@@ -337,16 +337,38 @@ def solve(graph: Dict[str, object], initial: str,
         bound=bound,
         margin=margin,
     )
+    # `success` and the status table disagreeing would mean one of the two is
+    # being read wrong; that is a defect in this function, not a fact about the
+    # world, so it is raised rather than classified.  The check is symmetric on
+    # purpose (E15's M30 survivor): the interesting direction is not the one
+    # that was guarded first.  `status == 0` with `success` false would fall
+    # through to `result.x` and mint a Certificate out of whatever the failed
+    # solve left behind -- and `certificate.holds` would then report it as a
+    # CertificateError, i.e. as *weights that failed re-checking*, when the
+    # truth is that no solve succeeded at all.  Refusing keeps a solver
+    # contradiction from being laundered into a statement about the geometry,
+    # which is the whole thesis of this item.
+    if bool(result.success) != (word == CERTIFIED):
+        # The outcome attached to the refusal is rebuilt as `undecided`, not
+        # handed over as `word`.  `word` here is the reading the engine has just
+        # announced it does not trust, and an exception carrying
+        # `decided is True` would let a caller read a verdict off a refusal --
+        # the same collapse this item removes from the return path, reappearing
+        # on the error path.  What survives is the raw `solver_status`, so the
+        # contradiction stays diagnosable without being quotable.
+        raise LpUnavailable(
+            "linprog reported success=%r with status %r, which this engine "
+            "reads as %r; the two disagree, so it refuses to classify."
+            % (bool(result.success), result.status, word),
+            LpOutcome(
+                status=UNDECIDED,
+                solver_status=int(result.status),
+                solver_message=message,
+                bound=bound,
+                margin=margin,
+            ),
+        )
     if word != CERTIFIED:
-        # `success` and the status table disagreeing would mean one of the two
-        # is being read wrong; that is a defect in this function, not a fact
-        # about the world, so it is raised rather than classified.
-        if result.success:
-            raise LpUnavailable(
-                "linprog reported success with status %r, which this engine "
-                "reads as %r; refusing to classify." % (result.status, word),
-                outcome,
-            )
         return outcome
 
     weights = [

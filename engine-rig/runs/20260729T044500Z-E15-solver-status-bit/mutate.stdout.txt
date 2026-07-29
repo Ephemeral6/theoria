@@ -1,0 +1,37 @@
+{
+  "killed": 26,
+  "killed_only_by_controls": [],
+  "killed_only_by_suite": [
+    "M06-unknown-status-defaults-to-infeasible",
+    "M14-outcome-hardcodes-the-default-bound",
+    "M17-downgraded-word-contains-global",
+    "M20-error-text-stops-naming-the-budget",
+    "M28-artifact-hardcodes-the-infeasible-code"
+  ],
+  "killed_only_by_the_older_c11_file": [
+    "M02-solve_certificate-collapses-to-none"
+  ],
+  "mutants": 30,
+  "not_applied": 0,
+  "not_applied_ids": [],
+  "survived": 4,
+  "survivors": [
+    {
+      "id": "M27-budget-meaning-reads-as-a-verdict",
+      "note": "the prose a human reads contradicts the status word beside it"
+    },
+    {
+      "id": "M29-cell-local-word-renamed",
+      "note": "the other scope word changes under consumers that filter on it"
+    },
+    {
+      "id": "M30-success-status-disagreement-ignored",
+      "note": "a linprog result whose `success` and `status` disagree is classified anyway instead of refusing"
+    },
+    {
+      "id": "M25-degradation-keys-gated-on-the-run-not-the-label",
+      "note": "cell-local rows in a truncated run also carry the degradation -- the design alternative, expected to survive"
+    }
+  ],
+  "wall_seconds": 163.3
+}
