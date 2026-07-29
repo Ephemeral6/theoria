@@ -244,6 +244,119 @@ PY
 fi
 echo
 
+# ------------------------------- 8. the 19-vs-21 correction must not grow back
+# `freeze/tiers.py --verify` guards two .py files against a hardcoded `N = 21`.
+# It cannot see prose -- and prose is where the wrong denominator actually
+# lived: after the code was fixed on 2026-07-29, twenty lines across the four
+# drafts still read 21, including the analysis-unit table, the Clopper-Pearson
+# calibration table, and a "分母恒 21" sitting six sections away from a "/19".
+# This stage is the missing half of that gate (RECONCILE N-1).
+#
+# WHAT IS DETECTED: `21` in the shapes a *count of analysis units* takes --
+#   X/21 and 21/X fractions, `21 局`, `21 对`, `21 格`, `n=21`, `恒 21`,
+#   a sentence pairing 分母 with 21, `封存堆 21`, `sealed ... 21`, `m ≤ 21`.
+# Hashes (`5f21d674…`), line refs (`:121-123`), timestamps (`18:21:25Z`),
+# `0.021` and `$1.2184` are not counts and are deliberately not matched.
+#
+# WHAT IS ALLOWED: an explicit allowlist, keyed on the TEXT of the line rather
+# than its number (numbers move; these files grow every session).  Every entry
+# says why that particular 21 is correct or why it is knowingly still open.
+# Anything else fails.  If you are about to add an entry to make this green,
+# read the reason column of the neighbours first -- "21" is right only when the
+# sentence is about the sealed pile as an object, never when it is a
+# denominator.
+#
+# SCOPE: the four frozen drafts only.  RECONCILE.md is a worklist that quotes
+# the wrong numbers on purpose, and the *.s4draft.md files are the untouched
+# porting source -- scanning either would make the stage red for being honest.
+echo "[8] 19-vs-21: no frozen draft uses 21 as an analysis-unit count"
+
+# NOTE on the regex: no negated bracket may contain a multibyte character here.
+# grep runs byte-oriented, so `[^。]` becomes "not one of the three bytes of 。",
+# and E3/80 are bytes that 「 」 ， are all built from -- `分母[^。]*21` silently
+# stopped matching at the first quote mark.  Bounded `.{0,60}` instead: a byte
+# window, no character classes, no locale surprises.
+DETECT='/21([^0-9]|$)|21/[0-9]|21 ?(局|对|格|个)|[nN] ?= ?21|恒 ?21|分母.{0,60}21|21.{0,60}分母|封存堆的? ?21|sealed.{0,20}21|[≤<] ?21'
+
+# file | substring that must appear in the line | why this 21 is legitimate
+ALLOW=(
+"MANIFEST_DRAFT.md|含封存堆 21 局 / 14,121 基线动作|budget arithmetic: how many games get RUN. Not the statistical denominator. Open, see PENDING_FIVE 4.2."
+"STATS_RULES.md|封存堆有 21 局，但|(a) states the sealed pile size in order to say the denominator is NOT it."
+"STATS_RULES.md|sealed n=21 只作描述|(a) the tier definition itself -- sealed is descriptive-only by construction."
+"STATS_RULES.md|也不需要 21 局封存游戏来确证|(a) the sealed pile as a resource ('you need not spend the pile to show this'), not a denominator."
+"STATS_RULES.md|sealed 层 n=21 只作描述|(a) same tier definition, stated again in 1.2 where the three tiers are set out."
+"STATS_RULES.md|达成 14 在 n=21 下的 CI 下界是|(a) recomputation of P-22's OLD table, quoted to show it was wrong at its own n."
+"STATS_RULES.md|必修一把分母从 21 改成 19|(a) the correction's own record of what it changed."
+"STATS_RULES.md|是 n=21 下的值（21/3 = 7|(a) the superseded integer threshold, kept so the change is auditable."
+"STATS_RULES.md|按 \`piles.json\` 里 sealed 21 局的|OPEN, RECONCILE N-2: the ⟨m⟩ exam-subset rule still selects from the sealed 21 and so can select a quarantined game. Known wrong, tracked, NOT fixed here."
+"CLAIMS_TEXT.md|不是封存堆的 21|(a) names 21 in order to reject it as the denominator."
+"PENDING_FIVE.md|\`sealed_pile\` 21 = 25 自洽|(a) the pile cut's own arithmetic, 4 + 21 = 25 public games."
+"PENDING_FIVE.md|封存堆 21 局，官方基线动作合计|budget denominator = games run; carries the caveat immediately below it."
+"PENDING_FIVE.md|这个 21 是「要跑多少局」|(a) the caveat that distinguishes games-run from the statistical denominator."
+"PENDING_FIVE.md|跑满 21 局、只在 19 局上主张|(a) same caveat, spelling out that the two counts need not be equal."
+"PENDING_FIVE.md|上表按 21 局算|(a) same caveat, stating the direction of the resulting bias."
+"PENDING_FIVE.md|约束是 m ≤ 21|OPEN, RECONCILE N-2: same ⟨m⟩ bound. Must become 19 when N-2 is done."
+)
+
+hits="$(cd "$HERE" && grep -nE "$DETECT" \
+        MANIFEST_DRAFT.md STATS_RULES.md CLAIMS_TEXT.md PENDING_FIVE.md 2>/dev/null)"
+used=""
+n21=0
+if [ -n "$hits" ]; then
+  while IFS= read -r hit; do
+    [ -z "$hit" ] && continue
+    hfile="${hit%%:*}"; rest="${hit#*:}"
+    hline="${rest%%:*}"; htext="${rest#*:}"
+    allowed=0
+    idx=0
+    for entry in "${ALLOW[@]}"; do
+      idx=$((idx+1))
+      afile="${entry%%|*}"; tail="${entry#*|}"; apat="${tail%%|*}"
+      [ "$afile" = "$hfile" ] || continue
+      case "$htext" in
+        *"$apat"*) allowed=1; used="$used $idx"; break ;;
+      esac
+    done
+    if [ "$allowed" -eq 0 ]; then
+      bad "$hfile:$hline uses 21 as a count -- the claim set is 19 (F-11). Line: $htext"
+      n21=$((n21+1))
+    fi
+  done <<EOF
+$hits
+EOF
+fi
+[ "$n21" -eq 0 ] && ok "no unexplained 21 in the four drafts (${#ALLOW[@]} allowlisted, each with a reason)"
+
+# A stale allowlist entry is a silent hole: it stops covering anything and
+# nobody notices.  Report the ones that matched nothing.
+idx=0
+for entry in "${ALLOW[@]}"; do
+  idx=$((idx+1))
+  case " $used " in
+    *" $idx "*) ;;
+    *) afile="${entry%%|*}"; tail="${entry#*|}"; apat="${tail%%|*}"
+       note "allowlist entry ${idx} matched nothing and can be deleted: $afile -- $apat" ;;
+  esac
+done
+
+# The other direction: the corrected numbers must actually be present.  A file
+# with no 21 and no 19 would pass the check above while saying nothing.
+for want in "19" "12"; do
+  if grep -q "claim 层 ${want}\|n = ${want}\|n=${want}\|/${want}" "$S"; then
+    ok "STATS_RULES.md still carries the n=${want} tier"
+  else
+    bad "STATS_RULES.md no longer mentions the n=${want} tier -- the correction is gone"
+  fi
+done
+
+# And the code-side half of the same gate, so both halves fail together.
+if python "$HERE/tiers.py" --verify >/dev/null 2>&1; then
+  ok "freeze/tiers.py --verify (claim set still 21/19/12, no script hardcodes it)"
+else
+  bad "freeze/tiers.py --verify failed -- run it for the reason"
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then
