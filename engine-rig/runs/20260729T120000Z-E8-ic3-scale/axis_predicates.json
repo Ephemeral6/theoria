@@ -1,0 +1,2904 @@
+{
+  "axis": "predicates",
+  "axis_letter": "B",
+  "question": "at a state space held EXACTLY fixed -- same states, same edges, same answer -- what does IC3 pay for the number of predicates used to say it?",
+  "family": "peg-1d and worldgen catalogue",
+  "ladder": [
+    "peg6/binary",
+    "peg6/native",
+    "peg6/dual+3",
+    "peg6/dual+6",
+    "peg6/onehot",
+    "peg8/binary",
+    "peg8/native",
+    "peg8/dual+4",
+    "peg8/dual+8",
+    "peg8/onehot",
+    "peg10/binary",
+    "peg10/native",
+    "peg10/dual+5",
+    "peg10/dual+10",
+    "peg10/onehot",
+    "peg12/binary",
+    "peg12/native",
+    "peg12/dual+6",
+    "peg12/dual+12",
+    "peg12/onehot",
+    "t1-tokens-lock/binary",
+    "t1-tokens-lock/native",
+    "t1-tokens-lock/onehot",
+    "t2-cycler-lock/binary",
+    "t2-cycler-lock/native",
+    "t2-cycler-lock/onehot"
+  ],
+  "budget_seconds": 300.0,
+  "complete": true,
+  "stopped_early": null,
+  "why_this_axis_exists": "on peg-N the predicate count and the state count are the same number, so axis A cannot tell which of them it measured. Every block here re-encodes ONE world: the states, the labelled edges, the initial state and the bad set are identical across a block by construction and by a gate, and only the vocabulary moves.",
+  "what_is_comparable": "coverage and abstraction, which are facts about the world. NOT n_clauses or n_literals, which are sentences in whichever language the rung speaks: an onehot rung's single clause is not a simpler certificate than a native rung's eight.",
+  "anchor": {
+    "rule": "every board's `native` rung is the same spec axis A ran at that n, so the two axes cross once per board.",
+    "checked": "ic3bounds.axis_predicates.check_anchors, which raises AnchorDrift, when an axis_size.json is supplied."
+  },
+  "gate": {
+    "runs": "before IC3, in the child, on every rung",
+    "first": "the family's own transcription gate on the BASE system (harness for peg, worldgen_system for worldgen)",
+    "second": "reencode.recoding_mismatches -- the recoded system has the same |S|, the same labelled edges, the same init and the same bad set as the base one, bijectively",
+    "on_failure": "verdict adapter-mismatch, escalate=true, never tabulated as a boundary"
+  },
+  "recheck": {
+    "column": "steps[].recheck",
+    "via": "reencode.desugar -- a dual clause set is rewritten literal for literal into the native vocabulary and handed to recheck/, which shares no code with the engine",
+    "cross_check": "engines.ic3_pdr.check.verify re-counts the native form; a bijection cannot change the count, so a disagreement is a finding and fails the run",
+    "not_available": "recheck/ grounds a rule set over the world's declared variables, so a certificate can only be handed to it in that vocabulary. A `dual` clause set has one -- `free_pos3` IS `!pos3`, and `reencode.desugar` rewrites it literal for literal -- so those rungs are rechecked in full. A `binary` or `onehot` clause set does not: its predicates name state indices, not world facts, and there is no rewriting that recovers what was never said. Those rows read 'no native form'. That is a boundary this axis was built to find, not a gap in it, and it is never scored as a pass.",
+    "worldgen": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself.",
+    "taxonomy": {
+      "0": "ACCEPT -- the three conditions hold on the emitted predicate",
+      "1": "REJECT -- an independent checker refuses the engine's invariant",
+      "2": "would-not-load -- the rule set or certificate never became an object to check (a peg board of n >= 20 exceeds recheck.ruleset.MAX_STATES = 1000000). This is the honest reading of an uncheckable certificate",
+      "3": "INCONSISTENT -- the conditions hold and the goal is reachable anyway; a defect in the rechecker, escalated rather than rounded to a pass",
+      "4": "rechecker-crashed -- the recheck itself failed, kept separate from REJECT because Python's own status for a crash is 1",
+      "n/a": "n/a \u2014 no invariant -- the rung produced no invariant, so there is nothing for an independent checker to check. Not a pass."
+    }
+  },
+  "determinism": {
+    "deterministic_half": "re-derived exactly by a verify pass.",
+    "timing_half": "presence and ordering only, never equality.",
+    "correction": "deterministic.n_states is overwritten with the real state count; harness fills it as 2**n, which on an onehot rung would claim a space 2^|S| wide."
+  },
+  "held_fixed": [
+    {
+      "board": "peg6",
+      "n_states": 64,
+      "n_reachable": 3,
+      "n_rungs": 5,
+      "n_answered": 5,
+      "unanswered": [],
+      "predicate_range": [
+        6,
+        64
+      ],
+      "rows": [
+        {
+          "label": "peg6/binary",
+          "encoding": "binary",
+          "n_predicates": 6,
+          "verdict": "invariant",
+          "n_clauses": 4,
+          "coverage": "34/64",
+          "abstraction": 11.333333,
+          "ic3_seconds": 0.012447
+        },
+        {
+          "label": "peg6/native",
+          "encoding": "native",
+          "n_predicates": 6,
+          "verdict": "invariant",
+          "n_clauses": 8,
+          "coverage": "30/64",
+          "abstraction": 10.0,
+          "ic3_seconds": 0.0348
+        },
+        {
+          "label": "peg6/dual+3",
+          "encoding": "dual+3",
+          "n_predicates": 9,
+          "verdict": "invariant",
+          "n_clauses": 4,
+          "coverage": "35/64",
+          "abstraction": 11.666667,
+          "ic3_seconds": 0.014683
+        },
+        {
+          "label": "peg6/dual+6",
+          "encoding": "dual+6",
+          "n_predicates": 12,
+          "verdict": "invariant",
+          "n_clauses": 8,
+          "coverage": "30/64",
+          "abstraction": 10.0,
+          "ic3_seconds": 0.052248
+        },
+        {
+          "label": "peg6/onehot",
+          "encoding": "onehot",
+          "n_predicates": 64,
+          "verdict": "invariant",
+          "n_clauses": 1,
+          "coverage": "3/64",
+          "abstraction": 1.0,
+          "ic3_seconds": 0.003246
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        0.003246,
+        0.052248
+      ],
+      "ic3_seconds_spread": 16.096,
+      "fastest": {
+        "label": "peg6/onehot",
+        "encoding": "onehot",
+        "n_predicates": 64,
+        "abstraction": 1.0,
+        "adjudicable": false
+      }
+    },
+    {
+      "board": "peg8",
+      "n_states": 256,
+      "n_reachable": 4,
+      "n_rungs": 5,
+      "n_answered": 5,
+      "unanswered": [],
+      "predicate_range": [
+        8,
+        256
+      ],
+      "rows": [
+        {
+          "label": "peg8/binary",
+          "encoding": "binary",
+          "n_predicates": 8,
+          "verdict": "invariant",
+          "n_clauses": 6,
+          "coverage": "146/256",
+          "abstraction": 36.5,
+          "ic3_seconds": 0.151923
+        },
+        {
+          "label": "peg8/native",
+          "encoding": "native",
+          "n_predicates": 8,
+          "verdict": "invariant",
+          "n_clauses": 11,
+          "coverage": "176/256",
+          "abstraction": 44.0,
+          "ic3_seconds": 0.595301
+        },
+        {
+          "label": "peg8/dual+4",
+          "encoding": "dual+4",
+          "n_predicates": 12,
+          "verdict": "invariant",
+          "n_clauses": 5,
+          "coverage": "141/256",
+          "abstraction": 35.25,
+          "ic3_seconds": 0.100556
+        },
+        {
+          "label": "peg8/dual+8",
+          "encoding": "dual+8",
+          "n_predicates": 16,
+          "verdict": "invariant",
+          "n_clauses": 11,
+          "coverage": "176/256",
+          "abstraction": 44.0,
+          "ic3_seconds": 0.96676
+        },
+        {
+          "label": "peg8/onehot",
+          "encoding": "onehot",
+          "n_predicates": 256,
+          "verdict": "invariant",
+          "n_clauses": 1,
+          "coverage": "4/256",
+          "abstraction": 1.0,
+          "ic3_seconds": 0.077193
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        0.077193,
+        0.96676
+      ],
+      "ic3_seconds_spread": 12.524,
+      "fastest": {
+        "label": "peg8/onehot",
+        "encoding": "onehot",
+        "n_predicates": 256,
+        "abstraction": 1.0,
+        "adjudicable": false
+      }
+    },
+    {
+      "board": "peg10",
+      "n_states": 1024,
+      "n_reachable": 5,
+      "n_rungs": 5,
+      "n_answered": 5,
+      "unanswered": [],
+      "predicate_range": [
+        10,
+        1024
+      ],
+      "rows": [
+        {
+          "label": "peg10/binary",
+          "encoding": "binary",
+          "n_predicates": 10,
+          "verdict": "invariant",
+          "n_clauses": 7,
+          "coverage": "594/1024",
+          "abstraction": 118.8,
+          "ic3_seconds": 1.442863
+        },
+        {
+          "label": "peg10/native",
+          "encoding": "native",
+          "n_predicates": 10,
+          "verdict": "invariant",
+          "n_clauses": 20,
+          "coverage": "766/1024",
+          "abstraction": 153.2,
+          "ic3_seconds": 9.248183
+        },
+        {
+          "label": "peg10/dual+5",
+          "encoding": "dual+5",
+          "n_predicates": 15,
+          "verdict": "invariant",
+          "n_clauses": 11,
+          "coverage": "759/1024",
+          "abstraction": 151.8,
+          "ic3_seconds": 2.444598
+        },
+        {
+          "label": "peg10/dual+10",
+          "encoding": "dual+10",
+          "n_predicates": 20,
+          "verdict": "invariant",
+          "n_clauses": 20,
+          "coverage": "766/1024",
+          "abstraction": 153.2,
+          "ic3_seconds": 15.293034
+        },
+        {
+          "label": "peg10/onehot",
+          "encoding": "onehot",
+          "n_predicates": 1024,
+          "verdict": "invariant",
+          "n_clauses": 1,
+          "coverage": "5/1024",
+          "abstraction": 1.0,
+          "ic3_seconds": 2.098888
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        1.442863,
+        15.293034
+      ],
+      "ic3_seconds_spread": 10.599,
+      "fastest": {
+        "label": "peg10/binary",
+        "encoding": "binary",
+        "n_predicates": 10,
+        "abstraction": 118.8,
+        "adjudicable": false
+      }
+    },
+    {
+      "board": "peg12",
+      "n_states": 4096,
+      "n_reachable": 6,
+      "n_rungs": 5,
+      "n_answered": 5,
+      "unanswered": [],
+      "predicate_range": [
+        12,
+        4096
+      ],
+      "rows": [
+        {
+          "label": "peg12/binary",
+          "encoding": "binary",
+          "n_predicates": 12,
+          "verdict": "invariant",
+          "n_clauses": 8,
+          "coverage": "2386/4096",
+          "abstraction": 397.666667,
+          "ic3_seconds": 13.770932
+        },
+        {
+          "label": "peg12/native",
+          "encoding": "native",
+          "n_predicates": 12,
+          "verdict": "invariant",
+          "n_clauses": 29,
+          "coverage": "3466/4096",
+          "abstraction": 577.666667,
+          "ic3_seconds": 106.626842
+        },
+        {
+          "label": "peg12/dual+6",
+          "encoding": "dual+6",
+          "n_predicates": 18,
+          "verdict": "invariant",
+          "n_clauses": 12,
+          "coverage": "3063/4096",
+          "abstraction": 510.5,
+          "ic3_seconds": 18.913231
+        },
+        {
+          "label": "peg12/dual+12",
+          "encoding": "dual+12",
+          "n_predicates": 24,
+          "verdict": "invariant",
+          "n_clauses": 29,
+          "coverage": "3466/4096",
+          "abstraction": 577.666667,
+          "ic3_seconds": 179.676401
+        },
+        {
+          "label": "peg12/onehot",
+          "encoding": "onehot",
+          "n_predicates": 4096,
+          "verdict": "invariant",
+          "n_clauses": 1,
+          "coverage": "6/4096",
+          "abstraction": 1.0,
+          "ic3_seconds": 69.874467
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        13.770932,
+        179.676401
+      ],
+      "ic3_seconds_spread": 13.048,
+      "fastest": {
+        "label": "peg12/binary",
+        "encoding": "binary",
+        "n_predicates": 12,
+        "abstraction": 397.666667,
+        "adjudicable": false
+      }
+    },
+    {
+      "board": "t1-tokens-lock",
+      "n_states": 128,
+      "n_reachable": 50,
+      "n_rungs": 3,
+      "n_answered": 3,
+      "unanswered": [],
+      "predicate_range": [
+        7,
+        128
+      ],
+      "rows": [
+        {
+          "label": "t1-tokens-lock/binary",
+          "encoding": "binary",
+          "n_predicates": 7,
+          "verdict": "invariant",
+          "n_clauses": 3,
+          "coverage": "117/128",
+          "abstraction": 2.34,
+          "ic3_seconds": 0.021709
+        },
+        {
+          "label": "t1-tokens-lock/native",
+          "encoding": "native",
+          "n_predicates": 19,
+          "verdict": "invariant",
+          "n_clauses": 3,
+          "coverage": "121/128",
+          "abstraction": 2.42,
+          "ic3_seconds": 0.023141
+        },
+        {
+          "label": "t1-tokens-lock/onehot",
+          "encoding": "onehot",
+          "n_predicates": 128,
+          "verdict": "invariant",
+          "n_clauses": 7,
+          "coverage": "121/128",
+          "abstraction": 2.42,
+          "ic3_seconds": 0.62079
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        0.021709,
+        0.62079
+      ],
+      "ic3_seconds_spread": 28.596,
+      "fastest": {
+        "label": "t1-tokens-lock/binary",
+        "encoding": "binary",
+        "n_predicates": 7,
+        "abstraction": 2.34,
+        "adjudicable": false
+      }
+    },
+    {
+      "board": "t2-cycler-lock",
+      "n_states": 128,
+      "n_reachable": 61,
+      "n_rungs": 3,
+      "n_answered": 3,
+      "unanswered": [],
+      "predicate_range": [
+        7,
+        128
+      ],
+      "rows": [
+        {
+          "label": "t2-cycler-lock/binary",
+          "encoding": "binary",
+          "n_predicates": 7,
+          "verdict": "invariant",
+          "n_clauses": 2,
+          "coverage": "122/128",
+          "abstraction": 2.0,
+          "ic3_seconds": 0.01284
+        },
+        {
+          "label": "t2-cycler-lock/native",
+          "encoding": "native",
+          "n_predicates": 19,
+          "verdict": "invariant",
+          "n_clauses": 2,
+          "coverage": "122/128",
+          "abstraction": 2.0,
+          "ic3_seconds": 0.015672
+        },
+        {
+          "label": "t2-cycler-lock/onehot",
+          "encoding": "onehot",
+          "n_predicates": 128,
+          "verdict": "invariant",
+          "n_clauses": 6,
+          "coverage": "122/128",
+          "abstraction": 2.0,
+          "ic3_seconds": 0.488862
+        }
+      ],
+      "machine_dependent": true,
+      "ic3_seconds_range": [
+        0.01284,
+        0.488862
+      ],
+      "ic3_seconds_spread": 38.073,
+      "fastest": {
+        "label": "t2-cycler-lock/binary",
+        "encoding": "binary",
+        "n_predicates": 7,
+        "abstraction": 2.0,
+        "adjudicable": false
+      }
+    }
+  ],
+  "monotone_in_predicates": {
+    "question": "inside one held-fixed state space, is IC3's own clock non-decreasing in the number of predicates?",
+    "per_board": [
+      {
+        "board": "peg6",
+        "n_compared": 5,
+        "monotone": false,
+        "breaks": [
+          "native (m=6, 0.0348s) is slower than dual+3 (m=9, 0.0147s) although it declares fewer predicates",
+          "dual+6 (m=12, 0.0522s) is slower than onehot (m=64, 0.0032s) although it declares fewer predicates"
+        ]
+      },
+      {
+        "board": "peg8",
+        "n_compared": 5,
+        "monotone": false,
+        "breaks": [
+          "native (m=8, 0.5953s) is slower than dual+4 (m=12, 0.1006s) although it declares fewer predicates",
+          "dual+8 (m=16, 0.9668s) is slower than onehot (m=256, 0.0772s) although it declares fewer predicates"
+        ]
+      },
+      {
+        "board": "peg10",
+        "n_compared": 5,
+        "monotone": false,
+        "breaks": [
+          "native (m=10, 9.2482s) is slower than dual+5 (m=15, 2.4446s) although it declares fewer predicates",
+          "dual+10 (m=20, 15.2930s) is slower than onehot (m=1024, 2.0989s) although it declares fewer predicates"
+        ]
+      },
+      {
+        "board": "peg12",
+        "n_compared": 5,
+        "monotone": false,
+        "breaks": [
+          "native (m=12, 106.6268s) is slower than dual+6 (m=18, 18.9132s) although it declares fewer predicates",
+          "dual+12 (m=24, 179.6764s) is slower than onehot (m=4096, 69.8745s) although it declares fewer predicates"
+        ]
+      },
+      {
+        "board": "t1-tokens-lock",
+        "n_compared": 3,
+        "monotone": true,
+        "breaks": []
+      },
+      {
+        "board": "t2-cycler-lock",
+        "n_compared": 3,
+        "monotone": true,
+        "breaks": []
+      }
+    ],
+    "monotone_everywhere": false,
+    "machine_dependent": true,
+    "read_it_as": "a wall clock, so this is a statement about this machine. It is reported because a NON-monotone block is robust to the machine in a way a monotone one is not: an ordering that reverses under a 20x spread is not noise."
+  },
+  "cost_of_adjudicability": {
+    "rows": [
+      {
+        "board": "peg6",
+        "fastest": "peg6/onehot",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 1.0,
+        "spread": 16.096
+      },
+      {
+        "board": "peg8",
+        "fastest": "peg8/onehot",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 1.0,
+        "spread": 12.524
+      },
+      {
+        "board": "peg10",
+        "fastest": "peg10/binary",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 118.8,
+        "spread": 10.599
+      },
+      {
+        "board": "peg12",
+        "fastest": "peg12/binary",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 397.666667,
+        "spread": 13.048
+      },
+      {
+        "board": "t1-tokens-lock",
+        "fastest": "t1-tokens-lock/binary",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 2.34,
+        "spread": 28.596
+      },
+      {
+        "board": "t2-cycler-lock",
+        "fastest": "t2-cycler-lock/binary",
+        "fastest_is_adjudicable": false,
+        "fastest_abstraction": 2.0,
+        "spread": 38.073
+      }
+    ],
+    "n_boards": 6,
+    "n_boards_where_fastest_is_unreadable": 6,
+    "abstraction_note": "abstraction 1.0 means the invariant admits exactly the reachable states -- the engine computed reachability and returned it as a law. It is sound, it is what the three Lean theorems ask for, and it explains nothing."
+  },
+  "boundary": null,
+  "escalations": [],
+  "recheck_findings": [],
+  "steps": [
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg6/binary",
+        "n": 6,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 6,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 64,
+        "n_reachable": 3,
+        "native_n": 6
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 34,
+        "coverage": "34/64",
+        "coverage_ratio": 0.53125,
+        "near_vacuous": false,
+        "n_clauses": 4,
+        "n_literals": 13,
+        "widest_clause": 5,
+        "narrowest_clause": 2,
+        "cube_limit": 6,
+        "literal_saturation": 0.541667,
+        "converged_at_frame": 4,
+        "states_blocked": 15,
+        "literals_dropped": 42,
+        "clauses_dropped": 2,
+        "counterexample_length": null,
+        "cnf_text": "(!b4 | !b5) & (!b1 | !b3 | b4) & (!b2 | !b3 | b4) & (b0 | b1 | b2 | b3 | b5)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.104204,
+        "ic3_seconds": 0.012447,
+        "check_seconds": 7.9e-05,
+        "build_seconds": 0.004473
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 6,
+        "native_n_predicates": 6,
+        "n_reachable": 3,
+        "encoding_slack": 0,
+        "abstraction": 11.333333,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg6/native",
+        "n": 6,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 6,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 64,
+        "n_reachable": 3,
+        "native_n": 6
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 30,
+        "coverage": "30/64",
+        "coverage_ratio": 0.46875,
+        "near_vacuous": false,
+        "n_clauses": 8,
+        "n_literals": 26,
+        "widest_clause": 4,
+        "narrowest_clause": 3,
+        "cube_limit": 6,
+        "literal_saturation": 0.541667,
+        "converged_at_frame": 7,
+        "states_blocked": 34,
+        "literals_dropped": 117,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos0 | !pos1 | pos5) & (!pos0 | !pos2 | !pos4) & (!pos0 | pos3 | !pos4) & (!pos2 | !pos3 | pos4) & (!pos2 | !pos3 | pos5) & (!pos2 | pos3 | !pos4) & (!pos1 | pos2 | pos3 | pos5) & (!pos1 | !pos3 | pos4 | !pos5)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.127977,
+        "ic3_seconds": 0.0348,
+        "check_seconds": 0.000126,
+        "build_seconds": 0.004145
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 6,
+        "native_n_predicates": 6,
+        "n_reachable": 3,
+        "encoding_slack": 0,
+        "abstraction": 10.0,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg6-011111",
+        "ruleset_source": "recheck/cases/peg6-011111.rules.json",
+        "certificate": "peg6-011111-ic3-invariant",
+        "engine_n_states": 64,
+        "engine_n_satisfying": 30,
+        "recheck_n_states": 64,
+        "recheck_n_satisfying": 30,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "30 of 64 states, counted over 2^6 boolean tuples by the engine and over the product of peg6-011111's declared domains by the rechecker | all three conditions hold over 64 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 8 clause(s), 26 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg6/dual+3",
+        "n": 9,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 6,
+        "scheme": "dual",
+        "k": 3,
+        "n_states": 64,
+        "n_reachable": 3,
+        "native_n": 6
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 35,
+        "coverage": "35/64",
+        "coverage_ratio": 0.546875,
+        "near_vacuous": false,
+        "n_clauses": 4,
+        "n_literals": 14,
+        "widest_clause": 5,
+        "narrowest_clause": 2,
+        "cube_limit": 9,
+        "literal_saturation": 0.388889,
+        "converged_at_frame": 4,
+        "states_blocked": 14,
+        "literals_dropped": 82,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos0 | free_pos1) & (!pos4 | !free_pos1 | free_pos2) & (!pos3 | pos4 | !free_pos1 | free_pos2) & (pos3 | pos4 | pos5 | free_pos1 | !free_pos2)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.116964,
+        "ic3_seconds": 0.014683,
+        "check_seconds": 8.3e-05,
+        "build_seconds": 0.003888
+      },
+      "derived": {
+        "encoding": "dual+3",
+        "scheme": "dual",
+        "k": 3,
+        "n_predicates": 9,
+        "native_n_predicates": 6,
+        "n_reachable": 3,
+        "encoding_slack": 3,
+        "abstraction": 11.666667,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg6-011111",
+        "ruleset_source": "recheck/cases/peg6-011111.rules.json",
+        "certificate": "peg6-011111-ic3-invariant",
+        "engine_n_states": 64,
+        "engine_n_satisfying": 35,
+        "recheck_n_states": 64,
+        "recheck_n_satisfying": 35,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "35 of 64 states, counted over 2^6 boolean tuples by the engine and over the product of peg6-011111's declared domains by the rechecker | all three conditions hold over 64 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 4 clause(s), 14 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg6/dual+6",
+        "n": 12,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 6,
+        "scheme": "dual",
+        "k": 6,
+        "n_states": 64,
+        "n_reachable": 3,
+        "native_n": 6
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 30,
+        "coverage": "30/64",
+        "coverage_ratio": 0.46875,
+        "near_vacuous": false,
+        "n_clauses": 8,
+        "n_literals": 26,
+        "widest_clause": 4,
+        "narrowest_clause": 3,
+        "cube_limit": 12,
+        "literal_saturation": 0.270833,
+        "converged_at_frame": 7,
+        "states_blocked": 34,
+        "literals_dropped": 321,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos0 | free_pos1 | !free_pos5) & (free_pos0 | free_pos2 | free_pos4) & (free_pos0 | !free_pos3 | free_pos4) & (free_pos2 | !free_pos3 | free_pos4) & (free_pos2 | free_pos3 | !free_pos4) & (free_pos2 | free_pos3 | !free_pos5) & (free_pos1 | !free_pos2 | !free_pos3 | !free_pos5) & (free_pos1 | free_pos3 | !free_pos4 | free_pos5)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.143778,
+        "ic3_seconds": 0.052248,
+        "check_seconds": 0.000217,
+        "build_seconds": 0.003978
+      },
+      "derived": {
+        "encoding": "dual+6",
+        "scheme": "dual",
+        "k": 6,
+        "n_predicates": 12,
+        "native_n_predicates": 6,
+        "n_reachable": 3,
+        "encoding_slack": 6,
+        "abstraction": 10.0,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg6-011111",
+        "ruleset_source": "recheck/cases/peg6-011111.rules.json",
+        "certificate": "peg6-011111-ic3-invariant",
+        "engine_n_states": 64,
+        "engine_n_satisfying": 30,
+        "recheck_n_states": 64,
+        "recheck_n_satisfying": 30,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "30 of 64 states, counted over 2^6 boolean tuples by the engine and over the product of peg6-011111's declared domains by the rechecker | all three conditions hold over 64 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 8 clause(s), 26 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg6/onehot",
+        "n": 64,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 6,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 64,
+        "n_reachable": 3,
+        "native_n": 6
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 3,
+        "coverage": "3/64",
+        "coverage_ratio": 0.046875,
+        "near_vacuous": false,
+        "n_clauses": 1,
+        "n_literals": 3,
+        "widest_clause": 3,
+        "narrowest_clause": 3,
+        "cube_limit": 64,
+        "literal_saturation": 0.046875,
+        "converged_at_frame": 3,
+        "states_blocked": 2,
+        "literals_dropped": 123,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(is_011111 | is_100111 | is_101001)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.097823,
+        "ic3_seconds": 0.003246,
+        "check_seconds": 4.9e-05,
+        "build_seconds": 0.004499
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 64,
+        "native_n_predicates": 6,
+        "n_reachable": 3,
+        "encoding_slack": 58,
+        "abstraction": 1.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg8/binary",
+        "n": 8,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 8,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 256,
+        "n_reachable": 4,
+        "native_n": 8
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 146,
+        "coverage": "146/256",
+        "coverage_ratio": 0.570312,
+        "near_vacuous": false,
+        "n_clauses": 6,
+        "n_literals": 24,
+        "widest_clause": 7,
+        "narrowest_clause": 2,
+        "cube_limit": 8,
+        "literal_saturation": 0.5,
+        "converged_at_frame": 5,
+        "states_blocked": 28,
+        "literals_dropped": 116,
+        "clauses_dropped": 5,
+        "counterexample_length": null,
+        "cnf_text": "(!b6 | !b7) & (!b4 | !b5 | !b7) & (!b1 | !b3 | !b5 | b6) & (!b2 | !b3 | !b5 | b6) & (!b4 | !b5 | b6 | b7) & (b0 | b1 | b2 | b3 | b4 | b5 | b7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.264329,
+        "ic3_seconds": 0.151923,
+        "check_seconds": 0.000456,
+        "build_seconds": 0.011317
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 8,
+        "native_n_predicates": 8,
+        "n_reachable": 4,
+        "encoding_slack": 0,
+        "abstraction": 36.5,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg8/native",
+        "n": 8,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 8,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 256,
+        "n_reachable": 4,
+        "native_n": 8
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 176,
+        "coverage": "176/256",
+        "coverage_ratio": 0.6875,
+        "near_vacuous": false,
+        "n_clauses": 11,
+        "n_literals": 52,
+        "widest_clause": 7,
+        "narrowest_clause": 4,
+        "cube_limit": 8,
+        "literal_saturation": 0.590909,
+        "converged_at_frame": 8,
+        "states_blocked": 78,
+        "literals_dropped": 312,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | !pos2 | !pos3 | pos7) & (!pos1 | !pos4 | !pos5 | pos7) & (!pos1 | !pos4 | pos5 | !pos6) & (!pos2 | !pos4 | !pos5 | pos7) & (!pos2 | !pos4 | pos5 | !pos6) & (!pos1 | !pos2 | !pos3 | pos5 | !pos6) & (!pos1 | !pos2 | pos3 | !pos4 | !pos6) & (!pos1 | !pos3 | pos4 | pos5 | pos7) & (!pos1 | !pos3 | !pos5 | pos6 | !pos7) & (!pos2 | !pos3 | pos4 | pos5 | pos7) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.70072,
+        "ic3_seconds": 0.595301,
+        "check_seconds": 0.000791,
+        "build_seconds": 0.011247
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 8,
+        "native_n_predicates": 8,
+        "n_reachable": 4,
+        "encoding_slack": 0,
+        "abstraction": 44.0,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg8-01111111",
+        "ruleset_source": "recheck/cases/peg8-01111111.rules.json",
+        "certificate": "peg8-01111111-ic3-invariant",
+        "engine_n_states": 256,
+        "engine_n_satisfying": 176,
+        "recheck_n_states": 256,
+        "recheck_n_satisfying": 176,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "176 of 256 states, counted over 2^8 boolean tuples by the engine and over the product of peg8-01111111's declared domains by the rechecker | all three conditions hold over 256 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 11 clause(s), 52 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg8/dual+4",
+        "n": 12,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 8,
+        "scheme": "dual",
+        "k": 4,
+        "n_states": 256,
+        "n_reachable": 4,
+        "native_n": 8
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 141,
+        "coverage": "141/256",
+        "coverage_ratio": 0.550781,
+        "near_vacuous": false,
+        "n_clauses": 5,
+        "n_literals": 20,
+        "widest_clause": 7,
+        "narrowest_clause": 2,
+        "cube_limit": 12,
+        "literal_saturation": 0.333333,
+        "converged_at_frame": 4,
+        "states_blocked": 20,
+        "literals_dropped": 167,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos0 | free_pos1) & (!free_pos1 | free_pos2 | free_pos3) & (!pos4 | !pos5 | free_pos2 | !free_pos3) & (!pos4 | !pos6 | free_pos2 | !free_pos3) & (pos4 | pos5 | pos6 | pos7 | free_pos1 | !free_pos2 | !free_pos3)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.198858,
+        "ic3_seconds": 0.100556,
+        "check_seconds": 0.000321,
+        "build_seconds": 0.011481
+      },
+      "derived": {
+        "encoding": "dual+4",
+        "scheme": "dual",
+        "k": 4,
+        "n_predicates": 12,
+        "native_n_predicates": 8,
+        "n_reachable": 4,
+        "encoding_slack": 4,
+        "abstraction": 35.25,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg8-01111111",
+        "ruleset_source": "recheck/cases/peg8-01111111.rules.json",
+        "certificate": "peg8-01111111-ic3-invariant",
+        "engine_n_states": 256,
+        "engine_n_satisfying": 141,
+        "recheck_n_states": 256,
+        "recheck_n_satisfying": 141,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "141 of 256 states, counted over 2^8 boolean tuples by the engine and over the product of peg8-01111111's declared domains by the rechecker | all three conditions hold over 256 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 5 clause(s), 20 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg8/dual+8",
+        "n": 16,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 8,
+        "scheme": "dual",
+        "k": 8,
+        "n_states": 256,
+        "n_reachable": 4,
+        "native_n": 8
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 176,
+        "coverage": "176/256",
+        "coverage_ratio": 0.6875,
+        "near_vacuous": false,
+        "n_clauses": 11,
+        "n_literals": 52,
+        "widest_clause": 7,
+        "narrowest_clause": 4,
+        "cube_limit": 16,
+        "literal_saturation": 0.295455,
+        "converged_at_frame": 8,
+        "states_blocked": 78,
+        "literals_dropped": 936,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos1 | free_pos2 | free_pos3 | !free_pos7) & (free_pos1 | free_pos4 | !free_pos5 | free_pos6) & (free_pos1 | free_pos4 | free_pos5 | !free_pos7) & (free_pos2 | free_pos4 | !free_pos5 | free_pos6) & (free_pos2 | free_pos4 | free_pos5 | !free_pos7) & (free_pos1 | free_pos2 | !free_pos3 | free_pos4 | free_pos6) & (free_pos1 | free_pos2 | free_pos3 | !free_pos5 | free_pos6) & (free_pos1 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos7) & (free_pos1 | free_pos3 | free_pos5 | !free_pos6 | free_pos7) & (free_pos2 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos7) & (free_pos1 | !free_pos2 | !free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 1.072091,
+        "ic3_seconds": 0.96676,
+        "check_seconds": 0.000762,
+        "build_seconds": 0.011328
+      },
+      "derived": {
+        "encoding": "dual+8",
+        "scheme": "dual",
+        "k": 8,
+        "n_predicates": 16,
+        "native_n_predicates": 8,
+        "n_reachable": 4,
+        "encoding_slack": 8,
+        "abstraction": 44.0,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg8-01111111",
+        "ruleset_source": "recheck/cases/peg8-01111111.rules.json",
+        "certificate": "peg8-01111111-ic3-invariant",
+        "engine_n_states": 256,
+        "engine_n_satisfying": 176,
+        "recheck_n_states": 256,
+        "recheck_n_satisfying": 176,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "176 of 256 states, counted over 2^8 boolean tuples by the engine and over the product of peg8-01111111's declared domains by the rechecker | all three conditions hold over 256 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 11 clause(s), 52 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg8/onehot",
+        "n": 256,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 8,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 256,
+        "n_reachable": 4,
+        "native_n": 8
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 4,
+        "coverage": "4/256",
+        "coverage_ratio": 0.015625,
+        "near_vacuous": false,
+        "n_clauses": 1,
+        "n_literals": 4,
+        "widest_clause": 4,
+        "narrowest_clause": 4,
+        "cube_limit": 256,
+        "literal_saturation": 0.015625,
+        "converged_at_frame": 4,
+        "states_blocked": 3,
+        "literals_dropped": 759,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(is_01111111 | is_10011111 | is_10100111 | is_10101001)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.18553,
+        "ic3_seconds": 0.077193,
+        "check_seconds": 0.000177,
+        "build_seconds": 0.014168
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 256,
+        "native_n_predicates": 8,
+        "n_reachable": 4,
+        "encoding_slack": 248,
+        "abstraction": 1.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg10/binary",
+        "n": 10,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 10,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 1024,
+        "n_reachable": 5,
+        "native_n": 10
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 594,
+        "coverage": "594/1024",
+        "coverage_ratio": 0.580078,
+        "near_vacuous": false,
+        "n_clauses": 7,
+        "n_literals": 32,
+        "widest_clause": 9,
+        "narrowest_clause": 2,
+        "cube_limit": 10,
+        "literal_saturation": 0.457143,
+        "converged_at_frame": 6,
+        "states_blocked": 45,
+        "literals_dropped": 248,
+        "clauses_dropped": 10,
+        "counterexample_length": null,
+        "cnf_text": "(!b8 | !b9) & (!b6 | !b7 | !b9) & (!b4 | !b5 | !b7 | b8) & (!b6 | !b7 | b8 | b9) & (!b1 | !b3 | !b5 | !b7 | b8) & (!b2 | !b3 | !b5 | !b7 | b8) & (b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7 | b9)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 1.60706,
+        "ic3_seconds": 1.442863,
+        "check_seconds": 0.001816,
+        "build_seconds": 0.0662
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 10,
+        "native_n_predicates": 10,
+        "n_reachable": 5,
+        "encoding_slack": 0,
+        "abstraction": 118.8,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg10/native",
+        "n": 10,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 10,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 1024,
+        "n_reachable": 5,
+        "native_n": 10
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 766,
+        "coverage": "766/1024",
+        "coverage_ratio": 0.748047,
+        "near_vacuous": false,
+        "n_clauses": 20,
+        "n_literals": 120,
+        "widest_clause": 9,
+        "narrowest_clause": 4,
+        "cube_limit": 10,
+        "literal_saturation": 0.6,
+        "converged_at_frame": 9,
+        "states_blocked": 149,
+        "literals_dropped": 697,
+        "clauses_dropped": 6,
+        "counterexample_length": null,
+        "cnf_text": "(!pos4 | !pos6 | !pos7 | pos9) & (!pos4 | !pos6 | pos7 | !pos8) & (!pos1 | !pos3 | !pos6 | !pos7 | pos9) & (!pos1 | !pos3 | !pos6 | pos7 | !pos8) & (!pos2 | !pos3 | !pos6 | !pos7 | pos9) & (!pos2 | !pos3 | !pos6 | pos7 | !pos8) & (!pos1 | !pos3 | !pos4 | !pos5 | !pos7 | pos9) & (!pos1 | !pos3 | !pos4 | !pos5 | pos7 | !pos8) & (!pos1 | !pos3 | !pos4 | pos5 | !pos6 | !pos8) & (!pos1 | !pos3 | !pos5 | pos6 | pos7 | pos9) & (!pos1 | !pos3 | !pos5 | !pos7 | pos8 | !pos9) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | pos7 | !pos8) & (!pos2 | !pos3 | !pos4 | pos5 | !pos6 | !pos8) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | pos8) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 9.416306,
+        "ic3_seconds": 9.248183,
+        "check_seconds": 0.005529,
+        "build_seconds": 0.063078
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 10,
+        "native_n_predicates": 10,
+        "n_reachable": 5,
+        "encoding_slack": 0,
+        "abstraction": 153.2,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg10-0111111111",
+        "ruleset_source": "recheck/cases/peg10-0111111111.rules.json",
+        "certificate": "peg10-0111111111-ic3-invariant",
+        "engine_n_states": 1024,
+        "engine_n_satisfying": 766,
+        "recheck_n_states": 1024,
+        "recheck_n_satisfying": 766,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "766 of 1024 states, counted over 2^10 boolean tuples by the engine and over the product of peg10-0111111111's declared domains by the rechecker | all three conditions hold over 1024 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 20 clause(s), 120 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg10/dual+5",
+        "n": 15,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 10,
+        "scheme": "dual",
+        "k": 5,
+        "n_states": 1024,
+        "n_reachable": 5,
+        "native_n": 10
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 759,
+        "coverage": "759/1024",
+        "coverage_ratio": 0.741211,
+        "near_vacuous": false,
+        "n_clauses": 11,
+        "n_literals": 63,
+        "widest_clause": 9,
+        "narrowest_clause": 3,
+        "cube_limit": 15,
+        "literal_saturation": 0.381818,
+        "converged_at_frame": 5,
+        "states_blocked": 47,
+        "literals_dropped": 440,
+        "clauses_dropped": 2,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos0 | free_pos2 | free_pos3) & (!pos5 | free_pos0 | !free_pos3 | free_pos4) & (!pos5 | pos6 | free_pos2 | !free_pos3 | free_pos4) & (!pos5 | pos7 | free_pos2 | !free_pos3 | free_pos4) & (!pos6 | !pos7 | free_pos0 | !free_pos3 | free_pos4) & (!pos6 | !pos7 | free_pos2 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | free_pos0 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | free_pos2 | !free_pos3 | free_pos4) & (pos5 | pos6 | pos7 | pos8 | pos9 | free_pos2 | free_pos3 | !free_pos4) & (pos5 | pos6 | pos7 | pos8 | pos9 | free_pos0 | free_pos1 | free_pos3 | !free_pos4) & (pos5 | pos6 | pos7 | pos8 | pos9 | free_pos1 | !free_pos2 | !free_pos3 | !free_pos4)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 2.622338,
+        "ic3_seconds": 2.444598,
+        "check_seconds": 0.003617,
+        "build_seconds": 0.0667
+      },
+      "derived": {
+        "encoding": "dual+5",
+        "scheme": "dual",
+        "k": 5,
+        "n_predicates": 15,
+        "native_n_predicates": 10,
+        "n_reachable": 5,
+        "encoding_slack": 5,
+        "abstraction": 151.8,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg10-0111111111",
+        "ruleset_source": "recheck/cases/peg10-0111111111.rules.json",
+        "certificate": "peg10-0111111111-ic3-invariant",
+        "engine_n_states": 1024,
+        "engine_n_satisfying": 759,
+        "recheck_n_states": 1024,
+        "recheck_n_satisfying": 759,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "759 of 1024 states, counted over 2^10 boolean tuples by the engine and over the product of peg10-0111111111's declared domains by the rechecker | all three conditions hold over 1024 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 11 clause(s), 63 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg10/dual+10",
+        "n": 20,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 10,
+        "scheme": "dual",
+        "k": 10,
+        "n_states": 1024,
+        "n_reachable": 5,
+        "native_n": 10
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 766,
+        "coverage": "766/1024",
+        "coverage_ratio": 0.748047,
+        "near_vacuous": false,
+        "n_clauses": 20,
+        "n_literals": 120,
+        "widest_clause": 9,
+        "narrowest_clause": 4,
+        "cube_limit": 20,
+        "literal_saturation": 0.3,
+        "converged_at_frame": 9,
+        "states_blocked": 149,
+        "literals_dropped": 2187,
+        "clauses_dropped": 6,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos4 | free_pos6 | !free_pos7 | free_pos8) & (free_pos4 | free_pos6 | free_pos7 | !free_pos9) & (free_pos1 | free_pos3 | free_pos6 | !free_pos7 | free_pos8) & (free_pos1 | free_pos3 | free_pos6 | free_pos7 | !free_pos9) & (free_pos2 | free_pos3 | free_pos6 | !free_pos7 | free_pos8) & (free_pos2 | free_pos3 | free_pos6 | free_pos7 | !free_pos9) & (free_pos1 | free_pos3 | free_pos4 | !free_pos5 | free_pos6 | free_pos8) & (free_pos1 | free_pos3 | free_pos4 | free_pos5 | !free_pos7 | free_pos8) & (free_pos1 | free_pos3 | free_pos4 | free_pos5 | free_pos7 | !free_pos9) & (free_pos1 | free_pos3 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos9) & (free_pos1 | free_pos3 | free_pos5 | free_pos7 | !free_pos8 | free_pos9) & (free_pos1 | free_pos4 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos9) & (free_pos2 | free_pos3 | free_pos4 | !free_pos5 | free_pos6 | free_pos8) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | !free_pos7 | free_pos8) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos7 | !free_pos9) & (free_pos2 | free_pos4 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos9) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos6 | free_pos7 | !free_pos8) & (free_pos1 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9) & (free_pos2 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9) & (free_pos1 | !free_pos2 | !free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 15.46561,
+        "ic3_seconds": 15.293034,
+        "check_seconds": 0.005306,
+        "build_seconds": 0.064511
+      },
+      "derived": {
+        "encoding": "dual+10",
+        "scheme": "dual",
+        "k": 10,
+        "n_predicates": 20,
+        "native_n_predicates": 10,
+        "n_reachable": 5,
+        "encoding_slack": 10,
+        "abstraction": 153.2,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg10-0111111111",
+        "ruleset_source": "recheck/cases/peg10-0111111111.rules.json",
+        "certificate": "peg10-0111111111-ic3-invariant",
+        "engine_n_states": 1024,
+        "engine_n_satisfying": 766,
+        "recheck_n_states": 1024,
+        "recheck_n_satisfying": 766,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "766 of 1024 states, counted over 2^10 boolean tuples by the engine and over the product of peg10-0111111111's declared domains by the rechecker | all three conditions hold over 1024 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 20 clause(s), 120 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg10/onehot",
+        "n": 1024,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 10,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 1024,
+        "n_reachable": 5,
+        "native_n": 10
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 5,
+        "coverage": "5/1024",
+        "coverage_ratio": 0.004883,
+        "near_vacuous": false,
+        "n_clauses": 1,
+        "n_literals": 5,
+        "widest_clause": 5,
+        "narrowest_clause": 5,
+        "cube_limit": 1024,
+        "literal_saturation": 0.004883,
+        "converged_at_frame": 5,
+        "states_blocked": 4,
+        "literals_dropped": 4082,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(is_0111111111 | is_1001111111 | is_1010011111 | is_1010100111 | is_1010101001)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 2.390018,
+        "ic3_seconds": 2.098888,
+        "check_seconds": 0.00062,
+        "build_seconds": 0.128687
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 1024,
+        "native_n_predicates": 10,
+        "n_reachable": 5,
+        "encoding_slack": 1014,
+        "abstraction": 1.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg12/binary",
+        "n": 12,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 12,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 4096,
+        "n_reachable": 6,
+        "native_n": 12
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 2386,
+        "coverage": "2386/4096",
+        "coverage_ratio": 0.58252,
+        "near_vacuous": false,
+        "n_clauses": 8,
+        "n_literals": 41,
+        "widest_clause": 11,
+        "narrowest_clause": 2,
+        "cube_limit": 12,
+        "literal_saturation": 0.427083,
+        "converged_at_frame": 7,
+        "states_blocked": 68,
+        "literals_dropped": 475,
+        "clauses_dropped": 15,
+        "counterexample_length": null,
+        "cnf_text": "(!b10 | !b11) & (!b8 | !b9 | !b11) & (!b6 | !b7 | !b9 | b10) & (!b8 | !b9 | b10 | b11) & (!b4 | !b5 | !b7 | !b9 | b10) & (!b1 | !b3 | !b5 | !b7 | !b9 | b10) & (!b2 | !b3 | !b5 | !b7 | !b9 | b10) & (b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7 | b8 | b9 | b11)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 14.459812,
+        "ic3_seconds": 13.770932,
+        "check_seconds": 0.009444,
+        "build_seconds": 0.495995
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 12,
+        "native_n_predicates": 12,
+        "n_reachable": 6,
+        "encoding_slack": 0,
+        "abstraction": 397.666667,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg12/native",
+        "n": 12,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 12,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 4096,
+        "n_reachable": 6,
+        "native_n": 12
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 3466,
+        "coverage": "3466/4096",
+        "coverage_ratio": 0.846191,
+        "near_vacuous": false,
+        "n_clauses": 29,
+        "n_literals": 215,
+        "widest_clause": 11,
+        "narrowest_clause": 5,
+        "cube_limit": 12,
+        "literal_saturation": 0.617816,
+        "converged_at_frame": 12,
+        "states_blocked": 253,
+        "literals_dropped": 1343,
+        "clauses_dropped": 13,
+        "counterexample_length": null,
+        "cnf_text": "(!pos4 | !pos6 | !pos8 | !pos9 | pos11) & (!pos4 | !pos6 | !pos8 | pos9 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos8 | !pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos8 | pos9 | !pos10) & (!pos1 | !pos3 | !pos6 | !pos8 | !pos9 | pos11) & (!pos1 | !pos3 | !pos6 | !pos8 | pos9 | !pos10) & (!pos2 | !pos3 | !pos6 | !pos8 | !pos9 | pos11) & (!pos2 | !pos3 | !pos6 | !pos8 | pos9 | !pos10) & (!pos4 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | !pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | pos9 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos6 | pos7 | !pos8 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos7 | !pos9 | pos10 | !pos11) & (!pos1 | !pos3 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos8 | !pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos8 | pos9 | !pos10) & (!pos2 | !pos3 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos4 | !pos5 | !pos7 | pos8 | pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | !pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | pos9 | !pos10) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | pos7 | !pos8 | !pos10) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | !pos8 | !pos9 | pos10) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 107.318056,
+        "ic3_seconds": 106.626842,
+        "check_seconds": 0.033372,
+        "build_seconds": 0.508397
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 12,
+        "native_n_predicates": 12,
+        "n_reachable": 6,
+        "encoding_slack": 0,
+        "abstraction": 577.666667,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg12-011111111111",
+        "ruleset_source": "recheck/cases/peg12-011111111111.rules.json",
+        "certificate": "peg12-011111111111-ic3-invariant",
+        "engine_n_states": 4096,
+        "engine_n_satisfying": 3466,
+        "recheck_n_states": 4096,
+        "recheck_n_satisfying": 3466,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "3466 of 4096 states, counted over 2^12 boolean tuples by the engine and over the product of peg12-011111111111's declared domains by the rechecker | all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 29 clause(s), 215 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg12/dual+6",
+        "n": 18,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 12,
+        "scheme": "dual",
+        "k": 6,
+        "n_states": 4096,
+        "n_reachable": 6,
+        "native_n": 12
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 3063,
+        "coverage": "3063/4096",
+        "coverage_ratio": 0.747803,
+        "near_vacuous": false,
+        "n_clauses": 12,
+        "n_literals": 77,
+        "widest_clause": 11,
+        "narrowest_clause": 3,
+        "cube_limit": 18,
+        "literal_saturation": 0.356481,
+        "converged_at_frame": 6,
+        "states_blocked": 71,
+        "literals_dropped": 833,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos0 | free_pos2 | free_pos3) & (free_pos0 | !free_pos3 | free_pos4 | free_pos5) & (free_pos2 | !free_pos3 | free_pos4 | free_pos5) & (!pos6 | !pos7 | free_pos0 | !free_pos3 | free_pos4) & (!pos6 | !pos7 | free_pos2 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | !pos9 | free_pos0 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | !pos9 | free_pos2 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | !pos10 | free_pos0 | !free_pos3 | free_pos4) & (!pos6 | !pos8 | !pos10 | free_pos2 | !free_pos3 | free_pos4) & (pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | free_pos2 | free_pos3 | !free_pos4 | !free_pos5) & (pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | free_pos0 | free_pos1 | free_pos3 | !free_pos4 | !free_pos5) & (pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | free_pos1 | !free_pos2 | !free_pos3 | !free_pos4 | !free_pos5)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 19.571267,
+        "ic3_seconds": 18.913231,
+        "check_seconds": 0.013042,
+        "build_seconds": 0.497351
+      },
+      "derived": {
+        "encoding": "dual+6",
+        "scheme": "dual",
+        "k": 6,
+        "n_predicates": 18,
+        "native_n_predicates": 12,
+        "n_reachable": 6,
+        "encoding_slack": 6,
+        "abstraction": 510.5,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg12-011111111111",
+        "ruleset_source": "recheck/cases/peg12-011111111111.rules.json",
+        "certificate": "peg12-011111111111-ic3-invariant",
+        "engine_n_states": 4096,
+        "engine_n_satisfying": 3063,
+        "recheck_n_states": 4096,
+        "recheck_n_satisfying": 3063,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "3063 of 4096 states, counted over 2^12 boolean tuples by the engine and over the product of peg12-011111111111's declared domains by the rechecker | all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 12 clause(s), 77 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg12/dual+12",
+        "n": 24,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 12,
+        "scheme": "dual",
+        "k": 12,
+        "n_states": 4096,
+        "n_reachable": 6,
+        "native_n": 12
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 3466,
+        "coverage": "3466/4096",
+        "coverage_ratio": 0.846191,
+        "near_vacuous": false,
+        "n_clauses": 29,
+        "n_literals": 215,
+        "widest_clause": 11,
+        "narrowest_clause": 5,
+        "cube_limit": 24,
+        "literal_saturation": 0.308908,
+        "converged_at_frame": 12,
+        "states_blocked": 253,
+        "literals_dropped": 4379,
+        "clauses_dropped": 13,
+        "counterexample_length": null,
+        "cnf_text": "(free_pos4 | free_pos6 | free_pos8 | !free_pos9 | free_pos10) & (free_pos4 | free_pos6 | free_pos8 | free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos5 | free_pos8 | !free_pos9 | free_pos10) & (free_pos1 | free_pos3 | free_pos5 | free_pos8 | free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos6 | free_pos8 | !free_pos9 | free_pos10) & (free_pos1 | free_pos3 | free_pos6 | free_pos8 | free_pos9 | !free_pos11) & (free_pos2 | free_pos3 | free_pos6 | free_pos8 | !free_pos9 | free_pos10) & (free_pos2 | free_pos3 | free_pos6 | free_pos8 | free_pos9 | !free_pos11) & (free_pos4 | free_pos6 | free_pos7 | !free_pos8 | !free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos5 | free_pos6 | !free_pos7 | free_pos8 | free_pos10) & (free_pos1 | free_pos3 | free_pos5 | free_pos6 | free_pos7 | !free_pos9 | free_pos10) & (free_pos1 | free_pos3 | free_pos5 | free_pos6 | free_pos7 | free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos5 | free_pos7 | free_pos9 | !free_pos10 | free_pos11) & (free_pos1 | free_pos3 | free_pos6 | free_pos7 | !free_pos8 | !free_pos9 | !free_pos11) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos8 | !free_pos9 | free_pos10) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos8 | free_pos9 | !free_pos11) & (free_pos2 | free_pos3 | free_pos6 | free_pos7 | !free_pos8 | !free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos4 | free_pos5 | free_pos7 | !free_pos8 | !free_pos9 | !free_pos11) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos6 | !free_pos7 | free_pos8 | free_pos10) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos6 | free_pos7 | !free_pos9 | free_pos10) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos6 | free_pos7 | free_pos9 | !free_pos11) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos7 | !free_pos8 | !free_pos9 | !free_pos11) & (free_pos1 | free_pos3 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11) & (free_pos1 | free_pos4 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11) & (free_pos2 | free_pos3 | free_pos4 | free_pos5 | free_pos6 | free_pos7 | free_pos8 | free_pos9 | !free_pos10) & (free_pos2 | free_pos4 | free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11) & (free_pos1 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11) & (free_pos2 | free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11) & (free_pos1 | !free_pos2 | !free_pos3 | !free_pos4 | !free_pos5 | !free_pos6 | !free_pos7 | !free_pos8 | !free_pos9 | !free_pos10 | !free_pos11)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 180.36623,
+        "ic3_seconds": 179.676401,
+        "check_seconds": 0.03495,
+        "build_seconds": 0.499125
+      },
+      "derived": {
+        "encoding": "dual+12",
+        "scheme": "dual",
+        "k": 12,
+        "n_predicates": 24,
+        "native_n_predicates": 12,
+        "n_reachable": 6,
+        "encoding_slack": 12,
+        "abstraction": 577.666667,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg12-011111111111",
+        "ruleset_source": "recheck/cases/peg12-011111111111.rules.json",
+        "certificate": "peg12-011111111111-ic3-invariant",
+        "engine_n_states": 4096,
+        "engine_n_satisfying": 3466,
+        "recheck_n_states": 4096,
+        "recheck_n_satisfying": 3466,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "3466 of 4096 states, counted over 2^12 boolean tuples by the engine and over the product of peg12-011111111111's declared domains by the rechecker | all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 29 clause(s), 215 literal(s), 0 tautologies dropped]"
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "peg12/onehot",
+        "n": 4096,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64,
+        "family": "peg-1d",
+        "world_id": "",
+        "board": 12,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 4096,
+        "n_reachable": 6,
+        "native_n": 12
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 6,
+        "coverage": "6/4096",
+        "coverage_ratio": 0.001465,
+        "near_vacuous": false,
+        "n_clauses": 1,
+        "n_literals": 6,
+        "widest_clause": 6,
+        "narrowest_clause": 6,
+        "cube_limit": 4096,
+        "literal_saturation": 0.001465,
+        "converged_at_frame": 6,
+        "states_blocked": 5,
+        "literals_dropped": 20460,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(is_011111111111 | is_100111111111 | is_101001111111 | is_101010011111 | is_101010100111 | is_101010101001)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 72.684699,
+        "ic3_seconds": 69.874467,
+        "check_seconds": 0.004158,
+        "build_seconds": 1.635556
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 4096,
+        "native_n_predicates": 12,
+        "n_reachable": 6,
+        "encoding_slack": 4084,
+        "abstraction": 1.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no native form",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t1-tokens-lock/binary",
+        "n": 7,
+        "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+        "goal_states": [
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t1-tokens-lock",
+        "board": 0,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 50,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 117,
+        "coverage": "117/128",
+        "coverage_ratio": 0.914062,
+        "near_vacuous": true,
+        "n_clauses": 3,
+        "n_literals": 14,
+        "widest_clause": 5,
+        "narrowest_clause": 4,
+        "cube_limit": 7,
+        "literal_saturation": 0.666667,
+        "converged_at_frame": 5,
+        "states_blocked": 8,
+        "literals_dropped": 27,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(b1 | !b3 | !b4 | b5) & (b0 | !b3 | !b4 | b5 | b6) & (b2 | !b3 | !b4 | b5 | b6)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.403924,
+        "ic3_seconds": 0.021709,
+        "check_seconds": 0.000275,
+        "build_seconds": 0.118066
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 7,
+        "native_n_predicates": 19,
+        "n_reachable": 50,
+        "encoding_slack": 0,
+        "abstraction": 2.34,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t1-tokens-lock/native",
+        "n": 19,
+        "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+        "goal_states": [
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t1-tokens-lock",
+        "board": 0,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 50,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 121,
+        "coverage": "121/128",
+        "coverage_ratio": 0.945312,
+        "near_vacuous": true,
+        "n_clauses": 3,
+        "n_literals": 6,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 19,
+        "literal_saturation": 0.105263,
+        "converged_at_frame": 3,
+        "states_blocked": 4,
+        "literals_dropped": 69,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r3c4 | token_r1c3) & (!at_r3c4 | token_r1c5) & (!at_r3c4 | token_r3c1)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.131157,
+        "ic3_seconds": 0.023141,
+        "check_seconds": 0.000158,
+        "build_seconds": 0.015974
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 19,
+        "native_n_predicates": 19,
+        "n_reachable": 50,
+        "encoding_slack": 12,
+        "abstraction": 2.42,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t1-tokens-lock/onehot",
+        "n": 128,
+        "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+        "goal_states": [
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t1-tokens-lock",
+        "board": 0,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 50,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 121,
+        "coverage": "121/128",
+        "coverage_ratio": 0.945312,
+        "near_vacuous": true,
+        "n_clauses": 7,
+        "n_literals": 7,
+        "widest_clause": 1,
+        "narrowest_clause": 1,
+        "cube_limit": 128,
+        "literal_saturation": 0.007812,
+        "converged_at_frame": 9,
+        "states_blocked": 14,
+        "literals_dropped": 1690,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!is_r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0) & (!is_r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1) & (!is_r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0) & (!is_r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1) & (!is_r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0) & (!is_r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1) & (!is_r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.731779,
+        "ic3_seconds": 0.62079,
+        "check_seconds": 0.000389,
+        "build_seconds": 0.01579
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 128,
+        "native_n_predicates": 19,
+        "n_reachable": 50,
+        "encoding_slack": 121,
+        "abstraction": 2.42,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t2-cycler-lock/binary",
+        "n": 7,
+        "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+        "goal_states": [
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t2-cycler-lock",
+        "board": 0,
+        "scheme": "binary",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 61,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 122,
+        "coverage": "122/128",
+        "coverage_ratio": 0.953125,
+        "near_vacuous": true,
+        "n_clauses": 2,
+        "n_literals": 10,
+        "widest_clause": 5,
+        "narrowest_clause": 5,
+        "cube_limit": 7,
+        "literal_saturation": 0.714286,
+        "converged_at_frame": 5,
+        "states_blocked": 6,
+        "literals_dropped": 21,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(b0 | !b3 | !b4 | b5 | b6) & (b1 | !b3 | !b4 | b5 | b6)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.274668,
+        "ic3_seconds": 0.01284,
+        "check_seconds": 0.000133,
+        "build_seconds": 0.015493
+      },
+      "derived": {
+        "encoding": "binary",
+        "scheme": "binary",
+        "k": 0,
+        "n_predicates": 7,
+        "native_n_predicates": 19,
+        "n_reachable": 61,
+        "encoding_slack": 0,
+        "abstraction": 2.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t2-cycler-lock/native",
+        "n": 19,
+        "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+        "goal_states": [
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t2-cycler-lock",
+        "board": 0,
+        "scheme": "native",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 61,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 122,
+        "coverage": "122/128",
+        "coverage_ratio": 0.953125,
+        "near_vacuous": true,
+        "n_clauses": 2,
+        "n_literals": 4,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 19,
+        "literal_saturation": 0.105263,
+        "converged_at_frame": 3,
+        "states_blocked": 3,
+        "literals_dropped": 52,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r3c4 | token_r1c4) & (!at_r3c4 | token_r1c7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.125273,
+        "ic3_seconds": 0.015672,
+        "check_seconds": 0.000137,
+        "build_seconds": 0.015582
+      },
+      "derived": {
+        "encoding": "native",
+        "scheme": "native",
+        "k": 0,
+        "n_predicates": 19,
+        "native_n_predicates": 19,
+        "n_reachable": 61,
+        "encoding_slack": 12,
+        "abstraction": 2.0,
+        "vocabulary": "world",
+        "adjudicable": true,
+        "has_native_form": true
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    },
+    {
+      "spec": {
+        "axis": "predicates",
+        "label": "t2-cycler-lock/onehot",
+        "n": 128,
+        "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+        "goal_states": [
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0"
+        ],
+        "max_levels": 64,
+        "family": "worldgen catalogue",
+        "world_id": "t2-cycler-lock",
+        "board": 0,
+        "scheme": "onehot",
+        "k": 0,
+        "n_states": 128,
+        "n_reachable": 61,
+        "native_n": 19
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 122,
+        "coverage": "122/128",
+        "coverage_ratio": 0.953125,
+        "near_vacuous": true,
+        "n_clauses": 6,
+        "n_literals": 6,
+        "widest_clause": 1,
+        "narrowest_clause": 1,
+        "cube_limit": 128,
+        "literal_saturation": 0.007812,
+        "converged_at_frame": 9,
+        "states_blocked": 13,
+        "literals_dropped": 1577,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!is_r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0) & (!is_r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1) & (!is_r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0) & (!is_r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0) & (!is_r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1) & (!is_r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.5973,
+        "ic3_seconds": 0.488862,
+        "check_seconds": 0.000348,
+        "build_seconds": 0.016022
+      },
+      "derived": {
+        "encoding": "onehot",
+        "scheme": "onehot",
+        "k": 0,
+        "n_predicates": 128,
+        "native_n_predicates": 19,
+        "n_reachable": 61,
+        "encoding_slack": 121,
+        "abstraction": 2.0,
+        "vocabulary": "state index",
+        "adjudicable": false,
+        "has_native_form": false
+      },
+      "recheck": {
+        "status": "n/a \u2014 no worldgen transcriber",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself."
+      }
+    }
+  ],
+  "provenance": {
+    "prompt_id": "E8-ic3-bounds",
+    "branch": "agent/e8-ic3-scale",
+    "base_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
+    "utc": "2026-07-29T10:57:15Z",
+    "command": "python -m ic3bounds.axis_predicates --out runs/20260729T120000Z-E8-ic3-scale --timeout 300",
+    "host": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.13",
+      "machine": "AMD64"
+    }
+  }
+}

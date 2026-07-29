@@ -1,0 +1,71 @@
+{
+  "prompt_id": "E8-ic3-scale",
+  "branch": "agent/e8-ic3-scale",
+  "base_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
+  "utc": "2026-07-29T12:00:00Z",
+  "worker": "W-1660",
+  "territory": "engine-rig",
+  "status": "complete",
+  "inherits": {
+    "run": "runs/20260728T203711Z-E8-ic3-bounds",
+    "what": "axis A (size) and axis C (compose) were measured by a previous session and salvaged verbatim in commit 4260081f. This run does not re-measure them; it audits them, adds the third axis (predicate count), and writes the named deliverable.",
+    "gaps_at_start": [
+      "engine-rig/IC3_BOUNDS.md -- the item's named deliverable -- does not exist",
+      "axis B (predicate count) has no module and no results file",
+      "ic3bounds/__main__.py has AXES = (\"size\",) so axis C cannot be re-run through the documented entry point",
+      "the salvaged code has never been reviewed, and the salvage commit says so"
+    ]
+  },
+  "files": [
+    {
+      "path": "AXIS_PREDICATES.md",
+      "sha256": "95fd4fa61dec9fc0cff7081eb38c2e9a942fbf0920ae3d1cca62e5410ca3d83a"
+    },
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "5026ac03f39f1e1156821cb5bc4f33688ead19b04d4f32466127bf8717cb3c67"
+    },
+    {
+      "path": "axis_predicates.json",
+      "sha256": "48206e9e71c18b8c9d93bff1dfcee56dccbac697d718038d650f56af5e80c711"
+    },
+    {
+      "path": "lp_reach.json",
+      "sha256": "ef2c5f05bc83de3f5fa970f1767f5af061d924db319b85f28df9cc9103a7aaa3"
+    },
+    {
+      "path": "engine-rig/IC3_BOUNDS.md",
+      "sha256": "cb8d707ce16995bc51023539f7da67b0fe67847e8f694c9f21cb1e9bdb64ce96"
+    },
+    {
+      "path": "engine-rig/ic3bounds/reencode.py",
+      "sha256": "3e01b11c86dc42af9c31d20e685072fb38f8f7047b6203c4ccc9b4347face770"
+    },
+    {
+      "path": "engine-rig/ic3bounds/axis_predicates.py",
+      "sha256": "be7cdaf6fd8608d08a0bc7e09a2eb31c7ad1d48a785c046e5eb44c8b45cf66fa"
+    },
+    {
+      "path": "engine-rig/ic3bounds/document.py",
+      "sha256": "af5daaa8205cd6e1eb1dc8c725128357b6e7a07ee53cdb3beb38db6eb68ef3ac"
+    },
+    {
+      "path": "engine-rig/ic3bounds/verify.py",
+      "sha256": "5a37c501c0aff94afbf6a5124877c6b7d76663d535d030fb9d8d6806e3ab542c"
+    },
+    {
+      "path": "engine-rig/ic3bounds/__main__.py",
+      "sha256": "47bd7fb6463de25daedf3d09dffa2ec2e2883b514f0b0d4ab7203e2c506e3123"
+    },
+    {
+      "path": "engine-rig/tests/test_ic3bounds_reencode.py",
+      "sha256": "0cb38644a56626fb8a60eab49da9b72d19b0cfa41a9c4d0dc51209772b454cae"
+    },
+    {
+      "path": "engine-rig/tests/test_ic3bounds_axis_predicates.py",
+      "sha256": "d75e5e58c2f43d01e26e4f7da62f8822638c4f4bbcc28a1830fbcdfadc642a35"
+    }
+  ],
+  "head_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
+  "note": "the run stdout is not an artefact and is not committed: it is CRLF on this platform, engine-rig/.gitattributes pins LF, and every line of it is derivable from axis_predicates.json."
+}

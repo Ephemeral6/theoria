@@ -1,0 +1,778 @@
+{
+  "artefact": "lp_reach.json",
+  "prompt_id": "E8-lp-reach",
+  "question": "Theoria.md line 205 says of IC3/PDR: 'LP/\u96f6\u7a7a\u95f4\u591f\u4e0d\u7740\u7684\u5f62\u72b6\u7531\u5b83\u515c' -- the shapes LP and the null space cannot reach are covered by it. E8 found an IC3 invariant at every rung of a peg-1d unsolvability ladder (n = 4,6,8,10,12,13). That only supports the sentence if lp_potential actually FAILS on the same rungs. Does it?",
+  "answer_in_one_line": "Yes for LP: lp_potential is infeasible on 10 of 10 rungs, and the infeasibility is exact and structural, not a solver or a tolerance artefact. No for the null space half of the sentence: the GF(2) null space of the transition relation separates initial from goal on 7 of 10 rungs (5 of E8's 6), so on those rungs IC3 is covering something linear algebra already covers.",
+  "method": {
+    "family": "peg-1d, identical to ic3bounds.axis_size",
+    "initial": "'0' + '1'*(n-1)  (ic3bounds.axis_size.initial_for)",
+    "goal": "'01' + '0'*(n-2)   (ic3bounds.axis_size.goal_for), passed explicitly -- goal_states=None means ALL single-peg finals and is a different question with a different answer",
+    "ladder": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "e8_ladder": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      13
+    ],
+    "graph": "interop.peg1d.build_graph(n, initial, [goal]) -- the full builder, no shortcut; it stays under 1.4s even at n=13",
+    "lp": "engines.lp_potential.potential.solve_certificate(graph, initial, [goal]) at its defaults margin=1, bound=10, then again at bound=100 and bound=10000",
+    "verdict_mapping": {
+      "certificate": "solve_certificate returned a Certificate (which means it had already passed check_exactly -- the function raises rather than returning a fudged one)",
+      "infeasible": "solve_certificate returned None, i.e. HiGHS reported the LP not solved",
+      "certificate-refused-by-exact-check": "solve_certificate raised CertificateError: the float weights did not survive rational re-checking",
+      "error": "any other exception"
+    },
+    "check_exactly": "check_exactly is re-run on every returned certificate and recorded, even though solve_certificate already ran it internally and raises CertificateError when it fails -- so the 'refused' category is reachable in this harness and was simply never triggered.",
+    "solvability": "confirmed twice per rung and independently of the LP: build_graph's own 'solvable' flag and a direct peg1d.distance_to forward BFS.",
+    "solver_status": "the LP was rebuilt row for row outside the engine purely to read scipy/HiGHS' status code, which solve_certificate discards; the replica agrees with the engine on every rung."
+  },
+  "rungs": [
+    {
+      "n": 4,
+      "on_e8_ladder": true,
+      "initial": "0111",
+      "goal": "0100",
+      "n_states": 16,
+      "n_move_geometries": 4,
+      "n_edges": 8,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 2,
+      "min_pegs_reachable": 2,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.003253,
+      "graph_build_seconds": 0.000128,
+      "bfs_seconds": 4e-06,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 5,
+      "on_e8_ladder": false,
+      "initial": "01111",
+      "goal": "01000",
+      "n_states": 32,
+      "n_move_geometries": 6,
+      "n_edges": 24,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 3,
+      "min_pegs_reachable": 2,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.000813,
+      "graph_build_seconds": 0.000291,
+      "bfs_seconds": 9e-06,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 6,
+      "on_e8_ladder": true,
+      "initial": "011111",
+      "goal": "010000",
+      "n_states": 64,
+      "n_move_geometries": 8,
+      "n_edges": 64,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 3,
+      "min_pegs_reachable": 3,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.001302,
+      "graph_build_seconds": 0.000983,
+      "bfs_seconds": 1.1e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 7,
+      "on_e8_ladder": false,
+      "initial": "0111111",
+      "goal": "0100000",
+      "n_states": 128,
+      "n_move_geometries": 10,
+      "n_edges": 160,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 4,
+      "min_pegs_reachable": 3,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.001159,
+      "graph_build_seconds": 0.002279,
+      "bfs_seconds": 1.5e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 8,
+      "on_e8_ladder": true,
+      "initial": "01111111",
+      "goal": "01000000",
+      "n_states": 256,
+      "n_move_geometries": 12,
+      "n_edges": 384,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 4,
+      "min_pegs_reachable": 4,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.001591,
+      "graph_build_seconds": 0.007338,
+      "bfs_seconds": 1.7e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 9,
+      "on_e8_ladder": false,
+      "initial": "011111111",
+      "goal": "010000000",
+      "n_states": 512,
+      "n_move_geometries": 14,
+      "n_edges": 896,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 5,
+      "min_pegs_reachable": 4,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.00225,
+      "graph_build_seconds": 0.019777,
+      "bfs_seconds": 2.4e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 10,
+      "on_e8_ladder": true,
+      "initial": "0111111111",
+      "goal": "0100000000",
+      "n_states": 1024,
+      "n_move_geometries": 16,
+      "n_edges": 2048,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 5,
+      "min_pegs_reachable": 5,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.003479,
+      "graph_build_seconds": 0.057831,
+      "bfs_seconds": 3.1e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 11,
+      "on_e8_ladder": false,
+      "initial": "01111111111",
+      "goal": "01000000000",
+      "n_states": 2048,
+      "n_move_geometries": 18,
+      "n_edges": 4608,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 6,
+      "min_pegs_reachable": 5,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.006406,
+      "graph_build_seconds": 0.163508,
+      "bfs_seconds": 3.9e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 12,
+      "on_e8_ladder": true,
+      "initial": "011111111111",
+      "goal": "010000000000",
+      "n_states": 4096,
+      "n_move_geometries": 20,
+      "n_edges": 10240,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 6,
+      "min_pegs_reachable": 6,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.012567,
+      "graph_build_seconds": 0.473117,
+      "bfs_seconds": 4e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    },
+    {
+      "n": 13,
+      "on_e8_ladder": true,
+      "initial": "0111111111111",
+      "goal": "0100000000000",
+      "n_states": 8192,
+      "n_move_geometries": 22,
+      "n_edges": 22528,
+      "solvable": false,
+      "solvable_how": "two independent enumerations, both saying no: peg1d.build_graph(...)['solvable'][initial] and a direct peg1d.distance_to(initial,[goal]) forward BFS. distance is None == the goal is not in the reachable set.",
+      "bfs_distance_to_goal": null,
+      "bfs_reachable_states": 7,
+      "min_pegs_reachable": 6,
+      "lp_verdict": "infeasible",
+      "lp_seconds": 0.029407,
+      "graph_build_seconds": 1.514932,
+      "bfs_seconds": 7e-05,
+      "lp_error": null,
+      "certificate": null,
+      "lp_solver_status_default_bound_10": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      "lp_solver_status_no_weight_box": {
+        "success": false,
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      },
+      "lp_verdict_at_wider_bounds": {
+        "10": "infeasible",
+        "100": "infeasible",
+        "10000": "infeasible"
+      },
+      "exact_infeasibility_witness": {
+        "both_directions_present_on_every_triple": true,
+        "missing_move_rows": [],
+        "argument": [
+          "row(i,i+1,i+2): w[i+2] - w[i] - w[i+1] <= 0",
+          "row(i+2,i+1,i): w[i] - w[i+2] - w[i+1] <= 0",
+          "their sum is -2*w[i+1] <= 0, so w[1..n-2] >= 0 for every 0<=i<=n-3",
+          "row(n-1,n-2,n-3) gives w[n-3] <= w[n-2] + w[n-1]; w[n-3] >= 0 by the line above (n-3 lies in [1,n-2] for n>=4), so w[n-2] + w[n-1] >= 0",
+          "hence sum_{i=2..n-1} w[i] = sum_{i=2..n-3} w[i] + (w[n-2]+w[n-1]) >= 0",
+          "the goal row demands potential(goal) - potential(initial) >= margin, i.e. w[1] - sum_{i=1..n-1} w[i] >= margin, i.e. sum_{i=2..n-1} w[i] <= -margin < 0 -- contradiction, for every margin > 0 and with no reference to the +/-bound box"
+        ]
+      }
+    }
+  ],
+  "positive_controls": {
+    "why": "so that 'infeasible' on every rung is a result about the family and not a broken solver or a broken harness.",
+    "cases": [
+      {
+        "n": 4,
+        "initial": "1110",
+        "goal": "0100",
+        "lp_verdict": "certificate",
+        "weights_rational": [
+          "-1",
+          "1",
+          "0",
+          "1"
+        ],
+        "initial_potential": "0",
+        "goal_potential": "1",
+        "max_decrease": "2",
+        "check_exactly": {
+          "inv_init": true,
+          "inv_closed": true,
+          "goal_break": true
+        }
+      },
+      {
+        "n": 5,
+        "initial": "11011",
+        "goal": "01000",
+        "bound": 10000,
+        "lp_verdict": "certificate",
+        "weights_rational": [
+          "-1",
+          "1",
+          "0",
+          "1",
+          "-1"
+        ],
+        "initial_potential": "0",
+        "goal_potential": "1",
+        "max_decrease": "2",
+        "check_exactly": {
+          "inv_init": true,
+          "inv_closed": true,
+          "goal_break": true
+        }
+      }
+    ],
+    "note": "'1110' -> '0100' differs from the E8 ladder only in where the hole starts, and it does admit a linear pagoda. The E8 ladder's '0111...' does not, at any n. The endpoint weight w[0] is the only one the move rows leave free to go negative, and '1110' needs exactly that; '0111...' needs the interior sum to go negative, which the move rows forbid."
+  },
+  "zero_space": {
+    "shipped_driver": {
+      "api": "zerospace.analyse(states, colors) -> ZeroSpaceResult",
+      "input_shape": "a *trajectory*: a sequence of states, one colour per cell. It has no goal argument and no notion of reachability.",
+      "demo_n": 8,
+      "demo_trajectory": [
+        "01111111",
+        "10011111",
+        "10100111",
+        "10101001"
+      ],
+      "demo_trajectory_length": 4,
+      "n_features": 16,
+      "difference_rank": 3,
+      "null_space_dimension": 13,
+      "n_global_laws": 4,
+      "global_law_renderings": [
+        "(1@0 + 1@1) mod 2 = 1",
+        "(1@0 + 1@2 + 1@3) mod 2 = 0",
+        "(1@0 + 1@2 + 1@4 + 1@5) mod 2 = 1",
+        "(1@0 + 1@2 + 1@4 + 1@6) mod 2 = 1"
+      ],
+      "verify_on_trajectory": true,
+      "verdict": "not applicable as shipped. A peg game loses one peg per move, so a trajectory from a full board is at most n/2 states long -- here 4 states, 3 transitions, rank 3 out of 16 features, leaving a 13-dimensional 'null space' almost all of which is sampling artefact rather than law. The driver also cannot be asked the E8 question: it takes no goal and returns no unreachability verdict."
+    },
+    "core_applied_to_the_transition_relation": {
+      "what_was_done": "engines.zero_space.gf2.null_space was handed the GF(2) difference vectors of the move *geometries* over the peg encoding (one indicator feature per (cell,colour); a move flips both features of each of src, over, dst), instead of the differences of one observed trajectory. This is the engine's core used on the transition relation, which is sound; it is not what zerospace.analyse does.",
+      "law_shape": "c[i] + c[i+1] + c[i+2] = 0 (mod 2) on every triple -- the Fibonacci-mod-2 pattern; 2 global dimensions for every n",
+      "per_n": {
+        "4": {
+          "n": 4,
+          "null_space_dimension": 6,
+          "n_cell_local": 4,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@1 + 1@2) mod 2 = 0",
+            "(1@0 + 1@1 + 1@3) mod 2 = 0"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 32
+        },
+        "5": {
+          "n": 5,
+          "null_space_dimension": 7,
+          "n_cell_local": 5,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@2 + 1@3) mod 2 = 0",
+            "(1@1 + 1@2 + 1@4) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": false,
+          "n_separating_vectors_in_span": 0
+        },
+        "6": {
+          "n": 6,
+          "null_space_dimension": 8,
+          "n_cell_local": 6,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@1 + 1@3 + 1@4) mod 2 = 1",
+            "(1@0 + 1@2 + 1@3 + 1@5) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 128
+        },
+        "7": {
+          "n": 7,
+          "null_space_dimension": 9,
+          "n_cell_local": 7,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@1 + 1@2 + 1@4 + 1@5) mod 2 = 0",
+            "(1@0 + 1@1 + 1@3 + 1@4 + 1@6) mod 2 = 0"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 256
+        },
+        "8": {
+          "n": 8,
+          "null_space_dimension": 10,
+          "n_cell_local": 8,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@2 + 1@3 + 1@5 + 1@6) mod 2 = 0",
+            "(1@1 + 1@2 + 1@4 + 1@5 + 1@7) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": false,
+          "n_separating_vectors_in_span": 0
+        },
+        "9": {
+          "n": 9,
+          "null_space_dimension": 11,
+          "n_cell_local": 9,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@1 + 1@3 + 1@4 + 1@6 + 1@7) mod 2 = 1",
+            "(1@0 + 1@2 + 1@3 + 1@5 + 1@6 + 1@8) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 1024
+        },
+        "10": {
+          "n": 10,
+          "null_space_dimension": 12,
+          "n_cell_local": 10,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@1 + 1@2 + 1@4 + 1@5 + 1@7 + 1@8) mod 2 = 0",
+            "(1@0 + 1@1 + 1@3 + 1@4 + 1@6 + 1@7 + 1@9) mod 2 = 0"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 2048
+        },
+        "11": {
+          "n": 11,
+          "null_space_dimension": 13,
+          "n_cell_local": 11,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@2 + 1@3 + 1@5 + 1@6 + 1@8 + 1@9) mod 2 = 0",
+            "(1@1 + 1@2 + 1@4 + 1@5 + 1@7 + 1@8 + 1@10) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": false,
+          "n_separating_vectors_in_span": 0
+        },
+        "12": {
+          "n": 12,
+          "null_space_dimension": 14,
+          "n_cell_local": 12,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@0 + 1@1 + 1@3 + 1@4 + 1@6 + 1@7 + 1@9 + 1@10) mod 2 = 1",
+            "(1@0 + 1@2 + 1@3 + 1@5 + 1@6 + 1@8 + 1@9 + 1@11) mod 2 = 1"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 8192
+        },
+        "13": {
+          "n": 13,
+          "null_space_dimension": 15,
+          "n_cell_local": 13,
+          "n_global": 2,
+          "global_law_renderings": [
+            "(1@1 + 1@2 + 1@4 + 1@5 + 1@7 + 1@8 + 1@10 + 1@11) mod 2 = 0",
+            "(1@0 + 1@1 + 1@3 + 1@4 + 1@6 + 1@7 + 1@9 + 1@10 + 1@12) mod 2 = 0"
+          ],
+          "separates_initial_from_goal": true,
+          "n_separating_vectors_in_span": 16384
+        }
+      },
+      "reaches_n": [
+        4,
+        6,
+        7,
+        9,
+        10,
+        12,
+        13
+      ],
+      "misses_n": [
+        5,
+        8,
+        11
+      ],
+      "pattern": "it misses exactly n = 5, 8, 11, i.e. n = 2 (mod 3), where every Fibonacci-mod-2 vector gives the same parity to '0'+'1'*(n-1) and to '01'+'0'*(n-2)"
+    }
+  },
+  "caveats": [
+    "The LP is solved in floating point by HiGHS and only the *returned* weights are re-checked in exact rationals. An 'infeasible' verdict is therefore, in the engine, a floating-point solver's word. On this family that word is independently confirmed by an exact algebraic argument (rungs[].exact_infeasibility_witness): summing the two opposite jump rows over each triple gives w[1..n-2] >= 0, the top triple's reverse row gives w[n-2]+w[n-1] >= 0, so sum_{i>=2} w[i] >= 0, while the goal row demands it be <= -margin. The witness field machine-checks that both rows really are in the LP the engine builds; the inequality chain itself is hand algebra, not machine-verified.",
+    "solve_certificate's defaults are margin=1 and bound=10. Neither causes the failure here: the argument above uses no bound at all, the LP was rerun at bound=100 and bound=10000 with the same verdict, and it was rerun with the +/-bound box removed entirely (lp_solver_status_no_weight_box) with the same verdict.",
+    "This measures the LP as engines/lp_potential builds it: linear pagoda weights, one weight per cell, potential = sum over occupied cells. 'LP cannot reach this' means 'no linear pagoda exists', not 'no LP-shaped argument exists'. A quadratic or state-dependent potential is a different question and was not measured.",
+    "Only one goal state is used per rung. lp_potential is markedly weaker on goal disjunctions (see tests/test_interop.py: 11011 admits certificates for two single-cell goals and none for their disjunction), so this is the LP's best case, not its worst.",
+    "The zero_space result is split deliberately. zerospace.analyse as shipped does NOT apply: it consumes a trajectory, takes no goal, and on this family a trajectory is at most n/2 states long, so most of the 'null space' it reports is sampling artefact. The 7-of-10 number comes from feeding the engine's gf2 core the difference vectors of the move geometries instead -- the engine's linear algebra applied to the transition relation. Reporting that as 'zero_space succeeds' would overstate what the shipped engine does; reporting it as 'zero_space fails' would understate what the null space reaches. Both numbers are in the artefact.",
+    "The ladder scales |S| = 2^n but not the instance. The reachable set from '0'+'1'*(n-1) is 2 states at n=4 and 7 states at n=13 -- it grows like n/2, because the board is full and the first jump is forced. So every rung is a shallow instance dressed in an exponentially larger state space; the LP's failure and IC3's success are both being measured on problems a 7-state BFS settles. That does not weaken the LP result (no linear pagoda exists, however easy the instance is) but it does bound what the ladder says about scale.",
+    "At n=4 the GF(2) global law the null space returns renders as '(1@1 + 1@2) mod 2 = 0' -- positions 1 and 2 always agree -- which is the M9 invariant IC3 converges to at frame 2 and which ic3bounds.axis_size.check_anchor pins character for character. The ladder's anchor rung is therefore one linear elimination away, not a shape only IC3 can see.",
+    "The IC3 side of the comparison is not re-measured here. It is taken from E8's own axis_size run (invariant found at every rung it reached). If any of those rungs were a timeout rather than an invariant, the coverage count below shrinks accordingly.",
+    "Wall-clock seconds are one machine on one afternoon: Windows-11-10.0.26200-SP0, python 3.13.13. Only their ordering means anything."
+  ],
+  "summary": {
+    "n_rungs_measured": 10,
+    "lp_certificate": 0,
+    "lp_infeasible": 10,
+    "lp_certificate_refused_by_exact_check": 0,
+    "lp_error": 0,
+    "all_rungs_confirmed_unsolvable": true,
+    "e8_ladder_rungs": 6,
+    "e8_ladder_rungs_where_lp_is_infeasible": 6,
+    "rungs_of_e8s_ladder_where_ic3_covers_something_lp_cannot": 6,
+    "rungs_of_e8s_ladder_where_ic3_covers_something_neither_lp_nor_the_gf2_null_space_can": 1,
+    "gf2_null_space_reaches_e8_rungs": [
+      4,
+      6,
+      10,
+      12,
+      13
+    ],
+    "reading": "The LP half of Theoria line 205 is licensed by this ladder: lp_potential finds no linear pagoda on any of the 6 E8 rungs (nor on any of the 4 extra rungs), every rung is genuinely unsolvable, and the failure is exact rather than numerical. The null-space half is not: the GF(2) conservation laws of the transition relation separate initial from goal on n = 4, 6, 7, 9, 10, 12, 13 -- 5 of E8's 6 rungs. On those 5, IC3 is re-deriving an invariant that one GF(2) elimination already gives. n = 8 is the only E8 rung where IC3 is the only engine of the three that gets there."
+  },
+  "provenance": {
+    "prompt_id": "E8-lp-reach",
+    "branch": "agent/e8-ic3-scale",
+    "base_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
+    "utc": "2026-07-29T10:57:31Z",
+    "host": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.13",
+      "machine": "AMD64"
+    },
+    "engines": [
+      "engines.lp_potential.potential",
+      "engines.zero_space.zerospace",
+      "engines.zero_space.gf2",
+      "interop.peg1d",
+      "ic3bounds.axis_size"
+    ]
+  }
+}
