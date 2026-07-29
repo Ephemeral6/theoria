@@ -173,6 +173,27 @@ class Consumable(Mechanism):
                        for i, entity in enumerate(world.mine(self))
                        if view.get(i) == ARMED)
 
+        def state_is_monotone(world, prev, _action, nxt) -> bool:
+            before = world.view(self, prev)
+            after = world.view(self, nxt)
+            return all(after.get(i) >= before.get(i)
+                       for i in range(len(world.mine(self))))
+
+        def collapsed_is_never_crossed(world, _prev, _action, nxt) -> bool:
+            view = world.view(self, nxt)
+            return all(entity.cell != nxt.agent
+                       for i, entity in enumerate(world.mine(self))
+                       if view.get(i) == COLLAPSED)
+
+        def tile_monotone(world, prev, action, nxt) -> bool:
+            # Both clauses of the sentence, not just the easy one.  "only ever
+            # rises" is the monotone part; "so a collapsed tile is never crossed
+            # again" is a second, checkable claim, and verifying only the first
+            # while the statement asserts both would put the machine-read verdict
+            # back ahead of the prose it is supposed to summarise.
+            return (state_is_monotone(world, prev, action, nxt)
+                    and collapsed_is_never_crossed(world, prev, action, nxt))
+
         return [
             {"name": "single_armed_tile",
              "statement": "at most one fragile tile is armed at any instant",
@@ -183,9 +204,11 @@ class Consumable(Mechanism):
             {"name": "tile_state_is_monotone",
              "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a "
                           "collapsed tile is never crossed again",
-             # Prose.  It relates two states and `check` sees one; the graph-side
-             # form of the same claim is `cross_fragile` having one witness per tile.
-             "check": None},
+             # It relates two states, which is why `check` (one state) was `None`
+             # here and the claim shipped unverified for thirteen worlds.  It is
+             # an `edge_check` now: a predicate on a transition, run over the
+             # whole reachable graph.
+             "edge_check": tile_monotone},
         ]
 
     def reversibility(self, spec: WorldSpec, mine: Tuple[Entity, ...]) -> List[Dict[str, Any]]:

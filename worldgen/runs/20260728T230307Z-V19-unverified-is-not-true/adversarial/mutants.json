@@ -1,0 +1,727 @@
+[
+ {
+  "name": "A01-holds-key-optimistic-default",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if (status == INV_HOLDS and row.get(\"verified\") is True\n                and row.get(\"holds\") is True):\n            holds.append(name)\n",
+    "        if (status == INV_HOLDS and row.get(\"verified\") is True\n                and row.get(\"holds\", True) is True):\n            holds.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A02-holds-ignores-status",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if (status == INV_HOLDS and row.get(\"verified\") is True\n                and row.get(\"holds\") is True):\n            holds.append(name)\n",
+    "        if (row.get(\"verified\") is True\n                and row.get(\"holds\") is True):\n            holds.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A03-holds-ignores-verified",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if (status == INV_HOLDS and row.get(\"verified\") is True\n                and row.get(\"holds\") is True):\n            holds.append(name)\n",
+    "        if (status == INV_HOLDS\n                and row.get(\"holds\") is True):\n            holds.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A04-truthy-not-identity",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if (status == INV_HOLDS and row.get(\"verified\") is True\n                and row.get(\"holds\") is True):\n            holds.append(name)\n",
+    "        if (status == INV_HOLDS and bool(row.get(\"verified\"))\n                and bool(row.get(\"holds\"))):\n            holds.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A05-sink-to-holds",
+  "edits": [
+   [
+    "core/truth.py",
+    "        else:\n            unverified.append(name)\n",
+    "        else:\n            holds.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A06-sink-to-violated",
+  "edits": [
+   [
+    "core/truth.py",
+    "        else:\n            unverified.append(name)\n",
+    "        else:\n            violated.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A07-drop-status-violated-clause",
+  "edits": [
+   [
+    "core/truth.py",
+    "        elif status == INV_VIOLATED or (row.get(\"verified\") is True\n                                        and row.get(\"holds\") is False):\n            violated.append(name)\n",
+    "        elif (row.get(\"verified\") is True\n                                        and row.get(\"holds\") is False):\n            violated.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A08-drop-verified-violated-clause",
+  "edits": [
+   [
+    "core/truth.py",
+    "        elif status == INV_VIOLATED or (row.get(\"verified\") is True\n                                        and row.get(\"holds\") is False):\n            violated.append(name)\n",
+    "        elif status == INV_VIOLATED:\n            violated.append(name)\n"
+   ]
+  ]
+ },
+ {
+  "name": "A09-nameless-rows-vanish",
+  "edits": [
+   [
+    "core/truth.py",
+    "        name = row.get(\"name\", \"<unnamed>\")\n",
+    "        if \"name\" not in row:\n            continue\n        name = row.get(\"name\", \"<unnamed>\")\n"
+   ]
+  ]
+ },
+ {
+  "name": "A10-unverified-list-emptied-at-return",
+  "edits": [
+   [
+    "core/truth.py",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: violated, INV_UNVERIFIED: unverified}\n",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: violated, INV_UNVERIFIED: []}\n"
+   ]
+  ]
+ },
+ {
+  "name": "A11-violated-list-emptied-at-return",
+  "edits": [
+   [
+    "core/truth.py",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: violated, INV_UNVERIFIED: unverified}\n",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: [], INV_UNVERIFIED: unverified}\n"
+   ]
+  ]
+ },
+ {
+  "name": "A12-violated-and-unverified-swapped",
+  "edits": [
+   [
+    "core/truth.py",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: violated, INV_UNVERIFIED: unverified}\n",
+    "    return {INV_HOLDS: holds, INV_VIOLATED: unverified, INV_UNVERIFIED: violated}\n"
+   ]
+  ]
+ },
+ {
+  "name": "B01-all-hold-ignores-unverified",
+  "edits": [
+   [
+    "core/truth.py",
+    "    status = classify_invariants(invariants)\n    return not status[INV_VIOLATED] and not status[INV_UNVERIFIED]\n",
+    "    status = classify_invariants(invariants)\n    return not status[INV_VIOLATED]\n"
+   ]
+  ]
+ },
+ {
+  "name": "B02-all-hold-ignores-violated",
+  "edits": [
+   [
+    "core/truth.py",
+    "    status = classify_invariants(invariants)\n    return not status[INV_VIOLATED] and not status[INV_UNVERIFIED]\n",
+    "    status = classify_invariants(invariants)\n    return not status[INV_UNVERIFIED]\n"
+   ]
+  ]
+ },
+ {
+  "name": "B03-all-hold-always-true",
+  "edits": [
+   [
+    "core/truth.py",
+    "    status = classify_invariants(invariants)\n    return not status[INV_VIOLATED] and not status[INV_UNVERIFIED]\n",
+    "    classify_invariants(invariants)\n    return True\n"
+   ]
+  ]
+ },
+ {
+  "name": "C01-prose-branch-reports-holds",
+  "edits": [
+   [
+    "core/truth.py",
+    "            row[\"verified\"] = False\n            row[\"status\"] = INV_UNVERIFIED\n            row[\"note\"] = (\"prose only \u2014 no callable check, so this claim is \"\n                           \"unverified, which is not the same as true\")\n",
+    "            row[\"verified\"] = True\n            row[\"holds\"] = True\n            row[\"status\"] = INV_HOLDS\n            row[\"note\"] = (\"prose only\")\n"
+   ]
+  ]
+ },
+ {
+  "name": "C02-prose-branch-drops-status-stamp",
+  "edits": [
+   [
+    "core/truth.py",
+    "            row[\"verified\"] = False\n            row[\"status\"] = INV_UNVERIFIED\n            row[\"note\"] = (\"prose only \u2014 no callable check, so this claim is \"\n                           \"unverified, which is not the same as true\")\n",
+    "            row[\"verified\"] = False\n            row[\"note\"] = (\"prose only \u2014 no callable check, so this claim is \"\n                           \"unverified, which is not the same as true\")\n"
+   ]
+  ]
+ },
+ {
+  "name": "C03-vacuity-guard-disabled",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if not violations and evidence == 0:\n",
+    "        if False and not violations and evidence == 0:\n"
+   ]
+  ]
+ },
+ {
+  "name": "C04-vacuity-guard-states-only",
+  "edits": [
+   [
+    "core/truth.py",
+    "            evidence += len(states)\n",
+    "            evidence += 0\n"
+   ]
+  ]
+ },
+ {
+  "name": "C05-vacuity-guard-edges-not-counted",
+  "edits": [
+   [
+    "core/truth.py",
+    "            evidence += edges\n",
+    "            evidence += 0\n"
+   ]
+  ]
+ },
+ {
+  "name": "C06-edge-check-never-runs",
+  "edits": [
+   [
+    "core/truth.py",
+    "        if edge_check is not None and len(violations) < 3:\n",
+    "        if edge_check is not None and len(violations) < 3 and False:\n"
+   ]
+  ]
+ },
+ {
+  "name": "C07-edge-loop-first-transition-only",
+  "edits": [
+   [
+    "core/truth.py",
+    "            for prev, action, nxt, _rule in world.transitions(states):\n",
+    "            for prev, action, nxt, _rule in list(world.transitions(states))[:1]:\n"
+   ]
+  ]
+ },
+ {
+  "name": "C08-state-loop-first-state-only",
+  "edits": [
+   [
+    "core/truth.py",
+    "            for state in states:\n",
+    "            for state in states[:1]:\n"
+   ]
+  ]
+ },
+ {
+  "name": "C09-holds-hardcoded-true",
+  "edits": [
+   [
+    "core/truth.py",
+    "        row[\"holds\"] = not violations\n",
+    "        row[\"holds\"] = True\n"
+   ]
+  ]
+ },
+ {
+  "name": "C10-status-hardcoded-holds",
+  "edits": [
+   [
+    "core/truth.py",
+    "        row[\"status\"] = INV_VIOLATED if violations else INV_HOLDS\n",
+    "        row[\"status\"] = INV_HOLDS\n"
+   ]
+  ]
+ },
+ {
+  "name": "C11-status-hardcoded-violated",
+  "edits": [
+   [
+    "core/truth.py",
+    "        row[\"status\"] = INV_VIOLATED if violations else INV_HOLDS\n",
+    "        row[\"status\"] = INV_VIOLATED\n"
+   ]
+  ]
+ },
+ {
+  "name": "C12-check-exception-swallowed",
+  "edits": [
+   [
+    "core/truth.py",
+    "                except Exception as exc:\n                    violations.append({\"state\": list(state.key()), \"error\": repr(exc)})\n                    break\n",
+    "                except Exception:\n                    continue\n"
+   ]
+  ]
+ },
+ {
+  "name": "C13-edge-exception-swallowed",
+  "edits": [
+   [
+    "core/truth.py",
+    "                except Exception as exc:\n                    violations.append({\"state\": list(prev.key()), \"action\": action,\n                                       \"next\": list(nxt.key()), \"error\": repr(exc)})\n                    break\n",
+    "                except Exception:\n                    continue\n"
+   ]
+  ]
+ },
+ {
+  "name": "C14-states-checked-misreported",
+  "edits": [
+   [
+    "core/truth.py",
+    "            row[\"states_checked\"] = len(states)\n",
+    "            row[\"states_checked\"] = 0\n"
+   ]
+  ]
+ },
+ {
+  "name": "C15-transitions-checked-misreported",
+  "edits": [
+   [
+    "core/truth.py",
+    "            row[\"transitions_checked\"] = edges\n",
+    "            row[\"transitions_checked\"] = 0\n"
+   ]
+  ]
+ },
+ {
+  "name": "C16-verified-stamp-false",
+  "edits": [
+   [
+    "core/truth.py",
+    "        row[\"verified\"] = True\n        row[\"holds\"]",
+    "        row[\"verified\"] = False\n        row[\"holds\"]"
+   ]
+  ]
+ },
+ {
+  "name": "C17-edge-violations-not-recorded",
+  "edits": [
+   [
+    "core/truth.py",
+    "                if not ok:\n                    violations.append({\"state\": list(prev.key()), \"action\": action,\n                                       \"next\": list(nxt.key())})\n                    if len(violations) >= 3:\n                        break\n",
+    "                if not ok:\n                    pass\n"
+   ]
+  ]
+ },
+ {
+  "name": "D01-ground-truth-all-hold-true",
+  "edits": [
+   [
+    "core/truth.py",
+    "        \"invariants_all_hold\": all_invariants_hold(invariants),\n",
+    "        \"invariants_all_hold\": True,\n"
+   ]
+  ]
+ },
+ {
+  "name": "D02-ground-truth-status-emptied",
+  "edits": [
+   [
+    "core/truth.py",
+    "        \"invariant_status\": classify_invariants(invariants),\n",
+    "        \"invariant_status\": {INV_HOLDS: [], INV_VIOLATED: [], INV_UNVERIFIED: []},\n"
+   ]
+  ]
+ },
+ {
+  "name": "D03-markdown-unverified-marker-removed",
+  "edits": [
+   [
+    "core/truth.py",
+    "            lines.append(\"* **%s** \u2014 %s  _(prose only, **unverified** \u2014 no \"\n",
+    "            lines.append(\"* **%s** \u2014 %s  _(prose only, no \"\n"
+   ]
+  ]
+ },
+ {
+  "name": "D04-markdown-violated-marker-removed",
+  "edits": [
+   [
+    "core/truth.py",
+    "                            \"holds\" if inv[\"holds\"] else \"**VIOLATED**\"))\n",
+    "                            \"holds\"))\n"
+   ]
+  ]
+ },
+ {
+  "name": "D05-markdown-summary-always-true",
+  "edits": [
+   [
+    "core/truth.py",
+    "                 \"true\" if truth[\"invariants_all_hold\"] else \"false\"),\n",
+    "                 \"true\"),\n"
+   ]
+  ]
+ },
+ {
+  "name": "D06-markdown-rulecorr-and-not-or",
+  "edits": [
+   [
+    "core/truth.py",
+    "    if \"rule_correspondence\" not in truth or \"agrees\" not in corr:\n",
+    "    if \"rule_correspondence\" not in truth and \"agrees\" not in corr:\n"
+   ]
+  ]
+ },
+ {
+  "name": "D07-markdown-omits-unverified-bullets",
+  "edits": [
+   [
+    "core/truth.py",
+    "    for inv in truth[\"invariants\"]:\n        if not inv.get(\"verified\"):\n",
+    "    for inv in truth[\"invariants\"]:\n        if not inv.get(\"verified\"):\n            continue\n        if False:\n"
+   ]
+  ]
+ },
+ {
+  "name": "E01-row-violated-emptied",
+  "edits": [
+   [
+    "build.py",
+    "        \"invariants_violated\": list(truth_blob[\"invariant_status\"][\"violated\"]),\n",
+    "        \"invariants_violated\": [],\n"
+   ]
+  ]
+ },
+ {
+  "name": "E02-row-unverified-emptied",
+  "edits": [
+   [
+    "build.py",
+    "        \"invariants_unverified\": list(truth_blob[\"invariant_status\"][\"unverified\"]),\n",
+    "        \"invariants_unverified\": [],\n"
+   ]
+  ]
+ },
+ {
+  "name": "E03-totals-unverified-emptied",
+  "edits": [
+   [
+    "build.py",
+    "            \"invariant_unverified\": sorted(r[\"world_id\"] for r in rows\n                                           if r[\"invariants_unverified\"]),\n",
+    "            \"invariant_unverified\": [],\n"
+   ]
+  ]
+ },
+ {
+  "name": "E04-totals-failures-emptied",
+  "edits": [
+   [
+    "build.py",
+    "            \"invariant_failures\": sorted(r[\"world_id\"] for r in rows\n                                         if r[\"invariants_violated\"]),\n",
+    "            \"invariant_failures\": [],\n"
+   ]
+  ]
+ },
+ {
+  "name": "E05-totals-keys-swapped",
+  "edits": [
+   [
+    "build.py",
+    "            \"invariant_failures\": sorted(r[\"world_id\"] for r in rows\n                                         if r[\"invariants_violated\"]),\n            \"invariant_unverified\": sorted(r[\"world_id\"] for r in rows\n                                           if r[\"invariants_unverified\"]),\n",
+    "            \"invariant_failures\": sorted(r[\"world_id\"] for r in rows\n                                         if r[\"invariants_unverified\"]),\n            \"invariant_unverified\": sorted(r[\"world_id\"] for r in rows\n                                           if r[\"invariants_violated\"]),\n"
+   ]
+  ]
+ },
+ {
+  "name": "E06-unverified-gate-removed",
+  "edits": [
+   [
+    "build.py",
+    "    (\"invariant_unverified\",\n     \"a declared invariant ships unverified \u2014 no callable check ran, so the world \"\n     \"cannot claim it holds; give it a `check` or an `edge_check`, or stop \"\n     \"declaring it\"),\n",
+    ""
+   ]
+  ]
+ },
+ {
+  "name": "E07-violated-gate-removed",
+  "edits": [
+   [
+    "build.py",
+    "    (\"invariant_failures\", \"a declared invariant is violated on a reachable state\"),\n",
+    ""
+   ]
+  ]
+ },
+ {
+  "name": "E08-missing-key-back-to-optimistic-get",
+  "edits": [
+   [
+    "build.py",
+    "        if key not in totals:\n            out.append(\"%-24s gate could not be evaluated: the manifest carries \"\n                       \"no `%s` key, and an unevaluated gate is not a passed one\"\n                       % (\"<manifest>\", key))\n            continue\n        for world_id in totals[key]:\n",
+    "        for world_id in totals.get(key, ()):\n"
+   ]
+  ]
+ },
+ {
+  "name": "E09-gate-failures-returns-empty",
+  "edits": [
+   [
+    "build.py",
+    "        for world_id in totals[key]:\n            out.append(\"%-24s %s (%s)\" % (world_id, why, key))\n    return out\n",
+    "        for world_id in totals[key]:\n            out.append(\"%-24s %s (%s)\" % (world_id, why, key))\n    return []\n"
+   ]
+  ]
+ },
+ {
+  "name": "E10-main-exits-zero-on-gate-failure",
+  "edits": [
+   [
+    "build.py",
+    "    if failures:\n        print()\n        print(\"BUILD GATE FAILED:\")\n        for line in failures:\n            print(\"  \" + line)\n        return 1\n",
+    "    if failures:\n        print()\n        print(\"BUILD GATE FAILED:\")\n        for line in failures:\n            print(\"  \" + line)\n        return 0\n"
+   ]
+  ]
+ },
+ {
+  "name": "E11-mutant-gate-results-discarded",
+  "edits": [
+   [
+    "build.py",
+    "        failures.extend(gate_failures(mutants))\n",
+    "        gate_failures(mutants)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F01-latch-edge-check-returns-true",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "            def latch_monotone(world, prev, _action, nxt) -> bool:\n                mine_ = world.mine(self)\n",
+    "            def latch_monotone(world, prev, _action, nxt) -> bool:\n                return True\n                mine_ = world.mine(self)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F02-latch-monotone-direction-flipped",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "                    if after.get(index) < before.get(index):\n",
+    "                    if after.get(index) > before.get(index):\n"
+   ]
+  ]
+ },
+ {
+  "name": "F03-latch-per-switch-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "                    if after.get(index) < before.get(index):\n                        return False\n",
+    "                    if False:\n                        return False\n"
+   ]
+  ]
+ },
+ {
+  "name": "F04-latch-net-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "                    if (self._net_on(mine_, before, net)\n                            and not self._net_on(mine_, after, net)):\n                        return False\n",
+    "                    if False:\n                        return False\n"
+   ]
+  ]
+ },
+ {
+  "name": "F05-latch-reverted-to-prose",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "                 \"edge_check\": latch_monotone})\n",
+    "                 \"check\": None})\n"
+   ]
+  ]
+ },
+ {
+  "name": "F06-collection-edge-check-returns-true",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "        def collection_monotone(world, prev, _action, nxt) -> bool:\n            before = world.view(self, prev)\n",
+    "        def collection_monotone(world, prev, _action, nxt) -> bool:\n            return True\n            before = world.view(self, prev)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F07-collection-direction-flipped",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "            if self._collected(after) < self._collected(before):\n",
+    "            if self._collected(after) > self._collected(before):\n"
+   ]
+  ]
+ },
+ {
+  "name": "F08-collection-count-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "            if self._collected(after) < self._collected(before):\n                return False\n",
+    "            if False:\n                return False\n"
+   ]
+  ]
+ },
+ {
+  "name": "F09-collection-lock-reopen-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "            return now_closed <= was_closed\n",
+    "            return True\n"
+   ]
+  ]
+ },
+ {
+  "name": "F10-collection-reverted-to-prose",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "             \"edge_check\": collection_monotone},\n",
+    "             \"check\": None},\n"
+   ]
+  ]
+ },
+ {
+  "name": "F11-tile-edge-check-returns-true",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "        def tile_monotone(world, prev, action, nxt) -> bool:\n",
+    "        def tile_monotone(world, prev, action, nxt) -> bool:\n            return True\n"
+   ]
+  ]
+ },
+ {
+  "name": "F12-tile-monotone-direction-flipped",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "            return all(after.get(i) >= before.get(i)\n",
+    "            return all(after.get(i) <= before.get(i)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F13-tile-monotone-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "            return (state_is_monotone(world, prev, action, nxt)\n                    and collapsed_is_never_crossed(world, prev, action, nxt))\n",
+    "            return collapsed_is_never_crossed(world, prev, action, nxt)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F14-tile-collapsed-crossing-clause-dropped",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "            return (state_is_monotone(world, prev, action, nxt)\n                    and collapsed_is_never_crossed(world, prev, action, nxt))\n",
+    "            return state_is_monotone(world, prev, action, nxt)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F15-tile-reverted-to-prose",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "             \"edge_check\": tile_monotone},\n",
+    "             \"check\": None},\n"
+   ]
+  ]
+ },
+ {
+  "name": "G01-sandbox-anchor-guard-disabled",
+  "edits": [
+   [
+    "tests/invariant_sandbox.py",
+    "            found = text.count(anchor)\n            if found != 1:\n",
+    "            found = text.count(anchor)\n            if False:\n"
+   ]
+  ]
+ },
+ {
+  "name": "G02-sandbox-table-anchor-broken-guard-intact",
+  "edits": [
+   [
+    "tests/invariant_sandbox.py",
+    "_TABLE_ANCHOR = (\n    \"    for mechanism in world.mechanisms:\\n\"\n",
+    "_TABLE_ANCHOR = (\n    \"    for MECHANISM in world.mechanisms:\\n\"\n"
+   ]
+  ]
+ },
+ {
+  "name": "G03-sandbox-anchor-broken-and-guard-disabled",
+  "edits": [
+   [
+    "tests/invariant_sandbox.py",
+    "            found = text.count(anchor)\n            if found != 1:\n",
+    "            found = text.count(anchor)\n            if False:\n"
+   ],
+   [
+    "tests/invariant_sandbox.py",
+    "_TABLE_ANCHOR = (\n    \"    for mechanism in world.mechanisms:\\n\"\n",
+    "_TABLE_ANCHOR = (\n    \"    for MECHANISM in world.mechanisms:\\n\"\n"
+   ]
+  ]
+ },
+ {
+  "name": "G04-sandbox-pythonpath-not-isolated",
+  "edits": [
+   [
+    "tests/invariant_sandbox.py",
+    "    env[\"PYTHONPATH\"] = root\n",
+    "    env[\"PYTHONPATH\"] = root + os.pathsep + os.path.dirname(PACKAGE)\n"
+   ]
+  ]
+ },
+ {
+  "name": "G05-sandbox-gate-lines-always-empty",
+  "edits": [
+   [
+    "tests/invariant_sandbox.py",
+    "    out = []\n    seen = False\n",
+    "    return ()\n    out = []\n    seen = False\n"
+   ]
+  ]
+ },
+ {
+  "name": "H01-mutate-now-false-back-to-optimistic-get",
+  "edits": [
+   [
+    "mutate.py",
+    "    mutant_status = truth.classify_invariants(mutant_inv.values())\n    now_false = sorted(mutant_status[truth.INV_VIOLATED])\n",
+    "    now_false = sorted(name for name, row in mutant_inv.items()\n                       if row.get(\"verified\") and not row.get(\"holds\", True))\n"
+   ]
+  ]
+ },
+ {
+  "name": "H02-mutate-now-false-includes-unverified",
+  "edits": [
+   [
+    "mutate.py",
+    "    now_false = sorted(mutant_status[truth.INV_VIOLATED])\n",
+    "    now_false = sorted(mutant_status[truth.INV_VIOLATED]\n                       + mutant_status[truth.INV_UNVERIFIED])\n"
+   ]
+  ]
+ }
+]

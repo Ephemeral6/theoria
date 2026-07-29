@@ -29,11 +29,13 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+5 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 42 reachable states: holds)_
 * **grid_shape** — every frame is 5 x 7  _(checked on 42 reachable states: holds)_
 * **single_armed_tile** — at most one fragile tile is armed at any instant  _(checked on 42 reachable states: holds)_
 * **armed_tile_under_agent** — an armed fragile tile's cell is the agent's cell  _(checked on 42 reachable states: holds)_
-* **tile_state_is_monotone** — a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again  _(prose only, unverified)_
+* **tile_state_is_monotone** — a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again  _(checked on 168 transitions: holds)_
 
 ## Solvability
 

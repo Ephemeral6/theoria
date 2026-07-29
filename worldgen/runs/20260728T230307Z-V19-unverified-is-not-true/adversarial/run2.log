@@ -1,0 +1,8 @@
+{"mutant": "F16-latch-edge-check-returns-false", "pytest_rc": 1, "build_rc": 1}
+{"mutant": "F17-collection-edge-check-returns-false", "pytest_rc": 1, "build_rc": 1}
+{"mutant": "F18-tile-edge-check-returns-false", "pytest_rc": 1, "build_rc": 1}
+{"mutant": "C18-transitions-checked-key-omitted", "pytest_rc": 0, "build_rc": 0}
+{"mutant": "C19-edge-loop-half-the-transitions", "pytest_rc": 0, "build_rc": 0}
+{"mutant": "C20-state-loop-half-the-states", "pytest_rc": 0, "build_rc": 0}
+{"mutant": "E12-gates-tuple-emptied", "pytest_rc": 1, "build_rc": 0}
+{"mutant": "D08-markdown-invariant-section-dropped", "pytest_rc": 1, "build_rc": 0}

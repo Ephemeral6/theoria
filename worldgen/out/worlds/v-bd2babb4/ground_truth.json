@@ -15,12 +15,27 @@
     8,
     10
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "phase_in_range",
+      "color_reads_phase",
+      "agent_conserved",
+      "mouths_static",
+      "token_count",
+      "collection_is_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +43,7 @@
       "name": "grid_shape",
       "statement": "every frame is 8 x 10",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +51,7 @@
       "name": "phase_in_range",
       "statement": "every cycler's phase stays in range(k)",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +59,7 @@
       "name": "color_reads_phase",
       "statement": "the colour of a cycler cell determines its phase, except where the agent covers it",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -49,6 +67,7 @@
       "name": "agent_conserved",
       "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -56,6 +75,7 @@
       "name": "mouths_static",
       "statement": "each of the 2 portal mouth(s) shows colour 2 unless the agent is standing on it",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
@@ -63,13 +83,16 @@
       "name": "token_count",
       "statement": "the number of cells showing colour 3 equals the number of tokens not yet collected",
       "states_checked": 387,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "collection_is_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 1548,
+      "verified": true
     }
   ],
   "invariants_all_hold": true,

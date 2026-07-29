@@ -298,6 +298,31 @@ class SwitchDoor(Mechanism):
                  "check": drawn_iff_closed})
 
         if any(e.prop("mode", "toggle") == "latch" for _, e in switches):
+
+            def latch_monotone(world, prev, _action, nxt) -> bool:
+                mine_ = world.mine(self)
+                before = world.view(self, prev)
+                after = world.view(self, nxt)
+                for index, entity in self._switches(mine_):
+                    if entity.prop("mode", "toggle") != "latch":
+                        continue
+                    if after.get(index) < before.get(index):
+                        return False
+                # ...and the aggregate bit of an all-latch net, which is the
+                # second half of the statement and does not follow from the
+                # first for free: a net is an OR over its switches, so it is
+                # monotone only when *every* switch feeding it is a latch.
+                nets = {e.prop("net", "a") for _i, e in self._switches(mine_)}
+                for net in nets:
+                    feeding = [e for _i, e in self._switches(mine_)
+                               if e.prop("net", "a") == net]
+                    if not all(e.prop("mode", "toggle") == "latch" for e in feeding):
+                        continue
+                    if (self._net_on(mine_, before, net)
+                            and not self._net_on(mine_, after, net)):
+                        return False
+                return True
+
             out.append(
                 {"name": "latch_monotone",
                  "statement": "every latch switch's bit is monotone non-decreasing "
@@ -305,10 +330,10 @@ class SwitchDoor(Mechanism):
                               "of a net whose switches are all latches: once 1, "
                               "never 0 again",
                  # Monotonicity is a property of a transition, not of a state, so
-                 # there is nothing honest to put here — a single-state predicate
-                 # cannot distinguish a bit that rose from one that was always 1.
-                 # `core/reversibility.py` settles it on the reachable graph.
-                 "check": None})
+                 # `check` — which sees one state — was `None` and the claim went
+                 # out unverified while `invariants_all_hold` said `true`.  An
+                 # `edge_check` sees both endpoints and settles it directly.
+                 "edge_check": latch_monotone})
 
         return out
 

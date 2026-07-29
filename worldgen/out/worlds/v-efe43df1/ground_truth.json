@@ -15,12 +15,25 @@
     7,
     9
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "block_count",
+      "blocks_disjoint",
+      "door_presence_tracks_net",
+      "latch_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 134,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +41,7 @@
       "name": "grid_shape",
       "statement": "every frame is 7 x 9",
       "states_checked": 134,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +49,7 @@
       "name": "block_count",
       "statement": "exactly 1 cell(s) show colour 2 at all times",
       "states_checked": 134,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +57,7 @@
       "name": "blocks_disjoint",
       "statement": "no two blocks ever occupy the same cell",
       "states_checked": 134,
+      "status": "holds",
       "verified": true
     },
     {
@@ -49,13 +65,16 @@
       "name": "door_presence_tracks_net",
       "statement": "a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
       "states_checked": 134,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "latch_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 536,
+      "verified": true
     }
   ],
   "invariants_all_hold": true,
