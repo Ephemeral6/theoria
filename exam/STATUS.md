@@ -644,10 +644,20 @@ noisy. The wording is corrected where the guard lives.
 
 `v11-handover-a0`'s eight `optimal_action` items sit on `warren`, `flume` and
 `kiln` twice each — all solvable — and on `stile` and `cairn` once each, which are
-exactly the two dead boards. So "does my `level:` name occur only once on this
-sheet" answers `solvable` **8 of 8**, at an exact false-positive rate of 0.0357.
-The shipped gate scored none of it: each `level:` token sits on one or two items,
-and `flume` at k = 2 lands exactly on the majority floor.
+exactly the two dead boards. So "does my `level:` name occur only once **among the
+`optimal_action` items**" answers `solvable` **8 of 8**, at an exact false-positive
+rate of 0.0357. The shipped gate scored none of it: each `level:` token sits on one
+or two items, and `flume` at k = 2 lands exactly on the majority floor.
+
+> **Scope corrected by V26.** This paragraph first said "only once on this sheet",
+> and that rule is **7 of 8**. `level:` tags also ride the seven `step_semantics`
+> items, making whole-sheet counts `stile` 1, `cairn` 2, `flume` 3, `kiln` 4,
+> `warren` 5 — so unscoped, the rule calls `cairn` solvable, and `cairn` is the
+> board `PREREGISTRATION.json` nominated in advance as the sharpest
+> discriminator. The gate never had the bug; it groups by `kind` and so computed
+> the family-scoped rule all along. Only the prose was loose, and loose in the
+> direction that would let a reader test the wrong rule, see 7 of 8, and conclude
+> there was nothing here.
 
 This paper's first build was voided for printing `dead` in `tags`
 (`runs/20260728T202101Z-V11-handover-auto/VOIDED.md`) and re-run as `-r2` on the

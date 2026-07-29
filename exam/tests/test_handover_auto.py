@@ -61,61 +61,156 @@ def test_the_build_is_deterministic_and_offline():
     assert sha256(a) == sha256(b)
 
 
-#: The one leak this sheet is known to carry, pinned rather than tolerated.
-#:
-#: Found by V25's pooled single-holder cut on the day it was switched on, in a
-#: paper whose first build was VOIDED for a *different* leak in the same family
-#: (`VOIDED.md` in `runs/20260728T202101Z-V11-handover-auto`) and re-run as `-r2`
-#: on the belief that it was clean. It was not: the eight `optimal_action` items
-#: sit on `warren`, `flume` and `kiln` twice each -- all solvable -- and on
-#: `stile` and `cairn` once each, which are exactly the two dead boards. So "does
-#: my `level:` name occur only once on this sheet" answers `solvable` 8 of 8, at
-#: an exact false-positive rate of 0.0357.
-#:
-#: Not repaired here on purpose. Repairing it means new board states for `stile`
-#: and `cairn` and a ruling on `-r2`, whose six examinees all answered `none` on
-#: exactly these two items while disagreeing with each other on the solvable
-#: ones -- so that run cannot distinguish reasoning from reading the tag
-#: distribution. That is a call about a sat run's results, not a change to a leak
-#: checker, and V25 exists because two decisions in one diff cannot be told apart
-#: afterwards. Filed for the fix; recorded here so nothing depends on silence.
-KNOWN_LEAK = {"label_source": "solvable", "field": "tags",
-              "token": leakage.PRIVATE_MARKER_CUT,
-              "carrier_ids": ["v11-opt-01", "v11-opt-04"]}
+def test_the_sheet_is_clean_under_the_full_leak_check():
+    """No pin, no xfail: every finding is a failure.
 
+    V25 could not assert this. It had just found, with the pooled single-holder
+    cut on the day that cut was switched on, that this sheet leaked `solvable`
+    8 of 8 through level-name multiplicity at an exact false-positive rate of
+    0.0357 -- in a paper whose first build was already VOIDED for a *different*
+    leak in the same family (`VOIDED.md` in
+    `runs/20260728T202101Z-V11-handover-auto`) and re-run as `-r2` on the belief
+    it was clean. So V25 pinned the finding by identity instead, deliberately not
+    as an xfail, because an xfail switches the check off for the paper and the
+    whole family of defects V19-V25 chased is checks that stopped looking while
+    still printing.
 
-def test_the_sheet_carries_exactly_one_known_leak_and_no_other():
-    """Still a full leak check: any finding but the pinned one fails.
-
-    Written this way rather than as an xfail because an xfail would switch the
-    check off for this paper, and the whole family of defects V19-V25 chased is
-    checks that stopped looking while still printing.
+    V26 repaired `_OPTIMAL_CASES` and ruled on `-r2`
+    (`runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md`), so the pin is
+    deleted rather than left as folklore -- which is what V25's own comment
+    instructed whoever repaired it to do.
     """
-    try:
-        report = leakage.check_paper(PAPER, SHEET, key_doc=KEY,
-                                     answer_of=HA.answer_labels(PAPER, KEY))
-    except LeakageError as error:
-        findings = error.findings if hasattr(error, "findings") else None
-        assert findings is not None or KNOWN_LEAK["token"] in str(error), (
-            "the leak check fired for a reason that is not the known one: %s"
-            % error)
-        # The message is the only channel the gate offers, so it is parsed for
-        # the pinned identity rather than trusted for "something went wrong".
-        text = str(error)
-        for value in (KNOWN_LEAK["label_source"], KNOWN_LEAK["field"],
-                      KNOWN_LEAK["token"], "v11-opt-01", "v11-opt-04"):
-            assert value in text, (
-                "a leak other than the pinned one, or a changed one: %s" % text)
-        assert text.count("'check':") == 1, (
-            "more than one finding; only the known leak is accounted for: %s"
-            % text)
-        return
-    # If someone repairs `_OPTIMAL_CASES`, this is the branch that must pass, and
-    # the pin above should then be deleted rather than left as folklore.
+    report = leakage.check_paper(PAPER, SHEET, key_doc=KEY,
+                                 answer_of=HA.answer_labels(PAPER, KEY))
     assert report["probe_hits"] == 0
     assert report["structural_hits"] == 0
-    assert report.get("metadata_hits", 0) == 0, (
-        "sheet is clean of the known leak but carries another")
+    # The metadata half is asserted as "the check ran and could have spoken",
+    # not as a count. V25's draft of this test asserted
+    # `report.get("metadata_hits", 0) == 0`, and an adversarial review of V26
+    # showed that key does not exist in `check_paper`'s return value at all
+    # (`check_paper` *raises* on a metadata hit, so reaching this line already
+    # means none fired). The assertion therefore passed on every paper ever
+    # written, including a paper with the leak this file exists to keep out --
+    # which is verbatim the "checks that stopped looking while still printing"
+    # family V19-V25 chased, committed inside the fix for one of them.
+    assert "metadata_hits" not in report, (
+        "`check_paper` grew a `metadata_hits` key; assert on it directly now "
+        "instead of on the fact that it did not raise")
+    assert "solvable" in report["label_sets_checked"], (
+        "the `solvable` label set was not derived, so the metadata check never "
+        "looked at the family that carried V25's leak: %s"
+        % report["label_sets_checked"])
+    assert "tags" in report["metadata_fields_checked"]
+    # V25 measured that 6 of 10 shipped (paper, label set) groups cannot fire at
+    # all, so green is not evidence unless the group could have gone red. This
+    # pins that at least one group under `solvable` -- the label set the leak
+    # travelled on -- is genuinely testable here.
+    power = report["metadata_multiplicity"]["solvable"]["group_power"]
+    assert any(g["can_fire_at_all"] for g in power), (
+        "every `solvable` group is untestable, so this test's green means the "
+        "check could not have spoken: %s" % power)
+
+
+def test_level_multiplicity_is_uniform():
+    """The repair, stated as the property rather than as the two states.
+
+    Pinning the states would pass for a paper that added a ninth case on
+    `warren` and reopened the channel from the other side. What has to hold is
+    that how often a level name occurs on the sheet carries no information, so
+    that is what is asserted -- and separately that both dead boards are still
+    dead, since the repair would also "work" by making everything solvable, which
+    would delete the question the family exists to ask.
+    """
+    from collections import Counter
+    counts = Counter(level for level, _p, _b in HA._OPTIMAL_CASES)
+    assert len(set(counts.values())) == 1, (
+        "level-name multiplicity is not uniform, which is the channel V25 found: "
+        "%s" % dict(counts))
+    solvable = Counter()
+    for level, player, box in HA._OPTIMAL_CASES:
+        length = H._plan_length(HA.LEVEL_OF[level], player, box)
+        solvable["dead" if length is None else "solvable"] += 1
+    assert solvable["dead"] == 2, (
+        "the family needs both dead boards to keep asking `solvable`: %s"
+        % dict(solvable))
+
+
+def test_a_box_on_the_outer_ring_is_dead_for_a_reason_and_not_by_accident():
+    """The sharpest predictor on this family is a sound law. Pinned as such.
+
+    An adversarial review of V26's repair found that "the Box is drawn on the
+    outermost ring" predicts `solvable` 10 of 10 here -- and that V26's repair
+    *sharpened* it, from 8 of 8 at p_fire 0.0357 to 10 of 10 at 0.0222, because
+    both dead cases put the Box at the literal same cell `(0, 5)` (both `stile`
+    and `cairn` are authored with `start_box=(0, 5)`) while both appended states
+    put it in the interior.
+
+    It was nearly filed as a second leak. It is not one, and the difference is
+    measured rather than argued: a Box on an edge can only ever be pushed along
+    that edge, so if the target is *not* on the ring the Box can never reach it.
+    Every ring cell on `warren`, `kiln`, `stile` and `cairn` is therefore dead
+    from every player position -- 26, 22, 21 and 17 cells, all checked -- and
+    `flume`, the one level whose target *is* on the ring at `(7, 5)`, has 2 ring
+    cells that are solvable, exactly as the law says it must. A rule whose truth
+    tracks the target's position is world reasoning, which is what the paper is
+    for; `leakage.METADATA_FIELDS` excludes `state` and `board` on precisely that
+    doctrine.
+
+    What this test pins is the *reason*, because the reason is what makes it
+    legitimate. The dangerous edit is not "the rule stops being pure" -- an
+    impure rule is a broken channel, which is fine. It is "the rule stays pure
+    while ceasing to be derivable": a ring Box that is dead on a board where ring
+    Boxes *can* be pushed to the target is dead for some other reason, so a reader
+    scoring it with ring-implies-dead is being rewarded for a Sokoban reflex
+    instead of a derivation, and that is a leak. So the invariant asserted is the
+    conditional one -- any level contributing a ring-Box item must have its target
+    off the ring -- with `flume` standing as the law's positive control.
+
+    The residual defect that cannot be tested from here is recorded in the run's
+    RULING.md: this paper cannot distinguish a reader applying the sound rule from
+    one applying the unsound "edge Box is dead, full stop" prior, because four of
+    the five targets happen to sit off the ring.
+    """
+    def on_ring(spec, cell):
+        row, col = cell
+        return (row == 0 or col == 0
+                or row == spec.height - 1 or col == spec.width - 1)
+
+    def solvable_ring_boxes(spec):
+        walls = set(map(tuple, spec.walls))
+        free = [(r, c) for r in range(spec.height) for c in range(spec.width)
+                if (r, c) not in walls]
+        return [b for b in free
+                if on_ring(spec, b) and tuple(b) != tuple(spec.target)
+                and any(H._plan_length(spec, p, b) for p in free if p != b)]
+
+    # The invariant that keeps the family honest.
+    for level, _player, box in HA._OPTIMAL_CASES:
+        spec = HA.LEVEL_OF[level]
+        if not on_ring(spec, box):
+            continue
+        assert H._plan_length(spec, _player, box) is None, (
+            "%s %s/%s has its Box on the ring and is solvable, which is fine in "
+            "itself -- but check the ring cut's purity before assuming so"
+            % (level, _player, box))
+        assert not on_ring(spec, spec.target), (
+            "%s contributes a ring-Box item while its own target %s is on the "
+            "ring, so ring-implies-dead is pure here but not derivable -- that "
+            "item now rewards a Sokoban reflex rather than a deduction"
+            % (level, spec.target))
+        assert not solvable_ring_boxes(spec), (
+            "%s has a dead ring-Box item and also solvable ring Boxes, so the "
+            "rule the item leans on is unsound on this very board: %s"
+            % (level, solvable_ring_boxes(spec)))
+
+    # Positive control: the law must also *fail to forbid* the solvable case, or
+    # it is not a law, just a description of how these boards were authored.
+    flume = HA.LEVEL_OF["flume"]
+    assert on_ring(flume, flume.target), "flume's target moved off the ring"
+    assert solvable_ring_boxes(flume), (
+        "flume's target is on the ring, so some ring Box must be pushable to it; "
+        "if this fails, ring-implies-dead is not a law of this world and every "
+        "argument built on it above is void")
 
 
 def test_every_family_of_1_11_is_on_the_sheet():
@@ -510,47 +605,17 @@ def test_the_prompt_asks_for_a_tool_report():
 
 # --------------------------------------------------------------- the driver
 
-#: A level distribution with the known leak taken out of it, for the tests that
-#: need a *buildable* paper to exercise something else. `stile` and `cairn` were
-#: the two levels that appeared once and were exactly the dead boards; giving each
-#: a second, solvable state makes every level appear twice, so how often a level
-#: name occurs says nothing about the answer.
-#:
-#: Both states were found by search over the free cells of those boards and are the
-#: longest solvable ones either admits (plan_len 11 each -- `stile` and `cairn` are
-#: 6-row boards and do not reach the 14 that `warren`/`flume`/`kiln` do, which is
-#: why the "needs a real search" items still have to come from the big three).
-#: `leakage.check_paper` passes on the resulting paper under every derived label
-#: set; that is the measurement that makes this a repair rather than a guess.
-#:
-#: It is deliberately NOT applied to `_OPTIMAL_CASES` itself. Repairing the shipped
-#: paper would silently turn `runs/20260728T202540Z-V11-handover-auto-r2` into
-#: results for a paper that no longer exists, with nothing on the record saying its
-#: numbers were produced while the leak was live. The fix and the ruling on that
-#: run belong together, in the item filed for them -- which is why the states are
-#: written down here rather than left to be searched for twice.
-BALANCED_EXTRA_CASES = (("stile", (5, 0), (2, 4)),
-                        ("cairn", (3, 5), (4, 1)))
+#: V25 carried the repair states here as `BALANCED_EXTRA_CASES`, monkeypatched on
+#: by a `balanced_paper` fixture, because it had measured the leak but ruling on
+#: the `-r2` run that sat the leaking sheet was not its call. V26 applied them to
+#: `_OPTIMAL_CASES` itself and ruled on the run, so the fixture is gone: with the
+#: shipped cases already balanced, patching the extras back on would have appended
+#: `stile` and `cairn` a *third* time -- a paper no one ships, quietly standing in
+#: for the real one in the two driver tests below. They use the real `PAPER` now.
 
 
-@pytest.fixture
-def balanced_paper(monkeypatch):
-    """The paper with its level multiplicity balanced, so it passes the gate."""
-    monkeypatch.setattr(HA, "_OPTIMAL_CASES",
-                        HA._OPTIMAL_CASES + BALANCED_EXTRA_CASES)
-    paper = HA.build()
-    key = paper.key(registry.digest())
-    # If this ever raises, the fixture stopped being clean and the two tests using
-    # it would otherwise fail for a reason that has nothing to do with what they
-    # check.
-    leakage.check_paper(paper, paper.sheet(registry.digest()), key_doc=key,
-                        answer_of=HA.answer_labels(paper, key))
-    return paper, key
-
-
-def test_the_driver_freezes_the_key_without_writing_it(tmp_path,
-                                                      balanced_paper):
-    paper, key = balanced_paper
+def test_the_driver_freezes_the_key_without_writing_it(tmp_path):
+    paper, key = PAPER, KEY
     run_dir = str(tmp_path / "run")
     out = DRIVER.build(run_dir)
     prereg = out["prereg"]
@@ -567,8 +632,7 @@ def test_the_driver_freezes_the_key_without_writing_it(tmp_path,
     assert prereg["key_sha256"] == sha256(key)
 
 
-def test_scoring_refuses_a_key_that_no_longer_matches(tmp_path, monkeypatch,
-                                                     balanced_paper):
+def test_scoring_refuses_a_key_that_no_longer_matches(tmp_path, monkeypatch):
     run_dir = str(tmp_path / "run")
     DRIVER.build(run_dir)
     prereg_path = os.path.join(run_dir, "PREREGISTRATION.json")

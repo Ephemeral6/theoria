@@ -309,3 +309,27 @@ second consecutive attempt that got no answer. What the run leaves behind:
 The next run of this apparatus must not be on A0. Accuracy there is exhausted,
 and the only channel left for the tier question is cost, which nothing here
 measures.
+
+---
+
+## Annulled on the `optimal_action` family (V26, 2026-07-29)
+
+A second leak into the same two items was found after this run was sat, by V25's
+pooled private-marker cut: among the eight `optimal_action` items, `stile` and
+`cairn` carried their `level:` tag exactly once and were exactly the two dead
+boards, so family-scoped level-name multiplicity predicts `action=none;
+plan_len=none` 8 of 8 at an exact false-positive rate of 1/28 = 0.035714 against
+alpha 0.05. All six examinees answered `none` on exactly `v11-opt-01` and
+`v11-opt-04` and nowhere else, which is what both search and counting predict, so
+those marks carry no information about reasoning and **no number here may be cited
+as evidence about the dead boards.**
+
+**The 36 shortest-plan integers are not annulled** (six solvable items x six
+readers, unanimous: 24, 25, 14, 16, 22, 21). No channel on this sheet carries
+plan-length information.
+
+This run is **not** voided, and the ruling says why -- including why the sentence
+V25 filed for it ("cannot distinguish reasoning from tag-reading") is too strong,
+and why the reader disagreements on `v11-opt-03`/`-06`/`-08` are evidence that the
+readers *did* reason. Full ruling, with the five-channel census:
+`exam/runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md`.

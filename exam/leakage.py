@@ -834,12 +834,24 @@ def _token_hits_within(labelled: List[Item], answer_of: Dict[str, str],
     #     constant guard the tokens use, because an enumeration predicts nothing.
     #
     # This is not hypothetical. On `v11-handover-a0`/`solvable` the two `false`
-    # items are exactly the two whose `level:` name occurs once (`stile`, `cairn`)
-    # while every `true` item shares its level name with another -- so "is my
-    # level name unique on this sheet?" answers the paper 8 of 8, at an exact
+    # items were exactly the two whose `level:` name occurred once (`stile`,
+    # `cairn`) while every `true` item shared its level name with another -- so
+    # "is my level name unique?" answered the paper 8 of 8, at an exact
     # false-positive rate of 0.0357. The shipped gate scored none of it: each
     # `level:` token sits on one or two items, and `flume` at k=2 scores exactly
     # the majority floor.
+    #
+    # **Scope, corrected by V26 -- the first wording of this comment said "unique
+    # on this sheet", and that rule is 7 of 8, not 8 of 8.** `level:` tags also
+    # ride the `step_semantics` items, so whole-sheet counts were `stile` 1,
+    # `cairn` 2, `flume` 3, `kiln` 4, `warren` 5: unscoped, the rule misses
+    # `cairn` -- the board `PREREGISTRATION.json` had named the sharpest
+    # discriminator. The 8-of-8 rule is "unique *among the `optimal_action`
+    # items*", which is the scope this function computes in anyway, one group at a
+    # time. Worth the four lines because a reader who tests the unscoped rule,
+    # sees 7 of 8, and concludes there was no leak has been misled by our own
+    # comment. Repaired in V26; the ruling is
+    # `runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md`.
     #
     # Known evasion, stated rather than papered over: padding every item with a
     # decoy private marker pushes k to n and silences this. That is measured in
