@@ -1,0 +1,204 @@
+{
+  "artefacts": [
+    {
+      "bytes": 34229,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/campaign/ar25.log",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "Console transcript of the paid run. .gitignore has excluded out/campaign/*.log since before A14 and that call stands: the log is a human-readable shadow of the ledger, which is committed. Recorded here so the exclusion is a decision with a digest behind it rather than a silent gap.",
+      "sha256": "cfc897a376e50ffe2f3946e1dd52b339953dcd3f3d1c62f3137206ea09ee7ad1"
+    },
+    {
+      "bytes": 4533,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "crlf",
+      "eol_note": "Written by the harness in Python text mode on Windows. The pinned digest is over these CRLF bytes; .gitattributes disables eol translation for out/campaign/*.json so a clone reproduces them.",
+      "path": "out/campaign/campaign_ar25.json",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The per-game roll-up of a paid campaign, and the only source for the bare-CC column of the main table. battery already cites its sha256 as evidence, so the question of whether it belongs in the repository was settled before A14 asked it. 4.5 kB.",
+      "sha256": "2d1d5140cdc3f6639addc98d45ef620b25bc07da8bb735c714bff240df4c183d"
+    },
+    {
+      "bytes": 4537,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "crlf",
+      "eol_note": "Written by the harness in Python text mode on Windows. The pinned digest is over these CRLF bytes; .gitattributes disables eol translation for out/campaign/*.json so a clone reproduces them.",
+      "path": "out/campaign/campaign_g50t.json",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The per-game roll-up of a paid campaign, and the only source for the bare-CC column of the main table. battery already cites its sha256 as evidence, so the question of whether it belongs in the repository was settled before A14 asked it. 4.5 kB.",
+      "sha256": "d83ba976d9c2c79429e009af48c5923d5cd14061a9cff1f6739db9ce7fe2d469"
+    },
+    {
+      "bytes": 4535,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "crlf",
+      "eol_note": "Written by the harness in Python text mode on Windows. The pinned digest is over these CRLF bytes; .gitattributes disables eol translation for out/campaign/*.json so a clone reproduces them.",
+      "path": "out/campaign/campaign_sk48.json",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The per-game roll-up of a paid campaign, and the only source for the bare-CC column of the main table. battery already cites its sha256 as evidence, so the question of whether it belongs in the repository was settled before A14 asked it. 4.5 kB.",
+      "sha256": "6683f5d72e80206b58fbcd384e32067189d49174dd13ffcec9a2dc12e6b57ab2"
+    },
+    {
+      "bytes": 4540,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "crlf",
+      "eol_note": "Written by the harness in Python text mode on Windows. The pinned digest is over these CRLF bytes; .gitattributes disables eol translation for out/campaign/*.json so a clone reproduces them.",
+      "path": "out/campaign/campaign_tn36.json",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The per-game roll-up of a paid campaign, and the only source for the bare-CC column of the main table. battery already cites its sha256 as evidence, so the question of whether it belongs in the repository was settled before A14 asked it. 4.5 kB.",
+      "sha256": "35a8c66fb97432aa0d499d3256a8d2b37ab15e0c878f2cb62cd1b411a85e47ec"
+    },
+    {
+      "bytes": 38136,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/campaign/g50t.log",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "Console transcript of the paid run. .gitignore has excluded out/campaign/*.log since before A14 and that call stands: the log is a human-readable shadow of the ledger, which is committed. Recorded here so the exclusion is a decision with a digest behind it rather than a silent gap.",
+      "sha256": "2891135cc82b7183cff084cdf6b2dc9002f1135c4186c41d2082f4254179ea5d"
+    },
+    {
+      "bytes": 25582,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/campaign/sk48.log",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "Console transcript of the paid run. .gitignore has excluded out/campaign/*.log since before A14 and that call stands: the log is a human-readable shadow of the ledger, which is committed. Recorded here so the exclusion is a decision with a digest behind it rather than a silent gap.",
+      "sha256": "b23a8b73b080b2006503e465739af1af66199eceb6e1e75e8803dbdd477958a9"
+    },
+    {
+      "bytes": 15809,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/campaign/tn36.log",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "Console transcript of the paid run. .gitignore has excluded out/campaign/*.log since before A14 and that call stands: the log is a human-readable shadow of the ledger, which is committed. Recorded here so the exclusion is a decision with a digest behind it rather than a silent gap.",
+      "sha256": "af9bda9bb4a88e930b9f4a4564ed06746782634518e9745044135e1884e32902"
+    },
+    {
+      "bytes": 6267799,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/ledger.ar25.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The action-by-action ledger the campaign roll-up is computed from -- the frames and model calls that were actually paid for, and not derivable from anything else in the repository (the tracked ledger.jsonl is a different, shorter record, 560 lines against these 754-1347). battery pins its sha256 too. Large uncompressed because every row carries a full frame, but it is repetitive integer grids and packs at 50-76x, so the cost to the repository is well under a megabyte for all four.",
+      "sha256": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+    },
+    {
+      "bytes": 38311448,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/ledger.g50t.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The action-by-action ledger the campaign roll-up is computed from -- the frames and model calls that were actually paid for, and not derivable from anything else in the repository (the tracked ledger.jsonl is a different, shorter record, 560 lines against these 754-1347). battery pins its sha256 too. Large uncompressed because every row carries a full frame, but it is repetitive integer grids and packs at 50-76x, so the cost to the repository is well under a megabyte for all four.",
+      "sha256": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5"
+    },
+    {
+      "bytes": 6919008,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/ledger.sk48.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The action-by-action ledger the campaign roll-up is computed from -- the frames and model calls that were actually paid for, and not derivable from anything else in the repository (the tracked ledger.jsonl is a different, shorter record, 560 lines against these 754-1347). battery pins its sha256 too. Large uncompressed because every row carries a full frame, but it is repetitive integer grids and packs at 50-76x, so the cost to the repository is well under a megabyte for all four.",
+      "sha256": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0"
+    },
+    {
+      "bytes": 3636837,
+      "consumed_by": [
+        "battery/runs/20260728T061147Z-v3/MANIFEST.json#input_digests"
+      ],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/ledger.tn36.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The action-by-action ledger the campaign roll-up is computed from -- the frames and model calls that were actually paid for, and not derivable from anything else in the repository (the tracked ledger.jsonl is a different, shorter record, 560 lines against these 754-1347). battery pins its sha256 too. Large uncompressed because every row carries a full frame, but it is repetitive integer grids and packs at 50-76x, so the cost to the repository is well under a megabyte for all four.",
+      "sha256": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b"
+    },
+    {
+      "bytes": 2362554,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/probe_log.ar25.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The HTTP-level record of the same paid campaign: it is what substantiates the http_calls counts and the retry envelope that AUDIT.md section 6 and INC-BA-002 argue from. Not pinned by battery, but its a7-* counterparts for the later campaign are already tracked, so leaving these out would make the record inconsistent across two runs of the same harness. Every X-API-Key occurrence is '<redacted>' (checked 1:1 over all four files, 14294 occurrences, 14294 redacted).",
+      "sha256": "1db5457eecdc7a2fc7f68367971b186e17570bf50ca5fd52857446b404e83574"
+    },
+    {
+      "bytes": 2669737,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/probe_log.g50t.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The HTTP-level record of the same paid campaign: it is what substantiates the http_calls counts and the retry envelope that AUDIT.md section 6 and INC-BA-002 argue from. Not pinned by battery, but its a7-* counterparts for the later campaign are already tracked, so leaving these out would make the record inconsistent across two runs of the same harness. Every X-API-Key occurrence is '<redacted>' (checked 1:1 over all four files, 14294 occurrences, 14294 redacted).",
+      "sha256": "b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899"
+    },
+    {
+      "bytes": 1935799,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/probe_log.sk48.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The HTTP-level record of the same paid campaign: it is what substantiates the http_calls counts and the retry envelope that AUDIT.md section 6 and INC-BA-002 argue from. Not pinned by battery, but its a7-* counterparts for the later campaign are already tracked, so leaving these out would make the record inconsistent across two runs of the same harness. Every X-API-Key occurrence is '<redacted>' (checked 1:1 over all four files, 14294 occurrences, 14294 redacted).",
+      "sha256": "3a19f8912a91dd666dc81d9e376767c201148285d015f1e748a05428dc16e05d"
+    },
+    {
+      "bytes": 1872168,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "committed",
+      "eol": "lf",
+      "path": "out/shards/probe_log.tn36.jsonl",
+      "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
+      "reason": "The HTTP-level record of the same paid campaign: it is what substantiates the http_calls counts and the retry envelope that AUDIT.md section 6 and INC-BA-002 argue from. Not pinned by battery, but its a7-* counterparts for the later campaign are already tracked, so leaving these out would make the record inconsistent across two runs of the same harness. Every X-API-Key occurrence is '<redacted>' (checked 1:1 over all four files, 14294 occurrences, 14294 redacted).",
+      "sha256": "acc22260911d99aec6722d2d694e0ad46c2e5dfde3f2292802bf588d5cbf7b0a"
+    }
+  ],
+  "generated_by": "baseline-arms/runs/20260729T100000Z-a14/build_register.py",
+  "prompt_id": "A14-campaign-json-untracked",
+  "rule": "An artefact whose creation spent money or hours is either committed, or has its sha256 and provenance recorded here. Never neither. Checked by harness.cost_artefacts, which baseline-arms/verify.py runs as part of rung 3.",
+  "schema": "baseline-arms/cost-artefacts@1"
+}
