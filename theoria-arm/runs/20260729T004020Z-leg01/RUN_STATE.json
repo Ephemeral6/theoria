@@ -1,12 +1,12 @@
 {
  "budget": {
   "actions_failed": 0,
-  "actions_left": 12,
-  "actions_ok": 0,
+  "actions_left": 9,
+  "actions_ok": 3,
   "ceiling_actions": 12,
   "ceiling_commands": 2000,
-  "commands_sent": 9,
-  "http_amplification": null,
+  "commands_sent": 32,
+  "http_amplification": 10.667,
   "probe_actions": 0,
   "reserve_for_probes": 0,
   "resets": 1
@@ -68,7 +68,7 @@
   "unpriced_calls": 0,
   "usage_total": {}
  },
- "elapsed_s": 28.4,
+ "elapsed_s": 98.2,
  "levels": {
   "boundaries": 0,
   "events": [],
@@ -79,7 +79,7 @@
   ]
  },
  "outcome": "not_started",
- "steps": 0,
+ "steps": 3,
  "stopped_because": "",
  "surprises": {
   "by_family": {

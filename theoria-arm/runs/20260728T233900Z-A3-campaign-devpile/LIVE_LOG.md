@@ -102,3 +102,53 @@ Expectations written before the result, so they can be wrong in public:
   money, is what will end it.**
 
 Result appended below when it lands.
+
+## Two findings from the live leg, before it even reached a model call
+
+### The credential alarm fires on every single request
+
+The leg's ledger carries one `incident` per `env_step`, all of kind
+`credential_in_body` — *"a key-shaped string appeared in a request body"* —
+across all five command paths (`RESET`, `ACTION1`–`ACTION4`).
+
+They are false positives, and provably so: this arm holds no credential at all.
+`harness/arc.py` is checked by a test that greps it for `os.environ`,
+`read_secret`, `getenv`, `X-API-Key` and `Authorization` and requires all of
+them absent; the key is injected only inside `proxy/env_proxy.py`. What the
+detector is matching is the **`guid`** every request body carries, which is a
+UUID, and `redact.py`'s `_KEYISH` includes a UUID-shaped alternative. The
+comment beside that pattern already anticipates it —
+*"`card_id` and `guid` are also UUIDs, so matching here raises an incident and
+never rewrites the ledger"* — so the ledger is not corrupted and this is a
+detector limitation working as documented.
+
+**But the consequence is not benign.** The signal fires on 100% of requests, so
+a genuine credential leak would arrive as one more line in a stream that is
+already all alarm. An alarm with a 100% false-positive rate is not a
+conservative alarm; it is an alarm nobody can read, and it is exactly the shape
+of thing that gets filtered out of a dashboard and then misses the one that
+mattered. Worth a cheap fix in `proxy/` — exclude the known UUID-valued fields
+(`guid`, `card_id`) before matching, so the detector's remaining hits mean
+something.
+
+### HTTP amplification is 1.0 — the "no cookie jar" blocker did not bite
+
+Measured over the leg's first 39 steps: **39 outbound attempts for 39 steps,
+amplification exactly 1.0**, every request succeeding first try.
+
+That is a correction to a blocker I was handed and repeated. The pre-spend audit
+listed "no cookie jar in `theoria-arm`, so amplification is 5–17× instead of
+~1.25" as a high-severity item, on the evidence of the three P-8 runs (17.0×,
+7.33×, 5.71×). Those numbers are real, but they were measured **before** the
+transport changed — `arc-recon`'s INC-007a landed 13 minutes before the first
+P-8 scorecard opened, and the cookie jar reached `baseline-arms` afterwards.
+Whatever is handling it now (the environment proxy's own forwarding, most
+likely, rather than anything in the arm), this arm is **not** paying an
+amplification penalty on live traffic today.
+
+So the porting job I listed as an outstanding gap is, on this evidence, not
+needed — and more usefully, the P-8 amplification figures should not be quoted
+as a property of the arm. They are a property of a transport that no longer
+exists. I am recording this as a measurement rather than acting on it: one leg
+is one leg, and the honest statement is "1.0 on 39 live steps of g50t on
+2026-07-29", not "the problem is solved".
