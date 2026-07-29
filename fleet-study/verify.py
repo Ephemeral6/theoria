@@ -19,7 +19,12 @@ What "evidence" means here
 Every row must cite at least one thing an auditor can open:
 
     git:<40-hex>      resolved with `git cat-file -t`
-    file:<path>       repo-relative or absolute; `#anchor` suffix ignored
+    file:<path>       **repo-relative**; `#anchor` suffix ignored
+
+An absolute path is rejected.  It resolves only on the machine that wrote it,
+and against *that* machine's checkout rather than the tree being verified --
+115 such citations sat green for a whole round here, and were concealing two
+paths to a directory that had never been committed anywhere.
 
 A `file:` path that no longer exists is *not* automatically an error -- this
 repo deletes board items when they are claimed, so half the delivery record
@@ -43,6 +48,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = Path(__file__).resolve().parent / "data"
 
 SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
+#: `C:\...`, `C:/...`, `/...`, or a UNC share -- anything not repo-relative.
+ABS_RE = re.compile(r"^([A-Za-z]:[\\/]|[\\/])")
 UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?Z$")
 
 # dataset -> (id prefix, required keys, {key: allowed values})
@@ -189,6 +196,16 @@ def check_schema(name: str, rows: list[dict], rep: Report) -> None:
                     rep.err(where, f"evidence entry {item!r} is not a string")
                 elif not item.startswith(("git:", "file:")):
                     rep.err(where, f"evidence entry {item!r} lacks a git:/file: scheme")
+                elif item.startswith("file:") and ABS_RE.match(item[5:]):
+                    # An absolute path resolves only on the machine that wrote
+                    # it, and points at *that* machine's checkout rather than
+                    # the tree being verified.  115 of these sat green for a
+                    # whole round, and hid two citations to a directory that
+                    # was never committed at all -- the checker was passing on
+                    # a promise it had no way to test.
+                    rep.err(where, f"evidence entry {item!r} is an absolute path; "
+                                   "citations must be repo-relative or no other "
+                                   "machine can resolve them")
 
         # A row whose every claim is hedged to nothing is not evidence.
         if row.get("confidence") == "low" and not row.get("caveat"):
@@ -309,6 +326,11 @@ _DEFECTS = [
      [{**_GOOD, "evidence": ["file:monitor/this-was-never-created.py"]}],
      "neither in the worktree nor in history"),
     ("CRLF", [_GOOD], "CRLF"),
+    ("absolute citation path",
+     [{**_GOOD, "evidence": ["file:C:/Users/user/Desktop/theoria/CLAUDE.md"]}],
+     "is an absolute path"),
+    ("posix absolute citation path",
+     [{**_GOOD, "evidence": ["file:/etc/hostname"]}], "is an absolute path"),
 ]
 
 #: Same shape, but asserted against `rep.warnings` instead of `rep.errors`.
