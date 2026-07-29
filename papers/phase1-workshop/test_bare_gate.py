@@ -60,6 +60,18 @@ def test_a_repo_relative_path_passes(tmp_path):
     assert flagged == []
 
 
+def test_a_path_whose_basename_is_ambiguous_still_passes(tmp_path):
+    """The whole point of the check is that the *path* disambiguates.
+
+    Without the `"/" in token` guard the check would look at the basename of a
+    full path and flag `cold-start-a0/STATUS.md` for the nine `STATUS.md` in the
+    tree -- flagging the very form it is asking authors to use.
+    """
+    assert len(vp._candidates("STATUS.md")) > 1
+    flagged, _, _ = scan(tmp_path, "Recorded in `cold-start-a0/STATUS.md`.\n")
+    assert flagged == []
+
+
 def test_a_line_anchored_path_passes(tmp_path):
     """The form P16 found check B could not see; F must not re-flag it."""
     flagged, _, _ = scan(
@@ -145,7 +157,13 @@ def test_worktrees_are_not_candidates():
     `.worktrees/` holds ~90 checkouts of this same repository. Counting them
     would make every filename in the paper ambiguous, and the check would be
     measuring the agent's scratch space rather than the published tree.
+
+    The membership assertion is the load-bearing one, and it is deliberately
+    not the obvious path-prefix test alone: when this suite runs *from inside*
+    a worktree there is no `.worktrees/` under ROOT, so the prefix check is
+    vacuous exactly where the work happens and would pin nothing.
     """
+    assert {".worktrees", ".git", ".claude", "__pycache__"} <= vp._WALK_SKIP
     assert all(
         not p.startswith((".worktrees/", ".git/", ".claude/"))
         for p in vp._candidates("PAPER.md"))
