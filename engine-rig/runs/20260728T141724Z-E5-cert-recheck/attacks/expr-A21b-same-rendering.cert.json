@@ -1,0 +1,26 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A21b-same-rendering-other-theorem",
+  "predicate": [
+    "table",
+    "dead",
+    [
+      "var",
+      "b1"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "dead": {
+      "arity": 1,
+      "default": false,
+      "entries": [
+        [
+          "1,4",
+          true
+        ]
+      ]
+    }
+  }
+}

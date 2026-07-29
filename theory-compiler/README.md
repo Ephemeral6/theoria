@@ -17,7 +17,25 @@
 | `generators/gen_python.py` | IR | 可执行预测器（系统里唯一的预测器） |
 | `generators/gen_lean.py` | IR + 证书 | Lean 4 发展，0 sorry，不发 `native_decide` |
 | `generators/gen_markdown.py` | AST | 确定性自然语言，无模型在链路上 |
-| `generators/gen_pddl.py` | AST | PDDL domain + problem |
+| `generators/gen_pddl.py` | AST（+ 可选 ProblemSpec）| PDDL domain + problem |
+| `handover.py` | theory.dsl（+ playbook.dsl）+ ≥2 份关卡 | 自足的移交包 |
+
+## 移交包
+
+```bash
+python -m theory_compiler.handover --world-id w --theory theory.dsl \
+    --level a=a.json --level b=b.json --out pkg/
+python -m tools.build_handover_packages          # 本轨道发布的两个包
+python -m tools.build_handover_packages --check  # 逐字节复算
+```
+
+一个目录，交给一个没有仓库的读者代替仓库（Theoria 1.11 分层移交）：四形态 + 确定性
+英文渲染 + 词汇表索引 + 一次上下文扫描。**一包带两关**——三个形态是 grounded 的，
+只带一关的包会教读者把那一关的家具当成世界律。生不成的形态在包首页照实公布，
+连生成器自己的拒绝理由一起；PDDL 在被叫作 generated 之前先过 `strips` 复读一遍
+（D-TC-032）。
+
+`tools/handover_exam.py` 判卷：题目与答案都从包**自己**编译出来的预测器算，不碰仓库。
 
 ## Lean 发展有两种，由说明书挑
 

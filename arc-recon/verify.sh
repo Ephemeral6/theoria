@@ -60,7 +60,17 @@ step "pile cut, claim set and the sealed-contact audit" \
 step "campaign rate budget fits inside the documented limit" \
     python rate_budget.py --measure
 
-step "no credential or cookie value reached the ledger" python redact_ledger.py
+# `redact_ledger.py` with no args scans for the INC-008 shape only -- one field,
+# `set_cookie`, because that is the field the incident was about. Kept: it is the
+# remediation's own before/after check and it should keep working.
+step "no cookie value reached the ledger (the INC-008 field)" python redact_ledger.py
+
+# The general form, and the one that does not depend on knowing which incident
+# happened. Every ledger this repo can see, every credential shape, whoever wrote
+# the line -- see tools/ledger_invariants.py on why this is a check on the file
+# rather than a rule inside a writer.
+step "ledger invariants hold on the artefacts themselves" \
+    python tools/ledger_invariants.py --all
 
 echo
 if [ "$fail" -eq 0 ]; then

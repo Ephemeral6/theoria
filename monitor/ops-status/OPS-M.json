@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-28T08:01:50Z",
- "cycle": 2,
- "state": "working",
- "note": "三个分支已手动合入（含 C2-semantics-migrate），全量门 9 目录首次全绿；但 TheoriaReflex 虽已启用仍每轮 UnboundLocalError 崩溃，ci_merge 仍无自动驱动，详见 inbox 20260728T075952Z"
+ "utc": "2026-07-28T17:08:05Z",
+ "cycle": 8,
+ "state": "blocked",
+ "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z"
 }

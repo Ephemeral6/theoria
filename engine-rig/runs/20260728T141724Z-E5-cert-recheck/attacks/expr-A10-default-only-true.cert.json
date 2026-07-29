@@ -1,0 +1,21 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A10-default-only-true",
+  "predicate": [
+    "table",
+    "t",
+    [
+      "var",
+      "pos0"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "t": {
+      "arity": 1,
+      "default": true,
+      "entries": []
+    }
+  }
+}

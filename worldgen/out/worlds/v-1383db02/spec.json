@@ -1,0 +1,57 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "portal": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        5,
+        5
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    }
+  ],
+  "families": [
+    "portal"
+  ],
+  "flags": {},
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "#########",
+    "#....#..#",
+    "#.####..#",
+    "#...##..#",
+    "#.###...#",
+    "#.....#.#",
+    "#########"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 2,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-1383db02"
+}

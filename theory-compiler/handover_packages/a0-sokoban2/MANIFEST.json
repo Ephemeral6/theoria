@@ -1,0 +1,97 @@
+{
+  "bundle_digest": "c64e2eb81b266b503e8d360ca18e7384fa7c84314a144132901f6ca08f9d1c71",
+  "compile_warnings": [],
+  "context_scan": {
+    "blocking": 0,
+    "by_category": {
+      "citation/artefact_not_here": 3,
+      "citation/path_out_of_bundle": 5,
+      "citation/run_id": 1
+    },
+    "citations": 9,
+    "excluded": [
+      "MANIFEST.json",
+      "SEAL.md"
+    ]
+  },
+  "files": {
+    "GLOSSARY.md": "8602cad92990d9f6c703940c0cd43fcded630006b864ad76b368a3441908ce09",
+    "README.md": "13cc3581a734bf186b265f96cf7336be1cfe3683ea09ea25ad4bc214718b9750",
+    "SEAL.md": "e8ff2fd2e51708cf0c54ca52a9efa955b98c1ea134dfec31aa3e7343b1ad4e21",
+    "levels/crossing-up/BOARD.md": "b240c8f8b60b97d0c0b725649b8b93828040bcd2fea30477a6c64d3e59b75404",
+    "levels/crossing-up/LEVEL.json": "3b9d5acf94c044845736570ea793574d4f07fe7dd07b88fb73cbf89d0763b6ef",
+    "levels/crossing-up/Level.lean": "9621e4691c8810ac44747cb5044bad7f1316477bc196aa192ae12b380c273ba1",
+    "levels/crossing-up/predictor.py": "0d54edf8ea3ee3584535e462d297c60d8a52be5961b75d27a1903bb883e7b2f6",
+    "levels/match/BOARD.md": "1d51d613b6f4483eecd1035bba816a1346c8e52ab761d67a02b0cdb54f3aa5b9",
+    "levels/match/LEVEL.json": "56c75dd29fd604b93c34610a6fa3c4b0bfe1098f83b18d570cad8b579e3397fc",
+    "levels/match/Level.lean": "df4437fafadd2678b1811a9a84fdaba4e945341fb08d4f6e888f776993d60847",
+    "levels/match/predictor.py": "142ceb4851786b3f208834765aa07795833f4d3785eb9014196d26638a253b32",
+    "manual/MANUAL.dsl": "b7c06b49c3cddd121e9a74ccb05ec8f776307eca146a2f9ee045e7a4fe883112",
+    "manual/MANUAL.md": "77e22c94bc1b3ae0beb6e2fec9e61dcad2a1eed593093bc30bdf33ec0560a118",
+    "manual/PRIMITIVES.md": "4c2f53e3626661e135d7b8ee638ded6747a9c9588652a6fb38aafbc3b6b00c3f"
+  },
+  "forms": {
+    "english": {
+      "status": "generated"
+    },
+    "executable": {
+      "status": "generated"
+    },
+    "planning_domain": {
+      "status": "refused",
+      "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+    },
+    "planning_problem": {
+      "status": "refused",
+      "why": "crossing-up: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition.; match: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+    },
+    "proof": {
+      "status": "generated"
+    }
+  },
+  "forms_by_level": {
+    "crossing-up": {
+      "executable": {
+        "status": "generated"
+      },
+      "planning_problem": {
+        "status": "refused",
+        "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+      },
+      "proof": {
+        "status": "generated"
+      }
+    },
+    "match": {
+      "executable": {
+        "status": "generated"
+      },
+      "planning_problem": {
+        "status": "refused",
+        "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+      },
+      "proof": {
+        "status": "generated"
+      }
+    }
+  },
+  "levels": [
+    "match",
+    "crossing-up"
+  ],
+  "package_format": "theoria-handover/1",
+  "provenance": {
+    "manual": {
+      "copied_from": "theory-compiler/tests/fixtures/sokoban2_theory.dsl",
+      "ground_truth_check": "theory-compiler/tools/probe_mentions.py, against a0-spike/world/sokoban2.py",
+      "upstream": "a0-spike/theory/theory.dsl",
+      "why_not_upstream": "no package can be built from the upstream manual. It declares `slid(o, dir)`; a push moves the box and carries the pusher, so a two-argument slide leaves half its own effect unnamed and there is nothing to tell a reader the event does. It also leaves `dir` a free name, which the executable and proof backends refuse. The shipped file is that manual with the v0.3 repairs (X-1, X-5), every rule bound over a declared `domain direction`."
+    },
+    "playbook": {
+      "why_absent": "a0-spike ships no playbook file. This package is tier `manual` because that is what the arm produced, not because a tier was withheld."
+    }
+  },
+  "tier": "manual",
+  "title": "The sokoban-2 world — handover package (manual only)",
+  "world_id": "a0-sokoban2"
+}

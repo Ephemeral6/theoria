@@ -23,7 +23,7 @@
     "problem.json": 2285,
     "problem.pddl": 3927,
     "theory.lean": 8727,
-    "theory.md": 1937,
+    "theory.md": 2247,
     "theory.py": 6594
   },
   "constructive_ground": "the Door is the only opening in the dividing wall, and the only rule that removes it (door_opens_left) tests for the Button's colour; with no Button in the instance that guard can never hold, so the goal room is unreachable by construction",

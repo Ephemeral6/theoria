@@ -309,7 +309,23 @@ def via_task(pid_str, prompt_file):
                        capture_output=True, text=True)
     ok = r.returncode == 0
     reg = load_registry()
-    reg[pid_str] = {"pid": 0, "task": task, "log": os.path.basename(log_path),
+    # A worker found `pid: 0` copied into three consumers (reap / health /
+    # quota), so every task-launched session was untrackable. Ask the
+    # scheduler for the real pid it started.
+    real_pid = 0
+    try:
+        q = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST",
+                            "/V"], capture_output=True, text=True)
+        for line in q.stdout.splitlines():
+            if line.strip().lower().startswith(("pid", "进程 id")):
+                digits = "".join(c for c in line.split(":")[-1] if c.isdigit())
+                if digits:
+                    real_pid = int(digits)
+                break
+    except Exception:
+        pass
+    reg[pid_str] = {"pid": real_pid, "task": task,
+                    "log": os.path.basename(log_path),
                     "started": stamp, "reaped": None, "via": "task"}
     save_registry(reg)
     print("%-20s %s task=%s" % (pid_str, "started" if ok else "FAILED", task))

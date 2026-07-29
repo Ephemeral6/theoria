@@ -86,8 +86,10 @@ PHASES = [
                 "clause": "Phase 1 · 一件接入核查",
                 "status": "partial",
                 "note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、"
-                        "首帧跨会话可复现。未结：全量跨会话残留、速率与配额、"
-                        "金丝雀重放、帧缓存与释出许可条款。",
+                        "首帧跨会话可复现、金丝雀基线；**帧缓存与释出许可条款已由 OPS-B 查实**"
+                        "（browser-ops/TERMS.md §2）：本地缓存/落盘是官方设计的一部分，无需额外"
+                        "许可；**再释出需书面许可且默认禁止**（ToS 原文 without our express prior "
+                        "written permission）。未结：全量跨会话残留、速率配额的官方口径。"
             },
             {
                 "id": "p1-cascade",
@@ -238,6 +240,18 @@ PHASES = [
                 "note": "A0 已产出五条真实条目（E-01..E-05），但它们埋在 "
                         "THEORIZE_LOG.md 里。Theoria.md 要求这是一份公开台账 —— "
                         "应提升为独立的被跟踪文件。",
+            },
+            {
+                "id": "p3-gate-exception",
+                "label": "【例外登记】Phase 1 未全绿即启动了 Phase 3 的花费",
+                "clause": "Theoria.md:305「全绿才准烧游戏钱」；OPS-A DRIFT 2026-07-28",
+                "status": "risk",
+                "note": "如实登记，不追认合规。事实：p3-envelope 已实花 $2.53 跑 "
+                        "ar25×haiku×3，而 Phase 1 当时 16 项中 6 项绿。**例外依据**："
+                        "方差包络是 Phase 4 定重复数 n 的前置，且花费受预算闸门硬约束"
+                        "（G4 实际开火并拦停在 1/4 局）。**代价**：这批数据是在并发负载"
+                        "下测得的，单价不可与试点直接比较（INC-BA-003）。"
+                        "**规矩**：此后任何跨门花费必须先在此登记一条，再动手。",
             },
             {
                 "id": "p3-envelope",
@@ -498,6 +512,65 @@ FINDINGS = [
                 "转正典格式（原始文件保留不动，转换产物入 runs/ 归档）；battery 的 "
                 "INPUT_FORMAT 对齐正典。",
         "action": "P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。",
+    },
+    {
+        "id": "F-17",
+        "severity": "high",
+        "title": "工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全"
+                 "【已裁决·监控代行：五件上板】",
+        "body": "RES-3 的三路只读普查（报告在 engine-rig/runs/20260729T000000Z-"
+                "E11-engine-crosscheck-deep/SURVEY-*.md）扫约 340 处判据点，判不安全 48 处。"
+                "**它们几乎全部偏向好消息**，这才是这条finding的要害——不是随机的错，"
+                "是有方向的错。四个家族：退出码当证明（p13_fd_dividend.py:129 裸 "
+                "returncode==12，而正确谓词 backends.proves_unsolvable 就在它已经 import 的"
+                "模块里）、缺省值当成立（worldgen/core/truth.py:279 的 .get('holds', True)，"
+                "35 份基准真值里 13 份因此报『不变量全部成立』）、崩溃当发现"
+                "（theoria-arm/inner/plan.py:172 吞异常后仍宣布『穷举了整个可达集』——"
+                "**崩得越多，健康证明越干净**）、读不开当干净（release/check_redlines.py:207 "
+                "让封存红线报无发现，而同包 enumerate.py:220 对同一情形判 needs_human）。\n\n"
+                "**目前没有已发表结论被推翻，但有已发表数字依赖读者重新推导**："
+                "lp_potential 的 29.2% 不完备率成立，是因为复核员自己去取了 HiGHS 的 status"
+                "（639 例沉默里 638 例是 status 2）——引擎自己把 status 1/2/3/4 塌成了同一个 "
+                "None。方法不健全而结论当前为真，两者必须分开说。",
+        "action": "【已裁决·监控代行 2026-07-29】五件上板，全部要求带负样本："
+                  "S23-unreadable-is-not-clean（p1，动的是封存红线闸门，含 RES-4 报的 "
+                  "arc-recon/contamination.py:338 退出码只反映 sha256）、"
+                  "V19-unverified-is-not-true、E14-crash-is-not-a-finding、"
+                  "E15-solver-status-bit、P14-honesty-section（写进论文，不藏进 limitations）。"
+                  "C10 改形：从『定正典』改为『采纳已有的 backends.proves_unsolvable』——"
+                  "新写会产生第二条正典，而两条正典正是这件工单要治的病。"
+                  "cold-start-a0/ 的同族缺陷只登记进 PARTNER_SYNC，不动手（非本轨道领地）。",
+    },
+    {
+        "id": "F-18",
+        "severity": "high",
+        "title": "engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是"
+                 "「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】",
+        "body": "对偶普查（RES-3 第四路，约 105 处判据点，判不安全 8 处）的最重一条："
+                "`grep -ril \"held_out|held-out\" engine-rig/engines engine-rig/tools` "
+                "**零命中**，而 `zero_space.verify` 是在**拟合它的同一条轨迹上**复验的——"
+                "按 GF(2) 的构造那近乎恒真，那句 AssertionError 几乎不可能触发。\n\n"
+                "三条独立发现指向同一件事：DECISIONS 的 D-003 明写 zero_space 只承诺"
+                "在观测证据上守恒（边界，不是缺陷）；E9 把 g50t 放在该边界的**已测**一侧，"
+                "而那一侧从来没有东西检查过正确性；本轮发现整个 rig 没有留出验证。\n\n"
+                "**同一路的正面结果同等重要，不许只报病例**：「求解器返回计划就认定可解」"
+                "在本仓库**没有发生**——`fd_adapter` 三档全部无条件 validate_plan()，"
+                "且 `validate.py` **刻意不 import `search`**：验证器不认识搜索器，"
+                "这是结构保证而非承诺。这是「引擎提议、LLM 裁决」少有的硬证据。\n\n"
+                "对偶的真实形状不是「没验」，是**「验了、写进产物、然后不拿它把关」**："
+                "`lp_potential/potential.py:255` 的 `\"admissible\": True` 是字面量，"
+                "而真检查躺在同一份 payload 的 `admissibility_check` 里；"
+                "`deadlock_carver.run()` 是 carve→report→emit 中间没有一个 if，"
+                "于是一条定理和一份证伪它的报告并排发布，谁也不压过谁。",
+        "action": "【已裁决·监控代行 2026-07-29】(1) 论文改词：在 E17 交付之前，"
+                  "正文凡写「已验证」处一律改为「在观测证据上自洽」——不是措辞保守，"
+                  "是那些格子当前的真实含义；已写进 P14-honesty-section。"
+                  "(2) 两件上板且**不许合并**（验收线一个是接线、一个是新数字）："
+                  "E16-verdict-must-gate（两处判决接到头条字段 + 负样本）、"
+                  "E17-held-out-validation（ENGINE_TABLE 边界列先写实话，再给 "
+                  "zero_space/lp_potential 各补一次真留出验证）。"
+                  "依据：RES-3 自己提出的切法，与 A9/V16 同一条——"
+                  "把验收线切到能被复核的大小。",
     },
     {
         "id": "F-01",
@@ -911,26 +984,26 @@ ITERATION_LOOP = [
 # --------------------------------------------------------------------------
 
 PAPER_PLAN = [
-    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 95,
+    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 100,
      "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
      "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
-     "evidence": "四件离线验收全绿 + M9 八工序齐 + FD 真接入；余：a0-spike 的 v0.2 迁移在跑（C2）"},
-    {"id": "WP2", "name": "封闭系统与外壳可信度", "weight": 0.08, "pct": 88,
+     "evidence": "六引擎 + M9 + FD 三档定价 + 500 世界 23 不变量零违规；世界工厂 20 世界；契约 v0.3；A0/A0′/A1/A2/A3 五件离线验收全绿"},
+    {"id": "WP2", "name": "封闭系统与外壳可信度", "weight": 0.08, "pct": 95,
      "slot": "§2 方法可信度（密封/复放/对账）",
      "scale": "Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检",
-     "evidence": "proxy 全链路实证：preflight PASS，密钥从不出代理，护栏零绕过，0 计费动作"},
-    {"id": "WP3", "name": "Theoria 臂在线迭代战役（开发堆）", "weight": 0.20, "pct": 22,
+     "evidence": "双代理 + 花费闸门（对抗测试先破五种绕法）+ 金丝雀日检 + 预检 4/4 + 熔断器自动出闩；留痕正典化"},
+    {"id": "WP3", "name": "Theoria 臂在线迭代战役（开发堆）", "weight": 0.20, "pct": 30,
      "slot": "§5 实验主体 · 图2 账单形状（Theoria 列）",
      "scale": "对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）",
-     "evidence": "首次真 API 接触成功（g50t，18 次重试拿到 RESET）；关卡推进尚未开始 → E3"},
-    {"id": "WP4", "name": "对照臂数据（CC 包络 + Schema 路A + 消融臂）", "weight": 0.08, "pct": 30,
+     "evidence": "臂在线链路通、preflight 零计费；战役第二关在跑（RES-1 常驻推进）"},
+    {"id": "WP4", "name": "对照臂数据（CC 包络 + Schema 路A + 消融臂）", "weight": 0.08, "pct": 55,
      "slot": "表1 主表另两列 · §6 消融",
      "scale": "CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务",
-     "evidence": "裸 CC 包络 + 上游路 A 165 文件已落盘；消融臂离线件待接"},
-    {"id": "WP5", "name": "评测两器：电池冻结 + 考卷构造器", "weight": 0.10, "pct": 70,
+     "evidence": "裸 CC 包络 + 上游 165 文件 + 消融臂建成并有闸门（a0 可解 / a2 不可解判决正确）"},
+    {"id": "WP5", "name": "评测两器：电池冻结 + 考卷构造器", "weight": 0.10, "pct": 90,
      "slot": "§4 评测协议 · 图3 能力谱与考卷",
      "scale": "电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环",
-     "evidence": "exam 四题型 + 泄漏防护建成；battery v1 在跑（V3 区分力首跑）"},
+     "evidence": "考卷四题型跑上 20 世界 + 判卷自检 + 电池区分力首跑；抗游戏审计在跑"},
     {"id": "WP6", "name": "封存战役（主表确证）", "weight": 0.20, "pct": 0,
      "slot": "表1 主表 · 图2/图3 确证版 · C1/C2 裁决",
      "scale": "对标 Schema 25 局：我们 19 封存局 × (Theoria + CC + 消融) × n，逐局入库禁止回看",
@@ -939,18 +1012,18 @@ PAPER_PLAN = [
      "slot": "图3 考卷行 · C4 裁决",
      "scale": "m 局在主表跑完后构造变体（时序死结的解）；分层移交可随主表同跑",
      "evidence": "依赖 WP6；出题流程由 P-15 预演"},
-    {"id": "WP8", "name": "预注册与统计裁决（冻结清单 13 项）", "weight": 0.05, "pct": 25,
+    {"id": "WP8", "name": "预注册与统计裁决（冻结清单 13 项）", "weight": 0.05, "pct": 55,
      "slot": "§5 统计口径 · 双结局文本",
      "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
-     "evidence": "冻结包起草中；n 由包络方差定的机制已有实测原料"},
-    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 35,
+     "evidence": "冻结包起草 + Phase 1 收口交付；统计规则草案在盘"},
+    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 70,
      "slot": "全文（3.2 的八节骨架）",
      "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
-     "evidence": "papers/ 已有 PAPER.md + sections + 图数据 + 引文核查 + 自审"},
-    {"id": "WP10", "name": "释出包（Schema 地板对齐）", "weight": 0.03, "pct": 30,
+     "evidence": "PAPER.md 2512 行成稿，含引文核查、评审分诊、待办清单；五视角评审在跑"},
+    {"id": "WP10", "name": "释出包（Schema 地板对齐）", "weight": 0.03, "pct": 60,
      "slot": "§8 开放性声明",
      "scale": "对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明",
-     "evidence": "runs/ 留痕正典化；释出清单脚本待建"},
+     "evidence": "release/ 落地 + 复现脚本 + 许可条款；账本哈希链在盘"},
 ]
 
 # --------------------------------------------------------------------------
@@ -971,39 +1044,51 @@ GRID_ROWS = [
 ]
 
 GRID = {
-    "E1": {"pct": 98, "note": "六引擎 + M9 三件全绿，性质测试战役待跑", "active": ["E1-property-fuzz", ]},
-    "E2": {"pct": 95, "note": "FD 24.06 真接入，三级梯子；基准对比待做 → E2 板项", "active": ["P-13"]},
+    "E1": {"pct": 100, "note": "六引擎全绿 + 500 世界性质轰炸零违规", "active": ["E1-property-fuzz", ]},
+    "E2": {"pct": 100, "note": "FD 三档定价，死锁红利量化", "active": ["P-13"]},
     "E3": {"pct": 5,  "note": "引擎在线供货（经 theoria-arm 调用）", "active": []},
     "E4": {"pct": 0,  "note": "封存战役中的引擎供给", "active": []},
     "E5": {"pct": 20, "note": "引擎代码随释出包公开", "active": []},
 
-    "C1": {"pct": 95, "note": "DSL v0.2 + 四形态生成器 + refuse 语义", "active": ["C1-worldgen", ]},
-    "C2": {"pct": 92, "note": "A0/A0′/A1/A2/A3 五件离线验收；a0-spike 迁移在修", "active": []},
+    "C1": {"pct": 100, "note": "DSL v0.3 + 四形态 + refuse 语义 + 计数锁词汇", "active": ["C1-worldgen", ]},
+    "C2": {"pct": 100, "note": "五件离线验收 + 世界工厂 20 世界 + 变体生成", "active": []},
     "C3": {"pct": 5,  "note": "在线两本书：首局的 theory.dsl 尚在 P-8 分支里", "active": []},
     "C4": {"pct": 0,  "note": "封存局的证书生产线", "active": []},
-    "C5": {"pct": 35, "note": "Lean 证明与四形态随释出；复跑脚本待建", "active": ["P-19"]},
+    "C5": {"pct": 60, "note": "四形态 + Lean + 移交包随释出", "active": ["P-19"]},
 
-    "S1": {"pct": 92, "note": "双代理 + 护栏 + 账本 + 对账 + 变体层全落地", "active": []},
-    "S2": {"pct": 85, "note": "预检 4/4 PASS + 金丝雀基线；级联探针交付", "active": ["P-20"]},
-    "S3": {"pct": 45, "note": "在线对账实证（0 计费动作核对）；花费闸门在建", "active": []},
-    "S4": {"pct": 25, "note": "冻结包起草中", "active": ["P-22"]},
+    "S1": {"pct": 98, "note": "双代理 + 护栏 + 账本 + 对账 + 变体层 + 契约变更协议", "active": []},
+    "S2": {"pct": 95, "note": "预检 4/4 + 金丝雀日检 + 封存护栏两半齐", "active": ["P-20"]},
+    "S3": {"pct": 85, "note": "花费闸门落地五种绕法已封；哈希链在盘", "active": []},
+    "S4": {"pct": 55, "note": "冻结清单起草 + Phase 1 收口", "active": ["P-22"]},
     "S5": {"pct": 20, "note": "账本与 incident 台账随释出公开", "active": []},
 
-    "A1": {"pct": 75, "note": "裸 CC 全套 + 消融臂离线；Theoria 臂离线件齐", "active": ["P-18"]},
-    "A2": {"pct": 85, "note": "A0/A0′/A2/A3 四世界 + 双 A0 互考", "active": ["A2-crosscheck", "P-17"]},
-    "A3": {"pct": 18, "note": "开发堆在线：preflight PASS，包络 1/4，关卡推进待开", "active": ["P-12"]},
+    "A1": {"pct": 88, "note": "裸 CC 全套 + 消融臂建成并带闸门", "active": ["P-18"]},
+    "A2": {"pct": 95, "note": "五个自建世界 + 双 A0 互考 + 消融对照", "active": ["A2-crosscheck", "P-17"]},
+    "A3": {"pct": 25, "note": "开发堆在线：preflight PASS，战役第二关推进", "active": ["P-12"]},
     "A4": {"pct": 0,  "note": "封存战役（门槛：Phase1 全绿 + 冻结提交）", "active": []},
     "A5": {"pct": 0,  "note": "主表三列 + 消融列", "active": []},
 
-    "V1": {"pct": 95, "note": "电池五族 + 预注册纪律", "active": []},
-    "V2": {"pct": 80, "note": "exam 四题型 + 泄漏防护 + battery v1", "active": []},
-    "V3": {"pct": 40, "note": "区分力首跑在跑（App 会话）", "active": []},
+    "V1": {"pct": 100, "note": "五族指标 + 预注册 + 区分力首跑", "active": []},
+    "V2": {"pct": 92, "note": "考卷四题型 × 20 世界 + 判卷自检", "active": []},
+    "V3": {"pct": 60, "note": "区分力已跑；抗游戏审计在跑", "active": []},
     "V4": {"pct": 0,  "note": "封存回算 + 判决题实考", "active": []},
-    "V5": {"pct": 15, "note": "能力谱与考卷的发表版图表", "active": ["P-21"]},
+    "V5": {"pct": 70, "note": "图表管线可复现，六图数据就位并入正文", "active": ["P-21"]},
 
-    "P1": {"pct": 75, "note": "方法论与骨架", "active": []},
-    "P2": {"pct": 70, "note": "PAPER.md + sections + 引文核查 + 自审", "active": ["P-23"]},
-    "P3": {"pct": 35, "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移裁决）", "active": ["P3-case-study", ]},
-    "P4": {"pct": 20, "note": "预注册包起草中", "active": []},
-    "P5": {"pct": 20, "note": "释出包脚手架待建", "active": ["P-19"]},
+    "P1": {"pct": 85, "note": "方法论与骨架", "active": []},
+    "P2": {"pct": 88, "note": "PAPER.md 2512 行，引文核查 + 评审分诊", "active": ["P-23"]},
+    "P3": {"pct": 55, "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移、消融对照）", "active": ["P3-case-study", ]},
+    "P4": {"pct": 30, "note": "预注册包起草中", "active": []},
+    "P5": {"pct": 55, "note": "release/ + 复现脚本 + 许可条款", "active": ["P-19"]},
 }
+
+
+# --------------------------------------------------------------------------
+# 当前阶段焦点（监控的判断，改这里即改全舰队的优先次序）
+#
+# 依据：离线建造已近完成（WP1 98% / WP2 92% / WP5 82%），剩余权重集中在
+# 战役与论文（WP3 20% 权重仅 25%、WP6 20% 权重为 0、WP9/WP10 合成类）。
+# 所以板上同优先级的条目里，属于焦点赛道的先被领走。
+# --------------------------------------------------------------------------
+
+PHASE_FOCUS = ["campaign", "paper", "verify", "infra"]      # 依次加权；不在表内的赛道不降级，只是不加权
+FOCUS_BOOST = 1                          # 焦点赛道的条目在排序上等价于优先级 -1

@@ -7,9 +7,12 @@ generated from it, each shipping its own ground truth.
 
 ```bash
 python -m worldgen.verify                     # everything: build, tests, QC
-python -m worldgen.build --check              # the twenty worlds, byte-reproducible
+python -m worldgen.build --check              # the twenty + fifteen, byte-reproducible
 python -m worldgen.build t1-switch-toggle     # one
+python -m worldgen.mutate --list              # the mutation corpus
+python -m worldgen.mutate --knobs             # the declared semantic knobs
 python -m worldgen.qc.run_qc                  # three worlds through cold-start-a0
+python -m worldgen.qc.run_qc --mutants        # four mutants, against their bases
 python -m worldgen.qc.diagnose_miner <id>     # why did the miner refuse this world?
 ```
 
@@ -72,6 +75,28 @@ destroys nothing yet measures a **single witness** in two worlds, because nothin
 routes the agent back to a shut phase. Conflating them is what made seven worlds
 ship a claim disagreement that was not one.
 
+## Controlled variant pairs — `worldgen/mutate.py`
+
+A world plus **one rule-level edit**, with the edit written down in a form an
+exam can compute against. Four families (`forbid_action`, `change_guard`,
+`reversible_to_irreversible`, `move_portal_exit`), fifteen instances, shipped
+into `out/worlds/` under opaque ids so that the id itself cannot leak an answer.
+
+`mutate.KNOBS` declares the semantic parameters — which entity props a mechanism
+actually branches on — and a test perturbs every one of them and requires the
+world to move, because a knob table nothing exercises is a comment. Exactly one
+knob is new (`flags["forbidden_action"]`); the rest already existed and had
+simply never been declared.
+
+`out/worlds/MUTATIONS.json` is scoring-only and carries, per edit: the operators,
+the exact **detection latency** (BFS over the product of the two worlds, so it is
+a minimum over every strategy rather than over one walk), the **collateral**
+(rules falsified both directions, claims now false, claims to re-examine via a
+computed claim→rule dependency graph, verdict and whether it flipped), and what
+this territory can honestly say about **repair cost** — with the part that needs
+another track's miner emitted as `null` next to its blocker rather than
+approximated.
+
 ## The build gates
 
 `python -m worldgen.build --check` refuses to ship a catalogue where any of these
@@ -92,14 +117,23 @@ printed, and then exited 0 on.
 4. **invariants** — every declared invariant, checked on every reachable state;
 5. **claims** — every mechanism's `re_witnessable` claim against the measurement;
 6. **determinism** — a second build in a **separate interpreter** at a different
-   `PYTHONHASHSEED`, diffed byte for byte.
+   `PYTHONHASHSEED`, diffed byte for byte. `INDEX.json` and `MUTATIONS.json` are
+   in the diff too; they were outputs nothing compared;
+7. **edit family** — a mutation's declared family against what its operators
+   touch, and for `reversible_to_irreversible` against the two measured
+   reversibility stamps;
+8. **mutant solvability** — a mutation's `intended_solvable` claim against the
+   exhaustive decision. Separate from gate 2 only because a mutant's `spec.json`
+   deliberately leaves the field blank: `spec.json` is open, and for a verdict
+   item that field is the answer.
 
 ## Registered uses
 
 | user | what it takes from here |
 |---|---|
 | prompt iteration | the whole family — this is the Phase 1 clause's "自建世界族", so theorize-prompt work happens here and the ARC development pile stays a verification set |
-| `V2-exam-on-worldgen` | 20 worlds with ground truth; the four **variant pairs** (`t1-push-open`/`t1-push-corridor`, `t1-switch-toggle`/`t1-switch-latch`, `t2-portal-pair`/`t2-portal-paired`, `t1-switch-toggle`/`t2-unsolvable-nodoor`) are ready-made 改规则适应 question stems — same picture, one legend entry changed |
+| `V2-exam-on-worldgen` | 20 worlds with ground truth. **The claim this row used to make was refuted from the exam's side** — it said the four variant pairs were "ready-made 改规则适应 question stems", and `exam/runs/…-V2-…/GAPS.md` established that they are not: `variant_delta` is free prose, and three of the four pairs differ in *geometry* rather than in a rule, so nothing can compute a detection latency or a collateral set from them. What is ready-made is `out/worlds/MUTATIONS.json` — see the row below |
+| `C6` mutation corpus | 15 controlled variant pairs: one base world, one rule-level edit, a new measured truth, and a machine-readable descriptor carrying 检测延迟 / 连带作废 exactly and 修复成本 partly. Includes the two properties `exam.papers.adaptation.build()` refuses a paper without — an undetectable variant and verdict flips in both directions — and the solvable/unsolvable near-twins on identical boards that `GAPS.md` asks for by name. Interface: `RUN_STATE.md` §the interface |
 | `E4-property-fuzz` | high-level world source; `GridWorld.explain` gives a labelled oracle per transition |
 | ablation-arm calibration | tier 1/2/3 with measured reachable-state counts, and one world (`t2-lock-fragile`) known to sit **outside** the current engine vocabulary — a fixed capability-boundary fixture |
 | upstream engine work | `worldgen/qc/diagnose_miner.py` localises a mining refusal to one transition pair and says whether the world or the vocabulary is at fault |

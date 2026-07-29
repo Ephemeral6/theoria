@@ -1,0 +1,15 @@
+cm-frontier-guard-inconsistent     eval=39   inert=1    {'frontier_guards_are_consistent': 37}
+cm-drop-frontier-guard             eval=35   inert=5    {'frontier_is_complete_to_size': 35}
+cm-empty-frontier                  eval=39   inert=1    SURVIVED
+cm-truncation-alibi                eval=35   inert=5    SURVIVED
+cm-inflate-applicable              eval=39   inert=1    {'applicable_equals_support': 37}
+cm-weaken-ground-guard             eval=39   inert=1    {'guards_partition_the_evidence': 37}
+cm-drop-rule                       eval=39   inert=1    {'guards_partition_the_evidence': 37}
+cm-shrink-lifted-support           eval=34   inert=6    {'applicable_equals_support': 34}
+cm-flip-effect-delta               eval=37   inert=3    {'effects_agree_with_the_evidence': 37}
+cm-effect-none-becomes-move        eval=36   inert=4    {'effects_agree_with_the_evidence': 34}
+cm-drift-effect-destination        eval=18   inert=22   {'effects_agree_with_the_evidence': 18}
+cm-drop-effect-destination         eval=18   inert=22   SURVIVED
+cm-freeze-lifted-direction         eval=34   inert=6    {'effects_agree_with_the_evidence': 34}
+cm-lift-admits-a-wrong-direction   eval=32   inert=8    {'effects_agree_with_the_evidence': 32}
+cm-relabel-rule-action             eval=39   inert=1    {'rules_fire_on_the_action_they_name': 37}

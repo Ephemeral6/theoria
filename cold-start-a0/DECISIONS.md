@@ -380,3 +380,79 @@ planner is installed, so their checked-in artefacts stay byte-identical on a
 machine with or without Fast Downward. The FD comparison is its own artefact,
 `artifacts/fd_real.json`. Determinism of the committed stream is worth more here
 than routing the default path through whichever planner happens to be present.
+
+## D-A0-022 · Identity across a consumable, and the one price we pay knowingly
+
+**上游限制 (not a defect), and the third capability gap the A0 family has found
+in the segmenter** — after touching objects (D-A0-007, the uniform-colour
+operator) and return-after-absence (D-A0-017).
+
+`mdl_segmenter`'s matcher prices a one-cell recolour at 9 bits and a one-step
+move at 11. When the mover steps onto a stationary object of another colour, the
+two readings cover *exactly* the same changed pixels, and "the stationary one
+recoloured, the mover vanished" (14) beats "the mover moved, the stationary one
+vanished" (16). The assignment is per transition and independent, so this is the
+global optimum of the published objective, not a search failure. A0's cart world
+has nothing that vanishes; `worldgen`'s `t2-lock-fragile` has three tokens, and
+the agent is credited with **1** move in 110 transitions while three stationary
+tokens are credited with **61**. `mover_track` then names a token and every
+positional atom in `a0_relational_v1` is anchored on something that never moved.
+
+`pipeline/identity_swap.py` repairs exactly that pattern — vanish, total recolour
+into the vanishing track's colour, same shape, 4-adjacent — and refuses anything
+wider with a named reason and a test each. Upstream is untouched; the pass
+consumes a `Segmentation` and returns a new one, the same shape as D-A0-017.
+
+**为什么不由脚本长度裁决.** Because script length is what prefers the wrong
+answer: the repair costs **+2 bits per swap**, and `choose_operator` would
+therefore reject it. This is the one segmentation decision in this pipeline not
+adjudicated by compression, and pretending otherwise would have meant rigging the
+cost model until the answer came out right. The criterion actually applied is
+total description length — segmentation script **plus** rule script — and the
+mis-anchored reading has no rule script at all: the miner raises
+`NoSeparatingGuard` rather than paying more bits. The number is published in
+`identity_repair.delta_bits` in every artefact so a reader can disagree with the
+trade rather than having to discover it.
+
+**代价照录.** Two bits per swap for a one-cell mover, on the record. A0 itself
+repairs zero swaps and records one refusal at the Button press. The three
+`object_hypothesis` candidate rows move because they carry this report; every
+mined guard in the tree is byte-identical.
+
+**The pass needs the pixels, and that was found by attacking it rather than by
+designing it.** An adversarial review found the case in a shipped world:
+`t2-cycler-lock`'s agent walks *over* a cycler tile, and the frames produce the
+signature exactly — vanish, total recolour into the mover's colour, same shape,
+adjacent. Standing on something and destroying it are the same picture at that
+transition, and no test on the `Segmentation` can tell them apart. The first
+version therefore fired on occlusion and made the mover *worse* there: 46/61
+frames tracking the agent before, 33/61 after, on three of the shipped worlds.
+
+The discriminator is in the pixels but only *later* — an occluded body shows
+itself again the moment the mover steps off, and a consumed one never does. The
+pass now takes the object layer and refuses any candidate whose cells go back to
+showing something other than floor. Measured over all 35 worldgen worlds through
+`choose_operator`: **7 improved, 0 regressed**, and the three cycler worlds moved
+from "harmed" to "improved". `probes/11_mover_tracks_the_agent.py` is that sweep
+and it is in the verify gate, so a future change cannot quietly regress a world.
+
+Three further things the same review closed, each with a test: an ambiguous
+transition is now refused **whole** rather than resolved by track id (which would
+have made the answer an artefact of raster order); `Track.color` is the colour at
+declaration and goes stale, so the mover's colour is replayed from its recolour
+events; and `reidentify` no longer merges a track this pass marked `consumed_by`
+— truncating the eaten track is precisely what manufactures the disjoint-lifetime
+pair that merge gets wrong.
+
+**上游定价对齐.** The review also caught the pass charging in a different currency
+from the script it was editing: `choose_operator` built its `CostModel` with
+`max_objects=len(seg.tracks)` while `segment_trajectory` uses the most components
+in any **one frame**, so `b_objid` differed and the advertised +2 was +4 or +6 on
+three worlds. `_max_objects` now reproduces upstream's number. This was a
+pre-existing mis-pricing in `reidentify`'s call, not something this pass
+introduced — A0's losing operator moves 5704 → 5284 bits and the chosen operator
+does not move.
+
+**The clean fix is not ours.** Charging a recolour above a move, or making the
+assignment prefer colour continuity, would delete this pass. That is
+`engine-rig`'s call and is reported to it rather than taken.

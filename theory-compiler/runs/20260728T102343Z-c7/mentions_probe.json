@@ -1,0 +1,1079 @@
+{
+  "failures": [],
+  "ground_truth": "a0-spike/world/sokoban2.py",
+  "predictor": "theory_compiler.generators.gen_python",
+  "prompt_id": "C7-dsl-v03-mentions",
+  "results": [
+    {
+      "expected": 376,
+      "got": 376,
+      "manual": "sokoban2_x5_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 466,
+      "mismatches_by_level": {
+        "crossing_DOWN": 93,
+        "crossing_LEFT": 91,
+        "crossing_RIGHT": 93,
+        "crossing_UP": 91,
+        "match": 98
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 376,
+        "on_wall": 90
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "first_argument",
+      "stratum": "off_wall",
+      "transitions_with_an_unconstrained_object": 10666,
+      "why": "**ledger X-1, reproduced in its own denominator.** Over the 39,960 pairs in which neither object stands on a wall, taking `mentions` to be the object the event is about freezes the Player across every push. On the v0.2 signature `slid(o, dir)` this reading and `signature` coincide \u2014 `dir` is not an object \u2014 so this is the number X-1 measured, not a narrower relative of it",
+      "witnesses": [
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            1
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            0
+          ],
+          "predicted": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            0
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            0
+          ],
+          "predicted": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            2
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            1
+          ],
+          "predicted": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            1
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            1
+          ],
+          "predicted": [
+            [
+              0,
+              1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              1
+            ],
+            [
+              3,
+              1
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            3
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            2
+          ],
+          "predicted": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            2
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            2
+          ],
+          "predicted": [
+            [
+              0,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "expected": 52,
+      "got": 52,
+      "manual": "sokoban2_x5_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 52,
+      "mismatches_by_level": {
+        "crossing_DOWN": 10,
+        "crossing_LEFT": 12,
+        "crossing_RIGHT": 10,
+        "crossing_UP": 12,
+        "match": 8
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 0,
+        "on_wall": 52
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "declared",
+      "stratum": "on_wall",
+      "transitions_with_an_unconstrained_object": 0,
+      "why": "ledger X-5: `push2` cannot say the Box is not standing on a wall, and every one of these fires it",
+      "witnesses": [
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            5
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            5
+          ],
+          "predicted": [
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "LEFT",
+          "box": [
+            1,
+            5
+          ],
+          "fired": [
+            "push2_left"
+          ],
+          "level": "match",
+          "player": [
+            1,
+            6
+          ],
+          "predicted": [
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            3,
+            4
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              6,
+              4
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            4,
+            3
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              6
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "LEFT",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_left"
+          ],
+          "level": "match",
+          "player": [
+            4,
+            5
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "UP",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_up"
+          ],
+          "level": "match",
+          "player": [
+            5,
+            4
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              5,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "expected": 0,
+      "got": 0,
+      "manual": "sokoban2_x5_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 52,
+      "mismatches_by_level": {
+        "crossing_DOWN": 10,
+        "crossing_LEFT": 12,
+        "crossing_RIGHT": 10,
+        "crossing_UP": 12,
+        "match": 8
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 0,
+        "on_wall": 52
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "declared",
+      "stratum": "off_wall",
+      "transitions_with_an_unconstrained_object": 0,
+      "why": "the X-5 defect is confined to the on-wall stratum \u2014 the guard set is otherwise exactly right, which is why X-5 is one defect and not a rot",
+      "witnesses": [
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            5
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            5
+          ],
+          "predicted": [
+            [
+              1,
+              5
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "LEFT",
+          "box": [
+            1,
+            5
+          ],
+          "fired": [
+            "push2_left"
+          ],
+          "level": "match",
+          "player": [
+            1,
+            6
+          ],
+          "predicted": [
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            3,
+            4
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              6,
+              4
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            4,
+            3
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              6
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "LEFT",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_left"
+          ],
+          "level": "match",
+          "player": [
+            4,
+            5
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              4,
+              5
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "UP",
+          "box": [
+            4,
+            4
+          ],
+          "fired": [
+            "push2_up"
+          ],
+          "level": "match",
+          "player": [
+            5,
+            4
+          ],
+          "predicted": [
+            [
+              4,
+              4
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          "stratum": "on_wall",
+          "truth": [
+            [
+              5,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "expected": 0,
+      "got": 0,
+      "manual": "sokoban2_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 0,
+      "mismatches_by_level": {
+        "crossing_DOWN": 0,
+        "crossing_LEFT": 0,
+        "crossing_RIGHT": 0,
+        "crossing_UP": 0,
+        "match": 0
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 0,
+        "on_wall": 0
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "declared",
+      "stratum": "all",
+      "transitions_with_an_unconstrained_object": 0,
+      "why": "v0.3, both repairs in: over all 47,040 pairs the manual predicts the world exactly",
+      "witnesses": []
+    },
+    {
+      "expected": 0,
+      "got": 0,
+      "manual": "sokoban2_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 0,
+      "mismatches_by_level": {
+        "crossing_DOWN": 0,
+        "crossing_LEFT": 0,
+        "crossing_RIGHT": 0,
+        "crossing_UP": 0,
+        "match": 0
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 0,
+        "on_wall": 0
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "signature",
+      "stratum": "all",
+      "transitions_with_an_unconstrained_object": 10718,
+      "why": "**the point of X-1's second request.** Giving `slid` the pusher as an argument makes the signature reading agree with the canon \u2014 the 376 was a fact about a manual that under-named its own event, and naming it is what closes the gap. A definition alone would have left the two readings still disagreeing, with the contract merely picking a side",
+      "witnesses": []
+    },
+    {
+      "expected": 376,
+      "got": 376,
+      "manual": "sokoban2_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 414,
+      "mismatches_by_level": {
+        "crossing_DOWN": 83,
+        "crossing_LEFT": 79,
+        "crossing_RIGHT": 83,
+        "crossing_UP": 79,
+        "match": 90
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 376,
+        "on_wall": 38
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "first_argument",
+      "stratum": "off_wall",
+      "transitions_with_an_unconstrained_object": 10718,
+      "why": "**and why both halves of X-1 are load-bearing.** The same 376, unmoved, on the fully repaired manual: naming the pusher in the signature does nothing for a reader who takes `mentions` to be the first argument. The signature fix rescues the `signature` reading; only the *definition* rescues this one, which is why v0.3 does both and fails closed on events it has not been told about",
+      "witnesses": [
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            1
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            0
+          ],
+          "predicted": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            0
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            0
+          ],
+          "predicted": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            2
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            1
+          ],
+          "predicted": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            1
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            1
+          ],
+          "predicted": [
+            [
+              0,
+              1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              1
+            ],
+            [
+              3,
+              1
+            ]
+          ]
+        },
+        {
+          "action": "RIGHT",
+          "box": [
+            0,
+            3
+          ],
+          "fired": [
+            "push2_right"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            2
+          ],
+          "predicted": [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        {
+          "action": "DOWN",
+          "box": [
+            1,
+            2
+          ],
+          "fired": [
+            "push2_down"
+          ],
+          "level": "match",
+          "player": [
+            0,
+            2
+          ],
+          "predicted": [
+            [
+              0,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          "stratum": "off_wall",
+          "truth": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "expected": 0,
+      "got": 0,
+      "manual": "sokoban2_theory.dsl",
+      "max_rules_fired": 1,
+      "mismatches": 0,
+      "mismatches_by_level": {
+        "crossing_DOWN": 0,
+        "crossing_LEFT": 0,
+        "crossing_RIGHT": 0,
+        "crossing_UP": 0,
+        "match": 0
+      },
+      "mismatches_by_stratum": {
+        "off_wall": 0,
+        "on_wall": 0
+      },
+      "no_rule_fired": 0,
+      "pairs": 47040,
+      "pairs_by_stratum": {
+        "off_wall": 39960,
+        "on_wall": 7080
+      },
+      "reading": "rule_text",
+      "stratum": "all",
+      "transitions_with_an_unconstrained_object": 10718,
+      "why": "R1 does not mispredict here \u2014 it leaves objects unconstrained, which is reported separately and is why it is not a definition",
+      "witnesses": []
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "inter_judge_overlap": [],
+  "intra_judge_repeat": [
+    {
+      "agree_negctl": false,
+      "judges": [
+        "arms"
+      ],
+      "path": "ablation-arm/run_arm.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`ablation-arm/run_arm.py`（预注册像素数 + 上游只读钉）",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "arms"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`ablation-arm/run_arm.py --twice`（两轮复跑比对）",
+          "exit_honest": "是",
+          "has_negctl": "部分",
+          "judge": "arms"
+        }
+      ]
+    },
+    {
+      "agree_negctl": true,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "arc-recon/canary.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/canary.py` `compare`（漂移仪表）",
+          "exit_honest": "不适用",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/canary.py check-freeze`",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/canary.py` `INVOCATION_CAP`（配额闸）",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "arc-recon/client.py",
+      "verdicts": [
+        {
+          "can_red": "部分",
+          "census": "V11",
+          "entry": "`arc-recon/client.py` 密钥密封（`_record` 里 `X-API-Key`→`<redacted>`）",
+          "exit_honest": "不适用",
+          "has_negctl": "否",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/client.py` `load_api_key`（缺失即拒）",
+          "exit_honest": "不适用",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "arc-recon/contamination.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/contamination.py` `verify_piles_hash`",
+          "exit_honest": "是",
+          "has_negctl": "部分",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/contamination.py` `sealed_api_contacts`（封存接触审计）",
+          "exit_honest": "否",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/contamination.py` `claim_set` 的 `needs_adjudication`",
+          "exit_honest": "否",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "arc-recon/precheck.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`arc-recon/precheck.py` `assert_playable`（封存护栏）",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "部分",
+          "census": "V11",
+          "entry": "`arc-recon/precheck.py` `main`",
+          "exit_honest": "否",
+          "has_negctl": "不适用",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "exam-battery"
+      ],
+      "path": "exam/verify.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`exam/verify.py`（五阶段总闸）",
+          "exit_honest": "是",
+          "has_negctl": "部分",
+          "judge": "exam-battery"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`exam/verify.py::_determinism`（两解释器字节一致）",
+          "exit_honest": "是",
+          "has_negctl": "否",
+          "judge": "exam-battery"
+        }
+      ]
+    },
+    {
+      "agree_negctl": true,
+      "judges": [
+        "figures-release"
+      ],
+      "path": "figures/check_coverage.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`figures/check_coverage.py`（默认）",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "figures-release"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`figures/check_coverage.py --self-test`",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "figures-release"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "worldgen-fuzzlab"
+      ],
+      "path": "fuzzlab/tests/test_battery.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`fuzzlab/tests/test_battery.py::test_short_campaign_finds_no_violation`",
+          "exit_honest": "是",
+          "has_negctl": "否",
+          "judge": "worldgen-fuzzlab"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`fuzzlab/tests/test_battery.py::test_distinct_indices_give_distinct_worlds`",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "worldgen-fuzzlab"
+        }
+      ]
+    },
+    {
+      "agree_negctl": true,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "proxy/guard.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`proxy/guard.py` SealedPileGuard（封存护栏）",
+          "exit_honest": "不适用",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`proxy/guard.py` `load_piles` 切分完整性（钉死 sha256）",
+          "exit_honest": "不适用",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "proxy-arcrecon"
+      ],
+      "path": "proxy/spend_gate.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`proxy/spend_gate.py` SpendGate（花费闸 / 配额闸，reserve+check+record）",
+          "exit_honest": "不适用",
+          "has_negctl": "是",
+          "judge": "proxy-arcrecon"
+        },
+        {
+          "can_red": "否",
+          "census": "V11",
+          "entry": "`proxy/spend_gate.py` `__main__`（池子报表）",
+          "exit_honest": "否",
+          "has_negctl": "否",
+          "judge": "proxy-arcrecon"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "worldgen-fuzzlab"
+      ],
+      "path": "worldgen/build.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`worldgen/build.py --check`（出厂闸 `gate_failures`）",
+          "exit_honest": "是",
+          "has_negctl": "是",
+          "judge": "worldgen-fuzzlab"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`worldgen/build.py::check_determinism`",
+          "exit_honest": "是",
+          "has_negctl": "否",
+          "judge": "worldgen-fuzzlab"
+        }
+      ]
+    },
+    {
+      "agree_negctl": false,
+      "judges": [
+        "worldgen-fuzzlab"
+      ],
+      "path": "worldgen/qc/run_qc.py",
+      "verdicts": [
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`worldgen/qc/run_qc.py`（三世界 QC 闸）",
+          "exit_honest": "是",
+          "has_negctl": "否",
+          "judge": "worldgen-fuzzlab"
+        },
+        {
+          "can_red": "是",
+          "census": "V11",
+          "entry": "`worldgen/qc/run_qc.py --mutants`（预注册变异体套件）",
+          "exit_honest": "是",
+          "has_negctl": "部分",
+          "judge": "worldgen-fuzzlab"
+        }
+      ]
+    }
+  ],
+  "judges": [
+    "arms",
+    "b1",
+    "b2",
+    "b3",
+    "b4",
+    "b5",
+    "b6",
+    "b7",
+    "b8",
+    "b9",
+    "engine-rig-theory-compiler",
+    "exam-battery",
+    "figures-release",
+    "proxy-arcrecon",
+    "worldgen-fuzzlab"
+  ],
+  "n_inter": 0,
+  "n_intra": 12,
+  "paths_indexed": 233,
+  "rows": 253
+}

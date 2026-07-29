@@ -63,10 +63,15 @@ table.gridmap{border-collapse:separate;border-spacing:5px;width:100%;min-width:6
 .badge{flex:0 0 auto;min-width:36px;text-align:center;padding:5px 7px;border-radius:7px;
  font:700 12px system-ui,sans-serif;background:var(--greenbg);color:var(--green)}
 .badge.ops{background:var(--blockedbg);color:var(--blocked)}
+.dot2{flex:0 0 auto;width:10px;height:10px;border-radius:99px;margin-top:5px}
+.dot2.run{background:var(--st-partial);animation:pulse 1.6s infinite}
+.dot2.stop{background:var(--st-missing)}
 .cbody{flex:1;min-width:0}
 .cbody b{font-weight:600;display:block;line-height:1.35}
-.cbody em{font-style:normal;font-size:11px;color:var(--mut);
- font-family:ui-monospace,Menlo,Consolas,monospace}
+.cbody em{font-style:normal;font-size:11.5px;color:var(--mut);display:block;margin-top:3px}
+.agnote{font-size:11px;color:var(--mut);margin-top:6px;opacity:.85;line-height:1.55}
+.crew{align-items:flex-start}
+.cst{text-align:right;line-height:1.6;white-space:nowrap}
 .cst{flex:0 0 auto;font-size:11.5px;color:var(--mut)}
 .needs{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--st-risk);
  border-radius:9px;padding:13px 17px;margin-bottom:9px}
@@ -140,61 +145,100 @@ function gridMap(s){
 
 function render(s){
   const p = s.paper_progress ?? 0;
-  const ops = (s.probes?.ops_duty?.rows) || [];
-  const opsLive = ops.filter(o => o.status === "green").length;
-  const board = s.board || {};
+  const ag = s.agents || {};
+  const ops = ag.ops || [], workers = ag.workers || [];
+  const opsLive = ops.filter(o => o.age_min != null && o.age_min < 180).length;
+  const wLive = workers.filter(w => w.running).length;
+  const delivered = ag.delivered_plain || [];
+  const doing = ag.in_progress_plain || [];
   const needs = (s.findings||[]).filter(f => f.severity === "blocking"
     && !/已裁决|已解决/.test(f.title));
-  const wins = (s.iteration_loop||[]).filter(e => e.status === "green")
-    .slice(-5).reverse().map(e => e.summary);
 
   let h = `<div class="top">${ring(p)}
     <div class="topmid"><h1>Theoria 研究进度</h1>
       <p class="one">目标：一篇实验规模对标 Schema 的可发表论文。
-        眼下 <b>${opsLive} 个运维</b> + <b>${board.claimed ?? 0} 个研究</b>会话在岗。</p>
-      <div class="live"><i></i>后端每 10 分钟自动重算，本页每 20 秒自动拉取
-        · 数据时间 ${esc((s.generated_at||"").slice(5,16))}</div>
+        手下 <b>${ops.length} 个运维</b> + <b>${workers.length} 个研究员</b>，
+        累计交付 <b>${delivered.length}</b> 件工作。</p>
+      <div class="live"><i></i>数据 ${esc((s.generated_at||"").slice(5,16))} · 每 20 秒自动刷新</div>
     </div>
     <div class="topstats">
-      <div class="ts2"><b>${board.available ?? 0}</b><span>板上待领</span></div>
-      <div class="ts2"><b>${board.done ?? 0}</b><span>板上已交付</span></div>
-      <div class="ts2"><b>${s.probes?.ops_duty?.to_monitor ?? 0}</b><span>运维待回复</span></div>
-      <div class="ts2"><b>${needs.length}</b><span>需要你处理</span></div>
+      <div class="ts2"><b>${opsLive}</b><span>运维在岗</span></div>
+      <div class="ts2"><b>${wLive}</b><span>研究员在跑</span></div>
+      <div class="ts2"><b>${doing.length}</b><span>手上的活</span></div>
+      <div class="ts2"><b>${needs.length}</b><span>要你决定</span></div>
     </div></div>`;
 
-  h += `<h2>项目地图 <span class="note">— 横轴推进方向，纵轴六个子系统；
-    呼吸点=有会话在跑，悬停看实况</span></h2>` + gridMap(s);
+  h += `<h2>运维团队 <span class="note">— 常驻岗位，不做研究，负责让整台机器不出错</span></h2>
+    <div class="fleet">` + ops.map(o => {
+      const fresh = o.age_min != null && o.age_min < 180;
+      return `<div class="crew ${fresh ? "" : "risk"}">
+        <span class="badge ops">${esc(o.id.replace("OPS-",""))}</span>
+        <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.role)}</em></div>
+        <span class="cst">${o.age_min==null ? "未启动"
+          : "第 "+o.cycle+" 轮 · "+o.outputs+" 份产出<br>"+o.age_min+" 分钟前"}</span>
+      </div>`;
+    }).join("") + "</div>";
 
-  h += `<h2>运维值班 <span class="note">— 四个 App 常驻会话，靠心跳文件监控</span></h2>
-    <div class="fleet">` +
-    ops.map(o => `<div class="crew ${o.status}"><span class="badge ops">${esc(o.id)}</span>
-      <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.note||"")}</em></div>
-      <span class="cst">${o.age_min==null ? "未启动"
-        : "第"+o.cycle+"轮 "+esc(o.state)+" · "+o.age_min+" 分钟前"}</span></div>`).join("")
-    + "</div>";
+  const standing = ag.standing || [];
+  if (standing.length) {
+    h += `<h2>常驻研究员 <span class="note">— 各守一条赛道持续推进，只领自己方向的活</span></h2>
+      <div class="fleet">` + standing.map(r => {
+        const fresh = r.age_min != null && r.age_min < 120;
+        return `<div class="crew ${fresh ? "" : "risk"}">
+          <span class="badge">${esc(r.id.replace("RES-","R"))}</span>
+          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em></div>
+          <span class="cst">${r.age_min==null ? "未启动"
+            : "第 "+r.cycle+" 轮<br>"+r.age_min+" 分钟前"}</span></div>`;
+      }).join("") + "</div>";
+  }
 
-  h += `<h2>工作板 <span class="note">— 工人自助领活，做完接着领</span></h2>
-    <div class="tiles">
-      <div class="tile"><div class="tv">${board.available ?? 0}</div>
-        <div class="tl">待领</div><div class="ts">依赖与领地都通</div></div>
-      <div class="tile"><div class="tv">${board.claimed ?? 0}</div>
-        <div class="tl">在做</div><div class="ts">已被领走</div></div>
-      <div class="tile"><div class="tv">${board.blocked ?? 0}</div>
-        <div class="tl">等依赖</div><div class="ts">前置未完成</div></div>
-      <div class="tile"><div class="tv">${board.done ?? 0}</div>
-        <div class="tl">已交付</div><div class="ts">板上完成计数</div></div>
-    </div>` + (board.listing ? `<pre class="boardpre">${esc(board.listing)}</pre>` : "");
+  const busy = workers.filter(w => w.now), idle = workers.filter(w => !w.now);
+  h += `<h2>研究员正在做的事 <span class="note">— 自己从任务板领活，做完接着领；
+    额度停机时暂停，复工后从磁盘接着干</span></h2>
+    <div class="fleet">` + busy.map(w => `
+      <div class="crew ${w.orphan ? "risk" : (w.running ? "" : "done")}">
+        <span class="dot2 ${w.orphan ? "stop" : (w.running ? "run" : "stop")}"></span>
+        <div class="cbody"><b>${esc(w.now)}</b>
+          <em>${w.finished.length
+            ? "这位之前交付过：" + w.finished.map(esc).join("　·　")
+            : "这是它的第一件活"}</em></div>
+        <span class="cst">${w.orphan ? "无人在做<br>（已交回板上）"
+          : (w.running ? "进行中" : "已停")}</span>
+      </div>`).join("") + "</div>";
+  if (idle.length) {
+    const past = idle.flatMap(w => w.finished);
+    h += `<p class="note">另有 ${idle.length} 位研究员手上没活，等着领新任务${
+      past.length ? "（他们此前交付了 " + past.length + " 件）" : ""}。</p>`;
+  }
 
-  h += "<h2>需要你的事</h2>";
-  h += needs.length
-    ? needs.map(f => `<div class="needs"><b>${esc(f.title)}</b>
-        <p>${md(f.action)}</p></div>`).join("")
-    : `<p class="allclear">✓ 目前没有需要你出手的事——决策已代行，执行在跑。</p>`;
+  const today = ag.delivered_today || [];
+  if (today.length) {
+    h += `<h2>今天交付的 <span class="note">— 最近 24 小时合进主线的</span></h2>
+      <ul class="wins">` + today.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
+  }
+  h += `<h2>累计做完的事 <span class="note">— 全部合进主线并通过测试</span></h2>
+    <ul class="wins">` + delivered.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
 
-  h += "<h2>最近拿下</h2><ul class=\"wins\">" +
-    wins.map(w => `<li>${esc(w)}</li>`).join("") + "</ul>";
+  const nh = s.probes?.needs_human || {};
+  const restarts = nh.rows || [];
+  h += "<h2>今天需要你做的事</h2>";
+  if (restarts.length) {
+    h += restarts.map(r => `<div class="needs"><b>重开 ${esc(r.id)} · ${esc(r.name)}</b>
+      <p>${esc(r.why)}。在 Claude App 开一个新会话，粘贴
+      <code>${esc(r.prompt)}</code> 的内容即可；它会自己接上进度。</p></div>`).join("");
+  }
+  if (needs.length) {
+    h += needs.map(f => `<div class="needs"><b>${esc(f.title)}</b>
+      <p>${md(f.action)}</p></div>`).join("");
+  }
+  if (!restarts.length && !needs.length) {
+    h += `<p class="allclear">✓ 今天什么都不用做。会话自愈、额度自恢复、合并自动跑、
+      供货由我补——出问题才会出现在这里。</p>`;
+  }
 
-  h += `<h2>审计明细 <span class="note">— 专业视图，日常不用看</span></h2>`;
+  h += `<h2>细节 <span class="note">— 专业视图，日常不用看</span></h2>`;
+  h += `<details class="fold"><summary>研究地图（六个方向 × 五个阶段）</summary>
+    <div>${gridMap(s)}</div></details>`;
   const probeRows = Object.entries(s.probes||{}).map(([k,v]) =>
     `<tr><td><b>${esc(k)}</b></td><td><span class="pill ${v.status}">${esc(v.status)}</span></td>
      <td class="nt">${md(v.detail||"")}</td></tr>`).join("");

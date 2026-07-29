@@ -1,0 +1,37 @@
+{
+  "prompt_id": "E4-property-fuzz",
+  "branch": "agent/e4-property-fuzz",
+  "base_commit": "0b01f29cda45d2e4d9821710c2f0d61e1fe9afa9",
+  "utc": "2026-07-28T08:54:48Z",
+  "worker": "W-1610",
+  "territory": "fuzzlab",
+  "status": "complete",
+  "campaign": {
+    "seed": "0x00005eedc1e4f002",
+    "worlds_per_engine": 500,
+    "worlds_checked": 3000,
+    "engines": 6,
+    "invariants": 23,
+    "violated": 0,
+    "raised": 0,
+    "skipped": 80,
+    "generator_errors": 0,
+    "engine_rig_head": "0b01f29",
+    "skipped_cause": "all 80 are 20 gridworlds x 4 cegis invariants: neither segmentation operator narrates them as move/none because the mover's component merges with an obstacle it touches (BUGS.md B1)"
+  },
+  "artifacts": {
+    "campaign": "fuzzlab/out/campaign.json",
+    "seed_table": "fuzzlab/out/seeds.jsonl",
+    "findings": "fuzzlab/out/findings.jsonl",
+    "archive": "fuzzlab/archive/",
+    "generator_audit": "GENERATOR_AUDIT.md",
+    "file_hashes": "files.json"
+  },
+  "engine_rig_modified": false,
+  "provenance_notes": [
+    "The predecessor's untracked fuzzlab/ on agent/e1-property-fuzz supplied the PRNG, the rig bootstrap, the finding types and all five world generators. The infrastructure was adopted; the oracles and every invariant are new (oracles/ and props/ held only docstrings and finding.py).",
+    "Three of five generators were repaired before the campaign was worth running. The first full campaign was green over a corpus in which gridworld could never produce an obstacle (0 in 3200 worlds) and jumpgraph was single-state 52.5% of the time; those results certified nothing and are recorded as such in GENERATOR_AUDIT.md rather than superseded silently.",
+    "engine-rig was not modified. fuzzlab/rig.py only puts it on sys.path.",
+    "Fast Downward is absent on this machine, so fd_adapter ran on stub-bfs only and two of its three ladder rungs were never exercised."
+  ]
+}

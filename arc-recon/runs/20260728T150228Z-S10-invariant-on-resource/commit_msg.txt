@@ -1,0 +1,43 @@
+arc-recon: the ledger's invariant moves onto the ledger, and two other resources turn out to be red right now
+
+S10. INC-008's recorded lesson is that the redaction discipline lived inside
+`client._record`, so every instrument that opened the ledger itself went around
+it -- 55 raw Set-Cookie headers, one of them a live session bearer token, into a
+tracked file that Phase 4 publishes.
+
+The repair is not "make `_record` the only writer". `probe_stickiness.py` still
+opens the ledger itself because it needs response headers `_record` does not
+capture, which is a legitimate need and the shape of every future second writer.
+`tools/ledger_invariants.py` asks what is in the file and never who put it
+there. Four tiers: exact field rules; a literal search for the live key, which
+is schema-independent and reports whether it was able to run rather than
+counting a skipped check as a pass; a fail-closed refusal of any
+credential-shaped field nobody declared, aimed at the next incident rather than
+the last; and bearer/JWT shapes only in fields that could carry one, because a
+shape check over game frames is noise nobody reads.
+
+Violations are (line, field, shape). The scanner never returns the value it
+found, and a test asserts that over the serialised report -- reports get pasted
+into commit messages. 29 tests plant one synthetic offender per claimed shape
+and require the detector to go red, then require a clean row to stay clean. 111
+offline tests pass, verify.sh green, three ledgers clean, zero API actions.
+
+Three defects in my own drafts are in RUN_STATE: two assertions that were true
+by construction, negative controls that all ran in memory and so never exercised
+the file reader, and a DECLARED_FIELDS list conflating "exempted by name" with
+"governed by tier 1".
+
+The proposal's other two resources are monitor's territory, so the checks are
+written and run but not landed. Both are red on this machine right now: 24 agent
+processes against WORKER_MAX 7 with 6.0 GB free against a floor of 8, because
+the admission gate counts registry entries and terminal workers are in neither;
+and board.log's replayed claim set diverges from claimed/ on two items that were
+moved by hand today. Filed to monitor/inbox with the transcripts.
+
+A small version of the same bug showed up while writing the concurrency check:
+the first RAM probe used wmic, which Windows 11 has removed, and it returned
+None silently. Because the predicate treats an unmeasured resource as not clean,
+the report said UNMEASURED rather than green on a machine three times over its
+cap.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

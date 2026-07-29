@@ -1,0 +1,79 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "axis": "reversible",
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "walk_through_door",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "reversible": true,
+      "rule": "blocked_by_door",
+      "verdict": "unreachable"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "reversible": true,
+      "rule": "door_mirrors_net",
+      "verdict": "unreachable"
+    }
+  ],
+  "components": 1,
+  "reachable_states": 17,
+  "reversibility_score": 1.0,
+  "rules": {
+    "blocked_by_wall": {
+      "firing_states": 14,
+      "firing_transitions": 24,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 17,
+      "firing_transitions": 39,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_door": {
+      "firing_states": 5,
+      "firing_transitions": 5,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 3,
+  "rules_single_witness": [],
+  "rules_total": 3
+}

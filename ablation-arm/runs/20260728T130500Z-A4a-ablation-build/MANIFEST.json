@@ -1,0 +1,12 @@
+{
+  "prompt_id": "A4a-ablation-build",
+  "branch": "agent/a4a-ablation-build",
+  "base_commit": "d1733dfe8c9d3525ff1cf06120c635aa49a5dcf0",
+  "utc": "2026-07-28T13:05:00Z",
+  "worker": "RES-1",
+  "lane": "campaign",
+  "territory": "ablation-arm",
+  "network": "none",
+  "pile_contact": "none",
+  "state": "in progress -- build plan written, implementation not started"
+}
