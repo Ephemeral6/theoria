@@ -1,1 +1,1 @@
-2026-07-29T12:58Z cycle=36 audited_to=9bc8c880 reports=2 (high: reorg covered 4 of 8 numbers; medium: 4th pid_alive copy keeps 9 ghosts "进行中")
+2026-07-29T14:30Z cycle=37 audited_to=ad778386 reports=2 (high: the account rotator's success path forgets which sessions it handled -- registry write-back skipped, so one stale log line can hold an account shut indefinitely and its requeue is never drained; medium: the pool ledger's only entry is hand-written and attributed to an account with 0 launches)
