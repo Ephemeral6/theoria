@@ -94,3 +94,85 @@ deliverable. The difference is that those reds mark work a human still has to
 rule on, and this one marks residue with a one-command fix and no judgement in
 it. Leaving `monitor`'s gate red over it would have blocked every territory's
 merges to make a point that a `board.log` line makes better.
+
+---
+
+## Correction: the merge that resurrects is not the one I described
+
+Everything above says the resurrection comes from *"a merge from a branch whose
+base predates the `done`."* That is **wrong**, and it was found by writing the
+fixture rather than by reasoning about it. Six merge shapes were probed in
+throwaway repositories:
+
+* **The story above does not reproduce.** Item on the shelf at the merge base →
+  branch off → master does `claim` → `done` → merge the branch back. Git keeps
+  the item deleted: delete-on-one-side beats unmodified-on-the-other. And if the
+  branch *edits* the item file, rename detection carries the edit onto
+  `done/<id>.<worker>.md` instead. This is pinned as
+  `test_the_naive_merge_story_does_not_reproduce_it`, so that nobody later
+  "simplifies" the fixture into something that reproduces nothing.
+* **What does reproduce: the merge base predates the item's *creation*.** Then
+  master's net change against the base is an *add* in `done/`, and the branch's
+  is an *add* in `items/`. Two adds, no delete — git merges both without a
+  murmur and without a conflict. That is the literal *"a file the other side has
+  and I do not"*, and it is the centrepiece fixture.
+* **A second route, which conflicts loudly and then resolves quietly:** the
+  branch ran `sweep` or `release` while master ran `done`. That is a
+  rename/rename conflict, and git leaves **both** paths in the working tree — so
+  any "resolve by keeping both" resolution commits the resurrection.
+
+The distinction matters operationally: the dangerous branches are the **old**
+ones, cut before the item existed at all, not the ones cut before it finished.
+This fleet keeps 130+ worktrees, many of them weeks of commits behind, so that is
+the common case rather than the exotic one.
+
+## A defect in this fix, found by the tests written for it
+
+`resurrected()` built its claim side from `claimed_map()`, which is a dict keyed
+on the id — so when one id carries **two** claim files it kept only whichever
+`os.listdir` returned last. `reconcile --fix` then removed one, printed
+「清掉 1 个残留」and returned **0**, with the second claim still sitting there.
+
+A repair tool whose exit code says *clean* over residue it left is this lane's
+own disease, and a CI gate would have believed it. Two claims on one id is not
+the rare case either: it is a *more* resurrected board, because every
+resurrection is another chance for somebody to claim. `claimed_by` is now a list
+and `--fix` removes all of them. The adversary had filed it as a strict `xfail`;
+the marker is gone and the test passes.
+
+## Tests
+
+`python -m pytest monitor/tests` → **248 passed, 2 xfailed**, from 220 passed / 2
+xfailed before. 29 new tests in `test_done_items_resurrect.py`.
+
+Each guard was removed from a restored copy of `board.py` and the suite re-run:
+
+| guard removed | failures |
+|---|---|
+| `candidates()` `if iid in ready: continue` | **5** |
+| `cmd_sweep()` delivered-`kept` branch | **3** |
+| `_warn_resurrected()` in `cmd_list` | **1** |
+| `_warn_resurrected()` in `cmd_claim` | **1** |
+
+Beyond the four the work order named, the suite pins: that `done_ids()`'s
+original job still works (an item whose `deps` name a delivered id stays
+unblocked, and an unmet dep still blocks); that both roles of `done_ids()`
+coexist in one run; that ids sharing a prefix do not collide in **either**
+direction (`S4-freeze` delivered must not suppress `S4-freeze-complete`, and
+vice versa — they do not, because `done_ids()` splits on `.` and gets the whole
+id); that `P13-P13-figure-numbering-and-plates` round-trips; and that the whole
+`RESURRECTED` + `reconcile` output is encodable in cp936, which is the trap
+`prior_work` fell into once on this platform.
+
+## One thing this branch does that is board *data*, not code
+
+`monitor/board/items/E8-ic3-scale.md` and
+`monitor/board/claimed/E8-ic3-scale.W-1671.md` are deleted here, by running
+`board.py reconcile --fix` in this worktree, with both removals logged as
+`RECONCILE` in `board.log`. Without it this branch's own gate is red, because
+the invariant it adds is violated by the board data sitting in the same tracked
+tree. A branch that ships a check and not the repair the check demands is a
+branch that hands the next person a red gate and no explanation.
+
+The same reconciliation was done by hand in the live checkout earlier, since
+`reconcile` only exists on this branch.

@@ -251,3 +251,5 @@
 2026-07-29T10:04:37Z CLAIM S21-app-session-death by RES-4
 2026-07-29T10:07:00Z CLAIM P4-P16-e06-contradiction by RES-2
 2026-07-29T10:07:27Z CLAIM V6-exam-on-sealed-dryrun by RES-3
+2026-07-29T18:42:13Z RECONCILE E8-ic3-scale removed items/E8-ic3-scale.md (already delivered by W-1660)
+2026-07-29T18:42:13Z RECONCILE E8-ic3-scale removed claimed/E8-ic3-scale.W-1671.md (already delivered by W-1660)

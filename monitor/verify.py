@@ -246,8 +246,8 @@ def _board_states_disjoint() -> Tuple[str, int, str]:
         where = []
         if st["in_items"]:
             where.append("items/")
-        if st["claimed_by"]:
-            where.append("claimed/ by %s" % st["claimed_by"])
+        for by in st["claimed_by"]:
+            where.append("claimed/ by %s" % by)
         lines.append("  %-34s delivered by %-8s still in %s"
                      % (iid, st["deliverer"], " + ".join(where)))
     return "board states disjoint", 1, "\n".join(lines)

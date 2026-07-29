@@ -163,15 +163,30 @@ def resurrected():
     `list` showed the item as ordinary available work: every one of those
     workers spent a launch and a context redoing something already on a branch.
 
-    Returns ``{id: {"deliverer": w, "in_items": bool, "claimed_by": w or None}}``.
+    Returns ``{id: {"deliverer": w, "in_items": bool, "claimed_by": [w, ...]}}``.
+
+    ``claimed_by`` is a **list**, not one worker, and that is not tidiness.
+    ``claimed_map()`` is keyed on the id, so with two claim files for one id it
+    keeps whichever ``os.listdir`` returned last -- and `reconcile --fix` would
+    then remove one, report success and return 0 with the other still sitting
+    there. A repair tool whose exit code says "clean" over residue it left is
+    this lane's own disease, and it was found by the tests for this very fix.
+    Two claims on one id is also not the rare case: it is a *more* resurrected
+    board, since each resurrection is another chance for someone to claim.
     """
     delivered = delivered_map()
-    claimed = claimed_map()
     shelf = {item_id(f) for f in os.listdir(ITEMS) if f.endswith(".md")}
+    claims = {}
+    for f in sorted(os.listdir(CLAIMED)):
+        if not f.endswith(".md"):
+            continue
+        parts = f[:-3].split(".")
+        if len(parts) >= 2:
+            claims.setdefault(parts[0], []).append(parts[1])
     out = {}
     for iid, deliverer in delivered.items():
         in_items = iid in shelf
-        by = claimed.get(iid)
+        by = claims.get(iid, [])
         if in_items or by:
             out[iid] = {"deliverer": deliverer, "in_items": in_items,
                         "claimed_by": by}
@@ -459,8 +474,8 @@ def _warn_resurrected():
         where = []
         if st["in_items"]:
             where.append("items/")
-        if st["claimed_by"]:
-            where.append("claimed/ by %s" % st["claimed_by"])
+        for by in st["claimed_by"]:
+            where.append("claimed/ by %s" % by)
         print("  %-32s done by %-8s 现在还在 %s"
               % (iid, st["deliverer"], " + ".join(where)))
 
@@ -487,9 +502,8 @@ def cmd_reconcile(fix=False):
         targets = []
         if st["in_items"]:
             targets.append(os.path.join(ITEMS, "%s.md" % iid))
-        if st["claimed_by"]:
-            targets.append(os.path.join(CLAIMED, "%s.%s.md"
-                                        % (iid, st["claimed_by"])))
+        for by in st["claimed_by"]:
+            targets.append(os.path.join(CLAIMED, "%s.%s.md" % (iid, by)))
         for path in targets:
             rel = os.path.relpath(path, BOARD).replace("\\", "/")
             if not fix:
