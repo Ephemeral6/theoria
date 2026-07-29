@@ -396,3 +396,22 @@ V23 条目文件写于 **17:17:01Z**，17:22:09Z 被 W-1681 认领。
 那两个已隔离的、且在我自己的审计文字里；append-only 首父删除 1/0/0/0/0/0。
 
 下一轮游标 `82e859d4`，`wake_at 2026-07-29T19:36:00Z`。
+
+### 附：cycle 41 的产出在哪里（2026-07-29T18:40Z 追记）
+
+`git push origin master` 被拒（master 落后 6 个提交），而工作树里有约 45 个
+**别的 agent 正在写的文件**（`monitor/bus/RES-*`、`monitor/ops-status/RES-*`、
+`monitor/board/*`、`monitor/ci/*`…）。rebase 需要把它们全部 stash，
+**我不愿意为了推自己的一个提交去动别人在飞的盘面**；而且 `CHARTER.md` 那张表里
+「合并到 master」本来就不是 OPS-A 的格子。
+
+所以本轮提交 `e1e939d3` 推到了侧分支：
+
+```
+agent/opsa-c41-pool-three-readers
+```
+
+只碰 `monitor/audit/`（3 份报告 + HEARTBEAT + state.json）、
+`monitor/ops-status/OPS-A.json`、`monitor/mailbox/OPS-A.md`、`monitor/bus/OPS-A/`，
+**没有一个文件与别人的领地重叠**，`ci_merge` 应当能直接合。
+如果它没被合走，请当成一次 merge-queue 事件处理——**不是我的活没干完**。
