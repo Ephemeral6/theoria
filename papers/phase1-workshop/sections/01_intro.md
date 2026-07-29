@@ -276,9 +276,12 @@ Scoped to what was actually run:
    mechanism, rule count, state count and explorer budget at once, and §3.3 shows
    the outcome is entailed by the construction rather than discovered by it
    (`cold-start-a0/A0_REPORT.md` §8).
-4. **A machine-checked impossibility certificate whose weights cross a data
-   boundary.** The pagoda weights are produced by an independent engine's linear
-   program and transported as a JSON certificate
+4. **A machine-checked impossibility whose invariant weights crossed a data
+   boundary.** The impossibility is the machine-checked object — a Lean theorem
+   with an empty axiom list (§4.2) — and the certificate is what crossed. The
+   distinction is worth the extra clause: the certificate is a JSON document, and
+   what re-checks it is Python, not a kernel. The pagoda weights are produced by
+   an independent engine's linear program and transported as that certificate
    (`engine-rig/interop/certificates/pagoda_5_11011_to_00010.json`); the consuming
    side re-verifies every obligation rather than trusting the certificate's own
    `verified` flag (`theory-compiler/STATUS.md`). The two sides are sessions that
