@@ -1,0 +1,10 @@
+{
+  "prompt_id": "S18-fleetkit-extract",
+  "branch": "agent/s18-fleetkit-extract",
+  "base_commit": "156018f",
+  "utc": "2026-07-29T02:30:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "fleetkit",
+  "state": "partial -- coordination core ported and accepted with process workers; dispatch/reflex/quota/assign/ci_merge not ported; live-agent acceptance outstanding"
+}
