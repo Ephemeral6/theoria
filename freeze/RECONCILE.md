@@ -167,10 +167,19 @@ P-22 `STATS_RULES.md:276-278` 写 `baseline-arms/out/campaign/` 的 48 集是
 
 ## 从 S4 移植回来的清单（按价值排序，逐条勾掉）
 
-- [ ] **G1 · U3 的公理白名单**（`STATS_RULES.s4draft.md:69-80`）。
-      放行 `propext`、`Quot.sound`、`Classical.choice`，**永不允许** `sorryAx`、
-      `Lean.ofReduceBool`。P-22 只写「空公理集」——**照字面几乎排除掉一切非平凡的
-      Lean 4 证明**，只放行可计算的琐碎命题。这是整份比对里最该移植的一条。
+- [x] **G1 · U3 的公理白名单**（`STATS_RULES.s4draft.md:69-80`）—— ✅ 已移植
+      （RES-1，2026-07-29，`STATS_RULES.md` §1.2）。放行 `propext`、`Quot.sound`、
+      `Classical.choice`，**永不允许** `sorryAx`、`Lean.ofReduceBool`。P-22 只写
+      「空公理集」——**照字面几乎排除掉一切非平凡的 Lean 4 证明**，只放行可计算的
+      琐碎命题。这是整份比对里最该移植的一条。
+      移植时补了一句 S4 也没写的分寸：两类拒绝的**理由不同**——`sorryAx` 与
+      `Lean.ofReduceBool` 不是「比 `Classical.choice` 更强的公理」，前两条威胁的是
+      **这条证明有没有被证**（未完成的证明 / 绕过内核把判定外包给编译器），
+      后一条只影响**在哪套基础上被证**。白名单冻结后新增任一条都是 incident。
+      **顺带补掉必修一的散文残留**：同一段的分母从 21 改为 **19**（claim 层），
+      并写入三层报告条款（claim n=19 与 clean n=12 各报一次、分歧以弱者为准；
+      sealed n=21 只作描述，因为它含 ft09/ls20 两局已污染已隔离）。
+      数字取自 `freeze/tiers.py` 的实算输出，不是抄的。
 - [ ] **G2 · §2.1.1 按断言种类拆开的非空转条款**（`:84-98`）。不可解性四条、
       守恒律「存在两个可表示状态使其取值不同」、条件化不可解三条。
       P-22 这块只是一条 `needs_impl`。
