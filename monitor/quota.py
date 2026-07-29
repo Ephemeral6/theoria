@@ -29,6 +29,7 @@ import re
 import subprocess
 import sys
 import time
+import childio  # noqa: E402  (per-child decoding, see its docstring)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -181,14 +182,14 @@ def save_state(st):
 
 def pid_alive(pidnum):
     out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
-                         capture_output=True, text=True).stdout
+                         capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout
     return str(pidnum) in out
 
 
 def branch_pushed(pid_str):
     slug = "agent/" + pid_str.lower().replace("-", "")
     out = subprocess.run(["git", "branch", "-r", "--format=%(refname:short)"],
-                         cwd=ROOT, capture_output=True, text=True).stdout
+                         cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
     return any(slug in b for b in out.splitlines())
 
 
@@ -374,7 +375,7 @@ def ping(if_due=False):
     import shutil
     claude = shutil.which("claude")
     proc = subprocess.run([claude, "-p", "reply with: ok", "--model", "haiku"],
-                          capture_output=True, text=True, timeout=120)
+                          capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
     ok = proc.returncode == 0 and "ok" in proc.stdout.lower()
 
     # Reloaded *after* the call, not before: the call can take two minutes and
