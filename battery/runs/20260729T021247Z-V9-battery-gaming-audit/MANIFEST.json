@@ -1,5 +1,5 @@
 {
-  "base_commit": "520dc5dda90eefd93c6c2afbe2b03db5b0745e49",
+  "base_commit": "2f68c448cfd4cc9629bb61e2a635367b4d723b8e",
   "branch": "agent/v9-battery-gaming-audit",
   "files": [
     {
@@ -24,11 +24,11 @@
     },
     {
       "path": "battery/audit/v9/verdict.py",
-      "sha256": "80a6d00cc7ee569d8f9c77d310fa9790480c3a20dcc9c75c951412f997419bc0"
+      "sha256": "36dea134bae0ac08f59a5c22e2e283e15f430c5b52faa8728e2849b7f4a87582"
     },
     {
       "path": "battery/audit/v9/run.py",
-      "sha256": "26dddb1ae54a208eb93e2b05d657c1bb41b082b58645eb088be91f47809db900"
+      "sha256": "8052490d8b7266fcc0e96fa3fd1ae9398d412d604d1757c4dd5204a22ce2ad7d"
     },
     {
       "path": "battery/audit/v9/attacks/__init__.py",
@@ -59,8 +59,40 @@
       "sha256": "00b2d4140625d64c258ba3b8904058d7eb230ea2b26e5004bff17d0db93a3d63"
     },
     {
+      "path": "battery/METRICS.md",
+      "sha256": "ffb1f014560b85166980e34d049dc29bed94363396b669cfd17e9871974a67da"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "1656bb810dc6328689158df7750f2114405256aa127ecfaab9df72161c16e3a0"
+    },
+    {
+      "path": "battery/audit/v9/mutants.py",
+      "sha256": "c0ef54f6ec3a057850b512108b4a9a3dca9f218fd2c416c8902974ee0a6d390c"
+    },
+    {
+      "path": "battery/audit/v9/REPORT.md",
+      "sha256": "af15358ee9c49d3fa7b912208ff1eaa34335bef3f4768a44dc10a947c0355fba"
+    },
+    {
+      "path": "battery/tests/test_v9_prereg.py",
+      "sha256": "e771bb2b9d9dbe233302f4eed29a67afdc8dc577c87410cf967e8d488f091c08"
+    },
+    {
+      "path": "battery/tests/test_v9_defences.py",
+      "sha256": "c4e0c731981e835edfe94d7ed2973f6eed7e87ecfcc8303de8b3f01252e08982"
+    },
+    {
       "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json",
       "sha256": "e098ef223b061095bba32b96043b01cc91612a8617ad34017781ec75a570e9b1"
+    },
+    {
+      "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/pytest.txt",
+      "sha256": "5f2144d36d0861dab6872bf99de4951270a64922e347414f674c9fb6260a7dc5"
+    },
+    {
+      "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/RUN_STATE.md",
+      "sha256": "206db361afeb277c37674052e1265ac17835bd9f6534be303879e130d2f70ebc"
     }
   ],
   "prereg_commit": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",

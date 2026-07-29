@@ -70,8 +70,14 @@ def write(stamp: str) -> str:
             for name in sorted(os.listdir(attack_dir)) if name.endswith(".py"))
 
     files: List[Dict[str, str]] = []
-    for rel in tracked + ["battery/runs/%s-%s/v9_gaming_audit.json"
-                          % (stamp, PROMPT_ID)]:
+    run_relative = ["battery/runs/%s-%s/%s" % (stamp, PROMPT_ID, name)
+                    for name in ("v9_gaming_audit.json", "pytest.txt",
+                                 "RUN_STATE.md")]
+    for rel in tracked + ["battery/METRICS.md", "battery/STATUS.md",
+                          "battery/audit/v9/mutants.py",
+                          "battery/audit/v9/REPORT.md",
+                          "battery/tests/test_v9_prereg.py",
+                          "battery/tests/test_v9_defences.py"] + run_relative:
         absolute = os.path.join(REPO, rel.replace("/", os.sep))
         if os.path.isfile(absolute):
             files.append({"path": rel, "sha256": _sha256(absolute)})
