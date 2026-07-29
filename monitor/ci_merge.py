@@ -109,13 +109,58 @@ def log_line(msg):
     print(msg)
 
 
+def flag_path(branch):
+    return os.path.join(CI_DIR,
+                        "CONFLICT-%s.md" % branch.replace("/", "_"))
+
+
 def flag(branch, reason, detail):
     os.makedirs(CI_DIR, exist_ok=True)
-    name = "CONFLICT-%s.md" % branch.replace("/", "_")
-    with open(os.path.join(CI_DIR, name), "w", encoding="utf-8") as fh:
+    path = flag_path(branch)
+    with open(path, "w", encoding="utf-8") as fh:
         fh.write("# %s\nbranch: %s\nreason: %s\n\n```\n%s\n```\n"
-                 % (name, branch, reason, detail[-4000:]))
+                 % (os.path.basename(path), branch, reason, detail[-4000:]))
     log_line("FLAG %s: %s" % (branch, reason))
+
+
+def clear_flag(branch):
+    """Retire a branch's flag once that branch has merged.
+
+    A flag was written on failure and then left behind for good, so `ci_merge`
+    accumulated verdicts about branches that had since merged -- 13 of 24 at
+    one point (OPS-M cycle 10).  Two of those ghosts were still displaying the
+    eaten-backslash bash error four hours after that bug was fixed, which is
+    the part that matters: a stale flag is not merely noise, it is the loudest
+    evidence in the directory and it is *wrong*.  Anyone triaging reads the
+    biggest, angriest file first and starts debugging something that no longer
+    exists.  All 13 had been merged by this very function, so clearing it here
+    is where the knowledge already is.
+
+    Moved rather than deleted: the failure did happen, and what it said is
+    worth keeping.  The stamp is so a branch that failed, merged, and failed
+    again does not overwrite its own history.
+    """
+    path = flag_path(branch)
+    if not os.path.exists(path):
+        return
+    archive = os.path.join(CI_DIR, "archive")
+    os.makedirs(archive, exist_ok=True)
+    stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    stem = os.path.join(archive,
+                        "%s.%s" % (os.path.basename(path)[:-len(".md")], stamp))
+    # A second's resolution is not uniqueness: two clears inside the same
+    # second gave the same name and `os.replace` overwrote the first one
+    # silently -- which is the thing this function exists to stop.
+    dest, n = stem + ".md", 1
+    while os.path.exists(dest):
+        n += 1
+        dest = "%s-%d.md" % (stem, n)
+    try:
+        os.replace(path, dest)
+    except OSError:
+        # Never fail a merge that already succeeded over its own bookkeeping.
+        return
+    log_line("CLEARED flag for %s (merged)" % branch)
 
 
 def m0_alive():
@@ -294,6 +339,10 @@ def try_merge(branch):
             parts.append("; a gate dirtied the worktree: %s" % ",".join(dirtied))
         parts.append(")")
         log_line("".join(parts))
+        # The branch merged, so whatever this rig said about it last time is
+        # now a statement about the past.  Retired here rather than left for a
+        # human to sweep, which is how it accumulated in the first place.
+        clear_flag(branch)
         return True
     finally:
         sh(["git", "worktree", "remove", "--force", wt])
