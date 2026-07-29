@@ -1,1 +1,1 @@
-2026-07-29T04:03Z cycle=32 audited_to=fec3f10 reports=0 (ci_merge hold landed under user instruction; one self-caught false positive)
+2026-07-29T04:35Z cycle=33 audited_to=43b29a5 reports=0 (verified my own change in production; transition as designed)
