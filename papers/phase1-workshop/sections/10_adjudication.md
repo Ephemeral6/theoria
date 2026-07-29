@@ -36,8 +36,8 @@ The figures below are **each pass's own summary line**, not a re-count:
 | success signal read as truth | `SURVEY-success-as-truth.md` | ~105 points | 8 |
 
 **No total is published here, and no rate.** The obvious headline — around 340
-points examined, 56 judged unsafe — does not survive, and neither does any
-replacement assembled by adding these columns up. Four reasons, in increasing
+points examined, 48 judged unsafe — does not survive, and neither does any
+replacement assembled by adding these columns up, which gives 445 and 56. Four reasons, in increasing
 order of severity.
 
 First, **the passes did not use one ruler.** One states the criterion under which
@@ -68,15 +68,19 @@ audit issuing an affirmative claim must publish both the number of objects it
 claim when they differ. No pass meets its own criterion.
 
 Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate
-exit-code readings" that reached the work items and the digests appears in no
-survey. The "~97 further legitimate usages" from the fourth pass is `105 − 8` —
-arithmetic residue, not a list.
+exit-code readings" that reached the work items and the digests
+(`monitor/inbox/archive/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md:168-169`)
+appears in no survey. The "~97 further legitimate usages" from the fourth pass
+(`monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md:100`)
+is `105 − 8` — arithmetic residue, not a list.
 
 Fourth, and decisively: **the passes overlap, and where they overlap they
 disagree.** `engine-rig/engines/lp_potential/potential.py:170-171` is graded
 安全 — safe — at `SURVEY-solver-status.md:308` and unsafe at
-`SURVEY-environment-as-semantics.md:77`. `probe_frontier/reach.py:94-99` is safe
-at `:290` and unsafe at `:80`. `cegis_miner/miner.py:323` is safe at `:339` and
+`SURVEY-environment-as-semantics.md:77`.
+`engine-rig/engines/probe_frontier/reach.py:94-99` is safe
+at `:290` and unsafe at `:80`.
+`engine-rig/engines/cegis_miner/miner.py:323` is safe at `:339` and
 mismeasured at `:131`. Any sum over the four passes therefore counts some sites
 twice, and counts at least three of them on both sides of the ledger at once.
 

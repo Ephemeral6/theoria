@@ -536,34 +536,73 @@ c_path, s_path = sys.argv[1:3]
 claims = open(c_path, encoding="utf-8").read()
 stats  = open(s_path, encoding="utf-8").read()
 
-ALLOWED  = ["propext", "Quot.sound", "Classical.choice"]
-REFUSED  = ["sorryAx", "ofReduceBool"]
-SUPERSEDED = ["公理集为空", "空公理集", "公理集非空"]
+ALLOWED  = ["propext", "Quot.sound"]
+REFUSED  = ["Classical.choice", "sorryAx", "ofReduceBool"]
+SUPERSEDED = ["公理集为空", "空公理集", "公理集非空", "不报告任何公理"]
+
+# Every axiom name allowed to appear ANYWHERE in the frozen drafts.  A name
+# outside this set is a whitelist that grew -- see check 3b.  `Classical.em`
+# is here because the counterexample that justifies excluding Classical.choice
+# is stated in the drafts.
+KNOWN_AXIOMS = set(ALLOWED) | set(REFUSED) | {"Lean.ofReduceBool", "Classical.em"}
+
+# A "claim" section is `## C<n> · …`; C1 is the one that carries U3.
+def c1_section(text):
+    m = re.search(r"^## C1 [·・].*?(?=^## C[0-9]|\Z)", text, re.M | re.S)
+    return m.group(0) if m else None
 
 def verbatim_blocks(text):
-    """The '> ' quote blocks under C1's 成立版/不成立版 headings, by name."""
+    """Every '（逐字）' quote block inside C1, keyed by its heading.
+
+    Scoped to C1 rather than to the file: `re.search` on a bare heading
+    pattern takes the FIRST match anywhere, so a claim inserted above C1
+    would silently redirect this audit.  Keyed by whatever heading is
+    actually there rather than by a fixed pair of names, because C2 already
+    sets the precedent that a claim may publish a third outcome
+    (`结局三 · B-2`) -- a third outcome under C1 carrying a different
+    acceptance criterion must be audited, not ignored.
+    """
+    sec = c1_section(text)
+    if sec is None:
+        return None
     out = {}
-    for name in ("成立版", "不成立版"):
-        m = re.search(r"^### %s（逐字）\s*$(.*?)(?=^###|\Z)" % name,
-                      text, re.M | re.S)
-        if m is None:
-            continue
-        out[name] = "\n".join(l for l in m.group(1).split("\n")
-                              if l.lstrip().startswith(">"))
+    for m in re.finditer(r"^### ([^\n]*?（逐字）)[ \t]*$(.*?)(?=^###|\Z)", sec, re.M | re.S):
+        out[m.group(1).strip().replace("（逐字）", "")] = "\n".join(
+            l for l in m.group(2).split("\n") if l.lstrip().startswith(">"))
     return out
 
 def audit(text, label):
     """Returns a list of complaints.  Empty list == the criterion is aligned."""
     bad = []
     blocks = verbatim_blocks(text)
+    if blocks is None:
+        return ["%s: C1's section could not be located -- the audit has no subject" % label]
     for name in ("成立版", "不成立版"):
         if name not in blocks:
             bad.append("%s: C1 has no %s（逐字）block" % (label, name))
-            continue
+    for name, block in blocks.items():
         for s in SUPERSEDED:
-            if s in blocks[name]:
-                bad.append("%s: C1 %s still states the superseded criterion %r"
+            if s in block:
+                bad.append("%s: C1 %s states the superseded criterion %r"
                            % (label, name, s))
+        # A published sentence may not point somewhere else for the rule it
+        # is supposed to BE.  Without this, C1 can keep its pinned wording
+        # byte-for-byte and append "the operative whitelist is §1.9" -- the
+        # rule moves out of range of every check below and the claim text
+        # says so out loud.
+        # Narrow on purpose: 成立版 legitimately says "两层分歧时以弱者为准",
+        # which is a rule it STATES.  What is refused is delegating the
+        # ACCEPTANCE CRITERION -- the whitelist, the axioms, criterion (b) --
+        # to somewhere this stage does not read.
+        for pointer in re.findall(r"(白名单|判据|公理)[^\n]{0,24}(为准|仅为历史|另见)", block):
+            bad.append("%s: C1 %s delegates its own acceptance criterion elsewhere "
+                       "(%s…%s) -- a verbatim claim must state the rule, not cite it"
+                       % (label, name, pointer[0], pointer[1]))
+    extra = [n for n in blocks if n not in ("成立版", "不成立版")]
+    if extra:
+        bad.append("%s: C1 carries an unaudited extra verbatim outcome %s -- "
+                   "a third outcome may not smuggle a different criterion"
+                   % (label, sorted(extra)))
     hold = blocks.get("成立版", "")
     for a in ALLOWED + REFUSED:
         if a not in hold:
@@ -582,58 +621,96 @@ if not live:
 #      every one of them in passing, so a substring search over the section
 #      stays green even after the operative table is gutted.  The disposition
 #      each axiom receives is what has to match, so that is what is read.
+# SCOPE NOTE.  An earlier form of this check read only §1.2 and only column 2
+# of rows containing 放行.  An adversarial pass demonstrated four green
+# bypasses against exactly those qualifiers: drop the backticks, put the
+# supplement in the reason column, put it in a new section (§1.9), or label
+# the row 接受 instead of 放行.  So the scan is now file-wide and shape-free:
+# the four frozen drafts may not mention ANY axiom name outside the known
+# set, wherever it appears and however it is dressed.  Disposition is still
+# read off the table, because that is where disposition lives.
+# Any code-ish identifier, not just dotted or camel ones: the bypass that got
+# through the first form of this check was a plain snake_case `axiom
+# theoria_step_sound`, which no name-shape heuristic was going to catch.  So
+# the rule is inverted -- on a disposition row, EVERY identifier must be one
+# we already know, and the vocabulary of things that legitimately appear there
+# is small enough to enumerate.
+AXIOM_TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_.]{2,}")
+NOT_AN_AXIOM = {
+    "Lean", "lean", "sorry", "native_decide", "decide", "rfl", "print",
+    "axioms", "propext", "Prop", "noncomputable", "theorem", "axiom",
+    "STATS_RULES", "CLAIMS_TEXT", "PENDING_FIVE", "MANIFEST_DRAFT",
+}
 sec = re.search(r"### 1\.2(.*?)(?=^## |\Z)", stats, re.M | re.S)
 if not sec:
     print("FAIL STATS_RULES.md: §1.2 not found -- criterion (b) has no home")
 else:
-    rows = [l for l in sec.group(1).split("\n") if "放行" in l and l.count("|") >= 3]
-    passes = [l for l in rows if "永不放行" not in l]
-    refuses = [l for l in rows if "永不放行" in l]
+    rows = [l for l in sec.group(1).split("\n")
+            if ("放行" in l or "接受" in l) and l.count("|") >= 3]
+    passes = [l for l in rows if "永不放行" not in l and "不放行" not in l]
+    refuses = [l for l in rows if "永不放行" in l or "不放行" in l]
     drift = []
     for a in ALLOWED:
         if not any(a in l for l in passes):
             drift.append("%s is no longer on the 放行 row" % a)
     for a in REFUSED:
-        if not any(a in l for l in refuses):
-            drift.append("%s is no longer on a 永不放行 row" % a)
         if any(a in l for l in passes):
             drift.append("%s has been moved onto the 放行 row" % a)
-    # The whitelist is CLOSED: the prose promises that adding an axiom after
-    # the freeze is an incident, and this is the executable half of that
-    # promise.  Checking only that the three are present would let a fourth
-    # be appended silently -- which is the cheapest way to relax criterion (b)
-    # without touching a single sentence anyone reads.
-    for l in passes:
-        cell = l.split("|")[2] if l.count("|") >= 3 else ""
-        extra = [n for n in re.findall(r"`([A-Za-z][\w.]*)`", cell)
-                 if n not in ALLOWED]
-        if extra:
-            drift.append("the 放行 row has grown: %s is not in the frozen "
-                         "whitelist (adding one is an incident, not an edit)"
-                         % ", ".join(sorted(set(extra))))
+    # The whitelist is CLOSED.  The prose promises that adding an axiom after
+    # the freeze is an incident; this is the executable half of that promise,
+    # and it is stated over the whole file so that "somewhere else" is not a
+    # place a supplement can live.
+    for name, path in (("STATS_RULES.md", s_path), ("CLAIMS_TEXT.md", c_path)):
+        # Every line that talks about the whitelist, anywhere in the file and
+        # under any of its labels -- so "put it in another section", "put it
+        # in another column", "drop the backticks" and "call the row 接受"
+        # all land inside the scan instead of outside it.
+        lines = [l for l in open(path, encoding="utf-8").read().split("\n")
+                 if re.search(r"放行|接受|whitelist", l) and l.count("|") >= 3]
+        unknown = {n for l in lines for n in AXIOM_TOKEN.findall(l)
+                   if n not in KNOWN_AXIOMS and n not in NOT_AN_AXIOM
+                   and not re.search(r"\.(md|py|json|jsonl|sh|lean)$", n)}
+        if unknown:
+            drift.append("%s names axiom(s) outside the frozen whitelist: %s "
+                         "(adding one is an incident, not an edit)"
+                         % (name, ", ".join(sorted(unknown))))
     if drift:
         print("FAIL STATS_RULES.md §1.2 whitelist table drifted: %s" % "; ".join(drift))
     else:
-        print("PASS STATS_RULES.md §1.2 whitelist table gives all five axioms "
-              "the same disposition C1 publishes")
+        print("PASS the whitelist is closed: 放行 = %s, and no axiom outside the "
+              "frozen set is named anywhere in the two files" % ", ".join(ALLOWED))
 
 # 4 -- the price of the relaxation
 for row, what in (("9.2", "non-triviality check (criterion c)"),
                   ("9.14", "U3 has no implementation")):
     line = next((l for l in stats.split("\n")
                  if l.startswith("| %s |" % row)), None)
+    # A substring test cannot tell a promotion from its own retraction: a row
+    # reading `~~开跑前置条件~~ -> needs_impl（降级）` contains the substring.
+    # Demonstrated green against the first form of this check, so the marks of
+    # retraction are read too.
+    # `needs_impl` alone is not a mark of retraction -- 9.2's row names it in
+    # order to record what it was PROMOTED from.  The direction is what is
+    # read: strikethrough, 降级, 暂缓, 豁免.
+    retracted = [m for m in ("~~", "降级", "暂缓", "豁免")
+                 if line and m in line]
     if line is None:
         print("FAIL STATS_RULES.md §9: row %s is gone -- %s was a launch blocker" % (row, what))
     elif "开跑前置条件" not in line:
         print("FAIL STATS_RULES.md §%s downgraded: %s is no longer a launch blocker"
               % (row, what))
+    elif retracted:
+        print("FAIL STATS_RULES.md §%s carries 开跑前置条件 alongside marks of its own "
+              "retraction (%s) -- %s"
+              % (row, ", ".join(retracted), what))
     else:
         print("PASS §%s is a launch blocker (%s)" % (row, what))
 
 # 5 -- negative control: put the old wording back, the audit must catch it
 mutant = claims.replace(
-    "> `#print axioms` 只报告预注册白名单内公理（`propext` / `Quot.sound` / `Classical.choice`；\n"
-    "> `sorryAx` 与 `Lean.ofReduceBool` 永不放行）且通过非平凡性检查的定理，",
+    "> `#print axioms` 只报告预注册白名单内公理（`propext` / `Quot.sound`；\n"
+    "> `Classical.choice`、`sorryAx` 与 `Lean.ofReduceBool` 均不放行）"
+    "且通过非平凡性检查的定理，",
     "> 公理集为空且通过非平凡性检查的定理，")
 if mutant == claims:
     print("FAIL negative control could not be built: the 成立版 whitelist sentence "

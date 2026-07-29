@@ -671,8 +671,9 @@ against are in `papers/phase1-workshop/figures/PARITY.md`.
 loop as a whole.
 
 **`zero_space` recovered the Button↔Door dependency as a conservation law.**
-Handed 152 anonymous indicator bits, with no vocabulary for buttons or doors, it
-returned
+Handed 152 anonymous indicator bits (`cold-start-a0/A0_REPORT.md` §3;
+`cold-start-a0/artifacts/engines_report.json`, `zero_space.features`), with no
+vocabulary for buttons or doors, it returned
 
 ```
 [cell (3,2) shows 8]  +  [cell (4,5) shows 5]   ≡  1   (mod 2)
@@ -849,8 +850,9 @@ it. Adding four evidence levels that make "blocked while crossing" reachable gav
 **39,960 well-formed states across five levels, 0 mismatches**, at a cost of
 **1,966 actions instead of 341**.
 
-T-10 injected single-rule variants and measured detection latency. Latency tracks
-*firing frequency*, not the size of the change: `ghost` (walls stop being solid,
+`a0-spike/THEORIZE_LOG.md` T-10 injected single-rule variants and measured
+detection latency. Latency tracks *firing frequency*, not the size of the
+change: `ghost` (walls stop being solid,
 on a rule that fires nearly every action) is caught in **6 actions**; `nocross`
 is **never caught in 341 actions** on the level it was learned on, and in **6**
 elsewhere. The consequential one is `push1`, which flips the truth value of
@@ -1026,8 +1028,10 @@ E-06 by using the second method it already had".
 The reason recorded for the discharge is "the certificate covers what it covers,
 exhaustion closes the rest, each goal attributed to its method", and the compiler's
 own generator repeats it: the two proofs are "kept **separate and attributed**,
-because they are not the same argument". **The emitted artefact does not do that,
-and the generator concedes it a dozen lines further down.** In the development it
+because they are not the same argument"
+(`theory-compiler/src/theory_compiler/generators/gen_lean.py:722-724`). **The
+emitted artefact does not do that, and the same function concedes it at `:786`.**
+In the development it
 actually writes, `Goal` is `false` on every reachable state, `unsolvable` closes
 all five end states by exhaustion, and the certificate's contribution is a
 `potential` function with an `inv_all` lemma that `unsolvable` never invokes. The
@@ -1492,7 +1496,7 @@ The free half of the valve saw nothing. The static check reads the board, and
 neither control touches the board; Lean re-proved a domain that was still
 internally consistent. Only replay — which costs plan-length actions and arrives
 only *after* acting — could see that the transition function had changed. The
-report states the consequence plainly:
+report states the consequence plainly (`cold-start-a3/A3_REPORT.md` §5):
 
 > Carrying a domain to a new level buys a plan for zero actions and buys **no
 > free assurance that the plan is valid**; the assurance costs plan-length
@@ -1519,9 +1523,10 @@ not noise:
 > **how much of a manual is convention rather than content**, and it is most of
 > the surface.
 
-The blind arm also spent 5 theorize rounds to the cold start's 1, and the report
-records that two of those five — 40 % of its adjudication budget — went to
-toolchain conformance rather than to the world.
+The blind arm also spent 5 theorize rounds to the cold start's 1
+(`cold-start-a3/artifacts/bill_table.md`), and the report records that two of
+those five — 40 % of its adjudication budget — went to toolchain conformance
+rather than to the world (`cold-start-a3/A3_REPORT.md` §4).
 
 ### 6.5 What A3 does not show
 
@@ -1694,7 +1699,7 @@ metric losing twice as often as it wins. X2 sits in the same position. Whatever
 gradient's own paired test agreed.
 
 A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the
-table's −0.562 and −0.188 print three decimals onto a quantity with seventeen
+table's −0.562 and −0.188 print three decimals onto a quantity with thirty-three
 reachable values. §7.4 calls exactly that presentational overstatement out when K2
 does it over a denominator of three. It is the same error, in the table this
 section asks the reader to trust most.
@@ -2113,12 +2118,15 @@ being counted as a separate finding; and the two K-only clusters — {K10, K8} a
 near-identical manuals. The artefact does not flag that cluster by cluster, which
 is where this paper previously said it did: it carries one global `coverage_note`
 reading that the picture "reflects thin data, not twenty independent findings",
-and a `warning` on the cross-family cluster alone.
+and a `warning` on the cross-family cluster alone
+(`battery/artifacts/redundancy.json`, `coverage_note` against `clusters[*].warning`).
 
 A cluster count near the metric count is not reassuring, and the artefact refuses
-to let it read as thirty independent findings: **257 of 703 metric pairs share
+to let it read as thirty-two independent findings: **257 of 703 metric pairs share
 enough runs to correlate at all — the identical count as v1, after tripling the run
-count.** Adding 64 runs made no new pair comparable, because the un-comparability is
+count** (`battery/artifacts/redundancy.json`, `n_pairs_measured` of `n_pairs`;
+`n_clusters` 32). Adding 64 runs — 95 against v1's 31 (`battery/REPORT_V2.md`) —
+made no new pair comparable, because the un-comparability is
 structural rather than a sample-size problem: no run in the repository has both
 books and model calls.
 
@@ -2180,12 +2188,14 @@ One thing this section deliberately does **not** do with that fact, because the
 temptation is obvious and the evidence refuses it: it does not pair the empty
 capability column against a full one. The natural candidate is the **cost**
 shape — E2 and E3 — and it will not carry the contrast, though not because it is
-empty. E2's median over 67 `bare_cc` runs is 0.229 against a construction null of
-exactly 0.250, with 53 of the 67 below it: a real departure from flat, in the
+empty. E2's median over the 67 of 80 `bare_cc` runs that return a value is 0.229
+against a construction null of exactly 0.250, with 53 of the 67 below it
+(`battery/artifacts/capability_spectrum.json`, `metrics.E2`; the null is the
+interpolated head defined in `battery/metrics/economy.py`): a real departure from flat, in the
 **back-loaded** direction, which is the opposite of the front-loading signature
 claim C2 predicts. It is a signal pointing the wrong way, not an absence. Across arms it is undefined rather than weak:
 E2's process-1 verdict is `no-data` with **zero** pairs, because the corpus records
-no cost on the other side. And the one place E2 does separate, it separates *by
+no cost on the other side (`battery/artifacts/discrimination_arms.json`, `metrics.E2`). And the one place E2 does separate, it separates *by
 model tier within one arm* — which is a capability gradient, the very thing §7.8
 already registers as the confound to break before Phase 4. The economy family is not uniformly empty, and §7.2's own
 table says so: **E4** separates the specified gradient at δ = −0.875 over four
@@ -2270,7 +2280,8 @@ credible exhaustive search earns 40 % of it, and an *invalid* certificate
 short-circuits to zero with no fallback.
 
 The held-out rubric's refusal of per-cell credit is worth quoting, because it is
-the kind of scoring choice that silently manufactures a result:
+the kind of scoring choice that silently manufactures a result
+(`exam/grading/rubrics_heldout.py`):
 
 > on a 7x7 A0 board a typical transition changes two cells, so an examinee that
 > returns the input frame unchanged already scores 47/49 = 96 % under a
@@ -2353,7 +2364,9 @@ That number is worth almost nothing on its own, and the directory says why.
 yielded **17 of 17 claims with no board reasoning at all**, measured rather than
 estimated. And the held-out paper's world description published the dynamics in
 prose, taking a reader from 47.5 % to essentially full marks. Both are fixed
-(uniform point values; a world block that no longer states dynamics).
+(uniform point values; a world block that no longer states dynamics); both yields
+were confirmed against the answer key before anything was changed
+(`exam/DECISIONS.md` D-EX-011).
 
 The reason the static checks missed them is the most transferable thing in this
 section:
@@ -2622,7 +2635,10 @@ rather than about the run.
 **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
 identifies 116 470 cache-creation tokens written at the one-hour multiplier and
 priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
-the $0.52 gap**. Correcting it takes the disagreement from 8.3 % to **1.35 %**, and
+the $0.52 gap**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cache_ttl_diagnosis` against `cost.delta_usd`). Correcting it takes the
+disagreement from 8.3 % to **1.35 %**, and
 the residual has no identified cause. So this is not an unexplained discrepancy
 between two accountings; it is a priced, located defect in one of them with a small
 remainder. **Every dollar figure in this paper is the provider's number**, which is
@@ -2674,8 +2690,8 @@ The figures below are **each pass's own summary line**, not a re-count:
 | success signal read as truth | `SURVEY-success-as-truth.md` | ~105 points | 8 |
 
 **No total is published here, and no rate.** The obvious headline — around 340
-points examined, 56 judged unsafe — does not survive, and neither does any
-replacement assembled by adding these columns up. Four reasons, in increasing
+points examined, 48 judged unsafe — does not survive, and neither does any
+replacement assembled by adding these columns up, which gives 445 and 56. Four reasons, in increasing
 order of severity.
 
 First, **the passes did not use one ruler.** One states the criterion under which
@@ -2706,15 +2722,19 @@ audit issuing an affirmative claim must publish both the number of objects it
 claim when they differ. No pass meets its own criterion.
 
 Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate
-exit-code readings" that reached the work items and the digests appears in no
-survey. The "~97 further legitimate usages" from the fourth pass is `105 − 8` —
-arithmetic residue, not a list.
+exit-code readings" that reached the work items and the digests
+(`monitor/inbox/archive/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md:168-169`)
+appears in no survey. The "~97 further legitimate usages" from the fourth pass
+(`monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md:100`)
+is `105 − 8` — arithmetic residue, not a list.
 
 Fourth, and decisively: **the passes overlap, and where they overlap they
 disagree.** `engine-rig/engines/lp_potential/potential.py:170-171` is graded
 安全 — safe — at `SURVEY-solver-status.md:308` and unsafe at
-`SURVEY-environment-as-semantics.md:77`. `probe_frontier/reach.py:94-99` is safe
-at `:290` and unsafe at `:80`. `cegis_miner/miner.py:323` is safe at `:339` and
+`SURVEY-environment-as-semantics.md:77`.
+`engine-rig/engines/probe_frontier/reach.py:94-99` is safe
+at `:290` and unsafe at `:80`.
+`engine-rig/engines/cegis_miner/miner.py:323` is safe at `:339` and
 mismeasured at `:131`. Any sum over the four passes therefore counts some sites
 twice, and counts at least three of them on both sides of the ledger at once.
 
