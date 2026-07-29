@@ -111,7 +111,7 @@ metric losing twice as often as it wins. X2 sits in the same position. Whatever
 gradient's own paired test agreed.
 
 A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the
-table's −0.562 and −0.188 print three decimals onto a quantity with seventeen
+table's −0.562 and −0.188 print three decimals onto a quantity with thirty-three
 reachable values. §7.4 calls exactly that presentational overstatement out when K2
 does it over a denominator of three. It is the same error, in the table this
 section asks the reader to trust most.
@@ -530,12 +530,15 @@ being counted as a separate finding; and the two K-only clusters — {K10, K8} a
 near-identical manuals. The artefact does not flag that cluster by cluster, which
 is where this paper previously said it did: it carries one global `coverage_note`
 reading that the picture "reflects thin data, not twenty independent findings",
-and a `warning` on the cross-family cluster alone.
+and a `warning` on the cross-family cluster alone
+(`battery/artifacts/redundancy.json`, `coverage_note` against `clusters[*].warning`).
 
 A cluster count near the metric count is not reassuring, and the artefact refuses
-to let it read as thirty independent findings: **257 of 703 metric pairs share
+to let it read as thirty-two independent findings: **257 of 703 metric pairs share
 enough runs to correlate at all — the identical count as v1, after tripling the run
-count.** Adding 64 runs made no new pair comparable, because the un-comparability is
+count** (`battery/artifacts/redundancy.json`, `n_pairs_measured` of `n_pairs`;
+`n_clusters` 32). Adding 64 runs — 95 against v1's 31 (`battery/REPORT_V2.md`) —
+made no new pair comparable, because the un-comparability is
 structural rather than a sample-size problem: no run in the repository has both
 books and model calls.
 
@@ -597,12 +600,14 @@ One thing this section deliberately does **not** do with that fact, because the
 temptation is obvious and the evidence refuses it: it does not pair the empty
 capability column against a full one. The natural candidate is the **cost**
 shape — E2 and E3 — and it will not carry the contrast, though not because it is
-empty. E2's median over 67 `bare_cc` runs is 0.229 against a construction null of
-exactly 0.250, with 53 of the 67 below it: a real departure from flat, in the
+empty. E2's median over the 67 of 80 `bare_cc` runs that return a value is 0.229
+against a construction null of exactly 0.250, with 53 of the 67 below it
+(`battery/artifacts/capability_spectrum.json`, `metrics.E2`; the null is the
+interpolated head defined in `battery/metrics/economy.py`): a real departure from flat, in the
 **back-loaded** direction, which is the opposite of the front-loading signature
 claim C2 predicts. It is a signal pointing the wrong way, not an absence. Across arms it is undefined rather than weak:
 E2's process-1 verdict is `no-data` with **zero** pairs, because the corpus records
-no cost on the other side. And the one place E2 does separate, it separates *by
+no cost on the other side (`battery/artifacts/discrimination_arms.json`, `metrics.E2`). And the one place E2 does separate, it separates *by
 model tier within one arm* — which is a capability gradient, the very thing §7.8
 already registers as the confound to break before Phase 4. The economy family is not uniformly empty, and §7.2's own
 table says so: **E4** separates the specified gradient at δ = −0.875 over four
