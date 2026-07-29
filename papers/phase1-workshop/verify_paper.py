@@ -426,8 +426,8 @@ def _emit(out: list, start: int, chunk: list[str]) -> None:
     out.append([start, text])
 
 
-def _quantities(block: str) -> tuple[list[str], list[str]]:
-    """(digit tokens, spelled-out tokens) that are not citations or structure."""
+def _mark_citations(block: str) -> str:
+    """Replace artefact pointers with a sentinel and strip structural tokens."""
 
     def mark(m: re.Match) -> str:
         token = m.group(1)
@@ -440,6 +440,12 @@ def _quantities(block: str) -> tuple[list[str], list[str]]:
     text = CITE_TOKEN.sub(mark, block)
     for _name, rx in STRUCTURAL:
         text = rx.sub(" ", text)
+    return text
+
+
+def _quantities(block: str) -> tuple[list[str], list[str]]:
+    """(digit tokens, spelled-out tokens) that are not citations or structure."""
+    text = _mark_citations(block)
     if "█CITE█" in text:
         return [], []
     return DIGIT.findall(text), WORDNUM.findall(text)
@@ -546,6 +552,8 @@ CHECKS = [
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--quiet", action="store_true", help="verdict lines only")
+    ap.add_argument("--explain-uncited", action="store_true",
+                    help="report how much weaker check E is than the binding rule")
     args = ap.parse_args()
 
     # The sections quote δ, §, ↔ and Chinese. On a cp936 or cp1252 console the
@@ -563,6 +571,20 @@ def main() -> int:
                 print(n)
         if not passed:
             failures.append(tag)
+
+    if args.explain_uncited:
+        blocks, quantities, worst = coverage_uncited()
+        print()
+        print(f"E UNCITED, what it does not prove: {quantities} quantities in "
+              f"{blocks} blocks are cleared by a citation somewhere in the same "
+              f"block.")
+        print("  E proves no block is *entirely* uncited. It does not check that "
+              "any given number")
+        print("  came from the artefact beside it -- CITECHECK.md is the audit "
+              "that does that.")
+        print("  Widest blocks (quantities behind how many citations):")
+        for n, cites, name, lineno in worst:
+            print(f"    {n:>3} quantities / {cites} citation(s)   {name}:{lineno}")
 
     print()
     if failures:
