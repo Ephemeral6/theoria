@@ -1,0 +1,9 @@
+{
+  "agent": "RES-4",
+  "base_commit": "c1a60420",
+  "branch": "agent/s21-app-session-death",
+  "lane": "infra",
+  "prompt_id": "S21-app-session-death",
+  "territory": "monitor",
+  "utc": "2026-07-29T10:09:29Z"
+}
