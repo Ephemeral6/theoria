@@ -139,10 +139,32 @@ def test_done_on_the_board_but_absent_from_master_is_risk(monkeypatch):
     monkeypatch.setattr(mergequeue, "unmerged_branches", lambda: [])
     monkeypatch.setattr(mergequeue, "done_not_on_master",
                         lambda: [{"item": "X1-thing",
-                                  "branch": "origin/agent/x1-thing"}])
+                                  "branch": "origin/agent/x1-thing",
+                                  "state": "queued"}])
     r = mergequeue.probe()
     assert r["status"] == "risk", r
     assert "X1-thing" in r["detail"]
+    # A queued branch must NOT be described as missing from the remote.
+    assert "没推上远端" not in r["detail"], r
+
+
+def test_a_done_item_that_was_never_pushed_is_named_as_such(monkeypatch):
+    """The failure the merge queue cannot see by construction.
+
+    S16-silent-failure-hunt was `done` on the board for hours while its branch
+    existed only in one checkout. The queue reads `origin/agent/*`, so it
+    reported nothing waiting -- truthfully. Being absent from the queue has to
+    read louder than being slow in it, not quieter.
+    """
+    monkeypatch.setattr(mergequeue, "unmerged_branches", lambda: [])
+    monkeypatch.setattr(mergequeue, "done_not_on_master",
+                        lambda: [{"item": "S16-silent-failure-hunt",
+                                  "branch": "agent/s16-silent-failure-hunt",
+                                  "state": "unpushed"}])
+    r = mergequeue.probe()
+    assert r["status"] == "risk", r
+    assert "S16-silent-failure-hunt" in r["detail"]
+    assert "没推上远端" in r["detail"], r
 
 
 def test_the_probe_is_registered_in_scan():
@@ -194,3 +216,83 @@ def test_ordering_never_stops_a_merge_run(monkeypatch):
     monkeypatch.setattr(mergequeue, "read_log", boom)
     got = ci_merge.starved_first(["origin/agent/b", "origin/agent/a"])
     assert got == ["origin/agent/b", "origin/agent/a"]
+
+
+# ------------------------------------------- the never-pushed branch, for real
+#
+# The probe test above monkeypatches `done_not_on_master`, so it proves the
+# wording and nothing about the git logic underneath. This one builds an actual
+# repository with an actual remote, because the discrimination that matters --
+# "no remote ref because it was never pushed" versus "no remote ref because it
+# merged and the robot deleted it" -- exists only in git, and getting it wrong
+# in the safe direction (reporting merged work as missing) is how a probe earns
+# its way into the muted pile.
+
+import subprocess
+
+
+def _git(repo, *a):
+    r = subprocess.run(["git"] + list(a), cwd=repo, capture_output=True,
+                       text=True, encoding="utf-8", errors="replace")
+    assert r.returncode == 0, (a, r.stdout, r.stderr)
+    return r.stdout.strip()
+
+
+def _repo_with_three_kinds_of_branch(tmp_path):
+    """origin/master plus: one merged+deleted, one pushed, one never pushed."""
+    remote = tmp_path / "remote.git"
+    remote.mkdir()
+    _git(remote, "init", "--bare", "-q", "-b", "master")
+    work = tmp_path / "work"
+    work.mkdir()
+    _git(work, "init", "-q", "-b", "master")
+    _git(work, "config", "user.email", "t@t")
+    _git(work, "config", "user.name", "t")
+    (work / "f").write_text("0\n", encoding="utf-8")
+    _git(work, "add", "f")
+    _git(work, "commit", "-qm", "base")
+    _git(work, "remote", "add", "origin", str(remote))
+    _git(work, "push", "-q", "origin", "master")
+
+    def branch(name, text):
+        _git(work, "checkout", "-q", "-b", "agent/" + name, "master")
+        (work / name).write_text(text, encoding="utf-8")
+        _git(work, "add", name)
+        _git(work, "commit", "-qm", name)
+
+    # (a) merged, remote branch deleted afterwards -- must NOT be reported
+    branch("merged-and-gone", "a")
+    _git(work, "checkout", "-q", "master")
+    _git(work, "merge", "-q", "--no-ff", "-m", "m", "agent/merged-and-gone")
+    _git(work, "push", "-q", "origin", "master")
+    # (b) pushed and still unmerged -- belongs to unmerged_branches(), not here
+    branch("pushed-waiting", "b")
+    _git(work, "push", "-q", "origin", "agent/pushed-waiting")
+    # (c) never pushed -- the S16 case
+    branch("never-pushed", "c")
+    _git(work, "checkout", "-q", "master")
+    _git(work, "fetch", "-q", "origin")
+    return str(work)
+
+
+def test_unpushed_finds_the_branch_that_never_left_the_laptop(tmp_path,
+                                                              monkeypatch):
+    repo = _repo_with_three_kinds_of_branch(tmp_path)
+    monkeypatch.setattr(mergequeue, "ROOT", repo)
+    assert mergequeue.unpushed_branches() == ["agent/never-pushed"]
+
+
+def test_a_merged_branch_whose_remote_was_deleted_is_not_reported(tmp_path,
+                                                                  monkeypatch):
+    """The false positive that would get this probe muted."""
+    repo = _repo_with_three_kinds_of_branch(tmp_path)
+    monkeypatch.setattr(mergequeue, "ROOT", repo)
+    assert "agent/merged-and-gone" not in mergequeue.unpushed_branches()
+
+
+def test_a_pushed_branch_is_left_to_the_queue_not_double_counted(tmp_path,
+                                                                 monkeypatch):
+    repo = _repo_with_three_kinds_of_branch(tmp_path)
+    monkeypatch.setattr(mergequeue, "ROOT", repo)
+    assert "agent/pushed-waiting" not in mergequeue.unpushed_branches()
+    assert "origin/agent/pushed-waiting" in mergequeue.unmerged_branches()
