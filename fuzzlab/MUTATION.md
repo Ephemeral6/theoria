@@ -698,3 +698,38 @@ A mutant proves an invariant *can* fire; only a real defect proves it fires *in
 the right place*. Here the second kind of evidence arrived first, and reading
 the 21 findings instead of counting them is what turned a bad invariant into a
 corpus repair.
+
+---
+
+## V-21 · why the `lp_potential` catalogue was *not* extended
+
+V-21 closed a hole in `props/lp_potential.py`: `LpUnavailable` — the engine
+declining because HiGHS stopped without deciding — was caught nowhere, escaped as
+a `raised`, and was counted as an evaluated world. The obvious reflex is a new
+mutant. It would have been the wrong instrument, for two reasons that come
+straight out of this file.
+
+**A mutant must contradict something the engine claims.** Raising `LpUnavailable`
+contradicts nothing: `lp_potential` is entitled to decline, and E-15 added the
+exception precisely so that declining is *not* mistaken for an answer. An
+injected behaviour no engine ever promised to avoid is not a defect, and an
+invariant that lets it through is not weak — reporting it would produce the
+confident, wrong bug report `BUGS.md` names as this battery's characteristic
+failure. The section above says the same thing about the missing certificate, and
+this is the same argument one status code over.
+
+**`expect_kill` cannot express the property under test.** The defect V-21 fixed
+does not change any invariant's verdict; both before and after, no invariant
+returns `violated`. What changes is which *column* the world lands in —
+`invariant_worlds_evaluated` against `skips_by_cause.solver_unavailable`. A
+catalogue whose only verdict is "which invariants killed it" is blind to that by
+construction, and the mutant would have been recorded as a survivor, meaning
+nothing.
+
+So the measurement went into a **counterfeit table** instead:
+`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/counterfeits.py`. Same
+method — inject a defect of known shape, see who notices — but the subject is the
+classification machinery (`props/finding.py`, `campaign.py`, the catch itself)
+rather than an engine's answer, and the observable is "does the V-21 gate go
+red", not `expect_kill`. Results and survivors in `COUNTERFEITS.json` and that
+directory's `RUN_STATE.md`.

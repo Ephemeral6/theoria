@@ -1,0 +1,44 @@
+{
+  "baseline": {
+    "elapsed_s": 19.7,
+    "failing_tests": [],
+    "id": "__none__",
+    "killed": false,
+    "n_failing": 0,
+    "returncode": 0,
+    "tail": [
+      "..................................................                       [100%]"
+    ]
+  },
+  "counterfeits": [
+    {
+      "description": "the skip carries no status / solver_status / bound / margin",
+      "elapsed_s": 20.1,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-drop-the-outcome-payload",
+      "killed": true,
+      "misreading": "unjudged, attributable to the solver, but not diagnosable",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "target": "props/lp_potential.py"
+    }
+  ],
+  "gate": [
+    "fuzzlab/tests/test_solver_unavailable.py",
+    "fuzzlab/tests/test_finding_contract.py",
+    "fuzzlab/tests/test_battery.py::test_nothing_went_unjudged_because_a_tool_could_not_compute",
+    "fuzzlab/tests/test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count",
+    "fuzzlab/tests/test_battery.py::test_short_campaign_passes_the_gate_the_docstring_describes",
+    "fuzzlab/tests/test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage"
+  ],
+  "n_counterfeits": 1,
+  "n_survivors": 0,
+  "n_without_a_dedicated_test": 1,
+  "survivors": []
+}

@@ -103,6 +103,26 @@ def test_a_starved_solver_is_attributable_not_merely_absent(starved_run):
         assert report["invariant_worlds_unavailable"][name] > 0
     assert report["unavailable"] > 0
 
+    # The skip must also be *diagnosable*, not merely attributable. Status 1
+    # (raise the budget), 3 (the model is wrong) and 4 (go and look at the
+    # arithmetic) call for three different responses, and a skip that says only
+    # "the solver" cannot tell a reader which.
+    #
+    # This assertion was **not** predicted. `counterfeits.py`'s
+    # `c-drop-the-outcome-payload` -- file the skip correctly, drop the payload
+    # -- was the one row of 17 that survived the gate, and it was written
+    # against the code path with no test in mind. It is recorded as a survivor
+    # in `COUNTERFEITS.json` and in the run's `RUN_STATE.md`; this line is the
+    # fix that came after, not a test that anticipated it.
+    payloads = [f.data for f in starved_run["findings"]
+                if f.kind == finding.SKIPPED and f.cause == "solver_unavailable"]
+    assert payloads
+    for data in payloads:
+        assert data.get("lp_status") == "budget", data
+        assert data.get("solver_status") == 1, data
+        assert data.get("decided") is False, data
+        assert "bound" in data and "margin" in data, data
+
 
 def test_unavailable_is_not_the_same_field_as_a_clean_decline(starved_run, live_run):
     """The V-13 rule: two different reasons may not produce one number.

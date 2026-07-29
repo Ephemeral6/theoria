@@ -1,0 +1,22 @@
+baseline (no counterfeit): rc=0 ['..................................................                       [100%]']  21s
+  c-drop-the-catch                       props/lp_potential.py  killed    (5 failing, 22s)
+  c-catch-only-one-invariant             props/lp_potential.py  killed    (6 failing, 22s)
+  c-swallow-return-empty                 props/lp_potential.py  killed    (4 failing, 23s)
+  c-file-as-violated                     props/lp_potential.py  killed    (5 failing, 22s)
+  c-drop-the-outcome-payload             props/lp_potential.py  SURVIVED  (0 failing, 21s)
+  c-relabel-as-no-certificate            the classification     killed    (2 failing, 22s)
+  c-relabel-as-budget                    the classification     killed    (2 failing, 21s)
+  c-unavailable-is-declined              props/finding.py       killed    (3 failing, 21s)
+  c-failures-narrow-again                props/finding.py       killed    (2 failing, 21s)
+  c-cause-validation-off                 props/finding.py       killed    (1 failing, 21s)
+  c-skipped-cause-defaults               props/finding.py       killed    (1 failing, 21s)
+  c-raised-loses-its-cause               props/finding.py       killed    (1 failing, 20s)
+  c-cause-class-blank                    props/finding.py       killed    (2 failing, 20s)
+  c-unavailable-always-zero              campaign.py            killed    (1 failing, 20s)
+  c-skips-by-cause-empty                 campaign.py            killed    (4 failing, 20s)
+  c-evaluated-ignores-skips              campaign.py            killed    (5 failing, 20s)
+  c-unavailable-counted-as-evaluated     campaign.py            killed    (2 failing, 20s)
+
+17 counterfeits, 1 survivors (c-drop-the-outcome-payload)
+9 of 17 had no dedicated test written for them
+-> C:\Users\user\Desktop\theoria\.worktrees\v21-lp-unavailable-is-not-a-pass\fuzzlab\runs\20260729T104608Z-V21-lp-unavailable-is-not-a-pass\COUNTERFEITS.json

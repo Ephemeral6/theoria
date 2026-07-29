@@ -74,15 +74,32 @@ def size_of(world: Any) -> int:
 
 
 def signature(f: finding.Finding) -> str:
+    """`engine.invariant.kind`, and for a skip also `.cause`.
+
+    A skip's `kind` alone is not a signature (V-21).  `lp_potential` files
+    `no_certificate` skips -- the engine correctly declining -- and
+    `solver_unavailable` skips -- HiGHS not deciding -- and they are different
+    events with different reproducers.  Minimising to "the smallest world where
+    this invariant skipped" would draw from both pools and return whichever
+    happened to be smaller, which is a reproducer for a question nobody asked.
+
+    `violated` and `raised` keep the three-part form: a violation's cause is the
+    invariant, and `raised` is deliberately outside the taxonomy.
+    """
+    if f.kind == finding.SKIPPED and f.cause:
+        return "%s.%s.%s.%s" % (f.engine, f.invariant, f.kind, f.cause)
     return "%s.%s.%s" % (f.engine, f.invariant, f.kind)
 
 
 def search(engine: str, invariant: str, kind: str, pool: int,
-           campaign_seed: int, quiet: bool = False) -> Dict[str, Any]:
+           campaign_seed: int, quiet: bool = False,
+           cause: Optional[str] = None) -> Dict[str, Any]:
     module = load(engine)
     family = module.FAMILY
     generate = GENERATORS[family]
     want = "%s.%s.%s" % (engine, invariant, kind)
+    if cause:
+        want = "%s.%s" % (want, cause)
 
     hits: List[Dict[str, Any]] = []
     scanned = 0
@@ -154,6 +171,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="shrink and archive a failing world")
     parser.add_argument("--engine", required=True)
     parser.add_argument("--invariant", required=True)
+    parser.add_argument("--cause", default=None,
+                        help="for --kind skipped: which declared cause to "
+                             "reproduce (finding.CAUSE_CLASS). Skips of "
+                             "different causes are different events; without "
+                             "this the search draws from every pool at once.")
     parser.add_argument("--kind", default=finding.VIOLATED,
                         choices=(finding.VIOLATED, finding.RAISED, finding.SKIPPED))
     parser.add_argument("--pool", type=int, default=DEFAULT_POOL)
@@ -172,14 +194,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     print("searching %d seeds for %s.%s.%s"
           % (args.pool, args.engine, args.invariant, args.kind), flush=True)
-    result = search(args.engine, args.invariant, args.kind, args.pool, args.seed)
+    result = search(args.engine, args.invariant, args.kind, args.pool,
+                    args.seed, cause=args.cause)
     if not result["found"]:
         print("no world in %d reproduced %s" % (result["scanned"],
                                                 result["signature"]))
         return 1
 
     os.makedirs(args.archive, exist_ok=True)
-    name = "%s.%s.%s.json" % (args.engine, args.invariant, args.kind)
+    name = "%s.%s.%s.json" % (args.engine, args.invariant,
+                              "%s.%s" % (args.kind, args.cause)
+                              if args.cause else args.kind)
     path = os.path.join(args.archive, name)
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(result, indent=2, sort_keys=True) + "\n")

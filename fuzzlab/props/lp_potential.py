@@ -29,6 +29,14 @@ wrong.
 re-checking — is documented behaviour (D-007), so it is recorded as `skipped`
 with the reason rather than counted as a defect.
 
+`LpUnavailable` — HiGHS stopped without deciding (status 1/3/4) — is `skipped`
+too, and under a **different cause**: `solver_unavailable`, class `unavailable`,
+against `no_certificate`'s `declined`. The distinction is the whole of V-21 and
+it is not cosmetic. `no_certificate` is the engine looking and correctly having
+nothing to say; `solver_unavailable` is nobody knowing. See
+`_skip_solver_unavailable` for the measured cost of confusing them, and
+`tests/test_solver_unavailable.py` for the regression.
+
 ## The bare `return []`, and what it was hiding (V-13)
 
 All four invariants used to open with `if cert is None: return []` (or
