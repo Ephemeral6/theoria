@@ -427,9 +427,12 @@ Scoped to what was actually run:
    mechanism, rule count, state count and explorer budget at once, and §3.3 shows
    the outcome is entailed by the construction rather than discovered by it
    (`cold-start-a0/A0_REPORT.md` §8).
-4. **A machine-checked impossibility certificate whose weights cross a data
-   boundary.** The pagoda weights are produced by an independent engine's linear
-   program and transported as a JSON certificate
+4. **A machine-checked impossibility whose invariant weights crossed a data
+   boundary.** The impossibility is the machine-checked object — a Lean theorem
+   with an empty axiom list (§4.1) — and the certificate is what crossed. The
+   distinction is worth the extra clause: the certificate is a JSON document, and
+   what re-checks it is Python, not a kernel. The pagoda weights are produced by
+   an independent engine's linear program and transported as that certificate
    (`engine-rig/interop/certificates/pagoda_5_11011_to_00010.json`); the consuming
    side re-verifies every obligation rather than trusting the certificate's own
    `verified` flag (`theory-compiler/STATUS.md`). The two sides are sessions that
@@ -1032,10 +1035,19 @@ own generator repeats it: the two proofs are "kept **separate and attributed**,
 because they are not the same argument"
 (`theory-compiler/src/theory_compiler/generators/gen_lean.py:722-724`). **The
 emitted artefact does not do that, and the same function concedes it at `:786`.**
-In the development it
-actually writes, `Goal` is `false` on every reachable state, `unsolvable` closes
-all five end states by exhaustion, and the certificate's contribution is a
-`potential` function with an `inv_all` lemma that `unsolvable` never invokes. The
+**Which artefact — this matters, and an earlier draft of this paragraph left it to
+be inferred.** E-06's proposition is about all five single-peg end states, and a
+goal broader than the certificate covers routes the generator to its *hybrid*
+branch. That is the development described here, and it is written to no file in
+this repository: it exists as generator code, exercised by three tests against a
+five-goal problem declared inside the test module. A1's own fixture asks for one
+goal state, `00010`, which the certificate does cover, so A1 takes the other
+branch and ships `theory-compiler/lean/TheoriaLean.lean`, whose `unsolvable`
+**does** invoke `inv_all` — the crossed weights carry the theorem this section is
+named for. The two must not be read for each other. In the hybrid development,
+`Goal` is `false` on every reachable state, `unsolvable` closes all five end
+states by exhaustion, and the certificate's contribution is a `potential`
+function with an `inv_all` lemma that `unsolvable` never invokes. The
 per-goal attribution — which states the certificate excludes algebraically and
 which it does not — is computed in Python and printed into a comment block. The
 generator's own banner says it in the file it emits: "they are all closed the same

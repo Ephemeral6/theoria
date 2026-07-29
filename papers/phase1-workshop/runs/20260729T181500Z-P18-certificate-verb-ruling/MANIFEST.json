@@ -1,0 +1,14 @@
+{
+  "prompt_id": "P18-P18-certificate-verb-ruling",
+  "branch": "agent/p18-certificate-verb-ruling",
+  "base_commit": "6eef7616",
+  "utc": "2026-07-29T18:15:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "question": "Sections 1, 4 and 11 call A1 a machine-checked impossibility certificate whose weights cross a data boundary. Rule on it.",
+  "why_it_matters": "A section heading and a contribution bullet are the two worst places in a paper to rely on a favourable reading. Opened as OPEN_ITEMS C12 by the P17 ruling.",
+  "status": "in progress"
+}
