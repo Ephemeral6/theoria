@@ -1645,3 +1645,84 @@
 2026-07-29T02:48:01Z FLAG origin/agent/e8-ic3-scale: merge conflict
 2026-07-29T02:48:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
 2026-07-29T02:48:43Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:49:29Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:49:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:49:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:49:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:50:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:50:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:54:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:54:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:55:02Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:55:40Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:55:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:56:28Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:56:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:56:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:56:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:57:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:57:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:57:28Z MERGED origin/agent/v9-battery-gaming-audit (dirs: PARTNER_SYNC.md,battery; gates: verify:battery(verify.py))
+2026-07-29T03:03:52Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:04:19Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:04:23Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:05:01Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:05:05Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:05:51Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:06:14Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:06:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:06:18Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:06:22Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:06:26Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:13:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:14:00Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:14:04Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:14:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:14:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:15:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:15:55Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:15:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:15:59Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:16:03Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:16:08Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:20:10Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:27:35Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:28:02Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:28:06Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:28:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:28:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:29:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:29:54Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:29:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:29:58Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:30:02Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:30:06Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:34:08Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:26Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:37:53Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:57Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:38:35Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:38:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:39:24Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:39:46Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:39:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:39:50Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:45:40Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T03:45:45Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:45:49Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:49:50Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:52:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:53:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:53:05Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:53:49Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:53:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:54:58Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:55:23Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:55:24Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:55:28Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T04:02:32Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T04:02:37Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T04:02:41Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T04:07:49Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T04:12:54Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T04:14:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)

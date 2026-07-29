@@ -1,14 +1,13 @@
 {
-  "cycle": 32,
-  "utc": "2026-07-29T03:09Z",
-  "last_audited_commit": "ecb31ff",
-  "range_this_cycle": "c246f94..ecb31ff (107 files)",
+  "cycle": 34,
+  "utc": "2026-07-29T04:35Z",
+  "last_audited_commit": "43b29a5",
+  "range_this_cycle": "fec3f10..43b29a5",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "证据复核": "V9「37/38 指标可被刷、主表九项全降级」有真产物：battery/artifacts/gaming_audit.json、battery/audit/gaming.py、run 目录 20260729T021247Z（戳正确）。它自报三个防御一个都没救回指标、唯一未被攻破的那个也因从不调用 ok() 而记 undetermined——自曝比外审狠，正面样本。",
-    "纪律": "主线 append-only 停在 3，本区间零新增；封存 ID 仅登记文件；密钥零命中。",
-    "欠账": "ci_merge 的「同一分支不重复合并」仍未落地。已第三次也是最后一次提出；无新证据可加，不再重复占用总线。"
+    "复核自己的改动（本轮主项）": "04:00Z 后 16 条 FLAG 覆盖 14 分支；13 个 flag 文件中 12 个已带 tip/first_seen/attempts。两个分支两次入账：04:02 那次是改动前旧格式（无 tip），04:33 是新代码首次记 tip，live tip 与记录相同 → 下一趟应被 HELD。**HELD=0 是正确的一次性过渡**：先记 tip 才谈得上未变即跳过。下一周期复核 HELD 是否真出现，没出现即我判断有误，须如实说。",
+    "副作用登记": "attempts 对存量分支从 04:33 重新起算（旧格式无可解析计数），故「卡了多久」对它们不是真实起点。"
   },
   "reports_this_cycle": [],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
@@ -32,7 +31,8 @@
     "proxy/verify_spend.sh『无失败路径』——实为 fail=1 累积 + 末行 exit $fail。别再报。",
     "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。",
     "ops-status 心跳的 utc 字段有本地时间/未来时刻（RES-1 21:25Z、RES-3 07-29 07:30Z），我疑心判活被骗；读了 scan.py:471/:697/:775 与 agents.py:145 —— 全部用 os.path.getmtime，不读 JSON 的 utc。只影响显示，不是漂移。",
-    "差点把 e7 分支的 07-29 03:08 报成未来戳——那是我自己 git log --date=format 用了本地时区（UTC+8），换算是 07-28 19:08Z。**判时间戳异常必须显式带 Z 或用 %aI，别用本地格式。** 上轮那六个是真的（目录名与 MANIFEST.utc 都写着 Z）。"
+    "差点把 e7 分支的 07-29 03:08 报成未来戳——那是我自己 git log --date=format 用了本地时区（UTC+8），换算是 07-28 19:08Z。**判时间戳异常必须显式带 Z 或用 %aI，别用本地格式。** 上轮那六个是真的（目录名与 MANIFEST.utc 都写着 Z）。",
+    "monitor 全套后台跑报 test_gates.py 的 fleetkit 失败，复跑即绿——竞态：套件跑两分多钟，跑在一棵正被合并的工作树上，起跑时新领地已落地而更新后的断言未到。**长测试的红色必须复跑一次再报。**"
   ],
   "method_notes": [
     "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染",
@@ -49,10 +49,9 @@
     "判会话存活要读心跳**内容**的 utc 并与最近提交时间互证，别只看 mtime——心跳随 git 提交流动，mtime 量的是抵达时间。同时提防 cycle 24 那类编造的 utc：未来时刻或早于上一轮的一律可疑。"
   ],
   "next_cycle_focus": [
-    "S24 是否开始清冲突",
-    "六个未来戳是否回填 / provenance 探针是否加时间检查",
-    "OPS-M 仍静默 404 分钟——不阻塞分支，但 S21 自动化落地时应把 M-0 纳入",
-    "增量起点 c343976"
+    "**复核 merge.log 是否出现 HELD 行**——这是我那笔改动是否真生效的唯一判据",
+    "其余按常规增量",
+    "增量起点 43b29a5"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"

@@ -115,15 +115,19 @@ def test_this_repository_is_where_the_survey_says_it_is():
     #
     # S14 在此同样自报：十一个领地各得了一个三段式 verify.py，盘面从 6 个有闸门
     # 变成 17 个，`tests_only` 因此清零。
-    assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops", "papers",
-                                      "release", "fleet-study",
-                                      "verify-lab"}, survey["ungated"]
+    # 2026-07-29 收紧：`fleet-study`（S17 补上）与 `release` 都已自带闸门，
+    # 所以它们从这个集合里**移除**——按上面那条规矩，收紧同样要说出来，
+    # 否则下一个人会以为这两块地还敞着。
+    assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops",
+                                      "papers"}, survey["ungated"]
     # S14 cleared `tests_only` completely; anything in it now is a territory
     # that arrived afterwards and still owes a gate.  Naming them one by one is
     # the point -- an unexpected name here means a gate was deleted, which the
     # blanket `not survey["tests_only"]` I first wrote could not distinguish
     # from an ordinary new arrival.
-    assert set(survey["tests_only"]) <= {"verify-lab"}, survey["tests_only"]
+    # `fleetkit` 是 S18 抽出来的新领地，有测试、还没有闸门——按 S13 它欠一个。
+    assert set(survey["tests_only"]) <= {"verify-lab",
+                                         "fleetkit"}, survey["tests_only"]
     # `proxy` 本来是「非规范名闸门」的样板（`verify_spend.sh`）。S14 给了它一个
     # 规范的 `verify.py`，而规范名优先——于是 `verify_spend.sh` 会**从此不再在合并
     # 时被跑到**。这条断言之所以能松，唯一的理由是 `proxy/verify.py` 把它接成了
