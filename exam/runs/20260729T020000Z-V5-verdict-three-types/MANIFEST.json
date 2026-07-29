@@ -24,6 +24,10 @@
       "sha256": "a7e0fc6286f6e4919ced056855d43d0aa6fb3f778b49b3925257a4e3db7cfe34"
     },
     {
+      "path": "fix_sync.py",
+      "sha256": "2feb2aeb9015a04e29f5d6da7b23c6252dfebe5db37dc35b9f8fa86295896259"
+    },
+    {
       "path": "multiplicity_lift.txt",
       "sha256": "90b770ff344ae90a084a141135b76756c5827b0c8f5a7d31dc8e79532cc2e081"
     },
