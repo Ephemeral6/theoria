@@ -1,0 +1,41 @@
+
+== 0. required data sources present ==
+ok
+
+== 1. build pass A ==
+ok  (24 images)
+
+== 2. build pass B ==
+ok  (24 images)
+
+== 3. A vs B, byte for byte ==
+ok  (csv, out, SOURCES.sha256 all identical)
+
+== 4. data-source hashes match the committed manifest ==
+ok  (61 sources hashed)
+
+== 5. every declared artefact exists ==
+checked 6 figures -> 24 images + 6 CSVs
+
+== 6. the committed tree matches a fresh build ==
+ok
+
+== 7. no figure reads an undeclared path ==
+ok  (every read goes through sources.py)
+
+== 8. coverage: everything on disk reaches the figure ==
+ok  (negative control fires)
+ok  (COVERAGE-NAMED: partial theoria run directory, not a failure: preflight-20260728T012031Z (has MANIFEST.json; missing cost_curve.json) -- manifest states 0 model calls and $0.00 coverage ok: 4 billing theoria run(s), 12 non-billing partial directory(ies) named above, and 14 roll-up run_id(s) found by walking the tree; every cost-bearing run drawn or explained, every outcome on disk on the plate, every shape absence carrying its reason. )
+== 9. the cross-arm cost claim reconciles, and the check is shown refusing ==
+ok  (negative control fires: planted cost and action mismatches both refused)
+ok  ( AGREE(known-defect) 22  UNCORROBORATED 77)
+      KNOWN DEFECT RESET_IN_DENOMINATOR: 22 run(s) -- capability_spectrum.actions +1; counts the successful RESET as an action; proxy/SCORING.md:60-62 says total_actions counts successful non-RESET commands
+
+== 10. every figure reaches a reader, and the check is shown refusing ==
+ok  (negative control fires: an undeclared, uncited new figure fails by name)
+ok  ( 3 cited, 3 uncited by declaration, 0 unaccounted for. )
+      DECLARED    fig02_bill_shape: uncited on purpose -- pending a citation decision (paper author): the cost/bill panel has no home section yet -- section 6's cost discussion cites numbers, not the plate
+      DECLARED    fig03_capability_spectrum: uncited on purpose -- pending a citation decision (paper author): the battery's capability spectrum is a Phase-4 artefact and the workshop paper stops at Phase 1
+      DECLARED    fig04_a3_transfer: uncited on purpose -- pending a citation decision (paper author): A3 transfer has no section in the workshop paper's outline; cite it or retire the plate
+
+VERIFY: green. Two builds byte-identical, sources unchanged, all artefacts present.

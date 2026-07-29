@@ -1,0 +1,98 @@
+==========================================================================
+FIX 1 -- fig06.expected_ids is derived from the declared source
+==========================================================================
+
+--- baseline: the derived set on the real log
+  27 ids: O-01, O-02, O-03, O-04, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, L-01, L-02, L-03, P-01, P-02, P-03, E-01, E-02, E-03, E-04, E-05, E-06, E-07, E-08, E-09
+  PASS  matches the tuple abd8d0cb hand-edited
+  PASS  read through sources, not open()
+
+--- the source grows an E-10 row -- the case that broke the build for 14.5h
+  PASS  the scratch text really differs from the source
+  PASS  E-10 is in the derived set with no code edit -- tail=('E-08', 'E-09', 'E-10')
+  PASS  the full parse accepts it too -- 28 entries
+
+--- the source is unreadable -- must raise, never truncate
+  PASS  expected_ids() with an unreadable source
+        RuntimeError: fig06: cannot derive the expected entry set: declared source 'a0_theorize_log' could not be read (FileNotFoundError('declared source missing: a0_theor
+  PASS  sources.read_text restored
+
+--- the source is empty / has no ids -- must raise, never return ()
+  PASS  expected_ids('')
+        ValueError: THEORIZE_LOG.md (a0_theorize_log): no '### <ID>' heading and no '| E-NN |' table row found in the declared source. An empty expected set is not a lega
+  PASS  expected_ids(prose with no ids)
+        ValueError: THEORIZE_LOG.md (a0_theorize_log): no '### <ID>' heading and no '| E-NN |' table row found in the declared source. An empty expected set is not a lega
+
+  --- the invariants the hand-written tuple was really protecting ---
+
+--- a GAP in the E sequence (E-05 row deleted)
+  PASS  the scratch text really differs
+  PASS  expected_ids(log missing E-05)
+        ValueError: THEORIZE_LOG.md [E]: the id sequence has a gap or does not start at 01. found=['E-01', 'E-02', 'E-03', 'E-04', 'E-06', 'E-07', 'E-08', 'E-09'] expecte
+
+--- a DUPLICATE id (E-04 row stated twice)
+  PASS  the scratch text really differs
+  PASS  expected_ids(log with E-04 twice)
+        ValueError: THEORIZE_LOG.md [E]: duplicate entry id(s) ['E-04'].
+
+--- ids OUT OF ORDER (E-08 and E-09 rows swapped)
+  PASS  the scratch text really differs
+  PASS  expected_ids(log with E-09 above E-08)
+        ValueError: THEORIZE_LOG.md [E]: entries are out of source order: ['E-01', 'E-02', 'E-03', 'E-04', 'E-05', 'E-06', 'E-07', 'E-09', 'E-08']. The plate reads the lo
+
+--- a family SHRANK below its floor (E-09 and E-08 rows deleted)
+  PASS  the scratch text really differs
+  PASS  expected_ids(log with 7 E rows, floor 9)
+        ValueError: THEORIZE_LOG.md [E]: 7 entries, floor is 9. The log lost an adjudication this figure used to draw. Growing is green; shrinking is not, and the floor i
+
+--- an '### E-NN, in full' elaboration with no table row
+  PASS  the scratch text really differs
+  PASS  expected_ids(log whose E-11 elaboration has no row)
+        ValueError: THEORIZE_LOG.md [E]: '### E-11, in full' elaborates a row that the E table does not contain (all orphans: ['E-11']). The two halves of the E section d
+
+--- the scan's [ORLPE] regex and FAMILIES drifting apart
+  PASS  expected_ids() with P no longer in FAMILIES
+        ValueError: THEORIZE_LOG.md: id family/families ['P'] are not declared in FAMILIES ['O', 'R', 'L', 'E']. A new family is a new kind of content.
+  PASS  FAMILIES restored
+  PASS  parse_log() on a log with a new '## X' section
+        ValueError: THEORIZE_LOG.md: unrecognised section '## X — a brand new family'. Declare it in FAMILIES or KNOWN_SECTIONS -- an unparsed section is an adjudication 
+
+==========================================================================
+FIX 2 -- the citation gate enumerates build_all.FIGURES
+==========================================================================
+
+--- the gate today
+figure citations: 6 figure(s) from build_all.FIGURES, against 21 prose file(s) under papers/
+  DECLARED    fig02_bill_shape: uncited on purpose -- pending a citation decision (paper author): the cost/bill panel has no home section yet -- section 6's cost discussion cites numbers, not the plate
+  DECLARED    fig03_capability_spectrum: uncited on purpose -- pending a citation decision (paper author): the battery's capability spectrum is a Phase-4 artefact and the workshop paper stops at Phase 1
+  DECLARED    fig04_a3_transfer: uncited on purpose -- pending a citation decision (paper author): A3 transfer has no section in the workshop paper's outline; cite it or retire the plate
+  CITED       fig05_a2_repair_loop: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/05_a2.md
+  CITED       fig06_concept_timeline: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+  CITED       fig07_a0_vs_a0prime: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+
+3 cited, 3 uncited by declaration, 0 unaccounted for.
+  PASS  green on the real tree -- exit 0
+
+--- a NEWLY ADDED figure with no citation and no declaration
+  build_all.FIGURES is now 7 long
+figure citations: 7 figure(s) from build_all.FIGURES, against 21 prose file(s) under papers/
+  DECLARED    fig02_bill_shape: uncited on purpose -- pending a citation decision (paper author): the cost/bill panel has no home section yet -- section 6's cost discussion cites numbers, not the plate
+  DECLARED    fig03_capability_spectrum: uncited on purpose -- pending a citation decision (paper author): the battery's capability spectrum is a Phase-4 artefact and the workshop paper stops at Phase 1
+  DECLARED    fig04_a3_transfer: uncited on purpose -- pending a citation decision (paper author): A3 transfer has no section in the workshop paper's outline; cite it or retire the plate
+  CITED       fig05_a2_repair_loop: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/05_a2.md
+  CITED       fig06_concept_timeline: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+  CITED       fig07_a0_vs_a0prime: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+  FAIL        fig08_brand_new_plate is built by the pipeline, is cited nowhere in the paper's prose, and is not declared in NOT_CITED_ON_PURPOSE. Either cite it in papers/, or add it to NOT_CITED_ON_PURPOSE with a one-line reason. It is currently built on every run and published in release/MANIFEST.jsonl for no reader.
+
+3 cited, 3 uncited by declaration, 1 unaccounted for.
+
+Every figure this pipeline builds has to be accounted for: cited in the paper, or declared here with a reason. Neither is not an option.
+  PASS  the gate goes RED -- exit 1
+  PASS  build_all.FIGURES restored
+
+--- ...and the paper's own parity gate does not notice, which is the defect
+  PASS  check_figure_parity maps exactly 3 figures, hard-coded -- ['fig05_a2_repair_loop', 'fig06_concept_timeline', 'fig07_a0_vs_a0prime']
+  PASS  and 3 of build_all's 6 are outside its map -- ['fig02_bill_shape', 'fig03_capability_spectrum', 'fig04_a3_transfer']
+
+==========================================================================
+DEMO: PASS

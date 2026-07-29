@@ -1,0 +1,14 @@
+entries in SOURCES.sha256 @9239eb1c: 50
+  drifted vs TODAY (HEAD 443211dd worktree): 7
+    ('baseline-arms/BUDGET_REPORT.md', 'b463e49de21fa9af', '5678a00b92dff530')
+    ('cold-start-a0/THEORIZE_LOG.md', 'fd16da792b38e595', '4d517c78301f9317')
+    ('cold-start-a0/artifacts/candidates.jsonl', 'b44422ffc7ec0690', 'b7382aef6b3053aa')
+    ('theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json', '5421e042ca10b517', '52b323f24181c09d')
+    ('theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json', '4bc21e074558db9a', '34dffab6bbf09f17')
+    ('theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json', '998b0422a317a0a7', 'b3b56e1c4db28510')
+    ('theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json', '5781de56da2de675', '4e4c15d3d4cd6fa1')
+  not on disk: 4
+    baseline-arms/out/shards/ledger.ar25.jsonl
+    baseline-arms/out/shards/ledger.g50t.jsonl
+    baseline-arms/out/shards/ledger.sk48.jsonl
+    baseline-arms/out/shards/ledger.tn36.jsonl

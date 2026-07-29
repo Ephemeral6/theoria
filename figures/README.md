@@ -35,6 +35,19 @@ caught the probe's own first version, which took its inventory from the same
 registry it was auditing and so stayed green over the exact defect it existed to
 find.
 
+Gate 10 asks the question at the far end: **does anyone read this plate?** Its
+figure set is `build_all.FIGURES`, imported rather than copied, so a plate added
+tomorrow is checked tomorrow. Every figure must be cited in the paper's prose or
+declared uncited-on-purpose, with a reason, in `check_figure_citations.py`.
+Neither is a red gate naming the figure. It exists because the paper's own
+`check_figure_parity.py` maps exactly three figures by hand and has therefore
+been green for its whole life *while three of the six plates were cited nowhere
+at all* — built, hashed and published in `release/MANIFEST.jsonl` for no reader.
+Those three (`fig02`, `fig03`, `fig04`) are declared today as *pending a
+citation decision*: whether they get a sentence is the paper author's call, and
+this side of the fence does not write the paper. What it can do is stop the
+omission from being invisible.
+
 ## The six
 
 | figure | claim it serves | the thing it must not let you conclude |

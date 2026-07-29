@@ -8,3 +8,15 @@
 *.md    text eol=lf
 SOURCES.sha256 text eol=lf
 *.png   binary
+
+# Run artefacts are hashed into runs/<id>/MANIFEST.json, and a digest computed
+# over the bytes on this disk is only worth something if a clone gets the same
+# bytes. Without these, a manifest written on Windows stops matching the moment
+# somebody checks the tree out. (V20, 2026-07-29.)
+*.json  text eol=lf
+*.log   text eol=lf
+*.txt   text eol=lf
+*.jsonl text eol=lf
+
+# And this file itself, which was the one exception until it was noticed.
+.gitattributes text eol=lf
