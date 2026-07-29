@@ -507,6 +507,44 @@ def _histogram(values) -> Dict[str, int]:
     return out
 
 
+def _base_commit_check(arm_version: Dict[str, Any],
+                       head: Optional[str]) -> Dict[str, Any]:
+    """Does `base_commit` actually describe the tree this run ran against?
+
+    Never raises and never blocks a manifest: an archive that fails to be
+    written because a provenance check errored is worse than one with an
+    unchecked field. A failure here is reported inside the manifest.
+    """
+    recorded = arm_version.get("sha256")
+    if not recorded:
+        return {"verdict": "no_arm_version_recorded",
+                "detail": "the ledger's run_start carries no arm_version to check"}
+    try:
+        from armtools import armversion                # noqa: PLC0415
+        located = armversion.locate(recorded)
+        derived = located["commits"][0] if located["verdict"] == "matched" else None
+        if derived and head:
+            return {
+                "verdict": "agree" if derived == head else "DISAGREE",
+                "base_commit_recorded": head,
+                "base_commit_the_arm_version_reconstructs": derived,
+                "detail": ("HEAD is the tree this run ran against"
+                           if derived == head else
+                           "`base_commit` is where HEAD is now; the run ran at "
+                           "the derived commit. The derived one is the "
+                           "reproducible one and should be preferred."),
+            }
+        return {
+            "verdict": located["verdict"],
+            "base_commit_recorded": head,
+            "base_commit_the_arm_version_reconstructs": derived,
+            "detail": located["detail"],
+        }
+    except Exception as exc:                           # noqa: BLE001
+        return {"verdict": "check_failed",
+                "detail": "%s: %s" % (type(exc).__name__, exc)}
+
+
 def _turn_spine(turns_json, invocations, budget) -> Dict[str, Any]:
     """Decide what the turns were, and say how confident that is.
 
@@ -1081,14 +1119,32 @@ def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
         except Exception:                              # noqa: BLE001
             return None
 
+    # `utc` is one of CLAUDE.md's four required manifest fields and no earlier
+    # version of this file wrote it. It is the run's own start time off the
+    # ledger, not the moment this manifest is generated -- those differ by
+    # however long the run took, and it is the run that is being dated.
+    start = next((r for r in mine if r.get("event") == "run_start"), {})
+
+    # `git rev-parse HEAD` answers "where is HEAD *now*", which is where it was
+    # when this manifest was written, not necessarily where it was when the run
+    # ran. For a run archived immediately those coincide; for one archived
+    # after a fix was committed they do not, and four of this arm's manifests
+    # carry a commit their own run never ran against (S8). The recorded
+    # `arm_version` settles it independently, so it is checked here rather than
+    # left for an audit to find.
+    head = git("rev-parse", "HEAD")
+    checked = _base_commit_check(start.get("arm_version") or {}, head)
+
     manifest = {
         "prompt_id": prompt_id,
         "slug": slug,
         "run_id": run_id,
         "game_id": summary.get("game_id"),
         "arm": "theoria",
+        "utc": start.get("ts"),
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
-        "base_commit": git("rev-parse", "HEAD"),
+        "base_commit": head,
+        "base_commit_check": checked,
         "seed": None,
         "seed_note": ("this arm draws no random numbers: engine dispatch, the "
                       "compilers and the planner are deterministic, and the one "

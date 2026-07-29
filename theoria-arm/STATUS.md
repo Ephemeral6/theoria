@@ -131,3 +131,26 @@ run manifest, because two other sessions have work in flight in this repo.
 reading it would be legal. This arm does not, because feeding another arm's
 trajectory to this one would give Theoria evidence bare-CC never had and the
 three arms are supposed to differ only in the inner loop.
+
+---
+
+## S8 · the archive is accountable now (2026-07-28)
+
+Nine runs under `runs/`; before this pass five had no `MANIFEST.json`, on the
+only arm that has ever spent an ARC action. All nine have one, and the whole
+archive is checked by one command:
+
+```bash
+cd theoria-arm && python -m armtools.verify_provenance   # 9 checks
+```
+
+**18 actions is this arm's lifetime spend**, reconciled from the ledgers and
+from the API's own four closed scorecards independently. `RUN_STATE.md`'s last
+section says which runs a paper may cite and which are process records only.
+
+Three findings came out of it, all recorded there and in `DECISIONS.md`
+D-S8-016..018: no existing manifest names the commit its run ran at
+(`base_commit` was HEAD at *manifest* time — `armtools/armversion.py` now
+derives the real one from the recorded `arm_version`); two runs ran against
+files never committed and are not reproducible from git; and one scorecard,
+`bbbd5b57-…`, is still open and its zero-action claim unconfirmed.

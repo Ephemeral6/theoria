@@ -251,6 +251,99 @@ finding about the table. No dollar figure is written into the ledger itself
 rides inside the recorded response envelope, which is recorded whole because
 that is what the format says to do.
 
+## D-S8-016 · A backfilled manifest derives or abstains — it never fills in
+
+Five runs had no manifest and had to be given one months of commits later. The
+tempting shortcut is to run `archive.build` over them, because it produces a
+complete-looking file. It also calls `git rev-parse HEAD` and
+`_bootstrap.upstream_pin()`, both of which describe the machine writing the
+manifest rather than the run being described, so the result is a confident
+record of the wrong thing — which is strictly worse than a gap, because a gap
+is visible and a wrong number is not.
+
+`armtools/backfill.py` therefore takes every field from the run's own ledger or
+from git, and where the evidence does not reach, writes `null` with an entry in
+`provenance.missing` saying what is absent and why. `provenance.status` is
+`complete` only when CLAUDE.md's four required fields are all derived. Two of
+the five are `complete`; three are not, and say so.
+
+Two consequences worth naming, because both were tempting and both are wrong:
+
+* **`git branch --contains` is not a source.** It answers which branches hold a
+  commit *today*, so a manifest built on it changes whenever a colleague pushes.
+  The reproducibility check caught it doing exactly that. `branch` now comes
+  from the parent run's contemporaneous manifest, labelled as inherited, or is
+  absent.
+* **A manifest this tool wrote is rebuilt, not amended.** Amending its own
+  output would relabel a derived manifest as a generator-written one and the
+  second run would not reproduce the first.
+
+## D-S8-017 · `base_commit` is checked against the run, not trusted
+
+`arm_version` — a sha256 over this arm's `.py` sources, recorded in every
+`run_start` — is a function of the tree alone, so it can be recomputed at any
+commit and matched (`armtools/armversion.py`). That makes `base_commit`
+falsifiable, and when the four existing manifests were checked, all four failed:
+two named a commit later than the one whose tree their run's sources match, two
+named a commit whose tree the run's own hash contradicts.
+
+Three limits, all of which an adversarial review had to find before they were
+written down, and each of which would have produced a confident wrong answer:
+
+* **The scan must cover every reachable commit, not the arm's own log.** A
+  commit that does not touch the arm carries its parent's hash and is invisible
+  to `git log -- theoria-arm`; one arm version here is shared by 187 commits.
+  Scanning only the arm's log reports `matched` and names one of them. The scan
+  is now over `rev-list --all`, keyed by the arm's subtree so it stays cheap.
+* **`matched` is a claim about `.py` files.** Two commits differing only in a
+  prompt, a log or a fixture are indistinguishable; four of seventeen groups are
+  multi-commit for that reason.
+* **The commit is not "where the run was launched from".** Two of these commits
+  were created 21 s and 57 s *after* their run started — the fix under test was
+  committed mid-run. The hash says the sources were byte-identical to that
+  tree, which is what reproducibility needs, and the manifest says exactly that
+  and gives the arithmetic.
+
+`archive.py` now runs the check at write time and records the verdict beside the
+field rather than leaving a future audit to discover it. It does not *correct*
+`base_commit` — HEAD at archive time is a real fact and worth keeping — it puts
+the reproducible commit next to it and says which is which. A check that can
+only be run by someone who already suspects the answer is not a check.
+
+## D-S8-018 · A test's run directory is not archive material
+
+`runs/` is what Phase 4 reads to account for every action this arm spent. Two
+`pytest-*` directories sat in it. They were gitignored and so never reached the
+repository, but a directory listing could not tell them from runs that cost
+money, and the audit that opened this item counted eleven runs where there were
+nine. Ignoring a thing in git is not the same as keeping it out of the archive.
+Fixtures now write to `.pytest-runs/` and `verify_provenance` fails if one
+reappears under `runs/`.
+
+## D-S8-019 · `arm_version` is computed below the arm root, not on the absolute path
+
+`_bootstrap.arm_version()` skipped a directory when `os.sep + "runs" in root` or
+`"__pycache__" in root`, applied to the **absolute** path. An ancestor directory
+therefore decided the answer: under `.worktrees/runs-cleanup/theoria-arm` — a
+perfectly ordinary name under CLAUDE.md's worktree rule — every file was
+skipped, and the function returned `files: 0` and the sha256 of the empty
+string. A run made in such a worktree records a version that matches nothing and
+never can.
+
+The tests are now applied to the path below the arm root. They remain substring
+tests, so `runsim/` and `__pycache__x/` are still skipped: making them
+component tests would change the hash of any tree containing such a directory,
+and every hash already recorded has to keep reconstructing. No tree in this
+arm's history contains one (`git log --all --full-history --name-only`), which
+is what makes the narrow fix safe and the wide one unnecessary.
+
+Two tests pin it: one that the git-side reimplementation in
+`armtools/armversion.py` agrees with the walk on exactly the cases that separate
+the two readings, and one that the hash is the same wherever the arm is checked
+out. The reimplementation had in fact diverged — it read the rule
+component-wise — and the divergence was silent: it would have surfaced as a real
+run reporting that it matched no commit, for no reason.
+
 ## D-A3-001 · A level boundary segments the trajectory; it is not a transition
 
 The beats that reason over the trace — `certify`'s replay, `commit`'s and

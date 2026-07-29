@@ -5,8 +5,10 @@ point is that every property the live run depends on is checked *before* an
 action is spent, because a live action cannot be taken back.
 """
 
+import importlib.util
 import json
 import os
+import pathlib
 import sys
 
 import pytest
@@ -686,7 +688,7 @@ def test_the_colour_hint_is_read_off_the_object_declaration():
 # --------------------------------------------------------- the whole shell
 def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
     """No key, no network, no model call, no quota -- and a full ledger."""
-    from harness.run import play                       # noqa: PLC0415
+    from harness.run import FIXTURE_RUNS_DIR, play     # noqa: PLC0415
     from inner.loop import TheoriaArm                  # noqa: PLC0415
     from proxy.ledger import read_ledger               # noqa: PLC0415
     from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415
@@ -725,9 +727,12 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
         return TheoriaArm(env_base=env_base, run=run, game_id=game,
                           budget_actions=6, offline=True)
 
+    # Not `runs/`: that is the archive, and this run cost nothing and proves
+    # nothing about the world. See `harness.run.FIXTURE_RUNS_DIR`.
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       runs_root=FIXTURE_RUNS_DIR,
                        ledger_path=ledger_path)
 
     assert summary["budget"]["actions_ok"] == 6
@@ -755,7 +760,7 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
     """baseline-arms measured scorecard.total_actions == successful actions on
     four independent samples. If that ever stops holding, the budget's whole
     unit of account is wrong and this test is where it shows."""
-    from harness.run import play                       # noqa: PLC0415
+    from harness.run import FIXTURE_RUNS_DIR, play     # noqa: PLC0415
     from inner.loop import TheoriaArm                  # noqa: PLC0415
     from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415
 
@@ -769,8 +774,98 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       runs_root=FIXTURE_RUNS_DIR,
                        ledger_path=str(tmp_path / "ledger.jsonl"))
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
+
+
+# ----------------------------------------------------------- the archive
+def test_armversion_reimplements_the_walk_exactly(tmp_path):
+    """`armversion._counted` must agree with `_bootstrap.arm_version`'s walk.
+
+    They are two implementations of one rule -- one over a directory, one over
+    a git tree -- and the rule is stated with *substring* tests, so `runsim/`
+    and `__pycache__x/` are skipped where a component-wise reading would keep
+    them. An adversarial review found the reimplementation reading it
+    component-wise. Nothing on disk was wrong, because no such directory has
+    ever existed here; the divergence would simply have made a real run report
+    that it matched no commit. This pins the four cases that separate the two
+    readings.
+    """
+    from armtools.armversion import _counted            # noqa: PLC0415
+
+    cases = {
+        "harness/run.py": True,
+        "_bootstrap.py": True,
+        "runs/20260728T0Z-x/thing.py": False,           # the archive
+        "world/runs/x.py": False,                       # a nested one
+        "runsim/x.py": False,                           # substring, not component
+        "runs_old/x.py": False,
+        "__pycache__/x.py": False,
+        "__pycache__x/x.py": False,                     # substring again
+        "notes.md": False,                              # not a .py file
+    }
+    for rel, expected in cases.items():
+        assert _counted(rel) is expected, rel
+
+    # And the walk itself agrees, on a real directory built to contain them.
+    arm = tmp_path / "theoria-arm"
+    for rel in cases:
+        target = arm / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("x = 1\n", encoding="utf-8")
+    (arm / "_bootstrap.py").write_text(
+        pathlib.Path(os.path.join(ARM, "_bootstrap.py")).read_text(
+            encoding="utf-8"), encoding="utf-8")
+
+    spec = importlib.util.spec_from_file_location(
+        "arm_under_test_bootstrap", str(arm / "_bootstrap.py"))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    walked = module.arm_version()
+    assert walked["files"] == sum(1 for v in cases.values() if v)
+
+
+def test_arm_version_does_not_depend_on_where_the_arm_is_checked_out(tmp_path):
+    """A worktree named `runs-something` used to zero the hash.
+
+    `os.sep + "runs" in root` was applied to the *absolute* path, so an
+    ancestor directory decided it: under `.worktrees/runs-cleanup/` -- an
+    ordinary name under CLAUDE.md's worktree rule -- every file was skipped and
+    `arm_version` returned `files: 0` and the sha256 of the empty string. Any
+    run made there records a version that can never be matched to a commit.
+    """
+    digests = []
+    for parent in ("plain", "runs-cleanup", "__pycache__-ish"):
+        arm = tmp_path / parent / "theoria-arm"
+        (arm / "harness").mkdir(parents=True)
+        (arm / "harness" / "run.py").write_text("x = 1\n", encoding="utf-8")
+        (arm / "_bootstrap.py").write_text(
+            pathlib.Path(os.path.join(ARM, "_bootstrap.py")).read_text(
+                encoding="utf-8"), encoding="utf-8")
+        spec = importlib.util.spec_from_file_location(
+            "bootstrap_" + parent.replace("-", "_"), str(arm / "_bootstrap.py"))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        digests.append(module.arm_version())
+
+    assert digests[0]["files"] == 2
+    assert len({d["sha256"] for d in digests}) == 1, digests
+
+
+def test_the_archive_stays_accountable():
+    """`verify_provenance`'s nine checks, run as part of the suite.
+
+    The archive is the thing Phase 4 reads back to account for every ARC action
+    this arm spent. A check that only runs when somebody remembers to run it is
+    not a guarantee.
+    """
+    from armtools import verify_provenance               # noqa: PLC0415
+
+    checks = verify_provenance.run()
+    assert not checks.failed, [
+        "%s: %s" % (r["check"], r["detail"]) for r in checks.failed]
+    assert len(checks.rows) == 9
 
 
 # ------------------------------------------- E14: a crash is not a finding
@@ -1084,7 +1179,7 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
     you that.
     """
     from harness.modelcall import AnonymityBreach       # noqa: PLC0415
-    from harness.run import play                        # noqa: PLC0415
+    from harness.run import FIXTURE_RUNS_DIR, play      # noqa: PLC0415
     from inner.loop import TheoriaArm                   # noqa: PLC0415
     from proxy.mock.arc_mock import DEFAULT_KEY, MockArc    # noqa: PLC0415
 
@@ -1108,9 +1203,14 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         with pytest.raises(AnonymityBreach):
+            # Not `runs/`: D-S8-018. This run cost nothing and proves nothing
+            # about the world, and left in the archive it trips
+            # `verify_provenance`'s first check on the *next* invocation of the
+            # suite -- which is how it was found.
             play(game, "pytest-anon-" + os.path.basename(str(tmp_path)),
                  factory, env_upstream=mock.base_url, env_key=DEFAULT_KEY,
                  require_key=False,
+                 runs_root=FIXTURE_RUNS_DIR,
                  ledger_path=str(tmp_path / "ledger.jsonl"))
 
     assert seen.get("called"), "the desk was never reached; the test proved nothing"

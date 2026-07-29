@@ -3,8 +3,14 @@
 # transcripts and the manifest ARE tracked -- they are the account.
 runs/*/trace.jsonl
 runs/dryrun-*/
-runs/pytest-*/
 runs/smoke*/
+
+# Throwaway runs -- tests and smokes -- live outside the archive entirely
+# (`harness.run.FIXTURE_RUNS_DIR`). The `runs/pytest-*/` line that used to sit
+# above kept them out of git but not out of `runs/`, so the archive listed
+# eleven runs when it held nine. `armtools.verify_provenance` now fails if a
+# fixture reappears under `runs/`; this line is only about not committing them.
+.pytest-runs/
 runs_live.log
 .live_slug
 __pycache__/
