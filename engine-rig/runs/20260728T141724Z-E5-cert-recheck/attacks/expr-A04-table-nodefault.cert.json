@@ -1,0 +1,10 @@
+{
+  "schema": "engine-rig/recheck/certificate-v1",
+  "name": "A04-table-nodefault",
+  "kind": "inductive_invariant",
+  "claim": "unsolvable",
+  "tables": {
+    "t": {"arity": 1, "entries": [[0, true]]}
+  },
+  "predicate": ["table", "t", ["var", "pos0"]]
+}

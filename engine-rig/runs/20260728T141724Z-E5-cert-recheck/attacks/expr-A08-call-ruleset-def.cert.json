@@ -1,0 +1,30 @@
+{
+  "claim": "unsolvable",
+  "defs": [
+    {
+      "body": [
+        "call",
+        "free",
+        [
+          "param",
+          "x"
+        ]
+      ],
+      "name": "mine",
+      "params": [
+        "x"
+      ]
+    }
+  ],
+  "kind": "inductive_invariant",
+  "name": "A08-call-ruleset-def",
+  "predicate": [
+    "call",
+    "mine",
+    [
+      "var",
+      "cart"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

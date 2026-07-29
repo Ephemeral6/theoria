@@ -1,0 +1,28 @@
+{
+  "prompt_id": "P9-paper-to-submittable",
+  "scope": "figure clause only, by human ruling 2026-07-28 -- sections/07_battery.md and the rest of P7's territory untouched",
+  "branch": "agent/p9-paper-to-submittable",
+  "base_commit": "d1733df",
+  "utc": "2026-07-28T12:20:00Z",
+  "worker": "RES-2",
+  "lane": "paper",
+  "territory": "papers/phase1-workshop (figures + the two sections that cite them)",
+  "status": "delivered",
+  "checks": {
+    "figure_parity": "python papers/phase1-workshop/figures/check_figure_parity.py -- 12 agree, 1 one-sided, 1 adjudicated, 0 new",
+    "assemble": "python papers/phase1-workshop/assemble.py -- 12 sections, deterministic"
+  },
+  "spend": {"api_calls": 0, "model_calls": 0, "usd": 0.0, "network": false},
+  "sealed_pile_contact": "none",
+  "files_touched": [
+    "papers/phase1-workshop/figures/check_figure_parity.py",
+    "papers/phase1-workshop/figures/PARITY.md",
+    "papers/phase1-workshop/figures/fig1_concept_timeline.py",
+    "papers/phase1-workshop/figures/fig2_coverage_accuracy.py",
+    "papers/phase1-workshop/figures/fig3_loop_ledger.py",
+    "papers/phase1-workshop/sections/03_a0.md",
+    "papers/phase1-workshop/sections/05_a2.md",
+    "papers/phase1-workshop/OUTLINE.md",
+    "papers/phase1-workshop/PAPER.md"
+  ]
+}

@@ -2,124 +2,284 @@
   "agents": {
     "delivered_ids": [
       "A4-ablation-online",
+      "A4a-ablation-build",
+      "A7-envelope-finish",
+      "A9-readonly-baseline",
       "C1-worldgen",
+      "C11-tool-failure-as-truth",
       "C4-deadlock-lean",
+      "C6-worldgen-mutate",
       "C7-dsl-v03-mentions",
+      "C8-handover-package",
+      "C9-count-lock-vocabulary",
+      "E10-engine-crosscheck",
+      "E11-engine-crosscheck-deep",
+      "E14-crash-is-not-a-finding",
       "E2-fd-ladder-bench",
       "E4-property-fuzz",
+      "E5-cert-recheck",
+      "E6-engine-dividend",
+      "E7-deadlock-claim-audit",
+      "E9-engine-paper-table",
+      "P10-figures-into-paper",
+      "P11-battery-section-refresh",
       "P4-figures",
+      "P5-release",
       "P6-paper-assembly",
       "P7-paper-section7",
+      "P8-billshape-pipeline",
+      "P9-paper-to-submittable",
+      "R2-release-licence",
+      "S1-quota-auto-exit",
+      "S10-invariant-on-resource",
+      "S11-sealed-halfguard",
+      "S12-quota-hold-tests",
+      "S13-verify-gate-enforced",
+      "S14-gates-for-all",
+      "S15-ledger-hashchain",
       "S2-canary-schedule",
       "S3-spend-gate",
+      "S5-phase1-close",
       "S6-merge-gate-509",
-      "V2-exam-on-worldgen"
+      "S8-provenance-backfill",
+      "S9-contract-change-protocol",
+      "V10-fuzz-mutation-power",
+      "V11-handover-auto",
+      "V11-negative-control-census",
+      "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
+      "V14-standing-negative-control-probe",
+      "V15-census-sampling-frame",
+      "V16-determinism-has-no-caller",
+      "V17-pin-the-partial-verdict",
+      "V2-exam-on-worldgen",
+      "V3-battery-discrimination",
+      "V4-exam-selftest",
+      "V5-battery-freeze"
     ],
     "delivered_plain": [
       "对照版 AI（去掉证明能力）上线",
+      "把对照版 AI 真正建起来",
+      "补齐对照组的成绩数据",
+      "A9-readonly-baseline",
       "世界工厂：7 类机制、20 个带标准答案的练习世界",
+      "C11-tool-failure-as-truth",
       "把死锁定理和不变量送进 Lean 做机器验证",
+      "给世界工厂加「改一条规则」的变体生成",
       "语法 v0.3：把散落的提法收进契约",
+      "移交测试包：让陌生 agent 只读两本书就能接手",
+      "语法补计数锁词汇",
+      "E10-engine-crosscheck",
+      "E11-engine-crosscheck-deep",
+      "E14-crash-is-not-a-finding",
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
+      "证书独立复核器（不靠 Lean 一条路）",
+      "量化引擎改进带来的实际红利",
+      "E7-deadlock-claim-audit",
+      "引擎章节的论文表格",
+      "把图正式接进论文正文",
+      "P11-battery-section-refresh",
       "论文figures：把数据变成可复现的图",
+      "释出包：陌生人一条命令复跑全部结果",
       "把各处结果组装成论文正文",
       "论文第 7 节：相关工作",
+      "把论文「账单形状」图接上真数据管线",
+      "把论文推进到可投稿",
+      "释出许可条款落地",
+      "让配额熔断器学会自己开闩",
+      "S10-invariant-on-resource",
+      "S11-sealed-halfguard",
+      "熔断器的全链路测试",
+      "S13-verify-gate-enforced",
+      "S14-gates-for-all",
+      "S15-ledger-hashchain",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+      "Phase 1 收口：把地基验收单清干净",
       "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
-      "让考卷跑在新造的 20 个练习世界上"
+      "S8-provenance-backfill",
+      "契约变更协议：改契约要走什么流程",
+      "V10-fuzz-mutation-power",
+      "V11-handover-auto",
+      "V11-negative-control-census",
+      "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
+      "V14-standing-negative-control-probe",
+      "V15-census-sampling-frame",
+      "V16-determinism-has-no-caller",
+      "V17-pin-the-partial-verdict",
+      "让考卷跑在新造的 20 个练习世界上",
+      "指标体系首次区分两组 AI 的能力差",
+      "考卷自检 + 出三类判决题（验判卷的人对不对）",
+      "V5-battery-freeze"
+    ],
+    "delivered_today": [
+      "对照版 AI（去掉证明能力）上线",
+      "把对照版 AI 真正建起来",
+      "补齐对照组的成绩数据",
+      "A9-readonly-baseline",
+      "世界工厂：7 类机制、20 个带标准答案的练习世界",
+      "C11-tool-failure-as-truth",
+      "把死锁定理和不变量送进 Lean 做机器验证",
+      "给世界工厂加「改一条规则」的变体生成",
+      "语法 v0.3：把散落的提法收进契约",
+      "移交测试包：让陌生 agent 只读两本书就能接手",
+      "语法补计数锁词汇",
+      "E10-engine-crosscheck",
+      "E11-engine-crosscheck-deep",
+      "E14-crash-is-not-a-finding",
+      "给专业规划器的三档性能定价",
+      "用 500 个随机世界轰炸六个引擎找 bug",
+      "证书独立复核器（不靠 Lean 一条路）",
+      "量化引擎改进带来的实际红利",
+      "E7-deadlock-claim-audit",
+      "引擎章节的论文表格",
+      "把图正式接进论文正文",
+      "P11-battery-section-refresh",
+      "论文figures：把数据变成可复现的图",
+      "释出包：陌生人一条命令复跑全部结果",
+      "把各处结果组装成论文正文",
+      "论文第 7 节：相关工作",
+      "把论文「账单形状」图接上真数据管线",
+      "把论文推进到可投稿",
+      "释出许可条款落地",
+      "让配额熔断器学会自己开闩",
+      "S10-invariant-on-resource",
+      "S11-sealed-halfguard",
+      "熔断器的全链路测试",
+      "S13-verify-gate-enforced",
+      "S14-gates-for-all",
+      "S15-ledger-hashchain",
+      "把「金丝雀重放」做成每天自动跑的体检",
+      "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+      "Phase 1 收口：把地基验收单清干净",
+      "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
+      "S8-provenance-backfill",
+      "契约变更协议：改契约要走什么流程",
+      "V10-fuzz-mutation-power",
+      "V11-handover-auto",
+      "V11-negative-control-census",
+      "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
+      "V14-standing-negative-control-probe",
+      "V15-census-sampling-frame",
+      "V16-determinism-has-no-caller",
+      "V17-pin-the-partial-verdict",
+      "让考卷跑在新造的 20 个练习世界上",
+      "指标体系首次区分两组 AI 的能力差",
+      "考卷自检 + 出三类判决题（验判卷的人对不对）",
+      "V5-battery-freeze"
     ],
     "in_progress_plain": [
-      "跨关迁移协议：把学到的知识带去下一关",
-      "补齐对照组的成绩数据",
-      "让引擎在真游戏里供货（第二关）",
-      "量化引擎改进带来的实际红利",
-      "释出包：陌生人一条命令复跑全部结果",
-      "把论文「账单形状」图接上真数据管线",
-      "起草大考前要封存的规则包",
-      "Phase 1 收口：把地基验收单清干净",
-      "指标体系首次区分两组 AI 的能力差",
-      "考卷自检 + 出三类判决题（验判卷的人对不对）"
+      "开发堆在线战役：把 Theoria 臂推到退出条件",
+      "V19-unverified-is-not-true",
+      "S17-fleet-evidence-capture",
+      "S23-unreadable-is-not-clean"
     ],
     "ops": [
       {
-        "age_min": 29,
-        "cycle": 5,
+        "age_min": 24,
+        "cycle": 25,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
-        "outputs": 6,
+        "note": "cycle 25: no report. Queue steady at 13 -- nine real conflicts now boarded as S24, two genuine test reds, s11, one verify.py. Caught myself nearly filing a false future-timestamp: that one was my own local-time formatting, unlike the six real ones last cycle. Red lines clean.",
+        "outputs": 33,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 45,
-        "cycle": 3,
+        "age_min": 210,
+        "cycle": 10,
         "id": "OPS-B",
         "kind": "ops",
         "name": "浏览器专员",
-        "note": "邮箱无新 OPEN；两份提案待裁决；本轮把 ACCESS_CHECK 第 8 项记为未了结的那封信写成可发草稿（未发送），建议下轮起做条款定期漂移核查",
+        "note": "空转一轮，本职无活：总线空、邮箱无 OPEN、条款巡检按天未到期（上次 19:44Z NO-DRIFT）。两件挂人手的事没动（发信、.env key 归属账户）。观察一条不另开消息：未合并分支已从 14 涨到 23，S11 仍在其中（20:44Z 仍原样重报），封存护栏第 5 小时不在主线上",
         "outputs": 5,
         "role": "需要真浏览器和登录态的活：官方条款、账户核查",
         "state": "idle"
       },
       {
-        "age_min": 39,
-        "cycle": 3,
+        "age_min": 429,
+        "cycle": 8,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
-        "note": "用户派活：ci_merge 门已改成从树上读（有 test_*.py 才跑），退出码5单独成flag，merge.log 记录跑了哪些门；另修 fuzzlab/pytest.ini。已推 86958a9。附带报告一次提交扫走我半成品导致 master 两分钟零门",
-        "outputs": 8,
+        "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z",
+        "outputs": 6,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
-        "state": "working"
+        "state": "blocked"
       },
       {
-        "age_min": 280,
-        "cycle": 1,
+        "age_min": 520,
+        "cycle": 2,
         "id": "OPS-R",
         "kind": "ops",
         "name": "回顾员",
-        "note": "cycle 1 done: 1 OPEN acked (4 self-reports verified true), 2 proposals in inbox after adversarial review, 3 live faults raised to TO-MONITOR (reflex task Disabled / pid_alive(0)==True / quota missed a real session-limit death). Sleeping 43200s.",
-        "outputs": 7,
+        "note": "booted",
+        "outputs": 0,
         "role": "从所有痕迹里挖跨轨道重复出现的失败模式",
-        "state": "idle"
+        "state": "working"
       }
     ],
     "standing": [
       {
-        "age_min": 21,
-        "cycle": 1,
+        "age_min": 520,
+        "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "V4-exam-selftest: audit done -- 2/3 asks already shipped by P-15/V2; building marker mutation self-test + fault-injection matrix + sens/spec matrix",
-        "outputs": 0,
+        "note": "A:bus#2 ablation 闸门 完工——根因是仪表(pin 把并发舰队的 proxy/var/spend_gate.jsonl 算进本臂)，把宽泛否定名单换成按进程归属判定(audit hook)，verify.sh 连绿两次，56 passed，分支已推。B:A3 关卡边界+跨关带书落码，并查出一条决定性事实：全仓约 2600 条真实 ARC 应答里 levels_completed 恒为 0、state 只有 NOT_FINISHED——**没人通过任何一关**，所以「通关信号是什么」是未观测量。已把两种可能都实现(计数器递增 / WIN+RESET 探测)，探不动就以 level_advance_unknown 停并留下测量。C:A4b-ablation-calibrate 已领并派工。钱已批($200/$60/$25/40动作)，但桌面模型花费的闸门适配器(harness/spend.py)落地后才开跑。",
+        "outputs": 2,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 26,
-        "cycle": 0,
+        "age_min": 517,
+        "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "booted",
-        "outputs": 0,
+        "note": "P11 DELIVERED (pushed agent/p11-battery-section-refresh, board done): 21 drift defects fixed, then an adversarial pass refuted 5 of my own corrections -- all 5 verified by hand and reverted. Cross-track correction worth reading: piles.json really does hash differently on a Windows checkout (core.autocrlf=true, i/lf w/crlf, 111 CRLF, raw f2ef44d1 vs LF-normalised d3140eff); any files[].sha256 treated as machine-stable needs normalising or needs to name its checkout. Now holding 2: V7 (exam, all 20 examiners in, 304 tests pass, adversarial running) + P12 (papers, five-perspective review dispatched on the P11-corrected text).",
+        "outputs": 4,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
-        "state": "idle"
+        "state": "working"
+      },
+      {
+        "age_min": 20,
+        "cycle": 36,
+        "id": "RES-3",
+        "kind": "standing",
+        "name": "验证与考卷研究员",
+        "note": "V19 的对抗复核 80 变异体/逃 30，两条 CRITICAL 都是把 V19 刚修好的病在 V19 自己的修复里重建（吞异常 → holds:true+states_checked:24；证据计数写在循环之外 → 产物报告未采集的证据）。另两条要紧：修完后没有任何闸读 invariants_all_hold（把载荷从布尔上挪开而不是压上去）；worldgen.build 的 --check 在 diff 前就重建 OUT，所以对这类变异是盲的。已派回收尾，并让它把 reversibility 那条（218 条主张 90 条未验证、35/35 世界）只写提案不动手。手上 C10 / V19。",
+        "outputs": 6,
+        "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
+        "state": "working"
+      },
+      {
+        "age_min": 489,
+        "cycle": 6,
+        "id": "RES-4",
+        "kind": "standing",
+        "name": "基础设施研究员",
+        "note": "S14+S15 已交付done并推送;S17 在手,证据 187 行已落盘推送。缺口:human_actions.jsonl 未采(采集器撞额度),那是论点唯一的量化支撑。本会话 subagent 额度已尽、主上下文将满,建议重开一个 RES-4 会话接上——磁盘上什么都不丢。",
+        "outputs": 1,
+        "role": "常驻推进：这台机器本身可不可信——闸门、留痕、释出、防悄悄失败",
+        "state": "working"
       }
     ],
     "workers": [
       {
-        "finished": [],
+        "finished": [
+          "补齐对照组的成绩数据"
+        ],
         "id": "APP-A7",
         "kind": "worker",
         "name": "手动会话",
-        "now": "补齐对照组的成绩数据",
-        "outputs": 0,
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
         "running": false
       },
       {
@@ -130,6 +290,7 @@
         "kind": "worker",
         "name": "手动会话",
         "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -141,34 +302,202 @@
         "kind": "worker",
         "name": "手动会话",
         "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
       {
-        "finished": [],
+        "finished": [
+          "指标体系首次区分两组 AI 的能力差"
+        ],
         "id": "APP-V3",
         "kind": "worker",
         "name": "手动会话",
-        "now": "指标体系首次区分两组 AI 的能力差",
-        "outputs": 0,
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
         "running": false
       },
       {
-        "finished": [],
+        "finished": [
+          "把对照版 AI 真正建起来",
+          "S13-verify-gate-enforced",
+          "考卷自检 + 出三类判决题（验判卷的人对不对）"
+        ],
         "id": "RES-1",
         "kind": "worker",
         "name": "手动会话",
-        "now": "考卷自检 + 出三类判决题（验判卷的人对不对）",
-        "outputs": 0,
+        "now": null,
+        "orphan": false,
+        "outputs": 3,
         "running": false
       },
       {
-        "finished": [],
+        "finished": [
+          "P11-battery-section-refresh",
+          "释出包：陌生人一条命令复跑全部结果",
+          "把论文「账单形状」图接上真数据管线",
+          "把论文推进到可投稿"
+        ],
         "id": "RES-2",
         "kind": "worker",
         "name": "手动会话",
-        "now": "把论文「账单形状」图接上真数据管线",
-        "outputs": 0,
+        "now": null,
+        "orphan": false,
+        "outputs": 4,
+        "running": false
+      },
+      {
+        "finished": [
+          "A9-readonly-baseline",
+          "C11-tool-failure-as-truth",
+          "E10-engine-crosscheck",
+          "E11-engine-crosscheck-deep",
+          "E14-crash-is-not-a-finding",
+          "引擎章节的论文表格",
+          "V10-fuzz-mutation-power",
+          "V11-handover-auto",
+          "V11-negative-control-census",
+          "V12-worldgen-gate-deaf",
+          "V13-audit-the-published-surface",
+          "V14-standing-negative-control-probe",
+          "V15-census-sampling-frame",
+          "V16-determinism-has-no-caller",
+          "V17-pin-the-partial-verdict"
+        ],
+        "id": "RES-3",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": "V19-unverified-is-not-true",
+        "orphan": false,
+        "outputs": 15,
+        "running": true
+      },
+      {
+        "finished": [
+          "S14-gates-for-all",
+          "S15-ledger-hashchain"
+        ],
+        "id": "RES-4",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": null,
+        "orphan": false,
+        "outputs": 2,
+        "running": false
+      },
+      {
+        "finished": [
+          "让配额熔断器学会自己开闩",
+          "Phase 1 收口：把地基验收单清干净",
+          "契约变更协议：改契约要走什么流程"
+        ],
+        "id": "W-1250",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 3,
+        "running": false
+      },
+      {
+        "finished": [
+          "给世界工厂加「改一条规则」的变体生成",
+          "S10-invariant-on-resource"
+        ],
+        "id": "W-1251",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 2,
+        "running": false
+      },
+      {
+        "finished": [
+          "移交测试包：让陌生 agent 只读两本书就能接手"
+        ],
+        "id": "W-1252",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "把图正式接进论文正文"
+        ],
+        "id": "W-1253",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "量化引擎改进带来的实际红利",
+          "E7-deadlock-claim-audit"
+        ],
+        "id": "W-130",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 2,
+        "running": false
+      },
+      {
+        "finished": [
+          "语法补计数锁词汇"
+        ],
+        "id": "W-131",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "S11-sealed-halfguard"
+        ],
+        "id": "W-1410",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "证书独立复核器（不靠 Lean 一条路）"
+        ],
+        "id": "W-1411",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "释出许可条款落地",
+          "熔断器的全链路测试",
+          "S8-provenance-backfill"
+        ],
+        "id": "W-1412",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 3,
         "running": false
       },
       {
@@ -178,17 +507,9 @@
         "id": "W-1520",
         "kind": "worker",
         "name": "研究工人",
-        "now": "释出包：陌生人一条命令复跑全部结果",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
-        "running": false
-      },
-      {
-        "finished": [],
-        "id": "W-1521",
-        "kind": "worker",
-        "name": "研究工人",
-        "now": "让引擎在真游戏里供货（第二关）",
-        "outputs": 0,
         "running": false
       },
       {
@@ -201,6 +522,7 @@
         "kind": "worker",
         "name": "研究工人",
         "now": null,
+        "orphan": false,
         "outputs": 3,
         "running": false
       },
@@ -211,7 +533,8 @@
         "id": "W-1541",
         "kind": "worker",
         "name": "研究工人",
-        "now": "起草大考前要封存的规则包",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -225,6 +548,7 @@
         "kind": "worker",
         "name": "研究工人",
         "now": null,
+        "orphan": false,
         "outputs": 3,
         "running": false
       },
@@ -235,37 +559,62 @@
         "id": "W-1611",
         "kind": "worker",
         "name": "研究工人",
-        "now": "量化引擎改进带来的实际红利",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
       {
         "finished": [],
-        "id": "W-5200",
+        "id": "W-1640",
         "kind": "worker",
         "name": "研究工人",
-        "now": "Phase 1 收口：把地基验收单清干净",
+        "now": "开发堆在线战役：把 Theoria 臂推到退出条件",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [],
-        "id": "W-5201",
+        "id": "W-1641",
         "kind": "worker",
         "name": "研究工人",
-        "now": "跨关迁移协议：把学到的知识带去下一关",
+        "now": "S17-fleet-evidence-capture",
+        "orphan": false,
         "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-1642",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "S23-unreadable-is-not-clean",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [
+          "V5-battery-freeze"
+        ],
+        "id": "W-252",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
         "running": false
       }
     ]
   },
   "blocking_findings": 1,
   "board": {
-    "available": 1,
+    "available": 24,
     "blocked": 3,
-    "claimed": 10,
-    "done": 13,
-    "listing": "=== available ===\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen       \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P8-billshape-pipeline        by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n  V4-exam-selftest             by RES-1\n=== done (13) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540"
+    "claimed": 5,
+    "done": 55,
+    "listing": "=== available (ͨ�ù��˿��� 13) ===\n  p1  S24-merge-conflict-drain     cell=S24 territory=merge          lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  P12-paper-multi-review       cell=P12 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P13-paper-intro-abstract     cell=P13 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P14-honesty-section          cell=P14 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  S16-silent-failure-hunt      cell=S16 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S19-session-liveness         cell=S19 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S20-gate-negative-sample     cell=S20 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  A4b-ablation-calibrate       cell=A2  territory=ablation-arm   lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  S22-access-check-close       cell=S22 territory=arc-recon      lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          lane:infra������ͣ�ڣ��ѽ�⣩\n  p4  S4-freeze                    cell=S4  territory=freeze         lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     unlaned\n=== reserved�����������������о�Ա���� 11�� ===\n  p1  E16-verdict-must-gate        lane=verify   owner=RES-3(20����ǰ) territory=engine-rig\n  p2  E12-adopt-the-unsolvable-canon lane=verify   owner=RES-3(20����ǰ) territory=engine-rig\n  p2  E15-solver-status-bit        lane=verify   owner=RES-3(20����ǰ) territory=engine-rig\n  p2  V5-verdict-three-types       lane=verify   owner=RES-3(20����ǰ) territory=exam\n  p2  V7-exam-stress-fanout        lane=verify   owner=RES-3(20����ǰ) territory=exam\n  p2  V8-judge-trust-audit         lane=verify   owner=RES-3(20����ǰ) territory=exam\n  p2  V9-battery-gaming-audit      lane=verify   owner=RES-3(20����ǰ) territory=battery\n  p3  A6-transfer-protocol         lane=campaign owner=RES-1(520����ǰ) territory=cold-start-a3\n  p3  E13-engine-section-numbers   lane=verify   owner=RES-3(20����ǰ) territory=engine-rig\n  p3  V18-battery-prereg-check     lane=verify   owner=RES-3(20����ǰ) territory=battery\n  p3  V6-exam-on-sealed-dryrun     lane=verify   owner=RES-3(20����ǰ) territory=exam\n=== blocked ===\n  E17-held-out-validation      waits on E16-verdict-must-gate\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by W-1640\n  C10-unsolvable-proof-canon   by RES-3\n  S17-fleet-evidence-capture   by W-1641\n  S23-unreadable-is-not-clean  by W-1642\n  V19-unverified-is-not-true   by RES-3\n=== done (55) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C11-tool-failure-as-truth.RES-3\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252"
   },
   "con_green": 1,
   "constraints": [
@@ -426,6 +775,20 @@
       "title": "CONTRACTS 的 kind 枚举被冻结条款卡住 M9 新引擎【已裁决·监控代行：升 v0.2】"
     },
     {
+      "action": "【已裁决·监控代行 2026-07-29】五件上板，全部要求带负样本：S23-unreadable-is-not-clean（p1，动的是封存红线闸门，含 RES-4 报的 arc-recon/contamination.py:338 退出码只反映 sha256）、V19-unverified-is-not-true、E14-crash-is-not-a-finding、E15-solver-status-bit、P14-honesty-section（写进论文，不藏进 limitations）。C10 改形：从『定正典』改为『采纳已有的 backends.proves_unsolvable』——新写会产生第二条正典，而两条正典正是这件工单要治的病。cold-start-a0/ 的同族缺陷只登记进 PARTNER_SYNC，不动手（非本轨道领地）。",
+      "body": "RES-3 的三路只读普查（报告在 engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/SURVEY-*.md）扫约 340 处判据点，判不安全 48 处。**它们几乎全部偏向好消息**，这才是这条finding的要害——不是随机的错，是有方向的错。四个家族：退出码当证明（p13_fd_dividend.py:129 裸 returncode==12，而正确谓词 backends.proves_unsolvable 就在它已经 import 的模块里）、缺省值当成立（worldgen/core/truth.py:279 的 .get('holds', True)，35 份基准真值里 13 份因此报『不变量全部成立』）、崩溃当发现（theoria-arm/inner/plan.py:172 吞异常后仍宣布『穷举了整个可达集』——**崩得越多，健康证明越干净**）、读不开当干净（release/check_redlines.py:207 让封存红线报无发现，而同包 enumerate.py:220 对同一情形判 needs_human）。\n\n**目前没有已发表结论被推翻，但有已发表数字依赖读者重新推导**：lp_potential 的 29.2% 不完备率成立，是因为复核员自己去取了 HiGHS 的 status（639 例沉默里 638 例是 status 2）——引擎自己把 status 1/2/3/4 塌成了同一个 None。方法不健全而结论当前为真，两者必须分开说。",
+      "id": "F-17",
+      "severity": "high",
+      "title": "工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全【已裁决·监控代行：五件上板】"
+    },
+    {
+      "action": "【已裁决·监控代行 2026-07-29】(1) 论文改词：在 E17 交付之前，正文凡写「已验证」处一律改为「在观测证据上自洽」——不是措辞保守，是那些格子当前的真实含义；已写进 P14-honesty-section。(2) 两件上板且**不许合并**（验收线一个是接线、一个是新数字）：E16-verdict-must-gate（两处判决接到头条字段 + 负样本）、E17-held-out-validation（ENGINE_TABLE 边界列先写实话，再给 zero_space/lp_potential 各补一次真留出验证）。依据：RES-3 自己提出的切法，与 A9/V16 同一条——把验收线切到能被复核的大小。",
+      "body": "对偶普查（RES-3 第四路，约 105 处判据点，判不安全 8 处）的最重一条：`grep -ril \"held_out|held-out\" engine-rig/engines engine-rig/tools` **零命中**，而 `zero_space.verify` 是在**拟合它的同一条轨迹上**复验的——按 GF(2) 的构造那近乎恒真，那句 AssertionError 几乎不可能触发。\n\n三条独立发现指向同一件事：DECISIONS 的 D-003 明写 zero_space 只承诺在观测证据上守恒（边界，不是缺陷）；E9 把 g50t 放在该边界的**已测**一侧，而那一侧从来没有东西检查过正确性；本轮发现整个 rig 没有留出验证。\n\n**同一路的正面结果同等重要，不许只报病例**：「求解器返回计划就认定可解」在本仓库**没有发生**——`fd_adapter` 三档全部无条件 validate_plan()，且 `validate.py` **刻意不 import `search`**：验证器不认识搜索器，这是结构保证而非承诺。这是「引擎提议、LLM 裁决」少有的硬证据。\n\n对偶的真实形状不是「没验」，是**「验了、写进产物、然后不拿它把关」**：`lp_potential/potential.py:255` 的 `\"admissible\": True` 是字面量，而真检查躺在同一份 payload 的 `admissibility_check` 里；`deadlock_carver.run()` 是 carve→report→emit 中间没有一个 if，于是一条定理和一份证伪它的报告并排发布，谁也不压过谁。",
+      "id": "F-18",
+      "severity": "high",
+      "title": "engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】"
+    },
+    {
       "action": "Theoria.md 1.8『概念是一次压缩动作』需要补一句：概念的压缩账目以『不解释该像素』为基准，而不解释是无限代价。这是基准文件的修订，不是代码的。",
       "body": "A0 的 O-04：Button 与 Door 的压缩账目是负的（−17 / −13 bit）。约束 5『无收益不入册』要求拒绝；约束 2『全帧责任制』要求接受（否则两个像素永远没人认领，廉价层在 frame 0 就失败）。\n\nA0 的处理是对的 —— 照收，并把负数如实写进 theory.dsl，不粉饰。但这是把矛盾**记录**下来，不是**解决**它。THEORIZE_LOG 的诊断我认为是准确的：压缩账目在比较错误的替代方案 —— 『把像素编辑编码进去』不是真正的替代，『永远不解释这个格子』才是，而后者在这套记账法里根本没有价格。",
       "id": "F-04",
@@ -524,29 +887,29 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 19:13:35",
+  "generated_at": "2026-07-29 08:17:52",
   "grid": {
     "A1": {
       "active": [
         "P-18"
       ],
-      "note": "裸 CC 全套 + 消融臂保全",
-      "pct": 80
+      "note": "裸 CC 全套 + 消融臂建成并带闸门",
+      "pct": 88
     },
     "A2": {
       "active": [
         "A2-crosscheck",
         "P-17"
       ],
-      "note": "五个自建世界 + 双 A0 互考",
-      "pct": 90
+      "note": "五个自建世界 + 双 A0 互考 + 消融对照",
+      "pct": 95
     },
     "A3": {
       "active": [
         "P-12"
       ],
-      "note": "开发堆在线：preflight PASS，第二关待复工",
-      "pct": 20
+      "note": "开发堆在线：preflight PASS，战役第二关推进",
+      "pct": 25
     },
     "A4": {
       "active": [],
@@ -562,13 +925,13 @@
       "active": [
         "C1-worldgen"
       ],
-      "note": "DSL v0.2 + 四形态 + refuse 语义",
-      "pct": 98
+      "note": "DSL v0.3 + 四形态 + refuse 语义 + 计数锁词汇",
+      "pct": 100
     },
     "C2": {
       "active": [],
-      "note": "五件离线验收 + 世界工厂 20 个新世界",
-      "pct": 95
+      "note": "五件离线验收 + 世界工厂 20 世界 + 变体生成",
+      "pct": 100
     },
     "C3": {
       "active": [],
@@ -584,8 +947,8 @@
       "active": [
         "P-19"
       ],
-      "note": "四形态 + Lean 随释出；复跑脚本在做",
-      "pct": 45
+      "note": "四形态 + Lean + 移交包随释出",
+      "pct": 60
     },
     "E1": {
       "active": [
@@ -598,7 +961,7 @@
       "active": [
         "P-13"
       ],
-      "note": "FD 三档已定价，死锁红利已量化",
+      "note": "FD 三档定价，死锁红利量化",
       "pct": 100
     },
     "E3": {
@@ -619,21 +982,21 @@
     "P1": {
       "active": [],
       "note": "方法论与骨架",
-      "pct": 80
+      "pct": 85
     },
     "P2": {
       "active": [
         "P-23"
       ],
-      "note": "PAPER.md v0.2，三个结果入文",
-      "pct": 80
+      "note": "PAPER.md 2512 行，引文核查 + 评审分诊",
+      "pct": 88
     },
     "P3": {
       "active": [
         "P3-case-study"
       ],
-      "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移）",
-      "pct": 45
+      "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移、消融对照）",
+      "pct": 55
     },
     "P4": {
       "active": [],
@@ -644,32 +1007,32 @@
       "active": [
         "P-19"
       ],
-      "note": "释出包在做",
-      "pct": 35
+      "note": "release/ + 复现脚本 + 许可条款",
+      "pct": 55
     },
     "S1": {
       "active": [],
-      "note": "双代理 + 护栏 + 账本 + 对账 + 变体层",
-      "pct": 95
+      "note": "双代理 + 护栏 + 账本 + 对账 + 变体层 + 契约变更协议",
+      "pct": 98
     },
     "S2": {
       "active": [
         "P-20"
       ],
-      "note": "预检 4/4 + 金丝雀每日体检常态化",
-      "pct": 92
+      "note": "预检 4/4 + 金丝雀日检 + 封存护栏两半齐",
+      "pct": 95
     },
     "S3": {
       "active": [],
-      "note": "共享花费闸门落地，五种绕法已封",
-      "pct": 75
+      "note": "花费闸门落地五种绕法已封；哈希链在盘",
+      "pct": 85
     },
     "S4": {
       "active": [
         "P-22"
       ],
-      "note": "冻结包起草中",
-      "pct": 35
+      "note": "冻结清单起草 + Phase 1 收口",
+      "pct": 55
     },
     "S5": {
       "active": [],
@@ -678,18 +1041,18 @@
     },
     "V1": {
       "active": [],
-      "note": "五族指标 + 预注册",
-      "pct": 98
+      "note": "五族指标 + 预注册 + 区分力首跑",
+      "pct": 100
     },
     "V2": {
       "active": [],
-      "note": "考卷四题型跑上 20 个世界",
-      "pct": 88
+      "note": "考卷四题型 × 20 世界 + 判卷自检",
+      "pct": 92
     },
     "V3": {
       "active": [],
-      "note": "区分力在做（被额度中断）",
-      "pct": 45
+      "note": "区分力已跑；抗游戏审计在跑",
+      "pct": 60
     },
     "V4": {
       "active": [],
@@ -700,8 +1063,8 @@
       "active": [
         "P-21"
       ],
-      "note": "图表流水线可复现，六张图数据就位",
-      "pct": 55
+      "note": "图表管线可复现，六图数据就位并入正文",
+      "pct": 70
     }
   },
   "grid_cols": [
@@ -1169,6 +1532,98 @@
         }
       },
       "ts": "2026-07-28 18:12:55"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 6,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 50.0,
+      "progress": 42.5,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3,
+          "risk": 1
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-29 04:36:41"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 7,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 50.0,
+      "progress": 42.5,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3,
+          "risk": 1
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-29 07:41:12"
     }
   ],
   "iteration_loop": [
@@ -1398,103 +1853,115 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/audit/DRIFT-20260728T0831Z-stop-hook-verify-gates-are-decoration.md",
+      "blation-arm/artifacts/a0-base/episode.jsonl",
+      "ablation-arm/artifacts/a0-base/run_report.json",
+      "ablation-arm/artifacts/a0-no-button/run_report.json",
+      "ablation-arm/artifacts/a2-base/episode.jsonl",
+      "ablation-arm/artifacts/a2-base/run_report.json",
+      "ablation-arm/artifacts/a2-charitable/episode.jsonl",
+      "ablation-arm/artifacts/a2-charitable/run_report.json",
+      "ablation-arm/artifacts/a2-holed/run_report.json",
+      "ablation-arm/artifacts/run_all.json",
+      "ablation-arm/artifacts/verify.json",
       "monitor/board.py",
-      "monitor/board/board.log",
-      "monitor/board/claimed/C7-dsl-v03-mentions.APP-C7.md",
-      "monitor/board/claimed/P7-paper-section7.APP-P7.md",
-      "monitor/board/items/P8-billshape-pipeline.md",
-      "monitor/board/items/S6-merge-gate-509.md",
-      "monitor/board/items/V4-exam-selftest.md",
+      "monitor/board/claimed/A3-campaign-devpile.W-1640.md",
+      "monitor/board/items/A3-campaign-level2.md",
+      "monitor/board/items/A6-transfer-protocol.md",
+      "monitor/board/items/E3-engines-online.md",
+      "monitor/board/items/P14-honesty-section.md",
+      "monitor/bus/RES-3/out.jsonl",
+      "monitor/ci/CONFLICT-origin_agent_r2-release-licence.md",
+      "monitor/ci/CONFLICT-origin_agent_v5-battery-freeze.md",
       "monitor/ci/merge.log",
+      "monitor/ci_merge.py",
       "monitor/index.html",
-      "monitor/loop_state.json",
-      "monitor/mailbox/ALL.md",
-      "monitor/mailbox/RES-1.md",
-      "monitor/mailbox/RES-2.md",
+      "monitor/ops-status/RES-3.json",
+      "monitor/reflex.lock",
       "monitor/reflex.log",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/audit/archive/DRIFT-20260728T0831Z-stop-hook-verify-gates-are-decoration.md",
-      "monitor/board/claimed/P8-billshape-pipeline.RES-2.md",
-      "monitor/board/claimed/V4-exam-selftest.RES-1.md",
-      "monitor/board/done/C7-dsl-v03-mentions.APP-C7.md",
-      "monitor/board/done/P7-paper-section7.APP-P7.md",
-      "monitor/board/done/S6-merge-gate-509.superseded-by-derived-gate.md",
-      "monitor/ops-status/RES-1.json",
-      "monitor/ops-status/RES-2.json"
+      "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "baseline-arms/out/shards/probe_log.g50t.jsonl",
+      "baseline-arms/out/shards/probe_log.sk48.jsonl",
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/inbox/20260729T000500Z-W-1641-board-issues-territories-the-merge-bot-rejects.md",
+      "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "c9b2efe Merge remote-tracking branch 'origin/agent/p7-paper-section7' into HEAD",
+    "git_head": "8bda56a Merge remote-tracking branch 'origin/agent/s17-fleet-evidence-capture' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 102,
-    "sync_last": "2026-07-28T11:40:00Z",
+    "sync_entries": 137,
+    "sync_last": "2026-07-29T00:40:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/audit/archive/DRIFT-20260728T0831Z-stop-hook-verify-gates-are-decoration.md",
-      "monitor/board/claimed/P8-billshape-pipeline.RES-2.md",
-      "monitor/board/claimed/V4-exam-selftest.RES-1.md",
-      "monitor/board/done/C7-dsl-v03-mentions.APP-C7.md",
-      "monitor/board/done/P7-paper-section7.APP-P7.md",
-      "monitor/board/done/S6-merge-gate-509.superseded-by-derived-gate.md",
-      "monitor/ops-status/RES-1.json",
-      "monitor/ops-status/RES-2.json"
+      "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "baseline-arms/out/shards/probe_log.g50t.jsonl",
+      "baseline-arms/out/shards/probe_log.sk48.jsonl",
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/inbox/20260729T000500Z-W-1641-board-issues-territories-the-merge-bot-rejects.md",
+      "theoria-arm/.pytest-runs/"
     ]
   },
   "p1_green": 9,
   "p1_total": 16,
   "paper_plan": [
     {
-      "evidence": "六引擎 + M9 + FD 三档实测定价；E4 用 500 个世界 × 23 条不变量轰炸，零违规",
+      "evidence": "六引擎 + M9 + FD 三档定价 + 500 世界 23 不变量零违规；世界工厂 20 世界；契约 v0.3；A0/A0′/A1/A2/A3 五件离线验收全绿",
       "id": "WP1",
       "name": "框架本体与离线验收",
-      "pct": 98,
+      "pct": 100,
       "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
       "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
       "weight": 0.15
     },
     {
-      "evidence": "花费闸门落地（对抗测试先破了五种绕法）；金丝雀每日体检；预检 4/4",
+      "evidence": "双代理 + 花费闸门（对抗测试先破五种绕法）+ 金丝雀日检 + 预检 4/4 + 熔断器自动出闩；留痕正典化",
       "id": "WP2",
       "name": "封闭系统与外壳可信度",
-      "pct": 92,
+      "pct": 95,
       "scale": "Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检",
       "slot": "§2 方法可信度（密封/复放/对账）",
       "weight": 0.08
     },
     {
-      "evidence": "臂在线链路通、preflight 零计费；第二关与迁移协议在做（额度停机中断）",
+      "evidence": "臂在线链路通、preflight 零计费；战役第二关在跑（RES-1 常驻推进）",
       "id": "WP3",
       "name": "Theoria 臂在线迭代战役（开发堆）",
-      "pct": 25,
+      "pct": 30,
       "scale": "对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）",
       "slot": "§5 实验主体 · 图2 账单形状（Theoria 列）",
       "weight": 0.2
     },
     {
-      "evidence": "裸 CC 包络 + 上游 165 文件；消融臂已保全并记录真实状态",
+      "evidence": "裸 CC 包络 + 上游 165 文件 + 消融臂建成并有闸门（a0 可解 / a2 不可解判决正确）",
       "id": "WP4",
       "name": "对照臂数据（CC 包络 + Schema 路A + 消融臂）",
-      "pct": 45,
+      "pct": 55,
       "scale": "CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务",
       "slot": "表1 主表另两列 · §6 消融",
       "weight": 0.08
     },
     {
-      "evidence": "考卷跑上世界工厂（20 世界）；battery 区分力在做；三类题型说明了自身边界",
+      "evidence": "考卷四题型跑上 20 世界 + 判卷自检 + 电池区分力首跑；抗游戏审计在跑",
       "id": "WP5",
       "name": "评测两器：电池冻结 + 考卷构造器",
-      "pct": 82,
+      "pct": 90,
       "scale": "电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环",
       "slot": "§4 评测协议 · 图3 能力谱与考卷",
       "weight": 0.1
@@ -1518,34 +1985,34 @@
       "weight": 0.06
     },
     {
-      "evidence": "冻结包起草中（S4）；Phase 1 收口在做（S5）",
+      "evidence": "冻结包起草 + Phase 1 收口交付；统计规则草案在盘",
       "id": "WP8",
       "name": "预注册与统计裁决（冻结清单 13 项）",
-      "pct": 40,
+      "pct": 55,
       "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
       "slot": "§5 统计口径 · 双结局文本",
       "weight": 0.05
     },
     {
-      "evidence": "PAPER.md v0.2 三个结果入文；图表流水线可复现出图；电池一节待更新",
+      "evidence": "PAPER.md 2512 行成稿，含引文核查、评审分诊、待办清单；五视角评审在跑",
       "id": "WP9",
       "name": "论文写作（workshop 文 → 主文）",
-      "pct": 55,
+      "pct": 70,
       "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
       "slot": "全文（3.2 的八节骨架）",
       "weight": 0.05
     },
     {
-      "evidence": "释出包在做（P5）；runs/ 留痕正典化；图与数据双向可追",
+      "evidence": "release/ 落地 + 复现脚本 + 许可条款；账本哈希链在盘",
       "id": "WP10",
       "name": "释出包（Schema 地板对齐）",
-      "pct": 45,
+      "pct": 60,
       "scale": "对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明",
       "slot": "§8 开放性声明",
       "weight": 0.03
     }
   ],
-  "paper_progress": 45.0,
+  "paper_progress": 50.0,
   "phases": [
     {
       "_counts": {
@@ -1638,7 +2105,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3186 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -1902,6 +2369,10 @@
       "detail": "4 个追加式文件无新增删除（1 行历史删除已裁决豁免：同窗口自我订正）。",
       "status": "green"
     },
+    "bus": {
+      "detail": "已送达，欠回执：RES-4(1)",
+      "status": "partial"
+    },
     "conflict_scan": {
       "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
       "status": "green"
@@ -1915,76 +2386,123 @@
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "本轮无在册工单。",
+      "detail": "派单已由工作板取代（见 supply 探针），本探针不再适用。",
+      "retired": true,
       "rows": [],
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 18 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md, 20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 43 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T175900Z-V16-determinism-definition-gap.md, 20260728T180000Z-W-131-the-segmenter-prefers-teleporting-identity-to-moving-a-body.md, 20260728T183000Z-W-131-board-empty-for-a-generic-worker-with-28-items-on-it.md, 20260728T191500Z-W-250-app-v3-was-alive-a-liveness-verdict-refuted-five-minutes-later.md, 20260728T192000Z-W-252-freeze-list-cannot-cover-two-of-three-primary-endpoints.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md, 20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md, 20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md, 20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260728T213500Z-W-1630-fleet-study-cannot-merge.md, 20260729T000500Z-W-1641-board-issues-territories-the-merge-bot-rejects.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T024500Z-W-130-deadlock-claim-wording-for-1.9.md, 20260729T041500Z-W-130-e6-engine-dividend-done.md",
+      "status": "partial"
+    },
+    "needs_human": {
+      "detail": "需要你重开的会话：OPS-M 合并裁判（429 分钟没心跳）； RES-1 在线战役研究员（519 分钟没心跳）； RES-2 论文与释出研究员（516 分钟没心跳）； RES-4 基础设施研究员（488 分钟没心跳）",
+      "rows": [
+        {
+          "id": "OPS-M",
+          "name": "合并裁判",
+          "prompt": "monitor/prompts/ops/OPS-M.md",
+          "why": "429 分钟没心跳"
+        },
+        {
+          "id": "RES-1",
+          "name": "在线战役研究员",
+          "prompt": "monitor/prompts/ops/RES-1.md",
+          "why": "519 分钟没心跳"
+        },
+        {
+          "id": "RES-2",
+          "name": "论文与释出研究员",
+          "prompt": "monitor/prompts/ops/RES-2.md",
+          "why": "516 分钟没心跳"
+        },
+        {
+          "id": "RES-4",
+          "name": "基础设施研究员",
+          "prompt": "monitor/prompts/ops/RES-4.md",
+          "why": "488 分钟没心跳"
+        }
+      ],
+      "status": "risk"
+    },
+    "offline_done": {
+      "detail": "离线还差 1 格：V2 考卷(92%)。战役线已获授权可先行，不必等齐。",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**15 条 TO-MONITOR 待监控回复**。 OPS-A 第5轮 idle（28 分钟前）； OPS-B 第3轮 idle（45 分钟前）； OPS-M 第3轮 working（39 分钟前）； OPS-R 第1轮 idle（280 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第25轮 idle（24 分钟前）； OPS-B 第10轮 idle（209 分钟前）； OPS-M 第8轮 blocked（429 分钟前）； OPS-R 第2轮 working（519 分钟前）",
       "rows": [
         {
-          "age_min": 28,
-          "cycle": 5,
+          "age_min": 24,
+          "cycle": 25,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
+          "note": "cycle 25: no report. Queue steady at 13 -- nine real conflicts now boarded as S24, two genuine test reds, s11, one verify.py. Caught myself nearly filing a false future-timestamp: that one was my own local-time formatting, unlike the six real ones last cycle. Red lines clean.",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 45,
-          "cycle": 3,
+          "age_min": 209,
+          "cycle": 10,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "邮箱无新 OPEN；两份提案待裁决；本轮把 ACCESS_CHECK 第 8 项记为未了结的那封信写成可发草稿（未发送），建议下轮起做条款定期漂移核查",
+          "note": "空转一轮，本职无活：总线空、邮箱无 OPEN、条款巡检按天未到期（上次 19:44Z NO-DRIFT）。两件挂人手的事没动（发信、.env key 归属账户）。观察一条不另开消息：未合并分支已从 14 涨到 23，S11 仍在其中（20:44Z 仍原样重报），封存护栏第 5 小时不在主线上",
           "state": "idle",
-          "status": "green"
+          "status": "risk"
         },
         {
-          "age_min": 39,
-          "cycle": 3,
+          "age_min": 429,
+          "cycle": 8,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "用户派活：ci_merge 门已改成从树上读（有 test_*.py 才跑），退出码5单独成flag，merge.log 记录跑了哪些门；另修 fuzzlab/pytest.ini。已推 86958a9。附带报告一次提交扫走我半成品导致 master 两分钟零门",
-          "state": "working",
-          "status": "green"
+          "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z",
+          "state": "blocked",
+          "status": "risk"
         },
         {
-          "age_min": 280,
-          "cycle": 1,
+          "age_min": 519,
+          "cycle": 2,
           "id": "OPS-R",
           "name": "回顾员",
-          "note": "cycle 1 done: 1 OPEN acked (4 self-reports verified true), 2 proposals in inbox after adversarial review, 3 live faults raised to TO-MONITOR (reflex task Disabled / pid_alive(0)==True / quota missed a real session-limit death). Sleeping 43200s.",
-          "state": "idle",
+          "note": "booted",
+          "state": "working",
           "status": "green"
         }
       ],
-      "status": "green",
-      "to_monitor": 15
+      "status": "risk",
+      "to_monitor": 2
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 3186 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； arc-recon：2 个 run（正典 2），最新 P-11； proxy：2 个 run（正典 2），最新 p9-shell-harden； battery：2 个 run（正典 2），最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, baseline-arms。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：3 个 run（正典 2，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：3 个 run（正典 3），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：6 个 run（正典 5，非正典 1(md)），最新 p13-fd-real； exam：5 个 run（正典 5），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fleet-study：3 个 run（正典 3），最新 20260728T233850Z-S17； fuzzlab：3 个 run（正典 3），最新 20260728T161127Z-V13-audit-the-published-surface； proxy：3 个 run（正典 3），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：12 个 run（正典 5，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：4 个 run（正典 4），最新 20260729T180000Z-V17-pin-the-partial-verdict； worldgen：3 个 run（正典 3），最新 20260728T172500Z-V16-determinism-has-no-caller。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
       "detail": "TheoriaReflex 运行中（reap / quota / 自动合并）； TheoriaDashboard 运行中（每 10 分钟重算 state.json）； TheoriaServe **未注册**（本地服务 :8787（前端拉数据））　→ 自动化有缺口：TheoriaServe",
       "status": "risk"
     },
+    "self_driving": {
+      "detail": "RES-1 第2轮 working（519 分钟前）**疑似停下等人**； RES-2 第4轮 working（516 分钟前）**疑似停下等人**； RES-3 第36轮 working（19 分钟前）； RES-4 第6轮 working（488 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
+      "status": "risk"
+    },
     "spec_freshness": {
-      "detail": "spec.py 落后 10 个提交 / 2 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 21 个提交 / 1 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "status": "partial"
+    },
+    "spend": {
+      "detail": "开发堆战役包 $200，已花 **$31.75**，剩 $168.25（6863 条记账）；分战役：arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36、phase3-unit-price-remeasure $19.83",
+      "status": "green"
+    },
+    "supply": {
+      "detail": "板上 24 件可领、5 件在做，供货充足。",
       "status": "green"
     },
     "verify_gates": {
-      "detail": "**声称存在却没有的收工闸门 1 处**：ablation-arm/verify.sh（A4a-ablation-build 声称）。闸门不是被绕过，是根本没造出来。",
-      "status": "risk"
+      "detail": "工单声称的 3 个 verify 脚本全部在树上；但**4 个领地合并时无人检查**：CONTRACTS、browser-ops、papers、release。领地 23：自带闸门 9、仅测试套件 10、**无闸门 4**。这不是有人食言——是从来没人要求过，ci_merge 现在每次把它打进 merge.log。",
+      "status": "amber"
     }
   },
   "progress": {

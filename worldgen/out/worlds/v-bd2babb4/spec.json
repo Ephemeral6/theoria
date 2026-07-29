@@ -1,0 +1,102 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "cycler": 5,
+    "cycler_1": 7,
+    "cycler_2": 8,
+    "lock": 4,
+    "portal": 2,
+    "token": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        1,
+        8
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "kind": "cycler",
+      "props": {
+        "k": 3,
+        "open_phase": 2
+      }
+    },
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        5,
+        4
+      ],
+      "kind": "lock",
+      "props": {
+        "k": 2
+      }
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    }
+  ],
+  "families": [
+    "color_cycle",
+    "count_lock",
+    "portal"
+  ],
+  "flags": {},
+  "goal": [
+    6,
+    8
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "##########",
+    "#....#...#",
+    "#.##.#.#.#",
+    "#....#.#.#",
+    "#.##.#.#.#",
+    "#....#...#",
+    "#........#",
+    "##########"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 3,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-bd2babb4"
+}

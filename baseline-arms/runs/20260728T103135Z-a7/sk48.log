@@ -1,0 +1,218 @@
+
+=== shared spend pool (before sk48-d8078629) ===
+  spent $3.3620 / $214.90   166 / 24000 actions   (0 live reservation(s))
+    arc-recon-canary-quick             $  0.0000       0 actions
+    phase3-variance-envelope           $  3.3420      99 actions
+    phase3-variance-envelope-quota-probe $  0.0201       0 actions
+    phase3-variance-envelope-smoke     $  0.0000       3 actions
+    theoria:r-1d7be54ff37f4e17         $  0.0000       7 actions
+    theoria:r-395ddce163d04d83         $  0.0000       7 actions
+    theoria:r-4307c9242d3c417c         $  0.0000       9 actions
+    theoria:r-6a8d7f6e02fc44fb         $  0.0000       9 actions
+    theoria:r-98a5453a69634dac         $  0.0000       7 actions
+    theoria:r-c81d26e0ebe74ca8         $  0.0000       7 actions
+    theoria:r-e01eedd33c9f4daf         $  0.0000       9 actions
+    theoria:r-ed85ff1e396a4ef0         $  0.0000       9 actions
+=== sk48-d8078629 x claude-haiku-4-5-20251001 x 3 repeats (budget 30) ===
+  [rep 2] claude-haiku-4-5-20251001 -> budget_exhausted (28 ok / 2 failed, longest fail run 1, $1.3441, 1396s)
+  [rep 1] claude-haiku-4-5-20251001 -> budget_exhausted (26 ok / 4 failed, longest fail run 2, $1.3138, 1412s)
+  [rep 3] claude-haiku-4-5-20251001 -> budget_exhausted (27 ok / 3 failed, longest fail run 2, $1.3897, 1513s)
+
+=== budget gate: GREEN ===
+  cells 9 | $9.9171 | ok 215 / failed 39 | http 677 | elapsed 0.8 h | compute 3.0 h
+  $/action 0.0461 | http/action 3.15 | success 0.846
+  tier claude-haiku-4-5-20251001    $9.9171 / cap $20.00
+  BARRIER BAR-001 (2026-07-28T00:00:00Z): G4 judges the 6 cell(s) after bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8
+
+=== shared spend pool (after sk48-d8078629) ===
+  spent $7.4096 / $214.90   353 / 24000 actions   (0 live reservation(s))
+    arc-recon-canary-quick             $  0.0000       0 actions
+    phase3-variance-envelope           $  7.3895     270 actions
+    phase3-variance-envelope-quota-probe $  0.0201       0 actions
+    phase3-variance-envelope-smoke     $  0.0000       3 actions
+    theoria:r-1d7be54ff37f4e17         $  0.0000       7 actions
+    theoria:r-395ddce163d04d83         $  0.0000       7 actions
+    theoria:r-40ef6ffc39d84c57         $  0.0000       9 actions
+    theoria:r-4307c9242d3c417c         $  0.0000       9 actions
+    theoria:r-6a8d7f6e02fc44fb         $  0.0000       9 actions
+    theoria:r-98a5453a69634dac         $  0.0000       7 actions
+    theoria:r-99fbca5b0d054fe3         $  0.0000       7 actions
+    theoria:r-c81d26e0ebe74ca8         $  0.0000       7 actions
+    theoria:r-e01eedd33c9f4daf         $  0.0000       9 actions
+    theoria:r-ed85ff1e396a4ef0         $  0.0000       9 actions
+[
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 4,
+    "actions_failed_consecutive_max": 2,
+    "actions_ok": 26,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 321114,
+    "cache_read_tokens": 732150,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "619bb817-8022-4afe-a359-1b43c88127f2",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.3137889999999997,
+    "ended": "2026-07-28T13:11:11Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 2.5,
+    "http_calls_gameplay": 65,
+    "input_tokens": 300,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 30,
+    "outcome": "budget_exhausted",
+    "output_tokens": 102494,
+    "repeat": 1,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 68,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 30,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-f6d8f67ea20b48e9",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.313789
+    },
+    "started": "2026-07-28T12:47:41Z",
+    "wall_seconds": 1411.7,
+    "win_levels": 8
+  },
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 2,
+    "actions_failed_consecutive_max": 1,
+    "actions_ok": 28,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 318629,
+    "cache_read_tokens": 732150,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "d594ffdc-075b-4204-9d9f-3b426fbde404",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.3440570000000003,
+    "ended": "2026-07-28T13:10:55Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 1.61,
+    "http_calls_gameplay": 45,
+    "input_tokens": 300,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 30,
+    "outcome": "budget_exhausted",
+    "output_tokens": 110035,
+    "repeat": 2,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 48,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 30,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-4bf62d3533604b48",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.344057
+    },
+    "started": "2026-07-28T12:47:41Z",
+    "wall_seconds": 1395.7,
+    "win_levels": 8
+  },
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 3,
+    "actions_failed_consecutive_max": 2,
+    "actions_ok": 27,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 321648,
+    "cache_read_tokens": 732150,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "c90d0a69-9d91-4597-9a68-78ae4b80126f",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.389694,
+    "ended": "2026-07-28T13:12:53Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 1.93,
+    "http_calls_gameplay": 52,
+    "input_tokens": 300,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 30,
+    "outcome": "budget_exhausted",
+    "output_tokens": 117328,
+    "repeat": 3,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 55,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 30,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-f05fe384ded14e11",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.389694
+    },
+    "started": "2026-07-28T12:47:41Z",
+    "wall_seconds": 1513.0,
+    "win_levels": 8
+  }
+]

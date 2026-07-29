@@ -1,0 +1,52 @@
+-- arm old  (O1, O2, O3)
+  有负控, all 22                        n=22   po=0.848  kappa=0.764  unanimous 17/22  {'是': 30, '部分': 20, '否': 16}
+  有负控, 部分 stratum                    n=14   po=0.810  kappa=0.689  unanimous 10/14  {'是': 18, '部分': 18, '否': 6}
+  能红 (PLACEBO)                       n=22   po=1.000  kappa=1.000  unanimous 22/22  {'是': 42, '部分': 24, '否': 0}
+-- arm new  (N1, N2, N3)
+  有负控, all 22                        n=22   po=0.939  kappa=0.882  unanimous 20/22  {'是': 12, '部分': 11, '否': 43}
+  有负控, 部分 stratum                    n=14   po=0.905  kappa=0.770  unanimous 12/14  {'是': 3, '部分': 8, '否': 31}
+  能红 (PLACEBO)                       n=22   po=0.939  kappa=0.872  unanimous 20/22  {'是': 43, '部分': 21, '否': 2}
+-- kappa(new) - kappa(old), 20k item bootstrap
+   has_negctl_all                   +0.118  95% CI [-0.109, +0.330]  P(delta<=0)=0.141
+   has_negctl_partial_stratum       +0.078  95% CI [-0.533, +0.415]  P(delta<=0)=0.348
+   can_red_PLACEBO                  -0.124  95% CI [-0.306, +0.000]  P(delta<=0)=1.000
+-- majority verdict reproduces V15's published cell
+   old   all 22: 13/22 (59%)    部分 stratum:  6/14 (43%)
+   new   all 22:  9/22 (41%)    部分 stratum:  2/14 (14%)
+-- re-judgement of the 14 rows V15 graded 部分
+   changed 12 (86%), split panels 2
+   ablation-arm/exhibits/e2_a2.py                             部分 -> 否    否/否/否
+   baseline-arms/harness/summarise_envelope.py                部分 -> 否    否/否/否
+   cold-start-a2/a2pipeline/certify_a2.py                     部分 -> 部分   部分/部分/部分
+   cold-start-a2/a2pipeline/exhibit.py                        部分 -> 否    否/否/部分  SPLIT
+   cold-start-a2/a2pipeline/repair.py                         部分 -> 部分   部分/部分/部分
+   cold-start-a3/a3pipeline/certify_a3.py                     部分 -> 否    否/否/否
+   cold-start-a3/a3pipeline/run_l1.py                         部分 -> 否    否/否/否
+   engine-rig/recheck/verify_all.py                           部分 -> 否    否/否/部分  SPLIT
+   exam/papers/handover.py                                    部分 -> 否    否/否/否
+   monitor/gates.py                                           部分 -> 否    否/否/否
+   monitor/reflex.py                                          部分 -> 否    否/否/否
+   monitor/scan.py                                            部分 -> 否    否/否/否
+   theory-compiler/src/theory_compiler/strips_encoding.py     部分 -> 是    是/是/是
+   worldgen/generate.py                                       部分 -> 否    否/否/否
+-- reason codes, new arm: {"D2": 20, "C": 11, "D3": 7, "D1": 9, "—": 12, "D0": 7}
+   reason-code agreement po=0.773  unanimous 15/22
+      SPLIT ablation-arm/exhibits/e2_a2.py                       D2/D2/D3
+      SPLIT cold-start-a2/a2pipeline/exhibit.py                  D3/D3/C
+      SPLIT engine-rig/recheck/verify_all.py                     D2/D2/C
+      SPLIT monitor/ci_merge.py                                  D1/D0/D1
+      SPLIT monitor/reflex.py                                    D1/D0/D1
+      SPLIT monitor/scan.py                                      D3/D0/D2
+      SPLIT papers/phase1-workshop/figures/fig2_coverage_accuracy.py D1/D0/D1
+-- joint label (verdict + reason) vs the undefined question
+   all              old_verdict_only           n=22  po=0.848  kappa=0.764  unanimous 17
+   all              new_verdict_only           n=22  po=0.939  kappa=0.882  unanimous 20
+   all              new_verdict_plus_reason    n=22  po=0.773  kappa=0.718  unanimous 15
+   partial_stratum  old_verdict_only           n=14  po=0.810  kappa=0.689  unanimous 10
+   partial_stratum  new_verdict_only           n=14  po=0.905  kappa=0.770  unanimous 12
+   partial_stratum  new_verdict_plus_reason    n=14  po=0.738  kappa=0.669  unanimous 9
+-- each arm's majority against the preregistered dry read
+   all              old  9/22    new 21/22 
+   partial_stratum  old  3/14    new 13/14 
+-- 判据不决 (criterion could not decide), new arm
+   rows flagged by at least one judge: 5/22  cold-start-a2/a2pipeline/certify_a2.py, cold-start-a2/a2pipeline/exhibit.py, cold-start-a2/a2pipeline/repair.py, cold-start-a3/a3pipeline/certify_a3.py, engine-rig/recheck/verify_all.py

@@ -28,17 +28,21 @@ reap / quota check / 三振限内复活 / ci_merge 合并即交付 / 页面轻�
 4. needs_human / CONFLICT → 该转用户的转用户
 5. **前端判定**：master 变了 / 关键事件 / 3h 硬底 → 全量更新
    （spec + scan + push + 发给用户）；否则不动（轻刷反射层已做）
-6. 更新 loop_state 与本文件；commit + push；`ScheduleWakeup`
+6. 更新 loop_state 与本文件；**提交只写显式路径，永不 `git add -A`**
+   （2026-07-28 事故：一次 `add -A` 把 OPS-M 正在编辑的 ci_merge.py 半成品
+   扫上了 master）；push；`ScheduleWakeup`
    （正常 1800s；hold 3600s）
 
-## 当前态势快照（2026-07-28T09:35Z 心跳外手动更新）
+## 当前态势快照（2026-07-28T11:45Z）
 
-- 在飞 13：P-8/9/12/13/15/17（用户开的 app 会话）、P-18/19/20、R-1、B-1、
-  M-0、A-1（后七个是 dispatch 的，pid 在 dispatch-logs/registry.json）
-- 已交付 4：P-10、P-11、P-14、P-16（分支在 origin，待 M-0 合并）
-- 配额：normal；论文完成度 26.8%；下一个已排 wakeup：见会话调度
-- 悬而未决：B-1 第三次发射存活中（前两次无声早夭）；M-0 首跑结果未收
-- 特别注意：工单原文在 monitor/prompts/（含 A-1 的契约 AUDITOR.md）
+- **舰队**：8 个无头板工人（W-*，一次性、做完接着领）+ 2 个常驻研究员（RES-1/RES-2，
+  各守一条 lane）+ 4 个运维（OPS-A/B/M/R，App 常驻）+ 用户 App 里的研究会话。
+- **工作板**：`monitor/board/`——工人自助领活（原子改名领取、领地互斥、deps 门、
+  lane 归属）。监控只管**出活**与**控人数**，不逐件派单。
+- **自动件**：`TheoriaReflex`（5 分钟，reap/quota/复活/ci_merge/刷页面，**已启用**）、
+  `TheoriaDashboard`（10 分钟跑 scan.py）、`TheoriaServe`（本地 :8787 服务前端）。
+- **前端**：`monitor/app.html` 每 20 秒拉 `state.json`；后端改判断即自动生效。
+- **论文完成度** 39%；封存堆零接触；配额窗口开。
 
 ## 转世纪律（用户 2026-07-28 指令）
 

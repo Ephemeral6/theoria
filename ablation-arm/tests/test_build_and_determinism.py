@@ -94,18 +94,30 @@ def test_two_runs_produce_the_same_run():
     assert result["deterministic"], result["differences"]
     assert result["n_files"] > 30
     # The exemptions are named, not silent.
-    assert result["exempt_field"] == "ts"
+    assert result["exempt_field"] == ["ts", "prev"]
     assert result["ledgers_compared_modulo_ts"]
     assert "__pycache__" in result["not_compared_because"]
+    # `prev` is excused from the comparison only because it is checked
+    # elsewhere. If that check ever stops running, this exemption becomes the
+    # unexamined kind and the suite has to say so.
+    assert result["ledger_chains"], (
+        "no ledger chain was verified, so exempting `prev` from the "
+        "cross-run comparison is currently unpaid for")
+    assert set(result["ledger_chains"].values()) == {"PASS"}, \
+        result["ledger_chains"]
 
 
 @pytest.mark.slow
 def test_the_ledger_differs_only_in_its_wall_clock():
-    """The one exemption, checked rather than assumed.
+    """The clock exemption, checked rather than assumed.
 
     `proxy.ledger` stamps every record with `ts`, which is right in a record of
     an event. What would not be right is any *other* field drifting under cover
     of that exemption.
+
+    `prev` rides along with `ts` -- proxy's S15 chain hashes the previous line's
+    bytes, and those bytes carry the stamp -- so it is excused here and paid for
+    by the chain walk at the end of this test.
     """
     import json
 
@@ -126,6 +138,10 @@ def test_the_ledger_differs_only_in_its_wall_clock():
               if l.strip()]
     assert all(stamps), "every record must carry a stamp, or `ts` is not the "\
                         "field that differs"
+    # The other half of the exemption: excused from the diff, not from being
+    # an intact chain in each copy.
+    for path in paths:
+        assert run_arm._chain_verdict(path) == "PASS", path
 
 
 def test_a_subset_run_declines_to_overwrite_the_full_record():

@@ -123,7 +123,8 @@ def probe(driver: Optional[str], repo_root: str) -> Dict[str, object]:
     try:
         completed = subprocess.run(
             [sys.executable, driver, "--version"],
-            capture_output=True, text=True, timeout=120,
+            capture_output=True, text=True, encoding="utf-8",
+            errors="replace", timeout=120,
         )
         text = (completed.stdout or "") + (completed.stderr or "")
         version = _VERSION.search(text)

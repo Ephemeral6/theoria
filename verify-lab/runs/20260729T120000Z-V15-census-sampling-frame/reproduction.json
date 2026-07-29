@@ -1,0 +1,60 @@
+{
+  "harsh": {
+    "cells_agreeing": [
+      "FN",
+      "FP",
+      "TP"
+    ],
+    "cells_differing": {
+      "TN": {
+        "v14": 39,
+        "v15": 37
+      },
+      "n": {
+        "v14": 97,
+        "v15": 95
+      }
+    },
+    "rows_v15_drops": [
+      [
+        "theoria-arm/armtools/salvage.py",
+        "theoria-arm/armtools/timeline.py",
+        "gold 否, both measured absent -- these are the 2 missing TN"
+      ],
+      [
+        "proxy/canon.py",
+        "proxy/ledger.py",
+        "gold 是(实测), both measured present"
+      ]
+    ]
+  },
+  "strict": {
+    "cells_agreeing": [
+      "FN",
+      "FP",
+      "TP"
+    ],
+    "cells_differing": {
+      "TN": {
+        "v14": 31,
+        "v15": 29
+      },
+      "n": {
+        "v14": 97,
+        "v15": 95
+      }
+    },
+    "rows_v15_drops": [
+      [
+        "theoria-arm/armtools/salvage.py",
+        "theoria-arm/armtools/timeline.py",
+        "gold 否, both measured absent -- these are the 2 missing TN"
+      ],
+      [
+        "proxy/canon.py",
+        "proxy/ledger.py",
+        "gold 是(实测), both measured present"
+      ]
+    ]
+  }
+}

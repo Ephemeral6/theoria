@@ -6,6 +6,20 @@ step that is not an engine is `theorize`, which is the LLM's -- its output is
 
 Nothing here may import the world's rule table. The pipeline sees frames and
 actions; `world/sokoban2.py` is ground truth and is used only to grade the run.
+
+**A crash is not a finding (E14).** `mine()` used to wrap synthesis in a bare
+`except Exception:` and read *any* exception as "this class admits no single
+conjunctive guard", falling through to `learn_dnf` and publishing the resulting
+disjunction as the mined rule set -- the pipeline's headline output. The miner
+does have a designed signal for exactly that conclusion, `NoSeparatingGuard`,
+so the bare catch bought nothing and cost everything: a recursion error, an
+import mismatch or a genuine bug in `synthesize` produced a rule set
+byte-indistinguishable from "the world's rule structure really is disjunctive".
+A reader of `a0_report.json` could not tell "could not be mined" from "crashed
+while mining". Now `NoSeparatingGuard` alone is the finding; every other
+exception is counted into `MiningAccount`, each rule it produced is stamped
+`unsound_after_crash`, and `mine_account.all_guards_searched` -- which the green
+light reads -- goes false.
 """
 
 import os
@@ -20,7 +34,8 @@ sys.path.insert(0, os.path.join(REPO, "engine-rig"))
 
 from engines import mdl_segmenter                                    # noqa: E402
 from engines.cegis_miner.atoms import atom_order_key                  # noqa: E402
-from engines.cegis_miner.miner import enumerate_frontier, synthesize  # noqa: E402
+from engines.cegis_miner.miner import (                              # noqa: E402
+    NoSeparatingGuard, enumerate_frontier, synthesize)
 from pipeline.dnf import learn_dnf, mutually_exclusive                # noqa: E402
 from engines.zero_space import gf2                                   # noqa: E402
 from world.sokoban2 import DELTA, DIRECTIONS, Level                  # noqa: E402
@@ -178,6 +193,10 @@ def percepts_from(frames: Sequence[Sequence[Sequence[int]]]) -> List[Percept]:
 
 # ----------------------------------------------------------- stage 2: mine
 
+#: Verbatim crash messages kept in the artifact. The count is never capped.
+CRASH_SAMPLE_CAP = 8
+
+
 @dataclass
 class MinedRule:
     name: str
@@ -186,10 +205,19 @@ class MinedRule:
     guard: List[A0Atom]
     frontier: List[List[A0Atom]]
     support: List[int]
+    #: How this rule came to be one disjunct of several, or `None` if synthesis
+    #: found a single conjunction. `"no_separating_guard"` is the miner's
+    #: designed verdict and is a real finding about the world.
+    #: `"synthesis_crashed"` is not a finding at all.
+    disjunctive_because: Optional[str] = None
 
     @property
     def coverage(self) -> str:
         return "%d/%d" % (len(self.support), len(self.support))
+
+    @property
+    def unsound_after_crash(self) -> bool:
+        return self.disjunctive_because == "synthesis_crashed"
 
     def as_json(self) -> Dict[str, Any]:
         return {
@@ -200,6 +228,73 @@ class MinedRule:
             "frontier": [sorted(a.name for a in g) for g in self.frontier],
             "support": self.support,
             "coverage": self.coverage,
+            # E14: a disjunctive rule set is a substantive claim about the
+            # world, so it travels with the reason it is disjunctive.
+            "disjunctive_because": self.disjunctive_because,
+            "unsound_after_crash": self.unsound_after_crash,
+        }
+
+
+class MiningAccount:
+    """What the miner actually did, separated from what it concluded.
+
+    Three columns that used to be one: classes where synthesis found a single
+    conjunction, classes where the miner *decided* none exists
+    (`NoSeparatingGuard` -- a finding), and classes where it crashed (not a
+    finding). `all_guards_searched` is the field the green light reads, and it
+    is false whenever the third column is non-empty.
+    """
+
+    def __init__(self) -> None:
+        self.classes = 0
+        self.conjunctive = 0
+        self.no_separating_guard: List[Dict[str, Any]] = []
+        self.crashes: List[Dict[str, Any]] = []
+        self.by_type: Dict[str, int] = {}
+
+    def record_crash(self, exc: BaseException, *, action: str,
+                     effect: Any, n_positives: int) -> None:
+        kind = type(exc).__name__
+        self.by_type[kind] = self.by_type.get(kind, 0) + 1
+        if len(self.crashes) < CRASH_SAMPLE_CAP:
+            self.crashes.append({
+                "type": kind,
+                "message": str(exc)[:400],
+                "action": action,
+                "effect": str(effect),
+                "transitions_in_class": n_positives,
+            })
+        else:                                # keep the count, drop the detail
+            self.crashes.append({"type": kind, "action": action,
+                                 "truncated": True})
+
+    @property
+    def synthesis_crashes(self) -> int:
+        return len(self.crashes)
+
+    @property
+    def all_guards_searched(self) -> bool:
+        return not self.crashes
+
+    def as_json(self) -> Dict[str, Any]:
+        return {
+            "effect_classes": self.classes,
+            "classes_with_single_conjunction": self.conjunctive,
+            "classes_no_separating_guard": len(self.no_separating_guard),
+            "no_separating_guard": self.no_separating_guard,
+            "synthesis_crashes": len(self.crashes),
+            "crashes_by_type": dict(sorted(self.by_type.items())),
+            "crashes": self.crashes[:CRASH_SAMPLE_CAP],
+            "crash_sample_cap": CRASH_SAMPLE_CAP,
+            # The gated field. It sits next to the count on purpose.
+            "all_guards_searched": self.all_guards_searched,
+            "disjunction_is_a_finding": self.all_guards_searched,
+            "note": ("`NoSeparatingGuard` is the miner's designed verdict that "
+                     "an effect class admits no single conjunctive guard, and a "
+                     "disjunction learned after it is a claim about the world. "
+                     "Any other exception is a crash: the disjunction learned "
+                     "after it says nothing about the world, and every rule it "
+                     "produced carries `unsound_after_crash: true`."),
         }
 
 
@@ -222,6 +317,17 @@ def transitions_from_episodes(episodes: Sequence[Dict[str, Any]]
 
 
 def mine(transitions: Sequence[Tuple[Percept, str, Percept]]) -> List[MinedRule]:
+    """CEGIS over this world's vocabulary, using the engine's synthesis core.
+
+    Kept for callers that only want the rules. Anything that *publishes* the
+    rule set must use `mine_with_account`, because the rules alone cannot say
+    whether the miner ran or fell over.
+    """
+    return mine_with_account(transitions)[0]
+
+
+def mine_with_account(transitions: Sequence[Tuple[Percept, str, Percept]]
+                      ) -> Tuple[List[MinedRule], MiningAccount]:
     """CEGIS over this world's vocabulary, using the engine's synthesis core."""
     atoms = vocabulary()
     n = len(transitions)
@@ -239,7 +345,9 @@ def mine(transitions: Sequence[Tuple[Percept, str, Percept]]) -> List[MinedRule]
         groups.setdefault((action, _effect_of(before, after)), []).append(i)
 
     rules: List[MinedRule] = []
+    account = MiningAccount()
     for (action, effect), indices in sorted(groups.items(), key=lambda kv: str(kv[0])):
+        account.classes += 1
         positives = 0
         for i in indices:
             positives |= 1 << i
@@ -253,12 +361,37 @@ def mine(transitions: Sequence[Tuple[Percept, str, Percept]]) -> List[MinedRule]
 
         # One conjunction if the class admits one; otherwise a disjunction learned
         # as several, each of which is itself a legal conjunctive guard.
+        #
+        # E14: the two ways of arriving at that disjunction are NOT the same
+        # event, and the bare `except Exception` here used to make them
+        # indistinguishable in the published rule set.
+        reason: Optional[str] = None
         try:
             guard, _trace, _added = synthesize(positives, universe, masks)
             frontier = enumerate_frontier(positives, universe, masks, min(len(guard), 3))
             learned = [frontier[0] if frontier else guard]
             frontiers = [frontier]
-        except Exception:
+            account.conjunctive += 1
+        except NoSeparatingGuard as exc:
+            # The miner's designed verdict. This one IS a finding about the
+            # world: the vocabulary cannot separate this class with a single
+            # conjunction, so the class is genuinely disjunctive.
+            reason = "no_separating_guard"
+            account.no_separating_guard.append({
+                "action": action, "effect": str(effect),
+                "transitions_in_class": len(indices),
+                "detail": str(exc)[:400],
+            })
+            keep = [A0Atom("act", action)]
+            learned = learn_dnf(positives, universe, masks, atom_order_key, keep=keep)
+            frontiers = [[] for _ in learned]
+        except Exception as exc:                       # noqa: BLE001
+            # Not a finding. The DNF below is still computed so the pipeline can
+            # finish and report, but it is stamped, counted, and it takes
+            # `all_guards_searched` down with it.
+            reason = "synthesis_crashed"
+            account.record_crash(exc, action=action, effect=effect,
+                                 n_positives=len(indices))
             keep = [A0Atom("act", action)]
             learned = learn_dnf(positives, universe, masks, atom_order_key, keep=keep)
             frontiers = [[] for _ in learned]
@@ -272,21 +405,31 @@ def mine(transitions: Sequence[Tuple[Percept, str, Percept]]) -> List[MinedRule]
             rules.append(
                 MinedRule(name="%s_%s%s" % (stem, action, suffix), action=action,
                           effect=effect, guard=list(one), frontier=frontiers[k],
-                          support=support)
+                          support=support, disjunctive_because=reason)
             )
-    return rules
+    return rules, account
 
 
 # -------------------------------------------------------- stage 3: certify
 
 def certify(rules: Sequence[MinedRule],
-            transitions: Sequence[Tuple[Percept, str, Percept]]) -> Dict[str, Any]:
+            transitions: Sequence[Tuple[Percept, str, Percept]],
+            account: Optional[MiningAccount] = None) -> Dict[str, Any]:
     """Replay the whole history through the mined rules alone.
 
     The rules are the only predictor: for each transition, exactly one rule must
     fire, and its effect must reproduce the observed frame. This is the cheap
     layer of certify -- full-history replay -- and it is what turns "the rules
     look right" into "the rules predicted every frame we have".
+
+    **E14 (adversarial review, correction 6).** `replay_exact` and
+    `exactly_one_successor` are this file's coverage and no-violation claims,
+    and they are computed *over the mined rules*, so they inherit whatever
+    produced those rules. Pass the `MiningAccount` and they are gated on its
+    crash count; the ungated measurements are kept beside them under
+    `*_before_crash_gate`, because the measurement is still worth having -- it
+    just is not a claim about the world. Omitting `account` keeps the old
+    behaviour for callers that have no account to give.
     """
     failures = []
     ambiguities = []
@@ -309,12 +452,22 @@ def certify(rules: Sequence[MinedRule],
         if firing[0].effect != predicted:
             failures.append({"transition": i, "rule": firing[0].name,
                              "predicted": firing[0].effect, "observed": predicted})
+    sound = account is None or account.all_guards_searched
     return {
         "transitions": len(transitions),
         "replay_failures": failures,
         "ambiguities": ambiguities,
-        "exactly_one_successor": not ambiguities,
-        "replay_exact": not failures and not ambiguities,
+        "exactly_one_successor": (not ambiguities) and sound,
+        "replay_exact": (not failures and not ambiguities) and sound,
+        "exactly_one_successor_before_crash_gate": not ambiguities,
+        "replay_exact_before_crash_gate": not failures and not ambiguities,
+        "rules_are_sound": sound,
+        "synthesis_crashes": (0 if account is None
+                              else account.synthesis_crashes),
+        "error": (None if sound else
+                  "the rules replayed here came out of a synthesis that raised "
+                  "%d time(s); replaying a crash artefact exactly says nothing "
+                  "about the world" % account.synthesis_crashes),
     }
 
 

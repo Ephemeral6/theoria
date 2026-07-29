@@ -77,7 +77,7 @@
   "surprise_kinds_available_to_this_arm": 6,
   "surprise_kinds_in_taxonomy": 7,
   "upstream_files_changed": [],
-  "upstream_trees_hashed": 386,
+  "upstream_trees_hashed": 484,
   "upstream_unchanged": true,
   "what": "ablation-arm end-to-end run (A4a step 3)",
   "worlds": {
@@ -133,7 +133,7 @@
           "problem.json": 2566,
           "problem.pddl": 4041,
           "theory.lean": null,
-          "theory.md": 2219,
+          "theory.md": 2580,
           "theory.py": 8318
         },
         "loop_gate": {
@@ -278,7 +278,7 @@
           "problem.json": 2285,
           "problem.pddl": 3927,
           "theory.lean": null,
-          "theory.md": 1646,
+          "theory.md": 1956,
           "theory.py": 6594
         },
         "loop_gate": {
@@ -398,7 +398,7 @@
           "problem.json": 2536,
           "problem.pddl": 3764,
           "theory.lean": null,
-          "theory.md": 2225,
+          "theory.md": 2582,
           "theory.py": 8283
         },
         "loop_gate": {
@@ -550,7 +550,7 @@
           "problem.json": 2542,
           "problem.pddl": 3770,
           "theory.lean": null,
-          "theory.md": 2225,
+          "theory.md": 2582,
           "theory.py": 8283
         },
         "loop_gate": {
@@ -1148,7 +1148,7 @@
           "problem.json": 2476,
           "problem.pddl": 3672,
           "theory.lean": null,
-          "theory.md": 2057,
+          "theory.md": 2363,
           "theory.py": 7831
         },
         "loop_gate": {

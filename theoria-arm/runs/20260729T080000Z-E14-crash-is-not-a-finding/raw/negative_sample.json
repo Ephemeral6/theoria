@@ -1,0 +1,404 @@
+{
+ "a0_mine": {
+  "control": {
+   "account": {
+    "all_guards_searched": true,
+    "classes_no_separating_guard": 4,
+    "classes_with_single_conjunction": 8,
+    "crash_sample_cap": 8,
+    "crashes": [],
+    "crashes_by_type": {},
+    "disjunction_is_a_finding": true,
+    "effect_classes": 12,
+    "no_separating_guard": [
+     {
+      "action": "DOWN",
+      "detail": "no literal separates transition 59 from the positives",
+      "effect": "((0, 0), (0, 0))",
+      "transitions_in_class": 7
+     },
+     {
+      "action": "LEFT",
+      "detail": "no literal separates transition 17 from the positives",
+      "effect": "((0, 0), (0, 0))",
+      "transitions_in_class": 7
+     },
+     {
+      "action": "RIGHT",
+      "detail": "no literal separates transition 104 from the positives",
+      "effect": "((0, 0), (0, 0))",
+      "transitions_in_class": 7
+     },
+     {
+      "action": "UP",
+      "detail": "no literal separates transition 110 from the positives",
+      "effect": "((0, 0), (0, 0))",
+      "transitions_in_class": 7
+     }
+    ],
+    "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+    "synthesis_crashes": 0
+   },
+   "n_rules": 17,
+   "n_unsound": 0
+  },
+  "counting_removed": {
+   "account": {
+    "all_guards_searched": true,
+    "classes_no_separating_guard": 0,
+    "classes_with_single_conjunction": 0,
+    "crash_sample_cap": 8,
+    "crashes": [],
+    "crashes_by_type": {},
+    "disjunction_is_a_finding": true,
+    "effect_classes": 12,
+    "no_separating_guard": [],
+    "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+    "synthesis_crashes": 0
+   },
+   "n_rules": 17,
+   "n_unsound": 17,
+   "sample_rule": {
+    "action": "DOWN",
+    "coverage": "2/2",
+    "disjunctive_because": "synthesis_crashed",
+    "effect": {
+     "box_delta": [
+      0,
+      0
+     ],
+     "player_delta": [
+      0,
+      0
+     ]
+    },
+    "frontier": [],
+    "guard": [
+     "!ahead_free(LEFT)",
+     "act==DOWN",
+     "ahead_on_board(RIGHT)",
+     "box_beyond_free(LEFT)"
+    ],
+    "name": "blocked_DOWN_1",
+    "support": [
+     15,
+     31
+    ],
+    "unsound_after_crash": true
+   }
+  },
+  "counting_removed_raises": 12,
+  "poisoned": {
+   "account": {
+    "all_guards_searched": false,
+    "classes_no_separating_guard": 0,
+    "classes_with_single_conjunction": 0,
+    "crash_sample_cap": 8,
+    "crashes": [
+     {
+      "action": "DOWN",
+      "effect": "((0, 0), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 7,
+      "type": "Boom"
+     },
+     {
+      "action": "DOWN",
+      "effect": "((1, 0), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 56,
+      "type": "Boom"
+     },
+     {
+      "action": "DOWN",
+      "effect": "((1, 0), (2, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 12,
+      "type": "Boom"
+     },
+     {
+      "action": "LEFT",
+      "effect": "((0, -1), (0, -2))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 19,
+      "type": "Boom"
+     },
+     {
+      "action": "LEFT",
+      "effect": "((0, -1), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 101,
+      "type": "Boom"
+     },
+     {
+      "action": "LEFT",
+      "effect": "((0, 0), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 7,
+      "type": "Boom"
+     },
+     {
+      "action": "RIGHT",
+      "effect": "((0, 0), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 7,
+      "type": "Boom"
+     },
+     {
+      "action": "RIGHT",
+      "effect": "((0, 1), (0, 0))",
+      "message": "injected: synthesis fell over",
+      "transitions_in_class": 40,
+      "type": "Boom"
+     }
+    ],
+    "crashes_by_type": {
+     "Boom": 12
+    },
+    "disjunction_is_a_finding": false,
+    "effect_classes": 12,
+    "no_separating_guard": [],
+    "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+    "synthesis_crashes": 12
+   },
+   "n_rules": 17,
+   "n_unsound": 17,
+   "sample_rule": {
+    "action": "DOWN",
+    "coverage": "2/2",
+    "disjunctive_because": "synthesis_crashed",
+    "effect": {
+     "box_delta": [
+      0,
+      0
+     ],
+     "player_delta": [
+      0,
+      0
+     ]
+    },
+    "frontier": [],
+    "guard": [
+     "!ahead_free(LEFT)",
+     "act==DOWN",
+     "ahead_on_board(RIGHT)",
+     "box_beyond_free(LEFT)"
+    ],
+    "name": "blocked_DOWN_1",
+    "support": [
+     15,
+     31
+    ],
+    "unsound_after_crash": true
+   }
+  },
+  "poisoned_raises": 12
+ },
+ "all_sites_go_red_when_poisoned": true,
+ "all_sites_wave_it_through_without_counting": true,
+ "certify": {
+  "control": {
+   "actions": 1,
+   "cap_reached": false,
+   "clashes": [],
+   "detail": "no (state, action) among 1 x 1 admitted two rules, and all 1 pairs were adjudicated -- no call to `step` raised",
+   "n_clashes": 0,
+   "ok": true,
+   "pairs_checked": 1,
+   "pairs_nominal": 1,
+   "replay_truncated_by_crash": false,
+   "sample_cap": 400,
+   "scope": "sampled",
+   "states": 1,
+   "states_reconstructed": 1,
+   "step_crashes": {
+    "by_phase": {},
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "certify._ambiguity: step(state, action)"
+   }
+  },
+  "counting_removed": {
+   "actions": 1,
+   "cap_reached": false,
+   "clashes": [],
+   "detail": "no (state, action) among 1 x 1 admitted two rules, and all 1 pairs were adjudicated -- no call to `step` raised",
+   "n_clashes": 0,
+   "ok": true,
+   "pairs_checked": 0,
+   "pairs_nominal": 1,
+   "replay_truncated_by_crash": false,
+   "sample_cap": 400,
+   "scope": "sampled",
+   "states": 1,
+   "states_reconstructed": 1,
+   "step_crashes": {
+    "by_phase": {},
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "certify._ambiguity: step(state, action)"
+   }
+  },
+  "counting_removed_raises": 1,
+  "poisoned": {
+   "actions": 1,
+   "cap_reached": false,
+   "clashes": [],
+   "detail": "constraint 9 is NOT certified: 0 of 1 (state, action) pairs were adjudicated and 1 call(s) to `step` raised. `step` is documented total, so a crash is a defect in the compiled manual, and a pair that crashed is a pair on which ambiguity was never decided -- counting it inside the coverage would let a crashier manual look cleaner. No ambiguity was found among the pairs that did run, which settles nothing about the rest.",
+   "error": "step raised 1 time(s) (Boom x1); 1 of 1 (state, action) pairs went unadjudicated",
+   "n_clashes": 0,
+   "ok": false,
+   "pairs_checked": 0,
+   "pairs_nominal": 1,
+   "replay_truncated_by_crash": false,
+   "sample_cap": 400,
+   "scope": "sampled",
+   "states": 1,
+   "states_reconstructed": 1,
+   "step_crashes": {
+    "by_phase": {
+     "sweep": 1
+    },
+    "by_type": {
+     "Boom": 1
+    },
+    "count": 1,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+    "sample_cap": 8,
+    "samples": [
+     {
+      "action": [
+       "key",
+       1
+      ],
+      "message": "injected: the compiled manual fell over on ('key', 1)",
+      "phase": "sweep",
+      "type": "Boom"
+     }
+    ],
+    "site": "certify._ambiguity: step(state, action)"
+   }
+  },
+  "poisoned_raises": 1
+ },
+ "plan": {
+  "control": {
+   "detail": "the whole reachable set (3 states) was enumerated and none satisfies the goal -- no call to `step` raised, so no successor was dropped and the set is the manual's own. Constraint 6: this is a search result, not a theorem -- an unsolvability claim needs a certificate and a probe of the clauses it depends on.",
+   "exhaustive": true,
+   "expansions": 3,
+   "ok": false,
+   "reachable_states": 3,
+   "search_ceiling": {
+    "deadline_s": 120.0,
+    "node_cap": 120000
+   },
+   "status": "unsat",
+   "step_crashes": {
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is itself a constraint-9 defect. So none of these is 'the action does not apply' -- each is a violation or a bug, and each one silently shrank the reachable set this search enumerated.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "plan._tier_bfs: step(state, action)",
+    "successors_pruned": 0
+   },
+   "tier": "object-state-bfs"
+  },
+  "counting_removed": {
+   "detail": "the whole reachable set (1 states) was enumerated and none satisfies the goal -- no call to `step` raised, so no successor was dropped and the set is the manual's own. Constraint 6: this is a search result, not a theorem -- an unsolvability claim needs a certificate and a probe of the clauses it depends on.",
+   "exhaustive": true,
+   "expansions": 1,
+   "ok": false,
+   "reachable_states": 1,
+   "search_ceiling": {
+    "deadline_s": 120.0,
+    "node_cap": 120000
+   },
+   "status": "unsat",
+   "step_crashes": {
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is itself a constraint-9 defect. So none of these is 'the action does not apply' -- each is a violation or a bug, and each one silently shrank the reachable set this search enumerated.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "plan._tier_bfs: step(state, action)",
+    "successors_pruned": 0
+   },
+   "tier": "object-state-bfs"
+  },
+  "counting_removed_raises": 1,
+  "poisoned": {
+   "detail": "the queue drained after 1 expansions over 1 distinct states, but 1 call(s) to the manual's own `step` raised and each one silently removed a successor. `step` is documented total, so those are defects, not inapplicable actions -- the set enumerated here is a SUBSET of the reachable set of the manual as written, and this run is not entitled to say the goal is unreachable. Fix the predictor and re-run.",
+   "error": "step raised 1 time(s) (Boom x1); 1 successor(s) were pruned without adjudication",
+   "exhaustive": false,
+   "expansions": 1,
+   "ok": false,
+   "reachable_states": 1,
+   "search_ceiling": {
+    "deadline_s": 120.0,
+    "node_cap": 120000
+   },
+   "status": "unsat_unsound",
+   "step_crashes": {
+    "by_type": {
+     "Boom": 1
+    },
+    "count": 1,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is itself a constraint-9 defect. So none of these is 'the action does not apply' -- each is a violation or a bug, and each one silently shrank the reachable set this search enumerated.",
+    "sample_cap": 8,
+    "samples": [
+     {
+      "action": [
+       "key",
+       1
+      ],
+      "at_expansion": 1,
+      "message": "injected: the compiled manual fell over on ('key', 1)",
+      "type": "Boom"
+     }
+    ],
+    "site": "plan._tier_bfs: step(state, action)",
+    "successors_pruned": 1
+   },
+   "tier": "object-state-bfs"
+  },
+  "poisoned_raises": 1
+ },
+ "verdicts": [
+  {
+   "claim_field": "status / exhaustive",
+   "control": "unsat exhaustive=True crashes=0 states=3",
+   "counting_removed": "unsat exhaustive=True crashes=0 states=1",
+   "poisoned": "unsat_unsound exhaustive=False crashes=1 states=1",
+   "red_when_poisoned": true,
+   "site": "theoria-arm/inner/plan.py  _tier_bfs",
+   "waved_through_without_counting": true
+  },
+  {
+   "caveat": "Same caveat as the a0 row, which the first pass gave only to a0 and an adversarial review demanded here too. Removing `StepCrashLog.record` removes the gate and hands `ok: true` back to a sweep that crashed. It does NOT remove the second mechanism the same change added: `pairs_checked` increments only on a non-raise, so `pairs_checked (0) < pairs_nominal (1)` still betrays the crash in the counting-removed column. Pre-E14 `_ambiguity` had neither field, so this column is an ablation of the gate, not a byte-faithful reproduction of the old code. Note also that the surviving `detail` sentence says \"all 1 pairs were adjudicated\" while `pairs_checked` is 0 -- it is built from the nominal product, which is the original defect, visible here because the gate that normally suppresses that sentence is off.",
+   "claim_field": "ok (constraint 9)",
+   "control": "ok=True crashes=0 1/1 pairs",
+   "counting_removed": "ok=True crashes=0 0/1 pairs",
+   "poisoned": "ok=False crashes=1 0/1 pairs",
+   "red_when_poisoned": true,
+   "site": "theoria-arm/inner/certify.py  _ambiguity",
+   "waved_through_without_counting": true
+  },
+  {
+   "caveat": "The ablation removes `MiningAccount.record_crash` -- the counting -- and that is enough to hand `all_guards_searched: true` back to a run whose synthesis crashed 12 times. It does NOT remove the second mechanism added by the same change: the per-rule `disjunctive_because: synthesis_crashed` stamp is set on the exception branch itself, so `unsound_rules` stays 17 in the counting-removed column. So this column is a faithful ablation of the *gate*, not a byte-faithful reproduction of the pre-E14 code, which had neither. Reported this way round because the opposite reading -- 'the crash was caught anyway, so the gate is optional' -- is the error this ticket is about.",
+   "claim_field": "all_guards_searched / disjunction_is_a_finding",
+   "control": "searched=True crashes=0 no_sep_guard=4 unsound_rules=0",
+   "counting_removed": "searched=True crashes=0 no_sep_guard=0 unsound_rules=17",
+   "poisoned": "searched=False crashes=12 no_sep_guard=0 unsound_rules=17",
+   "red_when_poisoned": true,
+   "site": "a0-spike/pipeline/stages.py  mine",
+   "waved_through_without_counting": true
+  }
+ ]
+}

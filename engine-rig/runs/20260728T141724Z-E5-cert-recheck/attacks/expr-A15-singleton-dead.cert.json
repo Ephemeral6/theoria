@@ -1,0 +1,53 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A15-singleton-dead",
+  "predicate": [
+    "and",
+    [
+      "=",
+      [
+        "var",
+        "pos0"
+      ],
+      [
+        "lit",
+        0
+      ]
+    ],
+    [
+      "=",
+      [
+        "var",
+        "pos1"
+      ],
+      [
+        "lit",
+        0
+      ]
+    ],
+    [
+      "=",
+      [
+        "var",
+        "pos2"
+      ],
+      [
+        "lit",
+        0
+      ]
+    ],
+    [
+      "=",
+      [
+        "var",
+        "pos3"
+      ],
+      [
+        "lit",
+        0
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

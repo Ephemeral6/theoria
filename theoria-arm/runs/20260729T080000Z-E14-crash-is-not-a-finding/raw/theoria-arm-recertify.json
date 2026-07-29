@@ -1,0 +1,477 @@
+{
+ "bfs_reached": false,
+ "certify": {
+  "checks": {
+   "predictor": {
+    "ok": true
+   },
+   "replay": {
+    "detail": "0/7 transitions replay exactly",
+    "first_divergence": {
+     "arc_action": "ACTION1",
+     "cells": [
+      {
+       "cell": [
+        1,
+        2
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        1,
+        3
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        1,
+        6
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        1,
+        7
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        2,
+        1
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        2,
+        3
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        2,
+        5
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        2,
+        6
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        2,
+        7
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        3,
+        1
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        3,
+        2
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        3,
+        3
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        3,
+        5
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        3,
+        6
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        3,
+        7
+       ],
+       "manual_says": 0,
+       "world_says": 1
+      },
+      {
+       "cell": [
+        5,
+        1
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        5,
+        2
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        5,
+        3
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        8,
+        14
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        8,
+        15
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        8,
+        16
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        8,
+        17
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        8,
+        18
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      },
+      {
+       "cell": [
+        9,
+        14
+       ],
+       "manual_says": 0,
+       "world_says": 9
+      }
+     ],
+     "cells_wrong": 69,
+     "kind": "frame_mismatch",
+     "t": 0
+    },
+    "matched": 0,
+    "ok": false,
+    "transitions": 7
+   },
+   "responsibility": {
+    "cells_unexplained": 69,
+    "detail": "69 pixels of frame 0 belong to neither the board nor any declared object",
+    "first_cells": [
+     [
+      1,
+      2,
+      0,
+      9
+     ],
+     [
+      1,
+      3,
+      0,
+      9
+     ],
+     [
+      1,
+      6,
+      0,
+      1
+     ],
+     [
+      1,
+      7,
+      0,
+      1
+     ],
+     [
+      2,
+      1,
+      0,
+      9
+     ],
+     [
+      2,
+      3,
+      0,
+      9
+     ],
+     [
+      2,
+      5,
+      0,
+      1
+     ],
+     [
+      2,
+      6,
+      0,
+      1
+     ],
+     [
+      2,
+      7,
+      0,
+      1
+     ],
+     [
+      3,
+      1,
+      0,
+      9
+     ],
+     [
+      3,
+      2,
+      0,
+      9
+     ],
+     [
+      3,
+      3,
+      0,
+      9
+     ],
+     [
+      3,
+      5,
+      0,
+      1
+     ],
+     [
+      3,
+      6,
+      0,
+      1
+     ],
+     [
+      3,
+      7,
+      0,
+      1
+     ],
+     [
+      5,
+      1,
+      0,
+      9
+     ],
+     [
+      5,
+      2,
+      0,
+      9
+     ],
+     [
+      5,
+      3,
+      0,
+      9
+     ],
+     [
+      8,
+      14,
+      0,
+      9
+     ],
+     [
+      8,
+      15,
+      0,
+      9
+     ],
+     [
+      8,
+      16,
+      0,
+      9
+     ],
+     [
+      8,
+      17,
+      0,
+      9
+     ],
+     [
+      8,
+      18,
+      0,
+      9
+     ],
+     [
+      9,
+      14,
+      0,
+      9
+     ]
+    ],
+    "ok": false,
+    "total_cells": 4096
+   },
+   "unambiguous": {
+    "actions": 1,
+    "cap_reached": false,
+    "clashes": [],
+    "detail": "no (state, action) among 8 x 1 admitted two rules, and all 8 pairs were adjudicated -- no call to `step` raised",
+    "n_clashes": 0,
+    "ok": true,
+    "pairs_checked": 8,
+    "pairs_nominal": 8,
+    "replay_truncated_by_crash": false,
+    "sample_cap": 400,
+    "scope": "sampled",
+    "states": 8,
+    "states_reconstructed": 8,
+    "step_crashes": {
+     "by_phase": {},
+     "by_type": {},
+     "count": 0,
+     "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+     "sample_cap": 8,
+     "samples": [],
+     "site": "certify._ambiguity: step(state, action)"
+    }
+   }
+  },
+  "layer": "cheap",
+  "ok": false,
+  "replay_steps": [
+   {
+    "arc_action": "ACTION1",
+    "cells_wrong": 69,
+    "manual_action": [
+     "key",
+     1
+    ],
+    "t": 0
+   },
+   {
+    "arc_action": "ACTION2",
+    "cells_wrong": 69,
+    "manual_action": [
+     "key",
+     2
+    ],
+    "t": 1
+   },
+   {
+    "arc_action": "ACTION3",
+    "cells_wrong": 69,
+    "manual_action": [
+     "key",
+     3
+    ],
+    "t": 2
+   },
+   {
+    "arc_action": "ACTION4",
+    "cells_wrong": 69,
+    "manual_action": [
+     "key",
+     4
+    ],
+    "t": 3
+   },
+   {
+    "arc_action": "ACTION5",
+    "cells_wrong": 70,
+    "manual_action": [
+     "key",
+     5
+    ],
+    "t": 4
+   },
+   {
+    "arc_action": "ACTION1",
+    "cells_wrong": 70,
+    "manual_action": [
+     "key",
+     1
+    ],
+    "t": 5
+   },
+   {
+    "arc_action": "ACTION2",
+    "cells_wrong": 70,
+    "manual_action": [
+     "key",
+     2
+    ],
+    "t": 6
+   }
+  ]
+ },
+ "compile_ok": true,
+ "plan": {
+  "backend": null,
+  "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+  "plan": null,
+  "status": "no_goal_declared",
+  "tiers": []
+ },
+ "slug": "20260728T015354Z-g50t-first-contact",
+ "trace": {
+  "cascade_lengths": [
+   1,
+   7,
+   9
+  ],
+  "path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e14-crash-is-not-a-finding\\theoria-arm\\runs\\20260729T080000Z-E14-crash-is-not-a-finding\\raw\\theoria-arm-replay\\trace.jsonl",
+  "states": 8
+ }
+}

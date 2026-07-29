@@ -37,7 +37,7 @@ cd arc-recon && python contamination.py --json   # register, sealed claim set, l
 cd arc-recon && python probe_stickiness.py       # cookie A/B; zero actions
 cd arc-recon && python probe_stickiness.py --cross-game   # one jar, all 4 games
 cd arc-recon && python redact_ledger.py          # INC-008 check; --apply to redact
-cd arc-recon && python -m pytest                 # 82 offline tests, no API, no network
+cd arc-recon && python -m pytest                 # 111 offline tests, no API, no network
 ```
 
 The access check itself — every Phase 1 item, what settled it, what is still
@@ -334,6 +334,35 @@ owner's.
 The lesson generalises past cookies: the redaction discipline lived inside
 `_record`, so every instrument that wrote its own ledger line went around the
 discipline too.
+
+**S10 acted on that lesson, and the shape of the action is the interesting
+part.** The repair is *not* "make `_record` the only writer".
+`probe_stickiness.py` still opens the ledger itself, because it needs response
+headers `_record` does not capture — a legitimate need, and the next instrument
+that needs a field the writer does not carry will do the same. The invariant
+moved onto the artefact instead:
+
+```bash
+python tools/ledger_invariants.py          # this ledger
+python tools/ledger_invariants.py --all    # every track's, incl. baseline-arms
+```
+
+[`tools/ledger_invariants.py`](tools/ledger_invariants.py) reads the file and
+asks what is in it, never who put it there. Four tiers — exact field rules, a
+literal search for the live key (schema-independent, and it reports whether it
+was able to run rather than counting a skipped check as a pass), a **fail-closed**
+refusal of any credential-shaped field nobody declared, and bearer/JWT shapes in
+the fields that could carry one. Violations are `(line, field, shape)`: the
+scanner never returns the value it found, and a test asserts that over the
+serialised report. `verify.sh` runs it over all three ledgers; 29 tests in
+[`test_ledger_invariants.py`](test_ledger_invariants.py) plant one synthetic
+offender per claimed shape and require the detector to go red, then require a
+clean row to stay clean.
+
+Single entry points are worth building only where a capability can genuinely be
+taken away — `proxy`'s no-bypass seal holds because the arm never has the
+credential, not because of how its code is arranged. Everywhere else, the
+invariant belongs to the resource.
 
 <details>
 <summary>Original INC-001 / INC-002 text (diagnoses overturned, kept for the record)</summary>

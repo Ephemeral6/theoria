@@ -1,0 +1,633 @@
+{
+  "fault_matrix": {
+    "baseline_clean": true,
+    "baseline_noise": {},
+    "checks_available": [
+      "calibration",
+      "mutant:drop_exact",
+      "mutant:garbage",
+      "mutant:independence",
+      "mutant:key_order",
+      "mutant:monotone",
+      "mutant:partial_credit_survives",
+      "mutant:transplant"
+    ],
+    "faults": {
+      "accepts_anything": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:garbage",
+          "mutant:partial_credit_survives",
+          "mutant:transplant"
+        ],
+        "detail": {
+          "calibration": [
+            "heldout/memoriser: scored 1.0000, expected in [0, 0.75] (it replays what it saw, so its total is dragged up by the replay control and down by held-out. The number that matters is the gap, checked separately by `replay_gap`.)",
+            "heldout/bluffer: scored 1.0000, expected in [0, 0.5] (an absolute band here encodes an assumption about item mix that the paper is entitled to refute. The real checks are `bluffer_hits_ceiling` and `oracle_minus_bluffer`; this is a backstop, not the measurement.)",
+            "heldout: the memoriser's replay-minus-held-out gap is 0.0000, below the pre-registered 0.40. Either the held-out split is leaking evidence or the memoriser is not memorising.",
+            "heldout: the bluffer scored 1.0000 against a published ceiling of 0.4500. It should land exactly on the ceiling -- if it does not, either the ceiling is miscomputed or the bluffer is doing something other than returning the input frame."
+          ],
+          "mutant:garbage": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:partial_credit_survives": [
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:transplant": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 4,
+        "what_it_does": "any answer that is present earns full marks; content is never read"
+      },
+      "blends_the_pair": {
+        "caught": true,
+        "caught_by": [
+          "calibration"
+        ],
+        "detail": {
+          "calibration": [
+            "verdict: the bluffer shows sensitivity=0.529412 specificity=0.529412; the protocol expects 1.0 / 0.0. An arm that answers `unsolvable` to everything must catch every unsolvable case and no solvable one -- if it does not, the confusion matrix is not reading the answers it thinks it is."
+          ]
+        },
+        "n_catchers": 1,
+        "what_it_does": "sensitivity and specificity are both replaced by one blended accuracy"
+      },
+      "inflates_partial": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:partial_credit_survives",
+          "mutant:transplant"
+        ],
+        "detail": {
+          "calibration": [
+            "adaptation/bluffer: scored 0.4896, expected in [0, 0.45] (claiming everything is invalidated must not pay: recall without precision is the failure mode this item type exists to price)",
+            "verdict/bluffer: scored 0.5294, expected in [0, 0.5] (always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity)"
+          ],
+          "mutant:partial_credit_survives": [
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:transplant": [
+            "adaptation: failed",
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 3,
+        "what_it_does": "partial credit is rounded up to full"
+      },
+      "marks_by_item_name": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:garbage",
+          "mutant:partial_credit_survives",
+          "mutant:transplant"
+        ],
+        "detail": {
+          "calibration": [
+            "heldout/oracle: scored 0.5000, expected == 1 (ground truth must be accepted in full)",
+            "heldout/oracle: 40 item(s) marked wrong. The rubric rejects ground truth.",
+            "heldout: the memoriser's replay-minus-held-out gap is -0.0500, below the pre-registered 0.40. Either the held-out split is leaking evidence or the memoriser is not memorising.",
+            "heldout: the bluffer scored 0.5000 against a published ceiling of 0.4500. It should land exactly on the ceiling -- if it does not, either the ceiling is miscomputed or the bluffer is doing something other than returning the input frame."
+          ],
+          "mutant:garbage": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:partial_credit_survives": [
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:transplant": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 4,
+        "what_it_does": "the mark is a function of the item id and ignores the answer entirely"
+      },
+      "order_dependent": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:drop_exact",
+          "mutant:independence",
+          "mutant:key_order",
+          "mutant:monotone"
+        ],
+        "detail": {
+          "calibration": [
+            "heldout/oracle: scored 0.5000, expected == 1 (ground truth must be accepted in full)",
+            "heldout/oracle: 40 item(s) marked wrong. The rubric rejects ground truth.",
+            "heldout: the memoriser's replay-minus-held-out gap is 0.3750, below the pre-registered 0.40. Either the held-out split is leaking evidence or the memoriser is not memorising.",
+            "heldout: the bluffer scored 0.2625 against a published ceiling of 0.4500. It should land exactly on the ceiling -- if it does not, either the ceiling is miscomputed or the bluffer is doing something other than returning the input frame."
+          ],
+          "mutant:drop_exact": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed"
+          ],
+          "mutant:independence": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:key_order": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ],
+          "mutant:monotone": [
+            "adaptation: failed"
+          ]
+        },
+        "n_catchers": 5,
+        "what_it_does": "the mark depends on how many items were marked before it, so the same answer scores differently in a different key"
+      },
+      "pays_for_silence": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:drop_exact"
+        ],
+        "detail": {
+          "calibration": [
+            "heldout/null: scored 1.0000, expected == 0 (silence must pay nothing)",
+            "heldout/null: 80 of 80 items are not `unanswered`. Silence must be recorded as silence -- an arm with nothing to submit is a finding, not a wrong answer.",
+            "handover/null: scored 1.0000, expected == 0 (an arm with no deliverable scores zero)",
+            "handover/null: 29 of 29 items are not `unanswered`. Silence must be recorded as silence -- an arm with nothing to submit is a finding, not a wrong answer."
+          ],
+          "mutant:drop_exact": [
+            "heldout: failed",
+            "handover: failed",
+            "adaptation: failed",
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 2,
+        "what_it_does": "an unanswered item is awarded full marks -- every real score is inflated by the amount the examinee left blank"
+      },
+      "rejects_truth": {
+        "caught": true,
+        "caught_by": [
+          "calibration",
+          "mutant:partial_credit_survives"
+        ],
+        "detail": {
+          "calibration": [
+            "heldout/oracle: scored 0.0000, expected == 1 (ground truth must be accepted in full)",
+            "heldout/oracle: 80 item(s) marked wrong. The rubric rejects ground truth.",
+            "heldout: the memoriser's replay-minus-held-out gap is 0.0000, below the pre-registered 0.40. Either the held-out split is leaking evidence or the memoriser is not memorising.",
+            "heldout: the bluffer scored 0.0000 against a published ceiling of 0.4500. It should land exactly on the ceiling -- if it does not, either the ceiling is miscomputed or the bluffer is doing something other than returning the input frame."
+          ],
+          "mutant:partial_credit_survives": [
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 2,
+        "what_it_does": "a correct answer is marked wrong -- every real score is depressed by an unknown amount"
+      },
+      "truncates_partial": {
+        "caught": true,
+        "caught_by": [
+          "mutant:partial_credit_survives"
+        ],
+        "detail": {
+          "mutant:partial_credit_survives": [
+            "adaptation: failed",
+            "verdict: failed"
+          ]
+        },
+        "n_catchers": 1,
+        "what_it_does": "partial credit is truncated to zero"
+      }
+    },
+    "n_faults": 8,
+    "n_uncaught": 0,
+    "uncaught": []
+  },
+  "mutants": {
+    "failures": [],
+    "passed": true,
+    "per_type": {
+      "adaptation": {
+        "checks": {
+          "drop_exact": {
+            "dropped_all_unanswered": true,
+            "n_dropped": 20,
+            "observed_awarded": 96.0,
+            "passed": true,
+            "pre_registered": "dropping a set of answers costs exactly the sum of what those items were awarded, to the last decimal",
+            "predicted_awarded": 96.0
+          },
+          "garbage": {
+            "awarded": 0.0,
+            "counts": {
+              "abstained": 0,
+              "correct": 0,
+              "unanswered": 0,
+              "wrong": 60
+            },
+            "fraction": 0.0,
+            "passed": true,
+            "possible": 144.0,
+            "pre_registered": "a submission of structured nonsense scores exactly zero. If nonsense reads as an abstention and abstention pays, then a broken serialiser is indistinguishable from an honest refusal to answer, and both are being paid.",
+            "raised": null
+          },
+          "independence": {
+            "bleed": [],
+            "n_probed": 8,
+            "passed": true,
+            "pre_registered": "dropping one answer changes that item's mark and no other item's mark. A marker that leaks state between items is scoring the submission, not the answer."
+          },
+          "key_order": {
+            "moved": [],
+            "n_moved": 0,
+            "passed": true,
+            "pre_registered": "reversing the order of items in the answer key changes no item's mark. The order is an artefact of the builder; a mark that depends on it is not a property of the answer.",
+            "total_after": 144.0,
+            "total_before": 144.0
+          },
+          "monotone": {
+            "ladder": [
+              {
+                "awarded": 144.0,
+                "dropped_fraction": 0.0,
+                "n_dropped": 0
+              },
+              {
+                "awarded": 115.0,
+                "dropped_fraction": 0.25,
+                "n_dropped": 15
+              },
+              {
+                "awarded": 72.0,
+                "dropped_fraction": 0.5,
+                "n_dropped": 30
+              },
+              {
+                "awarded": 43.0,
+                "dropped_fraction": 0.75,
+                "n_dropped": 45
+              },
+              {
+                "awarded": 0.0,
+                "dropped_fraction": 1.0,
+                "n_dropped": 60
+              }
+            ],
+            "passed": true,
+            "pre_registered": "dropping more answers never awards more points",
+            "violations": []
+          },
+          "partial_credit_survives": {
+            "applicable": true,
+            "awarded": 140.4,
+            "examples": [
+              "v-a0-01.detect.across",
+              "v-a0-02.detect.across",
+              "v-a0-03.detect.across",
+              "v-a0-04.detect.across",
+              "v-a0-05.detect.across"
+            ],
+            "n_degraded": 6,
+            "n_strictly_partial": 6,
+            "passed": true,
+            "possible": 144.0,
+            "pre_registered": "an answer missing one component of a composite scores strictly between zero and full on a paper whose rubrics award partial credit. Added after the first fault-matrix run, which is the honest place to say why: every band in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`, bounded above and open below, so a marker that silently *depresses* scores satisfies every one of them. `truncates_partial` was injected and no check anywhere noticed. This is the check that notices, and it is structural rather than a number fitted to what the first run happened to produce."
+          },
+          "transplant": {
+            "accepted": [],
+            "n_accepted": 0,
+            "n_attempted": 8,
+            "passed": true,
+            "pre_registered": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
+          }
+        },
+        "failures": [],
+        "n_items": 60,
+        "oracle_fraction": 1.0,
+        "paper_id": "p15-adaptation-a0",
+        "passed": true,
+        "question_type": "adaptation"
+      },
+      "handover": {
+        "checks": {
+          "drop_exact": {
+            "dropped_all_unanswered": true,
+            "n_dropped": 9,
+            "observed_awarded": 32.0,
+            "passed": true,
+            "pre_registered": "dropping a set of answers costs exactly the sum of what those items were awarded, to the last decimal",
+            "predicted_awarded": 32.0
+          },
+          "garbage": {
+            "awarded": 0.0,
+            "counts": {
+              "abstained": 0,
+              "correct": 0,
+              "unanswered": 0,
+              "wrong": 29
+            },
+            "fraction": 0.0,
+            "passed": true,
+            "possible": 46.0,
+            "pre_registered": "a submission of structured nonsense scores exactly zero. If nonsense reads as an abstention and abstention pays, then a broken serialiser is indistinguishable from an honest refusal to answer, and both are being paid.",
+            "raised": null
+          },
+          "independence": {
+            "bleed": [],
+            "n_probed": 8,
+            "passed": true,
+            "pre_registered": "dropping one answer changes that item's mark and no other item's mark. A marker that leaks state between items is scoring the submission, not the answer."
+          },
+          "key_order": {
+            "moved": [],
+            "n_moved": 0,
+            "passed": true,
+            "pre_registered": "reversing the order of items in the answer key changes no item's mark. The order is an artefact of the builder; a mark that depends on it is not a property of the answer.",
+            "total_after": 46.0,
+            "total_before": 46.0
+          },
+          "monotone": {
+            "ladder": [
+              {
+                "awarded": 46.0,
+                "dropped_fraction": 0.0,
+                "n_dropped": 0
+              },
+              {
+                "awarded": 32.0,
+                "dropped_fraction": 0.25,
+                "n_dropped": 7
+              },
+              {
+                "awarded": 21.0,
+                "dropped_fraction": 0.5,
+                "n_dropped": 14
+              },
+              {
+                "awarded": 13.0,
+                "dropped_fraction": 0.75,
+                "n_dropped": 22
+              },
+              {
+                "awarded": 0.0,
+                "dropped_fraction": 1.0,
+                "n_dropped": 29
+              }
+            ],
+            "passed": true,
+            "pre_registered": "dropping more answers never awards more points",
+            "violations": []
+          },
+          "partial_credit_survives": {
+            "applicable": false,
+            "n_degraded": 0,
+            "passed": true,
+            "pre_registered": "an answer missing one component of a composite scores strictly between zero and full on a paper whose rubrics award partial credit. Added after the first fault-matrix run, which is the honest place to say why: every band in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`, bounded above and open below, so a marker that silently *depresses* scores satisfies every one of them. `truncates_partial` was injected and no check anywhere noticed. This is the check that notices, and it is structural rather than a number fitted to what the first run happened to produce.",
+            "why": "no answer on this paper is a composite with a removable component, so there is nothing to degrade"
+          },
+          "transplant": {
+            "accepted": [],
+            "n_accepted": 0,
+            "n_attempted": 8,
+            "passed": true,
+            "pre_registered": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
+          }
+        },
+        "failures": [],
+        "n_items": 29,
+        "oracle_fraction": 1.0,
+        "paper_id": "p15-handover-a0",
+        "passed": true,
+        "question_type": "handover"
+      },
+      "heldout": {
+        "checks": {
+          "drop_exact": {
+            "dropped_all_unanswered": true,
+            "n_dropped": 26,
+            "observed_awarded": 54.0,
+            "passed": true,
+            "pre_registered": "dropping a set of answers costs exactly the sum of what those items were awarded, to the last decimal",
+            "predicted_awarded": 54.0
+          },
+          "garbage": {
+            "awarded": 0.0,
+            "counts": {
+              "abstained": 0,
+              "correct": 0,
+              "unanswered": 0,
+              "wrong": 80
+            },
+            "fraction": 0.0,
+            "passed": true,
+            "possible": 80.0,
+            "pre_registered": "a submission of structured nonsense scores exactly zero. If nonsense reads as an abstention and abstention pays, then a broken serialiser is indistinguishable from an honest refusal to answer, and both are being paid.",
+            "raised": null
+          },
+          "independence": {
+            "bleed": [],
+            "n_probed": 8,
+            "passed": true,
+            "pre_registered": "dropping one answer changes that item's mark and no other item's mark. A marker that leaks state between items is scoring the submission, not the answer."
+          },
+          "key_order": {
+            "moved": [],
+            "n_moved": 0,
+            "passed": true,
+            "pre_registered": "reversing the order of items in the answer key changes no item's mark. The order is an artefact of the builder; a mark that depends on it is not a property of the answer.",
+            "total_after": 80.0,
+            "total_before": 80.0
+          },
+          "monotone": {
+            "ladder": [
+              {
+                "awarded": 80.0,
+                "dropped_fraction": 0.0,
+                "n_dropped": 0
+              },
+              {
+                "awarded": 60.0,
+                "dropped_fraction": 0.25,
+                "n_dropped": 20
+              },
+              {
+                "awarded": 40.0,
+                "dropped_fraction": 0.5,
+                "n_dropped": 40
+              },
+              {
+                "awarded": 20.0,
+                "dropped_fraction": 0.75,
+                "n_dropped": 60
+              },
+              {
+                "awarded": 0.0,
+                "dropped_fraction": 1.0,
+                "n_dropped": 80
+              }
+            ],
+            "passed": true,
+            "pre_registered": "dropping more answers never awards more points",
+            "violations": []
+          },
+          "partial_credit_survives": {
+            "applicable": false,
+            "n_degraded": 0,
+            "passed": true,
+            "pre_registered": "an answer missing one component of a composite scores strictly between zero and full on a paper whose rubrics award partial credit. Added after the first fault-matrix run, which is the honest place to say why: every band in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`, bounded above and open below, so a marker that silently *depresses* scores satisfies every one of them. `truncates_partial` was injected and no check anywhere noticed. This is the check that notices, and it is structural rather than a number fitted to what the first run happened to produce.",
+            "why": "no answer on this paper is a composite with a removable component, so there is nothing to degrade"
+          },
+          "transplant": {
+            "accepted": [],
+            "n_accepted": 0,
+            "n_attempted": 8,
+            "passed": true,
+            "pre_registered": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
+          }
+        },
+        "failures": [],
+        "n_items": 80,
+        "oracle_fraction": 1.0,
+        "paper_id": "p15-heldout-a0",
+        "passed": true,
+        "question_type": "heldout"
+      },
+      "verdict": {
+        "checks": {
+          "drop_exact": {
+            "dropped_all_unanswered": true,
+            "n_dropped": 5,
+            "observed_awarded": 24.0,
+            "passed": true,
+            "pre_registered": "dropping a set of answers costs exactly the sum of what those items were awarded, to the last decimal",
+            "predicted_awarded": 24.0
+          },
+          "garbage": {
+            "awarded": 0.0,
+            "counts": {
+              "abstained": 0,
+              "correct": 0,
+              "unanswered": 0,
+              "wrong": 17
+            },
+            "fraction": 0.0,
+            "passed": true,
+            "possible": 34.0,
+            "pre_registered": "a submission of structured nonsense scores exactly zero. If nonsense reads as an abstention and abstention pays, then a broken serialiser is indistinguishable from an honest refusal to answer, and both are being paid.",
+            "raised": null
+          },
+          "independence": {
+            "bleed": [],
+            "n_probed": 8,
+            "passed": true,
+            "pre_registered": "dropping one answer changes that item's mark and no other item's mark. A marker that leaks state between items is scoring the submission, not the answer."
+          },
+          "key_order": {
+            "moved": [],
+            "n_moved": 0,
+            "passed": true,
+            "pre_registered": "reversing the order of items in the answer key changes no item's mark. The order is an artefact of the builder; a mark that depends on it is not a property of the answer.",
+            "total_after": 34.0,
+            "total_before": 34.0
+          },
+          "monotone": {
+            "ladder": [
+              {
+                "awarded": 34.0,
+                "dropped_fraction": 0.0,
+                "n_dropped": 0
+              },
+              {
+                "awarded": 26.0,
+                "dropped_fraction": 0.25,
+                "n_dropped": 4
+              },
+              {
+                "awarded": 18.0,
+                "dropped_fraction": 0.5,
+                "n_dropped": 8
+              },
+              {
+                "awarded": 8.0,
+                "dropped_fraction": 0.75,
+                "n_dropped": 13
+              },
+              {
+                "awarded": 0.0,
+                "dropped_fraction": 1.0,
+                "n_dropped": 17
+              }
+            ],
+            "passed": true,
+            "pre_registered": "dropping more answers never awards more points",
+            "violations": []
+          },
+          "partial_credit_survives": {
+            "applicable": true,
+            "awarded": 25.0,
+            "examples": [
+              "vq-1015eb0bb1",
+              "vq-17af763cab",
+              "vq-2986ed8ffc",
+              "vq-6150a6eeb7",
+              "vq-721d09813c"
+            ],
+            "n_degraded": 9,
+            "n_strictly_partial": 9,
+            "passed": true,
+            "possible": 34.0,
+            "pre_registered": "an answer missing one component of a composite scores strictly between zero and full on a paper whose rubrics award partial credit. Added after the first fault-matrix run, which is the honest place to say why: every band in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`, bounded above and open below, so a marker that silently *depresses* scores satisfies every one of them. `truncates_partial` was injected and no check anywhere noticed. This is the check that notices, and it is structural rather than a number fitted to what the first run happened to produce."
+          },
+          "transplant": {
+            "accepted": [],
+            "n_accepted": 0,
+            "n_attempted": 8,
+            "passed": true,
+            "pre_registered": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
+          }
+        },
+        "failures": [],
+        "n_items": 17,
+        "oracle_fraction": 1.0,
+        "paper_id": "p15-verdict-a2",
+        "passed": true,
+        "question_type": "verdict"
+      }
+    },
+    "pre_registered": {
+      "drop_exact": "dropping a set of answers costs exactly the sum of what those items were awarded, to the last decimal",
+      "garbage": "a submission of structured nonsense scores exactly zero. If nonsense reads as an abstention and abstention pays, then a broken serialiser is indistinguishable from an honest refusal to answer, and both are being paid.",
+      "independence": "dropping one answer changes that item's mark and no other item's mark. A marker that leaks state between items is scoring the submission, not the answer.",
+      "key_order": "reversing the order of items in the answer key changes no item's mark. The order is an artefact of the builder; a mark that depends on it is not a property of the answer.",
+      "monotone": "dropping more answers never awards more points",
+      "partial_credit_survives": "an answer missing one component of a composite scores strictly between zero and full on a paper whose rubrics award partial credit. Added after the first fault-matrix run, which is the honest place to say why: every band in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`, bounded above and open below, so a marker that silently *depresses* scores satisfies every one of them. `truncates_partial` was injected and no check anywhere noticed. This is the check that notices, and it is structural rather than a number fitted to what the first run happened to produce.",
+      "transplant": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
+    }
+  },
+  "protocol_digest": "3310f827f807856f01dd0490baa659952bef48323a84b5f095c81578ee1ecf6b",
+  "protocol_modules": {
+    "exam.grading.calibration": "48dd52e416402f40142ef246ec33f8fbd6e07830b8056a2136a41a63402308f5",
+    "exam.grading.mark": "5fca1554b48d171828ec22f64a95faa06db1a12a71459a1acbd97cded8428d59",
+    "exam.grading.selftest": "29e8bcf7c8d62843bdd36169287620cdbd5c1260ef384ca8b9b940e5b85349bc"
+  },
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+}

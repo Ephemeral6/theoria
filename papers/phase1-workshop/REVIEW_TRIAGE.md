@@ -104,18 +104,37 @@ where the file says "M4 and M5" · §3.3 labels the explorer "exhaustive" one ro
 above quoting 99 % coverage · §3.3 renders 233/236 as "99 %" and "98.73 %" one
 line apart · §3.5's "the other track" has no antecedent · §2.2 omits
 `deadlock_carver` · §3.5's a0-spike corroboration is about reachability, not
-reversibility · §9.1 cites the ARC determinism precheck without putting 9/9, 3/3,
+reversibility · §10.1 cites the ARC determinism precheck without putting 9/9, 3/3,
 9/9, 9/9 in the sentence · the abstract drops "unplanned" from the Lean catch ·
 typography, mixed `·` and `—`, 重证 glossed two ways.
 
-**New, found at P7 and not in either audit — subsection numbers survived the
-renumber.** `runs/20260728T092517Z-P6/SECTION_RENUMBER.md` says only the `## n ·`
-heading line changed in the three moved files, and that is exactly the problem:
-`sections/10_limitations.md` still numbers its subsections **7.1–7.5**, and
-`sections/11_related.md` numbered its subsections **8.1–8.2** until P7 fixed that
-file. So the paper contains two §7.1s and two §7.3s, and any cross-reference to
-"§7.x" is ambiguous between the battery section and the limitations section. `W`,
-one pass over `sections/10_limitations.md`, plus a sweep for cross-references.
+**Found at P7 and not in either audit — subsection numbers survived the
+renumber. `W`, and now closed.** `runs/20260728T092517Z-P6/SECTION_RENUMBER.md`
+says only the `## n ·` heading line changed in the three moved files, and that was
+exactly the problem: `sections/10_limitations.md` numbered its subsections
+**7.1–7.5** and `sections/11_related.md` numbered its **8.1–8.2**, so the paper
+contained two §7.1s and two §7.3s and every "§7.x" was ambiguous between the
+battery and the limitations sections.
+
+Both files are renumbered, and a sweep over every `§n.m` in `sections/` — machine
+enumerated, then read one by one to separate references to *this* paper's sections
+from references to another file's — found **five stale cross-references** and
+three unattributed ones:
+
+| where | said | means | fixed to |
+|---|---|---|---|
+| `01_intro.md` | §7.1 records the sealed pile is no longer clean | limitations | **§10.1** |
+| `02_framework.md` | §8 places the whole thing against its neighbours | related work | **§11** |
+| `03_a0.md` | §8.1's own table forbids overstating it | the three-waves table | **§11.1** |
+| `10_limitations.md` ×2 | "the battery (§6)"; "rather than in §6" | the battery | **§7** |
+| `05_a2.md` ×3 | bare "§1.4's three-way" | `Theoria.md` §1.4, not this paper's §1 | attributed |
+
+The sweep also caught two things that are *not* numbering: the abstract's draft
+note still said "§7 is known stale", which stopped being true when §7 was
+re-derived; and §10.4 restated the battery's v0 figures (24 of 29) beside a §7
+that now reports v2. Both corrected against the artefacts. **A restatement in one
+section is a cross-reference too, and it goes stale the same way** — worth
+remembering the next time a section is re-derived.
 
 Open, **R**: `arc-recon/README.md:185` still says all 25 games are
 `never_audited` while the same file says the log supersedes it — a repo fix, not a

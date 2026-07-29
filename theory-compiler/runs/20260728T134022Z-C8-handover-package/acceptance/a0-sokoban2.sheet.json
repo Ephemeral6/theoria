@@ -1,0 +1,250 @@
+{
+  "action_vocabulary": {
+    "every board": [
+      "move(Player, down)",
+      "move(Player, left)",
+      "move(Player, right)",
+      "move(Player, up)"
+    ]
+  },
+  "answer_grammar": {
+    "any": "`abstain` is allowed anywhere; it scores nothing and is recorded as an abstention rather than as a wrong answer",
+    "name_class": "exactly one word: `level_data` if a board supplies it, `world_law` if no board can change it. There are only these two words, so something fixed by the language the manual is written in — rather than by this particular world — is still `world_law`: no board supplies it.",
+    "optimal_action": "exactly one action, written as it appears in `action_vocabulary`",
+    "step_semantics": "`<field>=<value>; …; rule=<name>` — every field listed in `state_fields` for that level, in any order, plus `rule`. A cell is written `(row,col)` and a true/false value `true` or `false`. The rule name must be one from `rule_vocabulary`."
+  },
+  "items": [
+    {
+      "action": "move(Player, up)",
+      "before": "Box_pos=(3,3); Player_pos=(5,3)",
+      "item_id": "step-crossing-up-9b876e60",
+      "kind": "step_semantics",
+      "level": "crossing-up",
+      "prompt": "The action move(Player, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, up)",
+      "before": "Box_pos=(3,3); Player_pos=(4,3)",
+      "item_id": "step-crossing-up-22d90dd9",
+      "kind": "step_semantics",
+      "level": "crossing-up",
+      "prompt": "The action move(Player, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, right)",
+      "before": "Box_pos=(3,3); Player_pos=(4,3)",
+      "item_id": "step-crossing-up-c91810ef",
+      "kind": "step_semantics",
+      "level": "crossing-up",
+      "prompt": "The action move(Player, right) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, right)",
+      "before": "Box_pos=(3,3); Player_pos=(3,2)",
+      "item_id": "step-crossing-up-0bf0c56e",
+      "kind": "step_semantics",
+      "level": "crossing-up",
+      "prompt": "The action move(Player, right) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, right)",
+      "before": "Box_pos=(3,5); Player_pos=(3,4)",
+      "item_id": "step-crossing-up-4bead192",
+      "kind": "step_semantics",
+      "level": "crossing-up",
+      "prompt": "The action move(Player, right) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, up)",
+      "before": "Box_pos=(3,3); Player_pos=(3,5)",
+      "item_id": "step-match-82f98383",
+      "kind": "step_semantics",
+      "level": "match",
+      "prompt": "The action move(Player, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, up)",
+      "before": "Box_pos=(3,3); Player_pos=(2,5)",
+      "item_id": "step-match-f9af048a",
+      "kind": "step_semantics",
+      "level": "match",
+      "prompt": "The action move(Player, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, left)",
+      "before": "Box_pos=(3,3); Player_pos=(3,4)",
+      "item_id": "step-match-824d2481",
+      "kind": "step_semantics",
+      "level": "match",
+      "prompt": "The action move(Player, left) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "move(Player, left)",
+      "before": "Box_pos=(3,1); Player_pos=(3,2)",
+      "item_id": "step-match-9bad5455",
+      "kind": "step_semantics",
+      "level": "match",
+      "prompt": "The action move(Player, left) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "definition": "the actions that can be taken",
+      "item_id": "name-action_vocabulary",
+      "kind": "name_class",
+      "name": "action_vocabulary",
+      "prompt": "Is `action_vocabulary` — the actions that can be taken — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "which directions exist at all",
+      "item_id": "name-direction_vocabulary",
+      "kind": "name_class",
+      "name": "direction_vocabulary",
+      "prompt": "Is `direction_vocabulary` — which directions exist at all — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `blocked_box_crossing` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_blocked_box_crossing",
+      "kind": "name_class",
+      "name": "effect_of_blocked_box_crossing",
+      "prompt": "Is `effect_of_blocked_box_crossing` — what the rule `blocked_box_crossing` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `blocked_box_landing` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_blocked_box_landing",
+      "kind": "name_class",
+      "name": "effect_of_blocked_box_landing",
+      "prompt": "Is `effect_of_blocked_box_landing` — what the rule `blocked_box_landing` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `blocked_box_on_wall` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_blocked_box_on_wall",
+      "kind": "name_class",
+      "name": "effect_of_blocked_box_on_wall",
+      "prompt": "Is `effect_of_blocked_box_on_wall` — what the rule `blocked_box_on_wall` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `blocked_wall` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_blocked_wall",
+      "kind": "name_class",
+      "name": "effect_of_blocked_wall",
+      "prompt": "Is `effect_of_blocked_wall` — what the rule `blocked_wall` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `push2` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_push2",
+      "kind": "name_class",
+      "name": "effect_of_push2",
+      "prompt": "Is `effect_of_push2` — what the rule `push2` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `walk` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_walk",
+      "kind": "name_class",
+      "name": "effect_of_walk",
+      "prompt": "Is `effect_of_walk` — what the rule `walk` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the *shape* of the winning condition — which object has to be where — as opposed to the particular cell, which is a separate name",
+      "item_id": "name-goal_form",
+      "kind": "name_class",
+      "name": "goal_form",
+      "prompt": "Is `goal_form` — the *shape* of the winning condition — which object has to be where — as opposed to the particular cell, which is a separate name — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "which cell the name `target` refers to",
+      "item_id": "name-landmark_target",
+      "kind": "name_class",
+      "name": "landmark_target",
+      "prompt": "Is `landmark_target` — which cell the name `target` refers to — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the set of rules that account for what happens",
+      "item_id": "name-rule_names",
+      "kind": "name_class",
+      "name": "rule_names",
+      "prompt": "Is `rule_names` — the set of rules that account for what happens — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `cascade` setting — how a turn is put together",
+      "item_id": "name-semantics_cascade",
+      "kind": "name_class",
+      "name": "semantics_cascade",
+      "prompt": "Is `semantics_cascade` — the world's `cascade` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `conflict` setting — how a turn is put together",
+      "item_id": "name-semantics_conflict",
+      "kind": "name_class",
+      "name": "semantics_conflict",
+      "prompt": "Is `semantics_conflict` — the world's `conflict` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `frame` setting — how a turn is put together",
+      "item_id": "name-semantics_frame",
+      "kind": "name_class",
+      "name": "semantics_frame",
+      "prompt": "Is `semantics_frame` — the world's `frame` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the value of `Player_pos` before any action has been taken",
+      "item_id": "name-start_Player_pos",
+      "kind": "name_class",
+      "name": "start_Player_pos",
+      "prompt": "Is `start_Player_pos` — the value of `Player_pos` before any action has been taken — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "which cells of the `board` array carry a colour other than the background — the cells `free` refuses for that reason. (The package does not use the word `wall_cells`; this item names the thing, not a term of art.)",
+      "item_id": "name-wall_cells",
+      "kind": "name_class",
+      "name": "wall_cells",
+      "prompt": "Is `wall_cells` — which cells of the `board` array carry a colour other than the background — the cells `free` refuses for that reason. (The package does not use the word `wall_cells`; this item names the thing, not a term of art.) — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "item_id": "opt-crossing-up-bdbe1a3c",
+      "kind": "optimal_action",
+      "level": "crossing-up",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Box_pos=(3,5); Player_pos=(3,3)"
+    },
+    {
+      "item_id": "opt-crossing-up-f46f71d5",
+      "kind": "optimal_action",
+      "level": "crossing-up",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Box_pos=(3,5); Player_pos=(4,3)"
+    },
+    {
+      "item_id": "opt-match-11813757",
+      "kind": "optimal_action",
+      "level": "match",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Box_pos=(3,3); Player_pos=(3,5)"
+    },
+    {
+      "item_id": "opt-match-b37722fd",
+      "kind": "optimal_action",
+      "level": "match",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Box_pos=(3,3); Player_pos=(2,5)"
+    }
+  ],
+  "levels": [
+    "crossing-up",
+    "match"
+  ],
+  "rule_vocabulary": {
+    "every board": [
+      "blocked_box_crossing",
+      "blocked_box_landing",
+      "blocked_box_on_wall",
+      "blocked_wall",
+      "push2",
+      "walk"
+    ]
+  },
+  "state_fields": {
+    "every board": [
+      "Box_pos",
+      "Player_pos"
+    ]
+  }
+}

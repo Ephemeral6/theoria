@@ -1,6 +1,6 @@
 {
   "api_calls_made": 0,
-  "base_commit": "0a3520b6d861384bda216e86deacf6d9575d1993",
+  "base_commit": "5defae76aa9958a439536302a55dab0d31f4abbd",
   "billable_actions": 0,
   "branch": "master",
   "credentials_entered": "none -- the user completed OAuth themselves",
@@ -16,26 +16,27 @@
     },
     {
       "path": "browser-ops/runs/2026-07-28-visits.md",
-      "sha256": "f30c1f9bc666c1da55183c012060bec710c3190ded0bdd32f907f94f0990b557"
+      "sha256": "b9550a2b7bfba38d11b4b78911e030ac872a07a9fc3ae5481933a3f86857cbbb"
     },
     {
       "path": "browser-ops/LETTER-TO-ARC-draft.md",
       "sha256": "d8497303a4ffbbdfe16bf28db165e6188a541f094713b1f92c913e5fe8441c87"
     },
     {
-      "path": "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
-      "sha256": "bda3a47713731df725c449a8cb9574c7157598ac722fd257bdb389e7b1483d73"
+      "path": "browser-ops/terms_canary.json",
+      "sha256": "da3b4dbdfeee3416a6ce2ffccad26c97b549a25d94b85b3eacaee859a11da438"
     },
     {
-      "path": "monitor/inbox/20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md",
-      "sha256": "c47a172c0f4dfb5fbe6dfeabef7bfc526abf9115eab70f5c4bb1c3c7db450f94"
+      "path": "browser-ops/REDLINE-replay-proposed-text.md",
+      "sha256": "349a1c65d214cf47a87c57fa2fb5885be99db22b74038017d33b6276353c4906"
     }
   ],
   "pages_declined": 10,
-  "pages_visited": 21,
+  "pages_visited": 27,
   "prompt_id": "OPS-B-browser",
-  "run": "browser-ops terms & account recon, cycles 0-3",
+  "run": "browser-ops terms & account recon, cycles 0-5",
   "screenshots_committed": 0,
   "sealed_pile_contact": 0,
-  "utc": "2026-07-28T10:25Z"
+  "terms_drift": "none as of 2026-07-28T12:28Z -- see browser-ops/terms_canary.json",
+  "utc": "2026-07-28T14:32Z"
 }

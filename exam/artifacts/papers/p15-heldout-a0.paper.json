@@ -1,5 +1,5 @@
 {
-  "instructions": "A0 is a sokoban variant. Each item gives the geometry of a board, the rendered frame before an action, and the action. Predict the rendered frame after that action.\n\nCell codes are in `legend`. Walls never move. Exactly one player and exactly one box are on every board. The four actions are UP, DOWN, LEFT, RIGHT.\n\nAnswer with the frame after, as a list of rows of integers, either bare or under the key `frame_after` -- so either [[0, 2], [4, 0]] or { \"frame_after\": [[0, 2], [4, 0]] } is accepted. Marking is whole-frame exact: a frame with one cell wrong scores the same as a frame with all of them wrong, because a theory that draws the world nearly right is a theory that has not been shown to draw it right.\n\nIf your theory has no rule covering an item, answer { \"abstain\": true }. That scores nothing, and it is recorded as an abstention rather than as a wrong answer; guessing costs you nothing here, so the distinction is for the reader of your report, not for your total.\n\nThe `tags` field says whether the transition occurred in the evidence you were given (`replay`) or did not (`heldout`). The two halves have the same mix of situations, so the tag tells you nothing about the answer.",
+  "instructions": "Each item gives the geometry of a board, the rendered frame before an action, and the action. Predict the rendered frame after that action.\n\nCell codes are in `legend`. Walls never move. Exactly one player and exactly one box are on every board. The four actions are UP, DOWN, LEFT, RIGHT.\n\nAnswer with the frame after, as a list of rows of integers, either bare or under the key `frame_after` -- so either [[0, 2], [4, 0]] or { \"frame_after\": [[0, 2], [4, 0]] } is accepted. Marking is whole-frame exact: a frame with one cell wrong scores the same as a frame with all of them wrong, because a theory that draws the world nearly right is a theory that has not been shown to draw it right.\n\nIf your theory has no rule covering an item, answer { \"abstain\": true }. That scores nothing, and it is recorded as an abstention rather than as a wrong answer; guessing costs you nothing here, so the distinction is for the reader of your report, not for your total.\n\nThe `tags` field says whether the transition occurred in the evidence you were given (`replay`) or did not (`heldout`). The two halves have the same mix of situations, so the tag tells you nothing about the answer.",
   "items": [
     {
       "action": "RIGHT",
@@ -8041,8 +8041,8 @@
   "n_items": 80,
   "paper_id": "p15-heldout-a0",
   "question_type": "heldout",
-  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
-  "rubric_module_digest": "ec31348a206a318452d332325730eaec7e092acc24be06abd1c6926661c38a72",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "rubric_module_digest": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
   "schema": "exam/v0.1",
   "total_points": 80.0,
   "world": {
@@ -8054,6 +8054,7 @@
       "sk48-d8078629",
       "tn36-ef4dde99"
     ],
+    "generated_worlds_available": 20,
     "n_sealed": 21,
     "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
     "synthetic_worlds": [

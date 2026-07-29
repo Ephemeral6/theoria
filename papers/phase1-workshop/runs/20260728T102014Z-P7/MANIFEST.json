@@ -60,7 +60,7 @@
   "files": [
     {
       "path": "papers/phase1-workshop/sections/07_battery.md",
-      "sha256": "b7eb3736c19bf4dd2c3cb69c1460a6f85a96241d67123a5a8dd30991118ab62b"
+      "sha256": "09802d3f58111bb3d5c83d01f089186720d0eebb6757d466b08d09d4c28fd1d2"
     },
     {
       "path": "papers/phase1-workshop/sections/11_related.md",
@@ -68,7 +68,7 @@
     },
     {
       "path": "papers/phase1-workshop/sections/03_a0.md",
-      "sha256": "a0112e2890f4c8eea0ea1c4f1e87b2f85ac51dfaf799bc1dd7b19b0a3bb75b49"
+      "sha256": "bcce6e319319ebc9069292811f3beeadb435418e080f64a6283ad34bee91efef"
     },
     {
       "path": "papers/phase1-workshop/references.bib",
@@ -76,7 +76,7 @@
     },
     {
       "path": "papers/phase1-workshop/REVIEW_TRIAGE.md",
-      "sha256": "3a01050e244ee92d1480af214afae313cb1d8a2ff9c6f1518a46fa398fa4dc2a"
+      "sha256": "4bebcb6461fce8c372dde0bfe22089a2c8f1acf59474d56b418ad12feccbcc00"
     },
     {
       "path": "papers/phase1-workshop/OPEN_ITEMS.md",
@@ -88,7 +88,7 @@
     },
     {
       "path": "papers/phase1-workshop/PAPER.md",
-      "sha256": "c1ba29bffdd3d7afd024c59b6146124c2a6f7b11859e629ecff8d24cb692d3ef"
+      "sha256": "4d768d2c0c1fa694292c0449a7d09c1752b7d930d4d6d0f86b59022594b717ca"
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/audit-sample-a.md",
@@ -156,7 +156,7 @@
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/RUN_STATE.md",
-      "sha256": "ff68189a8e682486c4f16cdc2236ddfec74a8b15c73d2eec1112e5251b5ee294"
+      "sha256": "3ecb368356908278517f3b23ff922ab4a14fa059e8dc2e7a79f3bea3efa62e46"
     }
   ],
   "bibliography": {

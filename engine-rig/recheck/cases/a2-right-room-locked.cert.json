@@ -1,0 +1,121 @@
+{
+  "claim": "unsolvable",
+  "comment": "I(s) := w(cart) = 0, the invariant Lean proves closed in cold-start-a2/theory/generated_holed/theory.lean, axiom-free. It is TRUE of the holed manual and FALSE of the world; rechecking it against a2-world must reject it. This is the one certificate here that carries no `ruleset` binding, and the omission is the point: it is meant to be checked against both manuals, and a binding would refuse the second run before the invariant was ever evaluated.",
+  "kind": "inductive_invariant",
+  "name": "a2-right-room-locked",
+  "predicate": [
+    "=",
+    [
+      "table",
+      "w",
+      [
+        "var",
+        "cart"
+      ]
+    ],
+    [
+      "lit",
+      0
+    ]
+  ],
+  "produced_by": "zero_space -> a GF(2) occupancy law, adjudicated into a 0/1 pagoda weight (cold-start-a2 THEORIZE_LOG L-03)",
+  "provenance": {
+    "lean": "cold-start-a2/theory/generated_holed/theory.lean, `def w` and `def I`",
+    "lean_status": "GREEN, #print axioms unsolvable = []",
+    "refuted_by": "cold-start-a2/artifacts/refutation.json -- an 18-action episode ends with win: true"
+  },
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "w": {
+      "arity": 1,
+      "comment": "0 on the 21 cells the Cart was ever observed on, 1 everywhere else, including the goal cell",
+      "default": 1,
+      "entries": [
+        [
+          "1,3",
+          0
+        ],
+        [
+          "1,4",
+          0
+        ],
+        [
+          "2,1",
+          0
+        ],
+        [
+          "2,2",
+          0
+        ],
+        [
+          "2,3",
+          0
+        ],
+        [
+          "2,4",
+          0
+        ],
+        [
+          "3,1",
+          0
+        ],
+        [
+          "3,2",
+          0
+        ],
+        [
+          "3,3",
+          0
+        ],
+        [
+          "3,4",
+          0
+        ],
+        [
+          "4,1",
+          0
+        ],
+        [
+          "4,2",
+          0
+        ],
+        [
+          "4,3",
+          0
+        ],
+        [
+          "4,4",
+          0
+        ],
+        [
+          "5,1",
+          0
+        ],
+        [
+          "5,2",
+          0
+        ],
+        [
+          "5,3",
+          0
+        ],
+        [
+          "5,4",
+          0
+        ],
+        [
+          "6,2",
+          0
+        ],
+        [
+          "6,3",
+          0
+        ],
+        [
+          "6,4",
+          0
+        ]
+      ]
+    }
+  }
+}

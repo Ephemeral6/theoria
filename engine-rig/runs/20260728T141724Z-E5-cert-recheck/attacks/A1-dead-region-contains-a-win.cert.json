@@ -1,0 +1,61 @@
+{
+  "claim": "conditional_unsolvability",
+  "comment": "b1=1,1 (the real corner deadlock) OR the winning position player=1,3 b1=4,2 b2=1,3",
+  "kind": "dead_region",
+  "name": "attack-A1-dead-region-contains-a-win",
+  "predicate": [
+    "or",
+    [
+      "=",
+      [
+        "var",
+        "b1"
+      ],
+      [
+        "lit",
+        "1,1"
+      ]
+    ],
+    [
+      "and",
+      [
+        "=",
+        [
+          "var",
+          "player"
+        ],
+        [
+          "lit",
+          "1,3"
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "b1"
+        ],
+        [
+          "lit",
+          "4,2"
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "b2"
+        ],
+        [
+          "lit",
+          "1,3"
+        ]
+      ]
+    ]
+  ],
+  "produced_by": "engines/deadlock_carver (M9)",
+  "ruleset": {
+    "name": "sokoban-open4far"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}

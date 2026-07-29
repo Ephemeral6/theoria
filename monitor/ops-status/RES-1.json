@@ -1,7 +1,10 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T11:05:00Z",
- "cycle": 1,
+ "utc": "2026-07-28T21:25:00Z",
+ "cycle": 2,
  "state": "working",
- "note": "V4-exam-selftest: audit done -- 2/3 asks already shipped by P-15/V2; building marker mutation self-test + fault-injection matrix + sens/spec matrix"
+ "note": "A:bus#2 ablation 闸门 完工——根因是仪表(pin 把并发舰队的 proxy/var/spend_gate.jsonl 算进本臂)，把宽泛否定名单换成按进程归属判定(audit hook)，verify.sh 连绿两次，56 passed，分支已推。B:A3 关卡边界+跨关带书落码，并查出一条决定性事实：全仓约 2600 条真实 ARC 应答里 levels_completed 恒为 0、state 只有 NOT_FINISHED——**没人通过任何一关**，所以「通关信号是什么」是未观测量。已把两种可能都实现(计数器递增 / WIN+RESET 探测)，探不动就以 level_advance_unknown 停并留下测量。C:A4b-ablation-calibrate 已领并派工。钱已批($200/$60/$25/40动作)，但桌面模型花费的闸门适配器(harness/spend.py)落地后才开跑。",
+ "in_hand": ["A3-campaign-devpile", "A4b-ablation-calibrate"],
+ "delivered_this_cycle": ["bus#2 ablation-arm readonly gate"],
+ "agents_out": 5
 }

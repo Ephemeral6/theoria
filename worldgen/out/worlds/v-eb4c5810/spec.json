@@ -1,0 +1,49 @@
+{
+  "agent_start": [
+    2,
+    2
+  ],
+  "colors": {
+    "cycler": 2,
+    "cycler_1": 3,
+    "cycler_2": 4
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        4
+      ],
+      "kind": "cycler",
+      "props": {
+        "k": 3,
+        "open_phase": 2
+      }
+    }
+  ],
+  "families": [
+    "color_cycle"
+  ],
+  "flags": {
+    "forbidden_action": "UP"
+  },
+  "goal": [
+    4,
+    5
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "#######",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#######"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-eb4c5810"
+}

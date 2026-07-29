@@ -1,0 +1,6 @@
+planted gap, shipped probe             -> exit 1   ['NEW_GAP']
+planted gap, gating=(REGRESSION,)      -> exit 0   ['NEW_GAP']
+name-only negctl, shipped probe        -> exit 1   ['NEW_GAP']
+name-only negctl, detector=N           -> exit 0   ['NEW_OK']
+positive controls only, shipped probe  -> exit 1   ['NEW_GAP']
+real negative control, shipped probe   -> exit 0   ['NEW_OK']

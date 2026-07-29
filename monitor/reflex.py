@@ -26,8 +26,9 @@ LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
 MAX_DEATHS = 3
-WORKER_MAX = 0      # spawning is OFF: the monitor ramps workers by hand after the
-                    # 2026-07-28 crash. Reflex keeps reap / quota / ci_merge only.
+WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
+                    # now (memory admission, 45s stagger, orphan sweep, quota
+                    # gate), so worker supply no longer waits for a human.
 MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
 
 
@@ -88,6 +89,30 @@ def main():
                     events.append("queue-skip:%s" % pid_str)
             os.remove(qpath)
 
+        # 0c. sweep orphaned board claims — a worker killed by the quota or a
+        # crash leaves its claim hanging, so the board thinks the work is in
+        # progress and the territory stays locked against everyone else.
+        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep"])
+        events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
+                   if "freed from" in l]
+
+        # 0d. dashboard server — the logon task could not be registered
+        # (needs admin), so reflex keeps the port alive itself. Without this
+        # the page dies at every reboot and the user has to notice.
+        try:
+            import socket
+            s = socket.socket()
+            s.settimeout(1)
+            dead = s.connect_ex(("127.0.0.1", 8787)) != 0
+            s.close()
+        except Exception:
+            dead = True
+        if dead:
+            subprocess.Popen(["cmd", "/c", "start", "/min", "",
+                              os.path.join(HERE, "serve.cmd")],
+                             creationflags=0x00000008 | 0x01000000)
+            events.append("serve:restarted")
+
         # 1. reap
         out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
                    "--reap"]).stdout
@@ -96,6 +121,29 @@ def main():
 
         # 2. quota
         q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
+        # The hold had no exit: nothing ever called resume, so a session-limit
+        # at 09:35 kept the fleet frozen long after its 20:20 reset (OPS-M
+        # cycle 5). Every tick in hold now probes the window and lifts it.
+        if q.returncode == 2:
+            # `--if-due` and not a bare ping: this loop runs every five minutes
+            # and each ping is a real haiku call, so an unthrottled probe spent
+            # the quota it was waiting to get back, twelve times an hour, for
+            # the length of the outage. Exit 3 means "not due, nothing spent".
+            probe = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "ping", "--if-due"], timeout=180)
+            if probe.returncode == 3:
+                events.append("quota:probe-throttled")
+            elif probe.returncode == 0:
+                # `resume` reuses this ping's answer rather than buying it
+                # again; it is the same measurement seconds apart.
+                r = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "resume"], timeout=1800)
+                events.append("quota:RESUMED(auto)")
+                rlog("quota: window reopened on its own -> automatic resume, "
+                     "no human in the loop: %s"
+                     % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
+                q = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "check"])
         hold = q.returncode == 2
         if hold:
             events.append("quota:HOLD")
@@ -180,13 +228,26 @@ def main():
                 state["death_counts"] = deaths
                 save_loop(state)
 
-        # 4. ci merge (its own lock + M-0 standdown check inside)
-        if not hold:
+        # 4. ci merge — runs even under quota hold: it spends zero tokens
+        # (git + pytest only), and a worker's proposal caught it being
+        # stopped by a budget it cannot possibly consume.
+        if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
             merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
             flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
             events += merged + flagged
+
+        # 4b. supply alarm — authoring items needs judgment, so reflex cannot
+        # refill the board itself; what it can do is make a dry board loud
+        # instead of silent. Idle agents look identical to busy ones.
+        try:
+            import board as board_mod
+            depth = len(board_mod.candidates())
+            if depth <= 2:
+                events.append("SUPPLY-LOW:%d" % depth)
+        except Exception:
+            pass
 
         # 5. light dashboard refresh
         run([sys.executable, os.path.join(HERE, "scan.py")], timeout=600)

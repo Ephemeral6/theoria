@@ -83,6 +83,15 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {m}", file=sys.stderr)
         return 2
 
+    # A discovery rule that could not apply its tracked-only filter still built
+    # a figure -- with a weaker guarantee than the one this pipeline advertises.
+    # Printed rather than swallowed, because a silently weaker guarantee is
+    # indistinguishable from the strong one right up until it is not.
+    for warning in sources.TRACKING_UNAVAILABLE:
+        print(f"WARN: {warning}", file=sys.stderr)
+    for warning in sources.untracked_inclusions():
+        print(f"WARN: {warning}", file=sys.stderr)
+
     wanted = tuple(args.only) if args.only else FIGURES
     unknown = [w for w in wanted if w not in FIGURES]
     if unknown:

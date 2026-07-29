@@ -26,13 +26,13 @@ The following types of changes can occur:
 
 ## How Things Change
 
-- **push up** (observed in all 56 cases): When the action is push(Cart, up) and the cell above Cart is free (unoccupied), then Cart moves up.
-- **push down** (observed in all 51 cases): When the action is push(Cart, down) and the cell below Cart is free (unoccupied), then Cart moves down.
-- **push left** (observed in all 39 cases): When the action is push(Cart, left) and leftof(Cart) is free (unoccupied), then Cart moves left.
-- **push right** (observed in all 43 cases): When the action is push(Cart, right) and rightof(Cart) is free (unoccupied), then Cart moves right.
-- **teleport down** (observed in all 1 cases): When the action is push(Cart, down) and colored(the cell below Cart, 3), then a peg jumps.
-- **press up** (observed in all 1 cases): When the action is push(Cart, up) and colored(the cell above Cart, 7), then recolored(Button, 8).
-- **door opens up** (observed in all 1 cases): When the action is push(Cart, up) and colored(the cell above Cart, 7), then Door vanishes.
+- **push up** (`push_up`) (observed in all 56 cases): When the action is push(Cart, up) and the cell above Cart is free — on the board, not a wall, and nothing standing on it, then Cart moves one cell up.
+- **push down** (`push_down`) (observed in all 51 cases): When the action is push(Cart, down) and the cell below Cart is free — on the board, not a wall, and nothing standing on it, then Cart moves one cell down.
+- **push left** (`push_left`) (observed in all 39 cases): When the action is push(Cart, left) and leftof(Cart) is free — on the board, not a wall, and nothing standing on it, then Cart moves one cell left.
+- **push right** (`push_right`) (observed in all 43 cases): When the action is push(Cart, right) and rightof(Cart) is free — on the board, not a wall, and nothing standing on it, then Cart moves one cell right.
+- **teleport down** (`teleport_down`) (observed in all 1 cases): When the action is push(Cart, down) and colored(the cell below Cart, 3), then Cart is placed on the cell portal_exit names.
+- **press up** (`press_up`) (observed in all 1 cases): When the action is push(Cart, up) and colored(the cell above Cart, 7), then Button's colour becomes 8.
+- **door opens up** (`door_opens_up`) (observed in all 1 cases): When the action is push(Cart, up) and colored(the cell above Cart, 7), then Door stops being present.
 
 ## Winning Condition
 

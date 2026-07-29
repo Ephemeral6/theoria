@@ -26,12 +26,20 @@ from .types import ACTIONS, AGENT, FLOOR, WALL, Cell, State, decode_cell, encode
 
 SETTLE_LIMIT = 256          # a settle loop longer than this is a bug, not a world
 
+#: The rule tag a world emits for an action its spec forbids.  See
+#: `WorldSpec.forbidden_action` and `worldgen/mutate.py`'s `forbid_action`
+#: operator: the command is refused before the grid is consulted at all, so the
+#: agent observes an unchanged frame — the same semantics as `exam/`'s wrapper
+#: operator of the same name, which is what makes the two comparable.
+FORBIDDEN_RULE = "action_forbidden"
+
 
 class GridWorld:
     def __init__(self, spec: WorldSpec, check: bool = True):
         if check:
             validate(spec)
         self.spec = spec
+        self.forbidden: FrozenSet[str] = spec.forbidden_actions()
         self.walls: FrozenSet[Cell] = frozenset(
             (r, c)
             for r in range(spec.height)
@@ -192,6 +200,14 @@ class GridWorld:
         produced by the same code path that produces the state — a rule cannot
         drift away from the transition it labels.
         """
+        # Checked first, ahead of the grid: a forbidden action is refused at the
+        # controller, not by the world, so it does not read as a wall.  Putting
+        # the test after the bounds check would make `blocked_by_wall` and
+        # `action_forbidden` fight over the same transitions and the tag a
+        # transition carried would depend on where the agent happened to stand.
+        if action in self.forbidden:
+            return state, FORBIDDEN_RULE
+
         target = shift(state.agent, action)
         if not self.in_bounds(target) or target in self.walls:
             return state, "blocked_by_wall"

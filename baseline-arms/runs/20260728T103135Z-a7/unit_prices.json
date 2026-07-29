@@ -1,0 +1,204 @@
+{
+  "common_games": [
+    "g50t-5849a774",
+    "sk48-d8078629",
+    "tn36-ef4dde99"
+  ],
+  "games_by_transport": {
+    "jar-off": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "jar-on": [
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ]
+  },
+  "generated": "2026-07-28T15:12:40Z",
+  "rows": {
+    "claude-haiku-4-5-20251001|jar-off": {
+      "action_success_rate": 0.7,
+      "actions_failed": 18,
+      "actions_ok": 42,
+      "barren_cells": 0,
+      "barren_cost_usd": 0,
+      "cells": 3,
+      "cells_seen": 3,
+      "cost_usd": 1.5049,
+      "games": [
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "http_calls": 298,
+      "http_per_action": 7.1,
+      "model_calls": 60,
+      "usd_per_action": 0.0358,
+      "usd_per_action_working_cells_only": 0.0358,
+      "usd_per_model_call": 0.0251,
+      "wall_s_per_action": 57.9
+    },
+    "claude-haiku-4-5-20251001|jar-on": {
+      "action_success_rate": 0.906,
+      "actions_failed": 25,
+      "actions_ok": 242,
+      "barren_cells": 0,
+      "barren_cost_usd": 0,
+      "cells": 9,
+      "cells_seen": 9,
+      "cost_usd": 10.5364,
+      "games": [
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "http_calls": 477,
+      "http_per_action": 1.97,
+      "model_calls": 269,
+      "usd_per_action": 0.0435,
+      "usd_per_action_working_cells_only": 0.0435,
+      "usd_per_model_call": 0.0392,
+      "wall_s_per_action": 42.7
+    },
+    "claude-opus-5|jar-off": {
+      "action_success_rate": 0.56,
+      "actions_failed": 22,
+      "actions_ok": 28,
+      "barren_cells": 1,
+      "barren_cost_usd": 0.7509,
+      "cells": 3,
+      "cells_seen": 3,
+      "cost_usd": 3.805,
+      "games": [
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "http_calls": 288,
+      "http_per_action": 10.29,
+      "model_calls": 50,
+      "usd_per_action": 0.1359,
+      "usd_per_action_working_cells_only": 0.1091,
+      "usd_per_model_call": 0.0761,
+      "wall_s_per_action": 53.3
+    },
+    "claude-opus-5|jar-on": {
+      "action_success_rate": 0.8,
+      "actions_failed": 14,
+      "actions_ok": 56,
+      "barren_cells": 1,
+      "barren_cost_usd": 1.1307,
+      "cells": 3,
+      "cells_seen": 3,
+      "cost_usd": 8.176,
+      "games": [
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "http_calls": 174,
+      "http_per_action": 3.11,
+      "model_calls": 70,
+      "usd_per_action": 0.146,
+      "usd_per_action_working_cells_only": 0.1258,
+      "usd_per_model_call": 0.1168,
+      "wall_s_per_action": 19.8
+    },
+    "claude-sonnet-5|jar-off": {
+      "action_success_rate": 0.65,
+      "actions_failed": 7,
+      "actions_ok": 13,
+      "barren_cells": 0,
+      "barren_cost_usd": 0,
+      "cells": 1,
+      "cells_seen": 5,
+      "cost_usd": 1.6358,
+      "games": [
+        "g50t-5849a774"
+      ],
+      "http_calls": 105,
+      "http_per_action": 8.08,
+      "model_calls": 24,
+      "usd_per_action": 0.1258,
+      "usd_per_action_working_cells_only": 0.1258,
+      "usd_per_model_call": 0.0682,
+      "wall_s_per_action": 77.2
+    },
+    "claude-sonnet-5|jar-on": {
+      "action_success_rate": 0.722,
+      "actions_failed": 25,
+      "actions_ok": 65,
+      "barren_cells": 0,
+      "barren_cost_usd": 0,
+      "cells": 3,
+      "cells_seen": 3,
+      "cost_usd": 11.6572,
+      "games": [
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "http_calls": 290,
+      "http_per_action": 4.46,
+      "model_calls": 102,
+      "usd_per_action": 0.1793,
+      "usd_per_action_working_cells_only": 0.1793,
+      "usd_per_model_call": 0.1143,
+      "wall_s_per_action": 55.3
+    }
+  },
+  "scoped_to_common_games": true,
+  "transport_check": {
+    "clean_split": true,
+    "mixed_files": [],
+    "populations": {
+      "probe_log.a7-g50t.jsonl": {
+        "calls": 99,
+        "jar_on": 99
+      },
+      "probe_log.a7-sk48.jsonl": {
+        "calls": 171,
+        "jar_on": 171
+      },
+      "probe_log.a7-tn36.jsonl": {
+        "calls": 234,
+        "jar_on": 234
+      },
+      "probe_log.a7smoke.jsonl": {
+        "calls": 3,
+        "jar_on": 3
+      },
+      "probe_log.a7up-opus-g50t.jsonl": {
+        "calls": 33,
+        "jar_on": 33
+      },
+      "probe_log.a7up-opus-sk48.jsonl": {
+        "calls": 70,
+        "jar_on": 70
+      },
+      "probe_log.a7up-opus-tn36.jsonl": {
+        "calls": 83,
+        "jar_on": 83
+      },
+      "probe_log.a7up-sonnet-g50t.jsonl": {
+        "calls": 33,
+        "jar_on": 33
+      },
+      "probe_log.a7up-sonnet-sk48.jsonl": {
+        "calls": 95,
+        "jar_on": 95
+      },
+      "probe_log.a7up-sonnet-tn36.jsonl": {
+        "calls": 173,
+        "jar_on": 173
+      },
+      "probe_log.jsonl": {
+        "calls": 1922,
+        "jar_on": 0
+      }
+    }
+  }
+}

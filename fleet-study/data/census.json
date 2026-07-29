@@ -1,0 +1,193 @@
+{
+  "censused_tree": {
+    "value": {
+      "root": "C:\\Users\\user\\Desktop\\theoria",
+      "branch": "master"
+    },
+    "method": "git rev-parse --git-common-dir, to reach the main checkout even when this script runs from a linked worktree",
+    "caveat": "Counts below describe this tree. Run from a feature worktree without --root and you would census that branch's stale copies instead."
+  },
+  "as_of_utc": {
+    "value": "2026-07-28T23:41:47Z",
+    "method": "TZ=UTC0 git log -1 --format=%cd --date=format-local:%Y-%m-%dT%H:%M:%SZ HEAD"
+  },
+  "head": {
+    "value": "c3439767a99791bce6cce73b80485a2e51c25a1b",
+    "method": "git rev-parse HEAD"
+  },
+  "first_commit_utc": {
+    "value": "2026-07-27T10:55:18Z",
+    "method": "TZ=UTC0 git log --reverse --format=%cd --date=format-local:%Y-%m-%dT%H:%M:%SZ HEAD | head -1",
+    "caveat": "The repo predates the fleet; this is the repo's start, not the fleet's."
+  },
+  "commits_reachable_from_head": {
+    "value": 490,
+    "method": "git rev-list --count HEAD",
+    "caveat": "Excludes unmerged branch tips; see commits_all_refs for the wider figure."
+  },
+  "commits_all_refs": {
+    "value": 552,
+    "method": "git rev-list --count --all",
+    "caveat": "Counts every commit on every ref, including branches never merged. This is the honest measure of work done, but not of work landed."
+  },
+  "commits_by_author": {
+    "value": {
+      "engine-rig": 547,
+      "baseline-arms": 5
+    },
+    "method": "git log --all --format=%an | tally",
+    "caveat": "Git author is the machine identity, not the agent identity: every agent commits as the same user. Agent attribution lives in commit *messages* and in monitor/board.log, not here. This field measures nothing about the fleet's size -- it is included so nobody mistakes it for that."
+  },
+  "agent_branches": {
+    "value": 91,
+    "method": "git branch -a --format='%(refname:short)' | grep agent/ | strip remote prefix | uniq",
+    "caveat": "One branch per board item worked, local and remote de-duplicated."
+  },
+  "partner_sync_paragraphs": {
+    "value": 136,
+    "method": "count of lines matching ^## \\[<track>\\] in PARTNER_SYNC.md",
+    "caveat": "Only paragraphs using the prescribed header form are counted; a paragraph appended with a malformed header is invisible here."
+  },
+  "partner_sync_by_track": {
+    "value": {
+      "engine-rig": 36,
+      "theory-compiler": 19,
+      "baseline-arms": 12,
+      "arc-recon": 9,
+      "cold-start-a0": 8,
+      "proxy": 8,
+      "papers/phase1-workshop": 6,
+      "battery": 4,
+      "OPS-M": 4,
+      "worldgen": 4,
+      "verify-lab": 4,
+      "cold-start-a3": 3,
+      "fuzzlab": 3,
+      "monitor": 3,
+      "cold-start-a2": 2,
+      "theoria-arm": 2,
+      "browser-ops": 2,
+      "figures": 2,
+      "exam": 2,
+      "OPS-R": 1,
+      "release": 1,
+      "ablation-arm": 1
+    },
+    "method": "same regex, grouped by the bracketed track name"
+  },
+  "inbox_reports_present": {
+    "value": 43,
+    "method": "count of monitor/inbox/*.md in the worktree",
+    "caveat": "The inbox is swept: reports are deleted once read, so this undercounts. See inbox_reports_ever."
+  },
+  "inbox_reports_ever": {
+    "value": 110,
+    "method": "git log --all --name-only -- monitor/inbox | unique *.md paths",
+    "caveat": "Union over all history and all refs; the true count of reports an agent ever filed. Untracked reports never committed are invisible to this."
+  },
+  "incident_ids_named_in_commits": {
+    "value": [
+      "INC-0008",
+      "INC-001",
+      "INC-001a",
+      "INC-001b",
+      "INC-002",
+      "INC-002a",
+      "INC-003",
+      "INC-004",
+      "INC-005",
+      "INC-006a",
+      "INC-007",
+      "INC-007a",
+      "INC-008",
+      "INC-009",
+      "INC-010",
+      "INC-011",
+      "INC-AR-010",
+      "INC-AR-011",
+      "INC-BA-001",
+      "INC-BA-002",
+      "INC-BA-003",
+      "INC-TA-002",
+      "INC-TA-003",
+      "INC-TA-004",
+      "INC-TA-005",
+      "INC-TA-006"
+    ],
+    "method": "regex \\bINC-(?:[A-Z]{1,4}-)?\\d{1,4}[a-z]?\\b over `git log --all --format=%B`",
+    "caveat": "Incidents *named in a commit message*. An incident recorded only in a file, or never recorded at all, does not appear here."
+  },
+  "incidents_in_ledger": {
+    "value": [
+      "INC-001",
+      "INC-001a",
+      "INC-001b",
+      "INC-002",
+      "INC-002a",
+      "INC-003",
+      "INC-004",
+      "INC-005",
+      "INC-006",
+      "INC-006a",
+      "INC-007",
+      "INC-007a",
+      "INC-008",
+      "INC-009",
+      "INC-010",
+      "INC-011"
+    ],
+    "method": "ids in arc-recon/data/incidents.jsonl",
+    "caveat": "The only structured incident ledger in the repo. It lives in arc-recon and covers that ground; fleet-level failures were never filed as incidents at all -- they live in commit messages, audits and inbox reports, which is why failures.jsonl had to be mined rather than read off a register."
+  },
+  "incident_ids_excluded_as_noise": {
+    "value": [
+      "INC-0008",
+      "INC-00x",
+      "INC-998",
+      "INC-999"
+    ],
+    "method": "hand-adjudicated: template placeholders, test fixtures, and one typo",
+    "caveat": "INC-0008 is a typo for INC-008 that reached a commit message and is now permanent; INC-00x is a template; INC-998/999 are test fixtures."
+  },
+  "incident_ids_anywhere": {
+    "value": [
+      "INC-001",
+      "INC-001a",
+      "INC-001b",
+      "INC-002",
+      "INC-002a",
+      "INC-003",
+      "INC-004",
+      "INC-005",
+      "INC-006",
+      "INC-006a",
+      "INC-007",
+      "INC-007a",
+      "INC-008",
+      "INC-009",
+      "INC-010",
+      "INC-011",
+      "INC-AR-010",
+      "INC-AR-011",
+      "INC-BA-001",
+      "INC-BA-002",
+      "INC-BA-003",
+      "INC-TA-001",
+      "INC-TA-002",
+      "INC-TA-003",
+      "INC-TA-004",
+      "INC-TA-005",
+      "INC-TA-006"
+    ],
+    "method": "union of the commit-message regex and the same regex over tracked text files in the worktree (.md/.py/.json/.jsonl/.txt/.sh)",
+    "caveat": "The widest defensible count of distinct incidents, spanning both id vocabularies. Ids cited but never defined are included: citation is evidence the incident was real to whoever wrote it, but this is an upper bound, not a register. Note that no single register exists -- the ledger holds only arc-recon's, so this union is the closest thing the fleet has to a complete incident list, and it was assembled after the fact by a regex rather than maintained as the incidents happened."
+  },
+  "pile_cut": {
+    "value": {
+      "development": 4,
+      "sealed": 21
+    },
+    "method": "arc-recon/data/piles.json, counting the two id lists",
+    "caveat": "Zero API contact is not the same as zero contamination: INC-BA-001 recorded knowledge contamination of 9 sealed games from a web search, and F-11 cut the claim set to 19. 'Untouched' and 'uncontaminated' are different claims and the study must not merge them."
+  }
+}

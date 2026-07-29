@@ -115,7 +115,7 @@
       "claim": "a full run leaves every upstream tree byte-identical",
       "evidence": {
         "changed": [],
-        "files_hashed": 386
+        "files_hashed": 484
       },
       "holds": true,
       "name": "read-only"
