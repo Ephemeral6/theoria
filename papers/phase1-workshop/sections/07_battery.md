@@ -346,11 +346,124 @@ two manuals.** For any pair differing by one concept or one clause, at least one
 `higher`-direction metric prefers each — deleting negatively-scoring concepts
 improves K6 and K14 while worsening K5; stating a generalisation you cannot fully
 evidence improves K2 and K3 while worsening K4. A single manual that describes
-nothing holds nineteen of the twenty metrics in that audit's scope at their best
+nothing holds **eighteen** of the twenty metrics in that audit's scope at their best
 reading at once — the scope being the fourteen epistemic metrics plus the six
-mechanism ones, and the twentieth, the only one the empty manual cannot reach,
-being M3 (`battery/audit/exploits/mechanism_epistemic.py`, `omnibus_manual`).
+mechanism ones, and the two it cannot reach being M3, which no run reaches at
+all, and K12, whose first-round hole the defence above genuinely closed
+(`battery/tests/test_exploits_mechanism_epistemic.py`, `assert len(landed) == 18`,
+whose docstring records the figure as "nineteen before v2.1 closed K12").
+Earlier drafts of this paper printed nineteen after that defence had landed: the
+number had been moved by the section's own test and the sentence did not follow.
 That lands on the two families which are also entirely unvalidated.
+
+### 7.7a Then it was done again, blind, and the main table emptied
+
+Everything above is one round, and its exploits were written by someone who could
+read the register they were attacking. A second round removed that advantage: six
+mutually invisible attackers, each given a source tree stripped of the register,
+the exploits and the reports, with every metric's threshold committed before any
+attack was written and the ordering provable by git ancestry rather than asserted
+(`battery/BLINDING.md`; `battery/PREREG_V9.md`). They wrote **105 attacks, of
+which 91 landed**, and **37 of the 38 metrics reached their pre-registered
+threshold** — the exception being M3, which no attack could reach because nothing
+in it ever calls its own success predicate.
+
+**The blind round took the main table from nine metrics to two**, leaving E1 and
+M3 — as the blind phase's own frozen artefact records it (`verdict.main` =
+`["E1", "M3"]`, the run directory as first written). That "two" is a statement
+about the code as it then stood: the `undetermined` tier did not yet exist, and
+running the same 105 attacks through today's adjudication leaves M3 outside the
+table rather than in it, so the blind round demoted **eight** metrics and the
+ninth is a later retier. Both readings are defensible and they are about
+different code, which is why the count is given with its date attached. The last two did not fall to the blind protocol. A **sighted**
+review, which could see everything, wrote seven more attacks of which four landed
+and took E1; M3 was moved to a new `undetermined` tier created for it after the
+fact, because a metric no attack can reach is not the same thing as a metric that
+resisted one. What the battery publishes today is
+`**Main table (0):**` against `**Reference (38):**` — every metric it has
+(`battery/METRICS.md`).
+
+**With one exception that a reader will hit first.** `battery/artifacts/gaming_audit.json`
+— the artefact `run_battery` regenerates, and the one this section has been citing
+throughout — still records a main table of nine. It was deliberately not rewritten:
+the blind round's pre-registration commits it to leaving already-published
+artefacts alone. The effect is that the shipped artefact set contradicts the
+shipped conclusion, and the file that contradicts it is the convenient one. §7.1
+says the artefacts regenerate; this is the second thing wrong with that sentence.
+
+That is the finding, and it is worth stating without softening: **the tier this
+paper has spent §7.7 describing as the set of metrics trusted to rank arms is
+empty.** It also retires, rather than answers, several arguments above. §7.2's
+quoted claim that P3 is the only metric both in the main table and validated on
+the specified gradient stays true as a quotation of `battery/REPORT_V2.md` and
+false as a statement about the battery. §7.9's finding that the published main
+table contained a metric process 3 had already retired is void in the same way:
+there is no table to contain it. And the four defences above — P4's and K12's
+"closed" among them — are closed against the attacks that were demonstrated, not
+against attackers who had not seen them: P4 fell blind at 0.05 after ten thousand
+failed actions, and K12 at 1.000 on a repair episode that spent no environment
+actions at all (`battery/audit/v9/REPORT.md`).
+
+**Seven limits, because a round that empties a table is exactly the round whose
+own discipline should be read hardest.**
+
+1. **The adjudication was not pre-registered.** `battery/audit/v9/verdict.py`
+   first enters the repository in the same commit as the attack results
+   (`520dc5dd`), while the pre-registration commit (`9892d23c`) carries only the
+   thresholds and the poverty certificate. The rule it implements is not the rule
+   that was registered: the pre-registered form is `gameable AND accidental AND
+   NOT defended → reference`, and the code drops the `NOT defended` conjunct. The
+   delivered artefact still publishes the pre-registered form verbatim in its own
+   `rule` field. Applying that published rule to the artefact's own per-metric
+   fields, **four of the nine — E2, E3, K12, M6 — would have stayed in the main
+   table**, against a published result of zero.
+2. **That the conjunct was dropped *after the results were seen* is the round's
+   own account, not an artefact.** No commit ever contained the un-collapsed form,
+   so the sequence rests on `battery/PREREG_V9.md`'s self-report, which records
+   having run the stricter version first and seen it lift K12 and E2 back. It is
+   reported here as a confession, which is what it is, and the round deserves
+   credit for writing it down; it is not independent evidence.
+3. **After the collapse, `accidental` is the only author-asserted field left in
+   the adjudication** — the derived half of the rule went and the judged half
+   stayed. The round's own review says so.
+4. **The poverty certificate rejected nothing.** It passed 105 of 105 attacks in
+   the blind phase and 112 of 112 in the delivered artefact, so it has no measured
+   selectivity on the only data it has seen; it was written by the round's own
+   aggregator, in the pre-registration commit, by the author of the attacks. Its
+   false-negative rate is known to be above zero: the review exhibited two
+   constructions that performed real search and certified clean. The evidence that
+   the attacks did no hidden work is the attackers' discipline and a manual
+   re-read — not the checker.
+5. **The round grades its own demotions, and most are graded below "strong".**
+   K7, K11 and M6 are graded 弱 ("weak"), each resting solely on a controllability
+   criterion the pre-registration concedes is near-automatic for count-type
+   diagnostics; P3, P4 and E1 are graded 中 ("medium"), their thresholds falling
+   inside the range honest runs already reach; only E2, E3 and K12 are graded 强
+   (`battery/audit/v9/REPORT.md` §9). Two cautions. **The grading lives in prose
+   and no artefact carries it** — there is no strength field on any metric row — so
+   it cannot be re-derived. And the nine graded there are not the nine demoted:
+   the table includes E1, which fell to the sighted review, and omits M3, which was
+   retiered rather than demoted.
+6. **"37 of 38" is not thirty-seven findings, and the round says so in a section
+   heading**: 这不是 37 个独立发现. One label-swapping convention satisfies X1, X2,
+   X4, X5 and X6 at once — five metrics, one hole — and the report collapses the
+   thirty-seven into roughly five structural causes.
+7. **The threat model is unstratified, and the round escalated this to an open
+   gap rather than fixing it.** Whether an *arm* could reach a state and whether an
+   *adapter* could write that value down are different questions, and the audit
+   does not separate them; many landing attacks construct the producer-side record
+   directly. The round's report puts a count on that — fifty-one of ninety-one —
+   and **this paper does not carry it, because no artefact does**: the attack
+   record has no producer-side field, so the figure cannot be re-derived from the
+   run. What can be checked is the instance, and it reaches the round's strongest
+   evidence: K12 is one of only three demotions the round grades 强, and its
+   landing attacks set an environment-action count directly.
+
+None of that restores the table. It bounds what emptying it demonstrates: on this
+evidence the battery has no metric that has survived an attack by someone who could
+not see the defence, and the strongest single reason to doubt that conclusion is
+that the rule which produced it was changed after its author had seen what the
+stricter rule would have said.
 
 ### 7.8 A confound on a pre-registered primary endpoint
 
@@ -391,8 +504,13 @@ into E4 (70 shared runs), X4 into X1 (87), **K14 and K7 into K5** (5 each), K8 i
 (5) — with exactly one cross-family cluster, {K6, X1, X4}
 (`battery/artifacts/redundancy.json`).
 
-**One of those five retirements is a metric this paper also lists in the main
-table, and the two artefacts do not know about each other.** K7 is retired into K5
+**One of those five retirements was a metric this paper also listed in the main
+table, and the two artefacts did not know about each other.** The blind round of
+§7.7a has since emptied the table, so the collision below no longer has a live
+instance — K7 fell blind on its own account. It is kept because the *class* of
+defect survives the instance, and because it is the kind a claim-by-claim audit
+cannot find: each artefact agreed with the paper, and only the two together
+disagreed. K7 is retired into K5
 by process 3 at ρ = 1.000 over 5 shared runs, and it is simultaneously one of the
 nine metrics process 4 leaves in the main table — `battery/artifacts/redundancy.json`
 `eliminated` and `battery/artifacts/gaming_audit.json` `main` both say so, and §7.7
@@ -400,8 +518,8 @@ above prints K7 among the nine without noticing. Neither process is wrong on its
 terms: the anti-gaming audit asks whether a metric can be cheated and the
 de-redundancy pass asks whether it says anything a representative does not, and a
 metric can pass the first while failing the second. But nothing downstream
-reconciles them, so **the main table as published contains a metric the battery has
-already retired**, and a reader assembling "the nine metrics worth reporting" gets
+reconciles them, so **the main table as published then contained a metric the
+battery had already retired**, and a reader assembling "the nine metrics worth reporting" gets
 one that process 3 says is K5 under another name. On five shared runs across
 near-identical manuals, which is the evidence base the same subsection warns is too
 thin to be evidence.
@@ -425,6 +543,7 @@ books and model calls.
 
 | gap | why |
 |---|---|
+| **No metric has survived a blind attack** | added after §7.7a and now the largest gap in the list: the published main table is empty (`battery/METRICS.md`), so there is no metric the battery trusts to rank arms. The rows below were written when there were nine |
 | **A theory-bearing control arm** | the real blocker, and v2 quantified it: adding an entire second control arm moved the unvalidated count by **zero**. 21 of 38 metrics — all of epistemic, all of mechanism, and P4 — have never been checked against any known gradient (`battery/artifacts/validation_material.json`), and no baseline can check them, because an arm with no books cannot be scored on the epistemic family |
 | **The economy family on any arm with a theory** | A0, a0-spike and A2 make no model calls, and the Schema corpus records no cost. Claim C2's signature has still never been computed where it would mean something |
 | **Arm separated from harness** | the Schema side is somebody else's agent on somebody else's infrastructure; P1, P5 and E4 are visibly the plumbing |
