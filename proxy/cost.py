@@ -20,6 +20,17 @@ from .paths import LEDGER_PATH, PRICING_DIR
 
 DEFAULT_TABLE = "pricing_v1"
 
+#: The two halves of every bill. A usage block that is missing either one has
+#: not been *measured*, and a call that has not been measured has no price --
+#: it does not have a price of zero. `proxy/model_proxy.py` has enforced this
+#: at its own call site since the SSE-truncation finding (`input_tokens`
+#: arrives in `message_start`, `output_tokens` only in `message_delta`), but it
+#: enforced it there and not here, so every *other* reader of this module --
+#: `price_run`, `proxy/reconcile.py`, `theoria-arm/armtools/archive.py`, and
+#: the figures downstream of them -- re-priced history without it. The rule
+#: belongs to the conversion, not to one caller of it.
+REQUIRED_USAGE_KEYS = ("input_tokens", "output_tokens")
+
 
 class PriceTable:
     def __init__(self, spec: Dict[str, Any], source: Optional[str] = None):
@@ -46,17 +57,61 @@ class PriceTable:
         return {"table": self.name, "sha256": self.sha256}
 
     def cost(self, model: str, usage: Dict[str, Any]) -> Dict[str, Any]:
+        """What this call cost, or `usd: None` and the reason it cannot be said.
+
+        Two facts that look alike and are not:
+
+        * **`unpriced_usage_keys`** -- the block carries a counted key this
+          table has no rate for. The other lines are still priced; the figure
+          is a *lower* bound and says so.
+        * **`missing_usage_keys`** -- a required key is *absent*, so there is
+          nothing to price. This returns `usd: None`, the same refusal the
+          unknown-model branch above returns, for the same reason.
+
+        The second one is new (S29). Until it existed, `usage == {}` walked
+        the fully-priced branch and came back as a well-formed **zero**:
+        `price_run` added $0.00, incremented `calls`, and reported
+        `unpriced_models: null` -- a positive assertion that nothing had been
+        missed. The partial case was worse. A usage block holding only
+        `input_tokens` returned a positive, plausible price and silently
+        dropped the output side, which is billed at five times the input rate
+        on every model in `pricing_v1.json`.
+
+        A key counts as measured only if it is present **and not None**. That
+        is one notch stricter than the `key in usage` test `model_proxy.py`
+        applies, deliberately: a provider that serialises `"output_tokens":
+        null` has told us it did not measure, and `int(None or 0)` would have
+        read that as zero.
+        """
         prices = self.models.get(model)
         if prices is None:
             return {"usd": None, "model": model,
                     "unpriced": "model %r is not in %s" % (model, self.name)}
 
+        # `int()` runs *before* the absence check, and the order is load-bearing.
+        # A usage value `json.loads` accepts and `int()` does not (`1e999`,
+        # `"1e5"`) is a loud failure and has to stay one -- five real calls
+        # produced no ledger row at all when it was swallowed. Testing for
+        # absence first would demote that raise to a quiet `usd: None`, which
+        # the pool happens to handle the same way but which throws away the
+        # difference between "the provider sent nonsense" and "the provider
+        # sent nothing".
+        measured = {key: (None if usage.get(key) is None else int(usage[key]))
+                    for key in REQUIRED_USAGE_KEYS}
+        missing = [key for key in REQUIRED_USAGE_KEYS if measured[key] is None]
+        if missing:
+            return {"usd": None, "model": model,
+                    "missing_usage_keys": missing,
+                    "unpriced": "usage carries no %s, so this call was never "
+                                "measured and has no price -- it does not have "
+                                "a price of $0.00" % (" or ".join(missing),)}
+
         per_token_in = prices["input"] / 1_000_000.0
         per_token_out = prices["output"] / 1_000_000.0
 
         lines: Dict[str, float] = {}
-        lines["input_tokens"] = int(usage.get("input_tokens") or 0) * per_token_in
-        lines["output_tokens"] = int(usage.get("output_tokens") or 0) * per_token_out
+        lines["input_tokens"] = measured["input_tokens"] * per_token_in
+        lines["output_tokens"] = measured["output_tokens"] * per_token_out
         for field, multiplier in self.cache.items():
             count = int(usage.get(field) or 0)
             if count:
@@ -126,16 +181,47 @@ class PriceTable:
 
 
 def price_run(records: List[Dict[str, Any]], table: PriceTable) -> Dict[str, Any]:
+    """Aggregate a ledger into a bill, and name every hole in it.
+
+    `usd_total` is a sum over the calls that could be priced, which is to say a
+    **lower** bound. Three separate channels say why it may be short, and they
+    are separate on purpose -- collapsing them is the defect S29 is about:
+
+    * `unpriced_models`   -- the table has no rate for this model at all;
+    * `unmeasured_calls` / `missing_usage_keys`
+                          -- the model is priced, the call was not measured;
+    * `unpriced_usage_keys`
+                          -- a counted key the table has no rate for. This one
+                            `cost()` has always computed and `price_run` used
+                            to drop on the floor, so the only reader that ever
+                            saw it was `armtools/archive.py`, which got it by
+                            calling `cost()` a second time itself.
+
+    A call that lands in the second bucket is *not* recorded in
+    `unpriced_models`: the model is in the table, and saying otherwise would
+    file a true fact under a false heading.
+    """
     total = 0.0
     per_model: Dict[str, Dict[str, Any]] = {}
     unpriced: List[str] = []
+    missing_keys: List[str] = []
+    unpriceable_keys: List[str] = []
+    unmeasured_calls = 0
 
     for record in records:
         if record.get("event") != "model_call":
             continue
         result = table.cost(record.get("model", "?"), record.get("usage") or {})
+        for key in result.get("unpriced_usage_keys") or []:
+            if key not in unpriceable_keys:
+                unpriceable_keys.append(key)
         if result["usd"] is None:
-            if result["model"] not in unpriced:
+            if result.get("missing_usage_keys"):
+                unmeasured_calls += 1
+                for key in result["missing_usage_keys"]:
+                    if key not in missing_keys:
+                        missing_keys.append(key)
+            elif result["model"] not in unpriced:
                 unpriced.append(result["model"])
             continue
         total += result["usd"]
@@ -145,6 +231,9 @@ def price_run(records: List[Dict[str, Any]], table: PriceTable) -> Dict[str, Any
 
     return {"pricing": table.reference(), "usd_total": round(total, 6),
             "per_model": per_model, "unpriced_models": unpriced or None,
+            "unmeasured_calls": unmeasured_calls,
+            "missing_usage_keys": sorted(missing_keys) or None,
+            "unpriced_usage_keys": sorted(unpriceable_keys) or None,
             "model_calls": sum(b["calls"] for b in per_model.values())}
 
 

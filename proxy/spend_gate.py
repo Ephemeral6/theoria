@@ -302,10 +302,21 @@ class SpendPolicy:
         self.spec = spec
         try:
             self.pool = str(spec["pool"])
-            self.usd_ceiling = float(spec["usd_ceiling"])
+            # `finite()` rather than `float()`, and this is the one place it was
+            # missing.  Its own docstring, forty lines up, explains that NaN
+            # voids every later comparison -- and it was applied to every amount
+            # a caller passes in and to none of the policy's own fields.  So the
+            # check below (`usd_ceiling <= 0`) waves NaN and +inf straight
+            # through (`nan <= 0` is False, `inf <= 0` is False), `check`,
+            # `reserve` and `_first_breach` then compare against it forever and
+            # never trip, and `verify_spend.sh:83-94` -- the dedicated
+            # "the pool policy is readable and has a ceiling" check -- prints
+            # `inf` and exits 0.  A ceiling that no comparison can reach is not
+            # a ceiling; the gate has to refuse to load, not load open.
+            self.usd_ceiling = finite(spec["usd_ceiling"], "usd_ceiling")
             self.action_ceiling = int(spec["action_ceiling"])
             ledger = str(spec["ledger"])
-        except (KeyError, TypeError, ValueError) as exc:
+        except (KeyError, TypeError, ValueError, SpendGateError) as exc:
             raise SpendGateUnavailable(
                 "the spend policy at %s is missing or malformed (%s). A gate "
                 "with no ceiling is not a gate; refusing to spend."
@@ -322,9 +333,15 @@ class SpendPolicy:
         self.lock_timeout_seconds = float(spec.get("lock_timeout_seconds", 30.0))
         caps = spec.get("default_run_caps") or {}
         try:
-            self.default_run_caps = {"usd": float(caps["usd"]),
+            # Same hole as `usd_ceiling`, and found while fixing it: the
+            # non-negative check below is `< 0`, which NaN also passes.  This is
+            # the cap a run that declares no budget of its own is given, so a
+            # NaN here means "no declared budget" resolves to "unlimited" by a
+            # different route than the one the message below already guards.
+            self.default_run_caps = {"usd": finite(caps["usd"],
+                                                   "default_run_caps.usd"),
                                      "actions": int(caps["actions"])}
-        except (KeyError, TypeError, ValueError) as exc:
+        except (KeyError, TypeError, ValueError, SpendGateError) as exc:
             raise SpendGateUnavailable(
                 "the spend policy at %s has no usable `default_run_caps` (%s). "
                 "That is what a run which declares no budget of its own is "
@@ -798,9 +815,46 @@ class SpendGate:
             reservation.expires_epoch = expires
             return reservation
 
-    def release(self, reservation: Reservation, reason: str = "closed") -> None:
-        """Give the unspent remainder back. Spend already recorded stays."""
+    def release(self, reservation: Reservation, reason: str = "closed",
+                *, expect_holder: Optional[Dict[str, Any]] = None) -> None:
+        """Give the unspent remainder back. Spend already recorded stays.
+
+        `expect_holder` is the ownership check, and it exists because this
+        method used to have none at all: it appended a release record for any
+        id whatsoever, and an id that matches no claim in the pool is a silent
+        no-op that leaves behind a record reading "released" -- which is how
+        `runner.run_game`'s crash cleanup could release *another session's*
+        reservation and log `run ended without releasing its claim` over it.
+        The line reads exactly like the thing it was written to do.
+
+        Deliberately opt-in rather than always-on. A supervisor clearing a
+        reservation stranded by a dead process is a legitimate caller and does
+        not hold the run that made it; what must not happen is a caller that
+        *thinks* it is releasing its own claim silently releasing someone
+        else's. So the caller states whose claim it believes this is, and is
+        refused if it is wrong.
+        """
         with _PoolLock(self.lock_path, self.policy.lock_timeout_seconds):
+            entry = self._totals_locked(time.time()).by_reservation.get(
+                reservation.reservation_id)
+            if entry is None:
+                raise NoReservation(
+                    "reservation %s is not in the pool ledger %s, so releasing "
+                    "it gives nothing back. Appending the record anyway writes "
+                    "a line that reads like a successful release."
+                    % (reservation.reservation_id, self.ledger_path))
+            if expect_holder:
+                held = entry.get("holder") or {}
+                mismatch = {k: (v, held.get(k))
+                            for k, v in expect_holder.items()
+                            if held.get(k) != v}
+                if mismatch:
+                    raise NoReservation(
+                        "reservation %s is held by %r, not by %r -- refusing "
+                        "to release a claim this caller does not hold "
+                        "(mismatched: %r)."
+                        % (reservation.reservation_id, held, expect_holder,
+                           mismatch))
             self._append_locked({
                 "kind": "release",
                 "reservation_id": reservation.reservation_id,

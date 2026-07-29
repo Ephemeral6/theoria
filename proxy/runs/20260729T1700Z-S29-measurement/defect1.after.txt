@@ -1,0 +1,10 @@
+no usage block at all -- the call was never measured           usage={}
+    usd=None  missing_usage_keys=['input_tokens', 'output_tokens']  unpriced='usage carries no input_tokens or output_tokens, so this call was never measured and has no price -- it does not have a price of $0.00'
+a truncated stream: input_tokens arrived, output_tokens never did usage={"input_tokens": 1000}
+    usd=None  missing_usage_keys=['output_tokens']  unpriced='usage carries no output_tokens, so this call was never measured and has no price -- it does not have a price of $0.00'
+the provider serialised an explicit null for the output side   usage={"input_tokens": 1000, "output_tokens": null}
+    usd=None  missing_usage_keys=['output_tokens']  unpriced='usage carries no output_tokens, so this call was never measured and has no price -- it does not have a price of $0.00'
+a genuine measured zero -- both halves present, both zero      usage={"input_tokens": 0, "output_tokens": 0}
+    usd=0.0  missing_usage_keys=None  unpriced=None
+a complete, ordinary block (the regression control)            usage={"input_tokens": 1000, "output_tokens": 5000}
+    usd=0.13  missing_usage_keys=None  unpriced=None
