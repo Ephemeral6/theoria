@@ -1,15 +1,18 @@
 {
-  "cycle": 34,
-  "utc": "2026-07-29T04:35Z",
-  "last_audited_commit": "43b29a5",
-  "range_this_cycle": "fec3f10..43b29a5",
+  "cycle": 35,
+  "utc": "2026-07-29T10:06Z",
+  "last_audited_commit": "de90ba90",
+  "range_this_cycle": "43b29a5..de90ba90 (34 commits, 102 files)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "复核自己的改动（本轮主项）": "04:00Z 后 16 条 FLAG 覆盖 14 分支；13 个 flag 文件中 12 个已带 tip/first_seen/attempts。两个分支两次入账：04:02 那次是改动前旧格式（无 tip），04:33 是新代码首次记 tip，live tip 与记录相同 → 下一趟应被 HELD。**HELD=0 是正确的一次性过渡**：先记 tip 才谈得上未变即跳过。下一周期复核 HELD 是否真出现，没出现即我判断有误，须如实说。",
-    "副作用登记": "attempts 对存量分支从 04:33 重新起算（旧格式无可解析计数），故「卡了多久」对它们不是真实起点。"
+    "HELD 生产验证（用户点名）": "53 条 HELD，最近 09:58:51Z。前后各 6 小时：改动前 FLAG 462/29 分支/HELD 0/MERGED 35；改动后 FLAG 6/5 分支/HELD 53/MERGED 22。FLAG 行 462→6 约 77 倍。逐 flag 文件比对：14 个 tip 未变（扣得对），0 个 tip 已变仍卡着——hold 能松开在生产上验到了。限定：MERGED 35→22，我认为是积压清完而非 hold 所致，但分不干净，如实记。",
+    "监控自身漂移（我的责任）": "a7-envelope-finish 回并 master（fec3f106/98b89780）使 master 一等父路径拐进该分支，64157c1 与 87a1e63 双双离开 first-parent（仍 reachable from master），计数 3→1，probe_append_only 转绿而两条越线一条未修。**--first-parent 是我 cycle 15 力主的，我用它否掉了监控原本的 SHA 豁免表——那个方向才是对的。**",
+    "纪律": "区间 102 文件，封存 ID 仅 PARTNER_SYNC 污染登记，密钥零命中，battery/PREDICTIONS.md +95 纯追加。"
   },
-  "reports_this_cycle": [],
+  "reports_this_cycle": [
+    "DRIFT-20260729T1006Z-first-parent-lost-two-adjudicated-crossings.md"
+  ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "优先合并 v15-census-sampling-frame 与 v11-negative-control-census（已有裁决建立在其上）；合不进则至少把 MATRIX_V15.md / NEGATIVE_CONTROL.md / KNOWN_GAPS.json 取到 master",
@@ -46,12 +49,13 @@
     "审「花钱纪律」的判据：proxy/var/spend_gate.jsonl 逐行扫封存 ID + 统计 campaign 里的 game id + 累计 usd/actions 与自报余额对账。三件一起做才能区分「敞口」与「事故」。",
     "判「某段是否已发布到主线」的当事人可用判据：git merge-base --is-ancestor HEAD origin/master。建议写进工单收工清单——今晚的越线正是因为没有这一步。",
     "**autostash 的安全判据（收严版，我自己踩过两次）**：推送前跑 `git status --short | grep -v \"^??\"`，只要出现任何 monitor/*.py 或别人领地的源码（不只是产物），**就不要用 --autostash**——改为等一轮，或只 commit 自己的路径后用 fetch + 明确 rebase 处理。2026-07-29T00:57Z 我用它时工作树里有监控未提交的 spec.py(+34) 与 board.py，结果留下一条未清的 stash@{0}（内容已核对与工作树一致，无丢失，但 stash 需由其主人自行 drop）。",
-    "判会话存活要读心跳**内容**的 utc 并与最近提交时间互证，别只看 mtime——心跳随 git 提交流动，mtime 量的是抵达时间。同时提防 cycle 24 那类编造的 utc：未来时刻或早于上一轮的一律可疑。"
+    "判会话存活要读心跳**内容**的 utc 并与最近提交时间互证，别只看 mtime——心跳随 git 提交流动，mtime 量的是抵达时间。同时提防 cycle 24 那类编造的 utc：未来时刻或早于上一轮的一律可疑。",
+    "**--first-parent 不是「是否公开过」的稳定身份**：回并（Merge master into agent/x 后该线成为主线）会让旧主线提交整体移到二等父侧，计数因此可以变小。判据应问历史事实（被删的行在该提交落地前是否已从 master 可达），或裁决当时就把结论记死；豁免按 SHA 记不要按计数记。"
   ],
   "next_cycle_focus": [
-    "**复核 merge.log 是否出现 HELD 行**——这是我那笔改动是否真生效的唯一判据",
-    "其余按常规增量",
-    "增量起点 43b29a5"
+    "append_only 判据是否改为 SHA 豁免/可达性",
+    "两条已裁决越线是否被写进固定记录",
+    "增量起点 de90ba90"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
