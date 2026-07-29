@@ -186,6 +186,25 @@ consistent observations, and it decides budgets — the pessimistic reading it
 displaced was 3.2× larger. Nothing has confirmed it and no non-destructive test
 can, so it stays labelled as measured rather than promoted to known.
 
+**Two qualifications the source states and the row above is too short to carry.**
+Both are from `../baseline-arms/BUDGET_REPORT.md` §4.1, under its own heading
+"what this does not answer and must not be said to answer":
+
+1. The 19 samples are all **HTTP 400/500 — requests the server refused or
+   failed before executing.** That is evidence that *rejected requests* are not
+   billed. It is **not** evidence that a semantically wasted action is not
+   billed: a click on empty space or a keypress with no effect returns 200,
+   enters `actions_ok`, and is billed like any other. §4.1 says it outright —
+   *"别把这条写成「ARC 不为失败动作计费」."* Read as that broader claim, the row
+   above is false.
+2. **The scorecard's count need not be the quota's count.** Everything measured
+   here was read off the scorecard; whether ARC meters against the same ledger
+   is unknown. Two books are possible and nothing here would tell them apart.
+
+Neither qualification changes the budget we plan against, and both change what
+happens when it is wrong: the failure would arrive as a quota exhausted earlier
+than arithmetic predicted, not as an error naming this assumption.
+
 The unmeasured residual named at item 6 is unchanged and belongs to the same
 family: **no 429 has ever been observed**, so the backoff curve is built on a
 limit never touched. Both are cases of a number we rely on and have not had

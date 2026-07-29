@@ -111,7 +111,7 @@
         "clean": true,
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
-        "ledger_lines": 1955,
+        "ledger_lines": 1956,
         "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
