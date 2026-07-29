@@ -314,6 +314,69 @@ def test_a_cut_that_no_longer_hashes_turns_the_gate_red(tmp_path, monkeypatch):
 # ------------------------------------------------------- the disclosed gap
 
 
+def test_an_unrecognised_level_turns_the_gate_red(tmp_path, monkeypatch):
+    """One typo'd character in a level, and a perfectly valid `claims`.
+
+    `order.get(level, 0)` maps an unknown level to index 0 -- `never_audited`,
+    the weakest rung -- so a sealed game whose trajectories were reviewed sat in
+    the claim set and the gate stayed green. The module already fixed this shape
+    once for the `claims` field; it survived in the field beside it.
+    """
+    game = _a_retained_sealed_game()
+    _replay_log(tmp_path, monkeypatch,
+                {"game_id": game, "level": "trajectories_reviewd",  # sic
+                 "claims": "in_claim_set",
+                 "note": "S23 negative control", "t": "2026-07-29T00:00:00Z"})
+
+    problems = contamination.register_coverage()["problems"]
+    assert any("not one of" in p and "trajectories_reviewd" in p for p in problems), problems
+
+    verdict = contamination.gate()
+    assert verdict["red"] is True
+    assert contamination.main([]) == 1
+
+
+def test_every_level_actually_in_the_log_is_recognised():
+    """The positive control, and it is not vacuous: it fails if `LEVELS` and the
+    log ever drift apart, which is the only way the check above misfires."""
+    assert contamination.register_coverage()["problems"] == []
+    for entry in contamination.entries():
+        assert entry["level"] in contamination.LEVELS, entry
+
+
+def test_the_artefact_records_the_red_verdict_rather_than_a_clean_one(
+        tmp_path, monkeypatch, capsys):
+    """`verify.sh` runs `contamination.py --json`. With the log missing, the
+    tracked claim_set.json was overwritten with 21 games and nothing quarantined
+    -- derived from a file that is not there -- and only then did main() return
+    1. The exit code carried the verdict; the file on disk contradicted it.
+    """
+    monkeypatch.setattr(contamination, "LOG_PATH", str(tmp_path / "gone.jsonl"))
+    out_path = tmp_path / "claim_set.json"
+    monkeypatch.setattr(contamination, "CLAIM_SET_PATH", str(out_path))
+
+    assert contamination.main(["--json"]) == 1
+
+    written = json.loads(out_path.read_text(encoding="utf-8"))
+    assert written["gate"]["red"] is True, (
+        "the artefact says clean while the exit code says red"
+    )
+    assert written["gate"]["reasons"]
+    assert "RECORDED AS RED" in capsys.readouterr().out
+
+
+def test_a_green_run_records_a_green_verdict_in_the_artefact(tmp_path, monkeypatch):
+    """The counterpart: the field must be capable of both values."""
+    out_path = tmp_path / "claim_set.json"
+    monkeypatch.setattr(contamination, "CLAIM_SET_PATH", str(out_path))
+
+    assert contamination.main(["--json"]) == 0
+
+    written = json.loads(out_path.read_text(encoding="utf-8"))
+    assert written["gate"]["red"] is False
+    assert written["gate"]["reasons"] == []
+
+
 def test_the_hand_written_scan_surface_is_reported_as_a_gap():
     """`OTHER_LEDGERS` is a hand-written list of two files and the repository
     holds more ledger-shaped files than that. Reported as a boolean rather than
@@ -322,7 +385,28 @@ def test_the_hand_written_scan_surface_is_reported_as_a_gap():
     """
     verdict = contamination.gate()
     assert verdict["scan_surface_self_discovered"] is False
-    assert verdict["red"] is False
+
+    # Not just "the flag is False" -- that only reads back a literal and can
+    # fail only if someone edits it. The claim being pinned is that the flag is
+    # *honest*: the scan surface really is a hand-written list, and it really is
+    # smaller than the set of ledger-shaped files in the tree. If a later change
+    # makes the surface self-discovering, this fails and the flag must move.
+    assert isinstance(contamination.OTHER_LEDGERS, list)
+    root = os.path.join(contamination.HERE, os.pardir)
+    declared = {os.path.abspath(p) for p in contamination.OTHER_LEDGERS}
+    declared.add(os.path.abspath(os.path.join(contamination.DATA_DIR,
+                                              "recon_ledger.jsonl")))
+    found = set()
+    for base, dirs, names in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in (".git", ".worktrees", ".toolchain")]
+        for name in names:
+            if name.endswith(".jsonl") and ("ledger" in name or "probe_log" in name):
+                found.add(os.path.abspath(os.path.join(base, name)))
+    assert found - declared, (
+        "no undeclared ledger-shaped file exists any more; the scan surface may "
+        "now be complete, in which case SCAN_SURFACE_IS_SELF_DISCOVERED is lying "
+        "in the other direction"
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -274,6 +274,28 @@ def register_coverage() -> Dict[str, Any]:
         if not isinstance(entry, dict) or "game_id" not in entry or "level" not in entry:
             problems.append("contamination log line %d is missing game_id or level, so it "
                             "registers nothing" % i)
+            continue
+        # A level outside the vocabulary fails OPEN everywhere downstream:
+        # `order.get(level, 0)` in the sort and `LEVELS.index` comparisons treat
+        # an unknown value as `never_audited`, the weakest rung. So one typo'd
+        # character in `trajectories_reviewed` puts a sealed game whose
+        # trajectories were reviewed into the claim set with a green gate. This
+        # is the same defect the module already fixed once for the `claims`
+        # field (INC-006a), surviving untouched in the field beside it.
+        if entry["level"] not in LEVELS:
+            problems.append(
+                "contamination log line %d registers %s at level %r, which is not one of "
+                "%s. An unrecognised level sorts as never_audited -- the weakest rung -- "
+                "so it cannot be left to the register to notice."
+                % (i, entry.get("game_id"), entry["level"], "/".join(LEVELS)))
+        if "claims" in entry and entry["claims"] not in CLAIM_STATES:
+            # Already caught by `claim_set()` as an unrecognised claim state for
+            # games in the sealed pile. Repeated here because the register covers
+            # the dev pile too, where nothing else looks at this field.
+            problems.append(
+                "contamination log line %d registers %s with claims %r, which is not one "
+                "of %s" % (i, entry.get("game_id"), entry["claims"],
+                           "/".join(CLAIM_STATES)))
     return {"present": True, "lines": lines, "problems": problems}
 
 
@@ -522,13 +544,23 @@ def main(argv: List[str]) -> int:
         for row in summary["retained_above_material_level"]:
             print("    %-18s level %s but not quarantined"
                   % (row["game_id"], row["level"]))
+    verdict = gate()
+
+    # The gate is computed BEFORE the artefact is written, and its verdict is
+    # written into it. `verify.sh` runs exactly `contamination.py --json`, and
+    # with the contamination log missing this used to overwrite the tracked
+    # `claim_set.json` with the maximally reassuring fabrication -- 21 games in
+    # the claim set, nothing quarantined, derived from a file that is not there
+    # -- and only then return 1. The exit code carried the verdict and the file
+    # on disk contradicted it, and the file is what CLAUDE.md points readers at.
     if args.json:
+        summary = dict(summary, gate=verdict)
         with open(CLAIM_SET_PATH, "w", encoding="utf-8", newline="") as fh:
             json.dump(summary, fh, indent=2, sort_keys=True, ensure_ascii=False)
             fh.write("\n")
-        print("  claim set -> %s" % CLAIM_SET_PATH)
+        print("  claim set -> %s%s"
+              % (CLAIM_SET_PATH, "  (RECORDED AS RED)" if verdict["red"] else ""))
 
-    verdict = gate()
     if verdict["red"]:
         print("\n  GATE: RED -- %d condition(s) below must be ruled on:"
               % len(verdict["reasons"]))

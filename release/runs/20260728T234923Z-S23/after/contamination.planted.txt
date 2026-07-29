@@ -28,7 +28,8 @@
   NEEDS ADJUDICATION (excluded from `clean`): bp35-0a0ad940
     bp35-0a0ad940      unrecognised claim state 'quarantined'
 
-  GATE: RED -- 2 condition(s) below must be ruled on:
+  GATE: RED -- 3 condition(s) below must be ruled on:
+    * register coverage: contamination log line 25 registers bp35-0a0ad940 with claims 'quarantined', which is not one of in_claim_set/retained_with_sensitivity_analysis/quarantined_from_claims
     * 1 game(s) NEED ADJUDICATION and are in no settled bucket: bp35-0a0ad940. They were printed before this change and excluded from the exit code, so the only reader that gates anything was told the reassuring answer.
     * arc-recon/data/recon_ledger.jsonl could not be audited (absent): a ledger that is absent or unreadable is not a ledger with no sealed contact in it.
 

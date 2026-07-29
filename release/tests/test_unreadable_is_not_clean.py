@@ -231,6 +231,107 @@ def test_a_frame_bearing_stream_is_judged_by_its_bytes_not_its_name(repo):
     assert "episode.log" in violations[0]
 
 
+@pytest.mark.parametrize(
+    "name,prefix,verdict",
+    [
+        # A BOM is not a parse error: `utf-8-sig` reads straight through it, so
+        # this must land as a full violation, not merely as "could not read".
+        ("bom.log", b"\xef\xbb\xbf", "violation"),
+        ("blank.log", b"\n\n", "violation"),
+        # A comment line genuinely cannot be parsed as a record. `needs_human`
+        # is the honest verdict there -- and it blocks the gate just as hard.
+        ("hdr.log", b"# episode dump\n", "needs_human"),
+    ],
+)
+def test_anything_in_front_of_the_first_record_does_not_make_it_prose(
+        repo, name, prefix, verdict):
+    """`json_shaped` used to test `blob.lstrip()[:1]`, so a byte-order mark or
+    one comment line was enough to drop a frame-bearing stream into the "source
+    or prose" branch -- whose sentence asserts that the ids in it are "constants
+    and guards, not content", about a file nothing had parsed.
+
+    The property that matters is that the file **blocks**; which of the two
+    blocking verdicts it earns depends on whether the bytes can be read as
+    records, and both are pinned so a future change cannot quietly downgrade one
+    to a mention.
+    """
+    body = (json.dumps({"game_id": _sealed_id(), "frame": [[1]]}) + "\n"
+            + json.dumps({"game_id": _sealed_id(), "frame": [[2]]}) + "\n")
+    _add(repo, name, prefix + body.encode())
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    blocking = violations + needs_human
+    assert any(name in b for b in blocking), (violations, needs_human)
+    assert not any(name in n and "source or prose" in n for n in notes)
+    if verdict == "violation":
+        assert any(name in v for v in violations), (violations, needs_human)
+    else:
+        assert any(name in h for h in needs_human), (violations, needs_human)
+
+
+def test_source_code_holding_a_few_json_lines_is_not_a_record_stream(repo):
+    """The counterweight, and a real file: `proxy/tests/test_redteam.py` is
+    Python carrying several double-quoted fixture dicts one to a line. On a bare
+    count of parsing object lines it was judged a stream, failed to parse as one,
+    and was reported unreadable -- a false red on a guard file."""
+    _add(repo, "test_guard.py",
+         '"""A guard test."""\n'
+         "import json\n\n"
+         "SEALED = %r\n\n" % _sealed_id()
+         + 'FIXTURE = 1\n'
+         '{"game_id": "aa00-0000", "frame": [[1]]}\n'
+         '{"game_id": "aa00-0000", "frame": [[2]]}\n'
+         "def test_it():\n"
+         "    assert SEALED not in json.dumps(FIXTURE)\n"
+         "    assert True\n"
+         "    return None\n")
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    assert violations == [] and needs_human == [], (violations, needs_human)
+    assert any("test_guard.py" in n and "source or prose" in n for n in notes)
+
+
+def test_a_utf16_file_is_not_reported_as_scanned(repo):
+    """Both red lines are UTF-8 byte substring searches. A UTF-16 file opens
+    fine, so `read_bytes` succeeds and it was counted among the scanned -- while
+    no id and no key in it could ever match, every character carrying an
+    interleaved NUL. The coverage note this change added ("N of N scanned")
+    turned that silence into an explicit false claim of full coverage."""
+    payload = json.dumps({"game_id": _sealed_id(), "frame": [[1, 2], [3, 4]]})
+    _add(repo, "wide.jsonl", payload.encode("utf-16"))
+
+    paths = redlines._tracked()
+    violations, needs_human, notes = redlines.check_sealed(paths)
+
+    assert violations == []
+    assert len(needs_human) == 1, needs_human
+    assert "wide.jsonl" in needs_human[0]
+    scanned_note = next(n for n in notes if "scanned for sealed game ids" in n)
+    assert scanned_note.startswith(f"{len(paths) - 1} of {len(paths)} "), scanned_note
+
+
+def test_the_credential_half_also_refuses_to_count_a_utf16_file(repo, monkeypatch):
+    """Same blindness, the other red line, and the more expensive one: a key
+    written in UTF-16 is invisible to `needle = key.encode()`."""
+    fake = "ffff" + "0" * 32
+    monkeypatch.setitem(sys.modules, "client",
+                        type(sys)("client"))
+    sys.modules["client"].load_api_key = lambda: fake
+    sys.modules["client"].mask = lambda k: "ffff...0000 (len %d)" % len(k)
+
+    _add(repo, "wide_leak.txt", fake.encode("utf-16"))
+
+    paths = redlines._tracked()
+    violations, needs_human, notes = redlines.check_credential(paths)
+
+    assert violations == [], "the fixture is not supposed to be findable in UTF-8"
+    assert any("wide_leak.txt" in h for h in needs_human), needs_human
+    scanned_note = next(n for n in notes if "scanned for the literal key" in n)
+    assert scanned_note.startswith(f"{len(paths) - 1} of {len(paths)} "), scanned_note
+
+
 def test_prose_that_merely_opens_like_json_is_not_reported_unreadable(repo):
     """The other direction, and the one that gets a gate switched off.
 
@@ -312,6 +413,60 @@ def test_the_enumerator_lists_an_unreadable_file_as_undetermined(repo):
     assert row["sha256"] is None
 
 
+def test_an_undetermined_row_does_not_crash_the_things_that_read_it(repo):
+    """The row shape has to survive its consumers, not just be correct.
+
+    `build()` first emitted `size: None` for an unreadable file. Both consumers
+    sum that field, so each died with `TypeError: unsupported operand type(s)
+    for +: 'int' and 'NoneType'` -- and in `checklist` the crash lands *before*
+    the UNDETERMINED verdict can be returned, so the report died on a traceback
+    instead of refusing. The test that covered the verdict hand-built a row
+    `build()` never produces, which is exactly why the suite could not see it.
+    """
+    _add(repo, "vanished.bin", "staged, then removed\n")
+    os.remove(repo / "vanished.bin")
+
+    rows = enum.build(enum._tracked())
+    row = next(r for r in rows if r["path"] == "vanished.bin")
+    assert row["class"] == "?"
+
+    # What `enumerate.main` does with it.
+    assert sum(r["size"] for r in rows) >= 0
+    # What `checklist.report` does with it.
+    lines, tally = checklist.report(rows)
+    assert isinstance(lines, list) and sum(tally.values()) > 0
+
+
+def test_the_enumerator_exits_nonzero_when_it_could_not_classify_something(repo, capsys):
+    """Reachable with nothing unreadable at all: an unparseable `.json` naming a
+    DEV-pile id is invisible to `check_sealed`, which scans only sealed ids, so
+    the red lines are clear and the `?` row arrives anyway. `verify.sh` states
+    this behaviour in a comment; it now also happens."""
+    with open(REAL_PILES, encoding="utf-8") as fh:
+        dev = json.load(fh)
+    dev_ids = dev.get("dev", dev.get("dev_pile", []))
+    dev_id = sorted(d if isinstance(d, str) else d.get("game_id", "") for d in dev_ids)[0]
+
+    _add(repo, "devtrace.json",
+         '{"game_id": "%s", "frame": [[1]],,,}\n' % dev_id)
+
+    seal_v, seal_h, _n = redlines.check_sealed(redlines._tracked())
+    assert seal_v == [] and seal_h == [], "premise: the sealed half must not fire"
+
+    code = enum.main(["--dry-run", "--mode", "verify"])
+    assert code == 1, "it printed the ? count and exited clean"
+    assert "devtrace.json" in capsys.readouterr().err
+
+
+def test_the_checklist_sees_an_unclassified_row_no_item_matches():
+    """`report()` only inspects rows some pattern matched, and the ten patterns
+    do not cover the tree."""
+    row = {"path": "nothing/matches/this.bin", "size": 0, "class": "?",
+           "verdict": "needs_human"}
+    assert checklist.unruled_rows([row]) == [row]
+    assert checklist.unruled_rows([{"path": "x", "size": 1, "class": "A"}]) == []
+
+
 def test_the_checklist_does_not_tick_an_item_it_could_not_classify():
     """Class `?` used to fall through to PRESENT, because only B and D were
     tested and `?` is neither. Driven directly: the checklist's input is
@@ -345,10 +500,12 @@ def test_both_scripts_read_through_the_same_decision(tmp_path):
     blob, why = redlines.read_bytes(str(tmp_path / "does-not-exist"))
     assert blob is None and why
 
-    assert enum.redlines is redlines, (
-        "enumerate.py stopped sharing check_redlines' readers, which is how the "
-        "two halves of this package drifted apart in the first place"
-    )
+    # `enum.redlines is redlines` was the first form of this and it cannot fail:
+    # `enumerate.py` binds the name at module scope, so removing the import
+    # breaks collection rather than the assertion. What has to be pinned is that
+    # enumerate reaches these functions *through* that module rather than
+    # holding copies, which the substitution test below and its sibling do.
+    assert redlines.read_bytes.__module__ == enum.redlines.read_bytes.__module__
 
 
 def test_the_enumerator_routes_its_parse_through_the_shared_reader(tmp_path, monkeypatch):

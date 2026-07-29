@@ -276,7 +276,15 @@ def build(paths: list[str]) -> list[dict]:
                 {
                     "path": rel,
                     "sha256": None,
-                    "size": None,
+                    # 0, not None. Every consumer sums this field
+                    # (`enumerate.main` and `checklist.report` both do
+                    # `total + row["size"]`), so a None here is a TypeError in
+                    # two places -- and in `checklist` it lands *before* the
+                    # UNDETERMINED verdict can be returned, so the report dies on
+                    # a traceback instead of refusing. An unreadable file
+                    # contributes no known bytes; `sha256: None` is where the
+                    # "unknown" is said, and nothing arithmetic reads that.
+                    "size": 0,
                     "class": "?",
                     "class_name": CLASSES["?"][0],
                     "verdict": CLASSES["?"][1],
@@ -364,14 +372,37 @@ def main(argv: list[str] | None = None) -> int:
             f"{name} -> {disposition}"
         )
 
+    # A `?` row is a file this enumerator refused to rule on, and the manifest's
+    # whole job is to state a licence class for every tracked file. The rows are
+    # still written -- dropping them is the defect above, and a human needs the
+    # list -- but the exit code must not say the enumeration succeeded.
+    #
+    # This is reachable without any unreadable file: an unparseable `.json`
+    # naming a *dev-pile* id is invisible to `check_sealed`, which scans only
+    # sealed ids, so nothing upstream aborts and the count arrives here.
+    undetermined = [r for r in rows if r["class"] == "?"]
+
     if args.dry_run:
         print("\ndry run: nothing written")
-        return 0
+    else:
+        body = "\n".join(
+            json.dumps(r, sort_keys=True, ensure_ascii=False) for r in rows) + "\n"
+        with open(MANIFEST, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(body)
+        print(f"\nwrote {os.path.relpath(MANIFEST, REPO_ROOT)} ({len(rows)} rows)")
 
-    body = "\n".join(json.dumps(r, sort_keys=True, ensure_ascii=False) for r in rows) + "\n"
-    with open(MANIFEST, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(body)
-    print(f"\nwrote {os.path.relpath(MANIFEST, REPO_ROOT)} ({len(rows)} rows)")
+    if undetermined:
+        print(
+            f"\n{len(undetermined)} tracked file(s) could not be classified and are in the "
+            "manifest as class ? / needs_human. A licence class has NOT been established "
+            "for them, so this enumeration is not a finished manifest:",
+            file=sys.stderr,
+        )
+        for r in undetermined[:20]:
+            print(f"  {r['path']}: {r['evidence']}", file=sys.stderr)
+        if len(undetermined) > 20:
+            print(f"  ... and {len(undetermined) - 20} more", file=sys.stderr)
+        return 1
     return 0
 
 

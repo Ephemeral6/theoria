@@ -144,6 +144,20 @@
     },
     "ledgers_scanned": 3
   },
+  "gate": {
+    "all_ledgers_clean": true,
+    "ledgers_scanned": 3,
+    "needs_adjudication": [],
+    "piles_hash_matches": true,
+    "reasons": [],
+    "red": false,
+    "register_coverage": {
+      "lines": 24,
+      "present": true,
+      "problems": []
+    },
+    "scan_surface_self_discovered": false
+  },
   "needs_adjudication": [],
   "piles_hash": {
     "declared": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",

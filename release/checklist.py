@@ -161,6 +161,18 @@ def status_of(hits: list[dict]) -> tuple[str, str]:
     )
 
 
+def unruled_rows(rows: list[dict]) -> list[dict]:
+    """Manifest rows the enumerator refused to classify, over the WHOLE manifest.
+
+    `status_of` can only speak about rows some checklist pattern matched, and the
+    ten patterns do not cover the tree. So a `?` row that no item happens to hit
+    was invisible to the tally, and the checklist could print all-green while
+    `MANIFEST.jsonl` carried needs_human rows. The manifest is the thing that
+    ships, so it is checked whole rather than through the items.
+    """
+    return [r for r in rows if r.get("class") == "?"]
+
+
 def completeness(zh: str, hits: list[dict]) -> list[str]:
     """Per-item detail that a status word cannot carry.
 
@@ -290,9 +302,22 @@ def main(argv: list[str] | None = None) -> int:
     # UNDETERMINED does not, and the difference is the whole point -- ABSENT is
     # "looked, not there", UNDETERMINED is "could not look". Only the second one
     # is a claim this program has no basis to make.
-    if tally["UNDETERMINED"]:
-        print(f"\n{tally['UNDETERMINED']} item(s) rest on files the enumerator could not "
-              "classify. Rule on them before this checklist is quoted as a release state.")
+    # `report()` only ever sees rows that matched one of the ten items, so an
+    # unclassified file that no pattern happens to cover was invisible to the
+    # tally above -- the checklist could print all-green while `MANIFEST.jsonl`
+    # carried needs_human rows. The manifest is what ships; it is checked whole.
+    unruled = unruled_rows(rows)
+    if unruled:
+        print(f"\n{len(unruled)} file(s) in the manifest are class ? / needs_human, "
+              "whether or not any checklist item covers them:")
+        for r in unruled[:20]:
+            print(f"  {r['path']}")
+        if len(unruled) > 20:
+            print(f"  ... and {len(unruled) - 20} more")
+
+    if tally["UNDETERMINED"] or unruled:
+        print("\nRule on the file(s) above before this checklist is quoted as a release "
+              "state.")
         return 1
     return 0
 

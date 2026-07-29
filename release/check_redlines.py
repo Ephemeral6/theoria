@@ -124,6 +124,42 @@ PAYLOAD_MARKERS: tuple[bytes, ...] = (
 )
 
 
+#: Byte-order marks for encodings in which a UTF-8 substring search finds
+#: nothing, however much is there. UTF-8's own BOM is deliberately absent: it
+#: shifts the first byte but leaves every subsequent match intact.
+_WIDE_BOMS: tuple[bytes, ...] = (
+    b"\xff\xfe\x00\x00", b"\x00\x00\xfe\xff",  # UTF-32 LE / BE
+    b"\xff\xfe", b"\xfe\xff",                  # UTF-16 LE / BE
+)
+
+
+def unsearchable_encoding(blob: bytes) -> str | None:
+    """Why a UTF-8 byte scan cannot speak about this file, or ``None``.
+
+    Both red lines are substring searches over raw bytes: `needle = key.encode()`
+    and `g.encode() in blob`. That is right for UTF-8 and blind for everything
+    wider. A UTF-16 file *opens* perfectly, so `read_bytes` succeeds and the file
+    is counted among those scanned -- and then no id and no key in it can ever
+    match, because every character carries an interleaved NUL.
+
+    Before this change that was a silent gap. This change made it worse before it
+    made it better: the new coverage note prints "N of N tracked file(s)
+    scanned", which turns a silence into an explicit assertion of full coverage.
+    A file whose encoding defeats the search has not been scanned, and saying so
+    is the whole subject of this module.
+    """
+    for bom in _WIDE_BOMS:
+        if blob.startswith(bom):
+            return f"byte-order mark for a wide encoding ({bom.hex()})"
+    # No BOM, but interleaved NULs in text are the same problem. Binary files
+    # (images, archives) are full of NULs too and are not a concern -- they carry
+    # no searchable text either way -- so this is deliberately only a report.
+    head = blob[:4096]
+    if len(head) >= 16 and head.count(b"\x00") > len(head) // 3:
+        return "more than a third NUL bytes: not searchable as UTF-8 text"
+    return None
+
+
 def read_bytes(path: str) -> tuple[bytes | None, str | None]:
     """``(blob, None)`` or ``(None, reason)``. Never ``(b"", reason)``.
 
@@ -152,8 +188,12 @@ def read_json_records(path: str, jsonl: bool) -> tuple[list | None, str | None]:
     inside a generator, so a malformed line thousands of records in unwound the
     loop and discarded every finding already made.
     """
+    # `utf-8-sig`, not `utf-8`: a byte-order mark is not a parse error. With the
+    # strict codec a BOM'd JSONL of frames came back `needs_human` -- which
+    # blocks, so nothing passed wrongly, but it files a readable violation as an
+    # unreadable file and buries a real leak in the queue of things to look at.
     try:
-        with open(path, encoding="utf-8") as fh:
+        with open(path, encoding="utf-8-sig") as fh:
             if not jsonl:
                 return [json.load(fh)], None
             records = []
@@ -192,33 +232,56 @@ def json_shaped(rel: str, blob: bytes) -> tuple[bool, bool]:
     """
     if rel.endswith(JSON_SUFFIXES):
         return True, rel.endswith(".jsonl")
-    if blob.lstrip()[:1] not in (b"{", b"["):
-        return False, False
     try:
-        text = blob.decode("utf-8")
+        text = blob.decode("utf-8-sig")
     except UnicodeDecodeError:
-        # Opens like JSON and is not even text, in a file that names a sealed
-        # game. Whatever it is, nothing has read it: undetermined, not prose.
+        # Not text at all. `check_sealed` only reaches here for a file that
+        # already matched a sealed id in its raw bytes, so something readable is
+        # in there and this is not a stray binary. Undetermined, not prose.
         return True, True
-    # A stream of JSON documents: two or more whole lines that parse. One is not
-    # enough -- a fenced `{}` inside a Markdown code block would qualify.
-    parsed = 0
+    # Look for RECORDS, not for a first character. Testing `blob.lstrip()[:1]`
+    # was the earlier version of this and it is defeated by anything at all in
+    # front of the first record -- a UTF-8 BOM, or one `# episode dump` comment
+    # line -- which drops a frame-bearing stream into the "source or prose"
+    # branch, whose sentence asserts that the ids in it are constants and guards.
+    #
+    # Two whole lines that parse as JSON *objects* is the test. Two, because one
+    # fenced `{}` in a Markdown code block should not make a document a stream;
+    # objects, because records are objects and a bare `[1, 2]` line in prose is
+    # not a record.
+    # Counting object lines alone is not enough either: `proxy/tests/test_redteam.py`
+    # is Python source carrying several double-quoted fixture dicts one to a line,
+    # and on a bare count it was judged a record stream and then reported
+    # unparseable -- a false red on a guard file, which is the failure this module
+    # already made once with its allow-list. A real stream under a wrong name is
+    # almost entirely records; source code that contains a few is not. So the
+    # records must also be the bulk of the file.
+    objects = 0
+    non_empty = 0
     for line in text.splitlines():
-        if not line.strip():
+        line = line.strip()
+        if not line:
+            continue
+        non_empty += 1
+        if line[0] != "{":
             continue
         try:
-            json.loads(line)
+            if isinstance(json.loads(line), dict):
+                objects += 1
         except ValueError:
             continue
-        parsed += 1
-        if parsed >= 2:
-            return True, True
-    try:
-        json.loads(text)
-    except ValueError:
-        # Opens like JSON, is valid text, and is not JSON. That is prose.
-        return False, False
-    return True, False
+    if objects >= 2 and objects * 2 >= non_empty:
+        return True, True
+    stripped = text.strip()
+    if stripped[:1] in ("{", "["):
+        try:
+            json.loads(text)
+        except ValueError:
+            # Opens like JSON, is valid text, and is not JSON: prose that begins
+            # with a bracket, e.g. a Markdown link reference.
+            return False, False
+        return True, False
+    return False, False
 
 
 def _tracked() -> list[str]:
@@ -295,6 +358,14 @@ def check_credential(
                 f"{rel} could not be opened ({why}), so it has NOT been searched for the "
                 "literal key. This is a tracked file: it ships in the manifest whether or "
                 "not this check could read it."
+            )
+            continue
+        why = unsearchable_encoding(blob)
+        if why:
+            needs_human.append(
+                f"{rel} opens, but a UTF-8 search cannot speak about it ({why}). It has "
+                "NOT been searched for the literal key; counting it as scanned would be "
+                "the coverage note asserting something it did not do."
             )
             continue
         scanned += 1
@@ -390,6 +461,13 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str], list[str]]:
                 f"{rel} could not be opened ({why}), so it has NOT been checked for sealed "
                 "material. A tracked file this check could not read is not a tracked file "
                 "with nothing in it."
+            )
+            continue
+        why = unsearchable_encoding(blob)
+        if why:
+            needs_human.append(
+                f"{rel} opens, but a UTF-8 search cannot speak about it ({why}). No sealed "
+                "id could match in it whatever it contains, so it has NOT been checked."
             )
             continue
         scanned += 1
