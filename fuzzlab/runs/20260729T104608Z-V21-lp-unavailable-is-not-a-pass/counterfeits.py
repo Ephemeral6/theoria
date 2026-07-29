@@ -1,4 +1,4 @@
-"""Seventeen ways to break V-21's machinery, and which tests notice.
+"""Nineteen ways to break V-21's machinery, and which tests notice.
 
 C-11's lesson is that N mutants matching N tests measures nothing: a catalogue
 built by reading the test file back is a catalogue of the tests, not of the code.
@@ -19,10 +19,19 @@ The five targets, and why each is a place a defect could hide:
 
 * `props/lp_potential.py`  -- the catch itself, and what it files;
 * `props/finding.py`       -- the taxonomy, the required `cause`, `failures()`;
-* `campaign.py`            -- the three coverage columns;
-* `verify.py`              -- the one command a human actually reads;
+* `campaign.py`            -- the coverage columns, and the exit code that carries
+  them past a 25-world pytest run to the artifact anyone reads;
 * the *classification*, as opposed to the catching -- a skip filed under the
-  wrong cause is caught by nothing that only checks a world was skipped.
+  wrong cause is caught by nothing that only checks a world was skipped;
+* the *arithmetic* -- a column can be right about which worlds and still count
+  the wrong things, which is how it was observed at -56 out of 12.
+
+Two rows (`c-worlds-columns-count-findings`, `c-campaign-exit-ignores-unavailable`)
+were added after an adversarial review found the defects they restore. Two rows
+have survived across the item's life -- `c-drop-the-outcome-payload` on the first
+pass and `c-campaign-exit-ignores-unavailable` on the re-run -- and both were
+closed afterwards, with the order recorded in the test that closes them rather
+than tidied away. Neither was predicted.
 """
 
 import argparse
@@ -410,7 +419,8 @@ TABLE: List[Counterfeit] = [
     Counterfeit("c-campaign-exit-ignores-unavailable", "campaign.py",
                 "campaign.main stops exiting non-zero on unavailable",
                 "'gated' is true of a 25-world test and false of the artifact",
-                _campaign_exit_ignores_unavailable, False),
+                _campaign_exit_ignores_unavailable, False),   # survivor of the
+    # 19-row re-run, closed afterwards; see RUN_STATE.md section 5.
     Counterfeit("c-unavailable-counted-as-evaluated", "campaign.py",
                 "the coverage column adds the unavailable skips back",
                 "V-21's defect, relocated from the property into the report",

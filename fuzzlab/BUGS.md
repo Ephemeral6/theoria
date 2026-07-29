@@ -557,23 +557,55 @@ got wrong; that is the coverage column's question, and it has its own gate.
 
 ## T3 · what the counterfeit table found
 
-17 counterfeits against the new machinery, run in fresh subprocesses against the
+19 counterfeits against the new machinery, run in fresh subprocesses against the
 V-21 gate set; results in
 `runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/COUNTERFEITS.json`. The
 table is written against the code paths rather than read back off the test file:
-**9 of the 17 had no dedicated test written for them**, which is the point (C-11:
-N mutants matching N tests measures the tests).
+**10 of the 19 had no dedicated test written for them**, which is the point
+(C-11: N mutants matching N tests measures the tests).
 
-16 were killed. **One survived**: `c-drop-the-outcome-payload` — file the skip,
-attribute it correctly to the solver, and drop the `LpOutcome` payload. Every
-count stays right; what is lost is the ability to tell status 1 (raise the
-budget) from status 3 (the model is wrong) from status 4 (go and look at the
-arithmetic). It has since been closed, and the assertion that closes it says in
-its own comment that it came *after* the survivor rather than predicting it —
-retro-fitting a test and then presenting it as foresight is the failure this
-paragraph exists to avoid. Re-run in `COUNTERFEITS-recheck.json`: killed.
+It ran twice — 17 rows, then 19 after an adversarial review added two — and
+**each pass produced exactly one survivor, neither predicted**:
+
+* `c-drop-the-outcome-payload` — file the skip, attribute it correctly, drop the
+  `LpOutcome` payload. Every count stays right; what is lost is telling status 1
+  (raise the budget) from 3 (the model is wrong) from 4 (go and look at the
+  arithmetic).
+* `c-campaign-exit-ignores-unavailable` — `campaign.main` stops exiting non-zero
+  on `unavailable`. This one exists because the review found the gate did not
+  reach the 500-world artifact, and the fix for *that* changed an exit code with
+  no test behind it — the same shape as the defect being closed, one layer up.
+
+Both are closed, and in both cases the closing test says in its own comment that
+it came *after* the survivor. Retro-fitting a test and presenting it as foresight
+is the failure this paragraph exists to avoid. Re-runs in
+`COUNTERFEITS-recheck.json`: killed.
+
+Both survivors were in the **reporting** layer. Every counterfeit against the
+catch, the classification and the taxonomy died at once; what survived twice was
+a defect in what the battery says about itself, which is this item's subject.
 
 The pre-registration named `c-relabel-as-no-certificate` as the one it expected
 to be hardest, on the grounds that a solver failure filed as the engine's own
 documented decline is identical in every column except `skips_by_cause`. **That
-prediction was wrong**, in the safe direction: two tests killed it.
+prediction was wrong**, in the safe direction: two tests killed it, on both
+passes.
+
+## T4 · what an adversarial review overturned
+
+Fourteen findings, one a BLOCKER, none rejected; verbatim in that directory's
+`ADVERSARIAL.md`, dispositions in its `RUN_STATE.md` §7. The one that matters
+here: `invariant_worlds_evaluated` and `invariant_worlds_unavailable` counted
+skip **findings** while being published under names that say *worlds*. The two
+are equal only while no property files two skips for one world —
+`cegis_miner.frontier_is_complete_to_size` files one per rule, and with its
+budget forced low the coverage column read **−56 out of 12 worlds**, with the
+reconciliation test green on it because its second assertion was `x == x`. Both
+are fixed; the columns count distinct seeds now.
+
+That bug predates V-21 — the expression is V-13's — but V-21 replicated its shape
+into a new column and asserted "worlds" in a docstring, which is how it was
+found. The review also caught this item shipping, twice, the exact defect it
+exists to remove: three docstrings claiming "the suite fails on it" when only a
+25-world pytest run did, and a `minimize` help string documenting the inverse of
+what the code did.

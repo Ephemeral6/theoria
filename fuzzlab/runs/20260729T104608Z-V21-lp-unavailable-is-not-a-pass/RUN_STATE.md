@@ -7,9 +7,15 @@ what makes `LpUnavailable` reachable at all, and what supplies the
 `solver_options` the negative sample needs to drive a *real* solver limit).
 
 Only `fuzzlab/` was written. `git diff --stat 92b140db HEAD -- engine-rig` is
-empty (T8). No network, no `.env`, zero contact with the sealed pile. No
-committed artifact was modified: every campaign ran under `--out` into this
-directory.
+empty, and so is `git diff --name-only 92b140db HEAD -- ':!fuzzlab'` (T8). No
+network, no `.env`, zero contact with the sealed pile.
+
+No committed artifact was modified. Every campaign ran under `--out` into this
+directory. The one exception is `python -m fuzzlab.verify`, which the ticket
+requires and whose stage 2 runs `campaign --worlds 60` with no `--out` and so
+writes `fuzzlab/out/`; it was run for the reading and `fuzzlab/out/` restored
+with `git checkout --` immediately afterwards. `git status` on that path is
+clean. `fuzzlab/out/` is consequently still pre-V-21 in schema — see §8.
 
 Commits, in order:
 
@@ -18,6 +24,8 @@ Commits, in order:
 | `41e72b34` | the pre-registration and the before-measurement |
 | `e1319503` | the fix: the catch, the taxonomy, the columns, `failures()` |
 | `863e899d` | the counterfeit table, `minimize`'s cause axis, the docs |
+| `ca72c8e1` | the adversarial review's findings, all fourteen |
+| *(final)* | the second survivor closed, and the reports reconciled to it |
 
 `git merge-base --is-ancestor 41e72b34 e1319503` → true. The criteria in
 `PREREGISTRATION.md` were on disk and committed before the fix existed and were
@@ -135,7 +143,7 @@ from the other. That is V-13's rule applied to the new entrance.
 
 ### (4) The negative sample, and the proof it does not idle
 
-`fuzzlab/tests/test_solver_unavailable.py`, 7 tests. The lever is
+`fuzzlab/tests/test_solver_unavailable.py`, 8 tests. The lever is
 `solver_options={"maxiter": 0}` passed to the **real** `linprog` through E-15's
 own hook, injected at `props/lp_potential._solve` — fuzzlab's own seam, the one
 the mutation battery uses, so `engine-rig` is untouched in fact and not only in
@@ -212,39 +220,51 @@ hide.
 
 ## 5. The counterfeit table — wider than the tests, on purpose
 
-`counterfeits.py`, 17 injected defects against the new machinery, each applied in
-a fresh subprocess and run against the V-21 gate set. `COUNTERFEITS.json`,
-`COUNTERFEITS.stdout.txt`.
+`counterfeits.py`, injected defects against the new machinery, each applied in a
+fresh subprocess and run against the V-21 gate set. `COUNTERFEITS.json`,
+`COUNTERFEITS.stdout.txt`, `COUNTERFEITS-recheck.json`.
 
 C-11's lesson is that N mutants matching N tests measures the tests. So the table
 was written against the **code paths** — the catch, what it files, the taxonomy,
-`failures()`, the three campaign columns — and **9 of the 17 had no dedicated
-test written for them**.
+`failures()`, the campaign columns, the exit code — and **10 of the 19 had no
+dedicated test written for them**.
 
-**16 killed, 1 survivor.**
+It ran twice. 17 rows before the adversarial review, then 19 (two added for
+defects the review found: `c-worlds-columns-count-findings` and
+`c-campaign-exit-ignores-unavailable`). **Each pass produced exactly one
+survivor, and neither was predicted.**
 
-The survivor was `c-drop-the-outcome-payload`: file the skip, attribute it
-correctly to the solver, and drop the `LpOutcome` payload. Every count stays
-right. What is lost is the ability to tell status 1 (raise the budget) from 3
-(the model is wrong) from 4 (go and look at the arithmetic) — an unavailability
-that is attributable but not diagnosable.
+| pass | survivor | what it does | what it would let a reader believe |
+|---|---|---|---|
+| 17-row | `c-drop-the-outcome-payload` | files the skip, attributes it correctly, drops the `LpOutcome` payload | unjudged and attributable, but you cannot tell status 1 (raise the budget) from 3 (the model is wrong) from 4 (go and look at the arithmetic) |
+| 19-row | `c-campaign-exit-ignores-unavailable` | `campaign.main` stops exiting non-zero on `unavailable` | "gated" is true of a 25-world pytest run and false of the artifact |
 
-It has been closed, and the record is explicit about the order: the assertion in
-`test_a_starved_solver_is_attributable_not_merely_absent` carries a comment
-saying it came *after* the survivor and did not predict it. Re-run in
-`COUNTERFEITS-recheck.json`: killed, 1 failing test. The pre-registration
-committed me to not retro-fitting a survivor with a test and presenting it as
-foresight; closing the hole is fine, claiming I saw it coming is not.
+The second one is the more embarrassing and the more useful. It exists because
+the review's finding 5 said the `unavailable` gate did not reach the 500-world
+artifact; I fixed that by changing `campaign.main`'s exit code — **and wrote no
+test for the change**, which is the same shape as the defect I was closing. The
+counterfeit table caught it on the next run.
+
+Both are now closed, and in both cases the closing test says in its own comment
+that it came *after* the survivor. The pre-registration committed me to not
+retro-fitting a survivor with a test and presenting it as foresight. Closing the
+hole is fine; claiming I saw it coming is not.
 
 **My pre-registered prediction was wrong.** I named
 `c-relabel-as-no-certificate` — a solver failure filed as the engine's own
 documented decline — as the one I expected to survive, since both are skips and
 every column except `skips_by_cause` is identical between them. It was killed by
-two tests. Wrong in the safe direction, and it is the strongest single piece of
-evidence that the `cause` column is load-bearing rather than decorative:
-`c-relabel-as-no-certificate`, `c-relabel-as-budget` and
+two tests, on both passes. Wrong in the safe direction, and it is the strongest
+single piece of evidence that the `cause` column is load-bearing rather than
+decorative: `c-relabel-as-no-certificate`, `c-relabel-as-budget` and
 `c-unavailable-is-declined` all leave the world correctly *skipped* and are all
 caught anyway, purely on which cause was written down.
+
+The thing the two survivors have in common is worth stating, because it is the
+only generalisation this run supports: **both were in the reporting layer, not
+the detection layer.** Every counterfeit against the catch, the classification
+and the taxonomy died immediately. What survived twice was a defect in what the
+battery *says about itself* — which is, exactly, the subject of this item.
 
 ---
 
@@ -254,7 +274,7 @@ Everything below is post-review, against the corrected code. Raw output in
 `campaign/campaign.json`, `campaign.stdout.txt`, `PYTEST.stdout.txt`,
 `VERIFY.stdout.txt`, `COUNTERFEITS.json`, `COUNTERFEITS.stdout.txt`.
 
-**`python -m pytest fuzzlab` → exit 0, 130 passed** (baseline at `92b140db`: 90).
+**`python -m pytest fuzzlab` → exit 0, 131 passed** (baseline at `92b140db`: 90).
 
 **`python -m fuzzlab.campaign --worlds 500 --out …` → exit 0.** 3000 worlds, 26
 invariants:

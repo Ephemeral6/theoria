@@ -1,0 +1,383 @@
+{
+  "baseline": {
+    "elapsed_s": 19.7,
+    "failing_tests": [],
+    "id": "__none__",
+    "killed": false,
+    "n_failing": 0,
+    "returncode": 0,
+    "tail": [
+      "...................................................                      [100%]"
+    ]
+  },
+  "counterfeits": [
+    {
+      "description": "the LpUnavailable catch re-raises: exactly the pre-V-21 code",
+      "elapsed_s": 20.0,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_does_not_pass_the_gate",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-drop-the-catch",
+      "killed": true,
+      "misreading": "the solver's silence is coverage",
+      "n_failing": 5,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_does_not_pass_the_gate"
+      ],
+      "target": "props/lp_potential.py"
+    },
+    {
+      "description": "one of four invariants keeps the catch, three revert",
+      "elapsed_s": 20.0,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_does_not_pass_the_gate",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_removing_the_catch_lets_the_starved_solver_through",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-catch-only-one-invariant",
+      "killed": true,
+      "misreading": "three quarters of the fix, reported as all of it",
+      "n_failing": 6,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_removing_the_catch_lets_the_starved_solver_through"
+      ],
+      "target": "props/lp_potential.py"
+    },
+    {
+      "description": "the catch returns [] -- caught and unreported",
+      "elapsed_s": 20.0,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-swallow-return-empty",
+      "killed": true,
+      "misreading": "the V-13 defect through a new entrance",
+      "n_failing": 4,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it"
+      ],
+      "target": "props/lp_potential.py"
+    },
+    {
+      "description": "an iteration limit is filed as an engine violation",
+      "elapsed_s": 19.9,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_does_not_pass_the_gate",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-file-as-violated",
+      "killed": true,
+      "misreading": "the engine is blamed for HiGHS; a false accusation",
+      "n_failing": 5,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_does_not_pass_the_gate"
+      ],
+      "target": "props/lp_potential.py"
+    },
+    {
+      "description": "the skip carries no status / solver_status / bound / margin",
+      "elapsed_s": 19.7,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-drop-the-outcome-payload",
+      "killed": true,
+      "misreading": "unjudged, attributable to the solver, but not diagnosable",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "target": "props/lp_potential.py"
+    },
+    {
+      "description": "solver_unavailable is filed as no_certificate",
+      "elapsed_s": 19.8,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-relabel-as-no-certificate",
+      "killed": true,
+      "misreading": "a starved solver reads as the engine's documented incompleteness",
+      "n_failing": 2,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "target": "the classification"
+    },
+    {
+      "description": "solver_unavailable is filed as sweep_budget",
+      "elapsed_s": 19.7,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-relabel-as-budget",
+      "killed": true,
+      "misreading": "a solver failure reads as a cost we chose to decline",
+      "n_failing": 2,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "target": "the classification"
+    },
+    {
+      "description": "CAUSE_CLASS moves solver_unavailable into `declined`",
+      "elapsed_s": 19.7,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_finding_contract.py::test_every_declared_cause_has_a_class",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-unavailable-is-declined",
+      "killed": true,
+      "misreading": "the gate on `unavailable` can never fire",
+      "n_failing": 3,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_finding_contract.py::test_every_declared_cause_has_a_class"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "failures() returns VIOLATED only, as it did before V-21",
+      "elapsed_s": 19.7,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_finding_contract.py::test_failures_counts_an_unexpected_raise",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_removing_the_catch_lets_the_starved_solver_through"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-failures-narrow-again",
+      "killed": true,
+      "misreading": "a crashing property is not a failure",
+      "n_failing": 2,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_finding_contract.py::test_failures_counts_an_unexpected_raise"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "an undeclared cause defaults to `declined` instead of raising",
+      "elapsed_s": 20.0,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_finding_contract.py::test_an_undeclared_cause_is_refused_at_the_call"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-cause-validation-off",
+      "killed": true,
+      "misreading": "a new bucket can be added without anyone classifying it",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_finding_contract.py::test_an_undeclared_cause_is_refused_at_the_call"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "cause stops being required; it defaults to no_certificate",
+      "elapsed_s": 20.3,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_finding_contract.py::test_a_missing_cause_is_a_type_error"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-skipped-cause-defaults",
+      "killed": true,
+      "misreading": "the convention decays back to what it was, silently",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_finding_contract.py::test_a_missing_cause_is_a_type_error"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "raised findings no longer record the exception type",
+      "elapsed_s": 20.1,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_finding_contract.py::test_a_raised_finding_records_which_exception_it_was"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-raised-loses-its-cause",
+      "killed": true,
+      "misreading": "triage cannot group crashes without reading tracebacks",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_finding_contract.py::test_a_raised_finding_records_which_exception_it_was"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "Finding.cause_class returns \"\" for every skip",
+      "elapsed_s": 20.1,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-cause-class-blank",
+      "killed": true,
+      "misreading": "the second axis disappears from every roll-up",
+      "n_failing": 2,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "target": "props/finding.py"
+    },
+    {
+      "description": "invariant_worlds_unavailable is reported as 0",
+      "elapsed_s": 19.9,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-unavailable-always-zero",
+      "killed": true,
+      "misreading": "the gate reads green because the number was blanked",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent"
+      ],
+      "target": "campaign.py"
+    },
+    {
+      "description": "skips_by_cause is reported empty",
+      "elapsed_s": 20.2,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative",
+        "fuzzlab\\tests\\test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count[cegis_miner]",
+        "fuzzlab\\tests\\test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count[lp_potential]",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_is_attributable_not_merely_absent",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_unavailable_is_not_the_same_field_as_a_clean_decline"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-skips-by-cause-empty",
+      "killed": true,
+      "misreading": "the breakdown that makes the skip auditable is gone",
+      "n_failing": 5,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative"
+      ],
+      "target": "campaign.py"
+    },
+    {
+      "description": "invariant_worlds_evaluated is the world count again",
+      "elapsed_s": 20.2,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage",
+        "fuzzlab\\tests\\test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative",
+        "fuzzlab\\tests\\test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count[cegis_miner]",
+        "fuzzlab\\tests\\test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count[lp_potential]",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-evaluated-ignores-skips",
+      "killed": true,
+      "misreading": "the pre-V-13 coverage column, restored",
+      "n_failing": 6,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage"
+      ],
+      "target": "campaign.py"
+    },
+    {
+      "description": "the world columns subtract skip findings instead of seeds",
+      "elapsed_s": 19.8,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative"
+      ],
+      "has_dedicated_test": true,
+      "id": "c-worlds-columns-count-findings",
+      "killed": true,
+      "misreading": "a coverage column that has been observed at -56 out of 12",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative"
+      ],
+      "target": "campaign.py"
+    },
+    {
+      "description": "campaign.main stops exiting non-zero on unavailable",
+      "elapsed_s": 20.2,
+      "failing_tests": [],
+      "has_dedicated_test": false,
+      "id": "c-campaign-exit-ignores-unavailable",
+      "killed": false,
+      "misreading": "'gated' is true of a 25-world test and false of the artifact",
+      "n_failing": 0,
+      "returncode": 0,
+      "tail": [
+        "...................................................                      [100%]"
+      ],
+      "target": "campaign.py"
+    },
+    {
+      "description": "the coverage column adds the unavailable skips back",
+      "elapsed_s": 20.9,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_a_starved_solver_judges_nothing",
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-unavailable-counted-as-evaluated",
+      "killed": true,
+      "misreading": "V-21's defect, relocated from the property into the report",
+      "n_failing": 2,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_blinding_the_solver_lowers_coverage_it_does_not_raise_it"
+      ],
+      "target": "campaign.py"
+    }
+  ],
+  "gate": [
+    "fuzzlab/tests/test_solver_unavailable.py",
+    "fuzzlab/tests/test_finding_contract.py",
+    "fuzzlab/tests/test_battery.py::test_nothing_went_unjudged_because_a_tool_could_not_compute",
+    "fuzzlab/tests/test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count",
+    "fuzzlab/tests/test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative",
+    "fuzzlab/tests/test_battery.py::test_short_campaign_passes_the_gate_the_docstring_describes",
+    "fuzzlab/tests/test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage"
+  ],
+  "n_counterfeits": 19,
+  "n_survivors": 1,
+  "n_without_a_dedicated_test": 10,
+  "survivors": [
+    "c-campaign-exit-ignores-unavailable"
+  ]
+}

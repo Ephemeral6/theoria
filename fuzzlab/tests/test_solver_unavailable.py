@@ -195,6 +195,45 @@ def test_a_starved_solver_does_not_pass_the_gate(starved_run):
     assert not finding.failures(findings)
 
 
+def test_the_campaign_exits_non_zero_when_a_tool_could_not_compute(tmp_path):
+    """The gate that reaches the 500-world artifact, not just the 25-world test.
+
+    An adversarial pass found "gated, not merely filed" was true of
+    `pytest fuzzlab` and false of everything anyone reads: `campaign.main`
+    exited 0 with every world unjudged, so `verify.py` printed the warning and
+    then printed `green`. The fix was to move the code — `campaign.main` now
+    exits non-zero on `totals.unavailable`, which is consistent with that exit
+    code being about the instrument rather than the reading.
+
+    **This test came after that fix, and after the counterfeit table caught the
+    fix untested.** `c-campaign-exit-ignores-unavailable` was the one survivor of
+    19 on the re-run: I had closed finding 5 by changing an exit code that no
+    test exercised, which is the same shape as the thing finding 5 was about. The
+    order is recorded rather than tidied away.
+
+    A *violation* must still exit 0 — that is the campaign's product, not its
+    failure — and `test_battery.py`'s reproducibility test already pins the
+    zero-unavailable path, so only the non-zero side needs stating here.
+    """
+    argv = ["--engine", "lp_potential", "--worlds", str(WORLDS),
+            "--out", str(tmp_path), "--quiet"]
+
+    original = props._solve
+    props._solve = _starved
+    try:
+        starved_code = campaign.main(argv)
+    finally:
+        props._solve = original
+    live_code = campaign.main(argv)
+
+    assert starved_code != 0, (
+        "the campaign exited 0 with every world unjudged; the coverage it "
+        "reports was not earned and nothing downstream would notice")
+    assert live_code == 0, (
+        "the campaign exits non-zero on a healthy run, so the signal above "
+        "means nothing")
+
+
 # ------------------------------------------------- the control on the control
 
 def test_removing_the_catch_lets_the_starved_solver_through(starved_run):

@@ -9,3 +9,16 @@ baseline (no counterfeit): rc=0 ['..............................................
   c-unavailable-is-declined              props/finding.py       killed    (3 failing, 20s)
   c-failures-narrow-again                props/finding.py       killed    (2 failing, 20s)
   c-cause-validation-off                 props/finding.py       killed    (1 failing, 20s)
+  c-skipped-cause-defaults               props/finding.py       killed    (1 failing, 20s)
+  c-raised-loses-its-cause               props/finding.py       killed    (1 failing, 20s)
+  c-cause-class-blank                    props/finding.py       killed    (2 failing, 20s)
+  c-unavailable-always-zero              campaign.py            killed    (1 failing, 20s)
+  c-skips-by-cause-empty                 campaign.py            killed    (5 failing, 20s)
+  c-evaluated-ignores-skips              campaign.py            killed    (6 failing, 20s)
+  c-worlds-columns-count-findings        campaign.py            killed    (1 failing, 20s)
+  c-campaign-exit-ignores-unavailable    campaign.py            SURVIVED  (0 failing, 20s)
+  c-unavailable-counted-as-evaluated     campaign.py            killed    (2 failing, 21s)
+
+19 counterfeits, 1 survivors (c-campaign-exit-ignores-unavailable)
+10 of 19 had no dedicated test written for them
+-> C:\Users\user\Desktop\theoria\.worktrees\v21-lp-unavailable-is-not-a-pass\fuzzlab\runs\20260729T104608Z-V21-lp-unavailable-is-not-a-pass\COUNTERFEITS.json
