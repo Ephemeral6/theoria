@@ -14,9 +14,16 @@ import os
 
 import pytest
 
-import verify
+from _armimport import arm_module
 
 ARM = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+#: Loaded by path, not by name. A plain ``import verify`` resolves to
+#: ``cold-start-a2/verify.py``: ``_bootstrap`` puts the upstream roots ahead of
+#: this arm on ``sys.path``, and S14 (127edab) gave eleven territories a
+#: top-level ``verify.py`` seventy-five minutes after these tests were written.
+#: ``tests/test_no_shadow.py`` is the guard that fails when that set grows.
+verify = arm_module("verify")
 
 
 @pytest.fixture(scope="module")
