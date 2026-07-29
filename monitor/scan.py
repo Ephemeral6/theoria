@@ -796,29 +796,63 @@ def _bus_probe():
             "detail": "%d 个会话在线，指令全部已读并回执。" % seen_ok}
 
 
+def _parse_utc(stamp):
+    """`2026-07-29T07:45:00Z` -> epoch seconds, or None if it is not that.
+
+    None rather than an exception: a malformed `wake_at` must fall back to the
+    old staleness rule, not take the probe down. A liveness check that dies on
+    bad input reports nothing about anybody.
+    """
+    try:
+        return calendar.timegm(time.strptime(str(stamp), "%Y-%m-%dT%H:%M:%SZ"))
+    except Exception:
+        return None
+
+
 def _self_driving():
     """常驻研究员是否在自转 —— 用户不该需要触发它们。
 
     判据是心跳的推进：cycle 在涨、note 在变、age 不超过一个循环周期。
     停在那里等人的会话，心跳会定格——这正是用户今天观察到的现象。"""
     import time as _t
-    rows = []
+    rows, bad = [], []
     for rid in ("RES-1", "RES-2", "RES-3", "RES-4"):
         path = "monitor/ops-status/%s.json" % rid
         if not exists(path):
-            rows.append("%s 未启动" % rid)
+            # Was `continue` with the verdict decided by a substring search over
+            # the display strings -- so a researcher who never started at all
+            # left no "疑似停下" anywhere and the probe reported green. Never
+            # started and running fine were the same colour.
+            rows.append("%s 未启动（无心跳文件）" % rid)
+            bad.append(rid)
             continue
         d = read_json(path, {}) or {}
         age = int((_t.time() - os.path.getmtime(rel(path))) / 60)
+        # S19: asleep and closed look identical from outside -- a timestamp has
+        # no power to tell them apart, and OPS-R sleeping 12 hours was read as
+        # dropped. A session that plans to sleep says when it will be back, and
+        # the two states stop sharing a signature: before `wake_at` a silence is
+        # scheduled; after it, the silence is the session failing to keep its
+        # own appointment, which is a louder fact than merely being stale.
+        wake_at = d.get("wake_at")
+        due = _parse_utc(wake_at) if wake_at else None
         stalled = age > 45          # 一轮活再长也该在 45 分钟内写一次心跳
+        if due is not None and _t.time() < due:
+            state = "按计划睡到 %s" % wake_at
+        elif due is not None and stalled:
+            state = "**说好 %s 醒，没醒**" % wake_at
+            bad.append(rid)
+        elif stalled:
+            state = "**疑似停下等人**"
+            bad.append(rid)
+        else:
+            state = ""
         rows.append("%s 第%s轮 %s（%d 分钟前）%s"
-                    % (rid, d.get("cycle"), d.get("state"), age,
-                       "**疑似停下等人**" if stalled else ""))
-    stalled_any = any("疑似停下" in r for r in rows)
-    return {"status": "risk" if stalled_any else "green",
+                    % (rid, d.get("cycle"), d.get("state"), age, state))
+    return {"status": "risk" if bad else "green",
             "detail": "； ".join(rows) +
-                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。"
-                       if stalled_any else "")}
+                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。（%s）"
+                       % "、".join(bad) if bad else "")}
 
 
 def _offline_done():
