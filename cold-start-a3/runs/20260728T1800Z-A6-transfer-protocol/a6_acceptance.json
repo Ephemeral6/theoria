@@ -1,0 +1,1019 @@
+{
+  "acceptance": {
+    "a3_negative_controls_still_caught": true,
+    "a3_positive_control_still_wins": true,
+    "drifted_fingerprint_refused": true,
+    "green_carry_can_be_earned_on_a_wrong_world": true,
+    "none_claimed_a_win": true,
+    "tampered_books_refused": true,
+    "transfer_planned_before_acting": true,
+    "transfer_relearned_nothing": true,
+    "two_worldgen_worlds_end_to_end": true,
+    "wrong_mechanism_world_spent_no_actions": true
+  },
+  "all_green": true,
+  "arms": [
+    {
+      "arm": "a3_l2_oneway",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": "render_mismatch",
+      "lean": false,
+      "lean_withheld_reason": null,
+      "level": "a3-l2-oneway",
+      "outcome": "replay_mismatch",
+      "pack": "a3-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": false,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": true,
+      "world_actions": 10,
+      "world_frames": 11
+    },
+    {
+      "arm": "a3_l2_positive",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": false,
+      "lean_withheld_reason": null,
+      "level": "a3-l2",
+      "outcome": "win",
+      "pack": "a3-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": true,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": false,
+      "world_actions": 10,
+      "world_frames": 11
+    },
+    {
+      "arm": "a3_l2_rewired",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": "render_mismatch",
+      "lean": false,
+      "lean_withheld_reason": null,
+      "level": "a3-l2-rewired",
+      "outcome": "replay_mismatch",
+      "pack": "a3-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": false,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": true,
+      "world_actions": 10,
+      "world_frames": 11
+    },
+    {
+      "arm": "source_open",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": null,
+      "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
+      "level": "t1-push-open",
+      "outcome": "win",
+      "pack": "push-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": true,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": false,
+      "world_actions": 5,
+      "world_frames": 6
+    },
+    {
+      "arm": "tampered_books",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": null,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": null,
+      "lean_withheld_reason": null,
+      "level": "t1-push-corridor",
+      "outcome": "pack_tampered",
+      "pack": "push-v1",
+      "plan_status": null,
+      "replay_certify_green": null,
+      "static_certify_green": null,
+      "theorize_rounds": 0,
+      "theorize_triggered": false,
+      "world_actions": 0,
+      "world_frames": 0
+    },
+    {
+      "arm": "transfer_corridor",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": null,
+      "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
+      "level": "t1-push-corridor",
+      "outcome": "win",
+      "pack": "push-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": true,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": false,
+      "world_actions": 5,
+      "world_frames": 6
+    },
+    {
+      "arm": "wrong_world_t1_cycler_gate",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": null,
+      "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
+      "level": "t1-cycler-gate",
+      "outcome": "win",
+      "pack": "push-v1",
+      "plan_status": "SAT",
+      "replay_certify_green": true,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": false,
+      "world_actions": 5,
+      "world_frames": 6
+    },
+    {
+      "arm": "wrong_world_t1_switch_latch",
+      "candidates_adjudicated": 0,
+      "cost_to_first_plan": {
+        "candidates_adjudicated": 0,
+        "certify_runs": 1,
+        "compile_runs": 1,
+        "dsl_clauses_written": 0,
+        "engine_stages": 0,
+        "plan_runs": 1,
+        "theorize_rounds": 0,
+        "world_actions": 0,
+        "world_frames": 1
+      },
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "first_mismatch_kind": null,
+      "lean": null,
+      "lean_withheld_reason": null,
+      "level": "t1-switch-latch",
+      "outcome": "no_plan",
+      "pack": "push-v1",
+      "plan_status": "UNSAT",
+      "replay_certify_green": null,
+      "static_certify_green": true,
+      "theorize_rounds": 0,
+      "theorize_triggered": true,
+      "world_actions": 0,
+      "world_frames": 1
+    }
+  ],
+  "fingerprint_control": {
+    "file_drifted": "CONTRACTS/candidates_schema.md",
+    "refused": true
+  },
+  "item": "A6-transfer-protocol",
+  "off_route_control": {
+    "anomaly_count": 8,
+    "anomaly_kinds": [
+      "render_mismatch",
+      "unowned_pixel"
+    ],
+    "first_anomaly": {
+      "cell": [
+        2,
+        3
+      ],
+      "kind": "render_mismatch",
+      "manual": 0,
+      "t": 2,
+      "world": 6
+    },
+    "green": false,
+    "off_route": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "pixels_unexplained": 6,
+    "world": "t1-cycler-gate"
+  },
+  "packs": {
+    "a3-v1": {
+      "books": {
+        "domain": {
+          "bytes": 8760,
+          "file": "domain.dsl",
+          "laws": 3,
+          "rules": 20,
+          "sha256": "db11cabaa510182257eacbbcd32ac648908c835de756cf285aa777b1c73d56db"
+        },
+        "playbook": {
+          "bytes": 4872,
+          "entries_carried": 2,
+          "entries_left_behind": [
+            "unparsed:line 81",
+            "heuristic:press_debt"
+          ],
+          "entries_unparsed": [
+            {
+              "error": "Invalid prefer statement: 'prefer portal_before_corridor [ev: 2/2 levels, n=2 — indicative only]'",
+              "line": 81,
+              "text": "prefer portal_before_corridor [ev: 2/2 levels, n=2 — indicative only]"
+            }
+          ],
+          "file": "playbook.dsl",
+          "parsed": "partial",
+          "sha256": "c27024d6aa529a8503444ce3bd4158683636ca5c565f3843ee0eed0159e1ed30"
+        }
+      },
+      "requires": {
+        "action_vocabulary": {
+          "DOWN": [
+            "push",
+            "Cart",
+            "down"
+          ],
+          "LEFT": [
+            "push",
+            "Cart",
+            "left"
+          ],
+          "RIGHT": [
+            "push",
+            "Cart",
+            "right"
+          ],
+          "UP": [
+            "push",
+            "Cart",
+            "up"
+          ]
+        },
+        "colour_roles": {
+          "5": "door",
+          "6": "cart",
+          "7": "switch-up",
+          "8": "switch-down"
+        },
+        "directions": [
+          "down",
+          "left",
+          "right",
+          "up"
+        ],
+        "forms": [
+          "python",
+          "markdown",
+          "pddl",
+          "lean"
+        ],
+        "forms_withheld": {},
+        "goal_in_domain": false,
+        "guard_colours": [
+          3,
+          4,
+          7,
+          8
+        ],
+        "guard_contexts": [
+          {
+            "coverage": "69/69",
+            "direction": "up",
+            "event": "moved",
+            "evidence": "t0,t5,t8",
+            "guard": [
+              "act=push(Cart,up)",
+              "free(above(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "push_up",
+            "target": "Cart"
+          },
+          {
+            "coverage": "70/70",
+            "direction": "down",
+            "event": "moved",
+            "evidence": "t3,t4,t10",
+            "guard": [
+              "act=push(Cart,down)",
+              "free(below(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "push_down",
+            "target": "Cart"
+          },
+          {
+            "coverage": "40/40",
+            "direction": "left",
+            "event": "moved",
+            "evidence": "t13,t17,t26",
+            "guard": [
+              "act=push(Cart,left)",
+              "free(leftof(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "push_left",
+            "target": "Cart"
+          },
+          {
+            "coverage": "46/46",
+            "direction": "right",
+            "event": "moved",
+            "evidence": "t7,t16,t22",
+            "guard": [
+              "act=push(Cart,right)",
+              "free(rightof(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "push_right",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "up",
+            "event": "jumped",
+            "evidence": "t48,t117",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),3)"
+            ],
+            "guard_colours": [
+              3
+            ],
+            "rule": "teleport_a_up",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "jumped",
+            "evidence": "t104,t167",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),3)"
+            ],
+            "guard_colours": [
+              3
+            ],
+            "rule": "teleport_a_down",
+            "target": "Cart"
+          },
+          {
+            "coverage": "4/4",
+            "direction": "left",
+            "event": "jumped",
+            "evidence": "t70,t154,t217",
+            "guard": [
+              "act=push(Cart,left)",
+              "colored(leftof(Cart),3)"
+            ],
+            "guard_colours": [
+              3
+            ],
+            "rule": "teleport_a_left",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "right",
+            "event": "jumped",
+            "evidence": "t91,t124",
+            "guard": [
+              "act=push(Cart,right)",
+              "colored(rightof(Cart),3)"
+            ],
+            "guard_colours": [
+              3
+            ],
+            "rule": "teleport_a_right",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "up",
+            "event": "jumped",
+            "evidence": "t112,t175",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),4)"
+            ],
+            "guard_colours": [
+              4
+            ],
+            "rule": "teleport_b_up",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "jumped",
+            "evidence": "t50,t119",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),4)"
+            ],
+            "guard_colours": [
+              4
+            ],
+            "rule": "teleport_b_down",
+            "target": "Cart"
+          },
+          {
+            "coverage": "4/4",
+            "direction": "left",
+            "event": "jumped",
+            "evidence": "t87,t141,t249",
+            "guard": [
+              "act=push(Cart,left)",
+              "colored(leftof(Cart),4)"
+            ],
+            "guard_colours": [
+              4
+            ],
+            "rule": "teleport_b_left",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "right",
+            "event": "jumped",
+            "evidence": "t97,t160",
+            "guard": [
+              "act=push(Cart,right)",
+              "colored(rightof(Cart),4)"
+            ],
+            "guard_colours": [
+              4
+            ],
+            "rule": "teleport_b_right",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "up",
+            "event": "recolored",
+            "evidence": "t1,t18",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),7)"
+            ],
+            "guard_colours": [
+              7
+            ],
+            "rule": "press_up",
+            "target": "Switch"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "up",
+            "event": "vanished",
+            "evidence": "t1,t18",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),7)"
+            ],
+            "guard_colours": [
+              7
+            ],
+            "rule": "door_opens_up",
+            "target": "Door"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "recolored",
+            "evidence": "t64,t251",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),7)"
+            ],
+            "guard_colours": [
+              7
+            ],
+            "rule": "press_down",
+            "target": "Switch"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "vanished",
+            "evidence": "t64,t251",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),7)"
+            ],
+            "guard_colours": [
+              7
+            ],
+            "rule": "door_opens_down",
+            "target": "Door"
+          },
+          {
+            "coverage": "1/1",
+            "direction": "up",
+            "event": "recolored",
+            "evidence": "t2",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),8)"
+            ],
+            "guard_colours": [
+              8
+            ],
+            "rule": "unpress_up",
+            "target": "Switch"
+          },
+          {
+            "coverage": "1/1",
+            "direction": "up",
+            "event": "appeared",
+            "evidence": "t2",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),8)"
+            ],
+            "guard_colours": [
+              8
+            ],
+            "rule": "door_closes_up",
+            "target": "Door"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "recolored",
+            "evidence": "t58,t114",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),8)"
+            ],
+            "guard_colours": [
+              8
+            ],
+            "rule": "unpress_down",
+            "target": "Switch"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "down",
+            "event": "appeared",
+            "evidence": "t58,t114",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),8)"
+            ],
+            "guard_colours": [
+              8
+            ],
+            "rule": "door_closes_down",
+            "target": "Door"
+          }
+        ],
+        "landmarks": [
+          "exit_a",
+          "exit_b"
+        ],
+        "mover": "Cart",
+        "objects": [
+          {
+            "colours": [
+              6
+            ],
+            "fields": [
+              "pos",
+              "color"
+            ],
+            "is_mover": true,
+            "movable": true,
+            "name": "Cart"
+          },
+          {
+            "colours": [
+              5
+            ],
+            "fields": [
+              "pos",
+              "color",
+              "present"
+            ],
+            "is_mover": false,
+            "movable": false,
+            "name": "Door"
+          },
+          {
+            "colours": [
+              7,
+              8
+            ],
+            "fields": [
+              "pos",
+              "color"
+            ],
+            "is_mover": false,
+            "movable": false,
+            "name": "Switch"
+          }
+        ],
+        "semantics": {
+          "cascade": "single_frame",
+          "conflict": "exclusive",
+          "frame": "persist"
+        },
+        "supplied_constants": [
+          "exit_a",
+          "exit_b",
+          "goal_cell"
+        ],
+        "theorem_dependencies": [
+          "teleport_a_down",
+          "teleport_a_left",
+          "teleport_a_right",
+          "teleport_a_up"
+        ]
+      },
+      "theorems": [
+        "cart_unique",
+        "switch_door_latch",
+        "portal_destination_is_absolute",
+        "press_before_door",
+        "count(Switch, 8) + count(Door) != 1"
+      ]
+    },
+    "push-v1": {
+      "books": {
+        "domain": {
+          "bytes": 10413,
+          "file": "domain.dsl",
+          "laws": 3,
+          "rules": 12,
+          "sha256": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
+        },
+        "playbook": {
+          "bytes": 4194,
+          "entries_carried": 1,
+          "entries_left_behind": [
+            "heuristic:shove_debt"
+          ],
+          "entries_unparsed": [],
+          "file": "playbook.dsl",
+          "parsed": "whole",
+          "sha256": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9"
+        }
+      },
+      "requires": {
+        "action_vocabulary": {
+          "DOWN": [
+            "push",
+            "Cart",
+            "down"
+          ],
+          "LEFT": [
+            "push",
+            "Cart",
+            "left"
+          ],
+          "RIGHT": [
+            "push",
+            "Cart",
+            "right"
+          ],
+          "UP": [
+            "push",
+            "Cart",
+            "up"
+          ]
+        },
+        "colour_roles": {
+          "2": "block",
+          "6": "agent"
+        },
+        "directions": [
+          "down",
+          "left",
+          "right",
+          "up"
+        ],
+        "forms": [
+          "python",
+          "markdown",
+          "pddl"
+        ],
+        "forms_withheld": {
+          "lean": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
+        },
+        "goal_in_domain": false,
+        "guard_colours": [
+          2
+        ],
+        "guard_contexts": [
+          {
+            "coverage": "5/5",
+            "direction": "up",
+            "event": "moved",
+            "evidence": "t7,t10,t23,t26",
+            "guard": [
+              "act=push(Cart,up)",
+              "free(above(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "step_up",
+            "target": "Cart"
+          },
+          {
+            "coverage": "5/5",
+            "direction": "down",
+            "event": "moved",
+            "evidence": "t0,t9,t16,t25",
+            "guard": [
+              "act=push(Cart,down)",
+              "free(below(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "step_down",
+            "target": "Cart"
+          },
+          {
+            "coverage": "7/7",
+            "direction": "left",
+            "event": "moved",
+            "evidence": "t2,t8,t15,t18",
+            "guard": [
+              "act=push(Cart,left)",
+              "free(leftof(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "step_left",
+            "target": "Cart"
+          },
+          {
+            "coverage": "6/6",
+            "direction": "right",
+            "event": "moved",
+            "evidence": "t5,t12,t21,t28",
+            "guard": [
+              "act=push(Cart,right)",
+              "free(rightof(Cart))"
+            ],
+            "guard_colours": [],
+            "rule": "step_right",
+            "target": "Cart"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "up",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),2)",
+              "free(above(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "shove_up",
+            "target": "Cart"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "down",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),2)",
+              "free(below(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "shove_down",
+            "target": "Cart"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "left",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,left)",
+              "colored(leftof(Cart),2)",
+              "free(leftof(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "shove_left",
+            "target": "Cart"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "right",
+            "event": "moved",
+            "evidence": "t13,t30",
+            "guard": [
+              "act=push(Cart,right)",
+              "colored(rightof(Cart),2)",
+              "free(rightof(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "shove_right",
+            "target": "Cart"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "up",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,up)",
+              "colored(above(Cart),2)",
+              "free(above(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "block_up",
+            "target": "Block"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "down",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,down)",
+              "colored(below(Cart),2)",
+              "free(below(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "block_down",
+            "target": "Block"
+          },
+          {
+            "coverage": "0/0",
+            "direction": "left",
+            "event": "moved",
+            "evidence": "symmetry",
+            "guard": [
+              "act=push(Cart,left)",
+              "colored(leftof(Cart),2)",
+              "free(leftof(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "block_left",
+            "target": "Block"
+          },
+          {
+            "coverage": "2/2",
+            "direction": "right",
+            "event": "moved",
+            "evidence": "t13,t30",
+            "guard": [
+              "act=push(Cart,right)",
+              "colored(rightof(Cart),2)",
+              "free(rightof(Block))"
+            ],
+            "guard_colours": [
+              2
+            ],
+            "rule": "block_right",
+            "target": "Block"
+          }
+        ],
+        "landmarks": [],
+        "mover": "Cart",
+        "objects": [
+          {
+            "colours": [
+              2
+            ],
+            "fields": [
+              "pos",
+              "color"
+            ],
+            "is_mover": false,
+            "movable": true,
+            "name": "Block"
+          },
+          {
+            "colours": [
+              6
+            ],
+            "fields": [
+              "pos",
+              "color"
+            ],
+            "is_mover": true,
+            "movable": true,
+            "name": "Cart"
+          }
+        ],
+        "semantics": {
+          "cascade": "single_frame",
+          "conflict": "exclusive",
+          "frame": "persist"
+        },
+        "supplied_constants": [
+          "goal_cell"
+        ],
+        "theorem_dependencies": [
+          "block_right",
+          "shove_right"
+        ]
+      },
+      "theorems": [
+        "cart_unique",
+        "block_unique",
+        "shove_is_relative_not_absolute",
+        "count(Block) != 1"
+      ]
+    }
+  },
+  "protocol": "a6carry/1",
+  "source_world": "t1-push-open",
+  "transfer_world": "t1-push-corridor"
+}

@@ -1,0 +1,110 @@
+{
+  "background_route": "border_excluded",
+  "counts": {
+    "arena_cells": 20,
+    "background": 0,
+    "board_non_background_cells": 22,
+    "grid": [
+      6,
+      7
+    ],
+    "object_cells": {
+      "Block": [
+        2,
+        4
+      ],
+      "Cart": [
+        2,
+        2
+      ]
+    },
+    "object_names": [
+      "Block",
+      "Cart"
+    ],
+    "objects": 2
+  },
+  "derived_fields": 6,
+  "fields": {
+    "arena": "derived_from_frame",
+    "background": "derived_from_frame",
+    "board": "derived_from_frame",
+    "goal_cell": "supplied",
+    "height": "derived_from_frame",
+    "landmarks": "n/a (the domain names none)",
+    "name": "supplied",
+    "objects": "derived_from_frame",
+    "width": "derived_from_frame"
+  },
+  "inputs_read": {
+    "actions": 0,
+    "frames": 1
+  },
+  "pack_requires_digest": {
+    "guard_colours": [
+      2
+    ],
+    "landmarks": [],
+    "objects": [
+      "Block",
+      "Cart"
+    ]
+  },
+  "preflight": {
+    "colours_present": {
+      "0": 18,
+      "1": 22,
+      "2": 1,
+      "6": 1
+    },
+    "dormant_guard_colours": [],
+    "dormant_rules": [],
+    "green": true,
+    "grid": [
+      6,
+      7
+    ],
+    "guard_colours": [
+      2
+    ],
+    "note": "a dormant guard colour is not a defect: the level does not present that mechanism and the rules guarding on it never fire.  A missing *object* is a refusal, because the manual is then about a world this level is not.",
+    "objects": {
+      "Block": {
+        "cells": [
+          [
+            2,
+            4
+          ]
+        ],
+        "colours": [
+          2
+        ],
+        "count": 1
+      },
+      "Cart": {
+        "cells": [
+          [
+            2,
+            2
+          ]
+        ],
+        "colours": [
+          6
+        ],
+        "count": 1
+      }
+    },
+    "refusals": []
+  },
+  "route": "frame",
+  "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/wrong_t1-cycler-gate_frame0.json",
+  "supplied_fields": 3,
+  "supplied_values": {
+    "goal_cell": [
+      4,
+      5
+    ],
+    "landmarks": {},
+    "name": "t1-cycler-gate"
+  }
+}

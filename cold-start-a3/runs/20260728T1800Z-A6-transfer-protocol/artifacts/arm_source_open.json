@@ -112,6 +112,7 @@
       "pddl",
       "python"
     ],
+    "forms_emitted_unauthorised": [],
     "forms_withheld": {
       "lean": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
     },
@@ -149,9 +150,9 @@
     "books": {
       "books": {
         "domain": {
-          "actual": "a1e35d0972222f86876e25077dc0d2e025f7dbf90e8207cbc585e41910578bba",
+          "actual": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc",
           "match": true,
-          "recorded": "a1e35d0972222f86876e25077dc0d2e025f7dbf90e8207cbc585e41910578bba"
+          "recorded": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
         },
         "playbook": {
           "actual": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9",

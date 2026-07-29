@@ -68,6 +68,25 @@ def write_execution(path: str, record: Dict[str, object]) -> str:
     wins = record["wins"]
     if len(actions) < len(frames):
         actions += [None] * (len(frames) - len(actions))
+    # D-A6-005: `actions` is padded because a short one is *expected* — an
+    # executor may stop early on a win (line 48) and the row format carries
+    # `null` where no action was taken, so the padding states something true.
+    # `wins` was neither padded nor checked, so an executor returning fewer wins
+    # than frames reached `wins[t]` below as an IndexError partway through the
+    # file, after some rows had already been written.  It is still not padded,
+    # and that is the honest choice rather than the lazy one: `win` is read by
+    # `certify_a3.cheap`'s goal-predicate pass, so a fabricated `False` on the
+    # tail rows would either report a real win as a replay mismatch or conceal
+    # one — a defect in the executor charged to the manual.  The contract says
+    # `wins` is aligned with `frames`; an executor that broke it is told the
+    # shape it returned, before anything is written.
+    if len(wins) != len(frames):
+        raise ValueError(
+            "executor returned %d wins for %d frames; `Executor.execute` "
+            "requires `wins` aligned with `frames` (executor_api.py:44-50).  "
+            "`wins` is not padded the way `actions` is, because `win` is a "
+            "claim about the world that the certify layer reads back as "
+            "evidence." % (len(wins), len(frames)))
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         for t, frame in enumerate(frames):
             handle.write(json.dumps(

@@ -79,6 +79,19 @@ def carry(pack: Pack, executor, out_dir: str, artefacts: str,
     it arrives, and a provenance record that hid the difference between "derived"
     and "handed over" would be the one thing this whole exercise is against.
     """
+    # D-A6-006: the drift branch below used to test `on_drift == "refuse"` and
+    # let every other string fall through to the accept branch, so `"REFUSE"`,
+    # `"stop"` or a plain typo read as *permission to act on a drifted
+    # toolchain* — the failure mode the whole of step 0 exists to prevent, and
+    # one that spends world actions before anybody notices.  A two-valued
+    # parameter is checked here, before the meter exists and before a frame is
+    # taken, so a misspelling costs nothing.
+    if on_drift not in ("refuse", "warn"):
+        raise ValueError(
+            "on_drift must be 'refuse' (stop before acting) or 'warn' (act, and "
+            "record the decision in the report); got %r.  There is no third "
+            "behaviour, and treating an unrecognised value as 'warn' is how a "
+            "typo comes to authorise a run on a drifted toolchain." % (on_drift,))
     os.environ.setdefault("THEORIA_DETERMINISTIC_IDS", "1")
     os.environ.setdefault("THEORIA_FIXED_TIME", "2026-07-28T00:00:00Z")
     os.makedirs(artefacts, exist_ok=True)
@@ -111,6 +124,9 @@ def carry(pack: Pack, executor, out_dir: str, artefacts: str,
             report["theorize_triggered"] = False
             _finish(report, meter, artefacts, tag)
             raise DependencyDrift(drift)
+        # Reachable only for "warn" now — the guard at the top of `carry`
+        # rejects everything else (D-A6-006), so this line records a decision a
+        # reader actually made rather than a value nobody recognised.
         report["pack_check"]["accepted_drift"] = True
 
     # -- 1. one frame: the arm's entire observation ---------------------------
@@ -190,7 +206,20 @@ def carry(pack: Pack, executor, out_dir: str, artefacts: str,
     execution = executor.execute(plan_report["world_actions"])
     exec_path = os.path.join(artefacts, "%s_execution.jsonl" % tag)
     write_execution(exec_path, execution)
-    meter.charge("world_actions", execution["actions_spent"],
+    # D-A6-004: `Executor.execute` promises `frames`, `wins`, `actions`, `win`
+    # and says `actions_spent` "is derived if absent" (executor_api.py:44-50).
+    # Nothing derived it, so a conforming executor that left the key out raised
+    # KeyError on this line.  The line number is the whole of the harm: the
+    # `executor.execute` above has already run, so the actions are *already gone
+    # from the world's budget* and the statement that crashes is the one that
+    # would have recorded them.  A driver that spends quota and then fails to
+    # bill it is exactly the accounting this arm exists to make impossible, so
+    # the derivation the contract advertises is done here rather than demanded
+    # of the executor.
+    actions_spent = execution.get("actions_spent")
+    if actions_spent is None:
+        actions_spent = len(execution["actions"])
+    meter.charge("world_actions", actions_spent,
                  "executing the plan")
     meter.charge("world_frames", len(execution["frames"]) - 1,
                  "frames returned by the execution (frame 0 already charged)")

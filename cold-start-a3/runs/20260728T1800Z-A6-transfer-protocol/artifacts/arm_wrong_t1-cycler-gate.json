@@ -1,7 +1,7 @@
 {
-  "arm": "transfer_corridor",
+  "arm": "wrong_t1-cycler-gate",
   "bill": {
-    "arm": "transfer_corridor",
+    "arm": "wrong_t1-cycler-gate",
     "carries_books": true,
     "cost_to_first_plan": {
       "candidates_adjudicated": 0,
@@ -52,7 +52,7 @@
         "line": "plan_runs",
         "running_total": 1,
         "seq": 3,
-        "why": "fd_adapter.solve on t1-push-corridor"
+        "why": "fd_adapter.solve on t1-cycler-gate"
       },
       {
         "amount": 5,
@@ -76,7 +76,7 @@
         "why": "replay the execution under the manual"
       }
     ],
-    "level": "t1-push-corridor",
+    "level": "t1-cycler-gate",
     "note": "carries a carrypack onto a level it has never seen"
   },
   "certify_lean": {
@@ -89,9 +89,9 @@
     "anomaly_kinds": [],
     "frames": 6,
     "green": true,
-    "pixels_checked": 180,
+    "pixels_checked": 252,
     "pixels_unexplained": 0,
-    "trace": "transfer_corridor_execution.jsonl",
+    "trace": "wrong_t1-cycler-gate_execution.jsonl",
     "transitions": 5
   },
   "certify_static": {
@@ -99,9 +99,9 @@
     "anomaly_kinds": [],
     "frames": 1,
     "green": true,
-    "pixels_checked": 30,
+    "pixels_checked": 42,
     "pixels_unexplained": 0,
-    "trace": "transfer_corridor_frame0_trace.jsonl",
+    "trace": "wrong_t1-cycler-gate_frame0_trace.jsonl",
     "transitions": 0
   },
   "compiled": {
@@ -112,22 +112,21 @@
       "pddl",
       "python"
     ],
-    "forms_emitted_unauthorised": [],
     "forms_withheld": {
       "lean": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
     },
     "goal_bound": [
-      3,
-      4
+      4,
+      5
     ],
     "lean_withheld": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
     "mover": "Cart",
     "pddl_cells_added": [],
-    "problem": "t1-push-corridor",
-    "problem.json": 1030,
-    "problem.pddl": 848,
+    "problem": "t1-cycler-gate",
+    "problem.json": 1478,
+    "problem.pddl": 2255,
     "theory.md": 4220,
-    "theory.py": 10377
+    "theory.py": 10419
   },
   "execution": {
     "actions": [
@@ -138,21 +137,21 @@
       "RIGHT"
     ],
     "actions_spent": 5,
-    "level": "t1-push-corridor",
+    "level": "t1-cycler-gate",
     "plan_length": 5,
     "win": true
   },
   "first_mismatch": null,
-  "level": "t1-push-corridor",
+  "level": "t1-cycler-gate",
   "outcome": "win",
   "pack": "push-v1",
   "pack_check": {
     "books": {
       "books": {
         "domain": {
-          "actual": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc",
+          "actual": "a1e35d0972222f86876e25077dc0d2e025f7dbf90e8207cbc585e41910578bba",
           "match": true,
-          "recorded": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
+          "recorded": "a1e35d0972222f86876e25077dc0d2e025f7dbf90e8207cbc585e41910578bba"
         },
         "playbook": {
           "actual": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9",
@@ -185,13 +184,13 @@
     "pushables": {
       "duplicate_actions_deleted": 4,
       "init_facts": [
-        "(block-at c1-3)"
+        "(block-at c2-4)"
       ],
       "moves_guarded": 4,
       "object_cells": {
         "Block": [
-          1,
-          3
+          2,
+          4
         ]
       },
       "objects": [
@@ -206,11 +205,11 @@
   },
   "plan": {
     "actions": [
-      "(step-down c1-1 c2-1)",
-      "(step-down c2-1 c3-1)",
-      "(step-right c3-1 c3-2)",
-      "(step-right c3-2 c3-3)",
-      "(step-right c3-3 c3-4)"
+      "(step-down c2-2 c3-2)",
+      "(step-down c3-2 c4-2)",
+      "(step-right c4-2 c4-3)",
+      "(step-right c4-3 c4-4)",
+      "(step-right c4-4 c4-5)"
     ],
     "backend": "stub-bfs",
     "directions": [
@@ -220,42 +219,42 @@
       "right",
       "right"
     ],
-    "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/domain.pddl",
+    "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_t1-cycler-gate/domain.pddl",
     "green": true,
     "length": 5,
     "manual_final_cell": [
-      3,
-      4
+      4,
+      5
     ],
     "manual_reaches_goal": true,
     "manual_trail": [
       [
-        1,
-        1
-      ],
-      [
         2,
-        1
-      ],
-      [
-        3,
-        1
+        2
       ],
       [
         3,
         2
       ],
       [
-        3,
+        4,
+        2
+      ],
+      [
+        4,
         3
       ],
       [
-        3,
+        4,
         4
+      ],
+      [
+        4,
+        5
       ]
     ],
-    "name": "t1-push-corridor",
-    "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/problem.pddl",
+    "name": "t1-cycler-gate",
+    "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_t1-cycler-gate/problem.pddl",
     "status": "SAT",
     "world_actions": [
       "DOWN",
@@ -269,21 +268,21 @@
   "provenance": {
     "background_route": "border_excluded",
     "counts": {
-      "arena_cells": 9,
+      "arena_cells": 20,
       "background": 0,
-      "board_non_background_cells": 21,
+      "board_non_background_cells": 22,
       "grid": [
-        5,
-        6
+        6,
+        7
       ],
       "object_cells": {
         "Block": [
-          1,
-          3
+          2,
+          4
         ],
         "Cart": [
-          1,
-          1
+          2,
+          2
         ]
       },
       "object_names": [
@@ -320,8 +319,8 @@
     },
     "preflight": {
       "colours_present": {
-        "0": 7,
-        "1": 21,
+        "0": 18,
+        "1": 22,
         "2": 1,
         "6": 1
       },
@@ -329,8 +328,8 @@
       "dormant_rules": [],
       "green": true,
       "grid": [
-        5,
-        6
+        6,
+        7
       ],
       "guard_colours": [
         2
@@ -340,8 +339,8 @@
         "Block": {
           "cells": [
             [
-              1,
-              3
+              2,
+              4
             ]
           ],
           "colours": [
@@ -352,8 +351,8 @@
         "Cart": {
           "cells": [
             [
-              1,
-              1
+              2,
+              2
             ]
           ],
           "colours": [
@@ -365,15 +364,15 @@
       "refusals": []
     },
     "route": "frame",
-    "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/transfer_corridor_frame0.json",
+    "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/wrong_t1-cycler-gate_frame0.json",
     "supplied_fields": 3,
     "supplied_values": {
       "goal_cell": [
-        3,
-        4
+        4,
+        5
       ],
       "landmarks": {},
-      "name": "t1-push-corridor"
+      "name": "t1-cycler-gate"
     }
   },
   "theorize_triggered": false

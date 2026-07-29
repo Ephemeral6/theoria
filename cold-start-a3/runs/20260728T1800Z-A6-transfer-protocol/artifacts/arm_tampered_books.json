@@ -1,0 +1,57 @@
+{
+  "arm": "tampered_books",
+  "bill": {
+    "arm": "tampered_books",
+    "carries_books": true,
+    "cost_to_first_plan": null,
+    "counts": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 0,
+      "compile_runs": 0,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 0,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 0
+    },
+    "events": [],
+    "level": "t1-push-corridor",
+    "note": "carries a carrypack onto a level it has never seen"
+  },
+  "level": "t1-push-corridor",
+  "outcome": "pack_tampered",
+  "pack": "push-v1",
+  "pack_check": {
+    "books": {
+      "books": {
+        "domain": {
+          "actual": "8a2cbde0232922ab532d04a59f215108e6b7aaec2e905fec9b7b09c12528f5d8",
+          "match": false,
+          "recorded": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
+        },
+        "playbook": {
+          "actual": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9",
+          "match": true,
+          "recorded": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9"
+        }
+      },
+      "match": false
+    },
+    "fingerprint": {
+      "added": [],
+      "current_interpreter": "python3.13",
+      "current_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "detail": {},
+      "drifted": [],
+      "interpreter_changed": false,
+      "match": true,
+      "recorded_interpreter": "python3.13",
+      "recorded_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "removed": []
+    },
+    "on_drift": "refuse"
+  },
+  "protocol": "a6carry/1",
+  "theorize_triggered": false
+}

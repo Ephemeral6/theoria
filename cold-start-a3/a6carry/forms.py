@@ -5,12 +5,24 @@ workarounds are imported from it unchanged (D-A3-004 `bind_goal`, D-A3-005
 `patch_pddl_landmarks`, D-A3-006 `pddl_addressable`).  Two things are new, and
 both are refusals rather than features:
 
-**A form that cannot be emitted honestly is not emitted.**  `compile_instance`
-always writes four files.  Here the pack declares which forms its domain may be
-rendered as (`pack.emittable_forms`), and a withheld form leaves *no file* and a
+**A form that cannot be emitted honestly is gated, and the two forms that are
+not gated are reported as such.**  `compile_instance` always writes four files.
+Here the pack declares which forms its domain may be rendered as
+(`pack.emittable_forms`); a withheld **pddl** or **lean** leaves *no file* and a
 reason in the report.  The case that forced it is D-A6-002 — a Lean certificate
 about a manual whose second moving object is not in the Lean state type would be
 green, axiom-free, and about something else.
+
+The gate does not cover all four forms, and this docstring used to claim it did.
+`theory.py` and `theory.md` are written whatever the pack lists, because the
+protocol needs them: `theory.py` is the only predictor in the system and is what
+both certify steps run (`protocol.py:156-163`, `:201`), and `theory.md` is the
+human-readable form.  Suppressing them on a pack that did not list them would
+not make the run honest, it would make it impossible.  So they keep being
+written and D-A6-007 fixes the *report* instead: a form written without being in
+the pack's `forms` list is listed under `forms_emitted_unauthorised`, never
+under `forms_emitted`.  The claim this module makes is therefore the narrower
+one — no form is emitted while its authorisation is misreported.
 
 **The Lean invariant builder must be supplied, not defaulted.**  `generate_lean`
 falls back to `door_latch_invariant`, which is keyed on an axis literally named
@@ -78,12 +90,15 @@ def compile_forms(dsl_path: str, problem: Problem, out_dir: str,
     }
 
     # --- the executable form: the only predictor in the system ---------------
+    # Written whatever `allowed` says, because both certify steps run it; if the
+    # pack did not list it, that is reported by `forms_emitted_unauthorised`
+    # below rather than by an absent file (D-A6-007).
     theory_py = os.path.join(out_dir, "theory.py")
     written["theory.py"] = _write(theory_py,
                                   generate_python(bound, problem, semantics,
                                                   mover=mover))
 
-    # --- the human form ------------------------------------------------------
+    # --- the human form: ungated for the same reason (D-A6-007) --------------
     written["theory.md"] = _write(os.path.join(out_dir, "theory.md"),
                                   render_markdown(bound, semantics))
 
@@ -138,10 +153,22 @@ def compile_forms(dsl_path: str, problem: Problem, out_dir: str,
                                           "(vacuous unless a Button latch is "
                                           "found — trap T4)")
 
+    # D-A6-007: this used to list every form a file had been written for, with
+    # no reference to `allowed`, so a pack declaring `requires["forms"] =
+    # ["pddl"]` got python and markdown on disk *and* reported them as emitted
+    # forms — the report asserting an authorisation the pack never gave.  The
+    # files still get written (see the module docstring: the certify path runs
+    # `theory.py`, and withholding it would break the protocol rather than make
+    # it honest), so the split is made visible here instead: `forms_emitted` is
+    # what the pack authorised and got, `forms_emitted_unauthorised` is what the
+    # driver wrote anyway.  A reader who only trusts `forms_emitted` is now
+    # right to.
+    _form_files = (("python", "theory.py"), ("markdown", "theory.md"),
+                   ("pddl", "domain.pddl"), ("lean", "theory.lean"))
     written["forms_emitted"] = sorted(
-        f for f, key in (("python", "theory.py"), ("markdown", "theory.md"),
-                         ("pddl", "domain.pddl"), ("lean", "theory.lean"))
-        if key in written)
+        f for f, key in _form_files if key in written and f in allowed)
+    written["forms_emitted_unauthorised"] = sorted(
+        f for f, key in _form_files if key in written and f not in allowed)
     written["forms_withheld"] = {
         k: v for k, v in (("lean", written.get("lean_withheld")),) if v}
     return written

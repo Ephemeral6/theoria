@@ -1,0 +1,61 @@
+{
+  "actions": [
+    "(step-down c2-2 c3-2)",
+    "(step-down c3-2 c4-2)",
+    "(step-right c4-2 c4-3)",
+    "(step-right c4-3 c4-4)",
+    "(step-right c4-4 c4-5)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "down",
+    "down",
+    "right",
+    "right",
+    "right"
+  ],
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_cycler_gate/domain.pddl",
+  "green": true,
+  "length": 5,
+  "manual_final_cell": [
+    4,
+    5
+  ],
+  "manual_reaches_goal": true,
+  "manual_trail": [
+    [
+      2,
+      2
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "name": "t1-cycler-gate",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_cycler_gate/problem.pddl",
+  "status": "SAT",
+  "world_actions": [
+    "DOWN",
+    "DOWN",
+    "RIGHT",
+    "RIGHT",
+    "RIGHT"
+  ]
+}

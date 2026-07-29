@@ -50,7 +50,7 @@
   "format": "carrypack/1",
   "origin": {
     "arm": "A3 level 1",
-    "note": "A3 books, for the negative controls"
+    "note": "A3's own books, so the negative controls run the same path"
   },
   "pack_id": "a3-v1",
   "requires": {

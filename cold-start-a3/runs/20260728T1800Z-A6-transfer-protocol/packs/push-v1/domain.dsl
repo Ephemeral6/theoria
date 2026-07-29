@@ -34,8 +34,13 @@
 # `walk` is witnessed in all four directions.  `push` is witnessed **twice, both
 # times rightward** (t13, t30), and the world's own catalogue entry says why: the
 # gap in the divider is horizontal, so no vertical shove is available to the
-# explorer at all.  Eight of the twelve clauses below therefore rest on symmetry
+# explorer at all.  Six of the twelve clauses below therefore rest on symmetry
 # rather than on a witness, and they say `ev: symmetry` instead of a t-list.
+#
+# (This line said "eight" until 2026-07-29, when the scorer counted the brackets
+# instead of trusting the prose and reported both numbers side by side rather
+# than quietly using the right one.  The six are `shove_up/down/left` and
+# `block_up/down/left`; the rightward pair carries `ev: t13,t30`.)
 #
 # That is the A0 failure mode being walked into deliberately and with the light
 # on.  A0 generalised from a single witness and shipped a manual wrong in three
@@ -44,6 +49,17 @@
 # this manual against every reachable transition of both worlds, including every
 # vertical shove the explorer never reached, and reports the verdict.  A guess
 # that is measured afterwards is a different object from a guess that is not.
+#
+# THE VERDICT, now that the file exists and not before: 256 transitions across
+# both worlds, zero disagreements — and that is a smaller result than it sounds.
+# Four of the six symmetry clauses were exercised by **exactly one transition
+# each**, all four in `t1-push-open` (the corridor's block sits in a one-wide row
+# and admits no vertical shove at all).  The other two — `shove_left` and
+# `block_left` — are exercised by **zero** transitions in either world: in the
+# open room the agent can never get to the block's right-hand side, and in the
+# corridor it cannot reach that side by construction.  They are unrefuted and
+# unvindicated, which is not the same as correct, and the artefact keeps the two
+# lists apart so nobody can add them up.
 #
 # The alternative — four clauses instead of twelve, and a manual that is silent
 # about vertical shoves — is worse and not more honest: silence is not the same
