@@ -1,5 +1,5 @@
 == M00 proxy/variants.py (control: no mutation at all; must NOT be killed)
-.....................................................                    [100%]
+.......................................................                  [100%]
 
 == M01 proxy/variants.py (revert the split entirely: absent and below collapse back together)
         assert absent["state"] == below["state"] == "NOT_FINISHED"
@@ -10,7 +10,7 @@ E
 E         - score_below
 E         + score_absent
 
-proxy\tests\test_variant_degeneracy.py:134: AssertionError
+proxy\tests\test_variant_degeneracy.py:135: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -24,7 +24,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the
 >       assert applied_absent["degenerate"] is True
 E       assert False is True
 
-proxy\tests\test_variant_degeneracy.py:135: AssertionError
+proxy\tests\test_variant_degeneracy.py:136: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -38,7 +38,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the
 >       assert applied_below["degenerate"] is False
 E       assert True is False
 
-proxy\tests\test_variant_degeneracy.py:136: AssertionError
+proxy\tests\test_variant_degeneracy.py:137: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -52,7 +52,7 @@ E
 E         - score_absent
 E         + score_below
 
-proxy\tests\test_variant_degeneracy.py:133: AssertionError
+proxy\tests\test_variant_degeneracy.py:134: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,7 +66,7 @@ E
 E         - score_below
 E         + score_absent
 
-proxy\tests\test_variant_degeneracy.py:134: AssertionError
+proxy\tests\test_variant_degeneracy.py:135: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -80,7 +80,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E       KeyError: 'degenerate'
 
-proxy\tests\test_variant_degeneracy.py:135: KeyError
+proxy\tests\test_variant_degeneracy.py:136: KeyError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -94,7 +94,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the
                ^^^^^^^^^^^^^
 E       KeyError: 'note'
 
-proxy\tests\test_variant_degeneracy.py:167: KeyError
+proxy\tests\test_variant_degeneracy.py:168: KeyError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -108,7 +108,7 @@ E
 E         - WIN
 E         + NOT_FINISHED)
 
-proxy\tests\test_variant_degeneracy.py:156: AssertionError
+proxy\tests\test_variant_degeneracy.py:157: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_a_sufficient_score_is_still_left_alone
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -136,7 +136,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the
                ^^^^^^^^^^^^^
 E       KeyError: 'note'
 
-proxy\tests\test_variant_degeneracy.py:167: KeyError
+proxy\tests\test_variant_degeneracy.py:168: KeyError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -150,7 +150,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrit
 >       assert "note" not in second and second["occurrence"] == 2
 E       AssertionError: assert ('note' not in {'degenerate': True, 'effect': 'WIN rewritten to NOT_FINISHED', 'note': 'this game reported no score, so `score_at_lea...tocol question, answerable without playing it; answer it before using win_tighten on that game.', 'occurrence': 2, ...})
 
-proxy\tests\test_variant_degeneracy.py:168: AssertionError
+proxy\tests\test_variant_degeneracy.py:169: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -164,7 +164,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrit
 >       assert "note" not in second and second["occurrence"] == 2
 E       AssertionError: assert ('note' not in {'degenerate': True, 'effect': 'WIN rewritten to NOT_FINISHED', 'occurrence': 1, 'op': 'win_tighten', ...} and 1 == 2)
 
-proxy\tests\test_variant_degeneracy.py:168: AssertionError
+proxy\tests\test_variant_degeneracy.py:169: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -176,15 +176,15 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrit
         assert runtime.degenerate_wins == 0
 >       assert runtime.first_degenerate is None
 E       assert {} is None
-E        +  where {} = <proxy.variants.VariantRuntime object at 0x000002AB6A5709D0>.first_degenerate
+E        +  where {} = <proxy.variants.VariantRuntime object at 0x0000013D63F309D0>.first_degenerate
 
-proxy\tests\test_variant_degeneracy.py:179: AssertionError
+proxy\tests\test_variant_degeneracy.py:180: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_a_shortfall_never_counts_as_a_degeneracy
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 == M14 proxy/variants.py (wording only -- EXPECTED TO SURVIVE; nothing should assert on the capital)
-.....................................................                    [100%]
+.......................................................                  [100%]
 
 == M15 proxy/tools/check_variant_degeneracy.py (a false bit now counts as degenerate)
         """P3c."""
@@ -195,7 +195,7 @@ E
 E         - PASS
 E         + REFUSED
 
-proxy\tests\test_variant_degeneracy.py:250: AssertionError
+proxy\tests\test_variant_degeneracy.py:251: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_the_scoring_session_passes_the_guard
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -209,16 +209,27 @@ E
 E         - PASS
 E         + REFUSED
 
-proxy\tests\test_variant_degeneracy.py:216: AssertionError
+proxy\tests\test_variant_degeneracy.py:217: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_stripping_the_marker_lets_the_scoreless_session_through
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 == M17 proxy/tools/check_variant_degeneracy.py (the guard flags any operator that carries the key)
-.....................................................                    [100%]
+            "applied": {"op": "observation_loss", "cell": [1, 1], "value": 2,
+                        "degenerate": True}}}
+>       assert scan_records([record])["verdict"] == "PASS"
+E       AssertionError: assert 'REFUSED' == 'PASS'
+E         
+E         - PASS
+E         + REFUSED
+
+proxy\tests\test_variant_degeneracy.py:314: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_the_guard_only_speaks_for_win_tighten
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 == M18 proxy/tools/check_variant_degeneracy.py (the guard reports but never exits non-zero -- the decoration failure)
-C:\Users\user\AppData\Local\Temp\pytest-of-user\pytest-900\test_the_guard_exits_non_zero_0\scoreless.jsonl: REFUSED (127 records, 33 degenerate rewrite(s))
+C:\Users\user\AppData\Local\Temp\pytest-of-user\pytest-934\test_the_guard_exits_non_zero_0\scoreless.jsonl: REFUSED (127 records, 33 degenerate rewrite(s))
   seq 59  variant t-absent  require_score=2  reason=score_absent
     this game reported no score, so `score_at_least` is unsatisfiable at every value: the win condition was not tightened, it was abolished. Reading an absent score as a shortfall is deliberate -- the other direction would let a game that never reports a score win a tightened variant outright -- but the variant's claim no longer follows from the construction it names. Whether a game reports a score is a protocol question, answerable without playing it; answer it before using win_tighten on that game.
   seq 62  variant t-absent  require_score=2  reason=score_absent
@@ -238,9 +249,9 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_the_guard_exits_non_zero_on_
         assert report["findings"]
 >       assert all(v["exam_eligible"] is False for v in report["variants"])
 E       assert False
-E        +  where False = all(<generator object test_a_scoreless_session_is_refused_by_the_guard.<locals>.<genexpr> at 0x000002083FAEBAC0>)
+E        +  where False = all(<generator object test_a_scoreless_session_is_refused_by_the_guard.<locals>.<genexpr> at 0x000001E381F6FC60>)
 
-proxy\tests\test_variant_degeneracy.py:197: AssertionError
+proxy\tests\test_variant_degeneracy.py:198: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_is_refused_by_the_guard
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -254,7 +265,7 @@ E
 E         - REFUSED
 E         + PASS
 
-proxy\tests\test_variant_degeneracy.py:316: AssertionError
+proxy\tests\test_variant_degeneracy.py:354: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_the_guard_sees_a_marker_nested_under_multiple
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -268,7 +279,7 @@ E
 E         - REFUSED
 E         + PASS
 
-proxy\tests\test_variant_degeneracy.py:195: AssertionError
+proxy\tests\test_variant_degeneracy.py:196: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_is_refused_by_the_guard
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -282,7 +293,7 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_is_refus
 E       assert 0 == 1
 E        +  where 0 = len([])
 
-proxy\tests\test_variant_degeneracy.py:225: AssertionError
+proxy\tests\test_variant_degeneracy.py:226: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_the_scoreless_session_records_an_incident_exactly_once
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -296,16 +307,27 @@ FAILED proxy\tests\test_variant_degeneracy.py::test_the_scoreless_session_record
 >       assert incidents[0]["reason"] == REASON_ABSENT
 E       AssertionError: assert None == 'score_absent'
 
-proxy\tests\test_variant_degeneracy.py:227: AssertionError
+proxy\tests\test_variant_degeneracy.py:228: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_the_scoreless_session_records_an_incident_exactly_once
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 == M24 proxy/env_proxy.py (the once-per-session guard is removed: one incident per WIN)
-.....................................................                    [100%]
+        ep._Handler._note_degeneracy(stub, runtime, "g-1")
+        ep._Handler._note_degeneracy(stub, runtime, "g-1")
+>       assert written == ["variant_degenerate"]
+E       AssertionError: assert ['variant_deg...t_degenerate'] == ['variant_degenerate']
+E         
+E         Left contains one more item: 'variant_degenerate'
+E         Use -v to get more diff
+
+proxy\tests\test_variant_degeneracy.py:339: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_the_incident_is_written_once_even_if_the_edge_is_seen_twice
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
 
 == M25 proxy/mock/arc_mock.py (the scoreless world quietly starts scoring: the negative control's own fixture)
-scoreless_run = [{'arm': 'mock_arm', 'budget': 60, 'env_base': 'http://127.0.0.1:51043', 'env_upstream': 'http://127.0.0.1:51007', ......nt': 'env_step', ...}, {'arm': 'mock_arm', 'call_idx': 1, 'event': 'model_call', 'game_id': 'ar25-0c556536', ...}, ...]
+scoreless_run = [{'arm': 'mock_arm', 'budget': 60, 'env_base': 'http://127.0.0.1:65457', 'env_upstream': 'http://127.0.0.1:65453', ......nt': 'env_step', ...}, {'arm': 'mock_arm', 'call_idx': 1, 'event': 'model_call', 'game_id': 'ar25-0c556536', ...}, ...]
 
     def test_a_scoreless_session_marks_every_rewrite(scoreless_run):
         applied = _applied(scoreless_run)
@@ -313,7 +335,7 @@ scoreless_run = [{'arm': 'mock_arm', 'budget': 60, 'env_base': 'http://127.0.0.1
 E       AssertionError: the run produced no win_tighten record at all
 E       assert []
 
-proxy\tests\test_variant_degeneracy.py:186: AssertionError
+proxy\tests\test_variant_degeneracy.py:187: AssertionError
 =========================== short test summary info ===========================
 FAILED proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
