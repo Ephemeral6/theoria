@@ -179,3 +179,20 @@
 2026-07-29T00:47:02Z SWEEP A3-campaign-devpile released (worker W-1640 gone)
 2026-07-29T00:52:21Z DONE S24-merge-conflict-drain by W-1641
 2026-07-29T00:52:21Z CLAIM A10-shared-ledger-real-arms by W-1641
+2026-07-29T01:25:20Z DONE A10-shared-ledger-real-arms by W-1641
+2026-07-29T01:25:20Z CLAIM A11-bypass-attempts-explained by W-1641
+2026-07-29T01:33:42Z CLAIM E16-verdict-must-gate by W-1650
+2026-07-29T01:34:24Z CLAIM P12-paper-multi-review by W-1651
+2026-07-29T01:35:09Z CLAIM V5-verdict-three-types by W-1652
+2026-07-29T01:38:22Z CLAIM S16-silent-failure-hunt by RES-4
+2026-07-29T01:38:22Z CLAIM S18-fleetkit-extract by RES-4
+2026-07-29T01:38:22Z CLAIM S22-access-check-close by RES-4
+2026-07-29T01:41:13Z DONE V19-unverified-is-not-true by RES-3
+2026-07-29T01:41:31Z CLAIM V9-battery-gaming-audit by RES-3
+2026-07-29T01:48:57Z DONE A11-bypass-attempts-explained by W-1641
+2026-07-29T01:50:57Z CLAIM P13-P13-figure-numbering-and-plates by RES-2
+2026-07-29T01:57:02Z SWEEP P12-paper-multi-review released (worker W-1651 gone)
+2026-07-29T02:00:28Z DONE S16-silent-failure-hunt by RES-4
+2026-07-29T02:02:04Z DONE P13-P13-figure-numbering-and-plates by RES-2
+2026-07-29T02:02:04Z CLAIM P12-paper-multi-review by RES-2
+2026-07-29T02:03:54Z RELEASE S22-access-check-close by RES-4 (第(2)项已交付并推送(agent/s22-access-check-close);第(1)项全量跨会话残留需真实API调用,按CHARTER仅RES-1可花钱,已写inbox请裁决改派)

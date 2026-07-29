@@ -1,10 +1,10 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T21:25:00Z",
- "cycle": 2,
+ "utc": "2026-07-29T10:15:00Z",
+ "cycle": 4,
  "state": "working",
- "note": "A:bus#2 ablation 闸门 完工——根因是仪表(pin 把并发舰队的 proxy/var/spend_gate.jsonl 算进本臂)，把宽泛否定名单换成按进程归属判定(audit hook)，verify.sh 连绿两次，56 passed，分支已推。B:A3 关卡边界+跨关带书落码，并查出一条决定性事实：全仓约 2600 条真实 ARC 应答里 levels_completed 恒为 0、state 只有 NOT_FINISHED——**没人通过任何一关**，所以「通关信号是什么」是未观测量。已把两种可能都实现(计数器递增 / WIN+RESET 探测)，探不动就以 level_advance_unknown 停并留下测量。C:A4b-ablation-calibrate 已领并派工。钱已批($200/$60/$25/40动作)，但桌面模型花费的闸门适配器(harness/spend.py)落地后才开跑。",
+ "note": "本轮两次交付均已推送。410e853：对抗性复核抓出的三个 fatal 全修（带书进场的跑永远不叫桌面、边界留下过期编译产物且三条察觉路径同时被堵、_try_advance_level 拿状态字符串当推进证据），并按复核结论撤销边界退役未决意外、改写 D-A3-003 自我推翻、新增 D-A3-004。cde83c2：把『闸门红了立刻停』真正实现——今早那场重试风暴的机理查实（闸门拒绝在 env_proxy 里抛异常，臂看到的是传输失败而非状态码，_retryable(0)=True 于是每条被拒命令重试 40 次），现在改为每次尝试前直接问预留，refused/unavailable 一律终止本腿。182 测试全绿，零 API 零花费。",
  "in_hand": ["A3-campaign-devpile", "A4b-ablation-calibrate"],
- "delivered_this_cycle": ["bus#2 ablation-arm readonly gate"],
- "agents_out": 5
+ "delivered": ["bus#2 ablation-arm readonly gate", "A3 offline: level boundary + book carry + campaign runner", "A3: 3 fatal fixes", "A3: gate-red stop line"],
+ "blocked_on": ["放大率 86.7 vs 假定 1.75——弄清是偶发还是常态前不再起在线腿", "pid 36428 是否有人管，等授权", "bus #7 在磁盘上就是乱码，已请重发"]
 }

@@ -1559,3 +1559,45 @@
 2026-07-29T00:59:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
 2026-07-29T01:00:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
 2026-07-29T01:00:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:03:11Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:04:36Z MERGED origin/agent/s8-provenance-backfill (dirs: PARTNER_SYNC.md,monitor,theoria-arm; gates: verify:monitor(verify.sh),pytest:theoria-arm)
+2026-07-29T01:05:55Z MERGED origin/agent/s9-contract-change-protocol (dirs: PARTNER_SYNC.md,monitor,proxy; gates: verify:monitor(verify.sh),verify:proxy(verify_contract.sh))
+2026-07-29T01:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:14:53Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:15:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:15:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:18:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:18:10Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:18:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:24:30Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:24:51Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:24:56Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:25:18Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:25:19Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:28:19Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:28:24Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:28:28Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:34:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:35:04Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:35:10Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:35:39Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:35:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:35:57Z FLAG origin/agent/s14-gates-for-all: verify gate red in a0-spike (verify.py)
+2026-07-29T01:36:02Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:36:07Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:42:56Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:44:47Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:45:14Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:52:40Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:54:06Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: PARTNER_SYNC.md,theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:55:33Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:55:45Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:57:39Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:59:03Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:59:25Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:59:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:59:38Z MERGED origin/agent/p12-paper-multi-review (dirs: papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T02:00:02Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:00:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:02:58Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T02:04:58Z MERGED origin/agent/v12-worldgen-gate-deaf (dirs: worldgen; gates: verify:worldgen(verify.py); a gate dirtied the worktree: worldgen/out/qc/t1-portal-oneway/candidates.jsonl,worldgen/out/qc/t1-portal-oneway/engines_report.json,worldgen/out/qc/t1-switch-latch/candidates.jsonl,worldgen/out/qc/t1-switch-latch/engines_report.json,worldgen/out/qc/t1-switch-toggle/candidates.jsonl,worldgen/out/qc/t1-switch-toggle/engines_report.json)

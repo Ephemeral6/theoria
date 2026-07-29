@@ -1,1 +1,1 @@
-{"id": "RES-4", "utc": "2026-07-28T16:08:44Z", "cycle": 6, "state": "working", "note": "S14+S15 已交付done并推送;S17 在手,证据 187 行已落盘推送。缺口:human_actions.jsonl 未采(采集器撞额度),那是论点唯一的量化支撑。本会话 subagent 额度已尽、主上下文将满,建议重开一个 RES-4 会话接上——磁盘上什么都不丢。"}
+{"id": "RES-4", "utc": "2026-07-29T02:00:28Z", "cycle": 7, "state": "working", "note": "S16 已交付push+done:reap_worktrees(实删70个,磁盘8.8→14.8GB)+两条常设探针(disk_headroom/clock_sanity,首跑抓到RES-3心跳超前626分钟)+按子进程分家的解码修复(11处,非原报的17处,已订正) · S14 已rebase到新master并push(此前被磁盘满伪装成a0-spike闸门红卡了5次) · S15 已合入master · 手上还有 S18/S22"}
