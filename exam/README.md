@@ -20,7 +20,7 @@ python -m exam.verify                  # the whole territory, one command
 python -m exam.tools.build_papers      # set the papers; split sheet from key
 python -m exam.tools.run_exam          # calibrate the marker, then mark
 python -m exam.tools.run_selftest      # test the marker between its endpoints
-python -m pytest exam/tests -q         # 334 tests
+python -m pytest exam/tests -q         # 338 tests
 python -m exam.tools.archive_run <id>  # runs/<id>/MANIFEST.json
 ```
 
@@ -114,17 +114,15 @@ are mixed across boards so board identity carries no signal.
   witness plan. A framework with a taste for unsolvability proofs gets caught
   here or nowhere.
 
-**The class (ii) premise is weaker than its name.** `lower_bound` is a true
-statement about the raw `(cart, button, latch mask)` product space, which is
-what a naive enumerator walks. It is not a statement about what a complete
-search costs: latching is monotone and gates no geometry, so the space that
-decides the question is the `(cart, button)` quotient, and that is **180, 180,
-600 and 177** states on the four class (ii) items. The paper publishes both
-numbers and derives `search_credible` from the second, because the rubric used
-to read the first and tell an examinee that had honestly searched that its
-search was impossible. What survives is the ordering, which is what the class is
-for: a certificate is worth 1.0 of the reason and a search 0.4, everywhere.
-D-EX-022, and `STATUS.md` open weakness 27.
+**The quotient is published beside the bound, and is not a search space.** The
+four class (ii) items have **180, 180, 600 and 177** reachable `(cart, button)`
+states against a `lower_bound` of 2^60 to 2^120, and the temptation to conclude
+that a solver can therefore just search the quotient is strong enough that this
+run gave in to it and had to be talked out by an adversarial reviewer. The
+quotient ignores `step_limit` outright and carries no latch state, so on a
+`require_all_switches` board it will call an unsolvable level solvable. Both
+numbers are in the truth file and the note beside them says which is which.
+D-EX-027, and `STATUS.md` open weakness 27.
 
 **Every solvable item says where its witness came from.** Five of the eight are
 breadth-first search output and three are constructions. A plan that replays and

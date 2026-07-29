@@ -1,7 +1,7 @@
 # V5-verdict-three-types — what this run did, and what it did not
 
 Worker `W-1652`. Territory `exam`. Branch `agent/v5-verdict-three-types`, base
-`31bea46`. Suite **334 passed** (321 at base). `python -m exam.verify` GREEN,
+`31bea46`. Suite **338 passed** (321 at base). `python -m exam.verify` GREEN,
 determinism holds across `PYTHONHASHSEED` 7 and 99.
 
 ## The scope call, made first and stated plainly
@@ -47,7 +47,9 @@ A seventh auditor then attacked this run's own conclusions.
 |---|---|---|
 | the certificate checker accepted proofs of false theorems | yes | D-EX-020 |
 | `subset_lower_bound` unsound off the comb; a shipped constructor reaches it | yes | D-EX-021 |
-| class (ii)'s "enumeration is out of reach" is false; the rubric repeated it | partly | D-EX-022 |
+| ~~class (ii) is searchable via its quotient~~ — **my error, withdrawn** | n/a | D-EX-027 |
+| the fix for the above introduced a new unsoundness | yes | D-EX-027 |
+| a claim outside the answer alphabet scored as a negative classification | yes | D-EX-027 |
 | the key did not say whether its own witness was searched or constructed | yes | D-EX-023 |
 | the class split cannot report the pair the item asks for | yes | D-EX-024 |
 | an unreadable answer was counted as an abstention | yes | D-EX-025 |
@@ -95,16 +97,46 @@ line; each is work with a reason it was not attempted here.
    the claim gets re-examined rather than quietly inherited when someone adds
    probes elsewhere.
 
-## The one place this run broke something and caught it
+## The places this run broke something
 
-Delegating `_neighbours` to `Level.step` made the button cell a node with no
-edges, which moved the atrium's component representative from `[1,1]` to `[1,3]`
-and caused the shipped `a2var-i1` certificate to be refused. It was found by the
-justification auditor mid-run, against the uncommitted working tree, and fixed
-by excluding the button from `passable()` for the same reason the portal is
-already excluded: `step` never returns it. Recorded because a fix that
-introduces a regression and finds it by luck is worth the same as one that does
-not, only if the luck is written down.
+Three, and the adversarial pass is the only reason two of them are not shipping.
+
+**1. The button exclusion, twice.** Delegating `_neighbours` to `Level.step`
+made the button cell a node with no edges, which moved the atrium's component
+representative from `[1,1]` to `[1,3]` and caused the shipped `a2var-i1`
+certificate to be refused. Found by the justification auditor mid-run and fixed
+by excluding the button from `passable()` — for the same reason the portal
+already is: `step` never returns it.
+
+That fix then **created a new unsoundness**, and the adversarial reviewer found
+it. `row_col_deltas` was also using `passable`, to ask a different question:
+where can the cart be *standing* when it issues a command, which includes the
+button because the cart can start there. The teleport's row displacement
+vanished from the closure, `cart_row` came out monotone, and a level solvable in
+one command was paid **2.0 of 2.0** for a certificate saying it is unsolvable —
+the exact failure D-EX-020 exists to remove, reintroduced by D-EX-020's own fix.
+`Level.can_stand` is the predicate for that question now.
+
+The lesson is not "check your callers". D-EX-020's argument was *there is one
+transition function now, so the two cannot disagree again* — true, and
+insufficient, because the disagreement moved into a **predicate** whose name
+answers one question and whose two callers ask two.
+
+**2. D-EX-022 was wrong and is withdrawn.** Deriving `search_credible` from the
+`(cart, button)` quotient rested on the quotient being a sound abstraction. It is
+not: it ignores `step_limit` outright and carries no latch state, and both
+counterexamples use a shipped constructor and a shipped operator. I had verified
+the auditor's *numbers* (180/180/600/177, all correct) and not its *inference*,
+which is the whole claim. The decision replaced "a true statement was called
+false" with "a false statement is called true" — and the second one pays.
+
+**3. D-EX-025 landed in one of the two places that needed it.** The three-way
+split went into `confusion_matrix.tally` and not `mark.confusion`, which is what
+the gate actually reads.
+
+All three are recorded rather than quietly repaired, because a run that only
+publishes the defects it found in *other* people's work is not reporting its own
+error rate. Detail: D-EX-027.
 
 ## Provenance
 

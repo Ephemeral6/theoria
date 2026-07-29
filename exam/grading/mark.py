@@ -101,27 +101,42 @@ def confusion(report: Report, key_doc: Dict[str, Any], *,
     numbers, always, or neither.
     """
     truth_of = {e["item_id"]: e["truth"] for e in key_doc["items"]}
+    # The answer alphabet, read off the key rather than assumed. Without it,
+    # "anything that is not the positive label is the negative label" -- and a
+    # submission of `{"claim": "banana"}` on every item scored specificity 1.000,
+    # better than the bluffer, for having classified nothing at all.
+    alphabet = {truth_of[i]["claim"] if "claim" in truth_of[i] else truth_of[i].get("label")
+                for i in truth_of}
+    alphabet.discard(None)
     tp = fp = tn = fn = 0
     abstain_pos = abstain_neg = 0
     illegible_pos = illegible_neg = 0
+    missing_pos = missing_neg = 0
     for score in report.scores:
         truth = truth_of.get(score.item_id, {})
         actual = truth.get("claim") or truth.get("label")
         is_positive = (actual == positive)
         said = score.detail.get("said")
+        if score.verdict == "unanswered":
+            # Nothing was submitted. Not a declining, not a garbled answer.
+            missing_pos += is_positive
+            missing_neg += not is_positive
+            continue
         if score.verdict == "abstained" or said in ("abstain", "unknown"):
             if is_positive:
                 abstain_pos += 1
             else:
                 abstain_neg += 1
             continue
-        if said is None:
-            # Not an abstention. `unanswered` lands here too, and so does a
-            # `wrong` verdict whose answer the rubric could not parse -- and
-            # folding the second into the abstention count let a submission of
-            # garbage print the row of a submission that honestly declined.
-            # Counted separately for the reason D-EX-006 gave for counting
-            # abstentions separately: the difference is the finding.
+        if said is None or said not in alphabet:
+            # Not an abstention, and not a classification either. A `wrong`
+            # verdict whose answer the rubric could not parse used to be folded
+            # into the abstention count, which let a submission of garbage print
+            # the row of one that honestly declined; and a claim string outside
+            # the paper's own alphabet used to be counted as a *negative*
+            # classification, which paid it specificity it had not earned.
+            # Counted apart for the reason D-EX-006 gave for counting
+            # abstentions apart: the difference is the finding. D-EX-027.
             if is_positive:
                 illegible_pos += 1
             else:
@@ -147,6 +162,8 @@ def confusion(report: Report, key_doc: Dict[str, Any], *,
         "abstained_on_negative": abstain_neg,
         "unclassified_on_positive": illegible_pos,
         "unclassified_on_negative": illegible_neg,
+        "unanswered_on_positive": missing_pos,
+        "unanswered_on_negative": missing_neg,
         "sensitivity": _rate(tp, tp + fn),
         "specificity": _rate(tn, tn + fp),
         "note": ("Sensitivity counts abstentions as neither -- an abstention is "

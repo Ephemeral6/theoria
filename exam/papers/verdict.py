@@ -672,29 +672,31 @@ def _paper_side(level_doc: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-#: A complete search costs what the *quotient* costs, not what the raw product
-#: space costs.  Above this many reachable `(cart, button)` states, "I searched
-#: it all" stops being a statement anyone can back.
-SEARCH_FEASIBLE_STATES = 200_000
-
-
 def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
                certificate: Optional[Dict[str, Any]], witness: Optional[List[str]],
                state_space: Dict[str, Any],
                spec_record: Dict[str, Any], justification: str,
                points: float, witness_source: Optional[str] = None) -> Item:
     item_id = _opaque_id(key)
-    # Derived, not declared. It used to be a boolean handed in per item -- True
-    # on the small boards, False on the large ones -- and on the large ones that
-    # was a false statement, which the rubric then repeated back to an examinee:
-    # "the state space of this level is beyond enumeration, so 'I searched it
-    # all' is not a reason, it is a false statement about the search". Every
-    # class (ii) level here has between 177 and 600 reachable `(cart, button)`
-    # states, because latching is monotone and gates no geometry, so a solver
-    # that quotients searches it exhaustively in under a second and its claim is
-    # simply true. A marker that calls a true statement false is the failure this
-    # whole territory exists to prevent. D-EX-022.
-    search_credible = state_space["positional_states"] <= SEARCH_FEASIBLE_STATES
+    # "Could this examinee have enumerated the space it says it enumerated?"
+    #
+    # This run briefly derived it from `positional_states`, the `(cart, button)`
+    # quotient, on the argument that latching is monotone and gates no geometry
+    # so the quotient decides the question. **That argument is false and the
+    # change was withdrawn.** The quotient ignores `step_limit` outright, and it
+    # carries no latch state at all -- so on a `require_all_switches` board where
+    # one switch has been made unreachable, the quotient says the goal is
+    # reachable and the level is unsolvable. Both counterexamples use a shipped
+    # constructor and a shipped operator; the reproduction is in this run's
+    # `verify_review_claims.py`. Deriving credibility from an unsound abstraction
+    # replaced "a true statement was called false" with "a false statement is
+    # called true", and the second one *pays*. D-EX-022, withdrawn.
+    #
+    # So it is the real thing again: an examinee could have enumerated this level
+    # exactly when a forward enumeration of the level's own state space finishes,
+    # which `_small_space` establishes by running one and `_large_space` refuses
+    # by demonstrating a 2^m lower bound.
+    search_credible = bool(state_space["exhaustive_feasible"])
     truth: Dict[str, Any] = {
         "claim": claim,
         "class": klass,
@@ -781,16 +783,17 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
         "dippable_switches": bound["dippable_switches"],
         "positional_states": quotient,
         "arithmetic": bound["arithmetic"],
-        # Published beside the bound rather than instead of it, because the two
-        # say different true things and the paper needs both. D-EX-022.
+        # Recorded as a measurement, and explicitly NOT as a search space.
+        # D-EX-022 tried to derive `search_credible` from this number and was
+        # withdrawn; the note says why, so the next reader does not repeat it.
         "quotient_note": (
-            "`lower_bound` is a bound on the raw (cart, button, latch mask) "
-            "product space, which is what a naive forward enumerator walks. A "
-            "solver that notices latching is monotone and gates no geometry "
-            "searches the (cart, button) quotient instead, and that has %d "
-            "reachable states. So `exhaustive_feasible: False` means *naive* "
-            "enumeration is out of reach; it does not mean no complete search "
-            "answers this level." % quotient),
+            "%d reachable (cart, button) states. This is a measurement, not a "
+            "search space: the quotient is NOT a sound abstraction of this "
+            "level. It ignores `step_limit` entirely, and it carries no latch "
+            "state, so on a require_all_switches board it can report the goal "
+            "reachable when the level is unsolvable. `lower_bound` remains the "
+            "honest statement of what a complete search must cover."
+            % quotient),
     }
 
 

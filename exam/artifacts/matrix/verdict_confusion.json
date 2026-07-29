@@ -25,6 +25,8 @@
         "specificity": 0.0,
         "tn": 0,
         "tp": 9,
+        "unanswered_on_negative": 0,
+        "unanswered_on_positive": 0,
         "unclassified_on_negative": 0,
         "unclassified_on_positive": 0
       },
@@ -170,6 +172,8 @@
         "specificity": 1.0,
         "tn": 8,
         "tp": 9,
+        "unanswered_on_negative": 0,
+        "unanswered_on_positive": 0,
         "unclassified_on_negative": 0,
         "unclassified_on_positive": 0
       },
@@ -315,8 +319,10 @@
         "specificity": 1.0,
         "tn": 5,
         "tp": 5,
-        "unclassified_on_negative": 3,
-        "unclassified_on_positive": 4
+        "unanswered_on_negative": 3,
+        "unanswered_on_positive": 4,
+        "unclassified_on_negative": 0,
+        "unclassified_on_positive": 0
       },
       "possible": 34.0,
       "split": {
@@ -460,8 +466,10 @@
         "specificity": null,
         "tn": 0,
         "tp": 0,
-        "unclassified_on_negative": 8,
-        "unclassified_on_positive": 9
+        "unanswered_on_negative": 8,
+        "unanswered_on_positive": 9,
+        "unclassified_on_negative": 0,
+        "unclassified_on_positive": 0
       },
       "possible": 34.0,
       "split": {
@@ -605,6 +613,8 @@
         "specificity": 1.0,
         "tn": 8,
         "tp": 9,
+        "unanswered_on_negative": 0,
+        "unanswered_on_positive": 0,
         "unclassified_on_negative": 0,
         "unclassified_on_positive": 0
       },
@@ -739,5 +749,5 @@
   "paper_id": "p15-verdict-a2",
   "positive_class": "unsolvable",
   "question_type": "verdict",
-  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
 }

@@ -17,7 +17,7 @@
     },
     {
       "path": "RUN_STATE.md",
-      "sha256": "f1251e6b027d905768b963e2f83d337433d7ede58364af053be799f5d9a61b4f"
+      "sha256": "61dbca274a6956f3d5d297a9815ad5cf03ef57cb79d6d76b5bb6e586bf53fe26"
     },
     {
       "path": "append_sync.py",
@@ -37,7 +37,7 @@
     },
     {
       "path": "seal_manifest.py",
-      "sha256": "72abb7543ab4e460035c82289c020cbbf26919d6b91bc28d0d814c71ac541ee5"
+      "sha256": "aec419b309dc34c8afdceebc39b9e67b03ffb6f719e2105c78b95ca95c93d496"
     },
     {
       "path": "verify_checker_claims.py",
@@ -48,40 +48,45 @@
       "sha256": "fd4ec841ce5a94d4ff871642524a75a160da1de73bf6cadd5732b872e91fb200"
     },
     {
+      "path": "verify_review_claims.py",
+      "sha256": "d7490ee973db0c8b44c63a2a6384f1022874542a62dfbb2bac4bd5bab6686d3c"
+    },
+    {
       "path": "write_inbox.py",
       "sha256": "c89df4e762fd1a1554ce4d7b0a9fbf1af3851928f55ecf91e3b51a4ae2cecaf4"
     },
     {
       "path": "exam/grading/rubrics_verdict.py",
-      "sha256": "1371d0be014bc34fdfee03d0bcd5fc3936518b3a37fc2c4d0b39e05bc82f116f"
+      "sha256": "dc696acc094082392311fd7c838c3342927c38fcec60b7dabac4583e6f860bb3"
     },
     {
       "path": "exam/grading/confusion_matrix.py",
-      "sha256": "98cd09c81a7fafb9c1ab38feb1ac7d8abdf3e54a471e5037728c699e89402dcb"
+      "sha256": "5f3801b7c15634ae374b0b2247e511f6cc5bce60e502125bfa9b79f05b77e2cc"
     },
     {
       "path": "exam/grading/calibration.py",
-      "sha256": "6b36545ddc0d4a7b486b53d8e600adb023134fc173d6d64454a930547a839839"
+      "sha256": "69aa2d9ce060d6de08204a06cec6048fd9d363dfcb52aa5942453500e4afa744"
     },
     {
       "path": "exam/grading/mark.py",
-      "sha256": "00c5d347edac8f997ecf8f6d94edc24043bfd036a9b8b9737f34ddb1230e23a9"
+      "sha256": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9"
     },
     {
       "path": "exam/papers/verdict.py",
-      "sha256": "d586db54c1d3a55edc3ffb8ed85bda99f202376193f8400b97055605ef9cae68"
+      "sha256": "22668d557fe8ce6ac0368b37e83eb7971bb7e286b6186d73ac64273053523713"
     },
     {
       "path": "exam/tests/test_verdict.py",
-      "sha256": "708dfe78bed6d7498e0ceb73a44f630554fb56bd6267e7dff38743fccc750c07"
+      "sha256": "0d0a54674dcf8f0ee2a554cba4f269cb8fd63988e3b45f1ac1aa70f00c0fd9dc"
     },
     {
       "path": "exam/tests/test_selftest.py",
-      "sha256": "920e11402a057e92bfa10a737a27ffd095025b0ce7c42c9c843ae54005a48075"
+      "sha256": "0a9e138c393c3378df4611dc74a800a2081336631b9858938d95baac4423d3ca"
     }
   ],
   "prompt_id": "V5-verdict-three-types",
   "result": {
+    "adversarial_review": "a seventh agent was pointed at this run's own changes and refuted three of seven claims: the button exclusion created a new unsoundness in row_col_deltas, D-EX-022 was withdrawn outright, and two smaller confusion defects. All fixed and pinned. D-EX-027.",
     "api_calls": 0,
     "decisions_added": [
       "D-EX-020",
@@ -90,7 +95,11 @@
       "D-EX-023",
       "D-EX-024",
       "D-EX-025",
-      "D-EX-026"
+      "D-EX-026",
+      "D-EX-027"
+    ],
+    "decisions_withdrawn": [
+      "D-EX-022"
     ],
     "determinism": "byte-identical across PYTHONHASHSEED 7 and 99",
     "network": "none; exam.guard.no_network() holds over the suite",
@@ -103,13 +112,16 @@
       24,
       25,
       26,
-      27
+      27,
+      28,
+      29,
+      30
     ],
     "status_weaknesses_closed": [
       4,
       6
     ],
-    "suite": "334 passed (321 at base commit)",
+    "suite": "338 passed (321 at base commit)",
     "verify": "GREEN"
   },
   "scope_note": "The item's four acceptance clauses (three classes in a self-built world family, constructive grounds per item, calibration by known-full/known-zero fakes, sensitivity and specificity reported separately) were already delivered by P-15 and V4 on `p15-verdict-a2`. V5's work is therefore adversarial: test whether the delivered instrument actually holds, and close what does not. Gaps carried into this run are STATUS.md open weaknesses 4, 5, 6, 13, 14 and D-EX-015.",

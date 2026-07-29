@@ -1,6 +1,6 @@
 # verdict — sensitivity / specificity, split by class
 
-paper `p15-verdict-a2`, positive class `unsolvable`, rubric digest `572786127280`
+paper `p15-verdict-a2`, positive class `unsolvable`, rubric digest `36a23877f696`
 
 Sizes: `large_unsolvable` 4, `small_unsolvable` 5, `solvable_hard` 8
 

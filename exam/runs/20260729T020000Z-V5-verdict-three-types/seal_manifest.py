@@ -44,13 +44,19 @@ def main():
         doc = json.load(handle)
     doc["files"] = files
     doc["result"] = {
-        "suite": "334 passed (321 at base commit)",
+        "suite": "338 passed (321 at base commit)",
+        "adversarial_review": (
+            "a seventh agent was pointed at this run's own changes and refuted "
+            "three of seven claims: the button exclusion created a new "
+            "unsoundness in row_col_deltas, D-EX-022 was withdrawn outright, "
+            "and two smaller confusion defects. All fixed and pinned. D-EX-027."),
         "verify": "GREEN",
         "determinism": "byte-identical across PYTHONHASHSEED 7 and 99",
         "decisions_added": ["D-EX-020", "D-EX-021", "D-EX-022", "D-EX-023",
-                            "D-EX-024", "D-EX-025", "D-EX-026"],
+                            "D-EX-024", "D-EX-025", "D-EX-026", "D-EX-027"],
+        "decisions_withdrawn": ["D-EX-022"],
         "status_weaknesses_closed": [4, 6],
-        "status_weaknesses_added": [20, 21, 22, 23, 24, 25, 26, 27],
+        "status_weaknesses_added": [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
         "sealed_pile_contact": "none",
         "api_calls": 0,
         "network": "none; exam.guard.no_network() holds over the suite",

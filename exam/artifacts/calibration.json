@@ -126,6 +126,8 @@
               "specificity": 0.0,
               "tn": 0,
               "tp": 2,
+              "unanswered_on_negative": 0,
+              "unanswered_on_positive": 0,
               "unclassified_on_negative": 0,
               "unclassified_on_positive": 0
             },
@@ -273,6 +275,8 @@
               "specificity": 1.0,
               "tn": 4,
               "tp": 0,
+              "unanswered_on_negative": 0,
+              "unanswered_on_positive": 0,
               "unclassified_on_negative": 0,
               "unclassified_on_positive": 0
             },
@@ -423,8 +427,10 @@
               "specificity": null,
               "tn": 0,
               "tp": 0,
-              "unclassified_on_negative": 4,
-              "unclassified_on_positive": 2
+              "unanswered_on_negative": 4,
+              "unanswered_on_positive": 2,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "repair": {
               "budget_exact": 0,
@@ -570,6 +576,8 @@
               "specificity": 1.0,
               "tn": 4,
               "tp": 2,
+              "unanswered_on_negative": 0,
+              "unanswered_on_positive": 0,
               "unclassified_on_negative": 0,
               "unclassified_on_positive": 0
             },
@@ -605,7 +613,7 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
     },
     "handover": {
       "calibrated": true,
@@ -872,7 +880,7 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
     },
     "heldout": {
       "calibrated": true,
@@ -1597,7 +1605,7 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
     },
     "verdict": {
       "calibrated": true,
@@ -1665,6 +1673,8 @@
               "specificity": 0.0,
               "tn": 0,
               "tp": 9,
+              "unanswered_on_negative": 0,
+              "unanswered_on_positive": 0,
               "unclassified_on_negative": 0,
               "unclassified_on_positive": 0
             },
@@ -1790,8 +1800,10 @@
               "specificity": 1.0,
               "tn": 5,
               "tp": 5,
-              "unclassified_on_negative": 3,
-              "unclassified_on_positive": 4
+              "unanswered_on_negative": 3,
+              "unanswered_on_positive": 4,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "confusion_by_board_size": {
               "large": {
@@ -1917,8 +1929,10 @@
               "specificity": null,
               "tn": 0,
               "tp": 0,
-              "unclassified_on_negative": 8,
-              "unclassified_on_positive": 9
+              "unanswered_on_negative": 8,
+              "unanswered_on_positive": 9,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "confusion_by_board_size": {
               "large": {
@@ -2042,6 +2056,8 @@
               "specificity": 1.0,
               "tn": 8,
               "tp": 9,
+              "unanswered_on_negative": 0,
+              "unanswered_on_positive": 0,
               "unclassified_on_negative": 0,
               "unclassified_on_positive": 0
             },
@@ -2139,14 +2155,14 @@
               "expected": 0.0
             },
             "searcher": {
-              "awarded": 20.6,
+              "awarded": 19.0,
               "counts": {
                 "abstained": 0,
                 "correct": 17,
                 "unanswered": 0,
                 "wrong": 0
               },
-              "expected": 20.6
+              "expected": 19.0
             },
             "wrong_claim_with_reason": {
               "awarded": 0.0,
@@ -2181,7 +2197,7 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
     }
   },
   "pre_registered": {
@@ -2250,7 +2266,7 @@
       "why": "ground truth must be accepted in full"
     }
   },
-  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
   "structural_expectations": {
     "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
     "null_all_unanswered": "every item of a null submission is `unanswered`",

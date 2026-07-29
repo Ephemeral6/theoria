@@ -253,15 +253,25 @@ def _verdict_probe_answers(kind: str, key_doc: Dict[str, Any]) -> Dict[str, Any]
             answers[entry["item_id"]] = {"claim": claim,
                                          "reason": "exhaustive_search"}
         elif kind == "forged_certificate":
-            # Right claim, legal certificate kind, fabricated numbers. The
-            # module's thesis is that "the examinee's arithmetic is checked,
-            # never believed"; this is the submission that tests it, and no
-            # fake and no mutant makes it -- the mutants are all derived from
-            # the oracle's answers, which are true.
+            # Right claim, fabricated reason. The module's thesis is that "the
+            # examinee's arithmetic is checked, never believed"; this is the
+            # submission that tests it, and no fake and no mutant makes it --
+            # the mutants are all derived from the oracle's answers, which are
+            # true.
+            #
+            # The witness matters. A first version sent only a certificate, and
+            # on a *solvable* item `_score_unsolvable_reason` is never called --
+            # the reason half was refused for lack of a witness rather than
+            # because anything was re-derived, so the probe scored exactly right
+            # on 8 of 17 items no matter what the checker did. An adversarial
+            # review found it by making `check_certificate` a rubber stamp and
+            # watching the award move by 9, not 17. A probe that passes for the
+            # wrong reason on half the paper is half a probe. D-EX-027.
             answers[entry["item_id"]] = {
                 "claim": claim,
                 "certificate": {"kind": "invariant", "invariant": "cart_region",
-                                "initial_value": [0, 0], "goal_value": [0, 1]}}
+                                "initial_value": [0, 0], "goal_value": [0, 1]},
+                "witness": ["UP", "UP", "UP"]}
         else:                                   # wrong_claim_with_reason
             flipped = "solvable" if claim == "unsolvable" else "unsolvable"
             answers[entry["item_id"]] = {"claim": flipped,
@@ -298,8 +308,11 @@ def _verdict_probe_expectation(kind: str, key_doc: Dict[str, Any]) -> float:
         truth = entry["truth"]
         awarded = points * VERDICT_WEIGHT           # the claim is right
         if kind == "forged_certificate":
-            # Every number in it is re-derived from the level, so the reason
-            # half is refused on every item and the claim half is all there is.
+            # On an unsolvable item the certificate's numbers are re-derived and
+            # refused; on a solvable one the witness is replayed and loses. Both
+            # halves of the reason channel are exercised and both pay nothing,
+            # so the claim half is all there is -- on every item, for a reason
+            # that is about the item.
             total += awarded
             continue
         if truth["claim"] == "unsolvable" and truth.get("search_credible"):

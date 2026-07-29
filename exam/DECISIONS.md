@@ -819,3 +819,117 @@ below — **for the verdict paper**, without adding a lower band fitted to a fir
 reading. `heldout`, `handover` and `adaptation` still have no probes and
 D-EX-013 stands there unchanged; a test asserts exactly that, so the day someone
 adds probes elsewhere the claim gets re-examined rather than quietly inherited.
+
+---
+
+## D-EX-027 — the adversarial review of D-EX-020…026, and the two things it broke
+
+An adversarial reviewer was pointed at this run's own changes and told to refute
+them. It refuted three of seven claims. Two were defects **this run introduced**,
+and one was a decision this run got wrong and has withdrawn. All reproductions
+are in `runs/20260729T020000Z-V5-verdict-three-types/verify_review_claims.py`,
+re-derived here before anything was changed.
+
+### 1 — excluding the button from `passable` created a new unsoundness
+
+D-EX-020 excluded the button because `step` never returns it, which is right for
+the movement graph. `row_col_deltas` was also using `passable`, to ask a
+different question: not *where can the cart rest* but **where can the cart be
+standing when it issues a command**. The cart can *start* on the button.
+
+On a board where the cart starts on the button and the button is the teleport's
+only entry, the jump's row displacement was dropped from the closure, `cart_row`
+came out monotone, and a level solvable in **one command** was paid **2.0 of
+2.0** for a certificate asserting it unsolvable — the exact failure D-EX-020
+claims to have eliminated, reintroduced by D-EX-020's own fix, and through a
+function D-EX-020 never touched. The pre-change `passable` refused it.
+
+`Level.can_stand` is now the predicate for that question and is deliberately
+generous: extra entry cells only add displacements, and more displacements make
+monotonicity harder to prove, so erring wide refuses certificates rather than
+accepting false ones. `wellformed_problems` also refuses `button == start` and
+`portal_dest == button`, so the shape cannot reach a sheet.
+
+**The lesson is about the fix, not the bug.** D-EX-020's argument was "there is
+one transition function now, so the two cannot disagree again". True, and
+insufficient: the disagreement moved into a *predicate* with two callers asking
+two different questions of it. A shared helper whose name answers one question
+and whose callers ask two is the same defect wearing a smaller coat.
+
+### 2 — D-EX-022 is withdrawn: the quotient is not a sound abstraction
+
+D-EX-022 derived `search_credible` from `positional_states`, the `(cart, button)`
+quotient, on the argument that latching is monotone and gates no geometry so the
+quotient decides the question. **The argument is false**, in two independent
+ways, both reachable with a shipped constructor and a shipped operator:
+
+* `positional_states` **does not read `step_limit`**. `comb_open(6)` under a
+  budget of 12 has 18 quotient states and the goal is reachable in the quotient;
+  the level is unsolvable. `a2var-ii3-spindle-budget` is exactly this shape, and
+  its recorded 600 is not even the number of positions reachable inside its
+  budget.
+* the quotient **carries no latch state**, and on a `require_all_switches` board
+  reaching the goal is not winning. `comb_room(5)` with an `observation_loss` on
+  one switch cell has 25 quotient states, the quotient says the goal is
+  reachable, and the level is unsolvable.
+
+So D-EX-022 replaced *a true statement being called false* with **a false
+statement being called true** — and the second one pays 0.4 of the reason. It
+also made `search_credible` `True` on 17 of 17 items, so the field discriminated
+nothing and `search_not_credible` was dead code.
+
+`search_credible` is `state_space["exhaustive_feasible"]` again, which is what it
+always was. `positional_states` stays, as a measurement, with the truth file
+saying in the same breath that it is not a search space — because the inference
+this run made is the one the next reader will make too.
+
+**What survives of D-EX-022**: nothing about `search_credible`. The ordering it
+also asserted — a certificate always beats a search, on every class — was worth
+keeping and is now asserted alongside the restored original.
+
+**And the check that should have caught it could not.** The `searcher` probe's
+expectation reads `truth["search_credible"]` from the same key the marker reads
+it from, so flipping the field moves both and the gate stays green. That is the
+self-reference D-EX-026's own `VERDICT_WEIGHTS` comment was written about,
+surviving one field to the left. Not fixed: recomputing credibility
+independently means running an enumeration per item inside calibration, which
+runs in every test. Recorded as `STATUS.md` open weakness 28.
+
+### 3 — a claim outside the answer alphabet was scored as a *negative*
+
+Both confusion functions treated "anything that is not the positive label" as
+the negative label. `{"claim": "I do not know"}` on all 17 items therefore scored
+**specificity 1.000** — better than the bluffer's 0.000 — for having classified
+nothing, on a submission worth 0.0000. `_ABSTAIN` is a five-word closed set and
+does not contain the most natural English phrasing of an abstention, so this is
+not an exotic input. The alphabet is now read off the key and anything outside it
+is unclassified.
+
+### 4 — D-EX-025's fix landed in one of the two places that needed it
+
+The three-way split went into `confusion_matrix.tally` and not into
+`mark.confusion` — which is what `axes()` publishes, what the renderer prints
+first, and what the calibration gate reads. `null` and an all-unreadable
+submission still printed identical pooled rows. Fixed, and pinned by a test that
+compares the two pooled rows directly.
+
+### 5 — the `forged_certificate` probe was vacuous on half the paper
+
+On a *solvable* item `_score_unsolvable_reason` is never called, so the reason
+half was refused for lack of a witness rather than because any arithmetic was
+re-derived: the probe scored exactly right on 8 of 17 items whatever the checker
+did. The reviewer demonstrated it by making `check_certificate` a rubber stamp
+and watching the award move by 9 rather than 17. The probe now sends a losing
+witness as well, so both halves of the reason channel are exercised on every
+item. A probe that passes for the wrong reason on half the paper is half a probe.
+
+### What the review did not break
+
+`relaxed_edges` as an over-approximation survived 8,210 fuzzed solvable levels
+across nine adversarial shapes with zero unsound acceptances, and the node-set
+closure adds no nodes and costs under 1.5 ms on every shipped level. All nine
+shipped certificates verify, each for its stated reason. The board-size split's
+arithmetic, its absence from the sheet and the absence of an import cycle all
+hold. The three-way disjointness and the denominator sums inside
+`per_class_confusion` hold across 48 cells. The pre-registered weight
+cross-check holds. Determinism and byte-identical artefact regeneration hold.

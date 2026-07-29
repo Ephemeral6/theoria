@@ -72,7 +72,7 @@
           "calibration": [
             "adaptation/bluffer: scored 0.4896, expected in [0, 0.45] (claiming everything is invalidated must not pay: recall without precision is the failure mode this item type exists to price)",
             "verdict/bluffer: scored 0.5294, expected in [0, 0.5] (always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity)",
-            "verdict/searcher: the marker awarded 34.0000 where arithmetic over the paper's points says 20.6000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
+            "verdict/searcher: the marker awarded 34.0000 where arithmetic over the paper's points says 19.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
             "verdict/forged_certificate: the marker awarded 34.0000 where arithmetic over the paper's points says 17.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes."
           ],
           "mutant:partial_credit_survives": [
@@ -217,7 +217,7 @@
         ],
         "detail": {
           "calibration": [
-            "verdict/searcher: the marker awarded 0.0000 where arithmetic over the paper's points says 20.6000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
+            "verdict/searcher: the marker awarded 0.0000 where arithmetic over the paper's points says 19.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
             "verdict/forged_certificate: the marker awarded 0.0000 where arithmetic over the paper's points says 17.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes."
           ],
           "mutant:partial_credit_survives": [
@@ -634,11 +634,11 @@
       "transplant": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
     }
   },
-  "protocol_digest": "01cf97791785e0d255ff1e303b26e856a515528be8f91b1f88c6fdc6b84124e0",
+  "protocol_digest": "200c26f9c445844df27eb700dd7dd4de3c2f0db596c862479c6057bf17c51fa3",
   "protocol_modules": {
-    "exam.grading.calibration": "6b36545ddc0d4a7b486b53d8e600adb023134fc173d6d64454a930547a839839",
-    "exam.grading.mark": "00c5d347edac8f997ecf8f6d94edc24043bfd036a9b8b9737f34ddb1230e23a9",
+    "exam.grading.calibration": "69aa2d9ce060d6de08204a06cec6048fd9d363dfcb52aa5942453500e4afa744",
+    "exam.grading.mark": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9",
     "exam.grading.selftest": "29e8bcf7c8d62843bdd36169287620cdbd5c1260ef384ca8b9b940e5b85349bc"
   },
-  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
 }

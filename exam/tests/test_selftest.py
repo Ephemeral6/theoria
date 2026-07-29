@@ -337,6 +337,60 @@ def test_an_unreadable_answer_is_not_reported_as_an_abstention():
     flat = confusion(report, key_doc, positive="unsolvable")
     assert flat["unclassified_on_positive"] == 9
     assert flat["abstained_on_positive"] == 0
+    assert flat["unanswered_on_positive"] == 0
+
+
+def test_a_claim_outside_the_answer_alphabet_earns_no_specificity():
+    """`{"claim": "I do not know"}` used to be a *negative* classification.
+
+    Both confusion functions treated "anything that is not the positive label"
+    as the negative label, so a submission of gibberish on every item scored
+    specificity **1.000** -- better than the bluffer's 0.000 -- for having
+    classified nothing. `_ABSTAIN` is a five-word closed set and does not
+    contain the most natural English phrasing of an abstention, so this was not
+    an exotic input. Found by an adversarial review of this run. D-EX-027.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+    for phrasing in ("I do not know", "banana"):
+        answers = {item.item_id: {"claim": phrasing} for item in paper.items}
+        report = mark(key_doc, Submission("probe-%s" % phrasing, paper.paper_id,
+                                          answers, capabilities=("answers",)),
+                      axes_fn=getattr(module, "axes", None))
+        assert report.fraction == 0.0
+        flat = confusion(report, key_doc, positive="unsolvable")
+        assert flat["specificity"] is None, phrasing
+        assert flat["sensitivity"] is None, phrasing
+        assert flat["tn"] == flat["fn"] == 0, phrasing
+        assert flat["unclassified_on_positive"] == 9
+        assert flat["unclassified_on_negative"] == 8
+
+
+def test_the_pooled_row_separates_silence_from_garble():
+    """The three-way split has to reach `mark.confusion`, not only the matrix.
+
+    The pooled cell is what `axes()` publishes, what the renderer prints first,
+    and what the calibration gate reads. The first version of this fix landed
+    only in `confusion_matrix.tally`, so `null` and an all-unreadable submission
+    still printed identical pooled rows. D-EX-027.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+
+    silent = mark(key_doc, Submission("probe-null", paper.paper_id, {}),
+                  axes_fn=getattr(module, "axes", None))
+    garbled = mark(key_doc, Submission(
+        "probe-garble", paper.paper_id,
+        {i.item_id: {"verdict": "solvable"} for i in paper.items},
+        capabilities=("answers",)), axes_fn=getattr(module, "axes", None))
+
+    a = confusion(silent, key_doc, positive="unsolvable")
+    b = confusion(garbled, key_doc, positive="unsolvable")
+    assert (a["unanswered_on_positive"], a["unclassified_on_positive"]) == (9, 0)
+    assert (b["unanswered_on_positive"], b["unclassified_on_positive"]) == (0, 9)
+    assert a != b
 
 
 def test_the_gate_now_watches_the_answer_shapes_no_fake_submits():

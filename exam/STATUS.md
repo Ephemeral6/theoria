@@ -420,15 +420,20 @@ reachable states. `build()` would have shipped it as class (ii). The bound
 checked each dip in isolation and never checked the lane walked between dips.
 D-EX-021.
 
-**And the class (ii) premise itself is false.** The four class (ii) levels have
-**180, 180, 600 and 177** reachable `(cart, button)` states. Latching is
-monotone and gates no geometry, so the quotient decides the question and a
-complete search is a second's work. The rubric was reading `search_credible:
-False` off the raw product bound and telling an examinee that had honestly
-searched: *"'I searched it all' is not a reason, it is a false statement about
-the search."* That sentence was the false statement, and it was aimed at the
-four items where the examinee had done the better thing. `search_credible` is
-now derived from the quotient. D-EX-022.
+**The class (ii) quotient is measured, and the inference drawn from it was
+wrong.** The four class (ii) levels have **180, 180, 600 and 177** reachable
+`(cart, button)` states, against a `lower_bound` of 2^60 to 2^120. This run
+briefly concluded that the quotient therefore decides the question, and derived
+`search_credible` from it (D-EX-022). **An adversarial review refuted that and
+the decision is withdrawn**: the quotient ignores `step_limit` outright, and it
+carries no latch state, so on a `require_all_switches` board where one switch is
+unreachable it reports the goal reachable and the level is unsolvable — both
+demonstrated with a shipped constructor and a shipped operator. Deriving
+credibility from an unsound abstraction replaced "a true statement was called
+false" with "a false statement is called true", and the second one *pays*.
+`search_credible` is `exhaustive_feasible` again; the quotient stays as a
+recorded measurement whose truth entry says in the same breath that it is not a
+search space. D-EX-022, withdrawn by D-EX-027.
 
 **The split confusion matrix cannot report a pair.** The three classes partition
 the paper *by answer*, so one denominator is empty in every class cell and the
@@ -464,7 +469,18 @@ solvable witnesses are breadth-first search output and three are constructions,
 and nothing said which. On a paper whose premise is 由构造即知答案 that is a
 disclosure gap, not a defect in the answers. D-EX-023.
 
-Tests: **334 passed** (321 before). `python -m exam.verify` GREEN, determinism
+**And the run's own fixes were then attacked, which cost two of them.** A
+seventh, adversarial reviewer refuted three of seven claims. Excluding the button
+from `passable` (part of the certificate fix) **created a new unsoundness** in
+`row_col_deltas`, which was using the same predicate to ask a different question
+— a level solvable in one command was paid 2.0 of 2.0. D-EX-022 was withdrawn
+outright. Two smaller defects: a claim outside the paper's answer alphabet was
+scored as a *negative* classification, so `{"claim": "I do not know"}` earned
+specificity **1.000**; and D-EX-025's fix had landed in `confusion_matrix` but
+not in `mark.confusion`, which is the one the gate reads. All fixed and pinned.
+D-EX-027.
+
+Tests: **338 passed** (321 before). `python -m exam.verify` GREEN, determinism
 holds across `PYTHONHASHSEED` 7 and 99.
 
 ### Closed by V5
@@ -543,7 +559,32 @@ holds across `PYTHONHASHSEED` 7 and 99.
     the solvable side the reason half is a witness a search finds, and on the
     unsolvable side it is a certificate. Mirror-image rate rows, 1.4× to 1.8×
     the score.
-27. **`positional_states` is measured, and the class (ii) construction is not
-    rebuilt around it.** D-EX-022 stopped the marker asserting a falsehood; it
-    did not make class (ii) mean what its name says. Switches that gate geometry
-    would, and that is a different world family and a different paper.
+27. **The class (ii) name still overstates what a naive enumerator faces.**
+    `lower_bound` (2^60 to 2^120) is a true statement about the raw product
+    space and is the honest account of what a complete search must cover. What
+    is not established is that *no* cheaper complete method exists — this run
+    tried to establish the opposite via the quotient and was wrong (D-EX-027),
+    which leaves the question open rather than settled. Making the class mean
+    what its name says needs switches that gate geometry, and that is a
+    different world family and a different paper.
+28. **The `searcher` probe cannot see a wrong `search_credible`.** Its
+    expectation reads `truth["search_credible"]` from the same key the marker
+    reads it from, so corrupting that field moves both and the gate stays green.
+    It is D-EX-026's own self-reference lesson surviving one field to the left,
+    and it is the check that would otherwise have caught D-EX-022. Fixing it
+    means recomputing credibility independently — an enumeration per item inside
+    `calibrate_one`, which runs in many tests — so it was measured and left
+    rather than paid for without a decision.
+29. **`_region_rep` computes the key's `cart_region` certificate with the
+    checker's own `components(relaxed_edges(...))`**, so `_self_check`'s "the
+    reference certificate verifies" is a tautology on the naming; only
+    `start_rep != goal_rep` is substantive. That is why the atrium's
+    representative migrated from `[1,1]` to `[1,3]` mid-run without any
+    assertion firing. Pre-existing, surfaced by this run.
+30. **`subset_lower_bound`'s lane precondition is a heavy false-negative
+    filter.** In fuzzing, 1,981 of 2,016 refusals (98%) were levels whose true
+    reachable state count already met 2^m; an L-shaped switch-free lane with six
+    verified out-and-back dips is refused. `_dip_source` compounds it by
+    minimising distance rather than preferring a source on the lane. Sound —
+    it only refuses to ship items — but "one contiguous row or column" is
+    strictly stronger than what the construction needs.

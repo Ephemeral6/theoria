@@ -215,6 +215,28 @@ class Level:
             return False
         return True
 
+    def can_stand(self, cell: Cell) -> bool:
+        """Cells the cart could be standing on **when it issues a command**.
+
+        Not the same question as `passable`, which asks where the cart can come
+        to *rest*, and the difference is load bearing. `passable` excludes the
+        button because `step` never returns it -- but the cart can *start* there,
+        and a `portal_dest` can put it there, and from there it can issue a
+        command like any other.
+
+        This distinction was learned the expensive way. When `passable` began
+        excluding the button, `row_col_deltas` -- which had been using it to ask
+        this question -- stopped counting the teleport jump out of a button cell.
+        On a board where the cart starts on the button and the button is the
+        portal's only entry, the jump's row delta vanished, `cart_row` looked
+        monotone, and a certificate for a level solvable in ONE command was paid
+        2.0 of 2.0. An adversarial review of this run's own fix found it.
+        Deliberately generous: extra entry cells can only add displacements, and
+        more displacements make monotonicity harder to prove, so erring wide
+        refuses certificates rather than accepting false ones. D-EX-027.
+        """
+        return self.in_bounds(cell) and not self.is_wall(cell)
+
     def cells(self) -> Iterable[Cell]:
         for r in range(self.height):
             for c in range(self.width):
@@ -293,9 +315,32 @@ class Level:
                     % (list(self.portal),))
             if self.portal == self.start:
                 problems.append("the cart starts on the portal cell")
+            if self.button is not None and self.portal_dest == self.button:
+                problems.append(
+                    "portal_dest is the button cell; the teleport parks the "
+                    "cart somewhere `step` will never return it to, so where "
+                    "the cart can rest and where it can stand come apart")
         if self.button is not None and self.button == self.door:
             problems.append("button and door are the same cell; the button "
                             "branch of `step` wins and the door never opens")
+        if self.button is not None and self.button == self.start:
+            # Found by an adversarial review of this run's own fix: the cart can
+            # be standing on the button even though `step` never returns it
+            # there, and one caller was reading `passable` as though it could
+            # not. Legal in the world; refused here because every argument in
+            # this module about where the cart can be gets harder to state.
+            problems.append(
+                "the cart starts on the button cell %s; `step` never returns "
+                "the cart there, so the level's own start is a cell the "
+                "movement graph does not contain" % (list(self.button),))
+        if len(set(self.switches)) != len(self.switches):
+            # `switch_index` is a dict, so duplicates collapse to one bit, while
+            # anything counting `switches` as a list over-counts. It makes the
+            # 2^m bound claim more states than the level has.
+            problems.append(
+                "the switch list repeats a cell; `switch_index` collapses "
+                "duplicates to one latch bit, so any count taken over the list "
+                "is larger than the number of distinct latch states")
         if not self.in_bounds(self.start) or self.is_wall(self.start):
             problems.append("the start cell %s is not a floor cell"
                             % (list(self.start),))
@@ -495,7 +540,9 @@ def row_col_deltas(level: Level) -> Tuple[Set[int], Set[int]]:
         for action in actions:
             dr, dc = DELTA[action]
             entry = (level.portal[0] - dr, level.portal[1] - dc)
-            if level.passable(entry):
+            # `can_stand`, not `passable`: the question is where the cart can be
+            # when it issues the command, which includes the button. D-EX-027.
+            if level.can_stand(entry):
                 rows.add(level.portal_dest[0] - entry[0])
                 cols.add(level.portal_dest[1] - entry[1])
     return rows, cols

@@ -60,6 +60,10 @@ def per_class_confusion(report: Any, key_doc: Dict[str, Any], *,
     this is a referee-side reading of a paper the examinee saw unlabelled.
     """
     truth_of = {e["item_id"]: e["truth"] for e in key_doc["items"]}
+    # See `mark.confusion`: a claim outside the paper's own answer alphabet is
+    # not a negative classification, it is not a classification. D-EX-027.
+    alphabet = {t.get("claim") or t.get("label") for t in truth_of.values()}
+    alphabet.discard(None)
     buckets: Dict[str, List[Any]] = {}
     strata: Dict[str, List[Any]] = {}
     for score in report.scores:
@@ -95,7 +99,7 @@ def per_class_confusion(report: Any, key_doc: Dict[str, Any], *,
                 abstain_pos += is_positive
                 abstain_neg += not is_positive
                 continue
-            if said is None:
+            if said is None or said not in alphabet:
                 illegible_pos += is_positive
                 illegible_neg += not is_positive
                 continue

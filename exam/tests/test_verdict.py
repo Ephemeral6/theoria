@@ -365,19 +365,15 @@ def test_class_ii_bound_is_recorded_and_enormous(paper):
         assert space["lower_bound"] > 10 ** 12
         assert space["lower_bound"] == 2 ** space["m"]
         assert "2^%d" % space["m"] in space["arithmetic"]
-        # `assert item.truth["search_credible"] is False` used to stand here.
-        # It pinned a false statement. The bound above is a true statement about
-        # the raw (cart, button, latch mask) product space; `search_credible` is
-        # a statement about what a complete search costs, and on these levels
-        # latching is monotone and gates no geometry, so the space a solver
-        # actually searches is the (cart, button) quotient -- measured at 177 to
-        # 600 states. The assertion is replaced rather than deleted, by the two
-        # below: the naive bound must still be enormous, and the quotient must
-        # still be recorded, so that whoever changes either has to look at both.
-        # D-EX-022.
+        # This assertion was briefly removed by D-EX-022, on the argument that
+        # the `(cart, button)` quotient decides these levels so a searcher's
+        # claim is true. The argument is false -- the quotient ignores
+        # `step_limit` and carries no latch state -- and the decision was
+        # withdrawn. The assertion is back, and the quotient is kept as a
+        # recorded measurement that is explicitly not a search space. D-EX-027.
+        assert item.truth["search_credible"] is False
         assert space["positional_states"] < 10 ** 4
-        assert str(space["positional_states"]) in space["quotient_note"]
-        assert item.truth["search_credible"] is True
+        assert "NOT a sound abstraction" in space["quotient_note"]
 
 
 def test_class_ii_bound_is_constructive_not_asserted(paper):
@@ -648,48 +644,68 @@ def test_a_right_verdict_with_no_reason_scores_only_the_verdict(paper):
     assert score.detail["reason"] == "none"
 
 
-def test_search_exhaustion_is_paid_partially_wherever_the_search_is_real(paper):
-    """A search claim is paid where it is true, and never as much as a proof.
+def test_search_exhaustion_is_partial_on_small_and_worthless_on_large(paper):
+    """A search claim is paid where it could be true and refused where it cannot.
 
-    This test used to assert `search_not_credible` on class (ii) -- that an
-    examinee saying "I enumerated it" there was making a false statement about
-    its own method. That was itself the false statement: the class (ii) boards
-    have 177 to 600 reachable `(cart, button)` states. So the ordering the
-    paper needs is not "search pays nothing on the large boards", it is
-    "search always pays less than a certificate", and that is what is pinned
-    now. It holds on both classes and does not depend on board size at all,
-    which is the property D-EX-010 asks a replacement check to have. D-EX-022.
+    D-EX-022 briefly rewrote this test on the argument that the class (ii)
+    boards are searchable after all, via their `(cart, button)` quotient. They
+    are not: the quotient ignores `step_limit` and carries no latch state, so it
+    reports a `require_all_switches` level solvable when it is unsolvable. The
+    original assertion is restored, and the ordering it depends on -- a
+    certificate always beats a search -- is now asserted alongside it, since
+    that part of the rewrite was worth keeping. D-EX-027.
     """
+    small = next(i for i in paper.items if i.truth["class"] == "small_unsolvable")
+    large = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
     answer = {"claim": "unsolvable", "reason": "exhaustive_search"}
-    for klass in ("small_unsolvable", "large_unsolvable"):
-        item = next(i for i in paper.items if i.truth["class"] == klass)
-        got = RUBRIC.grade(answer, item.truth, item)
-        assert got.detail["reason"] == "search_exhaustion"
-        assert got.awarded == pytest.approx(
-            item.points * (0.5 + 0.5 * RV.SEARCH_CREDIT))
-        assert got.awarded < item.points
+
+    got = RUBRIC.grade(answer, small.truth, small)
+    assert got.detail["reason"] == "search_exhaustion"
+    assert got.awarded == pytest.approx(small.points * (0.5 + 0.5 * RV.SEARCH_CREDIT))
+    assert got.awarded < small.points
+
+    got_large = RUBRIC.grade(answer, large.truth, large)
+    assert got_large.detail["reason"] == "search_not_credible"
+    assert got_large.awarded == pytest.approx(large.points * 0.5)
+
+    # A certificate beats a search on both classes, which is the whole of the
+    # class (i) ordering and does not depend on board size.
+    for item, searched in ((small, got), (large, got_large)):
         certified = RUBRIC.grade(
             {"claim": "unsolvable",
              "certificate": json.loads(item.truth["certificate_blob"])},
             item.truth, item)
-        assert certified.awarded > got.awarded
+        assert certified.awarded > searched.awarded
+        assert certified.awarded == item.points
 
 
-def test_a_search_claim_is_refused_where_the_search_would_be_impossible(paper):
-    """`search_not_credible` is still reachable, and still says something true.
+def test_the_quotient_is_recorded_and_is_not_a_search_space(paper):
+    """D-EX-022's withdrawal, pinned so it is not re-derived from scratch.
 
-    The branch survives the D-EX-022 change; what changed is which levels take
-    it. Handed a truth whose recorded quotient is past `SEARCH_FEASIBLE_STATES`,
-    the rubric still refuses to pay for "I searched it all" -- so the defence is
-    intact for a Phase 4 level where it is warranted, rather than fired on every
-    large board because the raw product space is big.
+    `positional_states` is a real measurement and a tempting one: 177 to 600
+    where `lower_bound` says 2^60 to 2^120. It is not a sound abstraction, and
+    the truth file has to say so, because the next reader will otherwise make
+    the same inference this run did. D-EX-027.
     """
-    item = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
-    truth = dict(item.truth, search_credible=False)
-    got = RUBRIC.grade({"claim": "unsolvable", "reason": "exhaustive_search"},
-                       truth, item)
-    assert got.detail["reason"] == "search_not_credible"
-    assert got.awarded == pytest.approx(item.points * 0.5)
+    for item in paper.items:
+        space = item.truth["state_space"]
+        assert isinstance(space["positional_states"], int)
+        if not space["exhaustive_feasible"]:
+            assert "NOT a sound abstraction" in space["quotient_note"]
+            assert item.truth["search_credible"] is False
+
+    # And the two mechanisms that make it unsound, on levels built from shipped
+    # constructors and shipped operators.
+    budgeted = RV.Level(V.variant_of(V.comb_open("probe", 6, 1, 6), "probe",
+                                     step_limit=12))
+    assert V.positional_states(budgeted) == 18
+    assert RV.enumerate_states(budgeted, cap=RV.MAX_ENUMERATION)["solution"] is None
+
+    latched = RV.Level(V.variant_of(V.comb_room("probe", 5, 2), "probe",
+                                    lost_cells=[[1, 3]]))
+    assert latched.require_all_switches is True
+    assert V.positional_states(latched) == 25
+    assert RV.enumerate_states(latched, cap=RV.MAX_ENUMERATION)["solution"] is None
 
 
 def test_every_solvable_item_says_where_its_witness_came_from(paper):
@@ -801,6 +817,48 @@ def test_every_shipped_level_is_wellformed(paper):
     for item in paper.items:
         level = RV.Level(json.loads(item.truth["level_blob"]))
         assert level.wellformed_problems() == []
+
+
+def test_a_cart_standing_on_the_button_still_counts_the_teleport_jump():
+    """The defect this run introduced and an adversarial review of it found.
+
+    Excluding the button from `passable` was right for the movement graph and
+    wrong for `row_col_deltas`, which was using `passable` to ask a different
+    question: not "where can the cart rest" but "where can the cart be standing
+    when it issues a command". The cart can start on the button. On a board
+    where the button is the teleport's only entry, the jump's row delta vanished,
+    `cart_row` looked monotone, and a level solvable in ONE command was paid
+    2.0 of 2.0 for a certificate saying it is unsolvable. D-EX-027.
+    """
+    doc = _bare_level("regression-button-start",
+                      ["####", "#..#", "##.#", "####"], (1, 1), (2, 2),
+                      button=[1, 1], portal=[1, 2], portal_dest=[2, 2],
+                      forbidden=["UP", "DOWN"])
+    level = RV.Level(doc)
+    assert RV.replay(level, ["RIGHT"])["win"] is True
+    rows, _cols = RV.row_col_deltas(level)
+    assert rows == {0, 1}, "the teleport's row delta is missing from the closure"
+    result = RV.check_certificate(
+        {"kind": "invariant", "invariant": "cart_row",
+         "initial_value": 1, "goal_value": 2}, level)
+    assert result["ok"] is False
+    # And the builder refuses the level, so it cannot reach a sheet at all.
+    assert any("starts on the button" in p for p in level.wellformed_problems())
+
+
+def test_a_duplicated_switch_is_refused_by_the_builder():
+    """`switch_index` collapses duplicates; anything counting the list does not.
+
+    Not reachable from `comb_open`/`comb_room`, so nothing shipped is affected,
+    but it makes `subset_lower_bound` claim more states than the level has and
+    it is exactly the hand-transcription hazard Phase 4 will meet. D-EX-027.
+    """
+    doc = _bare_level("regression-dup-switch",
+                      ["######", "#..#.#", "#.##.#", "######"], (2, 4), (2, 1),
+                      switches=[[1, 2], [1, 4], [1, 4]])
+    level = RV.Level(doc)
+    assert len(level.switch_index) < len(level.switches)
+    assert any("repeats a cell" in p for p in level.wellformed_problems())
 
 
 def test_the_subset_bound_refuses_a_board_it_does_not_fit():
