@@ -1,0 +1,278 @@
+{
+  "arm": "wrong_world_t1_switch_latch",
+  "bill": {
+    "arm": "wrong_world_t1_switch_latch",
+    "carries_books": true,
+    "cost_to_first_plan": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    },
+    "counts": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    },
+    "events": [
+      {
+        "amount": 1,
+        "line": "world_frames",
+        "running_total": 1,
+        "seq": 0,
+        "why": "the carrying arm's entire observation"
+      },
+      {
+        "amount": 1,
+        "line": "compile_runs",
+        "running_total": 1,
+        "seq": 1,
+        "why": "the carried domain + the rebuilt problem"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 1,
+        "seq": 2,
+        "why": "render/responsibility check on frame 0"
+      },
+      {
+        "amount": 1,
+        "line": "plan_runs",
+        "running_total": 1,
+        "seq": 3,
+        "why": "fd_adapter.solve on t1-switch-latch"
+      }
+    ],
+    "level": "t1-switch-latch",
+    "note": "carries a carrypack onto a level it has never seen"
+  },
+  "certify_static": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 1,
+    "green": true,
+    "pixels_checked": 42,
+    "pixels_unexplained": 0,
+    "trace": "wrong_world_t1_switch_latch_frame0_trace.jsonl",
+    "transitions": 0
+  },
+  "compiled": {
+    "domain.pddl": 3286,
+    "dsl": "runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/domain.dsl",
+    "forms_emitted": [
+      "markdown",
+      "pddl",
+      "python"
+    ],
+    "forms_emitted_unauthorised": [],
+    "forms_withheld": {
+      "lean": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
+    },
+    "goal_bound": [
+      4,
+      5
+    ],
+    "lean_withheld": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
+    "mover": "Cart",
+    "pddl_cells_added": [],
+    "problem": "t1-switch-latch",
+    "problem.json": 1329,
+    "problem.pddl": 1429,
+    "theory.md": 4220,
+    "theory.py": 10419
+  },
+  "level": "t1-switch-latch",
+  "outcome": "no_plan",
+  "pack": "push-v1",
+  "pack_check": {
+    "books": {
+      "books": {
+        "domain": {
+          "actual": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+          "match": true,
+          "recorded": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1"
+        },
+        "playbook": {
+          "actual": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9",
+          "match": true,
+          "recorded": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9"
+        }
+      },
+      "match": true
+    },
+    "fingerprint": {
+      "added": [],
+      "current_interpreter": "python3.13",
+      "current_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "detail": {},
+      "drifted": [],
+      "interpreter_changed": false,
+      "match": true,
+      "recorded_interpreter": "python3.13",
+      "recorded_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "removed": []
+    },
+    "on_drift": "refuse"
+  },
+  "pddl_workarounds": {
+    "cells_added": [],
+    "landmarks": {
+      "jump_actions": 0,
+      "note": "no jump rules"
+    },
+    "pushables": {
+      "duplicate_actions_deleted": 4,
+      "init_facts": [
+        "(block-at c4-1)"
+      ],
+      "moves_guarded": 4,
+      "object_cells": {
+        "Block": [
+          4,
+          1
+        ]
+      },
+      "objects": [
+        "Block"
+      ],
+      "predicates": [
+        "block-at"
+      ],
+      "push_actions_rewritten": 4,
+      "pushables": 1
+    }
+  },
+  "plan": {
+    "backend": null,
+    "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_switch_latch/domain.pddl",
+    "name": "t1-switch-latch",
+    "note": "no plan exists under this manual — constraint 6 forbids stopping here; a certificate is owed",
+    "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_switch_latch/problem.pddl",
+    "status": "UNSAT"
+  },
+  "protocol": "a6carry/1",
+  "provenance": {
+    "background_route": "border_excluded",
+    "counts": {
+      "arena_cells": 15,
+      "background": 0,
+      "board_non_background_cells": 27,
+      "grid": [
+        6,
+        7
+      ],
+      "object_cells": {
+        "Block": [
+          4,
+          1
+        ],
+        "Cart": [
+          1,
+          2
+        ]
+      },
+      "object_names": [
+        "Block",
+        "Cart"
+      ],
+      "objects": 2
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_frame",
+      "background": "derived_from_frame",
+      "board": "derived_from_frame",
+      "goal_cell": "supplied",
+      "height": "derived_from_frame",
+      "landmarks": "n/a (the domain names none)",
+      "name": "supplied",
+      "objects": "derived_from_frame",
+      "width": "derived_from_frame"
+    },
+    "inputs_read": {
+      "actions": 0,
+      "frames": 1
+    },
+    "pack_requires_digest": {
+      "guard_colours": [
+        2
+      ],
+      "landmarks": [],
+      "objects": [
+        "Block",
+        "Cart"
+      ]
+    },
+    "preflight": {
+      "colours_present": {
+        "0": 13,
+        "1": 25,
+        "2": 1,
+        "4": 2,
+        "6": 1
+      },
+      "dormant_guard_colours": [],
+      "dormant_rules": [],
+      "green": true,
+      "grid": [
+        6,
+        7
+      ],
+      "guard_colours": [
+        2
+      ],
+      "note": "a dormant guard colour is not a defect: the level does not present that mechanism and the rules guarding on it never fire.  A missing *object* is a refusal, because the manual is then about a world this level is not.",
+      "objects": {
+        "Block": {
+          "cells": [
+            [
+              4,
+              1
+            ]
+          ],
+          "colours": [
+            2
+          ],
+          "count": 1
+        },
+        "Cart": {
+          "cells": [
+            [
+              1,
+              2
+            ]
+          ],
+          "colours": [
+            6
+          ],
+          "count": 1
+        }
+      },
+      "refusals": []
+    },
+    "route": "frame",
+    "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/wrong_world_t1_switch_latch_frame0.json",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        4,
+        5
+      ],
+      "landmarks": {},
+      "name": "t1-switch-latch"
+    }
+  },
+  "theorize_triggered": true
+}

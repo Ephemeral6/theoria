@@ -1,0 +1,380 @@
+{
+  "arm": "source_open",
+  "bill": {
+    "arm": "source_open",
+    "carries_books": true,
+    "cost_to_first_plan": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    },
+    "counts": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 2,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 5,
+      "world_frames": 6
+    },
+    "events": [
+      {
+        "amount": 1,
+        "line": "world_frames",
+        "running_total": 1,
+        "seq": 0,
+        "why": "the carrying arm's entire observation"
+      },
+      {
+        "amount": 1,
+        "line": "compile_runs",
+        "running_total": 1,
+        "seq": 1,
+        "why": "the carried domain + the rebuilt problem"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 1,
+        "seq": 2,
+        "why": "render/responsibility check on frame 0"
+      },
+      {
+        "amount": 1,
+        "line": "plan_runs",
+        "running_total": 1,
+        "seq": 3,
+        "why": "fd_adapter.solve on t1-push-open"
+      },
+      {
+        "amount": 5,
+        "line": "world_actions",
+        "running_total": 5,
+        "seq": 4,
+        "why": "executing the plan"
+      },
+      {
+        "amount": 5,
+        "line": "world_frames",
+        "running_total": 6,
+        "seq": 5,
+        "why": "frames returned by the execution (frame 0 already charged)"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 2,
+        "seq": 6,
+        "why": "replay the execution under the manual"
+      }
+    ],
+    "level": "t1-push-open",
+    "note": "carries a carrypack onto a level it has never seen"
+  },
+  "certify_lean": {
+    "emitted": false,
+    "green": null,
+    "reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
+  },
+  "certify_replay": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 6,
+    "green": true,
+    "pixels_checked": 210,
+    "pixels_unexplained": 0,
+    "trace": "source_open_execution.jsonl",
+    "transitions": 5
+  },
+  "certify_static": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 1,
+    "green": true,
+    "pixels_checked": 35,
+    "pixels_unexplained": 0,
+    "trace": "source_open_frame0_trace.jsonl",
+    "transitions": 0
+  },
+  "compiled": {
+    "domain.pddl": 3286,
+    "dsl": "runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/domain.dsl",
+    "forms_emitted": [
+      "markdown",
+      "pddl",
+      "python"
+    ],
+    "forms_emitted_unauthorised": [],
+    "forms_withheld": {
+      "lean": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted."
+    },
+    "goal_bound": [
+      2,
+      5
+    ],
+    "lean_withheld": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
+    "mover": "Cart",
+    "pddl_cells_added": [],
+    "problem": "t1-push-open",
+    "problem.json": 1191,
+    "problem.pddl": 1334,
+    "theory.md": 4220,
+    "theory.py": 10392
+  },
+  "execution": {
+    "actions": [
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "RIGHT",
+      "UP"
+    ],
+    "actions_spent": 5,
+    "level": "t1-push-open",
+    "plan_length": 5,
+    "win": true
+  },
+  "first_mismatch": null,
+  "level": "t1-push-open",
+  "outcome": "win",
+  "pack": "push-v1",
+  "pack_check": {
+    "books": {
+      "books": {
+        "domain": {
+          "actual": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+          "match": true,
+          "recorded": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1"
+        },
+        "playbook": {
+          "actual": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9",
+          "match": true,
+          "recorded": "3d9bd3e9f19dd305324099a2b978e2929aebb5408bdd08288b2cc3c0428e6eb9"
+        }
+      },
+      "match": true
+    },
+    "fingerprint": {
+      "added": [],
+      "current_interpreter": "python3.13",
+      "current_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "detail": {},
+      "drifted": [],
+      "interpreter_changed": false,
+      "match": true,
+      "recorded_interpreter": "python3.13",
+      "recorded_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "removed": []
+    },
+    "on_drift": "refuse"
+  },
+  "pddl_workarounds": {
+    "cells_added": [],
+    "landmarks": {
+      "jump_actions": 0,
+      "note": "no jump rules"
+    },
+    "pushables": {
+      "duplicate_actions_deleted": 4,
+      "init_facts": [
+        "(block-at c2-3)"
+      ],
+      "moves_guarded": 4,
+      "object_cells": {
+        "Block": [
+          2,
+          3
+        ]
+      },
+      "objects": [
+        "Block"
+      ],
+      "predicates": [
+        "block-at"
+      ],
+      "push_actions_rewritten": 4,
+      "pushables": 1
+    }
+  },
+  "plan": {
+    "actions": [
+      "(shove-right c2-2 c2-3 c2-4)",
+      "(shove-right c2-3 c2-4 c2-5)",
+      "(step-down c2-4 c3-4)",
+      "(step-right c3-4 c3-5)",
+      "(shove-up c3-5 c2-5 c1-5)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "right",
+      "right",
+      "down",
+      "right",
+      "up"
+    ],
+    "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/domain.pddl",
+    "green": true,
+    "length": 5,
+    "manual_final_cell": [
+      2,
+      5
+    ],
+    "manual_reaches_goal": true,
+    "manual_trail": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        2,
+        5
+      ]
+    ],
+    "name": "t1-push-open",
+    "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/problem.pddl",
+    "status": "SAT",
+    "world_actions": [
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "RIGHT",
+      "UP"
+    ]
+  },
+  "protocol": "a6carry/1",
+  "provenance": {
+    "background_route": "border_excluded",
+    "counts": {
+      "arena_cells": 13,
+      "background": 0,
+      "board_non_background_cells": 22,
+      "grid": [
+        5,
+        7
+      ],
+      "object_cells": {
+        "Block": [
+          2,
+          3
+        ],
+        "Cart": [
+          2,
+          2
+        ]
+      },
+      "object_names": [
+        "Block",
+        "Cart"
+      ],
+      "objects": 2
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_frame",
+      "background": "derived_from_frame",
+      "board": "derived_from_frame",
+      "goal_cell": "supplied",
+      "height": "derived_from_frame",
+      "landmarks": "n/a (the domain names none)",
+      "name": "supplied",
+      "objects": "derived_from_frame",
+      "width": "derived_from_frame"
+    },
+    "inputs_read": {
+      "actions": 0,
+      "frames": 1
+    },
+    "pack_requires_digest": {
+      "guard_colours": [
+        2
+      ],
+      "landmarks": [],
+      "objects": [
+        "Block",
+        "Cart"
+      ]
+    },
+    "preflight": {
+      "colours_present": {
+        "0": 11,
+        "1": 22,
+        "2": 1,
+        "6": 1
+      },
+      "dormant_guard_colours": [],
+      "dormant_rules": [],
+      "green": true,
+      "grid": [
+        5,
+        7
+      ],
+      "guard_colours": [
+        2
+      ],
+      "note": "a dormant guard colour is not a defect: the level does not present that mechanism and the rules guarding on it never fire.  A missing *object* is a refusal, because the manual is then about a world this level is not.",
+      "objects": {
+        "Block": {
+          "cells": [
+            [
+              2,
+              3
+            ]
+          ],
+          "colours": [
+            2
+          ],
+          "count": 1
+        },
+        "Cart": {
+          "cells": [
+            [
+              2,
+              2
+            ]
+          ],
+          "colours": [
+            6
+          ],
+          "count": 1
+        }
+      },
+      "refusals": []
+    },
+    "route": "frame",
+    "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/source_open_frame0.json",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        2,
+        5
+      ],
+      "landmarks": {},
+      "name": "t1-push-open"
+    }
+  },
+  "theorize_triggered": false
+}

@@ -1,0 +1,61 @@
+{
+  "actions": [
+    "(shove-right c2-2 c2-3 c2-4)",
+    "(shove-right c2-3 c2-4 c2-5)",
+    "(step-down c2-4 c3-4)",
+    "(step-right c3-4 c3-5)",
+    "(shove-up c3-5 c2-5 c1-5)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "right",
+    "right",
+    "down",
+    "right",
+    "up"
+  ],
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/domain.pddl",
+  "green": true,
+  "length": 5,
+  "manual_final_cell": [
+    2,
+    5
+  ],
+  "manual_reaches_goal": true,
+  "manual_trail": [
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      2,
+      5
+    ]
+  ],
+  "name": "t1-push-open",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/problem.pddl",
+  "status": "SAT",
+  "world_actions": [
+    "RIGHT",
+    "RIGHT",
+    "DOWN",
+    "RIGHT",
+    "UP"
+  ]
+}

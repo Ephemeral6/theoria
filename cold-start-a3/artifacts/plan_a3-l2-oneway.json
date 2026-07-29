@@ -24,7 +24,7 @@
     "up",
     "up"
   ],
-  "domain": "theory/generated_l2neg/domain.pddl",
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway/domain.pddl",
   "green": true,
   "length": 10,
   "manual_final_cell": [
@@ -79,7 +79,7 @@
     ]
   ],
   "name": "a3-l2-oneway",
-  "problem": "theory/generated_l2neg/problem.pddl",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway/problem.pddl",
   "status": "SAT",
   "world_actions": [
     "LEFT",

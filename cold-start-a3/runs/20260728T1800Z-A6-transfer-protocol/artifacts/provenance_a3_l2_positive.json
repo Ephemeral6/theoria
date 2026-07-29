@@ -1,0 +1,157 @@
+{
+  "background_route": "border_excluded",
+  "counts": {
+    "arena_cells": 35,
+    "background": 0,
+    "board_non_background_cells": 46,
+    "grid": [
+      9,
+      9
+    ],
+    "object_cells": {
+      "Cart": [
+        6,
+        7
+      ],
+      "Door": [
+        3,
+        1
+      ],
+      "Switch": [
+        7,
+        6
+      ]
+    },
+    "object_names": [
+      "Cart",
+      "Door",
+      "Switch"
+    ],
+    "objects": 3
+  },
+  "derived_fields": 6,
+  "fields": {
+    "arena": "derived_from_frame",
+    "background": "derived_from_frame",
+    "board": "derived_from_frame",
+    "goal_cell": "supplied",
+    "height": "derived_from_frame",
+    "landmarks": "supplied",
+    "name": "supplied",
+    "objects": "derived_from_frame",
+    "width": "derived_from_frame"
+  },
+  "inputs_read": {
+    "actions": 0,
+    "frames": 1
+  },
+  "pack_requires_digest": {
+    "guard_colours": [
+      3,
+      4,
+      7,
+      8
+    ],
+    "landmarks": [
+      "exit_a",
+      "exit_b"
+    ],
+    "objects": [
+      "Cart",
+      "Door",
+      "Switch"
+    ]
+  },
+  "preflight": {
+    "colours_present": {
+      "0": 32,
+      "1": 44,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 1
+    },
+    "dormant_guard_colours": [
+      8
+    ],
+    "dormant_rules": [
+      "door_closes_down",
+      "door_closes_up",
+      "unpress_down",
+      "unpress_up"
+    ],
+    "green": true,
+    "grid": [
+      9,
+      9
+    ],
+    "guard_colours": [
+      3,
+      4,
+      7,
+      8
+    ],
+    "note": "a dormant guard colour is not a defect: the level does not present that mechanism and the rules guarding on it never fire.  A missing *object* is a refusal, because the manual is then about a world this level is not.",
+    "objects": {
+      "Cart": {
+        "cells": [
+          [
+            6,
+            7
+          ]
+        ],
+        "colours": [
+          6
+        ],
+        "count": 1
+      },
+      "Door": {
+        "cells": [
+          [
+            3,
+            1
+          ]
+        ],
+        "colours": [
+          5
+        ],
+        "count": 1
+      },
+      "Switch": {
+        "cells": [
+          [
+            7,
+            6
+          ]
+        ],
+        "colours": [
+          7,
+          8
+        ],
+        "count": 1
+      }
+    },
+    "refusals": []
+  },
+  "route": "frame",
+  "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/a3_l2_positive_frame0.json",
+  "supplied_fields": 3,
+  "supplied_values": {
+    "goal_cell": [
+      1,
+      1
+    ],
+    "landmarks": {
+      "exit_a": [
+        1,
+        5
+      ],
+      "exit_b": [
+        4,
+        1
+      ]
+    },
+    "name": "a3-l2"
+  }
+}

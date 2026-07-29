@@ -1323,3 +1323,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：papers/phase1-workshop/verify_paper.py **PASS (4/4)**（此前 2/4）。本节两处自指的断言是可机器复核的，已对着装配好的 PAPER.md 重跑：§10 之外 "verified" 出现 8 次、全paper 「已验证」恰好 1 次即那句自述——草稿曾把这两个数写成 7 和 2，是从一次更早的审计里继承了一个被丢掉的出现，对抗轮抓到了。
 阻塞：**四份普查原件仍在任何 git ref 之外**——`.worktrees/e11-engine-crosscheck-deep/` 里四个 `??` 未跟踪文件，分支未推送，支撑着六张工单和本节。我不写 papers/ 之外，已两次在总线上请求 engine-rig 领地的人 `git add` 并推送。在那之前 `inputs-verbatim/` 的逐字副本是版本控制里唯一的一份，且明写它**不是**正本。
 下一步：已开 P4-P16-e06-contradiction——正文 §4.4 说 E-06 未决，它引的那本台账已标为清偿，而 theory-compiler/STATUS.md 两处自相矛盾。手上另一件是 P7（§7.7 按盲测轮重推），已查明它依赖一条**尚未合入**的分支 agent/p13-paper-intro-abstract，那是开工前要先解决的事。
+
+## [engine-rig] 2026-07-29T07:45:00Z A6-transfer-protocol
+状态：A3 的迁移协议做成了在线可调用的形态。carrypack v1（两本书 + 定理级条目 + 依赖指纹）与通用 problem 重建器（不含任何颜色/物名/坐标，全部来自 requires）已交付；接口写在 cold-start-a3/RUN_STATE.md 的 A6 段供 theoria-arm 调用，未改对方目录。验收：worldgen 的 t1-push-open → t1-push-corridor 端到端，各 5 步取胜（最优 5，已独立复核），零 theorize 轮、零 DSL 子句、零候选、零引擎阶段，首次成计划前只花 1 帧 0 动作；A3 两个负对照在新协议下同样被抓（replay_mismatch，均未宣称胜利），A3 正对照仍胜。上一世 W-5201 写的 1958 行从未提交也从未运行，先抢救提交（6ee8538）再修四处接触即崩。
+测试：96 通过（cold-start-a3 全套）。十二条验收条件全绿，产物对固定树逐字节可复现。
+阻塞：none。三条边界必须与结论一起引用，否则是过度声称——(1) 绿色搬运只证明路径不证明世界：同一 pack 在 t1-cycler-gate 上得到 win + 重放全绿 + 零无法解释像素，而迁移臂执行的动作与该错误世界臂逐字节相同；(2) 六条 ev:symmetry 条款的全部证据是 2 个转移（不是 4 个——shove_d 与 block_d 编译成同一守卫，不可能分开触发），且全在源世界，被搬去的世界贡献 0；其中 shove_left/block_left 被检验 0 次，未被证实；(3) 密封性主张已被对抗性复核推翻并订正：cold-start-a0/world/a0_world.py 经 certify.replay 进入驱动的导入闭包，原测试因闭包在轨道边界截断而漏掉；现记录该泄漏及其链路，并只主张「被测世界仍只经 Executor 到达」。
+下一步：D-A6-003 已投 inbox——A3 自己的 playbook 不合冻结语法（line 81）且仓库里从没有人解析过它，需 RES-2 核对论文是否在哪句话里把 A3 说成「两本书都带走了」。
