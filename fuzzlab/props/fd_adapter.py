@@ -90,7 +90,8 @@ def _skip_pddl(world: Any, invariant: str, exc: Exception) -> List[finding.Findi
     return [finding.skipped(
         ENGINE, invariant, world,
         "PddlError — the generated instance is outside the supported STRIPS "
-        "subset. Documented behaviour, not a defect.", error=str(exc))]
+        "subset. Documented behaviour, not a defect.",
+        cause="pddl_error", error=str(exc))]
 
 
 # --------------------------------------------------------------- invariants
@@ -139,6 +140,7 @@ def optimal_rungs_are_optimal(world: Any) -> List[finding.Finding]:
         return [finding.skipped(
             ENGINE, "optimal_rungs_are_optimal", world,
             "ground BFS hit the %d-state budget" % STATE_BUDGET,
+            cause="ground_bfs_budget",
             plan_length=len(plan.actions), backend=plan.backend)]
     if best is None:
         return [finding.violated(
@@ -173,7 +175,7 @@ def no_plan_means_unsolvable(world: Any) -> List[finding.Finding]:
         return [finding.skipped(
             ENGINE, "no_plan_means_unsolvable", world,
             "ground BFS hit the %d-state budget, so 'no plan' could not be "
-            "confirmed either way" % STATE_BUDGET)]
+            "confirmed either way" % STATE_BUDGET, cause="ground_bfs_budget")]
     if best is not None:
         return [finding.violated(
             ENGINE, "no_plan_means_unsolvable", world,
