@@ -1,0 +1,263 @@
+########## fig02 ##########
+--- papers/ : stem 'fig02' ---
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:12:| B-i | `out/dark/` | `sections/03_a0.md:32` | BROKEN — a bare suffix, resolves from neither root | write the whole path: `figures/out/dark/fig06_concept_timeline.svg` (exists, with `.png`; the full fig02–fig07 dark set is present) |
+
+########## fig03 ##########
+--- papers/ : stem 'fig03' ---
+(0 hits)
+
+########## fig04 ##########
+--- papers/ : stem 'fig04' ---
+(0 hits)
+
+########## fig05 ##########
+--- papers/ : stem 'fig05' ---
+papers/phase1-workshop/figures/check_figure_parity.py:15:    papers fig3 loop ledger        ==  figures/fig05_a2_repair_loop
+papers/phase1-workshop/figures/check_figure_parity.py:67:    "fig3_loop_ledger": "fig05_a2_repair_loop",
+papers/phase1-workshop/figures/check_figure_parity.py:180:    # ---- figure 3 / fig05: the A2 repair loop -----------------------------
+papers/phase1-workshop/figures/check_figure_parity.py:184:        ("ledger beats", totals["beats"], {"value": "8", "status": "ok"}, "fig05 (RUN_STATE)")
+papers/phase1-workshop/figures/check_figure_parity.py:187:        ("loop beats proper", totals["loop_beats"], {"value": "6", "status": "ok"}, "fig05")
+papers/phase1-workshop/figures/PARITY.md:22:| Figure 3 `fig3_loop_ledger` | `figures/fig05_a2_repair_loop` | the A2 repair loop |
+papers/phase1-workshop/OUTLINE.md:72:| 3 | A2 打脸→重证 ledger flow | `figures/fig05_a2_repair_loop.py` | `figures/out/{light,dark}/fig05_a2_repair_loop.{svg,png}` | `figures/csv/fig05_a2_repair_loop.csv` |
+papers/phase1-workshop/PAPER.md:1163:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/PAPER.md:1164:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/PAPER.md:1165:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:28:`fig05_a2_repair_loop.py`, `figures/out/light/` and `figures/csv/`.
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:583:  `figures/fig05_a2_repair_loop.py`, plus `figures/out/light/*.svg` and
+papers/phase1-workshop/sections/05_a2.md:134:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/sections/05_a2.md:135:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/sections/05_a2.md:136:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/verify_paper.py:20:                                 paper cites the root pipeline's fig05/06/07
+papers/phase1-workshop/verify_paper.py:78:        "figures/fig05_a2_repair_loop.py",
+papers/phase1-workshop/verify_paper.py:81:        "figures/out/light/fig05_a2_repair_loop.svg",
+papers/phase1-workshop/verify_paper.py:85:        "figures/csv/fig05_a2_repair_loop.csv",
+
+########## fig06 ##########
+--- papers/ : stem 'fig06' ---
+papers/phase1-workshop/figures/check_figure_parity.py:13:    papers fig1 concept timeline   ==  figures/fig06_concept_timeline
+papers/phase1-workshop/figures/check_figure_parity.py:65:    "fig1_concept_timeline": "fig06_concept_timeline",
+papers/phase1-workshop/figures/check_figure_parity.py:143:    # ---- figure 1 / fig06: the adjudication timeline ----------------------
+papers/phase1-workshop/figures/check_figure_parity.py:145:    r6 = _pipeline_rows("fig06_concept_timeline")
+papers/phase1-workshop/figures/check_figure_parity.py:165:            "fig06",
+papers/phase1-workshop/figures/check_figure_parity.py:173:            "fig06 (drawn on the plate as the headline)",
+papers/phase1-workshop/figures/check_figure_parity.py:177:        ("compiler defects", len(p1["compiler_defects"]), {"value": "3", "status": "ok"}, "fig06")
+papers/phase1-workshop/figures/check_figure_parity.py:202:        "P-03. THEORIZE_LOG.md records no bold verdict for it; figures/fig06 emits it "
+papers/phase1-workshop/figures/PARITY.md:20:| Figure 1 `fig1_concept_timeline` | `figures/fig06_concept_timeline` | the adjudication timeline |
+papers/phase1-workshop/figures/PARITY.md:60:> `figures/fig06` emits it as `event_kind: verdict-absent-ABSENT` with the label
+papers/phase1-workshop/OUTLINE.md:70:| 1 | concept-birth timeline, with triggers | `figures/fig06_concept_timeline.py` | `figures/out/{light,dark}/fig06_concept_timeline.{svg,png}` | `figures/csv/fig06_concept_timeline.csv` |
+papers/phase1-workshop/PAPER.md:642:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/PAPER.md:643:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/PAPER.md:644:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:12:| B-i | `out/dark/` | `sections/03_a0.md:32` | BROKEN — a bare suffix, resolves from neither root | write the whole path: `figures/out/dark/fig06_concept_timeline.svg` (exists, with `.png`; the full fig02–fig07 dark set is present) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:27:exist"*, naming `figures/fig06_concept_timeline.py`, `fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:42:[fig06_concept_timeline]
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:44:FAIL: 1 figure(s) failed: fig06_concept_timeline
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:52:File "figures/fig06_concept_timeline.py", line 391, in parse_log
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:57:`figures/fig06_concept_timeline.py:108` declares the expressivity-ledger id set
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:66:`figures/fig06_concept_timeline.py` has been touched exactly once, at `8775102`
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:163:running the stop gate today sees a fig06 build crash, not a coverage failure, and
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:300:  ADJUDICATED adjudications on the timeline: paper 18 vs fig06 17.0
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:582:  `figures/fig06_concept_timeline.py`, `figures/fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:142:  beside `PAPER.md`. `figures/out/dark/fig06_concept_timeline.svg` was added to
+papers/phase1-workshop/sections/03_a0.md:31:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/sections/03_a0.md:32:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/sections/03_a0.md:33:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/verify_paper.py:79:        "figures/fig06_concept_timeline.py",
+papers/phase1-workshop/verify_paper.py:82:        "figures/out/light/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:84:        "figures/out/dark/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:86:        "figures/csv/fig06_concept_timeline.csv",
+
+########## fig07 ##########
+--- papers/ : stem 'fig07' ---
+papers/phase1-workshop/figures/check_figure_parity.py:14:    papers fig2 coverage/accuracy  ==  figures/fig07_a0_vs_a0prime
+papers/phase1-workshop/figures/check_figure_parity.py:66:    "fig2_coverage_accuracy": "fig07_a0_vs_a0prime",
+papers/phase1-workshop/figures/check_figure_parity.py:115:    # ---- figure 2 / fig07: the A0 vs A0-prime contrast --------------------
+papers/phase1-workshop/figures/check_figure_parity.py:117:    r7 = _pipeline_rows("fig07_a0_vs_a0prime")
+papers/phase1-workshop/figures/check_figure_parity.py:130:        out.append((label, paper_v, row, "fig07"))
+papers/phase1-workshop/figures/check_figure_parity.py:141:        out.append((label, paper_v, row, "fig07"))
+papers/phase1-workshop/figures/PARITY.md:21:| Figure 2 `fig2_coverage_accuracy` | `figures/fig07_a0_vs_a0prime` | coverage against accuracy |
+papers/phase1-workshop/figures/PARITY.md:43:**1 one-sided.** `figures/fig07` marks A0's executable-probe count
+papers/phase1-workshop/OUTLINE.md:71:| 2 | A0 vs A0′ coverage × accuracy | `figures/fig07_a0_vs_a0prime.py` | `figures/out/{light,dark}/fig07_a0_vs_a0prime.{svg,png}` | `figures/csv/fig07_a0_vs_a0prime.csv` |
+papers/phase1-workshop/PAPER.md:714:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/PAPER.md:715:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/PAPER.md:716:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:12:| B-i | `out/dark/` | `sections/03_a0.md:32` | BROKEN — a bare suffix, resolves from neither root | write the whole path: `figures/out/dark/fig06_concept_timeline.svg` (exists, with `.png`; the full fig02–fig07 dark set is present) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:27:exist"*, naming `figures/fig06_concept_timeline.py`, `fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:294:  AGREE       A0 accuracy vs truth (on trace): both 0.987288 (fig07, status=ok)
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:299:  ONE-SIDED   A0 executable probes: paper states 0; fig07 REFUSES to state it
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:582:  `figures/fig06_concept_timeline.py`, `figures/fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/sections/03_a0.md:103:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/sections/03_a0.md:104:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/sections/03_a0.md:105:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/verify_paper.py:80:        "figures/fig07_a0_vs_a0prime.py",
+papers/phase1-workshop/verify_paper.py:83:        "figures/out/light/fig07_a0_vs_a0prime.svg",
+papers/phase1-workshop/verify_paper.py:87:        "figures/csv/fig07_a0_vs_a0prime.csv",
+
+########## full slug names in papers/ ##########
+--- fig02_bill_shape ---
+(0 hits)
+--- fig03_capability_spectrum ---
+(0 hits)
+--- fig04_a3_transfer ---
+(0 hits)
+--- fig05_a2_repair_loop ---
+papers/phase1-workshop/figures/check_figure_parity.py:15:    papers fig3 loop ledger        ==  figures/fig05_a2_repair_loop
+papers/phase1-workshop/figures/check_figure_parity.py:67:    "fig3_loop_ledger": "fig05_a2_repair_loop",
+papers/phase1-workshop/figures/PARITY.md:22:| Figure 3 `fig3_loop_ledger` | `figures/fig05_a2_repair_loop` | the A2 repair loop |
+papers/phase1-workshop/OUTLINE.md:72:| 3 | A2 打脸→重证 ledger flow | `figures/fig05_a2_repair_loop.py` | `figures/out/{light,dark}/fig05_a2_repair_loop.{svg,png}` | `figures/csv/fig05_a2_repair_loop.csv` |
+papers/phase1-workshop/PAPER.md:1163:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/PAPER.md:1164:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/PAPER.md:1165:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:28:`fig05_a2_repair_loop.py`, `figures/out/light/` and `figures/csv/`.
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:583:  `figures/fig05_a2_repair_loop.py`, plus `figures/out/light/*.svg` and
+papers/phase1-workshop/sections/05_a2.md:134:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/sections/05_a2.md:135:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/sections/05_a2.md:136:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/verify_paper.py:78:        "figures/fig05_a2_repair_loop.py",
+papers/phase1-workshop/verify_paper.py:81:        "figures/out/light/fig05_a2_repair_loop.svg",
+papers/phase1-workshop/verify_paper.py:85:        "figures/csv/fig05_a2_repair_loop.csv",
+--- fig06_concept_timeline ---
+papers/phase1-workshop/figures/check_figure_parity.py:13:    papers fig1 concept timeline   ==  figures/fig06_concept_timeline
+papers/phase1-workshop/figures/check_figure_parity.py:65:    "fig1_concept_timeline": "fig06_concept_timeline",
+papers/phase1-workshop/figures/check_figure_parity.py:145:    r6 = _pipeline_rows("fig06_concept_timeline")
+papers/phase1-workshop/figures/PARITY.md:20:| Figure 1 `fig1_concept_timeline` | `figures/fig06_concept_timeline` | the adjudication timeline |
+papers/phase1-workshop/OUTLINE.md:70:| 1 | concept-birth timeline, with triggers | `figures/fig06_concept_timeline.py` | `figures/out/{light,dark}/fig06_concept_timeline.{svg,png}` | `figures/csv/fig06_concept_timeline.csv` |
+papers/phase1-workshop/PAPER.md:642:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/PAPER.md:643:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/PAPER.md:644:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:12:| B-i | `out/dark/` | `sections/03_a0.md:32` | BROKEN — a bare suffix, resolves from neither root | write the whole path: `figures/out/dark/fig06_concept_timeline.svg` (exists, with `.png`; the full fig02–fig07 dark set is present) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:27:exist"*, naming `figures/fig06_concept_timeline.py`, `fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:42:[fig06_concept_timeline]
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:44:FAIL: 1 figure(s) failed: fig06_concept_timeline
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:52:File "figures/fig06_concept_timeline.py", line 391, in parse_log
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:57:`figures/fig06_concept_timeline.py:108` declares the expressivity-ledger id set
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:66:`figures/fig06_concept_timeline.py` has been touched exactly once, at `8775102`
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:582:  `figures/fig06_concept_timeline.py`, `figures/fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:142:  beside `PAPER.md`. `figures/out/dark/fig06_concept_timeline.svg` was added to
+papers/phase1-workshop/sections/03_a0.md:31:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/sections/03_a0.md:32:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/sections/03_a0.md:33:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/verify_paper.py:79:        "figures/fig06_concept_timeline.py",
+papers/phase1-workshop/verify_paper.py:82:        "figures/out/light/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:84:        "figures/out/dark/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:86:        "figures/csv/fig06_concept_timeline.csv",
+--- fig07_a0_vs_a0prime ---
+papers/phase1-workshop/figures/check_figure_parity.py:14:    papers fig2 coverage/accuracy  ==  figures/fig07_a0_vs_a0prime
+papers/phase1-workshop/figures/check_figure_parity.py:66:    "fig2_coverage_accuracy": "fig07_a0_vs_a0prime",
+papers/phase1-workshop/figures/check_figure_parity.py:117:    r7 = _pipeline_rows("fig07_a0_vs_a0prime")
+papers/phase1-workshop/figures/PARITY.md:21:| Figure 2 `fig2_coverage_accuracy` | `figures/fig07_a0_vs_a0prime` | coverage against accuracy |
+papers/phase1-workshop/OUTLINE.md:71:| 2 | A0 vs A0′ coverage × accuracy | `figures/fig07_a0_vs_a0prime.py` | `figures/out/{light,dark}/fig07_a0_vs_a0prime.{svg,png}` | `figures/csv/fig07_a0_vs_a0prime.csv` |
+papers/phase1-workshop/PAPER.md:714:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/PAPER.md:715:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/PAPER.md:716:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:27:exist"*, naming `figures/fig06_concept_timeline.py`, `fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:582:  `figures/fig06_concept_timeline.py`, `figures/fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/sections/03_a0.md:103:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/sections/03_a0.md:104:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/sections/03_a0.md:105:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/verify_paper.py:80:        "figures/fig07_a0_vs_a0prime.py",
+papers/phase1-workshop/verify_paper.py:83:        "figures/out/light/fig07_a0_vs_a0prime.svg",
+papers/phase1-workshop/verify_paper.py:87:        "figures/csv/fig07_a0_vs_a0prime.csv",
+########## generic 'figures/' path refs in papers/ ##########
+papers/phase1-workshop/OUTLINE.md:61:Figures: the repository's deterministic pipeline at **`figures/`** (repo root) —
+papers/phase1-workshop/OUTLINE.md:63:from a hashed source registry, and `figures/verify.sh` holds eight gates over it
+papers/phase1-workshop/OUTLINE.md:66:`figures/theme.py` and nowhere else.
+papers/phase1-workshop/OUTLINE.md:70:| 1 | concept-birth timeline, with triggers | `figures/fig06_concept_timeline.py` | `figures/out/{light,dark}/fig06_concept_timeline.{svg,png}` | `figures/csv/fig06_concept_timeline.csv` |
+papers/phase1-workshop/OUTLINE.md:71:| 2 | A0 vs A0′ coverage × accuracy | `figures/fig07_a0_vs_a0prime.py` | `figures/out/{light,dark}/fig07_a0_vs_a0prime.{svg,png}` | `figures/csv/fig07_a0_vs_a0prime.csv` |
+papers/phase1-workshop/OUTLINE.md:72:| 3 | A2 打脸→重证 ledger flow | `figures/fig05_a2_repair_loop.py` | `figures/out/{light,dark}/fig05_a2_repair_loop.{svg,png}` | `figures/csv/fig05_a2_repair_loop.csv` |
+papers/phase1-workshop/PAPER.md:642:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/PAPER.md:643:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/PAPER.md:644:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/PAPER.md:714:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/PAPER.md:715:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/PAPER.md:716:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/PAPER.md:1163:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/PAPER.md:1164:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/PAPER.md:1165:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/README.md:21:| `figures/*.py` | figure **data** extractors, deterministic |
+papers/phase1-workshop/README.md:22:| `figures/data/*.json` | extracted payloads |
+papers/phase1-workshop/README.md:23:| `figures/*.txt` | plain-text renderings, for reading before anything is styled |
+papers/phase1-workshop/README.md:32:python figures/fig1_concept_timeline.py
+papers/phase1-workshop/README.md:33:python figures/fig2_coverage_accuracy.py
+papers/phase1-workshop/README.md:34:python figures/fig3_loop_ledger.py
+papers/phase1-workshop/REVIEW.md:4:`PROVENANCE.md` (08:45), `README.md` (08:42), `sections/*.md` and `figures/*.py`. The
+papers/phase1-workshop/REVIEW.md:334:  `figures/data/*.json` and `figures/*.txt`: identical. But no sentence in the paper
+papers/phase1-workshop/REVIEW.md:443:| figure determinism | "byte-deterministic: running them twice produces identical output" | ran all three twice; `figures/data/*.json` and `figures/*.txt` byte-identical | **match** |
+papers/phase1-workshop/runs/20260728T115500Z-P9/FINDINGS.md:54:   at `figures/`. Wiring the paper to the latter is exactly the "no hand-pasted
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:12:| B-i | `out/dark/` | `sections/03_a0.md:32` | BROKEN — a bare suffix, resolves from neither root | write the whole path: `figures/out/dark/fig06_concept_timeline.svg` (exists, with `.png`; the full fig02–fig07 dark set is present) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:17:**B-i does not close by itself.** `figures/out/dark/…svg` classifies **AMBIGUOUS**,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:18:not `ok`, because `figures/` exists both at the repo root and beside `PAPER.md`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:80:`data/*.json`. `emit` also writes `figures/<name>.txt`, which is never restored,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/gate-diagnosis.md:86:the next gate. The restore loop should snapshot `figures/*.txt` alongside the
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:27:exist"*, naming `figures/fig06_concept_timeline.py`, `fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:28:`fig05_a2_repair_loop.py`, `figures/out/light/` and `figures/csv/`.
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:30:**Checked, and all nine `figures/…` paths cited in `PAPER.md` resolve:**
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:33:grep -oE '`figures/[a-zA-Z0-9_/.-]+`' papers/phase1-workshop/PAPER.md \
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/PARTIAL.md:40:directory, which holds `fig1`/`fig2`/`fig3` — rather than the repo-root `figures/`
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:34:**B-1. `figures/verify.sh` — the figure pipeline's stop gate — is red at gate 1,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:38:$ bash figures/verify.sh
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:52:File "figures/fig06_concept_timeline.py", line 391, in parse_log
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:57:`figures/fig06_concept_timeline.py:108` declares the expressivity-ledger id set
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:66:`figures/fig06_concept_timeline.py` has been touched exactly once, at `8775102`
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:85:$ python figures/fig1_concept_timeline.py
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:114:python figures/fig1_concept_timeline.py
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:115:python figures/fig2_coverage_accuracy.py
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:116:python figures/fig3_loop_ledger.py
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:120:All four commands ran and exited 0. But `figures/fig1_concept_timeline.py`'s own
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:126:The real figures are built by the repo-root pipeline (`figures/build_all.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:127:gated by `figures/verify.sh`), which the README never mentions. A stranger
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:133:**M-2. `figures/check_coverage.py` (gate 8) is red — diagnosis CONFIRMED, with a
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:172:only `data/*.json`, while `common.emit` also writes `figures/<name>.txt`, which is
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:272:| 1 | `python figures/fig1_concept_timeline.py` | exit 0 — **but rewrote the committed payload** (B-2) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:273:| 2 | `python figures/fig2_coverage_accuracy.py` | exit 0, output byte-identical to committed |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:274:| 3 | `python figures/fig3_loop_ledger.py` | exit 0, output byte-identical to committed |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:276:| 5 | `bash figures/verify.sh` | **exit 1 at gate 1** (B-1) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:277:| 6 | `python figures/check_coverage.py --self-test` | exit 0 — negative control fires |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:278:| 7 | `python figures/check_coverage.py` | **exit 1**, 11 findings (M-2) |
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:486:$ python figures/fig3_loop_ledger.py && sha256sum figures/data/fig3_loop_ledger.json
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:488:$ python figures/fig3_loop_ledger.py && sha256sum figures/data/fig3_loop_ledger.json
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:515:$ ls -d figures/.verify
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:516:ls: cannot access 'figures/.verify': No such file or directory   # verify.sh trap cleaned up
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-c-repro.md:531:1. **`bash figures/verify.sh` fails immediately**, and the failure message is
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:582:  `figures/fig06_concept_timeline.py`, `figures/fig07_a0_vs_a0prime.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:583:  `figures/fig05_a2_repair_loop.py`, plus `figures/out/light/*.svg` and
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/review-e-lay.md:584:  `figures/csv/*.csv`. What exists is `figures/fig1_concept_timeline.py`,
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/REVISION.md:60:  All nine `figures/…` paths cited by `PAPER.md` resolve. The reviewer looked under
+papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/REVISION.md:113:end.** Its `B PATHS` check reports `figures/…` as AMBIGUOUS because `figures/`
+papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/ADVERSARIAL_ROUND.md:119:   `figures/fig1_concept_timeline.txt` under this run, because the committed
+papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/evidence-review-todo.md:635:> **All nine `figures/…` paths cited by `PAPER.md` resolve.** The reviewer looked
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-empty-as-negative.md:79:  **`figures/check_coverage.py:184`（`if not rows and slug in note_blob: continue`）**
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-environment-as-semantics.md:172:  `figures/sources.py:421-455`：`git ls-files` 失败 → 规则进 `TRACKING_UNAVAILABLE`
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:141:  into `AMBIGUOUS`, because `figures/` exists both at the repository root and
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:142:  beside `PAPER.md`. `figures/out/dark/fig06_concept_timeline.svg` was added to
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:144:  `figures/PARITY.md` ruling to a file the list omitted — its own light twin is
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/RUN_STATE.md:155:  (it is the parity witness), `figures/check_figure_parity.py` reads three keys
+papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/SECTION_RENUMBER.md:57:* Roughly 60 apparent hits elsewhere in the repository (`figures/PLAN.md §3/§10`,
+papers/phase1-workshop/runs/P-16.json:36:    "figures/": "fig1 concept-birth timeline, fig2 coverage x accuracy, fig3 A2 ledger flow — each a .py extractor, a data/*.json payload and a .txt rendering",
+papers/phase1-workshop/sections/03_a0.md:31:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/sections/03_a0.md:32:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/sections/03_a0.md:33:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/sections/03_a0.md:103:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/sections/03_a0.md:104:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/sections/03_a0.md:105:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/sections/05_a2.md:134:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/sections/05_a2.md:135:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/sections/05_a2.md:136:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/verify_paper.py:19:                                 nowhere. `figures/` is the live instance: the
+papers/phase1-workshop/verify_paper.py:21:                                 while sitting next to a local `figures/` holding
+papers/phase1-workshop/verify_paper.py:25:                 into a scratch tree and compare against `figures/data/*.json`.
+papers/phase1-workshop/verify_paper.py:64:    "figures/.verify/",
+papers/phase1-workshop/verify_paper.py:69:# The rule is `figures/PARITY.md`'s: the paper cites the repository-root figure
+papers/phase1-workshop/verify_paper.py:76:    token: "repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)"
+papers/phase1-workshop/verify_paper.py:78:        "figures/fig05_a2_repair_loop.py",
+papers/phase1-workshop/verify_paper.py:79:        "figures/fig06_concept_timeline.py",
+papers/phase1-workshop/verify_paper.py:80:        "figures/fig07_a0_vs_a0prime.py",
+papers/phase1-workshop/verify_paper.py:81:        "figures/out/light/fig05_a2_repair_loop.svg",
+papers/phase1-workshop/verify_paper.py:82:        "figures/out/light/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:83:        "figures/out/light/fig07_a0_vs_a0prime.svg",
+papers/phase1-workshop/verify_paper.py:84:        "figures/out/dark/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:85:        "figures/csv/fig05_a2_repair_loop.csv",
+papers/phase1-workshop/verify_paper.py:86:        "figures/csv/fig06_concept_timeline.csv",
+papers/phase1-workshop/verify_paper.py:87:        "figures/csv/fig07_a0_vs_a0prime.csv",
+papers/phase1-workshop/verify_paper.py:195:    scripts = sorted(HERE.glob("figures/fig[0-9]*.py"))
+papers/phase1-workshop/verify_paper.py:197:        return False, [fail("  no figure extractors found under figures/")]

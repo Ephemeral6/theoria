@@ -179,3 +179,87 @@ def test_both_new_probes_are_registered():
     """A probe that exists and is not wired in is the purest form of this bug."""
     assert scan.PROBES["clock_sanity"] is scan.probe_clock_sanity
     assert scan.PROBES["disk_headroom"] is scan.probe_disk_headroom
+
+
+# ------------------------------- clock_sanity: the scope, widened (S30)
+
+def _repo_with(tmp_path, monkeypatch, heartbeats=(), manifests=(), sync_lines=()):
+    root = tmp_path / "repo"
+    (root / "monitor" / "ops-status").mkdir(parents=True)
+    for name, stamp in heartbeats:
+        (root / "monitor" / "ops-status" / ("%s.json" % name)).write_text(
+            json.dumps({"id": name, "utc": stamp}), encoding="utf-8")
+    for territory, run, stamp in manifests:
+        d = root / territory / "runs" / run
+        d.mkdir(parents=True)
+        (d / "MANIFEST.json").write_text(
+            json.dumps({"prompt_id": run, "utc": stamp}), encoding="utf-8")
+    if sync_lines:
+        (root / "PARTNER_SYNC.md").write_text("\n".join(sync_lines),
+                                              encoding="utf-8")
+    monkeypatch.setattr(scan, "ROOT", str(root))
+    return root
+
+
+def test_a_manifest_stamped_in_the_future_is_caught(tmp_path, monkeypatch):
+    """The instance the first version of this probe could not see.
+
+    I wrote it to read heartbeats -- the one case I had noticed -- and then put
+    the same error into a run manifest in the same session. A probe whose scope
+    is pinned to its first sample misses the rest of its own class.
+    """
+    _repo_with(tmp_path, monkeypatch,
+               manifests=[("monitor", "20260729T1430Z-x", _stamp(+4 * 3600))])
+    r = scan.probe_clock_sanity()
+    assert r["status"] == "risk", r
+    assert "manifest" in r["detail"]
+
+
+def test_a_partner_sync_paragraph_stamped_in_the_future_is_caught(tmp_path,
+                                                                  monkeypatch):
+    _repo_with(tmp_path, monkeypatch,
+               sync_lines=["## [engine-rig] %s S99-thing" % _stamp(+6 * 3600),
+                           "状态：x"])
+    r = scan.probe_clock_sanity()
+    assert r["status"] == "risk", r
+    assert "PARTNER_SYNC" in r["detail"]
+
+
+def test_all_three_sources_are_in_scope(tmp_path, monkeypatch):
+    """The whole point of S30: one class, three places it is written."""
+    _repo_with(tmp_path, monkeypatch,
+               heartbeats=[("RES-9", _stamp(-60))],
+               manifests=[("monitor", "20260729T1000Z-y", _stamp(-60))],
+               sync_lines=["## [engine-rig] %s S98-thing" % _stamp(-60)])
+    kinds = {l.split()[0] for l, _p, _s, _e in scan._stamps_to_check()}
+    assert kinds == {"heartbeat", "manifest", "PARTNER_SYNC"}
+
+
+def test_honest_stamps_across_all_three_are_green(tmp_path, monkeypatch):
+    """The companion green: a probe hardwired to risk would pass the rest."""
+    _repo_with(tmp_path, monkeypatch,
+               heartbeats=[("RES-9", _stamp(-60))],
+               manifests=[("monitor", "20260729T1000Z-y", _stamp(-60))],
+               sync_lines=["## [engine-rig] %s S98-thing" % _stamp(-60)])
+    assert scan.probe_clock_sanity()["status"] == "green"
+
+
+def test_an_old_partner_sync_paragraph_is_not_flagged_as_drift(tmp_path,
+                                                               monkeypatch):
+    """PARTNER_SYNC is append-only, so old headers are legitimately far older
+    than the file. Only the future check applies to them."""
+    _repo_with(tmp_path, monkeypatch,
+               sync_lines=["## [engine-rig] 2026-07-01T00:00:00Z S1-old",
+                           "状态：ancient but honest"])
+    assert scan.probe_clock_sanity()["status"] == "green"
+
+
+def test_a_manifest_without_utc_is_left_to_the_provenance_probe(tmp_path,
+                                                               monkeypatch):
+    """Two probes shouting about one fact is how both get ignored."""
+    root = _repo_with(tmp_path, monkeypatch)
+    d = root / "monitor" / "runs" / "20260729T1000Z-z"
+    d.mkdir(parents=True)
+    (d / "MANIFEST.json").write_text(json.dumps({"prompt_id": "z"}),
+                                     encoding="utf-8")
+    assert scan.probe_clock_sanity()["status"] == "green"

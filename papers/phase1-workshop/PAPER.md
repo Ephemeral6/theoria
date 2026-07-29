@@ -346,7 +346,7 @@ Be precise about what was named, because the precision is the whole argument. R-
 names three **directions** — `press_up`, `press_down`, `press_right` — and one
 concrete configuration, "drive the Cart to (2,2) and push DOWN into an unpressed
 Button". It does not enumerate the coordinate pairs; the phrase "the three pairs
-R-05 named" appears in `THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
+R-05 named" appears in `cold-start-a0/THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
 makes the same gloss in different words — both written at M6 *after* the score
 existed, and this paper does not inherit either as if it were the
 pre-registration. The claim that survives is still the one
@@ -546,7 +546,8 @@ row's `status` is the literal string `"candidate"`
 the manual, and why, is written down by the LLM in a `THEORIZE_LOG.md` — one
 entry per proposal, with its evidence and its cost. Those logs are the primary
 evidence for most of what follows, and they were written before the scores
-existed.
+existed (`a0-spike/THEORIZE_LOG.md`, `cold-start-a0/THEORIZE_LOG.md`,
+`cold-start-a2/THEORIZE_LOG.md`, `cold-start-a3/THEORIZE_LOG.md`).
 
 The division has teeth in both directions. `a0-spike/THEORIZE_LOG.md` T-6
 records the adjudicator proposing a conservation law — the box never changes
@@ -628,7 +629,7 @@ from the Phase 3 claim menu.
 A0 is a self-built world, not a benchmark task. `cold-start-a0/A0_REPORT.md` §1
 records what was built at each milestone: a 9×9 arena containing a Cart, a
 Button, a Door and a Portal, **59 reachable states**, walked by a deterministic
-explorer into a **276-frame** `raw_trace.jsonl` (M1). The world's ground truth
+explorer into a **276-frame** `cold-start-a0/artifacts/raw_trace.jsonl` (M1). The world's ground truth
 exists as a file and was sealed — `cold-start-a0/THEORIZE_LOG.md` stamps the
 first read at M6, after M4 and M5 were green — M5 being the unsolvable-variant
 milestone, not a planning stage.
@@ -636,7 +637,7 @@ milestone, not a planning stage.
 The pipeline over that trace is the framework's, run end to end: board
 extraction, then `mdl_segmenter`, multi-track CEGIS, `zero_space` and
 `probe_frontier`, producing **29 schema-valid candidates** (M2;
-`cold-start-a0/artifacts/candidates.jsonl`. `THEORIZE_LOG.md`'s Round 0 opens on
+`cold-start-a0/artifacts/candidates.jsonl`. `cold-start-a0/THEORIZE_LOG.md`'s Round 0 opens on
 28 — it counts the 28 it adjudicated, the 29th row being a `plan`); then LLM
 adjudication of every candidate into `cold-start-a0/theory/theory.dsl` — **3 objects, 7 rules,
 2 invariants, 1 pending theorem**, reasoning recorded in
@@ -658,7 +659,7 @@ is unflattering: the manual was revised **zero** times by certify, and every
 iteration that did happen was in the compiler.
 
 The eighteenth entry is worth a sentence, because an earlier draft of this
-figure counted it. `THEORIZE_LOG.md` records **no verdict** for probe P-03; the
+figure counted it. `cold-start-a0/THEORIZE_LOG.md` records **no verdict** for probe P-03; the
 figure marks it `verdict-absent` and does not count it as adjudicated, where the
 paper's own earlier figure script had filled the gap with the placeholder string
 `"see body"` and counted it eighteen. The count is seventeen. The disagreement,
@@ -707,7 +708,7 @@ vanishes and 87 appears, because the Cart stands constantly adjacent to the
 Button; the uniform-colour operator gave **3 tracks**. Script bits: **6511 vs
 4423**. The framework's own criterion picked the right operator with no thumb on
 the scale. (Those are the figures in `cold-start-a0/A0_REPORT.md` §3 and
-`THEORIZE_LOG.md` O-01. `cold-start-a0/artifacts/engines_report.json` has since
+`cold-start-a0/THEORIZE_LOG.md` D-A0-007. `cold-start-a0/artifacts/engines_report.json` has since
 moved on — it now reports 5704 bits over 6 tracks, with 6511/90 demoted to
 `reidentification.*_before` — so the artefact and the report disagree, and the
 paper quotes the report the adjudication was actually made from.)
@@ -1151,16 +1152,69 @@ world can strengthen it three ways (`cold-start-a2/A2_REPORT.md` §1):
    `history_trace = raw_trace[0 .. portal_transition]`, the cut index found from
    the frames' geometry as the single non-adjacent Cart move (ibid.,
    `cut_rule`). "Was the history curated?" has a mechanical answer.
-3. **The isomorphism is machine-checked, clause by clause:**
+3. **Six clauses of §1.3's DC22 example have a counterpart in the built world,
+   and each counterpart was decided by a named artefact rather than by this
+   paper's say-so.** Six, not all of them: the same paragraph also concludes that
+   a perfect replay score can coexist with bankrupt understanding, and that the
+   failure is structural rather than an implementation flaw. Those are readings of
+   the example, not properties a world can be checked against. D-A2-001 authorised
+   a world "isomorphic to DC22's failure structure" and then restricted the
+   argument for it — it "may cite only the structural description already printed
+   in Theoria §1.3" (§5.1). DC22 itself is out of reach under the pile cut and no
+   row below touches it, so what this table can settle is a correspondence with
+   the *description*: the world was built to what §1.3 says. Two of the six are
+   properties the world was constructed to have — the hole was made by deleting a
+   rule, and the level was built solvable — so what an artefact settles there is
+   that the construction succeeded, which is worth checking and is not the same
+   as a discovery. The strength is not uniform down the column, which is what
+   `kind` is for: the row marked `Lean` rests on a kernel proof, 148 states
+   decided by `decide` with no Mathlib and no `native_decide`, whose empty axiom
+   list counts as evidence only alongside what §5.3 shows about it — 148 real
+   states decided by the kernel — because §6.6 exhibits a theorem from this same
+   toolchain that passes with an empty axiom list and proves nothing, kept in the
+   tree so that the empty list is never read as a guarantee on its own. The rest are properties a script computed from an artefact, and one is
+   an episode the world was made to run.
 
-| `Theoria.md` §1.3 | A2's check | result |
-|---|---|---|
-| "漏了一条传送规则" | `cold-start-a2/artifacts/engines_diff.json` — the only proposal with \|dy\|+\|dx\| > 1 | `obj1_jump_DOWN`, 1/1 |
-| 缺的那条传送规则从未触发 (compressed) | `cold-start-a2/artifacts/trace_summary.json` — the history's one omitted pair | `cart=(6,4) pressed=1 act=DOWN` |
-| "不欠任何一帧" | `certify_cheap` on the play record | 184/184, 0 anomalies |
-| 模型重放 175/175 全对 (compressed) | the miner on the history proposes **no** jump | `history_proposes_a_jump: false` |
-| "完备搜索'正确地'证明了目标不可达" | plan UNSAT + Lean `unsolvable`, axioms `[]` | green |
-| "而这一关人类可解" | an 18-action episode ends with `win: true` | refuted |
+| `Theoria.md` §1.3 | A2's check | kind | result |
+|---|---|---|---|
+| "漏了一条传送规则" | `cold-start-a2/artifacts/engines_diff.json` — in the **sweep** stream, the only proposal with \|dy\|+\|dx\| > 1 | artefact | `obj1_jump_DOWN`, coverage `1/1` |
+| "缺的那条传送规则从未触发" | `cold-start-a2/artifacts/trace_summary.json` — the history's one omitted pair | artefact | `cart=(6,4) pressed=1 act=DOWN` |
+| "不欠任何一帧" | `certify_cheap` on the play record (`cold-start-a2/artifacts/exhibit_report.json`) | artefact | 183 transitions and 14 904 pixels, `pixels_unexplained: 0`, `anomaly_kinds: []` |
+| "模型重放 175/175 全对" | the miner on the **history** stream proposes **no** jump (`cold-start-a2/artifacts/engines_diff.json`) | artefact | `history_proposes_a_jump: false` |
+| "完备搜索"正确地"证明了目标不可达" | Lean `unsolvable` with `#print axioms` empty (`cold-start-a2/theory/generated_holed/theory.lean`; the run's verdict in `cold-start-a2/artifacts/exhibit_report.json`), corroborated by the plan beside it, below | Lean | green, `axioms: []` |
+| "而这一关人类可解" | an 18-action episode ends on the goal cell (`final_win: true`, `win_frames: [18]`) (`cold-start-a2/artifacts/refutation.json`) | episode | confirmed — 18 actions, win on frame 18, and it is the manual's `unsolvable` **theorem** that this refutes |
+
+   Two rows carry fine print that belongs in the open rather than in a later
+   subsection. **The `Lean` row rests on two legs of different provenance, and
+   both hold.** The kernel proof is the leg the `kind` column names. The plan
+   beside it comes from the bundled BFS stub rather than from Fast Downward
+   (`cold-start-a2/a2pipeline/plan.py`, `prefer="stub"`), which is weaker in
+   provenance but not in kind: the stub is optimal for unit costs, and it reports
+   UNSAT only by closing the space without reaching the goal — the adapter raises
+   rather than returns when a budget is what stopped it
+   (`engine-rig/engines/fd_adapter/search.py`) — so its UNSAT is a statement about
+   the manual and not about the search. Nor is that UNSAT an artefact of §5.8's
+   **D-A2-006**: the ungrounded teleport was a defect of the imported backend, and
+   A2 worked around it in `cold-start-a2/a2pipeline/compile_a2.py`
+   (`pddl_addressable`) before any of these plans were run. With the workaround the
+   planner separates the manuals it is given — **SAT in 18 on both manuals that
+   contain the teleport rule** (`cold-start-a2/artifacts/plan_generated.json`,
+   `cold-start-a2/artifacts/plan_repaired.json`) and **UNSAT only on the holed
+   one** (`cold-start-a2/artifacts/plan_holed.json`). The differential is the hole,
+   which is what the clause 完备**搜索** asks for. An earlier draft of this
+   paragraph said the opposite — that the planner returns UNSAT either way and so
+   carries no weight — by quoting D-A2-006's finding and dropping its remedy; three
+   artefacts, §5.3's quotation of the source report and §5.5's own beat table all
+   contradicted it, and none of the paper's six gates could see that, because they
+   check that a citation resolves and not that it says what it is cited for.
+   **And no clause in this table comes out against the built world.** The
+   `episode` row confirms its clause as strongly as any row here — the level is
+   solvable, and the episode solves it. What the episode refutes is the manual's
+   theorem, which is the whole of what §5.3's exhibit exists to display
+   (`cold-start-a2/artifacts/refutation.json`, whose `verdict` field names the
+   theorem as the refuted object). An earlier draft of this table put the bare word
+   "refuted" in that row's result cell, and readers — including a reviewer
+   examining this very sentence — read it as the clause having failed.
 
 ### 5.3 The exhibit
 
@@ -1187,7 +1241,7 @@ unaltered and unassisted (`cold-start-a2/artifacts/exhibit_report.json`):
 | plan (`fd_adapter`) | **UNSAT** (`cold-start-a2/artifacts/plan_holed.json`) |
 | certificate | `zero_space` → 21-cell occupancy law → 0/1 pagoda weight |
 | certify, expensive | **GREEN** — Lean 4.9.0, `decide` only, no `sorry` |
-| `#print axioms unsolvable` | **`[]`** (`cold-start-a2/theory/generated_holed/theory.lean`) |
+| `#print axioms unsolvable` | **`[]`** — the command is at `cold-start-a2/theory/generated_holed/theory.lean`, its output at `cold-start-a2/artifacts/exhibit_report.json` (`certify_lean.axiom_reports`) |
 
 `theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true` — **148 states**,
 all decided by the kernel, no Mathlib, no `native_decide`. And the world reaches
@@ -1232,15 +1286,15 @@ and the plate never shows the ledger's own 8/8 summary.
 
 Truth is the referee throughout and reaches the manual only as frames: `cold-start-a2/a2pipeline/refute.py`
 writes the world's solved episode out as a four-field trace, and the world is
-reached only through `probe.py`'s `Environment` — actions in, frames out. No
+reached only through `cold-start-a2/a2pipeline/probe.py`'s `Environment` — actions in, frames out. No
 theorizing step reads `cold-start-a2/artifacts/ground_truth.json`, and nothing reads
 `env._state`.
 
 That is the defensible form of the discipline, and it is weaker than the form
 `cold-start-a2/DECISIONS.md` D-A2-010 states. D-A2-010 says `locate.py` and
-`probe.py` "import no world module at all"; they do —
+`cold-start-a2/a2pipeline/probe.py` "import no world module at all"; they do —
 `cold-start-a2/a2pipeline/probe.py:59` is `from a2world import a2_world`, used to
-construct the `Environment` at line 108, and `locate.py:36` imports
+construct the `Environment` at lines 108-109, and `locate.py:36` imports
 `a2world.ground_truth`, which pulls the world transitively. The isolation is
 enforced by what those modules are *allowed to call*, not by the import graph,
 and the paper states it that way.
@@ -1302,8 +1356,13 @@ The headline artefact is a pair, not a file (`cold-start-a2/A2_REPORT.md` §4):
 `cold-start-a2/A2_REPORT.md` §4 says the two files "differ in their weight table
 and in nothing else", and `cold-start-a2/DECISIONS.md` D-A2-005 repeats it. That
 is not true, and this paper cannot repeat it, because a rule of this draft is
-that any check it invites must survive being run. `diff` the two files and 52
-lines change across 7 hunks. Fourteen are the weight table. The rest are:
+that any check it invites must survive being run. `diff -u` the two files and 52
+lines change across 7 hunks — the unified default of three context lines is what
+groups them into 7, and a reader running plain `diff` gets the same 52 lines in
+15 groups, so the hunk count is a property of the command and the line count is
+not. Twenty-eight of the 52 are the weight table — fourteen entries, each a removed
+line against its replacement, which is why the entry count and the line count are
+not the same number. The rest are:
 
 * **`def Goal`** — `s.cart == Cell.c10`, the goal cell (2,7), against
   `s.cart == Cell.c34`, the sealed pocket (7,1). The two theorems are about
@@ -1360,7 +1419,13 @@ backend cannot ground a teleport — `gen_pddl_a0` emits a cell object only for
 cells in the derived arena, a static coloured Portal entry is never in it, so
 `teleport-down`'s `?p - markedcell` parameter has no inhabitant and the planner
 returns UNSAT on a manual *containing* the rule; A0's goal was reachable through
-the Door, so the bug was latent and returned a correct answer by luck.
+the Door, so the bug was latent and returned a correct answer by luck. **It was
+worked around in A2 before any A2 plan was run** — `pddl_addressable` in
+`cold-start-a2/a2pipeline/compile_a2.py` admits every cell a guard names by
+colour into the PDDL cell universe, and every compile calls it — so the plan
+verdicts in §5.2, §5.3 and §5.5 are the fixed backend's, not the broken one's.
+Recording the finding without its remedy is what let a later draft of §5.2 treat
+every A2 plan verdict as worthless;
 **D-A2-007**: `lean_check` destroys the diagnostic exactly when there is one,
 because it decodes the toolchain's output with the process locale and A0 never had
 a red Lean file, while A2 has one on purpose (`cold-start-a2/DECISIONS.md`
@@ -1450,7 +1515,7 @@ not a held-out split — A3 has no held-out set.
 
 **And the control scores the same.** The third row of that artefact is "the
 control arm's manual, induced from level 2's own sweep", and it is also right on
-**252 of 252** (`score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
+**252 of 252** (`cold-start-a3/artifacts/score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
 Earlier drafts of this section reported the carried manual's 252/252 and did not
 print the control's, which made an undiscriminating number look like the result.
 It is not: **on accuracy the two arms are tied at ceiling, and this measurement
@@ -2180,7 +2245,7 @@ compare capability rather than economics, raise the action budget first, and thi
 envelope knows nothing about the variance in that regime. The arithmetic behind it
 is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
 `g50t` takes 78 successful actions against an authorised budget of 40 per level
-(`FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
+(`theoria-arm/runs/20260728T210000Z-a3-level-boundary/FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
 first level**, so the column is not a measurement that came back
 empty — it is a measurement that was never affordable.
 
@@ -2377,7 +2442,7 @@ section:
 > does not run, and it fails in the direction that looks like success.
 
 The repair added label derivation from the key, and it did not fully close the
-hole: `leakage.json` records `label_sets_checked: []` for the handover and
+hole: `exam/artifacts/leakage.json` records `label_sets_checked: []` for the handover and
 adaptation papers, so the positional and metadata checks still run on nothing for
 two of the four. The directory's own reading is the one we adopt — "the static
 checks are necessary and cheap, and the adversarial reader is the one that found
@@ -2984,7 +3049,7 @@ recorded in its place — and the retraction was carried into the digest with it
 reason: the retraction itself needs a record.
 
 **The retraction is itself incomplete.** A downstream worker re-opened it on a
-different mechanism: `dividend.json` is written by `json.dump` *before* the
+different mechanism: `engine-rig/runs/p13-fd-real/dividend.json` is written by `json.dump` *before* the
 human-readable renderer is called, so in the double-crash scenario the misleading
 field did reach the JSON artefact regardless; the `%d` crash protected only the
 prose. The repair therefore does not rely on the crash
@@ -3080,7 +3145,7 @@ list them. They are the primary evidence for six work items and for this section
 They are therefore cited here through byte-verbatim copies committed into this
 paper's run directory
 (`papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/`,
-with their origin and sha256 recorded in the run's `MANIFEST.json`), and the line
+with their origin and sha256 recorded in the run's `papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/MANIFEST.json`), and the line
 references in this section are line numbers in those copies. Citing a path that
 resolves on one laptop is the documentary form of the error this section is
 about: a claim whose support cannot be reached by the person reading the claim.
@@ -3231,7 +3296,8 @@ plainly:
 The consequence is visible in the battery: `battery/REPORT_V0.md` records that
 "A0 ran engines and hand adjudication with no LLM in the loop, so it has no model
 calls", which is why **every economy metric is `not-applicable` on the Theoria
-arm**. The adjudication records in `THEORIZE_LOG.md` are genuine and were written
+arm**. The adjudication records in `cold-start-a0/THEORIZE_LOG.md` and
+`cold-start-a2/THEORIZE_LOG.md` are genuine and were written
 before the scores existed, but nothing here measures a prompted theorize step
 inside a harness, and no number in this paper should be read as one.
 
@@ -3293,8 +3359,9 @@ Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees wi
 the stub on all three instances including the UNSAT variant, with no caller code
 changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
 `cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
-a separate conformance artefact. The reproducible pipeline (`run_all.py`,
-`prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
+a separate conformance artefact. The reproducible pipeline (`cold-start-a0/run_all.py`,
+`prime.run_prime`) plans through `cold-start-a0/pipeline/plan_stage.py:59`,
+which calls `solve(..., prefer="stub")` **on purpose**, so its
 checked-in artefacts stay byte-identical whether or not a planner is installed.
 §3.1's 12-step plan and every other planning figure in §3 are the stub's. The
 stub is length-optimal for unit costs, so SAT/UNSAT verdicts and plan lengths are
@@ -3307,7 +3374,7 @@ an absolute path into a `.toolchain/` directory that is gitignored and not in th
 tree. Three of the repository's own statements about this disagree —
 `cold-start-a0/A0_REPORT.md` §5 and §6.5 say "still not connected", its §8 item 4
 says FD "could not be built (three failed compiler attempts)", and
-`BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record the successful install dated
+`BLOCKER_FAST_DOWNWARD.md` and `cold-start-a0/STATUS.md` record the successful install dated
 2026-07-28. The install is the latest. None of the three was edited, as no report
 in this repository is; where they disagree the paper cites all of them and says
 which is later.

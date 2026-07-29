@@ -750,64 +750,47 @@
         {
           "format": "pdf",
           "path": "figures/paper/light/figure6_bill_shape.pdf",
-          "sha256": "d4397dd8307a2647b4139c19d8720658ccbac6f871ba5c2141988fe8280564dc",
+          "sha256": "e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/paper/light/figure6_bill_shape.png",
-          "sha256": "b451c444f9bb4a119026af7a1b48c1a379f2ea61027d9a808f4711563b24096d",
+          "sha256": "9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/paper/light/figure6_bill_shape.svg",
-          "sha256": "5d9ca18774e6181ef25d872281c8166318b40e287f99b887a5d97dd326086af0",
+          "sha256": "6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c",
           "theme": "light"
         },
         {
           "format": "pdf",
           "path": "figures/paper/dark/figure6_bill_shape.pdf",
-          "sha256": "ca805a75bbd858d040003484a91be3f8160b1a4771fd8efe8c63cbab50e60fcc",
+          "sha256": "6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/paper/dark/figure6_bill_shape.png",
-          "sha256": "6c218b1d8b5b8ea8a70e3e6bcbd501e1db2a6f59a2d4f53b4530169ce38c2079",
+          "sha256": "557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c",
           "theme": "dark"
         },
         {
           "format": "svg",
           "path": "figures/paper/dark/figure6_bill_shape.svg",
-          "sha256": "95ff2f6c760ffbf1dd88d060f1251c29ea41d194b13001c92cede69e33aeb2e8",
+          "sha256": "4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8",
           "theme": "dark"
         }
       ],
       "cite": "Figure 6",
       "csv": {
         "path": "figures/csv/fig02_bill_shape.csv",
-        "sha256": "168d99576a30f95fbf1543459cdb045723cecfa4c44dc61d95b827954e49a399"
+        "sha256": "7ebba11c7006c2bd1681067bffec2538509083b30dc573086c5189d348138c2a"
       },
       "generator": "figures/fig02_bill_shape.py",
-      "missing_sources": [
-        {
-          "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
-          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
-        },
-        {
-          "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
-          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
-        },
-        {
-          "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
-          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
-        },
-        {
-          "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
-          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
-        }
-      ],
+      "missing_sources": [],
       "number": 6,
       "pipeline_plate": "fig02_bill_shape",
       "pub_name": "figure6_bill_shape",
@@ -849,25 +832,25 @@
         {
           "format": "svg",
           "path": "figures/out/light/fig02_bill_shape.svg",
-          "sha256": "5d9ca18774e6181ef25d872281c8166318b40e287f99b887a5d97dd326086af0",
+          "sha256": "6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/out/light/fig02_bill_shape.png",
-          "sha256": "e12467c84af52fc2f70b370b30a0b65dc578365d510d8387055503c3785cb8c7",
+          "sha256": "5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/out/dark/fig02_bill_shape.svg",
-          "sha256": "95ff2f6c760ffbf1dd88d060f1251c29ea41d194b13001c92cede69e33aeb2e8",
+          "sha256": "4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/out/dark/fig02_bill_shape.png",
-          "sha256": "7f9a31ddfdea5eb260f99123c67b97e934eb03349bf36920ac82657b917917dc",
+          "sha256": "a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989",
           "theme": "dark"
         }
       ],
@@ -1010,29 +993,29 @@
         },
         {
           "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
-          "present": false,
-          "sha256": null,
+          "present": true,
+          "sha256": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9",
           "tracked": false,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
-          "present": false,
-          "sha256": null,
+          "present": true,
+          "sha256": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5",
           "tracked": false,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
-          "present": false,
-          "sha256": null,
+          "present": true,
+          "sha256": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0",
           "tracked": false,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
-          "present": false,
-          "sha256": null,
+          "present": true,
+          "sha256": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b",
           "tracked": false,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
@@ -1114,7 +1097,7 @@
           "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
         }
       ],
-      "status": "partial",
+      "status": "complete",
       "supersedes": [],
       "title": "Bill shape: what each arm's turns cost, and when"
     }

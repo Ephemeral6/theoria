@@ -34,6 +34,17 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
 .live i{width:8px;height:8px;border-radius:99px;background:var(--st-green);
  animation:pulse 1.8s infinite}
 @keyframes pulse{50%{opacity:.3}}
+/* S30: 三态的数据年龄，以及扫描失败时整页的红。灰=未知，红=确实陈旧。 */
+.live.stale{color:var(--risk);font-weight:700}
+.live.stale i{background:var(--st-risk);animation:none}
+.live.unknown{color:var(--missing)}
+.live.unknown i{background:var(--missing);animation:none}
+.scanfail{background:var(--riskbg);border:1px solid var(--risk);
+ border-left:6px solid var(--risk);border-radius:11px;padding:20px 24px;margin-bottom:18px}
+.scanfail h1{color:var(--risk);margin:0 0 8px}
+.scanfail p{margin:8px 0 0;font-size:14px;max-width:70ch}
+.scanfail pre{margin:12px 0 0;padding:12px 14px;background:var(--missingbg);
+ border-radius:8px;overflow-x:auto;font-size:12px;white-space:pre-wrap;word-break:break-word}
 .topstats{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
 .ts2 b{display:block;font-size:20px;font-family:system-ui,sans-serif}
 .ts2 span{font-size:12px;color:var(--mut)}
@@ -143,8 +154,60 @@ function gridMap(s){
   return h + "</tbody></table></div>";
 }
 
+/* S30. 「上一次扫描崩了」和「什么都没发生」必须长得不一样。
+   这个函数以前不存在，于是一份失败的 state.json 会被下面 render() 里
+   满地的 `|| []` / `?? 0` 渲染成一屏漂亮的零——比陈旧数据更坏：
+   陈旧至少还是真发生过的数字，零是凭空造的。 */
+function ago(sec){
+  if(sec < 90) return sec + " 秒";
+  if(sec < 5400) return Math.round(sec/60) + " 分钟";
+  if(sec < 172800) return (sec/3600).toFixed(1) + " 小时";
+  return (sec/86400).toFixed(1) + " 天";
+}
+
+/* 三态：ok / stale / unknown。读不出生成时刻是 unknown，不是 0 分钟前。 */
+function freshness(s){
+  const t = s.generated_epoch, lim = s.stale_after_s;
+  if(typeof t !== "number" || !(t > 0))
+    return {cls:"unknown", text:"数据年龄未知：state.json 没带生成时刻。未知不写成 0"};
+  const age = Math.floor(Date.now()/1000) - t;
+  if(age < -120)
+    return {cls:"unknown", text:"生成时刻在未来 " + ago(-age) + "，时钟不一致，年龄不可信"};
+  const a = Math.max(0, age);
+  if(typeof lim === "number" && lim > 0 && a >= lim)
+    return {cls:"stale", text:"数据是 " + ago(a) + "前的，已超过两个扫描周期（"
+      + ago(lim) + "）——扫描可能已经挂了"};
+  return {cls:"", text:"数据 " + ago(a) + "前 · 每 20 秒自动刷新"};
+}
+
+function renderFailed(s){
+  const e = s.scan_error || {};
+  const last = s.last_success_at || null;
+  const lastEp = s.last_success_epoch;
+  const lastLine = last
+    ? ("最后一次成功扫描：<b>" + esc(String(last)) + "</b>"
+       + (typeof lastEp === "number"
+          ? "（" + ago(Math.max(0, Math.floor(Date.now()/1000) - lastEp)) + "前）" : ""))
+    : "读不到上一份 state.json，所以连上次成功是什么时候都不知道——不知道不写成 0。";
+  document.getElementById("root").innerHTML = `<div class="scanfail">
+    <h1>扫描失败</h1>
+    <p>这一页没有数据。上一次扫描崩了，<b>所以这里不显示旧数字，也不显示零</b>
+      ——旧数字配上新时间戳，和「一切正常」在页面上长得一模一样。</p>
+    <p>${lastLine}</p>
+    <p><code>${esc(e.type || "未知异常")}</code>
+      ${esc(e.message || "")}<br>位置：<code>${esc(e.where || "未知")}</code></p>
+    <pre>${esc(e.traceback || "（没有 traceback）")}</pre>
+    <p class="note">崩溃已记入 <code>monitor/crashes.jsonl</code>（被跟踪）；
+      分类见 <code>monitor/CRASHES.md</code>。扫描恢复后本页自动变回盘面。</p>
+  </div>`;
+}
+
 function render(s){
+  if(s.scan_ok === false) return renderFailed(s);
   const p = s.paper_progress ?? 0;
+  /* 算一次用一次：分两次调用会让 class 与文字取自两个时刻，
+     恰好跨过阈值时页面会说「新鲜」却涂成红的。 */
+  const fresh = freshness(s);
   const ag = s.agents || {};
   const ops = ag.ops || [], workers = ag.workers || [];
   const opsLive = ops.filter(o => o.age_min != null && o.age_min < 180).length;
@@ -159,7 +222,7 @@ function render(s){
       <p class="one">目标：一篇实验规模对标 Schema 的可发表论文。
         手下 <b>${ops.length} 个运维</b> + <b>${workers.length} 个研究员</b>，
         累计交付 <b>${delivered.length}</b> 件工作。</p>
-      <div class="live"><i></i>数据 ${esc((s.generated_at||"").slice(5,16))} · 每 20 秒自动刷新</div>
+      <div class="live ${fresh.cls}"><i></i>${esc(fresh.text)}</div>
     </div>
     <div class="topstats">
       <div class="ts2"><b>${opsLive}</b><span>运维在岗</span></div>

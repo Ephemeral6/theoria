@@ -5,7 +5,7 @@ which has since moved. A report cannot fail a build. This is the executable half
 of the same rule, and it is meant to be run before every push that touches
 `papers/phase1-workshop/`.
 
-Five checks, each independently reported, exit code 1 if any fails:
+Six checks, each independently reported, exit code 1 if any fails:
 
   A. GENERATED   `PAPER.md` is byte-identical to `assemble.py`'s output from
                  `sections/*.md`. The header says "do not hand-edit"; this is the
@@ -66,6 +66,48 @@ Five checks, each independently reported, exit code 1 if any fails:
                      small cardinals are not.
                    * **`section-word` ranges are greedy.** "Steps 3 to 4200"
                      exempts 4200 as part of a step range.
+
+  F. BARE        No body citation is a bare filename that could mean several
+                 files. Check B skips a token with no `/` **by design** -- it
+                 resolves paths, and a bare filename is not one -- while check E
+                 accepts it if the basename exists anywhere. So `MANIFEST.json`,
+                 125 real files here, satisfied both while pointing a reader at
+                 none of them. The bar is ambiguity, not bareness: one candidate
+                 is locatable, and flagging every `Theoria.md` would make the
+                 gate noise.
+
+                 Known gaps, all reproduced against the live scanner:
+
+                   * **Uniqueness is not findability, and it is the proxy this
+                     check is built on.** The sharpest case is in the paper:
+                     §10 cites four `SURVEY-*.md` bare, each unique, so F passes
+                     them -- while §10.7 says those files exist only as
+                     untracked files in a machine-local worktree on a branch
+                     that was never pushed. F calls the paper's least
+                     resolvable citations locatable. It is also unstable:
+                     deleting a file takes a token from one candidate to zero.
+                   * **A path is a free exit.** F skips anything with a `/` and
+                     defers to B, which does not catch `/STATUS.md`,
+                     `figures/*.csv`, or a directory-only `engine-rig/`.
+                   * **One character outside the token class hides a citation
+                     from all three checks.** `STATUS.md#seal`, `~/STATUS.md`,
+                     `**STATUS.md**` and `STATUS.md:L12` never match
+                     `CITE_TOKEN` at all, so they are not read rather than
+                     failed. `:L12` reopens exactly what the `:722-724` support
+                     closed.
+                   * **The candidate set is the working tree, not the commit.**
+                     `_candidates` walks the filesystem, so untracked scratch
+                     changes a verdict. `git ls-files` would fix it.
+                   * **Nothing checks the anchor inside the file.** F resolves
+                     `THEORIZE_LOG.md` to one path; that the entry id beside it
+                     is right is unchecked, and P17 shipped a wrong one
+                     (`O-01` for what the log calls `D-A0-007`).
+                   * **False positives F does flag:** a directory supplied in
+                     the same sentence, a verbatim blockquote from another
+                     document, a repro instruction. It also reports per
+                     occurrence, so one name used seven times prints seven
+                     findings -- pressure toward exactly the section-wide
+                     ruling the BROAD guard now limits.
 
 Run:  python papers/phase1-workshop/verify_paper.py
       python papers/phase1-workshop/verify_paper.py --quiet   (verdict lines only)
@@ -585,7 +627,32 @@ def _emit(out: list, start: int, chunk: list[str]) -> None:
     out.append([start, text])
 
 
-_BASENAMES: set[str] | None = None
+_BASENAMES: dict[str, list[str]] | None = None
+
+#: Directories that are not the published tree: other agents' checkouts, build
+#: output, caches. A basename that is "ambiguous" only because it also appears
+#: in a sibling worktree is not ambiguous to a reader of the repository.
+_WALK_SKIP = {
+    ".git", "__pycache__", ".worktrees", ".toolchain", "node_modules",
+    ".claude", ".pytest_cache", ".venv", "node_modules", ".mypy_cache",
+}
+
+
+def _candidates(token: str) -> list[str]:
+    """Every repo-relative path whose basename is this token.
+
+    Check F needs the count, `_basename_exists` needs only whether it is
+    non-empty, and walking the tree twice for that was silly.
+    """
+    global _BASENAMES
+    if _BASENAMES is None:
+        _BASENAMES = {}
+        for path, dirs, files in os.walk(ROOT):
+            dirs[:] = [d for d in dirs if d not in _WALK_SKIP]
+            for f in files:
+                rel = os.path.relpath(os.path.join(path, f), ROOT)
+                _BASENAMES.setdefault(f, []).append(rel.replace("\\", "/"))
+    return _BASENAMES.get(token.rsplit("/", 1)[-1], [])
 
 
 def _basename_exists(token: str) -> bool:
@@ -596,16 +663,10 @@ def _basename_exists(token: str) -> bool:
     does not exist -- was a citation *nobody* checked: E accepted the suffix and
     B never saw the token. This is the weakest test that still costs an inventor
     something, and it is free: all 34 distinct bare filenames the sections cite
-    exist by basename.
+    exist by basename. Check F is the stronger test on the same tokens: existing
+    is not the same as being findable.
     """
-    global _BASENAMES
-    if _BASENAMES is None:
-        skip = {".git", "__pycache__", ".worktrees", ".toolchain", "node_modules"}
-        _BASENAMES = set()
-        for path, dirs, files in os.walk(ROOT):
-            dirs[:] = [d for d in dirs if d not in skip]
-            _BASENAMES.update(files)
-    return token.rsplit("/", 1)[-1] in _BASENAMES
+    return bool(_candidates(token))
 
 
 def _mark_citations(block: str) -> str:
@@ -790,12 +851,158 @@ def check_uncited() -> tuple[bool, list[str]]:
     return not (flagged or stale), notes
 
 
+#: Bare filenames that name a *kind* of file rather than one artefact, each with
+#: the reason. Keyed by (section, token). Same discipline as the other two
+#: adjudication tables: the reason prints on every run, and an entry that
+#: matches nothing fails as stale.
+ADJUDICATED_BARE: dict[tuple[str, str], str] = {
+    ("02_framework.md", "playbook.dsl"):
+        "Names the *form*, not an instance: the parenthetical points at "
+        "`CONTRACTS/dsl_grammar_v0.1.md`, which itself uses the bare name for "
+        "the form (its four sentence types). The contrast is deliberate four "
+        "lines up, where the manual does get an instance and a scope -- "
+        "`cold-start-a0/theory/theory.dsl` for A0.",
+    ("02_framework.md", "THEORIZE_LOG.md"):
+        "Indefinite article, and the next sentence pluralises: 'written down "
+        "by the LLM in a THEORIZE_LOG.md' / 'Those logs are the primary "
+        "evidence'. It names the kind of file each arm keeps.",
+    ("10_adjudication.md", "ground_truth.json"):
+        "The token is what is being counted, not what is being cited: "
+        "'`worldgen/out/worlds/` holds 35 directories with a "
+        "`ground_truth.json`'. The directory carrying the claim is cited in "
+        "full; naming one of the 35 would be wrong here.",
+    ("11_limitations.md", "theory.dsl"):
+        "A claim about the v0.1 grammar era, so about every manual written "
+        "under it, and no single instance is meant. Ten `.dsl` files across "
+        "four arms carry the comment this sentence is about; the two the "
+        "section is discussing are `cold-start-a0/theory/theory.dsl:25` and "
+        "`cold-start-a2/theory/theory.dsl:26`. (An earlier version of this "
+        "ruling also named `a0-spike/theory/theory.dsl`, which carries the "
+        "keyword bare and no comment at all -- a ruling whose stated evidence "
+        "was false, and nothing here would have caught that.)",
+}
+
+
+def _split_siblings(token: str) -> list[str]:
+    """`{a,b}` and `a,b` -> the names they stand for. Anything else, itself."""
+    out = []
+    for part in expand_braces(token):
+        out.extend(p for p in part.split(",") if p)
+    return out or [token]
+
+
+def scan_bare(sections=None, rulings=None):
+    """Bare-filename citations in the body, with how many files could be meant.
+
+    Check B skips a token without a `/` by design -- it checks that cited
+    *paths* resolve, and a bare filename is not a path. Check E accepts one if
+    the basename exists anywhere in the tree. So `STATUS.md` is a citation that
+    neither check really reads, and the paper's own rule says every citation is
+    repo-relative. This is the executor for that half of the rule.
+
+    A bare filename with exactly one candidate in the tree is *locatable*, which
+    is what the rule is protecting, so it passes. The check is about ambiguity:
+    `MANIFEST.json` matches 124 files and points a reader at none of them.
+    """
+    sections = SECTIONS if sections is None else sections
+    rulings = ADJUDICATED_BARE if rulings is None else rulings
+    hits = {k: 0 for k in rulings}
+    flagged, seen = [], 0
+    for section in sorted(Path(sections).glob("*.md")):
+        if section.name in EXEMPT_SECTIONS:
+            continue
+        for lineno, line in enumerate(
+                section.read_text(encoding="utf-8").splitlines(), 1):
+            for m in CITE_TOKEN.finditer(line):
+                raw = m.group(1)
+                if "/" in raw:
+                    continue
+                # `{STATUS.md}` and `STATUS.md,DECISIONS.md` both slipped: the
+                # first fails the suffix test on its trailing brace, the second
+                # is one token that names two files. Section 7 already cites
+                # siblings as `{a0-base,a2-base}`, so this is the paper's own
+                # idiom with the directory removed -- one keystroke away, not a
+                # contrivance. `classify` normalises the same way for check B.
+                for token in _split_siblings(raw):
+                    if not token.lower().endswith(ARTEFACT_SUFFIX):
+                        continue
+                    seen += 1
+                    n = len(_candidates(token))
+                # `n == 1` is the only clean verdict. Zero is *worse* than many:
+                # a bare name matching nothing is an invented citation, and it
+                # was the one case this check waved through -- check B skips it
+                # for having no `/`, and check E only catches it when the block
+                # also carries a quantity, so a non-quantitative sentence citing
+                # `ledger_summary.jsonl` was read by nobody at all. That is the
+                # example `_basename_exists`'s own docstring gives as the hole.
+                    if n == 1:
+                        continue
+                    key = (section.name, token)
+                    if key in hits:
+                        hits[key] += 1
+                        continue
+                    flagged.append((section.name, lineno, token, n))
+    return flagged, hits, seen
+
+
+def check_bare() -> tuple[bool, list[str]]:
+    """F. No body citation is a bare filename that could mean several files."""
+    notes: list[str] = []
+    flagged, hits, seen = scan_bare()
+    stale = [k for k, n in hits.items() if not n]
+
+    # A ruling here is keyed by (section, token) with no text anchor, so unlike
+    # check E's it cannot be scoped to one claim -- which means one entry
+    # silences *every* use of that token in the section, including uses written
+    # after it was ruled. The adversarial pass demonstrated it: a section with
+    # one generic mention and three specific ones, the last brand new, passed
+    # with a single ruling. E defends against exactly this with MIN_ANCHOR and
+    # the BROAD rule; this table was ported without either guard.
+    #
+    # The count is the guard that fits a keyless table: a ruling says "this
+    # token, in this section, is generic". If the token appears more than once
+    # the sentences are no longer the one that was ruled on.
+    for key, n in sorted(hits.items()):
+        if n > 1:
+            notes.append(fail(
+                f"  BROAD     {key[0]} `{key[1]}` is ruled generic but appears "
+                f"{n} times. A ruling with no text anchor cannot tell the "
+                f"sentence it was written for from one added later; re-rule it "
+                f"or cite the paths."))
+            stale.append(key)
+
+    notes.append(
+        f"  {seen} bare-filename citations: {len(flagged)} ambiguous, "
+        f"{len(ADJUDICATED_BARE) - len(stale)} ruled, {len(stale)} stale rulings")
+    for name, lineno, token, n in flagged:
+        if n:
+            notes.append(fail(
+                f"  AMBIGUOUS {name}:{lineno} -- `{token}` matches {n} files in "
+                f"the tree, so it points a reader at none of them. Cite the "
+                f"repo-relative path, or rule it."))
+        else:
+            notes.append(fail(
+                f"  ABSENT    {name}:{lineno} -- `{token}` matches no file in "
+                f"the tree. Check B skips it for having no `/`, so nothing else "
+                f"reads it. Check the spelling and the case."))
+    for key, n in sorted(hits.items()):
+        if n:
+            notes.append(f"  ruled     {key[0]} `{key[1]}` ({n}x) -- {ADJUDICATED_BARE[key]}")
+    for key in stale:
+        notes.append(fail(
+            f"  STALE     {key[0]} `{key[1]}` is ruled and no longer appears. "
+            f"A ruling that excuses nothing is removed, not left to excuse a "
+            f"regression that comes back the other way."))
+    return not flagged and not stale, notes
+
+
 CHECKS = [
     ("A GENERATED", "PAPER.md == assemble(sections/)", check_generated),
     ("B PATHS", "every cited path resolves, unambiguously", check_paths),
     ("C FIGDATA", "figure extractors are byte-deterministic", check_figdata),
     ("D NOSECRET", "no credential value in any published file", check_nosecret),
     ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited),
+    ("F BARE", "no citation is an ambiguous bare filename", check_bare),
 ]
 
 

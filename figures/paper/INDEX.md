@@ -18,7 +18,7 @@ Regenerate all of it with `python figures/build_all.py`; check it with `bash fig
 | Figure 3 | §5 | `fig05_a2_repair_loop` | `figures/fig05_a2_repair_loop.py` | 13 file(s) | complete |
 | Figure 4 | §6 | `fig04_a3_transfer` | `figures/fig04_a3_transfer.py` | 7 file(s) | complete |
 | Figure 5 | §7 | `fig03_capability_spectrum` | `figures/fig03_capability_spectrum.py` | 4 file(s) | complete |
-| Figure 6 | §7 | `fig02_bill_shape` | `figures/fig02_bill_shape.py` | 30 file(s), 4 absent | partial |
+| Figure 6 | §7 | `fig02_bill_shape` | `figures/fig02_bill_shape.py` | 34 file(s) | complete |
 
 ## Artefacts and digests
 
@@ -169,20 +169,20 @@ trusting it.
 ### Figure 6 — Bill shape: what each arm's turns cost, and when
 
 * plate `fig02_bill_shape`, §7 (The metrics battery, recomputed over existing trajectories)
-* CSV `figures/csv/fig02_bill_shape.csv` sha256 `168d99576a30f95fbf1543459cdb045723cecfa4c44dc61d95b827954e49a399`
+* CSV `figures/csv/fig02_bill_shape.csv` sha256 `7ebba11c7006c2bd1681067bffec2538509083b30dc573086c5189d348138c2a`
 
 | artefact | sha256 |
 |---|---|
-| `figures/paper/light/figure6_bill_shape.pdf` | `d4397dd8307a2647b4139c19d8720658ccbac6f871ba5c2141988fe8280564dc` |
-| `figures/paper/light/figure6_bill_shape.png` | `b451c444f9bb4a119026af7a1b48c1a379f2ea61027d9a808f4711563b24096d` |
-| `figures/paper/light/figure6_bill_shape.svg` | `5d9ca18774e6181ef25d872281c8166318b40e287f99b887a5d97dd326086af0` |
-| `figures/paper/dark/figure6_bill_shape.pdf` | `ca805a75bbd858d040003484a91be3f8160b1a4771fd8efe8c63cbab50e60fcc` |
-| `figures/paper/dark/figure6_bill_shape.png` | `6c218b1d8b5b8ea8a70e3e6bcbd501e1db2a6f59a2d4f53b4530169ce38c2079` |
-| `figures/paper/dark/figure6_bill_shape.svg` | `95ff2f6c760ffbf1dd88d060f1251c29ea41d194b13001c92cede69e33aeb2e8` |
-| `figures/out/light/fig02_bill_shape.svg` | `5d9ca18774e6181ef25d872281c8166318b40e287f99b887a5d97dd326086af0` |
-| `figures/out/light/fig02_bill_shape.png` | `e12467c84af52fc2f70b370b30a0b65dc578365d510d8387055503c3785cb8c7` |
-| `figures/out/dark/fig02_bill_shape.svg` | `95ff2f6c760ffbf1dd88d060f1251c29ea41d194b13001c92cede69e33aeb2e8` |
-| `figures/out/dark/fig02_bill_shape.png` | `7f9a31ddfdea5eb260f99123c67b97e934eb03349bf36920ac82657b917917dc` |
+| `figures/paper/light/figure6_bill_shape.pdf` | `e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205` |
+| `figures/paper/light/figure6_bill_shape.png` | `9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461` |
+| `figures/paper/light/figure6_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
+| `figures/paper/dark/figure6_bill_shape.pdf` | `6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f` |
+| `figures/paper/dark/figure6_bill_shape.png` | `557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c` |
+| `figures/paper/dark/figure6_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
+| `figures/out/light/fig02_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
+| `figures/out/light/fig02_bill_shape.png` | `5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e` |
+| `figures/out/dark/fig02_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
+| `figures/out/dark/fig02_bill_shape.png` | `a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989` |
 
 | data source | sha256 | what |
 |---|---|---|
@@ -205,10 +205,10 @@ trusting it.
 | `baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl` | `89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl` | `bd0642458c40fc1f2c8da5d49dfaee8956f507058de79fb4901321bc750cc2b3` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl` | `570088da13eb58f0cfb6bc05ee64b420d0ed61c25638a3db11012cc3d0a4ad61` | envelope campaign ledger shard, same two dialects as the pilot ledger |
-| `baseline-arms/out/shards/ledger.ar25.jsonl` | `ABSENT — untracked` | envelope campaign ledger shard, same two dialects as the pilot ledger |
-| `baseline-arms/out/shards/ledger.g50t.jsonl` | `ABSENT — untracked` | envelope campaign ledger shard, same two dialects as the pilot ledger |
-| `baseline-arms/out/shards/ledger.sk48.jsonl` | `ABSENT — untracked` | envelope campaign ledger shard, same two dialects as the pilot ledger |
-| `baseline-arms/out/shards/ledger.tn36.jsonl` | `ABSENT — untracked` | envelope campaign ledger shard, same two dialects as the pilot ledger |
+| `baseline-arms/out/shards/ledger.ar25.jsonl` | `a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9` | envelope campaign ledger shard, same two dialects as the pilot ledger |
+| `baseline-arms/out/shards/ledger.g50t.jsonl` | `7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5` | envelope campaign ledger shard, same two dialects as the pilot ledger |
+| `baseline-arms/out/shards/ledger.sk48.jsonl` | `4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0` | envelope campaign ledger shard, same two dialects as the pilot ledger |
+| `baseline-arms/out/shards/ledger.tn36.jsonl` | `bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `battery/REPORT_V0.md` | `90bf3eb00defeb4a525d15983e3baec46c51939300febd5ccc3c97e1783e2245` | the step-failure confound panel C draws: 'Between 27% and 45% of steps in the pilot' failed outright, which makes E5 cost-per-action a price list |
 | `battery/artifacts/capability_spectrum.json` | `205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6` | cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints |
 | `papers/phase1-workshop/REVIEW.md` | `a5ad9bf75921326fb541b1ed98a6bd893de98ce3e8afc56fc3f0bea7180f8591` | the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records that the 27% lower bound does not reproduce. Declared so both numbers travel: the plate had been drawing the refuted bound alone |

@@ -1,0 +1,12 @@
+bytes                        721723
+lines                        6259
+tracebacks                   55
+successful runs logged       195
+exception types              [('UnicodeDecodeError', 55)]
+frames in subprocess reader  110
+frames mentioning scan.py    0
+tracebacks followed by a written line   55 / 55
+  lines from traceback to that line     median 11, max 23
+conflict_scan, cycles WITH a traceback  [('green', 54)]
+conflict_scan, cycles WITHOUT           [('risk', 90), ('green', 51)]
+offending bytes              [('0x80', 9), ('0x94', 9), ('0xa1', 12), ('0xa8', 8), ('0xaa', 5), ('0xac', 12)]

@@ -1,0 +1,85 @@
+{
+  "constructed_runs": 118,
+  "deterministic": true,
+  "drift": {
+    "files_differing": [
+      "battery/audit/v9/check.py",
+      "battery/metrics/__init__.py",
+      "battery/metrics/economy.py",
+      "battery/metrics/epistemic.py",
+      "battery/metrics/mechanism.py"
+    ],
+    "worktree_head": "0d586b6f99615fd87375d14441e0cc290fed8086",
+    "would_have_leaked": {
+      "unsound\\(": 13
+    }
+  },
+  "files": 12,
+  "files_read": 10,
+  "literals_with_digits": {
+    "battery/__init__.py": [
+      "0.1.0"
+    ],
+    "battery/audit/v9/check.py": [
+      "C1: builder raised %s: %s",
+      "C1: two calls differ",
+      "C2/C3: source unavailable (%s)",
+      "C2: attribute %r",
+      "C2: imports %r",
+      "C2: names %r",
+      "C3: `while` loop (search)",
+      "C3: calls %r (not whitelisted)",
+      "C3: calls a computed expression",
+      "C3: calls method %r (not whitelisted)",
+      "C3: recursive call to %r",
+      "C4: notes key %r reads as ground truth"
+    ],
+    "battery/metrics/economy.py": [
+      "Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early.",
+      "R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating.",
+      "R^2 of a quadratic fit to prompt size per turn minus R^2 of a linear fit. Positive means what the arm re-reads is accelerating.",
+      "Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted."
+    ],
+    "battery/metrics/epistemic.py": [
+      "Minimum per-concept compression gain in bits. The statistic K6's mean hides.",
+      "the held-out set declares no sampling frame, so this ratio cannot be compared with any other K2 -- a denominator of 3 adversarial gaps and one of 39960 exhaustive cases are different quantities sharing a name"
+    ],
+    "battery/metrics/exploration.py": [
+      "Distinct states observed. Support for X1/X4, not a ranking."
+    ],
+    "battery/metrics/mechanism.py": [
+      "Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.)"
+    ],
+    "battery/metrics/planning.py": [
+      "Actual successful steps divided by the shortest known plan, over runs that reached the goal. 1.0 is optimal; needs ground truth, so development pile and A0 only.",
+      "Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to."
+    ],
+    "battery/model.py": [
+      "utf-8"
+    ]
+  },
+  "pinned_commit": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
+  "pinned_ref": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
+  "python": "3.13",
+  "registered_leak_present": {
+    "3 adversarial gaps": 1,
+    "39960": 1
+  },
+  "run_arms": [
+    "attacker"
+  ],
+  "run_provenance_fields_set": {},
+  "run_sources": [
+    "v9"
+  ],
+  "scan_a_violations": {},
+  "scan_b_violations": {},
+  "submissions": [
+    "a1.py",
+    "a2.py",
+    "a3.py",
+    "a4.py",
+    "a5.py",
+    "a6.py"
+  ]
+}

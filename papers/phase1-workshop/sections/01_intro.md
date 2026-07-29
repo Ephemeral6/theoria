@@ -195,7 +195,7 @@ Be precise about what was named, because the precision is the whole argument. R-
 names three **directions** — `press_up`, `press_down`, `press_right` — and one
 concrete configuration, "drive the Cart to (2,2) and push DOWN into an unpressed
 Button". It does not enumerate the coordinate pairs; the phrase "the three pairs
-R-05 named" appears in `THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
+R-05 named" appears in `cold-start-a0/THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
 makes the same gloss in different words — both written at M6 *after* the score
 existed, and this paper does not inherit either as if it were the
 pre-registration. The claim that survives is still the one

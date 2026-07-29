@@ -1,0 +1,22 @@
+{
+  "prompt_id": "S-S33-monitor-gate-red-on-master",
+  "branch": "agent/s33-monitor-gate-red",
+  "base_commit": "bcfc1b93d813374768114f6e6aa9864f571acdc1",
+  "utc": "2026-07-29T16:00:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "what": "master's own verify:monitor gate was red for 30+ minutes; two branches were flagged for it. Two defects fixed: the pinned gate survey did not know papers gained a suite, and verify.py crashed while printing the reason a stage failed.",
+  "gate": {
+    "command": "bash monitor/verify.sh",
+    "result": "GREEN",
+    "exit": 0,
+    "suite": "197 passed, 2 xfailed"
+  },
+  "files": [
+    "monitor/tests/test_gates.py",
+    "monitor/verify.py",
+    "monitor/tests/test_verify_output_encoding.py",
+    "monitor/runs/20260729T1600Z-S33/RUN_STATE.md"
+  ]
+}

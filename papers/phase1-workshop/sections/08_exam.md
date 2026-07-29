@@ -133,7 +133,7 @@ section:
 > does not run, and it fails in the direction that looks like success.
 
 The repair added label derivation from the key, and it did not fully close the
-hole: `leakage.json` records `label_sets_checked: []` for the handover and
+hole: `exam/artifacts/leakage.json` records `label_sets_checked: []` for the handover and
 adaptation papers, so the positional and metadata checks still run on nothing for
 two of the four. The directory's own reading is the one we adopt — "the static
 checks are necessary and cheap, and the adversarial reader is the one that found

@@ -139,12 +139,23 @@ def branch_tip(branch):
 # are properties of the branch and re-deriving them costs a worktree and a full
 # gate run.  The hold itself was worth having -- it replaced 169 retries and
 # 915 identical FLAG lines.  What was wrong was only which failures it covers.
-TRANSIENT_REASONS = ("push rejected",)
+#
+# Two other reasons belong to the same kind and were added when this landed
+# next to S29: `worktree add failed` is a fact about the disk and `... timed
+# out` is a fact about the machine's load.  Neither was caused by the branch,
+# so neither can be cleared by it -- the same deadlock, differently worded.
+# The matching is case-insensitive because the reason strings this rig writes
+# are sentences, not tokens ("verify gate timed out in engine-rig").
+#
+# Widening the set is only safe because the retries are now capped; see
+# `TRANSIENT_RETRY_CAP` below.  Unbounded retry is what wrote the 915 lines.
+TRANSIENT_REASONS = ("push rejected", "worktree add failed", "timed out")
 
 
 def is_transient(reason):
     """Did this verdict describe the world around the branch rather than it?"""
-    return any(t in (reason or "") for t in TRANSIENT_REASONS)
+    low = (reason or "").lower()
+    return any(t in low for t in TRANSIENT_REASONS)
 
 
 def last_attempt(branch):
@@ -168,6 +179,120 @@ def last_attempt(branch):
     except OSError:
         return {}
     return memo
+
+
+#: How many times a transient failure is retried before it is held like any
+#: other. Set to the same number that already pages a human in `flag`, so the
+#: retries stop exactly when someone is being told to look.
+TRANSIENT_RETRY_CAP = 3
+
+
+def should_hold(memo, tip, base=None):
+    """Skip this branch? The hold rule itself, in one place.
+
+    A gate verdict is a statement about the **merged** tree, so it depends on
+    `origin/master` as much as on the branch. Keying the hold on the tip alone
+    made a verdict outlive the thing it described: `p13-figure-numbering` was
+    red because of a coverage probe in `figures/`, master cured that probe at
+    05:15Z, and the flag still read "verify gate red in figures" six hours
+    later with no retry. The comment above the old condition claimed "skipping
+    is therefore never a way for a fixed branch to stay stuck" -- p13 is the
+    counterexample, because it was fixed by the *base* moving, not the tip.
+
+    A flag written before `base:` existed has no base recorded. That is read as
+    "retry", not "skip": one wasted re-run per old flag, once, versus keeping
+    the failure mode this argument is about.
+
+    Extracted because `test_ci_merge_hold.py` had grown its own copy of the
+    condition, and a second copy of a rule drifts from the first. S21 shipped
+    with a docstring, a commit message and a reflex comment all describing a
+    third condition its code never had -- nothing caught it, because the tests
+    encoded the code rather than the rule. One function, one caller each side.
+
+    Transient failures are retried, but only `TRANSIENT_RETRY_CAP` times.
+    Retrying them forever would rebuild the exact problem the tip-keyed hold
+    was written to stop: on 2026-07-28 unbounded retries wrote 915 FLAG lines
+    across 24 branches, the same 21 strings every five minutes, while nothing
+    merged. A permanently-recurring transient is no longer transient, and the
+    honest thing to do with it is stop guessing and name a human -- which
+    `flag` already does at the same count.
+    """
+    if not (memo.get("tip") and memo["tip"] == tip):
+        return False
+    if base is not None and memo.get("base", "") != base:
+        return False                      # the base moved, or was never recorded
+    if not is_transient(memo.get("reason", "")):
+        return True
+    try:
+        attempts = int(memo.get("attempts", "0"))
+    except ValueError:
+        attempts = 0
+    return attempts >= TRANSIENT_RETRY_CAP
+
+
+def flag_branch(path):
+    """The branch a flag file is about, read out of its own header.
+
+    `last_attempt` goes branch -> file; sweeping the directory needs the other
+    direction, and the header has carried `branch:` since `flag` first wrote
+    it. Deriving it from the filename instead would mean undoing the
+    `/` -> `_` substitution, which is not injective: a branch legitimately
+    containing an underscore would come back as a different branch.
+    """
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("```"):
+                    break
+                if line.startswith("branch:"):
+                    return line.partition(":")[2].strip()
+    except OSError:
+        return ""
+    return ""
+
+
+def sweep_stale_flags(todo):
+    """Retire flags for branches that merged by some route other than this one.
+
+    `clear_flag` is only reachable from `try_merge`'s success path, and
+    `unmerged_branches` drops everything already an ancestor of origin/master.
+    Between them, a branch that merged **any other way** -- merged into a
+    sibling agent branch that then merged, or merged by hand -- keeps its flag
+    for good, because `try_merge` is never called on it again to clear it.
+
+    `agent/e9-engine-paper-table` did exactly that on 2026-07-29: it reached
+    master via `3e6d47be`, and hours later its flag was still being counted
+    among the "verify gate red" branches holding up the queue, describing a
+    disagreement in a merged tree that no longer exists.
+
+    This is the failure `clear_flag`'s own docstring names -- a stale flag is
+    not noise, it is the loudest evidence in the directory and it is *wrong* --
+    coming back through the one path the original fix did not cover.
+
+    Deliberately narrow: it clears only flags whose branch is **provably** an
+    ancestor of origin/master. A branch that merely vanished (deleted, renamed,
+    never pushed) keeps its flag, because "I cannot resolve this" and "this is
+    finished" are different facts and only one of them is safe to act on.
+    """
+    waiting, retired = set(todo), []
+    for name in sorted(os.listdir(CI_DIR)) if os.path.isdir(CI_DIR) else []:
+        if not (name.startswith("CONFLICT-") and name.endswith(".md")):
+            continue
+        branch = flag_branch(os.path.join(CI_DIR, name))
+        if not branch or branch in waiting:
+            continue
+        if sh(["git", "rev-parse", "--verify", "--quiet",
+               branch]).returncode != 0:
+            continue                      # unresolvable is not the same as done
+        if sh(["git", "merge-base", "--is-ancestor",
+               branch, "origin/master"]).returncode != 0:
+            continue
+        clear_flag(branch)
+        retired.append(branch)
+    if retired:
+        log_line("SWEEP-FLAGS retired %d stale flag(s): %s"
+                 % (len(retired), ", ".join(retired)))
+    return retired
 
 
 #: Lines worth surfacing out of a long gate transcript.
@@ -236,9 +361,10 @@ def flag(branch, reason, detail, tip=None):
         attempts = 1
     path = flag_path(branch)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\n"
+        fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\nbase: %s\n"
                  "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
                  % (os.path.basename(path), branch, reason, tip or "",
+                    branch_tip("origin/master"),
                     first_seen, stamp, attempts, excerpt(detail)))
     suffix = ""
     if attempts >= 3:
@@ -524,6 +650,10 @@ def main():
         print("delivered, unmerged:", unmerged_branches() or "none")
         return 0
     todo = starved_first(unmerged_branches())
+    # Before deciding anything, drop verdicts about branches that are already
+    # in master. They cost nothing to keep and everything to read: triage
+    # starts at the biggest, angriest file in the directory.
+    sweep_stale_flags(todo)
     if not todo:
         log_line("IDLE: no delivered branch was waiting")
         return 0
@@ -547,8 +677,11 @@ def main():
             # stale, and that retries immediately.  Skipping is therefore never
             # a way for a fixed branch to stay stuck.
             memo = last_attempt(b)
-            if (memo.get("tip") and memo["tip"] == branch_tip(b)
-                    and not is_transient(memo.get("reason"))):
+            # `should_hold` is the one copy of this rule -- it subsumes the
+            # inline tip-and-not-transient test that used to stand here, and
+            # adds the base check and the retry cap.  The tests call the same
+            # function, so the two cannot drift.
+            if should_hold(memo, branch_tip(b), branch_tip("origin/master")):
                 held.append((b, memo.get("reason", "?"),
                              memo.get("attempts", "?")))
                 continue

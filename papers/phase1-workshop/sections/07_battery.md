@@ -592,7 +592,7 @@ compare capability rather than economics, raise the action budget first, and thi
 envelope knows nothing about the variance in that regime. The arithmetic behind it
 is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
 `g50t` takes 78 successful actions against an authorised budget of 40 per level
-(`FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
+(`theoria-arm/runs/20260728T210000Z-a3-level-boundary/FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
 first level**, so the column is not a measurement that came back
 empty — it is a measurement that was never affordable.
 

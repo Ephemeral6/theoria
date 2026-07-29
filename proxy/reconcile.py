@@ -244,6 +244,8 @@ def _leg_cost(records: List[Dict[str, Any]],
     missing_ref: List[Any] = []
     unknown_table: List[str] = []
     unpriced: List[str] = []
+    unmeasured: List[Any] = []
+    unmeasured_keys: List[str] = []
     usd_total = 0.0
     priced_calls = 0
 
@@ -271,7 +273,20 @@ def _leg_cost(records: List[Dict[str, Any]],
             continue
         priced = table.cost(record.get("model", "?"), record.get("usage") or {})
         if priced["usd"] is None:
-            if priced["model"] not in unpriced:
+            # Two different holes reach this branch and only one of them is
+            # about the model. Before S29 a call whose usage block was missing
+            # `output_tokens` could not get here at all -- it priced to a
+            # plausible positive number -- and now that it can, filing it under
+            # `unpriced` would print "model 'claude-opus-5' is not in the table
+            # they name" about a model that is right there in pricing_v1.json.
+            # A true finding under a false heading is how a reconciliation
+            # report gets ignored.
+            if priced.get("missing_usage_keys"):
+                unmeasured.append(record.get("call_idx"))
+                for key in priced["missing_usage_keys"]:
+                    if key not in unmeasured_keys:
+                        unmeasured_keys.append(key)
+            elif priced["model"] not in unpriced:
                 unpriced.append(priced["model"])
             continue
         usd_total += priced["usd"]
@@ -304,6 +319,13 @@ def _leg_cost(records: List[Dict[str, Any]],
     if unpriced:
         incomplete.append("model(s) %s are not in the table they name"
                           % ", ".join(repr(m) for m in unpriced))
+    if unmeasured:
+        incomplete.append(
+            "%d model_call(s) carry a priced model but no %s, so they were "
+            "never measured and no dollar figure is derivable for them "
+            "(call_idx %s)"
+            % (len(unmeasured), " or ".join(sorted(unmeasured_keys)),
+               ", ".join(str(i) for i in unmeasured[:5])))
 
     if disagreements:
         verdict = "DISAGREE"
@@ -319,6 +341,7 @@ def _leg_cost(records: List[Dict[str, Any]],
         model_calls=len(calls),
         declared_model_calls=declared,
         priced_calls=priced_calls,
+        unmeasured_calls=len(unmeasured),
         usd_total=round(usd_total, 6) if priced_calls else None,
         price_table_drift=drifted[:10] or None,
         not_derivable=incomplete or None,

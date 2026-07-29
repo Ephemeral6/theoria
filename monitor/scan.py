@@ -27,7 +27,20 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
-import spec  # noqa: E402
+# S30. `spec.py` is the hand-written judgement file the fleet edits every
+# cycle, so a SyntaxError in it is the single most likely way this program
+# dies. Imported bare, that death happened *before* `main()` -- before the
+# failure exit could run -- and the page simply kept showing yesterday's
+# numbers, which is the whole defect S30 exists to remove. Deferring the
+# failure to `build()` puts it inside the handler instead. Nothing at module
+# level touches `spec`, so nothing else changes.
+try:
+    import spec  # noqa: E402
+except Exception as _exc:                       # noqa: BLE001 -- re-raised
+    spec = None
+    _SPEC_IMPORT_ERROR = _exc
+else:
+    _SPEC_IMPORT_ERROR = None
 
 GAME_ID = re.compile(r"\b[a-z0-9]{4}-[0-9a-f]{8}\b")
 SKIP_DIRS = {".git", "__pycache__", ".toolchain", ".lake", "node_modules",
@@ -75,14 +88,46 @@ def iter_jsonl(path):
                 continue
 
 
-def git(*args):
+def git_or_none(*args):
+    """git's stdout, or `None` when the call did not produce an answer.
+
+    S30. This is the distinction the 55 `UnicodeDecodeError` tracebacks in
+    `refresh.log` turned out to be about. The decode raised inside
+    `subprocess`'s **reader thread**, where it cannot propagate; `_communicate`
+    then handed back `stdout=None`, `git()` swallowed the resulting
+    `AttributeError` into `""`, and `probe_conflicts` read the empty string as
+    「三类检查全空」and reported green. All 54 crash cycles reported green; the
+    141 clean cycles reported risk 90 times. The crash never stopped the scan
+    -- it deleted one probe's evidence and let the probe call that innocence.
+
+    The decode itself is fixed (`encoding="utf-8", errors="replace"` below), but
+    a timeout, a missing binary, or a non-zero exit still produce empty output,
+    and empty output still reads as clean. So callers that would *judge* on the
+    result take `None` and say they could not look.
+    """
     try:
         out = subprocess.run(["git"] + list(args), cwd=ROOT,
                              capture_output=True, text=True, timeout=30,
                              encoding="utf-8", errors="replace")
-        return out.stdout.strip()
     except Exception:
-        return ""
+        return None
+    if out.returncode != 0 or out.stdout is None:
+        # `stdout is None` is the exact 2026-07-28 shape: exit 0, no output,
+        # because the reader thread died decoding. Kept as an explicit case so
+        # it cannot come back unnamed.
+        return None
+    return out.stdout.strip()
+
+
+def git(*args):
+    """Stdout, with failure flattened to `""`.
+
+    Fine for the callers that only *display* what git said. A caller that turns
+    the result into a verdict must use `git_or_none` instead -- see its
+    docstring for what this flattening cost.
+    """
+    out = git_or_none(*args)
+    return "" if out is None else out
 
 
 # ---------------------------------------------------------------- probes
@@ -299,7 +344,15 @@ def probe_conflicts():
         findings.append("文件内有合并冲突标记：" + ", ".join(marked))
 
     # (b) unmerged paths in the index
-    unmerged = git("ls-files", "-u")
+    #
+    # S30: `git_or_none`, not `git`. Both this call and (c) below are turned
+    # into a verdict, and a verdict built on "the command returned nothing"
+    # cannot tell a clean index from a git that never answered.
+    blind = []
+    unmerged = git_or_none("ls-files", "-u")
+    if unmerged is None:
+        blind.append("git ls-files -u")
+        unmerged = ""
     if unmerged:
         paths = sorted({line.split("\t")[-1] for line in unmerged.splitlines()})
         findings.append("git 未合并路径：" + ", ".join(paths))
@@ -310,7 +363,12 @@ def probe_conflicts():
     track_of = {"engine-rig": "engine-rig", "a0-spike": "engine-rig",
                 "theory-compiler": "theory-compiler",
                 "cold-start-a0": "theory-compiler"}
-    log = git("log", "--name-only", "--format=%h%x01%s", "-40")
+    log = git_or_none("log", "--name-only", "--format=%h%x01%s", "-40")
+    if log is None:
+        # The exact call that failed 55 times. It is named here so the page
+        # says which eye is shut rather than reporting a general unease.
+        blind.append("git log --name-only -40")
+        log = ""
     cross = []
     cur = None
     touched = set()
@@ -333,11 +391,34 @@ def probe_conflicts():
         findings.append("跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：" +
                         "； ".join(cross))
 
-    if not findings:
-        return {"status": "green",
-                "detail": "三类检查全空：无冲突标记、无未合并路径、"
-                          "近 40 个提交无跨领地改动。"}
-    return {"status": "risk", "detail": " ⚠ ".join(findings)}
+    # S30. Order matters, and the first version of this got it backwards.
+    #
+    # `findings` is checked FIRST. Check (a) scans files on disk and cannot go
+    # blind, so a conflict marker it found is real evidence regardless of what
+    # git did. Reporting `missing` ahead of it discarded that evidence and
+    # replaced it with a statement about not having looked -- and since
+    # `_VERDICT_RANK` puts `missing` above `risk`, that was an *upgrade* away
+    # from the worst verdict. Which is this ticket's own defect, committed by
+    # its own fix. Blindness is reported alongside a real finding, never
+    # instead of it.
+    blind_note = ("　⚠ 另有**没有检查成**的部分：%s 没有返回结果"
+                  % "、".join(blind)) if blind else ""
+    if findings:
+        return {"status": "risk",
+                "detail": " ⚠ ".join(findings) + blind_note}
+    # Nothing found -- but "found nothing" only means something if we could
+    # look. `missing` rather than `risk`: a git that would not answer is not
+    # evidence of a conflict, it is the absence of evidence either way, and
+    # this repository does not paint absence as red any more than as zero.
+    if blind:
+        return {"status": "missing",
+                "detail": "这一项**没有检查成**：%s 没有返回结果，"
+                          "所以「没发现冲突」这句话本轮不成立。"
+                          "（2026-07-28 这条路径静默地绿了 54 个周期）"
+                          % "、".join(blind)}
+    return {"status": "green",
+            "detail": "三类检查全空：无冲突标记、无未合并路径、"
+                      "近 40 个提交无跨领地改动。"}
 
 
 def probe_provenance():
@@ -460,7 +541,15 @@ def probe_append_only():
         # --first-parent: only what actually appeared on the mainline counts.
         # A branch-local fix before merge never published anything, so it is
         # not a violation (OPS-A, 2026-07-28: my earlier ruling cited it wrongly).
-        out = git("log", "--first-parent", "--numstat", "--format=%h", "--", path)
+        # S30: blind here meant `dels = 0`, i.e. 「append-only 规则完好」 --
+        # a clean bill of health for the one rule whose whole point is that
+        # nobody can quietly delete from these files.
+        out = git_or_none("log", "--first-parent", "--numstat", "--format=%h",
+                          "--", path)
+        if out is None:
+            return {"status": "missing",
+                    "detail": "问不出 %s 的删除历史（git 没有返回结果），"
+                              "本轮无法断言 append-only 完好。" % path}
         dels, cur = 0, ""
         for line in out.splitlines():
             parts = line.split("	")
@@ -564,12 +653,25 @@ def probe_spec_freshness():
     """手写判断 vs 树的漂移速度：spec.py 最后一次改动之后进了多少提交与合并。
     DRIFT dashboard-lags-the-merge-queue 说的正是这个——头条数字建立在手写值上，
     而树在跑。让陈旧本身变成盘面上的一个数，而不是靠审计员发现。"""
-    last = git("log", "-1", "--format=%H", "--", "monitor/spec.py").strip()
+    # S30: `git_or_none` at all three sites. This probe turns counts into a
+    # verdict, and with plain `git()` a blind call fell back to `"0"` -- i.e.
+    # 「spec.py 一点没落后」, a **green built on a git that never answered**.
+    # Same shape as the 55-traceback false green, two probes away from it.
+    last = git_or_none("log", "-1", "--format=%H", "--", "monitor/spec.py")
+    if last is None:
+        return {"status": "missing",
+                "detail": "问不出 spec.py 的最后一次提交（git 没有返回结果），"
+                          "所以本轮说不出它有多陈旧——不是「不陈旧」。"}
+    last = last.strip()
     if not last:
         return {"status": "partial", "detail": "spec.py 无提交历史。"}
-    commits = git("rev-list", "--count", "%s..HEAD" % last).strip() or "0"
-    merges = git("rev-list", "--count", "--merges", "%s..HEAD" % last).strip() or "0"
-    n, m = int(commits), int(merges)
+    commits = git_or_none("rev-list", "--count", "%s..HEAD" % last)
+    merges = git_or_none("rev-list", "--count", "--merges", "%s..HEAD" % last)
+    if commits is None or merges is None:
+        return {"status": "missing",
+                "detail": "数不出 spec.py 之后的提交数（git 没有返回结果）。"
+                          "空输出曾经在这里被当成 0，也就是「完全不陈旧」。"}
+    n, m = int(commits.strip() or 0), int(merges.strip() or 0)
     status = "green" if n < 15 else ("partial" if n < 40 else "risk")
     return {"status": status,
             "detail": "spec.py 落后 %d 个提交 / %d 次合并（判断陈旧到 %s 就该重扫）。"
@@ -623,62 +725,117 @@ def probe_disk_headroom():
             "detail": "磁盘剩 %.1f GB / %.0f GB；%s" % (free_gb, total_gb, tail)}
 
 
-def probe_clock_sanity():
-    """心跳自报的 utc 不得晚于机器当前 UTC —— 时钟不可能超前。
+def _stamps_to_check():
+    """(label, path, claimed-utc-string) for every hand-typed timestamp on disk.
 
-    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
-    但心跳里那个**手打的** `utc` 字段从来没有任何东西校验过，于是它可以随便漂：
-    2026-07-28T15:47Z 那一刻，RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ
-    ——全都晚于当时仓库里最新的提交，也就是这些时刻还没到。
+    Three sources, because the first version of this probe checked one. It
+    checked the heartbeats -- the instance I had noticed -- and then I wrote the
+    same error twice more in the same session, into a PARTNER_SYNC paragraph
+    header and a run MANIFEST, and it saw neither.
 
-    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**。
-    这是纯算术，没有任何借口不检查。
+    That is "fixed one instance, believed I had fixed the class": the probe's
+    scope was pinned to its first sample. The class is *any UTC a human typed*,
+    and the repository has exactly these three kinds.
     """
     import glob as _glob
-    now = time.time()
-    ahead, drifted, unreadable = [], [], []
+    out = []
     for path in sorted(_glob.glob(rel("monitor", "ops-status", "*.json"))):
         name = os.path.basename(path)[:-5]
         try:
             data = json.load(open(path, encoding="utf-8"))
         except Exception as exc:
-            unreadable.append("%s（%s）" % (name, str(exc)[:40]))
+            out.append(("heartbeat %s" % name, path, None, str(exc)[:40]))
             continue
-        stamp = data.get("utc")
+        out.append(("heartbeat %s" % name, path, data.get("utc"), None))
+
+    for path in sorted(_glob.glob(rel("*", "runs", "*", "MANIFEST.json"))):
+        label = "manifest %s" % os.path.basename(os.path.dirname(path))
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            out.append((label, path, None, str(exc)[:40]))
+            continue
+        # A manifest without `utc` is provenance's problem, not this probe's --
+        # `provenance_scan` already reports it, and two probes shouting about
+        # one fact is how both get ignored.
+        if data.get("utc") is not None:
+            out.append((label, path, data.get("utc"), None))
+
+    sync = rel("PARTNER_SYNC.md")
+    if os.path.exists(sync):
+        try:
+            text = open(sync, encoding="utf-8", errors="replace").read()
+        except OSError:
+            text = ""
+        for m in re.finditer(r"^##\s+\[[^\]]+\]\s+(\S+)", text, re.M):
+            out.append(("PARTNER_SYNC %s" % m.group(1), sync, m.group(1), None))
+    return out
+
+
+def probe_clock_sanity():
+    """手打的 UTC 不得晚于机器当前 UTC —— 时钟不可能超前。
+
+    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
+    但**手打的**时间戳从来没有任何东西校验过：2026-07-28T15:47Z 那一刻，
+    RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ——全都还没到。
+
+    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**，
+    也让一份留痕看起来比它实际的更新。这是纯算术，没有任何借口不检查。
+
+    **作用域**：心跳、`runs/*/MANIFEST.json`、`PARTNER_SYNC.md` 的段落头。
+    第一版只查心跳，然后写它的人在同一个会话里又把另外两种各写错一次——
+    一个探针的作用域若被它的第一个样本框死，它会漏掉同一类的其余部分。
+    """
+    now = time.time()
+    ahead, drifted, unreadable = [], [], []
+    for label, path, stamp, err in _stamps_to_check():
+        if err is not None:
+            unreadable.append("%s（%s）" % (label, err))
+            continue
         if not isinstance(stamp, str):
-            unreadable.append("%s（没有 utc 字段）" % name)
+            unreadable.append("%s（没有 utc 字段）" % label)
             continue
         try:
             claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
         except ValueError:
-            unreadable.append("%s（utc 不是 ISO8601Z：%r）" % (name, stamp[:30]))
-            continue
+            try:
+                claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%MZ"))
+            except ValueError:
+                unreadable.append("%s（不是 ISO8601Z：%r）" % (label, stamp[:30]))
+                continue
         # 60s of slack: writing the stamp and closing the file are not atomic.
         if claimed > now + 60:
             ahead.append("%s 自报 %s，超前 %.0f 分钟"
-                         % (name, stamp, (claimed - now) / 60))
+                         % (label, stamp, (claimed - now) / 60))
             continue
-        mtime = os.path.getmtime(path)
+        try:
+            mtime = os.path.getmtime(path)
+        except OSError:
+            continue
+        # PARTNER_SYNC is append-only, so its old paragraphs are legitimately
+        # far older than the file; only the future check applies to them.
+        if label.startswith("PARTNER_SYNC"):
+            continue
         if abs(claimed - mtime) > 3600:
             drifted.append("%s 自报 %s，与文件 mtime 差 %.0f 分钟"
-                           % (name, stamp, abs(claimed - mtime) / 60))
+                           % (label, stamp, abs(claimed - mtime) / 60))
     if ahead:
         return {"status": "risk",
-                "detail": "**%d 份心跳自报的时间还没到**：%s。时钟不可能超前，"
+                "detail": "**%d 处手打的时间还没到**：%s。时钟不可能超前，"
                           "所以这些是手打的；危险在方向——只会向前跑的自报时间"
-                          "让掉线看起来比实际新鲜。取值请用 "
-                          "`date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ`。"
+                          "让掉线看起来比实际新鲜、让留痕看起来比实际更新。"
+                          "取值请用 date -u。"
                           % (len(ahead), "；".join(ahead[:4]))}
     if unreadable:
         return {"status": "risk",
-                "detail": "**%d 份心跳的 utc 读不出来**：%s。读不出不等于没问题。"
+                "detail": "**%d 处时间戳读不出来**：%s。读不出不等于没问题。"
                           % (len(unreadable), "；".join(unreadable[:4]))}
     if drifted:
         return {"status": "partial",
-                "detail": "%d 份心跳自报时间与文件 mtime 相差超过一小时：%s。"
+                "detail": "%d 处自报时间与文件 mtime 相差超过一小时：%s。"
                           % (len(drifted), "；".join(drifted[:4]))}
     return {"status": "green",
-            "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
+            "detail": "心跳、run 留痕与 PARTNER_SYNC 段落头的时间全部不晚于机器 UTC。"}
 
 
 def _merge_queue_probe():
@@ -998,6 +1155,124 @@ def probe_standing():
                          "　→ **超过两个周期没跳，例行已停**" if stale else "")}
 
 
+def _accounts_rows():
+    """账号池的结构化行。读不出来返回空表——**空表不等于「没问题」**，
+    页面据此显示「账号池不可读」，而不是显示一个漂亮的空白。"""
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        return _acct.status()
+    except Exception:
+        return []
+
+
+def _agent_account(agent_id):
+    """这个 agent 最近一次是跑在哪个账号上的；不知道就是 None，不猜。"""
+    logs = rel("monitor", "dispatch-logs")
+    if not os.path.isdir(logs):
+        return None
+    best, best_m = None, 0
+    for name in os.listdir(logs):
+        if not (name.startswith(agent_id + "-") and name.endswith(".log")):
+            continue
+        path = os.path.join(logs, name)
+        try:
+            m = os.path.getmtime(path)
+        except OSError:
+            continue
+        if m > best_m:
+            best, best_m = path, m
+    if not best:
+        return None
+    try:
+        with open(best, encoding="utf-8", errors="replace") as fh:
+            for _ in range(4):
+                line = fh.readline()
+                if not line:
+                    break
+                hit = re.search(r"account=(\S+)", line)
+                if hit:
+                    a = hit.group(1)
+                    return None if a.startswith("default") else a
+    except OSError:
+        return None
+    return None
+
+
+def _fleet_rows():
+    """现役舰队：六个常驻岗 + 在跑的一次性工人。
+
+    「活着」问的是**计划任务表**（无头是唯一启动路径之后它就是权威）与
+    **工作板上的动作**，不问 agent 的自述——自述的时刻会漂前，文件的 mtime
+    会被一次 merge 摸新，而一行 CLAIM/DONE 只可能由活着的会话写出来。"""
+    try:
+        sys.path.insert(0, HERE)
+        import board as board_mod
+        import standing as standing_mod
+    except Exception:
+        return {"error": "fleet modules unreadable"}
+    try:
+        live = standing_mod.running_tasks()
+    except Exception:
+        live = set()
+    claimed = {}
+    try:
+        for f in os.listdir(board_mod.CLAIMED):
+            if f.endswith(".md"):
+                parts = f[:-3].split(".")
+                if len(parts) >= 2:
+                    claimed.setdefault(parts[1], []).append(parts[0])
+    except OSError:
+        pass
+    roles = {"RES-1": "战役", "RES-2": "论文", "RES-3": "验证",
+             "RES-4": "基建", "OPS-M": "合并", "OPS-A": "审计"}
+    rows = []
+    for aid, role in roles.items():
+        rows.append({
+            "id": aid, "role": role,
+            "alive": aid in live,
+            "account": _agent_account(aid),
+            "holding": sorted(claimed.get(aid, [])),
+            "idle_min": board_mod.heartbeat_age(aid),
+        })
+    workers = sorted(w for w in live if w.startswith("W-"))
+    return {"standing": rows, "workers": workers,
+            "workers_holding": {w: sorted(claimed.get(w, [])) for w in workers}}
+
+
+def _landed_gap():
+    """板上说交付了几件，其中几件的分支还没进 master。
+
+    这一格是今天最贵的一课的量化：把「板上 done」当成「已落地」计分，
+    headline 就虚高了 11.5 个百分点。"""
+    out = {"done": 0, "stuck": [], "flagged": 0}
+    try:
+        sys.path.insert(0, HERE)
+        import board as board_mod
+        out["done"] = len(board_mod.done_ids())
+    except Exception:
+        pass
+    try:
+        import mergequeue as mq
+        stuck = mq.done_not_on_master()      # [{item, branch, state}, ...]
+        out["stuck"] = [{"item": r.get("item"), "state": r.get("state")}
+                        for r in stuck][:12]
+        out["stuck_n"] = len(stuck)
+    except Exception as exc:
+        # 不知道就说不知道，不写 0。第一版这里写了 `sorted(stuck)`，
+        # 而它返回的是一串 dict——排序当场抛异常，`stuck_n` 变成 None，
+        # 页面于是显示「差额未知」。那次是对的：**它没有把失败画成零**。
+        out["stuck_n"] = None
+        out["stuck_error"] = type(exc).__name__
+    try:
+        ci = rel("monitor", "ci")
+        out["flagged"] = len([f for f in os.listdir(ci)
+                              if f.startswith("CONFLICT-")]) if os.path.isdir(ci) else 0
+    except OSError:
+        pass
+    return out
+
+
 def probe_accounts():
     """账号池：谁登录了、谁的窗口开着、下一个窗口几点重开。
 
@@ -1091,7 +1366,11 @@ def collect_metrics(with_tests):
     m = {}
     m["git_head"] = git("log", "-1", "--format=%h %s")
     m["git_branch"] = git("rev-parse", "--abbrev-ref", "HEAD")
-    status = git("status", "--porcelain")
+    # S30: an unanswered `git status` used to render as 「工作树干净」. It is
+    # now `None`, and the page says it does not know rather than showing an
+    # empty list that looks exactly like a clean tree.
+    status = git_or_none("status", "--porcelain")
+    m["dirty_known"] = status is not None
     m["dirty"] = [l[3:] for l in status.splitlines()] if status else []
     m["untracked"] = [l[3:] for l in status.splitlines() if l.startswith("??")] if status else []
 
@@ -1564,6 +1843,10 @@ def render(state, refresh=None):
 
     parts = []
     A = parts.append
+    # S30: the page had no doctype and no charset while being full of Chinese,
+    # and rendered only because browsers guess UTF-8 correctly. This branch
+    # added more user-facing Chinese and a script; both inherit that guess.
+    A('<!doctype html><meta charset="utf-8">')
     A('<title>Theoria · 进度</title>')
     if refresh:
         A('<meta http-equiv="refresh" content="%d">' % refresh)
@@ -1584,7 +1867,16 @@ def render(state, refresh=None):
                  (("%d" % len(needs)), "需要你处理"),
                  (esc(state["generated_at"][5:16]), "上次扫描")]:
         A('<div class="ts2"><b>%s</b><span>%s</span></div>' % (v, k))
-    A('</div></div></header>')
+    A('</div></div>')
+    # S30: the timestamp above is what the backend *claims*; this row is what
+    # the browser can *check*. A stale page and a healthy quiet one used to be
+    # the same picture.
+    A('<div class="freshrow"><span class="ago" data-since="%d" data-stale="%d" '
+      'data-label="本页数据：">本页数据：年龄由浏览器计算（未启用脚本时不可用）'
+      '</span></div>'
+      % (int(state.get("generated_epoch") or 0),
+         int(state.get("stale_after_s") or stale_after_s())))
+    A('</header>')
 
     A('<main>')
 
@@ -1744,6 +2036,7 @@ def render(state, refresh=None):
       '<code>monitor/spec.py</code>。人话层只是翻译，数据与审计口径不变。'
       '重跑即刷新；<code>--watch 120</code> 自动刷新。</p></footer>')
     A('</main>')
+    A(FRESH_JS)
     return "\n".join(parts)
 
 
@@ -1928,6 +2221,11 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
   padding:13px 16px;font-size:13.5px}
 .conflict.risk{border-left:4px solid var(--st-risk)}
 .conflict.green{border-left:4px solid var(--st-green);color:var(--mut)}
+/* S30: `missing` had no rule at all, so the one verdict this change exists to
+   make visible rendered flatter than the green it replaces -- 「没检查成」
+   would have been quieter on the page than 「检查过了，很干净」. */
+.conflict.missing{border-left:4px dashed var(--missing);background:var(--missingbg)}
+.conflict.partial{border-left:4px solid var(--partial)}
 
 .mainloop h2{border-bottom-width:2px;border-bottom-color:var(--fg)}
 .doctrine{background:var(--card);border-left:4px solid var(--fg);border-radius:6px;
@@ -2075,7 +2373,96 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
   header{padding:26px 16px 0}main{padding:0 16px 50px}
   .lb{width:auto}table{font-size:13px}td{padding:9px 10px}
 }
+
+/* ---- S30: 数据年龄，以及扫描失败页 ----
+   三态而非两态。新鲜是灰的（无需注意），陈旧是红的（后端可能已经挂了），
+   **读不出生成时刻是灰的**——与「缺失」同色，因为不知道就是不知道，
+   把它涂红等于把一次读取失败谎报成一次扫描失败。 */
+.freshrow{margin:16px 0 0;font-size:13px}
+.ago{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+.ago.fresh{color:var(--mut)}
+.ago.stale{display:inline-block;background:var(--riskbg);color:var(--risk);
+  border:1px solid var(--risk);border-radius:9px;padding:8px 14px;font-weight:700}
+.ago.unknown{display:inline-block;background:var(--missingbg);color:var(--missing);
+  border-radius:9px;padding:8px 14px}
+.scanfail{background:var(--riskbg);border:1px solid var(--risk);
+  border-left:6px solid var(--risk);border-radius:11px;padding:22px 26px}
+.scanfail h1{color:var(--risk)}
+.scanfail .lead{margin:8px 0 0;font-size:14.5px;max-width:70ch}
+.tb{margin:0;padding:12px 14px;background:var(--missingbg);border-radius:8px;
+  overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;
+  line-height:1.5;white-space:pre-wrap;word-break:break-word}
 </style>"""
+
+
+# The first JavaScript this page has ever carried, and it is here for one
+# reason: 渲染端不该无条件相信后端。`index.html` is a static file opened over
+# `file://`, so it cannot re-fetch anything -- but the generation instant is
+# baked in, and the browser owns a clock, which is enough to notice that the
+# backend stopped writing. Without this, a dead scan and a quiet repository are
+# the same page.
+FRESH_JS = """<script>
+(function(){
+  /* index.html carries no meta-refresh unless --watch is used, so an open tab
+     never re-reads the file. Without this, the widget would be measuring the
+     age of the DOM rather than the age of the data, and any tab left open past
+     the threshold would show 「扫描可能已经挂了」 about a perfectly healthy
+     scan -- a false red, which is the same disease pointed the other way.
+     So: before believing the page is stale, reload once to find out whether
+     the file on disk moved. Self-limiting -- the reload resets loadedAt, so
+     this fires at most once per staleness window, and a genuinely dead scan
+     still lands on the red banner right after. */
+  var loadedAt = Math.floor(Date.now()/1000);
+  function human(s){
+    if(s < 90) return s + " 秒";
+    if(s < 5400) return Math.round(s/60) + " 分钟";
+    if(s < 172800) return (s/3600).toFixed(1) + " 小时";
+    return (s/86400).toFixed(1) + " 天";
+  }
+  function paint(){
+    var now = Math.floor(Date.now()/1000);
+    var nodes = document.querySelectorAll(".ago");
+    for(var i=0;i<nodes.length;i++){
+      var el = nodes[i];
+      var t = parseInt(el.getAttribute("data-since"), 10);
+      var stale = parseInt(el.getAttribute("data-stale"), 10);
+      var label = el.getAttribute("data-label") || "";
+      if(!isFinite(t) || t <= 0){
+        el.className = "ago unknown";
+        el.textContent = label + "年龄未知：这一页没有带上生成时刻。未知不写成 0。";
+        continue;
+      }
+      var age = now - t;
+      if(age < -120){
+        el.className = "ago unknown";
+        el.textContent = label + "生成时刻在未来 " + human(-age)
+          + "，本机时钟与生成时不一致，年龄不可信。";
+        continue;
+      }
+      if(age < 0) age = 0;
+      if(isFinite(stale) && stale > 0 && age >= stale){
+        if(now - loadedAt >= stale && typeof location !== "undefined"
+           && location.reload){
+          /* This tab has itself been open longer than the window, so the age
+             may be the tab's and not the data's. Re-read the file before
+             accusing the backend. */
+          location.reload();
+          return;
+        }
+        el.className = "ago stale";
+        el.textContent = label + "这份数据是 " + human(age) + "前的，"
+          + "已超过两个扫描周期（" + human(stale) + "）——扫描可能已经挂了，"
+          + "不要把它当作现况读。";
+      }else{
+        el.className = "ago fresh";
+        el.textContent = label + human(age) + "前";
+      }
+    }
+  }
+  paint();
+  setInterval(paint, 15000);
+})();
+</script>"""
 
 
 # ---------------------------------------------------------------- main
@@ -2122,6 +2509,12 @@ def _reconcile(item, probe_result, overrides):
 
 
 def build(with_tests=False, out_dir=None):
+    if spec is None:
+        # Re-raised here rather than at import, so `main()`'s failure exit is
+        # already installed and turns this into a red page instead of a
+        # traceback in a gitignored log. Re-raising the original object keeps
+        # its traceback, so the page still names the line in `spec.py`.
+        raise _SPEC_IMPORT_ERROR
     metrics = collect_metrics(with_tests)
 
     probe_results = {name: fn() for name, fn in PROBES.items()}
@@ -2168,7 +2561,17 @@ def build(with_tests=False, out_dir=None):
     ]
 
     state = {
-        "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        # S30. `generated_at` keeps its exact historical shape -- `render()` and
+        # `app.html` both slice it `[5:16]`, and `history.jsonl` reuses it as
+        # `ts`. The epoch and the UTC form are added *beside* it, because a
+        # local naive string cannot be turned into an age by a browser that may
+        # not share this machine's timezone.
+        **_stamps(),
+        # Present and true on every successful scan, so `false` is a claim the
+        # failure exit makes rather than a value a reader has to infer from an
+        # absence. `verify.py` requires the field, so it cannot quietly vanish.
+        "scan_ok": True,
+        "stale_after_s": stale_after_s(),
         "metrics": metrics,
         "phases": phases,
         "sections": sections,
@@ -2188,6 +2591,14 @@ def build(with_tests=False, out_dir=None):
         "blocking_findings": sum(1 for f in spec.FINDINGS if f["severity"] == "blocking"),
         "probes": probe_results,
         "tickets": load_prompts(),
+        # 页面渲染，扫描计算——这条分工是本仓的既有契约。下面三块是
+        # 2026-07-29 舰队改制之后页面需要而旧 state 里没有的：
+        # 账号池的**结构化**行（不是一句散文）、每个 agent 跑在哪个账号上、
+        # 以及「板上 done」与「进了 master」的差额。最后一条是今天最重要的
+        # 新区分：把前者当成后者，正是 headline 虚高 11.5 个百分点的机制。
+        "accounts": _accounts_rows(),
+        "fleet": _fleet_rows(),
+        "landed": _landed_gap(),
     }
     state["progress"] = compute_progress(phases)
     state["paper_progress"] = compute_paper_progress()
@@ -2240,32 +2651,387 @@ def build(with_tests=False, out_dir=None):
 build.refresh = None
 
 
+# ------------------------------------------------------------- failure exit
+#
+# S30. A crashed scan used to be indistinguishable from a quiet one. `build()`
+# writes `index.html` and `state.json` at the very end, so any exception left
+# both files untouched; `refresh.cmd` appended the traceback to
+# `monitor/refresh.log`, which is gitignored, and `reflex.py` threw the return
+# code away. The page therefore kept showing the last successful scan with a
+# slightly older timestamp -- 「扫描挂了」and「什么都没变」rendered identically.
+# That is this repository's catalogued failure shape, grown on the dashboard
+# that is supposed to catch it everywhere else.
+#
+# Two placement decisions, both load-bearing:
+#
+#   * the exit lives in `main()`, **not** inside `build()`. `verify.py:_real_run`
+#     turns a raising `build()` into a red gate; a `build()` that caught its own
+#     crash and returned normally would silently take that red away, which is
+#     the same defect one level up.
+#   * the failure page is rendered by `render_failure()`, not by `render()`.
+#     `render()` subscripts nine keys of a successful state (including
+#     `probes["conflict_scan"]` and `loop_stats[2]`), so feeding it a stub would
+#     make the failure exit itself the second crash -- and that one has no
+#     handler.
+
+#: Scheduled Task `TheoriaDashboard` reruns the scan every 10 minutes.
+SCAN_PERIOD_S = 600
+#: ...so a page older than two of those has almost certainly missed a scan.
+STALE_CYCLES = 2
+
+
+def stale_after_s():
+    """Seconds after which the page must stop believing its own numbers.
+
+    `--watch N` makes the real period N, so the threshold follows it rather
+    than staying pinned to the scheduled-task cadence.
+
+    `getattr` rather than `build.refresh`: this runs on the failure path, where
+    the reason we are here may well be that something about the module is not
+    what it should be. A threshold helper that raises would take the failure
+    exit down with it and hand back the silence it exists to prevent.
+    """
+    return STALE_CYCLES * int(getattr(build, "refresh", None) or SCAN_PERIOD_S)
+
+
+def _say(text, stream=None):
+    """Write `text` to a console that may not be able to represent it.
+
+    The host console is cp936. Anything that reached us through
+    `errors="replace"` carries U+FFFD, which cp936 cannot encode, so an
+    unguarded `print` of a traceback raises `UnicodeEncodeError` -- and on the
+    failure path that turns a reported failure back into an unreported one.
+    Never raises; a mangled line beats a lost one.
+    """
+    stream = stream or sys.stdout
+    try:
+        stream.write(text if text.endswith("\n") else text + "\n")
+    except Exception:
+        try:
+            enc = getattr(stream, "encoding", None) or "ascii"
+            stream.write(text.encode(enc, "replace").decode(enc, "replace")
+                         + "\n")
+        except Exception:
+            pass
+
+
+def _stamps(now=None):
+    """The three forms of one instant.
+
+    `generated_at` keeps its historical shape (local, naive, `%Y-%m-%d
+    %H:%M:%S`) because `render()` and `app.html` both slice it as `[5:16]` and
+    `history.jsonl` reuses it as `ts`. The age arithmetic needs an unambiguous
+    instant, so the epoch is added beside it instead of replacing it.
+    """
+    now = time.time() if now is None else now
+    return {
+        "generated_at": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(now)),
+        "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)),
+        "generated_epoch": int(now),
+    }
+
+
+def _prior_success(out_dir=None):
+    """When the last scan that actually finished, finished.
+
+    Returns `(iso, epoch)`, either of which may be `None`. Unknown stays
+    `None` and is rendered as 「未知」: a state.json we cannot read is not the
+    same claim as "there has never been a successful scan", and this repository
+    has a standing rule against collapsing the two.
+    """
+    path = os.path.join(out_dir or HERE, "state.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            prev = json.load(fh)
+    except Exception:
+        return None, None
+    if not isinstance(prev, dict):
+        return None, None
+    if prev.get("scan_ok") is False:
+        # The predecessor was itself a failure page; it is carrying the stamp
+        # of the last *success*, so take that and do not restart the clock.
+        return prev.get("last_success_at"), prev.get("last_success_epoch")
+    return prev.get("generated_at"), prev.get("generated_epoch")
+
+
+def _write_atomic(path, text):
+    """tmp + os.replace, the idiom `accounts.py:98` argues for.
+
+    A failure writer that can leave a half-written file behind would replace
+    one invisible failure with a louder one.
+    """
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+    os.replace(tmp, path)
+
+
+def failure_state(exc, tb_text, out_dir=None, now=None):
+    """The machine-readable form of 「本次扫描失败」.
+
+    Deliberately carries **no** payload from the previous run. Copying the old
+    `metrics` / `phases` forward would hand every consumer stale numbers under
+    a fresh timestamp, which is the exact defect this exit exists to remove.
+    What survives is the one fact a reader needs: when the data they can no
+    longer see was last true.
+    """
+    lines = [ln for ln in (tb_text or "").strip().splitlines() if ln.strip()]
+    frames = [ln.strip() for ln in lines if ln.strip().startswith("File \"")]
+    last_at, last_epoch = _prior_success(out_dir)
+    state = dict(_stamps(now))
+    state.update({
+        "scan_ok": False,
+        "stale_after_s": stale_after_s(),
+        "scan_error": {
+            "type": type(exc).__name__,
+            "message": str(exc)[:2000],
+            # The literal first line of a traceback is always the useless
+            # "Traceback (most recent call last):", so what gets promoted here
+            # is the innermost frame and the raise line -- the two lines a
+            # reader actually needs to place the crash.
+            "where": frames[-1] if frames else "unknown",
+            "raised": lines[-1] if lines else "",
+            "traceback": (tb_text or "").strip()[-8000:],
+        },
+        "last_success_at": last_at,
+        "last_success_epoch": last_epoch,
+        # Missing is not zero: if we cannot read the predecessor we say so
+        # rather than reporting an age of 0 or a success at the epoch.
+        "last_success_known": last_at is not None,
+    })
+    # Guarded conversion: `json.load` happily accepts a bare `NaN`, and
+    # `int(nan)` raises. An arithmetic detail that can take down the failure
+    # exit is not a detail -- unknown is the correct answer for a
+    # `generated_epoch` we cannot subtract, and `bool` is excluded because
+    # `isinstance(True, int)` would otherwise date the last success to 1970.
+    try:
+        if isinstance(last_epoch, bool):
+            raise TypeError("bool is not an epoch")
+        state["stale_since_s"] = max(
+            0, state["generated_epoch"] - int(last_epoch))
+    except Exception:                           # noqa: BLE001 -- unknown
+        state["stale_since_s"] = None
+    return state
+
+
+def render_failure(state):
+    """A whole page whose only message is that there is no data.
+
+    Self-contained on purpose: it borrows `STYLE` and nothing else, so it still
+    renders when the crash was inside a probe, inside `spec`, or inside
+    `render()` itself.
+    """
+    err = state["scan_error"]
+    last_at = state.get("last_success_at")
+    last_epoch = state.get("last_success_epoch")
+    # `isinstance(True, int)` is True, and a bool epoch would render as 1970.
+    known_epoch = (isinstance(last_epoch, (int, float))
+                   and not isinstance(last_epoch, bool)
+                   and last_epoch > 0)
+    parts = []
+    A = parts.append
+    A('<!doctype html><meta charset="utf-8">')
+    A('<title>Theoria · 扫描失败</title>')
+    if getattr(build, "refresh", None):
+        A('<meta http-equiv="refresh" content="%d">' % build.refresh)
+    A(STYLE)
+    A('<header><div class="scanfail">'
+      '<h1>扫描失败</h1>'
+      '<p class="lead">这一页没有数据。上一次扫描崩了，'
+      '<b>所以这里不显示旧数字</b>——旧数字配上新时间戳，'
+      '和「一切正常」在页面上长得一模一样，那正是这一页要拆掉的东西。</p>'
+      '<p class="lead">最后一次成功扫描：<b>%s</b>%s</p>'
+      '</div></header>'
+      % (esc(str(last_at)) if last_at else "未知",
+         # Three cases, not two. The timestamp and the age come from different
+         # fields, so a predecessor written by pre-S30 code has the former and
+         # not the latter -- and the first crash after this ships is exactly
+         # that case. Saying 「不知道是什么时候」 next to a printed timestamp
+         # would be the page contradicting itself on its own headline.
+         ('　<span class="ago" data-since="%d" data-stale="%d">'
+          '（正在计算已过去多久）</span>' % (int(last_epoch), stale_after_s()))
+         if known_epoch else
+         ('　<span class="note">（这份记录来自 S30 之前的扫描，只有时刻没有'
+          '机器可读的纪元，所以算不出过去了多久）</span>' if last_at else
+          '　<span class="note">（读不到上一份 state.json，'
+          '所以连这个都不知道——不知道不写成 0）</span>')))
+    A('<main><section><h2>崩在哪里</h2>')
+    A('<table class="wide"><tbody>')
+    for k, v in [("异常", "%s: %s" % (err["type"], err["message"])),
+                 ("位置", err["where"]),
+                 ("抛出", err["raised"]),
+                 ("本次尝试", state["generated_at_utc"])]:
+        A('<tr><th>%s</th><td><code>%s</code></td></tr>' % (esc(k), esc(str(v))))
+    A('</tbody></table>')
+    # `html.escape`, NOT `esc()`: `esc()` replaces every newline with a space
+    # (it exists for one-line table cells), which flattened the whole traceback
+    # into one unreadable paragraph and made the `white-space:pre-wrap` on
+    # `.tb` decorative. The traceback is the single most useful thing on this
+    # page; it is the one string that must keep its shape.
+    A('<details class="fold" open><summary>完整 traceback</summary>'
+      '<div><pre class="tb">%s</pre></div></details>'
+      % html.escape(err["traceback"]))
+    A('</section><section><h2>怎么办</h2>'
+      '<div class="needs"><b>重跑一次，看它是否可复现</b>'
+      '<p><code>python monitor/scan.py</code>。这次崩溃已追加进 '
+      '<code>monitor/crashes.jsonl</code>（被 git 跟踪，'
+      '不像 <code>monitor/refresh.log</code> 那样会被下一次清理带走）；'
+      '历史崩溃的分类见 <code>monitor/CRASHES.md</code>。</p></div>'
+      '</section>')
+    A('<footer><p>由 <code>monitor/scan.py</code> 的失败出口生成（S30）。'
+      '扫描成功后这一页会被真正的盘面覆盖。</p></footer>')
+    A('</main>')
+    A(FRESH_JS)
+    return "\n".join(parts)
+
+
+def record_crash(state, out_dir=None):
+    """Append the crash to a **tracked** ledger.
+
+    `refresh.log` held the only record of 55 crashes and is gitignored, so the
+    record was one `git clean` from gone. This file is committed; the traceback
+    body is not written into it (that is what the page and the log are for) --
+    one line per crash keeps it a ledger rather than a second log.
+    """
+    row = {
+        "utc": state["generated_at_utc"],
+        "type": state["scan_error"]["type"],
+        "where": state["scan_error"]["where"],
+        "message": state["scan_error"]["message"][:300],
+        "last_success_at": state.get("last_success_at"),
+    }
+    path = os.path.join(out_dir or HERE, "crashes.jsonl")
+    with open(path, "a", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def write_failure(exc, tb_text, out_dir=None, now=None):
+    """Write the failure state and the failure page; return the state.
+
+    Every step is guarded, including the construction of the state itself --
+    a failure exit that can raise hands the caller back exactly the silence it
+    was built to prevent.
+
+    **`state.json` is written before `index.html`**, and that order is
+    load-bearing. Both writes are swallowed on error, so if only one lands it
+    must be the one that fails safe: a red page beside a `scan_ok: true` state
+    would leave `app.html` (which reads only the state) rendering the old
+    dashboard as healthy. A failure state beside a stale page is the harmless
+    direction of the same accident.
+
+    The return value carries `written`, so the caller can report what actually
+    reached the disk instead of announcing a red page it never managed to
+    write.
+    """
+    target = out_dir or HERE
+    try:
+        state = failure_state(exc, tb_text, out_dir, now)
+    except Exception as inner:                      # noqa: BLE001 -- last resort
+        state = dict(_stamps(now), scan_ok=False, last_success_at=None,
+                     last_success_epoch=None, last_success_known=False,
+                     stale_since_s=None, stale_after_s=stale_after_s(),
+                     scan_error={"type": type(exc).__name__,
+                                 "message": str(exc)[:2000],
+                                 "where": "unknown（构造失败状态时又崩了：%s）"
+                                          % type(inner).__name__,
+                                 "raised": "", "traceback": tb_text or ""})
+    written = []
+
+    def _try(name, fn):
+        try:
+            fn()
+            written.append(name)
+        except Exception:                           # noqa: BLE001 -- reported
+            pass
+
+    _try("state.json", lambda: _write_atomic(
+        os.path.join(target, "state.json"),
+        json.dumps(state, ensure_ascii=False, indent=2, sort_keys=True) + "\n"))
+
+    def _page():
+        try:
+            body = render_failure(state)
+        except Exception as inner:                  # noqa: BLE001 -- degraded
+            body = ("<!doctype html><meta charset=\"utf-8\">"
+                    "<title>Theoria · 扫描失败</title>"
+                    "<h1>扫描失败</h1><p>渲染失败页时又崩了一次：%s: %s</p>"
+                    "<pre>%s</pre>"
+                    % (html.escape(type(inner).__name__), html.escape(str(inner)),
+                       html.escape(state["scan_error"]["traceback"])))
+        _write_atomic(os.path.join(target, "index.html"), body)
+
+    _try("index.html", _page)
+    _try("crashes.jsonl", lambda: record_crash(state, out_dir))
+    state["written"] = written
+    return state
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tests", action="store_true", help="also run both pytest suites")
     ap.add_argument("--watch", type=int, metavar="SECONDS", default=0,
                     help="rescan on this interval; the page auto-reloads itself")
+    ap.add_argument("--out-dir", metavar="DIR", default=None,
+                    help="write the artifacts here instead of into monitor/")
     args = ap.parse_args()
     if args.watch:
         build.refresh = max(args.watch, 15)
+    state = None
+    failed = 0
     while True:
-        state = build(args.tests)
-        if state["p1_unprobed"]:
-            print("    Phase 1: %d/%d 项无任何机器检查，其状态是人工断言"
-                  % (state["p1_unprobed"], state["p1_total"]))
-        for o in state["verdict_overrides"]:
-            print("    裁决分歧 %s：手写 %s / 探针 %s → 取 %s（%s）"
-                  % (o["item"], o["hand"], o["probe_said"], o["kept"], o["why"]))
-        print("[%s] monitor/index.html written — Phase 1: %d/%d green"
-              % (state["generated_at"], state["p1_green"], state["p1_total"]))
+        try:
+            state = build(args.tests, out_dir=args.out_dir)
+        except Exception as exc:                    # noqa: BLE001 -- reported
+            import traceback
+            tb = traceback.format_exc()
+            fs = write_failure(exc, tb, out_dir=args.out_dir)
+            failed += 1
+            state = None
+            # Reporting comes after the artifacts are on disk, and it is
+            # wrapped, because printing is not safe here. The console is cp936
+            # and a traceback decoded with `errors="replace"` carries U+FFFD,
+            # which cp936 cannot encode -- this repository has already lost a
+            # gate to exactly that, dying inside the loop that printed why it
+            # had failed. A failure exit that crashes while announcing the
+            # failure hands back the silence it just removed.
+            _say(tb, stream=sys.stderr)
+            # Report what actually landed. The first version of this line
+            # announced 「index.html 已改写为红色失败页」 unconditionally,
+            # while the writes beneath it were swallowed -- a claim about a
+            # red page that a full disk would have made false, printed by the
+            # very code whose thesis is that failures must not be silent.
+            wrote = fs.get("written") or []
+            _say("[%s] 扫描失败：%s — 已写出 %s%s；上次成功 %s"
+                 % (fs["generated_at_utc"], fs["scan_error"]["type"],
+                    "、".join(wrote) if wrote else "**什么都没写成**",
+                    "" if "index.html" in wrote
+                    else "（**页面没能改写，它还显示着上一轮**）",
+                    fs.get("last_success_at") or "未知"))
+        else:
+            if state["p1_unprobed"]:
+                print("    Phase 1: %d/%d 项无任何机器检查，其状态是人工断言"
+                      % (state["p1_unprobed"], state["p1_total"]))
+            for o in state["verdict_overrides"]:
+                print("    裁决分歧 %s：手写 %s / 探针 %s → 取 %s（%s）"
+                      % (o["item"], o["hand"], o["probe_said"], o["kept"], o["why"]))
+            print("[%s] monitor/index.html written — Phase 1: %d/%d green"
+                  % (state["generated_at"], state["p1_green"], state["p1_total"]))
         if not args.watch:
             break
         time.sleep(max(args.watch, 15))
+    if state is None:
+        # Non-zero so a caller can tell. `reflex.py` now checks this; before
+        # S30 it discarded the return code and logged the cycle as `quiet`.
+        return 1
     for name, pr in sorted(state["probes"].items()):
         print("  %-22s %-8s %s" % (name, pr["status"], pr["detail"][:110]))
     for f in state["findings"]:
         if f["severity"] in ("blocking", "high"):
             print("  [%s] %s — %s" % (f["severity"].upper(), f["id"], f["title"]))
+    # Reached only when the last scan succeeded, so 0. An earlier draft
+    # returned `1 if failed else 0`, which under a future `--watch --once`
+    # would report a healthy board as a failed one and make `reflex.py` log
+    # `SCAN FAILED` for a cycle that recovered.
     return 0
 
 

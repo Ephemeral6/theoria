@@ -118,16 +118,48 @@ def test_this_repository_is_where_the_survey_says_it_is():
     # 2026-07-29 收紧：`fleet-study`（S17 补上）与 `release` 都已自带闸门，
     # 所以它们从这个集合里**移除**——按上面那条规矩，收紧同样要说出来，
     # 否则下一个人会以为这两块地还敞着。
-    assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops",
-                                      "papers"}, survey["ungated"]
+    # S33（2026-07-29T16:30Z）收到空集：`ungated` 这一栏现在是**空的**，
+    # 三个名字全部离场——`papers` 由 S32 补上 verify.py，`CONTRACTS` 与
+    # `browser-ops` 同期各得一道。按上面那条规矩，收紧要说出来，理由在这里
+    # 尤其硬：这三个名字留在放行集合里，等于允许它们**悄悄失去**闸门而这条
+    # 测试不响——放行集合用的是 `<=`，它只拦「冒出没登记的名字」，拦不住
+    # 「登记过的名字掉回来」。今天这三个恰好都刚补上闸门，所以留着它们是
+    # 三个刚装好的闸门各配一张免检条。
+    #
+    # 从 `<=` 改成 `==`，两条一起看才完整：`ungated` 空、`tests_only` 恰为
+    # {verify-lab}，合起来就等于「除 verify-lab 外每一块地都有规范闸门」。
+    # 于是**掉出 gated**（闸门被删）和**新地没带闸门**两种事都会红，而这正是
+    # 上面那句 docstring 一直声称、但 `<=` 从来做不到的那件事。
+    # 红了要做的是：补上闸门，或者在这里改名字并说明为什么——不是放宽集合。
+    assert set(survey["ungated"]) == set(), (
+        "这些领地没有任何闸门就能被合并：%s。补一个 verify.py，"
+        "或在此登记并说明理由。" % survey["ungated"])
     # S14 cleared `tests_only` completely; anything in it now is a territory
     # that arrived afterwards and still owes a gate.  Naming them one by one is
     # the point -- an unexpected name here means a gate was deleted, which the
     # blanket `not survey["tests_only"]` I first wrote could not distinguish
     # from an ordinary new arrival.
     # `fleetkit` 是 S18 抽出来的新领地，有测试、还没有闸门——按 S13 它欠一个。
-    assert set(survey["tests_only"]) <= {"verify-lab",
-                                         "fleetkit"}, survey["tests_only"]
+    # S33（2026-07-29）：`fleetkit` 已由 S31-fleetkit-gate 补上 verify.py、
+    # 升进 `gated`，按规矩把它从这里**移除**——留着它就是那道新闸门的免检条。
+    #
+    # 这条断言今天红了近一小时（15:02Z–15:55Z）：P16-uncited-number-gate 给
+    # `papers` 加了第一个 pytest 套件，`papers` 于是从 `ungated` 挪进
+    # `tests_only`，而这里的放行集合不认。**红的是 master 自己**，代价是
+    # s29-triage-the-five-red-gates / s30-clock-sanity-widen /
+    # w1661-board-half-tracked 三支各被判一次「verify gate red in monitor」，
+    # 而三支都不是肇事者；a3-campaign-devpile 的 NEEDS-HUMAN 计数里也混进了
+    # 这一次。更难自愈的是：合并队列的保持规则只比对分支自己的 tip，红因
+    # 长在 master 那一侧时 tip 不会动，所以这类分支会被**永久保持**——包括
+    # 那支正带着修这条规则的补丁的分支。
+    # 它最后不是被这条断言的更新救的，是 S32 给 `papers` 补了真闸门、
+    # `papers` 越过 `tests_only` 直接进了 `gated`。也就是说：**这个集合从头
+    # 到尾没有被更新过，它只是不再被触发**。所以 S33 在这里做的不是补一个
+    # 名字，而是把两个集合都收到当下的真值，让下一次「谁掉出 gated」立刻红。
+    assert set(survey["tests_only"]) == {"verify-lab"}, (
+        "有测试、没规范闸门的领地变了：%s（预期只有 verify-lab）。"
+        "多出来的欠一道闸门；少掉的说明有人补上了闸门，改这里并说明。"
+        % survey["tests_only"])
     # `proxy` 本来是「非规范名闸门」的样板（`verify_spend.sh`）。S14 给了它一个
     # 规范的 `verify.py`，而规范名优先——于是 `verify_spend.sh` 会**从此不再在合并
     # 时被跑到**。这条断言之所以能松，唯一的理由是 `proxy/verify.py` 把它接成了

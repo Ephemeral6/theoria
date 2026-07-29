@@ -146,6 +146,25 @@ def running_tasks():
 
 
 def quota_held():
+    """有没有**真的**没车可发。
+
+    有账号池之后，全局 `quota_state.mode == "hold"` 不再等于「不能发车」——
+    它只说明**某一个**账号撞了限额。2026-07-29 正式启动时当场发生：账号 a 窗口
+    开着、板上有活、内存 9.3 GB，而例行程序对六个岗位一律报 `quota hold`，
+    因为它问的是那个全局旗标。**轮换器修好了，可发车的判据没跟上，
+    于是新机制被旧判据挡在门外。**
+
+    所以先问池子：只要还有一个账号可用，就不是 hold。池子不存在或读不出来时，
+    才回落到全局旗标——那是没有池子时唯一的判据。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        pool = _acct.load_config()
+        if pool:
+            return not any(_acct.usable(a) for a in pool)
+    except Exception:
+        pass
     path = os.path.join(HERE, "quota_state.json")
     try:
         return json.load(open(path, encoding="utf-8")).get("mode") == "hold"

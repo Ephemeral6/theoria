@@ -1,0 +1,24 @@
+=== history of figures/SOURCES.sha256: entry counts per commit ===
+abd8d0cb 2026-07-29 A12: the paper claims no cross-arm cost, the plate does -- and its denominator counts the RESET -> 61 entries
+059f6ed1 2026-07-28 figures: a run that billed nothing has no shape -- it is not a crash -> 54 entries
+9239eb1c 2026-07-28 figures: an oracle can be captured through an argument, not only through a call -> 50 entries
+f0e43896 2026-07-28 figures: declare the growing inputs by rule, and probe what the gates cannot see -> 47 entries
+87751026 2026-07-28 P4: salvage the P-21 figure pipeline, correct it, and finish it -> 43 entries
+
+=== history of release/MANIFEST.jsonl ===
+6b095965 2026-07-28 release: the stranger got stuck on the second command, and six other things
+8db6d66f 2026-07-28 release: fix the seven documentation defects the stranger found
+fa597957 2026-07-28 release: fix the code defects the stranger's run exposed
+c8e616f9 2026-07-28 release: REPRODUCING.md, written for someone who has none of this context
+a5cb3b60 2026-07-28 release: reproduce.py -- and the first thing it found was a bug I shipped
+
+=== when did EXPECTED_IDS gain E-08/E-09? ===
+abd8d0cb 2026-07-29 A12: the paper claims no cross-arm cost, the plate does -- and its denominator counts the RESET :: E-01 E-02 E-03 E-04 E-05 E-06 E-07 E-08 E-09 
+87751026 2026-07-28 P4: salvage the P-21 figure pipeline, correct it, and finish it :: E-01 E-02 E-03 E-04 E-05 E-06 E-07 
+
+=== when did THEORIZE_LOG gain E-08/E-09? ===
+4dd8e0f7 2026-07-29 C9: the mover was the token it ate -- identity, then the atom that needed it :: E-08=1 E-09=1
+76e75609 2026-07-28 C9: the counting guard, one rung -- and the count that was a constant :: E-08=1 E-09=0
+3f3f3965 2026-07-28 theory-compiler: consume the ic3_pdr certificate -- the consumer half only :: E-08=0 E-09=0
+672044a8 2026-07-28 theory-compiler: close E-06 by using the second method it already had :: E-08=0 E-09=0
+85da5508 2026-07-28 theory-compiler: close E-07 by giving the manual somewhere to say it :: E-08=0 E-09=0

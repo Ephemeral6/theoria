@@ -28,6 +28,11 @@
 #      plate -- "the paper shows the figure the pipeline built", checked
 #  12. the index's digests match the files on disk, and the paper numbering is
 #      1..N with no gaps
+#   9. the cross-arm cost claim reconciles, four independent ways
+#  13. every figure the pipeline builds is accounted for on the far end: cited
+#      in the paper, or declared uncited with a reason. The figure set comes
+#      from build_all.FIGURES, so a plate added tomorrow is checked tomorrow --
+#      the paper's own parity gate maps exactly three figures and cannot.
 #
 # Runs every gate and reports all failures, rather than stopping at the first,
 # except where a later gate cannot mean anything without an earlier one.
@@ -374,6 +379,30 @@ PY
     sed 's/^/    /' "$SCRATCH/index.txt" | head -20 >&2
 else
     say "ok  ($(tail -n 1 "$SCRATCH/index.txt"), every digest recomputed)"
+fi
+
+say ""
+say "== 13. every figure reaches a reader, and the check is shown refusing =="
+# ---------------------------------------------------------------------------
+# Gates 1-9 all pass for a plate that is built, hashed, published and read by
+# nobody. The figure set is taken from build_all.FIGURES rather than a copy of
+# it, so this gate grows with the pipeline instead of ageing beside it.
+#
+# The negative control runs FIRST and is not optional, for the same reason gate
+# 8's does -- and with a sharper one here, because the gate this replaces was
+# green for its whole life *because* it could not see three of the six figures.
+if "$PYTHON" check_figure_citations.py --self-test > "$SCRATCH/citations.selftest.txt" 2>&1; then
+    say "ok  (negative control fires: an undeclared, uncited new figure fails by name)"
+else
+    fail "the citation gate's negative control did not fire:"
+    sed 's/^/    /' "$SCRATCH/citations.selftest.txt" | head -20 >&2
+fi
+if "$PYTHON" check_figure_citations.py > "$SCRATCH/citations.txt" 2>&1; then
+    say "ok  ($(tail -n 2 "$SCRATCH/citations.txt" | tr '\n' ' ' | sed 's/  */ /g'))"
+    grep -E "^  DECLARED" "$SCRATCH/citations.txt" | sed 's/^/    /' || true
+else
+    fail "a figure this pipeline builds is cited nowhere and declared nowhere:"
+    sed 's/^/    /' "$SCRATCH/citations.txt" | head -20 >&2
 fi
 
 # ---------------------------------------------------------------------------

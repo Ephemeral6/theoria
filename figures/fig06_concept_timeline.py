@@ -9,12 +9,18 @@ and titled in its own words -- the lane the honest reading of this log depends o
 What this script does, in order:
 
 1. **parses** ``cold-start-a0/THEORIZE_LOG.md`` (never ``open()``; always through
-   ``sources``). The entry set is not hard-coded: sections are found by their
-   ``## <FAMILY> --`` headings, entries by their ``### <ID> ... **<verdict>**``
-   headings, and the ``E`` family by its table. Every id must land in
-   ``EXPECTED_IDS`` and every verdict in ``VERDICTS`` -- an id or a verdict this
-   script does not recognise **raises**, because a silently-dropped adjudication
-   is worse than a broken build;
+   ``sources``). The entry set is not hard-coded, and neither is the *expected*
+   entry set: sections are found by their ``## <FAMILY> --`` headings, entries by
+   their ``### <ID> ... **<verdict>**`` headings, and the ``E`` family by its
+   table, while ``expected_ids()`` derives the set the parse is checked against
+   from the same declared source by a second, independent scan of its raw text.
+   The check that survives is structural rather than a name list --
+   per-family contiguity, ordering, uniqueness, a floor, and the cross-check
+   between the ``E`` table and its ``### E-NN, in full`` elaborations -- and
+   every verdict must still land in ``VERDICTS``. Anything this script does not
+   recognise **raises**, because a silently-dropped adjudication is worse than a
+   broken build. See ``expected_ids`` for exactly what the derived form does and
+   does not catch;
 2. **matches each entry back to the engine proposals it adjudicates**, by
    expanding the brace/star patterns the log's own headings use
    (``obj{0,1,2}_still_*``) against ``candidates.jsonl``, then propagating to
@@ -97,25 +103,25 @@ KNOWN_SECTIONS: tuple[str, ...] = (
     "Ground-truth seal",
 )
 
-#: Every entry id the log is expected to carry. The parser raises if it finds an
-#: id outside this set, and raises again if any of these is missing -- the two
-#: failure directions are different bugs and both are silent by default.
-EXPECTED_IDS: tuple[str, ...] = (
-    "O-01", "O-02", "O-03", "O-04",
-    "R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08",
-    "L-01", "L-02", "L-03",
-    "P-01", "P-02", "P-03",
-    "E-01", "E-02", "E-03", "E-04", "E-05", "E-06", "E-07",
-    # E-08 and E-09 were added upstream after this set was declared, and the
-    # parser did exactly what it was built to do: it refused to draw rather than
-    # silently publishing a timeline two decisions short. Both are ordinary rows
-    # of the same E table (`cold-start-a0/THEORIZE_LOG.md:364-365`), both
-    # `discharged`, both forced by `worldgen`'s `t2-lock-fragile`. Admitting them
-    # moves the decision count this figure reports from seventeen to nineteen --
-    # see `figures/runs/` for the consequence, which is a paper-side number this
-    # track does not own.
-    "E-08", "E-09",
-)
+#: The declared source the whole figure -- and the expected id set -- is read
+#: from. Named once so the read and the derivation cannot drift onto two files.
+LOG_SOURCE_KEY = "a0_theorize_log"
+
+#: How many entries each family carried on 2026-07-29, when the expected set
+#: stopped being hand-copied. This is the ``Rule.floor`` idiom from
+#: ``sources.py``, for the same reason: a family that quietly emptied out reads
+#: exactly like a family that is fine, and a derived set with no floor would
+#: happily agree that the log now contains nothing.
+#:
+#: A family growing is expected and green -- ``E-10`` is the case this whole
+#: change exists for. A family *shrinking* stops the build.
+FAMILY_FLOORS: dict[str, int] = {"O": 4, "R": 8, "L": 3, "P": 3, "E": 9}
+
+#: The two places the log states an id, scanned raw. Deliberately dumber than
+#: ``parse_log``: no section machinery, no verdict vocabulary, no continuation
+#: handling. Two scanners that share no code cannot share a bug.
+_ID_HEADING = re.compile(r"^### ([ORLPE]-\d{2})\b(.*)$", re.M)
+_E_TABLE_ROW = re.compile(r"^\|\s*(E-\d{2})\s*\|", re.M)
 
 #: The verdict vocabulary, verbatim as the headings bold it, mapped to
 #: ``(marker slot, outcome class, short label)``. Exactly eight verdicts and
@@ -290,6 +296,154 @@ def _backticked(text: str) -> list[str]:
     return re.findall(r"`([^`]+)`", text)
 
 
+def _scan_declared_ids(text: str) -> tuple[list[str], list[str]]:
+    """``(ids in source order, elaboration ids)``, straight off the log's text.
+
+    The ``### E-NN, in full`` sections are *elaborations* of a row of the E
+    table, not entries of their own; ``parse_log`` skips them and so does this.
+    They are returned separately because they are a second, independently
+    authored statement of which E rows exist, and cross-checking them against
+    the table is a genuine check rather than a restatement.
+    """
+    ids: list[str] = []
+    elaborated: list[str] = []
+    for m in _ID_HEADING.finditer(text):
+        item_id, rest = m.group(1), m.group(2)
+        if rest.startswith(",") and "in full" in rest[:20]:
+            elaborated.append(item_id)
+            continue
+        ids.append(item_id)
+    ids.extend(m.group(1) for m in _E_TABLE_ROW.finditer(text))
+    return ids, elaborated
+
+
+def expected_ids(text: str | None = None) -> tuple[str, ...]:
+    """The entry set the log declares, derived from the log. Never hand-copied.
+
+    ``text`` is the log's contents *as already read through* ``sources``; passing
+    it in matters, because reading the file a second time here would let the
+    parse and its own check disagree about which bytes they were looking at.
+    Called with nothing, it reads through ``sources.read_text`` -- there is no
+    ``open()`` path into this function and no path that returns a short set.
+
+    **What this still catches**, i.e. what the hand-written ``EXPECTED_IDS``
+    tuple was actually protecting against and what a naive "compare the log to
+    itself" replacement would have thrown away:
+
+    * an id whose family prefix is not one of ``FAMILIES`` -- which in practice
+      means ``_ID_HEADING``'s literal ``[ORLPE]`` alphabet and ``FAMILIES``
+      drifting apart, since the regex spells the alphabet out rather than
+      following the tuple. A wholly new family (``## X -- ...``) is caught one
+      level up, by ``parse_log``'s ``KNOWN_SECTIONS`` check, because a family
+      arrives as a section before it arrives as a heading;
+    * a **duplicate** id -- the same entry stated twice, in either place;
+    * a **gap** in a family's sequence: ``E-01..E-07, E-09`` is a row that was
+      deleted or an id that was mistyped, and it raises;
+    * ids **out of source order** -- ``E-09`` filed above ``E-08``;
+    * a family that **shrank** below ``FAMILY_FLOORS`` -- the "missing" half of
+      the old two-directional check, kept in the only form that can survive
+      derivation;
+    * an ``### E-NN, in full`` elaboration with **no matching row** in the E
+      table, which is the two halves of the log's E section disagreeing;
+    * a source that cannot be read or scanned at all: every failure below is a
+      raise, and an empty or unparsable log raises rather than yielding ``()``.
+      Silent truncation is the failure mode this function exists to make
+      impossible.
+
+    **What it no longer catches.** A *well-formed* addition at the end of a
+    family -- a genuine ``E-10`` row, correctly numbered, in order, with no
+    gap -- is now accepted without anyone editing this file. That is the whole
+    point: the old tuple turned every such addition into a red build for however
+    long it took a human to notice (14.5 hours, 2026-07-28). It also means this
+    file no longer asserts *which* concepts the log should contain; only that
+    whatever it contains is internally well-formed and has not shrunk. If you
+    need "E-10 must exist", raise ``FAMILY_FLOORS['E']`` to 10 -- that is the
+    declaration, and it is one number rather than a copied list.
+    """
+    if text is None:
+        try:
+            text = sources.read_text(LOG_SOURCE_KEY)
+        except Exception as exc:  # noqa: BLE001 -- re-raised, never swallowed
+            raise RuntimeError(
+                f"fig06: cannot derive the expected entry set: declared source "
+                f"{LOG_SOURCE_KEY!r} could not be read ({exc!r}). This raises on "
+                "purpose. Falling back to a shorter set here would draw a timeline "
+                "with adjudications silently missing from it."
+            ) from exc
+
+    ids, elaborated = _scan_declared_ids(text)
+    if not ids:
+        raise ValueError(
+            f"THEORIZE_LOG.md ({LOG_SOURCE_KEY}): no '### <ID>' heading and no "
+            "'| E-NN |' table row found in the declared source. An empty expected "
+            "set is not a legal answer -- it would make every later check vacuous."
+        )
+
+    by_family: dict[str, list[int]] = {}
+    for item_id in ids:
+        family, num = item_id.split("-")
+        by_family.setdefault(family, []).append(int(num))
+
+    unknown = sorted(set(by_family) - set(FAMILIES))
+    if unknown:
+        raise ValueError(
+            f"THEORIZE_LOG.md: id family/families {unknown} are not declared in "
+            f"FAMILIES {list(FAMILIES)}. A new family is a new kind of content."
+        )
+
+    out: list[str] = []
+    for family in FAMILIES:
+        nums = by_family.get(family, [])
+        if not nums:
+            raise ValueError(
+                f"THEORIZE_LOG.md: family {family!r} is declared in FAMILIES but the "
+                "log states no entry for it."
+            )
+        dupes = sorted({n for n in nums if nums.count(n) > 1})
+        if dupes:
+            raise ValueError(
+                f"THEORIZE_LOG.md [{family}]: duplicate entry id(s) "
+                f"{[f'{family}-{n:02d}' for n in dupes]}."
+            )
+        contiguous = list(range(1, len(nums) + 1))
+        if sorted(nums) != contiguous:
+            raise ValueError(
+                f"THEORIZE_LOG.md [{family}]: the id sequence has a gap or does not "
+                f"start at 01. found={[f'{family}-{n:02d}' for n in sorted(nums)]} "
+                f"expected={[f'{family}-{n:02d}' for n in contiguous]}. A gap is a "
+                "deleted entry or a mistyped id, and both are silent by default."
+            )
+        if nums != contiguous:
+            raise ValueError(
+                f"THEORIZE_LOG.md [{family}]: entries are out of source order: "
+                f"{[f'{family}-{n:02d}' for n in nums]}. The plate reads the log "
+                "top to bottom; an id filed out of order draws the wrong ordinal."
+            )
+        floor = FAMILY_FLOORS.get(family)
+        if floor is None:
+            raise ValueError(
+                f"family {family!r} has no entry in FAMILY_FLOORS; declare its floor "
+                "deliberately rather than letting it default to zero."
+            )
+        if len(nums) < floor:
+            raise ValueError(
+                f"THEORIZE_LOG.md [{family}]: {len(nums)} entries, floor is {floor}. "
+                "The log lost an adjudication this figure used to draw. Growing is "
+                "green; shrinking is not, and the floor is the only thing that can "
+                "tell the difference once the set is derived."
+            )
+        out.extend(f"{family}-{n:02d}" for n in nums)
+
+    orphaned = sorted(set(elaborated) - set(out))
+    if orphaned:
+        raise ValueError(
+            f"THEORIZE_LOG.md [E]: '### {orphaned[0]}, in full' elaborates a row that "
+            f"the E table does not contain (all orphans: {orphaned}). The two halves "
+            "of the E section disagree about which rows exist."
+        )
+    return tuple(out)
+
+
 def parse_log(text: str) -> dict:
     """The whole log, as data. Raises on anything it does not recognise."""
     lines = text.split("\n")
@@ -393,12 +547,29 @@ def parse_log(text: str) -> dict:
         }
 
     # --- the id set, both directions -------------------------------------
+    # The expected set is derived from the same bytes this function is parsing
+    # (`expected_ids(text)`, not a re-read), by a scanner that shares no code
+    # with the section/heading/table machinery above. That makes this comparison
+    # weaker than the old hand-written tuple in exactly one way and no others:
+    #
+    #   still caught -- a family prefix outside FAMILIES, a duplicate id, a gap
+    #     in a family's sequence, ids out of source order, a family that shrank
+    #     below its floor, an `### E-NN, in full` section with no table row, an
+    #     unreadable or unscannable source (all of these raise inside
+    #     expected_ids); plus, here, the two scanners disagreeing -- an id the
+    #     raw scan sees and the structured parse drops (a `, in full` rule that
+    #     over-matched, a heading whose verdict continuation was mis-consumed,
+    #     an E row inside a section the H2 splitter assigned elsewhere), or the
+    #     reverse.
+    #   no longer caught -- a genuine, well-formed new entry appended to a
+    #     family (E-10). By design; see expected_ids' docstring.
+    expected = expected_ids(text)
     found = sorted(entries)
-    unexpected = [i for i in found if i not in EXPECTED_IDS]
-    missing = [i for i in EXPECTED_IDS if i not in entries]
+    unexpected = [i for i in found if i not in expected]
+    missing = [i for i in expected if i not in entries]
     if unexpected or missing:
         raise ValueError(
-            f"THEORIZE_LOG.md: entry ids do not match the declared set. "
+            f"THEORIZE_LOG.md: entry ids do not match the set derived from the log. "
             f"unexpected={unexpected} missing={missing}"
         )
 
