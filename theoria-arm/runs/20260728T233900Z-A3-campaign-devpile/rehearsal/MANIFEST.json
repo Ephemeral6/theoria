@@ -1,5 +1,5 @@
 {
- "base_commit": "f443fc4fc622ea8ef60aac831d99838d1085f688",
+ "base_commit": "c57693db90ce208b8df631e3e4cbda3223844539",
  "branch": "agent/a3-campaign-devpile",
  "budget": {
   "actions_per_level": 6,
@@ -9,26 +9,25 @@
  },
  "games": [
   "g50t-5849a774",
-  "sk48-d8078629",
-  "tn36-ef4dde99"
+  "sk48-d8078629"
  ],
  "legs": [
   {
    "game_id": "g50t-5849a774",
    "outcome": "budget_exhausted",
-   "slug": "20260728T235841Z-leg01",
+   "slug": "20260729T000151Z-leg01",
    "usd": 0.0
   },
   {
    "game_id": "g50t-5849a774",
    "outcome": "budget_exhausted",
-   "slug": "20260728T235842Z-leg02",
+   "slug": "20260729T000152Z-leg02",
    "usd": 0.0
   },
   {
    "game_id": "sk48-d8078629",
    "outcome": "budget_exhausted",
-   "slug": "20260728T235843Z-leg01",
+   "slug": "20260729T000152Z-leg01",
    "usd": 0.0
   }
  ],
@@ -42,5 +41,5 @@
   },
   "reason": "3 legs in a row completed no level and met no new kind of surprise"
  },
- "utc": "2026-07-28T23:58:41Z"
+ "utc": "2026-07-29T00:01:51Z"
 }

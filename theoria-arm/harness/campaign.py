@@ -367,6 +367,22 @@ class Campaign:
 
         summary = play(game_id, slug, factory, **kwargs)
 
+        # The per-turn series, written while the leg's ledger is still the only
+        # thing that knows what happened. `armtools.archive.write_turn_series`
+        # is the one implementation of this reduction and it is not repeated
+        # here -- a second implementation of the input to a Phase 4 primary
+        # endpoint would be a second definition of the endpoint.
+        #
+        # Not fatal if it raises: a leg that played is worth recording even if
+        # the reduction over it fails, and the failure is a fact about the
+        # archive step rather than about the leg.
+        series_error = None
+        try:
+            from armtools.archive import write_turn_series    # noqa: PLC0415
+            write_turn_series(os.path.join(ARM, "runs", slug))
+        except Exception as exc:                       # noqa: BLE001
+            series_error = "%s: %s" % (type(exc).__name__, exc)
+
         usd, accounting = _leg_cost(summary)
         leg = {
             "index": index,
@@ -377,6 +393,7 @@ class Campaign:
             "carried": summary.get("carried_books"),
             "usd": usd,
             "cost_accounting": accounting,
+            "turn_series_error": series_error,
             "levels": summary.get("levels"),
             "surprises": summary.get("surprises"),
             "theorize_rounds": summary.get("theorize_rounds"),
@@ -509,12 +526,126 @@ class Campaign:
             "zero_progress_streak": self.zero_progress,
         }
 
+    # -- figure 2's raw material -------------------------------------------
+    def campaign_series(self) -> Dict[str, Any]:
+        """Every leg's turn series, concatenated in play order.
+
+        `armtools.archive.write_turn_series` writes one row per turn per leg:
+        cost, theorize rounds, and all seven surprise counts. Those are the
+        three columns the A3 order calls figure 2's entire raw material. What a
+        single leg cannot supply is the thing that makes them a *campaign*
+        curve: play order across legs, and where the level boundaries fell.
+
+        Two ordinals, kept apart on purpose:
+
+        * `turn` -- the leg's own turn number, which restarts at each leg.
+        * `campaign_turn` -- a dense ordinal across the whole campaign, which
+          is the x-axis the bill-shape claim is about. C2 predicts 前重后轻,
+          front-heavy then light, and that shape only means anything against a
+          clock that does not restart every time a leg dies.
+
+        The front-load index is deliberately NOT computed here. It is E2 in
+        `battery/metrics/economy.py`, one of Phase 4's three primary endpoints,
+        and the figures track's rule is right: a second implementation of a
+        primary endpoint is a second definition of it. This assembles the input
+        and stops.
+
+        Legs that failed appear as rows-less entries rather than being dropped.
+        A campaign that spent money on a leg which then produced no series is
+        not the same thing as a campaign with fewer legs, and the difference is
+        exactly the kind that a concatenation quietly destroys.
+        """
+        rows: List[Dict[str, Any]] = []
+        legs: List[Dict[str, Any]] = []
+        campaign_turn = 0
+
+        for leg in self.legs:
+            slug = leg.get("slug")
+            if not slug:
+                # A `game_end` or `leg_failed` marker, not a leg that played.
+                legs.append({"event": leg.get("event"),
+                             "game_id": leg.get("game_id"),
+                             "error": leg.get("error"), "rows": 0})
+                continue
+
+            path = os.path.join(ARM, "runs", slug, "turn_series.json")
+            doc = None
+            if os.path.exists(path):
+                try:
+                    with open(path, encoding="utf-8") as fh:
+                        doc = json.load(fh)
+                except Exception as exc:               # noqa: BLE001
+                    legs.append({"slug": slug, "game_id": leg.get("game_id"),
+                                 "rows": 0,
+                                 "error": "unreadable turn_series.json: %s"
+                                          % exc})
+                    continue
+            if doc is None:
+                legs.append({"slug": slug, "game_id": leg.get("game_id"),
+                             "rows": 0,
+                             "error": leg.get("turn_series_error")
+                                      or "no turn_series.json"})
+                continue
+
+            leg_rows = doc.get("rows") or []
+            boundaries = {b.get("turn") for b
+                          in ((leg.get("levels") or {}).get("events") or [])
+                          if b.get("turn") is not None}
+            for row in leg_rows:
+                campaign_turn += 1
+                rows.append(dict(
+                    row,
+                    campaign_turn=campaign_turn,
+                    leg_index=leg.get("index"),
+                    leg_slug=slug,
+                    game_id=leg.get("game_id"),
+                    # True only where a level actually changed. `levels` is
+                    # `inner/levels.py`'s record, not an inference from score.
+                    level_boundary=row.get("turn") in boundaries,
+                    # Whether this leg started from the previous leg's books.
+                    # C3's transfer claim is about rows on the far side of a
+                    # True here, and a series that does not mark it cannot be
+                    # read for transfer at all.
+                    seeded_from_previous_leg=bool(leg.get("seed_books")),
+                ))
+            legs.append({"slug": slug, "game_id": leg.get("game_id"),
+                         "rows": len(leg_rows),
+                         "seeded": bool(leg.get("seed_books")),
+                         "carried": leg.get("carried"),
+                         "usd": leg.get("usd"),
+                         "outcome": leg.get("outcome")})
+
+        return {
+            "schema": "theoria-campaign-series/v1",
+            "prompt_id": self.prompt_id,
+            "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "games": self.games,
+            "legs": legs,
+            "rows": rows,
+            "totals": {
+                "turns": len(rows),
+                "legs_with_rows": sum(1 for entry in legs if entry["rows"]),
+                "legs_recorded": len(legs),
+                "usd": round(sum(float(r.get("usd") or 0.0) for r in rows), 6),
+                "level_boundaries": sum(1 for r in rows
+                                        if r.get("level_boundary")),
+            },
+            "reading": (
+                "campaign_turn is the axis for C2's 前重后轻 claim. The "
+                "front-load index over it is E2 in battery/metrics/economy.py "
+                "and is deliberately not recomputed here. A leg with rows 0 "
+                "and an error spent money and produced no series; it is not "
+                "the same as a campaign with fewer legs."),
+        }
+
     def save(self) -> str:
         """Atomically, after every leg. A campaign is hours long and the
         session running it will be interrupted."""
         self._write_json(self.state_path, self.report())
         self._write_json(os.path.join(self.out_dir, "MANIFEST.json"),
                          self.manifest())
+        self._write_json(os.path.join(self.out_dir, "campaign_series.json"),
+                         self.campaign_series())
         return self.state_path
 
     @staticmethod

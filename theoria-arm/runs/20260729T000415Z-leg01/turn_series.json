@@ -1,0 +1,230 @@
+{
+ "frontload_input": {
+  "all_turns": {
+   "frontload_index_25": null,
+   "reason": "total cost is zero",
+   "status": "insufficient-data",
+   "turns": 2,
+   "usd_total": 0
+  },
+  "billed_calls": 0,
+  "billed_turns_only": {
+   "frontload_index_25": null,
+   "reason": "total cost is zero",
+   "status": "insufficient-data",
+   "turns": 0,
+   "usd_total": 0
+  },
+  "frontload_k": 0.25,
+  "min_turns_for_shape": 8,
+  "run_id": "r-dd79c28d118240da",
+  "slug": "20260729T000415Z-leg01",
+  "turn_costs": [
+   0,
+   0
+  ],
+  "turn_costs_billed_only": [],
+  "usd_total": 0
+ },
+ "game_id": "sk48-d8078629",
+ "join": {
+  "billed_calls_outside_their_own_turn_window": [],
+  "checks": [
+   {
+    "check": "theorize invocations per step index <= MAX_THEORIZE_PER_TURN",
+    "constant_source": "inner.loop.MAX_THEORIZE_PER_TURN",
+    "max_theorize_per_turn": 2,
+    "ok": true,
+    "violations": {}
+   },
+   {
+    "check": "step_idx never decreases across billed calls",
+    "ok": true
+   },
+   {
+    "check": "every billed theorize invocation was claimed by a turn",
+    "ok": true,
+    "unclaimed": []
+   },
+   {
+    "check": "step_idx == actions_before + resets (run failed no action, so the identity is closed-form)",
+    "offenders": [],
+    "ok": true,
+    "resets": 1
+   },
+   {
+    "check": "every billed call falls inside the window its turn's ARC commands define -- the index join and the clock join agree",
+    "offenders": [],
+    "ok": true
+   },
+   {
+    "check": "actions_before recomputed from the ledger matches the value the turn recorded",
+    "offenders": [],
+    "ok": true
+   }
+  ],
+  "join_confidence": "exact",
+  "key": "theorize-invocation segmentation (label 'round1' restarts inside every theorize.run()) allocated to turns in order; cross-checked by step_idx == actions_before + resets + actions_failed_so_far",
+  "spine": "turns.json",
+  "surprise_join": "wall-clock containment in the turn's window; a surprise's own step_idx is a frame ordinal and cannot address a turn",
+  "surprises_within_1s_of_a_turn_boundary": 0
+ },
+ "provenance": {
+  "run_dir": "20260729T000415Z-leg01",
+  "sources": {
+   "RUN_STATE.json": {
+    "present": true,
+    "sha256": "661772f57e578cbd8ecdc157761e8a8fb26845574307ad0b5c5d77c1cce5130d"
+   },
+   "cost_curve.json": {
+    "present": false,
+    "sha256": null
+   },
+   "desk_log.json": {
+    "present": true,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+   },
+   "ledger.jsonl": {
+    "present": true,
+    "sha256": "660efb6b8a3691c44a746dbb25263cbf26e3d6dcc7f8636d21636c9c924ee668"
+   },
+   "run.json": {
+    "present": true,
+    "sha256": "55dead9eb630b959de34be76b62b3de98ed42e5c3217cb4e8dd112b741564eb6"
+   },
+   "surprises.jsonl": {
+    "present": true,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "theorize.json": {
+    "present": true,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+   },
+   "turns.json": {
+    "present": true,
+    "sha256": "0c01ae8dfca44bdb2f02ee2af0e2540cb46943e0a7ff2359cb84c5c5cffe4e5b"
+   }
+  }
+ },
+ "reconciliation": {
+  "actions": {
+   "budget_actions_ok": 6,
+   "reconciles": true,
+   "sum_over_turns": 6
+  },
+  "model_calls": {
+   "in_ledger": 0,
+   "reconciles": true,
+   "sum_over_turns": 0
+  },
+  "surprises": {
+   "by_kind_in_surprises_jsonl": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "by_kind_over_turns": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "in_surprises_jsonl": 0,
+   "reconciles": true,
+   "sum_over_turns": 0
+  },
+  "usd": {
+   "delta_vs_desk": 0.0,
+   "reconciles": true,
+   "reported_by_the_desk": 0.0,
+   "sum_over_model_call_records": 0,
+   "sum_over_turns": 0
+  }
+ },
+ "rows": [
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": null,
+   "http_commands": 6,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 0.1,
+   "http_commands": 1,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 1,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": 0.092
+  }
+ ],
+ "run_id": "r-dd79c28d118240da",
+ "schema": "theoria-arm/turn_series v1",
+ "slug": "20260729T000415Z-leg01",
+ "totals": {
+  "actions": 6,
+  "billed_turns": 0,
+  "model_calls": 0,
+  "surprises": 0,
+  "turns": 2,
+  "usd": 0
+ }
+}

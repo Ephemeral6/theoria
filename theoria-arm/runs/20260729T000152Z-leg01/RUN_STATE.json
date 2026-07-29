@@ -1,0 +1,101 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 0,
+  "actions_ok": 6,
+  "ceiling_actions": 6,
+  "ceiling_commands": 2000,
+  "commands_sent": 7,
+  "http_amplification": 1.167,
+  "probe_actions": 0,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [],
+  "calls": 0,
+  "cli_cost_usd": 0.0,
+  "cost_ceiling_usd": null,
+  "model": "claude-opus-5",
+  "spend_gate": {
+   "action_cap": 57,
+   "actions_charged": 0,
+   "campaign": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260729T000152Z-leg01",
+   "caps": {
+    "action_cap": 57,
+    "arithmetic": {
+     "action_cap": 57,
+     "action_cap_hard_bound": 6000,
+     "actions_budget": 6,
+     "arm_attempts_capped_by_commands_ceiling": false,
+     "arm_attempts_planned": 19,
+     "commands_ceiling": 2000,
+     "cost_ceiling_usd": 20.0,
+     "env_max_attempts": 3,
+     "fixed_commands": 3,
+     "http_per_command": 1.75,
+     "model_call_ceiling_usd": 4.0,
+     "retry_safety": 1.5,
+     "ttl_seconds": 11700.0,
+     "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+     "usd_cap": 24.0,
+     "wall_clock_s": 10800.0
+    },
+    "ttl_seconds": 11700.0,
+    "usd_cap": 24.0
+   },
+   "model_call_ceiling_usd": 4.0,
+   "model_calls_charged": 0,
+   "pool": {
+    "action_ceiling": 24000,
+    "gate_version": "1.0",
+    "ledger_abspath": "C:\\Users\\user\\AppData\\Local\\Temp\\tmp.wxYXHiT8xY\\pool.jsonl",
+    "ledger_path": "../../../../AppData/Local/Temp/tmp.wxYXHiT8xY/pool.jsonl",
+    "policy_path": null,
+    "policy_sha256": "5e6a190eecf8b2f03a63b31b9a7f2e64bb077c27504cb3b5300f26b81d3a5012",
+    "pool": "theoria-arm-scratch",
+    "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+    "usd_ceiling": 214.9
+   },
+   "released": false,
+   "renewals": 0,
+   "reservation_id": "res-14d16bdd4d754cc9",
+   "tripped": null,
+   "unpriced_calls": 0,
+   "usd_cap": 24.0,
+   "usd_charged": 0.0
+  },
+  "unpriced_calls": 0,
+  "usage_total": {}
+ },
+ "elapsed_s": 0.1,
+ "levels": {
+  "boundaries": 0,
+  "events": [],
+  "level": 1,
+  "levels_completed": 0,
+  "starts": [
+   0
+  ]
+ },
+ "outcome": "budget_exhausted",
+ "steps": 7,
+ "stopped_because": "action budget spent",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 0
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 0,
+   "search_timeout": 0
+  },
+  "total": 0,
+  "unhandled": 0
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "carried": {},
+ "empty": true,
+ "seed_from": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01\\books",
+ "skipped": [
+  {
+   "file": "theory.dsl",
+   "why": "not present"
+  },
+  {
+   "file": "playbook.dsl",
+   "why": "not present"
+  }
+ ]
+}

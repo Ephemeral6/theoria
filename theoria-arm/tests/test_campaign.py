@@ -324,3 +324,93 @@ def test_a_game_ceiling_now_actually_trips(tmp_path):
     report = run.run(max_legs_per_game=4)
     assert report["by_game"]["g50t-5849a774"] >= 60.0
     assert any(leg.get("event") == "game_end" for leg in report["legs"])
+
+
+# ------------------------------------------------ figure 2's raw material
+#
+# The A3 order names three columns -- theorize rounds, the seven surprise
+# counts, per-turn cost -- and calls them figure 2's entire raw material.
+# `armtools.archive.write_turn_series` produces all three per leg. What only a
+# campaign knows is play order across legs and where the level boundaries fell.
+
+@pytest.fixture
+def arm_runs(tmp_path, monkeypatch):
+    """Point `campaign_series` at a runs/ tree the test owns.
+
+    Without this the helper below writes into the real `theoria-arm/runs/`,
+    which is the same non-hermetic shape that let `test_arm.py` poison a shared
+    ledger and go permanently red. A test that leaves artefacts in the tree it
+    is testing will eventually be testing its own leftovers.
+    """
+    monkeypatch.setattr(camp, "ARM", str(tmp_path / "arm"))
+    return tmp_path
+
+
+def _leg_with_series(tmp_path, slug, game, turns, *, seeded=False,
+                     boundary_turn=None):
+    """Write a leg's turn_series.json where `campaign_series` will look."""
+    run_dir = os.path.join(camp.ARM, "runs", slug)
+    os.makedirs(run_dir, exist_ok=True)
+    with open(os.path.join(run_dir, "turn_series.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        json.dump({"rows": [{"turn": t, "usd": 1.0 + t, "theorize_rounds": 1}
+                            for t in range(turns)]}, fh)
+    levels = ({"events": [{"turn": boundary_turn}]}
+              if boundary_turn is not None else {})
+    return {"index": 1, "game_id": game, "slug": slug, "levels": levels,
+            "seed_books": "/books" if seeded else None,
+            "usd": sum(1.0 + t for t in range(turns)), "outcome": "ok"}
+
+
+def test_the_campaign_turn_is_dense_while_the_legs_own_turn_restarts(arm_runs, tmp_path):
+    """The axis C2's front-heavy claim is about.
+
+    A leg's `turn` restarts every time a leg dies and a new one begins. A bill
+    shape read off that axis would show the campaign restarting its own clock
+    at every interruption, which is precisely the artefact that would fake the
+    predicted shape.
+    """
+    c = camp.Campaign(prompt_id="A3", out_dir=str(tmp_path),
+                      games=["g50t-5849a774"])
+    c.legs = [_leg_with_series(tmp_path, "t-a3-x1", "g50t-5849a774", 3),
+              _leg_with_series(tmp_path, "t-a3-x2", "g50t-5849a774", 2)]
+    doc = c.campaign_series()
+
+    assert [r["campaign_turn"] for r in doc["rows"]] == [1, 2, 3, 4, 5]
+    assert [r["turn"] for r in doc["rows"]] == [0, 1, 2, 0, 1]
+    assert doc["totals"]["turns"] == 5
+    assert doc["totals"]["legs_with_rows"] == 2
+
+
+def test_a_leg_that_produced_no_series_is_kept_not_dropped(arm_runs, tmp_path):
+    """A campaign that spent money on a leg which produced nothing is not the
+    same as a campaign with fewer legs, and concatenation is exactly where that
+    difference gets quietly destroyed."""
+    c = camp.Campaign(prompt_id="A3", out_dir=str(tmp_path),
+                      games=["g50t-5849a774"])
+    c.legs = [_leg_with_series(tmp_path, "t-a3-y1", "g50t-5849a774", 2),
+              {"index": 2, "game_id": "g50t-5849a774", "slug": "t-a3-missing",
+               "usd": 12.0, "turn_series_error": "ArcError: boom"},
+              {"game_id": "g50t-5849a774", "event": "leg_failed",
+               "error": "ArcError: boom"}]
+    doc = c.campaign_series()
+
+    assert doc["totals"]["legs_recorded"] == 3
+    assert doc["totals"]["legs_with_rows"] == 1
+    missing = [e for e in doc["legs"] if e.get("slug") == "t-a3-missing"][0]
+    assert missing["rows"] == 0 and "boom" in missing["error"]
+    assert any(e.get("event") == "leg_failed" for e in doc["legs"])
+
+
+def test_a_level_boundary_and_a_carried_seed_are_marked_on_the_row(arm_runs, tmp_path):
+    """C3's transfer claim is about rows on the far side of these two flags. A
+    series that does not mark them cannot be read for transfer at all."""
+    c = camp.Campaign(prompt_id="A3", out_dir=str(tmp_path),
+                      games=["g50t-5849a774"])
+    c.legs = [_leg_with_series(tmp_path, "t-a3-z1", "g50t-5849a774", 3,
+                               seeded=True, boundary_turn=1)]
+    rows = c.campaign_series()["rows"]
+
+    assert [r["level_boundary"] for r in rows] == [False, True, False]
+    assert all(r["seeded_from_previous_leg"] for r in rows)
+    assert c.campaign_series()["totals"]["level_boundaries"] == 1
