@@ -152,7 +152,12 @@ end states are pinned by `engine-rig`'s own tests as *not derivable* by the line
 pagoda method — not merely unexported — and the compiler responds with
 `CertificateGapError`, naming the uncovered end states and declining to generate,
 rather than silently narrowing the theorem into one that reads stronger
-(`theory-compiler/STATUS.md`, ledger entry E-06). The whole A1 verification also
+(`theory-compiler/STATUS.md`, ledger entry E-06). That entry has since been
+discharged — not by extending the invariant language, but by closing the
+uncovered goals with a second method and attributing every goal to whichever
+method proved it (`cold-start-a0/THEORIZE_LOG.md`, E-06, **discharged**; §4.4).
+The limitation below is unaffected: the linear pagoda method still cannot reach
+those three end states. The whole A1 verification also
 ran on exactly **one** 5-hole fixture; the pipeline's generality is not supported
 by this evidence.
 

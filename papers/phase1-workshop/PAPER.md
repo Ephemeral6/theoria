@@ -525,7 +525,12 @@ The precise work is outsourced. Six engines carried the acceptances reported her
 `fd_adapter` (classical planning), `probe_frontier` (which experiment splits a
 guard frontier, priced in bits). Two more — `deadlock_carver` and `ic3_pdr` —
 were added at milestone M9 in response to gaps the A0 cold start named, and are
-not exercised by any result below.
+not exercised by any result below. `ic3_pdr` is the closer of the two: the
+compile chain's **consumer** side for its certificates is complete, and the
+emitter is an `engine-rig` file that has not been written
+(`theory-compiler/STATUS.md`, delivery 9, "消费端完成；发射端……未写"). A
+consumer with nothing to consume still produces no result, which is why it stays
+on this side of the line.
 
 Engines emit **candidates**, never verdicts. The stream is append-only and every
 row's `status` is the literal string `"candidate"`
@@ -979,7 +984,7 @@ Changing `w .p1` from `1` to `7` made `lean` report
 `gen_lean.py` contains no hard-coded weight vector and that the move set is
 derived independently from the predictor, so the cross-check is not circular.
 
-### 4.4 What A1 did not settle: E-06, an open problem
+### 4.4 What A1 did not settle, and how E-06 was closed afterwards
 
 The manual's `goal count(Peg, alive) = 1` was **not** proved, and the pipeline
 says so. From `11011` on the 5-cell board there are five singleton end states.
@@ -999,8 +1004,35 @@ names the uncovered end states (D-TC-010, `theory-compiler/DECISIONS.md`). It do
 not silently narrow the theorem into one that reads stronger than what was proved.
 This is the headline of the section rather than its caveat. A pipeline that
 declines to state what it cannot certify is the behaviour the framework is
-arguing for; `theory-compiler/STATUS.md` books it as ledger entry E-06 and calls
-it "本 sprint 唯一的开放问题" (this sprint's only open problem).
+arguing for; `theory-compiler/STATUS.md` books it as ledger entry E-06 and, at
+the time of A1, called it "本 sprint 唯一的开放问题" (this sprint's only open
+problem).
+
+**It did not stay open, and how it closed is worth more than the fact that it
+did.** A later sprint discharges E-06 in both halves — the transcription half
+(injecting certificate weights into the compile chain) and the proof half — and
+`cold-start-a0/THEORIZE_LOG.md` now records the entry as **discharged**, with the
+reason: "the certificate covers what it covers, exhaustion closes the rest, each
+goal attributed to its method". The invariant language was never extended. What
+changed is that the goals no linear pagoda covers are now closed by a *second*
+method, and every goal carries an attribution to whichever method proved it —
+`theory-compiler/STATUS.md` books the proof half as 清偿 with "两条论证分开署名",
+the two arguments signed separately.
+
+That is the same discipline as the `CertificateGapError` one paragraph up, applied
+one level higher: the earlier refusal was "do not state what you cannot certify",
+and the closure is "do not let one method's success be read as another's". Both
+are the paper's point rather than exceptions to it.
+
+Two things a reader should be able to check independently. The technical claim
+above is unchanged — `lp_potential` still cannot certify `10000`, `00100` and
+`00001`, and `engine-rig/tests/test_interop.py` still pins that. And
+`theory-compiler/STATUS.md` **books E-06 both ways in one file**: the delivery
+table records it discharged, while an earlier sprint's section further down the
+same file still heads "未清偿：新增台账 E-06". The file is newest-first at sprint
+level, so the discharge is the later record; this paper follows the ledger
+(`cold-start-a0/THEORIZE_LOG.md`), which agrees with it, and names the collision
+rather than picking the convenient half silently.
 
 ### 4.5 Limitations
 
@@ -2989,7 +3021,12 @@ end states are pinned by `engine-rig`'s own tests as *not derivable* by the line
 pagoda method — not merely unexported — and the compiler responds with
 `CertificateGapError`, naming the uncovered end states and declining to generate,
 rather than silently narrowing the theorem into one that reads stronger
-(`theory-compiler/STATUS.md`, ledger entry E-06). The whole A1 verification also
+(`theory-compiler/STATUS.md`, ledger entry E-06). That entry has since been
+discharged — not by extending the invariant language, but by closing the
+uncovered goals with a second method and attributing every goal to whichever
+method proved it (`cold-start-a0/THEORIZE_LOG.md`, E-06, **discharged**; §4.4).
+The limitation below is unaffected: the linear pagoda method still cannot reach
+those three end states. The whole A1 verification also
 ran on exactly **one** 5-hole fixture; the pipeline's generality is not supported
 by this evidence.
 
