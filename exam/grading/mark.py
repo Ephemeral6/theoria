@@ -103,16 +103,29 @@ def confusion(report: Report, key_doc: Dict[str, Any], *,
     truth_of = {e["item_id"]: e["truth"] for e in key_doc["items"]}
     tp = fp = tn = fn = 0
     abstain_pos = abstain_neg = 0
+    illegible_pos = illegible_neg = 0
     for score in report.scores:
         truth = truth_of.get(score.item_id, {})
         actual = truth.get("claim") or truth.get("label")
         is_positive = (actual == positive)
         said = score.detail.get("said")
-        if score.verdict == "abstained" or said in (None, "abstain", "unknown"):
+        if score.verdict == "abstained" or said in ("abstain", "unknown"):
             if is_positive:
                 abstain_pos += 1
             else:
                 abstain_neg += 1
+            continue
+        if said is None:
+            # Not an abstention. `unanswered` lands here too, and so does a
+            # `wrong` verdict whose answer the rubric could not parse -- and
+            # folding the second into the abstention count let a submission of
+            # garbage print the row of a submission that honestly declined.
+            # Counted separately for the reason D-EX-006 gave for counting
+            # abstentions separately: the difference is the finding.
+            if is_positive:
+                illegible_pos += 1
+            else:
+                illegible_neg += 1
             continue
         said_positive = (said == positive)
         if is_positive and said_positive:
@@ -132,9 +145,14 @@ def confusion(report: Report, key_doc: Dict[str, Any], *,
         "tp": tp, "fp": fp, "tn": tn, "fn": fn,
         "abstained_on_positive": abstain_pos,
         "abstained_on_negative": abstain_neg,
+        "unclassified_on_positive": illegible_pos,
+        "unclassified_on_negative": illegible_neg,
         "sensitivity": _rate(tp, tp + fn),
         "specificity": _rate(tn, tn + fp),
         "note": ("Sensitivity counts abstentions as neither -- an abstention is "
                  "not a wrong answer, but it is not a right one either, so it is "
-                 "reported separately rather than folded into a rate."),
+                 "reported separately rather than folded into a rate. An answer "
+                 "that was never submitted, or that the rubric could not read a "
+                 "claim out of, is `unclassified` and is neither an abstention "
+                 "nor a classification."),
     }

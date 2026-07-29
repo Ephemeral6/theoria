@@ -539,6 +539,22 @@ def _lane_problems(level: Level,
     return problems[:4]
 
 
+def _witness_by_search(level_doc: Dict[str, Any]) -> Tuple[Optional[List[str]], str]:
+    """A witness found by breadth-first search over the whole state space.
+
+    Legitimate -- a plan that replays and wins proves solvability however it was
+    found -- but it is *not* an answer that follows from the construction, and
+    the paper's premise is 由构造即知答案. So the key records which of the two
+    this was, and `_self_check` refuses an item that does not say. D-EX-023.
+    """
+    return enumerate_states(Level(level_doc), cap=MAX_ENUMERATION)["solution"], "search"
+
+
+def _witness_by_construction(level_doc: Dict[str, Any]) -> Tuple[Optional[List[str]], str]:
+    """A witness built from the board's shape by `waypoint_plan`, no search."""
+    return waypoint_plan(Level(level_doc)), "construction"
+
+
 def positional_states(level: Level) -> int:
     """How many `(cart, button pressed)` states are actually reachable.
 
@@ -656,12 +672,29 @@ def _paper_side(level_doc: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+#: A complete search costs what the *quotient* costs, not what the raw product
+#: space costs.  Above this many reachable `(cart, button)` states, "I searched
+#: it all" stops being a statement anyone can back.
+SEARCH_FEASIBLE_STATES = 200_000
+
+
 def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
                certificate: Optional[Dict[str, Any]], witness: Optional[List[str]],
-               state_space: Dict[str, Any], search_credible: bool,
+               state_space: Dict[str, Any],
                spec_record: Dict[str, Any], justification: str,
-               points: float) -> Item:
+               points: float, witness_source: Optional[str] = None) -> Item:
     item_id = _opaque_id(key)
+    # Derived, not declared. It used to be a boolean handed in per item -- True
+    # on the small boards, False on the large ones -- and on the large ones that
+    # was a false statement, which the rubric then repeated back to an examinee:
+    # "the state space of this level is beyond enumeration, so 'I searched it
+    # all' is not a reason, it is a false statement about the search". Every
+    # class (ii) level here has between 177 and 600 reachable `(cart, button)`
+    # states, because latching is monotone and gates no geometry, so a solver
+    # that quotients searches it exhaustively in under a second and its claim is
+    # simply true. A marker that calls a true statement false is the failure this
+    # whole territory exists to prevent. D-EX-022.
+    search_credible = state_space["positional_states"] <= SEARCH_FEASIBLE_STATES
     truth: Dict[str, Any] = {
         "claim": claim,
         "class": klass,
@@ -669,6 +702,12 @@ def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
         "certificate_blob": canonical(certificate) if certificate else None,
         "witness": list(witness) if witness else None,
         "witness_length": len(witness) if witness else None,
+        # Where the key's own answer came from. `README` said "a computed
+        # witness plan" and `verdict.py` said "computed and replayed, not
+        # asserted", and neither word separates a breadth-first search from a
+        # construction. On a paper whose premise is 由构造即知答案, the key has
+        # to say which of the two produced it. D-EX-023.
+        "witness_source": witness_source,
         "spec": spec_record,
         "state_space": state_space,
         "search_credible": search_credible,
@@ -845,7 +884,7 @@ def build() -> Paper:
         {"kind": "invariant", "invariant": "cart_region",
          "initial_value": _region_rep(lvl, "start"),
          "goal_value": _region_rep(lvl, "goal")},
-        None, _small_space(lvl), True, spec,
+        None, _small_space(lvl), spec,
         "forbidding DOWN deletes the teleport's only entering edge, so the right "
         "room is a separate component of the board", POINTS_UNSOLVABLE))
 
@@ -867,7 +906,7 @@ def build() -> Paper:
         "i2", lvl, "small_unsolvable", "unsolvable",
         {"kind": "invariant", "invariant": "cart_row",
          "initial_value": 5, "goal_value": 1},
-        None, _small_space(lvl), True, spec,
+        None, _small_space(lvl), spec,
         "with UP forbidden the cart's row is non-decreasing and the goal is "
         "above the start", POINTS_UNSOLVABLE))
 
@@ -887,7 +926,7 @@ def build() -> Paper:
     items.append(_make_item(
         "i3", lvl, "small_unsolvable", "unsolvable",
         {"kind": "cut_set", "cells": [[3, 5]]},
-        None, _small_space(lvl), True, spec,
+        None, _small_space(lvl), spec,
         "(3,5) is the only cell joining the cistern's halves and the wrapper "
         "declares a loss on it", POINTS_UNSOLVABLE))
 
@@ -911,7 +950,7 @@ def build() -> Paper:
     items.append(_make_item(
         "i4", lvl, "small_unsolvable", "unsolvable",
         {"kind": "counting", "bound": atrium_distance, "limit": budget},
-        None, _small_space(lvl), True, spec,
+        None, _small_space(lvl), spec,
         "the relaxed board admits no path to the goal shorter than %d commands "
         "and the budget is %d" % (atrium_distance, budget), POINTS_UNSOLVABLE))
 
@@ -936,7 +975,7 @@ def build() -> Paper:
         {"kind": "invariant", "invariant": "cart_region",
          "initial_value": _region_rep(lvl, "start"),
          "goal_value": _region_rep(lvl, "goal")},
-        None, _small_space(lvl), True, spec,
+        None, _small_space(lvl), spec,
         "the quarry's goal room is sealed by static wall and a relabelling "
         "cannot open it", POINTS_UNSOLVABLE))
 
@@ -965,7 +1004,7 @@ def build() -> Paper:
         {"kind": "invariant", "invariant": "cart_region",
          "initial_value": _region_rep(lvl, "start"),
          "goal_value": _region_rep(lvl, "goal")},
-        None, _large_space(lvl), False, spec,
+        None, _large_space(lvl), spec,
         "the gantry's goal room is a component of its own behind a solid "
         "separator row", POINTS_UNSOLVABLE))
 
@@ -985,7 +1024,7 @@ def build() -> Paper:
     items.append(_make_item(
         "ii2", lvl, "large_unsolvable", "unsolvable",
         {"kind": "cut_set", "cells": [[4, 2]]},
-        None, _large_space(lvl), False, spec,
+        None, _large_space(lvl), spec,
         "(4,2) is the lattice's only bridge to the goal room and the wrapper "
         "declares a loss on it", POINTS_UNSOLVABLE))
 
@@ -1010,7 +1049,7 @@ def build() -> Paper:
     items.append(_make_item(
         "ii3", lvl, "large_unsolvable", "unsolvable",
         {"kind": "counting", "bound": spindle_distance, "limit": spindle_budget},
-        None, _large_space(lvl), False, spec,
+        None, _large_space(lvl), spec,
         "the spindle's goal is %d commands away at best and the budget is %d"
         % (spindle_distance, spindle_budget), POINTS_UNSOLVABLE))
 
@@ -1022,16 +1061,21 @@ def build() -> Paper:
         "by a unit vector or by nothing. With LEFT forbidden the surviving "
         "displacements have column components 0, 0 and +1, so the cart's column "
         "never decreases. It starts at column 2 and the goal is at column 1. "
-        "The 118 switches reachable to the right of the start keep the state "
-        "space past 10^35, so this verdict is not available to enumeration; the "
-        "monotone column costs three subtractions.",
+        "The 118 switches still reachable from the start keep the naive state "
+        "space past 10^35, so this verdict is not available to a plain forward "
+        "enumeration; the monotone column costs three subtractions. (118 is "
+        "reachable, not strictly-to-the-right: two of them, (1,2) and (3,2), "
+        "sit directly above and below the start's own column. Strictly to the "
+        "right there are 116, and 2^116 is 8.3e34, which would not clear "
+        "10^35 -- the looser phrasing was worth one order of magnitude and is "
+        "not used.)",
         [{"op": "forbid_action", "action": "LEFT"}],
         "The large-space twin of the updraft item, on the other axis."))
     items.append(_make_item(
         "ii4", lvl, "large_unsolvable", "unsolvable",
         {"kind": "invariant", "invariant": "cart_col",
          "initial_value": 2, "goal_value": 1},
-        None, _large_space(lvl), False, spec,
+        None, _large_space(lvl), spec,
         "with LEFT forbidden the orchard cart's column is non-decreasing and "
         "the goal is to its left", POINTS_UNSOLVABLE))
 
@@ -1041,7 +1085,7 @@ def build() -> Paper:
 
     lvl = variant_of(meander(), "meander",
                      remap={"LEFT": "RIGHT", "RIGHT": "LEFT"})
-    witness = enumerate_states(Level(lvl), cap=MAX_ENUMERATION)["solution"]
+    witness, witness_source = _witness_by_search(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii1-meander-swap", "meander", "solvable",
         "Relabelling is a bijection on the action alphabet, so it cannot change "
@@ -1057,12 +1101,12 @@ def build() -> Paper:
         "library can build."))
     items.append(_make_item(
         "iii1", lvl, "solvable_hard", "solvable", None, witness,
-        _small_space(lvl), True, spec,
+        _small_space(lvl), spec,
         "the meander is one long corridor and a relabelling does not shorten or "
-        "sever it", POINTS_SOLVABLE))
+        "sever it", POINTS_SOLVABLE, witness_source=witness_source))
 
     lvl = variant_of(base_atrium, "atrium", step_limit=60)
-    witness = enumerate_states(Level(lvl), cap=MAX_ENUMERATION)["solution"]
+    witness, witness_source = _witness_by_search(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii2-atrium-roomy", "atrium", "solvable",
         "A step limit is only an obstacle when it falls below what the level "
@@ -1076,31 +1120,34 @@ def build() -> Paper:
         "operator is identical in kind; only the arithmetic differs."))
     items.append(_make_item(
         "iii2", lvl, "solvable_hard", "solvable", None, witness,
-        _small_space(lvl), True, spec,
+        _small_space(lvl), spec,
         "the atrium needs eighteen commands and the budget is sixty",
-        POINTS_SOLVABLE))
+        POINTS_SOLVABLE, witness_source=witness_source))
 
     lvl = variant_of(base_atrium, "atrium", lost_cells=[[1, 3], [1, 4], [3, 3]])
-    witness = enumerate_states(Level(lvl), cap=MAX_ENUMERATION)["solution"]
+    witness, witness_source = _witness_by_search(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii3-atrium-offpath", "atrium", "solvable",
         "The three declared hazards (1,3), (1,4) and (3,3) sit in the middle of "
-        "the left room and none of them lies on any minimal route: the route "
-        "runs up column 1 to press the button, back down column 1, right along "
-        "row 5 and 6 to the door, through the teleport and up column 6. Deleting "
-        "those three cells leaves the start and the goal in the same connected "
-        "component, so they are not a cut set and the level survives them.",
+        "the left room, and none of them lies on THIS route: up column 1 to "
+        "press the button, back down column 1, right along rows 5 and 6 to the "
+        "door, through the teleport and up column 6. That route is 18 commands, "
+        "it avoids all three cells, and exhibiting it settles the question -- a "
+        "surviving route is a proof of solvability all by itself. Note what is "
+        "deliberately NOT claimed: the hazards are not off *every* minimal "
+        "route. (3,3) lies on 72 of the atrium's 204 shortest winning "
+        "sequences, and 132 of them avoid all three cells.",
         [{"op": "observation_loss", "cells": [[1, 3], [1, 4], [3, 3]],
           "value": CART_COLOUR}],
         "The near-twin of the cistern cut: same operator, cells that do not cut."))
     items.append(_make_item(
         "iii3", lvl, "solvable_hard", "solvable", None, witness,
-        _small_space(lvl), True, spec,
+        _small_space(lvl), spec,
         "the atrium's three hazards sit off every minimal route and do not "
-        "disconnect the board", POINTS_SOLVABLE))
+        "disconnect the board", POINTS_SOLVABLE, witness_source=witness_source))
 
     lvl = variant_of(base_atrium, "atrium", forbidden=["LEFT"])
-    witness = enumerate_states(Level(lvl), cap=MAX_ENUMERATION)["solution"]
+    witness, witness_source = _witness_by_search(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii4-atrium-noleft", "atrium", "solvable",
         "The atrium's route never moves the cart leftwards: it goes up column 1 "
@@ -1114,11 +1161,11 @@ def build() -> Paper:
         "operator, an action the solution does not need."))
     items.append(_make_item(
         "iii4", lvl, "solvable_hard", "solvable", None, witness,
-        _small_space(lvl), True, spec,
-        "the atrium's winning sequence contains no LEFT command", POINTS_SOLVABLE))
+        _small_space(lvl), spec,
+        "the atrium's winning sequence contains no LEFT command", POINTS_SOLVABLE, witness_source=witness_source))
 
     lvl = variant_of(base_atrium, "atrium", win_score_required=1)
-    witness = enumerate_states(Level(lvl), cap=MAX_ENUMERATION)["solution"]
+    witness, witness_source = _witness_by_search(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii5-atrium-tighten", "atrium", "solvable",
         "The level awards one point on victory and the tightened win test asks "
@@ -1134,16 +1181,16 @@ def build() -> Paper:
         "for a reason no certificate in the grammar states."))
     items.append(_make_item(
         "iii5", lvl, "solvable_hard", "solvable", None, witness,
-        _small_space(lvl), True, spec,
+        _small_space(lvl), spec,
         "the tightened win test asks for a score the winning frame already "
-        "carries", POINTS_SOLVABLE))
+        "carries", POINTS_SOLVABLE, witness_source=witness_source))
 
     # The three large solvable items: the same boards as class (ii), one
     # operator away from unsolvable. This is where a framework that has learned
     # "big comb board -> unsolvable" is caught.
     lvl = variant_of(comb_room("lattice", 60, 2), "lattice",
                      lost_cells=[[6, 10], [6, 20], [6, 30]])
-    witness = waypoint_plan(Level(lvl))
+    witness, witness_source = _witness_by_construction(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii6-lattice-safe", "lattice", "solvable",
         "The three declared hazards all sit in row 6, the goal room's back row, "
@@ -1159,55 +1206,64 @@ def build() -> Paper:
         "that are not the bridge."))
     items.append(_make_item(
         "iii6", lvl, "solvable_hard", "solvable", None, witness,
-        _large_space(lvl), False, spec,
+        _large_space(lvl), spec,
         "the lattice's hazards are in the goal room's back row and the bridge "
-        "at (4,2) is untouched", POINTS_SOLVABLE))
+        "at (4,2) is untouched", POINTS_SOLVABLE, witness_source=witness_source))
 
     base_room = comb_room("lattice", 60, 2)
     plan = waypoint_plan(Level(base_room))
     assert plan is not None
     roomy_budget = len(plan) + 40
     lvl = variant_of(base_room, "lattice", step_limit=roomy_budget)
-    witness = waypoint_plan(Level(lvl))
+    witness, witness_source = _witness_by_construction(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii7-lattice-roomy", "lattice", "solvable",
         "A plan that visits every switch and then the goal is constructed "
-        "directly from the board's shape: sweep the corridor left to right, at "
-        "each column step up to the switch above and down to the switch below, "
-        "then cross the bridge at (4,2) and walk row 5 to the goal. That costs "
-        "%d commands and the budget is %d. The budget is therefore not an "
-        "obstacle, and the level's 2^120 states are irrelevant to saying so."
+        "directly from the board's shape, with no search: take the switches in "
+        "column order and chain shortest hops between them, then cross the "
+        "bridge at (4,2) and walk row 5 to the goal. The plan that construction "
+        "yields costs %d commands and the budget is %d, so the budget is not an "
+        "obstacle and the level's 2^120 states are irrelevant to saying so. The "
+        "cost is stated for the plan actually shipped in the key rather than "
+        "for the tidier corridor sweep it is easy to describe -- that one runs "
+        "along row 2 and costs 418, also inside the budget, but it is not this "
+        "item's witness and quoting its number here would be quoting an "
+        "arithmetic that belongs to a different plan."
         % (len(plan), roomy_budget),
         [{"op": "step_limit", "limit": roomy_budget}],
         "The near-twin of the spindle's budget item: the same operator, "
         "arithmetic that goes the other way."))
     items.append(_make_item(
         "iii7", lvl, "solvable_hard", "solvable", None, witness,
-        _large_space(lvl), False, spec,
+        _large_space(lvl), spec,
         "a constructed sweep visits every lattice switch and reaches the goal "
         "in %d commands, inside the budget of %d" % (len(plan), roomy_budget),
-        POINTS_SOLVABLE))
+        POINTS_SOLVABLE, witness_source=witness_source))
 
     lvl = variant_of(comb_room("lattice", 60, 2), "lattice",
                      remap={"LEFT": "RIGHT", "RIGHT": "LEFT"})
-    witness = waypoint_plan(Level(lvl))
+    witness, witness_source = _witness_by_construction(lvl)
     spec = _emit_spec(_spec(
         "a2var-iii8-lattice-swap", "lattice", "solvable",
         "Relabelling LEFT and RIGHT is a bijection on the alphabet and its own "
         "inverse, so it maps winning sequences to winning sequences one for "
-        "one. The lattice's bridge at (4,2) is open and the goal room is "
-        "reachable through it, so the base level is solvable and the wrapped "
-        "one is too. The board is the same board as the sealed gantry item, "
-        "which is the trap: the separator row is what decides these, not the "
-        "size of the state space.",
+        "one. So it is enough that the base level is solvable, and it is: this "
+        "board requires every one of its 120 switches latched AS WELL AS the "
+        "cart on the goal, and the corridor sweep that dips into all 120 from "
+        "row 2 and then crosses the open bridge at (4,2) does both. Reaching "
+        "the goal is not winning here -- the 62-command walk straight to the "
+        "goal loses -- which is why the switches are named rather than left "
+        "implicit. The board is the same board as the sealed gantry item, which "
+        "is the trap: the separator row is what decides these, not the size of "
+        "the state space.",
         [{"op": "remap_action", "from": "LEFT", "to": "RIGHT"},
          {"op": "remap_action", "from": "RIGHT", "to": "LEFT"}],
         "Same operator as the sealed gantry item, opposite answer."))
     items.append(_make_item(
         "iii8", lvl, "solvable_hard", "solvable", None, witness,
-        _large_space(lvl), False, spec,
+        _large_space(lvl), spec,
         "the lattice's bridge is open and a relabelling preserves solvability",
-        POINTS_SOLVABLE))
+        POINTS_SOLVABLE, witness_source=witness_source))
 
     # ------------------------------------------------------------- shuffle
     # Deterministic, and keyed on the item id rather than on anything about the
@@ -1287,6 +1343,23 @@ def _self_check(items: Sequence[Item]) -> None:
     for item in items:
         truth = item.truth
         level = Level(json.loads(truth["level_blob"]))
+        # The level's own fields first. `Level.step` and the checker's graph now
+        # share one transition function, so a malformed level can no longer make
+        # the checker unsound -- but it can still make the level a different
+        # world from the one the justification describes, and in Phase 4 these
+        # are transcribed from a game rather than written here. D-EX-020.
+        problems = level.wellformed_problems()
+        if problems:
+            raise AssertionError("%s (%s): the level is malformed -- %s"
+                                 % (item.item_id, truth["spec"]["variant_id"],
+                                    "; ".join(problems)))
+        if truth["claim"] == "solvable" and not truth.get("witness_source"):
+            raise AssertionError(
+                "%s: a solvable item must record whether its witness came from "
+                "a search or from a construction. The paper's premise is that "
+                "the answer follows from the construction; a key that will not "
+                "say how its own answer was obtained cannot be checked against "
+                "that premise." % item.item_id)
         if truth["certificate_blob"]:
             result = check_certificate(json.loads(truth["certificate_blob"]), level)
             if not result["ok"]:

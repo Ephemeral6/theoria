@@ -365,7 +365,19 @@ def test_class_ii_bound_is_recorded_and_enormous(paper):
         assert space["lower_bound"] > 10 ** 12
         assert space["lower_bound"] == 2 ** space["m"]
         assert "2^%d" % space["m"] in space["arithmetic"]
-        assert item.truth["search_credible"] is False
+        # `assert item.truth["search_credible"] is False` used to stand here.
+        # It pinned a false statement. The bound above is a true statement about
+        # the raw (cart, button, latch mask) product space; `search_credible` is
+        # a statement about what a complete search costs, and on these levels
+        # latching is monotone and gates no geometry, so the space a solver
+        # actually searches is the (cart, button) quotient -- measured at 177 to
+        # 600 states. The assertion is replaced rather than deleted, by the two
+        # below: the naive bound must still be enormous, and the quotient must
+        # still be recorded, so that whoever changes either has to look at both.
+        # D-EX-022.
+        assert space["positional_states"] < 10 ** 4
+        assert str(space["positional_states"]) in space["quotient_note"]
+        assert item.truth["search_credible"] is True
 
 
 def test_class_ii_bound_is_constructive_not_asserted(paper):
@@ -636,19 +648,205 @@ def test_a_right_verdict_with_no_reason_scores_only_the_verdict(paper):
     assert score.detail["reason"] == "none"
 
 
-def test_search_exhaustion_is_partial_on_small_and_worthless_on_large(paper):
-    small = next(i for i in paper.items if i.truth["class"] == "small_unsolvable")
-    large = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
+def test_search_exhaustion_is_paid_partially_wherever_the_search_is_real(paper):
+    """A search claim is paid where it is true, and never as much as a proof.
+
+    This test used to assert `search_not_credible` on class (ii) -- that an
+    examinee saying "I enumerated it" there was making a false statement about
+    its own method. That was itself the false statement: the class (ii) boards
+    have 177 to 600 reachable `(cart, button)` states. So the ordering the
+    paper needs is not "search pays nothing on the large boards", it is
+    "search always pays less than a certificate", and that is what is pinned
+    now. It holds on both classes and does not depend on board size at all,
+    which is the property D-EX-010 asks a replacement check to have. D-EX-022.
+    """
     answer = {"claim": "unsolvable", "reason": "exhaustive_search"}
+    for klass in ("small_unsolvable", "large_unsolvable"):
+        item = next(i for i in paper.items if i.truth["class"] == klass)
+        got = RUBRIC.grade(answer, item.truth, item)
+        assert got.detail["reason"] == "search_exhaustion"
+        assert got.awarded == pytest.approx(
+            item.points * (0.5 + 0.5 * RV.SEARCH_CREDIT))
+        assert got.awarded < item.points
+        certified = RUBRIC.grade(
+            {"claim": "unsolvable",
+             "certificate": json.loads(item.truth["certificate_blob"])},
+            item.truth, item)
+        assert certified.awarded > got.awarded
 
-    got = RUBRIC.grade(answer, small.truth, small)
-    assert got.detail["reason"] == "search_exhaustion"
-    assert got.awarded == pytest.approx(small.points * (0.5 + 0.5 * RV.SEARCH_CREDIT))
-    assert got.awarded < small.points
 
-    got = RUBRIC.grade(answer, large.truth, large)
+def test_a_search_claim_is_refused_where_the_search_would_be_impossible(paper):
+    """`search_not_credible` is still reachable, and still says something true.
+
+    The branch survives the D-EX-022 change; what changed is which levels take
+    it. Handed a truth whose recorded quotient is past `SEARCH_FEASIBLE_STATES`,
+    the rubric still refuses to pay for "I searched it all" -- so the defence is
+    intact for a Phase 4 level where it is warranted, rather than fired on every
+    large board because the raw product space is big.
+    """
+    item = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
+    truth = dict(item.truth, search_credible=False)
+    got = RUBRIC.grade({"claim": "unsolvable", "reason": "exhaustive_search"},
+                       truth, item)
     assert got.detail["reason"] == "search_not_credible"
-    assert got.awarded == pytest.approx(large.points * 0.5)
+    assert got.awarded == pytest.approx(item.points * 0.5)
+
+
+def test_every_solvable_item_says_where_its_witness_came_from(paper):
+    """由构造即知答案 is a claim about the key, so the key has to be checkable.
+
+    `README` said "a computed witness plan" and the module said "computed and
+    replayed, not asserted". Neither separates a breadth-first search from a
+    construction, and five of the eight solvable witnesses are the former. That
+    is not a defect -- a plan that replays and wins proves solvability however
+    it was found -- but leaving it unsaid on a paper whose premise is that the
+    answer follows from the construction is. D-EX-023.
+    """
+    solvable = [i for i in paper.items if i.truth["claim"] == "solvable"]
+    assert len(solvable) == 8
+    sources = [i.truth["witness_source"] for i in solvable]
+    assert set(sources) <= {"search", "construction"}
+    assert None not in sources
+    assert sources.count("search") == 5
+    assert sources.count("construction") == 3
+    # The three constructed ones are exactly the large-board items, which is the
+    # part that matters: where a search was not available, the key did not use
+    # one either.
+    constructed = {json.loads(i.truth["level_blob"])["level_id"]
+                   for i in solvable if i.truth["witness_source"] == "construction"}
+    assert constructed == {"lattice"}
+    for item in solvable:
+        if item.truth["witness_source"] == "construction":
+            assert item.truth["state_space"]["exhaustive_feasible"] is False
+
+
+# ------------------------------------------------------------------------
+# V5 regressions. Each of these pins a defect that shipped, in the form it
+# shipped in, so that a future edit reintroducing it fails the suite rather
+# than being found by the next auditor. D-EX-011's precedent.
+# ------------------------------------------------------------------------
+
+def _bare_level(level_id, rows, start, goal, **extra):
+    doc = {"level_id": level_id, "rows": list(rows), "start": list(start),
+           "goal": list(goal), "button": None, "door": None, "portal": None,
+           "portal_dest": None, "switches": [], "require_all_switches": False,
+           "forbidden": [], "remap": {}, "step_limit": None, "lost_cells": [],
+           "win_score_required": 1}
+    doc.update(extra)
+    return doc
+
+
+@pytest.mark.parametrize("name,extra,cert", [
+    # `_level()` defaults portal_dest to None, so "portal set, destination
+    # forgotten" is inside the level shape rather than outside it. `step`
+    # returned `portal_dest or target` -- the portal cell itself -- and walked
+    # the cart on through; the graph dropped the edge and reported two
+    # components. Full marks for a proof that the level is unsolvable, on a
+    # level solvable in three commands.
+    ("portal_dest_is_none",
+     {"portal": [2, 3], "portal_dest": None},
+     {"kind": "invariant", "invariant": "cart_region",
+      "initial_value": [1, 1], "goal_value": [1, 4]}),
+    # Same disagreement, reached without any degenerate value: `step` tests the
+    # door before the portal and the graph had no door branch at all.
+    ("portal_dest_in_a_wall",
+     {"portal": [2, 3], "portal_dest": [1, 3]},
+     {"kind": "invariant", "invariant": "cart_region",
+      "initial_value": [1, 1], "goal_value": [1, 4]}),
+])
+def test_a_certificate_is_refused_on_a_level_that_is_actually_solvable(
+        name, extra, cert):
+    """The over-approximation claim, tested rather than asserted.
+
+    `relaxed_edges`' docstring said it "can never make a solvable level look
+    unsolvable, which would hand out points for a false theorem". It could, in
+    three ways, because the graph was a second implementation of `Level.step`
+    and the two disagreed about the teleport and the door. D-EX-020.
+    """
+    doc = _bare_level("regression-" + name,
+                      ["#######", "#..#..#", "#.SP.G#", "#..#..#", "#######"],
+                      (2, 2), (2, 5), **extra)
+    level = RV.Level(doc)
+    found = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+    assert found["solution"] is not None, "the probe level must be solvable"
+    assert RV.replay(level, found["solution"])["win"] is True
+    result = RV.check_certificate(cert, level)
+    assert result["ok"] is False, (
+        "a certificate for a false theorem was accepted: %s" % result["why"])
+
+
+def test_a_cut_set_is_refused_when_the_door_and_the_portal_collide():
+    """The third disagreement, and the vacuous-acceptance bug behind it.
+
+    `_check_cut_set` read "the goal is not a node of the graph" as success, so
+    once the door/portal collision hid the goal, *any* declared hazard bought a
+    full-marks cut set that cut nothing. Both halves are fixed; this pins both.
+    """
+    doc = _bare_level(
+        "regression-door-portal",
+        ["########", "#..#.#.#", "#....###", "#.#....#", "#.#...##", "########"],
+        (3, 4), (3, 3), button=[1, 4], door=[3, 3], portal=[3, 3],
+        portal_dest=[2, 4], lost_cells=[[2, 3], [3, 6]])
+    level = RV.Level(doc)
+    found = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+    assert found["solution"] is not None
+    result = RV.check_certificate({"kind": "cut_set", "cells": [[2, 3]]}, level)
+    assert result["ok"] is False
+    # And the builder would have refused to ship the level in the first place.
+    assert any("door and portal" in p for p in level.wellformed_problems())
+
+
+def test_every_shipped_level_is_wellformed(paper):
+    """The second line of defence, on the levels that actually ship."""
+    for item in paper.items:
+        level = RV.Level(json.loads(item.truth["level_blob"]))
+        assert level.wellformed_problems() == []
+
+
+def test_the_subset_bound_refuses_a_board_it_does_not_fit():
+    """`subset_lower_bound` was unsound off the strict comb, and said nothing.
+
+    A shipped constructor (`comb_open`) plus a shipped operator
+    (`observation_loss` on the corridor) produced m=60, a claimed 2^60, and
+    `exhaustive_feasible: False` on a level with 29,791 reachable states. The
+    bound counted each dip in isolation and never checked the lane walked
+    between dips. D-EX-021.
+    """
+    base = V.comb_open("regression-comb", 30, 1, 30)
+    lvl = V.variant_of(base, "regression-comb",
+                       lost_cells=[[2, c] for c in range(2, 31)])
+    with pytest.raises(AssertionError, match="not demonstrated"):
+        V.subset_lower_bound(RV.Level(lvl))
+
+
+def test_the_subset_bound_refuses_a_corridor_made_of_switches():
+    """The other falsifier: every corridor cell is itself a latching switch.
+
+    Walking between two dips then latches switches the subset did not choose,
+    so the reachable masks are the m prefixes rather than the 2^m subsets.
+    """
+    width = 12
+    rows = ["#" * width,
+            "#" + "s" * (width - 2) + "#",
+            "#" + "s" * (width - 2) + "#",
+            "#" + "s" * (width - 2) + "#",
+            "#" * width]
+    switches = [[r, c] for r in (1, 2, 3) for c in range(1, width - 1)]
+    lvl = _bare_level("regression-chainlink", rows, (1, 1), (3, width - 2),
+                      switches=switches, require_all_switches=True)
+    with pytest.raises(AssertionError, match="not demonstrated"):
+        V.subset_lower_bound(RV.Level(lvl))
+
+
+def test_the_shipped_class_ii_levels_still_pass_the_lane_precondition(paper):
+    """The precondition must refuse the falsifiers and accept the paper."""
+    for item in paper.items:
+        space = item.truth["state_space"]
+        if space["exhaustive_feasible"]:
+            continue
+        bound = V.subset_lower_bound(RV.Level(json.loads(item.truth["level_blob"])))
+        assert bound["lower_bound"] == space["lower_bound"]
+        assert bound["m"] >= 60
 
 
 def test_a_certificate_beats_a_search_on_the_same_item(paper):
@@ -740,3 +938,4 @@ def test_registry_if_available():
     assert len(digest) == 64
     assert registry.rubric(V.RUBRIC_ID).grade is RV.grade_verdict
     assert "exam.grading.rubrics_verdict" in registry.module_digests()
+

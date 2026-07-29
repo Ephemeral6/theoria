@@ -38,7 +38,8 @@ from exam.grading.confusion_matrix import (collisions,               # noqa: E40
 from exam.grading.registry import digest                            # noqa: E402
 from exam.grading.rubrics_adaptation import (UNREADABLE,          # noqa: E402
                                              _read_claim, _read_level_claim)
-from exam.model import ItemScore                                    # noqa: E402
+from exam.grading.mark import confusion, mark                       # noqa: E402
+from exam.model import ItemScore, Submission                        # noqa: E402
 from exam.papers import module_for                                  # noqa: E402
 
 ALL_TYPES = ("heldout", "handover", "adaptation", "verdict")
@@ -207,10 +208,18 @@ def test_the_split_separates_the_memoriser_from_ground_truth():
     """The argument for splitting the pair, as a measurement rather than a claim.
 
     Pooled, the memoriser is numerically identical to the oracle -- sensitivity
-    1.0 and specificity 1.0 -- while scoring 0.5882.  It abstains on all four
-    large-space items, and abstentions stay out of the denominator, so the
-    pooled rate is computed over the classes it happens to be good at.  Only the
-    split and the coverage figure show it.
+    1.0 and specificity 1.0 -- while scoring 0.5882.  It never answers any of the
+    four large-space items, and an unanswered item stays out of the denominator,
+    so the pooled rate is computed over the classes it happens to be good at.
+    Only the split and the coverage figure show it.
+
+    This docstring used to say it *abstains* on those four, and the assertion
+    below used to check `abstained_on_positive == 4`.  Both were wrong in the
+    same way the code was: `reference_answers` skips the item entirely, so it is
+    `unanswered`, and the old confusion counter folded unanswered, abstained and
+    unreadable into one column.  The memoriser declines to submit; it does not
+    say "I cannot tell".  Those are different arms and the table now says so.
+    D-EX-025.
     """
     matrix = verdict_matrix()
     oracle = matrix["examinees"]["oracle"]
@@ -222,7 +231,9 @@ def test_the_split_separates_the_memoriser_from_ground_truth():
 
     large = memoriser["split"]["by_class"]["large_unsolvable"]
     assert large["n_positive"] == 4
-    assert large["abstained_on_positive"] == 4
+    assert large["unanswered_on_positive"] == 4
+    assert large["abstained_on_positive"] == 0
+    assert large["illegible_on_positive"] == 0
     assert large["sensitivity"] is None
     assert large["coverage_positive"] == 0.0
 
@@ -238,6 +249,76 @@ def test_the_bluffer_signature_survives_the_split():
     assert bluffer["overall"]["specificity"] == 0.0
     assert bluffer["by_class"]["solvable_hard"]["specificity"] == 0.0
     assert bluffer["by_class"]["solvable_hard"]["coverage_negative"] == 1.0
+
+
+def test_the_pair_appears_in_one_cell_only_under_the_board_size_split():
+    """敢说不可解的框架必须在可解题上闭嘴, in a single cell rather than across rows.
+
+    The three classes partition the paper by answer, so every class cell has an
+    empty denominator on one side and the pair the protocol asks for exists only
+    pooled.  `board_size_class` cross-cuts the answer, so both rates are defined
+    in both strata -- and the bluffer's signature is printed twice, once per
+    stratum, instead of having to be assembled from two rows whose item sets do
+    not overlap.  D-EX-024.
+    """
+    matrix = verdict_matrix()
+
+    # The premise: no class cell holds both rates, for any examinee.
+    for row in matrix["examinees"].values():
+        for cell in row["split"]["by_class"].values():
+            assert cell["n_positive"] == 0 or cell["n_negative"] == 0
+
+    strata = matrix["examinees"]["oracle"]["split"]["by_board_size"]
+    assert set(strata) == {"small", "large"}
+    assert (strata["small"]["n_positive"], strata["small"]["n_negative"]) == (5, 5)
+    assert (strata["large"]["n_positive"], strata["large"]["n_negative"]) == (4, 3)
+    for cell in strata.values():
+        assert cell["sensitivity"] == 1.0 and cell["specificity"] == 1.0
+
+    bluffer = matrix["examinees"]["bluffer"]["split"]["by_board_size"]
+    for stratum, cell in sorted(bluffer.items()):
+        assert (cell["sensitivity"], cell["specificity"]) == (1.0, 0.0), stratum
+        assert cell["coverage_positive"] == cell["coverage_negative"] == 1.0
+
+    # And the memoriser's emptiness on the large boards is one cell, in both
+    # directions at once, rather than a `1.000` in each of two class rows.
+    large = matrix["examinees"]["memoriser"]["split"]["by_board_size"]["large"]
+    assert large["sensitivity"] is None and large["specificity"] is None
+    assert large["coverage_positive"] == large["coverage_negative"] == 0.0
+
+    text = render_matrix(matrix)
+    assert "sens · small board" in text and "spec · large board" in text
+
+
+def test_an_unreadable_answer_is_not_reported_as_an_abstention():
+    """D-EX-006 gave the abstention its own column so it could not be confused.
+
+    `grade_verdict` returns verdict `wrong` with `said = None` for an answer it
+    cannot parse, and both confusion functions branched on `said in (None, ...)`
+    -- so the column introduced to prevent the confusion was carrying it.  An
+    examinee that submits garbage printed the row of one that honestly declined.
+    D-EX-025.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+    garbage = {item.item_id: {"verdict": "solvable"} for item in paper.items}
+    report = mark(key_doc, Submission("probe-garbage", paper.paper_id, garbage,
+                                      capabilities=("answers",)),
+                  axes_fn=getattr(module, "axes", None))
+
+    assert report.fraction == 0.0
+    assert all(s.verdict == "wrong" for s in report.scores)
+
+    pooled = per_class_confusion(report, key_doc)["overall"]
+    assert pooled["illegible_on_positive"] == 9
+    assert pooled["illegible_on_negative"] == 8
+    assert pooled["abstained_on_positive"] == pooled["abstained_on_negative"] == 0
+    assert pooled["unanswered_on_positive"] == pooled["unanswered_on_negative"] == 0
+
+    flat = confusion(report, key_doc, positive="unsolvable")
+    assert flat["unclassified_on_positive"] == 9
+    assert flat["abstained_on_positive"] == 0
 
 
 def test_the_rendered_matrix_prints_coverage_and_never_prints_a_fake_zero():
