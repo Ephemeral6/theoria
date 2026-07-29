@@ -544,3 +544,278 @@ leak *of the answer key* and no answer-key checker will find it. Any paper that
 gives different arms different documents needs a check that the arms actually
 differ in what they were given — and that check has to run on the rendered text
 each arm receives, not on the metadata around it.
+
+---
+
+## D-EX-020 — there is one transition function, and the certificate graph asks it
+
+`rubrics_verdict._neighbours` now calls `Level.step` instead of reimplementing
+it, and `relaxed_edges` builds its node set by closure from the passable cells
+rather than by filtering successors.
+
+**What was wrong.** The module docstring said the graph "can never make a
+solvable level look unsolvable, which would hand out points for a false
+theorem." It could, because the graph was a *second* implementation of the
+transition function and the two disagreed in three places:
+
+| disagreement | `Level.step` | the old `_neighbours` |
+|---|---|---|
+| `portal_dest` is `None` | `portal_dest or target` → the cart rests on the portal cell and walks on | dropped the edge |
+| `portal_dest` is a wall | parks the cart in the wall, lets it walk out | dropped the edge (`passable(dest)` is False) |
+| a cell that is both door and portal | tests the door **first**, so the portal never fires | tested the portal; had no door branch at all |
+
+In each, `step` moved the cart and the graph did not. An over-approximating
+graph that fails *closed* is an under-approximation, and `cart_region` and
+`cut_set` certificates for **solvable** levels were accepted and paid in full —
+2.0 of 2.0, `reason: certificate`, on a level winnable in three commands. The
+first two need only `portal` set and `portal_dest` forgotten, and `_level()` in
+the paper builder defaults `portal_dest` to `None`, so that is inside the level
+shape rather than outside it. The third needs no malformed field at all.
+
+None of it was reachable through any *shipped* item — a differential fuzz over
+41,868 solvable well-formed levels found zero unsound accepts — which is exactly
+why nothing had noticed. The reproductions are in
+`runs/20260729T020000Z-V5-verdict-three-types/verify_checker_claims.py` and are
+pinned as regression tests.
+
+**Why delegation rather than three patches.** Three patches would have fixed
+three disagreements between two implementations that will keep producing them.
+The teleport rule is stated once now, in `step`, and `_neighbours` inherits it.
+The only relaxation left is `pressed=True` — the door treated as already open —
+which is the intended one and can only add edges.
+
+**A second line, for Phase 4.** `Level.wellformed_problems()` names the field
+combinations that made the disagreement reachable, and `_self_check` refuses to
+ship a level that has one. It is not called from the marker: a rubric must mark
+whatever it is handed, and refusing a malformed level would turn a builder's
+mistake into an examinee's zero. It matters when a level is transcribed from a
+sealed game rather than written here.
+
+**And one fix the fix required.** `passable()` now excludes the **button** as
+well as the portal, for the same reason: `step` never returns it, because
+stepping into B latches the button and leaves the cart where it was. Admitting
+it cost nothing while `_neighbours` was separate and yielded it. Once
+`_neighbours` asked `step`, the button became a node with no edges — its own
+singleton component — and since a component is named by its lexicographically
+smallest cell, the atrium's start representative moved from `[1,1]` to `[1,3]`
+and the shipped `a2var-i1` certificate was refused. The separation was never in
+doubt; the *name* changed. Excluding the button makes the node set mean "cells
+the cart can rest on", which is what both certificate kinds always assumed.
+
+**`_check_cut_set` had a vacuous acceptance too.** It read "the goal is not a
+node of the graph" as success. Any declared hazard then bought a full-marks cut
+set that cut nothing, and that is how the door/portal reproduction was paid. The
+goal must now be a node of the *uncut* graph, and must not itself be one of the
+cut cells.
+
+---
+
+## D-EX-021 — the 2^m bound checked each dip and never checked the walk between them
+
+`subset_lower_bound` now refuses unless the m dip sources lie on one contiguous
+row or column that is switch-free and hazard-free.
+
+**Why.** The bound's argument is "dip into any subset of m switches and come
+back, so there are at least 2^m reachable states". It verified that each switch
+is individually dippable out-and-back and never verified that the cart can
+*travel between* two dips without latching something the subset did not choose.
+Where it cannot, the reachable masks are the m prefixes — m+1 of them, not 2^m.
+
+Two falsifiers, and the second is the one that matters:
+
+* a corridor whose own cells are latching switches: `m = 60`, claimed 2^60,
+  **1,830** reachable states;
+* `comb_open(30)` — a shipped constructor — under `observation_loss` on the
+  corridor — a shipped operator: `m = 60`, claimed 2^60 = 1.15e18, **29,791**
+  reachable states, and `_large_space` stamped `exhaustive_feasible: False` on
+  it. `build()` would have shipped it as a class (ii) item. Overstatement factor
+  3.9e13.
+
+`STATUS.md` open weakness 6 said the bound "assumes comb-shaped geometry … and
+is applied only to the levels it fits". That was too kind: nothing checked, and
+on a non-comb board with switches it returned a large wrong number silently.
+17.5% of random boards with arbitrary switch placement produced `2^m` above the
+true state count.
+
+The shipped items all satisfy the precondition — every dip source is on row 2,
+the corridor — so no number in the paper moved.
+
+---
+
+## D-EX-022 — "enumeration is out of reach" was false, and the rubric was repeating it back
+
+Class (ii) publishes `lower_bound` (2^60 to 2^120) and now also
+`positional_states`, and `search_credible` is derived from the second.
+
+**The defect.** `lower_bound` is a true statement about the raw
+`(cart, button, latch mask)` product space, which is what a naive forward
+enumerator walks. It is not a statement about what a *complete search* costs. On
+these boards latching is monotone and gates no geometry, so every non-full mask
+at a position behaves alike and the space that decides the question is the
+`(cart, button)` quotient. Measured:
+
+| item | claimed `lower_bound` | reachable `(cart, button)` |
+|---|---|---|
+| `a2var-ii1-gantry-sealed` | 2^120 | **180** |
+| `a2var-ii2-lattice-bridge` | 2^120 | **180** |
+| `a2var-ii3-spindle-budget` | 2^60 | **600** |
+| `a2var-ii4-orchard-noleft` | 2^118 | **177** |
+
+The rubric read `search_credible: False` off the first number and told an
+examinee that had honestly searched the second:
+
+> the state space of this level is beyond enumeration, so 'I searched it all' is
+> not a reason, it is a false statement about the search.
+
+That sentence was the false statement. A marker that calls a true claim false is
+the failure this territory exists to prevent, and it was doing it on the four
+items where the examinee had done the *better* thing.
+
+**What changed and what did not.** `search_credible` is now
+`positional_states <= SEARCH_FEASIBLE_STATES`, so a quotient search is paid its
+0.4. The `search_not_credible` branch survives and still fires where the
+quotient really is out of reach — a test pins that. The incentive class (ii)
+exists to create is untouched: a certificate is worth 1.0 of the reason and a
+search 0.4, on every class, and that ordering is what the replacement test
+asserts.
+
+**What this costs the paper, stated rather than hidden.** Class (ii)'s premise
+as written — "enumeration is out of reach, so only invariant reasoning answers"
+— is false of these boards. What survives is weaker and still worth having: a
+*naive* enumerator cannot finish, and a proof is worth two and a half times a
+search. Making the premise true again means switches that gate geometry, which
+is a different world family and a different paper. It is `STATUS.md`'s open
+weakness, not a thing this run repaired.
+
+---
+
+## D-EX-023 — the key says whether its own answer came from a search or a construction
+
+`truth["witness_source"]` is `"search"` or `"construction"`, and `_self_check`
+refuses a solvable item that does not say.
+
+**Why.** The paper's premise is 由构造即知答案. `README.md` said class (iii)
+items each carry "a computed witness plan" and the module said "computed and
+replayed, not asserted". Neither word separates a breadth-first search from a
+construction, and **five of the eight** solvable witnesses come from
+`enumerate_states`, which is a BFS. That is not a defect — a plan that replays
+and wins proves solvability however it was found — but leaving it unsaid on a
+paper about constructive grounds is. The three large-board witnesses come from
+`waypoint_plan`, which builds a sweep from the board's shape; a test pins that
+the constructed ones are exactly the items where a search was not available.
+
+---
+
+## D-EX-024 — the class split cannot report a pair, because the class *is* the answer
+
+`per_class_confusion` now also splits on `board_size_class`, `axes()` publishes
+it, and `calibration` asserts the bluffer's signature per stratum.
+
+**The observation.** The three classes partition the paper by answer:
+
+```
+small_unsolvable 5 unsolvable / 0 solvable
+large_unsolvable 4 unsolvable / 0 solvable
+solvable_hard    0 unsolvable / 8 solvable
+```
+
+So one denominator is empty in **every** class cell, and the pair the protocol
+asks for appears nowhere except pooled — which is the reading D-EX-015 shows
+cannot separate ground truth from a reader who never saw a board. The renderer's
+footer already stated the fact; nobody had drawn the consequence.
+
+**The fix was already in the truth file.** `board_size_class` cross-cuts the
+answer — small 5/5, large 4/3 — and splits on precisely the distinction classes
+(i) and (ii) were invented to draw: whether exhaustive search was available. So
+both rates are defined in both strata. Measured, the difference is not cosmetic:
+
+| examinee | class split | board-size split |
+|---|---|---|
+| `bluffer` | `(1.0, --)`, `(1.0, --)`, `(--, 0.0)` | `(1.0, 0.0)` and `(1.0, 0.0)` |
+| `memoriser` | `(--, --)`, `(1.0, --)`, `(--, 1.0)` | `small (1.0, 1.0)`, `large (--, --)` at 0/4 and 0/3 |
+
+敢说不可解的框架必须在可解题上闭嘴 is the pair `(1.0, 0.0)`. Under the class
+split a reader has to join one row's sensitivity to another row's specificity,
+across item sets that do not overlap — which is the join the pooled rate makes.
+Under the board-size split it is one cell, twice. And the memoriser's emptiness
+becomes one cell saying it has never answered a large board in either direction,
+instead of two cells each printing `1.000`.
+
+`calibration`'s `verdict_bluffer_pair` asserted `(1.0, 0.0)` on the pooled pair
+only, which is the weakest available place to assert it. It now asserts it in
+each stratum, which is strictly stronger and independent of item mix.
+
+---
+
+## D-EX-025 — an unreadable answer was being reported as an abstention
+
+`mark.confusion` and `per_class_confusion` both branched on
+`score.verdict == "abstained" or said in (None, "abstain", "unknown")`.
+`grade_verdict` returns verdict `wrong` with `said = None` for an answer it
+cannot parse, and `unanswered` items have no `said` at all. So three different
+things — *did not submit*, *declined*, *submitted something unreadable* — were
+one column, and it was the column D-EX-006 introduced **so that an abstention
+could not be confused with anything else**.
+
+Consequences, measured: an examinee submitting `{"verdict": ...}` (no `claim`
+key) on four items printed the identical row and identical score to one that
+honestly abstained on those four; an examinee whose every answer was unreadable
+printed the identical row to `null`, which submitted nothing.
+
+Three counters now, and `n_positive` sums over all of them so coverage still
+adds up. The change immediately falsified a claim in an existing test: the
+memoriser's docstring said it "abstains on all four large-space items", and it
+does not — `reference_answers` skips them, so they are `unanswered`. The old
+counter could not tell, and neither could the docstring.
+
+---
+
+## D-EX-026 — the fakes calibrate the paths the fakes walk, and that is two of eleven
+
+`calibration._type_specific` now runs five **answer-shape probes** against the
+verdict paper, each with a score fixed by arithmetic over the paper's own points.
+
+**The measurement that forced it.** An adversarial audit injected fourteen
+faults into the verdict rubric. **Thirteen passed `assert_calibrated`** — the
+gate that "refuses to mark a real submission" — and twelve passed all seven
+mutants of D-EX-012. Two were caught by nothing at all: not the gate, not the
+mutants, not 73 tests. All four calibration fractions stayed bit-identical under
+every one of the fourteen.
+
+The mechanism is not subtle once stated. The sheet's `INSTRUCTIONS` advertise
+**five** answer shapes; the four fakes submit **three**. Nobody ever submits
+`{"claim": ..., "reason": "exhaustive_search"}` or `{"claim": "abstain"}`, and
+the seven mutants are all derived from the *oracle's* answers, so they inherit
+the same three shapes. Coverage says the same thing more starkly: of the eleven
+terminal outcomes of `grade_verdict`, the oracle reaches **two**, all four fakes
+together reach four, and fakes-plus-mutants reach six. Of `check_certificate`'s
+twenty-nine outcomes, **every semantic refusal in all three kind-specific
+checkers** is reached by no fake and no mutant — on a module whose thesis is
+"the machine actually refuses things". And the `null` fake executes **zero**
+statements of the verdict rubric; it tests `mark.unanswered`.
+
+**The five probes**, and what each closes:
+
+| probe | expected | closes |
+|---|---|---|
+| `abstainer` | exactly 0, all 17 `abstained` | abstain read as a claim (worth 9/34) |
+| `illegible` | exactly 0, all 17 `wrong` | a broken serialiser looking like restraint |
+| `searcher` | 0.5 + 0.5·0.4 per credible item | search paid in full, or not at all |
+| `wrong_claim_with_reason` | exactly 0, all 17 `wrong` | the reason half paid on a wrong claim |
+| `forged_certificate` | exactly half the paper | certificate values believed instead of re-derived |
+
+**The first draft of this check did not work, and the reason is the point.**
+`_verdict_probe_expectation` imported `SEARCH_CREDIT` from `rubrics_verdict`, so
+injecting `SEARCH_CREDIT = 1.0` moved the marker and the expectation together
+and the gate stayed green. **A check that reads its expectation out of the code
+it is checking is not a check.** The three weights are now pre-registered in
+`calibration.VERDICT_WEIGHTS` and the live constants are asserted against them —
+same argument D-EX-016 makes for the protocol digest.
+
+**A side effect worth recording.** The probes are exact equalities, not upper
+bounds, so they catch a marker that *depresses* scores. That closes D-EX-013's
+standing finding — every band for the informative fakes is `Band(0.0, x)`, open
+below — **for the verdict paper**, without adding a lower band fitted to a first
+reading. `heldout`, `handover` and `adaptation` still have no probes and
+D-EX-013 stands there unchanged; a test asserts exactly that, so the day someone
+adds probes elsewhere the claim gets re-examined rather than quietly inherited.
