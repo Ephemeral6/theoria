@@ -197,21 +197,50 @@ def probe_a0_state():
                          ", ".join(missing) or "无")}
 
 
+# The two tracks meet at exactly one place and name it the same way on both
+# sides: `engine-rig/interop/certificate_export.py:95` stamps the schema, and
+# `theory-compiler/src/theory_compiler/certificate.py:38` pins it to read the
+# file. Either token is a real handshake; the bare word "certificate" is not.
+A1_SCHEMA = "lp_potential/pagoda_certificate@"
+A1_INTEROP_DIR = "interop/certificates"
+
+
 def probe_a1_state():
     bridge = exists("engine-rig/interop/certificate_export.py")
+    # The handshake is the schema id both sides name -- `certificate_export.py`
+    # stamps it, and a consumer has to know it to read the file. The old test
+    # was the bare word "certificate" anywhere under theory-compiler, which the
+    # Lean proofs satisfy in prose comments ("the certificate's pattern: ...").
+    # Once the criterion decides something, a token that a comment can supply is
+    # not a criterion; replacing a gate that never opens with one that opens on
+    # a word is the worse trade of the two.
     consumed = False
     tc = rel("theory-compiler")
     for base, dirs, files in os.walk(tc):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        # `runs/` holds artefacts of past runs, not the track's source. A
+        # certificate quoted in a run log is evidence something happened once,
+        # not evidence the bridge is wired up now.
+        if "runs" in os.path.relpath(base, tc).split(os.sep):
+            continue
         for name in files:
             if name.endswith((".py", ".lean")):
                 try:
-                    if "certificate" in open(os.path.join(base, name),
-                                             encoding="utf-8", errors="ignore").read():
-                        consumed = True
+                    text = open(os.path.join(base, name),
+                                encoding="utf-8", errors="ignore").read()
                 except Exception:
-                    pass
-    return {"status": "partial",
+                    continue
+                if A1_SCHEMA in text or A1_INTEROP_DIR in text:
+                    consumed = True
+    # Both halves were computed, formatted into `detail`, and then discarded --
+    # the return was an unconditional `partial`, so this gate could neither open
+    # nor close no matter what the tree looked like. A gate that cannot close is
+    # a gate that gets stepped over, and this one was: Theoria.md 305 makes an
+    # all-green Phase 1 the precondition for spending game money, and money was
+    # spent across it at 9/16. The criterion now decides.
+    status = "green" if (bridge and consumed) else (
+        "partial" if (bridge or consumed) else "risk")
+    return {"status": status,
             "detail": "engine-rig 侧证书导出：%s；theory-compiler 侧消费：%s。"
                       "两半接通前，A1 仍是彩排而非验收。"
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
@@ -1973,28 +2002,78 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 
 # ---------------------------------------------------------------- main
 
+# How good a verdict is, worst first. Only used to tell an upgrade from a
+# downgrade -- nothing here ranks `unprobed`, which is not a verdict.
+_VERDICT_RANK = {"risk": 0, "missing": 1, "amber": 2, "partial": 3, "green": 4}
+
+
+def _reconcile(item, probe_result, overrides):
+    """Combine a hand-written status with its probe's, and record the disagreement.
+
+    The old rule was `probe wins unless the hand-written value is risk`, applied
+    silently. That let a probe covering *part* of an item promote the whole item:
+    `p1-seal-test` is the conjunction "no credential inside the arm" AND "egress
+    that bypasses the two proxies must fail", its hand-written status is
+    `partial` with a note saying the red-team surface is unverified, and
+    `credential_hygiene` -- which never attempts an egress bypass -- returned
+    green and won. That is a green cell on the board for a test nobody ran.
+
+    So: a probe may always **downgrade** (evidence of a problem beats optimism),
+    but it may only **upgrade** when it covers the whole item. Partial coverage
+    is declared per item by `probe_scope: "partial"`, because only the item's
+    author knows what the probe left out.
+
+    Either way the disagreement is recorded rather than resolved in silence --
+    the old override left no trace that a hand-written verdict had been replaced.
+    """
+    hand, probed = item["status"], probe_result["status"]
+    if hand == "risk":
+        keep, why = hand, "hand-written risk is never overridden by a probe"
+    elif _VERDICT_RANK.get(probed, 9) < _VERDICT_RANK.get(hand, 9):
+        keep, why = probed, "probe downgraded"
+    elif item.get("probe_scope") == "partial":
+        keep, why = hand, ("probe covers only part of this item, so it may not "
+                           "upgrade it")
+    else:
+        keep, why = probed, "probe upgraded"
+    if keep != probed or hand != probed:
+        overrides.append({"item": item["id"], "probe": item["probe"],
+                          "hand": hand, "probe_said": probed,
+                          "kept": keep, "why": why})
+    return keep
+
+
 def build(with_tests=False, out_dir=None):
     metrics = collect_metrics(with_tests)
 
     probe_results = {name: fn() for name, fn in PROBES.items()}
 
+
     phases = []
-    p1_green = p1_total = 0
+    p1_green = p1_total = p1_unprobed = 0
+    overrides = []
     for ph in spec.PHASES:
         items = []
         for it in ph["items"]:
             st, note = it["status"], it["note"]
-            if it.get("probe") and it["probe"] in probe_results:
+            probed = bool(it.get("probe") and it["probe"] in probe_results)
+            if probed:
                 pr = probe_results[it["probe"]]
-                st = pr["status"] if it["status"] not in ("risk",) else it["status"]
+                st = _reconcile(it, pr, overrides)
                 note = note + "  〔本次扫描：" + pr["detail"] + "〕"
-            items.append(dict(it, _status=st, _note=note))
+            else:
+                # S26 item 3: an item nothing checks must say so. Left silent,
+                # a hand-written `green` with no probe behind it is
+                # indistinguishable on the board from one a machine confirmed.
+                note = note + "  〔无探针：本项无任何机器检查，状态为人工断言〕"
+            items.append(dict(it, _status=st, _note=note, _probed=probed))
         counts = {}
         for i in items:
             counts[i["_status"]] = counts.get(i["_status"], 0) + 1
         if ph["id"] == "p1":
             p1_total = len(items)
             p1_green = counts.get("green", 0)
+            p1_unprobed = sum(1 for i in items if not i["_probed"])
         phases.append(dict(ph, items=items, _counts=counts))
 
     def counts_of(items, key="status"):
@@ -2019,6 +2098,13 @@ def build(with_tests=False, out_dir=None):
                            key=lambda f: ["blocking", "high", "medium", "low",
                                           "info"].index(f["severity"])),
         "p1_green": p1_green, "p1_total": p1_total,
+        # S26: the headline was one number over a list length, with no
+        # record of which items a machine had actually checked. 11 of the
+        # 16 have no probe at all, and several of those are hand-written
+        # green -- indistinguishable on the board from a confirmed one.
+        "p1_unprobed": p1_unprobed,
+        "verdict_overrides": overrides,
+
         "eng_green": sum(1 for e in spec.ENGINES if e["status"] == "green"),
         "con_green": sum(1 for c in spec.CONSTRAINTS if c["status"] == "green"),
         "blocking_findings": sum(1 for f in spec.FINDINGS if f["severity"] == "blocking"),
@@ -2086,6 +2172,12 @@ def main():
         build.refresh = max(args.watch, 15)
     while True:
         state = build(args.tests)
+        if state["p1_unprobed"]:
+            print("    Phase 1: %d/%d 项无任何机器检查，其状态是人工断言"
+                  % (state["p1_unprobed"], state["p1_total"]))
+        for o in state["verdict_overrides"]:
+            print("    裁决分歧 %s：手写 %s / 探针 %s → 取 %s（%s）"
+                  % (o["item"], o["hand"], o["probe_said"], o["kept"], o["why"]))
         print("[%s] monitor/index.html written — Phase 1: %d/%d green"
               % (state["generated_at"], state["p1_green"], state["p1_total"]))
         if not args.watch:

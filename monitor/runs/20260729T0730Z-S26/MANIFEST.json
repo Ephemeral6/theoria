@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "d6929c2",
+  "branch": "agent/s26-phase1-gate-must-decide",
+  "lane": "infra",
+  "prompt_id": "S26-phase1-gate-must-decide",
+  "state": "items 1 and 4 delivered (the A1 gate decides, and its criterion was tightened so it cannot open on a word in a comment); item 2 delivered for the two structural cases (partial-coverage probes may no longer upgrade; disagreements recorded); item 3 delivered as honest labelling (11 of 16 rows carry no probe and now say so) rather than 11 new probes",
+  "territory": "monitor",
+  "utc": "2026-07-29T07:30:00Z"
+}

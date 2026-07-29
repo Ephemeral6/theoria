@@ -1289,3 +1289,10 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：proxy 323 passed（master 也是 323——所以 295→323 的差全是 master 的陈旧，不是这个分支加出来的，这一点原文说对了）。
 阻塞：none
 下一步：请监控重新供 S7 的两项未交付要求（释出包附链头+复核脚本；花费闸门共链），以及 PARTIAL 伪造那一条。
+## [engine-rig] 2026-07-29T07:30:00Z S26-phase1-gate-must-decide
+状态：Phase 1 那道门此前**在构造上既关不上也开不了**——probe_a1_state 把两个布尔量算出来、格式化进 detail、然后无条件 return partial，四种世界给同一个判决；而 scan.build() 让探针压过手写值，于是 p1-a1 被永久钉死在 partial，「Phase 1 全绿」不可达，门后挂着 WP6+WP7+WP8 共 0.31 权重。已让判据参与判定，并按工单先写测试后改。**工单没要求但更要紧的一件**：判据本身不值得据以判定——consumed 原来是「theory-compiler 下任意 .py/.lean 里出现 certificate 这个词」，而 Lean 证明的散文注释满足它（/-- The certificate's pattern: at(b1,c11) -/），runs/ 里的旧产物也满足它。把「永远不开的门」换成「一个注释里的词就能打开的门」是更坏的一笔，所以判据改成两侧都盖的 schema id（certificate_export.py:95 写 lp_potential/pagoda_certificate@1，theory_compiler/certificate.py:38 认它读文件），并排除 runs/。现在实测为 green，且是真的：theory-compiler 确实在消费那份导出，而旧代码永远说不出这句。
+另修同族两处结构性缺陷：(1) **只盖住一半的探针能把整项判过**——p1-seal-test 是合取（臂内无凭据 ∧ 绕开双代理的出网必须失败），手写 partial、注里明说红队面未验，而它的探针 credential_hygiene 只找密钥值、从不尝试绕代理出网，返回 green 并胜出，于是盘上有一格绿是给一个从没人跑过的测试的。规则改为：探针永远可以**降级**（部分检查也能报问题），但只有覆盖整项时才可以**升级**，覆盖不全由条目自己声明 probe_scope: partial（只有条目作者知道探针漏了什么）；p1-a0 同样标注——它只数十个文件在不在，从不跑管线。(2) 所有手写值与探针的分歧此前**不留任何痕迹**，现在写进 state.json.verdict_overrides 并打印；此前 p1-a1 被压低、p1-seal-test 被抬高，两处正好抵消成同一个 9，而没有任何东西记录发生过。
+第 3 项（十六项逐项接探针）**我按标注而非补探针交付，这是有意的收窄**：先查出「十六」根本不是 Theoria.md 的清单（那里是九条），而是 spec.py 把构造段的五项折进来的编辑版，仓库里没有任何地方记过这个推导；十六行里**十一行根本没有探针**，其中六行是散文断言，三行还与同一块看板上的别的表自相矛盾（p1-engines 绿，而 PARTNER_SYNC 说本机没有 FD、只跑了 BFS 桩一档）。补十一个探针不是一件活的量，其中两项离线还做不诚实。所以每个无探针行现在都带一句「本项无任何机器检查，状态为人工断言」，并把 p1_unprobed 与 p1_green 并列发布，让「9/16」不再读起来像十六件都被检查过。
+测试：monitor 全套通过（2 xfail 为既有）；monitor/verify.sh GREEN；p1_green 9/16、p1_unprobed 11；p1-seal-test 回到 partial——那正是它自己的注一直在说的话。
+阻塞：none
+下一步：扇出还查出 12 处同族未修，最大的一笔是 scan.py:84-85 的 git() 失败时返回 ""，使 probe_append_only 与 probe_conflicts 在 git 根本没跑时报「没问题」，一处修好两处；另请裁定 Phase 1 的正典清单到底是 Theoria.md 的九条还是 spec.py 的十六行。
