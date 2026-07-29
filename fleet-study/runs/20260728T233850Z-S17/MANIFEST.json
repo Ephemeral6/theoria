@@ -1,0 +1,101 @@
+{
+  "prompt_id": "S17-fleet-evidence-capture",
+  "branch": "agent/s17-fleet-evidence-capture",
+  "base_commit": "20105fe070b1e2bd34494a1f737911c25b315981",
+  "utc": "2026-07-28T23:38:50Z",
+  "worker": "W-1641",
+  "territory": "fleet-study",
+  "predecessor": {
+    "worker": "RES-4",
+    "outcome": "died on session quota at ~2026-07-29T02:0x local; left census.py, verify.py, four datasets, no EVIDENCE.md",
+    "resumed_from": "817c35f (rebased onto master bac8282 as 20105fe)"
+  },
+  "goal": "Close the two gaps RES-4 named (human_actions.jsonl absent, assembly.jsonl at 3 rows), add bus.jsonl, append the day-2 delta, and write fleet-study/EVIDENCE.md. Records and organisation only -- no paper prose.",
+  "method": "Five parallel read-only harvest subagents writing into runs/<id>/harvest/, then synthesis here, then an adversarial subagent tasked with refuting the result.",
+  "note_on_utc": "The run directory is stamped with real UTC (2026-07-28T23:38Z), not local date. Commit bac8282 -- 'audit: cycle 24: six runs are dated in the future' -- is the reason this is stated explicitly.",
+  "files": [
+    {
+      "path": "fleet-study/census.py",
+      "sha256": "e9ee1a3a95977858c1b9a36eb57063fb3d18b18fd410d736cf83e67898aebf95",
+      "bytes": 13741
+    },
+    {
+      "path": "fleet-study/census_delta.py",
+      "sha256": "ffe32fa9e52514da61a6fde452406b263fb3934095ef53b5c7bec986b4d05337",
+      "bytes": 5974
+    },
+    {
+      "path": "fleet-study/merge_harvest.py",
+      "sha256": "e12c994ae093b50d40c9bce99199f9460ba8db0996f65549a43f88601e8898c2",
+      "bytes": 6349
+    },
+    {
+      "path": "fleet-study/verify.py",
+      "sha256": "72faef8dd22f62f250b611f61778bcb143655f4c8786410b7d73160866ab1953",
+      "bytes": 18054
+    },
+    {
+      "path": "fleet-study/EVIDENCE.md",
+      "sha256": "2e33e0262cba6cb73c7b1e88ff7a16796e7a724a64c6cc670ed26e72246a2fce",
+      "bytes": 20672
+    },
+    {
+      "path": "fleet-study/IDEA.md",
+      "sha256": "01e19bf5aaf2d3b36cd09e4bf9739099401643e055785ba738a41fa10fa6eea0",
+      "bytes": 4728
+    },
+    {
+      "path": "fleet-study/data/assembly.jsonl",
+      "sha256": "0bf18d9816e1cdf7ccc29b6e87b6399518f77c39adfe0d788257d9bbf5a77952",
+      "bytes": 34146
+    },
+    {
+      "path": "fleet-study/data/bus.jsonl",
+      "sha256": "d7eb04bb4289d4c9f172fbd790a48d2e332cd87d86d4fd42004464cdffdbe403",
+      "bytes": 66884
+    },
+    {
+      "path": "fleet-study/data/counterevidence.jsonl",
+      "sha256": "7aab8e83fac795b5b6d4cf7fc2a49301baba6aff95b242c43bd7b2f1bad9ab90",
+      "bytes": 78682
+    },
+    {
+      "path": "fleet-study/data/deliveries.jsonl",
+      "sha256": "3c84a001d23db84544e9a7b73080c2b2b5d150538673e12d276193d875db0aba",
+      "bytes": 58222
+    },
+    {
+      "path": "fleet-study/data/failures.jsonl",
+      "sha256": "484886258b3231c4e063fa72d3279ac09e2f2671414b87503e21ffeaf8ad4c71",
+      "bytes": 187720
+    },
+    {
+      "path": "fleet-study/data/human_actions.jsonl",
+      "sha256": "57b5b6302e9c901f83a26e710ebcfe58766ed37d0f0ec56645ca338da3201ca4",
+      "bytes": 26886
+    },
+    {
+      "path": "fleet-study/data/timeline.jsonl",
+      "sha256": "596ed099f353635f1457364149870a76380bab7df7e4bbc69c48d37dffd9056d",
+      "bytes": 67811
+    },
+    {
+      "path": "fleet-study/data/census.json",
+      "sha256": "2c9d2e2828d2e6efbbaaf5ec84e8428a5b9a2994c498ca68bc77a8be0790d295",
+      "bytes": 6903
+    },
+    {
+      "path": "fleet-study/data/README.md",
+      "sha256": "925805366c825cbd7d708e61b407af90aa9f13d5f8d2555750ff5051d32f54ab",
+      "bytes": 5893
+    }
+  ],
+  "head_at_close": "1567ec483e2e4639f3812d7915e6e41a9194adc3",
+  "verify": {
+    "cmd": "python fleet-study/verify.py",
+    "result": "GREEN",
+    "rows": 473,
+    "unresolvable_citations": 0
+  },
+  "files_note": "sha256 of the LF-normalised working tree, which is what a fresh clone gets: fleet-study/.gitattributes pins LF and this host has core.autocrlf=true, so two files committed before the pin still had CRLF in the working tree and were restored from the index before hashing. Hashing them as-found would have published digests no other machine could reproduce."
+}

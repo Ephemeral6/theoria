@@ -1,84 +1,92 @@
 # fleet-study/data — 一手证据，机器可读
 
-RES-4，2026-07-28/29。S17「抢救性证据固化」的结构化数据层。
-**正文只引用，不重抄数字**（工单第 4 条）。
+S17「舰队航海日志」的结构化数据层。**正文只引用，不重抄数字**（工单第 4 条）。
+叙述在 [`../EVIDENCE.md`](../EVIDENCE.md)，写作方针在 [`../IDEA.md`](../IDEA.md)。
 
-## 现有三份
-
-| 文件 | 行数 | 分组键 | 采法 |
+| 采集轮 | 日期 | 采集者 | 结果 |
 |---|---|---|---|
-| `failures.jsonl` | 96 | `class` | 三个只读 subagent 之一扫 349 个提交 + audit/ + inbox/ + 总线 |
-| `timeline.jsonl` | 45 | `trigger_kind` | 架构变更，UTC 升序，`2026-07-27T18:13Z` → `2026-07-28T15:06Z` |
-| `counterevidence.jsonl` | 43 | `kind` | 反证：装了没用的、担心过没发生的、废弃的、已被抓的过度声称 |
+| 1 | 2026-07-28 | RES-4 | 184 行；会话额度中途死亡，两个缺口未补 |
+| 2 | 2026-07-28 | W-1641 | **473 行**；两个缺口补齐，四个头部数字被推翻三个 |
 
-**184 行全部带 `evidence` 引用**（提交 sha 经 `git cat-file` 解析过，文件路径经存在性检查）。
+## 七个数据集
 
-## 失败分类学：给了 4 类，挖出 25 类
+| 文件 | 行数 | 主键 | 归并方式 |
+|---|---:|---|---|
+| `failures.jsonl` | 116 | `F-nn` | 追加 |
+| `bus.jsonl` | 111 | `B-nn` | 追加，UTC 升序 |
+| `deliveries.jsonl` | 90 | 板条目 slug | **状态表**，逐字段归并（见下） |
+| `counterevidence.jsonl` | 57 | `C-nn` | 追加 |
+| `timeline.jsonl` | 54 | `T-nn` | 追加，UTC 升序 |
+| `human_actions.jsonl` | 26 | `H-nn` | 追加，UTC 升序 |
+| `assembly.jsonl` | 19 | `A-nn` | 追加 |
+| `census.json` | — | — | 由 `census.py` 重算，**禁止手改** |
+| `census-history/` | — | — | 每日快照，供 `census_delta.py` 求增量 |
 
-工单预设四类。实际落盘 25 个 `class`，其中最大的一类正是本赛道的主题：
+**全部 473 行都带可解析的 `evidence`**：`git:<sha>` 经 `git cat-file -t` 解析，
+`file:<path>` 经存在性检查（工作树或 git 历史）。当前 **0 处无法解析**。
 
-| class | n |
-|---|---|
-| `silent_failure` | **37** |
-| `unserialised_shared_resource` | 10 |
-| `announcement_vs_fact` | 9 |
-| `requirement_cites_nonexistent` | 5 |
-| `context_handoff_state_loss` | 5 |
-| `one_way_door_no_exit` | 4 |
-| `check_with_no_failing_path` | 3 |
-| `orphaned_deliverable` | 3 |
-| 其余 17 类 | 各 1–2 |
+## 每天怎么加一轮
 
-新类里值得单独看的几个（名字本身就是结论）：
-`check_with_no_failing_path`（检查没有失败路径）、
-`false_positive_fix_blinds_the_check`（修误报把检查修瞎）、
-`instrument_blames_its_subject`（仪器怪罪被测对象）、
-`unauditable_by_construction`（构造上不可审）、
-`rehearsed_with_the_wrong_model`（拿错模型彩排）。
+```bash
+# 1. 采集：subagent 只写 runs/<UTC>-S17/harvest/，不碰 data/
+# 2. 折进来（可重复跑，重跑是空操作）
+python fleet-study/merge_harvest.py fleet-study/runs/<UTC>-S17/harvest
+# 3. 校验（能变红：--selftest 注入 12 个缺陷）
+python fleet-study/verify.py
+# 4. 计数：先把旧快照挪进 census-history/，再重算，再求增量
+cp fleet-study/data/census.json fleet-study/data/census-history/census.<UTC>.json
+python fleet-study/census.py
+python fleet-study/census_delta.py
+```
 
-## `assembly.jsonl` 只采到 3 行（部分）
+**`deliveries.jsonl` 的归并规则值得单独记**，因为改错过一次：它按板条目的 slug
+作键，同一个 slug 明天会带着更晚的状态回来（`open` → `claimed` → `done`）。
+直接追加会撞 id，直接整行替换会**悄悄丢掉昨天的 `first_claim_utc`**——
+而那正是交付账存在的理由。所以按字段归并：今天观测到的值胜出，
+今天填 null 的字段保留昨天的，列表求并集。`merge_harvest.py` 的 docstring 是权威。
 
-会话内直接量出的一条，是这份记录里最硬的证据之一：
+## 必须和数字一起读的四条
 
-> **RES-4 的 127 行契约里，99 行与 RES-1 逐字节相同（78%），改动 41 行、6 节变 7 节，
-> 且 RES-3 与 RES-4 由同一个提交 `6f6b87a` 一次造出。**
+第 2 轮派了一个 subagent **专职推翻**本数据集自己的头部数字，
+四个里三个没站住。结论落在 `counterevidence.jsonl` 的 C-44…C-49。
 
-也就是「克隆即继承」在文本层面是真的。**但要注意它没有证明什么**：78% 相同
-只说明克隆发生了，不说明被继承的四条纪律（总线先行 / 手持 2–3 件 / 扇出硬要求 /
-绝不停下）真的被遵守——那是另一次测量，本行没做。热重调（A-03）**完全没量**，
-`confidence: low`：契约自己声称「改一个文件全队下轮生效」，那是契约在陈述自己的机制，
-不是它奏效的证据。
+1. **`failures.direction` 不可用作基础率**（C-44）。88/96「往令人安心的方向」
+   是抽样框的产出率：采集者 RES-4 正是因为四起该类失败才被造出来，
+   岗位职责写明「专盯静默失败」。另一个独立普查（340 个判断点）给出 14%。
+   `direction` 在全仓没有定义，`neutral` 在 96 行中用了 0 次。
+2. **`failures.recurred` 不可用**（C-45）。它把「修好后又犯」「同类在别处」
+   「根本没修过」「字段被填成 true」四件事合成一个布尔值，且没有佐证栏——
+   而 `timeline.jsonl` 有 `recurred_after` **和** `recurrence_evidence` 两栏。
+   `verify.py` 现在对 `recurred: true` 且无 `fix` 的行发警告，命中 4 行。
+3. **`timeline.trigger_kind` 不可用作比例**（C-46）。`friction` 是残差桶，
+   判据是「提交信息没点名事故」；22 行 friction 中引用了事故 id 的有 0 行
+   （全表 45 行都是 0）。且 IDEA.md 在采集之前就写好了结论。
+4. **封存堆零接触成立，但措辞要改**（C-47/C-48）。18,365 精确复现且负控通过
+   （开发堆 id 命中 17,857 次，证明搜索有失败路径）。但「87 个文件」今天是 93
+   且不可能稳定，「18,648 条 HTTP 记录」实为 18,461，**78% 的语料在未跟踪文件里**
+   （干净克隆只能复算出 4,051 条）。准确说法是**零次请求指向封存局**，
+   不是零次出现。而出厂检查器 `arc-recon/contamination.py` 扫 3 个文件、
+   没有负控、第 338 行的退出码只看一次 sha256 比对——真出事它绿灯退出。
 
-## 一份还没采（**缺口，不是遗漏**）
+## 采集时撞到的、仍然成立的问题
 
-`human_actions.jsonl` 的采集器**因会话额度中断而失败**，产出为零。
-它承载的是工单第 (4) 条、也是整个论点里最硬的一项：
+1. **心跳时钟无人校验，且已恶化成伪造**：第 1 轮记的是 `ops-status/*.json`
+   写着未到来的时刻；第 2 轮在 F-103/F-104 记到**六个 run 目录的日期最远在
+   18.7 小时之后**，其中两个 `MANIFEST.json` 的 `utc`（必填留痕字段）
+   照抄了这个伪造值。整点的形状说明是编的，不是时区错。未修。
+   本领地的对策：`runs/` 目录名与本文件的时刻全部取真实 UTC。
+2. **`arc-recon/contamination.py:338` 封存堆审计不可能变红**——见上第 4 条。
+   属 arc-recon 领地，只上报不动手。
+3. **`ci_merge.KNOWN_DIRS` 那条已解决**：`fleet-study` 已在名单里，
+   分支能合了。代价记在 `runs/20260728T233850Z-S17/harvest/gate_reconfiguration.md`：
+   63 次 FLAG、6 小时 37 分，且条目持有者 RES-4 在此期间死亡。
+   一般形态未修——**板签发的领地，板自己不校验**，已报监控。
+4. **本领地合并后会自动获得闸门**：`monitor/gates.py` 是问树的，
+   `verify.py` 是它认的两个名字之一，实测 `kind` 从 `none` 变 `verify`。
 
-* **人类动作账**——整段时间里人类实际做了哪些不可自动化的动作，逐条列。
-  **「组装权下放的价值就等于这张表有多短」**，所以没有这张表，
-  论点就只剩定性叙述。
+## 第 2 轮自己犯的错，留在记录里
 
-`assembly.jsonl` 只补到 3 行（见上），其中热重调与「三个标准接口各自被哪次事故
-逼出来」两项仍未量。
-
-**没有人类动作账，S17 的论点是没有量化支撑的。** 时间线里已经零散撞到一些
-（例如 T-43 记着「用户不得不手动触发两个研究员」、T-23 记着契约上盘热重载
-是 2026-07-28T06:12Z `b23c110a`），但那是副产品，不是系统采集。
-下一个接手的会话应当**先补这两份**再动正文。
-
-## 采集时撞到的、正在发生的问题
-
-1. **心跳时钟无人校验**：`ops-status/RES-1.json` 写 20:55Z、RES-2/3/4 写 16:0x–16:4xZ，
-   而真实 UTC 是 15:47Z——这些时刻还没到；`OPS-R.json` 冻在 06:32Z 九小时。
-   我自己前四次心跳也是手打的。已写 `monitor/inbox/20260728T154800Z-RES-4-two-live-silent-failures.md`。
-2. **`arc-recon/contamination.py:338`——封存堆审计不可能变红**：
-   `return 0 if check["matches"] else 1`，`check` 只是 piles.json 的 sha256；
-   `sealed ADDRESSED` 与 `NEEDS ADJUDICATION` 算了、打印了、丢了，
-   而 `verify.sh:53` 只读退出码。**CLAUDE.md 称之为「让 Phase 3 诚实」的那条规则，
-   其可执行形式在真出事时返回绿。** 属 arc-recon 领地，只上报不动手。
-3. **封存堆「零接触」的数字应当换掉**：反证采集器实测
-   **18,365 条请求体 / 87 个 JSONL 文件零命中**，比原先流传的 3184 强得多；
-   而 3184 实为两个文件的**总行数**（口径错），且随提交漂移（3159/3184/3186）。
-   同时「零接触」≠「未污染」：封存宣称集是 19 不是 21，ls20/ft09 已隔离。
-4. **`fleet-study` 不在 `ci_merge.KNOWN_DIRS` 里**，任何触及它的分支都会被判
-   「unknown territory」拦下。属 monitor 领地，需监控补一行。
+`A-18` 引用 `reflex.log` 的 `worker-fail` 计数，第一次写 68，半小时后复算是 124——
+**同一个活文件的两个时刻**。这正是 C-49 记的「取自活文件的计数必须带时刻」
+在本工单自己的交付物里、同一个会话内复发了一次。行内保留了两个读数与更正说明，
+没有把它抹掉。同一行原先还断言 `reflex.log` 未被跟踪，实际它是被跟踪的，也已更正。
