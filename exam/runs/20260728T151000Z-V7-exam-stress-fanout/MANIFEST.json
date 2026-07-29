@@ -1,0 +1,146 @@
+{
+  "adversarial_pass": {
+    "claims_attacked": 4,
+    "corrections_applied": [
+      "236 not 160",
+      "residue 16 not 30, 14 worlds not 12",
+      "barren set is quota-dependent",
+      "the prior is legend-fed, not theory-free",
+      "sections 2 and 3 were one finding counted twice",
+      "tags=(split,) is not a one-line fix",
+      "a test written for the leak is vacuous"
+    ],
+    "refuted_or_overstated": 2,
+    "survived": 2,
+    "tool_defects_fixed": [
+      "main() exited 0 on a dead item",
+      "a test named for a bluffer comparison it never made"
+    ]
+  },
+  "author": "RES-2",
+  "base_commit": "8d4237346a93275609f277f62998df0d4ba1d439",
+  "branch": "agent/v7-exam-stress-fanout",
+  "files": [
+    {
+      "path": "exam/tools/discrimination.py",
+      "sha256": "05b40d435f2dc508e5a822f8df82c58e9f0b4bd7b879ff1e7cd0bd432621193c"
+    },
+    {
+      "path": "exam/tests/test_discrimination.py",
+      "sha256": "9086469db7c36a6b68d7bf702ae29a6826bacc83ee75159206e5ccc1d039a4bf"
+    },
+    {
+      "path": "exam/artifacts/matrix/discrimination_worldgen.json",
+      "sha256": "6df7574f0c48fa936724b56007354f4aed8c1feb823b3d8c4fe69ed43975b46b"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.py",
+      "sha256": "0efdab871aa006fa0d06469fa3c014ff35dabc79610e1c3c7a91ed67a46436b6"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.json",
+      "sha256": "408660efd25b9d6df05430dfa8d2d5bf860c7176c2bf483b7d61e7b711c08a6c"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/FINDINGS.md",
+      "sha256": "2564cb53147ab367eacd3a301deef49179508dc6ee99f80779859f7af329531e"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/RUN_STATE.md",
+      "sha256": "346e59fbb7852b96a71de1753c2db8e45a4f66987a3481340437882087f4f06d"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/worlds/INDEX.md",
+      "sha256": "fcefbb2c4a7c40b82049818244467c0e1474646e94f088da100ce700ff0ac0c5"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls_on_any_generation_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V7-exam-stress-fanout",
+  "results": {
+    "discrimination": {
+      "anomalies": [],
+      "barren_rules": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "latch_already_set"
+      ],
+      "barren_rules_are_quota_dependent": {
+        "note": "barrenness is derivable from the rule table; membership of the reported set is a property of the quota",
+        "per_class_1": 5,
+        "per_class_2": 4,
+        "per_class_3": 2,
+        "per_class_4": 1,
+        "stasis_rules_in_catalogue": 7
+      },
+      "dead": 0,
+      "free": 97,
+      "memorised": 70,
+      "theory": 69,
+      "zero_discrimination_share": 0.411017
+    },
+    "identity_class_is_f_split_framechanges": {
+      "items_checked": 236,
+      "violations": 0
+    },
+    "leakage": {
+      "a_test_written_for_this_leak_is_vacuous": "exam/tests/test_worldgen_papers.py:71 asserts the JSON-quoted '\"walk\"' is absent; the sheet says \"rule:walk\", so 56 of 59 (world, rule) pairs pass on the quote delimiters",
+      "cause": "heldout_worldgen absent from exam/papers/__init__.py BUILDERS; check_paper never reaches it",
+      "fixed_here": false,
+      "items_hitting_own_probe": 236,
+      "minimal_fix_is_not_one_line": "setting tags=(split,) still leaves 16 items across 4 worlds refused, via world_id and families which the sheet also publishes",
+      "note": "an earlier draft said 160; that was 20 worlds x the 8 findings LeakageError prints via findings[:8]",
+      "of": 20,
+      "of_items": 236,
+      "worlds_refused_by_check_paper": 20
+    },
+    "theory_free_prior": {
+      "frame_changing_items_taken": 109,
+      "is_not_theory_free": {
+        "bluffer_floor": 0.411,
+        "note": "every point above the floor is bought with the sheet naming the agent and the wall",
+        "score_without_legend_agent": 0.411,
+        "score_without_legend_wall": 0.4619
+      },
+      "of": 139,
+      "residue_after_the_prior": {
+        "note": "an earlier draft said 30 and twelve; 30 was 139-109, a different quantity",
+        "of": 69,
+        "theory_items_left": 16,
+        "worlds_with_zero_residue": 14
+      },
+      "share": 0.784173,
+      "worlds_beating_bluffer_floor": 18,
+      "worlds_scoring_1.000": 12
+    },
+    "true_matrix": {
+      "items": 236,
+      "of": 4,
+      "question_types_portable_to_generated_worlds": 1,
+      "why": "three of four builders take no world argument; blockers recorded in V2 GAPS.md",
+      "worlds": 20
+    },
+    "verdict_classes": {
+      "generated_worlds_carrying_a_verdict_item": 0,
+      "reason": "largest generated world 2654 states vs LARGE_SPACE_THRESHOLD 1e12; one unsolvable world of twenty against nine needed"
+    }
+  },
+  "status": "complete",
+  "territory": "exam",
+  "tests": {
+    "added_this_run": 21,
+    "failed": 0,
+    "passed": 308,
+    "suite": "python -m pytest exam/tests -q",
+    "unexplained": "one earlier full run reported 11 failed / 297 passed in test_selftest.py; not reproduced in four subsequent runs; cause not established; recorded in RUN_STATE.md"
+  },
+  "utc": "2026-07-28T15:10:00Z",
+  "what": "Full-matrix exam stress: four question types over every world the world factory produces, one independent subagent per world. Deliverables are grader misjudgement by question type (calibrated with known-perfect and known-zero synthetic examinees), zero-discrimination items, and sensitivity/specificity reported separately for the three verdict types.",
+  "worktree": ".worktrees/v7-exam-stress-fanout"
+}

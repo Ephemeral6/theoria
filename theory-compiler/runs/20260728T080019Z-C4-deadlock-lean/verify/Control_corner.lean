@@ -3,15 +3,15 @@
 
   A **conditional** unsolvability theorem for sokoban / sokoban-open4far:
 
-      at(b1,c11)  AND  not-goal  =>  dead
+      at(b1,c22)  AND  not-goal  =>  dead
 
   Conditional is the operative word. Nothing below is a claim about
   the level's start state; `dead` quantifies over every well-formed
   state the pattern accepts, reachable or not.
 
   The pattern — and *only* the pattern — comes from
-      engine-rig/artifacts/candidates.jsonl
-  produced by engine-rig/engines/deadlock_carver. Its two obligations were
+      control
+  produced by control. Its two obligations were
   recomputed here before emission over the whole well-formed state
   space; the producer's own mutex bookkeeping was read for
   cross-checking and believed for nothing.
@@ -428,9 +428,9 @@ def s0 : St := ⟨.c44, .c22, .c33⟩
 def Goal (s : St) : Bool :=
   s.b1 == .c42 && s.b2 == .c13
 
-/-- The certificate's pattern: at(b1,c11) -/
+/-- The certificate's pattern: at(b1,c22) -/
 def Pat (s : St) : Bool :=
-  s.b1 == .c12
+  s.b1 == .c22
 
 /-- One step of the task, from an arbitrary state rather than from `s0`. -/
 inductive ReachFrom (r : St) : St → Prop where
@@ -439,14 +439,14 @@ inductive ReachFrom (r : St) : St → Prop where
 
 /-- The pattern pins 1 of 3 slot(s), so a state satisfying it is
     determined by the rest. This is what keeps the split below small. -/
-theorem pat_pins : ∀ (b1 : Cell), Pat ⟨.c11, b1, .c11⟩ = true → b1 = .c11 := by
+theorem pat_pins : ∀ (b1 : Cell), Pat ⟨.c11, b1, .c11⟩ = true → b1 = .c22 := by
   intro b1
   cases b1 <;> decide
 
 /-- Closure, on the states the pattern leaves open. -/
 theorem closed_pinned : ∀ (player b2 : Cell) (m : Move),
-    wf ⟨player, .c11, b2⟩ = true → legal ⟨player, .c11, b2⟩ m = true →
-    wf (applyMove ⟨player, .c11, b2⟩ m) = true ∧ Pat (applyMove ⟨player, .c11, b2⟩ m) = true := by
+    wf ⟨player, .c22, b2⟩ = true → legal ⟨player, .c22, b2⟩ m = true →
+    wf (applyMove ⟨player, .c22, b2⟩ m) = true ∧ Pat (applyMove ⟨player, .c22, b2⟩ m) = true := by
   intro player b2 m
   cases player <;> cases b2 <;> cases m <;> decide
 
@@ -486,39 +486,6 @@ theorem dead : ∀ (r s : St), wf r = true → Pat r = true → ReachFrom r s �
   intro r s hw hp h
   exact pat_no_goal s (dead_persists r s hw hp h).2
 
-/-- Not vacuous: a well-formed state the pattern accepts. A theorem
-    whose hypothesis nothing satisfies proves nothing and reads
-    like proof. -/
-theorem pat_witness : wf ⟨.c12, .c11, .c13⟩ = true ∧ Pat ⟨.c12, .c11, .c13⟩ = true := by decide
-
-/-- Not idle either: this level **is** winnable. Below is a run from
-    `s0` to a goal state, so `dead` above is a statement about the
-    pattern and not about a level that was lost from the start. -/
-theorem level_is_winnable : ∃ s : St, ReachFrom s0 s ∧ Goal s = true := by
-  have h0 : ReachFrom s0 ⟨.c43, .c22, .c33⟩ :=
-    ReachFrom.step _ .move_c44_c43_left ReachFrom.refl (by decide)
-  have h1 : ReachFrom s0 ⟨.c33, .c22, .c23⟩ :=
-    ReachFrom.step _ .push_c43_c33_c23_b2_up h0 (by decide)
-  have h2 : ReachFrom s0 ⟨.c32, .c22, .c23⟩ :=
-    ReachFrom.step _ .move_c33_c32_left h1 (by decide)
-  have h3 : ReachFrom s0 ⟨.c31, .c22, .c23⟩ :=
-    ReachFrom.step _ .move_c32_c31_left h2 (by decide)
-  have h4 : ReachFrom s0 ⟨.c21, .c22, .c23⟩ :=
-    ReachFrom.step _ .move_c31_c21_up h3 (by decide)
-  have h5 : ReachFrom s0 ⟨.c11, .c22, .c23⟩ :=
-    ReachFrom.step _ .move_c21_c11_up h4 (by decide)
-  have h6 : ReachFrom s0 ⟨.c12, .c22, .c23⟩ :=
-    ReachFrom.step _ .move_c11_c12_right h5 (by decide)
-  have h7 : ReachFrom s0 ⟨.c22, .c32, .c23⟩ :=
-    ReachFrom.step _ .push_c12_c22_c32_b1_down h6 (by decide)
-  have h8 : ReachFrom s0 ⟨.c32, .c42, .c23⟩ :=
-    ReachFrom.step _ .push_c22_c32_c42_b1_down h7 (by decide)
-  have h9 : ReachFrom s0 ⟨.c33, .c42, .c23⟩ :=
-    ReachFrom.step _ .move_c32_c33_right h8 (by decide)
-  have h10 : ReachFrom s0 ⟨.c23, .c42, .c13⟩ :=
-    ReachFrom.step _ .push_c33_c23_c13_b2_up h9 (by decide)
-  exact ⟨_, h10, by decide⟩
-
 #print axioms pat_pins
 #print axioms closed_pinned
 #print axioms dead_closed
@@ -526,5 +493,3 @@ theorem level_is_winnable : ∃ s : St, ReachFrom s0 s ∧ Goal s = true := by
 #print axioms pat_no_goal
 #print axioms dead_persists
 #print axioms dead
-#print axioms pat_witness
-#print axioms level_is_winnable

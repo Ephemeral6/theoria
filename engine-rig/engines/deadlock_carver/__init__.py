@@ -44,6 +44,14 @@ ENGINE = "fd_adapter"                  # the frozen enum; see D-018
 PRODUCER = "deadlock_carver"
 
 
+class UnfinishedComparison(RuntimeError):
+    """Two searches were compared and at least one of them had not finished.
+
+    Raised rather than folded into `same_answer`'s boolean, so that a search
+    which stopped can never be reported as evidence about a theorem.
+    """
+
+
 @dataclass
 class PruningReport:
     """The same instance solved twice: once blind, once with the theorems."""
@@ -65,7 +73,36 @@ class PruningReport:
 
     @property
     def same_answer(self) -> bool:
-        """Pruning must change the node count and nothing else."""
+        """Pruning must change the node count and nothing else.
+
+        The comparison is only meaningful when **both** searches finished.  On
+        two unfinished searches `solved == solved` and `length(None) ==
+        length(None)` are both True, so the plain conjunction reports agreement
+        between two runs that answered nothing -- the same shape C11 corrected in
+        `tools/p13_fd_dividend.same_answer`, and this property feeds the same
+        kind of gate (`bench/dividend.py` reads `plan_length_unchanged` as
+        "pruning did not change the bundled rung's answer -- unsound theorem").
+
+        Today `search()` raises on its expansion budget rather than returning,
+        so a returned `SearchResult` is always exhaustive and this guard never
+        fires.  It is here anyway, because *that* is the argument C11 refused to
+        accept for `p13_fd_dividend` -- "an upstream mechanism makes it safe" is
+        a property of code twenty files away, and it is exactly what stops
+        holding when someone adds a budget that returns instead of raising.  The
+        entitlement is now checked where the claim is made.
+
+        It raises rather than returning a third value: `False` here means
+        "pruning changed the answer -- unsound theorem", so returning it for an
+        unfinished search would file a soundness violation against a theorem on
+        the strength of a search that stopped -- this work item's defect wearing
+        the other sign.
+        """
+        if not (self.baseline.exhaustive and self.pruned.exhaustive):
+            raise UnfinishedComparison(
+                "%s: a search that did not finish cannot be compared -- "
+                "baseline exhaustive=%r, pruned exhaustive=%r"
+                % (self.problem, self.baseline.exhaustive, self.pruned.exhaustive)
+            )
         return (
             self.baseline.solved == self.pruned.solved
             and self.baseline.length == self.pruned.length
@@ -121,23 +158,89 @@ def to_payload(theorem: Theorem, task: Task) -> Dict[str, Any]:
     return payload
 
 
+WITHHOLD = "withhold"
+MARK = "mark"
+ON_REFUTATION = (WITHHOLD, MARK)
+
+
+def refutation(report: Optional[PruningReport]) -> Optional[Dict[str, Any]]:
+    """The verdict `same_answer` reaches, in the form the emitter has to read.
+
+    `None` means "no verdict was taken" (no report was run).  A dict means the
+    experiment ran and the theorems changed the instance's answer -- which is
+    this engine's own definition of an unsound theorem, and the reason a
+    refutation may not be published as a sibling field of the thing it refutes.
+
+    Note it does not swallow `UnfinishedComparison`: a search that stopped is not
+    a refutation and not a clearance, and the caller must not be handed a boolean
+    that flattens the difference.
+    """
+    if report is None or report.same_answer:
+        return None
+    return {
+        "refuted_by": "pruning_report.same_answer",
+        "problem": report.problem,
+        "baseline_solved": report.baseline.solved,
+        "pruned_solved": report.pruned.solved,
+        "baseline_length": report.baseline.length,
+        "pruned_length": report.pruned.length,
+        "why": "pruning with these theorems changed the instance's answer, so at "
+               "least one of them excludes a state the goal is reachable from",
+    }
+
+
 def candidates(theorems: Sequence[Theorem], task: Task,
                report: Optional[PruningReport] = None,
-               timestamp: Optional[str] = None) -> List[Dict[str, Any]]:
-    """One `invariant` per theorem, plus one `plan` carrying the node account."""
+               timestamp: Optional[str] = None,
+               on_refutation: str = WITHHOLD) -> List[Dict[str, Any]]:
+    """One `invariant` per theorem, plus one `plan` carrying the node account.
+
+    **The node account is a verdict on the theorems, so it gates them.**  Before
+    this, `carve -> pruning_report -> emit` ran with no `if` between the second
+    and the third: `same_answer` was computed, serialised as
+    `plan_length_unchanged`, and published *next to* the very theorems it
+    falsified.  A reader got a theorem and a report saying the theorem is
+    unsound, side by side, with nothing saying which one wins.
+
+    When the report refutes the theorems, `on_refutation` decides:
+
+    * `"withhold"` (default) -- no `invariant` row is emitted.  The `plan` row
+      still goes out and carries `invariants_withheld`, so the suppression is on
+      the record rather than looking like a run that carved nothing.
+    * `"mark"` -- the rows go out, each payload carrying `refuted: true` and a
+      `refutation` object.  For callers that want the failed theorems retained;
+      the marker is machine-readable, which prose in a `rendering` string is not.
+
+    A caller that passes no `report` gets the old behaviour, because there is no
+    verdict to gate on -- that is a different thing from a verdict that passed,
+    and `plan.refuted` is absent rather than `false` in that case.
+    """
+    if on_refutation not in ON_REFUTATION:
+        raise ValueError(
+            "on_refutation must be one of %r, got %r" % (list(ON_REFUTATION), on_refutation)
+        )
+    refuted = refutation(report)          # may raise UnfinishedComparison -- deliberately
     n_actions = len(task.actions)
     rows = []
+    withheld = 0
+    if refuted is not None and on_refutation == WITHHOLD:
+        withheld = len(theorems)          # counted before the list is emptied
+        theorems = []
     for theorem in theorems:
         deleting = [
             index
             for index, action in enumerate(task.actions)
             if breaks(action, theorem.pattern)
         ]
+        payload = to_payload(theorem, task)
+        if refuted is not None:                       # only reachable under MARK
+            payload["refuted"] = True
+            payload["refutation"] = dict(refuted)
         rows.append(
             make_candidate(
                 engine=ENGINE,
                 kind="invariant",
-                payload=to_payload(theorem, task),
+                payload=payload,
                 # Every ground action was examined and none of them escapes the
                 # pattern; `transitions` names the ones that had to be discharged.
                 transitions=deleting,
@@ -149,6 +252,14 @@ def candidates(theorems: Sequence[Theorem], task: Task,
         payload = report.as_json()
         payload["producer"] = PRODUCER
         payload["form"] = "pruning_account"
+        if refuted is not None:
+            payload["refuted"] = True
+            payload["refutation"] = dict(refuted)
+            # What the gate suppressed, counted.  A refuted run that simply
+            # emitted nothing would be indistinguishable from a run that carved
+            # no theorems, and "nothing to report" is the wrong reading.
+            payload["invariants_withheld"] = withheld
+            payload["on_refutation"] = on_refutation
         rows.append(
             make_candidate(
                 engine=ENGINE,
@@ -167,14 +278,21 @@ def candidates(theorems: Sequence[Theorem], task: Task,
 
 def run(domain: Domain, problem: Problem, out_path: Optional[str] = None,
         max_pattern: int = MAX_PATTERN, with_report: bool = True,
-        timestamp: Optional[str] = None):
-    """Carve the theorems, measure what they buy, emit both.
+        timestamp: Optional[str] = None, on_refutation: str = WITHHOLD):
+    """Carve the theorems, measure what they buy, emit what survives.
 
     Returns (task, theorems, report). `report` is None when `with_report` is off.
+
+    `theorems` is returned whole regardless of the verdict -- the gate is on what
+    gets *published*, not on what the caller may look at.  Callers that want the
+    verdict themselves read `report.same_answer`; `tools/run_all.py` does, and
+    used to do it *after* this function had already written the refuted theorems
+    to disk.
     """
     task = Task.build(domain, problem)
     theorems = carve(task, max_pattern=max_pattern)
     report = pruning_report(domain, problem, theorems) if with_report else None
     if out_path:
-        emit(out_path, candidates(theorems, task, report=report, timestamp=timestamp))
+        emit(out_path, candidates(theorems, task, report=report, timestamp=timestamp,
+                                  on_refutation=on_refutation))
     return task, theorems, report

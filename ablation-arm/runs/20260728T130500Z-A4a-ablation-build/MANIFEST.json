@@ -1,0 +1,118 @@
+{
+  "asserted": [
+    "P-3",
+    "P-5(correct)",
+    "P-6",
+    "P-7",
+    "shadow-1",
+    "shadow-2",
+    "shadow-3",
+    "shadow-4",
+    "read-only",
+    "P-1(counts)"
+  ],
+  "base_commit": "d1733dfe8c9d3525ff1cf06120c635aa49a5dcf0",
+  "branch": "agent/a4a-ablation-build",
+  "files": [
+    {
+      "path": "ablation-arm/build_theory.py",
+      "sha256": "dd6a5ecf4508251047c40fa95caf3b1d72e15d2781182025ac6e062b94b2c178"
+    },
+    {
+      "path": "ablation-arm/run_arm.py",
+      "sha256": "0a040b4cfff18b78f0870d78467a5dd0355f35290c813120f0d17f014971763d"
+    },
+    {
+      "path": "ablation-arm/run_exhibits.py",
+      "sha256": "be96177182853765dc0bd06a5f3b021c2a46d9b21dee8e3f61c1fb529f6ceb83"
+    },
+    {
+      "path": "ablation-arm/verify.py",
+      "sha256": "4c5c2048b0f45429e4d8889352e08e3cc1fa6c68b0ee8678de3f9b5a718a07a0"
+    },
+    {
+      "path": "ablation-arm/verify.sh",
+      "sha256": "12c356f78ff0c762e31fa5e589217a2bed358a7410a8cc7e0532bf475e0658f1"
+    },
+    {
+      "path": "ablation-arm/worlds/a0_abl.py",
+      "sha256": "c7d1b4ed38d8cfab18cd0074d75c5219f2da6fbe7d094b383cec198e9dd48c49"
+    },
+    {
+      "path": "ablation-arm/worlds/a2_abl.py",
+      "sha256": "c95d3a114e861b905b39c176b59bca70cff0f77fff0cedf2c1543a0fb641f573"
+    },
+    {
+      "path": "ablation-arm/exhibits/e1_a0.py",
+      "sha256": "bfdcb27914050df26bfe17f09185865159bcdd4a38c8ca4c3aeb06b6c44f900d"
+    },
+    {
+      "path": "ablation-arm/exhibits/e2_a2.py",
+      "sha256": "b89775faee62800ab6bf1bc8f4a211be6ca9dec38156acb2385725f6dc311099"
+    },
+    {
+      "path": "ablation-arm/exhibits/e3_charitable.py",
+      "sha256": "5991f9d3aa833b75ceec39e9fc3185687e97becff81b5ba63e513e425cd367d7"
+    },
+    {
+      "path": "ablation-arm/README.md",
+      "sha256": "5933430c1f7fcbc15a91044bbedf7387b6ac821f3e2a4895b8002255a34c2861"
+    },
+    {
+      "path": "ablation-arm/DECISIONS.md",
+      "sha256": "4ff0c6d70dc9087b0bef9aef29823be537e9939a084e1eb879d732cef51ff5ee"
+    },
+    {
+      "path": "ablation-arm/RUN_STATE.md",
+      "sha256": "8e2115b5bde765a441101b8ec347bed170ed88fef4918ffed5509ae02f64db1e"
+    },
+    {
+      "path": "ablation-arm/STATUS.md",
+      "sha256": "73d87cc6e5c33151b3f74c1b0c319a2e856d74bd26d8a32a1b404be84ce85b07"
+    },
+    {
+      "path": "ablation-arm/theory/DOWNGRADE_REPORT.json",
+      "sha256": "9e1bc32369b9036eb26e4fcd525765db8e996dd131fe883febade603d68ff9db"
+    },
+    {
+      "path": "ablation-arm/artifacts/run_all.json",
+      "sha256": "9590e7c91b5c0e36b586d46c0d41567966c7b642aa236fe98046ca9dc92aa358"
+    },
+    {
+      "path": "ablation-arm/artifacts/exhibits.json",
+      "sha256": "af54be9acbd30f34b23f935480d8c64a966e7cb66e3a141dd6b4ce713cefd20c"
+    },
+    {
+      "path": "ablation-arm/artifacts/verify.json",
+      "sha256": "aaaa6b5f6559106b4b84f5cdea858b33197de3678e26f25629dd88a479ffb3d9"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T130500Z-A4a-ablation-build/BUILD_PLAN.md",
+      "sha256": "04be9eb26b40003529e2ff33226f4df6013f108bae1887f2fae7e2675da53ffe"
+    }
+  ],
+  "findings": [
+    "P-6 demonstrated: a true impossibility and a false one agree on 10/10 decision-carrying fields",
+    "the ablated arm CAN localise when handed a counterexample; what the cut removed is what produces one",
+    "E3 is no longer constructible -- D-A2-006 was closed upstream; reported as a pre-registered falsifier",
+    "the driver's first run used the wrong trace; P-1's pre-registered pixel counts now assert at run time",
+    "the theoria_ablate blocker does not apply to the code as written; three ledgers PASS validate_ledger"
+  ],
+  "lane": "campaign",
+  "network": "none",
+  "pile_contact": "none",
+  "prompt_id": "A4a-ablation-build",
+  "recorded_for_a4b": [
+    "P-1",
+    "P-2",
+    "P-4",
+    "P-5(identical)",
+    "E3"
+  ],
+  "state": "steps 1-7 complete; verify.sh GREEN",
+  "territory": "ablation-arm",
+  "tests": "56 passed",
+  "utc": "2026-07-28T13:05:00Z",
+  "verify": "GREEN -- build_theory --check, pytest, run_arm, run_arm --twice, run_exhibits; 10 assertions, 5 recorded for A4b",
+  "worker": "RES-1"
+}

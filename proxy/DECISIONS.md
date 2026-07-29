@@ -468,3 +468,230 @@ afterwards.
 Until it exists, the honest form of the closure claim is: **the ledger is
 complete and self-consistent, and the arm cannot write to it — but the operator
 can.** Phase 1's "no bypass" property was always about the arm, and it holds.
+
+## D-025 · The spend gate is on the socket, not beside it
+
+`forward.forward()` takes a keyword-only `permit` with **no default**. A caller
+that does not pass one gets a `TypeError` at the call site.
+
+The alternative — a `check_budget()` a caller is expected to call first — is
+what INC-BA-003 already tried, and the reason it failed is instructive. The
+second session obeyed every rule it knew about, including the pile cut, which
+is a far more demanding rule than "check the budget". It did not fail at
+compliance. **The rule it needed did not exist to be known.** A convention binds
+only the people who have read it, and that set is not one you can enumerate at
+03:00 when a second session starts.
+
+So the gate is shaped like `assert_playable()`: a function on the first line of
+the path that spends, whose refusal is an exception rather than a return value.
+A refusal returned as a `Response` would let a budget breach be retried as
+though it were weather.
+
+The permit is checked before **every attempt**, not once per `forward()` call.
+One call can open up to `max_attempts` sockets; the pool's action unit is one
+outbound request; and a retry storm is precisely the shape that reaches the
+600 rpm limit. A gate that charged a retry loop as one request would be blind
+to the case it was built for.
+
+## D-026 · Undeclared is answered with a small number, not with a shrug
+
+A proxy constructed without a reservation takes one itself, using the policy's
+`default_run_caps` ($5.00 / 600 actions).
+
+Three options were on the table and two are worse. **Refusing to construct**
+would have made the field required, which breaks `theoria-arm/harness/run.py`
+and `proxy/replay.py` — code this ticket may not edit — and a fail-closed
+change that another track has to fix before anything runs at all is a change
+that gets reverted. **Claiming the pool's whole remaining headroom** would mean
+two undeclared runs can never coexist, which is a rule nobody would keep.
+
+The default caps are deliberately small. Not declaring a budget should be
+inconvenient rather than unlimited: $5 is under a tenth of the whole approved
+programme, so an undeclared run cannot quietly become a campaign, and the global
+pool ceiling binds on top of it regardless. The holder record carries
+`undeclared: true`, so the monitor can see who did not say.
+
+## D-027 · Blindness is scoped to the quantity it blinds
+
+An unpriced model call makes the pool's **dollar** total a lower bound, so no
+further dollar may be spent against it. It says nothing whatever about ARC
+actions, which are counted by the request and not by a price table.
+
+The inherited code refused *everything* on one unpriced call, and wiring the
+gate to the egress path is what exposed that: a single mock model call with a
+name absent from `proxy/pricing/` stopped the **environment** proxy — which
+spends no dollars at all — for every session sharing the pool, permanently,
+because the ledger is append-only and nothing could take it back.
+
+A gate that can brick the whole programme on one missing price-table row is not
+fail-closed. It is a single point of failure wearing fail-closed's clothes, and
+the difference matters because the first kind gets fixed and the second kind
+gets disabled.
+
+`price_unpriced(reservation, usd=…, resolves=…, reason=…)` is the way back, and
+it is narrow on purpose: appended rather than edited, a stated reason required,
+and it refuses to resolve more blindness than the pool actually has — otherwise
+the count could be driven negative and the gate re-opened on nothing.
+
+## D-028 · The historical ledger is read, not rewritten
+
+`baseline-arms/ledger.jsonl` has 560 lines with no `campaign` field. New lines
+carry one; the old ones are attributed at **read** time, by a rule with exactly
+one source: a line's own `campaign` wins, otherwise `run_id` is looked up in
+`out/campaign_cells.jsonl`, otherwise `unknown`.
+
+Rewriting the file in place would be the INC-008 manoeuvre, and INC-008 was a
+deliberate, incident-recorded exception taken because the ledger contained
+something that must not be there — session bearer tokens. Nothing here is
+*wrong* in those lines. They are silent, and silence is recoverable from a file
+that already exists.
+
+The measured result is **151 decidable, 409 not**, and the 409 stay `unknown`.
+The other reconstructions available — infer from timestamps, or from which games
+ran together — would produce a complete-looking table, and that is the objection
+to them: a spend figure that cannot be checked against anything is worse than a
+gap that is visible.
+
+## D-029 · D-024 built: the chain, and the two things it does not do
+
+D-024 registered a hash chain as the structural answer to RED-40 and left it
+unbuilt. S15 built it, without redesigning it — the shape below is D-024's, and
+the value of writing it down again is only that the claims are now measured
+rather than predicted.
+
+`prev` is the sha256 of the previous line's bytes **as written**, including that
+line's own `prev`. It is optional, so `v` stays `1.0` (§8 bumps for a changed
+meaning or a new *required* field; an optional one is neither). It lives in
+`canon.ENVELOPE`, so the writer owns it and a caller that supplies one is
+refused — a chain a caller can set is a chain a caller can forge. It is assigned
+under the same lock as `seq`, so the two cannot disagree about write order.
+
+**Why bytes and not a recomputation.** A verifier that re-serialises each record
+before hashing is checking that today's `canonical()` matches the one that wrote
+the file. Change that function once and every ledger ever written goes red
+simultaneously — which teaches everyone to ignore the alarm. Hashing the bytes
+on disk asks the only question worth asking.
+
+**Six verdicts, not two.** `verify_chain` returns PASS / FAIL / PARTIAL /
+UNCHAINED / EMPTY / MISSING. Collapsing UNCHAINED into PASS would have been the
+fifth time this repo mistook a check that never ran for a check that passed, and
+an empty file is refused for the same reason: two builds that produced nothing
+are byte-identical.
+
+**Publication is not writing, and this was nearly shipped wrong.** The first
+version of this work wrote `ledger_head` into `runs/<run_id>.json` and called
+the head published. It is not: `runs_dir` defaults under `proxy/var/`, and
+`proxy/.gitignore` ignores `var/` — correctly, it is runtime output. So the
+head was being written to a file the forger can rewrite as freely as the ledger
+itself, and the tamper-evidence argument bought exactly nothing while looking
+complete. One `git check-ignore` on the path settled it.
+
+The publication is therefore explicit and named in two places: `play()` returns
+the record so an **arm** lifts `ledger_head` into its tracked
+`runs/<slug>/MANIFEST.json`, and an operator outside an arm runs
+`verify_chain --emit-head <tracked path>`, which refuses to write a head for
+any stream that does not verify — a head witnessing an unverified file is worse
+than no head, because it looks like one. `test_the_runners_default_head_location_is_gitignored`
+pins the trap so that relocating `var/` forces someone to think about it.
+
+**The two limits, both now pinned as tests.** A forger who rewrites the whole
+file and recomputes every link produces a stream that verifies —
+`test_rewriting_the_whole_chain_is_NOT_caught_without_a_published_head`. Only
+the head published outside the file catches that.
+And the converse, found while measuring rather than while designing: **an
+interior edit does not move the head at all.** A real 61-record mock run had one
+score digit flipped on line 3; the chain walk caught it at line 4 while the head
+still matched the published value. Each mechanism misses exactly what the other
+catches, so the honest form is that both are load-bearing, not that one is a
+backstop for the other.
+
+Unchanged from D-024, and still the closing claim: forgery *before* publication
+still works, and nothing local can prove the frames came from ARC — only an
+API-signed receipt could, and the API offers none. What the ledger now supports
+is: **complete, self-consistent, unwritable by the arm — and, after the head is
+published, tamper-evident against the operator.**
+
+Not yet done, and listed so it is not mistaken for done: the frozen scorer has
+no chain check and therefore no forged negative control (D-014 requires one),
+`validate_ledger.py` does not walk the chain, and `upgrade_ledger.py` does not
+yet mark lifted streams unchained.
+
+## D-030 · The two shapes stop being closed, because a writer that runs after the money is spent may not refuse
+
+`canon.py` used to refuse any field `LEDGER_FORMAT.md` §3/§4 did not list. The
+reason given was a reader's reason — "the battery reads two shapes without
+branching, and an extra field is a branch someone eventually has to write" —
+and it was applied to the writer, where the same rule is paid for in a
+different currency.
+
+INC-TA-006 is the invoice. `model_call`'s field set was closed *after* P-8
+started writing `beat`/`label`/`transport`/`proxied`/`proxy_gap` on that record.
+Arms import `proxy/` as a library, so the closure arrived on a commit the
+`theoria` arm had never touched, in a directory it may not edit. The first live
+desk call was refused at serialisation **after the provider had been paid
+$2.695**, the reply was discarded, and the arm's `except Exception` turned it
+into "the desk failed" — so the run would have kept paying $2.70 a call until
+its ceiling stopped it.
+
+The principle that follows is not "be lenient". It is that a **ledger record is
+written after the fact**: by the time the writer sees a `model_call`, the
+request is sent and the money is spent. A refusal cannot un-spend it. It can
+only destroy the evidence that it happened, which is the one thing an
+append-only record surface exists to prevent. **Refusing to record is strictly
+worse than recording something a reader may have to skip.**
+
+So an unlisted field on `env_step`/`model_call` is now warned about (`UnknownField`,
+tallied in `Ledger.unknown_fields`) and written. What stays a refusal is
+everything that is *wrong* rather than merely unknown: a v0 spelling, a dollar
+figure (§5), a caller-set envelope field, a missing required field, a type that
+would produce a plausible wrong number. Those were the properties the closure
+was credited with, and none of them ever depended on it.
+
+The reader side moves with it. `validate_ledger.py` reports an unlisted field as
+a **notice** and leaves the verdict alone, because the frozen scorer calls it
+from S-12 and a scorer that fails a run over a field it could ignore is the same
+mistake one direction over. `notices` is a separate out-parameter rather than a
+`severity` key on `problems`, so the widespread `assert validate_records(...) == []`
+keeps meaning what it meant and no caller can promote a notice to a failure by
+forgetting to filter.
+
+**What is given up.** A typo in a field name is now a typo on disk instead of an
+exception, and the two shapes are no longer literally two shapes. The first is
+the intended trade — the typo is visible in the warning, the tally and the
+validator's notices, and the alternative was losing the record. The second was
+never quite true anyway: the format has always promised that a *defined* field
+does not change meaning under one `v`, and a reader that handles what it knows
+and ignores the rest was correct before this change and is correct after it.
+
+## D-031 · A tightening is announced; the detector is what makes the rule real
+
+`proxy/CONTRACT_CHANGES.md` is the procedure: widening what the proxies accept
+is free, narrowing it is a breaking change that needs a PARTNER_SYNC
+announcement, one cycle of notice, and a compatibility window in which the old
+form warns rather than refuses.
+
+A protocol with no detector is prose, and prose is what failed in D-030 — the
+closure was made by someone who had a written reason and did not know they were
+breaking another track. So `proxy/canon_contract.json` pins `canon.describe()`,
+`proxy/tools/contract.py` diffs the live registry against the pin and labels
+each difference `additive` / `tightening` / `neutral`, and
+`tests/test_contract_changes.py` fails the suite the moment they disagree.
+
+The classifier earns its keep on one distinction a set-diff gets backwards:
+a name added to a shape's `fields` frees writers, and a name added to its
+`required` refuses them. Both are "a list grew".
+
+**Stated limits.** It cannot verify that an announcement was made — a test
+cannot read PARTNER_SYNC and judge a paragraph. It cannot enforce the wait. And
+it only sees `canon.describe()`, so the spend gate's protocol, the guard's
+verdict semantics and the pricing tables are covered by the rule in prose and by
+nothing in code. What it does is remove the excuse the incident actually had, by
+putting the question in front of whoever changes the contract at the moment they
+change it.
+
+The half this directory cannot do for itself is the importer's:
+`python -m proxy.tools.contract --fingerprint` goes in a run manifest and gets
+**diffed between runs**. That is W-1521's standing recommendation after
+INC-TA-006, and it is the same shape as the `upstream_pin` finding — a pin that
+is written and never compared documents an incident afterwards rather than
+preventing one.

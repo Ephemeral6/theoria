@@ -1,0 +1,32 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {},
+  "entities": [],
+  "families": [],
+  "flags": {
+    "forbidden_action": "DOWN"
+  },
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "#########",
+    "#...#...#",
+    "#.#.#.#.#",
+    "#.#...#.#",
+    "#.#####.#",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-ce732813"
+}

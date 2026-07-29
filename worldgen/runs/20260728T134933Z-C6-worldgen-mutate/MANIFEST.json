@@ -1,0 +1,427 @@
+{
+  "base_commit": "0d28e993b39119a795e0117f9fbf763b2dee2126",
+  "branch": "agent/c6-worldgen-mutate",
+  "files": [
+    {
+      "path": "worldgen/README.md",
+      "sha256": "fae2df19a85d157dacd40db187537f8f34b9ad654aeadc081dec063670e00286"
+    },
+    {
+      "path": "worldgen/RUN_STATE.md",
+      "sha256": "2ab660ce1d2ee55a7f92d9b7fb79f0c33dc3a630d309f4c94541b12031ecbda3"
+    },
+    {
+      "path": "worldgen/build.py",
+      "sha256": "acd7d21baaaca04e2ff42ef58ff02a79851979cc36cff2d4904760319dc63e73"
+    },
+    {
+      "path": "worldgen/core/spec.py",
+      "sha256": "4a6962aebd78e0daa1be3020e6aca8d8621989e52f3350941301e9ffe095719d"
+    },
+    {
+      "path": "worldgen/core/truth.py",
+      "sha256": "6095f3f4ddaf6b5c2a10cc0b1b2540adb0aaa73711db20f19605370f814e4a53"
+    },
+    {
+      "path": "worldgen/core/world.py",
+      "sha256": "175247c6741be946c1a275c862c487c69c3495b10d3a5f344a17186dffbf383e"
+    },
+    {
+      "path": "worldgen/mutate.py",
+      "sha256": "510951065133eaca3cf63471ffda3f433606fb23a8b42321a1f3bd258185cc81"
+    },
+    {
+      "path": "worldgen/out/qc/QC_MUTANTS.json",
+      "sha256": "cbeac47198f1d5a1a6ef49997ecad54a3d9fe20ba98a0112bf2f51dba253cde5"
+    },
+    {
+      "path": "worldgen/out/worlds/INDEX.json",
+      "sha256": "b9e21b55877c13a5e818c1e7a91f9937d0b08eb9092312aa15d230aa534bc77e"
+    },
+    {
+      "path": "worldgen/out/worlds/MUTATIONS.json",
+      "sha256": "3933dd226fcaaa06d1d72fc37ac8bda0ab23ca66a0d226c2e35ee085b1d74d81"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/GROUND_TRUTH.md",
+      "sha256": "b9162bb9e115f87f53909095775fa5bdc689406a5a05a5e8dd1afd61ef3e13e6"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/coverage.json",
+      "sha256": "f08c40434d559bd0d2ff3019fb0b1796618969e1b7f1974a734543688b5ca847"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/ground_truth.json",
+      "sha256": "bcd8b3d86c176c9aad4903f3edbc688d11cb5d37b478f73afc35442928791703"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/raw_trace.jsonl",
+      "sha256": "fa66c8a1c64d7e4214b0c4a3a84a14576406cd2e2f11bc5f02f98393850c043c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/reversibility.json",
+      "sha256": "5e4c8ec8c3a14ab278bdb083e56185ec4145910a51954067852cc088b5e026ec"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/spec.json",
+      "sha256": "e7e538a49715e4bfa23c2f5aada19c034b9691d33e3239dcf205d12186cc80a3"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/GROUND_TRUTH.md",
+      "sha256": "928318a29f9c9d40d06686e9e420fa0511f11caa610a580259306812a9fde89e"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/coverage.json",
+      "sha256": "c1a2889e791e0bc8af591af5862320319347866e169fe0beb1902a1de5d5a1e5"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/ground_truth.json",
+      "sha256": "128433f085143e22fcd06165eaebcd882c8657825c52c25f505d5f68dfc6c7b3"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/raw_trace.jsonl",
+      "sha256": "0b8140083dfbf5b73c6914a08e4f1639d9022a1c168831098d30bd3aa70d414c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/reversibility.json",
+      "sha256": "a9f7c068be817a8ac158052762accfe876ed8f1cefb5efea295033d5af7a98ee"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/spec.json",
+      "sha256": "537b02a95ce277f02cdec37f469c74d5adef2b257b22f66eee042795a739b5f4"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/GROUND_TRUTH.md",
+      "sha256": "89d38b70738dcf7d577bb7f9d6ce6b579f8e614b188b760d4da8ee57a17a8aba"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/coverage.json",
+      "sha256": "d3df155c9cb8727e8ab98c0bc63e4bbd5efc81fb40edcb012dd1418aa630eee1"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/ground_truth.json",
+      "sha256": "04d76714ef695f8cb7444511d8ccfe0be515ee398a8fd8713163d3e233caf44c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/raw_trace.jsonl",
+      "sha256": "9e65a62dca63001e30520ef29acc78336a7648b1c209bf14889c10d25a32e1eb"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/reversibility.json",
+      "sha256": "b25c300de615045379ce91aa05bcb7db75672ac2757f9e40acc15af2f58f26a7"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/spec.json",
+      "sha256": "cd4fffa3a5c56851712fc041f1129d2ab2bbfb9804f048b21fdbf8c5553b7be1"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/GROUND_TRUTH.md",
+      "sha256": "d3b3c31b9fbd58e73c9f6e671771f852200cbad1d90ab913001782f044622fd9"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/coverage.json",
+      "sha256": "eee60c9888747b2f4c8ad04fcae4eee73f20692d09da37dea4cfa2015cfb5185"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/ground_truth.json",
+      "sha256": "46cb473cb742fa3caaed6c14f3aae72da202faca8fcc809ee725418870148bde"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/raw_trace.jsonl",
+      "sha256": "ff598f67f852977f6fad041ea656e6cea702045df0eaa67b048639977a62cc4b"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/reversibility.json",
+      "sha256": "f94f99c5d3ab346ea1ad1578bfac1597dbc5b31cc7fa7a38a1ebc361b433e5d5"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/spec.json",
+      "sha256": "653885a92be5e1d3012621e63e14cf9743067a535f780fd26b479d45d1c2b4ea"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/GROUND_TRUTH.md",
+      "sha256": "54e348c473f10bb66cc45d5630af452568150bc801e5e9356028ca6272cd70de"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/coverage.json",
+      "sha256": "3a5168398e7149a9c69748b8153b7e0fa579846a946a0efb353228405c2b63c9"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/ground_truth.json",
+      "sha256": "6dca237d815b06a325880a2727a7f3697fd5d7176e0470f06957feaa76fcad57"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/raw_trace.jsonl",
+      "sha256": "970280472e917181bad9c4a2c220de9c585594cb427571511c8db29213e51182"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/reversibility.json",
+      "sha256": "67bccca54eda17bb373cafe26b0727aa4178ed6369436ce1923f512f3dba222f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/spec.json",
+      "sha256": "1e5775adc336092c55a47a4dc08fc02ab951bd741572abda4e2a4e583317a683"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/GROUND_TRUTH.md",
+      "sha256": "97b5f1be438cdfdd0c2c354641bf1d82d8b6bb5ccc96a2038ca555746a5c5174"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/coverage.json",
+      "sha256": "43e6eb3a94ea27c0b0e869e76a6ff7f7802344218730df749cead0e4695048ba"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/ground_truth.json",
+      "sha256": "9f8afdfbb23c156269ac4d90091f6beddc7532b70c65415410f9f52550d1c459"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/raw_trace.jsonl",
+      "sha256": "e78281f2df66bf37911b43f73e50c5866ec6d63bda683624534d764dfef73b85"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/reversibility.json",
+      "sha256": "737514c0ccde57c576e051b8eee8b3eaad538be6ca52fd00f15c0db1cd8ce280"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/spec.json",
+      "sha256": "61a94c699134ff083887ebde836083ba80a177648154db9d9655c86ee53823f8"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/GROUND_TRUTH.md",
+      "sha256": "bfd0e470cf6a7f8878c664a45cf2732496b56dba7288aa089eb86ca5505fa77f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/coverage.json",
+      "sha256": "ae52495174d1af383900aa4a736c86faae42fcf618469777b36d6998abbc1f80"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/ground_truth.json",
+      "sha256": "7bb1d2f596a84cd35689dca2f4fdd3bdfe8fc1ca2521fced55b1a46af33bc3c2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/raw_trace.jsonl",
+      "sha256": "677711b88e57d166a3cd779acafee05b42c06d63c768a3a762bf4f6de1948e16"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/reversibility.json",
+      "sha256": "b82aac91b5218abf5e53a21497a3f27d97115f5cde6b5fd2774f81e930468c0f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/spec.json",
+      "sha256": "077e7b0a53ea208b4035e1e74e2aef804e901ba02f37a954c5331578ea238ed2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/GROUND_TRUTH.md",
+      "sha256": "58d7600b71a0f93f013cfd4e30659c18e8bfa10f716f190a14ce2e442a656009"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/coverage.json",
+      "sha256": "708786ce7f67a05c32d641be28370c7f2dd84c658146aae092c7c2ce405e128c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/ground_truth.json",
+      "sha256": "c552b183a984928c308284bba80bf2e436975aacee852309408392c7776cd528"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/raw_trace.jsonl",
+      "sha256": "b49f0e9acf5d5987d018e45c240124d3935a05efecd5f80a508f87cc6e49f55f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/reversibility.json",
+      "sha256": "d45b1d87bfa810e10e9eaca4f6c9449fabeed9819d4c491b968025b1091e634a"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/spec.json",
+      "sha256": "a0be078da1d1bf00c6ab3fc7f9720e533fe07ff3572ae84be92a5a4c5330b83e"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/GROUND_TRUTH.md",
+      "sha256": "74180fd823a340bc9d689bf97a935d337ac66e037cca3d6580d758a04cd29384"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/coverage.json",
+      "sha256": "a1865e8efd61e783a5160ac9251afaa3dc16d731345ebb2c33f3602fd1557e07"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/ground_truth.json",
+      "sha256": "55325891c10feaaee83f1e7521d37f1afab4569ea5bf057910ef6491c2c258a0"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/raw_trace.jsonl",
+      "sha256": "d1a34794d5de92b753a9e270aaaca959a455d9ddd36fd388628ac3ead56d541c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/reversibility.json",
+      "sha256": "5c14d8a2c0d61158b40485757007c82be4bc430faaf9e620c23f995222bf4332"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/spec.json",
+      "sha256": "9b92b5d28eeb5c555ed8576590eb8d044e535fb31ccf9050ce2005efd877e07e"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/GROUND_TRUTH.md",
+      "sha256": "69161f050fdb4e74f29fbcd9da9173cbd3403a8c39bb6e04c9db5bcdf966d6bf"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/coverage.json",
+      "sha256": "b0f90b503fd6b60f3f28e443882a1c9198e74eeba466384fe4ea34107cedae27"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/ground_truth.json",
+      "sha256": "6058c1169e61c77a6983c764a01da3fd6f5e7aed4543dc0c171843c3d70198f2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/raw_trace.jsonl",
+      "sha256": "aa4b40fa2012d849cac4c082e3e3a2a91d90568fbf4a741799f75c7d29d8f53c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/reversibility.json",
+      "sha256": "9c595848635e99183e4f98ee9778241b05975a6e2ebcd0b0093ee408ea28c677"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/spec.json",
+      "sha256": "521c911f18de34c24f509ec62ba39ccc4d196ff5807925e93f878323eec26366"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/GROUND_TRUTH.md",
+      "sha256": "bb31ece316b5eafdef1da4b7ac29e3065910b551c3829a1f2ef70c9d3f3d6dd5"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/coverage.json",
+      "sha256": "ec7c877f057c2a5c920a707036b9c4b48266488fcd46e4deec116be1a158833d"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/ground_truth.json",
+      "sha256": "28765087c712637b4f340105d8c98be7370c05d3ea9d68ed81011015eb855c84"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/raw_trace.jsonl",
+      "sha256": "bfb06ffb6147c05694e368c4f0f4c6d7da2594c2a831a9629f09b489160d63cd"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/reversibility.json",
+      "sha256": "d45b1d87bfa810e10e9eaca4f6c9449fabeed9819d4c491b968025b1091e634a"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/spec.json",
+      "sha256": "2a26ea7cfc90eb79a9f60a3771a46db266101651169187a2ea31889bef15560d"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/GROUND_TRUTH.md",
+      "sha256": "f32b1a6e04f37785a07c4d566542d3ab3fc64de9eff1087d9773b778fc9bed32"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/coverage.json",
+      "sha256": "eb0586ce1e2b6cc1f34f10b6a9ab963248dca027ed2cc47904c550b6696afd91"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/ground_truth.json",
+      "sha256": "7267707781cfc52ef4b06f4ad17b38f4e909f98ef61dba710bc0e086689a08db"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/raw_trace.jsonl",
+      "sha256": "a6b6e87a8280cce07d2fff355e69d24895b6dd4cd4be20f54b39a11a5de81fc4"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/reversibility.json",
+      "sha256": "11e5e690d80ab0177cab55bd4321345035c3d163f6f1c9ff16f3ca61a5e3f8a4"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/spec.json",
+      "sha256": "32b453c94f74e0561a59b7986eea9488805897ead51791c3e13b81c53b490f40"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/GROUND_TRUTH.md",
+      "sha256": "3b9c6ac24112dbe4f54822c54b620fc21a253e9d27cacdebe149173b188b3c78"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/coverage.json",
+      "sha256": "cf3fe97a14aab31fd328a3d60cdb3a481829339c03cc04c5ab371673141e9ce9"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/ground_truth.json",
+      "sha256": "bb981dbaac0b439a260eca299f85fad1ee1556bf2accf0a8a3fecca5ea24370b"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/raw_trace.jsonl",
+      "sha256": "bbf45b1870975b7661091d53559c6895f401205d3e8c809ba59a9274bb7a0699"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/reversibility.json",
+      "sha256": "e5915e790596a65a5dca2d51560731086787f086c3cbc5dee172ae7f0b60b04b"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/spec.json",
+      "sha256": "d6b17b0d3346a37cda70caf54228c3517ddd83d3bb0f3f7650cf3fe2de86680d"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/GROUND_TRUTH.md",
+      "sha256": "eeae8e0ce8687e341236c03566dfa16442f2e303c1264013ec5768035656db7d"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/coverage.json",
+      "sha256": "321b13549a011477a37fa100245fc8a84f26d24650117e1dd223f235165c7412"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/ground_truth.json",
+      "sha256": "616b02cb8f8b7efaaa0769f4b24a1230d0ff1fa31570ad8d7d909f9c24d889cc"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/raw_trace.jsonl",
+      "sha256": "a616d98793ceed14447270de9550eafa863cdaec7e9997b85a921625555bb174"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/reversibility.json",
+      "sha256": "aa3bc6dd771f39a82d12cbbd4a33d91a31bf50a4495c0936cf28ff24dabdfd85"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/spec.json",
+      "sha256": "4a7cdfa89f61a0fd37d1c3c474ec62fad3e80ba89a46bc8b94b91aa4a670b591"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/GROUND_TRUTH.md",
+      "sha256": "3225e66a23321905fbdb055ef1cffc0c251af9cf2f9b3778daab4496e03d0e1b"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/coverage.json",
+      "sha256": "6520191d28e0c0e3abde7fac05c54b3221930bf5461adb25b62d52a22532fb5f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/ground_truth.json",
+      "sha256": "5886adfdff7f89de00612a568f494fdb0ede667e1a5a83b159fd76d00697416c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/raw_trace.jsonl",
+      "sha256": "03c17603ca8b9d8f2d69dc4eeb3634af259a1c43875c753edb5bd84261c737c2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/reversibility.json",
+      "sha256": "5ee46973826a36347fae32e38443893b6c818f23e781fa11795ac6cb1b89dd79"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/spec.json",
+      "sha256": "276fe30354a77cad300c50df9422e07f1897f53c520ad527a15afce3edf043e9"
+    },
+    {
+      "path": "worldgen/qc/PREREGISTERED_MUTANTS.md",
+      "sha256": "dcbae107c53b122bb3df49b5fc7e6f474e91659c642cdf74c85586ba654a3339"
+    },
+    {
+      "path": "worldgen/qc/run_qc.py",
+      "sha256": "bc5dcf578b0551a7a37ece4b0f26684a60b98f3cdee04f5f7868022990465706"
+    },
+    {
+      "path": "worldgen/tests/test_mutate.py",
+      "sha256": "60392e86119abe6b27f87fef9061b2f8d30c027a40e24dbdb32f05dfdecf7e11"
+    },
+    {
+      "path": "worldgen/verify.py",
+      "sha256": "26bcaba4aac87a955df0a84523d5bb558097d670ad35a19c6fb58fec52a49c9b"
+    }
+  ],
+  "prompt_id": "C6-worldgen-mutate",
+  "status": "complete",
+  "territory": "worldgen",
+  "utc": "2026-07-28T13:49:33Z",
+  "worker": "W-1251"
+}

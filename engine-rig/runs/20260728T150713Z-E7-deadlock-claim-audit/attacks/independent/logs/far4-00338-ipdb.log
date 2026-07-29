@@ -1,0 +1,51 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running search (release).
+INFO     search stdin: 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00338.sas'
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00338-ipdb.plan' < ''"'"'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00338.sas'"'"''
+[t=0.000160s, 1952 KB] Search code revision: 7120aa0
+[t=0.000246s, 1952 KB] reading input...
+[t=0.001425s, 2188 KB] done reading input!
+[t=0.002732s, 2824 KB] Initializing canonical PDB heuristic...
+[t=0.002742s, 2824 KB] Generating patterns using: hill climbing pattern collection generator
+[t=0.002812s, 2844 KB] Done calculating initial pattern collection: 0.000068s
+[t=0.002826s, 2844 KB] hill climbing pattern collection generator number of patterns: 2
+[t=0.002831s, 2844 KB] hill climbing pattern collection generator total PDB size: 32
+[t=0.002833s, 2844 KB] hill climbing pattern collection generator computation time: 0.000080s
+[t=0.002838s, 2844 KB] Running dominance pruning...
+[t=0.002844s, 2844 KB] Pruned 0 of 1 pattern cliques
+[t=0.002847s, 2844 KB] Pruned 0 of 2 PDBs
+[t=0.002849s, 2844 KB] Dominance pruning took 0.000008s
+[t=0.002852s, 2844 KB] Canonical PDB heuristic number of patterns: 2
+[t=0.002854s, 2844 KB] Canonical PDB heuristic total PDB size: 32
+[t=0.002859s, 2844 KB] Canonical PDB heuristic computation time: 0.000120s
+[t=0.002884s, 2844 KB] Building successor generator... done!
+[t=0.002942s, 2864 KB] peak memory difference for successor generator creation: 20 KB
+[t=0.002945s, 2864 KB] time for successor generation creation: 0.000050s
+[t=0.002949s, 2864 KB] Variables: 19
+[t=0.002953s, 2864 KB] FactPairs: 80
+[t=0.002955s, 2864 KB] Bytes per state: 4
+[t=0.002964s, 2864 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.002977s, 2876 KB] Initial state is a dead end.
+[t=0.002982s, 2876 KB] Initial heuristic value for cpdbs: infinity
+[t=0.002985s, 2876 KB] pruning method: none
+[t=0.002989s, 2876 KB] Completely explored state space -- no solution!
+[t=0.002991s, 2876 KB] Actual search time: 0.000005s
+[t=0.002996s, 2876 KB] Expanded 0 state(s).
+[t=0.002996s, 2876 KB] Reopened 0 state(s).
+[t=0.002996s, 2876 KB] Evaluated 1 state(s).
+[t=0.002996s, 2876 KB] Evaluations: 1
+[t=0.002996s, 2876 KB] Generated 0 state(s).
+[t=0.002996s, 2876 KB] Dead ends: 0 state(s).
+[t=0.002996s, 2876 KB] Number of registered states: 1
+[t=0.002996s, 2876 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.002996s, 2876 KB] Int hash set resizes: 0
+[t=0.002996s, 2876 KB] Search time: 0.000033s
+[t=0.002996s, 2876 KB] Total time: 0.002996s
+Search stopped without finding a solution.
+search exit code: 12
+
+Driver aborting after search

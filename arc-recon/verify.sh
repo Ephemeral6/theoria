@@ -6,9 +6,10 @@
 #
 # Exit 0 means: the offline suite passes, the shipped canary schedule is
 # internally consistent with the shipped canary spec, the pile cut still hashes
-# to its published value, and no sealed game appears in any request we have ever
-# made. It does NOT mean the environment has not drifted -- only a replay can
-# say that, and only `canary_schedule.py run` buys one.
+# to its published value, no sealed game appears in any request we have ever
+# made, and the planned campaign fits inside the documented rate limit. It does
+# NOT mean the environment has not drifted -- only a replay can say that, and
+# only `canary_schedule.py run` buys one.
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -53,7 +54,23 @@ fi
 step "pile cut, claim set and the sealed-contact audit" \
     python contamination.py --json
 
-step "no credential or cookie value reached the ledger" python redact_ledger.py
+# Phase 1's rate obligation (Theoria.md:299), in the unit that exists. Runs
+# with --measure so a declared input that has drifted from the data file it
+# was taken from is a verify failure, not a stale number nobody rechecks.
+step "campaign rate budget fits inside the documented limit" \
+    python rate_budget.py --measure
+
+# `redact_ledger.py` with no args scans for the INC-008 shape only -- one field,
+# `set_cookie`, because that is the field the incident was about. Kept: it is the
+# remediation's own before/after check and it should keep working.
+step "no cookie value reached the ledger (the INC-008 field)" python redact_ledger.py
+
+# The general form, and the one that does not depend on knowing which incident
+# happened. Every ledger this repo can see, every credential shape, whoever wrote
+# the line -- see tools/ledger_invariants.py on why this is a check on the file
+# rather than a rule inside a writer.
+step "ledger invariants hold on the artefacts themselves" \
+    python tools/ledger_invariants.py --all
 
 echo
 if [ "$fail" -eq 0 ]; then

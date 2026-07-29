@@ -30,6 +30,7 @@ from .parser.ast_nodes import (
 )
 from .parser.expand import expand_theory
 from .problem import Instance, ProblemSpec, check_against_theory
+from .writes import WriteSets
 
 
 class IRError(Exception):
@@ -62,6 +63,11 @@ class WorldIR:
     weight_sources: Dict[str, str] = field(default_factory=dict)
     # Legibility complaints, not errors. See `problem.check_against_theory`.
     warnings: List[str] = field(default_factory=list)
+    # v0.3, ledger X-1. The manual's own answer to "which objects does this rule
+    # write" — the definition `frame persist` and `conflict` both range over.
+    # Carried on the IR so that every backend reads one resolved source instead
+    # of each holding a private effect dictionary, which is the defect X-1 filed.
+    writes: "WriteSets" = None                          # type: ignore[assignment]
 
     @property
     def semantics(self):
@@ -333,15 +339,34 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
                     if not (w.startswith("theory.dsl declares `weights ")
                             and any("`weights %s " % n in w for n in filled))]
 
+    writes = WriteSets(ast)
+
+    # v0.3, ledger X-1. A write set that arrived from the published default
+    # table rather than from this manual is a per-world fact taken from a
+    # cross-world table. That is the trade v0.3 makes for backward
+    # compatibility, and it is a warning rather than an error for the same
+    # reason a missing `landmark` is: it compiles to the same world when the
+    # table is right. It is not silent, because a silent default is E-03.
+    inherited = writes.inherited_from_table(rules)
+    if inherited:
+        warnings.append(
+            "theory.dsl declares no `writes { ... }` for %s, so their write "
+            "sets come from v0.3's default table. The table is keyed by name "
+            "and arity across all worlds; what a rule writes is a fact about "
+            "this one. Declare them if the table is not what this manual means."
+            % (", ".join("%s/%d" % k for k in inherited),))
+
     if check_conflicts:
         from .conflict import Uniqueness, check_conflict
         report = check_conflict(rules, ast.semantics, problem.background,
                                 strict=False,
-                                uniq=Uniqueness(ast, problem))
+                                uniq=Uniqueness(ast, problem),
+                                writes=writes)
         warnings.extend(report.warnings())
 
     return WorldIR(
         warnings=warnings,
+        writes=writes,
         ast=ast,
         problem=problem,
         rules=rules,

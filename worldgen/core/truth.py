@@ -28,7 +28,7 @@ from . import reversibility as rev
 from . import solvability
 from .spec import WorldSpec
 from .types import ACTIONS, AGENT, FLOOR, WALL
-from .world import GridWorld
+from .world import FORBIDDEN_RULE, GridWorld
 
 # Two rules belong to `GridWorld.explain` itself rather than to any mechanism.
 BASE_RULES: List[Dict[str, Any]] = [
@@ -44,11 +44,67 @@ BASE_RULES: List[Dict[str, Any]] = [
 ]
 
 
+#: The opening every rule in this library writes when it is conditioned on the
+#: action.  `guard_rules` rewrites exactly this prefix and nothing else, and
+#: `tests/test_mutate.py` requires the rewrite to reach every rule that has it —
+#: a partial rewrite is worse than none, because it leaves the table looking
+#: uniformly correct while half of it is stale.
+ACTION_PREFIX = "act=D and "
+
+
+def base_rules(world: GridWorld) -> List[Dict[str, Any]]:
+    """`BASE_RULES`, plus `action_forbidden` where a world forbids a command."""
+    if not world.forbidden:
+        return list(BASE_RULES)
+    named = " or ".join("`%s`" % a for a in sorted(world.forbidden))
+    return list(BASE_RULES) + [{
+        "name": FORBIDDEN_RULE,
+        "when": "act=D and D is %s" % named,
+        "then": "nothing changes — the command is refused before the grid is "
+                "consulted, so the refusal is indistinguishable from a world in "
+                "which that direction never does anything",
+        "reversible": True,
+    }]
+
+
+def guard_rules(world: GridWorld,
+                rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Condition every action-triggered rule on the world's forbidden command.
+
+    A world that refuses a command before consulting the grid makes **no** rule
+    unconditional in the direction it refuses — not `walk`, not
+    `blocked_by_wall`, and not `advance_cycler` or `walk_through_door` either.
+    An earlier version of this rewrote only the two rules in `BASE_RULES`, on
+    the grounds that they were the ones this module owns, and the result was a
+    `ground_truth.json` that contradicted itself: on `v-eb4c5810` at agent
+    `(3,4)` with the cycler shut, `act=UP` satisfies the antecedent of both
+    `action_forbidden` ("nothing changes") and `advance_cycler` ("the phase
+    becomes (phase+1) mod k"), and only the first is true.
+
+    `rule_correspondence` compares rule *names* against `Outcome.rule` tags and
+    is blind to prose, so nothing caught it. It is caught now by
+    `test_no_rule_claims_a_transition_a_forbidden_action_prevents`, which
+    evaluates the antecedents rather than reading them.
+    """
+    if not world.forbidden:
+        return rules
+    named = " or ".join("`%s`" % a for a in sorted(world.forbidden))
+    guarded = "act=D, D is not %s, and " % named
+    out: List[Dict[str, Any]] = []
+    for rule in rules:
+        row = dict(rule)
+        when = row.get("when", "")
+        if rule["name"] != FORBIDDEN_RULE and when.startswith(ACTION_PREFIX):
+            row["when"] = guarded + when[len(ACTION_PREFIX):]
+        out.append(row)
+    return out
+
+
 def rule_table(world: GridWorld) -> List[Dict[str, Any]]:
-    out = list(BASE_RULES)
+    out = base_rules(world)
     for mechanism in world.mechanisms:
         out.extend(mechanism.truth_rules(world.spec, world.mine(mechanism)))
-    return out
+    return guard_rules(world, out)
 
 
 def fired_rules(world: GridWorld) -> List[str]:

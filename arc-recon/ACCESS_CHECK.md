@@ -11,9 +11,9 @@ measurement where the docs contradict it — both are recorded when they disagre
 | 1 | RESET semantics — full reset or level reset, hidden random source | **answered** | precheck, 4 games |
 | 2 | Cross-session residue | **closed** — none, across four sessions; the question is now standing surveillance, not an open item | precheck ×2 + canary ×2 |
 | 3 | Scorecard semantics — one card per game, in-card aggregation | **answered, with two traps** | baseline-arms measurement + official docs |
-| 4 | Does one action return several frames | **answered** — yes | precheck (7 frames on one command) |
+| 4 | Does one action return several frames | **answered** — yes, up to 113; and **adjudicated**: the batch is a render burst, not a tick → [`CASCADE_RULING.md`](CASCADE_RULING.md) | precheck + P-20 per-frame probe ([`cascade/`](cascade/)) + baseline-arms shards |
 | 5 | Is `level` a response field | **answered** — yes | precheck |
-| 6 | Rate limits and quota | **answered** — see below; the binding constraint is not what we assumed | official docs + baseline-arms measurement + this track's probe |
+| 6 | Rate limits and quota | **closed for the question Phase 1 asked** (the campaign fits: 432 rpm of 600, §6d) — with two named residuals: no 429 has ever been observed, and the backoff curve is unmeasured | official docs + `browser-ops/TERMS.md` + baseline-arms + this track's probe + the §6d budget |
 | 7 | Canary replay | **standing** — built, baselined, and now on a daily schedule | [`canary.py`](canary.py), [`canary_schedule.py`](canary_schedule.py), [`data/canary.json`](data/canary.json) |
 | 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check |
 
@@ -47,9 +47,16 @@ and it now makes one a day without being asked (item 7a):
 | first scheduled sweep | 2026-07-28T07:57Z, separate session and scorecard | `data/canary_runs.jsonl` |
 
 All of them agree hash-for-hash on every step they share, across **six replays
-in four sessions spanning two days and two different HTTP transports**. A
-session leaves nothing behind that a later session can see: same RESET state,
-same frames from the same actions.
+spanning two days and two different HTTP transports**. A session leaves nothing
+behind that a later session can see: same RESET state, same frames from the same
+actions.
+
+*(Corrected by S5: this sentence used to say "six replays in four sessions",
+which was a leftover from the three-replay wording incremented instead of
+recounted. The four canary sweeps alone opened four scorecards and 16 game
+sessions — `data/canary_runs.jsonl` carries 16 distinct `guid`s, all unique —
+and the precheck adds more. The replay count is right; "four sessions"
+understated it by an order of magnitude.)*
 
 Note what this does *not* say. It says the environment is reproducible, not that
 it is stateless — the server clearly keeps per-session state (that is what the
@@ -69,6 +76,31 @@ changes a frame the canary looks at. Residue confined to steps deeper than the
 stored sequences, or to fields other than `frame`, is outside what any of this
 measures — and that limit is a property of the instrument, not evidence about
 the server.
+
+**Three qualifications S5 added to the closure rationale, because "the question
+has an owner" is doing a lot of work above and the owner is smaller than it
+sounds.** The finding stands; the *surveillance* is thinner than the sentence
+implies:
+
+* **The watchdog is shallower than the evidence that answered the question.**
+  The precheck compared 9 steps per game; the daily canary compares 6/3/6/5.
+  Residue that first shows up on step 7 is outside the standing check.
+* **Its discriminating power is 11 of 16, not 16** (INC-009), and on the daily
+  `quick` profile **tn36 degrades to a RESET-only check** — for one of four
+  games, daily residue surveillance is a single hash.
+* **The schedule is not installed.** `canary_schedule.py install` prints a
+  command; nothing has run it, and `schtasks` shows no task. As of this writing
+  the "daily" canary has run on schedule **once** (2026-07-28T07:57Z). Installing
+  it is an owner decision and deliberately not an agent's (§"What S2 did not
+  do") — but until someone does, item 2 is closed on **six agreeing replays**,
+  which is the honest basis, and not on a standing instrument.
+
+One more, about the precheck half of the evidence: ar25's `run_a` (18:10:26 →
+18:35:03) and `run_b` (18:12:14 → 18:14:59) **overlapped in wall clock** —
+`run_b` is nested inside `run_a`. That pair tests concurrent session isolation,
+which is a fine property to have, but it is not the sequential "a later session
+sees nothing of an earlier one" that the item asks about. The canary sweeps,
+which are genuinely sequential, are what carry that claim.
 
 ## 3 · Scorecard semantics — one card per game holds, and two traps
 
@@ -98,13 +130,36 @@ context, a planner that runs a search — must keep the card alive or reopen it,
 and must not assume the card it opened is the card it is still writing to.
 Scorecards are also batched to the leaderboard roughly every 15 minutes.
 
-## 4 · Cascade semantics — one action can return several frames
+## 4 · Cascade semantics — adjudicated, and not the way this section first read it
 
-Settled observationally, not from documentation: a single `ACTION2` on
-`g50t-5849a774` returned **7 frames**; every action on `sk48-d8078629` returns
-**2**. `frame` is always a list. The environment has an internal tick, so `step`
-must be modelled as `action → frame sequence`. This is the answer Theoria.md
-Phase 1 wanted before freezing the shape of `step`.
+**The ruling is [`CASCADE_RULING.md`](CASCADE_RULING.md)** (S5, 2026-07-28).
+Cite that; this section is the access-check row, not the adjudication.
+
+Settled observationally, not from documentation: `frame` is always a list, and a
+single command can return many. The largest batch on disk is **113 frames** (one
+`g50t` `ACTION5` in `baseline-arms/out/shards/ledger.g50t.jsonl`), carrying
+**10 distinct** states. Batch length is a function of *(state, action)*, not of
+the game: `ar25` and `tn36` have never returned more than 1 frame across ~790
+responses; `sk48`'s keyboard actions return 2 (58 of 265 returned 1); `g50t`
+ranges over `{1, 7, 9, 13, 15, 17, 21, 25, 29, 32, 35, 37, 41, 49, 113}`.
+
+~~The environment has an internal tick, so `step` must be modelled as
+`action → frame sequence`. This is the answer Theoria.md Phase 1 wanted before
+freezing the shape of `step`.~~ **Withdrawn.** That was an inference from the
+frame count, not a measurement, and Theoria.md:299 does not license it — it
+names **动画/内部 tick** as two candidate causes of one observation and says the
+API answer settles only half the item. Read as the whole answer, it put a claim
+about the world's *rules* on evidence about the API's *response shape*, and
+INC-002a has been carrying it as "settled" ever since.
+
+What the frames actually show — plateaus quantised at exactly 4, constant
+12-cell increments, and an `sk48` intermediate frame that is never a state the
+world rests in — is a render burst, not a rule set re-firing to quiescence. So
+**`step` is frozen as `S → A → S` on `frames[-1]`**, and `cascade` is
+`single_frame` for the development pile, with a named refutation condition.
+Evidence, argument and the obligations it places on both tracks are in the
+ruling; the per-frame probe it rests on is tracked here in
+[`cascade/`](cascade/) and re-verifies with `bash cascade/verify.sh`.
 
 ## 5 · `level` is a response field
 
@@ -136,6 +191,15 @@ appear in the scorecard's action count (item 3). The canary baseline ran 16
 actions in 147 HTTP calls — **9.2× amplification**, at the pessimistic end of the
 2.5–10× band the precheck recorded.
 
+**Corroboration this section did not use.** The no-quota finding above rests on
+absence from the documentation. `browser-ops/TERMS.md:355-378` gets there from
+the product side: the logged-in panel has **no quota, no usage, no rate display
+and no billing** — "**不是『配额藏在别处』,是产品里就没有配额这个概念**". Two
+independent layers, and the second is positive evidence rather than silence.
+The claim above that this "stays an assumption rather than a finding" was
+written before that read existed; it is now a finding, though still one about
+what is *documented and shown*, not about what the server enforces.
+
 **The archiving conclusion, which is not the one we expected.** The campaign
 budget arithmetic Theoria.md asks for — 三臂 × 局数 × 回合 + 戳探 + 前缀重放 —
 was framed around an action quota that "可能先于 token 成为瓶颈". On the evidence
@@ -144,11 +208,16 @@ limit, and rate is a constraint on *concurrency and retry storms*, not on total
 volume. Restated for planners:
 
 * A single-process arm cannot approach 600 rpm; it spends most of its wall clock
-  waiting on the model.
-* Concurrent campaigns plus retry storms can. Four processes each retrying at the
-  precheck's envelope (40 attempts, backoff capped at 5 s) is the shape that gets
-  near the limit, and INC-BA-003 is a live instance of exactly that arrangement
-  arising by accident between two sessions that could not see each other.
+  waiting on the model. *(Stands — measured at 11 rpm in §6d.)*
+* ~~Concurrent campaigns plus retry storms can. Four processes each retrying at
+  the precheck's envelope (40 attempts, backoff capped at 5 s) is the shape that
+  gets near the limit~~, and INC-BA-003 is a live instance of exactly that
+  arrangement arising by accident between two sessions that could not see each
+  other. **The first clause is wrong and §6d does the arithmetic that shows it:
+  the retry envelope is the *slowest* shape this project runs, because its own
+  backoff is a rate limiter. Four storming processes reach 64 rpm — 9.4× inside
+  the limit. It takes 38 of them to breach.** INC-BA-003 was a real incident
+  about a real hazard; the hazard was the *bill*, not the rate limit.
 * So the gate that matters is a **shared, cross-session one** — the thing
   INC-BA-003 asked for. `data/campaign_freeze.json` is the file-based half of it;
   see [`canary.py`](canary.py).
@@ -259,6 +328,67 @@ effect rests on the zero-cost probes (20/20 vs 0/20 first-attempt RESETs, plus
 that is what it should be cited for. Nothing here says how the API behaves under
 concurrency, or whether the documented 600 rpm limit binds once retries stop
 dominating traffic.
+
+### 6d · The budget, finally done — in the unit that exists (S5)
+
+§6 concluded that a volume budget has nothing to bust and stopped. That is right
+about volume and was wrong to stop, because Theoria.md:299's obligation survives
+the change of unit — 「必须落在限额内」 just becomes a different sum. This is
+that sum. It is executable: [`rate_budget.py`](rate_budget.py), inputs declared
+in [`data/rate_budget.json`](data/rate_budget.json), run by `verify.sh`.
+
+A rate limit is charged against **requests in any 60-second window**, so the
+budget is not total ÷ duration — an average is exactly the statistic a rate
+limit ignores. The peak is `concurrency × how fast one process can issue`, and
+the second term is set by what the process does *between* requests.
+
+| scenario | Theoria term | shape | conc | peak rpm | headroom | breaches at |
+|---|---|---|---|---|---|---|
+| `phase3-s1` | 三臂×局数×回合 | LLM arm | 4 | 44 | 13.6× | 55 procs |
+| `phase3-s2` | same, 2× actions | LLM arm | 4 | 44 | 13.6× | 55 procs |
+| **`probe-and-replay`** | **戳探 + 前缀重放传送** | scripted | 4 | **432** | **1.4×** | **6 procs** |
+| `canary-daily` | (the standing spender) | scripted | 1 | 108 | 5.6× | 6 procs |
+| `inc-ba-003` | the collision that happened | retry storm | 4 | 64 | 9.4× | 38 procs |
+
+**Verdict: the plan of record fits, at 432 rpm of 600 — but not comfortably, and
+not where anyone was looking.** Two results, both the opposite of what §6 said:
+
+**1. Retry storms are the safest shape, not the most dangerous.** The envelope's
+own backoff is a rate limiter: 40 attempts spread over ~173 s cannot exceed
+~16 rpm however hard it tries. It takes 38 concurrent storming processes to
+breach. INC-BA-003's four never came close.
+
+**2. The dangerous shape is the fast, healthy, think-free one** — a scripted
+prefix replay issuing back-to-back at transport speed, bounded only by the
+fastest round-trip ever measured (0.558 s, over 1,231 ledger entries). That is
+**108 rpm per process**, and it breaches at **6**. Which is to say: the risky
+term is precisely 前缀重放传送, the one Theoria.md:299 named and nobody costed.
+Fixing the cookie amplification (INC-007a) cut HTTP volume ~9× and, by removing
+the waiting, raised the achievable *rate* — the same change moved the two
+budgets in opposite directions.
+
+**The operating constraint that falls out, and it is the deliverable of this
+section: cap concurrent think-free replay at 5 processes.** Model-paced arms are
+not the thing to count; a replay, a reconstruction pass or a probe sweep is.
+
+**What this is not.** A bound from a documented number is not a calibration.
+**Zero 429s have ever been observed** — 0 across 3,736 logged requests
+(`data/recon_ledger.jsonl` 1,231, `baseline-arms/ledger.jsonl` 560,
+`baseline-arms/probe_log.jsonl` 1,945). The gate has never been seen to close.
+Two residuals follow, and both are open:
+
+* **The backoff curve after a 429 is unmeasured and undocumented.** The docs say
+  "exponential"; [`precheck.py`](precheck.py) implements a *linear* ramp capped
+  at 5 s. Nothing has ever tested it against a real 429, and neither
+  `client.py` nor `canary.py` handles 429 at all — only `precheck.send_command`
+  treats it as retryable. `browser-ops/TERMS.md:236` lists this as needing a
+  letter to ARC.
+* **Rate had never been measured, only bounded.** The canary recorded HTTP
+  volume and no wall clock, so its four sweeps carry no rate at all. S5 added
+  `elapsed_s` / `observed_rpm` to the replay record; from the next sweep on,
+  every canary run is a free observation of the quantity the limit is charged
+  against. `python rate_budget.py --observed` reads them back and reports the
+  pre-S5 sweeps as unmeasured rather than back-filling a guess.
 
 ## 7 · Canary replay — built, and now standing
 
@@ -376,7 +506,13 @@ supersedes 1 and adds a category to 3):
    i.e. raw frames, and it is tracked. Before any public release it must be
    either redacted to hashes or covered by permission. **This is an open
    obligation, flagged here, not discharged by this ticket.** *(Stands, and
-   §8a.3 sharpens why.)*
+   §8a.3 sharpens why.)* **S5 enlarged it**: salvaging P-20 added
+   `cascade/runs/*/ledger.*.jsonl` (~1.0 MB of raw frames) to the tracked set.
+   That was a deliberate trade — `cascade/verify.py`'s load-bearing assertion
+   recomputes the frame hashes from those bodies, so dropping them would have
+   left a summary that only agrees with itself — but it is the same obligation
+   in a second file, and the release redaction must cover both paths, not just
+   `data/`.
 
 ~~Confidence is medium-low on this item and the reason is structural: no
 ARC-AGI-3-specific API terms of service appears to exist, so a generic website
@@ -481,14 +617,15 @@ had read, and it was more caution than the full record requires.
   machine is an owner decision, and an agent in a temporary worktree is the
   wrong thing to make it: the path it would register is the worktree's, which
   disappears. Install from the main checkout.
-* **The shared spend gate is not on this path yet, and the record says so.**
-  `proxy/spend_gate.py` is not on master at this commit, so `open_spend_gate`
-  writes `spend_gate: "absent"` into the run record rather than treating its
-  absence as approval. When it lands, it is used with no flag and no opt-out,
-  and any refusal from it stops the sweep — there is a test for that. What is
-  *not* done is the reverse direction: the gate does not know the canary exists,
-  so a campaign's headroom calculation will not currently anticipate 12 actions
-  a day.
+* **~~The shared spend gate is not on this path yet~~ — it landed.**
+  `proxy/spend_gate.py` is on master as of `ae82ede` (S3), so `open_spend_gate`
+  now imports it and reserves rather than writing `spend_gate: "absent"`. No
+  flag, no opt-out; any refusal from it stops the sweep, and there is a test for
+  that. What is still *not* done is the reverse direction: the gate does not
+  know the canary exists, so a campaign's headroom calculation will not
+  anticipate 12 actions a day. §6d includes the canary as a budget row for the
+  same reason — a rate budget that omits the one recurring spender repeats the
+  omission in a second place.
 * **The blindness threshold is a guess.** `blind_after: 3` says "three days of
   not being able to look is long enough to be worth an incident". Nothing
   measured that; it is in the config file so it can be argued with in a diff.

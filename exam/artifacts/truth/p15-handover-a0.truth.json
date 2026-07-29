@@ -469,8 +469,8 @@
           "possible": 22.0
         }
       },
-      "compile_refusal": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
-      "form": "checked-in",
+      "compile_refusal": null,
+      "form": "compiled",
       "fraction": 1.0,
       "note": "The author is the manual, executed. `pipeline.gen_exec.compile_module` is tried first, so that the baseline runs a form compiled from theory.dsl at this moment; when it raises, the checked-in compiled form a0-spike/artifacts/theory_exec.py is loaded instead and its three geometry constants are rebound per level. Both paths execute the same deliverable and neither consults the world's oracle or the answer key.",
       "possible": 46.0,
@@ -612,6 +612,6 @@
   },
   "paper_id": "p15-handover-a0",
   "question_type": "handover",
-  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
   "schema": "exam/v0.1"
 }

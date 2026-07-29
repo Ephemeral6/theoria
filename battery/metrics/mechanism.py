@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import List
 
-from battery.metrics import metric, ok, thin
+from battery.metrics import metric, ok, thin, unsound
 from battery.model import Run
 
 
@@ -38,6 +38,13 @@ def mean_first_use_delay(run: Run):
     delays = _delays(run)
     if not delays:
         return thin("M1", "no annotated mechanism was both seen and used")
+    # V9-D2. The blind audit printed M1 = -1000.0 from `first_used=0,
+    # first_seen=1000` -- an arm that used a mechanism a thousand steps before
+    # it existed, ranked as the most capable run in the battery. A negative
+    # delay is not a fast arm, it is two counters with different origins.
+    if min(delays) < 0:
+        return unsound("M1", "mechanism(s) recorded as first used before "
+                             "first seen (minimum delay %d)" % min(delays))
     return ok("M1", sum(delays) / len(delays), used=len(delays),
               annotated=len(run.truth.mechanisms),
               per_mechanism={name: (entry["first_used"] - entry["first_seen"])
@@ -108,6 +115,9 @@ def change_detection_delay(run: Run):
         per_episode[repair.episode_id] = earliest
     if not delays:
         return thin("M4", "no repair episode records a detection point")
+    if min(delays) < 0:
+        return unsound("M4", "detection recorded before the change was "
+                             "injected (minimum %d actions)" % min(delays))
     undetected = sum(1 for r in run.repairs if not r.detected)
     return ok("M4", sum(delays) / len(delays), episodes=len(delays),
               per_episode=per_episode,
@@ -157,10 +167,21 @@ def repair_collateral_share(run: Run):
     that is 1 of 4. A framework that could not count it would ship it.
     """
     shares = []
+    broken = []
     for repair in sorted(run.repairs, key=lambda r: r.episode_id):
         if not repair.theorems_before:
             continue
+        # V9-D1. Declared `unit="share"`, and the blind audit printed 1000.0
+        # from `invalidated=1000, before=1`. A consumer reading this as a
+        # fraction is wrong by three orders of magnitude.
+        if (repair.invalidated_theorems < 0
+                or repair.invalidated_theorems > repair.theorems_before):
+            broken.append(repair.episode_id)
+            continue
         shares.append(repair.invalidated_theorems / repair.theorems_before)
+    if broken:
+        return unsound("M6", "episode(s) %s invalidate more theorems than the "
+                             "manual held" % ", ".join(sorted(broken)))
     silent = sum(1 for r in run.repairs if r.silently_wrong_without_tracking)
     if not shares:
         return thin("M6", "no repair episode records how many theorems the "

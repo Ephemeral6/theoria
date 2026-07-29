@@ -1,0 +1,9 @@
+# Seed tables, findings and archived reproducers are byte-compared across runs,
+# and `core.autocrlf` is true on the machine this was built on.  Without this the
+# first commit normalises them and the next Windows checkout materialises CRLF.
+# Every sibling artefact directory in this repo pins the same thing.
+* text eol=lf
+*.jsonl text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf

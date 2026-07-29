@@ -1,0 +1,130 @@
+{
+  "artifact_digests": {
+    "SOURCES.sha256": "89773e0b439ce6c0910094241792bfa6b5f50e08456e4cb3b266df79ce121fc6",
+    "csv/fig02_bill_shape.csv": "09a24da82b4bb1c4eefad57c9638c16cd4cac3f963719d24eaeea2e73d444756",
+    "csv/fig03_capability_spectrum.csv": "684f8447b08bdc72d8ccdfa71b82645a4dabe333934f440fcfa8110a9bde081c",
+    "csv/fig04_a3_transfer.csv": "b467a07308bb7f5e26233a081dabaf49d1159c499f3811ab5036aa499cf6f067",
+    "csv/fig05_a2_repair_loop.csv": "b8ca26c86e5954fd94f767792820857400d59d2acae0a0837a6be136fe10c6db",
+    "csv/fig06_concept_timeline.csv": "ac1ca32f3fb6c8c0c4896f5369f93f3c203c67f4d9151ef351bd1d68026ddd30",
+    "csv/fig07_a0_vs_a0prime.csv": "1b8914e610ad1780c1e026006c934b20a1c9d2c9c5ab8e16807d8c169f7e4345",
+    "out/dark/fig02_bill_shape.png": "612975c0504af014427c5dcc7014aafccf57b6936d9f5aa7a2a6762f54e7012f",
+    "out/dark/fig02_bill_shape.svg": "8e0f5b24036a03b505c404fdd240a6a2f86c3f1679357e45ae17eaee6f9270e5",
+    "out/dark/fig03_capability_spectrum.png": "fa453a794bef3f6f16be1363efb2860efd79c3bd21708082ee708260dfe070dd",
+    "out/dark/fig03_capability_spectrum.svg": "87b8b2649c28b135df13a3bdaabd25d0ab6bf4b78279172533e42d3d887e7a40",
+    "out/dark/fig04_a3_transfer.png": "537522451477634abf494a315c410263e4076fb27a9fcdb3213c65e2d9942c90",
+    "out/dark/fig04_a3_transfer.svg": "f99a3aacb1a0ff8592c28fed21036574350c33a83e0f446fb7e64b20cb663d53",
+    "out/dark/fig05_a2_repair_loop.png": "032ef66c6c99136b6ac9d09f62118111d4a9d896c606495adea9f794779c4e4d",
+    "out/dark/fig05_a2_repair_loop.svg": "f1a3df417600359920d3347557a9e5d5a37ae3e1e809cdb210b0cabac05d9cbf",
+    "out/dark/fig06_concept_timeline.png": "a65c3378b1cd54f5317d22ae24384e8374cb1c498dfa9d3b96722a759f32ed0c",
+    "out/dark/fig06_concept_timeline.svg": "4223a1758470ec553fd6de5eb0325df2f010f928de3d59ccabfcef274790ff57",
+    "out/dark/fig07_a0_vs_a0prime.png": "e8f97e1bb7e9f8026698a9612bcf58a83c35c59a1dfe1347d50d464de7dcdf41",
+    "out/dark/fig07_a0_vs_a0prime.svg": "92896d95b29394d961e5824c1837bbd4b087b441572497f49b1138876b667aae",
+    "out/light/fig02_bill_shape.png": "81b45f7d1df3c324edad8fcb1591334752b08aa58c556f91464229366f95762d",
+    "out/light/fig02_bill_shape.svg": "b557176a4b5b3bd92fd9fae3a47f412dfaf58a3f22e135b07962484f0d3545ac",
+    "out/light/fig03_capability_spectrum.png": "bca339f435fe56ad97d66b5dcd74e2cc6119f0ba07f36196bd58fb9e24b95620",
+    "out/light/fig03_capability_spectrum.svg": "d9c467f0f6f9d48b4d9b76c7fd5c694afa7b2ca4380d1d266db5c11dce856433",
+    "out/light/fig04_a3_transfer.png": "57705cf3a2bc9f9683fd431ea7d34b7e9d7797aadead0c71ca2be41186c3a188",
+    "out/light/fig04_a3_transfer.svg": "cba9d96b0bf785479a1d563562a53ea2ca1f2e63d6c199353461993b35eabc02",
+    "out/light/fig05_a2_repair_loop.png": "439d1cf144d5a42618922d434e50361d43f7519114fd374a9c968e45aebc4bfb",
+    "out/light/fig05_a2_repair_loop.svg": "5bdc4cc8d700a823bd06075dd1e0efdd174ab054b3034014eb5c34deac4793aa",
+    "out/light/fig06_concept_timeline.png": "6f37a908ca538b5cd62a8e88926a87965ce6b5f664cfa1aeaeceb34fd779c2b5",
+    "out/light/fig06_concept_timeline.svg": "d204ddfa8b4edcc467988166b9a34d6c62458bb72ffaeb87ae68688745fc3911",
+    "out/light/fig07_a0_vs_a0prime.png": "c211d2f0d525c5dd201cc56a3feac872518129dd7541b2249e928a885ceec728",
+    "out/light/fig07_a0_vs_a0prime.svg": "4a01a9b4c2dbd18d0ba1e8eeecc13cba7e40906e6cb65505954ea22423f6ac29"
+  },
+  "base_commit": "1e7002d40a9d3f8f63b7537a793198964efe4052",
+  "branch": "agent/p4-figures",
+  "command": "python figures/build_all.py",
+  "excluded_inputs": [
+    {
+      "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "reason": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically."
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "reason": "untracked in master."
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "reason": "untracked in master."
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "reason": "untracked in master."
+    }
+  ],
+  "figures": [
+    "fig02_bill_shape",
+    "fig03_capability_spectrum",
+    "fig04_a3_transfer",
+    "fig05_a2_repair_loop",
+    "fig06_concept_timeline",
+    "fig07_a0_vs_a0prime"
+  ],
+  "formats": [
+    "svg",
+    "png"
+  ],
+  "game_spend_usd": 0.0,
+  "inputs": {
+    "baseline-arms/ledger.jsonl": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+    "baseline-arms/out/pilot_ar25-0c556536.json": "810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+    "baseline-arms/out/pilot_g50t-5849a774.json": "079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8",
+    "baseline-arms/out/pilot_sk48-d8078629.json": "e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+    "baseline-arms/out/pilot_tn36-ef4dde99.json": "130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e",
+    "battery/artifacts/arm_contrast.json": "c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0",
+    "battery/artifacts/capability_spectrum.json": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+    "battery/artifacts/gaming_audit.json": "191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce",
+    "battery/artifacts/validation_material.json": "06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38",
+    "cold-start-a0/THEORIZE_LOG.md": "fd16da792b38e59542480d9968bdb9c3df24aad86ae5c09a398ae1c006f86b51",
+    "cold-start-a0/artifacts/candidates.jsonl": "b44422ffc7ec0690aa423b4271aed8513af046df87d1bb6c9f4e170cb3eb5818",
+    "cold-start-a0/artifacts/concept_accounts.json": "8142db524edd316cbd40ae8a2a950f49d335df1ffeaa814bef0b6e38be6075a1",
+    "cold-start-a0/artifacts/score_vs_truth.json": "8bf2e036afc9e951af6ced93e920c395a49af45dae21878aedd34d3ad1babadd",
+    "cold-start-a0/prime/artifacts/prime_report.json": "14847f5d28beb75dd0279fa3a659601ff15849f5ecd939204ced56133266aa37",
+    "cold-start-a2/A2_REPORT.md": "b11897a02fcbf3ff620b3796dc31c32ec851e5662e6fa8bd97b7039dc5f8204c",
+    "cold-start-a2/artifacts/engines_diff.json": "041ad92e7e45d073830e1ef3c8901091d7db793a2b44a2fe57f9300435e90e94",
+    "cold-start-a2/artifacts/engines_diff_probed.json": "8f04eac2a4032a5c03502c85626479b9c088ac8b5b7fe1abf5f5a67d32afe0a7",
+    "cold-start-a2/artifacts/exhibit_report.json": "905c6a214ebe5d56a7efc82fd1ed971f7f64e8fb5144a12e5b14aaad1f4f35e1",
+    "cold-start-a2/artifacts/locate_report.json": "8001a7b6b3d8251986b5802ae7e8b2bc465268a863888d8ca6dd90d5cde00da9",
+    "cold-start-a2/artifacts/loop_ledger.json": "8d711fabcc40aae2e67838c5c91a11192c1c946fd9c89bf2149d1f0c1e878eb6",
+    "cold-start-a2/artifacts/plan_repaired.json": "8583e7a74eedc1c05d17c0f4cbed79dc3a79cb31112d2da2aedae60071330f15",
+    "cold-start-a2/artifacts/probe_report.json": "5f48e19b116267afbf6bc60f16def91c1dbcd2b8998f1e3bbe10bde6f3336270",
+    "cold-start-a2/artifacts/probes.jsonl": "1072a81f6a65fed72e678c0237832664932548a384c464fed6d7d604450a749d",
+    "cold-start-a2/artifacts/refutation.json": "3030e7bd3b1e707f3b46da8e131b88a65896113fd47937d2eeedb9d07575feb8",
+    "cold-start-a2/artifacts/repair_report.json": "246b741529c990b7bb2b8a7f4e89922e889a6dc6109a9eb1891124f62bc2f8b6",
+    "cold-start-a2/artifacts/trace_summary.json": "cb7b6146dc72137792a9dd0e165e0dfdee333ee026c48ffc3adf46470ddf84dd",
+    "cold-start-a3/A3_REPORT.md": "66fd6bfd65c4c48d36e9c25298a32fd0c59baa573172df1398de0fbda737d16a",
+    "cold-start-a3/artifacts/bill_l2_from_scratch.json": "3fe85f7876ebbc6cb088a6bab9e9813faca5e4c7e6090d21ca64a39ba7f6c7fe",
+    "cold-start-a3/artifacts/bill_l2_transfer.json": "3ae1b4124de204addd72b925b0b58ab9302d3c4f36b5c9c7bf721255e95c2a5e",
+    "cold-start-a3/artifacts/bill_table.json": "0325f118cf375635d7c782361b5b253b983379e5b09f921fb82a13b14b02d0ed",
+    "cold-start-a3/artifacts/negative_controls.json": "ce085da8af43c407be831168be3283de2e6d4c00aef39cd13fb0da1faa4a99c5",
+    "cold-start-a3/artifacts/provenance_l2_transfer.json": "3545b6c742db1c91c38cbebc7a6b52b09a33760b7f459540450c5dd2073b9b72",
+    "cold-start-a3/artifacts/score_vs_truth.json": "ac57397580e0d5688fd9b6c56c513faf69531ecf1b7bf4a3ae9bf7c55b3c0346",
+    "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json": "5421e042ca10b517c1d11271db1c8c24b4e3df9e6e8ba9bf1f716829685d6fd3",
+    "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json": "fb450e8733cc3c083c6fbdebeff691f0ce0f780ad38766e40eda054cd6e3935a",
+    "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json": "4bc21e074558db9a8b73396637fca9f781686705fc1be0de5804594aec8bba34",
+    "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/cost_curve.json": "183c07e7e4c9678dcde120ea51df3ab481b5cf40d05092b6f307244a56dbb873",
+    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json": "998b0422a317a0a7a48f0aef9f955f328f64623c2b2e4eb447daf7bfe8e6519b",
+    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json": "481e94ae45cc50cbe64078b08732332f5a4b5437dc81dab14a568a65c55f9cd2"
+  },
+  "model_calls": 0,
+  "n_artifacts": 31,
+  "n_inputs": 39,
+  "network_requests": 0,
+  "notes": [
+    "Every figure is regenerated from tracked data through a CSV intermediate layer; two builds over the same inputs are byte-identical (verify.sh gate 3).",
+    "Figure 2 draws two arms: bare_cc across the model ladder, and theoria. They are NOT priced in the same unit -- a bare_cc turn buys one model call that picks one action, a theoria turn buys a desk call that theorises across the run (5 calls covered 7 actions). The third arm is still absent: there is no Schema arm in this ledger (baseline-arms/SCHEMA_LOCATE.md), so the model ladder stands in for it, weakly, per battery/DECISIONS.md D-B-004.",
+    "The theoria arm's dollars are the provider's own arithmetic. The repo price table recomputes 8.3% lower, USD 0.4368 of that a known table defect (1-hour cache writes priced at the 5-minute multiplier). The disagreement is reported on the plate, not averaged away.",
+    "Figure 7 contrasts A0 with cold-start-a0/prime. It is confounded by construction and says so: two variables were changed, not one, and the objection that bites is analytic rather than statistical -- A0-prime's toggle was designed so every case would have a witness, so the contrast demonstrates the mechanism rather than testing it.",
+    "battery/artifacts/arm_contrast.json is a v1-era artefact that predates the schema_repro arm. Figure 3 takes its column axis from capability_spectrum's own provenance instead, and reports the disagreement rather than absorbing it."
+  ],
+  "prompt_id": "P4-figures",
+  "sealed_pile_reads": 0,
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "utc": "2026-07-28T09:05:37Z",
+  "verified_by": "figures/verify.sh",
+  "worker": "W-1611"
+}

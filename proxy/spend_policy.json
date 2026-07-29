@@ -1,0 +1,19 @@
+{
+  "v": "1.0",
+  "pool": "theoria-shared-2026-07",
+  "usd_ceiling": 214.9,
+  "action_ceiling": 24000,
+  "ledger": "proxy/var/spend_gate.jsonl",
+  "default_ttl_seconds": 3600,
+  "lock_timeout_seconds": 30.0,
+  "default_run_caps": {
+    "usd": 5.0,
+    "actions": 600
+  },
+  "provenance": {
+    "default_run_caps": "What a run that declares no budget of its own is given. Deliberately small, so that not declaring is inconvenient rather than unlimited -- the failure this whole file exists to stop is a process believing it may spend a number nobody wrote down. $5.00 is under a tenth of the $50 that BUDGET_REPORT.md G1 approved for the entire programme, so an undeclared run cannot quietly become a campaign. 600 actions is one minute at the documented 600 rpm rate limit, i.e. the most a single undeclared run could be spending while a human notices. Declaring a real budget is one argument: `SpendGate.reserve(campaign, usd_cap, action_cap)`.",
+    "usd_ceiling": "Not new authority. $50 (BUDGET_REPORT.md G1, approved as P-7) + $164.9 (the other session's stop-loss ceiling, CEILING_FACTOR 1.6 x $103) = $214.90 -- which is exactly the worst-case combined exposure INC-BA-003 computed and could not bound. The two numbers were already approved separately; this file is the first place their sum is a ceiling rather than an accident.",
+    "action_ceiling": "~24,000 outbound ARC requests, the combined figure in INC-BA-003's shared-resource table. One unit = one outbound ARC HTTP request through the environment proxy, which is the quantity the proxy can actually count and the one the 600 rpm rate limit is charged against. It is NOT the scorecard's successful-action count (BUDGET_REPORT.md 4.1).",
+    "raising_it": "A human act. Edit this file, say why here, and append the change to PARTNER_SYNC.md. Every run records this file's sha256 in its run_start, so a run that drew on a widened pool is identifiable after the fact."
+  }
+}

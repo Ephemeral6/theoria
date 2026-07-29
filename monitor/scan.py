@@ -14,6 +14,7 @@ Read-only with respect to the tracks: this writes only inside `monitor/`.
 """
 
 import argparse
+import calendar
 import html
 import json
 import os
@@ -76,8 +77,9 @@ def iter_jsonl(path):
 
 def git(*args):
     try:
-        out = subprocess.run(["git"] + list(args), cwd=ROOT, capture_output=True,
-                             text=True, timeout=30)
+        out = subprocess.run(["git"] + list(args), cwd=ROOT,
+                             capture_output=True, text=True, timeout=30,
+                             encoding="utf-8", errors="replace")
         return out.stdout.strip()
     except Exception:
         return ""
@@ -215,9 +217,28 @@ def probe_a1_state():
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
 
 
-TERRITORIES = ["engine-rig", "theory-compiler", "cold-start-a0", "cold-start-a2",
-               "a0-spike", "baseline-arms", "arc-recon", "proxy", "battery",
-               "monitor"]
+def _discover_territories():
+    """Derive the territory list from the tree instead of hardcoding it.
+
+    The hardcoded list stopped at nine directories while the repo grew to
+    nineteen, so provenance and conflict checks were blind to ten of them —
+    including theoria-arm, the arm that actually spends API money (OPS-A,
+    2026-07-28). A top-level directory counts as a territory if it is tracked
+    by git and is not tooling.
+    """
+    skip = {".git", ".claude", ".worktrees", ".pytest_cache", "__pycache__",
+            "CONTRACTS", ".toolchain"}
+    out = []
+    for name in sorted(os.listdir(ROOT)):
+        if name.startswith(".") or name in skip:
+            continue
+        if not os.path.isdir(os.path.join(ROOT, name)):
+            continue
+        out.append(name)
+    return out
+
+
+TERRITORIES = _discover_territories()
 SHARED_OK = {"PARTNER_SYNC.md", "CONTRACTS", "README.md", "LICENSE",
              ".gitignore", ".env.example", "CLAUDE.md", "Theoria.md"}
 
@@ -365,7 +386,11 @@ def probe_dispatch_board():
                          "branch": branch or "—",
                          "self_reported": self_rep})
     if not rows:
-        return {"status": "green", "detail": "本轮无在册工单。", "rows": []}
+        # 工作板取代了逐件派单，prompts/ 目录自然空了——但「空」在这里
+        # 不等于「无事」，报 green 会让盘面看起来比现实干净。
+        return {"status": "green",
+                "detail": "派单已由工作板取代（见 supply 探针），本探针不再适用。",
+                "rows": [], "retired": True}
     n_rep = sum(1 for r in rows if r["self_reported"])
     return {"status": "green" if n_rep else "partial",
             "detail": "%d 份在册工单，%d 份有自报痕迹（分支或 PARTNER_SYNC）。"
@@ -390,11 +415,23 @@ def probe_append_only():
     watched = ["PARTNER_SYNC.md", "arc-recon/data/incidents.jsonl",
                "arc-recon/data/contamination_log.jsonl",
                "battery/PREDICTIONS.md"]
+    # Deletions already adjudicated (same-window self-correction, ruled
+    # 2026-07-28: no incident). Counted as baseline so the probe measures
+    # NEW violations instead of being born red and never able to go green.
+    # One adjudicated deletion on the mainline: 63ef0bf, a same-window
+    # self-correction (3->4 samples). 6dec6f7 is NOT counted -- it edited a
+    # paragraph that had never reached master, which publishes nothing.
+    # The line the rule actually draws: once it is on the mainline it is
+    # frozen; on a branch, fix it until it is right.
+    BASELINE = {"PARTNER_SYNC.md": 1}
     offenders = []
     for path in watched:
         if not exists(path):
             continue
-        out = git("log", "--numstat", "--format=%h", "--", path)
+        # --first-parent: only what actually appeared on the mainline counts.
+        # A branch-local fix before merge never published anything, so it is
+        # not a violation (OPS-A, 2026-07-28: my earlier ruling cited it wrongly).
+        out = git("log", "--first-parent", "--numstat", "--format=%h", "--", path)
         dels, cur = 0, ""
         for line in out.splitlines():
             parts = line.split("	")
@@ -402,14 +439,18 @@ def probe_append_only():
                 dels += int(parts[1])
             elif line.strip():
                 cur = line.strip()
-        if dels:
-            offenders.append("%s（累计删除 %d 行）" % (path, dels))
+        allowed = BASELINE.get(path, 0)
+        if dels > allowed:
+            offenders.append("%s（删除 %d 行，超出已裁决豁免 %d 行）"
+                             % (path, dels, allowed))
     if offenders:
         return {"status": "risk",
                 "detail": "追加式文件出现删除：" + "； ".join(offenders) +
                           "。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。"}
+    exempt = sum(BASELINE.values())
     return {"status": "green",
-            "detail": "%d 个追加式文件全历史零删除行。" % len(watched)}
+            "detail": "%d 个追加式文件无新增删除（%d 行历史删除已裁决豁免："
+                      "同窗口自我订正）。" % (len(watched), exempt)}
 
 
 OPS_DUTY = [
@@ -459,7 +500,9 @@ def probe_ops_duty():
         for r in rows)
     if tm:
         detail = "**%d 条 TO-MONITOR 待监控回复**。 " % tm + detail
-    st = "risk" if stale else ("partial" if missing else "green")
+    # 未回复的 TO-MONITOR 必须影响状态：把它只写进 detail 而状态仍报 green，
+    # 正是今天反复出现的「沉默的乐观」——盘面绿着，欠债堆着。
+    st = "risk" if stale else ("partial" if (missing or tm) else "green")
     return {"status": st, "detail": detail, "rows": rows, "to_monitor": tm}
 
 
@@ -472,7 +515,8 @@ def probe_scheduled_tasks():
     rows, bad = [], []
     for name, role in want.items():
         out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
-                             capture_output=True, text=True)
+                             capture_output=True, text=True,
+                             encoding="utf-8", errors="replace")
         if out.returncode != 0:
             rows.append("%s **未注册**（%s）" % (name, role))
             bad.append(name)
@@ -487,8 +531,414 @@ def probe_scheduled_tasks():
                       ("　→ 自动化有缺口：" + ", ".join(bad) if bad else "")}
 
 
+def probe_spec_freshness():
+    """手写判断 vs 树的漂移速度：spec.py 最后一次改动之后进了多少提交与合并。
+    DRIFT dashboard-lags-the-merge-queue 说的正是这个——头条数字建立在手写值上，
+    而树在跑。让陈旧本身变成盘面上的一个数，而不是靠审计员发现。"""
+    last = git("log", "-1", "--format=%H", "--", "monitor/spec.py").strip()
+    if not last:
+        return {"status": "partial", "detail": "spec.py 无提交历史。"}
+    commits = git("rev-list", "--count", "%s..HEAD" % last).strip() or "0"
+    merges = git("rev-list", "--count", "--merges", "%s..HEAD" % last).strip() or "0"
+    n, m = int(commits), int(merges)
+    status = "green" if n < 15 else ("partial" if n < 40 else "risk")
+    return {"status": status,
+            "detail": "spec.py 落后 %d 个提交 / %d 次合并（判断陈旧到 %s 就该重扫）。"
+                      % (n, m, "risk" if n >= 40 else "partial 档")}
+
+
+#: Below this the machine is one pytest away from failing a merge for a reason
+#: that has nothing to do with the branch.  Set from the observed event: at
+#: 9.1 GB free, a0-spike's gate died with `OSError: [Errno 28] No space left on
+#: device` and the flag read "verify gate red in a0-spike".
+DISK_RISK_GB = 12.0
+DISK_PARTIAL_GB = 25.0
+
+
+def probe_disk_headroom():
+    """磁盘余量与 worktree 存量 —— 资源耗尽会伪装成别人的缺陷。
+
+    2026-07-29：115 个 worktree（71 个早已合并）把磁盘吃到 99%，
+    第一个症状是 a0-spike 的闸门报红 `No space left on device`，
+    合并日志上写的是「verify gate red in a0-spike」——**仪器怪罪了被测对象**。
+    没有量表的资源，耗尽时总是在别处报错。
+    """
+    import shutil as _shutil
+    try:
+        total, _used, free = _shutil.disk_usage(ROOT)
+    except OSError as exc:
+        return {"status": "risk", "detail": "读不到磁盘用量：%s" % exc}
+    free_gb, total_gb = free / (1024 ** 3), total / (1024 ** 3)
+
+    wt = 0
+    try:
+        out = subprocess.run(["git", "worktree", "list", "--porcelain"],
+                             cwd=ROOT, capture_output=True, text=True,
+                             encoding="utf-8", errors="replace")
+        wt = sum(1 for l in out.stdout.splitlines() if l.startswith("worktree "))
+    except Exception:
+        wt = -1
+
+    tail = ("%d 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工"
+            % wt) if wt >= 0 else "worktree 数量读不到"
+    if free_gb < DISK_RISK_GB:
+        return {"status": "risk",
+                "detail": "**磁盘仅剩 %.1f GB / %.0f GB**——这个水位上任何一次"
+                          "合并都可能因为跑不动而报成某个领地的闸门红。%s"
+                          % (free_gb, total_gb, tail)}
+    if free_gb < DISK_PARTIAL_GB:
+        return {"status": "partial",
+                "detail": "磁盘剩 %.1f GB / %.0f GB，接近会开始伪装成闸门失败的"
+                          "水位。%s" % (free_gb, total_gb, tail)}
+    return {"status": "green",
+            "detail": "磁盘剩 %.1f GB / %.0f GB；%s" % (free_gb, total_gb, tail)}
+
+
+def probe_clock_sanity():
+    """心跳自报的 utc 不得晚于机器当前 UTC —— 时钟不可能超前。
+
+    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
+    但心跳里那个**手打的** `utc` 字段从来没有任何东西校验过，于是它可以随便漂：
+    2026-07-28T15:47Z 那一刻，RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ
+    ——全都晚于当时仓库里最新的提交，也就是这些时刻还没到。
+
+    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**。
+    这是纯算术，没有任何借口不检查。
+    """
+    import glob as _glob
+    now = time.time()
+    ahead, drifted, unreadable = [], [], []
+    for path in sorted(_glob.glob(rel("monitor", "ops-status", "*.json"))):
+        name = os.path.basename(path)[:-5]
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            unreadable.append("%s（%s）" % (name, str(exc)[:40]))
+            continue
+        stamp = data.get("utc")
+        if not isinstance(stamp, str):
+            unreadable.append("%s（没有 utc 字段）" % name)
+            continue
+        try:
+            claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+        except ValueError:
+            unreadable.append("%s（utc 不是 ISO8601Z：%r）" % (name, stamp[:30]))
+            continue
+        # 60s of slack: writing the stamp and closing the file are not atomic.
+        if claimed > now + 60:
+            ahead.append("%s 自报 %s，超前 %.0f 分钟"
+                         % (name, stamp, (claimed - now) / 60))
+            continue
+        mtime = os.path.getmtime(path)
+        if abs(claimed - mtime) > 3600:
+            drifted.append("%s 自报 %s，与文件 mtime 差 %.0f 分钟"
+                           % (name, stamp, abs(claimed - mtime) / 60))
+    if ahead:
+        return {"status": "risk",
+                "detail": "**%d 份心跳自报的时间还没到**：%s。时钟不可能超前，"
+                          "所以这些是手打的；危险在方向——只会向前跑的自报时间"
+                          "让掉线看起来比实际新鲜。取值请用 "
+                          "`date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ`。"
+                          % (len(ahead), "；".join(ahead[:4]))}
+    if unreadable:
+        return {"status": "risk",
+                "detail": "**%d 份心跳的 utc 读不出来**：%s。读不出不等于没问题。"
+                          % (len(unreadable), "；".join(unreadable[:4]))}
+    if drifted:
+        return {"status": "partial",
+                "detail": "%d 份心跳自报时间与文件 mtime 相差超过一小时：%s。"
+                          % (len(drifted), "；".join(drifted[:4]))}
+    return {"status": "green",
+            "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
+
+
+def probe_verify_gates():
+    """收工闸门：**「声称有却没有」与「本来就没有」是两回事**，分开报。
+
+    DRIFT stop-hook-verify-gates-are-decoration：C2 已合并，它自己命名的
+    a0-spike/verify.sh 从未被造出来，合并时无人发现。那是第一种。
+
+    第二种是 S13 的根因：工单里「写一个 verify 脚本」是自觉条款，于是有些领地
+    压根没有闸门——而这不是任何人食言，是从来没人要求过。把两者混成一个数字，
+    结果就是要么冤枉了老实人，要么放过了漏洞。所以：第一种是 risk（有人声称了
+    不存在的东西），第二种是 amber 的一句实话（合并时无人检查），**并且现在
+    ci_merge 每次都会把它打进 merge.log**。
+
+    另修一处：旧正则只认 `.sh`，工单若写 `worldgen/verify.py` 会**静默漏检**。
+    """
+    import glob
+
+    import gates as gates_mod
+
+    # 只认第一段是**真实领地目录**的路径。否则散文里一句
+    # 「若该领地存在 verify.sh/verify.py 就必须跑它」会被读成
+    # 「有人声称存在 `verify.sh/verify.py` 这个文件」——S13 自己的工单文本
+    # 第一次跑这条探针时就是这样误报的。会喊狼的检查会被关掉，而一条被关掉的
+    # 检查和一条不存在的检查是同一回事。
+    known = set(gates_mod.territories(ROOT))
+    named, missing = [], []
+    pattern = re.compile(r"([\w./-]+/verify[\w.-]*\.(?:sh|py))")
+    for d in ("monitor/board/items", "monitor/board/claimed", "monitor/board/done"):
+        for f in glob.glob(os.path.join(rel(d), "*.md")):
+            try:
+                text = open(f, encoding="utf-8", errors="ignore").read()
+            except Exception:
+                continue
+            for m in pattern.finditer(text):
+                path = m.group(1)
+                if path.split("/")[0] not in known:
+                    continue
+                named.append(path)
+                if not exists(path):
+                    missing.append("%s（%s 声称）"
+                                   % (path, os.path.basename(f).split(".")[0]))
+    missing = sorted(set(missing))
+
+    survey = gates_mod.survey(ROOT)
+    ungated = survey["ungated"]
+    coverage = "领地 %d：自带闸门 %d、仅测试套件 %d、**无闸门 %d**" % (
+        survey["n_territories"], len(survey["gated"]),
+        len(survey["tests_only"]), len(ungated))
+
+    if missing:
+        return {"status": "risk",
+                "detail": "**声称存在却没有的收工闸门 %d 处**：%s。"
+                          "闸门不是被绕过，是根本没造出来。（另：%s）"
+                          % (len(missing), "； ".join(missing[:4]), coverage)}
+    if ungated:
+        return {"status": "amber",
+                "detail": "工单声称的 %d 个 verify 脚本全部在树上；"
+                          "但**%d 个领地合并时无人检查**：%s。%s。"
+                          "这不是有人食言——是从来没人要求过，"
+                          "ci_merge 现在每次把它打进 merge.log。"
+                          % (len(set(named)), len(ungated),
+                             "、".join(ungated), coverage)}
+    return {"status": "green",
+            "detail": "工单声称的 %d 个 verify 脚本全部在树上，且每个领地都有闸门。%s"
+                      % (len(set(named)), coverage)}
+
+
+def _supply():
+    """板上还剩几件可领 —— 供货是监控的单点，见底就是全员空转。"""
+    out = subprocess.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
+                         cwd=ROOT, capture_output=True, text=True,
+                 encoding="utf-8", errors="replace").stdout
+    avail = len([l for l in out.splitlines() if l.startswith("  p")])
+    claimed = out.count(" by ")
+    if avail == 0:
+        return {"status": "risk",
+                "detail": "**板已见底**：%d 件在做，0 件可领——有人交付即空转，"
+                          "监控必须补货。" % claimed}
+    if avail <= 2:
+        return {"status": "partial",
+                "detail": "板上仅剩 %d 件可领（%d 件在做），供货需要跟上。"
+                          % (avail, claimed)}
+    return {"status": "green",
+            "detail": "板上 %d 件可领、%d 件在做，供货充足。" % (avail, claimed)}
+
+
+def _bus_probe():
+    """托管是否真的成立：指令送达了吗、回执欠着吗、谁多久没露面。
+
+    直接读总线文件，不经子进程——今天已经两次被 GBK/UTF-8 的解码差异咬到
+    （一次把八个活着的工人报成已停，一次把未读报成已回执）。判据只信文件。"""
+    agents_ids = ["OPS-A", "OPS-B", "OPS-M", "OPS-R",
+                  "RES-1", "RES-2", "RES-3", "RES-4"]
+    never, owed, seen_ok = [], [], 0
+    for a in agents_ids:
+        d = rel("monitor", "bus", a)
+        inbox = os.path.join(d, "in.jsonl")
+        cur = os.path.join(d, "cursor.json")
+        out = os.path.join(d, "out.jsonl")
+        if not os.path.exists(inbox):
+            continue
+        sent = [json.loads(l) for l in open(inbox, encoding="utf-8")
+                if l.strip()]
+        last = 0
+        if os.path.exists(cur):
+            try:
+                last = json.load(open(cur, encoding="utf-8")).get("last_seq", 0)
+                seen_ok += 1
+            except Exception:
+                pass
+        else:
+            never.append(a)
+            continue
+        acked = set()
+        if os.path.exists(out):
+            for l in open(out, encoding="utf-8"):
+                if l.strip():
+                    r = json.loads(l)
+                    if r.get("kind") == "ack":
+                        acked.add(r.get("ref"))
+        pend = [m["seq"] for m in sent
+                if m["kind"] in ("order", "question") and m["seq"] not in acked]
+        if pend:
+            owed.append("%s(%d)" % (a, len(pend)))
+    if never:
+        return {"status": "partial",
+                "detail": "总线已上线；**%d 个会话还没读过**（%s）——"
+                          "它们下个循环读到指令后即被托管。"
+                          % (len(never), ", ".join(never))}
+    if owed:
+        return {"status": "partial",
+                "detail": "已送达，欠回执：" + ", ".join(owed)}
+    return {"status": "green",
+            "detail": "%d 个会话在线，指令全部已读并回执。" % seen_ok}
+
+
+def _self_driving():
+    """常驻研究员是否在自转 —— 用户不该需要触发它们。
+
+    判据是心跳的推进：cycle 在涨、note 在变、age 不超过一个循环周期。
+    停在那里等人的会话，心跳会定格——这正是用户今天观察到的现象。"""
+    import time as _t
+    rows = []
+    for rid in ("RES-1", "RES-2", "RES-3", "RES-4"):
+        path = "monitor/ops-status/%s.json" % rid
+        if not exists(path):
+            rows.append("%s 未启动" % rid)
+            continue
+        d = read_json(path, {}) or {}
+        age = int((_t.time() - os.path.getmtime(rel(path))) / 60)
+        stalled = age > 45          # 一轮活再长也该在 45 分钟内写一次心跳
+        rows.append("%s 第%s轮 %s（%d 分钟前）%s"
+                    % (rid, d.get("cycle"), d.get("state"), age,
+                       "**疑似停下等人**" if stalled else ""))
+    stalled_any = any("疑似停下" in r for r in rows)
+    return {"status": "risk" if stalled_any else "green",
+            "detail": "； ".join(rows) +
+                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。"
+                       if stalled_any else "")}
+
+
+def _offline_done():
+    """离线收工没有？——收工即可全力转向烧钱与墙钟的战役（用户已授权）。
+
+    判据是离线七格：引擎两格、编译两格、评测两格、离线对局一格。
+    它们都 >=95 时，建造期正式结束，剩余重量全在战役与写作上。"""
+    cells = {"E1": "引擎建成", "E2": "引擎验证", "C1": "编译链",
+             "C2": "离线验收", "V1": "指标电池", "V2": "考卷",
+             "A2": "自建世界对局"}
+    lag = [(k, spec.GRID.get(k, {}).get("pct", 0), v)
+           for k, v in cells.items() if spec.GRID.get(k, {}).get("pct", 0) < 95]
+    if not lag:
+        return {"status": "green",
+                "detail": "**离线已收工**（七格全 ≥95%）——战役线可全速；"
+                          "其余赛道转纯 token 工作。"}
+    return {"status": "partial",
+            "detail": "离线还差 %d 格：%s。战役线已获授权可先行，不必等齐。"
+                      % (len(lag), "、".join("%s %s(%d%%)" % (k, v, p)
+                                             for k, p, v in lag))}
+
+
+def _spend_watch():
+    """花了多少、剩多少 —— 账号额度是唯一的真约束，且是共享池。"""
+    led = rel("proxy", "var", "spend_gate.jsonl")
+    if not os.path.exists(led):
+        return {"status": "partial", "detail": "闸门账本尚未产生记录。"}
+    total, rows = 0.0, 0
+    by_campaign = {}
+    for line in open(led, encoding="utf-8", errors="ignore"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        usd = float(r.get("usd") or 0)
+        total += usd
+        rows += 1
+        c = r.get("campaign") or "未标注"
+        by_campaign[c] = by_campaign.get(c, 0.0) + usd
+    ENVELOPE = 200.0
+    left = ENVELOPE - total
+    detail = ("开发堆战役包 $%.0f，已花 **$%.2f**，剩 $%.2f（%d 条记账）"
+              % (ENVELOPE, total, left, rows))
+    if by_campaign:
+        detail += "；分战役：" + "、".join(
+            "%s $%.2f" % (k, v) for k, v in sorted(by_campaign.items())[:4])
+    if left < 40:
+        return {"status": "risk", "detail": detail + "　→ **余额不足，需续包**"}
+    return {"status": "green", "detail": detail}
+
+
+def probe_needs_human():
+    """全系统唯一需要人出手的事：App 会话死了（上下文满或被关）。
+
+    无头工人由反射层补员，配额由熔断器自愈，合并由脚本做，供货由监控写——
+    只有 App 里的会话没有任何 API 能重启它。所以它必须是页面上最显眼的
+    行动项，而且要精确到"重开哪一个、粘哪份启动词"。"""
+    import time as _t
+    roster = [("OPS-A", "漂移审计员", 120), ("OPS-B", "浏览器专员", 240),
+              ("OPS-M", "合并裁判", 180), ("OPS-R", "回顾员", 900),
+              ("RES-1", "在线战役研究员", 90), ("RES-2", "论文与释出研究员", 90),
+              ("RES-3", "验证与考卷研究员", 90), ("RES-4", "基础设施研究员", 90)]
+    dead = []
+    for rid, name, stale_min in roster:
+        path = "monitor/ops-status/%s.json" % rid
+        if not exists(path):
+            dead.append((rid, name, "从未启动"))
+            continue
+        age = (_t.time() - os.path.getmtime(rel(path))) / 60
+        if age > stale_min:
+            dead.append((rid, name, "%d 分钟没心跳" % age))
+    if not dead:
+        return {"status": "green", "detail": "六个 App 会话全部在岗，无需你出手。",
+                "rows": []}
+    return {"status": "risk",
+            "detail": "需要你重开的会话：" + "； ".join(
+                "%s %s（%s）" % (r, n, w) for r, n, w in dead),
+            "rows": [{"id": r, "name": n, "why": w,
+                      "prompt": "monitor/prompts/ops/%s.md" % r}
+                     for r, n, w in dead]}
+
+
+def probe_standing():
+    """常驻研究员的例行程序还在跳吗，上一跳做了什么决定。
+
+    这条探针的存在本身是个教训：`standing.py` 起会话的判断全在磁盘上，
+    而一个没人看的自动机制与一个坏掉的自动机制，在页面上长得一模一样。"""
+    log_path = rel("monitor", "standing.log")
+    task = "TheoriaStanding"
+    out = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace")
+    registered = out.returncode == 0
+    if not exists("monitor/standing.log"):
+        return {"status": "risk" if not registered else "partial",
+                "detail": "例行任务 %s；**还没有跳过一次**（standing.log 不存在）。"
+                          % ("已注册" if registered else "**未注册**")}
+    lines = [l.strip() for l in
+             open(log_path, encoding="utf-8", errors="replace").read()
+             .splitlines() if l.strip()]
+    age = int((time.time() - os.path.getmtime(log_path)) / 60)
+    starts = [l for l in lines if " START " in l]
+    tail = lines[-4:]
+    stale = age > 40          # 周期 15 分钟，跳过两次就是坏了
+    return {"status": ("risk" if (stale or not registered) else "green"),
+            "detail": "例行任务 %s，上一跳 %d 分钟前；累计起过 %d 次常驻会话。"
+                      "最近：%s%s"
+                      % ("已注册" if registered else "**未注册**", age,
+                         len(starts), "；".join(t.split(" ", 1)[-1][:70]
+                                                for t in tail),
+                         "　→ **超过两个周期没跳，例行已停**" if stale else "")}
+
+
 PROBES = {
+    "standing": probe_standing,
     "credential_hygiene": probe_credential_hygiene,
+    "needs_human": probe_needs_human,
+    "offline_done": lambda: _offline_done(),
+    "spend": lambda: _spend_watch(),
+    "self_driving": lambda: _self_driving(),
+    "bus": lambda: _bus_probe(),
+    "supply": lambda: _supply(),
+    "spec_freshness": probe_spec_freshness,
+    "verify_gates": probe_verify_gates,
+    "disk_headroom": probe_disk_headroom,
+    "clock_sanity": probe_clock_sanity,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,
@@ -511,6 +961,7 @@ def run_tests():
         try:
             proc = subprocess.run([sys.executable, "-m", "pytest", "-q"],
                                   cwd=rel(track), capture_output=True, text=True,
+                                  encoding="utf-8", errors="replace",
                                   timeout=900)
             tail = [l for l in proc.stdout.strip().splitlines() if l.strip()][-1:]
             out[track] = tail[0] if tail else "no output"
@@ -589,7 +1040,7 @@ def compute_paper_progress():
     return round(total, 1)
 
 
-def append_history(state):
+def append_history(state, out_dir=None):
     """One JSONL row per scan — the raw material of the trend chart."""
     row = {
         "ts": state["generated_at"],
@@ -600,7 +1051,7 @@ def append_history(state):
     }
     for f in state["findings"]:
         row["findings"][f["severity"]] = row["findings"].get(f["severity"], 0) + 1
-    hist_path = os.path.join(HERE, "history.jsonl")
+    hist_path = os.path.join(out_dir or HERE, "history.jsonl")
     last = None
     if os.path.exists(hist_path):
         with open(hist_path, encoding="utf-8") as fh:
@@ -943,8 +1394,14 @@ def render(state, refresh=None):
     def pid_alive_win(pidnum):
         out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum,
                               "/FO", "CSV"], capture_output=True,
-                             text=True).stdout
-        return str(pidnum) in out
+                             text=True, encoding="utf-8",
+                             errors="replace").stdout
+        # tasklist 说的是 GBK。PYTHONIOENCODING=utf-8 一设，解码就在
+        # reader 线程里炸掉——而线程里的异常不会往上抛，它只是让
+        # .stdout 变成 None，调用点于是把 None 当输出读。
+        # 闸门报的那句 "argument of type NoneType is not iterable"
+        # 整条链就在这里（2026-07-29）。
+        return str(pidnum) in (out or "")
 
     fleet = []
     for pid in ls.get("in_flight", []):
@@ -1506,7 +1963,7 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 
 # ---------------------------------------------------------------- main
 
-def build(with_tests=False):
+def build(with_tests=False, out_dir=None):
     metrics = collect_metrics(with_tests)
 
     probe_results = {name: fn() for name, fn in PROBES.items()}
@@ -1564,15 +2021,17 @@ def build(with_tests=False):
     n_landed = sum(1 for ex in spec.ITERATION_LOOP
                    for p in ex["problems"] if p["status"] == "landed")
     state["loop_stats"] = (len(spec.ITERATION_LOOP), n_prob, n_landed)
-    append_history(state)
+    append_history(state, out_dir)
     state["history"] = load_history()
 
-    with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as fh:
+    with open(os.path.join(out_dir or HERE, "index.html"), "w",
+              encoding="utf-8", newline="\n") as fh:
         fh.write(render(state, refresh=build.refresh))
     # --- data for the live frontend (app.html renders this; no HTML here) ---
     import subprocess as _sp
     bl = _sp.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
-                 cwd=ROOT, capture_output=True, text=True).stdout
+                 cwd=ROOT, capture_output=True, text=True,
+                 encoding="utf-8", errors="replace").stdout
     dd = os.path.join(HERE, "board", "done")
     cd = os.path.join(HERE, "board", "claimed")
     state["board"] = {
@@ -1582,6 +2041,11 @@ def build(with_tests=False):
         "blocked": bl.count("waits on"),
         "listing": bl.strip(),
     }
+    try:
+        import agents as agents_mod
+        state["agents"] = agents_mod.collect()
+    except Exception as exc:
+        state["agents"] = {"error": str(exc)}
     state["grid"] = spec.GRID
     state["grid_cols"] = spec.GRID_COLS
     state["paper_plan"] = spec.PAPER_PLAN
@@ -1589,7 +2053,12 @@ def build(with_tests=False):
     state["engines"] = spec.ENGINES
     state["constraints"] = spec.CONSTRAINTS
     slim = {k: v for k, v in state.items() if k != "tickets"}
-    with open(os.path.join(HERE, "state.json"), "w", encoding="utf-8", newline="\n") as fh:
+    # `out_dir` exists so a completion gate can run a real scan without dirtying
+    # the workspace it is gating. A gate that writes into the tree can turn
+    # itself red, and can turn the *next* territory's gate red for a reason that
+    # has nothing to do with the branch being merged (S13).
+    with open(os.path.join(out_dir or HERE, "state.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
         json.dump(slim, fh, ensure_ascii=False, indent=2, sort_keys=True)
     return state
 

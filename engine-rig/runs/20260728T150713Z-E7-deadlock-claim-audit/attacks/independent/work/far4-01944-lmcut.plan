@@ -1,0 +1,5 @@
+(move c43 c33 up)
+(move c33 c23 up)
+(move c23 c22 left)
+(push c22 c32 c42 b1 down)
+; cost = 4 (unit cost)

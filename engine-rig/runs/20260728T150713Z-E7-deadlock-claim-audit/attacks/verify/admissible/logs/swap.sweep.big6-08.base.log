@@ -1,0 +1,168 @@
+$ D:\Miniforge3\python.exe C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py --plan-file C:\Users\user\AppData\Local\Temp\e7verifyp8ejtg8i\sas_plan C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\fixtures\data\sokoban_domain.pddl C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\swap-passage.pddl --search astar(cpdbs(patterns=manual_patterns([[23,24,22,3,16,17,4,14,13]])))
+
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\fixtures\data\sokoban_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\swap-passage.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 20 rules.
+Computing model... [0.016s CPU, 0.005s wall-clock]
+597 relevant atoms
+888 auxiliary atoms
+1485 final queue length
+1755 total queue pushes
+Completing instantiation... [0.000s CPU, 0.002s wall-clock]
+Instantiating: [0.016s CPU, 0.008s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.001s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+54 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.003s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.000s CPU, 0.002s wall-clock]
+204 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+67 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.001s wall-clock]
+Reordering and filtering variables...
+25 of 25 variables necessary.
+22 of 25 mutex groups necessary.
+132 of 132 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.001s wall-clock]
+Translator variables: 25
+Translator derived variables: 0
+Translator facts: 110
+Translator goal facts: 2
+Translator mutex groups: 22
+Translator total mutex groups size: 88
+Translator operators: 132
+Translator axioms: 0
+Translator task size: 1233
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.010s wall-clock]
+Done! [0.016s CPU, 0.027s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(cpdbs(patterns=manual_patterns([[23,24,22,3,16,17,4,14,13]])))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\e7verifyp8ejtg8i\sas_plan' < output.sas
+[t=0.000154s, 1920 KB] Search code revision: 7120aa0
+[t=0.000238s, 1948 KB] reading input...
+[t=0.001641s, 2232 KB] done reading input!
+[t=0.002948s, 2792 KB] Initializing canonical PDB heuristic...
+[t=0.002958s, 2792 KB] Generating patterns using: manual pattern collection generator
+[t=0.002963s, 2792 KB] Manual pattern collection: [[23, 24, 22, 3, 16, 17, 4, 14, 13]]
+[t=0.002972s, 2792 KB] manual pattern collection generator number of patterns: 1
+[t=0.002975s, 2792 KB] manual pattern collection generator total PDB size: 681472
+[t=0.002978s, 2792 KB] manual pattern collection generator computation time: 8.8e-06s
+[t=0.002985s, 2792 KB] Computing PDBs for pattern collection...
+[t=0.013639s, 5912 KB] Done computing PDBs for pattern collection: 0.010667s
+[t=0.013661s, 5912 KB] Computing pattern cliques for pattern collection...
+[t=0.013683s, 5912 KB] Done computing pattern cliques for pattern collection: 0.000023s
+[t=0.013688s, 5912 KB] Running dominance pruning...
+[t=0.013693s, 5912 KB] Pruned 0 of 1 pattern cliques
+[t=0.013697s, 5912 KB] Pruned 0 of 1 PDBs
+[t=0.013699s, 5912 KB] Dominance pruning took 0.000010s
+[t=0.013703s, 5912 KB] Canonical PDB heuristic number of patterns: 1
+[t=0.013706s, 5912 KB] Canonical PDB heuristic total PDB size: 681472
+[t=0.013708s, 5912 KB] Canonical PDB heuristic computation time: 0.010755s
+[t=0.013739s, 5912 KB] Building successor generator... done!
+[t=0.013795s, 5912 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.013797s, 5912 KB] time for successor generation creation: 0.000047s
+[t=0.013802s, 5912 KB] Variables: 25
+[t=0.013804s, 5912 KB] FactPairs: 110
+[t=0.013807s, 5912 KB] Bytes per state: 8
+[t=0.013816s, 5912 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.013849s, 5912 KB] New best heuristic value for cpdbs: 9
+[t=0.013852s, 5912 KB] g=0, 1 evaluated, 0 expanded
+[t=0.013855s, 5912 KB] f = 9, 1 evaluated, 0 expanded
+[t=0.013861s, 5912 KB] Initial heuristic value for cpdbs: 9
+[t=0.013864s, 5912 KB] pruning method: none
+[t=0.013872s, 5912 KB] New best heuristic value for cpdbs: 8
+[t=0.013876s, 5912 KB] g=1, 3 evaluated, 1 expanded
+[t=0.013883s, 5912 KB] New best heuristic value for cpdbs: 7
+[t=0.013886s, 5912 KB] g=2, 6 evaluated, 2 expanded
+[t=0.013894s, 5912 KB] New best heuristic value for cpdbs: 6
+[t=0.013898s, 5912 KB] g=3, 10 evaluated, 3 expanded
+[t=0.013903s, 5912 KB] f = 11, 12 evaluated, 4 expanded
+[t=0.013915s, 5912 KB] New best heuristic value for cpdbs: 5
+[t=0.013919s, 5912 KB] g=6, 17 evaluated, 6 expanded
+[t=0.013923s, 5912 KB] New best heuristic value for cpdbs: 4
+[t=0.013925s, 5912 KB] g=7, 19 evaluated, 7 expanded
+[t=0.013939s, 5912 KB] f = 13, 28 evaluated, 14 expanded
+[t=0.013960s, 5912 KB] f = 15, 38 evaluated, 27 expanded
+[t=0.013967s, 5912 KB] f = 17, 39 evaluated, 32 expanded
+[t=0.014003s, 5912 KB] f = 19, 69 evaluated, 46 expanded
+[t=0.014032s, 5912 KB] f = 21, 91 evaluated, 65 expanded
+[t=0.014064s, 5912 KB] f = 23, 114 evaluated, 88 expanded
+[t=0.014099s, 5912 KB] f = 25, 133 evaluated, 108 expanded
+[t=0.014147s, 5912 KB] f = 27, 177 evaluated, 136 expanded
+[t=0.014204s, 5912 KB] f = 29, 224 evaluated, 173 expanded
+[t=0.014212s, 5912 KB] New best heuristic value for cpdbs: 3
+[t=0.014215s, 5912 KB] g=26, 229 evaluated, 175 expanded
+[t=0.014281s, 5912 KB] f = 31, 272 evaluated, 218 expanded
+[t=0.014359s, 5912 KB] f = 33, 350 evaluated, 272 expanded
+[t=0.014460s, 5912 KB] f = 35, 444 evaluated, 351 expanded
+[t=0.014589s, 5912 KB] f = 37, 535 evaluated, 436 expanded
+[t=0.014671s, 5912 KB] f = 39, 595 evaluated, 507 expanded
+[t=0.014733s, 5912 KB] f = 41, 641 evaluated, 562 expanded
+[t=0.014775s, 5912 KB] f = 43, 667 evaluated, 601 expanded
+[t=0.014793s, 5912 KB] f = 45, 674 evaluated, 619 expanded
+[t=0.014803s, 5912 KB] f = 47, 677 evaluated, 626 expanded
+[t=0.014809s, 5912 KB] f = 49, 678 evaluated, 629 expanded
+[t=0.014812s, 5912 KB] Completely explored state space -- no solution!
+[t=0.014814s, 5912 KB] Actual search time: 0.000948s
+[t=0.014817s, 5912 KB] Expanded 630 state(s).
+[t=0.014817s, 5912 KB] Reopened 0 state(s).
+[t=0.014817s, 5912 KB] Evaluated 678 state(s).
+[t=0.014817s, 5912 KB] Evaluations: 678
+[t=0.014817s, 5912 KB] Generated 1664 state(s).
+[t=0.014817s, 5912 KB] Dead ends: 48 state(s).
+[t=0.014817s, 5912 KB] Expanded until last jump: 629 state(s).
+[t=0.014817s, 5912 KB] Reopened until last jump: 0 state(s).
+[t=0.014817s, 5912 KB] Evaluated until last jump: 678 state(s).
+[t=0.014817s, 5912 KB] Generated until last jump: 1662 state(s).
+[t=0.014817s, 5912 KB] Number of registered states: 678
+[t=0.014817s, 5912 KB] Int hash set load factor: 678/1024 = 0.662109
+[t=0.014817s, 5912 KB] Int hash set resizes: 10
+[t=0.014817s, 5912 KB] Search time: 0.001002s
+[t=0.014817s, 5912 KB] Total time: 0.014817s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search
+

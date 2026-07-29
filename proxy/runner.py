@@ -18,8 +18,10 @@ from typing import Any, Dict, Optional
 from .env_proxy import EnvProxy, EnvProxyConfig
 from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
+from .tools import verify_chain
 from .model_proxy import ModelProxy, ModelProxyConfig
 from .paths import LEDGER_PATH, RUNS_DIR, UPSTREAM_ARC, UPSTREAM_MODEL
+from .spend_gate import default_campaign, default_gate
 from .variants import Variant
 from . import scoring
 
@@ -28,7 +30,7 @@ def new_run_id() -> str:
     return "r-" + uuid.uuid4().hex[:16]
 
 
-def run_game(game_id: str, *,
+def _run_game(game_id: str, *,
              arm: str = "mock_arm",
              budget: int = 40,
              run_id: Optional[str] = None,
@@ -44,6 +46,11 @@ def run_game(game_id: str, *,
              stream: bool = False,
              arm_factory=None,
              scorer_id: str = scoring.DEFAULT_SCORER,
+             campaign: Optional[str] = None,
+             spend_gate=None,
+             spend_reservation=None,
+             usd_cap: Optional[float] = None,
+             action_cap: Optional[int] = None,
              runs_dir: str = RUNS_DIR) -> Dict[str, Any]:
     run_id = run_id or new_run_id()
     ledger = Ledger(ledger_path)
@@ -53,13 +60,39 @@ def run_game(game_id: str, *,
     # have been scored by an edited scorer has already cost its actions.
     scorer_fp = scoring.verify_frozen(scorer_id)
 
+    # One reservation for the run, shared by both proxies, taken here for the
+    # same reason the scorer is verified here: it is the one place that owns
+    # both proxies' lifetimes, so it is the only place that can hand the claim
+    # back when the run ends. Two proxies each taking their own would hold the
+    # pool twice for one run's worth of spending.
+    #
+    # `campaign` names the run rather than the process. It is the field
+    # `baseline-arms/ledger.jsonl` did not have, which is why one file ended up
+    # holding two campaigns with no line able to say which was which.
+    gate = spend_gate if spend_gate is not None else default_gate()
+    campaign = campaign or default_campaign(arm, run_id)
+    reservation = spend_reservation
+    reservation_owned = reservation is None
+    if reservation_owned:
+        caps = gate.policy.default_run_caps
+        reservation = gate.reserve(
+            campaign,
+            usd_cap if usd_cap is not None else caps["usd"],
+            action_cap if action_cap is not None else caps["actions"],
+            holder={"run_id": run_id, "arm": arm, "game_id": game_id,
+                    "undeclared": usd_cap is None and action_cap is None})
+
     env_cfg = EnvProxyConfig(run_id=run_id, arm=arm, upstream=env_upstream,
                              api_key=env_key, require_key=require_keys,
-                             ledger=ledger, run=run, guard=guard, variant=variant)
+                             ledger=ledger, run=run, guard=guard, variant=variant,
+                             campaign=campaign, spend_gate=gate,
+                             spend_reservation=reservation)
     model_cfg = ModelProxyConfig(run_id=run_id, arm=arm, upstream=model_upstream,
                                  api_key=model_key, require_key=require_keys,
                                  ledger=ledger, run=run, game_id=game_id,
-                                 guard=env_cfg.guard)
+                                 guard=env_cfg.guard,
+                                 campaign=campaign, spend_gate=gate,
+                                 spend_reservation=reservation)
 
     with EnvProxy(env_cfg) as env_proxy, ModelProxy(model_cfg) as model_proxy:
         run.run_start(
@@ -71,6 +104,10 @@ def run_game(game_id: str, *,
             pricing=model_cfg.pricing.reference() if model_cfg.pricing else None,
             proxy_version=_proxy_version(),
             scorer=scorer_fp,
+            # Which pool this run drew on, and under whose claim. A run that
+            # drew on a widened ceiling is identifiable after the fact.
+            spend_gate=dict(gate.fingerprint(), campaign=campaign,
+                            reservation_id=reservation.reservation_id),
         )
 
         if arm_factory is None:
@@ -98,6 +135,22 @@ def run_game(game_id: str, *,
                   "env_proxy": env_proxy.summary(),
                   "model_proxy": model_proxy.summary()}
 
+    # The claim goes back the moment the run stops needing it, so a finished
+    # run does not keep the next campaign out of the pool. What it spent stays
+    # counted forever; only the unspent hold is returned.
+    #
+    # NOTE: this is the happy path only. `_release_on_exit` below wraps the
+    # whole run so a crash in `play()` cannot strand the claim -- 43 crashed
+    # runs would otherwise take the shared pool offline for an hour with
+    # nothing spent, and the recovery is to wait.
+    if reservation_owned:
+        gate.release(reservation, reason="run %s finished" % run_id)
+        reservation_owned = False
+    record["spend"] = {"campaign": campaign,
+                       "reservation_id": reservation.reservation_id,
+                       "pool": gate.policy.pool,
+                       "totals": gate.totals().as_dict()}
+
     # Scored the moment the game ends, not in a sweep afterwards: Phase 3
     # audits the order results arrive in, and a batch decided all at once is a
     # batch someone could have decided after seeing it.
@@ -110,12 +163,102 @@ def run_game(game_id: str, *,
                                 "undetermined_checks":
                                     score_report["undetermined_checks"]}
 
+    # D-024 / RED-40.  The chain inside the ledger only makes tampering
+    # *evident*; on its own it stops nobody from rewriting the whole file and
+    # recomputing every link.  What closes that is publishing the head
+    # somewhere the forger does not control: this run record is committed with
+    # the branch, and git is itself a hash chain that gets pushed to a remote,
+    # so the witness ends up on another machine.  Forging the ledger afterwards
+    # then means rewriting git history and the remote too -- far more expensive
+    # and far more detectable.
+    #
+    # The verdict is recorded alongside the hash on purpose.  A head published
+    # for a stream that does not actually verify would be a witness to nothing,
+    # and "unchained" must never be read later as "chain verified".
+    #
+    # !! THE DEFAULT PATH PUBLISHES NOTHING.  `runs_dir` defaults to
+    # `proxy/var/runs/`, and `proxy/.gitignore` ignores `var/` -- correctly, it
+    # is runtime output.  So writing the head here does not put it anywhere a
+    # forger cannot reach, and on its own this block buys exactly zero
+    # tamper-evidence.  It is still written because `play()` RETURNS this
+    # record: the arm lifts `ledger_head` into its own tracked
+    # `runs/<slug>/MANIFEST.json`, and *that* is the publication.  An operator
+    # working outside an arm publishes with
+    # `python -m proxy.tools.verify_chain <ledger> --emit-head <tracked path>`.
+    #
+    # Recording the trap in the code rather than only in the design note,
+    # because "the head is published" was believed here for as long as it took
+    # to run `git check-ignore` on the file this line writes.
+    chain = verify_chain.verify(ledger_path)
+    record["ledger_head"] = {"path": os.path.abspath(ledger_path),
+                             "last_seq": chain["last_seq"],
+                             "sha256": chain["head"],
+                             "lines": chain["lines"],
+                             "verdict": chain["verdict"]}
+
+    # Fields this run wrote that LEDGER_FORMAT.md §3/§4 does not list. Empty is
+    # the normal state. Non-empty is either a typo that is now a typo on disk,
+    # or a field the format should be listing -- and without this the only
+    # durable trace of either is a stderr warning nobody kept, since Python
+    # dedups a repeated warning to one line. `Ledger.unknown_fields` was
+    # offered as the backstop; a backstop nothing reads is a comment.
+    #
+    # Written after `ledger_head` and read from the in-memory `RunLedger`, not
+    # from the file, so the two records are independent: an unlisted field is a
+    # fact about what this run wrote, and the chain verdict is a fact about the
+    # bytes on disk. Neither may be inferred from the other.
+    record["unknown_ledger_fields"] = dict(run.unknown_fields)
+
     os.makedirs(runs_dir, exist_ok=True)
     with open(os.path.join(runs_dir, run_id + ".json"), "w",
               encoding="utf-8", newline="") as fh:
         json.dump(record, fh, indent=2, sort_keys=True)
         fh.write("\n")
     return record
+
+
+
+def run_game(*args, **kwargs) -> Dict[str, Any]:
+    """`_run_game`, with the pool's headroom guaranteed to come back.
+
+    A `finally` rather than a tidy release at the end, because the release at
+    the end only runs when the run finishes. An adversarial pass counted 43
+    crashed runs stranding the whole shared pool for the full TTL with nothing
+    actually spent -- fail-closed, but the recovery is to wait an hour, which
+    is not a recovery anyone will accept twice.
+
+    The reservation is re-derived here rather than threaded out, because
+    `_run_game` releases its own on the happy path and flips `reservation_owned`
+    when it does; this only has to catch the paths where it never got there.
+    """
+    from .spend_gate import default_gate
+    gate = kwargs.get("spend_gate") or default_gate()
+    declared = kwargs.get("spend_reservation")
+    before = {r["reservation_id"] for r in gate.totals().live}
+    try:
+        return _run_game(*args, **kwargs)
+    finally:
+        if declared is None:
+            # Anything this call opened and did not close. Comparing against a
+            # snapshot rather than remembering a handle keeps this correct even
+            # when `_run_game` dies before it has one.
+            for entry in gate.totals().live:
+                if entry["reservation_id"] in before:
+                    continue
+                if entry["holder"].get("run_id") != kwargs.get("run_id") \
+                        and kwargs.get("run_id") is not None:
+                    continue
+                gate.release(
+                    _Handle(entry["reservation_id"], entry["campaign"]),
+                    reason="run ended without releasing its claim")
+
+
+class _Handle:
+    """The two fields `release` needs, rebuilt from the ledger."""
+
+    def __init__(self, reservation_id: str, campaign: str):
+        self.reservation_id = reservation_id
+        self.campaign = campaign
 
 
 def _proxy_version() -> Dict[str, Any]:

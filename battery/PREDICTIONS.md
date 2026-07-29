@@ -506,3 +506,98 @@ wins by a lucky path. The four demonstrations that flip to `False` below are
 evidence that four specific holes closed, and are **not** evidence that these
 metrics are now sound. Nothing here licenses moving any of them out of the
 reference tier on any ground other than the one demonstrated.
+
+---
+
+# 标注 · V18 冻结前复核，2026-07-29 — 追加，正文一字未改
+
+**这一段是标注，不是预测，也不是修订。** 上面每一批的正文都保持原样，包括写错的
+地方。工单的话：**冻结一份被删干净的预注册，等于没有预注册。**
+
+复核记录、逐条实测与对抗复核全文在
+`battery/runs/20260729T025515Z-V18-battery-prereg-check/`。
+
+## 顺序：查过了，四批次都成立
+
+`git merge-base --is-ancestor` 双向验证，四次全部 `0 / 1`：
+v0 `50d144c`→`0be176c`、v1 `104908c`→`e82558b`、v2 `19eafb2`→`82a6925`、
+v2.1 `58e5f6b`→`5f85971`。预注册 commit 的**内容**也打开看过——后三个各只动本文件
+一个文件，`50d144c` 的十二个文件里没有 `battery/metrics/`。
+**「预测写在回算之后」这类顺序违规：0 条。**
+
+## 十三条预测已经被盘上现存的数据证伪，此前只报过两条
+
+工序 2 的终点不是「可证伪」，是「**证伪了没有**」。下列数值全部来自
+`battery/artifacts/`，不是新算的：
+
+| 预测 | 实测 | 出处 |
+|---|---|---|
+| **M5** `theoria > 0.5` 但 **`< 1.0`** | `a2-probed` = **1.000** | `capability_spectrum.json` |
+| **K7** `theoria > 0`，「一个 0 值就翻掉」 | `a0-no-button` = **0.000** | 同上，**与 K14 被证伪的是同一个 run** |
+| **K10** `theoria > 0`，其余 0 | `a2-play-record`/`a2-probed`/`a2-sweep` **均 0.0** | 同上 |
+| **K2** 后半「both < K1」 | `a0-spike` K2 = 1.0 = K1 | 同上 |
+| **X1** `bare_cc > schema > theoria` | theoria 0.781 vs bare_cc 0.282，`separates-against` | `arm_contrast.json`；`REPORT_V1.md:43` 早已印出 |
+| **X2** `theoria > schema > bare_cc` | theoria 0.869 vs bare_cc 1.000，`separates-against` | 同上；`REPORT_V1.md:41` |
+| **X6**、**K14** | v1 已自报证伪 | — |
+| **v2 的 X1 / X3 / X4 / P2 / P3 / E4** | 六条跨臂方向预测全部反了 | `discrimination_arms.json` |
+
+**v2 的 X3 尤其要看**：它是探索族的签名，v2 自称「its one real hope」，注册的是
+`agrees`，实测 d = −0.562 反向，并触发电池自己的警告字段——
+「separates strongly but in the opposite direction… **Do not use until resolved**」。
+
+**成立的那一大块也要写下来**：v2 预测「M1–M6 与 K1–K14 在两个对照臂上都
+`not-applicable`」，**20/20 全中**。K13 两半全中，K3/K4/K6/K8/K9/E6/M6/K12 成立。
+
+## 「可证伪」不够，还要「满足它需要真本事」
+
+复核给判据补了第四条：**不存在一个明显不具备该能力的臂能使预测成立**。
+本文件里被夸得最好的三条，各被一个零能力的臂满足了：
+
+* **X3** —— 撞墙卡死 32 步，得 **1.000**；
+* **P2** —— 写死的批量时刻表，得 **+8.0**（限流是它的意外版）；
+* **K7** —— 一个负账目概念的空说明书，得 **1.0**，且证伪它比满足它更贵。
+
+这三条改记 **「可满足但无信息」**。另 `METRICS.md:82` 给 P2 记的「(implemented)」
+防法不成立：它假设 harness 的批量速率恒定，限流、退避、上下文压缩都会破坏这个前提。
+
+## 指标口径变过的地方
+
+* **E2** —— 本文件点名的 `frontload_index_25` **在 `battery/metrics/` 里从未存在**，
+  电池实现叫 `frontload_index`；而这个名字**活在
+  `theoria-arm/armtools/archive.py:1067`**。这个 Phase 4 主终点因此有两份实现、
+  两个名字，本文件点名的是非电池的那一份。口径此后两次变更：v1 把回合轴从
+  model-call 改成决策，v2.1 把头部从 `ceil` 改成插值（自陈「every published E2 value
+  moves」，属实）。
+* **E3** —— `convergence_turn_90` 在全仓任何被跟踪文件里都从未存在，今名
+  `convergence_point`；头部 0.9 未变。
+* **预测写下时尚不存在的口径元素四处**（顺序合规，`METRICS.md`「Deviations」有声明）：
+  X4 的跑长归一化、E2/E3 的 8 回合地板、P4 的「必须在试图取胜」、E4/E7 的二次减
+  线性 R² 形式。**「预测先于回算」保证没有事后调参，不保证预测所指的量在写下时已
+  定义清楚。**
+* **V9 的 D1/D2/D3** 在四批预注册之后给 12 条指标加了拒答路径。实测：31 个交集 run
+  上没有一个值变化，48 个 run 上一次都没开火。**没改测量——代价是也不增加区分力。**
+* **`direction=` 声明全历史一次未改**（逐 commit 比对）。
+
+## 三个主终点
+
+`Theoria.md:373` 限定三个：U3 达成率、判决题准确率（含特异度）、前载指数配对差。
+
+* **U3 达成率** —— 本文件没有任何一条预测点名它。全仓唯一相关的方向预注册是
+  `ablation-arm/DESIGN.md:247` 的 P-7，**单臂构造性上限，不是达成率，没有分母**。
+  代理 K3/K10 都被 V9 判为可刷，**且 K10 在三个 a2 run 上实测为 0**。
+* **判决题准确率** —— 本文件没有。`exam/grading/calibration.py:130-131,286-292` 有
+  **带硬阻断的**方向预注册（bluffer 必须 sensitivity 1.0 / specificity 0.0，
+  不满足则阻断真实评分），但其作用域是**四个合成假考生**与消融臂上两个 n=1 展品，
+  **不是跨臂准确率**；全仓无任何数值门槛。
+* **前载指数** —— 三批都注册了，注册的是**序**，没有一条注册 `Theoria.md` 要的
+  **配对差**（量、n、α 都没有）。当前判决 `no-data`（上游不记成本，配不出一对）。
+  而它自己写下的反例——「若 E2 分开的是能力而不是前载，它作为 C2 签名的地位就有
+  麻烦」——**已经在模型阶梯上被满足**：d = 1.000、4 胜 0 负，三个臂一个理论都没有
+  （`discrimination.json`）。这件事 `REPORT_V0.md:74-82` 早 12 小时就公开写过。
+
+## 与冻结哈希的冲突，登记而不修
+
+`origin/agent/v5-battery-freeze` 的 `BATTERY_V1.md` 把本文件钉成两道哈希
+（全文与前 35087 字节，当时同值）。本段追加后前缀完好、全文变了。
+BATTERY_V1 自己规定这种情形是「**正当的工作、不正当的冻结**」，需要一个新的冻结
+版本而不是悄悄改哈希。**本复核没有改 `BATTERY_V1.md`，也没有改哈希。**

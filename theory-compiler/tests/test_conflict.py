@@ -22,6 +22,7 @@ from theory_compiler.ir import build_ir
 from theory_compiler.parser.ast_nodes import SemanticsSection
 from theory_compiler.parser.theory_parser import parse_theory
 from theory_compiler.problem import load_problem
+from theory_compiler.writes import WriteSets
 
 FIXTURES = Path(__file__).parent / "fixtures"
 REPO = Path(__file__).resolve().parents[2]
@@ -67,12 +68,45 @@ class TestClaimedObjects:
         rule = one_rule("act=push(Cart, up)", "dissolved(Cart, Door, up)")
         with pytest.raises(ConflictError) as exc:
             claimed_objects(rule)
-        assert "no claim table" in str(exc.value)
+        message = str(exc.value)
+        assert "has no write set" in message
+        assert "writes {" in message, (
+            "the fail-closed message must name the repair. v0.3's whole "
+            "content is that an unknown event is declared, not guessed")
 
-    def test_the_claim_table_covers_every_event_the_predictor_implements(self):
-        """Drift pin. `gen_python._effect` decides what actually gets mutated;
-        this table decides what gets *checked*. If the first grows and the
-        second does not, a two-object event silently stops being examined."""
+    def test_the_declaration_beats_the_default_table(self):
+        """v0.3, ledger X-1. The manual is the authority on what a rule writes.
+
+        `moved/2` is in the default table as `{arg 0}`. A manual that declares
+        `moved(o, dir) writes {}` means it, and the checker must read the
+        manual — otherwise "publish the table" would have only moved the guess
+        one file over.
+        """
+        source = (
+            "word_table:\n  board\n  object Cart { pos: Coord, color: Int }\n"
+            "semantics:\n  frame persist\n  conflict exclusive\n"
+            "  cascade single_frame\n"
+            "events:\n  event moved(o, dir) writes {}\n"
+            "rules:\n  rule r\n    when act=push(Cart, up) then moved(Cart, up)\n"
+            "goal:\n  goal Cart.pos = (1, 1)\n")
+        ast = parse_theory(source)
+        rule = ast.rules.rules[0]
+        assert claimed_objects(rule) == {"Cart"}, "default table, no manual"
+        assert claimed_objects(rule, WriteSets(ast)) == set(), (
+            "with the manual in hand the declaration wins")
+
+    def test_every_event_the_predictor_implements_has_a_deliberate_write_set(self):
+        """Drift pin, v0.3 shape.
+
+        `gen_python._effect` decides what actually gets mutated and
+        `check_backend_agreement` now holds it to the manual's declaration on
+        every compile — so the old direction of this pin is enforced at compile
+        time rather than scraped. What a source scrape still catches is the
+        thing compilation cannot: an event added to the backend that **no
+        manual anywhere exercises**, whose write set therefore nobody ever
+        chose. Such an event must be in v0.3's published default table, or be
+        used with an explicit `writes` clause by at least one fixture.
+        """
         source = (Path(generate_python.__globals__["__file__"])).read_text(
             encoding="utf-8")
         implemented = set()
@@ -86,10 +120,25 @@ class TestClaimedObjects:
                         if arity.isdigit():
                             implemented.add((name, int(arity)))
         assert implemented, "could not read the backend's event table"
-        missing = sorted(implemented - set(CLAIMED_ARGS))
-        assert not missing, (
-            "gen_python mutates state for %s, and the conflict checker has no "
-            "claim table for them, so pairs involving them are skipped" % (missing,))
+
+        declared = set()
+        for path in sorted(FIXTURES.glob("*.dsl")):
+            try:
+                ast = parse_theory(path.read_text(encoding="utf-8"))
+            except Exception:
+                continue        # playbooks and the deliberately-broken fixtures
+            if ast.events is None:
+                continue
+            for decl in ast.events.events:
+                for alt in decl.alternatives:
+                    if alt.writes is not None:
+                        declared.add((alt.name, len(alt.params)))
+
+        orphaned = sorted(implemented - set(CLAIMED_ARGS) - declared)
+        assert not orphaned, (
+            "gen_python mutates state for %s, which is in neither v0.3's "
+            "default table nor any fixture's `writes` declaration — so nothing "
+            "has ever decided which objects it writes" % (orphaned,))
 
 
 # --------------------------------------------------- the five decidable rules

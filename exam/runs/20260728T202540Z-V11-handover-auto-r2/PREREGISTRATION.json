@@ -1,0 +1,161 @@
+{
+  "base_commit": "18a39417e1212efba31b9cd6b040eaea3ac0f491",
+  "bootstrap": {
+    "n": 20000,
+    "seed": 20260729
+  },
+  "branch": "agent/v11-handover-auto",
+  "bundle_sha256": {
+    "tier1_manual": "7ca5ad716fc5493306c4a5b39152d3c6f928dcfd5d1f5703e2390bab2bf31f65",
+    "tier2_manual_playbook": "40464acaafdb15aff89caa8b3a42f8c533f7c3efa85ec519081a0754a867f515"
+  },
+  "key_note": "the answer key is deliberately not written until the examinees have answered. `score` re-derives it from the deterministic builder and refuses to mark if the digest does not match the value frozen here.",
+  "key_sha256": "f21ee3d66ebc21ba04fb5693fd72e8871c60ff1ec7dfd34e9e3b16db318d6ff5",
+  "key_written_to_disk": false,
+  "leakage": {
+    "label_sets_checked": [
+      "<declared>"
+    ],
+    "metadata_fields_checked": [
+      "points",
+      "tags",
+      "kind"
+    ],
+    "n_items": 31,
+    "paper_id": "v11-handover-a0",
+    "positional": {
+      "chance_baseline": 0.2,
+      "chance_label": "world_law",
+      "clustered_by_answer": false,
+      "example_ids_by_answer": {
+        "DOWN/LEFT": [
+          "v11-opt-08"
+        ],
+        "DOWN/RIGHT": [
+          "v11-opt-02",
+          "v11-opt-06"
+        ],
+        "RIGHT": [
+          "v11-opt-07"
+        ],
+        "UP/LEFT": [
+          "v11-opt-03",
+          "v11-opt-05"
+        ],
+        "blocked_box_crossing": [
+          "v11-step-06"
+        ],
+        "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk": [
+          "v11-why-01"
+        ],
+        "blocked_box_landing": [
+          "v11-step-02"
+        ],
+        "blocked_wall": [
+          "v11-step-05",
+          "v11-why-03"
+        ],
+        "goal_box_on_target+push2": [
+          "v11-why-02"
+        ],
+        "level_data": [
+          "v11-name-01",
+          "v11-name-03",
+          "v11-name-04",
+          "v11-name-06"
+        ],
+        "none": [
+          "v11-opt-01",
+          "v11-opt-04"
+        ],
+        "push2": [
+          "v11-step-01",
+          "v11-step-07",
+          "v11-why-04",
+          "v11-why-05"
+        ],
+        "walk": [
+          "v11-step-03",
+          "v11-step-04"
+        ],
+        "world_law": [
+          "v11-name-02",
+          "v11-name-05",
+          "v11-name-07",
+          "v11-name-08"
+        ]
+      },
+      "label_counts": {
+        "DOWN/LEFT": 1,
+        "DOWN/RIGHT": 2,
+        "RIGHT": 1,
+        "UP/LEFT": 2,
+        "blocked_box_crossing": 1,
+        "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk": 1,
+        "blocked_box_landing": 1,
+        "blocked_wall": 2,
+        "goal_box_on_target+push2": 1,
+        "level_data": 4,
+        "none": 2,
+        "push2": 4,
+        "walk": 2,
+        "world_law": 6
+      },
+      "n": 30,
+      "order_runs": 24,
+      "order_runs_max": 30,
+      "sheet_length_mean_by_answer": {
+        "DOWN/LEFT": 470.0,
+        "DOWN/RIGHT": 495.5,
+        "RIGHT": 501.0,
+        "UP/LEFT": 480.0,
+        "blocked_box_crossing": 379.0,
+        "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk": 368.0,
+        "blocked_box_landing": 406.0,
+        "blocked_wall": 379.0,
+        "goal_box_on_target+push2": 383.0,
+        "level_data": 197.25,
+        "none": 458.0,
+        "push2": 427.5,
+        "walk": 412.5,
+        "world_law": 208.167
+      }
+    },
+    "probe_hits": 0,
+    "probes_declared": 61,
+    "sheet_bytes": 19396,
+    "structural_hits": 0
+  },
+  "n_items": 31,
+  "paper_id": "v11-handover-a0",
+  "prediction": {
+    "overall": "tier 2 (manual + playbook) scores at least as high as tier 1 (manual only). The prediction of Theoria.md 1.11 is that tier 1 can re-derive the playbook and draw level, so a delta near zero is a confirmation and not a null result -- provided the sheet is not saturated, which is what the harder boards are for.",
+    "registered": "before the first examinee ran; see the run's BLINDING.md",
+    "saturation_guard": "if either tier scores above 0.95 overall the sheet has saturated again and the delta carries no information, whatever its sign.",
+    "where_it_should_not": "step_semantics and name_class. The manual alone determines every transition and every classification; a delta there would mean the tiers differ in some way other than strategy, and that would have to be explained before any number here is quoted.",
+    "where_the_delta_should_land": "optimal_action, and inside it on the two dead boards. `cairn` is the sharpest: every parity law the manual states matches there, so the manual alone cannot settle it by arithmetic, while the playbook writes the deadlock prune down. `stile` is settled by the manual's own invariant and should show no tier difference."
+  },
+  "prompt_id": "V11-handover-auto",
+  "prompts": {
+    "tier1_manual": {
+      "bytes": 43279,
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2\\prompts\\tier1_manual.prompt.md",
+      "sha256": "9c8025744d99092fff1bd2a14b64a69211b3ea5e09ee6780c419ceff15fb8c2c"
+    },
+    "tier2_manual_playbook": {
+      "bytes": 50753,
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2\\prompts\\tier2_manual_playbook.prompt.md",
+      "sha256": "9f46872030768dfe908cc05669f4f1522d100f815b804d297e366edb36816ca8"
+    }
+  },
+  "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+  "rubric_module_digests": {
+    "exam.grading.rubrics_adaptation": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e",
+    "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+    "exam.grading.rubrics_handover_auto": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
+    "exam.grading.rubrics_heldout": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
+    "exam.grading.rubrics_verdict": "6961340614174a3fc41d32dbc7145239106846d5321b83df8adbca0529ce102a"
+  },
+  "sheet_sha256": "6444a1a0753f77a2cbfc613630d61c9e96530f456a1f6970cecef087daf578de",
+  "total_points": 58.0
+}

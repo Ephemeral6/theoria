@@ -1,0 +1,69 @@
+{
+  "agent_start": [
+    1,
+    2
+  ],
+  "colors": {
+    "door": 4,
+    "switch": 2,
+    "switch_on": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "b",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        4,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "latch",
+        "net": "a"
+      }
+    },
+    {
+      "cell": [
+        4,
+        2
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    }
+  ],
+  "families": [
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "#######",
+    "#...#.#",
+    "#...#.#",
+    "#.....#",
+    "#...#.#",
+    "#######"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-d2c2b1b9"
+}

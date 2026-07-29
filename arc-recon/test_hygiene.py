@@ -581,3 +581,44 @@ def test_the_retry_envelope_redraws_a_replica_when_pinned(monkeypatch):
     assert api.cookies_held() == ["GAMESESSION"]
     assert any(h == ["GAMESESSION"] for h in held_at_each_attempt), \
         "the redraw never took effect within the envelope"
+
+
+# -- the INC-008 check must cover every ledger, not just the first one -------
+
+def test_redactor_scans_the_cascade_ledgers_too(tmp_path, monkeypatch):
+    """S5 salvaged P-20 into cascade/runs/, adding four more request ledgers.
+
+    The redactor was written against a single hardcoded path, which is a check
+    that would keep reporting "0 carry a cookie value" no matter what those
+    four files held. Both halves are asserted here: that the real ledgers are
+    discovered, and -- the negative control -- that a planted value in one of
+    them is actually found.
+    """
+    import redact_ledger
+
+    found = redact_ledger.all_ledgers()
+    assert any("recon_ledger" in p for p in found)
+    assert sum(1 for p in found if "cascade" in p) >= 4, found
+
+    planted = tmp_path / "ledger.planted.jsonl"
+    planted.write_text(
+        json.dumps({"t": "2026-07-28T00:00:00Z", "note": "planted",
+                    "set_cookie": "GAMESESSION=deadbeef; Path=/"}) + "\n",
+        encoding="utf-8")
+    report = redact_ledger.scan(str(planted))
+    assert report["entries_with_values"] == 1
+    assert report["offenders"][0]["names"] == ["GAMESESSION"]
+
+
+def test_redactor_discovers_ledgers_under_a_nested_run(tmp_path, monkeypatch):
+    """Negative control for the walk: a ledger one directory deeper is found."""
+    import redact_ledger
+
+    nest = tmp_path / "runs" / "2026-01-01T000000Z-x"
+    nest.mkdir(parents=True)
+    (nest / "ledger.g.jsonl").write_text("", encoding="utf-8")
+    (nest / "steps.g.jsonl").write_text("", encoding="utf-8")
+    monkeypatch.setattr(redact_ledger, "CASCADE_RUNS", str(tmp_path / "runs"))
+    monkeypatch.setattr(redact_ledger, "LEDGER_PATH", str(tmp_path / "none"))
+    found = redact_ledger.all_ledgers()
+    assert [os.path.basename(p) for p in found] == ["ledger.g.jsonl"]

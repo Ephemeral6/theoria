@@ -44,6 +44,7 @@
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 1231,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 21,
@@ -69,13 +70,15 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       },
       "baseline-arms/ledger.jsonl": {
         "clean": true,
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 560,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -101,13 +104,15 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       },
       "baseline-arms/probe_log.jsonl": {
         "clean": true,
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
-        "ledger_lines": 1945,
+        "ledger_lines": 1955,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -133,10 +138,261 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       }
     },
     "ledgers_scanned": 3
+  },
+  "gate": {
+    "all_ledgers_clean": true,
+    "ledgers_scanned": 3,
+    "needs_adjudication": [],
+    "piles_hash_matches": true,
+    "reasons": [],
+    "red": false,
+    "register_coverage": {
+      "entries": [
+        {
+          "game_id": "g50t-5849a774",
+          "level": "scores_only",
+          "note": "one RESET; initial 64x64 frame of level 1 observed. Development pile, expected.",
+          "pile": "dev",
+          "t": "2026-07-27T16:12:41Z"
+        },
+        {
+          "game_id": "ar25-0c556536",
+          "level": "never_audited",
+          "note": "RESET refused with 'game not found'; no frame returned, nothing observed.",
+          "pile": "dev",
+          "t": "2026-07-27T16:12:41Z"
+        },
+        {
+          "game_id": "sk48-d8078629",
+          "level": "never_audited",
+          "note": "RESET refused with 'game not found'; no frame returned, nothing observed.",
+          "pile": "dev",
+          "t": "2026-07-27T16:12:41Z"
+        },
+        {
+          "game_id": "tn36-ef4dde99",
+          "level": "never_audited",
+          "note": "RESET refused with 'game not found'; no frame returned, nothing observed.",
+          "pile": "dev",
+          "t": "2026-07-27T16:12:41Z"
+        },
+        {
+          "game_id": "dc22-fdcac232",
+          "level": "design_document_disclosed",
+          "note": "Theoria.md itself describes this game's failure structure (S1.3 teleport rule, S3.2 figure-5 case). Prose-level mechanics knowledge predates the cut. No frame, trajectory or upstream artifact has been read. Correction ruled in INC-004; supersedes the never_audited entry in the hash-locked piles.json, which stays byte-identical.",
+          "pile": "sealed",
+          "t": "2026-07-27T17:19:53Z"
+        },
+        {
+          "game_id": "ar25-0c556536",
+          "level": "trajectories_reviewed",
+          "note": "Played: baseline-arms bare-CC pilots (13-15 actions per model tier) and the arc-recon determinism precheck (fixed-sequence double replay). Frames and short trajectories observed and reviewed. Expected for the development pile; supersedes the earlier never_audited/scores_only entries.",
+          "pile": "dev",
+          "t": "2026-07-27T18:46:14Z"
+        },
+        {
+          "game_id": "g50t-5849a774",
+          "level": "trajectories_reviewed",
+          "note": "Played: baseline-arms bare-CC pilots (13-15 actions per model tier) and the arc-recon determinism precheck (fixed-sequence double replay). Frames and short trajectories observed and reviewed. Expected for the development pile; supersedes the earlier never_audited/scores_only entries.",
+          "pile": "dev",
+          "t": "2026-07-27T18:46:14Z"
+        },
+        {
+          "game_id": "sk48-d8078629",
+          "level": "trajectories_reviewed",
+          "note": "Played: baseline-arms bare-CC pilots (13-15 actions per model tier) and the arc-recon determinism precheck (fixed-sequence double replay). Frames and short trajectories observed and reviewed. Expected for the development pile; supersedes the earlier never_audited/scores_only entries.",
+          "pile": "dev",
+          "t": "2026-07-27T18:46:14Z"
+        },
+        {
+          "game_id": "tn36-ef4dde99",
+          "level": "trajectories_reviewed",
+          "note": "Played: baseline-arms bare-CC pilots (13-15 actions per model tier) and the arc-recon determinism precheck (fixed-sequence double replay). Frames and short trajectories observed and reviewed. Expected for the development pile; supersedes the earlier never_audited/scores_only entries.",
+          "pile": "dev",
+          "t": "2026-07-27T18:46:14Z"
+        },
+        {
+          "claims": "quarantined_from_claims",
+          "game_id": "ls20-9607627b",
+          "level": "mechanics_disclosed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Material leak: the page uses this game as its running example and states concrete transition rules. Quarantined from the sealed claim set -- no held-out claim may name this game. 'Never seen' is the premise of a sealed claim, and for this game it is false; a material leak of transition rules cannot be repaired by disclosure. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "quarantined_from_claims",
+          "game_id": "ft09-0d8bbf25",
+          "level": "mechanics_disclosed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Material leak: the page names this game's hidden mechanic explicitly. Quarantined from the sealed claim set -- no held-out claim may name this game. 'Never seen' is the premise of a sealed claim, and for this game it is false; a material leak of transition rules cannot be repaired by disclosure. Note the structural cost: ft09 is the untagged singleton and the sole member of piles.json's `sealed_only_families`, so quarantining it leaves the claim set with no representative of the one mechanics family the development pile never shows us. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "re86-8af5384d",
+          "level": "blurb_glimpsed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Minor: evidence-card blurb text, mostly action counts. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "ka59-38d34dbb",
+          "level": "blurb_glimpsed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Minor: evidence-card blurb text, mostly action counts. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "m0r0-492f87ba",
+          "level": "blurb_glimpsed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Minor: evidence-card blurb text, mostly action counts. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "sb26-7fbdac44",
+          "level": "blurb_glimpsed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Minor: evidence-card blurb text, mostly action counts. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "lf52-271a04aa",
+          "level": "blurb_glimpsed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Minor, self-assessed as the strongest of the minor set ('轻微偏上'): the blurb carried one sentence hinting at a mechanic. It is the most exposed game still inside the claim set, so it is the first to check if the sensitivity analysis moves. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "bp35-0a0ad940",
+          "level": "filename_only",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Negligible: the id appeared in a HuggingFace file listing. No content of any kind was read -- a directory name is not a glimpse of mechanics. Registered because the exposure list must be complete, not because it carries information. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "game_id": "dc22-fdcac232",
+          "level": "design_document_disclosed",
+          "note": "Knowledge contamination, zero API contact. While locating upstream Schema artifacts (baseline-arms M3), a search subagent was given the sealed-pile constraint up front and obeyed it -- it relayed no mechanics to its track -- but the project's landing page put game content high enough that it had already read some before it stopped. Its context was discarded and never reused. What propagated is only the list of which games were exposed. Levels below are that subagent's own self-assessment, recorded as reported (baseline-arms/INCIDENTS.md INC-BA-001). Level unchanged and deliberately not downgraded: INC-004 already placed this game at design_document_disclosed because Theoria.md itself prints its failure structure (S1.3 teleport rule, S3.2 figure-5 case), which is the stronger of the two exposures. This entry adds the second, weaker one -- it was also among the nine minor blurb glimpses in INC-BA-001. Still no frame, trajectory or upstream artifact has been read. kept in the sealed claim set, because what leaked is blurb-level and mostly action counts, and dropping it would cost sample size for an exposure that disclosure can carry. Every statistic over the claim set must be reported a second time with the seven minor-exposure games excluded (sensitivity analysis); if the two disagree, the weaker figure governs. Any claim that keeps DC22 as the figure-5 exhibit must carry both caveats. The cut is untouched: piles.json stays byte-identical and this game stays in the sealed pile. A contaminated sealed game is annotated, not moved into the development pile (INC-BA-001 recommendation 2). Ruled F-11 (monitor acting for the owner, 2026-07-28), the conservative merge of the two proposals on the table.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:31:47Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "re86-8af5384d",
+          "level": "blurb_glimpsed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. Minor exposure. This is the one row for which INC-BA-001 gives a detail: evidence-card blurb text, mostly action counts. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "ka59-38d34dbb",
+          "level": "blurb_glimpsed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. INC-BA-001 rates this game 轻微 with no further detail. The earlier note said 'evidence-card blurb text, mostly action counts' -- that description belongs to re86's row alone and was wrongly copied across the four bare 轻微 rows. What is actually reported for this game is the severity rating and nothing more. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "m0r0-492f87ba",
+          "level": "blurb_glimpsed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. INC-BA-001 rates this game 轻微 with no further detail. The earlier note said 'evidence-card blurb text, mostly action counts' -- that description belongs to re86's row alone and was wrongly copied across the four bare 轻微 rows. What is actually reported for this game is the severity rating and nothing more. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "sb26-7fbdac44",
+          "level": "blurb_glimpsed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. INC-BA-001 rates this game 轻微 with no further detail. The earlier note said 'evidence-card blurb text, mostly action counts' -- that description belongs to re86's row alone and was wrongly copied across the four bare 轻微 rows. What is actually reported for this game is the severity rating and nothing more. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "lf52-271a04aa",
+          "level": "blurb_glimpsed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. Minor, self-assessed as the strongest of the blurb-level set ('轻微偏上'): the blurb carried one sentence hinting at a mechanic. The earlier note called it 'the most exposed game still inside the claim set' and that is false -- dc22-fdcac232 is inside the claim set one level higher, at design_document_disclosed. lf52 is the first of the BLURB-LEVEL games to check if the sensitivity analysis moves; dc22 is the first overall. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        },
+        {
+          "claims": "retained_with_sensitivity_analysis",
+          "correction_of": "2026-07-28T00:31:47Z",
+          "game_id": "dc22-fdcac232",
+          "level": "design_document_disclosed",
+          "note": "CORRECTION, appended after an independent adversarial review of this batch; supersedes this game's entry of 2026-07-28T00:31:47Z. Level and claim state are unchanged -- only the note was wrong. Level unchanged and deliberately not downgraded: INC-004 already placed this game at design_document_disclosed because Theoria.md itself prints its failure structure (S1.3 teleport rule, S3.2 figure-5 case). This is the one game in this batch whose recorded level does NOT come from the INC-BA-001 self-report -- that table rates it 轻微, and taking the rating at face value would have downgraded it, contradicting INC-004. Its second, weaker exposure (one of the nine blurb glimpses) is recorded here; still no frame, trajectory or upstream artifact has been read. **A residual question this entry does not settle, flagged for the owner.** dc22 is retained in the claim set because F-11 placed it in the 轻微 seven, and F-11 read that bucket off INC-BA-001. But the ruling's stated basis is that a *material* leak of mechanics is unrepairable, and design_document_disclosed is mechanics prose -- one level below ls20/ft09, one above the blurb rows. Calling dc22 'minor-exposure' is therefore wrong even though retaining it is what the ruling says. It is the most exposed game inside the claim set and the first to move under sensitivity analysis. Any claim that also keeps DC22 as the figure-5 exhibit carries both caveats. Retained in the sealed claim set with a sensitivity-analysis obligation: every statistic over the claim set must be reported a second time with the seven retained-but-disclosed games excluded, and where the two disagree the weaker figure governs.",
+          "pile": "sealed",
+          "ruling": "F-11",
+          "sealed_api_calls": 0,
+          "source_incident": "baseline-arms/INCIDENTS.md INC-BA-001",
+          "t": "2026-07-28T00:49:50Z"
+        }
+      ],
+      "lines": 24,
+      "present": true,
+      "problems": []
+    },
+    "scan_surface_self_discovered": false
   },
   "needs_adjudication": [],
   "piles_hash": {
@@ -164,6 +420,7 @@
     "contacts": {},
     "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
     "ledger_lines": 1231,
+    "present": true,
     "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
     "sealed_games_contacted": [],
     "sealed_ids_seen_in_responses": 21,
@@ -189,7 +446,8 @@
       "tu93",
       "vc33",
       "wa30"
-    ]
+    ],
+    "unreadable": []
   },
   "sealed_pile_size": 21,
   "source": "derived from data/contamination_log.jsonl by contamination.py",

@@ -1,0 +1,39 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running search (release).
+INFO     search stdin: 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02796.sas'
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02796-lmcut.plan' < ''"'"'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02796.sas'"'"''
+[t=0.000779s, 2308 KB] Search code revision: 7120aa0
+[t=0.000833s, 2308 KB] reading input...
+[t=0.002177s, 2396 KB] done reading input!
+[t=0.008757s, 2804 KB] Initializing landmark cut heuristic...
+[t=0.008916s, 2804 KB] Building successor generator... done!
+[t=0.009086s, 2828 KB] peak memory difference for successor generator creation: 24 KB
+[t=0.009090s, 2828 KB] time for successor generation creation: 0.000159s
+[t=0.009098s, 2828 KB] Variables: 19
+[t=0.009101s, 2828 KB] FactPairs: 80
+[t=0.009104s, 2828 KB] Bytes per state: 4
+[t=0.009114s, 2828 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.009146s, 2864 KB] Initial state is a dead end.
+[t=0.009150s, 2864 KB] Initial heuristic value for lmcut: infinity
+[t=0.009153s, 2864 KB] pruning method: none
+[t=0.009157s, 2864 KB] Completely explored state space -- no solution!
+[t=0.009160s, 2864 KB] Actual search time: 0.000005s
+[t=0.009163s, 2864 KB] Expanded 0 state(s).
+[t=0.009163s, 2864 KB] Reopened 0 state(s).
+[t=0.009163s, 2864 KB] Evaluated 1 state(s).
+[t=0.009163s, 2864 KB] Evaluations: 1
+[t=0.009163s, 2864 KB] Generated 0 state(s).
+[t=0.009163s, 2864 KB] Dead ends: 0 state(s).
+[t=0.009163s, 2864 KB] Number of registered states: 1
+[t=0.009163s, 2864 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.009163s, 2864 KB] Int hash set resizes: 0
+[t=0.009163s, 2864 KB] Search time: 0.000050s
+[t=0.009163s, 2864 KB] Total time: 0.009163s
+Search stopped without finding a solution.
+search exit code: 12
+
+Driver aborting after search

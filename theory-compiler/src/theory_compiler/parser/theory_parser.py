@@ -293,17 +293,47 @@ class TheoryParser:
                 self.pos += 1
         return section
 
+    # `name(params)` optionally followed by `writes { a, b }` (v0.3, X-1).
+    _EVENT_ALT = re.compile(
+        r'(\w+)\(([^)]*)\)\s*(?:writes\s*\{([^}]*)\}\s*)?$')
+
     def _parse_event_decl(self, line: str) -> EventDecl:
-        # event name(params) | name(params) | ...
+        # event name(params) [writes {p, ...}] | name(params) [writes {...}] | ...
         body = line[len("event "):].strip()
         alts = []
         for part in body.split("|"):
             part = part.strip()
-            m = re.match(r'(\w+)\(([^)]*)\)', part)
-            if m:
-                name = m.group(1)
-                params = [p.strip() for p in m.group(2).split(",") if p.strip()]
-                alts.append(EventAlt(name, params))
+            if not part:
+                continue
+            m = self._EVENT_ALT.match(part)
+            if not m:
+                # v0.2 skipped what it could not match, which is how a `writes`
+                # clause with a typo in it would have become an event with no
+                # declared write set at all — the guess v0.3 exists to forbid.
+                raise ParseError(
+                    f"cannot read event alternative {part!r}. Expected "
+                    f"`name(params)` optionally followed by `writes {{a, b}}`.",
+                    self.pos + 1)
+            name = m.group(1)
+            params = [p.strip() for p in m.group(2).split(",") if p.strip()]
+            writes = None
+            if m.group(3) is not None:
+                writes = [w.strip() for w in m.group(3).split(",") if w.strip()]
+                unknown = [w for w in writes if w not in params]
+                if unknown:
+                    raise ParseError(
+                        f"event {name} declares `writes` over {unknown!r}, which "
+                        f"{'is' if len(unknown) == 1 else 'are'} not "
+                        f"parameter(s) of it. A written object must be named in "
+                        f"the signature (v0.3, ledger X-1): write "
+                        f"`{name}({', '.join(params + unknown)}) writes "
+                        f"{{{', '.join(writes)}}}` instead.",
+                        self.pos + 1)
+                if len(set(writes)) != len(writes):
+                    raise ParseError(
+                        f"event {name} names a parameter twice in `writes`",
+                        self.pos + 1)
+            alts.append(EventAlt(name, params, writes))
         return EventDecl(alts)
 
     # ---- rules ----

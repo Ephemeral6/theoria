@@ -6,8 +6,8 @@
 [`runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md`](runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md)。
 
 ```
-theory-compiler   283 passed   (THEORIA_REQUIRE_LEAN=1，含 11 项真 Lean 编译)
-                  224 -> 283   （+59，全部本轮新增）
+theory-compiler   288 passed   (THEORIA_REQUIRE_LEAN=1，含 11 项真 Lean 编译)
+                  224 -> 288   （+64，全部本轮新增）
 python -m tools.verify_c4      四个案例全绿，含一次负对照
 ```
 
@@ -57,7 +57,30 @@ theorem dead : ∀ (r s : St), wf r = true → Pat r = true → ReachFrom r s �
 （人站在被推的箱子里）能推出模式。所以 `wf` 作为假设进了定理，并有一项测试盯着那两个
 反例还在。
 
-### 最该记住的一条：条件化定理有它专属的「绿而假」
+（措辞精确一句：两条义务**搜索**的是 3360 个良构态，**判定**发生在模式接受的那些态上
+——pair 14 个、corner 210 个；Lean 那边的分裂是「未钉住槽位的取值 × 112 个动作」。
+「在 3360 个态上重算」是省略说法，展开是这个。）
+
+### 最该记住的一条：检查链断在最后一步，是对抗式复核找出来的
+
+完工后跑了一次对抗式复核（只读，只许证伪）。它**没能推翻定理**——独立重写了一个
+sokoban 接地器，独立数出 112 / 3360 / 3352，对**已发射的** `pair.lean` 逐对核对
+376,320 组守卫与效果，0 处不符——但它找到一条真的断链，并用变异实验证明了：
+
+`verify` 检查编码对任务，`recheck`/`cross_check` 检查证书对编码，而**从编码到发射出去
+的 Lean 文本之间那一步渲染，没有任何东西在读**。复核只改了 `_world` 一行，让每条
+`push` 的 `applyMove` 分支发 `=> s`：`verify` 过、`cross_check` 过、`recheck` 过、
+`lean` 退出 0、`dead` 公理集**为空**——一条关于「箱子永远不动的世界」的漂亮定理，
+全套非 Lean 测试一个都没抓到。**与 D-A3-007 同形**：上次是不变式退化成 `true`，
+这次是转移关系退化成恒等。
+
+已加 `gen_lean_deadlock.reread`：用发射时的文法把文本**解析回来**，逐项与已检查的
+编码比对（构造子表、每条 `legal` 守卫、每条 `applyMove` 赋值、`St.clear`、`wf`、
+`Pat`、`Goal`、`s0`），并在全部 4096 个可编码态上求值比对 `wf`/`Pat`/`Goal`；
+生成器还拒绝对未经 `verify` 的编码发射。四项变异测试留在 `TestEmissionIsRead`。
+同一次复核指出负对照红得不是地方，也已改成整份重新生成——详见 D-TC-028。
+
+### 另一条：条件化定理有它专属的「绿而假」
 
 D-A3-007 那份 `I := true` 的教训是：空公理集分辨不出没证东西的证明。条件化定理的
 同形失效模式是**条件无人满足**——每条义务空空地全过，`#print axioms` 打印空集。
@@ -67,8 +90,9 @@ D-A3-007 那份 `I := true` 的教训是：空公理集分辨不出没证东西�
 **可解的** `sokoban-open4far`，生成物里发 `theorem level_is_winnable`，附一条 11 步
 逐步 `by decide` 的通关，与 `dead` 并排。
 
-**负对照**：把 `Pat` 往里挪一格（`c12,c13` → `c22,c23`），同一份文件 `lean` 退出码
-非零、`sorryAx` 出现。空公理集这条检查因此不是摆设。
+**负对照**：换一个不是死区的模式（`c12,c13` → `c22,c23`）**整份重新生成**，`lean`
+退出码非零、`sorryAx` 出现，失败点落在 `closed_pinned` 上——正是那几条能把箱子分开的推。
+空公理集这条检查因此不是摆设。（为什么不能「在成品里改一处再编译」，见 D-TC-028。）
 
 ### 交叉核对：账对不上就拒绝
 
@@ -89,7 +113,7 @@ D-A3-007 那份 `I := true` 的教训是：空公理集分辨不出没证东西�
 | `src/theory_compiler/generators/gen_lean_deadlock.py` | Lean 发射器（只有 `computational`） |
 | `tools/transcribe_deadlock_certificates.py` | 从候选行转录夹具，可执行、被测试重跑 |
 | `tools/build_deadlock_lean.py` / `tools/verify_c4.py` | 单条构建 / C4 验收全跑 |
-| `tests/test_strips.py` / `test_deadlock_certificate.py` / `test_gen_lean_deadlock.py` | 59 项 |
+| `tests/test_strips.py` / `test_deadlock_certificate.py` / `test_gen_lean_deadlock.py` | 64 项，含 `TestEmissionIsRead` 的四条变异 |
 
 ### 未清偿
 
@@ -109,7 +133,7 @@ D-A3-007 那份 `I := true` 的教训是：空公理集分辨不出没证东西�
 ### 跑法
 
 ```bash
-cd theory-compiler && THEORIA_REQUIRE_LEAN=1 python -m pytest    # 283 passed
+cd theory-compiler && THEORIA_REQUIRE_LEAN=1 python -m pytest    # 288 passed
 cd theory-compiler && python -m tools.verify_c4                  # C4 验收，含负对照
 ```
 
@@ -341,3 +365,27 @@ cd theory-compiler && python -m pytest        # 83 passed（含 8 项真 Lean �
 ```
 
 `lean` 不在 PATH 时，8 项 Lean 编译测试自动跳过，其余 75 项照常。
+
+## C7 — `mentions` 有定义了（2026-07-28）
+
+`CONTRACTS/dsl_grammar_v0.3.md`。由 `a0-spike/THEORIZE_LOG.md` 表达力台账 **X-1**
+与 **X-5** 逼出来。v0.2 用 `mentions` 定义 `frame persist` 却从未定义 `mentions`；
+三种读法互不等价。取「编译效果」读法的外延，但把那本字典从后端搬进说明书：
+`writes(r)` 由 `events:` 声明确定（`writes { … }` 子句或 v0.3 公布的封闭默认表），
+两者都没有就报错，后端逐规则被校验。`free(c)` 排除掉声明位置在语法上就是 `c` 的对象。
+
+理由与代价：D-TC-029（读法与权威方向）、D-TC-030（`free`，及它的三处后果）、
+D-TC-031（`gen_pddl` 达不到这条义务，记账并钉住，不在本轮修）。
+
+两个数字，各在自己的分母里复现，然后都归零：X-1 的 **376**（off-wall 39,960 对）、
+X-5 的 **52**（on-wall 7,080 对）；修好之后全 47,040 对上 0 个不符、0 个无规则开火、
+从没有两条同时开火。跑法与留痕：`theory-compiler/runs/20260728T102343Z-c7/`。
+
+```bash
+cd theory-compiler && python -m pytest                       # 319 passed, 1 skipped
+bash theory-compiler/runs/20260728T102343Z-c7/verify.sh      # 套件 + 两个数字 + 十份说明书
+```
+
+未关事项在契约 §9：`writes` 是中途站（终点是事件**体**，写集从体里导出、无从漂移；
+v0.3 之后 `frame persist` 有定义了、`step` 仍然没有）；「成员必须是参数」在写集随状态
+变化时失效（连推）。

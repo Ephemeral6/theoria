@@ -1,0 +1,30 @@
+{
+  "prompt_id": "S9-contract-change-protocol",
+  "branch": "agent/s9-contract-change-protocol",
+  "base_commit": "ff796cddc6057eb4fa96230f0f9e8e4f4e23f6b3",
+  "utc": "2026-07-28T13:41:12Z",
+  "worker": "W-1250",
+  "territory": "proxy",
+  "baseline": {
+    "command": "python -m pytest proxy -q",
+    "result": "259 passed",
+    "utc": "2026-07-28T13:43:00Z"
+  },
+  "delivered": {
+    "command": "cd proxy && bash verify_contract.sh",
+    "result": "VERIFY OK -- 9 steps, 295 passed",
+    "contract_fingerprint": "sha256:9420fd0fc27d6c2e963d910f611653d2abe62fd35291b7b9bbdf2cd6f9921f35"
+  },
+  "adversarial_review": {
+    "agent": "independent subagent, brief: find real defects, do not praise",
+    "findings": 11,
+    "high": 3,
+    "medium": 5,
+    "low": 3,
+    "all_fixed": true,
+    "sharpest": "the UnknownField warning is itself a raise under `-W error`, which rebuilds INC-TA-006 out of the warning meant to replace it"
+  },
+  "network": "none",
+  "api_spend_usd": 0.0,
+  "sealed_pile_contact": "none"
+}

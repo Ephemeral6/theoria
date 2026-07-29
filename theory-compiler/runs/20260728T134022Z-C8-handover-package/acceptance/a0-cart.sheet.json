@@ -1,0 +1,226 @@
+{
+  "action_vocabulary": {
+    "every board": [
+      "push(Cart, down)",
+      "push(Cart, left)",
+      "push(Cart, right)",
+      "push(Cart, up)"
+    ]
+  },
+  "answer_grammar": {
+    "any": "`abstain` is allowed anywhere; it scores nothing and is recorded as an abstention rather than as a wrong answer",
+    "name_class": "exactly one word: `level_data` if a board supplies it, `world_law` if no board can change it. There are only these two words, so something fixed by the language the manual is written in — rather than by this particular world — is still `world_law`: no board supplies it.",
+    "optimal_action": "exactly one action, written as it appears in `action_vocabulary`",
+    "step_semantics": "`<field>=<value>; …; rule=<name>` — every field listed in `state_fields` for that level, in any order, plus `rule`. A cell is written `(row,col)` and a true/false value `true` or `false`. The rule name must be one from `rule_vocabulary`."
+  },
+  "items": [
+    {
+      "action": "push(Cart, up)",
+      "before": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true",
+      "item_id": "step-base-a4ab58ac",
+      "kind": "step_semantics",
+      "level": "base",
+      "prompt": "The action push(Cart, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, down)",
+      "before": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true",
+      "item_id": "step-base-051de7ba",
+      "kind": "step_semantics",
+      "level": "base",
+      "prompt": "The action push(Cart, down) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, right)",
+      "before": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true",
+      "item_id": "step-base-0bd2997c",
+      "kind": "step_semantics",
+      "level": "base",
+      "prompt": "The action push(Cart, right) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, left)",
+      "before": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,2); Door_color=5; Door_pos=(4,5); Door_present=true",
+      "item_id": "step-base-e7beaf2d",
+      "kind": "step_semantics",
+      "level": "base",
+      "prompt": "The action push(Cart, left) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, down)",
+      "before": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(6,3); Door_color=5; Door_pos=(4,5); Door_present=true",
+      "item_id": "step-base-e69836b0",
+      "kind": "step_semantics",
+      "level": "base",
+      "prompt": "The action push(Cart, down) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, up)",
+      "before": "Cart_color=6; Cart_pos=(5,1)",
+      "item_id": "step-no-button-49d23b9c",
+      "kind": "step_semantics",
+      "level": "no-button",
+      "prompt": "The action push(Cart, up) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, down)",
+      "before": "Cart_color=6; Cart_pos=(5,1)",
+      "item_id": "step-no-button-2de6d071",
+      "kind": "step_semantics",
+      "level": "no-button",
+      "prompt": "The action push(Cart, down) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, right)",
+      "before": "Cart_color=6; Cart_pos=(5,1)",
+      "item_id": "step-no-button-b53f6f8c",
+      "kind": "step_semantics",
+      "level": "no-button",
+      "prompt": "The action push(Cart, right) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, left)",
+      "before": "Cart_color=6; Cart_pos=(5,2)",
+      "item_id": "step-no-button-025bf65c",
+      "kind": "step_semantics",
+      "level": "no-button",
+      "prompt": "The action push(Cart, left) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "action": "push(Cart, down)",
+      "before": "Cart_color=6; Cart_pos=(6,3)",
+      "item_id": "step-no-button-3078deb3",
+      "kind": "step_semantics",
+      "level": "no-button",
+      "prompt": "The action push(Cart, down) is taken from the situation given in `before`. Give the situation afterwards and name the rule that accounts for it."
+    },
+    {
+      "definition": "the actions that can be taken",
+      "item_id": "name-action_vocabulary",
+      "kind": "name_class",
+      "name": "action_vocabulary",
+      "prompt": "Is `action_vocabulary` — the actions that can be taken — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "which directions exist at all",
+      "item_id": "name-direction_vocabulary",
+      "kind": "name_class",
+      "name": "direction_vocabulary",
+      "prompt": "Is `direction_vocabulary` — which directions exist at all — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `push_down` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_push_down",
+      "kind": "name_class",
+      "name": "effect_of_push_down",
+      "prompt": "Is `effect_of_push_down` — what the rule `push_down` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `push_left` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_push_left",
+      "kind": "name_class",
+      "name": "effect_of_push_left",
+      "prompt": "Is `effect_of_push_left` — what the rule `push_left` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `push_right` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_push_right",
+      "kind": "name_class",
+      "name": "effect_of_push_right",
+      "prompt": "Is `effect_of_push_right` — what the rule `push_right` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "what the rule `push_up` does to each thing it touches, in cells travelled",
+      "item_id": "name-effect_of_push_up",
+      "kind": "name_class",
+      "name": "effect_of_push_up",
+      "prompt": "Is `effect_of_push_up` — what the rule `push_up` does to each thing it touches, in cells travelled — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the *shape* of the winning condition — which object has to be where — as opposed to the particular cell, which is a separate name",
+      "item_id": "name-goal_form",
+      "kind": "name_class",
+      "name": "goal_form",
+      "prompt": "Is `goal_form` — the *shape* of the winning condition — which object has to be where — as opposed to the particular cell, which is a separate name — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the set of rules that account for what happens",
+      "item_id": "name-rule_names",
+      "kind": "name_class",
+      "name": "rule_names",
+      "prompt": "Is `rule_names` — the set of rules that account for what happens — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `cascade` setting — how a turn is put together",
+      "item_id": "name-semantics_cascade",
+      "kind": "name_class",
+      "name": "semantics_cascade",
+      "prompt": "Is `semantics_cascade` — the world's `cascade` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `conflict` setting — how a turn is put together",
+      "item_id": "name-semantics_conflict",
+      "kind": "name_class",
+      "name": "semantics_conflict",
+      "prompt": "Is `semantics_conflict` — the world's `conflict` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "the world's `frame` setting — how a turn is put together",
+      "item_id": "name-semantics_frame",
+      "kind": "name_class",
+      "name": "semantics_frame",
+      "prompt": "Is `semantics_frame` — the world's `frame` setting — how a turn is put together — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "definition": "which cells of the `board` array carry a colour other than the background — the cells `free` refuses for that reason. (The package does not use the word `wall_cells`; this item names the thing, not a term of art.)",
+      "item_id": "name-wall_cells",
+      "kind": "name_class",
+      "name": "wall_cells",
+      "prompt": "Is `wall_cells` — which cells of the `board` array carry a colour other than the background — the cells `free` refuses for that reason. (The package does not use the word `wall_cells`; this item names the thing, not a term of art.) — supplied by each individual board, or fixed by the world for every board?"
+    },
+    {
+      "item_id": "opt-base-67a9b3d0",
+      "kind": "optimal_action",
+      "level": "base",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true"
+    },
+    {
+      "item_id": "opt-base-9ddb3b14",
+      "kind": "optimal_action",
+      "level": "base",
+      "prompt": "Name one action that begins a shortest sequence of actions ending in a won game.",
+      "state": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(4,1); Door_color=5; Door_pos=(4,5); Door_present=true"
+    }
+  ],
+  "levels": [
+    "base",
+    "no-button"
+  ],
+  "rule_vocabulary": {
+    "every board": [
+      "door_opens_left",
+      "press_left",
+      "push_down",
+      "push_left",
+      "push_right",
+      "push_up",
+      "teleport_down"
+    ]
+  },
+  "state_fields": {
+    "base": [
+      "Button_color",
+      "Button_pos",
+      "Cart_color",
+      "Cart_pos",
+      "Door_color",
+      "Door_pos",
+      "Door_present"
+    ],
+    "no-button": [
+      "Cart_color",
+      "Cart_pos"
+    ]
+  }
+}

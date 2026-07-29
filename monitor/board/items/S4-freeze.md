@@ -2,6 +2,7 @@ priority: 4
 cell: S4
 territory: freeze
 deps: none
+lane: campaign
 
 # S4 · 冻结包起草（Phase 4 开跑前必须提交哈希的一切）
 

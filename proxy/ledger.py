@@ -6,9 +6,13 @@ module. Corrections are new `incident` records.
 Every record goes through `redact.VAULT.scrub()` on its way to disk, so a
 credential cannot reach the file even if an arm put one in a request body.
 
-Every record is also checked against `proxy/canon.py` first, so a field the
-format does not define never reaches disk at all (F-16: this file is the
-canon).
+Every record is also checked against `proxy/canon.py` first, so a spelling the
+format forbids never reaches disk at all (F-16: this file is the canon). A
+field the format merely does not *mention* is a different case and is written:
+the writer runs after the request has been sent, so refusing a record cannot
+un-send it, and the one time this module refused one it discarded a reply that
+had already cost $2.695 (INC-TA-006). Those fields are counted in
+`Ledger.unknown_fields` so a run can report them; see `proxy/CONTRACT_CHANGES.md`.
 """
 
 import hashlib
@@ -16,6 +20,7 @@ import json
 import os
 import threading
 import time
+import warnings
 from typing import Any, Dict, List, Optional
 
 from . import LEDGER_VERSION
@@ -55,6 +60,11 @@ INCIDENT_KINDS = frozenset({
     # A line in the file is not a v1.0 record. The file is append-only, so it
     # cannot be removed; recording it is the only correction available.
     "ledger_unreadable_line",
+    # The shared spend pool refused, so a request the arm made did not complete
+    # or its response never reached the arm. INC-BA-003's whole complaint was
+    # that a budget stop left no trace anyone else could see; a refusal that
+    # only appears as a 500 to the arm is that again, one layer down.
+    "spend_gate_refused",
 })
 
 _LOCKS: Dict[str, threading.Lock] = {}
@@ -110,6 +120,45 @@ def _last_seq(path: str) -> int:
     return last
 
 
+def line_hash(line: bytes) -> str:
+    """The chain link: sha256 over one line's bytes as written, no terminator.
+
+    Deliberately over *bytes*, not over a re-serialised record.  A verifier
+    that re-canonicalises before hashing is really checking that today's
+    `canonical()` agrees with the one that wrote the file -- so the day that
+    function's behaviour changes, every ledger ever written goes red at once
+    and the alarm means nothing.  Hashing the bytes on disk asks the only
+    question worth asking: are these the bytes that were written?
+    """
+    return sha256(line)
+
+
+def _tail_state(path: str) -> "tuple[int, Optional[str]]":
+    """`(last seq, hash of the last line)` -- what a new writer must resume from.
+
+    Read in binary in one pass, because the chain hashes bytes and decoding
+    then re-encoding would be a second chance to disagree with the file.
+    """
+    if not os.path.exists(path):
+        return 0, None
+    last_seq, last_line = 0, None
+    with open(path, "rb") as fh:
+        for raw in fh:
+            stripped = raw.rstrip(b"\r\n")
+            if not stripped.strip():
+                continue
+            last_line = stripped
+            try:
+                last_seq = max(last_seq,
+                               int(json.loads(stripped.decode("utf-8")).get("seq", 0)))
+            except (ValueError, AttributeError, UnicodeDecodeError):
+                # An unreadable line still occupies its place in the chain
+                # (RED-44: one bad line must not destroy the whole ledger), so
+                # it is kept as the predecessor even though its seq is unknown.
+                continue
+    return last_seq, (line_hash(last_line) if last_line is not None else None)
+
+
 class Ledger:
     """One ledger file. Thread-safe; `seq` is assigned under the lock so it is
     dense and monotonic even with several proxy threads writing."""
@@ -118,15 +167,49 @@ class Ledger:
         self.path = path
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         self._lock = _lock_for(path)
+        #: `"<event>.<field>" -> count` for every field written to one of the
+        #: two shapes that §3/§4 does not list. A warning on stderr is seen by
+        #: whoever is watching at the time; this is seen by the run report.
+        #: Empty is the normal state and the interesting one is non-empty.
+        self.unknown_fields: Dict[str, int] = {}
         with self._lock:
-            self._seq = _last_seq(path)
+            self._seq, self._prev = _tail_state(path)
+
+    def _note_unknown(self, event: str, names: List[str], message: str) -> None:
+        """Say it out loud, and *never* let saying it stop the write.
+
+        `canon.check`'s default is `warnings.warn`, which is right for a
+        validator and wrong here: a warning is an exception whenever the
+        ambient filter says `error` -- `python -W error`, `PYTHONWARNINGS=error`,
+        a hardened CI runner, or a `simplefilter("error")` left on by something
+        earlier in the process. On this path that would raise inside the writer,
+        after the request has been sent and the provider has been paid, and an
+        arm's `except Exception` would record "the desk failed" and discard the
+        reply. That is INC-TA-006 exactly, rebuilt out of the warning that was
+        supposed to replace it. So the warning is emitted defensively and the
+        tally, which cannot raise, is the durable half.
+        """
+        with self._lock:
+            for name in names:
+                key = "%s.%s" % (event, name)
+                self.unknown_fields[key] = self.unknown_fields.get(key, 0) + 1
+        try:
+            warnings.warn(message, canon.UnknownField, stacklevel=4)
+        except Exception:                       # noqa: BLE001 -- see docstring
+            pass
 
     def append(self, event: str, run_id: str, arm: str, **fields: Any) -> Dict[str, Any]:
         if event not in EVENTS:
             raise ValueError("unknown event %r (LEDGER_FORMAT.md §3, §4, §6)" % event)
         if arm not in ARMS:
+            # Still a hard refusal, and the reason it is not the after-the-money
+            # refusal D-030 argues against: `arm` and `event` are fixed when the
+            # RunLedger is constructed, so a wrong one fails on the run's very
+            # first record -- before any request is sent and any dollar is spent.
+            # A refusal that fires in the first second of a run is a typo caught;
+            # a refusal that fires on record 40 is evidence destroyed.
             raise ValueError("unknown arm %r; register it in ledger.ARMS" % (arm,))
-        canon.check(event, fields)
+        unknown = canon.check(event, fields, on_unknown=self._note_unknown)
         if event == "env_step":
             # The writer computes this itself on every normal path; a caller
             # that supplies one has to supply the right one. A frame_hash that
@@ -152,15 +235,32 @@ class Ledger:
             # model output; an arm putting a key in a *prompt* still raises a
             # `credential_in_body` incident at the proxy.
             clean = scrub_keyish(clean)
+        elif unknown:
+            # ...but the exemption is for `request` and `response`, which §4
+            # *requires* verbatim. A field the format has never heard of
+            # carries no such requirement, and additive-safe must not quietly
+            # widen a hole the exemption was never drawn around: before S9 an
+            # unlisted field on a model_call could not reach disk at all.
+            clean = dict(clean)
+            for name in unknown:
+                clean[name] = scrub_keyish({name: clean[name]})[name]
         record.update(clean)
         with self._lock:
             self._seq += 1
             record["seq"] = self._seq
             record["ts"] = utcnow()
+            # The chain link, set under the same lock that assigns `seq` so the
+            # two can never disagree about the order records were written in.
+            # The first record of a file carries `null`: there is nothing
+            # before it, and saying so explicitly distinguishes "start of
+            # chain" from "chain field forgotten".
+            record["prev"] = self._prev
             line = canonical(record)
+            blob = line.encode("utf-8")
             with open(self.path, "a", encoding="utf-8", newline="") as fh:
                 fh.write(line)
                 fh.write("\n")
+            self._prev = line_hash(blob)
         return record
 
     # -- reading -----------------------------------------------------------
@@ -253,6 +353,17 @@ class RunLedger:
 
     def _append(self, event: str, **fields: Any) -> Dict[str, Any]:
         return self.ledger.append(event, self.run_id, self.arm, **fields)
+
+    @property
+    def unknown_fields(self) -> Dict[str, int]:
+        """Fields written to the two shapes that §3/§4 does not list.
+
+        Counted per *file*, not per run: one `Ledger` can hold many runs, and
+        the tally is the writer's. In the normal case -- one run, one file --
+        the distinction does not arise, and when it does, over-reporting is the
+        safe direction for a notice.
+        """
+        return dict(self.ledger.unknown_fields)
 
     # -- the two shapes ----------------------------------------------------
     def env_step(self, game_id: str, action: Dict[str, Any],

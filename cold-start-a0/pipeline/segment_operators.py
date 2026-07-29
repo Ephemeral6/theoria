@@ -32,6 +32,7 @@ from engines.mdl_segmenter import segmenter as _seg
 from engines.mdl_segmenter.costs import CostModel
 from engines.mdl_segmenter.segmenter import Component, Segmentation
 
+from pipeline.identity_swap import repair_identity_swaps
 from pipeline.reidentify import reidentify
 
 Cell = Tuple[int, int]
@@ -99,6 +100,23 @@ OPERATORS: Dict[str, Callable] = {
 }
 
 
+def _max_objects(seg: Segmentation) -> int:
+    """The width `segment_trajectory` charged its object ids in.
+
+    Upstream sizes `b_objid` by the most components in **any one frame**, not by
+    the number of tracks (`segmenter.py`, `max_objects = max(len(comps) …)`), and
+    a post-pass that re-prices events has to charge in the same currency or
+    `script_bits` stops being the length of any single code -- which matters
+    here, because `script_bits` is what this function compares between operators.
+    Tracks present in a frame are exactly that frame's components, so this
+    reproduces the number rather than guessing at it.
+    """
+    per_frame = (sum(1 for track in seg.tracks
+                     if track.mask_at(i) is not None)
+                 for i in range(seg.n_frames))
+    return max(max(per_frame, default=1), 1)
+
+
 @contextlib.contextmanager
 def _operator(fn: Callable):
     original = _seg.connected_components
@@ -122,14 +140,24 @@ def segment_with(name: str, frames: Sequence[Frame],
 
 
 def choose_operator(frames: Sequence[Frame], background: int = 0):
-    """Run every operator, then re-identify; keep the shortest script.
+    """Run every operator, then repair identity, then re-identify; keep the
+    shortest script.
 
-    Two adjudications, both by script length and both reported:
+    Three adjudications.  Two of them are by script length and are reported as
+    such; the third is not, and says so:
 
-    1. which component proposer (colour-agnostic vs uniform-colour);
-    2. whether merging same-template, disjoint-lifetime tracks pays — an object
+    1. which component proposer (colour-agnostic vs uniform-colour) — by bits;
+    2. whether the matcher handed a mover's identity to the object it stepped
+       onto — **not** by bits.  That reading is 2 bits *cheaper* per swap under
+       the published cost model, which is exactly why the matcher chooses it and
+       exactly why script length cannot be the thing that overrules it.  See
+       `pipeline.identity_swap`; the price is in the report;
+    3. whether merging same-template, disjoint-lifetime tracks pays — an object
        that vanishes and comes back is otherwise a fresh track every time, which
        is how A0′'s single Door became five.
+
+    The order matters: a swap repair turns a `recolor` into a `vanish`, which is
+    what gives `reidentify` a disjoint lifetime to work with in the first place.
 
     Returns `(name, segmentation, report)`.  Ties break on the operator name so
     the choice is deterministic.
@@ -139,9 +167,15 @@ def choose_operator(frames: Sequence[Frame], background: int = 0):
 
     scored = []
     reports = {}
+    swap_reports = {}
     for name in sorted(OPERATORS):
         seg = segment_with(name, frames, background=background)
-        cost = CostModel(height, width, max_objects=max(len(seg.tracks), 1))
+        cost = CostModel(height, width, max_objects=_max_objects(seg))
+        repaired, swap_report = repair_identity_swaps(
+            seg, cost, frames=frames, background=background)
+        if swap_report.applied:
+            seg = repaired
+        swap_reports[name] = swap_report
         merged, merge_report = reidentify(seg, cost)
         if merge_report.applied:
             seg = merged
@@ -159,6 +193,7 @@ def choose_operator(frames: Sequence[Frame], background: int = 0):
             "tracks": len(seg.tracks),
             "events": len(seg.events),
             "reidentification": reports[name].as_json(),
+            "identity_repair": swap_reports[name].as_json(),
             "chosen": name == best_name,
         }
         for bits, name, seg in scored

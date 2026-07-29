@@ -20,7 +20,7 @@ from __future__ import annotations
 import math
 from typing import List
 
-from battery.metrics import metric, ok, polyfit_r2, thin
+from battery.metrics import metric, ok, polyfit_r2, thin, unsound
 from battery.model import Run
 
 FRONTLOAD_K = 0.25      # "the first k% of turns"
@@ -52,6 +52,24 @@ def _cost_through(costs, mark: float) -> float:
     return head
 
 
+def _unpriced(run: Run) -> int:
+    """Model calls the source recorded without a price.
+
+    V9-D3.  `_costs` reads `c.cost_usd or 0.0`, so a call with no price is a
+    call that cost nothing, and the blind audit turned that one line into four
+    attacks at once: 200 identically-sized calls with only the first priced
+    scored E1 = 0.5 instead of 100.0, E2 = 1.0, E3 = 0.005, E5 = 2e-09.  None
+    of them required an arm to do anything -- providers omit usage on cache
+    hits, on streamed responses and on errors, so a partly-priced ledger is the
+    ordinary case rather than the adversarial one.
+
+    The capability gate does not help: it asks whether *any* call carries a
+    price, which is a presence check.  This is the completeness check, and the
+    economy family is the one family where the difference is the measurement.
+    """
+    return sum(1 for c in run.calls if c.cost_usd is None)
+
+
 def _costs(run: Run) -> List[float]:
     """Cost per billed model call, in call order. The money axis."""
     return [c.cost_usd or 0.0 for c in sorted(run.calls, key=lambda c: c.idx)]
@@ -72,6 +90,11 @@ def _turn_costs(run: Run) -> List[float]:
         "Total model cost. Support for the shape metrics, not a ranking.",
         needs=("model_calls", "cost"), direction="neutral", unit="usd")
 def total_cost(run: Run):
+    missing = _unpriced(run)
+    if missing:
+        return unsound("E1", "%d of %d model calls carry no price, and an "
+                             "unpriced call is not a free one"
+                             % (missing, len(run.calls)))
     total = sum(_costs(run))
     if total <= 0:
         return thin("E1", "total cost is zero")
@@ -104,6 +127,11 @@ def frontload_index(run: Run):
     still scores near 1.0 over any number of turns, so the anti-gaming audit
     keeps E2 in the reference tier on the concentration attack alone.
     """
+    missing = _unpriced(run)
+    if missing:
+        return unsound("E2", "%d of %d model calls carry no price; the "
+                             "shape of a bill cannot be read from a "
+                             "partial bill" % (missing, len(run.calls)))
     costs = _turn_costs(run)
     total = sum(costs)
     if total <= 0:
@@ -122,6 +150,11 @@ def frontload_index(run: Run):
         "Low means the bill settled early.",
         needs=("model_calls", "cost"), direction="lower", unit="share")
 def convergence_point(run: Run):
+    missing = _unpriced(run)
+    if missing:
+        return unsound("E3", "%d of %d model calls carry no price; the "
+                             "shape of a bill cannot be read from a "
+                             "partial bill" % (missing, len(run.calls)))
     costs = _turn_costs(run)
     total = sum(costs)
     if total <= 0:
@@ -169,6 +202,11 @@ def context_growth_quadratic_gain(run: Run):
         needs=("steps", "model_calls", "cost"), direction="lower",
         unit="usd/action")
 def cost_per_action(run: Run):
+    missing = _unpriced(run)
+    if missing:
+        return unsound("E5", "%d of %d model calls carry no price, and an "
+                             "unpriced call is not a free one"
+                             % (missing, len(run.calls)))
     total = sum(_costs(run))
     actions = len(run.ok_steps)
     if total <= 0:

@@ -54,7 +54,11 @@ sys.path.insert(0, HERE)
 from client import DATA_DIR, ArcClient                      # noqa: E402
 from precheck import (                                      # noqa: E402
     ACTION_ATTEMPTS,
+    ACTION_DELAY_BASE,
+    ACTION_DELAY_CAP,
     RESET_ATTEMPTS,
+    RESET_DELAY_BASE,
+    RESET_DELAY_CAP,
     SealedGameError,
     assert_playable,
     dev_pile,
@@ -281,7 +285,8 @@ def play(client: ArcClient, game_id: str, spec: Dict[str, Any],
     status, opening, stats = send_command(
         client, "/api/cmd/RESET", {"game_id": game_id, "card_id": card_id},
         note="canary RESET %s" % game_id,
-        attempts=RESET_ATTEMPTS, delay_base=0.5, delay_cap=5.0)
+        attempts=RESET_ATTEMPTS,
+        delay_base=RESET_DELAY_BASE, delay_cap=RESET_DELAY_CAP)
     http_calls = stats["attempts"]
     if status != 200 or not isinstance(opening, dict):
         return {"game_id": game_id, "observed": [], "actions_executed": 0,
@@ -302,7 +307,8 @@ def play(client: ArcClient, game_id: str, spec: Dict[str, Any],
             client, "/api/cmd/ACTION%d" % action,
             {"game_id": game_id, "card_id": card_id, "guid": guid},
             note="canary ACTION%d #%d %s" % (action, offset, game_id),
-            attempts=ACTION_ATTEMPTS, delay_cap=5.0)
+            attempts=ACTION_ATTEMPTS,
+            delay_base=ACTION_DELAY_BASE, delay_cap=ACTION_DELAY_CAP)
         http_calls += stats["attempts"]
         if status != 200 or not isinstance(response, dict):
             error = ("ACTION%d #%d failed after %d attempts: HTTP %s"
@@ -413,6 +419,12 @@ def replay(games: Optional[List[str]] = None,
                              % (planned, INVOCATION_CAP))
 
     client = client or ArcClient()
+    # Wall clock, because the documented limit is a *rate* and until now this
+    # instrument only ever recorded volume. `rate_budget.py` can bound the
+    # campaign's requests-per-minute from the retry schedule, but a bound is
+    # not a measurement; `elapsed_s` is what turns every future sweep into one
+    # free observation of the quantity the 600 rpm limit is charged against.
+    started = time.time()
     card_id = client.open_scorecard(
         tags=["canary", SPEC_VERSION] + list(tags or []))["card_id"]
     results, drifted = {}, []
@@ -448,6 +460,16 @@ def replay(games: Optional[List[str]] = None,
         "planned_actions": planned,
         "actions_executed": sum(r["actions_executed"] for r in results.values()),
         "http_calls": sum(r["http_calls"] for r in results.values()),
+        # Volume over wall clock. `http_calls` alone cannot answer the only
+        # question the documented limit asks -- 600 requests per *minute* -- and
+        # for the first four sweeps it was the only figure recorded, so the four
+        # replays already on disk carry no rate at all. From here every sweep is
+        # a free observation of the real thing. `rate_budget.py --observed`
+        # reads these back; runs older than this field are skipped, not guessed.
+        "elapsed_s": round(time.time() - started, 3),
+        "observed_rpm": round(
+            sum(r["http_calls"] for r in results.values())
+            / max(time.time() - started, 1e-6) * 60.0, 2),
         "verdicts": {g: r["verdict"]["verdict"] for g, r in results.items()},
         "results": results,
     }

@@ -1,0 +1,399 @@
+{
+  "degrees_of_freedom": 6,
+  "excluded": {
+    "ar25-0c556536": {
+      "cells": 3,
+      "reason": "degraded: measured under INC-BA-003's concurrent-campaign load, and killed by an abort threshold that did not scale with the action budget (BUDGET_REPORT 11.2). Kept in the record and in every cumulative gate; not re-run, and not used to estimate a spread that would be the contention's and not the arm's."
+    }
+  },
+  "games": {
+    "g50t-5849a774": {
+      "outcomes": [
+        "budget_exhausted"
+      ],
+      "repeats": [
+        {
+          "action_success_rate": 1.0,
+          "actions_failed": 0,
+          "actions_ok": 30.0,
+          "cost_usd": 1.1468159999999998,
+          "failed_consecutive_max": 0,
+          "http_per_action": 1.0,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 1,
+          "reservation_id": "res-51100cdd66ab4aef",
+          "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+          "usd_per_action": 0.038227199999999996,
+          "wall_seconds": 1037.5
+        },
+        {
+          "action_success_rate": 1.0,
+          "actions_failed": 0,
+          "actions_ok": 30.0,
+          "cost_usd": 1.0675,
+          "failed_consecutive_max": 0,
+          "http_per_action": 1.0,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 2,
+          "reservation_id": "res-ba71da64e38441d9",
+          "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+          "usd_per_action": 0.03558333333333333,
+          "wall_seconds": 848.0
+        },
+        {
+          "action_success_rate": 1.0,
+          "actions_failed": 0,
+          "actions_ok": 30.0,
+          "cost_usd": 1.127674,
+          "failed_consecutive_max": 0,
+          "http_per_action": 1.0,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 3,
+          "reservation_id": "res-52858f71f2404fc1",
+          "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+          "usd_per_action": 0.03758913333333334,
+          "wall_seconds": 990.9
+        }
+      ],
+      "stats": {
+        "action_success_rate": {
+          "cv": 0.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "actions_ok": {
+          "cv": 0.0,
+          "max": 30.0,
+          "mean": 30.0,
+          "min": 30.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "cost_usd": {
+          "cv": 0.037154,
+          "max": 1.1468159999999998,
+          "mean": 1.113997,
+          "min": 1.0675,
+          "n": 3,
+          "sd": 0.041389
+        },
+        "http_per_action": {
+          "cv": 0.0,
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "levels_completed": {
+          "cv": null,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "usd_per_action": {
+          "cv": 0.037154,
+          "max": 0.038227199999999996,
+          "mean": 0.037133,
+          "min": 0.03558333333333333,
+          "n": 3,
+          "sd": 0.00138
+        },
+        "wall_seconds": {
+          "cv": 0.102987,
+          "max": 1037.5,
+          "mean": 958.8,
+          "min": 848.0,
+          "n": 3,
+          "sd": 98.743962
+        }
+      }
+    },
+    "sk48-d8078629": {
+      "outcomes": [
+        "budget_exhausted"
+      ],
+      "repeats": [
+        {
+          "action_success_rate": 0.8666666666666667,
+          "actions_failed": 4,
+          "actions_ok": 26.0,
+          "cost_usd": 1.3137889999999997,
+          "failed_consecutive_max": 2,
+          "http_per_action": 2.5,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 1,
+          "reservation_id": "res-f6d8f67ea20b48e9",
+          "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+          "usd_per_action": 0.05053034615384614,
+          "wall_seconds": 1411.7
+        },
+        {
+          "action_success_rate": 0.9333333333333333,
+          "actions_failed": 2,
+          "actions_ok": 28.0,
+          "cost_usd": 1.3440570000000003,
+          "failed_consecutive_max": 1,
+          "http_per_action": 1.6071428571428572,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 2,
+          "reservation_id": "res-4bf62d3533604b48",
+          "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+          "usd_per_action": 0.048002035714285726,
+          "wall_seconds": 1395.7
+        },
+        {
+          "action_success_rate": 0.9,
+          "actions_failed": 3,
+          "actions_ok": 27.0,
+          "cost_usd": 1.389694,
+          "failed_consecutive_max": 2,
+          "http_per_action": 1.9259259259259258,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 3,
+          "reservation_id": "res-f05fe384ded14e11",
+          "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+          "usd_per_action": 0.05147014814814815,
+          "wall_seconds": 1513.0
+        }
+      ],
+      "stats": {
+        "action_success_rate": {
+          "cv": 0.037037,
+          "max": 0.9333333333333333,
+          "mean": 0.9,
+          "min": 0.8666666666666667,
+          "n": 3,
+          "sd": 0.033333
+        },
+        "actions_ok": {
+          "cv": 0.037037,
+          "max": 28.0,
+          "mean": 27.0,
+          "min": 26.0,
+          "n": 3,
+          "sd": 1.0
+        },
+        "cost_usd": {
+          "cv": 0.028322,
+          "max": 1.389694,
+          "mean": 1.34918,
+          "min": 1.3137889999999997,
+          "n": 3,
+          "sd": 0.038211
+        },
+        "http_per_action": {
+          "cv": 0.224995,
+          "max": 2.5,
+          "mean": 2.011023,
+          "min": 1.6071428571428572,
+          "n": 3,
+          "sd": 0.452471
+        },
+        "levels_completed": {
+          "cv": null,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "usd_per_action": {
+          "cv": 0.035873,
+          "max": 0.05147014814814815,
+          "mean": 0.050001,
+          "min": 0.048002035714285726,
+          "n": 3,
+          "sd": 0.001794
+        },
+        "wall_seconds": {
+          "cv": 0.044169,
+          "max": 1513.0,
+          "mean": 1440.133333,
+          "min": 1395.7,
+          "n": 3,
+          "sd": 63.609459
+        }
+      }
+    },
+    "tn36-ef4dde99": {
+      "outcomes": [
+        "budget_exhausted",
+        "gave_up"
+      ],
+      "repeats": [
+        {
+          "action_success_rate": 0.8214285714285714,
+          "actions_failed": 5,
+          "actions_ok": 23.0,
+          "cost_usd": 1.0126804999999999,
+          "failed_consecutive_max": 2,
+          "http_per_action": 3.347826086956522,
+          "levels_completed": 0.0,
+          "outcome": "gave_up",
+          "repeat": 1,
+          "reservation_id": "res-5058a348d1af468f",
+          "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+          "usd_per_action": 0.04402958695652173,
+          "wall_seconds": 1001.1
+        },
+        {
+          "action_success_rate": 0.8275862068965517,
+          "actions_failed": 5,
+          "actions_ok": 24.0,
+          "cost_usd": 1.0948499999999999,
+          "failed_consecutive_max": 2,
+          "http_per_action": 2.9583333333333335,
+          "levels_completed": 0.0,
+          "outcome": "gave_up",
+          "repeat": 2,
+          "reservation_id": "res-e161d2d93abc410b",
+          "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+          "usd_per_action": 0.04561874999999999,
+          "wall_seconds": 1109.0
+        },
+        {
+          "action_success_rate": 0.8,
+          "actions_failed": 6,
+          "actions_ok": 24.0,
+          "cost_usd": 1.039319,
+          "failed_consecutive_max": 2,
+          "http_per_action": 3.2083333333333335,
+          "levels_completed": 0.0,
+          "outcome": "budget_exhausted",
+          "repeat": 3,
+          "reservation_id": "res-498f27ea75e549b5",
+          "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+          "usd_per_action": 0.04330495833333334,
+          "wall_seconds": 1026.2
+        }
+      ],
+      "stats": {
+        "action_success_rate": {
+          "cv": 0.017738,
+          "max": 0.8275862068965517,
+          "mean": 0.816338,
+          "min": 0.8,
+          "n": 3,
+          "sd": 0.01448
+        },
+        "actions_ok": {
+          "cv": 0.024395,
+          "max": 24.0,
+          "mean": 23.666667,
+          "min": 23.0,
+          "n": 3,
+          "sd": 0.57735
+        },
+        "cost_usd": {
+          "cv": 0.039966,
+          "max": 1.0948499999999999,
+          "mean": 1.04895,
+          "min": 1.0126804999999999,
+          "n": 3,
+          "sd": 0.041923
+        },
+        "http_per_action": {
+          "cv": 0.062224,
+          "max": 3.347826086956522,
+          "mean": 3.171498,
+          "min": 2.9583333333333335,
+          "n": 3,
+          "sd": 0.197342
+        },
+        "levels_completed": {
+          "cv": null,
+          "max": 0.0,
+          "mean": 0.0,
+          "min": 0.0,
+          "n": 3,
+          "sd": 0.0
+        },
+        "usd_per_action": {
+          "cv": 0.026705,
+          "max": 0.04561874999999999,
+          "mean": 0.044318,
+          "min": 0.04330495833333334,
+          "n": 3,
+          "sd": 0.001184
+        },
+        "wall_seconds": {
+          "cv": 0.054009,
+          "max": 1109.0,
+          "mean": 1045.433333,
+          "min": 1001.1,
+          "n": 3,
+          "sd": 56.462761
+        }
+      }
+    }
+  },
+  "pooled_cv": {
+    "action_success_rate": 0.018258,
+    "actions_ok": 0.020477,
+    "cost_usd": 0.035147,
+    "http_per_action": 0.09574,
+    "levels_completed": null,
+    "usd_per_action": 0.033244,
+    "wall_seconds": 0.067055
+  },
+  "sizing": {
+    "action_success_rate": {
+      "cv": 0.018258,
+      "n_for_ci_10pct": 3,
+      "n_for_ci_20pct": 2,
+      "n_to_detect_25pct_difference": 3,
+      "n_to_detect_50pct_difference": 3
+    },
+    "actions_ok": {
+      "cv": 0.020477,
+      "n_for_ci_10pct": 3,
+      "n_for_ci_20pct": 2,
+      "n_to_detect_25pct_difference": 3,
+      "n_to_detect_50pct_difference": 3
+    },
+    "cost_usd": {
+      "cv": 0.035147,
+      "n_for_ci_10pct": 3,
+      "n_for_ci_20pct": 3,
+      "n_to_detect_25pct_difference": 3,
+      "n_to_detect_50pct_difference": 3
+    },
+    "http_per_action": {
+      "cv": 0.09574,
+      "n_for_ci_10pct": 7,
+      "n_for_ci_20pct": 4,
+      "n_to_detect_25pct_difference": 5,
+      "n_to_detect_50pct_difference": 3
+    },
+    "levels_completed": {
+      "cv": null,
+      "note": "no usable CV: the metric was constant or its mean was zero across every repeat. A quantity with no spread needs no repeats to estimate -- and one that is identically zero, like levels_completed, cannot be compared between arms at all."
+    },
+    "usd_per_action": {
+      "cv": 0.033244,
+      "n_for_ci_10pct": 3,
+      "n_for_ci_20pct": 3,
+      "n_to_detect_25pct_difference": 3,
+      "n_to_detect_50pct_difference": 3
+    },
+    "wall_seconds": {
+      "cv": 0.067055,
+      "n_for_ci_10pct": 5,
+      "n_for_ci_20pct": 3,
+      "n_to_detect_25pct_difference": 4,
+      "n_to_detect_50pct_difference": 3
+    }
+  }
+}

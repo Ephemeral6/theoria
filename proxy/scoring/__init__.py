@@ -114,9 +114,37 @@ def verify_frozen(scorer_id: str = DEFAULT_SCORER,
             "and cannot be compared with runs scored under the new one -- "
             "register a new scorer_id instead of editing this file."
             % (record["source"], actual, record["sha256"]))
+
+    # The scorer is not one file. S-12 delegates to `tools/validate_ledger.py`,
+    # which consults `canon.py`, so a change in either moves what the scorer
+    # returns while `arc_v1.py` hashes exactly as before -- the freeze reports
+    # all clear and the number changes underneath it. S9 is the first change to
+    # exercise that: additive-safety turned S-12 from FAIL to PASS on a stream
+    # carrying an unlisted field, under an unchanged `scorer_id`. Freezing the
+    # source of a rule whose behaviour lives partly in its imports is a
+    # half-freeze, and a half-freeze reads as a whole one.
+    # Anchored on the package rather than on `frozen_path`: a test that points
+    # at a copied freeze record still checks the modules that will actually run.
+    package = os.path.dirname(HERE)
+    drifted = []
+    for rel, pinned in sorted((record.get("depends_on") or {}).items()):
+        actual_dep = _sha256_file(os.path.join(package, *rel.split("/")))
+        if actual_dep != pinned:
+            drifted.append((rel, actual_dep, pinned))
+    if drifted:
+        raise ScorerDriftError(
+            "%s's source is unchanged but %s. A scorer whose imports moved is a "
+            "scorer whose answers may have moved, and `scorer_id` %r would "
+            "attach the new rule's number to the old rule's name. Re-freeze "
+            "deliberately (proxy/CONTRACT_CHANGES.md) or register a new id."
+            % (record["source"],
+               "; ".join("%s hashes to %s, freeze says %s" % d for d in drifted),
+               scorer_id))
+
     return {"id": scorer_id, "version": REGISTRY[scorer_id].VERSION,
             "sha256": actual, "frozen_at": record["frozen_at"],
-            "source": record["source"]}
+            "source": record["source"],
+            "depends_on": dict(record.get("depends_on") or {})}
 
 
 def score_records(records: List[Dict[str, Any]],

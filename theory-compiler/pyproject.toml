@@ -23,3 +23,8 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# `slow` is opt-out, not opt-in: a marker that has to be asked for is a test
+# that does not run. Deselect with `-m "not slow"` when you want the fast pass.
+markers = [
+    "slow: sweeps every representable state of a world (tens of seconds)",
+]

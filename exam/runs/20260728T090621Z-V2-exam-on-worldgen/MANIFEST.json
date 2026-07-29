@@ -1,0 +1,91 @@
+{
+  "base_commit": "6072b067242895bfed6b664474e9d7fd12458a7b",
+  "baselines_before_any_change": {
+    "exam_tests": 158,
+    "worldgen_tests": 241
+  },
+  "branch": "agent/v2-exam-on-worldgen",
+  "cost": {
+    "api_calls": 0,
+    "model_calls": 0,
+    "network": "none (guard.no_network)",
+    "usd": 0.0
+  },
+  "delivered": {
+    "bluffer_floor_range": [
+      0.25,
+      0.666667
+    ],
+    "gaps": "exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md",
+    "items_total": 236,
+    "marker_calibrated_on_every_world": true,
+    "max_tag_bias": 0.25,
+    "mean_gap_replay_minus_heldout": 0.555,
+    "question_types_blocked": [
+      "handover",
+      "adaptation",
+      "verdict"
+    ],
+    "question_types_shipped": [
+      "heldout"
+    ],
+    "worlds_in_matrix": 20
+  },
+  "depends_on": {
+    "item": "C1-worldgen",
+    "landed_at": "7cb6775",
+    "provides": "worldgen/out/worlds/ -- 20 generated worlds, each shipping its own ground truth"
+  },
+  "files": [
+    {
+      "path": "exam/papers/worldgen_port.py",
+      "sha256": "3c4b4b7940a62a0e8d2322dc4a901698059e4a904b385b336f8b2d8e6bbb6d7f"
+    },
+    {
+      "path": "exam/papers/heldout_worldgen.py",
+      "sha256": "c3122a19448c3e017ffa1f25a6aa7441e957653b95de45318bea67f817f1c7e8"
+    },
+    {
+      "path": "exam/tools/run_matrix.py",
+      "sha256": "050f266350161a096eb7049e7bb304308f9b6cf094ddfd6e4e6b9e9f1717f034"
+    },
+    {
+      "path": "exam/tests/test_worldgen_papers.py",
+      "sha256": "780f14c2f57ca202377e089513e12a904ed600c7bf2e59a7c3cacc0e37d008a4"
+    },
+    {
+      "path": "exam/guard.py",
+      "sha256": "739b86d484950278673789a6c260b6d4b0bf71263fce517eb3e55988026bacbc"
+    },
+    {
+      "path": "exam/grading/rubrics_heldout.py",
+      "sha256": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9"
+    },
+    {
+      "path": "exam/artifacts/matrix/heldout_worldgen.json",
+      "sha256": "001a9a4028b309c2da3808b3dde988484ec844116053904610e49ce92bacc0aa"
+    },
+    {
+      "path": "exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md",
+      "sha256": "151a478fb40428a768e653261da4747ab3199017ce4be61a9ee0c5484659f724"
+    },
+    {
+      "path": "exam/runs/20260728T090621Z-V2-exam-on-worldgen/RUN_STATE.md",
+      "sha256": "cf3268ea743b4e5f598708d6139d331c18128c9595a5acb8c592b581bbb882e4"
+    }
+  ],
+  "goal": [
+    "run the four exam question types over the world factory's output, in batch",
+    "first grading matrix + per-question-type difficulty distribution",
+    "calibrate the marker against known full-score / zero fake examinees on the new worlds"
+  ],
+  "prompt_id": "V2-exam-on-worldgen",
+  "territory": "exam",
+  "tests": {
+    "exam_after": 253,
+    "exam_before": 158,
+    "worldgen": 241
+  },
+  "utc": "2026-07-28T09:06:21Z",
+  "worker": "W-1540"
+}

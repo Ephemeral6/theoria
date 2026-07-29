@@ -1,0 +1,86 @@
+{
+  "base_commit": "98593a09790386867a79f9bbac11452c82d64727",
+  "branch": "agent/v4-exam-selftest",
+  "files": [
+    {
+      "path": "exam/grading/selftest.py",
+      "sha256": "29e8bcf7c8d62843bdd36169287620cdbd5c1260ef384ca8b9b940e5b85349bc"
+    },
+    {
+      "path": "exam/grading/confusion_matrix.py",
+      "sha256": "c4fc63357c622e91c16de59fd59cfd0e83dfb4bc746ba7fd5a9f3e9c2974aa76"
+    },
+    {
+      "path": "exam/tools/run_selftest.py",
+      "sha256": "5b970e4efa3213c818afab20b9daa33cf744c489b0a8f2880efb7923367f1105"
+    },
+    {
+      "path": "exam/verify.py",
+      "sha256": "ca449ede0fbe9c4508bfa167d347d448a4ed7306e7fa241607ade3b1e61a7c38"
+    },
+    {
+      "path": "exam/tests/test_selftest.py",
+      "sha256": "155094cc2c88c73eeb5be0a41535571bca6398493b7e50a7e60a075115643268"
+    },
+    {
+      "path": "exam/grading/rubrics_adaptation.py",
+      "sha256": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e"
+    },
+    {
+      "path": "exam/papers/heldout.py",
+      "sha256": "41d93d2298f3e013b2bad947c6538a224033db55632ebab32534b489d0a7814a"
+    },
+    {
+      "path": "exam/artifacts/selftest.json",
+      "sha256": "2dacad25f4e3d2bd028316d55374d35928a02c88528975e9de401482743ff774"
+    },
+    {
+      "path": "exam/artifacts/matrix/verdict_confusion.json",
+      "sha256": "39a576c32113613bb32d759303a6adbacf7ecbae871b8ae412942aee54c9463d"
+    },
+    {
+      "path": "exam/artifacts/matrix/verdict_confusion.md",
+      "sha256": "fe52f4537c0b520165c41739f1e98ac9195defece2b0b6f0efa8b535f5a107b8"
+    },
+    {
+      "path": "exam/artifacts/answers/p15-verdict-a2.cheater-v4.answers.json",
+      "sha256": "322c21514a8ac07a424e53317ab5f3e0dca076209d7df4b38a69eb00d184718b"
+    },
+    {
+      "path": "exam/runs/20260728T105500Z-V4-exam-selftest/AUDIT.md",
+      "sha256": "ff4b2901e6525c7d86c56ae89cac57ea9cf92392ccbb196b2d42c5d3b4058325"
+    },
+    {
+      "path": "exam/runs/20260728T105500Z-V4-exam-selftest/RUN_STATE.md",
+      "sha256": "88023177ddfa251a4e01eb8c78cf8e94efdd1c3b837b5e1b0e46372acf15fd32"
+    },
+    {
+      "path": "exam/runs/20260728T105500Z-V4-exam-selftest/MATRIX.md",
+      "sha256": "fe52f4537c0b520165c41739f1e98ac9195defece2b0b6f0efa8b535f5a107b8"
+    },
+    {
+      "path": "exam/runs/20260728T105500Z-V4-exam-selftest/CHEATER.md",
+      "sha256": "907043c2afc52d53fc8d4c794c87f402e0a52f53b642479c63fb26fda19bc83d"
+    }
+  ],
+  "findings": [
+    "D-EX-013 calibration bands one-sided; truncates_partial uncaught until a seventh mutant was added",
+    "D-EX-014 illegible answers read as the claim `never`; empty submission scored 1.600/144 on adaptation",
+    "D-EX-015 oracle and a sheet-only cheater are identical in every cell of the confusion split",
+    "E1 the held-out sheet named the world's genre while claiming not to state its dynamics",
+    "E2 the replay/heldout split is 79/80 recoverable from box coordinate parity (recorded, unfixed)",
+    "E3 a0h-074's answer is a0h-042's input (recorded, unfixed)",
+    "master's checked-in sheets were stale against their own builder (generated_worlds_available)"
+  ],
+  "lane": "campaign",
+  "network": "none",
+  "pile_contact": "none",
+  "prompt_id": "V4-exam-selftest",
+  "protocol_digest": "3310f827f807856f01dd0490baa659952bef48323a84b5f095c81578ee1ecf6b",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "territory": "exam",
+  "tests": "287 passed",
+  "utc": "2026-07-28T10:55:00Z",
+  "verify": "GREEN -- build_papers, pytest, run_exam --calibrate, run_selftest, determinism",
+  "worker": "RES-1"
+}

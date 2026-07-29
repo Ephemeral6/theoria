@@ -1,0 +1,194 @@
+{
+ "budget": {
+  "actions_per_level": 6,
+  "campaign_usd": 200.0,
+  "game_usd": 60.0,
+  "leg_usd_cap": 25.0
+ },
+ "by_game": {
+  "g50t-5849a774": 0.0,
+  "sk48-d8078629": 0.0
+ },
+ "elapsed_s": 2.0,
+ "games": [
+  "g50t-5849a774",
+  "sk48-d8078629"
+ ],
+ "legs": [
+  {
+   "actions_ok": 6,
+   "books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01\\books",
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000151Z-leg01",
+   "carried": null,
+   "cost_accounting": {
+    "cli_cost_usd": 0.0,
+    "gate_absent": false,
+    "gate_usd_charged": 0.0,
+    "governing_source": "gate",
+    "governing_usd": 0.0
+   },
+   "game_id": "g50t-5849a774",
+   "index": 1,
+   "levels": {
+    "boundaries": 0,
+    "events": [],
+    "level": 1,
+    "levels_completed": 0,
+    "starts": [
+     0
+    ]
+   },
+   "outcome": "budget_exhausted",
+   "run_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01",
+   "seed_books": null,
+   "slug": "20260729T000151Z-leg01",
+   "stopped_because": "action budget spent",
+   "surprises": {
+    "by_family": {
+     "computational": 0,
+     "empirical": 0
+    },
+    "by_kind": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 0,
+     "search_timeout": 0
+    },
+    "total": 0,
+    "unhandled": 0
+   },
+   "theorize_rounds": 0,
+   "turn_series_error": null,
+   "usd": 0.0,
+   "utc": "2026-07-29T00:01:52Z"
+  },
+  {
+   "actions_ok": 6,
+   "books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000152Z-leg02\\books",
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000152Z-leg02",
+   "carried": {
+    "carried": {},
+    "empty": true,
+    "seed_from": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01\\books",
+    "skipped": [
+     {
+      "file": "theory.dsl",
+      "why": "not present"
+     },
+     {
+      "file": "playbook.dsl",
+      "why": "not present"
+     }
+    ]
+   },
+   "cost_accounting": {
+    "cli_cost_usd": 0.0,
+    "gate_absent": false,
+    "gate_usd_charged": 0.0,
+    "governing_source": "gate",
+    "governing_usd": 0.0
+   },
+   "game_id": "g50t-5849a774",
+   "index": 2,
+   "levels": {
+    "boundaries": 0,
+    "events": [],
+    "level": 1,
+    "levels_completed": 0,
+    "starts": [
+     0
+    ]
+   },
+   "outcome": "budget_exhausted",
+   "run_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000152Z-leg02",
+   "seed_books": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01\\books",
+   "slug": "20260729T000152Z-leg02",
+   "stopped_because": "action budget spent",
+   "surprises": {
+    "by_family": {
+     "computational": 0,
+     "empirical": 0
+    },
+    "by_kind": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 0,
+     "search_timeout": 0
+    },
+    "total": 0,
+    "unhandled": 0
+   },
+   "theorize_rounds": 0,
+   "turn_series_error": null,
+   "usd": 0.0,
+   "utc": "2026-07-29T00:01:52Z"
+  },
+  {
+   "actions_ok": 6,
+   "books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000152Z-leg01\\books",
+   "campaign": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260729T000152Z-leg01",
+   "carried": null,
+   "cost_accounting": {
+    "cli_cost_usd": 0.0,
+    "gate_absent": false,
+    "gate_usd_charged": 0.0,
+    "governing_source": "gate",
+    "governing_usd": 0.0
+   },
+   "game_id": "sk48-d8078629",
+   "index": 1,
+   "levels": {
+    "boundaries": 0,
+    "events": [],
+    "level": 1,
+    "levels_completed": 0,
+    "starts": [
+     0
+    ]
+   },
+   "outcome": "budget_exhausted",
+   "run_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000152Z-leg01",
+   "seed_books": null,
+   "slug": "20260729T000152Z-leg01",
+   "stopped_because": "action budget spent",
+   "surprises": {
+    "by_family": {
+     "computational": 0,
+     "empirical": 0
+    },
+    "by_kind": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 0,
+     "search_timeout": 0
+    },
+    "total": 0,
+    "unhandled": 0
+   },
+   "theorize_rounds": 0,
+   "turn_series_error": null,
+   "usd": 0.0,
+   "utc": "2026-07-29T00:01:53Z"
+  }
+ ],
+ "levels_completed": 0,
+ "prompt_id": "A3-campaign-devpile",
+ "spent_usd": 0.0,
+ "stopped": {
+  "detail": {
+   "game_id": "sk48-d8078629"
+  },
+  "reason": "3 legs in a row completed no level and met no new kind of surprise"
+ },
+ "utc": "2026-07-29T00:01:53Z",
+ "zero_progress_streak": 3
+}

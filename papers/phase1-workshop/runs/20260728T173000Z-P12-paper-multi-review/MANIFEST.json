@@ -1,0 +1,61 @@
+{
+  "prompt_id": "P12-paper-multi-review",
+  "branch": "agent/p12-paper-multi-review",
+  "base_commit": "29f41ea4028464592e56bcc0a7d81862b7f3221b",
+  "utc": "2026-07-28T21:31:31Z",
+  "worker": "W-1632",
+  "run_dir_name_utc": "20260728T173000Z",
+  "note": "The run directory keeps the name the first holder gave it. This manifest is written by the second holder; see continuity below.",
+
+  "continuity": {
+    "prior_holder": "RES-2",
+    "prior_holder_fate": "session-quota death circa 2026-07-29T02:0xZ; heartbeat stalled >2h, no response to urgent",
+    "inherited_artifacts": [
+      "review-a-domain.md",
+      "review-e-lay.md"
+    ],
+    "inheritance_is_valid_because": "Both inherited reviews were written against papers/phase1-workshop/PAPER.md at sha256 500867cd...f6a8cbc. The paper is byte-identical at this run's base_commit (verified by sha256sum, and by `git log 29f865d..master -- papers/` being empty). Re-running them would have produced a second opinion on the same text at no gain; the second holder therefore reused them and ran only the three reviews that were missing.",
+    "reviews_run_by_this_holder": [
+      "review-b-method.md",
+      "review-c-repro.md",
+      "review-d-adversarial.md"
+    ]
+  },
+
+  "subject": {
+    "path": "papers/phase1-workshop/PAPER.md",
+    "sha256": "500867cdb66e38a258da51acde9ad0709242d8bb68e841b6f3c9f6acff6a8cbc",
+    "version": "v0.3",
+    "generated_from": "papers/phase1-workshop/sections/*.md via assemble.py",
+    "fixes_land_in": "sections/, never in PAPER.md, which is a generated artefact"
+  },
+
+  "method": {
+    "design": "five independent single-perspective reviews, no reviewer told what the others found, cross-tabulated afterwards by the holder into one revision list",
+    "perspectives": {
+      "a": "domain referee -- novelty, fairness of the related-work section",
+      "b": "methods referee -- evidence sufficiency, definitional consistency, arithmetic",
+      "c": "reproducibility referee -- can it be re-run, does every number point at a file on disk",
+      "d": "hostile referee -- what can be refuted in one sentence",
+      "e": "lay reader -- is section 1 comprehensible to a non-specialist"
+    },
+    "api_cost_usd": 0.0,
+    "network_calls": 0,
+    "sealed_pile_contact": "none; all reviewers were given the zero-contact red line in their remit"
+  },
+
+  "files": [
+    {
+      "path": "review-a-domain.md",
+      "sha256": "25131ed9da83d2cd995a056aaa04b36e4e723cc4728cad19c2a0ce0736a551fa",
+      "author": "RES-2",
+      "utc": "2026-07-28T17:47Z (file mtime)"
+    },
+    {
+      "path": "review-e-lay.md",
+      "sha256": "3915968e4a917a3abbc720cf163e58c24fd3e03150b530a9fa2c9d80e754134d",
+      "author": "RES-2",
+      "utc": "2026-07-28T17:47Z (file mtime)"
+    }
+  ]
+}

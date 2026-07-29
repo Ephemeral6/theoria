@@ -1,0 +1,866 @@
+[
+  {
+    "blind": {
+      "expanded": 837,
+      "initial_h": "1",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c22"
+      ],
+      [
+        "at",
+        "b2",
+        "c33"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 12,
+      "initial_h": "11",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 23,
+      "initial_h": "7",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c44"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 0,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 2160,
+      "initial_h": "1",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c23"
+      ],
+      [
+        "at",
+        "b2",
+        "c33"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 18,
+      "initial_h": "17",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 43,
+      "initial_h": "10",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c11"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 329,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 1,
+      "initial_h": "0",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c42"
+      ],
+      [
+        "at",
+        "b2",
+        "c13"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 1,
+      "initial_h": "0",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 1,
+      "initial_h": "0",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c23"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 1138,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 20,
+      "initial_h": "1",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c32"
+      ],
+      [
+        "at",
+        "b2",
+        "c13"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 5,
+      "initial_h": "4",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 6,
+      "initial_h": "4",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c43"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 1944,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 533,
+      "initial_h": "1",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c23"
+      ],
+      [
+        "at",
+        "b2",
+        "c12"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 15,
+      "initial_h": "14",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 36,
+      "initial_h": "8",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c41"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 2618,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 279,
+      "initial_h": "1",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c33"
+      ],
+      [
+        "at",
+        "b2",
+        "c12"
+      ]
+    ],
+    "group": "alive",
+    "ipdb": {
+      "expanded": 11,
+      "initial_h": "10",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "lmcut": {
+      "expanded": 12,
+      "initial_h": "8",
+      "returncode": 0,
+      "solved": true,
+      "translator_ran": false,
+      "unsolvable": false
+    },
+    "player": [
+      [
+        "at-player",
+        "c14"
+      ]
+    ],
+    "python_relaxation_dead": false,
+    "state": 3120,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c22"
+      ],
+      [
+        "at",
+        "b2",
+        "c31"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c32"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 12,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c13"
+      ],
+      [
+        "at",
+        "b2",
+        "c33"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c22"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 338,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c12"
+      ],
+      [
+        "at",
+        "b2",
+        "c32"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c13"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 769,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c21"
+      ],
+      [
+        "at",
+        "b2",
+        "c23"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c13"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 1268,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c23"
+      ],
+      [
+        "at",
+        "b2",
+        "c24"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c12"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 1863,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 838,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c33"
+      ],
+      [
+        "at",
+        "b2",
+        "c24"
+      ]
+    ],
+    "group": "relaxation_dead_only",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c14"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 2576,
+    "theorem_dead": false
+  },
+  {
+    "blind": {
+      "expanded": 14,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c21"
+      ],
+      [
+        "at",
+        "b2",
+        "c31"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c22"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 108,
+    "theorem_dead": true
+  },
+  {
+    "blind": {
+      "expanded": 14,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c21"
+      ],
+      [
+        "at",
+        "b2",
+        "c11"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c13"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 868,
+    "theorem_dead": true
+  },
+  {
+    "blind": {
+      "expanded": 56,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c13"
+      ],
+      [
+        "at",
+        "b2",
+        "c41"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c42"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 1411,
+    "theorem_dead": true
+  },
+  {
+    "blind": {
+      "expanded": 210,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c32"
+      ],
+      [
+        "at",
+        "b2",
+        "c14"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c23"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 1868,
+    "theorem_dead": true
+  },
+  {
+    "blind": {
+      "expanded": 56,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c43"
+      ],
+      [
+        "at",
+        "b2",
+        "c14"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c13"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 2321,
+    "theorem_dead": true
+  },
+  {
+    "blind": {
+      "expanded": 42,
+      "initial_h": "1",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "boxes": [
+      [
+        "at",
+        "b1",
+        "c43"
+      ],
+      [
+        "at",
+        "b2",
+        "c41"
+      ]
+    ],
+    "group": "theorem_dead",
+    "ipdb": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "lmcut": {
+      "expanded": 0,
+      "initial_h": "infinity",
+      "returncode": 12,
+      "solved": false,
+      "translator_ran": false,
+      "unsolvable": true
+    },
+    "player": [
+      [
+        "at-player",
+        "c44"
+      ]
+    ],
+    "python_relaxation_dead": true,
+    "state": 2796,
+    "theorem_dead": true
+  }
+]

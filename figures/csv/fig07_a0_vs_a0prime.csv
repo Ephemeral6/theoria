@@ -1,0 +1,45 @@
+arm,world,run,metric,value,status,numerator,denominator,n_states,frame_note
+A0,cold-start-a0,base,accuracy_held_out_off_trace,0.000000,ok,0,3,59,"3 state-action pair(s) the full-history trace never covered out of 236 replayed pairs over 59 reachable states. Adversarial gaps left by the trace, not a sample drawn from the world -- not comparable with an exhaustive enumeration."
+A0,cold-start-a0,base,accuracy_vs_truth_on_trace,0.987288,ok,233,236,59,full-history replay over every reachable pair; 3 disagreements
+A0,cold-start-a0,base,errors_named_in_advance,DOWN;RIGHT;UP,ok,3,236,59,the three uncovered pairs are exactly the three the manual gets wrong -- THEORIZE_LOG R-05 named them before the score existed
+A0,cold-start-a0,base,executable_probes,,absent-not-in-source-registry,,,,"A0P_REPORT section 1 reports 0 of 22 designed; the count lives in cold-start-a0/artifacts/engines_report.json, which figures/sources.py does not declare"
+A0,cold-start-a0,base,explorer_steps,275,ok,,,59,battery capability_spectrum runs.a0-base.steps; the exhaustive walk
+A0,cold-start-a0,base,mechanism_witnessed_directions,1,ok,1,4,,press witnessed leftward only (structural: press_left); press (up/down/right) rejected at R-05 for want of evidence
+A0,cold-start-a0,base,objects_in_manual,3,prose-only-not-in-source-registry,,,,papers/phase1-workshop/sections/03_a0.md 3.3; no declared source carries it
+A0,cold-start-a0,base,reachable_states,59,ok,,,59,
+A0,cold-start-a0,base,revisions,0,ok,,,,"A0_REPORT: nothing came back from certify, so the loop was never exercised"
+A0,cold-start-a0,base,rules_in_manual,7,ok,,,,counted from score_vs_truth.structural: clauses neither null nor '<missing>'
+A0,cold-start-a0,base,state_action_coverage,0.987288,ok,233,236,59,"derived: pairs - held_out_pairs; the held-out set is the pairs the trajectory could never contain, so its complement is the covered set"
+A0,cold-start-a0,base,state_action_pairs,236,ok,,,59,
+A0,cold-start-a0,battery:a0-base,battery_K1,0.987288,ok,233,236,,
+A0,cold-start-a0,battery:a0-base,battery_K2,0.000000,ok,0,3,,"3 state-action pair(s) the full-history trace never covered out of 236 replayed pairs over 59 reachable states. Adversarial gaps left by the trace, not a sample drawn from the world -- not comparable with an exhaustive enumeration."
+A0,cold-start-a0,battery:a0-base,battery_K4,1.000000,ok,,,,"mean coverage over annotated clauses; annotated=7, unannotated=3 (reported alongside, never folded in), min_witnesses=1. K4 is never read without K2 beside it."
+A0 no-button,cold-start-a0 (button-less variant),battery:a0-no-button,battery_K1,1.000000,ok,92,92,,
+A0 no-button,cold-start-a0 (button-less variant),battery:a0-no-button,battery_K2,,insufficient-data,,,,no held-out pairs; every reachable pair was covered
+A0 no-button,cold-start-a0 (button-less variant),battery:a0-no-button,battery_K4,1.000000,ok,,,,"mean coverage over annotated clauses; annotated=5, unannotated=2 (reported alongside, never folded in), min_witnesses=1. K4 is never read without K2 beside it."
+A0 no-button,cold-start-a0 (button-less variant),variant,accuracy_held_out_off_trace,,insufficient-data,,,23,no held-out pairs; every reachable pair was covered
+A0 no-button,cold-start-a0 (button-less variant),variant,accuracy_vs_truth_on_trace,1.000000,ok,92,92,23,"the M5 variant: the Button removed, so the latch cannot bite"
+A0',cold-start-a0/prime,battery:none,battery_K2,,absent-no-battery-adapter,,,,"A0' has no battery run at all: no run id in capability_spectrum.json contains 'prime', and battery/adapters/ carries a0.py, a0_spike.py, a2.py and no prime adapter"
+A0',cold-start-a0/prime,run-a,accuracy_held_out_off_trace,,absent-no-held-out-set,,,57,no held-out set is defined for A0'. ABSENT -- not 1.0 and not 0.0. Drawn with theme.ABSENCE['not-applicable']
+A0',cold-start-a0/prime,run-a,accuracy_vs_truth_on_trace,1.000000,ok,228,228,57,scored over all 228 reachable pairs; 0 disagreements
+A0',cold-start-a0/prime,run-a,executable_probes,13,ok,13,27,,13 executable of 27 designed
+A0',cold-start-a0/prime,run-a,explorer_budget,110,ok,,,57,transitions walked before the explorer was cut off
+A0',cold-start-a0/prime,run-a,explorer_truncation,0.400000,ok,110,275,,derived across two artefacts: prime budget over battery runs.a0-base.steps
+A0',cold-start-a0/prime,run-a,mechanism_witnessed_directions,8,ok,8,8,,"one witness per direction x polarity: toggle_off_DOWN=1, toggle_off_LEFT=1, toggle_off_RIGHT=1, toggle_off_UP=1, toggle_on_DOWN=1, toggle_on_LEFT=1, toggle_on_RIGHT=1, toggle_on_UP=1"
+A0',cold-start-a0/prime,run-a,objects_in_manual,3,ok,,,,"prime_report engines.tracks, after re-identification merged 7 tracks into 3"
+A0',cold-start-a0/prime,run-a,reachable_states,57,ok,,,57,
+A0',cold-start-a0/prime,run-a,revisions,0,ok,,,,"0 revisions, and now with a measured reason: nothing was untested and nothing refuted"
+A0',cold-start-a0/prime,run-a,rules_in_manual,21,ok,,,,run_a.coverage_probes.rules
+A0',cold-start-a0/prime,run-a,rules_untested_by_trace,0,ok,,21,,run_a.coverage_probes.untested_rules
+A0',cold-start-a0/prime,run-a,state_action_coverage,0.469298,ok,107,228,57,the truncated explorer's own count (trace.a0p-base.covered_pairs)
+A0',cold-start-a0/prime,run-a,state_action_pairs,228,ok,,,57,
+A0',cold-start-a0/prime,run-b,accuracy_vs_truth_after_repair,1.000000,ok,228,228,57,after deleting the seeded clause
+A0',cold-start-a0/prime,run-b,accuracy_vs_truth_before_repair,0.991228,ok,226,228,57,"seeded manual: one false clause, push_onto_crate, invisible to replay"
+A0',cold-start-a0/prime,run-b,coverage_probe_verdict,CAUGHT,ok,,,,"untested by the trace: push_onto_crate; navigated to a firing state, wrote the prediction down first, world disagreed"
+A0',cold-start-a0/prime,run-b,coverage_probes_run,1,ok,,,,refuted: push_onto_crate
+A0',cold-start-a0/prime,run-b,lean_verdict,CAUGHT,ok,,,,"ArenaEscape: step sends the mover to (2, 4), which the board does not list as arena (from (2, 3) on right)"
+A0',cold-start-a0/prime,run-b,replay_verdict,GREEN,ok,,,,"blind to the seeded clause, exactly as predicted; the artefact records it as a bare boolean, and the 111-frame / 8991-pixel shape belongs to run A's unseeded manual"
+A0',cold-start-a0/prime,run-b,revisions,1,ok,,,,"one revision, and it was a deletion -- no multi-round repair is exercised anywhere"
+a0-spike,"a0-spike (other track, different world)",battery:a0-spike,battery_K1,1.000000,ok,1966,1966,,
+a0-spike,"a0-spike (other track, different world)",battery:a0-spike,battery_K2,1.000000,ok,39960,39960,,"exhaustive enumeration: every well-formed (state, direction) pair on all 5 evidence levels (39960 cases), most of them unreachable from the start state. NOT a withheld sample, and not comparable with cold-start-a0's held-out denominator of 3 adversarially chosen uncovered pairs."
+a0-spike,"a0-spike (other track, different world)",battery:a0-spike,battery_K4,1.000000,ok,,,,"mean coverage over annotated clauses; annotated=5, unannotated=4 (reported alongside, never folded in), min_witnesses=2. K4 is never read without K2 beside it."

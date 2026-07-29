@@ -1,0 +1,34 @@
+{
+  "base_commit": "dc9865a1b5edd432350d4a7bee4b218776e135d5",
+  "branch": "agent/bus2-ablation-readonly",
+  "files": [
+    {
+      "path": "ablcore/pin.py",
+      "sha256": "5483d683868e642e4e40805c19536b7f75999653c4646b2f3c486ec94a30bd08"
+    },
+    {
+      "path": "tests/test_readonly.py",
+      "sha256": "eda58ff7f932ebb6990e8fc12f22b1eed311bfe4473095a17cfa1afb4740c408"
+    },
+    {
+      "path": "verify.py",
+      "sha256": "ef35c76f6587de2f5cf6127e6fdab33fbeabd1859cb1e22e20f573c02c53df08"
+    },
+    {
+      "path": "artifacts/run_all.json",
+      "sha256": "ec2979ef1090807dfc21993738a26e22ce526f97cb9dcc917fe0825b4248c80d"
+    },
+    {
+      "path": "artifacts/verify.json",
+      "sha256": "66e3f420d14a8f90a59a94745e0f5df41774905ebed11b2e6ad6d696cc5a2aa0"
+    }
+  ],
+  "gate": {
+    "pytest_full_suite": "56 passed",
+    "pytest_test_verify_alone": "10 passed",
+    "verify.sh": "exit 0, twice, back to back"
+  },
+  "prompt_id": "bus2-ablation-readonly",
+  "utc": "2026-07-28T15:33:07Z",
+  "what": "repair of the intermittently RED read-only gate: the pin hashed a concurrent fleet session's runtime spend ledger, the test's denylist patch masked 201 tracked files, and verify.py ran pytest before the run it judges"
+}

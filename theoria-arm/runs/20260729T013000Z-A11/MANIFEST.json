@@ -1,0 +1,19 @@
+{
+  "prompt_id": "A11-bypass-attempts-explained",
+  "branch": "agent/a11-bypass-attempts-explained",
+  "base_commit": "16fed97",
+  "utc": "2026-07-29T01:30:00Z",
+  "worker": "W-1641",
+  "territory": "theoria-arm",
+  "question": "Classify 66 bypass_attempt records and establish whether the sealed-pile guarantee holds on the arm that talks to the real API, not merely on the proxy side.",
+  "classification": {"a_probe_manufactured": 66, "b_guard_neutralised": 66,
+                     "c_actual_bypass": 0, "sealed_ids_present": 0,
+                     "note": "buckets a and b are not disjoint here; that is the answer"},
+  "ticket_premise_refuted": "all 66 carry arm='probe', run_id='probe-model-proxy' and predate the arm (evidence/README.md:9-10); proxy/ledger.py:36-38 registers 'probe' as an identity distinct from 'theoria'. They are not on the real arm.",
+  "verdict_proxy_side": "HOLDS -- every evasion attempted by the adversarial audit was refused with 403 before any socket opened",
+  "verdict_arm_side": "DOES NOT HOLD YET -- (i) the arm process holds the live ARC credential (run.py:161 starts EnvProxy in-process; env_proxy.py:78 read_secret), (ii) the model path traverses no sealed-pile guard (modelcall.py:503-518), (iii) the model subprocess env scrub is config-bypassable (modelcall.py:505-508)",
+  "mechanism_finding": "bypass_attempt logs and falls through; model_proxy.py:176-181 has no return. Enforcement is the PASSTHROUGH_REQUEST_HEADERS allowlist in _forward, a separate mechanism. The 66 401s came from upstream for want of an ANTHROPIC_API_KEY, not from the proxy refusing.",
+  "privacy_finding": "theoria-arm/evidence/model-proxy-401.jsonl is tracked, 5.8 MB, and carries account_uuid/device_id/session_id 65 times each plus Claude Code's system prompt. No bearer tokens or oauth literals (0 each) -- operator identifiers, not credentials. Phase 4 publishes every tracked file.",
+  "method": "one classifier subagent + one adversarial auditor tasked with finding a real bypass; every load-bearing claim re-read in the source by W-1641 before being written down",
+  "files": []
+}

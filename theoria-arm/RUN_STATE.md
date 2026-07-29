@@ -186,3 +186,184 @@ action), and three of its results are findings in their own right:
 * **`cegis_miner` emitted nothing.** Its precondition (exactly one `move` event
   per transition) is a claim about the world, and this world does not satisfy
   it. Recorded per track as a refusal, never worked around (D-P8-006).
+
+---
+
+## The archive, read back — which runs a paper may cite (S8, 2026-07-28)
+
+Nine runs are under `runs/`. Before this pass, four had a `MANIFEST.json` and
+five did not, and this is the only arm that has ever spent an ARC action, so
+the gap was in the one place it mattered. `armtools/backfill.py` wrote the five
+from the runs' own ledgers, `armtools/verify_provenance.py` checks the result,
+and the table below is what a Phase 4 release manifest may lean on.
+
+| run | kind | billed actions | usable for the paper? |
+|---|---|---|---|
+| `preflight-20260728T012031Z` | pre-flight, aborted | 0 | **process record only** — opened a scorecard, never closed it, no run_end |
+| `preflight-20260728T012057Z` | pre-flight | 0 | **yes**, for the live-chain and retry-envelope findings |
+| `20260728T012311Z-…-aborted` | aborted experiment | **5** | **process record only** — INC-TA-004; cite for the cost of the defect, not for a result |
+| `20260728T012311Z-…-salvage` | salvage | 0 | process record — all eight close attempts 404ed |
+| `20260728T012311Z-…-salvage2` | salvage | 0 | **evidence** — holds the API's own scorecard for the run above (5 actions) |
+| `20260728T014402Z-…-aborted` | aborted experiment | **6** | **process record only** — INC-TA-004 |
+| `20260728T014402Z-…-salvage` | salvage | 0 | **evidence** — holds that run's scorecard (6 actions) |
+| `20260728T015354Z-g50t-first-contact` | experiment | **7** | **yes — this is the run the milestone rests on** |
+| `20260728T015354Z-…-salvage` | salvage | 0 | **evidence** — holds its scorecard (7 actions) |
+
+**18 actions is this arm's entire lifetime spend**, and all 18 are now confirmed
+twice: once by the ledgers (7 + 6 + 5) and once by the API's own arithmetic in
+the four closed scorecards. They agreed exactly. `verify_provenance` asserts it
+on every run, so the total cannot drift unnoticed.
+
+**The salvage runs are not filler.** A run that dies before closing its
+scorecard leaves `scorecard: null` in its own manifest — which is how both
+aborted runs' manifests read — while the number itself sits in the ledger of
+the salvage that closed the card afterwards. It was in the archive the whole
+time and unreachable from the file that needed it. Each aborted manifest now
+carries `scorecard_recovered_by` naming the salvage that holds it.
+
+### Three things this pass found, none of them comfortable
+
+**1. `base_commit` did not mean what it says.** `archive.py` filled it with
+`git rev-parse HEAD` at the moment the *manifest* was written, which for a run
+archived after its fix was committed is a later commit than the run ran at. The
+recorded `arm_version` settles it independently — it is a hash over this arm's
+own `.py` sources, so it can be recomputed at any commit and matched
+(`armtools/armversion.py`). Of the four manifests that carry a commit, **none
+names the tree its run actually ran against**: two name a later commit, two name
+one whose tree hashes differently from anything the run recorded.
+
+Said precisely, because the loose version is false: the derived commit is **not
+the commit the run was launched from**. Two of them were created *during* the
+run — `0f62cf6` 21 seconds after the 01:53 run started, `e3ce4ee` 57 seconds
+after the 01:44 one — because the fix under test was committed while the run
+was still going. What the hash establishes is that the run's `.py` sources were
+byte-identical to the tree that commit holds, which is what reproducibility
+needs and is all it claims. Each manifest carries the arithmetic under
+`provenance.arm_version_lookup.relation_to_the_run`.
+
+The corroboration is that each derived commit's message places the run exactly
+where the narrative already put it: the 01:44 run's sources match `e3ce4ee`, the
+commit recording the 01:23 abort; the 01:53 run's match `0f62cf6`, the commit
+fixing the 01:44 abort. `archive.py` now runs this check at write time and
+records its verdict beside the field.
+
+**2. Two runs ran against files that were never committed.** `preflight-…012057Z`
+and `20260728T012311Z-…-aborted` share an `arm_version` (22 files) that no
+commit in this repository reconstructs. They are honest runs and their ledgers
+are intact, but **they are not reproducible from git** and their manifests now
+say so in `provenance.missing` rather than implying otherwise with a commit id.
+
+**3. One scorecard is still open.** `preflight-20260728T012031Z` opened card
+`bbbd5b57-de5d-4f14-aa0e-adaedb234fef` and no run in this archive ever closed
+it. Its ledger records zero `env_step`s, so the ledger's claim is zero billed
+actions — but that claim has never been confirmed against the API, and cannot be
+offline. It is declared in that run's manifest under
+`scorecards_opened_and_never_closed` and left open rather than quietly assumed
+to be zero. Closing it costs no actions and would settle it;
+`armtools/salvage.py` is the tool, and it needs the spend gate open.
+
+### What is *not* in the archive any more
+
+Two `pytest-*` directories used to sit under `runs/`. They were gitignored, so
+they never reached the repository, but they were indistinguishable by directory
+listing from runs that cost money — the probe that opened this item counted
+eleven runs where there were nine. Test runs now write to `.pytest-runs/`
+(`harness.run.FIXTURE_RUNS_DIR`), and `verify_provenance` fails if a fixture
+reappears under `runs/`.
+
+```bash
+cd theoria-arm && python -m armtools.verify_provenance   # 9 checks
+cd theoria-arm && python -m armtools.backfill --all      # idempotent
+```
+
+### What an adversarial review changed
+
+The derivation above was handed to a reviewer told to refute it. The four
+verdicts survived — reproduced independently over a 347-commit universe
+including reflog-only and dangling commits, and cross-checked by extracting six
+commits' trees and running the *real* `_bootstrap.arm_version()` in each, which
+agreed exactly. But three defects in the mechanism came back, and all three are
+fixed here rather than filed:
+
+* **`matched` did not mean what it said.** The scan walked
+  `git log --all -- theoria-arm`, so it saw only commits that *touch* the arm —
+  and every commit that leaves the arm alone carries its parent's hash. One arm
+  version in this repository is shared by 187 commits while that scan finds one
+  of them and called it unique. No manifest here was wrong, by luck of which
+  hashes the runs recorded. The scan is now exhaustive over every reachable
+  commit, keyed by the arm's subtree so it stays cheap: 350 commits, 24 distinct
+  subtrees, 17 distinct arm versions. The four verdicts are unchanged.
+* **The reimplementation did not match the walk.** `_bootstrap.arm_version()`
+  skips directories with *substring* tests, so `runsim/` and `__pycache__x/` are
+  skipped; the git-side reimplementation read them as path components and would
+  have counted them. No such directory has ever existed here, so nothing was
+  wrong — but the divergence would have been silent, showing up as a run that
+  matched no commit for no reason. Pinned by a test now.
+* **`arm_version` depended on where the arm was checked out.** The same
+  substring test ran against the *absolute* path, so an ancestor directory
+  decided it: under `.worktrees/runs-cleanup/` — an ordinary name under
+  CLAUDE.md's worktree rule — every file was skipped and the function returned
+  `files: 0` and the sha256 of the empty string. Any run made in such a worktree
+  records a version that can never be matched to anything. Fixed in
+  `_bootstrap.py` and pinned by a test.
+
+A fourth was caught by this arm's own reproducibility check before the review
+saw it: `branch` was being filled from `git branch --contains`, which returned
+55 branches for one commit and took the alphabetically first — `agent/a2-crosscheck`,
+a branch with no relation to the run — and wrote it into a required field. It
+also made the manifest drift every time anyone pushed anything.
+
+**`arm_version` covers `.py` files only.** Two commits differing only in a
+prompt, a log or a fixture share a hash; four of the seventeen groups are
+multi-commit for that reason. A manifest that names a commit is claiming the
+sources matched, not that nothing else differed.
+
+---
+
+## E14 — a crash is not a finding (2026-07-29, `agent/e14-crash-is-not-a-finding`)
+
+Run directory: `runs/20260729T080000Z-E14-crash-is-not-a-finding/`
+(`MANIFEST.json`, `REPORT.md`, `ADVERSARIAL-VERBATIM.md`, `reconcile.py`,
+`negative_sample.py`, `raw/`). Zero API calls, zero network, zero sealed-pile
+contact. Suites: `theoria-arm` 51 → 59 passed, `a0-spike` 44 → 50 passed.
+
+Three sites where a swallowed exception was reinterpreted as a research
+conclusion, and reinterpreted *backwards* — the more the code crashed, the
+cleaner the health certificate:
+
+* `inner/plan.py` `_tier_bfs` — `except Exception: continue` pruned successors,
+  then the drained queue reported `status: "unsat"` and "the whole reachable set
+  (N states) was enumerated". Now `StepCrashLog`; on a non-zero count the status
+  is `unsat_unsound`, `exhaustive: false`, plus an `error`, and `optimal` on the
+  `sat` path is gated the same way. `search_ceiling` is written positively.
+* `inner/certify.py` `_ambiguity` — `except Exception: pass` skipped pairs that
+  stayed inside the claimed `N x M`. Now `pairs_checked` beside `pairs_nominal`,
+  crashes counted by phase, `ok` false while the count is non-zero, the
+  `len(states)` vs `states[:400]` off-by-one fixed, and the missing
+  `AmbiguousTransition` default changed from `Exception` (which filed every
+  crash as a constraint-9 clash) to a sentinel nothing raises.
+* `a0-spike/pipeline/stages.py` `mine` — a bare `except Exception` read any
+  crash as the miner's designed `NoSeparatingGuard` verdict and published the
+  resulting DNF. Split; `MiningAccount` gates `all_guards_searched` /
+  `disjunction_is_a_finding`, every rule carries `disjunctive_because`, and
+  `run_a0.main` / `adapt.main` read the count into their exit codes.
+
+**The deliverable number is 0.** Of 13 committed exhaustiveness / coverage /
+no-violation claims audited across both territories, 12 were exercised by the
+instrumented re-run and none carried a crash; 1 (`plan`'s `unsat` on the only
+archived arm run) was never reached, because that manual declares no goal, and
+is reported as not-exercised rather than counted clean. The a0 rule set was
+genuinely correct — all four disjunctive classes reach `NoSeparatingGuard` — but
+before this change no field in `a0_report.json` could have told you so.
+
+An adversarial subagent refuted part of the first pass and its review is stored
+verbatim in `ADVERSARIAL-VERBATIM.md`. It found the fix had reproduced the
+ticket's own disease inside itself: the crash account was snapshotted per exit
+and the `sat` exit was missed, so a search that crashed and then found a plan
+published `count: 0` and `optimal: true`. Also: `adapt.repair` put the count
+beside its claims without gating them, the reconciliation denominator was drawn
+too narrow, and one test grepped source instead of behaviour. All corrected; one
+of its corrections (gating `held_out`, `certify_generated` and
+`theorem.unsolvable`) was checked and partially declined, because those do not
+consult the mined rules and gating them would report a defect where none exists.
+The reason is recorded in the code and in `reconciliation.json`.

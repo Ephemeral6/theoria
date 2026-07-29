@@ -16,6 +16,34 @@ so they are subtracted here, by machine, from a file that records why.
 
     python contamination.py            # the table
     python contamination.py --json     # also write data/claim_set.json
+
+## The exit code carries the whole verdict, not one third of it
+
+`main()` used to end `return 0 if check["matches"] else 1` -- only the
+`piles.json` hash. Sealed games ADDRESSED in a ledger, and games in NEEDS
+ADJUDICATION, were **printed and dropped**. `verify.sh:53` looks at nothing but
+the exit code, so the human reading the table was told the truth and the machine
+holding the gate was told "clean" -- and only the machine's answer gates
+anything.
+
+Everything that can turn this red now goes through `gate()`, one function, so
+the printed table and the exit code cannot disagree. Three of the four
+conditions are about *not having looked*:
+
+* an unparseable line in the contamination log -- a game whose registration
+  nothing could read is not a game with no registration;
+* a declared ledger that is absent or unreadable -- deleting a dirty ledger must
+  not be a way through this gate;
+* an empty scan set -- `all([])` is `True`, so the old `all_clean` would have
+  reported a clean verdict having read nothing at all.
+
+**A known gap, stated rather than hidden.** `OTHER_LEDGERS` is a hand-written
+list of three files, and the repository holds far more ledger-shaped files than
+that (see `monitor/inbox/20260728T171500Z-RES-3-...`). This module now reports
+`scan_surface_self_discovered: False` so that the incompleteness is a boolean a
+later check can gate on, instead of the prose caveat that no consumer reads.
+Making the surface self-discovering is a separate work order; this one only
+stops the gate from lying about what it *did* read.
 """
 
 import argparse
@@ -106,14 +134,32 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
     short = {game_id.split("-")[0]: game_id for game_id in sealed}
     contacts: Dict[str, List[str]] = {}
     listed: Dict[str, int] = {}
+    unreadable: List[str] = []
     lines = 0
-    if os.path.exists(ledger_path):
-        for line in open(ledger_path, encoding="utf-8"):
+    present = os.path.exists(ledger_path)
+    if present:
+        try:
+            raw = open(ledger_path, encoding="utf-8").read().splitlines()
+        except (OSError, UnicodeDecodeError) as exc:
+            raw = []
+            unreadable.append("whole file: %s: %s" % (type(exc).__name__, exc))
+        for i, line in enumerate(raw, 1):
             line = line.strip()
             if not line:
                 continue
             lines += 1
-            entry = json.loads(line)
+            try:
+                entry = json.loads(line)
+            except ValueError as exc:
+                # A call record nothing can parse is a call nobody has checked.
+                # It used to raise, which at least stopped the run; the danger
+                # was never this branch but the one below it, where a *missing*
+                # ledger produced "0 calls, sealed ADDRESSED: NONE".
+                unreadable.append("line %d: %s" % (i, exc))
+                continue
+            if not isinstance(entry, dict):
+                unreadable.append("line %d: not a JSON object" % i)
+                continue
             url = str(entry.get("url", ""))
             body = entry.get("request_body")
             # Exact-match the id fields we actually send, then substring-scan the
@@ -139,7 +185,16 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
                        "a sealed id in a response is a listing, not a touch"),
         "sealed_games_contacted": sorted(contacts),
         "contacts": {k: sorted(set(v))[:5] for k, v in contacts.items()},
-        "clean": not contacts,
+        "present": present,
+        "unreadable": unreadable,
+        # `None`, not `True`, when the ledger is absent or partly unreadable.
+        # "no sealed game has been touched" is the load-bearing sentence of the
+        # held-out design, and it used to be returned as `True` from a file that
+        # was never opened -- `clean: not contacts` over an empty dict, printed
+        # as "0 calls, sealed ADDRESSED: NONE". Deleting a ledger was a way
+        # through this gate; `all_ledger_audit` already knew that about the
+        # *other* tracks' ledgers and gave this one the benefit of the doubt.
+        "clean": (not contacts) if (present and not unreadable) else None,
         "sealed_ids_seen_in_responses": len(listed),
         "responses_note": ("GET /api/games returns the whole public set, so all "
                            "21 sealed ids appear in read-only responses; that is "
@@ -177,15 +232,91 @@ def all_ledger_audit() -> Dict[str, Any]:
     }
 
 
-def entries() -> List[Dict[str, Any]]:
-    if not os.path.exists(LOG_PATH):
-        return []
-    out = []
-    for line in open(LOG_PATH, encoding="utf-8"):
+def register_coverage() -> Dict[str, Any]:
+    """Could the contamination log be read at all, and did every line parse?
+
+    `entries()` answered both "the log is missing" and "the log is empty" with
+    `[]`, and `current_register` turns `[]` into 21 sealed games at
+    `never_audited` / `in_claim_set` -- a full, clean, maximally reassuring claim
+    set derived from a file that is not there. Deleting the log was a way through
+    the gate.
+
+    A line that will not parse is worse still, because it is a registration
+    somebody wrote: the game it names silently keeps its `never_audited` default
+    and reads as unexamined rather than as unreadable.
+    """
+    present = os.path.exists(LOG_PATH)
+    problems: List[str] = []
+    if not present:
+        problems.append(
+            "%s does not exist, so every sealed game falls back to its "
+            "never_audited default and the register describes no evidence at all"
+            % os.path.relpath(LOG_PATH, os.path.join(HERE, os.pardir)).replace(os.sep, "/"))
+        return {"present": False, "lines": 0, "problems": problems}
+    lines = 0
+    try:
+        raw = open(LOG_PATH, encoding="utf-8").read()
+    except (OSError, UnicodeDecodeError) as exc:
+        problems.append("contamination log could not be read: %s: %s"
+                        % (type(exc).__name__, exc))
+        return {"present": True, "lines": 0, "problems": problems, "entries": []}
+    good: List[Dict[str, Any]] = []
+    for i, line in enumerate(raw.splitlines(), 1):
         line = line.strip()
-        if line:
-            out.append(json.loads(line))
-    return out
+        if not line:
+            continue
+        lines += 1
+        try:
+            entry = json.loads(line)
+        except ValueError as exc:
+            problems.append("contamination log line %d does not parse (%s); the game it "
+                            "registers keeps its never_audited default" % (i, exc))
+            continue
+        if not isinstance(entry, dict) or "game_id" not in entry or "level" not in entry:
+            problems.append("contamination log line %d is missing game_id or level, so it "
+                            "registers nothing" % i)
+            continue
+        # A level outside the vocabulary fails OPEN everywhere downstream:
+        # `order.get(level, 0)` in the sort and `LEVELS.index` comparisons treat
+        # an unknown value as `never_audited`, the weakest rung. So one typo'd
+        # character in `trajectories_reviewed` puts a sealed game whose
+        # trajectories were reviewed into the claim set with a green gate. This
+        # is the same defect the module already fixed once for the `claims`
+        # field (INC-006a), surviving untouched in the field beside it.
+        if entry["level"] not in LEVELS:
+            problems.append(
+                "contamination log line %d registers %s at level %r, which is not one of "
+                "%s. An unrecognised level sorts as never_audited -- the weakest rung -- "
+                "so it cannot be left to the register to notice."
+                % (i, entry.get("game_id"), entry["level"], "/".join(LEVELS)))
+        if "claims" in entry and entry["claims"] not in CLAIM_STATES:
+            # Already caught by `claim_set()` as an unrecognised claim state for
+            # games in the sealed pile. Repeated here because the register covers
+            # the dev pile too, where nothing else looks at this field.
+            problems.append(
+                "contamination log line %d registers %s with claims %r, which is not one "
+                "of %s" % (i, entry.get("game_id"), entry["claims"],
+                           "/".join(CLAIM_STATES)))
+        good.append(entry)
+    return {"present": True, "lines": lines, "problems": problems, "entries": good}
+
+
+def entries() -> List[Dict[str, Any]]:
+    """Parseable registrations only, read through `register_coverage()`.
+
+    This function and `register_coverage()` were briefly two loops over the same
+    file inside the same module -- one collecting rows, one collecting
+    complaints, each with its own `open`, its own exception tuple and its own
+    idea of what makes a line usable. That is precisely the arrangement this
+    whole work order is about ("两份实现一定会漂移"), reintroduced by the fix for
+    it: the moment one of them learned to reject an unrecognised `level`, the
+    other would have kept feeding that row to the register.
+
+    One read, one set of rules, two views of the result. Unparseable lines are
+    skipped here and reported there, so a broken log stays inspectable -- as the
+    module docstring promises -- without that tolerance becoming a clean verdict.
+    """
+    return register_coverage().get("entries", [])
 
 
 def current_register() -> Dict[str, Dict[str, Any]]:
@@ -282,6 +413,83 @@ def claim_set() -> Dict[str, Any]:
     }
 
 
+#: `OTHER_LEDGERS` is a hand-written list. The repository holds more
+#: ledger-shaped files than it names (per-campaign shards, for one), so a clean
+#: audit is evidence over the files scanned and not a proof over all traffic.
+#: Reported as a boolean rather than left in prose because a caveat no consumer
+#: reads is not a disclosure. It does NOT turn the gate red -- a permanently red
+#: gate is a gate nobody looks at -- but it is now a fact a later check can read.
+SCAN_SURFACE_IS_SELF_DISCOVERED = False
+
+
+def gate() -> Dict[str, Any]:
+    """Every condition that must turn this check red, in exactly one place.
+
+    `main()` used to end `return 0 if check["matches"] else 1`: the piles.json
+    hash and nothing else. Sealed games ADDRESSED in a ledger and games in NEEDS
+    ADJUDICATION were computed, printed, and dropped. `verify.sh` grades this
+    step by its exit code alone, so the human reading the table was told the
+    truth and the machine holding the gate was told "clean" -- and only the
+    machine's answer gates anything.
+
+    Both halves now come from here, so the printed table and the exit code
+    cannot disagree without someone editing this function.
+
+    Three of the five conditions are about *not having looked*, which is the
+    whole point of the work order this implements: a check that could not run
+    must not report the answer it would have liked to give.
+    """
+    reasons: List[str] = []
+
+    piles_hash = verify_piles_hash()
+    if not piles_hash["matches"]:
+        reasons.append("piles.json no longer hashes to its declared value: the cut has "
+                       "been edited, which CLAUDE.md defines as an incident")
+
+    coverage = register_coverage()
+    for problem in coverage["problems"]:
+        reasons.append("register coverage: %s" % problem)
+
+    summary = claim_set()
+    if summary["needs_adjudication"]:
+        reasons.append(
+            "%d game(s) NEED ADJUDICATION and are in no settled bucket: %s. They were "
+            "printed before this change and excluded from the exit code, so the only "
+            "reader that gates anything was told the reassuring answer."
+            % (len(summary["needs_adjudication"]), ", ".join(summary["needs_adjudication"])))
+
+    cross = summary["cross_track_api_audit"]
+    for label, report in sorted(cross["ledgers"].items()):
+        if report.get("clean") is False:
+            reasons.append(
+                "SEALED GAME ADDRESSED in %s: %s. This is the strongest failure this "
+                "module can find and it exited 0 on it."
+                % (label, ", ".join(report.get("sealed_games_contacted", []))))
+        elif report.get("clean") is None:
+            reasons.append(
+                "%s could not be audited (%s): a ledger that is absent or unreadable is "
+                "not a ledger with no sealed contact in it."
+                % (label, "absent" if not report.get("present")
+                   else "; ".join(report.get("unreadable", []))[:200]))
+
+    # `all([])` is True. Without this, a checkout where every declared ledger had
+    # been renamed would compute all_clean=True over an empty scan set and report
+    # a clean audit having read nothing at all.
+    if cross["ledgers_scanned"] == 0:
+        reasons.append("no ledger was scanned at all; the API audit covered nothing")
+
+    return {
+        "red": bool(reasons),
+        "reasons": reasons,
+        "piles_hash_matches": piles_hash["matches"],
+        "register_coverage": coverage,
+        "needs_adjudication": summary["needs_adjudication"],
+        "ledgers_scanned": cross["ledgers_scanned"],
+        "all_ledgers_clean": cross["all_clean"],
+        "scan_surface_self_discovered": SCAN_SURFACE_IS_SELF_DISCOVERED,
+    }
+
+
 def main(argv: List[str]) -> int:
     parser = argparse.ArgumentParser(prog="contamination.py",
                                      description=__doc__.splitlines()[0])
@@ -307,7 +515,8 @@ def main(argv: List[str]) -> int:
     cross = all_ledger_audit()
     for label, report in sorted(cross["ledgers"].items()):
         if report.get("clean") is None:
-            print("  ledger audit: %-40s absent" % label)
+            print("  ledger audit: %-40s NOT AUDITED (%s)"
+                  % (label, "absent" if not report.get("present") else "unreadable"))
         else:
             print("  ledger audit: %-40s %5d calls, sealed ADDRESSED: %s"
                   % (label, report["ledger_lines"],
@@ -330,12 +539,35 @@ def main(argv: List[str]) -> int:
         for row in summary["retained_above_material_level"]:
             print("    %-18s level %s but not quarantined"
                   % (row["game_id"], row["level"]))
+    verdict = gate()
+
+    # The gate is computed BEFORE the artefact is written, and its verdict is
+    # written into it. `verify.sh` runs exactly `contamination.py --json`, and
+    # with the contamination log missing this used to overwrite the tracked
+    # `claim_set.json` with the maximally reassuring fabrication -- 21 games in
+    # the claim set, nothing quarantined, derived from a file that is not there
+    # -- and only then return 1. The exit code carried the verdict and the file
+    # on disk contradicted it, and the file is what CLAUDE.md points readers at.
     if args.json:
+        summary = dict(summary, gate=verdict)
         with open(CLAIM_SET_PATH, "w", encoding="utf-8", newline="") as fh:
             json.dump(summary, fh, indent=2, sort_keys=True, ensure_ascii=False)
             fh.write("\n")
-        print("  claim set -> %s" % CLAIM_SET_PATH)
-    return 0 if check["matches"] else 1
+        print("  claim set -> %s%s"
+              % (CLAIM_SET_PATH, "  (RECORDED AS RED)" if verdict["red"] else ""))
+
+    if verdict["red"]:
+        print("\n  GATE: RED -- %d condition(s) below must be ruled on:"
+              % len(verdict["reasons"]))
+        for reason in verdict["reasons"]:
+            print("    * %s" % reason)
+        return 1
+    print("\n  GATE: green over %d ledger(s), %d register line(s)."
+          % (verdict["ledgers_scanned"], verdict["register_coverage"]["lines"]))
+    if not verdict["scan_surface_self_discovered"]:
+        print("    caveat, not a failure: the ledger list is hand-written, so this is "
+              "evidence over the files scanned, not a proof over all traffic ever sent.")
+    return 0
 
 
 if __name__ == "__main__":

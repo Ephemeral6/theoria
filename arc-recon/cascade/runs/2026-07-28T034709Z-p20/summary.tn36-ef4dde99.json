@@ -1,0 +1,141 @@
+{
+  "actions_executed": 1,
+  "available_actions": [
+    6
+  ],
+  "card_id": "8e1cace3-a803-43fa-bd3c-cb1cd57ba7eb",
+  "cascade": {
+    "max_frames": 1,
+    "multi_frame_batches_all_identical": 0,
+    "multi_frame_batches_with_internal_change": 0,
+    "responses_with_multiple_frames": 0
+  },
+  "cookies_enabled": true,
+  "cookies_held": [
+    "AWSALBAPP-0",
+    "AWSALBAPP-1",
+    "AWSALBAPP-2",
+    "AWSALBAPP-3",
+    "GAMESESSION"
+  ],
+  "finished": "2026-07-28T03:52:54Z",
+  "game_id": "tn36-ef4dde99",
+  "guid_present": true,
+  "http_calls": 3,
+  "prompt_id": "P-20",
+  "sequence": [
+    [
+      6,
+      {
+        "x": 32,
+        "y": 32
+      }
+    ],
+    [
+      6,
+      null
+    ],
+    [
+      1,
+      null
+    ],
+    [
+      2,
+      null
+    ]
+  ],
+  "started": "2026-07-28T03:52:50Z",
+  "steps": [
+    {
+      "action": "RESET",
+      "action_id": null,
+      "attempts": 1,
+      "available_actions": [
+        6
+      ],
+      "batch_hash": "1491b31f98da62d0",
+      "data": null,
+      "distinct_frames": 1,
+      "expected_batch_hash": "1491b31f98da62d0",
+      "first_equals_prev_last": null,
+      "frame_hashes": [
+        "3e8702e648bb9755"
+      ],
+      "full_reset": false,
+      "game_id": "tn36-ef4dde99",
+      "http_status": 200,
+      "intra_batch_changes": 0,
+      "levels_completed": 0,
+      "matches_expected": true,
+      "n_frames": 1,
+      "seq": 0,
+      "shapes": [
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:52Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION6",
+      "action_id": 6,
+      "attempts": 1,
+      "available_actions": [
+        6
+      ],
+      "batch_hash": "07428bf1030afccc",
+      "data": {
+        "x": 32,
+        "y": 32
+      },
+      "distinct_frames": 1,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": false,
+      "frame_hashes": [
+        "f24a3446b02c98c2"
+      ],
+      "full_reset": false,
+      "game_id": "tn36-ef4dde99",
+      "http_status": 200,
+      "intra_batch_changes": 0,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 1,
+      "seq": 1,
+      "shapes": [
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:53Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION6",
+      "action_id": 6,
+      "attempts": 1,
+      "batch_hash": null,
+      "data": null,
+      "distinct_frames": null,
+      "error": "<!doctype html>\n<html lang=en>\n<title>500 Internal Server Error</title>\n<h1>Internal Server Error</h1>\n<p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>\n",
+      "expected_batch_hash": null,
+      "first_equals_prev_last": null,
+      "frame_hashes": null,
+      "game_id": "tn36-ef4dde99",
+      "http_status": 500,
+      "intra_batch_changes": null,
+      "matches_expected": null,
+      "n_frames": null,
+      "seq": 2,
+      "shapes": null,
+      "t": "2026-07-28T03:52:54Z"
+    }
+  ],
+  "stopped_early_at": 2,
+  "win_levels": 7
+}

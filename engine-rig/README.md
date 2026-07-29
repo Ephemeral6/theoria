@@ -24,6 +24,10 @@ engine-rig/
     probe_frontier/  which action splits the frontier hardest, and what it costs to run
     deadlock_carver/ conditional mini unsolvability theorems: candidates *and* pruning
     ic3_pdr/         inductive invariants the LP and the null space cannot reach
+  recheck/         an independent recheck of the certificates the engines emit:
+                   rule set + certificate in, three conditions out, and no
+                   import of engines/ anywhere in it
+    cases/         generated rule sets and certificates (byte-stable)
   tools/           schema validator, integration runner
   tests/           acceptance tests, one module per engine
   DECISIONS.md     design calls and their reasons
@@ -135,6 +139,27 @@ expansions on `open4`, because pruning pays only where the search would otherwis
 go. And one of the two probe sites is a full bit that cannot be bought, which is
 R-05's "the experiment cannot be performed on this instance" reproduced as
 machinery rather than noticed by a human afterwards.
+
+## Rechecking the certificates without the engines
+
+```bash
+cd engine-rig && python -m recheck.verify_all --out runs/<id>
+```
+
+`recheck/` re-derives the three conditions from two files — a rule set and a
+certificate — and derives the transition relation itself by grounding the rules
+over the full product of the declared domains. It imports nothing from
+`engines/`. Full account in [`recheck/README.md`](recheck/README.md); the short
+version is one table:
+
+| rule set | certificate | verdict |
+|---|---|---|
+| `peg4-0111` | `ic3_pdr`'s invariant | ACCEPT |
+| `a2-holed` | A2's `right_room_locked` | ACCEPT — agreeing with Lean |
+| `a2-world` | the same certificate | **REJECT**, `inv_closed` |
+
+plus all 18 `deadlock_carver` theorems green, 25 catalogued forgeries behaving as
+declared, and six anchors saying the rule sets are the worlds they name.
 
 ## Contract compliance
 
