@@ -52,6 +52,7 @@ E5 = "engine-rig/runs/20260728T141724Z-E5-cert-recheck"
 P13 = "engine-rig/runs/p13-fd-real"
 V10 = "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power"
 G50T = "theoria-arm/runs/20260728T015354Z-g50t-first-contact"
+E17 = "engine-rig/runs/20260729T034043Z-E17-held-out-validation"
 
 
 class ProbeError(RuntimeError):
@@ -144,6 +145,39 @@ def _fd_pair(instance: str, guard: str, rung: str):
     def fn(div):
         f = _fd_row(div, instance, guard, rung)
         return f"{f['expansions_before']} -> {f['expansions_after']}"
+
+    return fn
+
+
+def _rate(bucket: str):
+    """delta_hit / laws for one E17 split bucket, as a one-decimal percentage."""
+
+    def fn(d):
+        row = d["zero_space"]["splits"][bucket]
+        if not row["laws"]:
+            raise ProbeError(f"E17 bucket {bucket!r} has no laws")
+        return "%.1f" % (100.0 * row["delta_hit"] / row["laws"])
+
+    return fn
+
+
+def _rate_suffix(prefix: str, suffix: str):
+    """The same, pooled over every E17 bucket `prefix*suffix`.
+
+    Pooling is on the raw counts, not an average of percentages: the settings
+    have different law counts, and averaging rates would silently reweight them.
+    """
+
+    def fn(d):
+        rows = [v for k, v in d["zero_space"]["splits"].items()
+                if k.startswith(prefix) and k.endswith(suffix)]
+        if not rows:
+            raise ProbeError(f"no E17 bucket matches {prefix}*{suffix}")
+        laws = sum(r["laws"] for r in rows)
+        hits = sum(r["delta_hit"] for r in rows)
+        if not laws:
+            raise ProbeError(f"E17 buckets {prefix}*{suffix} have no laws")
+        return "%.1f" % (100.0 * hits / laws)
 
     return fn
 
@@ -322,7 +356,7 @@ FACTS: dict[str, tuple[object, object]] = {
     "ic3.fuzz_engines": (0, jf("fuzzlab/out/campaign.json", lambda d: sum(1 for e in d["engines"] if e["engine"] == "ic3_pdr"), "count(engines[*].engine == ic3_pdr)")),
     # ---- cross-cutting ----
     "rig.candidates": (44, jlf("engine-rig/artifacts/candidates.jsonl", len, "line count")),
-    "rig.campaign_worlds": (500, jf("fuzzlab/out/campaign.json", lambda d: d["worlds_per_engine"], "worlds_per_engine")),
+    "rig.campaign_worlds": (60, jf("fuzzlab/out/campaign.json", lambda d: d["worlds_per_engine"], "worlds_per_engine")),
     "rig.campaign_violations": (0, jf("fuzzlab/out/campaign.json", lambda d: sum(e["violated"] for e in d["engines"]), "sum(engines[*].violated)")),
     "rig.published_fields": ("111", md(f"{V10}/PUBLISHED_VS_AUDITED.md", r"\| \*\*合计\*\* \| \*\*(\d+)\*\*")),
     "rig.unaudited_fields": ("64", md(f"{V10}/PUBLISHED_VS_AUDITED.md", r"\| \*\*合计\*\* \| \*\*111\*\* \| \*\*25\*\* \| \*\*22\*\* \| \*\*(\d+)\*\*")),
@@ -336,8 +370,30 @@ FACTS: dict[str, tuple[object, object]] = {
     # one raises ProbeError (exit 3) rather than a bare FileNotFoundError, which
     # would escape as an uncaught exception and exit 1 -- the same proof/shrug
     # confusion D-024 exists to prevent. Caught by an adversarial audit.
-    "rig.mutants": (55, mutation_sum(lambda ms: len(ms), "sum over the six mutation.<engine>.json of len(mutants)")),
-    "rig.survivors": (15, mutation_sum(lambda ms: sum(1 for m in ms if m.get("survived")), "sum over the six mutation.<engine>.json of count(survived)")),
+    "rig.mutants": (64, mutation_sum(lambda ms: len(ms), "sum over the six mutation.<engine>.json of len(mutants)")),
+    "rig.survivors": (14, mutation_sum(lambda ms: sum(1 for m in ms if m.get("survived")), "sum over the six mutation.<engine>.json of count(survived)")),
+    # ---- E17 held-out validation (the fit/re-check split; pre-registered) ----
+    "ho.zs_worlds": (120, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["worlds"], "zero_space.corpus.worlds")),
+    "ho.zs_train_pct": (70, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["s1_train_share_pct"], "zero_space.corpus.s1_train_share_pct")),
+    "ho.zs_heldout_pct": (30, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["s1_heldout_share_pct"], "zero_space.corpus.s1_heldout_share_pct")),
+    "ho.zs_s1_global": ("100.0", jf(f"{E17}/results.json", _rate("Z-S1/global"), "zero_space.splits['Z-S1/global'] delta_hit/laws")),
+    "ho.zs_s2_global": ("13.1", jf(f"{E17}/results.json", _rate("Z-S2/global"), "zero_space.splits['Z-S2/global'] delta_hit/laws")),
+    "ho.zs_s2_global_laws": (1680, jf(f"{E17}/results.json", lambda d: d["zero_space"]["splits"]["Z-S2/global"]["laws"], "zero_space.splits['Z-S2/global'].laws")),
+    "ho.zs_s2_local": ("92.9", jf(f"{E17}/results.json", _rate("Z-S2/cell_local"), "zero_space.splits['Z-S2/cell_local'] delta_hit/laws")),
+    "ho.zs_s2_k2": ("0.0", jf(f"{E17}/results.json", _rate_suffix("Z-S2/global/", "-k2"), "zero_space.splits['Z-S2/global/*-k2'] pooled delta_hit/laws")),
+    "ho.zs_s2_k3": ("22.9", jf(f"{E17}/results.json", _rate_suffix("Z-S2/global/", "-k3"), "zero_space.splits['Z-S2/global/*-k3'] pooled delta_hit/laws")),
+    "ho.lp_instances": (289, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["corpus"]["instances"], "lp_potential.corpus.instances")),
+    "ho.lp_cases": (2422, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["cases"], "lp_potential.held_out_L1.cases")),
+    "ho.lp_certs": (1408, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["certificates"], "lp_potential.held_out_L1.certificates")),
+    "ho.lp_silent": (1014, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["silent"], "lp_potential.held_out_L1.silent")),
+    "ho.lp_inv_rate": ("26.4", jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["heldout_inv_closed_rate_pct"], "lp_potential.held_out_L1.heldout_inv_closed_rate_pct")),
+    "ho.lp_false": (58, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["false_certificates"], "lp_potential.held_out_L1.false_certificates")),
+    "ho.lp_gate_let_through": (0, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["emit_gate_let_through"], "lp_potential.held_out_L1.emit_gate_let_through")),
+    "ho.lp_gate_arith": (1036, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["caught_by_raised_potential_too"], "lp_potential.held_out_L1.caught_by_raised_potential_too")),
+    "ho.lp_base_certs": (105, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["baseline_complete_graph"]["certificates"], "lp_potential.baseline_complete_graph.certificates")),
+    "ho.lp_base_states": (506, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["baseline_complete_graph"]["states_tested_L2"], "lp_potential.baseline_complete_graph.states_tested_L2")),
+    "ho.lp_base_viol": (0, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["baseline_complete_graph"]["admissibility_violations_L2"], "lp_potential.baseline_complete_graph.admissibility_violations_L2")),
+    "ho.lp_heldout_viol": (1778, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["heldout_admissibility_violations"], "lp_potential.held_out_L1.heldout_admissibility_violations")),
     "e5.forgeries": (31, jf(f"{E5}/recheck_report.json", lambda d: d["counts"]["forgeries"], "counts.forgeries")),
     "e5.forgeries_accepted": (2, jf(f"{E5}/recheck_report.json", lambda d: d["forgeries"]["n_accepted"], "forgeries.n_accepted")),
     "e5.matrix_rows": (22, jf(f"{E5}/recheck_report.json", lambda d: d["counts"]["matrix_rows"], "counts.matrix_rows")),
@@ -425,6 +481,7 @@ ROWS = [
             "`DECISIONS.md` **D-003** names this mechanism and rules it *still sound*: less observed difference space means a larger recovered invariant space. An adversarial review reproduced every number and overturned the word \"defect\". "
             "**A second over-assertion is not about the quantifier at all**: `scope` claims a *provenance* it never verified. Of {zs.cell_local_laws} `cell_local` laws, **{zs.cell_local_subsets} have a proper-subset support, and {zs.cell_local_in_span} of those lie in the engine's own encoding-law span** — they are world facts filed as encoding artefacts, and no test in the rig asserts anything about what `scope` *means*. The split this row's `solves` cell advertises is the line that measurement attacks. "
             "The scale on real data is worth quoting, but for what it is: on `g50t` the **modal** group of published laws is **{zs.g50t_worst}**, and **every published row carries `coverage` k = n**. The frozen contract has no field in which evidence thinness can be stated, so a law resting on {zs.g50t_modal_transitions} transitions here and one resting on Fixture B's {zs.fixtureB_transitions} are indistinguishable — that gap belongs to `/CONTRACTS/`, not to this engine. {zs.unaudited} of {zs.published} published fields are asserted by no invariant. "
+            "**Held out (E17), and this is the number that decides what \"已验证\" may mean here.** `verify(result, states)` re-checks each law on the very differences the elimination consumed, so it cannot fail by construction; E17 fitted on part of the evidence and re-checked on the part withheld, across {ho.zs_worlds} `parityworld` worlds. Under a random {ho.zs_train_pct} / {ho.zs_heldout_pct} transition split the recovered laws extrapolate perfectly — **{ho.zs_s1_global} %** of global laws hold on the withheld transitions. Withhold an entire *operation* instead and the same laws hold **{ho.zs_s2_global} %** of the time ({ho.zs_s2_global_laws} laws), and the split by operation width is **{ho.zs_s2_k2} % at k = 2 against {ho.zs_s2_k3} % at k = 3**. Both cuts were pre-registered together, before either number was seen, precisely because they disagree this hard: a hit rate here is a property of the cut as much as of the engine, and quoting one cut alone would be the flattering half of a measurement. **This is D-003 becoming visible, not a defect** — the engine's quantifier *is* the observed evidence, and a law that does not extrapolate to an unobserved operation is the documented behaviour, correctly reported. What it forbids is the word \"verified\" without the quantifier attached. A third figure is a genuine surprise and belongs to `scope` rather than to D-003: **{ho.zs_s2_local} %** of `cell_local` laws survive the same cut, not all of them, so thinner evidence does not merely add global laws — it manufactures encoding-local ones that are not there, which is the same over-assertion the paragraph above measures from the other side. "
             "**Two things are {unmeasured} here, and the second is the one that is easy to misread.** Behaviour on any family but `parityworld` — `gridworld`, `blockworld`, `hypset` and `jumpgraph` are never fed to this engine. And **`g50t` itself**: every g50t figure above is a census of what was *published*, not a check that any of it *holds*. Deciding that needs reachability enumeration over the live game, which both sources state is impossible offline. {zs.falsified_laws} is likewise reported by its own analyst as a **lower bound** — a stronger quantifier would only find more."
         ),
     ),
@@ -439,6 +496,9 @@ ROWS = [
             "Exactly **{lp.box_blocked}** of the silences is the hard-coded `bound={lp.weight_bound}` weight box rather than the mathematics. "
             "Two limits are honestly **{unmeasured}**: for the other **{lp.no_farkas}** worlds \"no linear pagoda exists\" rests on HiGHS returning float infeasibility — no exact Farkas dual was produced, so that is a solver's claim and not a proof; and `n_pos ≤ {lp.max_npos}` is the whole corpus, so nothing above {lp.max_states} states was examined and the silence-vs-size trend must not be extrapolated. "
             "A third limit is **{unmeasured}** and rows 2 and 3 name their equivalent: **only the `jumpgraph` family was tested.** This engine hard-codes peg-jump geometry in four places, so there is no second family to try without writing one. "
+            "**Held out (E17), and it splits cleanly into a pass and a hole.** What this engine fits on is the *move list*: `solve_certificate` builds one LP row per geometry and `inv_closed` then quantifies over that same list. Withhold one geometry at a time across {ho.lp_instances} `pegN` instances ({ho.lp_cases} cases, {ho.lp_silent} of them silent — silence is D-014 answering, never a miss) and of the {ho.lp_certs} certificates that come back only **{ho.lp_inv_rate} %** still satisfy `inv_closed` on the withheld geometry, **{ho.lp_false}** are outright false against BFS ground truth over the complete move set, and **{ho.lp_heldout_viol}** held-out states get an `h` above their true distance. Smallest witness, checkable by hand against Fixture C's own docstring: on `peg4` with goal `0100`, start `0011` and the geometry `jump(3,2,1)` withheld, the LP returns weights whose three conditions are all exactly true in the rationals -- certifying a goal the fixture's own hand-verified table says is reachable. The weights are in the run's `witnesses.false_certificates` block rather than here, so that no digit in this cell is unprobed. "
+            "**The pass is that the emit boundary already holds: {ho.lp_gate_let_through} of those certificates reach `candidates.jsonl`.** `premises_against_graph` re-derives the move list from the graph and withheld every one; the arithmetic half of it (a geometry that *raises* the potential, as opposed to one merely absent from the list) independently catches {ho.lp_gate_arith}. So the hole is in `check_exactly`, not at the emit gate, and the two must not be quoted as one. "
+            "**And the engine as it ships already passes a held-out check nobody had labelled as one**: the LP constrains exactly two state sets, `initial` and the goals, so every other state is held out — over {ho.lp_base_certs} complete-graph certificates that is **{ho.lp_base_viol} admissibility violations in {ho.lp_base_states} held-out states**. Alone among the eight rows, this engine's \"已验证\" was not circular to begin with. "
             "Two design consequences, both measured. No public path yields a heuristic for a solvable configuration, so all **{lp.heuristic_none_when_solvable}** reachable worlds get no bound at all — the heuristic exists only where no search would be run. And where it does exist it is usually vacuous: **{lp.h_zero_pct} %** of usable states get `h = 0`, and in **{lp.h_always_zero}** worlds `h` is 0 on *every* such state — an admissible bound that never once says anything. Sharpness is not claimed (D-008), and nothing in the rig currently measures it. {lp.unaudited} of {lp.published} published fields are asserted by no invariant."
         ),
     ),
@@ -605,10 +665,39 @@ def render(values: dict[str, str]) -> str:
     w("  before it was hit, and a later measurement quantified it. `zero_space`'s")
     w("  quantifier (D-003) and `lp_potential`'s incompleteness (D-014) are these; an")
     w("  adversarial review overturned the word \"defect\" on the first of them.")
+    w("* **Self-consistent on the fitting evidence** — the re-check ran, and it ran")
+    w("  on the same data the claim was fitted to. This is not a fourth kind of")
+    w("  boundary but a qualifier that attaches to a row's *re-check* column, and")
+    w("  until E17 no row in this rig had anything else. See the standing rule")
+    w("  below.")
     w(f"* **{UNMEASURED}** — nobody has drawn the line. `ic3_pdr` entire; the fuzz")
     w("  battery's view of a real Fast Downward rung; `lp_potential`'s infeasibility")
     w("  claim as a proof rather than a solver's word; `cegis_miner` past 3 literals")
     w("  and past the grid family; `probe_frontier`'s planner-backed path.")
+    w("")
+    w("## The standing rule on the word 「已验证」")
+    w("")
+    w("**Where no held-out validation exists, a cell may say 「在观测证据上自洽」 and")
+    w("may not say 「已验证」.** Not as a stylistic preference — as the literal reading")
+    w("of what was done. A re-check that consumes the evidence the claim was fitted")
+    w("to answers \"is this claim consistent with its own inputs\", which for a")
+    w("least-squares-shaped engine is close to a tautology and for `zero_space` is")
+    w("one exactly: the laws *are* the null space of the observed differences, so")
+    w(sub("`verify()` re-checks `a·d = 0` on the same `d`. Two of the eight rows now have", values))
+    w("the other half (E17, and it is a boundary rather than a defect — see both");
+    w("cells); the remaining six do not, and their re-check columns are to be read")
+    w("with this sentence attached.")
+    w("")
+    w(sub("The two numbers E17 produced are **{ho.zs_s2_global} %** (`zero_space`, global laws, one operation", values))
+    w(sub("withheld — against {ho.zs_s1_global} % under a random transition split of the same evidence) and", values))
+    w(sub("**{ho.lp_inv_rate} %** (`lp_potential`, `inv_closed` on a withheld move geometry, with", values))
+    w(sub("{ho.lp_false} certificates outright false). Both splits were registered before either", values))
+    w("number existed. Neither number is a score: `zero_space`'s quantifier is the")
+    w("observed evidence by decision (D-003) and `lp_potential` is sound but")
+    w("incomplete (D-014), so a miss measures how far a claim extrapolates, and")
+    w(sub("nothing else. The one figure that *is* a pass is {ho.lp_gate_let_through}: none of the false", values))
+    w("certificates reached the shared candidate stream, because the emit gate")
+    w("re-derives its premises from the graph rather than from the certificate.")
     w("")
     w("Two numbers are corrections of figures that were circulating, and both run")
     w("against the rig's own interest:")

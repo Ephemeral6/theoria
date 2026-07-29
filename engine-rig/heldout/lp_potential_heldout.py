@@ -10,7 +10,7 @@ move set.
 Two things this deliberately measures on the engine's side of the ledger:
 
 * `solve_certificate` returning `None` is **silence**, not a miss.  The engine is
-  sound but incomplete (D-008); refusing to certify is an answer.
+  sound but incomplete (D-014); refusing to certify is an answer.
 * `lp_potential.candidates(...)` already gates on `premises_against_graph`, which
   re-derives the move list from the graph.  Whether that gate catches each unsound
   certificate is recorded per case, so the result credits the guard that exists

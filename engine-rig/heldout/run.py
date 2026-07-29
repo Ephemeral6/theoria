@@ -20,6 +20,7 @@ from collections import Counter
 from typing import Any, Dict, List
 
 from heldout import lp_potential_heldout as lph
+from heldout import split
 from heldout import parityworld, peg
 from heldout import zero_space_heldout as zsh
 
@@ -38,11 +39,20 @@ def zero_space_section() -> Dict[str, Any]:
         outcomes.append(zsh.run_s1(world))
         outcomes.extend(zsh.run_s2(world))
 
+    setting = {w.world_id: "n%d-k%d" % (w.n_cells, w.width) for w in worlds}
+
     tally: Dict[str, Counter] = {}
     misses: List[Dict[str, Any]] = []
     for outcome in outcomes:
         for law in outcome.laws:
-            for bucket in (outcome.split_name, "%s/%s" % (outcome.split_name, law.scope)):
+            # The third bucket disaggregates a pre-registered metric along a
+            # corpus dimension declared in PREREGISTRATION.md section 1; it was
+            # added after the headline was read, to test prediction 2, and it
+            # changes no split and no hit definition.
+            for bucket in (outcome.split_name,
+                           "%s/%s" % (outcome.split_name, law.scope),
+                           "%s/%s/%s" % (outcome.split_name, law.scope,
+                                         setting[outcome.world_id])):
                 counter = tally.setdefault(bucket, Counter())
                 counter["laws"] += 1
                 counter["delta_hit"] += int(law.delta_hit)
@@ -72,6 +82,13 @@ def zero_space_section() -> Dict[str, Any]:
             "n_cells": list(parityworld.N_CELLS),
             "widths": list(parityworld.WIDTHS),
             "transitions_per_world": parityworld.N_TRANSITIONS,
+            # Published so that downstream prose can cite the cut from the
+            # artifact instead of retyping it; the values come from the
+            # pre-registered constants in `heldout/split.py`, not from here.
+            "s1_train_share_pct": (100 * split.TRAIN_FRACTION_NUMERATOR
+                                   // split.TRAIN_FRACTION_DENOMINATOR),
+            "s1_heldout_share_pct": (100 - 100 * split.TRAIN_FRACTION_NUMERATOR
+                                     // split.TRAIN_FRACTION_DENOMINATOR),
         },
         "gate_fit_matches_engine": {"failures": gate_failures,
                                     "checked": len(worlds)},

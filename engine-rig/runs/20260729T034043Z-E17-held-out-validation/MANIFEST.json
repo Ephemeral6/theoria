@@ -1,0 +1,67 @@
+{
+  "base_commit": "c781a73e57d9e2546845c3693efbedfcabb34291",
+  "branch": "agent/e17-held-out-validation",
+  "files": [
+    {
+      "path": "engine-rig/heldout/__init__.py",
+      "sha256": "b30d58af57f4ee3d0d1829ed5f396340213953845cd0d23d73f79f028be555da"
+    },
+    {
+      "path": "engine-rig/heldout/split.py",
+      "sha256": "061bc69df31803c40f1fd261f8a481548166f966e278299048d5c20601c983b2"
+    },
+    {
+      "path": "engine-rig/heldout/parityworld.py",
+      "sha256": "0bec6d85d9e53699f62e59f0e6b50950fa63d819ea788e3d408f060120890a70"
+    },
+    {
+      "path": "engine-rig/heldout/peg.py",
+      "sha256": "73ddf453f64aea7e8315c9dcdda7e35c90de42875e66a8fb21f0a84f2d06ff8f"
+    },
+    {
+      "path": "engine-rig/heldout/zero_space_heldout.py",
+      "sha256": "e0a494e826d585b0653f541554419b9c55adbc5fc4e89ebb03c208083041bbaf"
+    },
+    {
+      "path": "engine-rig/heldout/lp_potential_heldout.py",
+      "sha256": "8aeb80173c7faf46307ef6ad5dc3fb24f31d5ef7a9c77bd85aa2234b0bfedb56"
+    },
+    {
+      "path": "engine-rig/heldout/run.py",
+      "sha256": "fbc03e299dbb6af99549d48894867fe87d3ff81dfb5857753d1cc125ab0dc17f"
+    },
+    {
+      "path": "engine-rig/tools/engine_table.py",
+      "sha256": "08b3c5ffdbff2dbec3e60a1f49a8d226712c13439016710aaf684ccfcb1b2995"
+    },
+    {
+      "path": "engine-rig/ENGINE_TABLE.md",
+      "sha256": "fa1de92e7c82df73f8c8501aa8491b9ef9531497aca7c08c7cc0a830456b95a7"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/PREREGISTRATION.md",
+      "sha256": "b08ae9b5a0a70a0d8e29b66c2bb7886f12b0a8f545c98d14e2d5945972dd3ad8"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/results.json",
+      "sha256": "60bc41a7cd342cd9666926810672f71e1704ea462b9f2b07050ea4fbdced2853"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/RESULTS.md",
+      "sha256": "c582cb4a9503b3de89f2d32f3a2897b689a954cd02ac7dfe65847e81c7378be7"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/measured/heldout-run.txt",
+      "sha256": "c84812b83687e10cbc714f92e4f21c7898e794108685ad5a1633d52dc4910df3"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/measured/pytest.txt",
+      "sha256": "baf43d4198e7eca567d80abca00be45da641b51a0bb8caa63ecd2de3c1f9b8d9"
+    }
+  ],
+  "harness_commit": "c781a73e57d9e2546845c3693efbedfcabb34291",
+  "note": "The pre-registration commit is an ancestor of every commit that carries a number; `git merge-base --is-ancestor ef382c9ed80a7363127e30fedd9dccf4d83c6709 HEAD` is the proof. Zero API calls, zero network, zero sealed-pile contact; the corpora are generated in memory and no committed fixture is read or written except Fixture C, which is read as a correctness gate.",
+  "preregistration_commit": "ef382c9ed80a7363127e30fedd9dccf4d83c6709",
+  "prompt_id": "E17-held-out-validation",
+  "utc": "2026-07-29T03:40:43Z"
+}

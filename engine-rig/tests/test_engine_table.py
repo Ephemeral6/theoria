@@ -88,9 +88,15 @@ def test_every_number_in_the_table_is_backed_by_a_probe():
     # Identifiers, code constants and combinatorics -- not measurements.
     exempt = {
         "0", "1", "2", "3", "4", "12", "16", "64", "0.0", "1.0", "1.9",
-        "002", "003", "008", "024", "0111",
+        "002", "003", "008", "014", "024", "0111",
         "2,3",      # the (2,3) object shape in probe_frontier's enumerated space
         "2, 3",     # a cross-reference to rows 2, 3 and 4
+        # E17's smallest false-certificate witness. These are labels, not
+        # measurements: two peg4 states and one jump geometry, each of which a
+        # reader can look up in Fixture C. The weight vector that goes with them
+        # is deliberately *not* in the prose -- it lives in the run's
+        # `witnesses.false_certificates` block, because it is a measurement.
+        "0100", "0011", "3,2,1",
     }
     offenders = []
     for row in engine_table.ROWS:
