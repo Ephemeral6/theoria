@@ -734,6 +734,52 @@ $g1_out
 EOF
 echo
 
+# ------- 11. the launch blockers have an executable gate, and it is honest
+#
+# Stage 10 keeps §9's launch-blocker rows from being edited away.  It cannot
+# tell whether anything implements them -- that is what launch_gate.py is for.
+#
+# The split of dispositions here is deliberate and is the whole point of the
+# stage.  The gate's VERDICT is a note: it is red today, correctly, because
+# 9.2/9.11/9.14 are outstanding, and this script must keep exiting 0 while ⛔
+# items stand (see its header).  The gate's SELFTEST is a hard failure: if the
+# gate cannot demonstrate it would say "clear" when a blocker is genuinely
+# cleared, and "blocked" for each known way of faking one, then the executable
+# half of §9 does not exist and the draft is not complete.
+echo "[11] the §9 launch blockers have an executable gate"
+
+# Python writes to a pipe in the locale encoding; the rest of this script is
+# UTF-8, so pin it or the row subjects come back as mojibake.
+export PYTHONIOENCODING=utf-8
+
+st_out="$(python "$HERE/launch_gate.py" --selftest 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "launch_gate.py --selftest: $(printf '%s' "$st_out" | tail -1 | tr -d ' ') cases, both directions"
+else
+  bad "launch_gate.py --selftest is red -- the gate cannot be trusted either way"
+  printf '%s\n' "$st_out" | sed 's/^/        /'
+fi
+
+gate_json="$(python "$HERE/launch_gate.py" --json 2>&1)"
+gate_rc=$?
+if [ "$gate_rc" -eq 2 ]; then
+  bad "launch_gate.py cannot evaluate itself (exit 2) -- §9 is unreadable to it"
+  printf '%s\n' "$gate_json" | sed 's/^/        /'
+elif [ "$gate_rc" -eq 0 ]; then
+  ok "launch gate is CLEAR -- every §9 launch blocker is implemented"
+else
+  n_blocked="$(printf '%s' "$gate_json" | python -c \
+    'import json,sys; d=json.load(sys.stdin); print(sum(1 for b in d["blockers"] if not b["cleared"]))' \
+    2>/dev/null || echo "?")"
+  note "launch gate is BLOCKED: $n_blocked §9 launch blocker(s) outstanding -- the sealed campaign must not spend yet (this is a note, not a failure: the draft is complete, the kit is not ready)"
+  printf '%s' "$gate_json" | python -c \
+    'import json,sys
+for b in json.load(sys.stdin)["blockers"]:
+    if not b["cleared"]:
+        print("        §%-5s %s" % (b["row"], b["subject"]))' 2>/dev/null
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

@@ -1,0 +1,17 @@
+==============================================================
+ launch_gate.py --selftest
+==============================================================
+  PASS green is reachable: all three implemented and discriminating (want clear, got clear)
+  PASS stub check (accepts the vacuous artefact too)        (want blocked, got blocked)
+  PASS negative target absent from disk                     (want blocked, got blocked)
+  PASS cmd with no {target} placeholder                     (want blocked, got blocked)
+  PASS state=implemented with no cmd                        (want blocked, got blocked)
+  PASS declared in ¡ì9, absent from the registry             (want blocked, got blocked)
+  PASS a newly declared blocker defaults to outstanding     (want blocked, got blocked)
+  PASS downgraded in place (strikethrough + ½µ¼¶)             (want blocked, got blocked)
+  PASS a floor row deleted from ¡ì9 entirely                 (want blocked, got blocked)
+  PASS registry carries a blocker ¡ì9 no longer declares     (want blocked, got blocked)
+  PASS ¡ì9 emptied of blockers                               (want error, got error)
+  PASS ¡ì9 section missing entirely                          (want error, got error)
+==============================================================
+ 12/12
