@@ -54,6 +54,8 @@ check("the basis ships with it", payload["admissible_basis"]["certificate_holds"
 
 # The negative sample E16 asks for: holds=False must reach the field.
 from dataclasses import replace                          # noqa: E402
+from interop import certificate_export as ce             # noqa: E402
+from interop import peg1d                                # noqa: E402
 for label, conditions in (
     ("a failed condition", {"inv_init": True, "inv_closed": False, "goal_break": True}),
     ("no conditions at all", {}),
@@ -81,10 +83,40 @@ check("and is refuted by the empirical check",
       [r["state"] for r in report if not r["admissible"]] == ["0011", "1101"])
 check("so the headline reads False despite holds=True",
       partial_h.as_json(report)["admissible"] is False)
-check("the emitted row agrees",
+
+# The emitter is stricter still: it re-derives the premises from the graph and
+# withholds BOTH rows.  Gating only the heuristic row -- which is what the first
+# cut of this fix did -- left the invariant asserting `goal unreachable from X`
+# beside a heuristic row whose counterexamples disprove it.  Found by an
+# adversarial review of the fix, not by the fix.
+check("the emitter withholds both rows, not just the heuristic",
       lp_potential.candidates(partial, partial_h, graph,
-                              timestamp="2026-07-27T00:00:00Z")[1]["payload"]["admissible"]
-      is False)
+                              timestamp="2026-07-27T00:00:00Z") == [])
+marked = lp_potential.candidates(partial, partial_h, graph,
+                                 timestamp="2026-07-27T00:00:00Z", on_unsound="mark")
+check("marked, both rows carry the defect",
+      [r["payload"]["unsound"] for r in marked] == [True, True])
+check("and the invariant row publishes holds=False",
+      marked[0]["payload"]["holds"] is False)
+premise = lp_potential.premises_against_graph(partial, graph)
+check("the premise check asks the graph, not the certificate",
+      premise["missing_moves"] == ["jump(3,2,1)"]
+      and premise["moves_raising_potential"] == ["jump(3,2,1)"])
+check("conditions alone cannot be read as a verdict",
+      all(replace(certificate, conditions={}).as_json()["conditions"].values()) is True
+      and replace(certificate, conditions={}).as_json()["holds"] is False)
+
+# A certificate about other goals is legitimate; scoring it against the graph's
+# distance table is not -- those distances measure a different question.
+foreign_c, foreign_h = lp_potential.run(graph, "0111", goal_states=["1010"])
+foreign = lp_potential.candidates(foreign_c, foreign_h, graph,
+                                  timestamp="2026-07-27T00:00:00Z")[1]["payload"]
+check("a foreign goal set is not scored against the graph's distances",
+      foreign["admissible"] is True
+      and "not comparable" in foreign["admissible_basis"]["empirical_check"]
+      and "admissibility_check" not in foreign)
+check("an empty report is vacuous, not a pass",
+      "vacuous" in heuristic.as_json([])["admissible_basis"]["empirical_check"])
 
 # ------------------------------------------------ 2. deadlock_carver's gate
 
@@ -162,6 +194,42 @@ for path, gone in (
 ):
     text = _read(os.path.join(RIG, path))
     check("%s no longer overclaims" % path, gone not in text, gone[:44] + "...")
+
+# ------------------------- 5. the same shape, found by attacking the fix itself
+
+print("5. the sites an adversarial review of this fix turned up")
+
+# interop: `conclusion` was a literal written above the line computing `verified`.
+goal = ["01000"]
+peg5 = peg1d.build_graph(5, "11011", goal_states=goal)
+good = lp_potential.solve_certificate(peg5, "11011", goal_states=goal, bound=10000)
+document = ce.build(good, peg5, claim_name="ok")
+check("a discharged document still concludes", document["verified"] is True
+      and document["conclusion"].startswith("no goal state is reachable"))
+broken_doc = ce.build(replace(good, weights=[Fraction(9)] + list(good.weights[1:])),
+                      peg5, claim_name="broken")
+check("a failing document states no conclusion",
+      broken_doc["verified"] is False
+      and "nothing follows" in broken_doc["conclusion"])
+check("checked_over says what was actually checked",
+      "move instances this document lists"
+      in document["obligations"]["inv_closed"]["checked_over"])
+
+# run_all: the RING theorems drive a published reachability verdict.
+runall = _read(os.path.join(RIG, "tools", "run_all.py"))
+check("the probe planner's pruner has a verdict taken at its own site",
+      "ring_report = deadlock_carver.pruning_report" in runall
+      and "if not ring_report.same_answer:" in runall)
+
+# p13: the prose had no branch for a refuted row.
+p13 = _read(os.path.join(RIG, "tools", "p13_fd_dividend.py"))
+check("the FD dividend prose branches on a refuted verdict first",
+      'elif row["same_answer"] is False:' in p13
+      and p13.index('elif row["same_answer"] is False:') < p13.index("elif before == after:"))
+
+# DECISIONS: D-010 and D-028 asserted what D-035 falsified.
+check("D-010 and D-028 are superseded on their independence clause",
+      "**D-010** reads" in decisions and "**D-028** reads" in decisions)
 
 print()
 if FAILURES:
