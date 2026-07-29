@@ -317,3 +317,53 @@ also made the manifest drift every time anyone pushed anything.
 prompt, a log or a fixture share a hash; four of the seventeen groups are
 multi-commit for that reason. A manifest that names a commit is claiming the
 sources matched, not that nothing else differed.
+
+---
+
+## E14 — a crash is not a finding (2026-07-29, `agent/e14-crash-is-not-a-finding`)
+
+Run directory: `runs/20260729T080000Z-E14-crash-is-not-a-finding/`
+(`MANIFEST.json`, `REPORT.md`, `ADVERSARIAL-VERBATIM.md`, `reconcile.py`,
+`negative_sample.py`, `raw/`). Zero API calls, zero network, zero sealed-pile
+contact. Suites: `theoria-arm` 51 → 59 passed, `a0-spike` 44 → 50 passed.
+
+Three sites where a swallowed exception was reinterpreted as a research
+conclusion, and reinterpreted *backwards* — the more the code crashed, the
+cleaner the health certificate:
+
+* `inner/plan.py` `_tier_bfs` — `except Exception: continue` pruned successors,
+  then the drained queue reported `status: "unsat"` and "the whole reachable set
+  (N states) was enumerated". Now `StepCrashLog`; on a non-zero count the status
+  is `unsat_unsound`, `exhaustive: false`, plus an `error`, and `optimal` on the
+  `sat` path is gated the same way. `search_ceiling` is written positively.
+* `inner/certify.py` `_ambiguity` — `except Exception: pass` skipped pairs that
+  stayed inside the claimed `N x M`. Now `pairs_checked` beside `pairs_nominal`,
+  crashes counted by phase, `ok` false while the count is non-zero, the
+  `len(states)` vs `states[:400]` off-by-one fixed, and the missing
+  `AmbiguousTransition` default changed from `Exception` (which filed every
+  crash as a constraint-9 clash) to a sentinel nothing raises.
+* `a0-spike/pipeline/stages.py` `mine` — a bare `except Exception` read any
+  crash as the miner's designed `NoSeparatingGuard` verdict and published the
+  resulting DNF. Split; `MiningAccount` gates `all_guards_searched` /
+  `disjunction_is_a_finding`, every rule carries `disjunctive_because`, and
+  `run_a0.main` / `adapt.main` read the count into their exit codes.
+
+**The deliverable number is 0.** Of 13 committed exhaustiveness / coverage /
+no-violation claims audited across both territories, 12 were exercised by the
+instrumented re-run and none carried a crash; 1 (`plan`'s `unsat` on the only
+archived arm run) was never reached, because that manual declares no goal, and
+is reported as not-exercised rather than counted clean. The a0 rule set was
+genuinely correct — all four disjunctive classes reach `NoSeparatingGuard` — but
+before this change no field in `a0_report.json` could have told you so.
+
+An adversarial subagent refuted part of the first pass and its review is stored
+verbatim in `ADVERSARIAL-VERBATIM.md`. It found the fix had reproduced the
+ticket's own disease inside itself: the crash account was snapshotted per exit
+and the `sat` exit was missed, so a search that crashed and then found a plan
+published `count: 0` and `optimal: true`. Also: `adapt.repair` put the count
+beside its claims without gating them, the reconciliation denominator was drawn
+too narrow, and one test grepped source instead of behaviour. All corrected; one
+of its corrections (gating `held_out`, `certify_generated` and
+`theorem.unsolvable`) was checked and partially declined, because those do not
+consult the mined rules and gating them would report a defect where none exists.
+The reason is recorded in the code and in `reconciliation.json`.

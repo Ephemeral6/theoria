@@ -1,0 +1,25 @@
+{
+  "shipped_v03": {
+    "files": 14,
+    "forms": {
+      "english": "generated",
+      "executable": "generated",
+      "planning_domain": "refused",
+      "planning_problem": "refused",
+      "proof": "generated"
+    },
+    "manual": "theory-compiler/tests/fixtures/sokoban2_theory.dsl",
+    "package": "built",
+    "refusals": {
+      "planning_domain": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition.",
+      "planning_problem": "crossing-up: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition.; match: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+    }
+  },
+  "upstream_v02": {
+    "manual": "a0-spike/theory/theory.dsl",
+    "package": "refused",
+    "refused_by": "UnrenderableClause",
+    "why": "the manual declares the event(s) slid/2 and this module has no statement of what they do. The manual does not say either — an `events:` declaration is a name and an arity — so a package shipping them would be handing the reader a rule whose consequence is nowhere written down."
+  },
+  "what_this_shows": "No package can be built from the upstream v0.2 manual at all, and the refusal lands one layer earlier than expected. The known blocker was that it leaves `dir` a free name, which stops the executable and the proof; the builder never reaches that, because the manual declares `slid(o, dir)` -- a two-argument slide -- and the language implements `slid(o, pusher, dir)`. A push moves the box and carries the pusher, and the v0.2 signature names only one of the two, so there is no statement of what the event does that could be handed to a reader. That is ledger X-1 seen from the handover side: the arity that was a mispredicting frame axiom is, here, a rule whose consequence is nowhere written down. The shipped package uses the v0.3 migration for this reason and says so in its MANIFEST."
+}

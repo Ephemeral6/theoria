@@ -43,17 +43,36 @@ def _check_semantics(ast: TheoryAST) -> None:
 
 
 def generate_pddl(ast: TheoryAST, problem_name: str = "instance-1",
-                   grid_width: int = 2, grid_height: int = 3) -> tuple:
+                   grid_width: int = 2, grid_height: int = 3,
+                   problem: "ProblemSpec | None" = None) -> tuple:
     """Generate (domain_pddl, problem_pddl) strings from a TheoryAST.
+
+    Without a `problem`, the problem half is a **placeholder**: every object
+    stands on `cell-0-0`, every cell is free, and the board's walls do not exist.
+    That was adequate while the only consumer was a round-trip test of the
+    domain, and it is not adequate for anything that reads the problem as a
+    board — a handover package shipping it would hand its reader a board that is
+    not the board, and the reader could not tell. Passing a `ProblemSpec` emits
+    the level's real geometry: its walls, where each instance actually starts,
+    and a goal with its landmarks resolved.
 
     Returns:
         Tuple of (domain_str, problem_str)
     """
     _check_semantics(ast)
     domain_name = "theoria-domain"
+    if problem is not None:
+        if problem.is_line:
+            raise UnsupportedClause(
+                "this PDDL encoding lays cells out as a grid; problem %r is a "
+                "line world with %d positions" % (problem.name, problem.n_pos))
+        grid_height = problem.height if problem.height is not None else grid_height
+        grid_width = problem.width if problem.width is not None else grid_width
+        problem_name = problem.name
     domain = _gen_domain(ast, domain_name, grid_width, grid_height)
-    problem = _gen_problem(ast, domain_name, problem_name, grid_width, grid_height)
-    return domain, problem
+    problem_text = _gen_problem(ast, domain_name, problem_name, grid_width,
+                                grid_height, problem)
+    return domain, problem_text
 
 
 def _gen_domain(ast: TheoryAST, domain_name: str, w: int, h: int) -> str:
@@ -99,8 +118,30 @@ def _gen_domain(ast: TheoryAST, domain_name: str, w: int, h: int) -> str:
     return "\n".join(lines)
 
 
+def _instance_names(ast: TheoryAST, problem) -> "list":
+    """(pddl_name, type_name, cell_or_None, present) for every object instance.
+
+    Naming stays `<type>1`, `<type>2`, … in declaration order, which is what
+    `_expr_to_pddl_goal` already writes into a goal; a level with one instance
+    per type — every level either track has produced — therefore keeps exactly
+    the names the placeholder emitted.
+    """
+    out = []
+    if not ast.word_table:
+        return out
+    for obj in ast.word_table.objects:
+        type_name = obj.name.lower()
+        instances = problem.instances_of(obj.name) if problem is not None else []
+        if not instances:
+            out.append((f"{type_name}1", type_name, None, True))
+            continue
+        for n, inst in enumerate(instances, start=1):
+            out.append((f"{type_name}{n}", type_name, tuple(inst.pos), inst.present))
+    return out
+
+
 def _gen_problem(ast: TheoryAST, domain_name: str, problem_name: str,
-                 w: int, h: int) -> str:
+                 w: int, h: int, problem=None) -> str:
     lines = []
     lines.append(f"(define (problem {problem_name})")
     lines.append(f"  (:domain {domain_name})")
@@ -113,9 +154,8 @@ def _gen_problem(ast: TheoryAST, domain_name: str, problem_name: str,
     lines.append(f"    {cell_list} - cell")
 
     # Object instances
-    if ast.word_table:
-        for obj in ast.word_table.objects:
-            lines.append(f"    {obj.name.lower()}1 - {obj.name.lower()}")
+    for pddl_name, type_name, _cell, _present in _instance_names(ast, problem):
+        lines.append(f"    {pddl_name} - {type_name}")
     lines.append("  )")
     lines.append("")
 
@@ -142,15 +182,29 @@ def _gen_problem(ast: TheoryAST, domain_name: str, problem_name: str,
             else:
                 lines.append(f"    (boundary-right {cell})")
 
-    # Initial object positions — place at (0,0) by default
-    if ast.word_table:
-        for obj in ast.word_table.objects:
-            lines.append(f"    (at {obj.name.lower()}1 cell-0-0)")
-    # Mark free cells
+    # Initial object positions.  Without a level there is nowhere to put them
+    # and (0,0) is the placeholder; with one, they stand where the level says.
+    placed = _instance_names(ast, problem)
+    occupied = set()
+    for pddl_name, _type_name, cell, present in placed:
+        if not present:
+            continue
+        where = cell if cell is not None else (0, 0)
+        lines.append(f"    (at {pddl_name} cell-{where[0]}-{where[1]})")
+        occupied.add(tuple(where))
+
+    # Mark free cells.  A cell is free when the board's own colour there is the
+    # background and nothing is standing on it -- the same reading of `free` the
+    # executable form compiles.
     for r in range(h):
         for c in range(w):
-            if r == 0 and c == 0 and ast.word_table and ast.word_table.objects:
-                continue  # occupied by first object
+            if (r, c) in occupied:
+                continue
+            if problem is not None and problem.board:
+                row = problem.board[r] if r < len(problem.board) else []
+                colour = row[c] if c < len(row) else problem.background
+                if colour != problem.background:
+                    continue           # the board itself is not free here
             lines.append(f"    (free cell-{r}-{c})")
     lines.append("  )")
     lines.append("")
@@ -158,7 +212,7 @@ def _gen_problem(ast: TheoryAST, domain_name: str, problem_name: str,
     # Goal
     lines.append("  (:goal")
     if ast.goal:
-        goal_pddl = _goal_to_pddl(ast.goal)
+        goal_pddl = _goal_to_pddl(ast.goal, problem)
         lines.append(f"    {goal_pddl}")
     else:
         lines.append("    (and)")
@@ -196,6 +250,41 @@ def _rule_to_action(rule: RuleDecl, obj_types: list) -> str:
     return "\n".join(lines)
 
 
+def _refuse_count(expr) -> None:
+    """A counting guard has no STRIPS encoding in this subset — say so.
+
+    E-08 added `count(<Type>, <field> = <value>) >= k` to the guard language.
+    `:strips :typing` has no numeric fluent and no aggregate, so the condition
+    can only be encoded by inventing a chain of `collected-1`/`collected-2`/…
+    predicates and threading them through every rule that consumes a token.
+    That encoding may be worth building; **silently dropping the clause is not
+    the same thing**, and dropping is what this backend did — it emitted a
+    domain whose gate opens unconditionally and reported success.
+
+    `_extract_pred_pddl` has no else-branch, so anything it does not recognise
+    falls out of the precondition without a word. That is a wider defect than
+    this one clause (D-TC-031 records two more instances of it); refusing here
+    fixes the case E-08 creates rather than pretending the rest is fine.
+    """
+    stack = [expr]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, FuncCall) and node.name == "count":
+            raise UnsupportedClause(
+                "a counting guard (`count(...)`) has no encoding in this "
+                "STRIPS subset: `:strips :typing` has no numeric fluent, and "
+                "the condition would have to become a chain of threshold "
+                "predicates threaded through every rule that changes the "
+                "count. Refusing rather than dropping the precondition — a "
+                "dropped one yields a domain whose gate opens unconditionally "
+                "(expressivity ledger E-08).")
+        for attr in ("left", "right", "expr"):
+            child = getattr(node, attr, None)
+            if child is not None:
+                stack.append(child)
+        stack.extend(getattr(node, "args", []) or [])
+
+
 def _guard_to_pddl(guard, obj_types: list) -> tuple:
     """Convert guard to (params_dict, precondition_list)."""
     params = {}
@@ -218,6 +307,7 @@ def _guard_to_pddl(guard, obj_types: list) -> tuple:
                     params[pname] = ptype
         elif isinstance(clause, GuardPredicate):
             expr = clause.expr
+            _refuse_count(expr)
             _extract_pred_pddl(expr, params, preconds, obj_types)
 
     # If we found object params but no cell params, add position
@@ -324,32 +414,51 @@ def _event_to_pddl(event, params: dict) -> list:
     return effects
 
 
-def _goal_to_pddl(goal_sec: GoalSection) -> str:
+def _goal_to_pddl(goal_sec: GoalSection, problem=None) -> str:
     """Convert DSL goal to PDDL goal expression."""
     expr = goal_sec.goal.expr
-    return _expr_to_pddl_goal(expr)
+    return _expr_to_pddl_goal(expr, problem)
 
 
-def _expr_to_pddl_goal(expr) -> str:
+def _expr_to_pddl_goal(expr, problem=None) -> str:
     """Recursively convert a goal expression to PDDL."""
     if isinstance(expr, Comparison):
-        if isinstance(expr.left, FieldAccess) and isinstance(expr.right, TupleLit):
-            # Cart.pos = (0, 0) -> (at cart1 cell-r-c)
-            obj_name = expr.left.obj.lower()
-            elems = expr.right.elements
-            if len(elems) == 2 and all(isinstance(e, NumberLit) for e in elems):
-                r, c = elems[0].value, elems[1].value
-                return f"(at {obj_name}1 cell-{r}-{c})"
-        left = _expr_to_pddl_goal(expr.left)
-        right = _expr_to_pddl_goal(expr.right)
+        if isinstance(expr.left, FieldAccess):
+            cell = _goal_cell(expr.right, problem)
+            if cell is not None:
+                # Cart.pos = (0, 0), or Box.pos = target with a level to
+                # resolve `target` against -> (at cart1 cell-r-c)
+                return f"(at {expr.left.obj.lower()}1 cell-{cell[0]}-{cell[1]})"
+        left = _expr_to_pddl_goal(expr.left, problem)
+        right = _expr_to_pddl_goal(expr.right, problem)
         return f"(= {left} {right})"
     elif isinstance(expr, BinOp):
         if expr.op == "and":
-            left = _expr_to_pddl_goal(expr.left)
-            right = _expr_to_pddl_goal(expr.right)
+            left = _expr_to_pddl_goal(expr.left, problem)
+            right = _expr_to_pddl_goal(expr.right, problem)
             return f"(and {left} {right})"
     elif isinstance(expr, NameRef):
         return expr.name
     elif isinstance(expr, NumberLit):
         return str(expr.value)
     return "(and)"
+
+
+def _goal_cell(expr, problem):
+    """The cell a goal's right-hand side names, or None if it names no cell.
+
+    A literal `(2, 7)` is a cell whatever the level is.  A bare name is a
+    landmark, and only the level knows where it is: without one, this returns
+    None and the caller falls through to the generic encoding rather than
+    inventing a coordinate.
+    """
+    if isinstance(expr, TupleLit):
+        elems = expr.elements
+        if len(elems) == 2 and all(isinstance(e, NumberLit) for e in elems):
+            return (elems[0].value, elems[1].value)
+        return None
+    if isinstance(expr, NameRef) and problem is not None:
+        cell = problem.landmarks.get(expr.name)
+        if cell is not None and len(cell) == 2:
+            return (cell[0], cell[1])
+    return None

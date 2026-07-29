@@ -1,0 +1,215 @@
+{
+  "by_kind": {
+    "name_class": {
+      "abstain": 0,
+      "right": 10,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 2
+    },
+    "optimal_action": {
+      "abstain": 0,
+      "right": 2,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    },
+    "step_semantics": {
+      "abstain": 0,
+      "right": 10,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    }
+  },
+  "failed": [
+    {
+      "given": "level_data",
+      "item_id": "name-07",
+      "kind": "name_class",
+      "verdict": "wrong",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-12",
+      "kind": "name_class",
+      "verdict": "wrong",
+      "why": "expected level_data"
+    }
+  ],
+  "fraction": 0.916667,
+  "items": 24,
+  "package": "a0-cart",
+  "right": 22,
+  "scores": [
+    {
+      "given": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(4,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_up",
+      "item_id": "step-base-01",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(4,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_up (state ok, rule ok)"
+    },
+    {
+      "given": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(6,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_down",
+      "item_id": "step-base-02",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(6,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_down (state ok, rule ok)"
+    },
+    {
+      "given": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,2); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_right",
+      "item_id": "step-base-03",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,2); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_right (state ok, rule ok)"
+    },
+    {
+      "given": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_left",
+      "item_id": "step-base-04",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(5,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=push_left (state ok, rule ok)"
+    },
+    {
+      "given": "Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(1,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=teleport_down",
+      "item_id": "step-base-05",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Button_color=7; Button_pos=(3,2); Cart_color=6; Cart_pos=(1,1); Door_color=5; Door_pos=(4,5); Door_present=true; rule=teleport_down (state ok, rule ok)"
+    },
+    {
+      "given": "Cart_color=6; Cart_pos=(4,1); rule=push_up",
+      "item_id": "step-no-button-06",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Cart_color=6; Cart_pos=(4,1); rule=push_up (state ok, rule ok)"
+    },
+    {
+      "given": "Cart_color=6; Cart_pos=(6,1); rule=push_down",
+      "item_id": "step-no-button-07",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Cart_color=6; Cart_pos=(6,1); rule=push_down (state ok, rule ok)"
+    },
+    {
+      "given": "Cart_color=6; Cart_pos=(5,2); rule=push_right",
+      "item_id": "step-no-button-08",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Cart_color=6; Cart_pos=(5,2); rule=push_right (state ok, rule ok)"
+    },
+    {
+      "given": "Cart_color=6; Cart_pos=(5,1); rule=push_left",
+      "item_id": "step-no-button-09",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Cart_color=6; Cart_pos=(5,1); rule=push_left (state ok, rule ok)"
+    },
+    {
+      "given": "Cart_color=6; Cart_pos=(1,1); rule=teleport_down",
+      "item_id": "step-no-button-10",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Cart_color=6; Cart_pos=(1,1); rule=teleport_down (state ok, rule ok)"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-01",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-02",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-03",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-04",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-05",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-06",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-07",
+      "kind": "name_class",
+      "verdict": "wrong",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-08",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-09",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-10",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-11",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-12",
+      "kind": "name_class",
+      "verdict": "wrong",
+      "why": "expected level_data"
+    },
+    {
+      "given": "push(Cart, up)",
+      "item_id": "opt-base-01",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: push(Cart, up), push(Cart, right)"
+    },
+    {
+      "given": "push(Cart, right)",
+      "item_id": "opt-base-02",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: push(Cart, right)"
+    }
+  ]
+}

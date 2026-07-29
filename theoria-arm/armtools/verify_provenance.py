@@ -144,8 +144,19 @@ def run(runs_root: Optional[str] = None) -> Checks:
                  % sum(1 for r in survey if r["billed_actions_from_ledger"]))
 
     # 6 -- orphaned scorecards are declared, not silently dropped.
+    #
+    #      Drawn from the same population as check 4, and it has to be: `cards`
+    #      above is built from archive material only, so scanning every ledger
+    #      here compares an all-runs numerator against an archive-only
+    #      denominator. A `--mock` run opens and closes MockArc's own card ids,
+    #      which are not ARC scorecards and are never billed; counted
+    #      asymmetrically they surface as orphans that no manifest can honestly
+    #      declare. An orphan matters because it means real billed actions with
+    #      no closed card behind them, and that is an archive-material question.
     opened: Dict[str, str] = {}
     for row in survey:
+        if not row["archive_material"]:
+            continue
         ledger_path = os.path.join(runs_root, row["slug"], "ledger.jsonl")
         if not os.path.exists(ledger_path):
             continue

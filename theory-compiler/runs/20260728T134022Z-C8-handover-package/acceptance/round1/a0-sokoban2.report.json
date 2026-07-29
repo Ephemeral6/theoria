@@ -1,0 +1,235 @@
+{
+  "by_kind": {
+    "name_class": {
+      "abstain": 0,
+      "right": 16,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    },
+    "optimal_action": {
+      "abstain": 0,
+      "right": 4,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    },
+    "step_semantics": {
+      "abstain": 0,
+      "right": 9,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    }
+  },
+  "failed": [],
+  "fraction": 1.0,
+  "items": 29,
+  "package": "a0-sokoban2",
+  "right": 29,
+  "scores": [
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=walk",
+      "item_id": "step-crossing-up-01",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=walk (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=blocked_box_crossing",
+      "item_id": "step-crossing-up-02",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=blocked_box_crossing (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=blocked_wall",
+      "item_id": "step-crossing-up-03",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=blocked_wall (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,5); Player_pos=(3,3); rule=push2",
+      "item_id": "step-crossing-up-04",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,5); Player_pos=(3,3); rule=push2 (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,5); Player_pos=(3,4); rule=blocked_box_landing",
+      "item_id": "step-crossing-up-05",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,5); Player_pos=(3,4); rule=blocked_box_landing (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(2,5); rule=walk",
+      "item_id": "step-match-06",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(2,5); rule=walk (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(2,5); rule=blocked_wall",
+      "item_id": "step-match-07",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(2,5); rule=blocked_wall (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,1); Player_pos=(3,3); rule=push2",
+      "item_id": "step-match-08",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,1); Player_pos=(3,3); rule=push2 (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,1); Player_pos=(3,2); rule=blocked_box_landing",
+      "item_id": "step-match-09",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,1); Player_pos=(3,2); rule=blocked_box_landing (state ok, rule ok)"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-01",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-02",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-03",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-04",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-05",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-06",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-07",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-08",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-09",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-10",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-11",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-12",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-13",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-14",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-15",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-16",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "move(Player, right)",
+      "item_id": "opt-crossing-up-01",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, right)"
+    },
+    {
+      "given": "move(Player, up)",
+      "item_id": "opt-crossing-up-02",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, up)"
+    },
+    {
+      "given": "move(Player, left)",
+      "item_id": "opt-match-01",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, left)"
+    },
+    {
+      "given": "move(Player, down)",
+      "item_id": "opt-match-02",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, down), move(Player, left)"
+    }
+  ]
+}

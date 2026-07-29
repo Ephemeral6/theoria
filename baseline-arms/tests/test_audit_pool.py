@@ -249,3 +249,31 @@ def test_the_real_tn36_cells_now_reconcile():
     for cell in cells:
         report = audit_cells.audit_run(cell, records, probes)
         assert not report["findings"], (cell["run_id"], report["findings"])
+
+
+def test_auditing_one_campaign_does_not_judge_anothers_cells(scratch_gate):
+    """The over-correction to the --game bug. Attribution is per campaign: a
+    cell of campaign A names a reservation of campaign A, and comparing it
+    against a pool filtered to campaign B reports it as spend nobody can see."""
+    mine = scratch_gate.reserve(CAMPAIGN, 5.0, 400)
+    _spend_actions(scratch_gate, mine, 1 + 1 + 50 + 1)
+    scratch_gate.record(mine, usd=0.5, actions=0)
+    scratch_gate.release(mine)
+
+    other = scratch_gate.reserve("some-other-campaign", 5.0, 400)
+    _spend_actions(scratch_gate, other, 1 + 1 + 20 + 1)
+    scratch_gate.record(other, usd=0.3, actions=0)
+    scratch_gate.release(other)
+
+    # Only this campaign's cells, which is what `audit()` documents it needs.
+    report = audit_pool.audit([_cell(mine.reservation_id)], CAMPAIGN, scratch_gate)
+    assert report["clean"], report["cells"][0]["problems"]
+
+    # The negative control: hand it the other campaign's cell too and it must
+    # complain, because that really would be a cell naming an invisible spend.
+    stray = dict(_cell(other.reservation_id, repeat=2), game_id="sk48-d8078629")
+    bad = audit_pool.audit([_cell(mine.reservation_id), stray], CAMPAIGN,
+                           scratch_gate)
+    assert not bad["clean"]
+    assert any("absent from the pool" in p
+               for row in bad["cells"] for p in row["problems"])

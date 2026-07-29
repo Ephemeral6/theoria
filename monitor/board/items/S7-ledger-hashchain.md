@@ -2,6 +2,7 @@ priority: 3
 cell: S3
 territory: proxy
 deps: none
+lane: infra
 
 # S7 · 账本哈希链：让账本从「自洽」变成「不可篡改」
 

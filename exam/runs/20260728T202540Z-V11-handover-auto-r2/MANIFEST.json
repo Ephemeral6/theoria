@@ -1,0 +1,102 @@
+{
+  "api_calls": 0,
+  "base_commit": "18a39417e1212efba31b9cd6b040eaea3ac0f491",
+  "branch": "agent/v11-handover-auto",
+  "files": [
+    {
+      "path": "exam/grading/registry.py",
+      "sha256": "d075e3ee7ff25ee9d9ccffeb0e5297887c7faa4eefb8d282181813b7390d5f9d"
+    },
+    {
+      "path": "exam/grading/rubrics_handover_auto.py",
+      "sha256": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2"
+    },
+    {
+      "path": "exam/papers/handover_auto.py",
+      "sha256": "bad726becc2e91011a64228702c4584401faa82b21fc671152136763a2187406"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/ADVERSARIAL-BRIEF.md",
+      "sha256": "28a59ae737e9ca78319dc9f391bc8d6d6098a5c21b4aabf1e29836fa91c6db8e"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/ADVERSARIAL-VERBATIM.md",
+      "sha256": "ca0ef925fb0b56e3ad1c1fcbaa2cd0d0f38fb8c9965775c8456a79717525aefc"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/BLINDING.md",
+      "sha256": "d29860c2e92f61985760587899862eabf13115309c934628ce4c5e6340d36272"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/PREREGISTRATION.json",
+      "sha256": "cff77e9332d65f93bd3251ca1462620f4cf64dac7e471ab1ad15838588abaf21"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.json",
+      "sha256": "9027cfdb7f362c184c23a089d186bb4f45a64fb57d1488c3f410a6b2c5bb624c"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.md",
+      "sha256": "08f291ab9b9e27cbae9c585e882102471b28bc31e75a027786977023e675f33c"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-a1.answers.json",
+      "sha256": "2446b6ab2acf958082c78fdc4ef620760efe603db1aebe0fb5b964e618521b9c"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-a2.answers.json",
+      "sha256": "5832a65594ca9359ce3b3253ae2970d95c2b6362892c4c6dbf94f1ef3a294fd9"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-a3.answers.json",
+      "sha256": "277dfada57bcfc80bfe49e6b1654c7e6523b315d06a83e0cd704641eab521d59"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-b1.answers.json",
+      "sha256": "4a0581684f65b97e691c680e994a4e5c8d9631cee5072e3062092a217bf95e02"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-b2.answers.json",
+      "sha256": "ef3a3d1a0d46f027076cc6ea6f0e8150ac5c0ed2c4a5717f06dc63389017b715"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/answers/reader-b3.answers.json",
+      "sha256": "849ec0f9c15592c3a78116ddf5e54b8a4005415509b72c69a973ba5a5ec969c6"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/DELIVERY_WRAPPER.md",
+      "sha256": "d5348095f6b8ca87a31e3f2c05d063055414f9fb2caf3dd76f6ebd77256c07e0"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier1_manual.prompt.md",
+      "sha256": "9c8025744d99092fff1bd2a14b64a69211b3ea5e09ee6780c419ceff15fb8c2c"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier2_manual_playbook.prompt.md",
+      "sha256": "9f46872030768dfe908cc05669f4f1522d100f815b804d297e366edb36816ca8"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/sheet.json",
+      "sha256": "bed97ba27aaeb844052383bcab7d6a79ad9c23c1f769479100e06165b843ec83"
+    },
+    {
+      "path": "exam/tests/test_handover_auto.py",
+      "sha256": "69e0b3cf6e4e1e7b5ae2ccf08d433a6a7d6a703ceb54e696ff46e7d8a769b719"
+    },
+    {
+      "path": "exam/tools/run_handover_auto.py",
+      "sha256": "9b7433a8e5244d936d44446fc7d33637b592ab4da5a018d98843be3afb76f9d3"
+    }
+  ],
+  "manifest_refresh_reason": "the adversarial review found this manifest stale: it recorded exam/tools/run_handover_auto.py at its pre-crash-fix hash, so the one file the run admitted changing was the one file the provenance record did not cover. Refreshed over the post-review state, which also includes the cross-item leak check, the withheld positional block and prompts/DELIVERY_WRAPPER.md. The sheet, the answers and RESULTS.json are byte-unchanged since they were produced.",
+  "manifest_refreshed_utc": "2026-07-28T21:05:00Z",
+  "network": "none; every build runs inside exam.guard.no_network()",
+  "prompt_id": "V11-handover-auto",
+  "run_id": "20260728T202540Z-V11-handover-auto-r2",
+  "sealed_pile_contact": "none",
+  "supersedes": "exam/runs/20260728T202101Z-V11-handover-auto (VOIDED.md)",
+  "territory": "exam",
+  "utc": "2026-07-28T20:25:40Z",
+  "what": "Theoria.md 1.11 layered handover, automated. Second cohort: the first was voided when the sheet's tags printed `dead` on the two boards with no solution (see BLINDING.md).",
+  "world_id": "a0"
+}

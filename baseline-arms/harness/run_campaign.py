@@ -168,14 +168,27 @@ def append_cell(cell: Dict[str, Any]) -> None:
         fh.write(json.dumps(cell, sort_keys=True, ensure_ascii=True) + "\n")
 
 
-def load_cells() -> List[Dict[str, Any]]:
+def load_cells(campaign: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Every recorded cell, or only one campaign's.
+
+    `campaign_cells.jsonl` is append-only and now holds more than one campaign:
+    the variance envelope, and the section-2.1 unit-price re-measurement that
+    followed it on two other tiers. They must not be summed together. The gate's
+    thresholds are per campaign (a campaign's $50 cap is not a licence for the
+    next one), and the envelope's spread is meaningless if another tier's cells
+    are pooled into it. A cell written before the field existed is treated as
+    belonging to the envelope, which is where it came from.
+    """
     if not os.path.exists(CELLS_PATH):
         return []
     out = []
     for line in open(CELLS_PATH, encoding="utf-8"):
         line = line.strip()
-        if line:
-            out.append(json.loads(line))
+        if not line:
+            continue
+        cell = json.loads(line)
+        if campaign is None or (cell.get("campaign") or CAMPAIGN_NAME) == campaign:
+            out.append(cell)
     return out
 
 
@@ -310,11 +323,22 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def write_gate(gate: Dict[str, Any]) -> None:
+def gate_path(campaign: str = CAMPAIGN_NAME) -> str:
+    """One gate file per campaign. Sharing one would let the last campaign to
+    finish overwrite the standing verdict on another, which is how a RED becomes
+    invisible."""
+    if campaign == CAMPAIGN_NAME:
+        return GATE_PATH
+    slug = "".join(ch if ch.isalnum() or ch in "-_" else "-" for ch in campaign)
+    return os.path.join(OUT_DIR, "campaign_gate.%s.json" % slug)
+
+
+def write_gate(gate: Dict[str, Any], campaign: str = CAMPAIGN_NAME) -> None:
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(GATE_PATH, "w", encoding="utf-8") as fh:
+    with open(gate_path(campaign), "w", encoding="utf-8") as fh:
         json.dump(gate, fh, indent=2, sort_keys=True)
-    ledger.probe("campaign_gate", {"state": gate["state"], "tripped": gate["tripped"],
+    ledger.probe("campaign_gate", {"campaign": campaign, "state": gate["state"],
+                                   "tripped": gate["tripped"],
                                    "totals": gate["totals"]})
 
 
@@ -388,7 +412,8 @@ def cell_caps(model: str, budget: int) -> Dict[str, Any]:
 
 
 def run_repeat(game_id: str, model: str, budget: int, rep: int,
-               results: Dict[int, Dict[str, Any]], lock: threading.Lock) -> None:
+               results: Dict[int, Dict[str, Any]], lock: threading.Lock,
+               campaign: str = CAMPAIGN_NAME) -> None:
     started = time.time()
     caps = cell_caps(model, budget)
     binding = None
@@ -414,7 +439,7 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
         # cell, the reservation id lands in the cell record and the attribution
         # is exact rather than reconstructed.
         binding = spend.open_binding(
-            CAMPAIGN_NAME, caps["usd"], caps["actions"],
+            campaign, caps["usd"], caps["actions"],
             holder={"game_id": game_id, "model": model, "repeat": rep,
                     "budget": budget, "runner": "run_campaign"},
             ttl_seconds=7200)
@@ -438,7 +463,7 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
     summary["cell_caps"] = caps
     summary["wall_seconds"] = round(time.time() - started, 1)
     summary["repeat"] = rep
-    summary["campaign"] = CAMPAIGN_NAME
+    summary["campaign"] = campaign
     with lock:
         results[rep] = summary
     print("  [rep %d] %s -> %s (%d ok / %d failed, longest fail run %s, "
@@ -449,7 +474,8 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
              summary.get("cost_usd", 0.0), summary["wall_seconds"]), flush=True)
 
 
-def run_game(game_id: str, model: str, repeats: int, budget: int) -> List[Dict[str, Any]]:
+def run_game(game_id: str, model: str, repeats: int, budget: int,
+             campaign: str = CAMPAIGN_NAME) -> List[Dict[str, Any]]:
     """The `repeats` episodes of one cell, concurrently.
 
     Concurrent because the whole point is repeated *identical* cells: running
@@ -458,12 +484,13 @@ def run_game(game_id: str, model: str, repeats: int, budget: int) -> List[Dict[s
     afternoon's. The pilot already established the API tolerates 4-way
     concurrency (BUDGET_REPORT section 7).
     """
-    print("=== %s x %s x %d repeats (budget %d) ===" % (game_id, model, repeats, budget),
-          flush=True)
+    print("=== %s x %s x %d repeats (budget %d) [%s] ==="
+          % (game_id, model, repeats, budget, campaign), flush=True)
     results: Dict[int, Dict[str, Any]] = {}
     lock = threading.Lock()
     threads = [threading.Thread(target=run_repeat,
-                                args=(game_id, model, budget, rep, results, lock))
+                                args=(game_id, model, budget, rep, results, lock,
+                                      campaign))
                for rep in range(1, repeats + 1)]
     for t in threads:
         t.start()
@@ -478,13 +505,16 @@ def main(argv=None) -> int:
     ap.add_argument("--model", default=CAMPAIGN_TIER)
     ap.add_argument("--repeats", type=int, default=REPEATS)
     ap.add_argument("--budget", type=int, default=ACTION_BUDGET)
+    ap.add_argument("--campaign", default=CAMPAIGN_NAME,
+                    help="which campaign these cells belong to; gates and "
+                         "summaries are scoped to it and never summed across")
     ap.add_argument("--gate-only", action="store_true",
                     help="re-evaluate the gate over recorded cells and exit")
     args = ap.parse_args(argv)
 
     if args.gate_only:
-        gate = evaluate_gate(load_cells())
-        write_gate(gate)
+        gate = evaluate_gate(load_cells(args.campaign))
+        write_gate(gate, args.campaign)
         print_gate(gate)
         print_pool("now")
         return 3 if gate["state"] == "red" else 0
@@ -503,19 +533,20 @@ def main(argv=None) -> int:
     assert game_id not in arc_client.sealed_pile(), "sealed game reached the campaign"
 
     # Pre-flight: never start a game the gate has already stopped.
-    gate = evaluate_gate(load_cells())
+    gate = evaluate_gate(load_cells(args.campaign))
     if gate["state"] == "red":
         print_gate(gate)
         print("\ngate is already RED -- not starting %s" % game_id)
         return 3
 
     print_pool("before %s" % game_id)
-    cells = run_game(game_id, args.model, args.repeats, args.budget)
+    cells = run_game(game_id, args.model, args.repeats, args.budget,
+                     campaign=args.campaign)
     for cell in cells:
         append_cell(cell)
 
-    gate = evaluate_gate(load_cells())
-    write_gate(gate)
+    gate = evaluate_gate(load_cells(args.campaign))
+    write_gate(gate, args.campaign)
     print_gate(gate)
     print_pool("after %s" % game_id)
     print(json.dumps(cells, indent=2, sort_keys=True))

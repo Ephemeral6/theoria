@@ -65,6 +65,12 @@ class _Ctx:
         self.directions = LINE_DIRECTIONS if self.line else GRID_DIRECTIONS
         self.instances = {i.name for i in ir.problem.instances}
         self.landmarks = set(ir.landmarks)
+        self.problem = ir.problem
+        #: declared observations per object type, so `count(<Type>)` can ask
+        #: whether a type even has a `present` field before reading one.
+        self._fields = {obj.name: {f.name for f in obj.fields}
+                        for obj in ir.ast.word_table.objects}
+        self._type_of = {i.name: i.type for i in ir.problem.instances}
 
     def field(self, inst: str, obs: str) -> str:
         if inst not in self.instances:
@@ -72,6 +78,9 @@ class _Ctx:
                 f"{inst!r} is not an instance in this problem; the level has "
                 f"{sorted(self.instances)}")
         return f"state.{inst}_{'color' if obs == 'colour' else obs}"
+
+    def has_field(self, inst: str, obs: str) -> bool:
+        return obs in self._fields.get(self._type_of.get(inst, ""), set())
 
 
 def _is_line(ir: WorldIR) -> bool:
@@ -180,8 +189,59 @@ def _value(expr, ctx: _Ctx) -> str:
     if isinstance(expr, TupleLit):
         return "(" + ", ".join(_value(e, ctx) for e in expr.elements) + ")"
     if isinstance(expr, FuncCall):
+        if expr.name == "count":
+            return _count_expr(expr, ctx)
         return _cell(expr, ctx)
     raise UnsupportedClause(f"cannot evaluate {expr!r}")
+
+
+def _count_expr(call: FuncCall, ctx: _Ctx) -> str:
+    """`count(<Type>)` / `count(<Type>, <field> = <value>)` as a Python integer.
+
+    E-08.  The counting predicate was already implemented, once, inline in the
+    goal compiler and reachable only through `=`.  A guard could not use it at
+    all: `_predicate` reached `unknown predicate 'count'` and refused.  That is
+    the whole of what stopped a manual saying *"passable once k tokens have been
+    collected"* — the comparison operators were already legal in a guard, and so
+    was the shape of the call.
+
+    Lifted here so that the goal and the guard read the **same** count.  Two
+    implementations of a counting rule is how a manual comes to mean one thing
+    when it predicts and another when it decides it has won.
+
+    Deliberately one rung, not the whole ladder (the C9 work order says so, and
+    the expressivity ledger agrees): the condition is one `<field> = <value>`
+    test over declared instances of one type.  No quantifier, no nested count,
+    no counting of cells — a `forall` is a different ledger row and needs its own
+    forcing world.
+    """
+    args = call.args
+    if not args or not isinstance(args[0], NameRef):
+        raise UnsupportedClause("count(<Type>, ...) needs a type name first")
+    type_name = args[0].name
+    names = [i.name for i in ctx.problem.instances if i.type == type_name]
+    if not names:
+        raise UnsupportedClause(
+            f"count({type_name}) — this level declares no instance of that "
+            f"type, so the count is 0 on every state and the clause decides "
+            f"nothing. A manual counting a type the level does not supply is a "
+            f"mismatch between the two, not a guard.")
+    if len(args) == 1:
+        terms = [f"(1 if {ctx.field(n, 'present')} else 0)"
+                 if ctx.has_field(n, "present") else "1" for n in names]
+    elif len(args) == 2 and isinstance(args[1], Comparison):
+        cond = args[1]
+        if not isinstance(cond.left, NameRef) or cond.op != "=":
+            raise UnsupportedClause(
+                "count's condition must be `<field> = <value>`; "
+                f"got {cond!r}")
+        obs, want = cond.left.name, _value(cond.right, ctx)
+        terms = [f"(1 if {ctx.field(n, obs)} == {want} else 0)" for n in names]
+    else:
+        raise UnsupportedClause(
+            f"unsupported count(): {call!r}. One rung only — "
+            f"count(<Type>) or count(<Type>, <field> = <value>).")
+    return "(" + " + ".join(terms) + ")"
 
 
 def _predicate(expr, ctx: _Ctx) -> str:
@@ -336,25 +396,15 @@ def _goal_body(ir: WorldIR, ctx: _Ctx) -> List[str]:
     # `count(<Type>, <field> = <value>) = <n>` — how many instances are still in
     # a given condition. This is the peg goal, and v0.1's generator could not
     # read it at all.
-    if (isinstance(expr, Comparison) and expr.op == "="
+    # One counting predicate, shared with the guard compiler (E-08). It used to
+    # live here inline and only here, which is why a guard could not count and
+    # why `count(<Type>)` on a type with a `present` field counted the vanished
+    # ones too: the goal never had a vanish to get wrong.
+    if (isinstance(expr, Comparison)
             and isinstance(expr.left, FuncCall) and expr.left.name == "count"):
-        args = expr.left.args
-        if not args or not isinstance(args[0], NameRef):
-            raise UnsupportedClause("count(<Type>, ...) needs a type first")
-        type_name = args[0].name
-        names = [i.name for i in ir.problem.instances if i.type == type_name]
-        if len(args) == 1:
-            terms = ["1" for _ in names]
-        elif len(args) == 2 and isinstance(args[1], Comparison):
-            cond = args[1]
-            if not isinstance(cond.left, NameRef):
-                raise UnsupportedClause("count's condition must be `<field> = <value>`")
-            obs, want = cond.left.name, _value(cond.right, ctx)
-            terms = [f"(1 if state.{n}_{obs} == {want} else 0)" for n in names]
-        else:
-            raise UnsupportedClause(f"unsupported count(): {expr.left!r}")
-        total = " + ".join(terms) if terms else "0"
-        return [f"    return ({total}) == {_value(expr.right, ctx)}"]
+        op = "==" if expr.op == "=" else expr.op
+        return [f"    return {_count_expr(expr.left, ctx)} {op} "
+                f"{_value(expr.right, ctx)}"]
     if isinstance(expr, Comparison) and expr.op == "=":
         return [f"    return {_predicate(expr, ctx)}"]
     raise UnsupportedClause(f"unsupported goal {expr!r}")

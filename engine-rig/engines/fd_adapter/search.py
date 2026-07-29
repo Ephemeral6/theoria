@@ -96,6 +96,22 @@ class SearchResult:
     generated: int
     pruned: int
     ground_actions: int
+    # The budget this search was allowed, published beside the count it used.
+    # `plan is None` from this search means the queue emptied -- exceeding the
+    # budget raises -- so absence of a plan is a proof of unsolvability.  That
+    # implication is a fact about the code, and a reader of the artefact could
+    # not check it: `expansions` was there, the limit it ran under was not.
+    # `None` means no budget applied (the pre-search exits, which expand
+    # nothing).
+    max_expansions: Optional[int] = None
+    # Did *this* search look at everything it could reach?  True on every path
+    # out of `search()` -- exceeding the budget raises rather than returns -- so
+    # it is what entitles a caller to read `plan is None` as "no plan exists".
+    # It defaults to False so that the placeholder `SearchResult` the Fast
+    # Downward path constructs (where this search never ran) cannot inherit a
+    # claim about a search that did not happen; on that path the unsolvability
+    # proof is FD's, adjudicated by `backends.proves_unsolvable`.
+    exhaustive: bool = False
 
     @property
     def solved(self) -> bool:
@@ -106,6 +122,10 @@ class SearchResult:
         return None if self.plan is None else len(self.plan)
 
     def as_json(self) -> Dict[str, object]:
+        # `max_expansions` / `exhaustive` are held on the dataclass but kept out
+        # of this payload: it reaches `artifacts/candidates.jsonl`, whose sha256
+        # is pinned in `release/MANIFEST.jsonl` and whose ids are content-
+        # addressed.  Publishing them is a release-track decision (C11).
         return {
             "solved": self.solved,
             "length": self.length,
@@ -127,12 +147,12 @@ def search(domain: Domain, problem: Problem, prune: Optional[Pruner] = None,
     grounded = ground_actions(domain, problem)
     actions, start, static_goal_ok = strip_static(domain, problem, grounded)
     if not static_goal_ok:
-        return SearchResult(None, 0, 0, 0, len(grounded))
+        return SearchResult(None, 0, 0, 0, len(grounded), max_expansions, True)
     static = static_predicates(domain)
     if is_goal(problem, start, static):
-        return SearchResult([], 0, 1, 0, len(grounded))
+        return SearchResult([], 0, 1, 0, len(grounded), max_expansions, True)
     if prune is not None and prune(start):
-        return SearchResult(None, 0, 1, 1, len(grounded))
+        return SearchResult(None, 0, 1, 1, len(grounded), max_expansions, True)
 
     seen = {start}
     queue: deque = deque([(start, [])])
@@ -153,13 +173,15 @@ def search(domain: Domain, problem: Problem, prune: Optional[Pruner] = None,
             generated += 1
             extended = plan + [action]
             if is_goal(problem, nxt, static):
-                return SearchResult(extended, expansions, generated, pruned, len(grounded))
+                return SearchResult(extended, expansions, generated, pruned,
+                                    len(grounded), max_expansions, True)
             seen.add(nxt)
             if prune is not None and prune(nxt):
                 pruned += 1
                 continue
             queue.append((nxt, extended))
-    return SearchResult(None, expansions, generated, pruned, len(grounded))
+    return SearchResult(None, expansions, generated, pruned, len(grounded),
+                        max_expansions, True)
 
 
 def breadth_first_plan(domain: Domain, problem: Problem,

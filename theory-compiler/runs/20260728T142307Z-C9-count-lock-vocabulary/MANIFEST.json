@@ -1,0 +1,96 @@
+{
+  "acceptance": {
+    "bar_lowered": false,
+    "line": "worldgen's count-lock world runs through the cold-start-a0 pipeline",
+    "met": false,
+    "why": "unreachable by a counting predicate and proved so: a colour-cardinality atom is a function of the frame's colour histogram, and all 276 stuck transition pairs have identical histograms. Root cause is mover selection / object identity across absence — see FINDING_premise.md"
+  },
+  "base_commit": "76e756098987a2bbf4e6de38724c78d26d77844a",
+  "branch": "agent/c9-count-lock-vocabulary",
+  "cell": "C1",
+  "cost": {
+    "api_calls": 0,
+    "model_calls": 0,
+    "network": "none",
+    "sealed_pile_contact": "none",
+    "usd": 0.0
+  },
+  "delivered": {
+    "defects_fixed": [
+      "count(<Type>) compiled to a constant, so it counted vanished instances",
+      "gen_pddl silently dropped a counting guard and reported success"
+    ],
+    "guard_counting_predicate": "count(<Type>[, <field> = <value>]) compared with an integer, in a guard; one rung",
+    "ledger_entry": "cold-start-a0/THEORIZE_LOG.md E-08"
+  },
+  "files": [
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_python.py",
+      "sha256": "605a4523cf7241cff9dc47df9ece35b993b2f9619eb4644eac15e2c08492d6c8"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_pddl.py",
+      "sha256": "1332aa90fb1b026910a63d433f24cf02ff5eb3f20ff2a67b9ec0a1b5172a9013"
+    },
+    {
+      "path": "theory-compiler/tests/test_count_guard.py",
+      "sha256": "70570f13a0dd3759fe3f55641cd3a62b4d9f9b765db58802d869c64d7b0ed8ba"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/countlock_theory.dsl",
+      "sha256": "ecc6178ef8648a6579769790a9323dd99402b415c2e58a7dcf68bd7bd218c5cf"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/countlock_problem.json",
+      "sha256": "34859441df36a010e90d6c998054346fe87b20e98377f828e41642d3d51e7bcf"
+    },
+    {
+      "path": "cold-start-a0/pipeline/atoms_a0.py",
+      "sha256": "6eb644f3048c785a40e9ecdbc1559ce96e35985b3d8b87def262d0f9d76a3182"
+    },
+    {
+      "path": "cold-start-a0/THEORIZE_LOG.md",
+      "sha256": "21ef6b5cb031c094f600811fc00544d22389f6fe7065e61d593e2aa6a342318c"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/FINDING_premise.md",
+      "sha256": "a7fcb1f06bd2536270689816f7f3163adc8ec19ae5c4b7eabeaeb39ba20e57a5"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/MANIFEST.json",
+      "sha256": "7598c8623e3cb74f3f789fe53d8afd893495936d6b090508d3320002c7625347"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/RUN_STATE.md",
+      "sha256": "54a52c2d06b55585b136dcc498124315f80d4248e810ca912758795d21934d06"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/probes/01_can_a_count_separate.py",
+      "sha256": "2fc7b05f773eb5656f4285943cef2bf72f7acc7b5fa7a4815f59406abe79b41d"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/probes/02_which_reading_separates.py",
+      "sha256": "53c00aeb15cdf54cca44fae72a1061fb56a9ea435adc7edb8395c7c5c9f000c0"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/probes/03_what_is_the_mover.py",
+      "sha256": "37e3a306a3a2435f02b5d45f13123c7f917629e99aefc369dc49738d22613609"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/probes/04_move_attribution.py",
+      "sha256": "156c5e84975128a72ce4660a1e2eef3df0d8da73a8baeed58d3d33f7e00cf6a4"
+    }
+  ],
+  "goal": "add a counting predicate `count(Type, pred) >= k` to the guard language; register the widening in the expressiveness ledger with its provenance; no regression on the four existing DSLs; worldgen's count-lock world through the cold-start-a0 pipeline as acceptance",
+  "prompt_id": "C9-count-lock-vocabulary",
+  "provenance": "monitor/inbox/archive/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
+  "regression": {
+    "a0_artifacts": "candidates.jsonl 29->29 rows, 0 guards changed, only guard_cost_bits 16->18 on 23 rule_hypothesis rows",
+    "existing_dsls": "four fixtures compile and execute; peg goal checked against its number"
+  },
+  "status": "done-with-declared-gap",
+  "territory": "theory-compiler",
+  "tests": "theory-compiler 334 passed / 1 skipped; cold-start-a0 suite green; run_all.py green",
+  "utc": "2026-07-28T14:23:07Z",
+  "worker": "W-1252"
+}

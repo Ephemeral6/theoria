@@ -1,0 +1,162 @@
+{
+  "held_out_as_examples": [
+    "figures/fig02_bill_shape.py"
+  ],
+  "n": 22,
+  "rows": [
+    {
+      "batch": "b8",
+      "path": "ablation-arm/exhibits/e2_a2.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b2",
+      "path": "baseline-arms/harness/summarise_envelope.py",
+      "stratum": "partial",
+      "v15_can_red": "部分",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b4",
+      "path": "cold-start-a0/certify/replay.py",
+      "stratum": "present",
+      "v15_can_red": "是",
+      "v15_negctl": "是"
+    },
+    {
+      "batch": "b4",
+      "path": "cold-start-a0/pipeline/engines_stage.py",
+      "stratum": "absent",
+      "v15_can_red": "是",
+      "v15_negctl": "否"
+    },
+    {
+      "batch": "b5",
+      "path": "cold-start-a2/a2pipeline/certify_a2.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b5",
+      "path": "cold-start-a2/a2pipeline/exhibit.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b5",
+      "path": "cold-start-a2/a2pipeline/repair.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b6",
+      "path": "cold-start-a3/a3pipeline/certify_a3.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b6",
+      "path": "cold-start-a3/a3pipeline/run_l1.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b7",
+      "path": "engine-rig/engines/fd_adapter/validate.py",
+      "stratum": "present",
+      "v15_can_red": "是",
+      "v15_negctl": "是"
+    },
+    {
+      "batch": "b7",
+      "path": "engine-rig/fixtures/pair_flip.py",
+      "stratum": "absent",
+      "v15_can_red": "是",
+      "v15_negctl": "否"
+    },
+    {
+      "batch": "b7",
+      "path": "engine-rig/recheck/verify_all.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b8",
+      "path": "exam/model.py",
+      "stratum": "present",
+      "v15_can_red": "是",
+      "v15_negctl": "是"
+    },
+    {
+      "batch": "b8",
+      "path": "exam/papers/handover.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b1",
+      "path": "monitor/ci_merge.py",
+      "stratum": "absent",
+      "v15_can_red": "部分",
+      "v15_negctl": "否"
+    },
+    {
+      "batch": "b1",
+      "path": "monitor/gates.py",
+      "stratum": "partial",
+      "v15_can_red": "否",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b1",
+      "path": "monitor/quota.py",
+      "stratum": "present",
+      "v15_can_red": "是",
+      "v15_negctl": "是"
+    },
+    {
+      "batch": "b1",
+      "path": "monitor/reflex.py",
+      "stratum": "partial",
+      "v15_can_red": "部分",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b1",
+      "path": "monitor/scan.py",
+      "stratum": "partial",
+      "v15_can_red": "部分",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b9",
+      "path": "papers/phase1-workshop/figures/fig2_coverage_accuracy.py",
+      "stratum": "absent",
+      "v15_can_red": "部分",
+      "v15_negctl": "否"
+    },
+    {
+      "batch": "b3",
+      "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
+      "stratum": "partial",
+      "v15_can_red": "是",
+      "v15_negctl": "部分"
+    },
+    {
+      "batch": "b9",
+      "path": "worldgen/generate.py",
+      "stratum": "partial",
+      "v15_can_red": "部分",
+      "v15_negctl": "部分"
+    }
+  ]
+}

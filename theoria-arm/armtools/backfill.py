@@ -44,6 +44,7 @@ import json
 import os
 import sys
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 
 if __package__ in (None, ""):
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -106,6 +107,35 @@ def _run_start(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {}
 
 
+def _mock_upstreams(records: List[Dict[str, Any]]) -> Optional[List[str]]:
+    """The loopback upstreams this run talked to, if it *only* talked to those.
+
+    `run_start.env_upstream` is the address the env proxy was pointed at, and it
+    is written before anything can be spent. A live run names
+    `https://three.arcprize.org`; a `--mock` run names a `127.0.0.1` port that
+    `proxy.mock.arc_mock` was listening on. That is direct evidence about
+    whether the ARC API was reached, and it is stronger than the slug, which any
+    caller may choose freely.
+
+    Returns None where any run_start names a non-loopback upstream, or where
+    there is no `env_upstream` to read -- "not proven offline" is the safe
+    answer, because the cost of wrongly calling a live run offline is dropping a
+    billed run out of the archive's account.
+    """
+    seen: List[str] = []
+    for record in records:
+        if record.get("event") != "run_start":
+            continue
+        upstream = record.get("env_upstream")
+        if not isinstance(upstream, str):
+            return None
+        host = urlparse(upstream).hostname or ""
+        if host not in ("127.0.0.1", "::1", "localhost"):
+            return None
+        seen.append(upstream)
+    return sorted(set(seen)) or None
+
+
 def _run_end(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     for record in reversed(records):
         if record.get("event") == "run_end":
@@ -165,6 +195,19 @@ def classify(slug: str, run_dir: str, records: List[Dict[str, Any]]) -> Dict[str
                             "manifest and there is nothing to derive")}
         return {"kind": "empty", "archive_material": False,
                 "why": "no ledger records: nothing happened here to account for"}
+
+    mock = _mock_upstreams(records)
+    if mock:
+        return {"kind": "mock", "archive_material": False,
+                "why": ("every run_start names a loopback env_upstream (%s): "
+                        "this ran against `proxy.mock.arc_mock`, reached no ARC "
+                        "API and spent no quota, so there is no billed action "
+                        "for the archive to account for. Not a `fixture` -- "
+                        "these are committed offline proofs that other run "
+                        "directories cite as evidence (see D-S8-018 and "
+                        "`runs/20260728T152910Z-a3-desk-gate/RUN_STATE.md`), "
+                        "and a fixture is a leftover nobody cites."
+                        % ", ".join(mock))}
 
     start = _run_start(records)
     note = (start.get("note") or "").lower()

@@ -26,7 +26,7 @@ LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
 MAX_DEATHS = 3
-WORKER_MAX = 4      # spawning is back ON: the crash-era safeties are all in place
+WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
                     # now (memory admission, 45s stagger, orphan sweep, quota
                     # gate), so worker supply no longer waits for a human.
 MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
@@ -125,12 +125,23 @@ def main():
         # at 09:35 kept the fleet frozen long after its 20:20 reset (OPS-M
         # cycle 5). Every tick in hold now probes the window and lifts it.
         if q.returncode == 2:
+            # `--if-due` and not a bare ping: this loop runs every five minutes
+            # and each ping is a real haiku call, so an unthrottled probe spent
+            # the quota it was waiting to get back, twelve times an hour, for
+            # the length of the outage. Exit 3 means "not due, nothing spent".
             probe = run([sys.executable, os.path.join(HERE, "quota.py"),
-                         "ping"], timeout=180)
-            if probe.returncode == 0:
+                         "ping", "--if-due"], timeout=180)
+            if probe.returncode == 3:
+                events.append("quota:probe-throttled")
+            elif probe.returncode == 0:
+                # `resume` reuses this ping's answer rather than buying it
+                # again; it is the same measurement seconds apart.
                 r = run([sys.executable, os.path.join(HERE, "quota.py"),
                          "resume"], timeout=1800)
-                events.append("quota:RESUMED")
+                events.append("quota:RESUMED(auto)")
+                rlog("quota: window reopened on its own -> automatic resume, "
+                     "no human in the loop: %s"
+                     % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
                 q = run([sys.executable, os.path.join(HERE, "quota.py"),
                          "check"])
         hold = q.returncode == 2

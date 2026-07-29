@@ -343,3 +343,144 @@ the two readings, and one that the hash is the same wherever the arm is checked
 out. The reimplementation had in fact diverged — it read the rule
 component-wise — and the divergence was silent: it would have surfaced as a real
 run reporting that it matched no commit, for no reason.
+
+## D-A3-001 · A level boundary segments the trajectory; it is not a transition
+
+The beats that reason over the trace — `certify`'s replay, `commit`'s and
+`probe`'s roll-forward, `theorize`'s evidence brief, `books.problem_from_frames`
+— now take `store.since(levels.start)` rather than the whole store
+(`inner/loop.py:_level_store`). The whole store is still what `trace.jsonl`
+records: the boundary is a fact about the run and is kept.
+
+The reason is arithmetic, not taste. ARC advances a level in-band: no action
+causes it, the envelope's `levels_completed` increments and the next frame is a
+different board. `certify.cheap` replays the manual's `step` over every recorded
+action and compares grids, so across such a jump it predicts level N's next
+state and observes level N+1's opening board. That is a `replay_mismatch`; a
+`replay_mismatch` is a surprise; and a surprise is the only thing that calls the
+desk. Left alone, the arm would pay opus prices, twice per level, to repair a
+manual that was never wrong. `problem_from_frames` has the matching defect:
+pooled across a boundary, "the cells that never varied" is the intersection of
+two unrelated boards, which describes neither.
+
+**The alternative that was not taken.** A level advance could be modelled
+*inside* the manual, as an event with a precondition and an effect. That is a
+stronger claim and a more interesting one — it would let the playbook plan
+*through* a boundary. Segmenting is the conservative reading: it says the domain
+is silent about level advance rather than saying something no evidence supports.
+If a later run produces evidence about what completing a level requires, that
+evidence belongs in the playbook and this decision should be revisited.
+
+**What this costs.** Restricting `theorize`'s evidence to the current level
+means the frames of level 1 are not re-shown on level 2. The knowledge is meant
+to survive in the books rather than in the frames — which is Theoria's thesis,
+not a workaround — but it is a real narrowing and the engines see a shorter
+trace at the start of every level. It is recorded here so that a run where the
+manual visibly forgets something is read as evidence about this decision.
+
+## D-A3-002 · Two files travel between levels, and their hashes say so
+
+`Books(root, seed_from=...)` copies exactly `theory.dsl` and `playbook.dsl`, and
+records the sha256 of each in `CARRIED.json`. `problem.json` deliberately does
+not travel: it is computed from the frames of the level being played, so
+carrying it would carry an answer to a question the new level has not asked.
+`generated/` does not travel because the four forms are re-derived from the
+domain, which is what co-derivation means; `snapshots/` does not travel because
+a revision history belongs to the run that made it.
+
+The discipline is `cold-start-a3/a3pipeline/transfer.py`'s, which asserts
+byte-identity by sha256 rather than by inspection. "The manual that played level
+2 is the manual level 1 wrote" is then a checkable claim about artefacts rather
+than a sentence in a report — which is the only form in which C3's transfer
+claim can appear in the paper.
+
+## D-A3-003 · Surprises pending at a boundary are retired, not carried
+
+`Register.retire_pending` marks them `handled_by = "retired: <reason>"`. They
+were fired against a trajectory the arm can no longer show, and carrying them
+would spend a model call adjudicating evidence that no longer exists. Retiring
+is not deleting: the items stay in the register, so `counts()` is unchanged, all
+seven kinds still report (a zero is a measurement), and the constraint-8 audit
+still adds up. What changes is only who closed them — which is itself a datum,
+since "how many surprises died at a boundary rather than being theorized" is a
+number the bill-shape figure can use.
+
+## D-A3-004 · The arm's own vocabulary rides inside `request`, not beside it
+
+`RunLedger.model_call` forwards `**extra` into `Ledger.append`, and
+`canon.MODEL_CALL_FIELDS` is a closed set of ten names. `ModelDesk.call` was
+passing five more — `beat`, `label`, `transport`, `proxied`, `proxy_gap` — as
+top-level keyword arguments, so every completed model call raised
+`NonCanonicalField`.
+
+Two repairs were possible. Widen `canon.py` to admit the five, or move them
+inside `request`, which the ledger passes verbatim. Widening was rejected: the
+closed set is another track's file, and the refusal message states the reason
+the set exists — *"The battery reads two shapes without branching; an extra
+field is a branch."* A field added for one arm's convenience is a branch every
+downstream reader inherits forever.
+
+So they ride inside `request`. That is not a workaround; `request` is defined as
+what this arm sent, and `modelcall.py`'s own comment already said it is the one
+place the arm may add its own vocabulary. The record stays one of the two
+shapes, the sealing provenance D-P8-002 requires survives, and `step_idx` stays
+top-level because it is canonical and the cost curve joins on it.
+
+What this cost, recorded because it is the whole reason the defect mattered:
+the raise landed *after* `cli_cost_usd` was incremented and after
+`binding.record_model_call` had settled the charge. The money was spent and
+booked, and then the run died writing it down — on the first theorize call and
+every one after, with `inner/loop.py` swallowing it as an ordinary desk failure.
+A campaign at full budget would have produced no manual at all.
+
+## D-A3-005 · The game id is kept out of the model by construction, at two ends
+
+`Theoria.md:353` states it as a hard rule: 游戏 ID 永不进模型上下文,全程匿名化.
+The arm satisfied it on every unconditional path and had no anonymiser anywhere
+— it was clean because nobody had wired an id in, not because anything stopped
+them. An adversarial probe showed omission is not enough: an engine that raises
+puts its traceback into `evidence_brief`, an `OSError` message carries the path
+it failed on, and the run slug embedded the game stem. Six occurrences of `g50t`
+landed inside a real 20,975-char prompt.
+
+Closed at the source and at the backstop, deliberately both:
+
+* **Source** — a leg slug is `<utc>-leg<nn>`, with no game in it. Nothing that
+  stringifies a path can pick the id up, including the two channels not yet
+  triggered (`books.compile_all`'s write errors, and Lean's absolute-path
+  diagnostics reaching the next prompt inside a `proof_failure` payload).
+* **Backstop** — `ModelDesk.forbid_in_prompt`, checked at the single point every
+  prompt passes through, and checked *before* the subprocess starts so a leak
+  costs neither money nor the run's admissibility.
+
+Fixing only the source would leave the rule holding by convention again, one
+refactor away from the same defect. Fixing only the backstop would turn a
+recoverable formatting accident into a dead run.
+
+`AnonymityBreach` is its own exception class rather than a `ModelError`, because
+`inner/loop.py` catches desk failures and feeds them back as evidence to
+theorize against. That is right for a timeout and wrong here: a leaked id is a
+defect in the harness, not something the loop can learn from, and a run that
+sent one is inadmissible under the rule whatever it goes on to measure.
+
+## D-A3-006 · The campaign axis is dense; the leg axis is not
+
+`campaign_series()` carries two ordinals per row. `turn` is the leg's own,
+restarting whenever a leg dies and a new one begins. `campaign_turn` is dense
+across the whole campaign.
+
+C2 predicts 前重后轻 — front-heavy, then light, tending to zero after
+convergence. Read off the leg axis, a campaign of several short legs would show
+the cost restarting its climb at every interruption, which is the *shape C2
+predicts*, produced entirely by the bookkeeping. Both are kept so the artefact
+and the claim can be told apart; the campaign axis is the one the claim is about.
+
+The front-load index is not computed here. It is E2 in
+`battery/metrics/economy.py` and one of Phase 4's three primary endpoints, and
+a second implementation of a primary endpoint is a second definition of it.
+This module assembles E2's input and stops.
+
+Legs that produced no series are kept as rows-less entries carrying their error,
+never dropped. A campaign that paid for a leg which yielded nothing is not the
+same object as a campaign with fewer legs, and concatenation is exactly where
+that distinction disappears silently.

@@ -1,0 +1,9 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A18-universal-dead",
+  "predicate": [
+    "and"
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

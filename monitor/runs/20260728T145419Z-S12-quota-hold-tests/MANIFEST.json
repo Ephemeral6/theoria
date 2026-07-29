@@ -1,0 +1,13 @@
+{
+ "prompt_id": "S12-quota-hold-tests",
+ "slug": "20260728T145419Z-S12-quota-hold-tests",
+ "branch": "agent/s12-quota-hold-tests",
+ "base_commit": "d751ccd6ea06a61d3444600abec3c8b45c46ca16",
+ "utc": "2026-07-28T14:54:19Z",
+ "worker": "W-1412",
+ "territory_note": "the board item header says `territory: proxy`, but proxy/ has no quota code and the item body names monitor/quota.py four times. Read as a slip in the header; the work is in monitor/. Nothing under proxy/ was touched.",
+ "kind": "test-writing pass; no state machine was changed",
+ "quota": {"actions": 0, "http_commands": 0, "model_calls": 0, "usd": 0.0},
+ "results": {"tests": "22 passed, 2 xfailed", "mutants_caught": 5, "mutants_survived": 0},
+ "outputs": ["RUN_STATE.md", "pytest.txt", "mutants.txt"]
+}

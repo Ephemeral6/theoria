@@ -122,3 +122,92 @@ def test_degrees_of_freedom_are_reported_because_three_repeats_is_very_few():
     cells += [_cell("sk48-d8078629", r, 20 + r, 2, 1.0, 140, 900) for r in (1, 2, 3)]
     report = env.build(cells)
     assert report["degrees_of_freedom"] == 4          # (3-1) + (3-1)
+
+
+# -- scoping -----------------------------------------------------------------
+
+def test_another_tiers_cells_cannot_pool_into_an_envelope():
+    """campaign_cells.jsonl holds more than one campaign now. The tiers differ
+    by 3-4x in unit price, so a stray opus cell would turn 'within-cell spread'
+    into a between-tier difference wearing its name."""
+    cells = [_cell("g50t-5849a774", r, 30, 0, 1.1, 30, 900) for r in (1, 2, 3)]
+    intruder = _cell("g50t-5849a774", 4, 30, 0, 4.4, 30, 900)
+    intruder["model"] = "claude-opus-5"
+
+    clean = env.build(cells, model="claude-haiku-4-5-20251001")
+    polluted = env.build(cells + [intruder], model=None)
+    scoped = env.build(cells + [intruder], model="claude-haiku-4-5-20251001")
+
+    assert scoped["pooled_cv"]["cost_usd"] == clean["pooled_cv"]["cost_usd"]
+    assert polluted["pooled_cv"]["cost_usd"] > clean["pooled_cv"]["cost_usd"], \
+        "the negative control did not actually pollute anything"
+
+
+def test_load_cells_separates_campaigns_and_defaults_the_field_honestly():
+    from harness import run_campaign
+    import json as _json
+
+    rows = [{"run_id": "a", "campaign": "phase3-variance-envelope"},
+            {"run_id": "b", "campaign": "phase3-unit-price-remeasure"},
+            {"run_id": "c"}]                       # written before the field
+    path = run_campaign.CELLS_PATH
+    original = open(path, encoding="utf-8").read() if os.path.exists(path) else None
+    try:
+        with open(path, "w", encoding="utf-8", newline="") as fh:
+            for row in rows:
+                fh.write(_json.dumps(row) + "\n")
+        assert len(run_campaign.load_cells()) == 3
+        envelope = run_campaign.load_cells("phase3-variance-envelope")
+        assert [c["run_id"] for c in envelope] == ["a", "c"], \
+            "a cell written before the field belongs to the campaign it came from"
+        assert [c["run_id"] for c in
+                run_campaign.load_cells("phase3-unit-price-remeasure")] == ["b"]
+    finally:
+        if original is not None:
+            with open(path, "w", encoding="utf-8", newline="") as fh:
+                fh.write(original)
+
+
+# -- unit prices -------------------------------------------------------------
+
+def test_a_barren_cell_is_charged_to_the_unit_price_and_declared():
+    """opus/tn36 spent $1.13 for zero successful actions. Ratio-of-sums charges
+    that to the other cells' actions, which is right for extrapolating a run
+    that will also have dead cells -- and is invisible unless it is said."""
+    from harness import unit_prices
+
+    working = {"outcome": "budget_exhausted", "game_id": "g", "model": "m",
+               "actions_ok": 30, "actions_failed": 0, "model_calls": 30,
+               "http_calls_gameplay": 30, "cost_usd": 3.0, "wall_seconds": 300}
+    barren = {"outcome": "api_unusable", "game_id": "h", "model": "m",
+              "actions_ok": 0, "actions_failed": 10, "model_calls": 10,
+              "http_calls_gameplay": 80, "cost_usd": 1.2, "wall_seconds": 330}
+
+    alone = unit_prices.aggregate([working])
+    both = unit_prices.aggregate([working, barren])
+
+    assert alone["usd_per_action"] == pytest.approx(0.10)
+    assert both["usd_per_action"] == pytest.approx(4.2 / 30)
+    assert both["usd_per_action_working_cells_only"] == pytest.approx(0.10)
+    assert both["barren_cells"] == 1
+    assert both["barren_cost_usd"] == pytest.approx(1.2)
+
+
+def test_a_ratio_of_sums_is_not_a_mean_of_ratios():
+    """Section 2.1 extrapolates a large run, so a cell that completed three
+    actions must not weigh the same as one that completed thirty."""
+    from harness import unit_prices
+
+    heavy = {"outcome": "budget_exhausted", "game_id": "g", "model": "m",
+             "actions_ok": 30, "actions_failed": 0, "model_calls": 30,
+             "http_calls_gameplay": 30, "cost_usd": 3.0, "wall_seconds": 300}
+    light = {"outcome": "budget_exhausted", "game_id": "h", "model": "m",
+             "actions_ok": 1, "actions_failed": 0, "model_calls": 1,
+             "http_calls_gameplay": 1, "cost_usd": 1.0, "wall_seconds": 60}
+    row = unit_prices.aggregate([heavy, light])
+    # abs=5e-5: the row is rounded to four places, so approx's 1e-6 relative
+    # default compares the reported number against an unrounded one and fails
+    # on the rounding itself.
+    assert row["usd_per_action"] == pytest.approx(4.0 / 31, abs=5e-5)
+    mean_of_ratios = (0.10 + 1.0) / 2
+    assert row["usd_per_action"] < mean_of_ratios / 2

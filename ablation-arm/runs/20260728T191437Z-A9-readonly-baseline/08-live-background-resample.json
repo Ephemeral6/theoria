@@ -1,0 +1,164 @@
+{
+  "action_seconds_assumed": 1.0,
+  "events_per_second": 0.09121,
+  "files_watched": 3013,
+  "hit_rate_per_window": 0.2182,
+  "hit_rate_wilson_95": [
+    0.1512,
+    0.3042
+  ],
+  "live_root": "C:\\Users\\user\\Desktop\\theoria",
+  "mean_window_exposure_seconds": 2.392,
+  "paths_by_window_count": [
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/merge.log",
+      "superseded_criterion_would_report": false,
+      "windows": 12
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/index.html",
+      "superseded_criterion_would_report": true,
+      "windows": 4
+    },
+    {
+      "on_hard_list": true,
+      "path": "monitor/state.json",
+      "superseded_criterion_would_report": false,
+      "windows": 2
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/merge.lock",
+      "superseded_criterion_would_report": true,
+      "windows": 2
+    },
+    {
+      "on_hard_list": false,
+      "path": "browser-ops/terms_canary.json",
+      "superseded_criterion_would_report": true,
+      "windows": 2
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/reflex.lock",
+      "superseded_criterion_would_report": true,
+      "windows": 2
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/dispatch-logs/W-252-20260728T185408Z.log",
+      "superseded_criterion_would_report": false,
+      "windows": 2
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_s14-gates-for-all.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_s15-ledger-hashchain.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_s8-provenance-backfill.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_s9-contract-change-protocol.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_v12-worldgen-gate-deaf.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_v16-determinism-has-no-caller.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/reflex.log",
+      "superseded_criterion_would_report": false,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "browser-ops/runs/2026-07-28-visits.md",
+      "superseded_criterion_would_report": false,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/board/board.log",
+      "superseded_criterion_would_report": false,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/board/claimed/V5-battery-freeze.W-252.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/board/done/V5-battery-freeze.W-252.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ops-status/OPS-B.json",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_bus2-ablation-readonly.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/inbox/20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/ci/CONFLICT-origin_agent_c9-count-lock-vocabulary.md",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    },
+    {
+      "on_hard_list": false,
+      "path": "monitor/dispatch-logs/exits.json",
+      "superseded_criterion_would_report": true,
+      "windows": 1
+    }
+  ],
+  "read_only": true,
+  "reading": "The empty-run control subtracts a writer only when it fires in both legs, probability ~p^2 at this rate; it pays a false red when it fires in exactly one, probability ~2p(1-p). At p=0.218 that is a residual false red of ~8.7% per run and effectively no subtraction. The control is insurance against the day the fleet writes into the worktree, not a mechanism that is doing work today.",
+  "residual_false_red_per_run": 0.0872,
+  "supersedes": [
+    "05-live-background-churn.json",
+    "06-periodic-writer-residual.json"
+  ],
+  "total_exposure_seconds": 263.1,
+  "what": "wider re-measurement of live-tree churn; supersedes the 4-window frame in 05/06, which was too small to see the largest writer",
+  "window_seconds": 2.0,
+  "windows": 110,
+  "windows_with_any_change": 24
+}

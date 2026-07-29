@@ -1,0 +1,45 @@
+﻿world v-efe43df1: 111 frames, 110 transitions, 4 tracks, 124 atoms
+
+FAILS  track=obj0 action=LEFT effect=('move', 0, -1, None)  (20 positives)
+  NoSeparatingGuard: no literal separates transition 95 from the positives
+  negative t=95 action=LEFT
+  positive t=13 action=LEFT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=126000001
+    row 3  positive=106200001
+
+FAILS  track=obj0 action=RIGHT effect=('move', 0, 1, None)  (23 positives)
+  NoSeparatingGuard: no literal separates transition 21 from the positives
+  negative t=21 action=RIGHT
+  positive t=11 action=RIGHT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=106200001
+    row 3  positive=162000001
+
+FAILS  track=obj1 action=LEFT effect=('none', 0, 0, None)  (27 positives)
+  NoSeparatingGuard: no literal separates transition 91 from the positives
+  negative t=91 action=LEFT
+  positive t=5 action=LEFT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=100260001
+    row 3  positive=102000001
+    row 4  negative=101111101
+    row 4  positive=161111101
+
+FAILS  track=obj1 action=RIGHT effect=('none', 0, 0, None)  (28 positives)
+  NoSeparatingGuard: no literal separates transition 11 from the positives
+  negative t=11 action=RIGHT
+  positive t=6 action=RIGHT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=162000001
+    row 3  positive=102000001
+    row 4  negative=101111101
+    row 4  positive=161111101

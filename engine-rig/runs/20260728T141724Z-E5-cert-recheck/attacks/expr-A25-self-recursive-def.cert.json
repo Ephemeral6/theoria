@@ -1,0 +1,30 @@
+{
+  "claim": "unsolvable",
+  "defs": [
+    {
+      "body": [
+        "call",
+        "r",
+        [
+          "param",
+          "x"
+        ]
+      ],
+      "name": "r",
+      "params": [
+        "x"
+      ]
+    }
+  ],
+  "kind": "inductive_invariant",
+  "name": "A25",
+  "predicate": [
+    "call",
+    "r",
+    [
+      "var",
+      "pos0"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

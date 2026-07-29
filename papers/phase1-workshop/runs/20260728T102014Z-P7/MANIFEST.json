@@ -60,7 +60,7 @@
   "files": [
     {
       "path": "papers/phase1-workshop/sections/07_battery.md",
-      "sha256": "b7eb3736c19bf4dd2c3cb69c1460a6f85a96241d67123a5a8dd30991118ab62b"
+      "sha256": "09802d3f58111bb3d5c83d01f089186720d0eebb6757d466b08d09d4c28fd1d2"
     },
     {
       "path": "papers/phase1-workshop/sections/11_related.md",
@@ -88,7 +88,7 @@
     },
     {
       "path": "papers/phase1-workshop/PAPER.md",
-      "sha256": "d01d39fe3019cf67d523973562337c0e70ce4a2e20e82e6a0b2bf0562de21b2f"
+      "sha256": "4d768d2c0c1fa694292c0449a7d09c1752b7d930d4d6d0f86b59022594b717ca"
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/audit-sample-a.md",
@@ -156,7 +156,7 @@
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/RUN_STATE.md",
-      "sha256": "fab287f4473b73c3aa20a1e8b2f0f1e449318b4b4fa8ae83349a287c6e897ffd"
+      "sha256": "3ecb368356908278517f3b23ff922ab4a14fa059e8dc2e7a79f3bea3efa62e46"
     }
   ],
   "bibliography": {

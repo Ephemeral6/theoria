@@ -1,0 +1,93 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "axis": "reversible",
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "action_forbidden",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "walk_through_cycler",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "re_witnessable",
+      "claimed": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+      "measured": 2,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "advance_cycler",
+      "verdict": "deferred"
+    }
+  ],
+  "components": 9,
+  "reachable_states": 41,
+  "reversibility_score": 1.0,
+  "rules": {
+    "action_forbidden": {
+      "firing_states": 41,
+      "firing_transitions": 41,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "advance_cycler": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": 2,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 25,
+      "firing_transitions": 31,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 41,
+      "firing_transitions": 88,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_cycler": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 5,
+  "rules_single_witness": [],
+  "rules_total": 5
+}

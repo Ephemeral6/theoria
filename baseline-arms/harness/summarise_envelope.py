@@ -143,7 +143,19 @@ def n_for_two_sample(cv_value: float, rel_effect: float,
 
 
 # --------------------------------------------------------------------- report
-def build(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
+def build(cells: List[Dict[str, Any]],
+          model: Optional[str] = None) -> Dict[str, Any]:
+    """The envelope over `cells`, optionally restricted to one tier.
+
+    `campaign_cells.jsonl` holds more than one campaign now, and the section-2.1
+    re-measurement put opus and sonnet cells in it. Pooling a tier's cells into
+    another tier's spread would not be a small error: the tiers differ by 3-4x
+    in unit price, so the "within-cell spread" would become a between-tier
+    difference wearing its name. The caller passes the campaign; this filters
+    the tier.
+    """
+    if model is not None:
+        cells = [c for c in cells if c.get("model") == model]
     included = [c for c in cells if c.get("game_id") not in EXCLUDED]
     excluded = [c for c in cells if c.get("game_id") in EXCLUDED]
 
@@ -204,6 +216,7 @@ def build(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
         }
 
     return {
+        "model": model,
         "games": games,
         "excluded": {game: {"reason": EXCLUDED[game],
                             "cells": len([c for c in excluded
@@ -270,9 +283,11 @@ def _f(value, places):
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", default=None, help="also write the report here")
+    ap.add_argument("--campaign", default=run_campaign.CAMPAIGN_NAME)
+    ap.add_argument("--model", default=run_campaign.CAMPAIGN_TIER)
     args = ap.parse_args(argv)
 
-    report = build(run_campaign.load_cells())
+    report = build(run_campaign.load_cells(args.campaign), model=args.model)
     print_report(report)
     if args.json:
         os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)

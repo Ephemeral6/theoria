@@ -3,6 +3,7 @@ cell: E3
 territory: theoria-arm
 deps: none
 lane: campaign
+spend: api
 
 # E3 · 引擎在线供货：Theoria 臂第二局
 

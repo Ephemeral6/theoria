@@ -2,15 +2,16 @@
 
 # Certifying a world theory against something other than its own past
 
-### Phase 1 of Theoria: four offline acceptances, a passive metrics battery,
-### an examination instrument, and a live run that spent nothing
+### Phase 1 of Theoria: three offline acceptances and a transfer result, a
+### passive metrics battery, an examination instrument, and a live run that
+### spent nothing
 
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
 
 > **Draft status — v0.3.** This is a working draft assembled from the acceptance
 > reports already in the repository. Authorship, affiliation and venue are
-> unfilled placeholders, and at ~23 000 words it is roughly five times a workshop
+> unfilled placeholders, and at ~23 200 words it is roughly five times a workshop
 > budget — the cut is a separate pass, and no material has been dropped yet in
 > order to make it.
 >
@@ -55,7 +56,9 @@ playbook saying how to win — compiled to four co-derived forms and certified i
 two layers: full-history replay at the pixel, and declared laws discharged in
 Lean with the axiom list inspected.
 
-Phase 1 is offline: four acceptances on self-built deterministic worlds, a
+Phase 1 is offline: three acceptances on self-built deterministic worlds — the
+three `Theoria.md` Part 2 names, A0, A1 and A2 — plus a fourth section reporting
+an early read on claim C3 that the mandate does not list as an acceptance, a
 metrics battery recomputed over trajectories that already existed, an examination
 instrument, and one live run that spent nothing. Eight results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
@@ -87,8 +90,9 @@ supposed to.
 **(5)** A metrics battery recomputed over 95 runs across five arms at zero new
 spend, whose harshest reader is its own audit: 34 of 38 executable exploits still
 score a metric at or near its best value while possessing none of the capability
-it claims to measure, 17 of its written defence claims were contradicted by their
-own demonstration, and the exploration family's declared signature separates the
+it claims to measure, 17 of its written register entries — 14 of them defence
+claims — were contradicted by their own demonstration, and the exploration
+family's declared signature separates the
 one gradient the design specifies *backwards*. No metric on this pilot can reach
 significance in any case — a two-sided sign test over four paired games has a
 smallest attainable *p* of 0.125.
@@ -378,8 +382,11 @@ game spend.
 > 每个阶段边界定义一个最小可发表单元——Phase 1 结:A0–A2 + 电池对既有轨迹的回算,
 > 独立可成 workshop 文
 
-This paper is that unit and nothing more. It reports the three acceptances and
-the battery's recompute, now in its third version. It reports no play, no
+This paper is that unit and nothing more. It reports the three acceptances, the
+battery's recompute — its third round, labelled `battery_version: "v2"` in
+`battery/artifacts/capability_spectrum.json` because both the reports and the
+artefacts count from zero — and, in §6, an early read on claim C3 that the mandate
+does not list as an acceptance at all. It reports no play, no
 baseline comparison of the framework's own arms, and
 no claim from the Phase 3 claim menu.
 
@@ -1296,10 +1303,13 @@ kept unedited, including where v1 was wrong (`battery/REPORT_V0.md`,
 
 The instrument is still passive: zero API calls, zero model calls, zero network,
 zero game spend, zero sealed-pile reads (`battery/REPORT_V2.md`). Artefacts
-regenerate with `python -m battery.run_battery` (`battery/run_battery.py`), were
-byte-identical across two consecutive recomputes, and each carries the verified
-pile digest and the sha256 of its inputs, so a changed number traces to a changed
-input (`battery/artifacts/capability_spectrum.json`, `provenance.input_digests`).
+regenerate with `python -m battery.run_battery` (`battery/run_battery.py`) and were
+byte-identical across two consecutive recomputes. **One** of the seven carries the
+verified pile digest and the sha256 of its inputs, so a changed number traces to a
+changed input (`battery/artifacts/capability_spectrum.json`,
+`provenance.input_digests`); the other six carry no provenance block at all. The
+digests are a property of that one file, not of the artefact set, and this paper
+had the stronger claim in it until the sentence was checked.
 
 Two caveats on that reproducibility claim, both from the battery's own decision
 log. The determinism *test* runs against a synthetic fixture rather than against
@@ -1333,19 +1343,29 @@ arms, and an upstream ledger is sufficient material for that.
 **Ten of 38 metrics pair on at least two games; eight are rankable.** Effect sizes
 and medians below are read from `battery/artifacts/discrimination_arms.json`:
 
-| id | family | Cliff's δ (CC → Schema) | median CC / Schema | direction held? | tier |
-|---|---|---|---|---|---|
-| P1 | planning | +1.000 | 0.794 / 1.015 | yes | reference |
-| P2 | planning | +1.000 | −0.155 / 0.008 | yes | reference |
-| E4 | economy | −0.875 | 0.249 / 0.054 | yes | reference |
-| X1 | exploration | −0.625 | 0.278 / 0.085 | yes | reference |
-| X4 | exploration | −0.625 | 0.093 / 0.011 | yes | reference |
-| **X3** | exploration | **−0.562** | 0.015 / **−0.007** | **no** | reference |
-| P3 | planning | −0.375 | 0.130 / 0.001 | yes | **main** |
-| X2 | exploration | −0.188 | 0.975 / 0.941 | **no** | reference |
+| id | family | Cliff's δ (CC → Schema) | median CC / Schema | direction held? | tier | Schema-side runs |
+|---|---|---|---|---|---|---|
+| P1 | planning | +1.000 | 0.794 / 1.015 | yes | reference | **4 of 8** |
+| P2 | planning | +1.000 | −0.155 / 0.008 | yes | reference | **4 of 8** |
+| E4 | economy | −0.875 | 0.249 / 0.054 | yes | reference | **4 of 8** |
+| X1 | exploration | −0.625 | 0.278 / 0.085 | yes | reference | 8 of 8 |
+| X4 | exploration | −0.625 | 0.093 / 0.011 | yes | reference | 8 of 8 |
+| **X3** | exploration | **−0.562** | 0.015 / **−0.007** | **no** | reference | 8 of 8 |
+| P3 | planning | −0.375 | 0.130 / 0.001 | yes | **main** | 8 of 8 |
+| X2 | exploration | −0.188 | 0.975 / 0.941 | **no** | reference | 8 of 8 |
 
 **Every verdict in that table reads `underpowered`**, for the reason §7.5 gives;
-the effect sizes are the only thing in it anyone should read. One sentence
+the effect sizes are the only thing in it anyone should read.
+
+The last column is not decoration, and it is a caveat this paper adds rather than
+one the source report draws out. The Schema arm is two upstream collections of
+four games each, and **only one of them records model calls at all** — the
+Claude-side collection carries 197–564 per run, the Codex-side carries zero
+(`battery/artifacts/capability_spectrum.json`, `model_calls` per run). P1, P2 and
+E4 all divide by model calls, so their Schema side rests entirely on the
+Claude-side collection. Their effect sizes therefore compare bare Claude Code
+against *one vendor's* upstream agent, which is a narrower comparison than the
+other five rows and a confound beyond the arm-and-harness bundle already declared. One sentence
 describes the battery's state better than the table does:
 
 > **P3 is the only metric in the battery that is both in the main table and
@@ -1354,10 +1374,14 @@ describes the battery's state better than the table does:
 
 The main table holds nine metrics — E2, E3, K7, K11, K12, M3, M6, P3, P4
 (`battery/artifacts/gaming_audit.json`, `main`). Of the eight with a real
-cross-arm effect size, seven were demoted to `reference` by the anti-gaming audit
-in the same recompute. The battery's validated metrics and its main-table metrics
-are very nearly disjoint sets, and since neither pass had run on real material
-before v2, nobody had a way to see that.
+cross-arm effect size, seven sit in the `reference` tier. Only two of those seven
+were *demoted* there by the anti-gaming audit — P2 and X3, whose `register_tier`
+reads `main`; the other five were registered `reference` before this round and had
+no main table to fall from (`battery/artifacts/gaming_audit.json`,
+`metrics[*].register_tier`). The correction does not soften the finding: the
+battery's validated metrics and its main-table metrics are very nearly disjoint
+sets, and since neither pass had run on real material before v2, nobody had a way
+to see that.
 
 **X3 separates the gradient backwards, and X3 was the family's signature.**
 Novelty front-loading is the exploration family's declared signature and the one
@@ -1394,6 +1418,22 @@ finding, not a failure of the prediction". Both numbers are in
 `battery/REPORT_V2.md`, because picking the flattering one is the failure the file
 exists to prevent.
 
+One qualification, because the artefacts and the report disagree and this paper's
+precedence rule follows the artefacts. `battery/REPORT_V2.md` states flatly that
+"the economy family collapsed to `no-data`". **Four** of the seven economy metrics
+did — E2, E3, E5, E7. E1 and E6 return `not-ranked`, being direction-less
+diagnostics that no collapse could have touched, and **E4 did not collapse at
+all**: it appears in §7.2's table with a real cross-arm effect size
+(`battery/artifacts/discrimination_arms.json`, `metrics.E1`–`metrics.E7`,
+`verdict`).
+The reason is that E4 is a curvature fit over *context tokens* rather than over
+cost — its `needs` field asks for `model_calls`, not for a price — so it survives
+a corpus that carries no cost field under any spelling
+(`battery/artifacts/capability_spectrum.json`, card `E4`). The report's sentence
+is right about the family's cost-bearing members and wrong as stated; the
+conditional it invokes was registered about *usage*, and one collection logged
+some.
+
 The structural prediction held and the behavioural ones did not, and that
 asymmetry is the interesting part. v1 blamed its 21 unvalidated metrics on the
 missing Schema arm; v2 predicted that diagnosis was wrong, because what arrived is
@@ -1420,18 +1460,22 @@ overstatement, and the abstract should carry the denominator.
 
 The two are not in tension by accident. The manual scores perfect coverage
 *because* it refused the one generalisation it lacked evidence for:
-`cold-start-a0/THEORIZE_LOG.md` R-05 rejects "the Button is pressable from any
-direction" because the evidence for three of the four directions is "not thin,
-zero". That refusal makes every clause fully supported, and it is exactly why the
+`cold-start-a0/THEORIZE_LOG.md` R-05 rejects "the Button is presumably pressable
+from any of the four directions" because the evidence for three of those four is
+"not thin, zero". That refusal makes every clause fully supported, and it is exactly why the
 uncovered pairs are the ones the manual gets wrong.
 
 > **Evidence coverage rewards precisely the caution that held-out accuracy
 > punishes.** A battery reporting K4 alone would show a flawless manual.
 > — `battery/REPORT_V0.md`
 
-The consequence went into the code: the audit demotes K4 to the reference tier
-with the instruction that "K4 must never be reported without K2 beside it"
-(`battery/artifacts/gaming_audit.json`). The recompute also puts numbers on §1's
+The consequence went into the code: K4 sits in the reference tier carrying the
+instruction that "K4 must never be reported without K2 beside it". It was
+registered there rather than demoted there: its `status` is `register confirmed by
+demonstration` — the audit's majority outcome, 21 of 38 — and its `defended` field
+is `false`, so what the demonstration confirmed is an admitted, undefended hole
+rather than a defence that held (`battery/artifacts/gaming_audit.json`,
+`metrics.K4`). The recompute also puts numbers on §1's
 hook — replay accuracy 0.987 against held-out accuracy 0.000 — on the metric the
 field already optimises.
 
@@ -1460,7 +1504,10 @@ Unchanged from v0 through v2, and it bounds everything above:
 
 The floor is emitted on every run — `min_attainable_p` nested under each ranked
 metric's `sign_test`, plus a top-level `power` string — so nobody reads 0.125 as a
-near miss (`battery/artifacts/discrimination_arms.json`). Tripling the run count
+near miss (`battery/artifacts/discrimination_arms.json`). Three of §7.2's eight
+rows sit at a worse floor still: P3, X2 and X3 each lose a game to a tie, which
+drops them to three paired games and a `min_attainable_p` of **0.25**. The 0.125
+above is the best case in that table, not the uniform one. Tripling the run count
 from 31 to 95 did not move it: v2 bought pairing quality, not power. Six paired
 games remains the floor, and remains a Phase 3 design input rather than something
 this paper can fix.
@@ -1475,7 +1522,7 @@ reported because the audit acted on it, not because a pass discovered it.
 
 **P1 (actions per model call) is the genuine finding, and v2 changed what the
 finding is.** In v0, P1 separated the model ladder at δ = −1.000 and *backwards*,
-correlating with the step-failure rate at ρ = −0.83: between 28 % and 45 % of pilot
+correlating with the step-failure rate at ρ = −0.83: between 27 % and 45 % of pilot
 steps failed outright on HTTP 500s and "game not found", and P1 divides successful
 actions by all calls, so a run whose infrastructure failed more looks like one that
 planned less. That reading survives — on the ladder P1 still separates at
@@ -1489,10 +1536,13 @@ infrastructure quality on the arm gradient — which is why it sits in the refer
 tier on both. v0's response is still in the code: **P5 `step_failure_rate`** is a
 diagnostic, so the confound reaches a reader before P1 does.
 
-ρ = −0.83 is the one v0 number this paper cannot re-derive: it appears in
-`battery/REPORT_V0.md` and `battery/STATUS.md` W-4 and is carried by no artefact in
-`battery/artifacts/`, so it is quoted as a report's statement about v0 rather than
-as a v2 measurement.
+ρ = −0.83 is carried by no artefact in `battery/artifacts/` — it appears only in
+`battery/REPORT_V0.md` and `battery/STATUS.md` W-4 — so it is quoted as a report's
+statement about v0 rather than as a v2 measurement. The v2 recompute does measure
+the same pair, and more strongly on far more material: P1 against P5 at
+**ρ = −0.899 over 82 shared runs** (`battery/artifacts/redundancy.json`, `matrix`).
+The v0 value cannot be reproduced; the finding it stands for survived being
+re-measured, which is the better of the two things that could have happened to it.
 
 ### 7.7 The anti-gaming register became executable, and the main table moved twice
 
@@ -1508,8 +1558,12 @@ possessing none of the capability it claims to measure, with `succeeded` read fr
 register entries were contradicted by their own demonstration**
 (`battery/artifacts/gaming_audit.json`: `n_demonstrated` 38, `n_disagreements` 17,
 `main` 9, `reference` 29). The main table fell from 19 to 6 on demonstration and
-returned to 9 after four defences were implemented. Four exploits matter most,
-each contradicting a `defended: True`:
+returned to 9 after four defences were implemented. The endpoints are re-derivable
+from the artefact as the metrics whose `register_tier`, and whose `tier`, read
+`main`; the intermediate 6 is not, and comes from `battery/REPORT_V2.md`, which
+names the six by hand and reconciles them arithmetically — 19 − 13 demoted = 6,
+then 13 − 3 returned = 10, which is the artefact's `demoted_by_demonstration`, and
+6 + 3 = 9. Four exploits matter most, each contradicting a `defended: True`:
 
 * **P4 was monotone in failure** — `ok_steps / optimal`, direction `lower`, and
   1.0 was not a floor: one action against a 12-step plan scored 0.083, better than
@@ -1523,8 +1577,10 @@ each contradicting a `defended: True`:
 * **E2 — a `Theoria.md` Phase 4 primary endpoint — failed twice.** Its head was
   `ceil(n × 0.25)`, so a flat-cost run scored 0.333 at 9 turns and 0.250 at 12, and
   run length is set by the crash rather than by the arm; that manufactured swing
-  was the size of E2's entire observed range across every real run (0.162–0.321).
-  Interpolating at the 25 % mark closed it. The **concentration** attack survives
+  was the size of E2's entire observed range across every real run — 0.162–0.321
+  when the exploit was written, 0.162–0.297 in the current artefact, the top having
+  fallen when the fix landed (`battery/artifacts/capability_spectrum.json`,
+  `runs[*].metrics.E2.value`). Interpolating at the 25 % mark closed it. The **concentration** attack survives
   untouched: dump the bill on turn one and score 0.993 over twenty turns.
 
 E2's return to the main table deserves the argument `battery/REPORT_V2.md` gives it
@@ -1541,8 +1597,11 @@ two manuals.** For any pair differing by one concept or one clause, at least one
 `higher`-direction metric prefers each — deleting negatively-scoring concepts
 improves K6 and K14 while worsening K5; stating a generalisation you cannot fully
 evidence improves K2 and K3 while worsening K4. A single manual that describes
-nothing holds nineteen of twenty epistemic metrics at their best reading at once.
-That lands on the family which is also entirely unvalidated.
+nothing holds nineteen of the twenty metrics in that audit's scope at their best
+reading at once — the scope being the fourteen epistemic metrics plus the six
+mechanism ones, and the twentieth, the only one the empty manual cannot reach,
+being M3 (`battery/audit/exploits/mechanism_epistemic.py`, `omnibus_manual`).
+That lands on the two families which are also entirely unvalidated.
 
 ### 7.8 A confound on a pre-registered primary endpoint
 
@@ -1582,9 +1641,12 @@ v2 finds **32 clusters over 38 metrics and retires 5 into representatives** — 
 into E4 (70 shared runs), X4 into X1 (87), K14 and K7 into K5 (5 each), K8 into K10
 (5) — with exactly one cross-family cluster, {K6, X1, X4}
 (`battery/artifacts/redundancy.json`). Retired is not deleted, only excluded from
-being counted as a separate finding; and the three K-family clusters rest on 5
-shared runs across near-identical manuals, which the artefact flags on each as not
-evidence.
+being counted as a separate finding; and the two K-only clusters — {K10, K8} and
+{K14, K5, K7}, three retirements between them — rest on 5 shared runs across
+near-identical manuals. The artefact does not flag that cluster by cluster, which
+is where this paper previously said it did: it carries one global `coverage_note`
+reading that the picture "reflects thin data, not twenty independent findings",
+and a `warning` on the cross-family cluster alone.
 
 A cluster count near the metric count is not reassuring, and the artefact refuses
 to let it read as thirty independent findings: **257 of 703 metric pairs share
@@ -1607,17 +1669,35 @@ books and model calls.
 
 **What v3 needs, in order** (`battery/REPORT_V2.md`): fix or retire E2 before
 Phase 4, since a primary endpoint a crash can flatter is not a primary endpoint;
-read the fields the model already carries, because `Step.won`, `held_out_frame` and
-`Beat.env_actions` are populated by adapters and read by no metric; decide what the
-epistemic family ranks, or stop claiming it ranks anything; retire or redefine X3;
-and get six paired games, unchanged from v0 and still upstream of everything else.
+read the fields the model already carries; decide what the epistemic family ranks,
+or stop claiming it ranks anything; retire or redefine X3; and get six paired
+games, unchanged from v0 and still upstream of everything else.
+
+The second of those five is already out of date, in the direction of progress, and
+this paper reproduced it as current until the list was checked against the code
+rather than against the report. `battery/REPORT_V2.md` names `Step.won`,
+`held_out_frame` and `Beat.env_actions` as fields the adapters populate and no
+metric reads; **all three are read now**, by the same v2.1 defences §7.7 describes.
+`Step.won` is aggregated in `battery/model.py` and gates P4 through the capability
+guard in `battery/metrics/__init__.py`, so P4 returns `not-applicable` on a run
+that never won; `held_out_frame` gates K2 in `battery/metrics/epistemic.py`; and
+`Beat.env_actions`, summed into `Repair.env_actions` in `battery/model.py`, is read
+by K12 and K13 in the same module. The report is left
+standing unedited by policy, which is right for a record and is exactly why a
+reader who treats its recommendations as current will be one round behind it.
 
 One stale string closes the section, because this paper's binding rule exists to
 make such things visible. `CLAUDE.md`'s pile digest `3feca53e…41bbc19a` reads as a
 file hash and is not one: it is taken over the canonical JSON minus its own
-`sha256` field, while the file itself hashes to `d3140eff…` after LF normalisation
-and to a third value on a Windows checkout. The cut is intact and has never been
-modified; only the description misleads (`battery/DECISIONS.md` D-B-011).
+`sha256` field, while the file itself hashes to `d3140eff…` after LF
+normalisation and to a third value, `f2ef44d1…`, on a Windows checkout. All three
+reproduce exactly. The third is not a curiosity: `arc-recon/data/piles.json` is
+stored LF in the index and has no `.gitattributes` covering it, so with
+`core.autocrlf=true` every Windows working copy materialises 111 CRLF pairs and
+hashes differently from the same blob on Linux — which is why a digest quoted as
+"the file's hash" is a digest that depends on who checked it out. The cut is
+intact and has never been modified; only the description misleads
+(`battery/DECISIONS.md` D-B-011).
 
 ---
 
@@ -2211,8 +2291,9 @@ for that gradient but a second, differently-confounded pass beside it, which is
 why §7.6 reports P1 separating the two in opposite directions.
 
 What does not change is the part that matters here: the battery's author also
-wrote the metric definitions, which is structurally impossible to blind; four
-metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` rather
+wrote the metric definitions, which is structurally impossible to blind; five
+metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` — K1,
+K2, K7 and K8 in the v0 seal, K14 added in the v1 table — rather
 than being passed off as predictions; and **21 of 38 metrics have never been
 checked against any known gradient at all** — the entire epistemic family, the
 entire mechanism family, and P4 — a count that adding a whole second control arm
@@ -2235,9 +2316,10 @@ weights crossed a data boundary between two independently developed tracks and
 whose empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
 passive metrics battery over existing trajectories, once its anti-gaming register
-was made executable rather than written, contradicted 17 of its own defence claims
-by demonstration and found the exploration family's declared signature separating
-the specified gradient backwards.
+was made executable rather than written, contradicted 17 of its own register
+entries by demonstration — 14 of them defence claims
+(`battery/artifacts/gaming_audit.json`) — and found the exploration family's
+declared signature separating the specified gradient backwards.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.

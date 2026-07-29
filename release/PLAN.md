@@ -17,6 +17,16 @@ the deterministic artefacts per territory and compares hashes into
 document, with the document fixed rather than the stranger. Red lines: no `.env`
 value and no sealed-pile frame data anywhere in the release set.
 
+> **Corrected at step 1.** The section below frames the constraint as being about
+> **frame data**. That is too narrow, and too narrow in the dangerous direction —
+> it came from reading `R2`'s summary rather than `browser-ops/TERMS.md` itself.
+> ToS §4's first prohibited activity names *"a collection, compilation, database"*,
+> and a ledger of API interactions is literally that. The constrained class is
+> everything systematically retrieved and compiled — frames, actions, scores,
+> scorecards and the ledgers holding them. `release/LICENCE_POSTURE.md` carries
+> the corrected classification; this section is left as written, because a plan
+> whose wrong turns are quietly deleted teaches nobody.
+
 ## The constraint the item does not mention, and it changes the shape
 
 **`R2-release-licence` is not an optional follow-up; it is a precondition on the
@@ -88,7 +98,25 @@ only one of those two is recoverable.
 
 ## Status
 
-**Plan only.** No enumerator, no manifest, no reproduce script yet. The next
+**All six steps done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
+measured clear); `enumerate.py` and `MANIFEST.jsonl` (1,940 rows, byte-identical
+across two runs, red lines gating generation); `checklist.py` and `CHECKLIST.md`
+(6 present, 3 withheld, 1 absent, plus two items that matched and still were not
+what the list asks for). `reproduce.py` and `REPRODUCTION_REPORT.md`
+(3 of 9 declared targets reproduced; the rest graded, not hidden). `REPRODUCING.md` (the checklist's
+last ABSENT item now closes: 7 present, 3 withheld, 0 absent). and the stranger subagent ran against a clean
+clone with no `.env`. It got stuck on the document's **second command** and
+found seven defects; all are fixed and recorded in `RUN_STATE`-equivalent form
+in the commit history. Two upstream findings it surfaced -- the battery drifting
+and an exam artefact embedding absolute maintainer paths -- are reported to the
+monitor and are not this territory's to fix.
+
+**Order matters and is enforced:** `enumerate.py` -> `checklist.py` ->
+`reproduce.py`. Running reproduce against a manifest written before the tree
+moved grades every target `manifest-stale`, which is the script refusing to
+measure the baseline instead of the build.
+
+Previously: **plan only.** No enumerator, no manifest, no reproduce script yet. The next
 session starts at step 1 — and should read `browser-ops/TERMS.md` §2 and
 `browser-ops/runs/2026-07-28-visits.md` before writing a line of it, because
 that is where the licence verdict actually comes from.

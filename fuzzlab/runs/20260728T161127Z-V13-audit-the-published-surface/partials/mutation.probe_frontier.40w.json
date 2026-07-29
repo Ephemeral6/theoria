@@ -1,0 +1,890 @@
+{
+  "campaign_seed": 104375253266434,
+  "campaign_seed_hex": "0x00005eedc1e4f002",
+  "coverage": {
+    "probe_frontier": {
+      "baseline_dirty_worlds": 0,
+      "invariants": [
+        "costs_are_the_world's",
+        "entropy_matches_bruteforce",
+        "partition_matches_truth",
+        "ranking_is_sound",
+        "splits_flag_is_honest"
+      ],
+      "invariants_no_mutant_kills": [],
+      "mutants": 20
+    }
+  },
+  "engine_rig_head": "3c60acb",
+  "mutants": [
+    {
+      "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",
+      "description": "merge the first two observation classes into one: the engine now asserts that hypotheses predicting different observations agree, which is the error that makes a probe look less informative than it is.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-partition-merge-two-classes",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 34,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_partition_for",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 34,
+      "worlds_inert": 6,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": 1,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",
+      "description": "move one hypothesis from the second class into the first. The class count usually survives; one hypothesis is filed under an observation it does not predict, so `surviving()` would keep a refuted hypothesis alive.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-partition-move-one-hypothesis",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 34,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_partition_for",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 34,
+      "worlds_inert": 6,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": 1,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",
+      "description": "drop one hypothesis from the partition entirely: the frontier the probe reports is smaller than the frontier it was given, and `coverage` in the payload is then a count of hypotheses that were silently discarded.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-partition-drop-one-hypothesis",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 40,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_partition_for",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": 1,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",
+      "description": "rename one observation class to a label no hypothesis predicts. The grouping is intact; what the experimenter is told to look for is not, and a manual inheriting this states a false observable with the right shape.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-partition-relabel-class",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 40,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_partition_for",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": 1,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "EXPECTED SURVIVOR: offset every reported entropy by 1e-16 and re-sort. At the magnitudes hypset produces this is at or below one ulp, so it is the floor of what any exact comparison could see, tolerance or no tolerance.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-1e-16",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "entropy_matches_bruteforce"
+      ],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": true,
+      "survived_all_detection": true,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 31,
+      "worlds_inert": 9,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "EXPECTED SURVIVOR: offset every reported entropy by 1e-12, three orders of magnitude inside EPS. Representable, so the lie is really told; invisible, because the invariant's band is wider than it.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-1e-12",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "entropy_matches_bruteforce"
+      ],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": true,
+      "survived_all_detection": true,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "offset every reported entropy by exactly EPS. The test is `abs(diff) > EPS`, so this rung sits on the boundary and whether it kills is decided by the rounding of `fl(e + 1e-9) - e` on each world.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-1e-9",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 26,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": 1,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "offset every reported entropy by 2e-9, the first rung unambiguously outside EPS. This is the smallest offset the invariant should catch on every world.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-2e-9",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 40,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": 1,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "offset every reported entropy by 1e-6: still far below the 12 decimals `as_json` rounds to, so a reader of the payload could not see it, and three orders outside EPS.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-1e-6",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 40,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": 1,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.entropy is the Shannon entropy in bits of the true partition's summed class weights -- frontier.py:probe_value passes `[sum(weights_by_id[i] for i in ids) for ids in partition.values()]` to entropy_of, which is math.log2-based; README.md prints it as `bits` and to_payload publishes it as `entropy_bits`.",
+      "description": "offset every reported entropy by 1e-3 -- visible in the engine's own `%.3f bits` rendering. If this rung does not kill, the invariant is not comparing anything.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "entropy_matches_bruteforce"
+      ],
+      "id": "pf-entropy-shift-1e-3",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 40,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": 1,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "rank_probes returns every candidate action exactly once, ordered by (-value, -entropy, cost, str(action)) -- frontier.py:rank_probes builds one ProbeValue per action in `actions` and sorts on exactly that key; its docstring: 'Every candidate action, best splitter first ... Ordering is total and deterministic'.",
+      "description": "transpose the top two entries -- the weakest possible reordering. Every field travels with its own ProbeValue, so this is a pure order defect, and it hands the caller the second-best probe first.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "ranking_is_sound"
+      ],
+      "id": "pf-rank-swap-adjacent",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 40,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": 1,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "rank_probes returns every candidate action exactly once, ordered by (-value, -entropy, cost, str(action)) -- frontier.py:rank_probes builds one ProbeValue per action in `actions` and sorts on exactly that key; its docstring: 'Every candidate action, best splitter first ... Ordering is total and deterministic'.",
+      "description": "move the best probe to the end of the ranking -- the strongest reordering short of a full reversal. Paired with pf-rank-swap-adjacent to measure whether detection power depends on the size of the disorder.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "ranking_is_sound"
+      ],
+      "id": "pf-rank-best-to-last",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 40,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": 1,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "rank_probes returns every candidate action exactly once, ordered by (-value, -entropy, cost, str(action)) -- frontier.py:rank_probes builds one ProbeValue per action in `actions` and sorts on exactly that key; its docstring: 'Every candidate action, best splitter first ... Ordering is total and deterministic'.",
+      "description": "drop the last-ranked action from the result. The order of what remains is correct; an action the caller offered has silently stopped being a candidate.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "ranking_is_sound"
+      ],
+      "id": "pf-rank-drop-action",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 40,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": 1,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.splits is true exactly when the action separates at least two hypotheses -- frontier.py:ProbeValue.splits is `n_classes > 1` over the partition, and __init__.py:run returns `best=None` unless `ranked[0].splits`, so this flag decides whether a probe is proposed at all.",
+      "description": "collapse each ProbeValue's partition to a single class, so `splits` reads False for actions that really do separate hypotheses. `run()` would then return best=None and report that no experiment here is worth performing.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "splits_flag_is_honest"
+      ],
+      "id": "pf-splits-collapse-partition",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 34
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 34,
+      "worlds_inert": 6,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": 1
+      }
+    },
+    {
+      "claim": "ProbeValue.splits is true exactly when the action separates at least two hypotheses -- frontier.py:ProbeValue.splits is `n_classes > 1` over the partition, and __init__.py:run returns `best=None` unless `ranked[0].splits`, so this flag decides whether a probe is proposed at all.",
+      "description": "split a genuinely unanimous class in two, so `splits` reads True where nothing is separated -- the `agreeing` flavour's negative control inverted, and the failure that proposes an experiment with no possible outcome.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "splits_flag_is_honest"
+      ],
+      "id": "pf-splits-fabricate",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 12
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 12,
+      "worlds_inert": 28,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": 1
+      }
+    },
+    {
+      "claim": "ProbeValue.cost is the caller-supplied path cost for that action -- frontier.py:rank_probes passes `cost=costs.get(action, 1.0)`, and ProbeValue.value is documented 'Bits per unit of path cost'; README.md 'probes are ranked by bits per unit cost with a caller-supplied cost map (default 1)' and the planner tier charges a real plan length to it.",
+      "description": "report cost 1.0 for every action -- the engine ignoring the caller's cost map -- then re-sort under the engine's own key so the returned order is internally consistent. `value_bits_per_cost` in the payload is now wrong for every non-unit-cost action and the ranking is the one a cost-blind engine would give. Pre-registered in V-10 as an EXPECTED SURVIVOR against `ranking_is_sound`, and it survived; V-13 added `costs_are_the_world's` for exactly this gap, so `expect_kill` now names that invariant and the mutant is a real prediction again rather than a recorded blind spot.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "costs_are_the_world's"
+      ],
+      "id": "pf-flatten-reported-costs",
+      "killed": {
+        "costs_are_the_world's": 35,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 35,
+      "worlds_inert": 5,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": 1,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "at zero cost `value` is inf, not a number -- frontier.py:42-44 is `self.entropy / self.cost if self.cost else float('inf')`, published as `value_bits_per_cost`, and worlds/hypset.py:21 generates zero costs on purpose because 'Zero is not a hypothetical -- the ranking divides by it'. An engine answering 0.0 ranks every free probe last, which inverts the recommendation this engine exists to make.",
+      "description": "return 0.0 bits per unit cost for every free action, then re-sort under the engine's own key so the order is internally consistent and only the cost invariant can see it. Written after an adversarial review found that `costs_are_the_world's` shipped with an `if expected > 0` guard excluding exactly this branch while its docstring said the branch was checked -- so this mutant is the evidence that the repair is real and not another sentence.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "costs_are_the_world's"
+      ],
+      "id": "pf-zero-cost-value-is-zero",
+      "killed": {
+        "costs_are_the_world's": 11,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 11,
+      "worlds_inert": 29,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": 1,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.cost is the caller-supplied path cost for that action -- frontier.py:rank_probes passes `cost=costs.get(action, 1.0)`, and ProbeValue.value is documented 'Bits per unit of path cost'; README.md 'probes are ranked by bits per unit cost with a caller-supplied cost map (default 1)' and the planner tier charges a real plan length to it.",
+      "description": "double every reported cost. Paired with pf-flatten-reported-costs and differing from it in one way that matters: scaling by a positive constant divides every `value` by that constant and so preserves the engine's own sort order exactly. The flattening mutant could in principle have been caught by a ranking check on some world where it reordered something; this one cannot be, on any world, so a kill here is `costs_are_the_world's` comparing against the cost map and nothing else.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "costs_are_the_world's"
+      ],
+      "id": "pf-scale-reported-costs",
+      "killed": {
+        "costs_are_the_world's": 40,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": 1,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.partition is that same grouping and is published as the probe design's `partition` -- frontier.py:probe_value sets `partition=partition_for(...)`, ProbeValue.as_json emits it, and __init__.py:to_payload puts it in the frozen `probe_design` payload (README.md 'Payload shape -- kind: \"probe_design\" (stable)').",
+      "description": "EXPECTED SURVIVOR: relabel one class inside each ProbeValue's partition, leaving the class count and the entropy field alone. Same defect as pf-partition-relabel-class, on the copy that reaches the payload rather than on the one partition_matches_truth inspects.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-probevalue-partition-relabel",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "partition_matches_truth"
+      ],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": true,
+      "survived_all_detection": true,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "ProbeValue.partition is that same grouping and is published as the probe design's `partition` -- frontier.py:probe_value sets `partition=partition_for(...)`, ProbeValue.as_json emits it, and __init__.py:to_payload puts it in the frozen `probe_design` payload (README.md 'Payload shape -- kind: \"probe_design\" (stable)').",
+      "description": "EXPECTED SURVIVOR: move a hypothesis between two classes of each ProbeValue's partition without emptying either, so the class count -- and therefore `splits` -- is untouched and the entropy field still matches the true weights. The published grouping is wrong and nothing about it is derived.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "partition_matches_truth"
+      ],
+      "id": "pf-probevalue-partition-move",
+      "killed": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "partition_matches_truth"
+      ],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": true,
+      "survived_all_detection": true,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 28,
+      "worlds_inert": 12,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": null,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    }
+  ],
+  "worlds_per_engine": 40
+}

@@ -297,3 +297,92 @@ manual into a different world silently. The gap is that nothing migrated A0.
    claims that were **all wrong**, because the leak it exploited handed it a
    prior — vanilla sokoban — that is false of A0. Every cheater claim must be
    scored against the key before it is believed or acted on.
+
+
+## V11-handover-auto — the handover test is automated, and the run it produced is not a result
+
+Prompt `V11-handover-auto`, branch `agent/v11-handover-auto`. Run
+`exam/runs/20260728T202540Z-V11-handover-auto-r2/`; the voided first cohort is
+`exam/runs/20260728T202101Z-V11-handover-auto/`.
+
+**What was built.** The layered handover of Theoria.md 1.11 stopped being a
+thing a session does by hand:
+
+* `exam/papers/handover_auto.py` — paper `v11-handover-a0`, 31 items, 58 points,
+  on five fresh boards with shortest solutions of 14 to 25 actions and two with
+  no solution at all.
+* `exam/grading/rubrics_handover_auto.py` — five marking rules, registered in
+  `RUBRIC_MODULES`. **The fourth question family of 1.11 now exists**: "why does
+  this rule hold", asked as a citation set, marked with a penalty so that
+  shotgunning pays nothing (D-EX-017). `optimal_action` splits its points
+  between the move and the plan length and accepts `none` on a dead board.
+  One item is marked by recomputing the claim where the reader says it fails.
+* `exam/tools/run_handover_auto.py` — `build` freezes the sheet, writes the two
+  prompts and records the key's sha256 **without writing the key**; `score`
+  re-derives the key, refuses to mark on a digest mismatch, calibrates the
+  marker, marks, and reports the tier difference with a bootstrap over readers,
+  a bootstrap over items and a measured grader-noise floor.
+* 34 tests. Suite total 320, zero API calls, zero network, no sealed-pile
+  contact.
+
+**What it measured: nothing about the tiers.** Six fresh subagent readers,
+three per tier, every one 58/58. Delta 0.000. The pre-registered saturation rule
+fired — and then the adversarial review found the real fault, which is worse:
+**two `rule_justification` items restate the playbook's two `prune` entries in
+English on the tier-1 sheet**, so the control arm was handed the treatment on
+exactly the family where a difference had been pre-registered. This is the
+second consecutive run of 1.11's handover item that produced no tier number.
+
+**What it did establish.** A fresh instance handed nothing but
+`a0-spike/theory/theory.dsl` and its mechanical rendering returned exact
+shortest-plan lengths of 14 to 25 actions on six boards and both dead boards.
+The adversarial reviewer reproduced every length with its own BFS transcribed
+from `MANUAL.md`, showed no monotone function of the geometry yields them, and
+showed the readers' disagreements fall inside the tied optimal sets and never
+outside — the signature of independent search. It also supplied the reason the
+search was tractable, which nobody had claimed: the manual's two parity
+invariants pin the Box to a quarter of the board.
+
+**Three leaks, in the order they were found.**
+
+1. `tags` printed `dead` on the two unsolvable items. Found mid-run; the first
+   cohort was voided. `leakage.metadata_hits` missed it because it buckets on
+   whole `tags` *values*, and a unique `level:` token made every bucket a
+   singleton. D-EX-018.
+2. `PREREGISTRATION.json` carried `leakage.positional.example_ids_by_answer`, an
+   answer-label → item-id map, in the examinees' own run directory. The reviewer
+   scored **0.603** from that file alone, above this paper's memoriser arm,
+   having never seen the bundle. `build()` no longer persists it.
+3. The sheet restated the tier-2-only playbook on the tier-1 paper (above).
+   `cross_item_leak_report` and
+   `test_no_new_sheet_claim_restates_a_playbook_entry` are the check that did
+   not exist; the two known offenders are pinned so a third fails the suite.
+
+Every one of them is the same shape: a fact spelled one way, a checker looking
+for another spelling.
+
+## Open weaknesses this run adds
+
+13. **`leakage.metadata_hits` buckets on values, not tokens.** The fix belongs in
+    the shared checker and was deliberately not made mid-run. Until it is,
+    `p15-adaptation-a0`, `p15-heldout-a0` and `p15-verdict-a2` are unaudited
+    against a leak class that has demonstrably shipped once.
+14. **Nothing compares one item's prose with another tier's bundle.**
+    `cross_item_leak_report` lives in the V11 paper module and should be a
+    checker every paper runs.
+15. **A run has no chain of custody to its examinees.** No transcripts, no
+    session ids, no per-reader timestamps — six hand-assembled JSON files whose
+    independence rests on six self-reports. Fabrication and honesty look the
+    same in the artefacts, and that is a gap the exam should not have.
+16. **The delivered message was not the tested message.** The blinding tests run
+    against `prompts/*.prompt.md`; readers received a wrapper naming a
+    `TASK.md`. The wrapper is now `prompts/DELIVERY_WRAPPER.md` and the tests
+    should be pointed at it.
+17. **Per-reader delivery directories were named by arm** (`A1`…`B3`). The arm
+    label was outside the tested surface.
+18. **Still no cost instrument.** With accuracy on A0 exhausted, cost is now the
+    *only* channel through which 1.11's actual prediction — 多付的搜索成本 ≈
+    玩法书缓存的计算量 — could be measured. Open weakness 2 is no longer one
+    weakness among several; it is the blocking one.
+19. **`abstain` is unpriced**, which is load-bearing for the memoriser
+    calibration: that arm scores what it scores because of how much it abstains.

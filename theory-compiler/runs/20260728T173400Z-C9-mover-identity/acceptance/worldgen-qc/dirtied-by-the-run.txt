@@ -1,0 +1,7 @@
+ worldgen/out/qc/QC.json                            | 301 ++++++++-
+ worldgen/out/qc/t1-switch-latch/candidates.jsonl   |  64 +-
+ .../out/qc/t1-switch-latch/engines_report.json     | 682 +++++++++++++++++++--
+ worldgen/out/qc/t1-switch-toggle/candidates.jsonl  |  70 +--
+ .../out/qc/t1-switch-toggle/engines_report.json    | 676 ++++++++++++++++++--
+ worldgen/out/qc/t2-lock-fragile/candidates.jsonl   |  54 +-
+ 6 files changed, 1658 insertions(+), 189 deletions(-)

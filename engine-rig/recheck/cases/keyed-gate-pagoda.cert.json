@@ -1,0 +1,19 @@
+{
+  "bound": 0,
+  "claim": "unsolvable",
+  "comment": "w = {keyA: 1, keyB: 1, prize: 5}, bound 0. The region is the single state {0,0,0}; `open` does not fire there, so the potential never rises from it. Over the whole product it does -- {1,1,0} -open-> {1,1,1} gains 5 -- and that state is over the bound, which is exactly why the obligation is quantified over legal moves from the region.",
+  "kind": "potential_bound",
+  "name": "keyed-gate-pagoda",
+  "occupied": 1,
+  "produced_by": "written by hand for this package",
+  "ruleset": {
+    "name": "keyed-gate",
+    "sha256": "e4630290c5811ea4e404fd26e6f19042a82ca709d29433f3cd08bbdf0e5ea8c2"
+  },
+  "schema": "engine-rig/recheck/certificate-v1",
+  "weights": {
+    "keyA": 1,
+    "keyB": 1,
+    "prize": 5
+  }
+}

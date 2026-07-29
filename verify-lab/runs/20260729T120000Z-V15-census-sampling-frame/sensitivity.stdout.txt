@@ -1,0 +1,5 @@
+full frame (V15's definition) n=219  TP 70  FN 41  FP 6   TN 102  FNR 0.369  FPR 0.056 
+can_refuse only (V14's own rule) n=181  TP 64  FN 38  FP 3   TN 76   FNR 0.373  FPR 0.038 
+stratum A only               n=181  TP 39  FN 39  FP 4   TN 99   FNR 0.5    FPR 0.039 
+stratum A and can_refuse     n=145  TP 35  FN 36  FP 1   TN 73   FNR 0.507  FPR 0.014 
+what probe.py enumerates     n=145  TP 35  FN 36  FP 1   TN 73   FNR 0.507  FPR 0.014 

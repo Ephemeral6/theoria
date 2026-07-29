@@ -116,3 +116,51 @@ def test_size_metric_is_defined_for_every_family(family):
 
     world = GENERATORS[family](prng.derive(SEED, family, 1))
     assert minimize.size_of(world) > 0
+
+
+# ------------------------------------------- coverage has to mean something
+
+def test_a_dead_lp_potential_shows_up_as_lost_coverage():
+    """Disable the engine entirely; the battery must report less coverage, not the same.
+
+    The experiment is E-11's and it is the sharpest statement of what
+    `props/lp_potential.py`'s four bare `return []` openers were costing.
+    Every invariant in that module is conditional on a certificate existing, so
+    replacing `run` with `return None, None` — the engine deleted — used to
+    produce **byte-identical findings** and an unchanged
+    `invariant_worlds_evaluated: 500` for all four. A battery that cannot
+    distinguish a working engine from an absent one is not measuring the engine,
+    and the campaign's coverage column was the only place that could have said
+    so.
+
+    This test is the regression, and it is written to *fail* against the code as
+    it stood before V-13: it asserts that the dead engine is visible as a drop in
+    evaluated worlds, which is exactly what the `finding.skipped` calls buy.
+    """
+    import fuzzlab.props.lp_potential as props
+
+    live = campaign.run_engine("lp_potential", SEED, WORLDS, quiet=True)
+
+    original = props._solve
+    props._solve = lambda world: (None, None)
+    try:
+        dead = campaign.run_engine("lp_potential", SEED, WORLDS, quiet=True)
+    finally:
+        props._solve = original
+
+    live_evaluated = live["report"]["invariant_worlds_evaluated"]
+    dead_evaluated = dead["report"]["invariant_worlds_evaluated"]
+
+    for name in sorted(props.INVARIANTS):
+        assert dead_evaluated[name] == 0, (
+            "%s still reports %d worlds evaluated with the engine disabled; a "
+            "world nothing was checked on must be `skipped`, not an empty list"
+            % (name, dead_evaluated[name]))
+        assert live_evaluated[name] > dead_evaluated[name], (
+            "%s reports the same coverage whether the engine runs or not" % name)
+
+    # And the live run must not be claiming the full world count either: the
+    # certificate-less worlds are real and they are not judged.
+    assert any(live_evaluated[name] < WORLDS for name in props.INVARIANTS), (
+        "every invariant claims all %d worlds; the certificate-less ones are "
+        "being counted as evaluated again" % WORLDS)

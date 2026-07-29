@@ -1,0 +1,743 @@
+{
+  "a0-spike/pipeline/run_a0.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: engine-rig (its A0 cold start)",
+    "verdict": "absent"
+  },
+  "a0-spike/probes/semantics_probe.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: engine-rig (its A0 cold start)",
+    "verdict": "absent"
+  },
+  "a0-spike/runs/20260728T040057Z-c2/make_manifest.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: engine-rig (its A0 cold start)",
+    "verdict": "absent"
+  },
+  "ablation-arm/build_theory.py": {
+    "census_v11": "yes",
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "ablation-arm/exhibits/e1_a0.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "ablation-arm/exhibits/e2_a2.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "ablation-arm/exhibits/e3_charitable.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "ablation-arm/run_arm.py": {
+    "census_v11": "partial/yes",
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "ablation-arm/run_exhibits.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "ablation-arm/verify.py": {
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "arc-recon/canary.py": {
+    "census_v11": "yes",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "present"
+  },
+  "arc-recon/canary_schedule.py": {
+    "census_v11": "yes",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "present"
+  },
+  "arc-recon/contamination.py": {
+    "census_v11": "partial/yes",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "present"
+  },
+  "arc-recon/cut_piles.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "absent"
+  },
+  "arc-recon/precheck.py": {
+    "census_v11": "n/a/yes",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "present"
+  },
+  "arc-recon/precheck_resume.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "absent"
+  },
+  "arc-recon/redact_ledger.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "absent"
+  },
+  "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/board_log_invariants.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "absent"
+  },
+  "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/concurrency_invariants.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "absent"
+  },
+  "arc-recon/tools/ledger_invariants.py": {
+    "owner": "shared ground -- the pile cut and the API access check",
+    "verdict": "present"
+  },
+  "baseline-arms/harness/audit_cells.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/audit_pool.py": {
+    "census_v11": "yes",
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "baseline-arms/harness/bare_cc.py": {
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "baseline-arms/harness/campaign.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/campaign_status.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/fetch_schema_traces.py": {
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "baseline-arms/harness/merge_ledger.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/probe_action_variants.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/probe_api.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/run_campaign.py": {
+    "census_v11": "partial",
+    "owner": "lane: arms",
+    "verdict": "present"
+  },
+  "baseline-arms/harness/run_pilot.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/summarise_campaign.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/summarise_pilot.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/harness/transport_ab.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "baseline-arms/runs/20260728T103135Z-a7/await_quota.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "battery/run_battery.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "cold-start-a0/certify/fd_conformance.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/certify/lean_check.py": {
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "present"
+  },
+  "cold-start-a0/certify/replay.py": {
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "present"
+  },
+  "cold-start-a0/certify/score_vs_truth.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/compile/compile_a0.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/compile/problem.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/pipeline/concept_account.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/pipeline/engines_stage.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/pipeline/plan_stage.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/pipeline/unsolvable_variant.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/prime/run_prime.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/prime/world/ground_truth.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/run_all.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a0/world/ground_truth.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (off limits to engine-rig)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/certify_a2.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/compile_a2.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/concepts.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/engines.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/exhibit.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/ledger.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/locate.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/plan.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/probe.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/refute.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2pipeline/repair.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/a2world/ground_truth.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/run_all.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a2/tools/verify_readonly.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler (A2 cold start)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/agreement.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/bill.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/certify_a3.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/coldstart.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/concepts.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/engines.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/negctl.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/plan.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/run_l1.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3pipeline/transfer.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3world/ground_truth.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/a3world/score.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/run_all.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/tools/archive_run.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "cold-start-a3/tools/verify_readonly.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler (A3 transfer)",
+    "verdict": "absent"
+  },
+  "engine-rig/bench/__main__.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/bench/verify.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/recheck/__main__.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/recheck/build_cases.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/recheck/verify_all.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/runs/20260728T141724Z-E5-cert-recheck/manifest.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/tools/p13_fd_dividend.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: engine-rig",
+    "verdict": "absent"
+  },
+  "engine-rig/tools/run_all.py": {
+    "census_v11": "partial",
+    "owner": "track: engine-rig",
+    "verdict": "present"
+  },
+  "engine-rig/tools/validate_candidates.py": {
+    "census_v11": "yes",
+    "owner": "track: engine-rig",
+    "verdict": "present"
+  },
+  "exam/tools/archive_run.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "exam/tools/build_papers.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "exam/tools/run_exam.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "exam/tools/run_matrix.py": {
+    "census_v11": "partial",
+    "owner": "lane: exam / battery",
+    "verdict": "present"
+  },
+  "exam/tools/run_selftest.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "exam/verify.py": {
+    "census_v11": "no/partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: exam / battery",
+    "verdict": "absent"
+  },
+  "figures/build_all.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "figures/check_coverage.py": {
+    "census_v11": "yes",
+    "owner": "lane: figures / release",
+    "verdict": "present"
+  },
+  "figures/manifest.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "fuzzlab/campaign.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  },
+  "fuzzlab/minimize.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  },
+  "fuzzlab/verify.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  },
+  "monitor/_runner.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/assign.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/board.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/bus.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/ci_merge.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/dispatch.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/gates.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/quota.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/reflex.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/scan.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/tests/mutants.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "monitor/verify.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: monitor",
+    "verdict": "absent"
+  },
+  "papers/phase1-workshop/figures/check_figure_parity.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "proxy/reconcile.py": {
+    "census_v11": "yes",
+    "owner": "lane: proxy / spend gate",
+    "verdict": "present"
+  },
+  "proxy/replay.py": {
+    "census_v11": "yes",
+    "owner": "lane: proxy / spend gate",
+    "verdict": "present"
+  },
+  "proxy/runner.py": {
+    "owner": "lane: proxy / spend gate",
+    "verdict": "present"
+  },
+  "proxy/scoring/__init__.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: proxy / spend gate",
+    "verdict": "absent"
+  },
+  "proxy/tools/replay_spotcheck.py": {
+    "census_v11": "yes",
+    "owner": "lane: proxy / spend gate",
+    "verdict": "present"
+  },
+  "proxy/tools/validate_ledger.py": {
+    "census_v11": "yes",
+    "owner": "lane: proxy / spend gate",
+    "verdict": "present"
+  },
+  "release/check_redlines.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "release/enumerate.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "release/reproduce.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: figures / release",
+    "verdict": "absent"
+  },
+  "theoria-arm/armtools/preflight.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: arms",
+    "verdict": "absent"
+  },
+  "theory-compiler/src/theory_compiler/handover.py": {
+    "census_v11": "partial",
+    "owner": "track: theory-compiler",
+    "verdict": "present"
+  },
+  "theory-compiler/tools/build_deadlock_lean.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "theory-compiler/tools/build_handover_packages.py": {
+    "census_v11": "partial",
+    "owner": "track: theory-compiler",
+    "verdict": "present"
+  },
+  "theory-compiler/tools/handover_exam.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "theory-compiler/tools/probe_mentions.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "theory-compiler/tools/refresh_manifest.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "theory-compiler/tools/transcribe_deadlock_certificates.py": {
+    "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "theory-compiler/tools/validate_candidates_v02.py": {
+    "census_v11": "yes",
+    "owner": "track: theory-compiler",
+    "verdict": "present"
+  },
+  "theory-compiler/tools/verify_c4.py": {
+    "census_v11": "yes",
+    "owner": "track: theory-compiler",
+    "verdict": "present"
+  },
+  "theory-compiler/tools/verify_c8.py": {
+    "census_v11": "partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "track: theory-compiler",
+    "verdict": "absent"
+  },
+  "verify-lab/negctl/calibrate.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
+    "owner": "lane: verify (RES-3) -- this probe's own territory",
+    "verdict": "absent"
+  },
+  "verify-lab/negctl/probe.py": {
+    "owner": "lane: verify (RES-3) -- this probe's own territory",
+    "verdict": "present"
+  },
+  "worldgen/build.py": {
+    "census_v11": "no/yes",
+    "owner": "lane: worldgen",
+    "verdict": "present"
+  },
+  "worldgen/generate.py": {
+    "owner": "lane: worldgen",
+    "verdict": "present"
+  },
+  "worldgen/mutate.py": {
+    "census_v11": "partial",
+    "owner": "lane: worldgen",
+    "verdict": "present"
+  },
+  "worldgen/qc/diagnose_miner.py": {
+    "census_v11": "n/a",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  },
+  "worldgen/qc/run_qc.py": {
+    "census_v11": "no/partial",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  },
+  "worldgen/verify.py": {
+    "census_v11": "no",
+    "note": "V11 agrees: no executable demonstration that this can fail.",
+    "owner": "lane: worldgen",
+    "verdict": "absent"
+  }
+}

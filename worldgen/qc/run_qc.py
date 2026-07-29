@@ -20,6 +20,7 @@ cd .worktrees/c1-worldgen && python -m worldgen.qc.run_qc
 ```
 """
 
+import argparse
 import json
 import os
 import subprocess
@@ -32,7 +33,7 @@ from .engine_manual import EngineManual, TrackState
 from ..core.explorer import _walk
 from ..core.trace import read_trace, rows
 from ..core.world import GridWorld
-from ..generate import BY_ID
+from ..mutate import spec_for
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORLDGEN = os.path.dirname(HERE)
@@ -44,8 +45,36 @@ QC_OUT = os.path.join(WORLDGEN, "out", "qc")
 SAMPLE: Tuple[str, ...] = ("t1-switch-toggle", "t1-switch-latch", "t2-lock-fragile")
 HELD_OUT_BAR = 0.90
 
+# Fixed in PREREGISTERED_MUTANTS.md before *that* harness was run, one per edit
+# family.  Its acceptance question is deliberately not this file's: a mutant is
+# asked whether it behaves like its base under the pipeline, not whether the
+# miner clears a threshold the base family already missed.  So the mutant run
+# writes its own report and `MUTANT_BASE` records which comparison each row is
+# for, rather than being re-derived from an id that is opaque on purpose.
+MUTANT_SAMPLE: Tuple[str, ...] = ("v-ce732813", "v-707a64ad",
+                                  "v-efe43df1", "v-a3446614")
+MUTANT_BASE: Dict[str, str] = {
+    "v-ce732813": "t1-walk-maze",
+    "v-707a64ad": "t1-switch-toggle",
+    "v-efe43df1": "t2-switch-push",
+    "v-a3446614": "t1-portal-oneway",
+}
+
 
 # ------------------------------------------------------------------- L1 / L2
+
+def _rel(path: str) -> str:
+    """A repo-relative, forward-slashed path for the report.
+
+    The report used to record absolute ones, so every field naming a file
+    carried the checkout it was produced in — `QC.json` came back with an
+    eight-line diff consisting entirely of `.worktrees/c1-worldgen` becoming
+    `.worktrees/c6-worldgen-mutate`, with every measured number identical. An
+    artefact that churns on where it was built cannot be diffed for the thing it
+    is supposed to report.
+    """
+    return os.path.relpath(path, os.path.dirname(WORLDGEN)).replace(os.sep, "/")
+
 
 def layer_one_two(world_id: str) -> Dict[str, Any]:
     """`engines_stage.run_stage` on the shipped trace, then the schema validator."""
@@ -57,7 +86,7 @@ def layer_one_two(world_id: str) -> Dict[str, Any]:
     if os.path.exists(candidates):
         os.remove(candidates)            # append-only within a run, not across
 
-    result: Dict[str, Any] = {"trace": trace, "candidates": candidates}
+    result: Dict[str, Any] = {"trace": _rel(trace), "candidates": _rel(candidates)}
     try:
         report = engines_stage.run_stage(trace, candidates, report_path)
     except Exception as exc:                                  # noqa: BLE001
@@ -87,7 +116,9 @@ def layer_one_two(world_id: str) -> Dict[str, Any]:
         cwd=bridge.ENGINE_RIG, capture_output=True,
     )
     result["schema_valid"] = validate.returncode == 0
-    result["schema_output"] = (validate.stdout or b"").decode("utf-8", "replace").strip()
+    result["schema_output"] = (validate.stdout or b"")\
+        .decode("utf-8", "replace").strip()\
+        .replace(candidates, _rel(candidates))
     if validate.returncode != 0:
         result["schema_error"] = (validate.stderr or b"").decode("utf-8", "replace").strip()[-800:]
     result["l1_pass"] = bool(result["live"] and result["schema_valid"])
@@ -129,7 +160,11 @@ def _states_at(seg, layer, t: int) -> Dict[str, TrackState]:
 
 
 def layer_three(world_id: str) -> Dict[str, Any]:
-    world = GridWorld(BY_ID[world_id])
+    # `spec_for` rather than `BY_ID`, so a mutant can be sampled by the same
+    # harness as a catalogue world. There is no second QC implementation and
+    # there should not be: a mutant is inspected by exactly what inspects its
+    # base, or the comparison between the two means nothing.
+    world = GridWorld(spec_for(world_id))
 
     shipped_frames, shipped_actions, _wins = read_trace(
         os.path.join(WORLDS_OUT, world_id, "raw_trace.jsonl"))
@@ -241,8 +276,52 @@ def verdict(l12: Dict[str, Any], l3: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def mutant_verdict(row: Dict[str, Any], base_row: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """PREREGISTERED_MUTANTS.md's bar: runs like its base, no held-out threshold.
+
+    L3b is recorded and *not* graded. `PREREGISTERED.md` already measured the
+    held-out threshold against this miner and the family missed it; applying it
+    again here would report the miner's expressiveness a second time and nothing
+    about mutation. The comparison against the base is the finding.
+    """
+    v = row["verdict"]
+    held = v["L3b_value"]
+    base_held = None if base_row is None else base_row["verdict"]["L3b_value"]
+    base_runs = None if base_row is None else bool(
+        base_row["verdict"]["L1_liveness"] and base_row["verdict"]["L2_structure"])
+    return {
+        "L1_liveness": v["L1_liveness"],
+        "L2_structure": v["L2_structure"],
+        "L3a_replay": v["L3a_replay"],
+        "L3b_held_out_value": held,
+        "L3b_base_value": base_held,
+        "L3b_delta": (None if held is None or base_held is None
+                      else round(held - base_held, 6)),
+        # Recorded, and pointedly *not* an input to `pass`. The bar was fixed
+        # before the run and it is absolute; softening it now because the answer
+        # came back inconvenient is the exact move `RUN_STATE.md §the miss` was
+        # written to refuse. The diagnosis belongs next to the number, not
+        # inside it — see PREREGISTERED_MUTANTS.md's postscript.
+        "base_runs_the_pipeline": base_runs,
+        "base_also_fails": base_runs is False,
+        "pass": bool(v["L1_liveness"] and v["L2_structure"] and v["L3a_replay"]),
+    }
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    worlds = list(argv or SAMPLE)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("worlds", nargs="*")
+    parser.add_argument("--mutants", action="store_true",
+                        help="run PREREGISTERED_MUTANTS.md's sample and bar")
+    parser.add_argument("--report", default=None,
+                        help="report filename under out/qc (default QC.json, "
+                             "or QC_MUTANTS.json with --mutants)")
+    args = parser.parse_args(list(argv) if argv is not None else None)
+
+    if args.mutants:
+        return main_mutants(args.worlds or None, args.report or "QC_MUTANTS.json")
+
+    worlds = list(args.worlds or SAMPLE)
     os.makedirs(QC_OUT, exist_ok=True)
     report: Dict[str, Any] = {
         "prompt_id": "C1-worldgen",
@@ -292,5 +371,69 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     return 0 if report["family_verdict"]["pass"] else 1
 
 
+def _one(world_id: str) -> Dict[str, Any]:
+    l12 = layer_one_two(world_id)
+    try:
+        l3 = layer_three(world_id)
+    except Exception as exc:                                  # noqa: BLE001
+        l3 = _l3_failure(exc)
+    return {"l1_l2": l12, "l3": l3, "verdict": verdict(l12, l3)}
+
+
+def main_mutants(worlds: Optional[Sequence[str]] = None,
+                 report_name: str = "QC_MUTANTS.json") -> int:
+    """The mutants' factory inspection.  Bar in `PREREGISTERED_MUTANTS.md`.
+
+    Each sampled mutant is run **and so is its base**, in the same process and
+    through the same harness, because the acceptance question is a comparison
+    and a comparison against a number copied out of an older report is a
+    comparison against a different code state.
+    """
+    sample = list(worlds or MUTANT_SAMPLE)
+    os.makedirs(QC_OUT, exist_ok=True)
+    report: Dict[str, Any] = {
+        "prompt_id": "C6-worldgen-mutate",
+        "sample": sample,
+        "bar": "worldgen/qc/PREREGISTERED_MUTANTS.md",
+        "held_out_bar": None,
+        "held_out_bar_note": "deliberately none; see PREREGISTERED_MUTANTS.md",
+        "worlds": {},
+        "pairs": {},
+    }
+    for variant_id in sample:
+        base_id = MUTANT_BASE.get(variant_id)
+        print("== %s (base %s)" % (variant_id, base_id), flush=True)
+        row = _one(variant_id)
+        report["worlds"][variant_id] = row
+        base_row = None
+        if base_id:
+            if base_id not in report["worlds"]:
+                report["worlds"][base_id] = _one(base_id)
+            base_row = report["worlds"][base_id]
+        pair = mutant_verdict(row, base_row)
+        report["pairs"][variant_id] = dict(pair, base=base_id)
+        print("   L1=%s L2=%s L3a=%s  held_out=%s (base %s, delta %s)%s"
+              % (pair["L1_liveness"], pair["L2_structure"], pair["L3a_replay"],
+                 pair["L3b_held_out_value"], pair["L3b_base_value"],
+                 pair["L3b_delta"],
+                 "  ERROR: " + row["l3"]["error"] if row["l3"].get("error") else ""),
+              flush=True)
+
+    report["mutant_verdict"] = {
+        "sampled": len(sample),
+        "passed": sorted(v for v, p in report["pairs"].items() if p["pass"]),
+        "failed": sorted(v for v, p in report["pairs"].items() if not p["pass"]),
+        "pass": all(p["pass"] for p in report["pairs"].values()),
+    }
+    out = os.path.join(QC_OUT, report_name)
+    with open(out, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(report, indent=2, sort_keys=True) + "\n")
+    print()
+    print("mutant verdict: %s"
+          % json.dumps(report["mutant_verdict"], sort_keys=True))
+    print("-> %s" % os.path.relpath(out, WORLDGEN))
+    return 0 if report["mutant_verdict"]["pass"] else 1
+
+
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1:] or None))
+    raise SystemExit(main())

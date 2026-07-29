@@ -65,5 +65,5 @@ Nothing in the draft is new work. It is a reading of:
 * `a0-spike/THEORIZE_LOG.md`
 * `theory-compiler/STATUS.md`, `theory-compiler/DECISIONS.md`
 * `cold-start-a2/A2_REPORT.md` and its `artifacts/`
-* `battery/REPORT_V0.md`, `battery/PREDICTIONS.md` and its `artifacts/`
+* `battery/REPORT_V2.md` and `battery/artifacts/` (current — `battery_version: "v2"`), `battery/PREDICTIONS.md`, with `battery/REPORT_V0.md` for the v0 statements §7 still quotes and `battery/REPORT_V1.md` for the v1 counts it cites
 * `Theoria.md`, for the mandate and the narrative skeleton

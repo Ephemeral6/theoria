@@ -44,6 +44,14 @@ ENGINE = "fd_adapter"                  # the frozen enum; see D-018
 PRODUCER = "deadlock_carver"
 
 
+class UnfinishedComparison(RuntimeError):
+    """Two searches were compared and at least one of them had not finished.
+
+    Raised rather than folded into `same_answer`'s boolean, so that a search
+    which stopped can never be reported as evidence about a theorem.
+    """
+
+
 @dataclass
 class PruningReport:
     """The same instance solved twice: once blind, once with the theorems."""
@@ -65,7 +73,36 @@ class PruningReport:
 
     @property
     def same_answer(self) -> bool:
-        """Pruning must change the node count and nothing else."""
+        """Pruning must change the node count and nothing else.
+
+        The comparison is only meaningful when **both** searches finished.  On
+        two unfinished searches `solved == solved` and `length(None) ==
+        length(None)` are both True, so the plain conjunction reports agreement
+        between two runs that answered nothing -- the same shape C11 corrected in
+        `tools/p13_fd_dividend.same_answer`, and this property feeds the same
+        kind of gate (`bench/dividend.py` reads `plan_length_unchanged` as
+        "pruning did not change the bundled rung's answer -- unsound theorem").
+
+        Today `search()` raises on its expansion budget rather than returning,
+        so a returned `SearchResult` is always exhaustive and this guard never
+        fires.  It is here anyway, because *that* is the argument C11 refused to
+        accept for `p13_fd_dividend` -- "an upstream mechanism makes it safe" is
+        a property of code twenty files away, and it is exactly what stops
+        holding when someone adds a budget that returns instead of raising.  The
+        entitlement is now checked where the claim is made.
+
+        It raises rather than returning a third value: `False` here means
+        "pruning changed the answer -- unsound theorem", so returning it for an
+        unfinished search would file a soundness violation against a theorem on
+        the strength of a search that stopped -- this work item's defect wearing
+        the other sign.
+        """
+        if not (self.baseline.exhaustive and self.pruned.exhaustive):
+            raise UnfinishedComparison(
+                "%s: a search that did not finish cannot be compared -- "
+                "baseline exhaustive=%r, pruned exhaustive=%r"
+                % (self.problem, self.baseline.exhaustive, self.pruned.exhaustive)
+            )
         return (
             self.baseline.solved == self.pruned.solved
             and self.baseline.length == self.pruned.length

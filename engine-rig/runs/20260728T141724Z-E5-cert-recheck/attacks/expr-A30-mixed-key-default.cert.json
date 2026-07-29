@@ -1,0 +1,48 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A30",
+  "predicate": [
+    "table",
+    "t",
+    [
+      "if",
+      [
+        "=",
+        [
+          "var",
+          "pos0"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ],
+      [
+        "lit",
+        true
+      ],
+      [
+        "lit",
+        "y"
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "t": {
+      "arity": 1,
+      "default": false,
+      "entries": [
+        [
+          true,
+          true
+        ],
+        [
+          "x",
+          true
+        ]
+      ]
+    }
+  }
+}

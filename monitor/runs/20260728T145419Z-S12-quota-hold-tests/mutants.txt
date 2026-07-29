@@ -1,0 +1,7 @@
+resume-empty-queue-never-clears-the-mode             RED       test_an_empty_queue_with_an_open_window_clears_the_hold; test_a_hold_has_at_least_two_independent_exits[ping]
+check-never-lifts-the-hold-on-its-deadline           RED       test_the_hold_expires_when_the_window_it_named_has_reopened; test_an_unreadable_reset_hint_still_bounds_the_hold; test_a_hold_that_expired_but_still_has_a_queue_says_so; test_a_hold_has_at_least_two_independent_exits[deadline]
+ci-merge-blocked-by-the-quota-hold                   RED       test_ci_merge_is_not_gated_on_the_quota_hold
+resume-relaunches-into-a-closed-window               RED       test_a_closed_window_relaunches_nothing_and_holds
+hold-fires-on-any-dead-session-not-just-a-quota-one  RED       test_a_dead_session_without_a_limit_signature_does_not_hold
+
+all 5 mutants caught
