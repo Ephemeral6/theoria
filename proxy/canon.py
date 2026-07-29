@@ -35,7 +35,15 @@ from typing import Any, Dict, Optional, Set
 
 #: Envelope fields, on every record whatever its event (§2). The writer owns
 #: all four plus `seq`/`ts`; a caller may not set them.
-ENVELOPE = frozenset({"v", "event", "seq", "ts", "run_id", "arm"})
+#:
+#: `prev` joined them for D-024/RED-40: it is the sha256 of the previous line's
+#: bytes as they were written, so editing, deleting, inserting or reordering a
+#: record breaks every `prev` after it.  It is *optional* by design -- a stream
+#: without it is unchained, not invalid -- which is why the format stays at
+#: v1.0: §8 bumps `v` for a changed meaning or a new **required** field, and an
+#: optional one is neither.  It is listed here for the same reason as the rest:
+#: the writer owns it, and a caller who could set it could forge the chain.
+ENVELOPE = frozenset({"v", "event", "seq", "ts", "run_id", "arm", "prev"})
 
 #: §3. The closed field set of an `env_step`, minus the envelope.
 #:

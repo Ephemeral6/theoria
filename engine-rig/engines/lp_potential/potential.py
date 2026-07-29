@@ -28,9 +28,28 @@ from scipy.optimize import linprog
 
 DENOMINATOR_LIMIT = 1000
 
+# scipy's `linprog` status for "the problem is infeasible" -- the one
+# unsuccessful outcome that is an answer about the problem rather than about the
+# solver's budget or arithmetic.
+HIGHS_INFEASIBLE = 2
+
 
 class CertificateError(Exception):
     """The LP returned weights that do not survive exact re-checking."""
+
+
+class LpUnavailable(RuntimeError):
+    """The solver stopped without deciding feasibility.
+
+    Raised rather than folded into the `None` return, on the same rule as
+    `fd_adapter/search.py`'s expansion budget: a resource limit or a numerical
+    breakdown is a fact about HiGHS, and `solve_certificate` returning `None` is
+    read as a fact about the configuration ("no linear pagoda separates the goal
+    from the start").  Sharing one value between the two would let an iteration
+    limit publish itself as a geometric fact, which is exactly the reading
+    Theoria's constraint 6 forbids.  A caller that wants the old collapse can
+    catch this; it cannot get it by accident.
+    """
 
 
 @dataclass(frozen=True)
@@ -119,8 +138,21 @@ def solve_certificate(graph: Dict[str, object], initial: str,
                       margin: int = 1, bound: int = 10) -> Optional[Certificate]:
     """Find pagoda weights proving `initial` cannot reach the goal, or None.
 
-    Returning None is a real answer: if the goal *is* reachable, no such weight
-    function exists, and the LP has to be infeasible.
+    Returning None is a real answer, and only ever that one: it means HiGHS
+    **proved the LP infeasible** (status 2), so no weight function of this shape
+    exists.  Every other way the solver can stop -- iteration limit, numerical
+    difficulties, an unbounded relaxation -- raises `LpUnavailable`, because
+    those say nothing about the configuration and the caller's docstring reads
+    `None` as though they did.
+
+    One thing `None` still under-states, recorded rather than fixed here: the
+    box `bound` is a solver parameter, not part of the pagoda definition, so an
+    infeasibility is infeasibility *within* `|w_i| <= bound`.  Weights outside
+    the box can exist -- E11's exhaustive sweep found one instance in 3000
+    (seed 17475932563032345095, weights [12,9,3,7,-1,11,10,-4], verified in
+    exact rationals).  This direction is sound: `None` never certifies anything,
+    it only declines to.  It is the engine's documented incompleteness (CLAUDE.md),
+    widened slightly by a constant.
     """
     goals = list(goal_states or graph["goal_states"])  # type: ignore[index]
     moves = moves_from_graph(graph)
@@ -168,6 +200,15 @@ def solve_certificate(graph: Dict[str, object], initial: str,
         method="highs",
     )
     if not result.success:
+        # HiGHS status codes: 0 optimal, 1 iteration limit, 2 infeasible,
+        # 3 unbounded, 4 numerical difficulties.  Only 2 is an answer.
+        if result.status != HIGHS_INFEASIBLE:
+            raise LpUnavailable(
+                "linprog stopped without deciding feasibility: status %r (%s). "
+                "This is a fact about the solver, not about the configuration, "
+                "so no unreachability claim follows from it."
+                % (result.status, getattr(result, "message", ""))
+            )
         return None
 
     weights = [

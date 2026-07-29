@@ -1,5 +1,6 @@
 """A0 acceptance: the cold-start loop closes, and its verdicts match ground truth."""
 
+import json
 import os
 import sys
 
@@ -430,3 +431,166 @@ def test_the_repaired_push_effect_matches_the_injected_change(adaptation):
         "(-1, 0)", "(1, 0)", "(0, -1)", "(0, 1)"}
     assert set(adaptation["push3"]["repair"]["push_effects"]) == {
         "(-3, 0)", "(3, 0)", "(0, -3)", "(0, 3)"}
+
+
+# ------------------------------------------- E14: a crash is not a finding
+#
+# `mine()` used to read ANY exception out of synthesis as "this effect class
+# admits no single conjunctive guard" and publish the resulting disjunction as
+# the rule set. The negative sample injects a synthesis that is constructed to
+# crash, and the account must go red rather than quietly grow a rule.
+
+class _Boom(RuntimeError):
+    pass
+
+
+def _evidence_transitions():
+    evidence = explore.evidence_set(levels.MATCH, per_class=4)
+    return stages.transitions_from_episodes(evidence["episodes"])
+
+
+def test_the_disjunctive_classes_are_findings_and_the_report_says_so():
+    """The control. The four `blocked` classes really do need a disjunction --
+    the miner says so with `NoSeparatingGuard`, its designed verdict -- and with
+    no crash the account must stay green. Without this, the negative sample
+    below would prove only that the gate fires."""
+    rules, account = stages.mine_with_account(_evidence_transitions())
+    assert account.synthesis_crashes == 0
+    assert account.all_guards_searched is True
+    assert account.as_json()["disjunction_is_a_finding"] is True
+    assert len(account.no_separating_guard) > 0, (
+        "the blocked classes are supposed to reach NoSeparatingGuard; if they "
+        "no longer do, this control is not controlling anything")
+    disjunctive = [r for r in rules if r.disjunctive_because]
+    assert disjunctive and all(
+        r.disjunctive_because == "no_separating_guard" for r in disjunctive)
+    assert not any(r.unsound_after_crash for r in rules)
+
+
+def test_a_crashing_synthesis_is_not_a_finding(monkeypatch):
+    """E14: a crash must not come out looking like "the world is disjunctive"."""
+    transitions = _evidence_transitions()
+    calls = {"n": 0}
+
+    def exploding(positives, universe, masks):
+        calls["n"] += 1
+        raise _Boom("injected: synthesis fell over")
+
+    monkeypatch.setattr(stages, "synthesize", exploding)
+    rules, account = stages.mine_with_account(transitions)
+
+    assert calls["n"] > 0, "the injected synthesis was never called"
+    assert account.synthesis_crashes == calls["n"]
+    assert account.as_json()["crashes_by_type"] == {"_Boom": calls["n"]}
+    # The gated fields. Both must be false while the count is non-zero.
+    assert account.all_guards_searched is False
+    assert account.as_json()["disjunction_is_a_finding"] is False
+    # And every rule it emitted carries the stamp, so the rule set cannot be
+    # read out of the report without the reason it looks the way it does.
+    assert rules and all(r.unsound_after_crash for r in rules)
+    assert all(r.as_json()["disjunctive_because"] == "synthesis_crashed"
+               for r in rules)
+
+
+def test_without_the_crash_count_that_same_crash_publishes_a_rule_set(
+        monkeypatch):
+    """Non-vacuity. Remove the counting and nothing else: the identical injected
+    crash now yields `all_guards_searched: True`, unstamped rules, and a report
+    a reader cannot distinguish from a genuinely disjunctive world. This is what
+    the bare `except Exception` did."""
+    transitions = _evidence_transitions()
+    calls = {"n": 0}
+
+    def exploding(positives, universe, masks):
+        calls["n"] += 1
+        raise _Boom("injected: synthesis fell over")
+
+    monkeypatch.setattr(stages, "synthesize", exploding)
+    monkeypatch.setattr(stages.MiningAccount, "record_crash",
+                        lambda self, exc, **kw: None)
+    rules, account = stages.mine_with_account(transitions)
+
+    assert calls["n"] > 0
+    assert account.synthesis_crashes == 0              # the crash left no trace
+    assert account.all_guards_searched is True         # ... and the run is green
+    assert account.as_json()["disjunction_is_a_finding"] is True
+    assert rules, "the fallback still published a rule set"
+
+
+def test_the_green_light_reads_the_crash_count(monkeypatch, tmp_path):
+    """`run_a0.main()` ANDs `all_guards_searched` into its verdict, so a run
+    whose miner crashed cannot exit 0.
+
+    Checked BEHAVIOURALLY. The first version of this test grepped
+    `inspect.getsource(run_a0.main)` for the conjunct, and an adversarial review
+    showed it still passed with `all_guards_searched` hardcoded to `True` --
+    a test that passes on the un-fixed code is worthless, which is the same
+    complaint this ticket makes about a report that stays green on a crashed
+    run. `ARTIFACTS` is redirected into `tmp_path` so the real committed
+    artifacts are not written.
+    """
+    def exploding(positives, universe, masks):
+        raise _Boom("injected: synthesis fell over")
+
+    monkeypatch.setattr(stages, "synthesize", exploding)
+    monkeypatch.setattr(run_a0, "ARTIFACTS", str(tmp_path))
+    assert run_a0.main() != 0
+    report = json.loads((tmp_path / "a0_report.json").read_text(encoding="utf-8"))
+    assert report["mine"]["all_guards_searched"] is False
+    assert report["mine"]["synthesis_crashes"] > 0
+
+
+def test_a_crashed_miner_takes_down_exactly_the_claims_that_depend_on_it(
+        monkeypatch, tmp_path):
+    """Adversarial review, correction 6, and the honest half of declining it.
+
+    `a0_report.json` publishes more claims than the rule set, and the review is
+    right that `certify.replay_exact` / `exactly_one_successor` stayed `true`
+    under an injected crash. Those are computed over `rules` and are now gated.
+
+    The review also listed `certify_generated.replay_exact`, `held_out.exact`
+    and `levels[*].theorem.unsolvable`. Those do NOT depend on the miner --
+    `certify_generated(module, episodes)` and the held-out loop predict through
+    the module compiled from `theory/theory.dsl`, and
+    `unsolvability_certificate(level)` takes only a level and does arithmetic on
+    two parities. Gating them on a mining crash would report a defect at a site
+    that has none, which is its own way of making a report say something the
+    computation did not. So this test pins BOTH halves: the dependent claims go
+    false, and the independent ones must stay true."""
+    def exploding(positives, universe, masks):
+        raise _Boom("injected: synthesis fell over")
+
+    monkeypatch.setattr(stages, "synthesize", exploding)
+    monkeypatch.setattr(run_a0, "ARTIFACTS", str(tmp_path))
+    report = run_a0.run()
+
+    assert report["mine"]["synthesis_crashes"] > 0
+    # depends on the mined rules -> gated
+    assert report["certify"]["rules_are_sound"] is False
+    assert report["certify"]["replay_exact"] is False
+    assert report["certify"]["exactly_one_successor"] is False
+    assert report["certify"]["error"]
+    # the measurement itself is kept, it is just not a claim any more
+    assert report["certify"]["replay_exact_before_crash_gate"] is True
+    # does NOT depend on the mined rules -> must NOT be gated
+    assert report["certify_generated"]["replay_exact"] is True
+    assert report["held_out"]["exact"] is True
+    assert report["levels"]["mismatch"]["theorem"]["unsolvable"] is True
+
+
+def test_the_adaptation_repair_verdicts_are_gated_too(monkeypatch):
+    """Adversarial review, correction 3: `adaptation.json`'s four repair blocks
+    carry `replay_exact` and `exactly_one_successor`, produced by the audited
+    call site, and they stayed `true` under an injected crash."""
+    from pipeline import adapt                         # noqa: PLC0415
+
+    def exploding(positives, universe, masks):
+        raise _Boom("injected: synthesis fell over")
+
+    monkeypatch.setattr(stages, "synthesize", exploding)
+    out = adapt.repair(adapt.VARIANTS[0], per_class=1)
+    assert out["synthesis_crashes"] > 0
+    assert out["all_guards_searched"] is False
+    assert out["replay_exact"] is False
+    assert out["exactly_one_successor"] is False
+    assert out["error"]

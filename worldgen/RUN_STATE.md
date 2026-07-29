@@ -735,3 +735,150 @@ Full transcripts in `runs/20260728T153030Z-V12-worldgen-gate-deaf/`:
    `test_pin_matches_what_the_committed_artifacts_say` keeps it honest against
    the artifacts on disk, which is a consistency check and not independence —
    A0's hole again, one level down.
+
+---
+
+# V16 — the determinism gate had never been shown to go red
+
+`worldgen/build.py`'s `check_determinism` is the strongest determinism claim in
+this repository: it rebuilds the catalogue in a **fresh interpreter** at
+`PYTHONHASHSEED=271828` and diffs every byte. Two independent censuses (V11,
+V14) had flagged it as having no negative control. V14 nonetheless scored
+`build.py` as *covered*, because the verdict was **file-level** and other things
+in the same file are tested — a function-level blank hidden by a file-level
+present. This item is that blank, filled.
+
+Run directory: `worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/`.
+
+## 1. The premise, measured rather than scanned
+
+Both censuses said "zero test callers" from a static scan. Measured with a
+tripwire that raises on entry to `check_determinism`:
+
+* `worldgen/` — 412 passed, 13 skipped, **green**, sentinel file never created.
+* `exam/tests/test_worldgen_papers.py` + `theory-compiler/tests/test_count_guard.py`
+  (the only other tests that mention `worldgen`) — 110 passed, **green**.
+* The tripwire itself was verified live: a direct call raised and wrote the
+  sentinel. Without that check the green above would mean nothing, which is the
+  failure mode this whole item is about.
+
+**The premise holds.** One correction the scans had missed: the function is not
+dead code in *production*. `worldgen/verify.py:42` runs
+`python -m worldgen.build --check` as its first, gating stage. Nothing runs
+`verify.py` automatically. `test_determinism_gate.py` now pins that wiring, so
+dropping `--check` from `verify.STAGES` cannot silently orphan the gate.
+
+## 2. The negative control
+
+`worldgen/tests/determinism_sandbox.py` copies the package source to a temp
+root, patches a defect into a generator, and runs the **real command line**
+there — `python -m worldgen.build --check <world>` — asserting the process exit
+code and the gate's own banner. A sandbox rather than the real tree because the
+gate diffs against `build.OUT` and `main` rebuilds it on the way in; running
+`--check` in place would rewrite ten committed artefacts, which is a separate
+ledger entry. Same move `figures/check_coverage.py --self-test` makes with the
+pre-P8 tree.
+
+Twenty tests, `worldgen/tests/test_determinism_gate.py`. Suite is **428 passed,
+13 skipped** (was 412/13); `git status worldgen/` clean apart from the new
+files; `out/` untouched.
+
+## 3. Two classes of defect, and they are not the same claim
+
+This is the correction that changed what V16 demonstrates, and it came from the
+adversarial reviewer rather than from me. `CLAUDE.md` states the requirement as
+*"byte-reproducible for a **fixed seed**"*. Measured by building twice at one
+seed (`determinism_sandbox.classify`):
+
+| class | injections | at a fixed seed | violates |
+|---|---|---|---|
+| A | `unseeded_rng`, `wall_clock` | bytes **move** | `CLAUDE.md` as written |
+| B | `mechanism_order`, `hash_order_wide` | bytes **do not move** | only the stronger rule the gate enforces |
+
+`mechanism_order` is the shape `build.py`'s own docstring names — `GridWorld`
+taking its mechanism order from `set` iteration. **By the charter's literal
+wording it is not a violation.** It violates cross-seed stability, which
+`CLAUDE.md` never asks for and `check_determinism` demands anyway.
+
+Class B is kept and is the more interesting half — the `shared_hashseed` column
+below is the evidence that catching it is worth something. But the first version
+of this work asserted all four were "nondeterministic", which is **false** for
+class B, and a reader who took `mechanism_order` for a charter violation would
+have been told something this repository does not promise. Both halves are now
+labelled in the table and pinned by tests. A note proposing `CLAUDE.md` say
+which of the two it means has gone to `monitor/inbox/`; changing the charter is
+not this item's call.
+
+## 4. The gate is awake — the weakening table
+
+Leave the injection in place, weaken `check_determinism` instead. Every cell is
+a **rate over distinct parent seeds**, not a verdict, because two of them are
+genuinely probabilistic and the first version of this table published both as
+settled facts.
+
+| injection | class | none | shared_hashseed | size_only | no_diff |
+|---|---|---|---|---|---|
+| `mechanism_order` | B | **RED (25/30 seeds)** | MISSED (0/10) | MISSED (0/10) | MISSED (0/10) |
+| `hash_order_wide` | B | **RED** (30/30) | MISSED (0/10) | MISSED (0/10) | MISSED (0/10) |
+| `unseeded_rng` | A | **RED** (30/30) | **RED** (10/10) | **RED (5/10 seeds)** | MISSED (0/10) |
+| `wall_clock` | A | **RED** (30/30) | **RED** (10/10) | MISSED (0/10) | MISSED (0/10) |
+
+`shared_hashseed` is the gate exactly as it stood before C1's audit finding F7,
+and it misses **both** class-B defects: that column is what the fresh-interpreter
+rebuild actually buys. Three of these cells are kept as permanent tests.
+
+Two cells are rates and must be read as such. `mechanism_order` on
+`t3-latch-maze` binds three mechanisms, so set iteration has six orders and
+**one parent seed in six agrees with the gate's hardcoded 271828 and cannot see
+the defect at all** — 25 of 30 seeds catch it. `unseeded_rng` under `size_only`
+turns on whether two random floats happen to have the same `repr` length —
+5 of 10. Prose saying "reproducible rather than guaranteed" is not enough here;
+the table is the part that gets copied.
+
+## 5. What this does **not** establish — read this before citing the above
+
+* **The real `check_determinism` still runs against the real catalogue exactly
+  zero times, automatically.** All twenty new tests exercise a *source copy in
+  a temporary directory*. V16 demonstrated that the gate **can** go red. It did
+  not make the gate **run**. Those are different things and the first reads like
+  the second.
+* **The production `--check` path with no world id has never been reached by any
+  test** — the branch that builds the mutants, writes the rosters, runs
+  `mutation_gate_failures`, and adds `INDEX.json` and `MUTATIONS.json` to the
+  diff pairs. `build.py:266-268` says in its own comment that `MUTATIONS.json`
+  is "exactly the shape of artefact where a `set` reaching an output would
+  hide". That branch is still uncontrolled. Neither of these is fixed here;
+  both are new items.
+* The `divergent_artefacts` helper is **implementation-independent, not
+  criterion-independent**. It reproduces the gate's five-line diff loop without
+  calling it, but by default it is handed the same seed pair the gate hardcodes,
+  so it cannot by itself distinguish nondeterminism from a deterministic
+  function of the hash seed. That is what `classify` is for.
+
+## 6. What the adversarial pass changed
+
+Nine confirmed findings, every one acted on; the reviewer failed to land a
+single bypass against the injections that are constructively bound to go red,
+which is the hard evidence that the control is real. The corrections it forced:
+
+| found | what it was |
+|---|---|
+| the definition | `mechanism_order` and `hash_order_wide` are **not** nondeterministic under `CLAUDE.md`'s written rule; the module docstring's central sentence was false |
+| the oracle | `divergent_artefacts` was called "independent" while hardcoding the gate's own seed pair — implementation-independent at best |
+| `25/30`, `5/10` | two probabilistic cells published as settled facts, with `PARENT_SEED = "1"` silently sitting in the visible 5/6 |
+| `verdict()` | scored on exit code + banner with no `named` requirement, and `build.py:251-253` prints that banner for a *crashed* comparison build — the classifier could score a crash as a catch (measured: 0 crashes in 240 runs, so no published cell was wrong; the hole was real regardless) |
+| a wrong fact | `mechanism_order`'s description claimed "the whole trace moves"; `raw_trace.jsonl` is byte-identical, only `ground_truth.json` / `GROUND_TRUTH.md` / `reversibility.json` move — and this run's own first console log had said so |
+| a misattributed docstring | the red test credited the banner assertion for ruling out crashes; it is the third assertion that does it |
+| the scoreboard | §5 above exists because the reviewer said the report read as if the gate were now running |
+| `Elapsed 13.9 s` | a wall-clock number printed in an artefact about byte determinism |
+
+The 25/30 and 5/10 rates above are this session's own re-measurement, not the
+reviewer's numbers copied over; 25/30 reproduced its figure exactly and 5/10 is
+an independent draw from the same coin.
+
+**The reviewer's full report is not in this run directory.** The harness blocked
+the subagent from writing it and its findings reached this session only as the
+coordinator's summary; the coordinator holds the verbatim text. What is on disk
+here is the reviewer's executable probes, under `adversarial/`. Every finding
+above was re-verified against those probes or re-measured directly rather than
+transcribed.

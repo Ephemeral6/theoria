@@ -3,6 +3,8 @@ branch: origin/agent/a4a-ablation-build
 reason: merge conflict
 
 ```
+Auto-merging ablation-arm/RUN_STATE.md
+CONFLICT (add/add): Merge conflict in ablation-arm/RUN_STATE.md
 Auto-merging ablation-arm/artifacts/a0-base/episode.jsonl
 CONFLICT (content): Merge conflict in ablation-arm/artifacts/a0-base/episode.jsonl
 Auto-merging ablation-arm/artifacts/a0-base/run_report.json

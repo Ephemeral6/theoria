@@ -30,12 +30,12 @@ refusal are not the same answer.
 
 The three conditions, which are Theoria 1.10(a)'s Lean skeleton verbatim:
 
-| | inductive invariant (`ic3_pdr`) | dead region (`deadlock_carver`) |
-|---|---|---|
-| holds at the start | `inv_init` | — replaced by `region_nonempty` |
-| survives every rule | `inv_closed` | `region_closed` |
-| excludes the goal | `goal_break` | `goal_break` |
-| licenses | `unsolvable` | `conditional_unsolvability` |
+| | inductive invariant (`ic3_pdr`) | dead region (`deadlock_carver`) | pagoda (`lp_potential`) |
+|---|---|---|---|
+| holds at the start | `inv_init` | — replaced by `region_nonempty` | `potential_init` |
+| survives every rule | `inv_closed` | `region_closed` | `potential_nonincreasing` |
+| excludes the goal | `goal_break` | `goal_break` | `goal_break` |
+| licenses | `unsolvable` | `conditional_unsolvability` | `unsolvable` |
 
 A conditional theorem has no initial obligation — that is what *conditional*
 means — so the first slot becomes non-vacuity instead. A pattern no state
@@ -50,6 +50,49 @@ is exactly what the certificate is supposed to bound.
 subspace the rule set's constraint admits (see below), so the verdict reports
 how many states the predicate covers that no obligation touched. For a genuine
 `open4far` pair deadlock that is 2 of 16.
+
+## The pagoda shape, and the two things it is careful about
+
+A `potential_bound` certificate carries **no predicate**. It carries an integer
+weight per state variable, the value that counts as occupied, and a bound; the
+set of states is `potential(s) <= bound`, derived. The middle obligation is then
+arithmetic rather than set-theoretic — *no legal move raises the potential* —
+which is what `lp_potential` solves an LP for, and is strictly stronger than
+closure.
+
+```json
+{ "kind": "potential_bound", "claim": "unsolvable",
+  "occupied": 1, "bound": 0,
+  "weights": {"pos0": -1, "pos1": 1, "pos2": 0, "pos3": 1} }
+```
+
+**The moves come from the rule set.** `lp_potential`'s exported document ships
+an `obligations` block listing every move instance with its delta already
+evaluated, and `interop/certificate_export.py::verify` iterates that list — so a
+document that omits an inconvenient instance passes it, and one that lists a
+move the geometry does not have is believed. Here the relation is grounded from
+the declared rules over the product, exactly as for the other two kinds, and
+`obligations` is on the certificate schema's refused-by-name list. It is read
+exactly once, in `anchors.py`, as a differential: every listed move is replayed
+through the derived relation and the two move sets are compared both ways, so a
+discrepancy is a *finding* rather than a rejection or a silence.
+
+**The obligation is checked from the region, not off the geometry.** "No legal
+move raises the potential" quantifies over moves legal from a state the bound
+admits. Checking every move instance regardless is a different, stronger claim,
+and it **false-rejects** sound certificates. `keyed-gate` in `cases/` is the
+exhibit: its only potential-raising move needs both keys, every state holding
+both is already over the bound, and so the move can fire from nowhere the
+invariant admits. `test_the_potential_obligation_is_quantified_over_moves_legal_from_the_region`
+asserts both halves — that this rechecker accepts it, and that the stronger
+check really would have rejected it.
+
+Two smaller things follow the same principle. Weights must be **integers**:
+the exporter scales the LP's exact rationals precisely so that `delta <= 0` is
+decided exactly, and a float would put a rounding decision on that comparison.
+And `occupied` must be a value the variable's declared domain actually holds —
+a weight that can never be counted makes the potential constant, and a constant
+potential is non-increasing under everything.
 
 ## Why the rule set is a *rule* set
 
@@ -116,6 +159,16 @@ a2-holed    + a2-right-room-locked   ACCEPT  148 states
 a2-world    + a2-right-room-locked   REJECT  148 states, inv_closed
 ```
 
+All three of `lp_potential`'s exported pagodas pass, each against the rule set
+its claim names and each with the producer's document compared against the
+transcription:
+
+```
+peg4-1110            + peg4-1110-pagoda             ACCEPT  16 states, 0 raising
+peg5-11011-to-01000  + peg5-11011-to-01000-pagoda   ACCEPT  32 states, 0 raising
+peg5-11011-to-00010  + peg5-11011-to-00010-pagoda   ACCEPT  32 states, 0 raising
+```
+
 The A2 pair is the whole argument. It is one certificate — the 0/1 pagoda weight
 `cold-start-a2/theory/generated_holed/theory.lean` proves closed by `decide`,
 with `#print axioms unsolvable` coming back `[]` — checked against two rule sets
@@ -143,6 +196,8 @@ people for other purposes (`anchors.py`, run by `verify_all`):
 | Lean's explicit 592-row `step` table in `generated_holed/theory.lean` vs the relation derived from `a2-holed.rules.json` | 592/592 rows |
 | sokoban optima the fixture states by hand: `ring` 1, `open4` 6, `ringstuck` unsolvable, `open4far` 11 | 4/4 |
 | peg reachability, hand-verified in `fixtures/peg4.py`'s docstring: 1110, 0111, 1011 unsolvable; 1101 in 2 | 4/4 |
+| peg-5 reachability, enumerated in `interop/README.md`: `11011` reaches only `{00111, 11100, 01001, 10010}` | 5/5 states, both rule sets |
+| `lp_potential`'s three exported documents vs the pagoda cases transcribed from them — weights, bound, start, goal states, and every listed move replayed through the derived relation | 3/3 agree |
 
 The first two need `cold-start-a2/` to be on the machine. It is another track's
 directory: this package reads it and never writes to it, and if it is absent the
@@ -152,8 +207,15 @@ anchors are reported as **unavailable**, never as passes.
 
 `forgeries.py` is a catalogue of ways to lie to this rechecker, each with the
 rejection it must draw and the condition that must be the one to fail.
-31 entries in three families — lying in the certificate, lying in the rule set,
-and the two that end in ACCEPT.
+42 entries in four families — lying in the certificate, lying in the rule set,
+lying in a pagoda, and the two that end in ACCEPT.
+
+The eleven pagoda entries are the same shapes as the others wherever the shape
+exists — claim nothing (every weight zero), claim everything (a bound raised
+past the goal), bring your own goal, offer a real certificate for the wrong
+instance — plus four that only integers make possible: a weight the world can
+never count, a weight that is not an integer, a bound chosen after seeing the
+goal, and a document that ships its own obligations.
 
 ```bash
 python -c "from recheck import forgeries; print(forgeries.summary(forgeries.run_all())['n_as_declared'])"
@@ -196,8 +258,15 @@ Rule sets and certificates under `cases/` are **generated** by
 against what the generator makes. Add the world to `build_cases.py`, add its
 expected verdict to `MATRIX` in `verify_all.py`, and add an anchor — a number
 somebody else published about that world — to `SOKOBAN_OPTIMA`,
-`PEG_REACHABILITY` or `anchors.py`. A case with no anchor is a case that can
-only tell you this package is self-consistent.
+`PEG_REACHABILITY`, `PEG5_REACHABLE` or `anchors.py`. A case with no anchor is a
+case that can only tell you this package is self-consistent.
+
+The generator is **hermetic**: it reads no file, so `all_cases()` is the same
+dictionary on any machine and a case cannot drift because something outside the
+package moved. A pagoda's weights and bound are therefore transcribed into
+`PAGODA_CLAIMS` as literals, and the comparison against the document they came
+from lives in `anchors.py`, where it belongs and where a disagreement is
+reported rather than silently absorbed.
 
 ## What this does not do
 

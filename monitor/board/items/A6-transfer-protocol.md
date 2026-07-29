@@ -3,6 +3,7 @@ cell: A3
 territory: cold-start-a3
 deps: none
 lane: campaign
+spend: api
 
 # A6 · 把 A3 的迁移协议做成在线可用的形态
 

@@ -1,0 +1,13 @@
+# Pin LF, for the same reason engine-rig/.gitattributes does: this host has
+# core.autocrlf enabled, so without this git rewrites every checked-out line
+# ending to CRLF. That would (a) make the jsonl datasets non-byte-reproducible
+# across machines and (b) turn verify.py red on a fresh clone, since it treats
+# CRLF in a dataset as an error.
+#
+# Found the way these things are always found: `git add` printed
+# "LF will be replaced by CRLF" on the first commit of this territory.
+* text=auto eol=lf
+*.jsonl text eol=lf
+*.json  text eol=lf
+*.py    text eol=lf
+*.md    text eol=lf

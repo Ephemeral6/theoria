@@ -397,3 +397,150 @@ a check that has no reason to travel to an examinee. A separate hash, pinned by
 `test_a_widened_band_changes_the_protocol_digest`, gets the property at the
 cost of one deliberate test edit — which is the point: widening a band now
 requires an edit that a reviewer sees.
+
+## D-EX-017 — the fourth question family is a citation set, and a spurious citation costs what a correct one earns
+
+Theoria.md 1.11 names four things a fresh reader is asked: `step` semantics,
+which names are level data, the best action, and **why a rule holds**. P-15 built
+the first three. The fourth had no rubric, and the obvious reason is that "why"
+is prose and prose cannot be marked mechanically.
+
+It is asked here as a *citation*: a claim about the world, a fixed list of the
+manual's clauses, and the instruction to name the subset the claim's truth
+depends on. That turns 1.11's 「理由:证书,还是"我搜过了没有"」 into something a
+marker can settle, and it keeps the marker a pure function of (answer, truth,
+item).
+
+**Scoring, and why it has a subtraction in it.**
+
+    awarded = points * clamp01((|A ∩ T| - |A \ T|) / |T|)
+
+Without the penalty term the dominant strategy is to name every clause on the
+list, and a rubric whose optimum is "say more" measures fluency. With it, the
+calibration bluffer — which does exactly that — scores zero on every
+justification item whose support set is not the whole list, and
+`test_citing_everything_is_not_a_strategy` pins it below half the family.
+
+**The criterion had to be published or the family would be an argument.** "Does
+the claim depend on this clause" has two readings. Under the loose one, changing
+*any* rule could break almost any claim, and the answer to every item is "all of
+them". The sheet states the tight one: a clause belongs when the claim's truth
+uses **what that clause does** — the `then` half — so `blocked_wall`, whose
+effect moves nothing, is not cited for a claim about where the Box ends up. Each
+item's key carries a `why` field justifying its own set, in the truth file where
+the examinee cannot see it and an auditor can.
+
+**One item is not marked against a stored answer at all.** The A0 manual ships
+`invariant box_row_parity (Box.pos.row) mod 2 = 1` marked `proven`, and it is
+false on most boards of its own world (STATUS, "A defect in the A0 manual"). The
+sheet asks for a situation where it fails and the rubric *recomputes the claim
+there*. There is no key to loosen, which makes it the one item on the paper whose
+marking cannot drift — and it asks the reader to disagree with a document it was
+told to trust, which is the disposition the whole framework is betting on.
+
+---
+
+## D-EX-018 — a tag *token* can be an answer key even when the tag *value* is unique
+
+The first V11 cohort was voided. The optimal-action items carried
+
+    "tags": ["optimal_action", "level:stile", "dead"]
+
+and `Item.sheet_side()` prints `tags`. The word `dead` is the answer to the two
+sharpest items on the paper, written next to the question. Six readers were
+already reading when it was found, and a spawned subagent cannot be stopped by
+the agent that spawned it, so the cohort finished and its answers are kept as
+evidence, unmarked, under `exam/runs/20260728T202101Z-V11-handover-auto/`.
+
+**Why `metadata_hits` passed it, and why that was not a bug in the usual sense.**
+It buckets on the whole value of `tags`. Every item also carries a unique
+`level:` token, so every bucket held exactly one item, and D-EX-011's third
+exclusion — ignore buckets of size one, because a per-variant tag fits every
+answer and predicts nothing — dismissed them all as identifiers.
+
+That exclusion is correct about *values* and wrong about *tokens*. A tag list is
+not an atom; it is a set, and one member of it can be a key while the set as a
+whole is an identifier. The leak lived in a token inside a value that was unique
+for an unrelated reason.
+
+**What stands there now.** `test_no_single_tag_token_predicts_an_answer` buckets
+each token separately, within one answer alphabet, and fails any token that
+appears on more than one item, on fewer than all of them, and agrees with the
+answer every time. Run against the tags that shipped, it reports exactly one
+offender: `('dead', ['none'], 2)`.
+
+**Why it is a test here and not a fix in `leakage.py`.** The same weakness
+applies to all four P-15 papers, and changing a shared checker while six
+examinees are mid-run is how the *next* cohort gets voided too. The
+generalisation is written up in `STATUS.md` as work for whoever owns
+`leakage.py` next. It should be done: a token-level check would have caught this
+before anyone read anything.
+
+**The part worth keeping.** Three defences were designed against exactly this and
+all three held — forbidden substrings in the prompt, the paper's declared probes
+run against the prompt, and a wording check on the reader brief. The leak came
+through the one channel none of them watched. 泄漏面会跟着证据走: block one and it
+moves. The only durable response is to keep publishing the residue, which is what
+`BLINDING.md` is for.
+
+
+## D-EX-019 — the control arm was handed the treatment, and no checker was looking
+
+The V11 handover sheet asked, as `rule_justification` items, which manual clauses
+two claims rest on. The claims were:
+
+> "On a board whose target cell has a different column parity from the cell the
+> Box starts on, the game can never be won."
+
+> "If the Box stands where no direction admits a push … then the Box will never
+> move again, whatever the Player does."
+
+Those are the playbook's two `prune` entries, in English. The playbook is the
+**tier-2-only** half of the deliverable, and the item's prompt — "which of the
+listed clauses does this claim's truth depend on?" — presupposes the claim is
+true, so the tier-1 reader was not asked to evaluate them. It was told they hold.
+
+The adversarial reviewer showed the two printed criteria are jointly a complete
+and sound classifier for all eight optimal-action items — dead on exactly the two
+dead boards, no false positives — using no manual, no playbook and no search.
+`PREREGISTRATION.json` had pre-registered `optimal_action`, and `cairn` inside it,
+as the only place a tier difference should appear. The contamination landed
+exactly there.
+
+**Why nothing caught it.** Every defence in this territory compares an item with
+*itself*: `probe_hits` looks for an item's own answer in the sheet text;
+`structural_hits` compares an item's `truth` keys with its own `paper` keys;
+`metadata_hits` asks whether an item's `points`/`tags`/`kind` predicts its own
+answer. Nothing compares one item's **prose** with the content of the other
+tier's bundle, and nothing ever had reason to, because before V11 no paper was
+split into arms that receive different documents.
+
+**What was added.** `handover_auto.cross_item_leak_report` scores each item's
+claim text against each playbook entry by **containment of the entry** —
+`|claim ∩ entry| / |entry|` — with the DSL's scaffolding words dropped and `_`
+treated as a word break. Every one of those three choices was forced:
+
+* Jaccard divides by the union, so a six-word entry restated inside a thirty-word
+  claim scores 0.2. The first version used Jaccard and reported the sheet clean.
+  **A check that reports clean is not evidence of clean.**
+* `no_direction_admits_a_push(Box.pos)` is one identifier and "no direction
+  admits a push" is five words; without splitting on `_` a sentence has no
+  overlap with its own restatement.
+* Without dropping `prune`/`proof`/`lean`/`pos`, every entry matches every claim
+  a little and the threshold has to rise until it catches nothing.
+
+At 0.65 it flags exactly `v11-why-02` (0.75) and `v11-why-05` (0.80) and nothing
+else. Both are pinned in `test_no_new_sheet_claim_restates_a_playbook_entry` so
+that a *third* fails the suite instead of being found by a reviewer afterwards.
+
+**Why the offending items were not deleted.** Six readers answered that sheet.
+Editing it now would leave a run whose sheet digest, prompts, answers and results
+describe a paper that never existed — the same reason P-15 left its saturated
+`name_class` items alone. They come off the next sheet.
+
+**The generalisation worth carrying.** A two-arm exam has a failure mode a
+single-arm exam does not: the treatment leaking into the control. It is not a
+leak *of the answer key* and no answer-key checker will find it. Any paper that
+gives different arms different documents needs a check that the arms actually
+differ in what they were given — and that check has to run on the rendered text
+each arm receives, not on the metadata around it.

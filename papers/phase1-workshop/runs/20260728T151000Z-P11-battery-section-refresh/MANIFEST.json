@@ -1,0 +1,79 @@
+{
+  "author": "RES-2",
+  "base_commit": "8d4237346a93275609f277f62998df0d4ba1d439",
+  "branch": "agent/p11-battery-section-refresh",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/sections/00_abstract.md",
+      "sha256": "4e83c0c636c57ab1167e8d8b83a7bbf3cd537de93e1fce8a7f22f04978ea3dd9"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/02_framework.md",
+      "sha256": "f91b95747c5507466ff0ccf876ab964337fba46d42a0cc7fbfcd57605db48919"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/07_battery.md",
+      "sha256": "a8f6ef8a47fd5daf1f623218703867d7b015397a8e85e359837da3916ddcd5de"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/10_limitations.md",
+      "sha256": "89d1d5e1b5b8919744959fe4b2ca052071115475e4b6e6b46ed365b0efbe7a20"
+    },
+    {
+      "path": "papers/phase1-workshop/PROVENANCE.md",
+      "sha256": "565abc04fd1a0809d8bd1a45c395e8e5091c696418fb358de4f240fbec3f090a"
+    },
+    {
+      "path": "papers/phase1-workshop/README.md",
+      "sha256": "a997d2ae936597d82e894a4743acacb4cc0b030e7a3f88461ae89fa20e5f193c"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "500867cdb66e38a258da51acde9ad0709242d8bb68e841b6f3c9f6acff6a8cbc"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T151000Z-P11-battery-section-refresh/FINDINGS.md",
+      "sha256": "5ba8ef039d7d0a4cb5a4339d411fd750484aefed95d11d13e80650a9b650fab3"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T151000Z-P11-battery-section-refresh/RUN_STATE.md",
+      "sha256": "8f1755c68f19a345674ba3ee54dbb0b816d2a28b025a58aefed817c149c1793b"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls_on_any_generation_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "premise": {
+    "actual": "section was re-derived against battery v2 at P7; OPEN_ITEMS.md A1 closed and struck. Executed the order second clause -- cross-check every other battery citation -- which was live.",
+    "as_written": "the paper battery section is marked stale; rewrite it against the latest REPORT"
+  },
+  "prompt_id": "P11-battery-section-refresh",
+  "results": {
+    "adversarial_pass": {
+      "all_verified_and_reverted_or_rewritten": true,
+      "my_corrections_refuted": 5,
+      "worst": "I deleted a correct statement: piles.json does carry CRLF on a Windows checkout (i/lf w/crlf, core.autocrlf=true, 111 CRLF pairs, raw sha256 f2ef44d1..., LF-normalised d3140eff...). The verifier that reported no CRLF measured a different working copy of the same blob."
+    },
+    "all_fixed": true,
+    "defects_found": 21,
+    "defects_that_were_the_paper_faithfully_repeating_a_REPORT_sentence_the_artefacts_contradict": 6,
+    "half_fixes_closed": 4,
+    "inside_section_7": 13,
+    "outside_section_7": 8
+  },
+  "status": "complete",
+  "territory": "papers",
+  "utc": "2026-07-28T15:10:00Z",
+  "verification": {
+    "build": "python papers/phase1-workshop/assemble.py",
+    "note": "PAPER.md is generated from sections/ and was rebuilt, never hand-edited",
+    "sections": 12,
+    "words": 24107
+  },
+  "what": "Refresh the paper's battery section against the battery arm's current REPORT, and cross-check every other battery citation in papers/ for drift.",
+  "worktree": ".worktrees/p11-battery-section-refresh"
+}

@@ -417,6 +417,129 @@ def _delete_the_rule() -> Tuple[dict, dict]:
     return case("a2-holed.rules.json"), case("a2-right-room-locked.cert.json")
 
 
+# ------------------------------------------------------ family 4: the pagoda
+#
+# A potential certificate says less than a predicate does -- a weight per
+# variable, a bound, and the value that counts as occupied -- so there is less
+# of it to lie in, and every lie is arithmetic.  Six of the ten below are the
+# same six shapes the other families have (claim nothing, claim everything,
+# bring your own goal, offer a real certificate for the wrong instance, carry
+# the world, carry the answer); the other four exist because integers are new
+# here: a weight the world cannot count, a weight that is not an integer, a
+# bound chosen after the fact, and a document that ships its own obligations.
+
+def _pagoda_cert(source: str = "peg4-1110-pagoda.cert.json", **overrides) -> dict:
+    spec = case(source)
+    spec.pop("ruleset", None)
+    spec.update(overrides)
+    return spec
+
+
+def _pagoda_weight_perturbed() -> Tuple[dict, dict]:
+    """One weight raised until a move gains potential -- the classic tamper.
+
+    `pos3` is not occupied at the start, so the bound still holds where the
+    world begins and the goal still exceeds it; only the middle obligation
+    fails, and it fails on a move that is legal from the initial state itself.
+    """
+    weights = dict(case("peg4-1110-pagoda.cert.json")["weights"])
+    weights["pos3"] = 5
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-perturbed-weight", weights=weights)
+
+
+def _pagoda_all_weights_zero() -> Tuple[dict, dict]:
+    """The universal invariant, in numbers: potential 0 everywhere, bound 0."""
+    weights = {name: 0 for name in case("peg4-1110-pagoda.cert.json")["weights"]}
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-flat", weights=weights)
+
+
+def _pagoda_bound_raised_past_the_goal() -> Tuple[dict, dict]:
+    """Pick the bound after seeing the goal, so nothing has to break it."""
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-slack-bound", bound=5)
+
+
+def _pagoda_goal_under_the_bound() -> Tuple[dict, dict]:
+    """Move the goal to a state the invariant admits -- and can reach.
+
+    `1001` has potential 0, exactly the bound, and the rules reach it from the
+    start in one jump.  The pagoda argument needs `potential(goal) > bound`
+    strictly; a checker that accepted `>=` would accept this.
+    """
+    spec = copy.deepcopy(case("peg4-1110.rules.json"))
+    spec["name"] = "forged-peg-goal-under-the-bound"
+    spec["goal"] = ["and",
+                    ["=", ["var", "pos0"], ["lit", 1]],
+                    ["=", ["var", "pos1"], ["lit", 0]],
+                    ["=", ["var", "pos2"], ["lit", 0]],
+                    ["=", ["var", "pos3"], ["lit", 1]]]
+    return spec, _pagoda_cert(name="forged-pagoda-over-a-reachable-goal")
+
+
+def _pagoda_for_a_solvable_start() -> Tuple[dict, dict]:
+    """A real certificate, offered for the configuration next door.
+
+    `1101` solves in two moves, and its potential under these weights is 1 --
+    over the bound before a single move is considered.  This is the ordinary
+    forgery, and the one an importer is most likely to commit by accident.
+    """
+    return case("peg4-1101.rules.json"), _pagoda_cert(
+        name="forged-pagoda-on-1101")
+
+
+def _pagoda_weighs_an_undeclared_variable() -> Tuple[dict, dict]:
+    weights = dict(case("peg4-1110-pagoda.cert.json")["weights"])
+    weights["pos9"] = -100
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-undeclared-position", weights=weights)
+
+
+def _pagoda_counts_a_value_the_world_cannot_hold() -> Tuple[dict, dict]:
+    """`occupied: 2` on a 0/1 board: every weight is dead, the potential is 0.
+
+    A constant potential is non-increasing under everything, so this passes the
+    middle obligation for free.  It is refused where it is written rather than
+    where it happens to fail.
+    """
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-uncountable-occupancy", occupied=2)
+
+
+def _pagoda_with_a_fractional_weight() -> Tuple[dict, dict]:
+    """`w = -0.5`: the LP's rationals, unscaled, with rounding left to us."""
+    weights = dict(case("peg4-1110-pagoda.cert.json")["weights"])
+    weights["pos0"] = -0.5
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-fractional-weight", weights=weights)
+
+
+def _pagoda_carrying_its_own_obligations() -> Tuple[dict, dict]:
+    """The producer's exported document, offered whole.
+
+    `interop/certificate_export.py::verify` iterates
+    `obligations.inv_closed.witnesses`, so a document that omits a move instance
+    passes it.  Here the block is refused at load: it is the producer's account
+    of the answer, not evidence, and this rechecker grounds the move set from
+    the rules instead.
+    """
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-with-obligations",
+        obligations={"inv_closed": {"holds": True, "witnesses": []}})
+
+
+def _pagoda_with_a_predicate() -> Tuple[dict, dict]:
+    """Weights and a predicate at once: two sets of states, one verdict."""
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-with-a-predicate", predicate=["and"])
+
+
+def _pagoda_claiming_the_wrong_theorem() -> Tuple[dict, dict]:
+    return case("peg4-1110.rules.json"), _pagoda_cert(
+        name="forged-pagoda-mismatched-claim", claim="conditional_unsolvability")
+
+
 CATALOGUE: Tuple[Forgery, ...] = (
     Forgery("claims-nothing", "certificate", "an invariant no state satisfies",
             REJECT, _claims_nothing, "inv_init",
@@ -539,6 +662,62 @@ CATALOGUE: Tuple[Forgery, ...] = (
             "a table lookup with no entry and no default", REJECT,
             _a_rule_set_that_raises, "rules_evaluate",
             "a state that cannot be evaluated is not a state that is absent"),
+
+    Forgery("pagoda-perturbed-weight", "pagoda",
+            "one weight raised until a legal move gains potential", REJECT,
+            _pagoda_weight_perturbed, "potential_nonincreasing",
+            "the move is legal from the initial state itself, so no argument "
+            "about where it can fire from can save it"),
+    Forgery("pagoda-flat", "pagoda", "every weight zero, so the potential is "
+            "constant", REJECT, _pagoda_all_weights_zero, "goal_break",
+            "a constant potential is non-increasing under everything and "
+            "separates nothing; the goal has to exceed the bound strictly"),
+    Forgery("pagoda-slack-bound", "pagoda",
+            "the bound raised until the goal no longer breaks it", REJECT,
+            _pagoda_bound_raised_past_the_goal, "goal_break",
+            "the bound is part of the claim, so it is checked against the goal "
+            "rather than chosen after seeing it"),
+    Forgery("pagoda-goal-under-the-bound", "pagoda",
+            "the goal moved to a reachable state the invariant admits", REJECT,
+            _pagoda_goal_under_the_bound, "goal_break",
+            "potential(goal) > bound is strict; `1001` sits exactly on the "
+            "bound and the rules reach it in one jump"),
+    Forgery("pagoda-on-a-solvable-start", "pagoda",
+            "the 1110 pagoda offered for the solvable 1101", REJECT,
+            _pagoda_for_a_solvable_start, "potential_init",
+            "the ordinary forgery: a real certificate for the wrong instance, "
+            "and the second opinion reaches the goal in two"),
+    Forgery("pagoda-undeclared-position", "pagoda",
+            "a weight on a position the rule set does not declare", REJECT,
+            _pagoda_weighs_an_undeclared_variable, "predicate_wellformed",
+            "the positions are the rule set's variables; a weight on a name it "
+            "never declared has nothing to be summed over"),
+    Forgery("pagoda-uncountable-occupancy", "pagoda",
+            "`occupied: 2` on a 0/1 board, so no weight is ever counted",
+            REJECT, _pagoda_counts_a_value_the_world_cannot_hold,
+            "predicate_wellformed",
+            "it would make the potential constant, which passes closure for "
+            "free -- refused where it is written, not where it happens to fail"),
+    Forgery("pagoda-fractional-weight", "pagoda",
+            "a weight of -0.5, with the rounding left to the checker",
+            LOAD_ERROR, _pagoda_with_a_fractional_weight, None,
+            "the weights are scaled to integers by the exporter precisely so "
+            "that `delta <= 0` is decided exactly"),
+    Forgery("pagoda-with-obligations", "pagoda",
+            "the producer's own `obligations` block, offered as input",
+            LOAD_ERROR, _pagoda_carrying_its_own_obligations, None,
+            "certificate_export.py::verify iterates that list, so a document "
+            "that drops a move instance passes it; here it is refused at load "
+            "and the move set is grounded from the rules"),
+    Forgery("pagoda-with-a-predicate", "pagoda",
+            "a potential certificate carrying a predicate as well", LOAD_ERROR,
+            _pagoda_with_a_predicate, None,
+            "two sets of states and one verdict: it could be checked on the "
+            "predicate and claim about the weights"),
+    Forgery("pagoda-mismatched-claim", "pagoda",
+            "a pagoda claiming conditional unsolvability", LOAD_ERROR,
+            _pagoda_claiming_the_wrong_theorem, None,
+            "the kind fixes the claim; picking another is picking the conclusion"),
 
     Forgery("delete-the-rule", "not-caught",
             "the world's rule set, minus one rule", NOT_CAUGHT,

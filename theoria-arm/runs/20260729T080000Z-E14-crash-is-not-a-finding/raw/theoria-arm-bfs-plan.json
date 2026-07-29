@@ -1,0 +1,50 @@
+{
+ "backend": null,
+ "detail": "the whole reachable set (3 states) was enumerated and none satisfies the goal -- no call to `step` raised, so no successor was dropped and the set is the manual's own. Constraint 6: this is a search result, not a theorem -- an unsolvability claim needs a certificate and a probe of the clauses it depends on.",
+ "exhaustive": true,
+ "expansions": 3,
+ "plan": null,
+ "search_ceiling": {
+  "deadline_s": 120.0,
+  "node_cap": 120000
+ },
+ "status": "unsat",
+ "step_crashes": {
+  "by_type": {},
+  "count": 0,
+  "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is itself a constraint-9 defect. So none of these is 'the action does not apply' -- each is a violation or a bug, and each one silently shrank the reachable set this search enumerated.",
+  "sample_cap": 8,
+  "samples": [],
+  "site": "plan._tier_bfs: step(state, action)",
+  "successors_pruned": 0
+ },
+ "tiers": [
+  {
+   "detail": "the grounded task has no plan (1 expansions)",
+   "ok": false,
+   "tier": "pddl+fd_adapter"
+  },
+  {
+   "detail": "the whole reachable set (3 states) was enumerated and none satisfies the goal -- no call to `step` raised, so no successor was dropped and the set is the manual's own. Constraint 6: this is a search result, not a theorem -- an unsolvability claim needs a certificate and a probe of the clauses it depends on.",
+   "exhaustive": true,
+   "expansions": 3,
+   "ok": false,
+   "reachable_states": 3,
+   "search_ceiling": {
+    "deadline_s": 120.0,
+    "node_cap": 120000
+   },
+   "status": "unsat",
+   "step_crashes": {
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is itself a constraint-9 defect. So none of these is 'the action does not apply' -- each is a violation or a bug, and each one silently shrank the reachable set this search enumerated.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "plan._tier_bfs: step(state, action)",
+    "successors_pruned": 0
+   },
+   "tier": "object-state-bfs"
+  }
+ ]
+}

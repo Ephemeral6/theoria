@@ -1,0 +1,1313 @@
+{
+  "anchors": {
+    "a2_episode_replay": {
+      "agrees": true,
+      "episode": "cold-start-a2/artifacts/solved_episode.jsonl",
+      "mismatches": [],
+      "n_actions": 18,
+      "n_frames": 19,
+      "rules_reach_goal": true,
+      "world_reports_win": true
+    },
+    "a2_lean_step_table": {
+      "agrees": true,
+      "complete": true,
+      "lean_file": "cold-start-a2/theory/generated_holed/theory.lean",
+      "mismatches": [],
+      "n_cells": 37,
+      "n_expected_rows": 592,
+      "n_mismatches": 0,
+      "n_rows": 592
+    },
+    "agrees": true,
+    "all_available": true,
+    "peg5_reachable_set": [
+      {
+        "agrees": true,
+        "derived_reachable": [
+          "00111",
+          "01001",
+          "10010",
+          "11011",
+          "11100"
+        ],
+        "ruleset": "peg5-11011-to-01000",
+        "stated_reachable": [
+          "00111",
+          "01001",
+          "10010",
+          "11011",
+          "11100"
+        ],
+        "why": "interop/README.md: 11011 reaches only {00111, 11100, 01001, 10010}, bottoming out at 2 pegs"
+      },
+      {
+        "agrees": true,
+        "derived_reachable": [
+          "00111",
+          "01001",
+          "10010",
+          "11011",
+          "11100"
+        ],
+        "ruleset": "peg5-11011-to-00010",
+        "stated_reachable": [
+          "00111",
+          "01001",
+          "10010",
+          "11011",
+          "11100"
+        ],
+        "why": "interop/README.md: 11011 reaches only {00111, 11100, 01001, 10010}, bottoming out at 2 pegs"
+      }
+    ],
+    "peg_reachability": [
+      {
+        "agrees": true,
+        "derived": null,
+        "hand_verified": null,
+        "start": "1110",
+        "why": "peg4.py's docstring, hand-verified by exhaustive expansion"
+      },
+      {
+        "agrees": true,
+        "derived": null,
+        "hand_verified": null,
+        "start": "0111",
+        "why": "peg4.py's docstring, hand-verified by exhaustive expansion"
+      },
+      {
+        "agrees": true,
+        "derived": null,
+        "hand_verified": null,
+        "start": "1011",
+        "why": "peg4.py's docstring, hand-verified by exhaustive expansion"
+      },
+      {
+        "agrees": true,
+        "derived": 2,
+        "hand_verified": 2,
+        "start": "1101",
+        "why": "peg4.py's docstring, hand-verified by exhaustive expansion"
+      }
+    ],
+    "sokoban_optima": [
+      {
+        "agrees": true,
+        "derived": 1,
+        "ruleset": "sokoban-ring",
+        "stated_optimum": 1,
+        "why": "fixtures/sokoban.py: RING.optimum = 1"
+      },
+      {
+        "agrees": true,
+        "derived": 6,
+        "ruleset": "sokoban-open4",
+        "stated_optimum": 6,
+        "why": "fixtures/sokoban.py: OPEN4.optimum = 6, argued in engines/deadlock_carver/README.md"
+      },
+      {
+        "agrees": true,
+        "derived": null,
+        "ruleset": "sokoban-ringstuck",
+        "stated_optimum": null,
+        "why": "unsolvable; STATUS.md M9 and the FD ladder agree"
+      },
+      {
+        "agrees": true,
+        "derived": 11,
+        "ruleset": "sokoban-open4far",
+        "stated_optimum": 11,
+        "why": "STATUS.md M9: the plan is 11 steps either way"
+      }
+    ]
+  },
+  "counts": {
+    "cases": 37,
+    "forgeries": 42,
+    "forgeries_off_script": 0,
+    "matrix_off_script": 0,
+    "matrix_rows": 26,
+    "pagoda_certificates": 3,
+    "pagoda_passed": 3
+  },
+  "drift": [],
+  "forgeries": {
+    "attempts": [
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "inv_init",
+        "failed_conditions": [
+          "inv_init"
+        ],
+        "family": "certificate",
+        "message": "failed: inv_init; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "claims-nothing",
+        "verdict": "REJECT",
+        "what": "an invariant no state satisfies",
+        "why": "closed and goal-free for free, and true of no state the world can be in"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break"
+        ],
+        "family": "certificate",
+        "message": "failed: goal_break; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "claims-everything",
+        "verdict": "REJECT",
+        "what": "an invariant every state satisfies",
+        "why": "holds at init and is closed; it just fails to exclude the goal"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "certificate",
+        "message": "a certificate may not carry ['goal'] -- goal: the goal comes from the rule set; a certificate that picks its own goal proves a different theorem than the one claimed",
+        "name": "brings-its-own-goal",
+        "verdict": "LOAD-ERROR",
+        "what": "a certificate carrying a `goal`",
+        "why": "would prove a different theorem than the one claimed"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "certificate",
+        "message": "a certificate may not carry ['transitions'] -- transitions: the transition relation is derived here, never read",
+        "name": "brings-its-own-transitions",
+        "verdict": "LOAD-ERROR",
+        "what": "a certificate carrying `transitions`",
+        "why": "the relation is derived here, never read"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "certificate",
+        "message": "a certificate may not carry ['states'] -- states: the state space is the product of the declared domains, not a list",
+        "name": "brings-its-own-states",
+        "verdict": "LOAD-ERROR",
+        "what": "a certificate carrying `states`",
+        "why": "the space is the product of the declared domains, not a list"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "certificate",
+        "message": "a certificate may not carry ['constraint'] -- constraint: restricting the state space is the rule set's business, and only when the restriction is itself proved inductive",
+        "name": "brings-its-own-constraint",
+        "verdict": "LOAD-ERROR",
+        "what": "a certificate carrying `constraint`",
+        "why": "shrinking the space is the rule set's business, and only when proved"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "predicate: act is legal only inside a rule guard -- a certificate that mentions the action is describing the rules, not a set of states",
+        "name": "reads-the-action",
+        "verdict": "REJECT",
+        "what": "a predicate over the action label",
+        "why": "a set of states cannot depend on which rule is being applied"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "the predicate does not evaluate to a boolean on every state, so there is no set of states for it to denote",
+        "name": "integer-predicate",
+        "verdict": "REJECT",
+        "what": "a predicate returning 0 or 1 instead of a boolean",
+        "why": "Python would call 1 true; a set of states has to be denoted, not coerced, and the tool must answer with a verdict not a traceback"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "predicate: var: 'pos9' is not a declared state variable",
+        "name": "undeclared-variable",
+        "verdict": "REJECT",
+        "what": "a predicate naming pos9",
+        "why": "a name the rule set never declared has no meaning to check against"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "certificate",
+        "message": "a inductive_invariant certificate licenses 'unsolvable', not 'conditional_unsolvability'",
+        "name": "mismatched-claim",
+        "verdict": "LOAD-ERROR",
+        "what": "an inductive invariant claiming conditional unsolvability",
+        "why": "the kind fixes the claim; picking another is picking the conclusion"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "ruleset_binding",
+        "failed_conditions": [
+          "ruleset_binding"
+        ],
+        "family": "certificate",
+        "message": "the certificate is bound to rule set 'peg4-1101' but was checked against 'peg4-0111'",
+        "name": "wrong-binding",
+        "verdict": "REJECT",
+        "what": "a certificate bound to another rule set",
+        "why": "checking peg4-1101's certificate against peg4-0111 proves nothing"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "certificate defs ['free'] shadow the rule set's",
+        "name": "shadows-a-definition",
+        "verdict": "REJECT",
+        "what": "a certificate redefining the rule set's `free`",
+        "why": "redefining a guard's vocabulary rewrites the rules under cover"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "inv_init",
+        "failed_conditions": [
+          "inv_init"
+        ],
+        "family": "certificate",
+        "message": "failed: inv_init; and the claim itself is false of this rule set: the second opinion reached a goal state in 2 actions",
+        "name": "invariant-on-a-solvable-start",
+        "verdict": "REJECT",
+        "what": "the 0111 invariant, offered for the solvable 1101",
+        "why": "the ordinary forgery: a real certificate for the wrong instance"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "region_nonempty",
+        "failed_conditions": [
+          "region_nonempty"
+        ],
+        "family": "dead-region",
+        "message": "failed: region_nonempty; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "vacuous-region",
+        "verdict": "REJECT",
+        "what": "a pattern no state satisfies",
+        "why": "a theorem about no state is closed, goal-free, and empty"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "region_closed",
+        "failed_conditions": [
+          "region_closed"
+        ],
+        "family": "dead-region",
+        "message": "46 of the 256 states satisfying the predicate lie outside the rule set's well-formedness constraint. Closure is not checked on them. They are covered by the reachability qualifier instead: no reachable state lies outside the constraint, which was verified rather than assumed, so what is licensed here is the claim about *reachable* states -- which is the claim deadlock_carver writes.; failed: region_closed; and the claim itself is false of this rule set: the second opinion reached a goal state in 2 actions",
+        "name": "region-that-leaks",
+        "verdict": "REJECT",
+        "what": "a box in the open declared dead",
+        "why": "the successor leaves the pattern, which is what dead means"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break",
+          "region_closed"
+        ],
+        "family": "dead-region",
+        "message": "1 of the 12 states satisfying the predicate lie outside the rule set's well-formedness constraint. Closure is not checked on them. They are covered by the reachability qualifier instead: no reachable state lies outside the constraint, which was verified rather than assumed, so what is licensed here is the claim about *reachable* states -- which is the claim deadlock_carver writes.; failed: goal_break, region_closed; and the claim itself is false of this rule set: the second opinion reached a goal state in 0 actions",
+        "name": "region-over-the-goal",
+        "verdict": "REJECT",
+        "what": "the goal configuration itself declared dead",
+        "why": "a region containing a goal state cannot be dead"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "effects_in_domain",
+        "failed_conditions": [
+          "effects_in_domain",
+          "goal_satisfiable"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not discharge its own obligations, so nothing can be certified against it",
+        "name": "shrunken-domain",
+        "verdict": "REJECT",
+        "what": "the Cart's domain cut to the left room so the teleport cannot land",
+        "why": "every rule intact, and the escaping successor simply not admitted"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "constraint_closed",
+        "failed_conditions": [
+          "constraint_closed"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not discharge its own obligations, so nothing can be certified against it",
+        "name": "constrained-witness",
+        "verdict": "REJECT",
+        "what": "a constraint declaring the escaping state ill-formed",
+        "why": "a declared restriction is refused unless it is itself inductive"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "ruleset_binding",
+        "failed_conditions": [
+          "ruleset_binding"
+        ],
+        "family": "rule-set",
+        "message": "the certificate is bound to rule set sha256 888630e1352cef1f but this file hashes to 4ebaa08186428f30",
+        "name": "tampered-under-the-same-name",
+        "verdict": "REJECT",
+        "what": "a rule deleted, the rule set's name kept",
+        "why": "a binding by name alone would pass; the certificate carries the digest of the file it was written for"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "rule-set",
+        "message": "unknown top-level keys ['transitions']",
+        "name": "smuggled-edge-list",
+        "verdict": "LOAD-ERROR",
+        "what": "a rule set shipping `transitions`",
+        "why": "an unknown top-level key, refused rather than ignored"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "step_single_valued",
+        "failed_conditions": [
+          "step_single_valued"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not discharge its own obligations, so nothing can be certified against it",
+        "name": "ambiguous-step",
+        "verdict": "REJECT",
+        "what": "two rules writing one variable on one action",
+        "why": "`conflict exclusive` is an error, not a precedence question"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "effects_in_domain",
+        "failed_conditions": [
+          "effects_in_domain"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not discharge its own obligations, so nothing can be certified against it",
+        "name": "off-domain-effect",
+        "verdict": "REJECT",
+        "what": "a rule setting a variable outside its declared domain",
+        "why": "the product would no longer contain the successor"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "rule-set",
+        "message": "rule jump_0_1_2: owns ['pos0'] but writes ['pos0', 'pos1', 'pos2'] -- under `conflict exclusive` a rule owns exactly what it writes, and a mismatch would let two rules write one variable without either declaring it",
+        "name": "undeclared-write",
+        "verdict": "LOAD-ERROR",
+        "what": "a rule that owns less than it writes",
+        "why": "would let two rules write one variable with neither declaring it"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break"
+        ],
+        "family": "dead-region",
+        "message": "47 of the 257 states satisfying the predicate lie outside the rule set's well-formedness constraint. Closure is not checked on them. They are covered by the reachability qualifier instead: no reachable state lies outside the constraint, which was verified rather than assumed, so what is licensed here is the claim about *reachable* states -- which is the claim deadlock_carver writes.; failed: goal_break; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "region-hiding-a-win",
+        "verdict": "REJECT",
+        "what": "a dead region containing a goal state the constraint excludes",
+        "why": "goal_break is checked over the whole product; a pattern that contradicts the goal contradicts it everywhere"
+      },
+      {
+        "as_declared": true,
+        "expected": "ACCEPT-QUALIFIED",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "dead-region",
+        "message": "47 of the 257 states satisfying the predicate lie outside the rule set's well-formedness constraint. Closure is not checked on them. They are covered by the reachability qualifier instead: no reachable state lies outside the constraint, which was verified rather than assumed, so what is licensed here is the claim about *reachable* states -- which is the claim deadlock_carver writes.; all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable",
+        "name": "region-reaching-outside-the-constraint",
+        "verdict": "ACCEPT",
+        "what": "a dead region two actions from a win, through an ill-formed state",
+        "why": "true of every reachable state, which is the theorem the carver writes -- but the verdict now counts what the qualifier carried"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "rule-set",
+        "message": "defs: act is legal only inside a rule guard -- a certificate that mentions the action is describing the rules, not a set of states -- a def reachable from the goal, the constraint or a certificate may not read the action label",
+        "name": "act-through-a-def",
+        "verdict": "LOAD-ERROR",
+        "what": "a goal reading the action label through a def",
+        "why": "compiled closures kept `act` after the scope flag was flipped; this produced a real ACCEPT on a solvable world"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "predicate: predicate: expression nested deeper than 64. This rechecker recurses over expressions, so depth is capped rather than left to the interpreter's stack.",
+        "name": "deep-predicate",
+        "verdict": "REJECT",
+        "what": "900 nested `and`s",
+        "why": "a RecursionError is not a ValueError, so it escaped every catch"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "certificate",
+        "message": "predicate: lit takes exactly one argument",
+        "name": "arity-zero-lit",
+        "verdict": "REJECT",
+        "what": "`[\"lit\"]` with no argument",
+        "why": "the verdict renders the certificate it is rejecting, so rendering has to be total"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_satisfiable",
+        "failed_conditions": [
+          "goal_satisfiable"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not discharge its own obligations, so nothing can be certified against it",
+        "name": "shrunken-domain-and-patched-guard",
+        "verdict": "REJECT",
+        "what": "a domain cut, and one neighbour retargeted so the escaping rule never fires",
+        "why": "effects_in_domain only sees effects whose guard fires; the same shrink takes the goal cell out of the space"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "rules_evaluate",
+        "failed_conditions": [
+          "rules_evaluate"
+        ],
+        "family": "rule-set",
+        "message": "the rule set does not evaluate: table t has no entry for (1,) and no default",
+        "name": "partial-table",
+        "verdict": "REJECT",
+        "what": "a table lookup with no entry and no default",
+        "why": "a state that cannot be evaluated is not a state that is absent"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "potential_nonincreasing",
+        "failed_conditions": [
+          "potential_nonincreasing"
+        ],
+        "family": "pagoda",
+        "message": "failed: potential_nonincreasing; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "pagoda-perturbed-weight",
+        "verdict": "REJECT",
+        "what": "one weight raised until a legal move gains potential",
+        "why": "the move is legal from the initial state itself, so no argument about where it can fire from can save it"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break"
+        ],
+        "family": "pagoda",
+        "message": "failed: goal_break; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "pagoda-flat",
+        "verdict": "REJECT",
+        "what": "every weight zero, so the potential is constant",
+        "why": "a constant potential is non-increasing under everything and separates nothing; the goal has to exceed the bound strictly"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break"
+        ],
+        "family": "pagoda",
+        "message": "failed: goal_break; the claim may still be true -- the second opinion found no reachable goal -- but this certificate does not establish it",
+        "name": "pagoda-slack-bound",
+        "verdict": "REJECT",
+        "what": "the bound raised until the goal no longer breaks it",
+        "why": "the bound is part of the claim, so it is checked against the goal rather than chosen after seeing it"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "goal_break",
+        "failed_conditions": [
+          "goal_break"
+        ],
+        "family": "pagoda",
+        "message": "failed: goal_break; and the claim itself is false of this rule set: the second opinion reached a goal state in 1 actions",
+        "name": "pagoda-goal-under-the-bound",
+        "verdict": "REJECT",
+        "what": "the goal moved to a reachable state the invariant admits",
+        "why": "potential(goal) > bound is strict; `1001` sits exactly on the bound and the rules reach it in one jump"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "potential_init",
+        "failed_conditions": [
+          "potential_init"
+        ],
+        "family": "pagoda",
+        "message": "failed: potential_init; and the claim itself is false of this rule set: the second opinion reached a goal state in 2 actions",
+        "name": "pagoda-on-a-solvable-start",
+        "verdict": "REJECT",
+        "what": "the 1110 pagoda offered for the solvable 1101",
+        "why": "the ordinary forgery: a real certificate for the wrong instance, and the second opinion reaches the goal in two"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "pagoda",
+        "message": "the weight table names 'pos9', which is not a declared state variable of rule set 'peg4-1110'",
+        "name": "pagoda-undeclared-position",
+        "verdict": "REJECT",
+        "what": "a weight on a position the rule set does not declare",
+        "why": "the positions are the rule set's variables; a weight on a name it never declared has nothing to be summed over"
+      },
+      {
+        "as_declared": true,
+        "expected": "REJECT",
+        "expected_condition": "predicate_wellformed",
+        "failed_conditions": [
+          "predicate_wellformed"
+        ],
+        "family": "pagoda",
+        "message": "pos0 is weighted -1 when it holds 2, which is not in its declared domain [0, 1] -- a weight that can never be counted makes the potential constant, and a constant potential is closed under everything",
+        "name": "pagoda-uncountable-occupancy",
+        "verdict": "REJECT",
+        "what": "`occupied: 2` on a 0/1 board, so no weight is ever counted",
+        "why": "it would make the potential constant, which passes closure for free -- refused where it is written, not where it happens to fail"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "pagoda",
+        "message": "weights: pos0 is -0.5, which is not an integer",
+        "name": "pagoda-fractional-weight",
+        "verdict": "LOAD-ERROR",
+        "what": "a weight of -0.5, with the rounding left to the checker",
+        "why": "the weights are scaled to integers by the exporter precisely so that `delta <= 0` is decided exactly"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "pagoda",
+        "message": "a certificate may not carry ['obligations'] -- obligations: the obligations are what this rechecker discharges. lp_potential's exported document ships its own, with every delta pre-evaluated, and a checker that iterates that list can be defeated by omitting an entry from it -- so it is refused as input here and the move set is re-derived from the rule set instead",
+        "name": "pagoda-with-obligations",
+        "verdict": "LOAD-ERROR",
+        "what": "the producer's own `obligations` block, offered as input",
+        "why": "certificate_export.py::verify iterates that list, so a document that drops a move instance passes it; here it is refused at load and the move set is grounded from the rules"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "pagoda",
+        "message": "a potential_bound certificate may not carry a predicate: its set of states is `potential(s) <= bound`, derived from the weights. One that carried both could be checked on one set and claim about the other",
+        "name": "pagoda-with-a-predicate",
+        "verdict": "LOAD-ERROR",
+        "what": "a potential certificate carrying a predicate as well",
+        "why": "two sets of states and one verdict: it could be checked on the predicate and claim about the weights"
+      },
+      {
+        "as_declared": true,
+        "expected": "LOAD-ERROR",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "pagoda",
+        "message": "a potential_bound certificate licenses 'unsolvable', not 'conditional_unsolvability'",
+        "name": "pagoda-mismatched-claim",
+        "verdict": "LOAD-ERROR",
+        "what": "a pagoda claiming conditional unsolvability",
+        "why": "the kind fixes the claim; picking another is picking the conclusion"
+      },
+      {
+        "as_declared": true,
+        "expected": "NOT-CAUGHT",
+        "expected_condition": null,
+        "failed_conditions": [],
+        "family": "not-caught",
+        "message": "all three conditions hold over 148 states, and an independent search agrees the goal is unreachable",
+        "name": "delete-the-rule",
+        "verdict": "ACCEPT",
+        "what": "the world's rule set, minus one rule",
+        "why": "Theoria 1.3: a manual is checked against its own past, and a rule that never fired owes no frame. No certificate checker can see this; the refutation loop can, and did."
+      }
+    ],
+    "n_accepted": 2,
+    "n_as_declared": 42,
+    "n_forgeries": 42,
+    "n_inconsistent": 0,
+    "n_off_script": 0
+  },
+  "green": true,
+  "matrix": [
+    {
+      "as_declared": true,
+      "certificate": "peg4-0111-ic3",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 16,
+      "ruleset": "peg4-0111",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "M9's acceptance line: 0111 is unsolvable and this is the invariant ic3_pdr returns for it",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "peg4-0111-ic3",
+      "expected": "REJECT",
+      "expected_failing_condition": "ruleset_binding",
+      "failed_conditions": [
+        "ruleset_binding"
+      ],
+      "n_states": null,
+      "ruleset": "peg4-1101",
+      "second_opinion": null,
+      "verdict": "REJECT",
+      "why": "the same certificate offered for the solvable configuration, which ic3_pdr correctly refuses to certify. It is rejected at the binding, before the invariant is evaluated at all; the forgery catalogue's `invariant-on-a-solvable-start` strips the binding and shows it fails `inv_init` on the merits too",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "a2-right-room-locked",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 148,
+      "ruleset": "a2-holed",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "agrees with Lean: generated_holed/theory.lean proves this closed, axiom-free, and so does this rechecker, over all 148 states",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "a2-right-room-locked",
+      "expected": "REJECT",
+      "expected_failing_condition": "inv_closed",
+      "failed_conditions": [
+        "inv_closed"
+      ],
+      "n_states": 148,
+      "ruleset": "a2-world",
+      "second_opinion": "a goal state IS reachable -- the claim is false of this rule set",
+      "verdict": "REJECT",
+      "why": "THE ACCEPTANCE LINE. The same certificate against the world's own rules. The theorem is false of the world, so a rechecker that passed it here would be wrong, not lenient",
+      "witness_plan": [
+        "up",
+        "up",
+        "up",
+        "up",
+        "down",
+        "down",
+        "down",
+        "right",
+        "down",
+        "right",
+        "right",
+        "down",
+        "right",
+        "up",
+        "up",
+        "up",
+        "up",
+        "up"
+      ],
+      "witnesses": {
+        "inv_closed": [
+          "{button=7, cart=6,4, door=no} -down-> {button=7, cart=7,6, door=no} escapes",
+          "{button=7, cart=6,4, door=yes} -down-> {button=7, cart=7,6, door=yes} escapes"
+        ]
+      }
+    },
+    {
+      "as_declared": true,
+      "certificate": "keyed-gate-pagoda",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 8,
+      "ruleset": "keyed-gate",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "the pagoda obligation is quantified over moves *legal from the region*. This world's only potential-raising move needs both keys, and any state holding both is already over the bound, so the certificate is inductive and a checker reading deltas straight off the geometry false-rejects it",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "peg4-1110-pagoda",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 16,
+      "ruleset": "peg4-1110",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "lp_potential's pagoda for peg4-1110, transcribed from pagoda_4_1110_to_0100.json; the weights and the bound are the certificate, everything else is re-derived here",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "peg5-11011-to-01000-pagoda",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 32,
+      "ruleset": "peg5-11011-to-01000",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "lp_potential's pagoda for peg5-11011-to-01000, transcribed from pagoda_5_11011_to_01000.json; the weights and the bound are the certificate, everything else is re-derived here",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "peg5-11011-to-00010-pagoda",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_states": 32,
+      "ruleset": "peg5-11011-to-00010",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "lp_potential's pagoda for peg5-11011-to-00010, transcribed from pagoda_5_11011_to_00010.json; the weights and the bound are the certificate, everything else is re-derived here",
+      "witness_plan": null,
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-ringstuck-dead-b1-11",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 11,
+      "n_states": 144,
+      "ruleset": "sokoban-ringstuck",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-ringstuck-dead-b1-14",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 11,
+      "n_states": 144,
+      "ruleset": "sokoban-ringstuck",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-11",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-12-b2-13",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-13-b2-12",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-14",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-21-b2-31",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-24-b2-34",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-31-b2-21",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-34-b2-24",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-41",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-42-b2-43",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-43-b2-42",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 14,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b1-44",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b2-11",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b2-14",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b2-41",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    },
+    {
+      "as_declared": true,
+      "certificate": "sokoban-open4far-dead-b2-44",
+      "expected": "ACCEPT",
+      "expected_failing_condition": null,
+      "failed_conditions": [],
+      "n_satisfying": 210,
+      "n_states": 4096,
+      "ruleset": "sokoban-open4far",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT",
+      "why": "a deadlock_carver theorem, rechecked against rules that were never grounded for it",
+      "witnesses": {}
+    }
+  ],
+  "pagoda": {
+    "all_passed": true,
+    "method": "the three conditions re-derived from the rule set, with the move set grounded from the declared rules; the producer's own obligation list is refused as input and compared once, as a differential, in anchors.pagoda_differential",
+    "n_accepted": 3,
+    "n_certificates": 3,
+    "n_differentials_agree": 3,
+    "n_passed": 3,
+    "rows": [
+      {
+        "certificate": "peg4-1110-pagoda",
+        "conditions": {
+          "goal_break": true,
+          "potential_init": true,
+          "potential_nonincreasing": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "differential": {
+          "agrees": true,
+          "certificate": "peg4-1110-pagoda",
+          "checks": {
+            "bound_agrees": true,
+            "goal_states_agree": true,
+            "initial_state_agrees": true,
+            "listed_moves_replay": true,
+            "move_set_agrees": true,
+            "weights_agree": true
+          },
+          "derived_goal_states": [
+            "0100"
+          ],
+          "derived_initial_state": [
+            "1110"
+          ],
+          "document": "pagoda_4_1110_to_0100.json",
+          "document_goal_states": [
+            "0100"
+          ],
+          "document_initial_state": "1110",
+          "document_sha256": "5fd37c24c7f11edfd7a249cb78f5d88d3021147e030b2126577d868e122519aa",
+          "document_weights": [
+            -1,
+            1,
+            0,
+            1
+          ],
+          "n_moves_derived": 4,
+          "n_moves_listed": 4,
+          "replay_mismatches": [],
+          "ruleset": "peg4-1110",
+          "transcribed_weights": {
+            "pos0": -1,
+            "pos1": 1,
+            "pos2": 0,
+            "pos3": 1
+          }
+        },
+        "document": "pagoda_4_1110_to_0100.json",
+        "expected": "ACCEPT",
+        "failed_conditions": [],
+        "goal_reachable": false,
+        "n_potential_checks": 32,
+        "n_raising_transitions": 0,
+        "n_satisfying": 8,
+        "n_states": 16,
+        "passed": true,
+        "potential_at_init": [
+          0
+        ],
+        "potential_bound": 0,
+        "ruleset": "peg4-1110",
+        "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+        "verdict": "ACCEPT"
+      },
+      {
+        "certificate": "peg5-11011-to-01000-pagoda",
+        "conditions": {
+          "goal_break": true,
+          "potential_init": true,
+          "potential_nonincreasing": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "differential": {
+          "agrees": true,
+          "certificate": "peg5-11011-to-01000-pagoda",
+          "checks": {
+            "bound_agrees": true,
+            "goal_states_agree": true,
+            "initial_state_agrees": true,
+            "listed_moves_replay": true,
+            "move_set_agrees": true,
+            "weights_agree": true
+          },
+          "derived_goal_states": [
+            "01000"
+          ],
+          "derived_initial_state": [
+            "11011"
+          ],
+          "document": "pagoda_5_11011_to_01000.json",
+          "document_goal_states": [
+            "01000"
+          ],
+          "document_initial_state": "11011",
+          "document_sha256": "365074345f865361660c8b447d99bd32d4c8fb1e7497e91bc1c7e4720346f035",
+          "document_weights": [
+            -1,
+            1,
+            0,
+            1,
+            -1
+          ],
+          "n_moves_derived": 6,
+          "n_moves_listed": 6,
+          "replay_mismatches": [],
+          "ruleset": "peg5-11011-to-01000",
+          "transcribed_weights": {
+            "pos0": -1,
+            "pos1": 1,
+            "pos2": 0,
+            "pos3": 1,
+            "pos4": -1
+          }
+        },
+        "document": "pagoda_5_11011_to_01000.json",
+        "expected": "ACCEPT",
+        "failed_conditions": [],
+        "goal_reachable": false,
+        "n_potential_checks": 132,
+        "n_raising_transitions": 0,
+        "n_satisfying": 22,
+        "n_states": 32,
+        "passed": true,
+        "potential_at_init": [
+          0
+        ],
+        "potential_bound": 0,
+        "ruleset": "peg5-11011-to-01000",
+        "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+        "verdict": "ACCEPT"
+      },
+      {
+        "certificate": "peg5-11011-to-00010-pagoda",
+        "conditions": {
+          "goal_break": true,
+          "potential_init": true,
+          "potential_nonincreasing": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "differential": {
+          "agrees": true,
+          "certificate": "peg5-11011-to-00010-pagoda",
+          "checks": {
+            "bound_agrees": true,
+            "goal_states_agree": true,
+            "initial_state_agrees": true,
+            "listed_moves_replay": true,
+            "move_set_agrees": true,
+            "weights_agree": true
+          },
+          "derived_goal_states": [
+            "00010"
+          ],
+          "derived_initial_state": [
+            "11011"
+          ],
+          "document": "pagoda_5_11011_to_00010.json",
+          "document_goal_states": [
+            "00010"
+          ],
+          "document_initial_state": "11011",
+          "document_sha256": "6d88e9edf11680f4f497dadf35264c081ea5015b4ac23a16c06a671e51124406",
+          "document_weights": [
+            -1,
+            1,
+            0,
+            1,
+            -1
+          ],
+          "n_moves_derived": 6,
+          "n_moves_listed": 6,
+          "replay_mismatches": [],
+          "ruleset": "peg5-11011-to-00010",
+          "transcribed_weights": {
+            "pos0": -1,
+            "pos1": 1,
+            "pos2": 0,
+            "pos3": 1,
+            "pos4": -1
+          }
+        },
+        "document": "pagoda_5_11011_to_00010.json",
+        "expected": "ACCEPT",
+        "failed_conditions": [],
+        "goal_reachable": false,
+        "n_potential_checks": 132,
+        "n_raising_transitions": 0,
+        "n_satisfying": 22,
+        "n_states": 32,
+        "passed": true,
+        "potential_at_init": [
+          0
+        ],
+        "potential_bound": 0,
+        "ruleset": "peg5-11011-to-00010",
+        "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+        "verdict": "ACCEPT"
+      }
+    ]
+  }
+}

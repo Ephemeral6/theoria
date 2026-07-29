@@ -1,0 +1,152 @@
+{
+  "api_calls": 0,
+  "base_commit": "f09555ca9b43493895d9bd2213ebca06338d405c",
+  "branch": "agent/v17-pin-the-partial-verdict",
+  "files": [
+    {
+      "path": "verify-lab/PARTIAL_CRITERION.md",
+      "sha256": "b1c41c8011f1b5364afb61b7b06716a431471ab6dbced058d70edf3299b9cd8c"
+    },
+    {
+      "path": "verify-lab/RELIABILITY.md",
+      "sha256": "b0940a5b29dfdc6ced866778ac0f4dd5bfe8b4e66a7982059e1ceacbc8643c1a"
+    },
+    {
+      "path": "verify-lab/irr/agree.py",
+      "sha256": "c8e309b411ad7436fa98dd2d6044ba4cf151d7018705acf94a93b83890a343cc"
+    },
+    {
+      "path": "verify-lab/irr/blindtree.py",
+      "sha256": "3f64326daf79f84fe6ea4028b25e366518527c27893d9d5b8bef6998810bc460"
+    },
+    {
+      "path": "verify-lab/irr/manifest.py",
+      "sha256": "7e48a132e8e37b24c545a44223fa95e582670423592cc6bb04d7301a3e1bd07c"
+    },
+    {
+      "path": "verify-lab/irr/overlap.py",
+      "sha256": "51814ed92f8d2aff19e489d20e313a681eecacf2391ba5b1e104619ca54ed5d8"
+    },
+    {
+      "path": "verify-lab/irr/refold.py",
+      "sha256": "9900a4d61b7b3e76cb790c4b4099d426a8277894883451986063bddd91c85a75"
+    },
+    {
+      "path": "verify-lab/irr/rows.py",
+      "sha256": "8cfd1891f9fd0d7d4e4a2a63e1d4bd2853b9be8643584a0213f8a16fbb5d3bd5"
+    },
+    {
+      "path": "verify-lab/irr/sample.py",
+      "sha256": "68cfc5e10aaeb2293c92ff80b988dd74ca29503b35428f04c1c7a90bc8f3a087"
+    },
+    {
+      "path": "verify-lab/irr/shapes.py",
+      "sha256": "995aa6ef00d97cebffca801ed102fafcfc4eaa76471249d46a6af702a5fe5852"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/ADVERSARIAL.md",
+      "sha256": "cc7f4c23fa8ade03e16eee0360c4c3bb4dd450c85b5908a866a5b763f572362d"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/BLINDING.md",
+      "sha256": "46ba33a9e2729032fc07d9e14a07c0ef484d76bf6e6234c3fe02d4cb8a97855f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/PREREGISTRATION.md",
+      "sha256": "4f3b2366bdb42aa25318602fcbca39a5534e29b65137de14b6967aca595b417f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/agreement.json",
+      "sha256": "c5ba5ce086b7148efd579d940745ad587f988dbdd482351a52ae01cf983ca9a1"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/agreement.stdout.txt",
+      "sha256": "6e9e58c5d11502e01a32911fe6bc9e951297d6f9e27751dd6a826ab47806f4df"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/blindtree.json",
+      "sha256": "03bad387568b1d311116cafb38cf4683dcaf1375a9138e5403128e13b5b4a210"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/blindtree.stdout.txt",
+      "sha256": "f3b8eab9ba384f115394f46463d753fe9daaa34ceb17b382b66064a3890496c5"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/N1.md",
+      "sha256": "04ca9a2261f6469a53ee963a9ac68a77760c8c8f0cf17ca039907a64b5059a7f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/N2.md",
+      "sha256": "4a8fa3805468f989ce3e5bf3bdf13760f1483ee58b26a52b6a35c4e8e9a82e30"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/N3.md",
+      "sha256": "b82200c6406df894449aa4574fbd99ccc0fba5e95f0180cfc1166accf7182c5e"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/O1.md",
+      "sha256": "fdbf7fc91f2a1aa47dc23fda9ed38f9b44750b9b6738272c84be5d917d15b6ec"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/O2.md",
+      "sha256": "9e1abd4d70bdd78414235d601b1f6fd04c483f5e9650f20259653da4917f2604"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/judgements/O3.md",
+      "sha256": "a40be765c2daaa8dad77824948ddd2c39190c17603234bde9e82e3375aa38982"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/overlap.json",
+      "sha256": "78db170496d716fe9285d03f8926d54bc7933892cf5a5ab5b76bf0c17bb2bd46"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/overlap.stdout.txt",
+      "sha256": "d2915c7b9c8235f7bf58f4b0999bd3fc09ac03d6d8d028e1d6237c15cfeb63a7"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/refold.json",
+      "sha256": "7168f2de5d520651368976cd3078913b9de8c2e4cdad4aaf0d493071e7898897"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/refold.stdout.txt",
+      "sha256": "ed4d2b77c22a2187634cd3d7d80d9b438ecd21239874ca0dc0981261300a5521"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/sample.json",
+      "sha256": "7138c2e927460bf7e87d0b47d518fe16807a81d63682ab07d324409c87d76bb9"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/sample.stdout.txt",
+      "sha256": "695aab0b54c4ac80600837b8f37546b036163470e8153134bfcd3476b4a305f0"
+    },
+    {
+      "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/shapes.stdout.txt",
+      "sha256": "54cc0052af3906f76a64907b8936d89b5e34bc06b2efc7554417323afcbaa958"
+    }
+  ],
+  "head_commit": "5711d9a23fe7c552c0ad718916640c984eab01c1",
+  "judges": {
+    "blinding": "git ls-files minus 290 answer-key files; see BLINDING.md for what was not blocked",
+    "model": "one model, six independent instances -- not six people; cross-model reliability was not measured",
+    "new_arm": [
+      "N1",
+      "N2",
+      "N3"
+    ],
+    "old_arm": [
+      "O1",
+      "O2",
+      "O3"
+    ]
+  },
+  "merged_predecessors": {
+    "V11": "a2b4b7cb19c0238b8cf404fc11fd4fea80779f38",
+    "V14": "45181cdae2afc3ea047899786541334f57b67e4e",
+    "V15": "ab9a1c68f9282bb0238e1a9d0a594bd841992ddd"
+  },
+  "network": "none",
+  "preregistration_commit": "4a47472b480a68ba6280de3f7caada0761185c32",
+  "prompt_id": "V17-pin-the-partial-verdict",
+  "sealed_pile_contact": "none",
+  "utc": "2026-07-29T18:00:00Z"
+}

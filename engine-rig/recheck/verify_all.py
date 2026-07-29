@@ -32,7 +32,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 from recheck import anchors, build_cases, forgeries
 from recheck.certificate import load_certificate
 from recheck.ruleset import load_ruleset
-from recheck.verify import ACCEPT, REJECT, recheck, shortest_plan
+from recheck.verify import ACCEPT, REJECT, reachable_states, recheck, shortest_plan
 
 CASES_DIR = build_cases.CASES_DIR
 
@@ -54,6 +54,24 @@ MATRIX: Tuple[Tuple[str, str, str, Optional[str], str], ...] = (
      "THE ACCEPTANCE LINE. The same certificate against the world's own rules. "
      "The theorem is false of the world, so a rechecker that passed it here "
      "would be wrong, not lenient"),
+    ("keyed-gate", "keyed-gate-pagoda", ACCEPT, None,
+     "the pagoda obligation is quantified over moves *legal from the region*. "
+     "This world's only potential-raising move needs both keys, and any state "
+     "holding both is already over the bound, so the certificate is inductive "
+     "and a checker reading deltas straight off the geometry false-rejects it"),
+)
+
+# The pagoda claims lp_potential exported, one row per document in
+# `interop/certificates/`. The expected verdict is ACCEPT for all three: the
+# engine's LP found these weights and `interop/README.md` states independently
+# that the underlying claims are true, so a rejection here would be a finding
+# about this checker before it was a finding about the certificate.
+PAGODA_MATRIX: Tuple[Tuple[str, str, str, Optional[str], str], ...] = tuple(
+    (ruleset, name, ACCEPT, None,
+     "lp_potential's pagoda for %s, transcribed from %s; the weights and the "
+     "bound are the certificate, everything else is re-derived here"
+     % (ruleset, document))
+    for name, ruleset, _weights, _bound, document in build_cases.PAGODA_CLAIMS
 )
 
 SOKOBAN_LEVELS = ("sokoban-ringstuck", "sokoban-open4far")
@@ -71,6 +89,13 @@ PEG_REACHABILITY: Tuple[Tuple[str, Optional[int]], ...] = (
     ("1110", None), ("0111", None), ("1011", None), ("1101", 2),
 )
 
+# interop/README.md, on the 5-cell board theory-compiler's fixture uses:
+# "enumeration confirms `11011` reaches only `{00111, 11100, 01001, 10010}`,
+# bottoming out at 2 pegs, never 1". Five states with the start itself, and the
+# claim the two pagoda certificates make is about exactly this set.
+PEG5_REACHABLE: Tuple[str, ...] = ("00111", "01001", "10010", "11011", "11100")
+PEG5_RULESETS = ("peg5-11011-to-01000", "peg5-11011-to-00010")
+
 
 def _load(name: str, suffix: str):
     return os.path.join(CASES_DIR, "%s.%s.json" % (name, suffix))
@@ -85,7 +110,7 @@ def run_matrix() -> List[Dict[str, object]]:
             cache[name] = load_ruleset(_load(name, "rules"))
         return cache[name]
 
-    for rules_name, cert_name, expected, condition, why in MATRIX:
+    for rules_name, cert_name, expected, condition, why in MATRIX + PAGODA_MATRIX:
         verdict = recheck(ruleset(rules_name), load_certificate(_load(cert_name, "cert")))
         failed = sorted(name for name, ok in verdict.conditions.items() if not ok)
         rows.append({
@@ -131,6 +156,66 @@ def run_matrix() -> List[Dict[str, object]]:
     return rows
 
 
+def run_pagoda() -> Dict[str, object]:
+    """The pass rate over `lp_potential`'s exported certificates, one row each.
+
+    Two independent things are reported per row and both have to hold:
+
+    * the **verdict** -- the three conditions re-derived from the rule set, with
+      the move set grounded from the declared rules rather than read out of the
+      document's own obligation list;
+    * the **differential** -- what the transcription and the producer's document
+      say about each other (`anchors.pagoda_differential`).
+
+    A row is a pass only if both agree.  The verdict alone would say nothing if
+    the case were a transcription of a different world, and the differential
+    alone would say nothing about whether the certificate is any good.
+    """
+    rows: List[Dict[str, object]] = []
+    for name, ruleset_name, _weights, _bound, document in build_cases.PAGODA_CLAIMS:
+        ruleset = load_ruleset(_load(ruleset_name, "rules"))
+        certificate = load_certificate(_load(name, "cert"))
+        verdict = recheck(ruleset, certificate)
+        try:
+            differential = anchors.pagoda_differential(ruleset, certificate, document)
+        except anchors.AnchorUnavailable as exc:
+            differential = {"unavailable": str(exc), "agrees": None}
+        failed = sorted(key for key, ok in verdict.conditions.items() if not ok)
+        rows.append({
+            "certificate": name,
+            "document": document,
+            "ruleset": ruleset_name,
+            "expected": ACCEPT,
+            "verdict": verdict.verdict,
+            "conditions": dict(sorted(verdict.conditions.items())),
+            "failed_conditions": failed,
+            "n_states": verdict.stats.get("n_states"),
+            "n_satisfying": verdict.stats.get("n_satisfying"),
+            "n_potential_checks": verdict.stats.get("n_potential_checks"),
+            "n_raising_transitions": verdict.stats.get("n_raising_transitions"),
+            "potential_bound": verdict.stats.get("potential_bound"),
+            "potential_at_init": verdict.stats.get("potential_at_init"),
+            "second_opinion": verdict.search.get("says"),
+            "goal_reachable": verdict.search.get("goal_reachable"),
+            "differential": differential,
+            "passed": (verdict.verdict == ACCEPT
+                       and differential.get("agrees") is True),
+        })
+    return {
+        "rows": rows,
+        "n_certificates": len(rows),
+        "n_passed": sum(1 for row in rows if row["passed"]),
+        "n_accepted": sum(1 for row in rows if row["verdict"] == ACCEPT),
+        "n_differentials_agree": sum(1 for row in rows
+                                     if row["differential"].get("agrees") is True),
+        "all_passed": all(row["passed"] for row in rows) and bool(rows),
+        "method": "the three conditions re-derived from the rule set, with the "
+                  "move set grounded from the declared rules; the producer's "
+                  "own obligation list is refused as input and compared once, "
+                  "as a differential, in anchors.pagoda_differential",
+    }
+
+
 def run_anchors() -> Dict[str, object]:
     out: Dict[str, object] = {}
 
@@ -169,11 +254,29 @@ def run_anchors() -> Dict[str, object]:
         })
     out["peg_reachability"] = peg
 
+    # The 5-cell board, against the reachable set interop/README.md names.
+    peg5 = []
+    for name in PEG5_RULESETS:
+        ruleset = load_ruleset(_load(name, "rules"))
+        derived = tuple(sorted(
+            "".join(str(value) for value in state)
+            for state in reachable_states(ruleset)))
+        peg5.append({
+            "ruleset": name,
+            "stated_reachable": list(PEG5_REACHABLE),
+            "derived_reachable": list(derived),
+            "why": "interop/README.md: 11011 reaches only {00111, 11100, "
+                   "01001, 10010}, bottoming out at 2 pegs",
+            "agrees": derived == PEG5_REACHABLE,
+        })
+    out["peg5_reachable_set"] = peg5
+
     out["agrees"] = (
         out["a2_episode_replay"].get("agrees") is not False
         and out["a2_lean_step_table"].get("agrees") is not False
         and all(row["agrees"] for row in plans)
         and all(row["agrees"] for row in peg)
+        and all(row["agrees"] for row in peg5)
     )
     out["all_available"] = (
         out["a2_episode_replay"].get("agrees") is True
@@ -190,6 +293,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     drift = build_cases.check()
     matrix = run_matrix()
     anchor_report = run_anchors()
+    pagoda = run_pagoda()
     attempts = forgeries.run_all()
     forged = forgeries.summary(attempts)
 
@@ -197,6 +301,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     green = (
         not drift and not off_script
         and anchor_report["agrees"]
+        and pagoda["all_passed"]
         and forged["n_off_script"] == 0
     )
 
@@ -205,11 +310,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "drift": drift,
         "matrix": matrix,
         "anchors": anchor_report,
+        "pagoda": pagoda,
         "forgeries": forged,
         "counts": {
             "cases": len(build_cases.all_cases()),
             "matrix_rows": len(matrix),
             "matrix_off_script": len(off_script),
+            "pagoda_certificates": pagoda["n_certificates"],
+            "pagoda_passed": pagoda["n_passed"],
             "forgeries": forged["n_forgeries"],
             "forgeries_off_script": forged["n_off_script"],
         },
@@ -236,6 +344,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print("  a2 vs lean step    %s" % (
         "%d/%d rows agree" % (lean.get("n_rows", 0), lean.get("n_expected_rows", 0))
         if lean.get("agrees") else json.dumps(lean)[:160]))
+    for row in anchor_report["peg5_reachable_set"]:
+        print("  %-18s reachable %d states %s"
+              % (row["ruleset"], len(row["derived_reachable"]),
+                 "ok" if row["agrees"] else "MISMATCH"))
+    print("pagoda     %d of %d certificates pass (%d accepted, %d differentials agree)"
+          % (pagoda["n_passed"], pagoda["n_certificates"],
+             pagoda["n_accepted"], pagoda["n_differentials_agree"]))
+    for row in pagoda["rows"]:
+        print("  %-8s %-28s %-30s %s"
+              % (row["verdict"], row["certificate"], row["document"],
+                 "as declared" if row["passed"] else "OFF SCRIPT"))
     print("forgeries  %d attempted, %d behaved as declared, %d accepted"
           % (forged["n_forgeries"], forged["n_as_declared"], forged["n_accepted"]))
     for attempt in attempts:
@@ -245,10 +364,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if args.out:
         os.makedirs(args.out, exist_ok=True)
-        path = os.path.join(args.out, "recheck_report.json")
-        with open(path, "w", encoding="utf-8", newline="\n") as handle:
-            handle.write(json.dumps(report, indent=2, sort_keys=True) + "\n")
-        print("report     %s" % path)
+        # Two files, because the pagoda table is what an importer of
+        # `lp_potential`'s certificates wants and the rest of the report is not.
+        # Neither carries a timestamp or an absolute path: a run of this script
+        # on the same inputs is byte-identical to the last one.
+        for filename, payload in (("recheck_report.json", report),
+                                  ("pagoda_recheck.json", pagoda)):
+            path = os.path.join(args.out, filename)
+            with open(path, "w", encoding="utf-8", newline="\n") as handle:
+                handle.write(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+            print("report     %s" % path)
 
     return 0 if green else 1
 
