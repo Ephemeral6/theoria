@@ -10,5 +10,46 @@
   "sealed_pile_contact": "none",
   "question": "Sections 1, 4 and 11 call A1 a machine-checked impossibility certificate whose weights cross a data boundary. Rule on it.",
   "why_it_matters": "A section heading and a contribution bullet are the two worst places in a paper to rely on a favourable reading. Opened as OPEN_ITEMS C12 by the P17 ruling.",
-  "status": "in progress"
+  "status": "delivered",
+  "sessions": [
+    {"utc": "2026-07-29T18:15:00Z", "did": "ruling written and applied; commit a2269994; adversarial round dispatched", "ended": "session died before harvesting the round"},
+    {"utc": "2026-07-30T00:05:00Z", "did": "picked the item up off disk, re-ran the round, did task 3 (B5), fixed the three defects the round found, delivered", "ended": "delivered"}
+  ],
+  "deliverables": {
+    "RULING.md": "the ruling; section 2a is the adversarial round and the three defects it found in this item's own work",
+    "B5_CHECK.md": "task 3 -- B5 re-measured from the .lean files; still only recorded",
+    "LEAN_TRANSCRIPT.md": "a stored lean transcript for A1's four theorems, which RULING section 3 said did not exist",
+    "RUN_STATE.md": "narrative"
+  },
+  "verify_paper": "PASS (6/6) after every edit",
+  "adversarial_round": {
+    "independent_adversary": false,
+    "why": "four subagent launches died on API Error 529 Overloaded; the round was run by the ruling's author, recorded as a weakness of the round",
+    "defects_found": 3,
+    "defects": [
+      "TheoriaLean.lean:148 cited for a line at :149, plus :144-151 -> :145-152 and :153-156 -> :154-157; the file had not moved. Propagated into OPEN_ITEMS C12 and commit a2269994's message.",
+      "section 4.4's 'three tests' did not reproduce -- six tests exercise the branch, four generating and two refusing -- and it had reached the paper",
+      "the repaired section 1 bullet cross-referenced section 4.1 for an empty axiom list that is in section 4.2"
+    ],
+    "substance_held": true
+  },
+  "toolchain": {
+    "lean": "Lean (version 4.9.0, x86_64-w64-windows-gnu, commit 8f9843a4a5fe, Release)",
+    "artefact": "theory-compiler/lean/TheoriaLean.lean",
+    "artefact_sha256": "951981b68c6a07859c954ed288bff2b0a84eead76255511291677a2d5496bee0",
+    "result": "all four theorems report 'does not depend on any axioms', exit 0",
+    "test_gen_lean": "21 passed, 0 skipped"
+  },
+  "files_read_as_evidence_not_modified": [
+    "theory-compiler/lean/TheoriaLean.lean",
+    "theory-compiler/src/theory_compiler/generators/gen_lean.py",
+    "theory-compiler/src/theory_compiler/certificate.py",
+    "theory-compiler/src/theory_compiler/problem.py",
+    "theory-compiler/tests/test_gen_lean.py",
+    "theory-compiler/tests/fixtures/peg5_problem.json",
+    "theory-compiler/tests/fixtures/peg_theory.dsl",
+    "engine-rig/interop/certificates/pagoda_5_11011_to_00010.json",
+    "cold-start-a2/theory/generated_holed/theory.lean",
+    "cold-start-a2/theory/generated_repaired/theory.lean"
+  ]
 }

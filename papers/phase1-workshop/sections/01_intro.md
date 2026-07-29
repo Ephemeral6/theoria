@@ -278,7 +278,7 @@ Scoped to what was actually run:
    (`cold-start-a0/A0_REPORT.md` §8).
 4. **A machine-checked impossibility whose invariant weights crossed a data
    boundary.** The impossibility is the machine-checked object — a Lean theorem
-   with an empty axiom list (§4.1) — and the certificate is what crossed. The
+   with an empty axiom list (§4.2) — and the certificate is what crossed. The
    distinction is worth the extra clause: the certificate is a JSON document, and
    what re-checks it is Python, not a kernel. The pagoda weights are produced by
    an independent engine's linear program and transported as that certificate

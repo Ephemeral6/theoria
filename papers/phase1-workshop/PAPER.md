@@ -429,7 +429,7 @@ Scoped to what was actually run:
    (`cold-start-a0/A0_REPORT.md` §8).
 4. **A machine-checked impossibility whose invariant weights crossed a data
    boundary.** The impossibility is the machine-checked object — a Lean theorem
-   with an empty axiom list (§4.1) — and the certificate is what crossed. The
+   with an empty axiom list (§4.2) — and the certificate is what crossed. The
    distinction is worth the extra clause: the certificate is a JSON document, and
    what re-checks it is Python, not a kernel. The pagoda weights are produced by
    an independent engine's linear program and transported as that certificate
@@ -1039,8 +1039,11 @@ emitted artefact does not do that, and the same function concedes it at `:786`.*
 be inferred.** E-06's proposition is about all five single-peg end states, and a
 goal broader than the certificate covers routes the generator to its *hybrid*
 branch. That is the development described here, and it is written to no file in
-this repository: it exists as generator code, exercised by three tests against a
-five-goal problem declared inside the test module. A1's own fixture asks for one
+this repository: it exists as generator code, exercised by six tests in
+`theory-compiler/tests/test_gen_lean.py` — four that generate the hybrid
+development against a five-goal problem the test module declares itself, and two
+that check the branch refuses rather than emitting a theorem no method licenses.
+A1's own fixture asks for one
 goal state, `00010`, which the certificate does cover, so A1 takes the other
 branch and ships `theory-compiler/lean/TheoriaLean.lean`, whose `unsolvable`
 **does** invoke `inv_all` — the crossed weights carry the theorem this section is
