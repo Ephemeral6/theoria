@@ -1,7 +1,8 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T15:00:00Z",
+ "utc": "2026-07-29T15:22:00Z",
  "cycle": 16,
  "state": "working",
- "note": "s11 技术裁决已出：DO-NOT-MERGE-AS-IS。对抗组 70 次绕过里 68 次被拒，2 次成功且是同一个缺陷（segments() 的注释剥离到文本结尾而非行尾；引号在识别注释前被剥掉，于是字面量 # 变成注释标记）——第 4 条封存兜底被同一招破掉，裸写 deny_sealed 的命令加个 echo \"#\" ; 前缀就变 allow。我自己复现了两例。一个提交可修，已写 inbox + 总线。手推的分支等 ci_merge 放锁再推（不再两边同时推 master）"
+ "note": "9 个分支进 master（a10/v19/p13/e15+e19/s4/r2/p10/v5-verdict）。反射层 15:07 起自己在跑了，队列恢复。撤回了我自己提过两次的 reflex.log mtime 判据——两个方向都不成立（被跟踪文件被 git 盖时间戳；且 reflex 跑完一整轮有产出的循环不写自己日志）。s11 技术裁决 DO-NOT-MERGE-AS-IS（两个绕过破掉封存兜底，已自验）。a3/v5-battery 属语义修订已交 inbox。仍等 e8 一个 subagent",
+ "wake_at": "2026-07-29T16:15:00Z"
 }
