@@ -178,7 +178,15 @@ def main():
                      % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
                 q = run([sys.executable, os.path.join(HERE, "quota.py"),
                          "check"])
-        hold = q.returncode == 2
+        # 退出码 2 是「窗口关着」，0 是「窗口开着」，**其它一律是「没问出来」**。
+        # 旧写法 `== 2` 把 1（未捕获的 traceback、截断的 quota_state.json）
+        # 塌成「窗口开着」，重新放开这一跳最贵的两条分支；而 stderr 被捕获后丢弃，
+        # 失败的检查与干净的检查在 reflex.log 里逐字节相同。
+        hold = q.returncode != 0
+        if q.returncode not in (0, 2):
+            first = ((q.stderr or "").strip().splitlines() or [""])[0]
+            events.append("quota:CHECK-FAILED(%d) %s"
+                          % (q.returncode, first[:120]))
         if hold:
             events.append("quota:HOLD")
 
@@ -201,16 +209,26 @@ def main():
                     continue
                 st = run_console(["schtasks", "/Query", "/TN",
                           "TheoriaAgent-%s" % wid, "/FO", "LIST"])
-                if st.returncode == 0 and "Running" in st.stdout:
+                # 中文控制台印的是「正在运行」，英文的 "Running" 一次也不会命中，
+                # 于是 live_workers **恒为 0**，补员循环每一跳都按满员上限拉人。
+                # 这仓库已经为 GBK/UTF-8 付过五次账；两个词都认，别只认一个。
+                if st.returncode == 0 and ("Running" in st.stdout
+                                           or "正在运行" in st.stdout):
                     live_workers += 1
-            free_gb = 99
+            # 读不到内存就当作**没有**内存，不是当作 99 GB。
+            # 旧写法初始值 99 + `except: pass`，任何一种读数失败都让门大开、
+            # 一次放进七个工人；而这道门唯一能发的事件（worker-hold:low-memory）
+            # 按构造在读数失败时不可能发出——今天读数失败与一台健康的 99GB 机器
+            # 产生逐字节相同的日志。`standing.py` 的同一处测量失败时返回 0.0，
+            # 两个方向相反的默认值，能一次拉七个的那个反而是 fail-open 的。
+            free_gb = 0.0
             try:
                 out = run(["powershell", "-NoProfile", "-Command",
                            "(Get-CimInstance Win32_OperatingSystem)."
                            "FreePhysicalMemory"]).stdout.strip()
                 free_gb = int(out) / 1048576.0
-            except Exception:
-                pass
+            except Exception as exc:
+                events.append("mem-unreadable:%s" % type(exc).__name__)
             if free_gb < MIN_FREE_GB:
                 events.append("worker-hold:low-memory(%.1fGB)" % free_gb)
                 target = live_workers          # spawn nothing

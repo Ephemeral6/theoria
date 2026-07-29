@@ -247,6 +247,15 @@ def held_by(worker):
 
 
 def cmd_claim(worker, lane=None):
+    # `--lane` 是**认领者自报的**，而带赛道的查询会跳过花钱守卫与预留守卫。
+    # 于是 `claim W-9999 --lane campaign` 能领走一件在真 API 上打的战役，
+    # 退出 0，board.log 记下的那行与一次被批准的花钱认领逐字不可区分
+    # （2026-07-29 对抗性普查抓到）。自报一个身份不该等于拥有它。
+    if lane and LANE_OWNER.get(lane) not in (None, worker):
+        if lane not in stale_lanes():
+            print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
+                  % (lane, LANE_OWNER.get(lane)))
+            return 3
     if worker.startswith("RES-") and held_by(worker) >= HOLD_CAP:
         print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
               % HOLD_CAP)

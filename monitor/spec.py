@@ -677,6 +677,44 @@ FINDINGS = [
                   "没有钱在动，不需要人介入——**审计员在正确的方向上把急迫性说大了**。",
     },
     {
+        "id": "F-21",
+        "severity": "blocking",
+        "title": "这个代码库没有第三个值：28 处「测不到」被写成了「测了，没问题」"
+                 "【已裁决·监控代行：四处当场修，其余四件上板】",
+        "body": "57 个 agent 的对抗性普查（每条候选都由一名默认认为它错的复核员反驳过）"
+                "留下 28 条。**它们全是同一件事的不同写法**：计数器的默认是 0"
+                "（无活可做／无违规／板见底），布尔的默认是 True（还活着／干净／"
+                "没被禁用／未超支），集合的默认是空（无欠回执／无越界分支），"
+                "异常处理的默认是 `pass`。**没有一处区分「我看了，是零」和「我没看成」。**\n\n"
+                "最重的三条：`dispatch.pid_alive(0)` **恒为真**"
+                "（tasklist 会返回 System Idle Process 那一行），而任务表在本机不给 "
+                "PID 字段、抓取循环无声退回 0——66 条注册项里 62 条读作「还在跑」；"
+                "`arc-recon/contamination.py:163` 用 HTTP 账本的字段去读只有 `game_id` "
+                "的 episode 账本，于是 560 条记录读出零接触并印成「sealed ADDRESSED: NONE」，"
+                "**而这个绿灯已经落进 `claim_set.json`**；`release/enumerate.py:123` 的空 id "
+                "列表让 33 个 B→A、223 个 C→A 全部滑向「可发布」。\n\n"
+                "**第二层规律更刺眼：出问题最多的是补丁本身。** dispatch 的 pid 抓取"
+                "**正是为了修 `pid: 0`** 而加的，它在本机的失败模式是返回同一个 0；"
+                "`check_redlines` 建了 `json_shaped` 按字节判类，`enumerate` 没接上；"
+                "`check_sealed` 补了 piles 形状守卫，`_arc_game_ids` 没补；"
+                "`bus.py` 声明了 `ACK_REQUIRED`，两个消费端各自手打了缩水的元组。"
+                "**修复恢复了症状，同时让问题看上去已被处理。**",
+        "action": "【已裁决·监控代行 2026-07-29】(1) 四处当场修并跑过："
+                  "`pid_alive` 加 pid<=0 守卫且 quota 改为引用同一份实现；"
+                  "reflex 认「正在运行」（中文控制台里 `\"Running\"` 一次也没命中过，"
+                  "于是 live_workers 恒 0、补员循环每跳按满员拉人）；"
+                  "reflex 读不到内存改为 0.0 并发 `mem-unreadable` 事件（原为默认 99GB 的 fail-open）；"
+                  "`--lane` 自报身份不再能绕过花钱守卫（`claim W-9999 --lane campaign` "
+                  "此前可领走真 API 战役且日志与批准过的认领逐字相同）。"
+                  "(2) 其余上板四件：A13-sealed-audit-reads-the-wrong-fields（p1，封存守门人）、"
+                  "S29-measurement-missing-is-not-zero（proxy 的三处「量不到=0」）、"
+                  "R3-release-classifier-defaults（释出分类器的默认值全指向可发布）、"
+                  "S28-no-third-value-in-the-monitor（监控自己剩下的 11 处）。"
+                  "(3) 全体要求：**逐条修、逐条配阴性样本，不许打包成一次「已全部加固」**——"
+                  "本仓 20 道闸门里 19 道从没被证明能变红，而普查的第二层结论正是"
+                  "「出问题最多的是补丁本身」。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",

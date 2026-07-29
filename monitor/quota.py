@@ -30,6 +30,7 @@ import subprocess
 import sys
 import time
 import childio  # noqa: E402  (per-child decoding, see its docstring)
+import dispatch  # noqa: E402  (one pid_alive for the whole rig, not two)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -181,9 +182,10 @@ def save_state(st):
 
 
 def pid_alive(pidnum):
-    out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
-                         capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout
-    return str(pidnum) in out
+    # 与 `dispatch.pid_alive` 同源，包括它那条 pid<=0 的守卫——理由写在那边。
+    # 两份实现会漂移，而这一份漂移的后果是配额分类把死会话读成活的，
+    # 于是限额签名永远不会被归因到任何一个会话上。
+    return dispatch.pid_alive(pidnum)
 
 
 def branch_pushed(pid_str):
