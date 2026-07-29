@@ -460,7 +460,8 @@ class TheoriaArm:
     def play(self) -> Dict[str, Any]:
         self.arc.open_scorecard(
             tags=["theoria", "p8", "first-contact"],
-            opaque={"run_id": self.run.run_id, "prompt_id": "P-8"})
+            opaque={"run_id": self.run.run_id,
+                    "prompt_id": getattr(self.run, "prompt_id", "P-8")})
 
         status, envelope = self.arc.reset()
         self._record("RESET", status, envelope)

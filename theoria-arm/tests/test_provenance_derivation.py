@@ -139,13 +139,63 @@ def test_a_run_whose_card_was_salvaged_can_be_navigated_to_the_number():
     to name a run that really holds the card, not merely be present.
     """
     closed = _closed_anywhere()
+    seen = 0
     for name, manifest in _manifests():
         pointer = manifest.get("scorecard_recovered_by")
         if not pointer:
+            # Not merely "no pointer": a run that opened a card, did not close
+            # it, and has no pointer either is the regression this test exists
+            # for.  Skipping it silently is how the test came to be unable to
+            # fail for its own stated reason -- removing the pointer removed
+            # the only thing it looked at.
+            orphans = manifest.get("scorecards_opened_and_never_closed") or []
+            recovered = [c for c in orphans if c in closed]
+            assert not recovered, (
+                "%s declares card(s) %s lost, but the archive shows %s closed "
+                "them -- the pointer is missing, not the number"
+                % (name, recovered, [closed[c] for c in recovered]))
             continue
+        seen += 1
         assert closed.get(pointer["card_id"]) == pointer["slug"], (
             "%s points at %s for card %s, but the archive says %s closed it"
             % (name, pointer["slug"], pointer["card_id"],
                closed.get(pointer["card_id"])))
         assert pointer.get("total_actions") is not None, (
             "%s's pointer carries no count, so it settles nothing" % name)
+    assert seen, ("no manifest in the archive carries a recovery pointer, so "
+                  "this test just checked nothing -- it is stated over the "
+                  "whole archive and needs a subject in it")
+
+
+def test_a_salvaged_card_outranks_the_campaign_string():
+    """The ranking the code declares must be the ranking the code applies.
+
+    `prompt_id_of` calls `opaque.prompt_id` its strongest source and the
+    campaign string a weaker one -- but it used to search only the run's own
+    records for the strong one. A run that died before closing its card
+    therefore fell through to the campaign string, whose `prompt_id` field is
+    `harness/run.py`'s module-level default rather than anything observed.
+    The result on disk was worse than being wrong: `…004020Z-leg01` said
+    `A3-campaign-devpile` while `…004020Z-leg01-salvage`, holding that same
+    card, said `P-8`.
+
+    Stated over the archive because the invariant is about the archive: no run
+    may disagree with the salvage that closed its own card.
+    """
+    by_slug = dict(_manifests())
+    checked = 0
+    for name, manifest in by_slug.items():
+        pointer = manifest.get("scorecard_recovered_by")
+        if not pointer:
+            continue
+        other = by_slug.get(pointer["slug"])
+        if other is None or not other.get("prompt_id"):
+            continue
+        checked += 1
+        assert manifest.get("prompt_id") == other["prompt_id"], (
+            "%s is filed under %r but %s, which closed its card, is filed "
+            "under %r -- the archive contradicts itself about one card"
+            % (name, manifest.get("prompt_id"), pointer["slug"],
+               other["prompt_id"]))
+    assert checked, ("no run in the archive is paired with the salvage that "
+                     "closed its card, so this test checked nothing")

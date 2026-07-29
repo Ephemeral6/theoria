@@ -144,7 +144,7 @@
  "note_at_run_start": null,
  "outcome": "budget_exhausted",
  "parent_run": null,
- "prompt_id": "A3-campaign-devpile",
+ "prompt_id": "P-8",
  "provenance": {
   "arm_version_lookup": {
    "arm_sha256": "7c33e2daafdedcb4ee775a5335b48bb1a71c9d5f2a24b8dcbe79fe5c8dc505c8",
@@ -169,7 +169,7 @@
    "base_commit": "armtools.armversion: several commits share this arm_version; all are named",
    "game_id": "ledger run_start.game_id",
    "guard": "ledger run_start.guard",
-   "prompt_id": "the `prompt_id` field of `run_start.spend_gate.campaign`, written by the reservation at run start",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API by the salvage run '20260729T004020Z-leg01-salvage' that closed this run's card",
    "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
    "run_id": "ledger run_start.run_id",
    "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",

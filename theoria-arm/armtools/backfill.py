@@ -583,18 +583,24 @@ def prompt_id_of(records: List[Dict[str, Any]], slug: str,
                  runs_root: str) -> Dict[str, Optional[str]]:
     """Which prompt this run belongs to, and how that was established.
 
-    Three sources, strongest first, and the one used is always named:
+    Five sources, strongest first, and the one used is always named:
 
     1. `opaque.prompt_id` inside a scorecard the run closed -- the arm stamped
        it when it opened the card, and the API handed it back verbatim.
-    2. the `p<N>` tag on the scorecard the run opened. Weaker: a tag is a label,
+    2. the same field, in the card as closed by a *salvage* run. Same card,
+       same round trip; the only difference is which directory holds the
+       ledger. Ranked with source 1 because it is source 1.
+    3. the `prompt_id` field of the spend reservation's campaign string. Note
+       this is a DECLARATION rather than an observation -- see
+       `_campaign_prompt_id`.
+    4. the `p<N>` tag on the scorecard the run opened. Weaker: a tag is a label,
        not a field, but it was written by the same code at the same moment.
-    3. the parent run's manifest, for a salvage. A salvage is named after its
+    5. the parent run's manifest, for a salvage. A salvage is named after its
        parent *and* closes its parent's card, so the link is checked, not
        assumed.
 
-    If none of the three answers, the field stays null and `provenance.missing`
-    says so. It is never filled in from what a reader would guess.
+    If none answers, the field stays null and `provenance.missing` says so. It
+    is never filled in from what a reader would guess.
     """
     for card in recovered_scorecards(records):
         value = (card.get("opaque") or {}).get("prompt_id")
@@ -602,12 +608,40 @@ def prompt_id_of(records: List[Dict[str, Any]], slug: str,
             return {"value": value,
                     "source": "scorecard opaque.prompt_id, read back from the API"}
 
+    # Source 1 again, one directory over.  A run that died before closing its
+    # own card has no `opaque.prompt_id` in its own ledger -- but the salvage
+    # that closed that card does, and it is the same card.  Without this, the
+    # strongest source was declared strongest and then not consulted: the loop
+    # above searched only this run's records, so `20260729T004020Z-leg01` fell
+    # through to the campaign string and was filed under `A3-campaign-devpile`
+    # while `20260729T004020Z-leg01-salvage`, holding that same card, was
+    # filed under `P-8`. The archive went from consistently wrong to
+    # inconsistent, which is harder to see and harder to correct.
+    run_id = _run_start(records).get("run_id")
+    elsewhere = _scorecard_recovered_elsewhere(run_id, runs_root, slug)
+    if elsewhere:
+        for card in recovered_scorecards(
+                read_ledger(os.path.join(runs_root, elsewhere["slug"],
+                                         "ledger.jsonl"))):
+            if (card.get("opaque") or {}).get("run_id") != run_id:
+                continue
+            value = (card.get("opaque") or {}).get("prompt_id")
+            if value:
+                return {"value": value,
+                        "source": ("scorecard opaque.prompt_id, read back from "
+                                   "the API by the salvage run %r that closed "
+                                   "this run's card" % elsewhere["slug"])}
+
     campaign = _campaign_prompt_id(records)
     if campaign:
         return {"value": campaign,
                 "source": ("the `prompt_id` field of "
-                           "`run_start.spend_gate.campaign`, written by the "
-                           "reservation at run start")}
+                           "`run_start.spend_gate.campaign`. NOTE this is a "
+                           "DECLARATION, not an observation: the field is "
+                           "filled from `harness/run.py`'s module-level "
+                           "PROMPT_ID unless a caller passes `prompt_id=`. It "
+                           "ranks below opaque.prompt_id for exactly that "
+                           "reason and is used only when no card carries one")}
 
     for opened in opened_scorecards(records):
         tags = (opened.get("request") or {}).get("tags") or []
@@ -642,17 +676,25 @@ def _campaign_prompt_id(records: List[Dict[str, Any]]) -> Optional[str]:
     """The prompt id out of the spend reservation's campaign string.
 
     `run_start.spend_gate.campaign` is `arm:prompt_id:game_id:slug` -- the
-    string the spend gate books every reservation against. Two runs needed
-    this: `20260729T004020Z-leg01` and `20260729T105729Z-leg01` both died
-    before closing a card, so sources 1 and 3 had nothing, and source 4 (the
-    `p8` tag) answered "P-8" -- the arm's generic tag, not the item the legs
-    were run for, which is `A3-campaign-devpile`. A backfilled manifest that
-    files a campaign leg under the wrong prompt is worse than one that admits
-    it does not know.
+    string the spend gate books every reservation against.
 
-    Ranked below `opaque.prompt_id` because that one survived a round trip
-    through the API and this one did not, and above the tag because a tag is a
-    label whereas this is the identity the money was actually booked under.
+    **This is a declaration, not an observation, and the difference matters.**
+    The `prompt_id` field is filled from `harness/run.py`'s module-level
+    `PROMPT_ID` unless a caller passes `prompt_id=`. That makes it exactly as
+    hardcoded as the `p8` tag it outranks -- the archive holds two module
+    constants, not two measurements, and until 2026-07-29 they disagreed
+    (`inner/loop.py` stamped a literal "P-8" while this one said
+    "A3-campaign-devpile"). The constants have since been unified at
+    `Run.prompt_id`, but manifests written before that still carry whichever
+    one their code path reached, so this source stays ranked BELOW every form
+    of `opaque.prompt_id` -- including the one a salvage read back for a card
+    this run opened but never closed. Promoting a default above a round trip
+    is how `20260729T004020Z-leg01` came to disagree with the salvage holding
+    its own card.
+
+    Above the tag because a tag is a label whereas this is the identity the
+    money was booked under; below the round trip because a round trip is
+    evidence and a default is not.
     Parsed strictly: anything that is not exactly four colon-separated
     non-empty fields is not a campaign string this function understands, and
     it declines rather than guessing which field is the prompt.
