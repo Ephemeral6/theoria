@@ -94,6 +94,17 @@ PAYLOAD_KEYS = redlines.PAYLOAD_FIELDS
 #: requests is a compilation of retrieved data even where a record names no game.
 API_TRANSACTION_MARKERS = (b'"X-API-Key"', b"arcprize.org/api", b'"kind": "arc_api_call"')
 
+#: Human rulings on files the classifier abstained from. Append-only, one JSON
+#: object per line: `path`, `sha256`, `class`, `ruled_by`, `utc`, `reason`.
+#:
+#: This exists because before it, a `?` row could only be cleared by **editing
+#: code**. R3's adversarial review put the consequence plainly: a gate that is
+#: red forever for a whole class of file (any binary figure rendering a per-game
+#: label) is a gate the next person switches off, and the true reds go with it.
+#: A ruling path makes the red mean *red until someone rules* instead of *red
+#: until someone gives up*.
+RULINGS = os.path.join(_HERE, "RULINGS.jsonl")
+
 #: Upstream third-party payload, by the only thing that identifies it: where the
 #: upstream dropped it. This IS a path, and it is the one place a path is right:
 #: the class is defined by provenance, not by content, and the content is
@@ -439,8 +450,82 @@ def _review_note(rel: str, blob: bytes, cls: str) -> str | None:
     )
 
 
-def build(paths: list[str]) -> list[dict]:
+class RulingRefused(RuntimeError):
+    """A line in `RULINGS.jsonl` is not a ruling this enumerator will honour.
+
+    Raised, never skipped. A malformed ruling that is quietly ignored is
+    indistinguishable from one that was never written, and the whole point of
+    the file is that somebody's name is on a decision.
+    """
+
+
+#: Classes a human may rule a `?` row into. `D` is absent on purpose: an
+#: undetermined file cannot be ruled *into* not-releasable by this path either,
+#: because `D` is decided by provenance (`UPSTREAM_PAYLOAD_PREFIX`) and a ruling
+#: that could reach it would be a second, competing definition of the class.
+RULEABLE_CLASSES = ("A", "B", "C")
+
+RULING_FIELDS = ("path", "sha256", "class", "ruled_by", "utc", "reason")
+
+
+def load_rulings(path: str | None = None) -> dict[tuple[str, str], dict]:
+    """`{(path, sha256): ruling}`. Missing file is an empty mapping, not an error.
+
+    **Keyed on the content hash, not on the path**, and that is the whole
+    design. A ruling says "I looked at *these bytes* and this is their licence
+    class". Keyed on the path, the same ruling would silently carry over to
+    whatever the file becomes next -- a figure regenerated with different data,
+    a log overwritten by a later run -- and a human's signature would end up
+    attached to bytes they never saw. That is the exact shape this lane exists
+    to catch: an assurance that outlives the thing it was about.
+
+    A ruling whose path matches and whose hash does not is therefore **stale,
+    not applicable**. It is reported (see `stale_rulings`) rather than dropped,
+    because "nobody has ruled on this" and "somebody ruled on the old version"
+    are different situations and only one of them is one signature away from
+    resolved.
+    """
+    src = path or RULINGS
+    out: dict[tuple[str, str], dict] = {}
+    if not os.path.exists(src):
+        return out
+    with open(src, encoding="utf-8") as fh:
+        for n, line in enumerate(fh, 1):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise RulingRefused(
+                    "%s line %d is not JSON (%s). A rulings file that cannot be "
+                    "read whole cannot be trusted in part." % (src, n, exc)) from exc
+            missing = [k for k in RULING_FIELDS if not rec.get(k)]
+            if missing:
+                raise RulingRefused(
+                    "%s line %d is missing %s. Every field is required: a ruling "
+                    "without `ruled_by` or `reason` is an unsigned override, which "
+                    "is what this file exists to replace."
+                    % (src, n, ", ".join(missing)))
+            if rec["class"] not in RULEABLE_CLASSES:
+                raise RulingRefused(
+                    "%s line %d rules class %r; a human may rule only into %s. "
+                    "D is decided by provenance and `?` is not a ruling."
+                    % (src, n, rec["class"], "/".join(RULEABLE_CLASSES)))
+            key = (rec["path"], rec["sha256"])
+            if key in out:
+                raise RulingRefused(
+                    "%s line %d rules on bytes already ruled on at this path. "
+                    "The file is append-only; supersede by ruling on the NEW "
+                    "hash, not by re-ruling the old one." % (src, n))
+            out[key] = rec
+    return out
+
+
+def build(paths: list[str], rulings: dict | None = None) -> list[dict]:
     game_ids = _arc_game_ids()
+    if rulings is None:
+        rulings = load_rulings()
     rows: list[dict] = []
     for rel in paths:
         p = _abs(rel)
@@ -493,8 +578,67 @@ def build(paths: list[str]) -> list[dict]:
         review = _review_note(rel, blob, verdict["class"])
         if review:
             row["review"] = review
+        _apply_ruling(row, rulings)
         rows.append(row)
     return rows
+
+
+def _apply_ruling(row: dict, rulings: dict) -> None:
+    """Let a human ruling settle a `?` row. Mutates `row` in place.
+
+    Three refusals are as much the point as the one acceptance:
+
+    * **Only `?` rows.** A ruling speaks exactly where the machine abstained. If
+      it could reach a decided row it would be an override, and an override path
+      beside a classifier is a way to make the classifier's answer optional --
+      which is worse than the permissive defaults R3 removed, because it would
+      be signed. This is also what makes class `D` structurally unreachable
+      here: `D` is decided, so no ruling ever meets it.
+    * **Hash must match.** A ruling recorded against different bytes is stale,
+      and stale is not "absent" -- `stale_rulings` reports it so somebody can
+      look again at bytes nobody has seen.
+    * **The evidence keeps saying what the machine could not do.** The ruling is
+      appended to the original evidence rather than replacing it. A row that
+      reads only "ruled class C by X" hides the fact that no parser ever opened
+      the file, and the next reader would have no idea a human was standing in
+      for a measurement.
+    """
+    if row["class"] != "?":
+        return
+    ruling = rulings.get((row["path"], row["sha256"]))
+    if ruling is None:
+        return
+    name, disposition = CLASSES[ruling["class"]]
+    row["class"] = ruling["class"]
+    row["class_name"] = name
+    row["verdict"] = disposition
+    row["ruled_by"] = ruling["ruled_by"]
+    row["ruled_utc"] = ruling["utc"]
+    row["evidence"] = (
+        "%s -- RULED class %s by %s at %s: %s (the machine did not determine "
+        "this; a human did, against sha256 %s)"
+        % (row["evidence"], ruling["class"], ruling["ruled_by"], ruling["utc"],
+           ruling["reason"], row["sha256"][:12]))
+
+
+def stale_rulings(rows: list[dict], rulings: dict) -> list[str]:
+    """Rulings whose path is still tracked but whose bytes have changed.
+
+    Reported, not applied and not silently dropped. "Nobody has ruled on this"
+    and "somebody ruled on the version before this one" are different
+    situations, and only the second is one signature away from resolved.
+    """
+    by_path: dict[str, str] = {r["path"]: r["sha256"] for r in rows if r["sha256"]}
+    out = []
+    for (path, sha), ruling in sorted(rulings.items()):
+        current = by_path.get(path)
+        if current is not None and current != sha:
+            out.append(
+                "%s: ruled class %s by %s against sha256 %s, but the file is now "
+                "%s. The ruling does NOT apply -- it was about bytes that are no "
+                "longer there."
+                % (path, ruling["class"], ruling["ruled_by"], sha[:12], current[:12]))
+    return out
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -537,7 +681,24 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(f"red lines clear over {len(paths)} tracked files")
 
-    rows = build(paths)
+    rulings = load_rulings()
+    rows = build(paths, rulings)
+
+    # Printed before the distribution, because it changes how the distribution
+    # should be read: a class C row that got there by ruling is not the same
+    # fact as one the classifier reached, and a reader who does not know which
+    # is which is being handed a tidier number than the evidence supports.
+    ruled = [r for r in rows if r.get("ruled_by")]
+    if ruled:
+        print("  note %d file(s) carry a human ruling where this enumerator "
+              "abstained:" % len(ruled))
+        for r in ruled:
+            print("  note     %s -> class %s by %s"
+                  % (r["path"], r["class"], r["ruled_by"]))
+    stale = stale_rulings(rows, rulings)
+    for line in stale:
+        print("  note STALE RULING %s" % line)
+
     counts: dict[str, int] = {}
     bytes_by: dict[str, int] = {}
     for r in rows:
