@@ -1,0 +1,49 @@
+{
+  "certificate_issued_status0": 1550,
+  "feasible_when_widened": 1,
+  "goal_truly_unreachable": 2189,
+  "highs_status_counts": {
+    "0": 1550,
+    "2": 1450
+  },
+  "incompleteness_rate_pct": 29.2,
+  "no_certificate": 1450,
+  "silent_and_truly_unreachable": 639,
+  "status0_failing_exact_recheck": 0,
+  "status_2_at_bound_10": 639,
+  "still_infeasible_when_widened": 638,
+  "triple_set_mismatch_count": 0,
+  "triple_set_mismatch_sample": [],
+  "wall_seconds": 10.3,
+  "widened_feasible_worlds": [
+    {
+      "first": {
+        "bound": 100,
+        "exact": {
+          "goal_break": true,
+          "goal_gaps": [
+            "1",
+            "13"
+          ],
+          "holds": true,
+          "initial_potential": "9",
+          "inv_closed": true,
+          "weights": [
+            "12",
+            "9",
+            "3",
+            "7",
+            "-1",
+            "11",
+            "10",
+            "-4"
+          ]
+        },
+        "highs_status": 0
+      },
+      "index": 2302,
+      "seed": 17475932563032345095
+    }
+  ],
+  "worlds": 3000
+}
