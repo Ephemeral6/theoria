@@ -1,4 +1,4 @@
-## 10 · Limitations and honesty clauses
+## 11 · Limitations and honesty clauses
 
 `Theoria.md` §3.2 item 8 fixes, in advance, the list of things this project must
 disclose. It is transcribed here clause by clause and answered for *this* paper,
@@ -7,7 +7,7 @@ account. Nothing in this section is a concession extracted by a reviewer; all of
 it was written down by the runs themselves, and the paths are given so it can be
 checked rather than believed.
 
-### 10.1 The pre-declared clauses, answered
+### 11.1 The pre-declared clauses, answered
 
 **(a) 便宜是预测 — "cheap" is a prediction, not a result.** `Theoria.md`'s cost
 claim (C5, total spend 10⁸ → 10⁶) belongs to Phase 4 and is not evidenced here in
@@ -87,7 +87,7 @@ pretraining-prior caveat.** Two entries, and both are worse than "clean":
   enter model context. Any absolute phrasing of "induced from zero" is
   discounted accordingly. This paper makes no induction claim about any ARC game.
 
-### 10.2 A correction to the repository's own summary
+### 11.2 A correction to the repository's own summary
 
 `CLAUDE.md` states that no game has been played and that all 25 are registered
 `never_audited`. That was true when written and is **not true now**. The
@@ -101,7 +101,7 @@ nothing reached level 2. This is the legitimate use of a development pile, and
 recording it is the point of having one; it is corrected here because a paper
 that repeated `CLAUDE.md`'s sentence would be repeating something false.
 
-### 10.3 What the individual acceptances do not show
+### 11.3 What the individual acceptances do not show
 
 **The theorize step is not a measured LLM step.** This is the largest caveat in
 the paper and it is stated first. `cold-start-a2/A2_REPORT.md` §8 puts it
@@ -196,7 +196,7 @@ inside the loop, from a wrong manual — and one of those bugs manufactured a
 obligation for a theorem that is false. The four-co-derived-forms design is meant
 to make that drift visible; here it took a human reading the plan output.
 
-### 10.4 What the battery cannot yet certify
+### 11.4 What the battery cannot yet certify
 
 Restated from §7 so that the limitations section is complete on its own. Every
 ranked metric's verdict is `underpowered` or `no-data` — **31 of 38** on the model
@@ -233,7 +233,7 @@ sharing one budget and one API quota without knowing about each other
 (`baseline-arms/INCIDENTS.md` INC-BA-003). The runs are individually accounted,
 but any aggregate read off that ledger inherits the incident.
 
-### 10.5 The one thing this paper claims
+### 11.5 The one thing this paper claims
 
 **We built an instrument for holding a world model as an explicit,
 machine-checkable theory, ran it end to end on small deterministic worlds we
