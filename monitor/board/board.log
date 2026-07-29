@@ -171,3 +171,11 @@
 2026-07-28T23:36:46Z CLAIM A3-campaign-devpile by W-1640
 2026-07-28T23:37:29Z CLAIM S17-fleet-evidence-capture by W-1641
 2026-07-28T23:38:14Z CLAIM S23-unreadable-is-not-clean by W-1642
+2026-07-29T00:21:01Z DONE S23-unreadable-is-not-clean by W-1642
+2026-07-29T00:24:43Z RELEASE A3-campaign-devpile by W-1640 (offline work delivered and pushed (branch agent/a3-campaign-devpile, 4 money-wasting defects fixed, verify.sh 7 gates green, 170 tests); live campaign BLOCKED on spend authority -- Theoria.md:305 gate is 9/16 and CHARTER.md:24 grants campaign-lane spend to RES-1 only; ruling requested in monitor/inbox/20260729T002000Z-W-1640-a3-spend-proposal.md)
+2026-07-29T00:24:50Z CLAIM A3-campaign-devpile by W-1640
+2026-07-29T00:27:06Z DONE S17-fleet-evidence-capture by W-1641
+2026-07-29T00:27:12Z CLAIM S24-merge-conflict-drain by W-1641
+2026-07-29T00:47:02Z SWEEP A3-campaign-devpile released (worker W-1640 gone)
+2026-07-29T00:52:21Z DONE S24-merge-conflict-drain by W-1641
+2026-07-29T00:52:21Z CLAIM A10-shared-ledger-real-arms by W-1641

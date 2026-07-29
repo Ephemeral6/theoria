@@ -268,9 +268,28 @@ def cmd_release(iid, worker, reason="unstated"):
     if not os.path.exists(src):
         print("not claimed by you")
         return 1
-    os.rename(src, os.path.join(ITEMS, "%s.md" % iid))
+    dst = os.path.join(ITEMS, "%s.md" % iid)
+    os.rename(src, dst)
+    _revoke_authorisation(dst)
     note("RELEASE %s by %s (%s)" % (iid, worker, reason))
     return 0
+
+
+def _revoke_authorisation(path):
+    """交回板上就撤销授权。
+
+    `generic_ok: yes` 是监控**对某一次认领**签的字（「这个工人、这件事、我批准」），
+    不是条目的属性。而认领文件交回时会连同我在上面写的每一行一起变回条目——
+    于是一次性的批准变成了永久的批准。2026-07-29 当场发生：我批准了 A3 在飞的
+    那一次，工人死后 sweep 把它交回，条目带着我的签字重新对所有人开放。"""
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return
+    stripped = re.sub(r"^generic_ok:.*\n", "", text, count=1, flags=re.M)
+    if stripped != text:
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(stripped)
 
 
 def cmd_sweep(dry=False):
@@ -300,8 +319,9 @@ def cmd_sweep(dry=False):
             continue
         freed.append((iid, worker))
         if not dry:
-            os.rename(os.path.join(CLAIMED, f),
-                      os.path.join(ITEMS, "%s.md" % iid))
+            dst = os.path.join(ITEMS, "%s.md" % iid)
+            os.rename(os.path.join(CLAIMED, f), dst)
+            _revoke_authorisation(dst)   # 死掉的工人不该把我的签字留在板上
             note("SWEEP %s released (worker %s gone)" % (iid, worker))
     if not freed:
         print("no orphaned claims")
