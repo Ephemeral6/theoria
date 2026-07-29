@@ -1152,16 +1152,47 @@ world can strengthen it three ways (`cold-start-a2/A2_REPORT.md` §1):
    `history_trace = raw_trace[0 .. portal_transition]`, the cut index found from
    the frames' geometry as the single non-adjacent Cart move (ibid.,
    `cut_rule`). "Was the history curated?" has a mechanical answer.
-3. **The isomorphism is machine-checked, clause by clause:**
+3. **Every clause of §1.3's DC22 sentence has a counterpart in the built world,
+   and each counterpart was computed rather than asserted.** The far side of the
+   comparison is `Theoria.md` §1.3's *description* — this project's own prose —
+   and not DC22, which the pile cut puts out of reach and which no row below
+   touches. That is the scope D-A2-001 set when it authorised the substitution:
+   the isomorphism argument "may cite only the structural description already
+   printed in Theoria §1.3" (§5.1). So what the table settles is that the world
+   was built to the description, clause by clause, each clause decided by a named
+   artefact rather than by this paper's say-so — and nothing about DC22 itself.
+   The strength is not uniform down the column, which is what `kind` is for: only
+   the row marked `Lean` is machine-checked in the sense §5.3 and §5.6 use that
+   term, of a kernel proof with an empty axiom list. The rest are properties a
+   script computed from an artefact, and one is an episode the world was made to
+   run.
 
-| `Theoria.md` §1.3 | A2's check | result |
-|---|---|---|
-| "漏了一条传送规则" | `cold-start-a2/artifacts/engines_diff.json` — the only proposal with \|dy\|+\|dx\| > 1 | `obj1_jump_DOWN`, 1/1 |
-| 缺的那条传送规则从未触发 (compressed) | `cold-start-a2/artifacts/trace_summary.json` — the history's one omitted pair | `cart=(6,4) pressed=1 act=DOWN` |
-| "不欠任何一帧" | `certify_cheap` on the play record | 184/184, 0 anomalies |
-| 模型重放 175/175 全对 (compressed) | the miner on the history proposes **no** jump | `history_proposes_a_jump: false` |
-| "完备搜索'正确地'证明了目标不可达" | plan UNSAT + Lean `unsolvable`, axioms `[]` | green |
-| "而这一关人类可解" | an 18-action episode ends with `win: true` | refuted |
+| `Theoria.md` §1.3 | A2's check | kind | result |
+|---|---|---|---|
+| "漏了一条传送规则" | `cold-start-a2/artifacts/engines_diff.json` — in the **sweep** stream, the only proposal with \|dy\|+\|dx\| > 1 | artefact | `obj1_jump_DOWN`, coverage `1/1` |
+| "缺的那条传送规则从未触发" | `cold-start-a2/artifacts/trace_summary.json` — the history's one omitted pair | artefact | `cart=(6,4) pressed=1 act=DOWN` |
+| "不欠任何一帧" | `certify_cheap` on the play record (`cold-start-a2/artifacts/exhibit_report.json`) | artefact | 183 transitions and 14 904 pixels, `pixels_unexplained: 0`, `anomaly_kinds: []` |
+| "模型重放 175/175 全对" | the miner on the **history** stream proposes **no** jump (`cold-start-a2/artifacts/engines_diff.json`) | artefact | `history_proposes_a_jump: false` |
+| "完备搜索'正确地'证明了目标不可达" | Lean `unsolvable` with `#print axioms` empty (`cold-start-a2/theory/generated_holed/theory.lean`); the plan beside it carries no weight, below | Lean | green, `axioms: []` |
+| "而这一关人类可解" | an 18-action episode ends with `win: true` (`cold-start-a2/artifacts/refutation.json`) | episode | confirmed — 18 actions, win on frame 18, and it is the manual's `unsolvable` **theorem** that this refutes |
+
+   Two rows carry fine print that belongs in the open rather than in a later
+   subsection. **The `Lean` row is carried by its Lean half alone.** The plan
+   that returns UNSAT beside it runs the bundled BFS stub rather than Fast
+   Downward (`cold-start-a2/a2pipeline/plan.py`, `prefer="stub"`;
+   `cold-start-a2/A2_REPORT.md` says the same in its own words), and §5.8's
+   **D-A2-006** records that the PDDL backend cannot ground a teleport at all —
+   that planner returns UNSAT on a manual *containing* the rule too, so a verdict
+   which comes out UNSAT either way is no evidence about the hole. The clause
+   being matched says 完备**搜索**, and it is matched by the Lean proof, not by
+   the planner. **And no clause in this table comes out against the built
+   world.** The `episode` row confirms its clause as strongly as any row here —
+   the level is solvable, and the episode solves it. What the episode refutes is
+   the manual's theorem, which is the whole of what §5.3's exhibit exists to
+   display (`cold-start-a2/artifacts/refutation.json`, whose `verdict` field
+   names the theorem as the refuted object). An earlier draft of this table put
+   the bare word "refuted" in that row's result cell, and readers — including a
+   reviewer examining this very sentence — read it as the clause having failed.
 
 ### 5.3 The exhibit
 
