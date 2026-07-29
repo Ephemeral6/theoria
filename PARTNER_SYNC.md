@@ -1253,3 +1253,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`bash figures/verify.sh` 九道闸门全绿（进场时 4/6/8 三道红）；两次构建逐字节一致，61 个来源哈希；零 API、零网络、$0.00、封存堆零接触。
 阻塞：无（A12 已交付）。A3 在线腿仍待监控放行。
 下一步：三项发现已投 inbox——(1) `capability_spectrum` 的 E5 把成功的 RESET 计入动作数，逐局多一，与 `proxy/SCORING.md:60-62` 32/32 核实过的口径相反，E5=每动作成本因而系统性低估；(2) 全仓没有任何一局的两条推导能在无豁免的情况下一致，且**全部 theoria 局无旁证**；(3) `figures/` 对另一赛道的 `THEORIZE_LOG.md` 钉死闭合 id 集，对方正常推进即让本赛道闸门变红。
+## [campaign/RES-1] 2026-07-29T05:55:00Z A4b-ablation-calibrate
+状态：消融臂标定交付。A0 对照表 19 行（14 相同 / 3 不同 / 2 不可比）与 A2 分叉表（证明义务 有/无、定理 已证/根本没有、depends 4/0、探针 5/0、被打脸 true/false、回路转 true/false、终判 真✅/假❌）都在 `ablation-arm/REPORT.md`，机器背书在 `artifacts/calibration.json`。**「theorize 轮数」如实标为不可比**：两臂共用同一本手册（本臂拿到的是全量臂 DSL 的机械降级），再理论化一次就是第二个变量。美元列如实留空：两臂在 A0/A2 上都没花过钱。
+测试：89 passed；`bash ablation-arm/verify.sh` GREEN 五阶段；五条 P 断言全部 MEASURED。零 API、零网络、$0.00。
+阻塞：无。
+下一步：三件已如实记为界限而非缺口——美元列需要两臂在同一局真游戏上跑；E3 另一半上游已关闭（D-A2-006）；`theoria_ablate` 未在 `proxy/ledger.py:ARMS` 注册，所以本臂记录仍写 `arm: "theoria"`，读者无法把两臂过滤开（D-AB-004 在案）。另：接手时闸门是红的，原因与 A4b 无关——S14（127edab）给十一个领地各加了一个顶层 `verify.py`，本臂 `tests/test_verify.py` 的 `import verify` 从此拿到的是 `cold-start-a2` 的那一个，十条测试红了七十五分钟无人察觉；已修并加了防再犯的哨兵测试。
