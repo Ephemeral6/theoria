@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "6f297cd",
+  "branch": "agent/s20-gate-negative-sample",
+  "lane": "infra",
+  "prompt_id": "S20-gate-negative-sample",
+  "state": "items 1 and 3 delivered (declaration mechanism + decorative column + METHOD.md requirement); item 2 delivered for monitor only -- the other four gates named in the ticket live in territories this item may not write to, and are reported for their owners",
+  "territory": "monitor",
+  "utc": "2026-07-29T08:30:00Z"
+}

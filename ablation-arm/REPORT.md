@@ -339,15 +339,33 @@ assert and what it could only record for A4b. A4b settles the four it recorded.
 ## 8 · Gates
 
 ```
-cd ablation-arm && python -m pytest -q     ->  74 passed        (56 before A4b + 18 new)
-bash ablation-arm/verify.sh                ->  GREEN, exit 0
+cd ablation-arm && python -m pytest -q     ->  89 passed        (65 on master + 18 A4b + 6 shadow)
+bash ablation-arm/verify.sh                ->  GREEN, exit 0, five stages
 python ablation-arm/calibrate.py           ->  P-1 P-2 P-4 P-5(identical) P-6 all hold
-                                               upstream unchanged, 468 files hashed
+                                               upstream unchanged, 514 files hashed
 ```
 
-`verify.sh` was green on every stage including `read-only`; the
-`proxy/var/spend_gate.jsonl` defect being fixed on `agent/bus2-ablation-readonly`
-did not appear on this branch. `pin.hash_tree` reports the upstream trees
+**Re-measured 2026-07-29 against master `a03fe99`.** The figures this section
+first carried (74 passed, 468 files) were taken against `d1733df`; A9 rebuilt the
+read-only criterion and S24 and `bus2` landed in between, so both moved. The
+`proxy/var/spend_gate.jsonl` defect that this report described as "being fixed on
+`agent/bus2-ablation-readonly`" is **merged into master** and no longer pending.
+
+Note that `514` is not a property of this arm: `pin.hash_tree` counts files in
+four upstream trees, so it moves whenever *any* track commits one. It is a
+same-run before/after comparison, not a number to hold across runs.
+
+**The gate was red when I picked this branch up, for a reason that had nothing to
+do with A4b.** `tests/test_verify.py` did a plain `import verify`, and S14
+(`127edab`, 2026-07-28T23:38) gave eleven territories a top-level `verify.py` --
+so with `_bootstrap` putting the upstream roots ahead of this arm on `sys.path`,
+the module under test was `cold-start-a2`'s. Ten tests failed on
+`AttributeError: _assertions`, and since `verify.py` runs pytest as its last
+stage, `verify.sh` was red with it. Fixed in `0d5d2a4`: `tests/_armimport.py`
+loads arm-owned modules by path, and `tests/test_no_shadow.py` fails when a new
+collision appears instead of letting the next one go unnoticed for 75 minutes.
+
+`verify.sh` is green on every stage including `read-only`. `pin.hash_tree` reports the upstream trees
 unchanged around every run in this report, including around the Lean timings —
 which were taken on copies in a temp directory rather than on the upstream files.
 

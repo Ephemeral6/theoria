@@ -149,6 +149,41 @@ assert notices and notices[0]["fields"] == ["a_field_from_2027"], notices
 print("verdict unaffected; 1 notice: %s" % notices[0]["fields"])
 PY
 
+# D-014: every check ships with a control that must trip. The chain has 28 unit
+# tests and none of them ran on a gate path, so at merge time the chain was a
+# claim rather than an instrument. This builds a real ledger, verifies it, then
+# edits one landed record and requires red.
+step "the ledger chain verifies, and editing a landed record turns it red" \
+    python - <<'CHAIN'
+import os, subprocess, sys, tempfile
+sys.path.insert(0, os.getcwd())
+from proxy.ledger import Ledger
+
+d = tempfile.mkdtemp(prefix="chain-gate-")
+path = os.path.join(d, "ledger.jsonl")
+led = Ledger(path)
+for i in range(5):
+    led.append("env_meta", "r1", "probe", http={"step": "MARK%d" % i})
+
+def verdict(p):
+    r = subprocess.run([sys.executable, "-m", "proxy.tools.verify_chain", p],
+                       capture_output=True, text=True, encoding="utf-8",
+                       errors="replace")
+    return r.returncode, (r.stdout + r.stderr)
+
+rc, out = verdict(path)
+assert rc == 0, "a chain we just wrote must verify: %s" % out
+print("clean stream: PASS")
+
+raw = open(path, "rb").read()
+assert raw.count(b"MARK0") == 1, "fixture did not write what the control edits"
+tampered = os.path.join(d, "tampered.jsonl")
+open(tampered, "wb").write(raw.replace(b"MARK0", b"MARKX", 1))
+rc, out = verdict(tampered)
+assert rc != 0, "EDITING A LANDED RECORD WENT UNDETECTED -- chain not checking"
+print("tampered stream: refused, exit %d" % rc)
+CHAIN
+
 step "the whole proxy suite" \
     python -m pytest proxy -q
 

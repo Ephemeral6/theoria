@@ -425,16 +425,22 @@ here so nobody has to wonder whether the goalposts moved:
 
 ## What is **not** closed, and is not claimed to be
 
-* **RED-40 stands.** Every check is still internal consistency, so a
-  sufficiently careful forger writing canonical records reconciles clean. The
-  test passes because the forgery it uses is now detectable, not because
-  forgery is. P-9 raised the price; it did not authenticate anything. The
-  structural answer is a hash chain with the head published outside the file.
-  Registered as D-024 and written up as
-  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. D-024 first
-  priced it at a version bump and a three-arm negotiation; that was wrong — an
-  **optional** `prev` keeps the format at `v1.0` and the enforcement comes from
-  the published head instead.
+* **RED-40 is half closed, and the closed half is the smaller one.** The hash
+  chain landed in S15 (`cd94e19`, 2026-07-28): `prev` carries the digest of the
+  preceding line's bytes, `tools/verify_chain.py` re-derives the chain, and 28
+  tests in `tests/test_chain.py` each make a real edit and require red. So
+  *tampering with an existing file* is now caught — edit, delete, insert, swap,
+  front-truncate.
+  **The original finding survives this.** RED-40 was never about editing a
+  ledger; it was that a file no proxy ever wrote reconciles clean, and a forger
+  writing from scratch simply chains their own records. What defeats that is
+  the head published where the forger cannot reach, and that is exactly the
+  half still undone: `runner.py` writes `ledger_head` into the per-run record,
+  whose default location `proxy/var/runs/` is gitignored, so **the default path
+  publishes nothing**. No gate compares a run's head to a tracked manifest.
+  Until one does, authorship rests on discipline, which is what RED-40 said in
+  the first place. Do not read the chain's 28 green tests as this line being
+  closed.
 * **The value-join is order-dependent.** An id split across two fields is
   caught when the values concatenate in key order and not otherwise.
 * **Base64 is chased one level.**

@@ -1,10 +1,17 @@
 {
  "id": "RES-1",
- "utc": "2026-07-29T10:15:00Z",
- "cycle": 4,
+ "utc": "2026-07-29T08:05:00Z",
+ "cycle": 15,
  "state": "working",
- "note": "本轮两次交付均已推送。410e853：对抗性复核抓出的三个 fatal 全修（带书进场的跑永远不叫桌面、边界留下过期编译产物且三条察觉路径同时被堵、_try_advance_level 拿状态字符串当推进证据），并按复核结论撤销边界退役未决意外、改写 D-A3-003 自我推翻、新增 D-A3-004。cde83c2：把『闸门红了立刻停』真正实现——今早那场重试风暴的机理查实（闸门拒绝在 env_proxy 里抛异常，臂看到的是传输失败而非状态码，_retryable(0)=True 于是每条被拒命令重试 40 次），现在改为每次尝试前直接问预留，refused/unavailable 一律终止本腿。182 测试全绿，零 API 零花费。",
- "in_hand": ["A3-campaign-devpile", "A4b-ablation-calibrate"],
- "delivered": ["bus#2 ablation-arm readonly gate", "A3 offline: level boundary + book carry + campaign runner", "A3: 3 fatal fixes", "A3: gate-red stop line"],
- "blocked_on": ["放大率 86.7 vs 假定 1.75——弄清是偶发还是常态前不再起在线腿", "pid 36428 是否有人管，等授权", "bus #7 在磁盘上就是乱码，已请重发"]
+ "note": "会话重启，接上 cycle 14。总线读到 #7 为止无新指令（且 #1-#7 的 body 在磁盘上就是乱码，已报过：指令走总线而总线丢字=指令会静默丢失）。手上两件：A3-campaign-devpile（在线腿仍卡在 Theoria.md:305 钱门 9/16，监控未写 generic_ok），S4-freeze（950c739 已推，freeze/RECONCILE.md 落盘）。本轮先推 S4 的两条必修：必修二 48 集来历 P-22 记反了、必修三 消融臂已存在；以及散文里残留的 21 与三层报告条款。",
+ "in_hand": [
+  "A3-campaign-devpile",
+  "S4-freeze"
+ ],
+ "blocked_on": [
+  "A3 在线腿：Theoria.md:305 钱门 9/16，监控未写 generic_ok/放行"
+ ],
+ "delivered": [
+  "A6 delivered+done f22acdd2 (96 tests, 12 acceptance conditions, sealing claim corrected after review)"
+ ]
 }

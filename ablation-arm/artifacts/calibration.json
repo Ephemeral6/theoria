@@ -401,7 +401,7 @@
         ],
         "ran_on": "a copy in a temp directory, not the upstream file",
         "returncode": 0,
-        "seconds": 1.765
+        "seconds": 2.108
       },
       "a0-no-button": {
         "available": true,
@@ -412,7 +412,7 @@
         ],
         "ran_on": "a copy in a temp directory, not the upstream file",
         "returncode": 0,
-        "seconds": 0.551
+        "seconds": 0.555
       },
       "a2-holed": {
         "available": true,
@@ -423,7 +423,7 @@
         ],
         "ran_on": "a copy in a temp directory, not the upstream file",
         "returncode": 0,
-        "seconds": 1.82
+        "seconds": 1.74
       }
     },
     "reading": "P-4 holds in every unit that could be measured, and it holds trivially: the cut removes work and adds none. DESIGN.md §8 gave P-4 the power to kill a claim of the mother framework -- if the ablated arm were both cheaper and equally right, C5's '理解省' half would have to be withdrawn. It is cheaper. It is equally right on A0. It is WRONG on A2, and that is what saves the claim: the saving is real and it is paid for in the only currency that matters, the ability to tell a true theorem from a false one.",
@@ -449,7 +449,7 @@
       {
         "ablated_arm": 0.0,
         "comparable": true,
-        "full_arm": 4.136,
+        "full_arm": 4.403,
         "note": "WALL CLOCK -- the one non-deterministic number in this report. What is deterministic is that the ablated side is zero by construction, not by luck.",
         "quantity": "cost · certification fuel (Lean wall-clock seconds, 3 worlds)",
         "same": false,
@@ -650,7 +650,7 @@
     "cold-start-a0/artifacts/plan_generated_no_button.json": "c76e4930053eb3d7573975f94fab543c7a28db560f8c51b0cd85611d03ce0f62",
     "cold-start-a0/artifacts/score_vs_truth.json": "8bf2e036afc9e951af6ced93e920c395a49af45dae21878aedd34d3ad1babadd",
     "cold-start-a0/artifacts/trace_summary.json": "fd86d2239c8351d6170fe192db52675e77d3e1bd9a18edbbebbb8544dc4acc45",
-    "cold-start-a0/artifacts/unsolvable_report.json": "8e6eb999135609f8d66792315e3ca66c37f9e3708c0584135ce1d9b887870542",
+    "cold-start-a0/artifacts/unsolvable_report.json": "a636dcb0db80a8faaba480a4c5132c946c918e5c5c2ba5e7d83fba2201287ccb",
     "cold-start-a0/theory/generated/theory.lean": "5100972f272986723a367bf894428efd4041d719c33dd3b336e72918c4ffdb65",
     "cold-start-a0/theory/generated_no_button/theory.lean": "e73a105a0e573ff68f802df9b3f2d24b2ac638fc223b1ae88e91564504e4ca10",
     "cold-start-a2/artifacts/exhibit_report.json": "905c6a214ebe5d56a7efc82fd1ed971f7f64e8fb5144a12e5b14aaad1f4f35e1",
@@ -663,7 +663,7 @@
     "cold-start-a2/theory/generated_holed/theory.lean": "9bdebadcb6865f7b10c9fb061b7a0f85fcc49d96ddb007902cb4fab3b150407a"
   },
   "upstream_files_changed": [],
-  "upstream_trees_hashed": 468,
+  "upstream_trees_hashed": 514,
   "upstream_unchanged": true,
   "what": "A4b -- the ablation arm calibrated against the full arm"
 }

@@ -24,10 +24,19 @@ Exit codes
 ----------
 0   every fact verified; table written (or, under --check, already current)
 1   a fact disagrees with its artifact, or the table on disk is stale
+2   a template does not render -- a `{fact.key}` survived substitution
 3   an artifact is missing or a probe could not run at all
 
 3 is kept apart from 1 on purpose (D-024, D-031): a checker that fell over must
 not share a return value with a checker that returned a verdict.
+
+2 is kept apart from 3 for the same reason one level down, and E13 is why. A
+missing artifact is a fact about *this checkout*, and the suite skips on it;
+a template that does not render is a defect in *this file*, reproduces
+everywhere, and must fail. While they shared code 3, reintroducing E13's
+placeholder bug on a partial checkout turned the suite yellow instead of red.
+The 2 check also runs before any artifact is read, so it is reachable on the
+checkouts where 3 would otherwise pre-empt it.
 
 Determinism: the output contains no timestamp, no wall clock and no path from
 this machine. Two runs are byte-identical.
@@ -57,6 +66,18 @@ E17 = "engine-rig/runs/20260729T034043Z-E17-held-out-validation"
 
 class ProbeError(RuntimeError):
     """An artifact is missing, or a probe could not be evaluated at all."""
+
+
+class PlaceholderError(ProbeError):
+    """A `{fact.key}` survived substitution.
+
+    Kept apart from its parent on purpose. `main` reports a bare `ProbeError` as
+    exit 3, and the suite *skips* on 3 — correctly, because an artifact that
+    lives outside `engine-rig/` genuinely cannot be checked on every checkout.
+    A rendering fault is not that: it is a defect in this file, reproducible
+    everywhere, and reporting it as "not checkable here" would hide it exactly
+    the way the original bug was hidden. So it gets its own exit code and fails.
+    """
 
 
 # --------------------------------------------------------------------------
@@ -147,6 +168,133 @@ def _fd_pair(instance: str, guard: str, rung: str):
         return f"{f['expansions_before']} -> {f['expansions_after']}"
 
     return fn
+
+
+def _p13_stub_pair(instance: str):
+    """`before -> after` bundled-BFS expansions for one P13 instance."""
+
+    def fn(div):
+        for row in div["deadlock_dividend"]:
+            if row.get("instance") == instance:
+                return "%s → %s" % (row["stub_expansions_before"], row["stub_expansions_after"])
+        raise ProbeError(f"no P13 dividend row for {instance!r}")
+
+    return fn
+
+
+def _ladder_rungs(ladder):
+    """Every (instance name, rung dict) pair in the E2 bench."""
+    for r in ladder["results"]:
+        for g in r["rungs"]:
+            yield r["instance"]["name"], g
+
+
+def _wall_ms(rung):
+    w = (rung.get("timing") or {}).get("wall_seconds")
+    return None if w is None else w * 1000.0
+
+
+def _fd_timed_rows(ladder):
+    """(instance, config, wall_ms, fd_total_ms, search_ms) per timed FD rung.
+
+    The bench times **three** nested clocks, not two: FD's search is inside FD's
+    own total, which is inside the subprocess wall. E13 first published a cell
+    saying the bench "counts that as neither", built two probes on the outer and
+    inner clocks and never read the middle one -- and the middle one is exactly
+    where `ipdb`'s cost lives. `fd_total_seconds` is present on all 51 rows.
+    """
+    out = []
+    for name, g in _ladder_rungs(ladder):
+        t = g.get("timing") or {}
+        if not str(g.get("tier", "")).startswith("fd-"):
+            continue
+        if any(t.get(k) is None for k in ("wall_seconds", "fd_total_seconds", "search_seconds")):
+            continue
+        out.append((name, g.get("config"),
+                    t["wall_seconds"] * 1000, t["fd_total_seconds"] * 1000, t["search_seconds"] * 1000))
+    if not out:
+        raise ProbeError("no fd-* rung in the ladder carries all three clocks")
+    return out
+
+
+def _fd_startup_band(ladder):
+    """Driver startup: subprocess wall minus everything FD spent inside itself.
+
+    This is what "FD's cost here is startup" should always have been measured
+    against. The band it gives is far tighter than the wall-clock band it
+    replaces, because it does not have to absorb the instances where FD really
+    did work: it is a property of the harness, not of the problem.
+    """
+    import statistics
+    rows = [w - f for _, _, w, f, _ in _fd_timed_rows(ladder)]
+    return "%.1f and %.1f ms, median %.1f" % (min(rows), max(rows), statistics.median(rows))
+
+
+def _fd_search_share_median(ladder):
+    """Median share of an FD row's wall clock spent inside search."""
+    import statistics
+    return "%.1f" % statistics.median(100.0 * s / w for _, _, w, _, s in _fd_timed_rows(ladder))
+
+
+def _fd_search_outlier(ladder):
+    """The FD row where search accounts for the largest share of the wall clock."""
+    name, cfg, w, _f, s = max(_fd_timed_rows(ladder), key=lambda r: r[4] / r[2])
+    return "%.1f ms of %.1f (%.1f %%) on `%s`/%s" % (s, w, 100.0 * s / w, name, cfg.split("/")[-1])
+
+
+def _fd_wall_outlier(ladder):
+    """The slowest FD row, split across all three clocks.
+
+    The point of this row is that its three clocks disagree: the time is neither
+    startup nor search, and the middle clock is where it actually sits.
+    """
+    name, cfg, w, f, s = max(_fd_timed_rows(ladder), key=lambda r: r[2])
+    return "%.1f ms wall, %.1f inside FD, %.1f in search, on `%s`/%s" % (
+        w, f, s, name, cfg.split("/")[-1])
+
+
+def _fd_wall_median(ladder):
+    import statistics
+    return "%.1f" % statistics.median(w for _, _, w, _, _ in _fd_timed_rows(ladder))
+
+
+def _fd_search_share(instance: str, config: str):
+    """`search_seconds` against `wall_seconds` for one rung, both from the bench."""
+
+    def fn(ladder):
+        for name, g in _ladder_rungs(ladder):
+            if name != instance or g.get("config") != config:
+                continue
+            t = g.get("timing") or {}
+            if t.get("search_seconds") is None or t.get("wall_seconds") is None:
+                raise ProbeError(f"{instance}/{config} has no search/wall split")
+            return "%.1f ms of a %.1f ms bill" % (t["search_seconds"] * 1000, t["wall_seconds"] * 1000)
+        raise ProbeError(f"no ladder row {instance}/{config}")
+
+    return fn
+
+
+def _fd_crossover(ladder):
+    """The first gripper size at which the bundled stub is slower than FD.
+
+    "Slower" is measured against the *fastest* optimal rung, which is the
+    comparison that favours the stub least and so is the one worth publishing.
+    """
+    # Sorted, not in serialisation order: `gripper-01…10` happen to be stored in
+    # size order today, so "the first hit in file order" gives the right answer
+    # by luck. A reordered bench would have published `gripper-10` silently.
+    for r in sorted(ladder["results"], key=lambda r: r["instance"]["name"]):
+        name = r["instance"]["name"]
+        if not name.startswith("gripper"):
+            continue
+        stub = next((_wall_ms(g) for g in r["rungs"] if g.get("config") == "stub-bfs"), None)
+        opt = [_wall_ms(g) for g in r["rungs"]
+               if g.get("tier") == "fd-optimal" and _wall_ms(g) is not None]
+        if stub is None or not opt:
+            continue
+        if stub > min(opt):
+            return name
+    raise ProbeError("the stub never loses to fd-optimal on any gripper instance")
 
 
 def _rate(bucket: str):
@@ -305,9 +453,34 @@ FACTS: dict[str, tuple[object, object]] = {
     "fd.open4far_actions": ("112", md(f"{E11}/partials/deadlock-via-reachability.md", r"\| `sokoban-open4far` \| (\d+) \| 3352")),
     "fd.open4far_states": ("3352", md(f"{E11}/partials/deadlock-via-reachability.md", r"\| `sokoban-open4far` \| 112 \| (\d+) \|")),
     "fd.open4far_optimal": ("11", md(f"{E11}/partials/deadlock-via-reachability.md", r"\| `sokoban-open4far` \| 112 \| 3352 \| 9552 \| 14 \| 448 \| 2904 \| yes \| \*\*(\d+)\*\*")),
-    "fd.startup_ms": ("140 and 260", md("engine-rig/STATUS.md", r"sits between (\d+ and \d+) ms almost regardless of instance")),
-    "fd.search_share": ("4.1 ms of a 181 ms bill", md("engine-rig/STATUS.md", r"the search itself is (4\.1 ms of a 181 ms bill)")),
-    "fd.crossover": ("gripper-08", md("engine-rig/STATUS.md", r"crossover against the bundled\n  rung is at `([\w-]+)`")),
+    # These three were regexed out of STATUS.md until E13 -- prose checked against
+    # prose, so nothing ever compared them to the bench. One of them had drifted:
+    # the table published "4.1 ms of a 181 ms bill" where `ladder.json` says the
+    # `sokoban-far6`/lmcut row is 4.1 ms of 187.3. Now computed from the bench.
+    "fd.wall_median": ("163.3", jf(f"{E2}/ladder.json", _fd_wall_median,
+                                   "median wall_seconds over the 51 timed fd-* rungs")),
+    "fd.timed_rungs": ("51", jf(f"{E2}/ladder.json", lambda L: str(len(_fd_timed_rows(L))),
+                                "count of fd-* rungs carrying all three clocks")),
+    "fd.startup_band": ("144.5 and 181.2 ms, median 154.9",
+                        jf(f"{E2}/ladder.json", _fd_startup_band,
+                           "wall_seconds - fd_total_seconds over the 51 timed fd-* rungs")),
+    "fd.ipdb_pdb_seconds": ("1.621222",
+                            md(f"{E2}/logs/far6.fd-optimal-ipdb.base.log",
+                               r"hill climbing pattern collection generator computation time: ([\d.]+)s")),
+    "fd.search_share_median": ("0.2", jf(f"{E2}/ladder.json", _fd_search_share_median,
+                                         "median search_seconds/wall_seconds over the timed fd-* rungs")),
+    "fd.search_outlier": ("502.9 ms of 666.2 (75.5 %) on `gripper-10`/lmcut",
+                          jf(f"{E2}/ladder.json", _fd_search_outlier,
+                             "the fd-* rung with the largest search_seconds/wall_seconds")),
+    "fd.wall_outlier": ("1796.8 ms wall, 1615.6 inside FD, 0.2 in search, on `sokoban-far6`/ipdb",
+                        jf(f"{E2}/ladder.json", _fd_wall_outlier,
+                           "the fd-* rung with the largest wall_seconds")),
+    "fd.search_share": ("4.1 ms of a 187.3 ms bill",
+                        jf(f"{E2}/ladder.json", _fd_search_share("sokoban-far6", "fd-optimal/lmcut"),
+                           "sokoban-far6 / fd-optimal/lmcut :: search_seconds of wall_seconds")),
+    "fd.crossover": ("gripper-08",
+                     jf(f"{E2}/ladder.json", _fd_crossover,
+                        "first gripper instance where stub-bfs wall_seconds exceeds the fastest fd-optimal rung's")),
     "fd.never_fuzzed": ("stub-bfs", md("fuzzlab/MUTATION.md", r"`choose_tier`'s third clause\n\(`backends.py:152-154`\) forces `([\w-]+)` for exactly that case")),
     "fd.mutants": (6, jf("fuzzlab/out/mutation.fd_adapter.json", lambda d: len(d["mutants"]), "len(mutants)")),
     "fd.undetermined": (1, jf("fuzzlab/out/mutation.fd_adapter.json", lambda d: sum(1 for m in d["mutants"] if m.get("undetermined")), "count(undetermined)")),
@@ -433,7 +606,12 @@ FACTS: dict[str, tuple[object, object]] = {
     "pf.argmax_states": ("16", md(f"{E11}/partials/probe_frontier-via-bruteforce.md", r"argmax \*\*在 (\d+) 个状态上改变\*\*")),
     "zs.fixtureB_features": ("16", md(f"{E11}/partials/probe_frontier-via-bruteforce.md", r"`analyse` 给出：(\d+) 个特征")),
     "dl.far6_blind_pct": ("-10.0", jf(f"{E2}/dividend.json", lambda d: (lambda f: f"{100 * (f['expansions_after'] - f['expansions_before']) / f['expansions_before']:.1f}")(_fd_row(d, "far6", "singleton", "fd-optimal/blind")), "far6/singleton/blind, (after-before)/before")),
-    "dl.m9_ringstuck": ("44 → 22", md("engine-rig/STATUS.md", r"M9's (44 → 22) is a fact about the bundled search")),
+    # Was regexed out of STATUS.md prose until E13, though the pair has been in
+    # P13's artifact all along. A number quoted from a narrative is a number
+    # nobody re-derived; this one happened to be right.
+    "dl.m9_ringstuck": ("44 → 22",
+                        jf(f"{P13}/dividend.json", _p13_stub_pair("ringstuck"),
+                           "deadlock_dividend[ringstuck] :: stub_expansions_before -> _after")),
     "fd.coldstart_domains": (7, jf(f"{P13}/dividend.json", lambda d: len(d["cross_check"]), "len(cross_check)")),
     # All three FD-reported UNSATs exit 12, which D-024 and the toolchain
     # manifest both say is not a proof on its own.
@@ -532,7 +710,7 @@ ROWS = [
             "**Measured on cost, and explicitly {unmeasured} on the one comparison the paper wants.** "
             "The property battery has **never run against any Fast Downward rung**: `props/fd_adapter.py` calls `solve_parsed` with in-memory objects, and `choose_tier`'s third clause forces `{fd.never_fuzzed}` for that call shape — a *structural* fall-back, not an environmental one, so it holds on a machine that does have a build. Everything the fuzz campaign reports about this engine is about the bundled BFS, and **the stub-versus-real-FD difference under the battery is therefore {unmeasured}**. Measuring it needs `props` to hand `solve()` real file paths *and* an FD build; `.toolchain/` is gitignored by design, so the second half is per-machine. "
             "Of {fd.mutants} mutants one is `undetermined` — it never ran — and that column exists only because an adversarial pass found `survived` did not require the mutant to have executed. "
-            "What is measured is the price: FD's cost here is startup, not search — every FD row sits between {fd.startup_ms} ms almost regardless of instance, and on `sokoban-far6` the search is {fd.search_share}. The crossover against the bundled rung is at `{fd.crossover}`, above every instance this rig generates. "
+            "What is measured is the price, and the bench times **three nested clocks** — search inside FD's own total inside the subprocess wall — which is what makes the claim checkable. **Driver startup is the tight one**: `wall - fd_total` sits between **{fd.startup_band} ms** across all {fd.timed_rungs} timed rungs, a property of the harness rather than of the instance. Search is usually free — the median rung spends **{fd.search_share_median} %** of its **{fd.wall_median} ms** wall inside search (two medians over the same {fd.timed_rungs} rows, not one representative row), and `sokoban-far6`/lmcut is {fd.search_share}. **But \"the cost is startup\" is a median, not a law, and it fails upward twice.** Search can dominate outright — {fd.search_outlier}. And the slowest row is neither: {fd.wall_outlier} — the time is inside FD and outside search, and the run's own log attributes **{fd.ipdb_pdb_seconds} s** of it to `ipdb`'s hill-climbing pattern-collection generator, which runs before search begins. No row falls *below* the band; the exceptions are all upward. The crossover against the bundled rung is at `{fd.crossover}` — above every instance the *engines* in this rig generate, though the bench's own gripper ladder runs past it. "
             "Exit codes cannot separate a proof from a shrug (D-024), and a cross-track audit found `cold-start-a0` reading exit 12 as a proof from the exception string alone — latent, because that pipeline runs the stub. {fd.unaudited} of {fd.published} published fields are asserted by no fuzz invariant (all of them are pinned by engine-rig unit tests instead)."
         ),
     ),
@@ -585,9 +763,15 @@ ROWS = [
 # --------------------------------------------------------------------------
 
 
+# Substitutable names that are not probed facts: fixed vocabulary the rows share
+# so that the same phrase cannot be spelled two ways. Named once, so `verify()`
+# and `render_selfcheck()` cannot disagree about what a legal key is.
+LITERALS: dict[str, str] = {"unmeasured": UNMEASURED}
+
+
 def verify() -> tuple[dict[str, str], list[str]]:
     """Probe every fact. Returns (values, mismatches)."""
-    values: dict[str, str] = {"unmeasured": UNMEASURED}
+    values: dict[str, str] = dict(LITERALS)
     mismatches: list[str] = []
     for key in sorted(FACTS):
         expect, probe = FACTS[key]
@@ -598,7 +782,11 @@ def verify() -> tuple[dict[str, str], list[str]]:
     return values, mismatches
 
 
-_PLACEHOLDER = re.compile(r"\{([a-z0-9_.]+)\}")
+_PLACEHOLDER = re.compile(r"\{([A-Za-z0-9_.]+)\}")
+
+# Anything brace-wrapped that survives substitution. Deliberately wider than
+# _PLACEHOLDER: the point is to catch keys this module's own matcher cannot see.
+_ANY_BRACE = re.compile(r"\{[^{}]*\}")
 
 
 def sub(text: str, values: dict[str, str]) -> str:
@@ -606,6 +794,16 @@ def sub(text: str, values: dict[str, str]) -> str:
 
     `str.format` cannot do this: it reads the dot as attribute access. An
     unknown key raises rather than leaving a silent gap in the table.
+
+    The character class was `[a-z0-9_.]+` until E13, which meant the three keys
+    carrying a capital letter -- `cegis.fixtureA_transitions`,
+    `zs.fixtureB_features`, `zs.fixtureB_transitions` -- were never seen by the
+    matcher at all, so they could not raise: they were copied into the published
+    table verbatim, braces and all, and `--check` compared one unsubstituted
+    table against another and called it current. The unknown-key guard above was
+    written to make exactly that impossible and was reachable only by keys it
+    already matched. `_unresolved` below is the guard that does not depend on
+    this pattern being right.
     """
 
     def one(m):
@@ -614,11 +812,55 @@ def sub(text: str, values: dict[str, str]) -> str:
             raise ProbeError(f"table references unknown fact {key!r}")
         return values[key]
 
-    return _PLACEHOLDER.sub(one, text)
+    out = _PLACEHOLDER.sub(one, text)
+    left = _unresolved(out)
+    if left:
+        raise PlaceholderError(
+            "placeholder(s) survived substitution: " + ", ".join(sorted(set(left)))
+            + " -- a published number that is still a placeholder is worse than a "
+              "missing one, and _PLACEHOLDER cannot be the thing that decides it")
+    return out
 
 
 def _cell(text: str, values: dict[str, str]) -> str:
     return sub(text, values).replace("|", r"\|").replace("\n", " ")
+
+
+def _unresolved(text: str) -> list[str]:
+    """Every brace-wrapped run left in a rendered table.
+
+    A separate, deliberately dumber check than `sub`: it knows nothing about
+    what a fact key looks like, which is the only way it can catch a key `sub`'s
+    own pattern is too narrow to see. If the table ever needs a literal brace in
+    its prose, this is the function that has to learn about it -- and that is the
+    right place to make someone argue for it.
+    """
+    return _ANY_BRACE.findall(text)
+
+
+def render_selfcheck() -> list[str]:
+    """Render with sentinel values, so the rendering check needs no artifacts.
+
+    `main` probes before it renders, so on a checkout missing any of the 21
+    artifacts `verify()` raises first and the render is never reached. That is
+    right for a *value* check -- an unreadable artifact really is unknown -- but
+    it meant E13's placeholder guard was unreachable on exactly the checkouts the
+    skip branch exists for, which is where a rendering fault would sit longest
+    unnoticed. This path substitutes every known key with a sentinel and asks
+    only the question that does not need an artifact: does anything brace-wrapped
+    survive, and is every key referenced a key that exists?
+
+    Returns the problems it found, so the caller decides what to do with them.
+    """
+    values = {key: "░" for key in FACTS} | dict(LITERALS)
+    problems: list[str] = []
+    for row in ROWS:
+        for col in ("solves", "fixture", "recheck", "boundary"):
+            try:
+                sub(row[col], values)
+            except ProbeError as exc:
+                problems.append(f"{row['engine']} / {col}: {exc}")
+    return problems
 
 
 def render(values: dict[str, str]) -> str:
@@ -627,7 +869,10 @@ def render(values: dict[str, str]) -> str:
     w("# engine-rig · the eight processes, and what each one is worth")
     w("")
     w("Generated by `python -m tools.engine_table`. **Do not edit by hand** — every")
-    w("number here is probed out of an artifact under `runs/`, and the generator exits")
+    under_runs = sum(1 for _, p in FACTS.values() if "/runs/" in p.where.split(" :: ")[0])
+    w(f"number here is probed out of an artifact -- {under_runs} of the {len(FACTS)} out of a `runs/`")
+    w("directory, the remainder out of a committed stream or campaign output")
+    w("(`artifacts/candidates.jsonl`, `fuzzlab/out/`) -- and the generator exits")
     w("non-zero if any of them has drifted. The provenance table at the end names the")
     w("file and the field each number came from.")
     w("")
@@ -768,8 +1013,11 @@ def render(values: dict[str, str]) -> str:
     w("")
     w("## Provenance")
     w("")
-    w("Every number above, and where it was probed from. A number that could not be")
-    w("pointed back at a run does not appear in the table.")
+    w("Every number above, and where it was probed from. A number nobody could point")
+    w("at a file does not appear in the table. Most of them point at a `runs/`")
+    w("directory; the exceptions are the committed candidate stream and `fuzzlab/`'s")
+    w("campaign and mutation outputs, which are standing artifacts rather than the")
+    w("record of one run, and are listed below with everything else.")
     w("")
     w("| key | value | artifact :: locator |")
     w("|---|---|---|")
@@ -778,13 +1026,23 @@ def render(values: dict[str, str]) -> str:
         where = probe.where.replace("|", r"\|")
         w(f"| `{key}` | `{values[key]}` | `{where}` |")
     w("")
-    w("Runs referenced: `engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep`")
-    w("(six cross-checks + two adversarial reviews), `.../20260728T072633Z-E2-fd-ladder-bench`")
-    w("(the ladder and the deadlock dividend), `.../20260728T141724Z-E5-cert-recheck`")
-    w("(the independent rechecker), `.../p13-fd-real` (Fast Downward connected),")
-    w("`fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power` (mutation power and the")
-    w("published-versus-audited census), and `theoria-arm/runs/20260728T015354Z-g50t-first-contact`")
-    w("(the one live-game artifact quoted). The generator reads them; it writes only this file.")
+    # Counted from the probes, not listed by hand. The hand-written version of
+    # this paragraph named six runs and omitted E17 -- which supplies more facts
+    # than any other source in the table -- because it was written before E17
+    # landed and nothing made it wrong.
+    per_source: dict[str, int] = {}
+    for _, probe in FACTS.values():
+        src = probe.where.split(" :: ")[0]
+        run = src.rsplit("/", 1)[0] if "/runs/" not in src else \
+            src[:src.index("/runs/") + 6] + src[src.index("/runs/") + 6:].split("/")[0]
+        per_source[run] = per_source.get(run, 0) + 1
+    w("Sources, with the number of facts each supplies — counted from the probes")
+    w("above rather than listed by hand, so a new source cannot go unmentioned:")
+    w("")
+    for src, n in sorted(per_source.items(), key=lambda kv: (-kv[1], kv[0])):
+        w(f"* `{src}` — {n}")
+    w("")
+    w("The generator reads them; it writes only this file.")
     w("")
     return "\n".join(lines)
 
@@ -794,9 +1052,26 @@ def main(argv=None) -> int:
     ap.add_argument("--check", action="store_true", help="verify only; do not write")
     args = ap.parse_args(argv)
 
+    # Before anything touches an artifact: a rendering fault is reproducible on
+    # every checkout, so it must be reportable on every checkout.
+    problems = render_selfcheck()
+    if problems:
+        print(f"engine_table: RENDER FAILED: {len(problems)} template(s) do not render:",
+              file=sys.stderr)
+        for p in problems:
+            print(f"  {p}", file=sys.stderr)
+        print("\nThe table was NOT written. This is a defect in this file, not a "
+              "missing artifact: it reproduces on every checkout.", file=sys.stderr)
+        return 2
+
     try:
         values, mismatches = verify()
         text = render(values)
+    except PlaceholderError as exc:
+        print(f"engine_table: RENDER FAILED: {exc}", file=sys.stderr)
+        print("\nThe table was NOT written. This is a defect in this file, not a "
+              "missing artifact: it reproduces on every checkout.", file=sys.stderr)
+        return 2
     except ProbeError as exc:
         print(f"engine_table: PROBE FAILED: {exc}", file=sys.stderr)
         return 3

@@ -201,7 +201,7 @@
         "effect": {
           "type": "appear"
         },
-        "frontier_size": 7,
+        "frontier_size": 13,
         "guard": [
           "!present(obj1)"
         ],
@@ -214,7 +214,7 @@
         "effect": {
           "type": "none"
         },
-        "frontier_size": 8,
+        "frontier_size": 15,
         "guard": [
           "!at(3,1)",
           "act==DOWN"
@@ -267,7 +267,7 @@
         "effect": {
           "type": "vanish"
         },
-        "frontier_size": 8,
+        "frontier_size": 27,
         "guard": [
           "act==DOWN",
           "tcolor(DOWN)==2"
@@ -282,7 +282,7 @@
           "to": 2,
           "type": "recolor"
         },
-        "frontier_size": 7,
+        "frontier_size": 13,
         "guard": [
           "!present(obj1)"
         ],
@@ -296,7 +296,7 @@
           "to": 3,
           "type": "recolor"
         },
-        "frontier_size": 8,
+        "frontier_size": 27,
         "guard": [
           "act==DOWN",
           "tcolor(DOWN)==2"
@@ -310,7 +310,7 @@
         "effect": {
           "type": "none"
         },
-        "frontier_size": 8,
+        "frontier_size": 15,
         "guard": [
           "!at(3,1)",
           "act==DOWN"
@@ -363,7 +363,7 @@
         "effect": {
           "type": "appear"
         },
-        "frontier_size": 7,
+        "frontier_size": 13,
         "guard": [
           "!present(obj1)"
         ],
@@ -376,7 +376,7 @@
         "effect": {
           "type": "none"
         },
-        "frontier_size": 8,
+        "frontier_size": 15,
         "guard": [
           "!at(3,1)",
           "act==DOWN"
@@ -429,7 +429,7 @@
         "effect": {
           "type": "vanish"
         },
-        "frontier_size": 8,
+        "frontier_size": 27,
         "guard": [
           "act==DOWN",
           "tcolor(DOWN)==2"
@@ -506,7 +506,7 @@
         "track": "obj3"
       }
     ],
-    "vocabulary_size": 96
+    "vocabulary_size": 116
   },
   "probes": [
     {
@@ -730,13 +730,13 @@
       "construction": {
         "direction": "DOWN",
         "mover_anchor": [
-          1,
+          3,
           1
         ],
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.591673,
+      "entropy_bits": 0.77935,
       "frontier": [
         [
           "!present(obj1)"
@@ -758,20 +758,44 @@
         ],
         [
           "!color(obj3)==4"
+        ],
+        [
+          "count(0)>=14"
+        ],
+        [
+          "count(0)>=15"
+        ],
+        [
+          "count(3)>=1"
+        ],
+        [
+          "!count(2)>=1"
+        ],
+        [
+          "!count(4)>=1"
+        ],
+        [
+          "!count(4)>=2"
         ]
       ],
-      "n_hypotheses": 7,
+      "n_hypotheses": 13,
       "partition": {
         "fires": [
-          "obj1_appear_DOWN_3"
+          "obj1_appear_DOWN_10",
+          "obj1_appear_DOWN_3",
+          "obj1_appear_DOWN_9"
         ],
         "silent": [
           "obj1_appear_DOWN_0",
           "obj1_appear_DOWN_1",
+          "obj1_appear_DOWN_11",
+          "obj1_appear_DOWN_12",
           "obj1_appear_DOWN_2",
           "obj1_appear_DOWN_4",
           "obj1_appear_DOWN_5",
-          "obj1_appear_DOWN_6"
+          "obj1_appear_DOWN_6",
+          "obj1_appear_DOWN_7",
+          "obj1_appear_DOWN_8"
         ]
       },
       "rule": "obj1_appear_DOWN",
@@ -789,10 +813,14 @@
         "painted_color": 3
       },
       "coverage": "9/9",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.918296,
       "frontier": [
         [
           "!at(3,1)",
+          "act==DOWN"
+        ],
+        [
+          "!faces(obj2,DOWN)",
           "act==DOWN"
         ],
         [
@@ -829,21 +857,58 @@
           "!tcolor(DOWN)==2",
           "!tcolor(DOWN)==3",
           "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(3)>=1",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 15,
       "partition": {
         "fires": [
-          "obj1_still_DOWN_1",
+          "obj1_still_DOWN_10",
+          "obj1_still_DOWN_11",
+          "obj1_still_DOWN_12",
+          "obj1_still_DOWN_13",
           "obj1_still_DOWN_2",
           "obj1_still_DOWN_3",
           "obj1_still_DOWN_4",
           "obj1_still_DOWN_5",
-          "obj1_still_DOWN_6"
+          "obj1_still_DOWN_6",
+          "obj1_still_DOWN_7"
         ],
         "silent": [
           "obj1_still_DOWN_0",
-          "obj1_still_DOWN_7"
+          "obj1_still_DOWN_1",
+          "obj1_still_DOWN_14",
+          "obj1_still_DOWN_8",
+          "obj1_still_DOWN_9"
         ]
       },
       "rule": "obj1_still_DOWN",
@@ -861,7 +926,7 @@
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.825627,
       "frontier": [
         [
           "act==DOWN",
@@ -875,6 +940,16 @@
         [
           "act==DOWN",
           "at(3,1)",
+          "present(obj3)"
+        ],
+        [
+          "act==DOWN",
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "act==DOWN",
+          "faces(obj2,DOWN)",
           "present(obj3)"
         ],
         [
@@ -893,29 +968,133 @@
           "color(obj3)==4"
         ],
         [
+          "act==DOWN",
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
           "!color(obj2)==3",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!color(obj2)==3",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
           "act==DOWN",
           "at(3,1)"
         ],
         [
           "!tcolor(DOWN)==3",
           "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "act==DOWN",
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
           "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 27,
       "partition": {
         "fires": [
           "obj1_vanish_DOWN_1",
+          "obj1_vanish_DOWN_10",
+          "obj1_vanish_DOWN_11",
+          "obj1_vanish_DOWN_12",
+          "obj1_vanish_DOWN_16",
+          "obj1_vanish_DOWN_17",
+          "obj1_vanish_DOWN_19",
           "obj1_vanish_DOWN_2",
+          "obj1_vanish_DOWN_20",
+          "obj1_vanish_DOWN_21",
+          "obj1_vanish_DOWN_22",
+          "obj1_vanish_DOWN_23",
+          "obj1_vanish_DOWN_24",
           "obj1_vanish_DOWN_3",
           "obj1_vanish_DOWN_4",
           "obj1_vanish_DOWN_5",
-          "obj1_vanish_DOWN_6"
+          "obj1_vanish_DOWN_6",
+          "obj1_vanish_DOWN_7",
+          "obj1_vanish_DOWN_8",
+          "obj1_vanish_DOWN_9"
         ],
         "silent": [
           "obj1_vanish_DOWN_0",
-          "obj1_vanish_DOWN_7"
+          "obj1_vanish_DOWN_13",
+          "obj1_vanish_DOWN_14",
+          "obj1_vanish_DOWN_15",
+          "obj1_vanish_DOWN_18",
+          "obj1_vanish_DOWN_25",
+          "obj1_vanish_DOWN_26"
         ]
       },
       "rule": "obj1_vanish_DOWN",
@@ -927,13 +1106,13 @@
       "construction": {
         "direction": "DOWN",
         "mover_anchor": [
-          1,
+          3,
           1
         ],
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.591673,
+      "entropy_bits": 0.77935,
       "frontier": [
         [
           "!present(obj1)"
@@ -955,20 +1134,44 @@
         ],
         [
           "!color(obj3)==4"
+        ],
+        [
+          "count(0)>=14"
+        ],
+        [
+          "count(0)>=15"
+        ],
+        [
+          "count(3)>=1"
+        ],
+        [
+          "!count(2)>=1"
+        ],
+        [
+          "!count(4)>=1"
+        ],
+        [
+          "!count(4)>=2"
         ]
       ],
-      "n_hypotheses": 7,
+      "n_hypotheses": 13,
       "partition": {
         "fires": [
-          "obj2_recolor2_DOWN_3"
+          "obj2_recolor2_DOWN_10",
+          "obj2_recolor2_DOWN_3",
+          "obj2_recolor2_DOWN_9"
         ],
         "silent": [
           "obj2_recolor2_DOWN_0",
           "obj2_recolor2_DOWN_1",
+          "obj2_recolor2_DOWN_11",
+          "obj2_recolor2_DOWN_12",
           "obj2_recolor2_DOWN_2",
           "obj2_recolor2_DOWN_4",
           "obj2_recolor2_DOWN_5",
-          "obj2_recolor2_DOWN_6"
+          "obj2_recolor2_DOWN_6",
+          "obj2_recolor2_DOWN_7",
+          "obj2_recolor2_DOWN_8"
         ]
       },
       "rule": "obj2_recolor2_DOWN",
@@ -986,7 +1189,7 @@
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.825627,
       "frontier": [
         [
           "act==DOWN",
@@ -1004,6 +1207,16 @@
         ],
         [
           "act==DOWN",
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "act==DOWN",
+          "faces(obj2,DOWN)",
+          "present(obj3)"
+        ],
+        [
+          "act==DOWN",
           "at(3,1)",
           "color(obj1)==4"
         ],
@@ -1018,29 +1231,133 @@
           "color(obj3)==4"
         ],
         [
+          "act==DOWN",
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
           "!color(obj2)==3",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!color(obj2)==3",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
           "act==DOWN",
           "at(3,1)"
         ],
         [
           "!tcolor(DOWN)==3",
           "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "act==DOWN",
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
           "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 27,
       "partition": {
         "fires": [
           "obj2_recolor3_DOWN_1",
+          "obj2_recolor3_DOWN_10",
+          "obj2_recolor3_DOWN_11",
+          "obj2_recolor3_DOWN_12",
+          "obj2_recolor3_DOWN_16",
+          "obj2_recolor3_DOWN_17",
+          "obj2_recolor3_DOWN_19",
           "obj2_recolor3_DOWN_2",
+          "obj2_recolor3_DOWN_20",
+          "obj2_recolor3_DOWN_21",
+          "obj2_recolor3_DOWN_22",
+          "obj2_recolor3_DOWN_23",
+          "obj2_recolor3_DOWN_24",
           "obj2_recolor3_DOWN_3",
           "obj2_recolor3_DOWN_4",
           "obj2_recolor3_DOWN_5",
-          "obj2_recolor3_DOWN_6"
+          "obj2_recolor3_DOWN_6",
+          "obj2_recolor3_DOWN_7",
+          "obj2_recolor3_DOWN_8",
+          "obj2_recolor3_DOWN_9"
         ],
         "silent": [
           "obj2_recolor3_DOWN_0",
-          "obj2_recolor3_DOWN_7"
+          "obj2_recolor3_DOWN_13",
+          "obj2_recolor3_DOWN_14",
+          "obj2_recolor3_DOWN_15",
+          "obj2_recolor3_DOWN_18",
+          "obj2_recolor3_DOWN_25",
+          "obj2_recolor3_DOWN_26"
         ]
       },
       "rule": "obj2_recolor3_DOWN",
@@ -1058,10 +1375,14 @@
         "painted_color": 3
       },
       "coverage": "9/9",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.918296,
       "frontier": [
         [
           "!at(3,1)",
+          "act==DOWN"
+        ],
+        [
+          "!faces(obj2,DOWN)",
           "act==DOWN"
         ],
         [
@@ -1098,21 +1419,58 @@
           "!tcolor(DOWN)==2",
           "!tcolor(DOWN)==3",
           "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(3)>=1",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 15,
       "partition": {
         "fires": [
-          "obj2_still_DOWN_1",
+          "obj2_still_DOWN_10",
+          "obj2_still_DOWN_11",
+          "obj2_still_DOWN_12",
+          "obj2_still_DOWN_13",
           "obj2_still_DOWN_2",
           "obj2_still_DOWN_3",
           "obj2_still_DOWN_4",
           "obj2_still_DOWN_5",
-          "obj2_still_DOWN_6"
+          "obj2_still_DOWN_6",
+          "obj2_still_DOWN_7"
         ],
         "silent": [
           "obj2_still_DOWN_0",
-          "obj2_still_DOWN_7"
+          "obj2_still_DOWN_1",
+          "obj2_still_DOWN_14",
+          "obj2_still_DOWN_8",
+          "obj2_still_DOWN_9"
         ]
       },
       "rule": "obj2_still_DOWN",
@@ -1124,13 +1482,13 @@
       "construction": {
         "direction": "DOWN",
         "mover_anchor": [
-          1,
+          3,
           1
         ],
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.591673,
+      "entropy_bits": 0.77935,
       "frontier": [
         [
           "!present(obj1)"
@@ -1152,20 +1510,44 @@
         ],
         [
           "!color(obj3)==4"
+        ],
+        [
+          "count(0)>=14"
+        ],
+        [
+          "count(0)>=15"
+        ],
+        [
+          "count(3)>=1"
+        ],
+        [
+          "!count(2)>=1"
+        ],
+        [
+          "!count(4)>=1"
+        ],
+        [
+          "!count(4)>=2"
         ]
       ],
-      "n_hypotheses": 7,
+      "n_hypotheses": 13,
       "partition": {
         "fires": [
-          "obj3_appear_DOWN_3"
+          "obj3_appear_DOWN_10",
+          "obj3_appear_DOWN_3",
+          "obj3_appear_DOWN_9"
         ],
         "silent": [
           "obj3_appear_DOWN_0",
           "obj3_appear_DOWN_1",
+          "obj3_appear_DOWN_11",
+          "obj3_appear_DOWN_12",
           "obj3_appear_DOWN_2",
           "obj3_appear_DOWN_4",
           "obj3_appear_DOWN_5",
-          "obj3_appear_DOWN_6"
+          "obj3_appear_DOWN_6",
+          "obj3_appear_DOWN_7",
+          "obj3_appear_DOWN_8"
         ]
       },
       "rule": "obj3_appear_DOWN",
@@ -1183,10 +1565,14 @@
         "painted_color": 3
       },
       "coverage": "9/9",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.918296,
       "frontier": [
         [
           "!at(3,1)",
+          "act==DOWN"
+        ],
+        [
+          "!faces(obj2,DOWN)",
           "act==DOWN"
         ],
         [
@@ -1223,21 +1609,58 @@
           "!tcolor(DOWN)==2",
           "!tcolor(DOWN)==3",
           "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(DOWN)==2",
+          "act==DOWN",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        [
+          "!count(3)>=1",
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 15,
       "partition": {
         "fires": [
-          "obj3_still_DOWN_1",
+          "obj3_still_DOWN_10",
+          "obj3_still_DOWN_11",
+          "obj3_still_DOWN_12",
+          "obj3_still_DOWN_13",
           "obj3_still_DOWN_2",
           "obj3_still_DOWN_3",
           "obj3_still_DOWN_4",
           "obj3_still_DOWN_5",
-          "obj3_still_DOWN_6"
+          "obj3_still_DOWN_6",
+          "obj3_still_DOWN_7"
         ],
         "silent": [
           "obj3_still_DOWN_0",
-          "obj3_still_DOWN_7"
+          "obj3_still_DOWN_1",
+          "obj3_still_DOWN_14",
+          "obj3_still_DOWN_8",
+          "obj3_still_DOWN_9"
         ]
       },
       "rule": "obj3_still_DOWN",
@@ -1255,7 +1678,7 @@
         "painted_color": 3
       },
       "coverage": "1/1",
-      "entropy_bits": 0.811278,
+      "entropy_bits": 0.825627,
       "frontier": [
         [
           "act==DOWN",
@@ -1269,6 +1692,16 @@
         [
           "act==DOWN",
           "at(3,1)",
+          "present(obj3)"
+        ],
+        [
+          "act==DOWN",
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "act==DOWN",
+          "faces(obj2,DOWN)",
           "present(obj3)"
         ],
         [
@@ -1287,29 +1720,133 @@
           "color(obj3)==4"
         ],
         [
+          "act==DOWN",
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
           "!color(obj2)==3",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!color(obj2)==3",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
           "act==DOWN",
           "at(3,1)"
         ],
         [
           "!tcolor(DOWN)==3",
           "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "act==DOWN",
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "act==DOWN",
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "act==DOWN",
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
           "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "at(3,1)"
+        ],
+        [
+          "!count(3)>=1",
+          "act==DOWN",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 8,
+      "n_hypotheses": 27,
       "partition": {
         "fires": [
           "obj3_vanish_DOWN_1",
+          "obj3_vanish_DOWN_10",
+          "obj3_vanish_DOWN_11",
+          "obj3_vanish_DOWN_12",
+          "obj3_vanish_DOWN_16",
+          "obj3_vanish_DOWN_17",
+          "obj3_vanish_DOWN_19",
           "obj3_vanish_DOWN_2",
+          "obj3_vanish_DOWN_20",
+          "obj3_vanish_DOWN_21",
+          "obj3_vanish_DOWN_22",
+          "obj3_vanish_DOWN_23",
+          "obj3_vanish_DOWN_24",
           "obj3_vanish_DOWN_3",
           "obj3_vanish_DOWN_4",
           "obj3_vanish_DOWN_5",
-          "obj3_vanish_DOWN_6"
+          "obj3_vanish_DOWN_6",
+          "obj3_vanish_DOWN_7",
+          "obj3_vanish_DOWN_8",
+          "obj3_vanish_DOWN_9"
         ],
         "silent": [
           "obj3_vanish_DOWN_0",
-          "obj3_vanish_DOWN_7"
+          "obj3_vanish_DOWN_13",
+          "obj3_vanish_DOWN_14",
+          "obj3_vanish_DOWN_15",
+          "obj3_vanish_DOWN_18",
+          "obj3_vanish_DOWN_25",
+          "obj3_vanish_DOWN_26"
         ]
       },
       "rule": "obj3_vanish_DOWN",
@@ -1332,8 +1869,33 @@
         "baseline_bits": 920,
         "chosen": true,
         "events": 33,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [
+            {
+              "eaten": "obj2",
+              "mover": "obj1",
+              "t": 4,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            },
+            {
+              "eaten": "obj2",
+              "mover": "obj3",
+              "t": 4,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            }
+          ],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 724,
+          "script_bits_before": 724,
+          "swaps": []
+        },
         "operator": "connected_components(4)+uniform_color",
-        "ratio": 0.7652,
+        "ratio": 0.763,
         "reidentification": {
           "applied": true,
           "merged": [
@@ -1347,21 +1909,33 @@
             }
           ],
           "operator": "template_match+disjoint_lifetime",
-          "saved_bits": 20,
-          "script_bits_after": 704,
+          "saved_bits": 22,
+          "script_bits_after": 702,
           "script_bits_before": 724,
           "tracks_after": 4,
           "tracks_before": 6
         },
-        "script_bits": 704,
+        "script_bits": 702,
         "tracks": 4
       },
       {
         "baseline_bits": 920,
         "chosen": false,
         "events": 59,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 1192,
+          "script_bits_before": 1192,
+          "swaps": []
+        },
         "operator": "connected_components(4)",
-        "ratio": 1.0674,
+        "ratio": 1.012,
         "reidentification": {
           "applied": true,
           "merged": [
@@ -1435,18 +2009,18 @@
             }
           ],
           "operator": "template_match+disjoint_lifetime",
-          "saved_bits": 210,
-          "script_bits_after": 982,
+          "saved_bits": 261,
+          "script_bits_after": 931,
           "script_bits_before": 1192,
           "tracks_after": 8,
           "tracks_before": 25
         },
-        "script_bits": 982,
+        "script_bits": 931,
         "tracks": 8
       }
     ],
-    "ratio": 0.7652,
-    "script_bits": 704,
+    "ratio": 0.763,
+    "script_bits": 702,
     "tracks": [
       {
         "color": 6,

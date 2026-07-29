@@ -1,0 +1,19 @@
+{
+  "arm": "drifted_fingerprint",
+  "carries_books": true,
+  "cost_to_first_plan": null,
+  "counts": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 0,
+    "compile_runs": 0,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 0,
+    "theorize_rounds": 0,
+    "world_actions": 0,
+    "world_frames": 0
+  },
+  "events": [],
+  "level": "t1-push-corridor",
+  "note": "carries a carrypack onto a level it has never seen"
+}

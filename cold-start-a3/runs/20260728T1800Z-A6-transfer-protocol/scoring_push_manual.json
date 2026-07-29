@@ -1,0 +1,771 @@
+{
+  "artefact": "scoring_push_manual.json",
+  "manual": "theory/push/domain.dsl",
+  "method": {
+    "action_vocabulary": {
+      "DOWN": [
+        "push",
+        "Cart",
+        "down"
+      ],
+      "LEFT": [
+        "push",
+        "Cart",
+        "left"
+      ],
+      "RIGHT": [
+        "push",
+        "Cart",
+        "right"
+      ],
+      "UP": [
+        "push",
+        "Cart",
+        "up"
+      ]
+    },
+    "comparison": "rendered frames, cell by cell; never internal state",
+    "disagreement_list_cap": 50,
+    "enumeration": "BFS from initial() over the four actions, all four actions applied at every reachable state",
+    "exercised_definition": "union of (the manual's guard fired) and (the world's ground-truth rule tag implicates the clause); both components reported separately",
+    "state_cap": 200000,
+    "state_reading": "the unique cell carrying each declared object colour, as a6carry/rebuild.py:preflight reads it"
+  },
+  "promised_by": "theory/push/domain.dsl:43-45",
+  "rules": {
+    "block_down": {
+      "correct_total": 1,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 1,
+      "status": "checked_and_right",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "block_left": {
+      "correct_total": 0,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 0,
+      "status": "never_exercised",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "block_right": {
+      "correct_total": 3,
+      "cov": "2/2",
+      "disagreements_total": 0,
+      "ev": "t13,t30",
+      "exercised_total": 3,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 2,
+          "disagreements": 0,
+          "exercised": 2,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 2,
+          "required_but_not_fired": 0,
+          "world_required": 2
+        },
+        "transfer_corridor": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        }
+      }
+    },
+    "block_up": {
+      "correct_total": 1,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 1,
+      "status": "checked_and_right",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "shove_down": {
+      "correct_total": 1,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 1,
+      "status": "checked_and_right",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "shove_left": {
+      "correct_total": 0,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 0,
+      "status": "never_exercised",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "shove_right": {
+      "correct_total": 3,
+      "cov": "2/2",
+      "disagreements_total": 0,
+      "ev": "t13,t30",
+      "exercised_total": 3,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 2,
+          "disagreements": 0,
+          "exercised": 2,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 2,
+          "required_but_not_fired": 0,
+          "world_required": 2
+        },
+        "transfer_corridor": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        }
+      }
+    },
+    "shove_up": {
+      "correct_total": 1,
+      "cov": "0/0",
+      "disagreements_total": 0,
+      "ev": "symmetry",
+      "exercised_total": 1,
+      "status": "checked_and_right",
+      "witnessed": false,
+      "worlds": {
+        "source_open": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "transfer_corridor": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        }
+      }
+    },
+    "step_down": {
+      "correct_total": 32,
+      "cov": "5/5",
+      "disagreements_total": 0,
+      "ev": "t0,t9,t16,t25",
+      "exercised_total": 32,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "transfer_corridor": {
+          "correct": 4,
+          "disagreements": 0,
+          "exercised": 4,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 4,
+          "required_but_not_fired": 0,
+          "world_required": 4
+        }
+      }
+    },
+    "step_left": {
+      "correct_total": 37,
+      "cov": "7/7",
+      "disagreements_total": 0,
+      "ev": "t2,t8,t15,t18",
+      "exercised_total": 37,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "transfer_corridor": {
+          "correct": 9,
+          "disagreements": 0,
+          "exercised": 9,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 9,
+          "required_but_not_fired": 0,
+          "world_required": 9
+        }
+      }
+    },
+    "step_right": {
+      "correct_total": 37,
+      "cov": "6/6",
+      "disagreements_total": 0,
+      "ev": "t5,t12,t21,t28",
+      "exercised_total": 37,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "transfer_corridor": {
+          "correct": 9,
+          "disagreements": 0,
+          "exercised": 9,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 9,
+          "required_but_not_fired": 0,
+          "world_required": 9
+        }
+      }
+    },
+    "step_up": {
+      "correct_total": 32,
+      "cov": "5/5",
+      "disagreements_total": 0,
+      "ev": "t7,t10,t23,t26",
+      "exercised_total": 32,
+      "status": "checked_and_right",
+      "witnessed": true,
+      "worlds": {
+        "source_open": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "transfer_corridor": {
+          "correct": 4,
+          "disagreements": 0,
+          "exercised": 4,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 4,
+          "required_but_not_fired": 0,
+          "world_required": 4
+        }
+      }
+    }
+  },
+  "totals": {
+    "disagreements": 0,
+    "reachable_states": 64,
+    "transitions_checked": 256,
+    "worlds": 2
+  },
+  "verdict": {
+    "all_transitions_agree": true,
+    "checked_and_right": [
+      "block_down",
+      "block_up",
+      "shove_down",
+      "shove_up"
+    ],
+    "checked_and_wrong": [],
+    "distinct_transitions_by_world": {
+      "source_open": 2,
+      "transfer_corridor": 0
+    },
+    "distinct_transitions_exercising_any_unwitnessed_clause": 2,
+    "evidence_scale_note": "the six generalised clauses rest, in total, on 2 transitions out of the 256 checked -- all of them in the source world, none in the world the pack was carried to.  `exercising_transitions` counts clause-slots and is twice that, because a shove clause and its block clause share a guard and cannot fire apart.  The headline \"256 transitions checked\" is a statement about coverage of the state space, not about how much of it tests the part of the manual that was guessed.",
+    "exercising_transitions": {
+      "block_down": 1,
+      "block_left": 0,
+      "block_up": 1,
+      "shove_down": 1,
+      "shove_left": 0,
+      "shove_up": 1
+    },
+    "exercising_transitions_by_world": {
+      "block_down": {
+        "source_open": 1,
+        "transfer_corridor": 0
+      },
+      "block_left": {
+        "source_open": 0,
+        "transfer_corridor": 0
+      },
+      "block_up": {
+        "source_open": 1,
+        "transfer_corridor": 0
+      },
+      "shove_down": {
+        "source_open": 1,
+        "transfer_corridor": 0
+      },
+      "shove_left": {
+        "source_open": 0,
+        "transfer_corridor": 0
+      },
+      "shove_up": {
+        "source_open": 1,
+        "transfer_corridor": 0
+      }
+    },
+    "header_clause_count": {
+      "agrees": true,
+      "citation": "theory/push/domain.dsl:37",
+      "claimed_by_header": 6,
+      "counted_in_file": 6,
+      "note": "the header says 6, the file carries 6 `ev: symmetry` clauses.  Both numbers are read at run time — the count from the `[ev: …]` brackets, the claim from the header sentence — so neither is a copy that can rot.  They disagreed until 2026-07-29, when the header said eight.",
+      "sentence": "explorer at all.  Six of the twelve clauses below therefore rest on symmetry"
+    },
+    "never_checked": [
+      "block_left",
+      "shove_left"
+    ],
+    "reading_note": "`never_checked` is not a pass.  A clause with zero exercising transitions has zero disagreements for the same reason an unopened box has no broken contents, and the two lists are kept apart here so no reader can sum them.  A0′_REPORT §1 is what happens when they are summed.",
+    "statement": "4 of the 6 unwitnessed clauses were exercised by at least one reachable transition and agreed with the world everywhere they were; 2 were exercised by zero transitions across both worlds and are therefore NOT vindicated by this run -- they remain assertions.",
+    "unwitnessed_clauses": [
+      "block_down",
+      "block_left",
+      "block_up",
+      "shove_down",
+      "shove_left",
+      "shove_up"
+    ],
+    "witnessed_clauses": [
+      "block_right",
+      "shove_right",
+      "step_down",
+      "step_left",
+      "step_right",
+      "step_up"
+    ]
+  },
+  "worlds": {
+    "source_open": {
+      "agreements": 196,
+      "ambiguous_transitions": 0,
+      "capped": false,
+      "disagreement_sample": [],
+      "disagreements": 0,
+      "first_frame_agrees": true,
+      "first_frame_note": "frame 0 renders.  This tests the read-back, not any rule: the board and the object positions are derived from this frame, so no guard is evaluated.  The theorem is tested by the transitions --  and specifically by the corridor's one push, whose block sits in a different row and column from either witness",
+      "grid": [
+        5,
+        7
+      ],
+      "no_clause_transitions": {
+        "by_world_rule": {
+          "blocked_by_block": 5,
+          "blocked_by_wall": 75
+        },
+        "correct": 80,
+        "note": "wall- and block-blocked commands implicate no clause: the manual predicts them by having no rule fire and letting `frame persist` hold the frame (domain.dsl:75).  Counted here so the per-world totals add up, and excluded from the per-rule table so no clause is credited for a transition that tests nothing.",
+        "transitions": 80
+      },
+      "pack_slug": "source_open",
+      "predictor": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/theory.py",
+      "predictor_correspondence": {
+        "manual_sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+        "note": "the graded predictor was recompiled from the manual this module parses and came out byte-identical, so the per-rule table is about the code in front of it",
+        "pack_books_intact": true,
+        "recompiled_byte_identical": true
+      },
+      "reachable_states": 49,
+      "readback_mismatches": 0,
+      "rules": {
+        "block_down": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "block_left": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "block_right": {
+          "correct": 2,
+          "disagreements": 0,
+          "exercised": 2,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 2,
+          "required_but_not_fired": 0,
+          "world_required": 2
+        },
+        "block_up": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "shove_down": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "shove_left": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "shove_right": {
+          "correct": 2,
+          "disagreements": 0,
+          "exercised": 2,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 2,
+          "required_but_not_fired": 0,
+          "world_required": 2
+        },
+        "shove_up": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "step_down": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "step_left": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "step_right": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        },
+        "step_up": {
+          "correct": 28,
+          "disagreements": 0,
+          "exercised": 28,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 28,
+          "required_but_not_fired": 0,
+          "world_required": 28
+        }
+      },
+      "state_cap": 200000,
+      "transitions_accounted": true,
+      "transitions_checked": 196,
+      "transitions_exercising_an_unwitnessed_clause": 2,
+      "unchecked_transitions": 0,
+      "unreadable_states": 0,
+      "world_id": "t1-push-open"
+    },
+    "transfer_corridor": {
+      "agreements": 60,
+      "ambiguous_transitions": 0,
+      "capped": false,
+      "disagreement_sample": [],
+      "disagreements": 0,
+      "first_frame_agrees": true,
+      "first_frame_note": "frame 0 renders.  This tests the read-back, not any rule: the board and the object positions are derived from this frame, so no guard is evaluated.  The theorem is tested by the transitions --  and specifically by the corridor's one push, whose block sits in a different row and column from either witness",
+      "grid": [
+        5,
+        6
+      ],
+      "no_clause_transitions": {
+        "by_world_rule": {
+          "blocked_by_block": 1,
+          "blocked_by_wall": 32
+        },
+        "correct": 33,
+        "note": "wall- and block-blocked commands implicate no clause: the manual predicts them by having no rule fire and letting `frame persist` hold the frame (domain.dsl:75).  Counted here so the per-world totals add up, and excluded from the per-rule table so no clause is credited for a transition that tests nothing.",
+        "transitions": 33
+      },
+      "pack_slug": "transfer_corridor",
+      "predictor": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/theory.py",
+      "predictor_correspondence": {
+        "manual_sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+        "note": "the graded predictor was recompiled from the manual this module parses and came out byte-identical, so the per-rule table is about the code in front of it",
+        "pack_books_intact": true,
+        "recompiled_byte_identical": true
+      },
+      "reachable_states": 15,
+      "readback_mismatches": 0,
+      "rules": {
+        "block_down": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "block_left": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "block_right": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "block_up": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "shove_down": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "shove_left": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "shove_right": {
+          "correct": 1,
+          "disagreements": 0,
+          "exercised": 1,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 1,
+          "required_but_not_fired": 0,
+          "world_required": 1
+        },
+        "shove_up": {
+          "correct": 0,
+          "disagreements": 0,
+          "exercised": 0,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 0,
+          "required_but_not_fired": 0,
+          "world_required": 0
+        },
+        "step_down": {
+          "correct": 4,
+          "disagreements": 0,
+          "exercised": 4,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 4,
+          "required_but_not_fired": 0,
+          "world_required": 4
+        },
+        "step_left": {
+          "correct": 9,
+          "disagreements": 0,
+          "exercised": 9,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 9,
+          "required_but_not_fired": 0,
+          "world_required": 9
+        },
+        "step_right": {
+          "correct": 9,
+          "disagreements": 0,
+          "exercised": 9,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 9,
+          "required_but_not_fired": 0,
+          "world_required": 9
+        },
+        "step_up": {
+          "correct": 4,
+          "disagreements": 0,
+          "exercised": 4,
+          "fired_without_world_support": 0,
+          "manual_guard_fired": 4,
+          "required_but_not_fired": 0,
+          "world_required": 4
+        }
+      },
+      "state_cap": 200000,
+      "transitions_accounted": true,
+      "transitions_checked": 60,
+      "transitions_exercising_an_unwitnessed_clause": 0,
+      "unchecked_transitions": 0,
+      "unreadable_states": 0,
+      "world_id": "t1-push-corridor"
+    }
+  }
+}

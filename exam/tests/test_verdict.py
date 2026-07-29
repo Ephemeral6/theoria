@@ -740,3 +740,56 @@ def test_registry_if_available():
     assert len(digest) == 64
     assert registry.rubric(V.RUBRIC_ID).grade is RV.grade_verdict
     assert "exam.grading.rubrics_verdict" in registry.module_digests()
+
+
+# ------- negative control: an UNFIXED concurrency defect, pinned so it cannot
+# ------- change quietly.  See RUN_STATE.md and ADVERSARIAL.md (claim 5) in
+# ------- exam/runs/20260728T151000Z-V7-exam-stress-fanout/.
+
+@pytest.mark.xfail(strict=True, reason=(
+    "UNFIXED DEFECT, pinned deliberately: verdict._emit_spec writes 17 spec "
+    "files into the shared, tracked, non-temporary exam/artifacts/variant_specs/ "
+    "with model.write_json, whose open(path, 'w') truncates on open, and then "
+    "reads each one straight back with Variant.load(path) at verdict.py:479. "
+    "Two concurrent verdict.build() calls race: 6 workers x 12 builds produced "
+    "2 JSONDecodeErrors, and pytest exam/tests/test_selftest.py under 4 "
+    "concurrent builders failed 1 of 34. NOT fixed here: the fix has to decide "
+    "whether SPEC_DIR should be per-process at all, and that is its own item. "
+    "strict=True on purpose: whichever way it is fixed -- validating the spec "
+    "text in memory, or writing and reading a private path -- this XPASSes, the "
+    "suite goes red, and the writeup has to be re-derived."))
+def test_a_concurrent_builder_cannot_hand_emit_spec_an_empty_spec(tmp_path,
+                                                                 monkeypatch):
+    """The race, reproduced without a race.
+
+    A real concurrency test would be flaky, and a flaky strict-xfail is worse
+    than no test.  So the interleaving is injected instead of waited for: the
+    shared spec path is truncated at the exact moment `Variant.load` opens it,
+    which is what a competing `verdict.build()` does when it reaches
+    `open(path, "w")` a few microseconds earlier.  Everything happens under
+    `tmp_path`; the tracked specs under `exam/artifacts/variant_specs/` are
+    never touched, because leaving a committed artefact zero bytes long is the
+    damage this test exists to describe.
+    """
+    from proxy.variants import Variant
+
+    source = os.path.join(V.SPEC_DIR, "a2var-i1-atrium-nodown.json")
+    with open(source, "r", encoding="utf-8") as handle:
+        spec = json.load(handle)
+
+    monkeypatch.setattr(V, "SPEC_DIR", str(tmp_path))
+    shared = os.path.join(str(tmp_path), "%s.json" % spec["variant_id"])
+
+    original_load = Variant.load
+
+    def load_while_a_competitor_truncates(path):
+        if os.path.exists(shared):
+            with open(shared, "w", encoding="utf-8"):
+                pass                       # the competing builder's open(..., "w")
+        return original_load(path)
+
+    monkeypatch.setattr(Variant, "load",
+                        staticmethod(load_while_a_competitor_truncates))
+
+    emitted = V._emit_spec(spec)
+    assert emitted["variant_id"] == spec["variant_id"]

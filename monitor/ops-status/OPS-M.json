@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T03:56:16Z",
- "cycle": 11,
+ "utc": "2026-07-29T12:35:36Z",
+ "cycle": 14,
  "state": "working",
- "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支"
+ "note": "用户授权：hold 不再扣住 push rejected（该判决在所有闸门通过之后作出，取决于 master 而非分支）。冲突与红闸门仍照旧扣住。已推 da928c78，全部原因字符串逐一验过；生产判据仍欠——当前盘上没有该类 flag，下次竞态应被自动重试而非进 HELD"
 }

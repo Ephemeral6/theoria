@@ -1,5 +1,5 @@
 {
-  "mode": "hold",
+  "mode": "normal",
   "requeue": [],
   "history": [
     {
@@ -26,10 +26,10 @@
   ],
   "detected_at": "2026-07-29T03:27:24Z",
   "reset_hint": "You've hit your session limit \u00b7 resets 12:30pm (Asia/Shanghai)",
-  "note": "hold expired on its own: the window reopened at 2026-07-28T22:20:00Z",
+  "note": "hold expired on its own: the window reopened at 2026-07-29T04:30:00Z",
   "resumed_at": "2026-07-28T21:26:55Z",
   "last_ping_at": "2026-07-29T03:52:28Z",
   "last_ping_result": "CLOSED",
   "reopen_at": "2026-07-29T04:30:00Z",
-  "auto_released_at": "2026-07-28T22:22:20Z"
+  "auto_released_at": "2026-07-29T04:42:23Z"
 }

@@ -23,7 +23,7 @@ closed in the current sections (the Lean weight table, the anti-circularity cite
 | id | item | where | status |
 |---|---|---|---|
 | **A1** | ~~**§7 is a report of battery v0 and the battery is now v2.**~~ **Closed at P7** — §7 re-derived against `battery_version: "v2"`, every number read from `battery/artifacts/*.json` rather than from report prose. A2 is unblocked as a result. Original text of the item follows. **§7 is a report of battery v0 and the battery is now v2.** 26 runs / 2 arms / 29 metrics → 95 runs / 5 arms / 38 metrics; 24-of-29 → 31-of-38; 27 clusters → 32; and "there is no Schema arm and there may never be" is contradicted by a `schema_repro` arm that exists. Everything downstream — effect sizes, actions-per-call, ρ, P5, E5 — was computed over the v0 spectrum. **Cannot be patched number by number; §7 needs re-deriving against `battery_version: "v2"`.** | `sections/07_battery.md` | flagged in a standing note this pass; **re-derivation not done** |
-| **A2** | Abstract asserts no benchmark game was played for any result, while §7 reports effect sizes over four played ARC games and §10 says so. The current wording qualifies it ("played *for* this paper"); confirm the qualification survives §7's re-derivation, since A1 changes what §7 claims. | `sections/00_abstract.md` | open, blocked on A1 |
+| **A2** | Abstract asserts no benchmark game was played for any result, while §7 reports effect sizes over four played ARC games and §11 says so. The current wording qualifies it ("played *for* this paper"); confirm the qualification survives §7's re-derivation, since A1 changes what §7 claims. | `sections/00_abstract.md` | open, blocked on A1 |
 | **A3** | "The miss was named … with its three pairs" overstates `THEORIZE_LOG.md` R-05, which names three *directions* and one cell. The "three pairs" gloss was written at M6, after the score existed. This is the sentence that turns an anecdote into evidence for the seal. | `sections/00_abstract.md`, `sections/01_intro.md` | open |
 | **A4** | A third audit pass is owed: both existing audits predate §6, §8, §9 and the renumbering. | whole paper | open |
 
@@ -44,7 +44,7 @@ closed in the current sections (the Lean weight table, the anti-circularity cite
 | **C2** | "Independently developed track" / "independent adversarial review" oversells two sessions on one repo sharing one `CLAUDE.md`. Defence in depth, not independent replication. |
 | **C3** | Two findings entailed by their definitions: E5 is a price list by construction, and the K4/K2 tension is partly definitional with `0.000` quoted to three decimals over **n = 3**. The abstract should carry the n. |
 | **C4** | §5.3's "diff the files and the deletion is the whole diff" is false — the header goes 13 → 45 lines and every coverage annotation is rewritten. |
-| **C5** | `zero_space` is described two incompatible ways: an empirical null space over observed transitions in §3.2, and symbolically computed Petri invariants in §11. It reads data, not rules. |
+| **C5** | `zero_space` is described two incompatible ways: an empirical null space over observed transitions in §3.2, and symbolically computed Petri invariants in §12. It reads data, not rules. |
 | **C6** | §7.6 draws a Phase 4 conclusion from a 4-game pilot the paper elsewhere says can certify nothing. |
 | **C7** | The ground-truth seal is not auditable: it rests on a string the authors' own scorer writes. Cite commit hashes, or state plainly that it is a declaration and not a control. Same for the battery's pre-registration. |
 | **C8** | A Lean toolchain is required and the paper does not say so — "83/83 tests pass" becomes 75 passed / 8 skipped without `lean` on PATH, and the empty-axiom-list claim evaporates into skips. Of 8 lean-gated items only 7 invoke `lean` and 6 read `#print axioms`. |
@@ -55,11 +55,11 @@ closed in the current sections (the Lean weight table, the anti-circularity cite
 ## D · Novelty and related work — the largest reviewer-facing gap
 
 **Status after P7: the citation half is closed, the claim-scoping half is not.**
-Four of the five bullets below now have real, twice-verified citations in §11 —
+Four of the five bullets below now have real, twice-verified citations in §12 —
 Angluin and Chow for the reset assumption and conformance testing, Mitchell and
 Lau for the version space, De Millo–Lipton–Perlis with Dijkstra, Fetzer and Boehm
 for specification validity, and Ammons et al. for the mined-specification setting
-that is the exhibit's *actual* point. §11.3 states in the paper's own voice which
+that is the exhibit's *actual* point. §12.3 states in the paper's own voice which
 of its framings the literature already owns. What is **not** closed is the
 consequence: the abstract still reads as "four results" where the honest scope is
 an instrument-and-artefact contribution, and the fifth bullet — "engineering, not
@@ -79,7 +79,7 @@ and each maps onto a headline:
   "which experiment splits the frontier, priced in bits" is information-gain
   experiment design;
 * §5.6's point is the specification-validity problem (De Millo–Lipton–Perlis);
-  §11 cites proof-carrying code but nothing for the exhibit's actual point;
+  §12 cites proof-carrying code but nothing for the exhibit's actual point;
 * "engineering, not a result" applies to §4, §5.8, §7.1 and §3.1 — §4 should not
   read as a headline.
 
@@ -102,7 +102,7 @@ the unsolvable-variant milestone · §3.3 calls A0's explorer "exhaustive" one r
 above quoting its coverage as 99 % · §3.3 renders the same fraction as "99 %" and
 "98.73 %" one line apart · §3.5's "the other track" has no antecedent · §2.2 omits
 `deadlock_carver`, which is shipped, tested and tagged · §3.5's a0-spike
-corroboration is about reachability, not reversibility · §10.1(c) cites the ARC
+corroboration is about reachability, not reversibility · §11.1(c) cites the ARC
 determinism precheck without putting its numbers in the sentence · the abstract
 drops the qualification that both catches of the seeded clause were contingent on
 the experimenter's choice of error, and that the Lean catch is called *unplanned*

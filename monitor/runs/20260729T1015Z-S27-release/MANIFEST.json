@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "1b3c6150",
+  "branch": "agent/s27-release-must-stick",
+  "lane": "infra",
+  "note": "based on agent/s21-app-session-death because both change board.py",
+  "prompt_id": "S27-S27-release-must-stick",
+  "territory": "monitor",
+  "utc": "2026-07-29T10:14:11Z"
+}

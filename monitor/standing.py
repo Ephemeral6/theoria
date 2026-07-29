@@ -53,8 +53,14 @@ import board as board_mod                                          # noqa: E402
 #: 同时最多几个常驻会话。四个全开会和无头工人抢同一个额度窗口。
 MAX_STANDING = 3
 
-#: 低于这个空闲内存就不起新会话（机器为此崩过一次，约二十个会话同时没了）。
-MIN_FREE_GB = 8.0
+#: 起会话的内存门槛。
+#
+#: 8.0 这个数是机器崩过一次之后拍的（约二十个会话同时没了），但它是个**总量**门槛，
+#: 而崩溃的原因是**并发数**。实测一个 claude 会话稳态约 0.4–0.5 GB，所以按
+#: 「留够余量 + 每个待起会话的实际开销」算，比拿一个总量数一刀切诚实：
+#: 6.7 GB 空闲时按旧规则一个都不许起，而那时四个常驻研究员全死着、板上有活。
+HEADROOM_GB = 3.0        # 不动用的余量
+PER_SESSION_GB = 0.6     # 单个会话的保守估计（实测 0.42–0.52）
 
 #: 两次起同一个编号之间的最短间隔。会话如果一启动就崩，没有这条就会变成死循环
 #: 起会话——每十五分钟烧一次额度，而且看起来像在工作。
@@ -65,6 +71,13 @@ EVERY_MIN = 15
 
 #: 锁文件 / cycle 推进在这个时长内算「有人顶着这个编号」。
 LOCK_FRESH_MIN = 20
+
+#: 板上有这个编号的动作，多久之内算它还活着。比锁宽——一件活可以做很久才交付，
+#: 但一个会话在 90 分钟里对板一次动作都没有，就不该再被当成在岗。
+BOARD_ACTIVE_MIN = 90
+
+#: 板日志的路径（board.py 的同一份文件）。
+BOARD_LOG = os.path.join(HERE, "board", "board.log")
 
 
 def log(msg):
@@ -166,6 +179,35 @@ def occupied(agent, state):
     * mtime **不算**：一次 `git merge` 就能把死会话的 ops-status 摸新，
       今天下午就发生过（RES-2/RES-4 的 mtime 49 分钟，自报时刻却是几小时前）。
     """
+    # **板上的动作是最强的存活信号**，因为它是这个编号对共享状态造成的**后果**，
+    # 不是它对自己的**自述**：锁可以忘记刷新，cycle 可以停在原地，mtime 可以被
+    # 一次 merge 摸新，但 board.log 里一行 CLAIM/DONE 只可能由一个活着的会话写出来。
+    #
+    # 2026-07-29 实测：App 里的 RES-4 安静了三个多小时（锁 204 分钟、cycle 不动），
+    # 我据此判它已死并另起了一个无头 RES-4——**于是同一个编号有两个会话**，
+    # 同一件 S29 被独立做了两遍，产出两条互相冲突的分支。这是同号并发的第三次。
+    log_path = os.path.join(BOARD_LOG)
+    if os.path.exists(log_path):
+        try:
+            recent = 0.0
+            with open(log_path, encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    if (" by %s" % agent) not in line:
+                        continue
+                    try:
+                        t = time.strptime(line.split(" ", 1)[0],
+                                          "%Y-%m-%dT%H:%M:%SZ")
+                    except Exception:
+                        continue
+                    import calendar
+                    recent = max(recent, calendar.timegm(t))
+            if recent:
+                age = (time.time() - recent) / 60.0
+                if age < BOARD_ACTIVE_MIN:
+                    return "board activity %.0f min ago" % age
+        except OSError:
+            pass
+
     lock = os.path.join(HERE, "ops-status", "%s.lock" % agent)
     if os.path.exists(lock):
         age = (time.time() - os.path.getmtime(lock)) / 60.0
@@ -190,7 +232,14 @@ def occupied(agent, state):
     if cycle is not None and cycle != seen["last_cycle"]:
         seen["last_cycle"] = cycle
         seen["last_cycle_epoch"] = time.time()
-        return "cycle advanced to %s" % cycle
+        # cycle 变了**只说明它比我们上次记的新**，不说明它是刚刚写的——
+        # 我们上次记的可能是三小时前，而它两小时前就死了。所以还要求文件本身是新的。
+        # mtime 单看会被一次 merge 摸新（已实测），但那种情况下 cycle 下一跳就不再变，
+        # 于是最多骗过一跳。两个都要求，才既不误杀活人、也不替死人站岗。
+        file_age = (time.time() - os.path.getmtime(path)) / 60.0
+        if file_age < LOCK_FRESH_MIN:
+            return "cycle advanced to %s (%.0f min ago)" % (cycle, file_age)
+        return None
     quiet_since = seen.get("last_cycle_epoch") or 0.0
     if quiet_since:
         quiet = (time.time() - quiet_since) / 60.0
@@ -234,8 +283,9 @@ def sweep(dry=False, only=None):
             why = busy
         elif held:
             why = "quota hold"
-        elif gb < MIN_FREE_GB:
-            why = "free memory %.1fGB < %.1f" % (gb, MIN_FREE_GB)
+        elif gb < HEADROOM_GB + PER_SESSION_GB:
+            why = ("free memory %.1fGB < headroom %.1f + %.1f per session"
+                   % (gb, HEADROOM_GB, PER_SESSION_GB))
         elif n_standing >= MAX_STANDING:
             why = "standing cap %d reached" % MAX_STANDING
         elif not w["any"]:
@@ -273,6 +323,16 @@ def sweep(dry=False, only=None):
             n_standing += 1
             time.sleep(45)       # 错峰：同时起会互相踩额度与内存
 
+    # **每一跳都要落盘，不只是起了会话的那一跳。**
+    #
+    # 第一版只在起会话的分支里存状态（2026-07-29 实测后果）：观察到的 cycle 从不
+    # 被记下，于是记录永远停在最后一次启动时的值，而 `cycle != last_cycle` 永远为真，
+    # `occupied()` 于是每一跳都说「cycle advanced」并跳过——**这套机制把自己永久关掉了**，
+    # 而日志上每一行都写着令人安心的「cycle advanced to 14」。
+    # 四个常驻研究员 05:45–06:45Z 被它成功起来、交了 28 件活、然后死于上下文，
+    # 之后三个多小时里它一个也没重启，因为它相信它们还在涨。
+    if not dry:
+        save_state(state)
     if not started:
         log("nothing to start")
     return started
