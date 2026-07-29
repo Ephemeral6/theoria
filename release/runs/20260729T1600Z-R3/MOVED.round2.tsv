@@ -1,0 +1,9 @@
+path	before	after	size	evidence_after
+proxy/runs/p9-shell-harden/scores_ar25_lifted.json	C	B	51819	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+proxy/tests/fixtures/scorecard_corpus.json	C	B	57296	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json	C	B	13413	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json	C	B	3589	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/20260728T235841Z-leg01/run.json	C	B	8104	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/20260728T235842Z-leg02/run.json	C	B	8484	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/20260728T235843Z-leg01/run.json	C	B	8104	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
+theoria-arm/runs/a3-gate-mock/run.json	C	B	8344	1 record(s) pair an ARC game id with environment payload (frame, frames, action_input, available_actions, full_reset, guid, scorecard, state)
