@@ -84,16 +84,29 @@ def note(msg):
 def meta(path):
     head = open(path, encoding="utf-8").read(800)
     out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": "",
-           "spend": "", "generic_ok": ""}
+           "spend": "", "generic_ok": "", RELEASED_BY: ""}
     for key in ("priority", "cell", "territory", "lane", "spend", "generic_ok"):
         m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
+    # To end of line, not `\S+`: this one is a comma-separated list, and the
+    # single-token pattern would silently keep only the first releaser --
+    # re-offering the item to everyone after them.
+    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, head, re.M)
+    if m:
+        out[RELEASED_BY] = m.group(1).strip()
     m = re.search(r"^deps:\s*(.+)$", head, re.M)
     if m:
         out["deps"] = [d.strip() for d in m.group(1).split(",")
                        if d.strip() and d.strip().lower() != "none"]
     return out
+
+
+
+def released_by(m):
+    """Workers who have handed this item back, from its front matter."""
+    raw = (m or {}).get(RELEASED_BY) or ""
+    return {w.strip() for w in raw.replace(",", " ").split() if w.strip()}
 
 
 def item_id(fname):
@@ -238,7 +251,16 @@ def cmd_claim(worker, lane=None):
         print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
               % HOLD_CAP)
         return 3
+    withheld = []
     for _pri, iid, fname, _m in candidates(lane):
+        if worker in released_by(_m):
+            # You already decided you cannot do this one. Re-offering it costs
+            # a whole session's context to re-derive the same conclusion, and
+            # the log fills with claims and releases while nothing moves.
+            # Anyone else may still take it -- one agent's refusal is about
+            # that agent, not about the item.
+            withheld.append(iid)
+            continue
         src = os.path.join(ITEMS, fname)
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
         try:
@@ -249,7 +271,16 @@ def cmd_claim(worker, lane=None):
         print("---8<--- item %s ---8<---" % iid)
         sys.stdout.write(open(dst, encoding="utf-8").read())
         return 0
-    print("BOARD-EMPTY")
+    if withheld:
+        # Never a bare BOARD-EMPTY when something was hidden. Silently
+        # withholding work is the trap this board already fell into once
+        # (board-empty-is-misleading): "nothing to do" and "nothing I will
+        # show you" have to look different, or the next reader debugs the
+        # wrong thing.
+        print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
+              % (len(withheld), ", ".join(sorted(withheld)[:6])))
+    else:
+        print("BOARD-EMPTY")
     return 3
 
 
@@ -271,8 +302,59 @@ def cmd_release(iid, worker, reason="unstated"):
     dst = os.path.join(ITEMS, "%s.md" % iid)
     os.rename(src, dst)
     _revoke_authorisation(dst)
+    _record_release(dst, worker, reason)
     note("RELEASE %s by %s (%s)" % (iid, worker, reason))
     return 0
+
+
+#: Front-matter key listing everyone who has handed this item back.
+RELEASED_BY = "released_by"
+
+
+def _record_release(path, worker, reason):
+    """Write the releaser into the item's front matter.
+
+    Until now `release` only wrote a log line, and `claim` re-offered the item
+    to the same agent on its next pass -- 11 seconds later, in the case that
+    prompted this. Each round costs a session a fresh read of the context to
+    reach the conclusion the last round already reached, and the log shows
+    claims and releases ticking over as if work were happening.
+
+    That is a livelock, not a deadlock, and it fails in the reassuring
+    direction: the board looks busy and progress is zero. It was not one
+    agent's mistake either -- C9 and A4-ablation-online were each handed back
+    by two different workers -- so the board is what changes, not the people.
+    """
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return
+    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, text, re.M)
+    prior = [w.strip() for w in m.group(1).split(",") if w.strip()] if m else []
+    if worker not in prior:
+        prior.append(worker)
+    line = "%s: %s" % (RELEASED_BY, ", ".join(prior))
+    if m:
+        text = text[:m.start()] + line + text[m.end():]
+    else:
+        # Front matter is the run of `key: value` lines at the top; append to
+        # the end of it rather than to the file, so `meta()` still sees it.
+        lines = text.split("\n")
+        cut = 0
+        for i, l in enumerate(lines):
+            if re.match(r"^\w+:\s", l):
+                cut = i + 1
+            elif l.strip() == "":
+                break
+        lines.insert(cut, line)
+        text = "\n".join(lines)
+    # The reason belongs with it: a later reader has to be able to tell
+    # "I could not do this" from "I ran out of time".
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    text = text.rstrip("\n") + "\n\n> **%s 于 %s 交回**：%s\n" % (
+        worker, stamp, reason)
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
 
 
 def _revoke_authorisation(path):
