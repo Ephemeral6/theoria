@@ -1,5 +1,28 @@
 {
-  "base_commit": "99204472a77320bfb37dd142141ddc20e63cc3fe",
+  "adversarial_review": {
+    "by": "a subagent with no hand in the implementation",
+    "confirmed_independently": [
+      "3000/2189/1550/639/29.2%/639 status-2/638/1 reproduce from a second implementation that never imports engines.lp_potential",
+      "artifacts/candidates.jsonl sha256 5113ad32... unchanged across regeneration",
+      "both controls exit 1 under the revert and are not satisfied by a cheaply broken engine (an engine that never certifies, or one with 'global' deleted)",
+      "the pre-registration is a strict ancestor of every results commit and was never amended",
+      "nothing anywhere calls the documented incompleteness a defect"
+    ],
+    "overturned": [
+      "the incompleteness rate is NOT a tally of engine status strings alone -- the denominator is the harness's BFS",
+      "an earlier MUTATION.json contradicted the shipped engine",
+      "the standing check's exit 1 under revert was a crash, not a report"
+    ],
+    "path": "runs/20260729T044500Z-E15-solver-status-bit/ADVERSARIAL-REVIEW.md",
+    "required_fixes_applied": [
+      "MUTATION.json regenerated (31/28/3) and stamped with its tree",
+      "P5's re-reading disclosed instead of scored as a bare pass",
+      "tools/check_status_bit reports a verdict instead of a traceback, and one control can no longer mask the other",
+      "the 'tally of status strings alone' claim narrowed in RECONCILIATION.md and RUN_STATE.md; PREREGISTRATION.md left as written, deliberately"
+    ],
+    "verdict": "the work holds up; four REQUIRED fixes, all applied"
+  },
+  "base_commit": "af884509a7067a5419b851dbed814b56ff685fcb",
   "branch": "agent/e15-solver-status-bit",
   "cost": {
     "api_calls": 0,
@@ -10,14 +33,34 @@
   },
   "files": [
     {
-      "bytes": 22572,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/MUTATION.json",
-      "sha256": "bf7d3408b4fdbee6393a4ccc8f1866bdc6f15e8b3718eb6df942a948ef552a65"
+      "bytes": 7839,
+      "path": "engines/lp_potential/__init__.py",
+      "sha256": "f800825380d50196d104b14285efe95f50e60b624683e4a47380702335bcbeeb"
     },
     {
-      "bytes": 8527,
+      "bytes": 28012,
+      "path": "engines/lp_potential/potential.py",
+      "sha256": "dff44f53a751b0fa60ecdb64ee89337e9e8d3b1b59f7fb6f8b2ca6c7accfc92d"
+    },
+    {
+      "bytes": 15495,
+      "path": "engines/zero_space/zerospace.py",
+      "sha256": "7a546f51effcbb5ef457c931021c2fbb474f796de37675cfa27a23e2ee9e3dde"
+    },
+    {
+      "bytes": 33761,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/ADVERSARIAL-REVIEW.md",
+      "sha256": "3a977a327bfe21f698bdd2e24cb4030057b34325da686f790627b68725930cde"
+    },
+    {
+      "bytes": 21719,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/MUTATION.json",
+      "sha256": "32b71299a051092bb664ad2c31c8f4a543d7e11ec85ec0e387adb7890f799235"
+    },
+    {
+      "bytes": 10510,
       "path": "runs/20260729T044500Z-E15-solver-status-bit/NONVACUITY.md",
-      "sha256": "f0c5a51e00d6075571b387a3029d92511c86e7eba8893c06836b2511455b3bac"
+      "sha256": "ab7b23bfde3f065e6af9c090c2e49ba1862d6ab81d57f92f4ceb8a4b658aa66d"
     },
     {
       "bytes": 14237,
@@ -35,9 +78,9 @@
       "sha256": "0a1a3d2d8b1bcd01ea3f0b2c6ea3514ea218e4ee890c7812795393d0fa915a19"
     },
     {
-      "bytes": 10991,
+      "bytes": 12458,
       "path": "runs/20260729T044500Z-E15-solver-status-bit/RECONCILIATION.md",
-      "sha256": "c2fa8b7a632c02caa20510c14e667551e96f8126681b1a19b742d2604b57a035"
+      "sha256": "d6a64744ed2fb8287fbc893dd874708c96c538f7605038d1ef7c40b74183075f"
     },
     {
       "bytes": 1063,
@@ -45,9 +88,9 @@
       "sha256": "785bb7c72f3b72bfab12c67850cf5ec04c44c0ee11b9a0d4fdd4e3961ad2d5f8"
     },
     {
-      "bytes": 8098,
+      "bytes": 11180,
       "path": "runs/20260729T044500Z-E15-solver-status-bit/RUN_STATE.md",
-      "sha256": "f632078bcd4ca6be930376560d83511c3d704d3f735b977c55e387a41ae96afc"
+      "sha256": "5b305d5f0c498662e097db469c41e908ea44ec0af7e1203517b1a14d8173fbef"
     },
     {
       "bytes": 1479,
@@ -75,14 +118,49 @@
       "sha256": "5b37b554a46fa7e2261929c3cd272f07eac2edb3db3a2bc42dc02456e65c613c"
     },
     {
-      "bytes": 13944,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/mutate.py",
-      "sha256": "d40970dca587cdc2db8ad13054036ede63923b9d3fd5e364bf1d8a22be28bea2"
+      "bytes": 3681,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n1-iteration-limit.json",
+      "sha256": "f9dbea37a714eaaa82a3f3ec83bf48b05efcda990e428e5a4b14cc07a26f57fd"
     },
     {
-      "bytes": 1200,
+      "bytes": 525,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n1-outcome.json",
+      "sha256": "4e71ca06bc04fa549c0a96082dadfc685f759e5d442b034705ff8e1d798b4a03"
+    },
+    {
+      "bytes": 15016,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-candidates-10colour.jsonl",
+      "sha256": "21e476e815b72c77e8b221ff77d0b6873f52c0114a7ee36b66cf756d072eb666"
+    },
+    {
+      "bytes": 1483,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-candidates-2colour.jsonl",
+      "sha256": "5a8930d9ae2f9c46ecc8a0bd4654491257ee1ed23fc44a2ddd780ad582ee42ed"
+    },
+    {
+      "bytes": 3013,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-over-eight-colours.json",
+      "sha256": "9e144609b1a41e07cc2ed7f7e41d39e4318aa8e31ee4ace0c67d74a0fcf02bac"
+    },
+    {
+      "bytes": 11001,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/n1_iteration_limit.py",
+      "sha256": "1950d196f24a0fb72de0fd99a5373f3d37dda4f86a592f6fb6078c9e28105944"
+    },
+    {
+      "bytes": 11284,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/n2_over_eight_colours.py",
+      "sha256": "65ca5093aab24bd664829c9ef9b84cdaeace20532f5adb3a1003b52a54e8391d"
+    },
+    {
+      "bytes": 15499,
+      "path": "runs/20260729T044500Z-E15-solver-status-bit/mutate.py",
+      "sha256": "1e4b2414318ae5dc6a3f5aef63f3ad54a8f329eb7ed78b2d441bc2dc581b4d8a"
+    },
+    {
+      "bytes": 1526,
       "path": "runs/20260729T044500Z-E15-solver-status-bit/mutate.stdout.txt",
-      "sha256": "3f0c0800e96001413cc0d30a5622a420777d509c4d22d00d161dbad10e9ab9cf"
+      "sha256": "69450a73a56e5d6daa7c5ddd466d35982fe91c21ce17712e558372c3887b56ed"
     },
     {
       "bytes": 5016,
@@ -115,71 +193,17 @@
       "sha256": "6e592e50bcdc4d754b7940669ab4c2b8469d52ed9afea08d810f01c8759dba35"
     },
     {
-      "bytes": 11001,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/n1_iteration_limit.py",
-      "sha256": "1950d196f24a0fb72de0fd99a5373f3d37dda4f86a592f6fb6078c9e28105944"
-    },
-    {
-      "bytes": 11284,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/n2_over_eight_colours.py",
-      "sha256": "65ca5093aab24bd664829c9ef9b84cdaeace20532f5adb3a1003b52a54e8391d"
-    },
-    {
-      "bytes": 3681,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n1-iteration-limit.json",
-      "sha256": "f9dbea37a714eaaa82a3f3ec83bf48b05efcda990e428e5a4b14cc07a26f57fd"
-    },
-    {
-      "bytes": 525,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n1-outcome.json",
-      "sha256": "4e71ca06bc04fa549c0a96082dadfc685f759e5d442b034705ff8e1d798b4a03"
-    },
-    {
-      "bytes": 15016,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-candidates-10colour.jsonl",
-      "sha256": "6a889b1bbdcb9fb1da1ccf40e84113444344b54eb4c378d57341f192d1acacbd"
-    },
-    {
-      "bytes": 1483,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-candidates-2colour.jsonl",
-      "sha256": "e659dddf29be8bb0c4ef04bd7412fa84952aad1eda1eb68e7bdb4539e94a5f90"
-    },
-    {
-      "bytes": 3013,
-      "path": "runs/20260729T044500Z-E15-solver-status-bit/controls/artifacts/n2-over-eight-colours.json",
-      "sha256": "9e144609b1a41e07cc2ed7f7e41d39e4318aa8e31ee4ace0c67d74a0fcf02bac"
-    },
-    {
       "bytes": 18905,
       "path": "tests/test_solver_status_bit.py",
       "sha256": "95cd63cf8012c2f5f1c7ace1848e729ac832a635228e27de34b06e0d228e8315"
     },
     {
-      "bytes": 12270,
+      "bytes": 14150,
       "path": "tools/check_status_bit.py",
-      "sha256": "6a9fd6021bb4188569a56b14edc66ddca3e5f1a3e97337dda108b5337f3659d3"
-    },
-    {
-      "bytes": 26955,
-      "path": "engines/lp_potential/potential.py",
-      "sha256": "70a052ccab534bee730b66f1129398dd1d225a3fd38bf888535fa5432574005e"
-    },
-    {
-      "bytes": 7839,
-      "path": "engines/lp_potential/__init__.py",
-      "sha256": "f800825380d50196d104b14285efe95f50e60b624683e4a47380702335bcbeeb"
-    },
-    {
-      "bytes": 15495,
-      "path": "engines/zero_space/zerospace.py",
-      "sha256": "7a546f51effcbb5ef457c931021c2fbb474f796de37675cfa27a23e2ee9e3dde"
-    },
-    {
-      "bytes": 47705,
-      "path": "artifacts/candidates.jsonl",
-      "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a"
+      "sha256": "eb325909d9a8bdba5f2d1cca3fe84b0e6c2f9f95a7e029a12bae7abbda3addf4"
     }
   ],
+  "files_note": "text files are hashed after CRLF->LF normalisation: .gitattributes pins LF, so hashing working-tree bytes would record sha256s no committed blob has",
   "headline_numbers": {
     "certificate_errors": 0,
     "certificate_issued": 1550,
@@ -195,17 +219,22 @@
   "lane": "verify",
   "notes": [
     "P3.3 quoted sha256 679fe331... as the pin for artifacts/candidates.jsonl. That pin in release/MANIFEST.jsonl is STALE and was stale before this branch: the artifact moved 679fe331 -> b74576fa (3de10b7) -> 5113ad32 (c6a5b82), and c6a5b82 is an ancestor of this run's base. The condition read literally was unsatisfiable when written; it was scored on intent (E15 must not move the hash) and passes -- 5113ad32 stable across four regenerations. The stale pin is a live manifest-stale break for the release track and was reported, not touched.",
-    "M30 survivor was acted on: the success/status disagreement guard was one-directional. status==0 with success false fell through to result.x and minted a Certificate from a failed solve, which check_exactly would then report as a CertificateError -- i.e. as weights that failed re-checking rather than as a solve that never succeeded. Guard made symmetric; the refusal now carries a rebuilt undecided outcome so a caller cannot read decided=True off a refusal.",
     "A mutation battery running in this shared worktree left live mutants in tracked source during the run. Two subagents reported phantom suite failures (13 and 2) caused by them. All numbers here were taken on a tree verified clean by git diff immediately before and after.",
-    "The three *.stdout.txt captures were normalised to LF before hashing: .gitattributes pins LF, so hashing the working-tree CRLF bytes would have recorded sha256s that no committed blob has -- the same defect as the stale release pin reported above, and it would have been self-inflicted."
+    "The three *.stdout.txt captures were normalised to LF before hashing: .gitattributes pins LF, so hashing the working-tree CRLF bytes would have recorded sha256s that no committed blob has -- the same defect as the stale release pin reported above, and it would have been self-inflicted.",
+    "M30 was a real survivor and was acted on rather than filed: the success/status disagreement guard was one-directional. status==0 with success false fell through to result.x and minted a Certificate from a failed solve, which check_exactly would then report as a CertificateError -- i.e. as weights that failed re-checking rather than as a solve that never succeeded. Guard made symmetric; the refusal carries a rebuilt undecided outcome so a caller cannot read decided=True off a refusal. M30 and M31 (the one-directional variant) are now both killed.",
+    "An earlier MUTATION.json reported 30/26/4 with M30 as a SURVIVOR, three minutes before potential.py closed that hole, and nothing on its face said the counts were stale. An adversarial review caught it. Regenerated (31/28/3) and mutate.py now stamps the HEAD and the dirty state into a `tree` block, so a stale report can be recognised as one.",
+    "tools/check_status_bit exited 1 under a reverted engine by raising AttributeError before it could print a verdict, and main() built its report list eagerly so N1 crashing meant N2 never ran. Both fixed in af884509; NONVACUITY.md's table is corrected to say so. The exit code was always right; what was missing was which property broke.",
+    "STATUS_MEANINGS[no_linear_pagoda] and LpOutcome.no_linear_pagoda's docstring said HiGHS 'proved' the LP infeasible and that no such weight function 'exists'. That was the only unhedged existence claim reaching an emitted artifact while the 'floating point, no Farkas dual' caveat lived only in Markdown. Both now say 'reported' and name the missing certificate.",
+    "adversarial_rederive.py, REDERIVED.json and rederived.jsonl in this directory are the ADVERSARIAL-REVIEW author's files, written in flight and swept into an earlier commit of this manifest without attribution. They are the review's independent re-derivation, not this item's deliverables. Recorded here rather than removed: they are the evidence for review section (b).",
+    "P3-VERIFICATION.md records 'pytest -> 519 passed, 27 skipped'. That was true when it ran; the suite has since grown and the tree now gives 528 passed, 27 skipped."
   ],
   "owner": "RES-3",
   "pass_conditions": {
     "P1_status_bit_reaches_caller": "pass",
-    "P2_census_639_readable_off_artifact": "pass",
+    "P2_census_639_readable_off_artifact": "pass, with the claim narrowed: the 639 numerator is the engine's own LpOutcome.status; the 2189 denominator is the harness's forward BFS, not an engine field. See RECONCILIATION.md 3.1.",
     "P3_zero_space_scope_not_proved": "pass (P3.3 scored on intent; see note)",
     "P4_two_negative_controls": "pass",
-    "P5_mutation_surface_wider_than_test_surface": "pass (30 mutants, 26 killed, 4 survivors reported)"
+    "P5_mutation_surface_wider_than_test_surface": "FAILS as literally pre-registered (31 mutants vs 122 assertions); PASSES under the criterion actually used (31 mutants vs 28 collected test cases, 28 killed, 3 survivors reported, 0 not applied). The substitution of test cases for assertions is a change of yardstick after the fact and is recorded in RUN_STATE.md rather than absorbed."
   },
   "preregistration": {
     "checkable_by": "git merge-base --is-ancestor 72b4eb8 <results commit>",
@@ -213,5 +242,5 @@
     "path": "runs/20260729T044500Z-E15-solver-status-bit/PREREGISTRATION.md"
   },
   "prompt_id": "E15-solver-status-bit",
-  "utc": "2026-07-29T05:19:15Z"
+  "utc": "2026-07-29T10:33:00Z"
 }

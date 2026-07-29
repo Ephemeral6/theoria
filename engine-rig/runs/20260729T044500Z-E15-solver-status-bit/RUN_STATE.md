@@ -69,19 +69,67 @@ print(len(silent), "/", len(unreachable),
 PY
 ```
 
-`639 / 2189 = 29.2%`. The only engine field read is `status`; no LP is re-solved.
-`bound` and `margin` travel on every row, so the figure states the box it holds
-in — before E15 neither was readable off any artifact.
+`639 / 2189 = 29.2%`. No LP is re-solved. `bound` and `margin` travel on every
+row, so the figure states the box it holds in — before E15 neither was readable
+off any artifact.
+
+**What that command reads, exactly.** The **numerator** is the engine's own
+`status` string. The **denominator** — 2189 genuinely unreachable worlds — is the
+harness's independent forward BFS over `spec.triples`, not an engine field. And
+`artifacts/candidates.jsonl` carries no `lp_potential` status at all (`grep -c
+"no_linear_pagoda\|lp_outcome\|solver_status"` → 0), because a declined LP emits
+no candidate row by design.
+
+So the honest claim is narrower than "the rate is a tally of the engine's status
+strings": the rate is a tally of the engine's status strings **over a set the
+harness computed**, and it lives in `census.jsonl`, a run artifact pairing the
+engine's word with an independent oracle. What actually changed is the half that
+was missing: before E15 the numerator was not readable off anything and a
+reviewer had to rebuild the LP to get it. See `RECONCILIATION.md` §3.1.
 
 ## The mutation battery, and its survivors
 
-30 mutants against 25 test cases plus two standing controls, deliberately not a
-one-to-one mirror (C11's finding was 18 mutants matching 18 tests, which measures
-the author's imagination). Judges are kept separate so the report can say *which*
-defence caught what: `tools.check_status_bit`, `tests/test_solver_status_bit.py`,
-and C11's older `tests/test_tool_failure_is_not_truth.py`.
+**31 mutants, 28 killed, 3 survived, 0 not applied**, against 28 collected test
+cases plus two standing controls — deliberately not a one-to-one mirror (C11's
+finding was 18 mutants matching 18 tests, which measures the author's
+imagination). Judges are kept separate so the report can say *which* defence
+caught what: `tools.check_status_bit`, `tests/test_solver_status_bit.py`, and
+C11's older `tests/test_tool_failure_is_not_truth.py`.
 
-26 killed, 4 survived. The survivors are reported rather than deleted:
+`MUTATION.json` now carries a `tree` block naming the HEAD it was run against and
+whether `engines/`/`tools/`/`tests/` were dirty. The reason is a finding: an
+earlier copy of that file reported **30 / 26 / 4** with `M30` as a *survivor*,
+three minutes before `potential.py` was changed to close exactly that hole, and
+nothing on its face said the counts were stale. A reader trusting the
+machine-readable artifact over the prose beside it would have got a wrong answer
+about the code they were about to merge. Regenerated at
+`af884509a7067a5419b851dbed814b56ff685fcb`, clean tree.
+
+### The pre-registered P5 criterion, and how it was actually scored
+
+`PREREGISTRATION.md` §P5 says the battery must contain "strictly more mutants
+than the number of **assertions** written for this item". **That criterion fails
+as literally written** and is recorded as failing: 31 mutants against 122
+assertions (82 `assert` statements in `tests/test_solver_status_bit.py`, 11
+`check()` calls in each standalone control, 18 `failures.append` conditions in
+`tools/check_status_bit.py`).
+
+It passes under the reading actually used — **31 mutants against 28 collected
+test cases** — which is the criterion C11's finding was about (a battery whose
+members correspond one-to-one with the tests measures nothing). That reading is
+the better one, but substituting *test cases* for *assertions* is a change of
+yardstick after the fact, so it is stated here rather than absorbed: the
+pre-registration is left exactly as written and this paragraph is the correction,
+in the same shape P3.3's unsatisfiable literal condition was handled.
+
+Counting assertions was the wrong pre-registration to write. An assertion is not
+a unit of coverage — `test_every_way_the_solver_can_stop_gets_its_own_word` makes
+four assertions about one behaviour, and padding a test with more `assert` lines
+would have made the criterion *harder* to meet while testing nothing new. The
+criterion should have been about correspondence, not counts, and the honest
+report is that the number it named was not met.
+
+The survivors are reported rather than deleted:
 
 * `M25` — gating the degradation keys on the *run* (`scope_exhaustive`) instead
   of on the *label* (`scope == undetermined`). This is the design alternative,
@@ -92,9 +140,9 @@ and C11's older `tests/test_tool_failure_is_not_truth.py`.
 * `M29` — renaming `CELL_LOCAL`. Caught by `tests/test_zero_space.py`, which is
   not one of this battery's three judges. A survivor of *this* battery, not of the
   suite.
-* `M30` — dropping the `result.success` / status-table disagreement guard. This
-  one was **acted on rather than filed**, and it is the reason the battery paid
-  for itself. Chasing why nothing exercised the branch showed the guard was
+`M30` and `M31` are **killed**, and the story of how is why the battery paid for
+itself. `M30` — dropping the `result.success` / status-table disagreement guard —
+survived its first run. Chasing why nothing exercised the branch showed the guard was
   *one-directional*: it caught `status != 0` with `success` true, and let the
   converse through. `status == 0` with `success` false fell past it into
   `result.x` and minted a `Certificate` out of whatever a failed solve had left
@@ -112,10 +160,11 @@ and C11's older `tests/test_tool_failure_is_not_truth.py`.
   reappearing on the error path. `solver_status` is preserved, so the
   contradiction stays diagnosable without being quotable.
 
-  Honest limit: with real HiGHS the branch remains unreachable, so the guard is
-  defended by `_Contradictory`, a synthetic result. The battery did not prove
-  the defect can fire in production; it proved the code would have believed the
-  wrong thing if it did.
+Honest limit: with real HiGHS the branch remains unreachable, so the guard is
+defended by `_Contradictory`, a synthetic result. The battery did not prove the
+defect can fire in production; it proved the code would have believed the wrong
+thing if it did. `M31` was added afterwards for the one-directional variant — the
+shape the guard had before — and is killed too.
 
 One mutant, `M02` (collapsing `solve_certificate` back to `None`), is killed
 **only** by C11's older file. That is worth seeing rather than averaging away:

@@ -9,13 +9,50 @@ This file is the measurement, not the claim. Every exit code below was observed.
 
 ## Result
 
-| control | engine as committed | engine reverted |
-|---|---|---|
-| `controls/n1_iteration_limit.py` | **exit 0** | **exit 1** |
-| `controls/n2_over_eight_colours.py` | **exit 0** | **exit 1** |
-| `python -m tools.check_status_bit` (the standing pair) | **exit 0** | **exit 1** |
+| control | engine as committed | engine reverted | how it reported |
+|---|---|---|---|
+| `controls/n1_iteration_limit.py` | **exit 0** | **exit 1** | verdict artifact, 10 of 11 checks FAIL |
+| `controls/n2_over_eight_colours.py` | **exit 0** | **exit 1** | verdict artifact, 6 of 11 checks FAIL |
+| `python -m tools.check_status_bit` (the standing pair) | **exit 0** | **exit 1** | **originally: an uncaught `AttributeError` — see below** |
 
 Both controls go red under the revert. Neither is vacuous.
+
+### Correction: the third row was not the clean exit 1 this table implied
+
+As first written this table listed all three exit codes side by side, which read
+as three instruments reporting a regression. The two standalone controls did.
+`tools/check_status_bit` did not: under the revert it exited 1 by **crashing** —
+
+```
+  File ".../tools/check_status_bit.py", line 105, in control_iteration_limit
+    if baseline.status != lp_potential.CERTIFIED:
+AttributeError: 'Certificate' object has no attribute 'status'
+```
+
+Two things were wrong with that, and an adversarial review named both. An
+operator at a merge gate saw a stack trace instead of `FAILED N1-…`, so the
+tool's own reporting path — the thing being trusted to *describe* a regression —
+was never exercised by the case it exists for. And `main()` built its report list
+eagerly, so **N1 crashing meant N2 never ran**: a simultaneous `zero_space`
+regression would have been invisible behind an unrelated `lp_potential` one.
+
+Fixed in `af884509`: each control body is wrapped, and an exception becomes a
+FAILED verdict naming the exception. Re-measured on a fresh `git archive HEAD`
+scratch copy with the same revert applied to `potential.py` and
+`__init__.py` only:
+
+```
+FAILED N1-iteration-limit-is-not-an-infeasibility
+       - the control could not complete: AttributeError: 'NoneType' object has no attribute 'as_json'
+HELD   N2-truncated-enumeration-is-not-a-global-law
+EXIT=1
+```
+
+N1 now reports rather than explodes, and N2 still runs and is still judged — it
+holds there because that scratch revert touched only `lp_potential`, which is
+exactly the independence that was missing. The exit code was always right; what
+was missing was the ability to tell *which* property broke, which is this item's
+own complaint applied to its own instrument.
 
 ## How it was measured
 

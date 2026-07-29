@@ -1,17 +1,19 @@
 {
-  "killed": 26,
+  "killed": 28,
   "killed_only_by_controls": [],
   "killed_only_by_suite": [
     "M06-unknown-status-defaults-to-infeasible",
     "M14-outcome-hardcodes-the-default-bound",
     "M17-downgraded-word-contains-global",
     "M20-error-text-stops-naming-the-budget",
-    "M28-artifact-hardcodes-the-infeasible-code"
+    "M28-artifact-hardcodes-the-infeasible-code",
+    "M30-success-status-disagreement-ignored",
+    "M31-disagreement-guard-only-one-way"
   ],
   "killed_only_by_the_older_c11_file": [
     "M02-solve_certificate-collapses-to-none"
   ],
-  "mutants": 30,
+  "mutants": 31,
   "not_applied": 0,
   "not_applied_ids": [],
   "results": [
@@ -170,7 +172,7 @@
     },
     {
       "controls_exit": 1,
-      "controls_tail": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\tools\\check_status_bit.py\", line 285, in <module>\n    sys.exit(main(sys.argv))\n             ~~~~^^^^^^^^^^\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\tools\\check_status_bit.py\", line 270, in main\n    reports = [control() for control in CONTROLS]\n               ~~~~~~~^^\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\tools\\check_status_bit.py\", line 119, in control_iteration_limit\n    with open(sidecar, encoding=\"utf-8\") as handle:\n         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\tmp1rf8c6tj\\\\outcome.json'\n",
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - the control could not complete: FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\tmpgvjyodbk\\\\outcome.json'\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
       "file": "engines/lp_potential/__init__.py",
       "id": "M12-outcome-sidecar-not-written",
       "killed_by": [
@@ -184,7 +186,7 @@
     },
     {
       "controls_exit": 1,
-      "controls_tail": "t.py\", line 285, in <module>\n    sys.exit(main(sys.argv))\n             ~~~~^^^^^^^^^^\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\tools\\check_status_bit.py\", line 270, in main\n    reports = [control() for control in CONTROLS]\n               ~~~~~~~^^\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\tools\\check_status_bit.py\", line 115, in control_iteration_limit\n    starved = lp_potential.decide(\n        graph, N1_INITIAL, solver_options={\"maxiter\": 0},\n        outcome_path=sidecar,\n    )\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\engines\\lp_potential\\__init__.py\", line 145, in decide\n    json.dump(outcome.as_json(), handle, indent=2, sort_keys=True)\n              ~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e15-solver-status-bit\\engine-rig\\engines\\lp_potential\\potential.py\", line 233, in as_json\n    \"linear pagodas; weights \"\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~\n    \"outside the box are not examined\" % (self.bound, self.margin)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~\nTypeError: not all arguments converted during string formatting\n",
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - the control could not complete: TypeError: not all arguments converted during string formatting\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
       "file": "engines/lp_potential/potential.py",
       "id": "M13-scope_of_claim-drops-the-box",
       "killed_by": [
@@ -402,11 +404,26 @@
       "controls_tail": "",
       "file": "engines/lp_potential/potential.py",
       "id": "M30-success-status-disagreement-ignored",
-      "killed_by": [],
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
       "legacy_exit": 0,
       "note": "a linprog result whose `success` and `status` disagree is classified anyway instead of refusing",
-      "outcome": "survived",
-      "suite_exit": 0
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M31-disagreement-guard-only-one-way",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the guard is narrowed back to the direction that was noticed first: `status == 0` with `success` false would then mint a Certificate out of whatever the failed solve left in `result.x`",
+      "outcome": "killed",
+      "suite_exit": 1
     },
     {
       "controls_exit": 0,
@@ -420,7 +437,7 @@
       "suite_exit": 0
     }
   ],
-  "survived": 4,
+  "survived": 3,
   "survivors": [
     {
       "id": "M27-budget-meaning-reads-as-a-verdict",
@@ -431,13 +448,16 @@
       "note": "the other scope word changes under consumers that filter on it"
     },
     {
-      "id": "M30-success-status-disagreement-ignored",
-      "note": "a linprog result whose `success` and `status` disagree is classified anyway instead of refusing"
-    },
-    {
       "id": "M25-degradation-keys-gated-on-the-run-not-the-label",
       "note": "cell-local rows in a truncated run also carry the degradation -- the design alternative, expected to survive"
     }
   ],
-  "wall_seconds": 163.3
+  "tree": {
+    "dirty_paths": [],
+    "engines_tools_tests_dirty": false,
+    "head": "af884509a7067a5419b851dbed814b56ff685fcb",
+    "head_subject": "E15: fixes the adversarial review required, in the instrument and in the payload",
+    "note": "if `head` is not the commit you are reviewing, or `engines_tools_tests_dirty` is true, these counts describe a different tree than the one you are about to merge"
+  },
+  "wall_seconds": 188.7
 }

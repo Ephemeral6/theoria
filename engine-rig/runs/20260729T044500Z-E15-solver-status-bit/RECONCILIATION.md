@@ -67,8 +67,34 @@ census is the artifact that is supposed to model the reading discipline.
 
 ## 3. Pre-registered table versus measured
 
-Every count below is a tally of the engine's own `status` strings in
-`census.jsonl` (`census.py::summarise`).
+### 3.1 Correction: which counts are the engine's, and which are the harness's
+
+An adversarial review overturned the sentence that used to open this section
+("every count below is a tally of the engine's own `status` strings"). It is not
+true of every count, and the difference matters:
+
+| count | source |
+|---|---|
+| `certified` 1550, `no_linear_pagoda` 1450, the status histogram, the 639 numerator | the engine's `LpOutcome.status`, tallied |
+| goal genuinely unreachable **2189**, genuinely reachable **811** | the **harness's** forward BFS over `spec.triples` — not an engine field |
+| the incompleteness **rate** | engine numerator ÷ harness denominator |
+
+`PREREGISTRATION.md` §P2.2 says the same thing too strongly. It is left exactly
+as written — a pre-registration edited after the results is worth nothing — and
+this table is the correction. §2's ownership table below was already right, and
+was the basis for the run; nothing was computed differently than it says.
+
+Also worth stating because it is easy to over-read: `artifacts/candidates.jsonl`
+carries **no** `lp_potential` status field (`grep -c` → 0). A declined LP emits no
+candidate row by design, so the rate is not derivable from the frozen candidate
+stream under any reading; it needs `census.jsonl`. What E15 changed is that the
+numerator is now the engine's own published word instead of something a reviewer
+had to rebuild the LP to obtain.
+
+### 3.2 The table
+
+Every count in the "measured" column is read from `census.jsonl`
+(`census.py::summarise`), with the ownership split as in §3.1.
 
 | quantity | pre-registered (E11 §4.1, §4.3) | measured | verdict |
 |---|---|---|---|
