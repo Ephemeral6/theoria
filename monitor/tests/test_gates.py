@@ -112,10 +112,24 @@ def test_this_repository_is_where_the_survey_says_it_is():
     # fleet-study 是 2026-07-29 新落地的领地，尚无闸门——按上面那条规矩，
     # 更新这个集合的同时要说明：它的闸门由 S17-fleet-evidence-capture 负责补，
     # 补上之后这条测试会再红一次，那是对的。
+    #
+    # S14 在此同样自报：十一个领地各得了一个三段式 verify.py，盘面从 6 个有闸门
+    # 变成 17 个，`tests_only` 因此清零。
     assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops", "papers",
                                       "release", "fleet-study",
                                       "verify-lab"}, survey["ungated"]
-    assert "proxy" in survey["non_canonical"]
+    # S14 cleared `tests_only` completely; anything in it now is a territory
+    # that arrived afterwards and still owes a gate.  Naming them one by one is
+    # the point -- an unexpected name here means a gate was deleted, which the
+    # blanket `not survey["tests_only"]` I first wrote could not distinguish
+    # from an ordinary new arrival.
+    assert set(survey["tests_only"]) <= {"verify-lab"}, survey["tests_only"]
+    # `proxy` 本来是「非规范名闸门」的样板（`verify_spend.sh`）。S14 给了它一个
+    # 规范的 `verify.py`，而规范名优先——于是 `verify_spend.sh` 会**从此不再在合并
+    # 时被跑到**。这条断言之所以能松，唯一的理由是 `proxy/verify.py` 把它接成了
+    # 自己的一段；否则这就是加了一道闸门、悄悄关掉另一道。
+    assert "proxy" not in survey["non_canonical"]
+    assert survey["rows"]["proxy"]["name"] == "verify.py"
 
 
 def test_describe_makes_an_ungated_merge_readable():

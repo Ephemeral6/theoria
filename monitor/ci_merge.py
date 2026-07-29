@@ -304,15 +304,27 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max", type=int, default=2)
     args = ap.parse_args()
+    # Every way this run can merge nothing now leaves a line in merge.log.
+    # All three were a bare `print` to a console nobody reads followed by exit
+    # 0, so "stood down for eight hours", "nothing was waiting" and "merged
+    # everything cleanly" were the same observation from outside.  Standing
+    # down is correct behaviour and stays exit 0 -- it just stops being
+    # invisible, which is the same argument S13 made for UNGATED.
     if m0_alive():
-        print("M-0 session alive — CI stands down.")
+        log_line("STOOD DOWN: an M-0 session is alive; merged nothing")
+        return 0
+    if args.dry_run:
+        # Asked *before* unmerged_branches(), which opens with `git fetch`.  A
+        # --dry-run that goes to the network is not a dry run, and it is why
+        # this command cannot serve as anyone's completion gate.
+        print("delivered, unmerged:", unmerged_branches() or "none")
         return 0
     todo = unmerged_branches()
-    if args.dry_run or not todo:
-        print("delivered, unmerged:", todo or "none")
+    if not todo:
+        log_line("IDLE: no delivered branch was waiting")
         return 0
     if not take_lock():
-        print("another merge in progress.")
+        log_line("BLOCKED: another merge holds the lock; merged nothing")
         return 0
     try:
         done = 0

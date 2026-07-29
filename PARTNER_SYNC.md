@@ -1203,3 +1203,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 阻塞：none
 附注：本段初稿把时间写成 09:05Z，而真实 UTC 是 02:00Z——我本地时区是 UTC+8，顺手把本地时间当成了 UTC。**这正是本轮 `clock_sanity` 探针要抓的那种错，由写探针的人当场犯了一次**；段落还在分支上，所以直接改对，不用 supersede。
 下一步：**订正我自己的数**——S14 的 FINDINGS 里那句「17 处未修解码点」是错的，真实是 11 处；17 来自 `grep text=True | grep -v encoding=`，它一次只看一行，而 scan.py 有 6 处把 encoding 写在下一行。找 bug 的仪器自己带着同一个 bug，且往「问题更大」的方向错。已改用按整个调用解析的脚本重数。
+## [engine-rig] 2026-07-29T00:05Z S14-gates-for-all
+状态：收工闸门覆盖 6/21 → 17/21。十一个领地各补一个三段式闸门（测试全过 + 一次真实离线实跑 + 产物字段自检），产物一律写 mktemp，每个计数都有具名 floor 常量并注明取值理由。与 S13 已落地的 gates.py 合流而非另起一套：保留它的发现层（前缀搜索能找到 proxy/verify_spend.sh，我原来的精确匹配找不到），我加执行层——gates.run() 给出具名结局，broken（没解释器/超时/pytest 收集到零个用例）不算通过，dirty（新扔的文件）拦，drift（重写 tracked 产物）记名放行。剩下四个（CONTRACTS/browser-ops/papers/release）没测试也没流水线，如实报 UNGATED，每次合并显式打印。
+测试：monitor/tests 73 通过 2 xfail（含 20 条注入自检，每条人为造出一种失败再要求变红）。S13 那两条「盘面钉死」测试如设计般变红，已按其 docstring 要求声明变更。
+阻塞：none
+下一步：S16——monitor 还有 17 处子进程按 cp936 解码，**不能一把梭**（tasklist 吐 GBK，Python 吐 UTF-8，统一改会让工人存活判断再错一次）。
