@@ -1,23 +1,32 @@
 {
+  "adversarial_pass": {
+    "refuted": 3,
+    "refuted_items": [
+      "newest-first at sprint level was false and was printed in the paper; replaced with commit ordering and three corroborating sources",
+      "the closure is exhaustion, not two separately signed arguments -- verified by compiling the generated development",
+      "the refusal was asserted in the present tense alongside the discharge; D-TC-010 superseded by D-TC-022"
+    ],
+    "ruling": "survived"
+  },
   "author": "RES-2",
   "base_commit": "c1a60420",
   "branch": "agent/p7-p14-battery-section-blind-round",
   "files": [
     {
       "path": "papers/phase1-workshop/sections/04_a1.md",
-      "sha256": "1e79823214a1e1659e2bc81cee485c357a53dad412061cf7dc6532bfe3ce081a"
+      "sha256": "b2895731cddaa06911609fc2a9a91b783bcd9844c3433010d725a5e66ad19e50"
     },
     {
       "path": "papers/phase1-workshop/sections/11_limitations.md",
-      "sha256": "f2e2298f516c664e1ea25674bc89d5b1045e81c9d62c3d9d6a0af8beeafc2fd8"
+      "sha256": "b9b830e721b53d277da9c6a65a85a7ebdeb581687c9d8c33d28d8d2d5292d125"
     },
     {
       "path": "papers/phase1-workshop/sections/02_framework.md",
-      "sha256": "544b8d598e14414570604cf46f7d9d56d2ce8945e123734cb10df0a02b4a0154"
+      "sha256": "3d79642176a1a572f8776dbb9e563dd4ed99707e8360784f8db2b3d2bb9fb6f3"
     },
     {
       "path": "papers/phase1-workshop/runs/20260729T101500Z-P4-P16-e06-contradiction/RUN_STATE.md",
-      "sha256": "98053e8da986b19662934071ca3f0ba05d3af99f9837e85f2b1622f09789acb5"
+      "sha256": "cc14b013eb7544edd24f0d6fdab93acf549f03c396d1aa4c17612fe190cf18ad"
     }
   ],
   "passive": {

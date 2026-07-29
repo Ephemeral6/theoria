@@ -31,8 +31,10 @@ rewritten, or it is not and `theory-compiler/STATUS.md:165` is wrong.
 `:325` block describes E-06 as newly added and calls it "本 sprint 唯一的开放问题"
 — the only open problem of *that* sprint. The `:165` delivery table is a later
 sprint's. So the file is newest-first at sprint level, and the discharge is the
-later record. That reading is corroborated by the ledger, which is the artefact
-§4.4 actually cites.
+later record. That reading is corroborated by the ledger. (An earlier draft of this file said
+the ledger was "the artefact §4.4 actually cites" — it was not; this item's own
+edit is what introduced that citation. The corroboration is real, the framing was
+circular.)
 
 `STATUS.md:165` is therefore not wrong. The paper was.
 
@@ -63,3 +65,35 @@ later record. That reading is corroborated by the ledger, which is the artefact
 rows" in its module docstring while the declared id set at `:108` now carries nine
 (E-01…E-09). The set was corrected in an earlier item; the prose above it was not.
 `figures/` is not this item's territory. Filed to `monitor/inbox/`.
+
+
+## The adversarial pass refuted three things, and the ruling survived
+
+**The ruling holds — E-06 is discharged — but the account of *how* did not.**
+
+1. **My "newest-first at sprint level" inference was wrong**, and it was printed in
+   the paper. `theory-compiler/STATUS.md`'s newest block (C7, 19:02) sits at the
+   *bottom*, below a block from 02:47. The ordering claim fails on the first block a
+   checker looks at. The conclusion survives on better evidence, now cited instead:
+   the commits themselves — the "still open" section at `f58959e7` (02:47), the
+   discharge at `672044a8` (10:24) — plus `PARTNER_SYNC.md`'s append-only record,
+   `DECISIONS.md` D-TC-022 superseding D-TC-010, and `CONTRACTS/dsl_grammar_v0.2.md`.
+2. **The closure is not "two arguments separately signed".** The adversary compiled
+   the generated development and ran a negative control. In the emitted file `Goal`
+   is `false` on every reachable state, `unsolvable` closes all five end states by
+   exhaustion, and `inv_all` — the certificate's contribution — is never invoked by
+   it; the per-goal attribution is computed in Python and printed into a comment.
+   The generator's docstring claims the split and its own emitted banner denies it:
+   "they are all closed the same way here, by exhausting the reachable set." §4.4
+   now says the narrower true thing, and says why it matters here of all places.
+3. **§4.4 and §11 asserted both that the compiler refuses and that it emitted.**
+   `CertificateGapError` no longer fires on this manual; it fires above the
+   enumeration bound. Both are now past tense where they describe A1, and D-TC-022
+   is cited beside D-TC-010.
+
+Also corrected: `ic3_pdr`'s unwritten piece is the **certificate exporter**, not the
+engine — the engine runs and emits candidate rows, which is why §12 can cite it
+without contradicting §2.
+
+The wider collision, added to the paper: `CONTRACTS/dsl_grammar_v0.2.md` books E-06
+both ways too, so it is two files disagreeing with themselves, not one.
