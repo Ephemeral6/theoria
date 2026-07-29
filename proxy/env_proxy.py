@@ -111,9 +111,6 @@ class _State:
         #: a command that names only a session has to be attributable to a game.
         self.session_games: Dict[str, str] = {}
         self.runtimes: Dict[str, VariantRuntime] = {}
-        #: game_ids whose `win_tighten` degeneracy has already been recorded as
-        #: an incident. One per session, not one per WIN.
-        self.degeneracy_reported: set = set()
         self.commands = 0
         self.meta_calls = 0
         self.denials = 0
@@ -469,17 +466,20 @@ class _Handler(BaseHTTPRequestHandler):
         The `degenerate` bit on the `applied` record is the decision (D-032);
         this is one of the two things that read it. It is written after the
         `env_step` it refers to, so the incident always points at a record that
-        already exists, and it fires once because a scoreless game produces the
-        same rewrite on every WIN and a per-WIN incident would bury the first
-        one under copies of itself."""
-        if runtime.degenerate_wins != 1 or game_id in self.state.degeneracy_reported:
+        already exists.
+
+        The once-ness belongs to `VariantRuntime.take_first_degenerate`, not
+        here. An earlier version asked `runtime.degenerate_wins != 1`, which is
+        a read of a shared counter at notify time: with two commands for one
+        game in flight, both rewrites land, both notifiers see 2, both return,
+        and the incident is written **zero** times. Fixing it in this file
+        would have needed the same handshake anyway, and the state it is about
+        lives in the runtime."""
+        first = runtime.take_first_degenerate()
+        if first is None:
             return
         with self.state.lock:
-            if game_id in self.state.degeneracy_reported:
-                return
-            self.state.degeneracy_reported.add(game_id)
             self.state.incidents += 1
-        first = runtime.first_degenerate or {}
         self.cfg.run.incident(
             "variant_degenerate",
             first.get("note") or DEGENERATE_NOTE,

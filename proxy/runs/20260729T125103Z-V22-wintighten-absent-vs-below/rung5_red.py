@@ -24,10 +24,12 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 
-RETURN_LINE = '    return 2 if report["verdict"] == "REFUSED" else 0'
+RETURN_LINE = '    if report["verdict"] == "REFUSED":\n        return 2'
 BREAKS = [
-    ("neutered  (guard always exits 0)", "    return 0"),
-    ("paranoid  (guard always exits 2)", "    return 2"),
+    ("neutered  (guard always exits 0)",
+     '    if report["verdict"] == "REFUSED":\n        return 0'),
+    ("paranoid  (guard always exits 2)",
+     '    if True:\n        return 2'),
 ]
 
 

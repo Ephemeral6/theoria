@@ -824,3 +824,69 @@ answered *before* `win_tighten` is used against a sealed game — a variant buil
 on an unchecked assumption there produces an unsolvable item whose
 justification is false, and the only thing that would reveal it is the incident
 this decision added. Check first; the incident is the backstop, not the plan.
+
+### D-032a · What the adversarial pass took back
+
+Four of the sentences above were wrong or overstated when they were written.
+They are corrected here rather than edited in place, because what a decision
+claimed before it was tested is part of the record.
+
+**"records one incident per session" was "records at most one, and sometimes
+none".** The notifier asked `runtime.degenerate_wins != 1` — a read of a shared
+counter *at notify time*. `env_proxy` serves on a `ThreadingHTTPServer` and one
+`VariantRuntime` is shared by every command for a game, so two responses can
+both be rewritten before either handler reaches its notifier; both then see the
+counter at 2, both return, and the incident is written **zero** times. The
+adversarial pass drove that interleaving and observed it. The mitigation that
+was in place (`_State.degeneracy_reported`) defended the harmless direction —
+the incident firing twice — and the test written for it pinned that same
+harmless direction while citing the very hazard it was not covering. A
+duplicate incident is noise; a missing one is the silence this ticket exists to
+remove, reproduced one layer up.
+
+Fixed by moving the claim into the runtime: `VariantRuntime.take_first_degenerate`
+hands the first record to exactly one caller under the runtime's own lock, and
+the notifier acts on what it was handed rather than re-reading a counter.
+`_State.degeneracy_reported` is gone — the handover is the once-guarantee.
+`test_the_incident_survives_two_rewrites_landing_before_either_notifier` is the
+interleaving, and M23/M24/M26/M27 are the mutants.
+
+**"two readers" was two readers of unequal weight.** The guard exits non-zero;
+the incident is a record whose only automated reader was the suite asserting it
+had been written. That is a defensible design — an incident is *for* the human
+reading the ledger later, which is this decision's stated failure mode — but
+"two readers" invited a stronger inference than the wiring supported. It is now
+three, and the third one is the load-bearing one: see below.
+
+**"the fact reaches a grader in a form that costs something to ignore" described
+a gate, and what existed was a command.** Nothing ran
+`check_variant_degeneracy` over a real run's ledger; rung 5 ran it only against
+a ledger rung 5 had fabricated seconds earlier. The territory boundary explains
+why `proxy/` cannot make `exam/` subtract the item; it does not explain why
+`proxy/` was not applying its own rule to its own runs. So `runner` now scans
+the ledger the run just wrote and puts `variant_degeneracy` into the run record
+— verdict, count, `variant_records`, `exam_eligible`, and the rule's name —
+and `verify.py` requires that key on every run record. Recorded, not raised:
+by then the game is played and the money is spent, and refusing there would
+destroy evidence rather than prevent anything (D-030).
+
+**The guard could not tell "nothing degenerate happened" from "I could not
+look".** `scan_file` skipped unparseable lines under a comment claiming that a
+skipped line "cannot hide a degenerate rewrite that a readable line would have
+shown" — a tautology, since the skipped line is precisely the one that would
+have shown it. A ledger truncated mid-record, which is what a killed writer
+leaves, produced a `PASS` byte-identical to a clean run's. The report now
+carries `variant_records` and `skipped_lines`, and an unreadable line makes the
+verdict `INCONCLUSIVE` (exit 1) rather than `PASS`.
+
+**One finding is acknowledged and deliberately not fixed here.** `redact.py`'s
+process-global vault scrubs dictionary *keys*, and `register(force=True)`
+ignores the length floor, so a short forced credential rewrites field names on
+their way to disk. The adversarial pass showed the consequence for this
+ticket specifically: a secret that is a substring of `variant`, `applied`, `op`
+or `degenerate` turns a stream full of degenerate rewrites into a silent `PASS`
+— **the new guard fails open on it**. That is a real hole and it is upstream of
+everything here; fixing it means changing `redact.py`'s contract, which is its
+own decision and its own ticket. What is owed and paid here is that the guard
+being downstream of it is written down (`RUN_STATE.md`, and the filed ticket)
+rather than left for the next person to discover.

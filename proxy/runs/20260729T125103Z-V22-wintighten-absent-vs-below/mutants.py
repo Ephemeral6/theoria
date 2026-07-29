@@ -4,12 +4,15 @@ time, and see whether anything goes red.
 The point of the exercise is the *surface*, not the count. C11's lesson was 18
 mutants that happened to line up one-to-one with 18 tests, which measures
 nothing except that somebody wrote one test per mutant. So the mutants here are
-generated from what the change could plausibly get wrong -- across all three
-files that carry the behaviour and both directions of every predicate -- and
-several of them have no test named after them. One is included that I expect to
-**survive**: a pure wording change to a note, which nothing asserts on
-character-by-character. A harness whose only possible output is "all killed"
-cannot tell a strong suite from a lucky one.
+generated from what the change could plausibly get wrong -- across every file
+that carries the behaviour and both directions of every predicate -- and
+several of them have no test named after them. Two are included that I expect
+to **survive**: M14, a pure wording change to a note that nothing asserts on
+character-by-character, and M33, which breaks `verify.py`'s stripper, a thing
+`verify.py` rung 5 covers and pytest does not. A harness whose only possible
+output is "all killed" cannot tell a strong suite from a lucky one, and a
+survivor that is *predicted* is worth more than one that is explained
+afterwards.
 
     python mutants.py --out <dir>
 
@@ -65,9 +68,9 @@ MUTANTS = [
      "",
      "drop the bit from the record altogether"),
     ("M07", V,
-     "                    self.degenerate_wins += 1",
-     "                    self.degenerate_wins += 0",
-     "the counter never moves, so the incident never fires"),
+     "                        self.degenerate_wins += 1",
+     "                        self.degenerate_wins += 0",
+     "the counter never moves, so nothing is ever the first rewrite"),
     ("M08", V,
      "                elif have < needed:",
      "                elif have <= needed:",
@@ -77,21 +80,29 @@ MUTANTS = [
      "                if have is None and needed < 0:\n                    # \"Absent\" is read as \"below\"",
      "the dangerous inverse: an absent score now *passes* the tightened win"),
     ("M10", V,
-     "                    if self.degenerate_wins == 1:",
-     "                    if self.degenerate_wins == 0:",
+     "                    if occurrence == 1:",
+     "                    if occurrence == 0:",
      "no rewrite is ever the first, so nothing is ever loud"),
     ("M11", V,
-     "                    if self.degenerate_wins == 1:",
-     "                    if self.degenerate_wins >= 1:",
+     "                    if occurrence == 1:",
+     "                    if occurrence >= 1:",
      "every rewrite is the first: the sentence on every record"),
     ("M12", V,
-     '                              "occurrence": self.degenerate_wins,',
+     '                              "occurrence": occurrence,',
      '                              "occurrence": 1,',
      "the occurrence index is frozen"),
     ("M13", V,
      "        self.degenerate_wins = 0\n        self.first_degenerate: Optional[Dict[str, Any]] = None",
      "        self.degenerate_wins = 0\n        self.first_degenerate: Optional[Dict[str, Any]] = {}",
      "first_degenerate starts non-None, so 'nothing degenerate happened' is unsayable"),
+    ("M26", V,
+     "            self._degeneracy_unreported = False\n            return self.first_degenerate",
+     "            return self.first_degenerate",
+     "the handover never clears: every notifier gets the record, one incident per WIN"),
+    ("M27", V,
+     "                            self._degeneracy_unreported = True",
+     "                            self._degeneracy_unreported = False",
+     "the handover is never armed, so the incident is never written at all"),
     ("M14", V,
      "DEGENERATE_NOTE = (\n    \"this game reported no score",
      "DEGENERATE_NOTE = (\n    \"This game reported no score",
@@ -111,8 +122,8 @@ MUTANTS = [
      '            if applied.get("op") != "win_tighten":\n                pass',
      "the guard flags any operator that carries the key"),
     ("M18", G,
-     '    return 2 if report["verdict"] == "REFUSED" else 0',
-     '    return 0',
+     '    if report["verdict"] == "REFUSED":\n        return 2',
+     '    if report["verdict"] == "REFUSED":\n        return 0',
      "the guard reports but never exits non-zero -- the decoration failure"),
     ("M19", G,
      '            seen["exam_eligible"] = False',
@@ -122,9 +133,21 @@ MUTANTS = [
      '    if applied.get("op") == "multiple":',
      '    if applied.get("op") == "never":',
      "nested applied records stop being unwrapped"),
+    ("M28", G,
+     '        verdict = "INCONCLUSIVE"',
+     '        verdict = "PASS"',
+     "an unreadable line goes back to reading as a clean stream"),
+    ("M29", G,
+     "                skipped += 1",
+     "                skipped += 0",
+     "unreadable lines stop being counted, so the verdict cannot see them"),
+    ("M30", G,
+     "        variant_records += 1",
+     "        variant_records += 0",
+     "'no degeneracy in 300 variant records' and 'I walked nothing' merge again"),
     ("M21", G,
-     '    verdict = "REFUSED" if findings else "PASS"',
-     '    verdict = "PASS"',
+     '    if findings:\n        verdict = "REFUSED"',
+     '    if findings:\n        verdict = "PASS"',
      "the verdict is hard-coded green"),
 
     # -- the wiring --------------------------------------------------------
@@ -133,13 +156,30 @@ MUTANTS = [
      "",
      "the incident consumer is never called"),
     ("M23", E,
-     "        if runtime.degenerate_wins != 1 or game_id in self.state.degeneracy_reported:",
-     "        if runtime.degenerate_wins != 0 or game_id in self.state.degeneracy_reported:",
-     "the incident fires on the wrong edge -- once, before anything degenerated"),
+     "        first = runtime.take_first_degenerate()",
+     "        first = runtime.first_degenerate",
+     "back to reading shared state instead of taking the handover: the F1 race"),
     ("M24", E,
-     "            self.state.degeneracy_reported.add(game_id)",
-     "            pass",
-     "the once-per-session guard is removed: one incident per WIN"),
+     "        if first is None:\n            return",
+     "        if first is None:\n            first = {}",
+     "the notifier stops honouring the handover and writes an incident every time"),
+
+    # -- R-V22 firing by itself on a real run ------------------------------
+    ("M31", "proxy/runner.py",
+     '        "verdict": degeneracy["verdict"],',
+     '        "verdict": "PASS",',
+     "the run record always says the rule passed"),
+    ("M32", "proxy/runner.py",
+     '        "exam_eligible": all(v["exam_eligible"] for v in degeneracy["variants"]),',
+     '        "exam_eligible": True,',
+     "the run record always says the item is exam-eligible"),
+    ("M33", "proxy/verify.py",
+     '            for applied in _applied_records((record.get("variant") or {}).get("applied")):\n'
+     '                if applied.pop("degenerate", None) is not None:',
+     '            applied = (record.get("variant") or {}).get("applied") or {}\n'
+     '            if applied.pop("degenerate", None) is not None:',
+     "rung 5's stripper stops recursing -- EXPECTED TO SURVIVE the suite; rung 5 "
+     "is what covers this and rung 5 does not run under pytest"),
 
     # -- the mock the negative control is built on -------------------------
     ("M25", "proxy/mock/arc_mock.py",
@@ -148,9 +188,15 @@ MUTANTS = [
      "the scoreless world quietly starts scoring: the negative control's own fixture"),
 ]
 
-TESTS = ["-m", "pytest", "proxy/tests/test_variant_degeneracy.py",
-         "proxy/tests/test_variants.py", "proxy/tests/test_e2e.py", "-q",
-         "-x", "--no-header"]
+#: The whole suite, which is what `PREREGISTRATION.md` P4 asked for. An earlier
+#: run of this harness narrowed it to three files; that deviation was
+#: conservative (a smaller test set makes a mutant harder to kill, so it can
+#: only understate the kill count) but it was a deviation from a written
+#: criterion and it was not flagged, which is the part that mattered. It also
+#: excluded `test_spend_gate.py`, the file whose one-character credential
+#: poisons the redaction vault -- so the harness could not see that interaction
+#: in either direction.
+TESTS = ["-m", "pytest", "proxy", "-q", "-x", "--no-header"]
 
 
 def build_tree(dst):
@@ -172,6 +218,13 @@ def build_tree(dst):
     os.makedirs(piles_dst)
     shutil.copy2(os.path.join(REPO, "arc-recon", "data", "piles.json"),
                  os.path.join(piles_dst, "piles.json"))
+    # `test_chain.py::test_the_runners_default_head_location_is_gitignored`
+    # shells out to `git check-ignore`, which exits 128 outside a repository --
+    # so with the test surface widened to the whole suite (P4 as written), the
+    # control failed and the harness refused to report, which is the control
+    # working. An empty repo plus the copied `proxy/.gitignore` is enough for
+    # that test to mean what it means in the real checkout.
+    subprocess.run(["git", "init", "-q", dst], capture_output=True)
 
 
 #: The control. Not a mutation: the anchor is replaced by itself, so this run
@@ -260,7 +313,7 @@ def main():
                "killed": len([r for r in results if r["verdict"] == "killed"]),
                "survived": len(survivors),
                "not_applied": len(unapplied),
-               "expected_survivor": "M14",
+               "expected_survivors": ["M14", "M33"],
                "results": results}
     with open(os.path.join(args.out, "mutants.json"), "w",
               encoding="utf-8", newline="\n") as fh:

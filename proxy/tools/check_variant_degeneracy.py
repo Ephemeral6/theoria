@@ -19,7 +19,16 @@ Exit codes:
     0   no degenerate rewrite in the stream
     2   at least one; the run's variant claim does not follow from its
         construction and the item is not exam-eligible (rule R-V22)
-    1   the file could not be read
+    1   the file could not be read, or the stream could not be judged --
+        a line that will not parse makes the verdict INCONCLUSIVE, because a
+        guard whose "clean" is indistinguishable from "I could not look" is
+        the silence this tool exists to remove, one layer up
+
+Every report carries `variant_records` and `skipped_lines` beside the verdict,
+so "no degenerate rewrite in 300 variant records" and "no variant records at
+all" are different sentences on the page. An adversarial pass produced two
+byte-identical PASS lines for those two cases, which is exactly the collapse
+D-032 is about.
 
 **It reads the marker and nothing else.** It does not re-derive degeneracy from
 `score: null`, and that restraint is the point: if the marker is stripped from
@@ -41,16 +50,19 @@ import sys
 from typing import Any, Dict, List
 
 
-def scan_records(records: List[Dict[str, Any]]) -> Dict[str, Any]:
+def scan_records(records: List[Dict[str, Any]],
+                 skipped_lines: int = 0) -> Dict[str, Any]:
     """Judge a list of ledger records. Pure; the file reader is separate so a
     test can hand it records without touching a disk."""
     findings: List[Dict[str, Any]] = []
     variants: Dict[str, Dict[str, Any]] = {}
+    variant_records = 0
 
     for record in records:
         variant = record.get("variant")
         if not isinstance(variant, dict):
             continue
+        variant_records += 1
         variant_id = variant.get("variant_id") or "<unnamed>"
         seen = variants.setdefault(
             variant_id, {"variant_id": variant_id,
@@ -72,8 +84,17 @@ def scan_records(records: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "note": applied.get("note"),
             })
 
-    verdict = "REFUSED" if findings else "PASS"
+    if findings:
+        verdict = "REFUSED"
+    elif skipped_lines:
+        # Nothing degenerate in what could be read, and something could not be
+        # read. Those two facts do not add up to a clean stream.
+        verdict = "INCONCLUSIVE"
+    else:
+        verdict = "PASS"
     return {"verdict": verdict, "records": len(records),
+            "variant_records": variant_records,
+            "skipped_lines": skipped_lines,
             "findings": findings,
             "variants": [variants[k] for k in sorted(variants)]}
 
@@ -95,6 +116,7 @@ def _applied_records(applied: Any) -> List[Dict[str, Any]]:
 
 def scan_file(path: str) -> Dict[str, Any]:
     records: List[Dict[str, Any]] = []
+    skipped = 0
     with open(path, encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
@@ -103,18 +125,25 @@ def scan_file(path: str) -> Dict[str, Any]:
             try:
                 parsed = json.loads(line)
             except ValueError:
-                # Not this tool's complaint to make: validate_ledger.py owns
-                # unreadable lines. Skipping one here cannot hide a degenerate
-                # rewrite that a readable line would have shown.
+                # Counted, not diagnosed. `validate_ledger.py` owns the
+                # question of *why* a line will not parse; what this tool owes
+                # its caller is that a line it could not read never disappears
+                # into a clean verdict. An earlier version skipped silently
+                # under the claim that "a skipped line cannot hide a degenerate
+                # rewrite that a readable line would have shown", which is a
+                # tautology: the skipped line is the one that would have shown
+                # it. A truncated ledger -- what a killed writer leaves --
+                # produced a PASS byte-identical to a clean run's.
+                skipped += 1
                 continue
             if isinstance(parsed, dict):
                 records.append(parsed)
-    report = scan_file_report(path, records)
-    return report
+    return scan_file_report(path, records, skipped)
 
 
-def scan_file_report(path: str, records: List[Dict[str, Any]]) -> Dict[str, Any]:
-    report = scan_records(records)
+def scan_file_report(path: str, records: List[Dict[str, Any]],
+                     skipped_lines: int = 0) -> Dict[str, Any]:
+    report = scan_records(records, skipped_lines=skipped_lines)
     report["path"] = path
     return report
 
@@ -134,9 +163,11 @@ def main(argv=None) -> int:
     if args.json:
         print(json.dumps(report, indent=2, sort_keys=True))
     else:
-        print("%s: %s (%d records, %d degenerate rewrite(s))"
+        print("%s: %s (%d records, %d carrying a variant, %d degenerate "
+              "rewrite(s), %d unreadable line(s))"
               % (report["path"], report["verdict"], report["records"],
-                 len(report["findings"])))
+                 report["variant_records"], len(report["findings"]),
+                 report["skipped_lines"]))
         for finding in report["findings"][:5]:
             print("  seq %s  variant %s  require_score=%s  reason=%s"
                   % (finding["seq"], finding["variant_id"],
@@ -152,7 +183,13 @@ def main(argv=None) -> int:
                       "one, so it does not count toward the reason score"
                       % variant["variant_id"])
 
-    return 2 if report["verdict"] == "REFUSED" else 0
+    if report["verdict"] == "REFUSED":
+        return 2
+    if report["verdict"] == "INCONCLUSIVE":
+        print("  %d line(s) could not be read, so 'no degenerate rewrite' is "
+              "not a claim this run can make" % report["skipped_lines"])
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

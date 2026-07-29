@@ -31,7 +31,9 @@ from proxy.ledger import INCIDENT_KINDS, read_ledger
 from proxy.mock.arc_mock import DEFAULT_GAME, DEFAULT_KEY as ARC_KEY, MockArc
 from proxy.mock.model_mock import DEFAULT_KEY as MODEL_KEY, MockProvider
 from proxy.runner import run_game
-from proxy.tools.check_variant_degeneracy import main as check_main, scan_records
+from proxy.tools.check_variant_degeneracy import (_applied_records,
+                                                  main as check_main,
+                                                  scan_file, scan_records)
 from proxy.variants import (DEGENERATE_NOTE, REASON_ABSENT, REASON_BELOW,
                             Variant, VariantRuntime)
 
@@ -82,16 +84,18 @@ def _play(tmp_path, variant, scoreless, budget=60):
     with _vault_without_toy_secrets(), \
             MockArc(api_key=ARC_KEY, games=[DEFAULT_GAME], scoreless=scoreless) as arc, \
             MockProvider(api_key=MODEL_KEY) as provider:
-        run_game(DEFAULT_GAME, arm="mock_arm", budget=budget,
-                 env_upstream=arc.base_url, model_upstream=provider.base_url,
-                 env_key=ARC_KEY, model_key=MODEL_KEY, require_keys=False,
-                 variant=variant, ledger_path=ledger_path,
-                 runs_dir=str(tmp_path / "runs"))
-    return read_ledger(ledger_path)
+        record = run_game(DEFAULT_GAME, arm="mock_arm", budget=budget,
+                          env_upstream=arc.base_url,
+                          model_upstream=provider.base_url,
+                          env_key=ARC_KEY, model_key=MODEL_KEY,
+                          require_keys=False, variant=variant,
+                          ledger_path=ledger_path,
+                          runs_dir=str(tmp_path / "runs"))
+    return record, read_ledger(ledger_path)
 
 
 @pytest.fixture(scope="module")
-def scoreless_run(tmp_path_factory):
+def scoreless(tmp_path_factory):
     """A run against a world that reports no score. `win_tighten` here removes
     the win condition rather than tightening it."""
     return _play(tmp_path_factory.mktemp("scoreless"),
@@ -99,13 +103,42 @@ def scoreless_run(tmp_path_factory):
 
 
 @pytest.fixture(scope="module")
-def scoring_run(tmp_path_factory):
+def scoring(tmp_path_factory):
     """A run against the normal scoring world, with the floor set above
     anything the game can reach -- so `win_tighten` fires on every WIN, for a
     shortfall. This is the session that must *pass* the guard: not because
     nothing happened, but because what happened was the honest case."""
     return _play(tmp_path_factory.mktemp("scoring"),
                  _variant(99, "t-below"), scoreless=False)
+
+
+@pytest.fixture(scope="module")
+def scoreless_run(scoreless):
+    return scoreless[1]
+
+
+@pytest.fixture(scope="module")
+def scoring_run(scoring):
+    return scoring[1]
+
+
+def _strip_markers(records):
+    """Remove every `degenerate` marker, walking nested `applied` records with
+    the guard's own unwrapper.
+
+    Deliberately not a top-level `.pop`. An adversarial pass pointed out that
+    the guard recurses through `{"op":"multiple"}` and the strippers did not,
+    so a variant with two operators would leave a nested marker behind, the
+    guard would correctly still refuse, and the negative control would report
+    "it is not the marker that catches this" -- a false accusation aimed at the
+    guard instead of at the stripper.
+    """
+    removed = 0
+    for record in records:
+        for applied in _applied_records((record.get("variant") or {}).get("applied")):
+            if applied.pop("degenerate", None) is not None:
+                removed += 1
+    return removed
 
 
 def _applied(records, op="win_tighten"):
@@ -205,12 +238,7 @@ def test_stripping_the_marker_lets_the_scoreless_session_through(scoreless_run):
     red and the marker would be decoration -- true, recorded, and load-bearing
     for nothing. It goes green, so the marker is what catches it."""
     stripped = copy.deepcopy(scoreless_run)
-    removed = 0
-    for record in stripped:
-        applied = (record.get("variant") or {}).get("applied")
-        if isinstance(applied, dict) and "degenerate" in applied:
-            applied.pop("degenerate")
-            removed += 1
+    removed = _strip_markers(stripped)
     assert removed > 0
 
     report = scan_records(stripped)
@@ -275,6 +303,29 @@ def test_the_scoring_session_records_no_incident(scoring_run):
                 if r["event"] == "incident" and r["kind"] == "variant_degenerate"]
 
 
+# -- R-V22 fires by itself on a real run -----------------------------------
+
+def test_the_run_record_carries_the_rule_verdict(scoreless, scoring):
+    """R-V22 was a command until this. An adversarial pass observed that
+    nothing obliged anybody to run the detector over a real ledger, so the
+    rule fired only if a human remembered -- which is not what "the fact
+    reaches a grader in a form that costs something to ignore" describes.
+    `runner` now scans the ledger the run just wrote and puts the verdict in
+    the run record, inside this territory and without touching `exam/`."""
+    absent_record, _ = scoreless
+    below_record, _ = scoring
+
+    assert absent_record["variant_degeneracy"]["verdict"] == "REFUSED"
+    assert absent_record["variant_degeneracy"]["exam_eligible"] is False
+    assert absent_record["variant_degeneracy"]["degenerate_rewrites"] > 0
+    assert absent_record["variant_degeneracy"]["rule"].startswith("R-V22")
+
+    assert below_record["variant_degeneracy"]["verdict"] == "PASS"
+    assert below_record["variant_degeneracy"]["exam_eligible"] is True
+    assert below_record["variant_degeneracy"]["degenerate_rewrites"] == 0
+    assert below_record["variant_degeneracy"]["variant_records"] > 0
+
+
 # -- the guard as a program ------------------------------------------------
 
 def test_the_guard_exits_non_zero_on_a_refused_stream(tmp_path, scoreless_run, capsys):
@@ -302,6 +353,56 @@ def test_the_guard_reports_an_unreadable_path_rather_than_passing_it(tmp_path):
     assert check_main([str(tmp_path / "nope.jsonl")]) == 1
 
 
+def test_a_truncated_line_is_inconclusive_not_clean(tmp_path, scoreless_run):
+    """An adversarial pass fed the guard a ledger whose marked line had been
+    truncated -- what a killed writer leaves -- and got a PASS byte-identical
+    to a clean run's. 'I saw nothing degenerate' and 'I could not look' are not
+    the same sentence, and the tool now refuses to write them the same way."""
+    lines = [json.dumps(r, sort_keys=True) for r in scoreless_run]
+    marked = next(i for i, r in enumerate(scoreless_run)
+                  if ((r.get("variant") or {}).get("applied") or {}).get("degenerate"))
+    truncated = tmp_path / "truncated.jsonl"
+    lines[marked] = lines[marked][:len(lines[marked]) // 2]
+    truncated.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    report = scan_file(str(truncated))
+    assert report["skipped_lines"] >= 1
+    assert report["verdict"] in ("REFUSED", "INCONCLUSIVE")
+
+    # And with every marker gone as well, the surviving unreadable line is the
+    # whole of the complaint: not PASS.
+    only_broken = tmp_path / "only-broken.jsonl"
+    only_broken.write_text('{"seq": 1, "event": "run_start"}\n{"seq": 2, "ev\n',
+                           encoding="utf-8")
+    report = scan_file(str(only_broken))
+    assert report["verdict"] == "INCONCLUSIVE" and report["skipped_lines"] == 1
+    assert check_main([str(only_broken)]) == 1
+
+
+def test_the_report_distinguishes_no_degeneracy_from_no_variants(scoring_run):
+    """`variant_records` is what makes 'clean over 126 records' different from
+    'I walked nothing'. Both used to print the same line."""
+    seen = scan_records(scoring_run)
+    empty = scan_records([{"seq": 1, "event": "run_start"}])
+    assert seen["verdict"] == empty["verdict"] == "PASS"
+    assert seen["variant_records"] > 0 and empty["variant_records"] == 0
+
+
+def test_a_nested_marker_is_stripped_as_well_as_found():
+    """The stripper and the guard have to agree about nesting, or the negative
+    control blames the wrong component."""
+    records = [{"seq": 9, "event": "env_step", "variant": {
+        "variant_id": "t-nested", "spec_sha256": "sha256:x",
+        "applied": {"op": "multiple", "applied": [
+            {"op": "remap_action", "from": "ACTION3", "to": "ACTION4"},
+            {"op": "win_tighten", "reason": REASON_ABSENT, "degenerate": True,
+             "require_score": 2}]}}}]
+    assert scan_records(copy.deepcopy(records))["verdict"] == "REFUSED"
+    stripped = copy.deepcopy(records)
+    assert _strip_markers(stripped) == 1
+    assert scan_records(stripped)["verdict"] == "PASS"
+
+
 def test_the_guard_only_speaks_for_win_tighten():
     """Written because a mutant survived: dropping the `op` filter changed no
     test. `degenerate` is a `win_tighten` word -- R-V22 excludes a *win_tighten*
@@ -314,29 +415,68 @@ def test_the_guard_only_speaks_for_win_tighten():
     assert scan_records([record])["verdict"] == "PASS"
 
 
-def test_the_incident_is_written_once_even_if_the_edge_is_seen_twice():
-    """Also written because a mutant survived. `degenerate_wins != 1` already
-    fires once per session in a single-threaded run, so the `degeneracy_reported`
-    set looks redundant -- it is not: two commands for the same game can be in
-    flight at once (`ThreadingHTTPServer`), and both would see the counter at 1.
-    Calling the notifier twice is the deterministic stand-in for that race."""
+def _notifier():
+    """A `_Handler` reduced to what `_note_degeneracy` touches, plus the list
+    of incident kinds it wrote."""
     from proxy import env_proxy as ep
-
-    runtime = VariantRuntime(_variant(2, "t-race"))
-    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
-    assert runtime.degenerate_wins == 1
 
     written = []
     stub = types.SimpleNamespace(
         state=ep._State(),
         cfg=types.SimpleNamespace(
-            variant=runtime.variant,
+            variant=None,
             run=types.SimpleNamespace(
                 incident=lambda kind, detail, **fields: written.append(kind))))
+    return ep._Handler._note_degeneracy, stub, written
 
-    ep._Handler._note_degeneracy(stub, runtime, "g-1")
-    ep._Handler._note_degeneracy(stub, runtime, "g-1")
+
+def test_the_incident_is_written_once_even_if_the_edge_is_seen_twice():
+    """Written because a mutant survived: nothing pinned the once-per-session
+    half."""
+    notify, stub, written = _notifier()
+    runtime = VariantRuntime(_variant(2, "t-race"))
+    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
+
+    notify(stub, runtime, "g-1")
+    notify(stub, runtime, "g-1")
     assert written == ["variant_degenerate"]
+
+
+def test_the_incident_survives_two_rewrites_landing_before_either_notifier():
+    """The half the first version got wrong, found by an adversarial pass.
+
+    `env_proxy` serves on a `ThreadingHTTPServer` and `runtime_for` hands one
+    `VariantRuntime` to every command for a game, so two commands can be in
+    flight together. The first version asked `runtime.degenerate_wins != 1` at
+    notify time; in this interleaving both notifiers see 2, both return, and
+    the incident is written **zero** times -- the exact silence this ticket
+    exists to remove, one layer up. A duplicate incident is noise; a missing
+    one is the defect.
+    """
+    notify, stub, written = _notifier()
+    runtime = VariantRuntime(_variant(2, "t-race"))
+
+    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
+    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
+    assert runtime.degenerate_wins == 2          # both rewrites landed first
+
+    notify(stub, runtime, "g-1")
+    notify(stub, runtime, "g-1")
+    assert written == ["variant_degenerate"], (
+        "the incident was lost because the notifier re-read a counter that had "
+        "already moved past 1")
+
+
+def test_the_first_degenerate_record_is_handed_out_exactly_once():
+    runtime = VariantRuntime(_variant(2, "t-once"))
+    assert runtime.take_first_degenerate() is None
+    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
+    first = runtime.take_first_degenerate()
+    assert first is not None and first["occurrence"] == 1
+    assert runtime.take_first_degenerate() is None
+    # and the record itself is still readable afterwards -- handing it out is
+    # not the same as discarding it.
+    assert runtime.first_degenerate["note"] == DEGENERATE_NOTE
 
 
 def test_the_guard_sees_a_marker_nested_under_multiple():

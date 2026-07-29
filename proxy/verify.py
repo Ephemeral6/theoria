@@ -84,7 +84,7 @@ ENVELOPE_REQUIRED = ("arm", "event", "run_id", "seq", "ts", "v")
 # per game into `runs/<run_id>.json`.
 RUN_REQUIRED = ("arm", "env_proxy", "game_id", "ledger", "model_proxy",
                 "reconciliation", "run_id", "score", "scorer", "spend",
-                "summary")
+                "summary", "variant_degeneracy")
 
 # Floors.  Not decoration: the number below which "the pipeline ran" stops
 # being true.  A mock game at the runner's default budget of 40 produces about
@@ -226,7 +226,18 @@ from proxy.mock.model_mock import DEFAULT_KEY as MODEL_KEY, MockProvider
 variant = Variant({
     "variant_id": "verify-degenerate", "base_game": DEFAULT_GAME,
     "claim": "unsolvable",
-    "operators": [{"op": "win_tighten",
+    # Two operators on purpose. `env_proxy` folds an outbound rewrite and an
+    # inbound one into `{"op":"multiple"}`, so a single-operator variant never
+    # produces a nested `applied` record and never exercises the guard's
+    # recursion or this rung's stripper against it.
+    #
+    # The remap is its own identity: it rewrites nothing the arm can observe,
+    # so the route to the win is exactly the route without it, and the rung
+    # still gets the nested record shape it needs. A real remap (ACTION3 ->
+    # ACTION4) was tried first and the arm stopped reaching the win inside the
+    # budget, which would have made this rung green for the wrong reason.
+    "operators": [{"op": "remap_action", "from": "ACTION1", "to": "ACTION1"},
+                  {"op": "win_tighten",
                    "require": {"kind": "score_at_least", "value": 2}}],
     "justification": "The server's win is kept and a score floor is added on "
                      "top of it, so the tightened win is a strict subset.",
@@ -479,6 +490,16 @@ def rung_degeneracy_guard(problems, scratch):
                                           (refused.stdout + refused.stderr)[-2000:]))
         return
 
+    # The stripper walks nested `applied` records with the guard's own
+    # unwrapper rather than a top-level `.pop`. They have to agree: the guard
+    # recurses through `{"op":"multiple"}`, and a stripper that did not would
+    # leave a nested marker behind, the guard would (correctly) refuse, and
+    # this rung would print "it is not the marker that catches this" -- a false
+    # accusation pointed at the guard instead of at the stripper.
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from proxy.tools.check_variant_degeneracy import _applied_records
+
     stripped_path = os.path.join(scratch, "ledger_degenerate_unmarked.jsonl")
     stripped = 0
     with open(ledger_path, encoding="utf-8") as src, \
@@ -487,9 +508,9 @@ def rung_degeneracy_guard(problems, scratch):
             if not line.strip():
                 continue
             record = json.loads(line)
-            applied = (record.get("variant") or {}).get("applied")
-            if isinstance(applied, dict) and applied.pop("degenerate", None) is not None:
-                stripped += 1
+            for applied in _applied_records((record.get("variant") or {}).get("applied")):
+                if applied.pop("degenerate", None) is not None:
+                    stripped += 1
             dst.write(json.dumps(record, sort_keys=True) + "\n")
     if stripped == 0:
         fail(problems, "the degenerate run carried no `degenerate` marker at all "

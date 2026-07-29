@@ -34,6 +34,7 @@ a variant run replays exactly like an unmodified one.
 import glob
 import json
 import os
+import threading
 from typing import Any, Dict, List, Optional
 
 from .ledger import canonical, sha256
@@ -204,6 +205,15 @@ class VariantRuntime:
         #: tighten anything -- it removed the win condition (D-032).
         self.degenerate_wins = 0
         self.first_degenerate: Optional[Dict[str, Any]] = None
+        #: The first one, not yet handed to a consumer. `take_first_degenerate`
+        #: is the only way to clear it.
+        self._degeneracy_unreported = False
+        #: Guards the three fields above and nothing else. `env_proxy` serves
+        #: on a `ThreadingHTTPServer`, so two commands for one game share this
+        #: runtime; an adversarial pass showed that a consumer deciding "am I
+        #: the first?" by re-reading `degenerate_wins` loses the incident
+        #: entirely when both rewrites land before either consumer looks.
+        self._degeneracy_lock = threading.Lock()
 
     def _ops(self, kind: str):
         if self.variant is None:
@@ -280,16 +290,20 @@ class VariantRuntime:
                     # different thing, because it is a different thing.
                     body = dict(body)
                     body["state"] = "NOT_FINISHED"
-                    self.degenerate_wins += 1
+                    with self._degeneracy_lock:
+                        self.degenerate_wins += 1
+                        occurrence = self.degenerate_wins
                     record = {"op": "win_tighten", "require_score": needed,
                               "score": None,
                               "reason": REASON_ABSENT,
                               "degenerate": True,
-                              "occurrence": self.degenerate_wins,
+                              "occurrence": occurrence,
                               "effect": "WIN rewritten to NOT_FINISHED"}
-                    if self.degenerate_wins == 1:
+                    if occurrence == 1:
                         record["note"] = DEGENERATE_NOTE
-                        self.first_degenerate = dict(record)
+                        with self._degeneracy_lock:
+                            self.first_degenerate = dict(record)
+                            self._degeneracy_unreported = True
                     applied.append(record)
                 elif have < needed:
                     body = dict(body)
@@ -305,6 +319,25 @@ class VariantRuntime:
             return body, None
         return body, (applied[0] if len(applied) == 1 else {"op": "multiple",
                                                             "applied": applied})
+
+    def take_first_degenerate(self) -> Optional[Dict[str, Any]]:
+        """The first degenerate rewrite of this session, handed out **once**.
+
+        A consumer must not decide "am I the first?" by reading
+        `degenerate_wins`, because by the time it looks the counter may have
+        moved past 1 -- two commands for one game are in flight on a
+        `ThreadingHTTPServer` and both responses can be rewritten before either
+        handler reaches its notifier. An adversarial pass drove exactly that
+        interleaving and the incident was written **zero** times, which is the
+        failure this ticket exists to remove, reproduced one layer up. So the
+        claim is moved into the runtime, where the state is: this returns the
+        record to the first caller and `None` to every caller after it.
+        """
+        with self._degeneracy_lock:
+            if not self._degeneracy_unreported:
+                return None
+            self._degeneracy_unreported = False
+            return self.first_degenerate
 
     # -- synthetic bodies --------------------------------------------------
     def _unchanged_body(self) -> Dict[str, Any]:
