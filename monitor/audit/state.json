@@ -1,76 +1,78 @@
 {
-  "cycle": 35,
-  "utc": "2026-07-29T10:06Z",
-  "last_audited_commit": "de90ba90",
-  "range_this_cycle": "43b29a5..de90ba90 (34 commits, 102 files)",
+  "cycle": 36,
+  "utc": "2026-07-29T12:58Z",
+  "last_audited_commit": "9bc8c880",
+  "range_this_cycle": "de90ba90..9bc8c880 (102 commits, 403 files)",
   "mode": "incremental",
-  "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
+  "launch_path_this_life": "**headless**, started by standing.py at 2026-07-29T12:46:33Z (STANDING_OPS now auto-starts OPS-A/OPS-M). Verified by walking my own process ancestry: powershell <- claude.exe <- cmd.exe <- python.exe(standing) <- svchost <- services.exe. The pasted launch words are byte-identical to monitor/prompts/ops/OPS-A.md, so **prompt text cannot tell you which path you came in on -- the process tree can.**",
+  "channel": "bus.py read OPS-A -> NO-NEW-MESSAGES (cursor last_seq 3 == in.jsonl length). mailbox ALL.md/OPS-A.md: no new OPEN items since 07-28T14:09Z; mailbox is now retired by FLEET.md but my own prompt still orders a TO-MONITOR write at boot -- reported.",
   "covered": {
-    "HELD 生产验证（用户点名）": "53 条 HELD，最近 09:58:51Z。前后各 6 小时：改动前 FLAG 462/29 分支/HELD 0/MERGED 35；改动后 FLAG 6/5 分支/HELD 53/MERGED 22。FLAG 行 462→6 约 77 倍。逐 flag 文件比对：14 个 tip 未变（扣得对），0 个 tip 已变仍卡着——hold 能松开在生产上验到了。限定：MERGED 35→22，我认为是积压清完而非 hold 所致，但分不干净，如实记。",
-    "监控自身漂移（我的责任）": "a7-envelope-finish 回并 master（fec3f106/98b89780）使 master 一等父路径拐进该分支，64157c1 与 87a1e63 双双离开 first-parent（仍 reachable from master），计数 3→1，probe_append_only 转绿而两条越线一条未修。**--first-parent 是我 cycle 15 力主的，我用它否掉了监控原本的 SHA 豁免表——那个方向才是对的。**",
-    "纪律": "区间 102 文件，封存 ID 仅 PARTNER_SYNC 污染登记，密钥零命中，battery/PREDICTIONS.md +95 纯追加。"
+    "the reorg (9bc8c880)": "the night's big change: app retired as a launch path for RES-1..4, mailbox retired, liveness := board.log, FLEET.md written. Audited whether it covered what it claims. It covers 4 of 8 numbers -- report 1.",
+    "red lines": "0 key hits in 5641 tracked files. Sealed ids in added lines: 5 hits, all administrative (claim_set membership, quarantine list, one board item about an id-matching bug) -- no content. append_only: 0 new deletions in range; all-history first-parent still 1 (the exempt 63ef0bf).",
+    "pid/liveness machinery": "4th unguarded copy of pid_alive found in scan.py -- report 2. The pid:0 root cause itself is NOT mine: already diagnosed and documented in dispatch.py:98-107 by the 57-agent census.",
+    "evidence check on the reorg's own numbers": "commit claims 'of today's 99 delivered items, 46 came from RES-3 and RES-4'. Counted board/done: 103 items now, RES-3 29 + RES-4 18 = 47. Consistent with 46 at commit time. No evidence drift."
   },
   "reports_this_cycle": [
-    "DRIFT-20260729T1006Z-first-parent-lost-two-adjudicated-crossings.md"
+    "DRIFT-20260729T1255Z-reorg-covered-four-of-eight-numbers.md (high)",
+    "DRIFT-20260729T1255Z-fourth-pid-alive-copy-keeps-ghosts-running.md (medium)"
   ],
-  "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
+  "attribution_note": "The pid:0 diagnosis belongs to the 2026-07-29 adversarial census (already written into dispatch.py's docstring); my report adds only the fourth copy and the on-screen consequence. Report 1 credits standing.py's own comments for the twin-session incident narrative.",
   "pending_on_monitor": [
-    "优先合并 v15-census-sampling-frame 与 v11-negative-control-census（已有裁决建立在其上）；合不进则至少把 MATRIX_V15.md / NEGATIVE_CONTROL.md / KNOWN_GAPS.json 取到 master",
-    "引用纪律：裁决/工单/论文判断引用的产物必须在 master 上，否则引用处注明「依据在分支 X，尚未落地」",
-    "把 board 的 done 拆成 done / landed（判据 git rev-list --count master..origin/agent/<id> == 0），心跳只把 landed 计作交付；今天的口径应是 landed 30 / done-but-unlanded 21",
-    "**最急（已升 critical）**：应用 OPS-M cycle 8 的一行——gates.py 显式解析 Git Bash 的绝对路径（Program Files 下的 Git/bin/bash.exe），不要让 CreateProcess 的 PATH 搜索选到 System32 里 WSL 的 bash；若监控仍未动，按 CHARTER 阶梯交给用户",
-    "加 probe_merge_queue（十几行，判据在 scratchpad/flags.py；它现在就是红的，天然满足 S20 负样本要求）",
-    "flag() 加 first_seen/count、同因三次停重试并派活、重试退避",
-    "probe_a1_state 改一行让它能变绿 + 补样本",
-    "把 ast 判据搬进 monitor 作 meta 探针",
-    "03:57Z 规则后半句：矛盾显式记出来（第三次提）",
-    "probe_provenance 加字段检查 + 9 份回填 utc",
-    "cmd_sweep 对 RES-* 用心跳判活；APP-* 给心跳或禁止领活",
-    "a0-spike/verify.sh 判死结案（欠 9 周期）",
-    "verify_gates 范围加 monitor/prompts/**",
-    "WP10 的 scale 按 R2 收窄"
+    "**order matters (report 1)**: fix the OPS liveness criterion BEFORE raising MAX_STANDING. The cap is currently the only thing preventing an OPS-A twin; removing it first manufactures one.",
+    "one sleep interval per role: ops/OPS-A.md says 30 min, prompts/ops/OPS-A.md says 60, AUDITOR.md says 3600+exit-after-6 -- and any of them must exceed standing.py's LOCK_FRESH_MIN=20 to be safe",
+    "probe_needs_human: 6 of its 8 rows are now automated; only OPS-B/OPS-R still need a human. It still hands the user prompts/ops/RES-*.md, the path the reorg retired.",
+    "channel's second half: monitor/prompts/ops/*.md + monitor/ops/*.md still order mailbox writes; scan.py:514 counts TO-MONITOR in the retired channel and never clears on reply",
+    "scan.py:1467 -> use dispatch.pid_alive; registry should record the task name, not a pid this machine's schtasks never reports",
+    "loop_state.json in_flight has 9 entries with no exit path (oldest 29.5h)",
+    "still open from cycle 35: append_only should key exemptions by SHA/reachability, not by count (--first-parent moved 2 adjudicated crossings out of frame); the two adjudicated crossings should be written into a fixed record",
+    "still open, older: probe_merge_queue; flag() first_seen/count + backoff; probe_a1_state can never go green; ast criterion as a meta-probe; 03:57Z rule's second half (record contradictions explicitly); probe_provenance field checks; a0-spike/verify.sh dead-or-alive; verify_gates scope to monitor/prompts/**; WP10 scale narrowed per R2"
   ],
   "false_positives_i_caught_myself": [
-    "proxy/verify_spend.sh『无失败路径』——实为 fail=1 累积 + 末行 exit $fail。别再报。",
-    "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。",
-    "ops-status 心跳的 utc 字段有本地时间/未来时刻（RES-1 21:25Z、RES-3 07-29 07:30Z），我疑心判活被骗；读了 scan.py:471/:697/:775 与 agents.py:145 —— 全部用 os.path.getmtime，不读 JSON 的 utc。只影响显示，不是漂移。",
-    "差点把 e7 分支的 07-29 03:08 报成未来戳——那是我自己 git log --date=format 用了本地时区（UTC+8），换算是 07-28 19:08Z。**判时间戳异常必须显式带 Z 或用 %aI，别用本地格式。** 上轮那六个是真的（目录名与 MANIFEST.utc 都写着 Z）。",
-    "monitor 全套后台跑报 test_gates.py 的 fleetkit 失败，复跑即绿——竞态：套件跑两分多钟，跑在一棵正被合并的工作树上，起跑时新领地已落地而更新后的断言未到。**长测试的红色必须复跑一次再报。**"
+    "**cycle 36: 'a fourth same-number collision'** -- standing.log showed START OPS-A 33 seconds before my launch words arrived, and TheoriaAgent-OPS-A was Running. I was about to report a live twin. Walking my own process ancestry showed I *am* that headless session. **Before reporting a twin, prove you are not it.**",
+    "cycle 36: 'probe_scheduled_tasks does not watch TheoriaStanding' -- it does, via probe_standing (scan.py:970-998), a separate probe. Grep the whole file for the task name before reporting an omission.",
+    "cycle 36: 'probe_append_only silently skips missing files and still claims len(watched)' -- the skip-and-still-count is real in code, but all four watched paths exist today, so it is latent, not firing. Not reported as drift; noted here so it is not rediscovered as new.",
+    "proxy/verify_spend.sh has no failure path -- false: fail=1 accumulation + trailing exit $fail.",
+    "bus messages 'corrupted' -- false: Bash stdout renders GBK here; the files are good UTF-8.",
+    "ops-status utc fields carrying local/future times do not fool liveness: scan.py:471/697/775 and agents.py:145 all use os.path.getmtime. Display only.",
+    "timestamps: judge them only with an explicit Z or %aI -- git log --date=format gave me a local (UTC+8) time I nearly reported as a future stamp.",
+    "long test suites: a red run on a tree that is being merged must be re-run once before reporting."
   ],
   "method_notes": [
-    "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染",
-    "**heredoc 里不要写含反斜杠的 python 字面量**，写进 scratchpad 的 .py 再跑",
-    "调 bus.py 不要 print 它的 stdout，只打印 returncode",
-    "**正则判『有没有失败路径』假阳性高，判完必须读全文**",
-    "**报别人已报过的事之前先读它的 commit**：本轮 OPS-M/OPS-B 已报队列停摆，我改为只补量化与拓扑，避免重复",
-    "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py",
-    "推送被拒（behind N）时用 git pull --rebase --autostash origin master 再 push：工作树里 ablation-arm/artifacts/a0-base/episode.jsonl 常年是脏的（跑测试的产物），普通 rebase 会因未暂存改动失败。",
-    "scratchpad/stamps.py：扫 */runs/*/ 目录名里的 UTC 戳与真实时间比对，抓未来时刻。这类检查天然带负样本（今天就有 6 个）。",
-    "审「花钱纪律」的判据：proxy/var/spend_gate.jsonl 逐行扫封存 ID + 统计 campaign 里的 game id + 累计 usd/actions 与自报余额对账。三件一起做才能区分「敞口」与「事故」。",
-    "判「某段是否已发布到主线」的当事人可用判据：git merge-base --is-ancestor HEAD origin/master。建议写进工单收工清单——今晚的越线正是因为没有这一步。",
-    "**autostash 的安全判据（收严版，我自己踩过两次）**：推送前跑 `git status --short | grep -v \"^??\"`，只要出现任何 monitor/*.py 或别人领地的源码（不只是产物），**就不要用 --autostash**——改为等一轮，或只 commit 自己的路径后用 fetch + 明确 rebase 处理。2026-07-29T00:57Z 我用它时工作树里有监控未提交的 spec.py(+34) 与 board.py，结果留下一条未清的 stash@{0}（内容已核对与工作树一致，无丢失，但 stash 需由其主人自行 drop）。",
-    "判会话存活要读心跳**内容**的 utc 并与最近提交时间互证，别只看 mtime——心跳随 git 提交流动，mtime 量的是抵达时间。同时提防 cycle 24 那类编造的 utc：未来时刻或早于上一轮的一律可疑。",
-    "**--first-parent 不是「是否公开过」的稳定身份**：回并（Merge master into agent/x 后该线成为主线）会让旧主线提交整体移到二等父侧，计数因此可以变小。判据应问历史事实（被删的行在该提交落地前是否已从 master 可达），或裁决当时就把结论记死；豁免按 SHA 记不要按计数记。"
+    "**a session can identify its own launch path from its process ancestry** (Get-CimInstance Win32_Process, walk ParentProcessId). services.exe/svchost ancestry = scheduled task = headless. Prompt text cannot distinguish it: monitor/prompts/ops/OPS-A.md and the human-pasted launch words are identical.",
+    "**read Chinese files with the file-reading tool**; Bash stdout renders GBK here",
+    "**do not put backslash-bearing python literals in a heredoc**; write a scratchpad .py and run it",
+    "when calling bus.py, print the returncode, not its stdout",
+    "**regex answers to 'is there a failure path' are high false-positive; read the whole function before reporting**",
+    "**read the commit before reporting something someone else already reported** -- OPS-M/OPS-B are often ahead of me, and this cycle dispatch.py's own docstring already contained the pid:0 diagnosis",
+    "scratchpad scripts (vanish with the session, all short enough to rewrite): redline.py (sealed ids / key / append-only over a range), standlog.py (standing.py skip-reason histogram), plus the older manifests.py / probe_red.py / negsample.py / flags.py / stamps.py / dim6.py",
+    "push rejected (behind N): git pull --rebase --autostash origin master -- but see the autostash safety rule below",
+    "**autostash safety (tightened, burned twice)**: before pushing run `git status --short | grep -v '^??'`; if any monitor/*.py or another territory's source appears, do NOT use --autostash. Wait a round, or commit only your own paths and rebase explicitly.",
+    "judging whether a paragraph reached the mainline: git merge-base --is-ancestor HEAD origin/master",
+    "**--first-parent is not a stable identity for 'was this ever public'** -- a back-merge moves old mainline commits to the second-parent side, so counts can shrink. Ask a historical question (was the deleted line reachable from master before this commit landed) or record the verdict at adjudication time; key exemptions by SHA, never by count.",
+    "auditing the spend discipline: scan proxy/var/spend_gate.jsonl line by line for sealed ids + count campaign game ids + reconcile cumulative usd/actions against the self-reported balance. All three, or you cannot separate exposure from incident.",
+    "judging a session alive: read the heartbeat's *content* utc and cross-check against recent commits; mtime measures arrival, not writing."
   ],
   "next_cycle_focus": [
-    "append_only 判据是否改为 SHA 豁免/可达性",
-    "两条已裁决越线是否被写进固定记录",
-    "增量起点 de90ba90"
+    "did monitor act on report 1, and **in which order** (criterion before cap)",
+    "**live prediction to check**: if MAX_STANDING is raised while occupied() still relies on cycle+LOCK_FRESH_MIN=20, standing.log should show a second START OPS-A while a live OPS-A is mid-cycle. Grep standing.log for two STARTs of one id inside 60 minutes.",
+    "the six new directories' content dimension (owed since cycle 31 -- pushed again by the reorg, do it next)",
+    "append_only criterion: SHA exemption / reachability",
+    "incremental start 9bc8c880"
   ],
   "superseded": [
-    "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
+    "cycle 12's citation of OPS-M cycle-7 root cause (Git Bash eating backslashes) was disproved by OPS-M itself in cycle 8; WSL bash is the real one.",
+    "The cycle-35 handoff line 'OPS-A runs only in the Claude App, nobody can restart it but the user' is no longer true: standing.py's STANDING_OPS restarts OPS-A and OPS-M headless as of 2026-07-29. scan.py's probe_needs_human has not caught up -- that is report 1."
   ],
   "vindicated": [
-    "cycle 8 报的 APP-*/RES-* 认领无法自动释放：监控在 1ae2074 定为 obsolete 并上板 S21（含「新起常驻会话绝不能被误扫」的负样本），采纳形态比我建议的更完整。这次三个常驻会话死了两小时、六件在手工单人工释放，是它的实际代价。"
+    "cycle 8's finding that APP-*/RES-* claims cannot auto-release was adopted as S21 with a negative sample.",
+    "cycle 35's warning that the merge queue was blocked on one line in gates.py: the transient-hold fix landed (da928c78, 81c27547) without my having touched monitor/ -- the escalation ladder worked, slowly."
   ],
   "handoff": {
-    "这份文件就是交接": "我若无声消失（四个常驻研究员今天全灭于上下文耗尽，监控原话 the one failure mode no API can heal），新会话按本节冷启动即可，不需要问任何人。",
-    "启动词": "用户贴的 OPS-A 启动词 + monitor/ops/OPS-A.md（契约，每周期重读）+ monitor/AUDITOR.md（八个漂移维度）+ monitor/CHARTER.md（分工）。",
-    "每周期顺序": "python monitor/bus.py read OPS-A → 读 monitor/mailbox/OPS-A.md 与 ALL.md 的 OPEN 条目 → 从本文件 last_audited_commit 增量审 → 写 monitor/audit/HEARTBEAT 与 monitor/ops-status/OPS-A.json → commit+push（只 add monitor/audit、自己邮箱、ops-status、bus/OPS-A）→ sleep 1800。",
-    "当前最急": "合并队列已停摆 140 分钟；修法是 monitor/gates.py 里一行（显式解析 Git Bash 而非让 PATH 选到 System32 的 WSL bash，OPS-M cycle 8 已实跑验证）；按 CHARTER 只有监控可改，已升 critical 并请其转交用户，用户尚未回复。**不要自行代改——只写自己的产出目录是本角色红线。**",
-    "别重蹈的假阳性": "见 false_positives_i_caught_myself；另：报别人已报过的事之前先读它的 commit（OPS-M/OPS-B 常先我一步）。",
-    "判据脚本": "全在 scratchpad（会随会话消失，逻辑很短可重写）：redline.py 红线、flags.py 解析 merge.log 的阻塞时长与重报次数、probe_red.py 用 ast 查探针有没有活的状态机、manifests.py 查 MANIFEST 必填字段、negsample.py 查闸门有没有负样本。"
+    "this file is the handoff": "If I vanish, a new session cold-starts from this file alone and needs to ask nobody.",
+    "launch words": "monitor/prompts/ops/OPS-A.md (what standing.py dispatches) + monitor/ops/OPS-A.md (contract, re-read every cycle) + monitor/AUDITOR.md (8 drift dimensions) + monitor/CHARTER.md (division of labour) + monitor/FLEET.md (the 2026-07-29 map).",
+    "each cycle": "python monitor/bus.py read OPS-A -> mailbox OPEN items -> incremental audit from last_audited_commit -> write monitor/audit/HEARTBEAT + monitor/ops-status/OPS-A.json (+ refresh OPS-A.lock) -> commit+push (add only monitor/audit, monitor/ops-status/OPS-A.*, monitor/bus/OPS-A, own mailbox) -> sleep.",
+    "the interim self-defence I started this cycle": "refresh monitor/ops-status/OPS-A.lock every cycle. Reason: standing.py's occupied() cannot see OPS-A any other way (0 board.log lines ever, contract never asked for a lock, cycle window is 20 min against a 30-60 min sleep). Keep doing it until monitor fixes the criterion.",
+    "red line, unchanged": "write only monitor/audit/ + my own status files + my own mailbox. Never edit monitor/*.py, however obvious the one-line fix looks."
   },
-  "escalation": "已按 CHARTER 阶梯顶给监控三次（16:47Z / 17:20Z / 18:26Z），17:20Z 明确请其转交用户；本轮升级链上环静默，改为直接同时报给用户。**始终未越权代改 monitor/gates.py**——只写自己的产出目录是本角色红线。",
-  "self_correction_rule": "报「唯一堵点」之前先把阻塞按原因分解一次。这五轮每轮数据都对，错在跳过了这一步；分解只花十分钟。建议写进 AUDITOR.md。"
+  "self_correction_rule": "Before reporting 'X is missing / X is broken / there are two of X', spend one command proving you are not looking at yourself, at a second copy elsewhere in the file, or at a latent path that never executes. Cycle 36 caught three of these before they left the session."
 }
