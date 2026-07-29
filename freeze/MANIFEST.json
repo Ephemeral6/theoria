@@ -583,7 +583,7 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "165926882d51a1067ed936536f2eedd859651a4a",
+    "commit": "8e4f03a65b98a68098894f9040934a97507e9064",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
