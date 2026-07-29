@@ -17,6 +17,7 @@ assignment which metrics the project cares about:
 | `a4` | M1 M2 M3 M4 M5 M6 |
 | `a5` | K1 K2 K3 K4 K5 K6 K13 |
 | `a6` | K7 K8 K9 K10 K11 K12 K14 |
+| `a7_review` | E1 M3 — **sighted**, from the adversarial review; see that module's docstring |
 
 **Kept unedited on purpose.** These modules are evidence, and an aggregator who
 tidies the evidence is an aggregator whose findings cannot be audited.  Where a
@@ -24,8 +25,13 @@ module's own comment disagrees with the verdict table, the verdict table is
 derived and the comment is the attacker's belief; both stay.
 """
 
-from battery.audit.v9.attacks import a1, a2, a3, a4, a5, a6
+from battery.audit.v9.attacks import a1, a2, a3, a4, a5, a6, a7_review
 
-MODULES = (a1, a2, a3, a4, a5, a6)
+# a7_review is deliberately last and deliberately named: it is the one module
+# whose author had seen everything.  `BLIND_MODULES` is what a claim about the
+# *blind* round may be computed from.
+BLIND_MODULES = (a1, a2, a3, a4, a5, a6)
+MODULES = BLIND_MODULES + (a7_review,)
 
-__all__ = ["MODULES", "a1", "a2", "a3", "a4", "a5", "a6"]
+__all__ = ["MODULES", "BLIND_MODULES", "a1", "a2", "a3", "a4", "a5", "a6",
+           "a7_review"]

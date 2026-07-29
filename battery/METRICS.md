@@ -30,9 +30,9 @@ A metric reading `none — never computed on a control arm` has not been shown t
 separate anything. `Theoria.md` is blunt about what that means:
 分不开已知差异的指标，没资格测未知差异.
 
-**Main table (2):** E1, M3
+**Main table (0):** 
 
-**Reference (36):** E2, E3, E4, E5, E6, E7, K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M4, M5, M6, P1, P2, P3, P4, P5, X1, X2, X3, X4, X5, X6
+**Reference (38):** E1, E2, E3, E4, E5, E6, E7, K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P1, P2, P3, P4, P5, X1, X2, X3, X4, X5, X6
 
 **Never validated on a control arm (21):** K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P4
 
@@ -91,7 +91,7 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
-| `E1` | neutral | main | model_calls, cost | 78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Total model cost. Support for the shape metrics, not a ranking. |
+| `E1` | neutral | reference | model_calls, cost | 78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Total model cost. Support for the shape metrics, not a ranking. |
 | `E2` | higher | reference | model_calls, cost | 67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted. |
 | `E3` | lower | reference | model_calls, cost | 67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early. |
 | `E4` | lower | reference | model_calls | 74 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered | R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating. |
@@ -122,7 +122,7 @@ separate anything. `Theoria.md` is blunt about what that means:
 |---|---|---|---|---|---|
 | `M1` | lower | reference | truth, mechanisms | none — never computed on a control arm | Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use. |
 | `M2` | higher | reference | truth, mechanisms | none — never computed on a control arm | Fraction of annotated mechanisms the arm ever used. |
-| `M3` | lower | main | steps, truth, mechanisms | none — never computed on a control arm | Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.) |
+| `M3` | lower | reference | steps, truth, mechanisms | none — never computed on a control arm | Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.) |
 | `M4` | lower | reference | repairs | none — never computed on a control arm | Mean environment actions until a changed rule first contradicts the manual, over changes the manual noticed at all. |
 | `M5` | higher | reference | repairs | none — never computed on a control arm | Fraction of injected rule changes the manual notices on the evidence it already holds. |
 | `M6` | neutral | reference | repairs | none — never computed on a control arm | Mean share of the manual's theorems invalidated by one repair. A diagnostic: a repair that invalidates nothing had nothing load-bearing downstream. |

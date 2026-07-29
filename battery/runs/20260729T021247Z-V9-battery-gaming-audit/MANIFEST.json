@@ -1,14 +1,14 @@
 {
-  "base_commit": "2f68c448cfd4cc9629bb61e2a635367b4d723b8e",
+  "base_commit": "e073a8a38b8a7692a5a8c021e44309c4505f7255",
   "branch": "agent/v9-battery-gaming-audit",
   "files": [
     {
       "path": "battery/PREREG_V9.md",
-      "sha256": "0f64c57a85cf41b4083c228e23e373a4aaba5e99ebfa73b2cf247b989c29e500"
+      "sha256": "cf7d327168fa751a9a8d60814fd3854911f829b26e280d3e47659765d5bf37a9"
     },
     {
       "path": "battery/BLINDING.md",
-      "sha256": "8821a7e054e3a181e5651ca87e7d18730f34594678993abf9850ec69b6b6009a"
+      "sha256": "8ebc4a44e3165ec40d35bdbe2d5d5b86291e59ed3aa6d0b394a7370693d3414b"
     },
     {
       "path": "battery/audit/v9/prereg.py",
@@ -16,7 +16,7 @@
     },
     {
       "path": "battery/audit/v9/check.py",
-      "sha256": "8f86fe9086e3fe1669eb641501d1825324e427752026a2ba928fc0cd000d5e88"
+      "sha256": "c5e1142abc9e71ce31967c631ba2f503fc2aee3f655c332636e87b220228127f"
     },
     {
       "path": "battery/audit/v9/attack.py",
@@ -24,7 +24,7 @@
     },
     {
       "path": "battery/audit/v9/verdict.py",
-      "sha256": "36dea134bae0ac08f59a5c22e2e283e15f430c5b52faa8728e2849b7f4a87582"
+      "sha256": "c099deba3d0bc38c1bfeb8d549da4f1611f38c692dc64e5d4b93177797f34b57"
     },
     {
       "path": "battery/audit/v9/run.py",
@@ -32,7 +32,7 @@
     },
     {
       "path": "battery/audit/v9/attacks/__init__.py",
-      "sha256": "4c608249a9860edda1752be0684ac2dc4c8253b6e8b6af5046c3eaab54d087c5"
+      "sha256": "62ea523b50adf23f3a7aa922f9de41b4bb76b8b4311c566fc0f951df807ec22e"
     },
     {
       "path": "battery/audit/v9/attacks/a1.py",
@@ -59,12 +59,16 @@
       "sha256": "00b2d4140625d64c258ba3b8904058d7eb230ea2b26e5004bff17d0db93a3d63"
     },
     {
+      "path": "battery/audit/v9/attacks/a7_review.py",
+      "sha256": "be1a2ba6bb0e63bf57a91f5f84a75f15e9530f043a73a8652f1ce6b5f8e69f74"
+    },
+    {
       "path": "battery/METRICS.md",
-      "sha256": "ffb1f014560b85166980e34d049dc29bed94363396b669cfd17e9871974a67da"
+      "sha256": "0956bf68cbfebd8b0ab36365bda6beaf353bf7678cacd9a333fc0eaa9b2c7fd1"
     },
     {
       "path": "battery/STATUS.md",
-      "sha256": "1656bb810dc6328689158df7750f2114405256aa127ecfaab9df72161c16e3a0"
+      "sha256": "b46cb587985dd22b3417fd7442ac01d321427bc50559435426da0d3b12de72e8"
     },
     {
       "path": "battery/audit/v9/mutants.py",
@@ -72,7 +76,7 @@
     },
     {
       "path": "battery/audit/v9/REPORT.md",
-      "sha256": "af15358ee9c49d3fa7b912208ff1eaa34335bef3f4768a44dc10a947c0355fba"
+      "sha256": "0d3e189ef63068ed01dca5440be6d488b4e689bcf641da14ac60b816275b98a5"
     },
     {
       "path": "battery/tests/test_v9_prereg.py",
@@ -84,15 +88,15 @@
     },
     {
       "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json",
-      "sha256": "e098ef223b061095bba32b96043b01cc91612a8617ad34017781ec75a570e9b1"
+      "sha256": "2130ce45ea872b3c9b256b155e1bd00409ae62942609713a82a24e22958ad27c"
     },
     {
       "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/pytest.txt",
-      "sha256": "5f2144d36d0861dab6872bf99de4951270a64922e347414f674c9fb6260a7dc5"
+      "sha256": "69789064325c1bcd13953c3a8e794d68b272716297dcb302d29e3fc0b468f975"
     },
     {
       "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/RUN_STATE.md",
-      "sha256": "206db361afeb277c37674052e1265ac17835bd9f6534be303879e130d2f70ebc"
+      "sha256": "7156744d8acde0cf3d1a6bd7981eb0b66c9c1777fcf86883e4786aa6c6381107"
     }
   ],
   "prereg_commit": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",

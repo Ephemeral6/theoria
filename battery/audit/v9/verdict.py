@@ -145,6 +145,20 @@ def judge(attack: Attack) -> Dict[str, object]:
 # asserted by a producer who did no work.  That is the honest ceiling of a
 # defence written inside a passive instrument, and it is why most of these
 # metrics stay in the reference tier with a defence landed.
+# The B14 baseline, **pinned rather than recomputed**.  Named verbatim in
+# `PREREG_V9.md` §4 before any attack ran, so it is a record and not a function
+# of the current tree.
+#
+# It has to be pinned.  `gaming.tier_before_v9` is a live recomputation, and
+# `Exploit.proposed_tier` returns "main" for any exploit that stops succeeding
+# — so landing D3 flipped E1's *baseline* from reference to main, and
+# `adjudicate` then read `prior == "main"` and never reached the R1 promotion
+# guard at all.  The gate written to police defence-driven promotion was
+# bypassed by exactly the mechanism it exists to police, and nothing noticed
+# because R1 simply never fired.  The adversarial review found this.
+B14_BASELINE_MAIN = ("E2", "E3", "K7", "K11", "K12", "M3", "M6", "P3", "P4")
+
+
 DEFENCE_OF: Dict[str, str] = {
     "K1": "D1", "K2": "D1", "K4": "D1", "K8": "D1", "K12": "D1", "M6": "D1",
     "M1": "D2", "M4": "D2",
@@ -206,6 +220,19 @@ def v9_demotions() -> Dict[str, Dict[str, object]]:
             "target": worst["target"],
             "claim": worst["claim"],
         }
+    # R4: a metric that never answered any attack is withheld from the main
+    # table too, with a different reason. `gaming.tier_of` consults this, and
+    # "unimplemented" must not read as "survived".
+    for metric_id, group in collect_attacks().items():
+        judged = [judge(a) for a in group]
+        if judged and not any(j.get("S1_metric_answered") for j in judged):
+            out.setdefault(metric_id, {
+                "attack": "—",
+                "value": None,
+                "target": None,
+                "claim": "withheld, not survived: the metric refused every "
+                         "attack because it answers nothing at all",
+            })
     _DEMOTIONS = out
     return out
 
@@ -228,24 +255,44 @@ def _r2_counts_uncached() -> Dict[str, Dict[str, int]]:
     discipline that reads a number its own author wrote would be one more
     unfalsifiable boolean of the kind this package exists to remove.
     """
+    import ast
     import os
-    import re
 
     from battery.audit.v9 import mutants as mutant_module
 
-    counts = mutant_module.counts()
+    # Mutants that must be *refused*.  Counting the accept-cases too inflated
+    # the ratio: an accept-case checks the defence does not overreach, which is
+    # necessary and is not attack surface.
+    refusing: Dict[str, int] = {}
+    for mutant in mutant_module.all_mutants():
+        if mutant.refused:
+            refusing[mutant.defence] = refusing.get(mutant.defence, 0) + 1
+
+    # Tests attributed by **which metrics they exercise**, not by their names.
+    # The first version counted `^def test_D\d_`, so renaming a test changed
+    # the ratio with no change in coverage -- an anti-gaming audit whose own
+    # discipline was gameable by rename.
     tests_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.abspath(__file__)))),
         "tests", "test_v9_defences.py")
+    per_defence: Dict[str, int] = {}
     try:
         with open(tests_path, encoding="utf-8") as fh:
-            names = re.findall(r"^def (test_D\d)_", fh.read(), re.MULTILINE)
+            tree = ast.parse(fh.read())
     except OSError:                                   # pragma: no cover
-        names = []
-    return {defence_id: {"mutants": counts.get(defence_id, 0),
-                         "tests": sum(1 for n in names
-                                      if n == "test_%s" % defence_id)}
+        tree = ast.parse("")
+    for node in tree.body:
+        if not isinstance(node, ast.FunctionDef):
+            continue
+        mentioned = {n.value for n in ast.walk(node)
+                     if isinstance(n, ast.Constant)
+                     and isinstance(n.value, str) and n.value in DEFENCE_OF}
+        for defence_id in {DEFENCE_OF[m] for m in mentioned}:
+            per_defence[defence_id] = per_defence.get(defence_id, 0) + 1
+
+    return {defence_id: {"mutants": refusing.get(defence_id, 0),
+                         "tests": per_defence.get(defence_id, 0)}
             for defence_id in sorted(DEFENCES)}
 
 
@@ -258,10 +305,34 @@ def _r2_satisfied(metric_id: str) -> bool:
     return counts.get("mutants", 0) > counts.get("tests", 0)
 
 
+def decide_tier(prior: str, gameable: bool, accidental: bool, answered: bool,
+                attacked: bool, r2_satisfied: bool) -> Dict[str, object]:
+    """The whole tier decision as one pure function, so it can be tested.
+
+    It was not one before, and that is how R1 came to be dead code without
+    anyone seeing it: the guard lived inline in a loop whose inputs were all
+    derived from the live tree, so "does R1 ever fire?" was not a question the
+    suite could ask. `battery/tests/test_v9_verdict_rule.py` now asks it of
+    every combination.
+    """
+    if gameable and accidental:
+        tier = "reference"
+    elif attacked and not answered:
+        tier = "undetermined"          # R4: unimplemented is not survived
+    else:
+        tier = "main"
+
+    # R1 — V9 never promotes on "I could not break it". A metric that B14 had
+    # in the reference tier may only come back on an implemented defence whose
+    # attack surface is wider than its test surface.
+    refused = tier == "main" and prior == "reference" and not r2_satisfied
+    if refused:
+        tier = "reference"
+    return {"tier": tier, "R1_promotion_refused": refused}
+
+
 def adjudicate() -> Dict[str, object]:
     """The V9 verdict table."""
-    from battery.audit.gaming import tier_before_v9 as prior_tier_of
-
     attacks = collect_attacks()
     rows: Dict[str, object] = {}
     demoted: List[str] = []
@@ -270,7 +341,7 @@ def adjudicate() -> Dict[str, object]:
     unattacked = sorted(set(REGISTRY) - set(attacks))
 
     for metric_id in sorted(REGISTRY):
-        prior = prior_tier_of(metric_id)
+        prior = "main" if metric_id in B14_BASELINE_MAIN else "reference"
         judged = [judge(a) for a in attacks.get(metric_id, [])]
         landed = [j for j in judged if j.get("succeeded")]
         # The worst surviving case decides: a metric is only as safe as its
@@ -291,16 +362,19 @@ def adjudicate() -> Dict[str, object]:
         # already dropped out of `landed`. So the formula collapses: whatever
         # survives here is gameable and undefended, and the standing defence
         # only earns a metric its tier back when nothing accidental survives.
-        if gameable and accidental:
-            v9_tier = "reference"
-        else:
-            v9_tier = "main"
+        # R4, given an executable form. A metric that never answered *any*
+        # attack has not been shown robust; it has not been shown anything.
+        # M3 is the case: `cross_level_first_use_delay` has no path that calls
+        # `ok(...)`, so it returns `insufficient-data` to a genuinely
+        # transfer-capable arm exactly as it did to the attacker. Recording
+        # that as `main` puts an unimplemented metric in the headline table,
+        # which is the label `PREREG_V9.md` R4 was written to withhold.
+        answered = any(j.get("S1_metric_answered") for j in judged)
+        decision = decide_tier(prior, gameable, accidental, answered,
+                               bool(judged), _r2_satisfied(metric_id))
+        v9_tier = decision["tier"]
 
-        # R1 — V9 never promotes on "I could not break it".
-        promoted_by_silence = (v9_tier == "main" and prior == "reference"
-                               and not _r2_satisfied(metric_id))
-        if promoted_by_silence:
-            v9_tier = "reference"
+        promoted_by_silence = decision["R1_promotion_refused"]
 
         row = {
             "prior_tier": prior,
@@ -322,7 +396,7 @@ def adjudicate() -> Dict[str, object]:
                            "`reason` for the guard that refused it")
         rows[metric_id] = row
 
-        if gameable and prior == "main" and v9_tier == "reference":
+        if prior == "main" and v9_tier != "main":
             demoted.append(metric_id)
         elif gameable:
             held.append(metric_id)
@@ -346,6 +420,9 @@ def adjudicate() -> Dict[str, object]:
         "gameable_but_held": sorted(held),
         "main": sorted(m for m in rows if rows[m]["v9_tier"] == "main"),
         "reference": sorted(m for m in rows if rows[m]["v9_tier"] == "reference"),
+        "undetermined": sorted(m for m in rows
+                               if rows[m]["v9_tier"] == "undetermined"),
+        "b14_baseline_main": list(B14_BASELINE_MAIN),
         "metrics": rows,
     }
 
@@ -358,12 +435,10 @@ def disagreements_with_b14() -> List[Dict[str, object]]:
     could not reach, or the blind ones reached something the register never
     named.
     """
-    from battery.audit.gaming import tier_before_v9 as prior_tier_of
-
     table = adjudicate()
     out: List[Dict[str, object]] = []
     for metric_id, row in sorted(table["metrics"].items()):
-        prior = prior_tier_of(metric_id)
+        prior = row["prior_tier"]
         if row["v9_tier"] != prior:
             out.append({
                 "metric": metric_id,

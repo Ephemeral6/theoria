@@ -17,14 +17,32 @@ mechanical checks:
   outside a tiny whitelist.  Laying out data is allowed; computing is not.
 * **C4 no world** — nothing smuggled through `Run.notes` under a key that
   would read as ground truth.
+* **C5 no closure** — the builder must be a module-level function.  C2 and C3
+  read *the builder's* source, so a factory that ran a planner and returned a
+  closure laying out its answer would pass everything above having done exactly
+  the work this file exists to rule out.  The adversarial review built that
+  case and it certified clean, which is why C5 exists.
 
 C3 is the load-bearing one and it is deliberately crude.  Its two known edges
-are written into the pre-registration rather than discovered afterwards: it is
+were written into the pre-registration rather than discovered afterwards: it is
 too strict for an honest attack that wants `itertools` (rewrite it as data),
 and too loose in that `sum`/`sorted` could in principle carry a little
 arithmetic.  A checker that could tell "computation" from "layout" in general
 would be a solved halting problem; this one is a proxy, declared in advance,
 and every result it produces — including the failures — goes into the artefact.
+
+The "in principle" turned out to be in practice.  The adversarial review
+demonstrated generate-and-test inside the whitelist:
+
+    candidates = [[a, b, c] for a in range(12) for b in range(12)
+                  for c in range(12) if a + b + c == 14]
+    best = min(candidates, key=lambda t: abs(t[0] * t[0] - t[2]))
+
+— a constrained optimum found by exhaustive search, certified as "laying out
+data".  Two constructs carry that: a filtered comprehension is the *test*, and
+a `key=` lambda is the *objective*.  Both are now refused.  None of the 105
+delivered attacks uses either, so the rule costs nothing retroactively and the
+verdicts do not move; it is written down so the next round cannot use it.
 """
 
 from __future__ import annotations
@@ -82,6 +100,11 @@ def _static_violations(fn: Callable[[], Any]) -> List[str]:
     for node in ast.walk(tree):
         if isinstance(node, ast.While):
             out.append("C3: `while` loop (search)")
+        elif isinstance(node, ast.Lambda):
+            out.append("C3: lambda (an objective function is search's other "
+                       "half)")
+        elif isinstance(node, ast.comprehension) and node.ifs:
+            out.append("C3: filtered comprehension (generate-and-test)")
         elif isinstance(node, (ast.Import, ast.ImportFrom)):
             module = getattr(node, "module", None) or ""
             names = [a.name for a in node.names]
@@ -118,8 +141,16 @@ def _normalise(run: Any) -> Any:
 
 
 def certificate(fn: Callable[[], Any]) -> Dict[str, object]:
-    """Run C1..C4 over one attack builder.  Never raises."""
+    """Run C1..C5 over one attack builder.  Never raises."""
     violations: List[str] = []
+
+    # C5 — a builder defined inside another function hides its enclosing scope
+    # from C2 and C3, which read only this function's source.
+    qualname = getattr(fn, "__qualname__", "")
+    if "<locals>" in qualname:
+        violations.append(
+            "C5: builder %s is a closure; work in the enclosing scope is "
+            "invisible to C2/C3" % qualname)
 
     # C1 — determinism.
     first = second = None

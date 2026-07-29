@@ -42,6 +42,14 @@
     },
     {
       "b14_tier": "main",
+      "metric": "M3",
+      "n_landed": 0,
+      "v9_gameable": false,
+      "v9_tier": "undetermined",
+      "why": "attacked and not broken; see each attack's `reason` for the guard that refused it"
+    },
+    {
+      "b14_tier": "main",
       "metric": "M6",
       "n_landed": 1,
       "v9_gameable": true,
@@ -89,12 +97,24 @@
   ],
   "prompt_id": "V9-battery-gaming-audit",
   "verdict": {
+    "b14_baseline_main": [
+      "E2",
+      "E3",
+      "K7",
+      "K11",
+      "K12",
+      "M3",
+      "M6",
+      "P3",
+      "P4"
+    ],
     "demoted_by_v9": [
       "E2",
       "E3",
       "K11",
       "K12",
       "K7",
+      "M3",
       "M6",
       "P3",
       "P4"
@@ -169,15 +189,41 @@
       "X5",
       "X6"
     ],
-    "main": [
-      "E1",
-      "M3"
-    ],
+    "main": [],
     "metrics": {
       "E1": {
         "R1_promotion_refused": false,
-        "accidental_if_gameable": false,
+        "accidental_if_gameable": true,
         "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "",
+            "certificate": {
+              "builder": "build_E1_cache_hi",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E1 = 6.0 vs 0.60 with the same 50k-token context every turn; prompt caching is on in one run and off in the other",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_cache_lo",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.6,
+            "metric": "E1",
+            "name": "cache-flag",
+            "rationale": "Caching is a harness flag with no bearing on what the arm decided. `Call.context_tokens` already sums the three token fields, so the battery can see the contexts are identical and E1 still reports a tenfold difference.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 6.0
+          },
           {
             "S1_metric_answered": true,
             "S2_reached_target": true,
@@ -208,6 +254,64 @@
             "value": 3000.0
           },
           {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "",
+            "certificate": {
+              "builder": "build_E1_model_hi",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E1 = 3.0 vs 0.10 -- 30x -- for the identical 40-step trajectory and identical token counts, differing only in Run.model",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_model_lo",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.1,
+            "metric": "E1",
+            "name": "model-swap",
+            "rationale": "Model choice is a launcher flag. E1 carries `model` on the Run and never divides by a unit price, so the economy family reads the price list rather than the arm.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 3.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "",
+            "certificate": {
+              "builder": "build_E1_retry_hi",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E1 = 24.0 vs 2.0 for the same 40 decisions; one ledger row per HTTP attempt during a rate-limit storm",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_retry_lo",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 2.0,
+            "metric": "E1",
+            "name": "retry-rows",
+            "rationale": "`Call.attempt` exists precisely because one harness in this repository writes a row per attempt. E1 sums rows. Rate limiting is the environment's behaviour, not the arm's.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 24.0
+          },
+          {
             "S1_metric_answered": false,
             "S2_reached_target": false,
             "S3_poverty_certified": true,
@@ -235,6 +339,35 @@
             "succeeded": false,
             "target": null,
             "value": 100.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "",
+            "certificate": {
+              "builder": "build_E1_cents_hi",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E1 = 48.0 vs 0.48 on byte-identical traffic; the provider reported cents and the adapter wrote the number into cost_usd",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_cents_lo",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.48,
+            "metric": "E1",
+            "name": "unit-bug",
+            "rationale": "A currency-unit mistake is the canonical accident, needs no intent, and E1 has no plausibility band, no tokens-to-dollars cross-check and no per-call unit price to contradict it.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 48.0
           }
         ],
         "defence": {
@@ -244,11 +377,11 @@
         },
         "defended_by_v9": true,
         "gameable": true,
-        "n_attacks": 2,
-        "n_landed": 1,
-        "prior_tier": "main",
+        "n_attacks": 6,
+        "n_landed": 5,
+        "prior_tier": "reference",
         "r2_satisfied": true,
-        "v9_tier": "main"
+        "v9_tier": "reference"
       },
       "E2": {
         "R1_promotion_refused": false,
@@ -2015,6 +2148,27 @@
             "S1_metric_answered": false,
             "S2_reached_target": false,
             "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M3_many_levels",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "fifty levels, fifty mechanisms all used 100 steps before seen",
+            "direction": "lower",
+            "metric": "M3",
+            "name": "fifty-levels-negative",
+            "rationale": "two counters with different origins, exactly the M1 accident that D2 refuses -- and M3 would accept, if it answered at all",
+            "reason": "multi-level runs exist but the cross-level annotation schema is not yet defined; see STATUS.md",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
             "accidental": false,
             "certificate": {
               "builder": "build_M3_one_level",
@@ -2026,6 +2180,27 @@
             "metric": "M3",
             "name": "one-level",
             "rationale": "Both branches of the function terminate in thin(); confirms the stub rather than a data problem on my side.",
+            "reason": "the run never reached a second level; transfer cannot be measured within one level",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M3_one_level",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "one level, so transfer is undefined; the control",
+            "direction": "lower",
+            "metric": "M3",
+            "name": "single-level",
+            "rationale": "a control, not an attack",
             "reason": "the run never reached a second level; transfer cannot be measured within one level",
             "status": "insufficient-data",
             "succeeded": false,
@@ -2052,17 +2227,38 @@
             "succeeded": false,
             "target": 0.001,
             "value": null
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M3_two_levels",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "two levels, one mechanism, first_used == first_seen -> delay 0",
+            "direction": "lower",
+            "metric": "M3",
+            "name": "two-levels-zero-delay",
+            "rationale": "an annotator who defaults first_used to first_seen",
+            "reason": "multi-level runs exist but the cross-level annotation schema is not yet defined; see STATUS.md",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
           }
         ],
         "defence": null,
         "defended_by_v9": false,
         "gameable": false,
-        "n_attacks": 2,
+        "n_attacks": 5,
         "n_landed": 0,
         "note": "attacked and not broken; see each attack's `reason` for the guard that refused it",
         "prior_tier": "main",
         "r2_satisfied": false,
-        "v9_tier": "main"
+        "v9_tier": "undetermined"
       },
       "M4": {
         "R1_promotion_refused": false,
@@ -3058,11 +3254,9 @@
       }
     },
     "n_attacked": 38,
-    "n_attacks": 105,
+    "n_attacks": 112,
     "n_metrics": 38,
-    "not_gameable": [
-      "M3"
-    ],
+    "not_gameable": [],
     "prereg_targets": {
       "E1": null,
       "E2": 0.95,
@@ -3104,6 +3298,7 @@
       "X6": 0.95
     },
     "reference": [
+      "E1",
       "E2",
       "E3",
       "E4",
@@ -3142,6 +3337,9 @@
       "X6"
     ],
     "rule": "S1 metric answered AND S2 reached the pre-registered target AND S3 poverty certificate passed -> gameable. gameable AND accidental AND NOT defended -> reference. R1: V9 never promotes on silence. R2: a defence that would promote needs more attack variants than tests.",
-    "unattacked": []
+    "unattacked": [],
+    "undetermined": [
+      "M3"
+    ]
   }
 }
