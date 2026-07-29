@@ -40,6 +40,7 @@ record rather than reduced to a boolean.
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 from typing import Any, Dict, List, Optional, Sequence
@@ -140,6 +141,37 @@ def find_gate(root: str, directory: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+# A gate is only an instrument if something makes it go red on purpose. S13's
+# audit turned that into a standing requirement, and this is its executable
+# form: the gate *declares* its negative sample, on a line of its own.
+#
+#     # negative-sample: monitor/tests/test_probes_injection.py
+#
+# Declared rather than sniffed. Guessing from filenames -- anything matching
+# test_*negative*, say -- would let a gate acquire a negative sample by someone
+# naming an unrelated file well, and would miss every real one that is named
+# something else. A declaration is a claim its author can be held to, and the
+# path is checked to exist so the claim cannot be to a file that never landed.
+NEGATIVE_SAMPLE = re.compile(r"negative-sample:\s*(\S+)")
+
+
+def negative_sample_of(root: str, gate_path: str) -> Optional[Dict[str, Any]]:
+    """The negative sample a gate script declares, if any, and whether it exists."""
+    try:
+        with open(gate_path, encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+    except Exception:
+        return None
+    m = NEGATIVE_SAMPLE.search(text)
+    if not m:
+        return None
+    declared = m.group(1)
+    # Accept `path::test_name`; only the path half is checkable here.
+    path_part = declared.split("::", 1)[0]
+    return {"declared": declared,
+            "exists": os.path.isfile(os.path.join(root, path_part))}
+
+
 def has_tests(root: str, directory: str) -> bool:
     base = os.path.join(root, directory)
     if not os.path.isdir(base):
@@ -160,15 +192,27 @@ def gate_for(root: str, directory: str) -> Dict[str, Any]:
     """
     gate = find_gate(root, directory)
     if gate:
+        ns = negative_sample_of(root, gate["path"])
+        # `decorative` is not "failing" -- the gate may check plenty. It is
+        # "nobody has shown this can fail", which is the state a gate installed
+        # and never exercised is in, and is indistinguishable from a working one
+        # for exactly as long as nothing is broken.
+        decorative = not (ns and ns["exists"])
         return {"kind": "verify", "cmd": gate["cmd"], "name": gate["name"],
                 "canonical": gate["canonical"],
-                "why": "the territory ships its own completion gate"}
+                "negative_sample": ns, "decorative": decorative,
+                "why": "the territory ships its own completion gate"
+                       + ("" if not decorative else
+                          "; no negative sample declared, so nothing has shown "
+                          "it can go red")}
     if has_tests(root, directory):
         return {"kind": "pytest",
                 "cmd": [sys.executable, "-m", "pytest", "-q", "-x"],
                 "name": None, "canonical": None,
+                "negative_sample": None, "decorative": True,
                 "why": "no verify script; the test suite is the gate"}
     return {"kind": "none", "cmd": None, "name": None, "canonical": None,
+            "negative_sample": None, "decorative": True,
             "why": "no verify script and no test_*.py -- this territory merges "
                    "with nothing checking it"}
 
@@ -197,6 +241,11 @@ def survey(root: str = ROOT,
         "ungated": by_kind["none"],
         "non_canonical": sorted(n for n, r in rows.items()
                                 if r["kind"] == "verify" and not r["canonical"]),
+        # Gates that exist and have never been shown to fail. Reported beside
+        # `gated`, because "19 gated" and "19 gates known to work" are different
+        # claims and the survey only ever supported the first.
+        "decorative": sorted(n for n, r in rows.items()
+                             if r["kind"] == "verify" and r["decorative"]),
         "n_territories": len(rows),
     }
 
