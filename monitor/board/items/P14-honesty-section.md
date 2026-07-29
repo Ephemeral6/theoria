@@ -1,6 +1,6 @@
 priority: 2
 cell: P14
-territory: paper
+territory: papers
 deps: none
 lane: paper
 

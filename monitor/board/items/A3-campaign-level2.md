@@ -3,6 +3,7 @@ cell: A3
 territory: theoria-arm
 deps: none
 lane: campaign
+spend: api
 
 # A3-campaign-level2 · 战役第二关：把两本书带过去
 

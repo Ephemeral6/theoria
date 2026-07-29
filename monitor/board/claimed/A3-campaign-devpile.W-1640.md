@@ -3,6 +3,8 @@ cell: A3
 territory: theoria-arm
 deps: none
 lane: campaign
+spend: api
+generic_ok: yes
 
 # A3-campaign-devpile · 开发堆在线战役：把 Theoria 臂推到退出条件
 
@@ -11,3 +13,9 @@ lane: campaign
 
 ---
 **前任持有者 RES-1 于 2026-07-29 02:0x 因会话限额死亡**（心跳停滞 >2 小时、urgent 无回应）。它可能已有半成品：先查`git branch -a | grep a3-campaign-devpile` 与 `<territory>/runs/` 再决定重做还是接续，别从零开始。
+
+
+---
+**监控事后授权（2026-07-29）**：这件是花真钱的战役，而它被一个通用工人领走，是因为我解封赛道时顺手拆掉了那层**顺带**的保护（「只有 RES-1 能花 API 钱」一直靠 campaign 赛道有主在执行）。缺口已堵：`spend: api` 的条目现在必须由监控显式写 `generic_ok: yes` 才下放。
+
+**这一件我批准继续**，理由写在这里而不是留在脑子里：条目自带硬红线（预算先算后花、必经 `spend_gate.reserve()`、闸门红即停、封存堆零接触），余额 $168，而 WP3 是论文权重最大的缺口且已冻结八小时。监控每次心跳读 `spend` 探针；异常即发 urgent 并停。

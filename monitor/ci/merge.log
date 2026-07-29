@@ -1433,3 +1433,82 @@
 2026-07-28T23:40:14Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
 2026-07-28T23:40:17Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
 2026-07-28T23:40:21Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:44:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:44:38Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:44:42Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:44:54Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:44:58Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:45:02Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:45:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:45:05Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:45:10Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:45:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:45:18Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:45:22Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:45:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:47:38Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:47:42Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:47:49Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:48:05Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:48:09Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:48:14Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:48:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:48:21Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:48:25Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:48:29Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:48:33Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:48:36Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:48:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:54:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:54:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:54:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:54:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:54:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:54:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:54:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:54:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:55:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:55:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:55:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:55:12Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:55:15Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:59:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:59:37Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:59:41Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:59:50Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:59:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:59:57Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:59:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:00:02Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:00:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:00:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:00:17Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:00:20Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:00:23Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:09:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:09:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:09:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:09:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:09:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:09:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:09:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:09:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:10:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:10:03Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:10:07Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:10:10Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:10:13Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:14:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:14:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:14:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:14:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:14:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:14:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:14:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:15:15Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:15:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:15:20Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:15:23Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:15:26Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:15:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)

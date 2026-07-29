@@ -83,8 +83,9 @@ def note(msg):
 
 def meta(path):
     head = open(path, encoding="utf-8").read(800)
-    out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": ""}
-    for key in ("priority", "cell", "territory", "lane"):
+    out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": "",
+           "spend": "", "generic_ok": ""}
+    for key in ("priority", "cell", "territory", "lane", "spend", "generic_ok"):
         m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
@@ -139,6 +140,15 @@ def candidates(lane=None):
             continue                        # standing researchers stay in lane
         if lane and not m.get("lane"):
             continue                        # unlaned items are for generic workers
+        # 花真钱的活不随赛道解封一起下放。赛道守卫此前**顺带**挡住了它——
+        # 章程写的是「只有 RES-1 能花 API 钱」，而那条规矩一直是靠 campaign
+        # 赛道有主在执行的。我把赛道解封之后，那层顺带的保护就没了：
+        # 一个一次性工人可以领走一件在真 API 上打的战役（2026-07-29 当场发生）。
+        # 现在要监控在条目里显式写 `generic_ok: yes` 才放行——花钱得是有人拍板，
+        # 不是某道无关的闸门碰巧还没坏。
+        if (not lane and m.get("spend") == "api"
+                and m.get("generic_ok", "").lower() not in ("yes", "true")):
+            continue
         if not lane and m.get("lane") and m["lane"] not in stale:
             continue                        # laned items belong to their standing
                                             # researcher; a generic worker must

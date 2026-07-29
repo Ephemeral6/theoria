@@ -165,10 +165,39 @@ def touched_dirs(branch):
     return {line.split("/")[0] for line in out.splitlines() if line.strip()}
 
 
+def board_territories():
+    """工作板自己签发过的领地。
+
+    W-1641 量出来的代价（2026-07-29）：`fleet-study` 是**板签发的**
+    （S17 条目自带 `territory: fleet-study`），而合并机器人有另一份手工白名单，
+    两份定义只在分支推上来时才对账——对不上就是 **6 小时 37 分、63 次同一句
+    FLAG**，而条目持有者在这期间因会话额度死了，没人知道交付卡住了。
+
+    这与 `gates.py` 开头那条教训是同一个：一张手工表是一个关于树的声称，
+    而没有任何东西拿它去对树；`gates.py` 的答案是「去问树」，这里的答案是
+    「去问板」。板是「什么算领地」的权威，合并机器人不该再存一份平行定义。"""
+    out = set()
+    try:
+        sys.path.insert(0, HERE)
+        import board as _board
+        for d in (_board.ITEMS, _board.CLAIMED, _board.DONE):
+            if not os.path.isdir(d):
+                continue
+            for f in os.listdir(d):
+                if f.endswith(".md"):
+                    t = _board.meta(os.path.join(d, f)).get("territory")
+                    if t and t != "?":
+                        out.add(t)
+    except Exception:
+        pass
+    return out
+
+
 def try_merge(branch):
     dirs = touched_dirs(branch)
+    known = KNOWN_DIRS | board_territories()
     unknown = {d for d in dirs
-               if d not in KNOWN_DIRS
+               if d not in known
                and "." not in d and d != "PARTNER_SYNC.md"}
     root_files = {d for d in dirs if "." in d}
     bad_root = root_files - {"PARTNER_SYNC.md", "README.md", ".gitignore",
