@@ -13,10 +13,19 @@ placeholders that four guards were too narrow to see.
 
 So the tables in `IC3_BOUNDS.md` are not written, they are *injected*, between
 markers, from the run artefacts, by the same `markdown()` functions the axes use
-to print themselves.  The prose around them is authored -- a document that
-argues nothing is not worth reading -- but every number a reader could check is
-generated, and `--check` fails the run if the file on disk and the artefacts on
-disk have parted company.
+to print themselves, and `--check` fails the run if the file on disk and the
+artefacts on disk have parted company.
+
+**What that does and does not cover, stated exactly, because an earlier draft of
+this paragraph overstated it.**  It covers the marked regions.  It does not cover
+the prose, and it does not cover a table that has no markers -- and the draft
+that claimed "every number a reader could check is generated" was sitting beside
+a hand-typed summary table every one of whose figures was wrong.  Two things came
+out of that: the summary table is now generated too (`table:blocks`), and the
+document carries a rule that removes the *class* of error rather than the
+instance -- prose quotes only deterministic numbers, and every timing lives in a
+generated table and is referred to rather than retyped.  The two tables that
+remain authored are labelled as authored where they appear.
 
 The markers are HTML comments so they render as nothing:
 
@@ -43,11 +52,13 @@ DOCUMENT = "IC3_BOUNDS.md"
 # `engine-rig/` and are recorded here rather than in the document so the
 # document cannot claim a provenance the generator does not read.
 SOURCES: Dict[str, Tuple[str, object]] = {
-    "size": ("runs/20260728T203711Z-E8-ic3-bounds/axis_size.json",
+    "size": ("runs/20260729T120000Z-E8-ic3-scale/axis_size_dense/axis_size.json",
              axis_size.markdown),
     "predicates": ("runs/20260729T120000Z-E8-ic3-scale/axis_predicates.json",
                    axis_predicates.markdown),
-    "compose": ("runs/20260728T203711Z-E8-ic3-bounds/axis_compose.json",
+    "blocks": ("runs/20260729T120000Z-E8-ic3-scale/axis_predicates.json",
+               axis_predicates.blocks_markdown),
+    "compose": ("runs/20260729T120000Z-E8-ic3-scale/axis_compose.json",
                 axis_compose.markdown),
 }
 

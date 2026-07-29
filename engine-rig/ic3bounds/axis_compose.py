@@ -286,8 +286,10 @@ def run_step(spec: ComposeSpec,
         deterministic["detail"] = (
             "killed after %.1fs of wall clock by this harness, on this machine. "
             "This is a statement about the budget and the hardware, NOT about "
-            "the problem: the engine has no timeout of its own, max_levels=%d "
-            "did not bind, and a longer budget or a faster machine may finish it."
+            "the problem: a longer budget or a faster machine may finish it. "
+            "Nothing is claimed about whether max_levels=%d would have bound -- "
+            "a killed child reports no frame, so that is not knowable from this "
+            "row, and an earlier version of this message asserted it anyway."
             % (timeout_seconds, spec.max_levels)
         )
         record = harness._record(spec, deterministic,
@@ -353,6 +355,7 @@ def derived(record: Dict[str, Any], info: Dict[str, Any]) -> Dict[str, Any]:
     n_bad = info["n_bad"]
     excluded = (None if n_satisfying is None or n_states is None
                 else n_states - n_satisfying)
+    trap = already_inductive(step_world_id(record))
     return {
         "n_families": info["n_families"],
         "families": list(info["families"]),
@@ -363,8 +366,43 @@ def derived(record: Dict[str, Any], info: Dict[str, Any]) -> Dict[str, Any]:
         # generalisation bought nothing; above 1.0 it had something to say.
         "strengthening": (None if excluded is None or not n_bad
                           else round(excluded / float(n_bad), 6)),
+        "near_vacuous": det.get("near_vacuous"),
+        "edges_into_bad": trap["edges_into_bad"],
+        "property_already_inductive": trap["property_already_inductive"],
         "families_in_invariant": families_in_invariant(det.get("cnf_text"), info),
         "recheck": RECHECK_STATUS,
+    }
+
+
+def step_world_id(record: Dict[str, Any]) -> str:
+    return str(record["spec"]["world_id"])
+
+
+def already_inductive(world_id: str) -> Dict[str, Any]:
+    """Was the safety property inductive before IC3 was asked?
+
+    Added after an adversarial pass over this axis found that on five of its six
+    rungs **no edge leads from outside the bad set into it**, so `!bad` is an
+    inductive invariant on its own and IC3's job reduces to noticing that.  A
+    sub-second timing on such a rung measures a closure check, not a proof
+    search, and the ladder's original headline -- "composing families costs
+    nothing" -- was reading those six numbers as though they measured
+    composition.
+
+    `strengthening == 1.0` was already reporting the same fact and reporting it
+    badly: a metric whose failing value is the neutral-looking number 1.  This
+    says it in a word, so the table cannot be skimmed past it.
+    """
+    system = worldgen_system.build_system(world_id)
+    bad = set(system.bad)
+    edges = sum(
+        1
+        for state in system.states if state not in bad
+        for _, target in system.moves(state) if target in bad
+    )
+    return {
+        "edges_into_bad": edges,
+        "property_already_inductive": edges == 0,
     }
 
 
@@ -500,18 +538,34 @@ def escalations(steps: Sequence[Dict[str, Any]]) -> List[str]:
 def gate_results(steps: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """One line per rung: did the adapter gate pass, and what would it have said.
 
-    Reported explicitly rather than inferred from the absence of an
-    `adapter-mismatch`, because "the gate passed" is the load-bearing claim under
-    every other number in the table and a reader should not have to reconstruct
-    it from a silence.
+    **This infers rather than records, and an adversarial pass was right to call
+    the old docstring on saying otherwise.**  The gate runs inside the budgeted
+    child and only its *failure* crosses back, as the verdict
+    `adapter-mismatch`; nothing carries "the gate ran and passed".  So a rung
+    that timed out, or whose child died before reaching the gate, has no
+    adapter-mismatch verdict and would publish here as `passed: true` -- which
+    is a claim nobody made.
+
+    Rather than assert a provenance the record does not carry, the three cases
+    are now distinguished: `true` where a verdict exists that could only have
+    been reached past the gate, `false` on an explicit mismatch, and `null`
+    where the rung never got far enough for the gate's silence to mean anything.
     """
     out = []
     for step in steps:
         verdict = step["deterministic"]["verdict"]
-        passed = verdict != harness.ADAPTER_MISMATCH
+        if verdict == harness.ADAPTER_MISMATCH:
+            passed = False
+        elif verdict in harness.ANSWERS or verdict == harness.LEVEL_CAP:
+            # The gate runs before ic3(); any of these means it was passed.
+            passed = True
+        else:
+            passed = None
         out.append({
             "world_id": step["spec"]["world_id"],
             "passed": passed,
+            "inferred_from": "the verdict. A timeout or a dead child leaves no "
+                             "evidence either way and reads null, not true.",
             "checks": "edges vs GridWorld.transitions() on the reachable set, "
                       "encode/decode round trip, reachable set inside the declared "
                       "subspace, init, bad set disjoint from GridWorld.reachable() "
@@ -532,7 +586,12 @@ def report(steps: Sequence[Dict[str, Any]], timeout_seconds: float,
     return {
         "axis": AXIS,
         "axis_letter": "C",
-        "question": "at a held-fixed declared state-space size, does IC3 pay for "
+        # "held-fixed" was this axis's own overclaim, caught in review: the
+        # declared products on this ladder are 34, 128, 128, 576, 432 and 1680,
+        # a 49x spread. Only the matched PAIR holds size fixed; the ladder holds
+        # it fixed the way `axis_compose`'s docstring says -- roughly.
+        "question": "at a roughly-held state-space size, and exactly held only "
+                    "across the matched pair, does IC3 pay for "
                     "the number of mechanism families a world composes, or only "
                     "for the size?",
         "family": FAMILY,
@@ -573,14 +632,21 @@ def report(steps: Sequence[Dict[str, Any]], timeout_seconds: float,
         "vacuity": {
             "guard": "every row carries n_satisfying / n_states and near_vacuous "
                      "at ratio >= %s" % harness.NEAR_VACUOUS_RATIO,
-            "read_it_with": "bad_fraction and strengthening. On this axis coverage "
-                            "is high BY CONSTRUCTION: the bad set is a small "
-                            "mechanism-separated corner of the declared space, so "
-                            "1 - coverage can never exceed bad_fraction by much. "
-                            "The quantity that carries information is "
-                            "`strengthening` = states_excluded / n_bad -- 1.0 means "
-                            "the invariant is exactly the negation of the goal and "
-                            "generalisation bought nothing.",
+            "read_it_with": "bad_fraction, strengthening and "
+                            "property_already_inductive. An earlier version of "
+                            "this note claimed coverage is high BY CONSTRUCTION "
+                            "because '1 - coverage can never exceed bad_fraction "
+                            "by much'; the first row of this axis's own table "
+                            "refutes it (t1-switch-latch excludes 5 of 34 states "
+                            "against a bad_fraction of 0.029, five times over). "
+                            "Coverage is high on the other five rungs for a "
+                            "reason that is a finding rather than a construction: "
+                            "no edge leads into their bad set at all, so `!bad` "
+                            "was already inductive and there was nothing to "
+                            "strengthen. `strengthening` = states_excluded / "
+                            "n_bad says the same thing in a number whose failing "
+                            "value, 1.0, looks neutral; "
+                            "`property_already_inductive` says it in a word.",
         },
         "determinism": {
             "deterministic_half": "Re-derived exactly by a verify pass, as on axis "
@@ -606,10 +672,17 @@ def report(steps: Sequence[Dict[str, Any]], timeout_seconds: float,
 
 def markdown(payload: Dict[str, Any]) -> str:
     lines = [
+        # `vacuous?` and `!bad already inductive?` are in the table rather than
+        # only in the JSON because an adversarial pass found both being computed
+        # and then never published: five of six rungs are flagged near-vacuous
+        # and five of six had an already-inductive property, and a reader of the
+        # rendered table could see neither.
         "| world | fam | \\|S\\| | vars | bad | verdict | clauses | literals | "
-        "widest | saturation | frame | blocked | coverage | strengthen | "
-        "invariant mentions | recheck | wall (s) |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "widest | saturation | frame | blocked | coverage | vacuous? | "
+        "strengthen | !bad inductive? | edges into bad | invariant mentions | "
+        "recheck | wall (s) |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"
+        "---|---|---|",
     ]
     for step in payload["steps"]:
         det = step["deterministic"]
@@ -621,14 +694,18 @@ def markdown(payload: Dict[str, Any]) -> str:
 
         lines.append(
             "| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | "
-            "%s | %s | %s | %s |"
+            "%s | %s | %s | %s | %s | %s | %s |"
             % (
                 step["spec"]["world_id"], step["spec"]["n_families"],
                 det["n_states"], step["spec"]["n"], step["spec"]["n_bad"],
                 det["verdict"], cell(det["n_clauses"]), cell(det["n_literals"]),
                 cell(det["widest_clause"]), cell(det["literal_saturation"]),
                 cell(det["converged_at_frame"]), cell(det["states_blocked"]),
-                cell(det["coverage"]), cell(der.get("strengthening")),
+                cell(det["coverage"]),
+                "**yes**" if det.get("near_vacuous") else "no",
+                cell(der.get("strengthening")),
+                "**yes**" if der.get("property_already_inductive") else "no",
+                cell(der.get("edges_into_bad")),
                 ", ".join(der.get("families_in_invariant") or []) or "-",
                 der.get("recheck", RECHECK_STATUS),
                 "-" if wall is None else "%.3f" % wall,

@@ -339,8 +339,16 @@ def test_the_ladder_reaches_a_size_the_budget_cannot_buy():
     Not run here -- n=14 is a five-minute rung -- but the constants are pinned so
     a later edit cannot quietly trim the ladder back to the sizes that are
     comfortable and then report "no boundary reached".
+
+    The ladder is also pinned as CONTIGUOUS.  It was originally every-other --
+    `(4, 6, 8, 10, 12, 13, 14)`, one odd rung among evens -- and board parity
+    turns out to matter on this family: odd boards give a more vacuous invariant
+    at the same |S|, so the near-vacuity onset was reported two rungs late and
+    the cost exponent was fitted through the confound.  A future edit that thins
+    the ladder back out to save minutes would reintroduce it silently.
     """
-    assert axis_size.LADDER == (4, 6, 8, 10, 12, 13, 14)
+    assert axis_size.LADDER == tuple(range(4, 15))
+    assert list(axis_size.LADDER) == sorted(axis_size.LADDER)
     assert axis_size.LADDER[0] == axis_size.ANCHOR_N
     assert axis_size.DEFAULT_TIMEOUT_SECONDS == 300.0
     assert 2 ** axis_size.LADDER[-1] == 16384

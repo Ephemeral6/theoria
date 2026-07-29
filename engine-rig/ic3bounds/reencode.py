@@ -85,7 +85,7 @@ cannot, and says so rather than pretending -- see `Recoding.desugars`.
 
 import math
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from engines.ic3_pdr.system import Clause, Literal, State, System, clause_key
 
@@ -563,7 +563,51 @@ class Desugared:
         }
 
 
-def desugar(recoding: Recoding, clauses: Sequence[Clause]) -> Desugared:
+def renaming_map(system: System,
+                 recoding: Recoding) -> Optional[Tuple[Literal, ...]]:
+    """If every predicate of this recoding *is* a world variable, say which one.
+
+    Written after a reviewer refuted a claim this package had been making from
+    the scheme's name rather than from the states.  `binary` was described as
+    predicates that "name state indices, not world facts", and on the peg family
+    that is simply false: `peg_system` sorts its states as binary strings, so a
+    state's index *is* its bit string and `b_i` is exactly `pos_(n-1-i)`.  Four
+    rungs were being reported as having no adjudicable certificate when their
+    certificate was the world's own vocabulary in reverse declaration order.
+
+    So the question is asked of the data instead of the label: for each
+    predicate, is there a native variable and a polarity that it agrees with on
+    **every** state?  All of them matched means the recoding is a renaming --
+    the certificate is readable, and `desugar` can rewrite it.  One unmatched
+    means it is not, and `None` says so.
+
+    That the same function now finds `onehot` unmatched and `binary` matched on
+    peg but unmatched on the worldgen worlds (7 bits cannot rename 19 variables)
+    is the point: it is a measurement, and it disagrees with the naming.
+    """
+    codes = [(state, recoding.encode(state)) for state in system.states]
+    if not codes:
+        return None
+    out: List[Literal] = []
+    for index in range(len(recoding.variables)):
+        match: Optional[Literal] = None
+        for native_index in range(len(system.variables)):
+            for sense in (True, False):
+                if all(code[index] == (state[native_index] if sense
+                                       else not state[native_index])
+                       for state, code in codes):
+                    match = (native_index, sense)
+                    break
+            if match is not None:
+                break
+        if match is None:
+            return None
+        out.append(match)
+    return tuple(out)
+
+
+def desugar(recoding: Recoding, clauses: Sequence[Clause],
+            renaming: Optional[Sequence[Literal]] = None) -> Desugared:
     """Rewrite a clause set into the native vocabulary, meaning preserved.
 
     Two things can shrink and neither changes what the formula says.  A clause
@@ -590,12 +634,23 @@ def desugar(recoding: Recoding, clauses: Sequence[Clause]) -> Desugared:
     trust either -- it re-counts both sides with the engine's own checker and
     reports a finding if the two numbers differ.
     """
-    if not recoding.desugars():
+    if renaming is None and not recoding.desugars():
         raise RecodingError(
             "%s names states rather than variables, so its clauses have no "
             "native form. A rung under it has no certificate the peg rechecker "
             "can read, and must say so rather than be scored." % recoding.label
         )
+
+    def rewrite(literal: Literal) -> Literal:
+        if renaming is None:
+            return recoding.desugar_literal(literal)
+        index, value = literal
+        if not 0 <= index < len(renaming):
+            raise RecodingError(
+                "literal %r names predicate %d and the renaming covers %d"
+                % ((index, value), index, len(renaming)))
+        native_index, sense = renaming[index]
+        return (native_index, value if sense else not value)
 
     out: List[Clause] = []
     dropped = 0
@@ -603,7 +658,7 @@ def desugar(recoding: Recoding, clauses: Sequence[Clause]) -> Desugared:
     literals_after = 0
     for clause in clauses:
         literals_before += len(clause)
-        rewritten = {recoding.desugar_literal(literal) for literal in clause}
+        rewritten = {rewrite(literal) for literal in clause}
         variables_seen: Dict[int, bool] = {}
         tautological = False
         for index, value in rewritten:

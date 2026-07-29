@@ -33,12 +33,26 @@ and it is the number the encoding moves most.
 
 **What this axis can find that axis A cannot.**  Two failure shapes the item
 named and axis A never reached.  A certificate can stop being *recheckable*: the
-independent rechecker of `recheck/` speaks the peg vocabulary, so a rung whose
-invariant is written in state-index bits has no form it can be handed in, and
-the column says `not available` rather than scoring it.  And a certificate can
-stop being *adjudicable* while still being perfectly valid -- `(!is_01011010)`
-is a true clause about a real world that tells a reader nothing.  Both are
-recorded, per rung, as data rather than as prose.
+independent rechecker of `recheck/` speaks the world's vocabulary, so a rung
+whose invariant names state ordinals has no form it can be handed in, and the
+column says `not available` rather than scoring it.  And a certificate can stop
+being *adjudicable* while still being perfectly valid -- `(!is_01011010)` is a
+true clause about a real world that tells a reader nothing.  Both are recorded,
+per rung, as data rather than as prose.
+
+**And a correction that this axis had to make about itself.**  Both of those
+columns were originally read off the *scheme's name*: `binary` was assumed to
+name state indices rather than world facts.  On the peg family that is false.
+`peg_system` sorts its states as binary strings, so a state's index IS its bit
+string and `b_i` is exactly `pos_(n-1-i)` -- the world's own predicates in
+reverse declaration order.  Four rungs were being reported as carrying an
+unreadable certificate when their certificate was the world's vocabulary
+renamed.  `reencode.renaming_map` now decides it by comparing every predicate
+against every state, and the columns follow the measurement.  What survives the
+correction is sharper than what it replaced: the peg `binary`/`native` pair is
+the same predicates in a different declaration order, over the same states, and
+the two differ by a factor of six to eight -- a **variable-ordering** result with
+everything else pinned.
 
 **The anchor.**  Every board's `native` rung is a rung of axis A -- same spec,
 same system, same engine -- so the two axes cross at four points.
@@ -105,13 +119,16 @@ WORLD_SCHEMES: Tuple[Tuple[str, int], ...] = (
 RECHECK_NOT_AVAILABLE = "n/a — no native form"
 RECHECK_WHY = (
     "recheck/ grounds a rule set over the world's declared variables, so a "
-    "certificate can only be handed to it in that vocabulary. A `dual` clause "
-    "set has one -- `free_pos3` IS `!pos3`, and `reencode.desugar` rewrites it "
-    "literal for literal -- so those rungs are rechecked in full. A `binary` or "
-    "`onehot` clause set does not: its predicates name state indices, not world "
-    "facts, and there is no rewriting that recovers what was never said. Those "
-    "rows read 'no native form'. That is a boundary this axis was built to "
-    "find, not a gap in it, and it is never scored as a pass."
+    "certificate can only be handed to it in that vocabulary. Whether a rung's "
+    "certificate HAS such a form is measured, not read off the scheme's name: "
+    "reencode.renaming_map asks, for each predicate, whether some world variable "
+    "and polarity agree with it on every state. `dual` has one by construction "
+    "(`free_pos3` IS `!pos3`); `binary` on peg turns out to have one too (a "
+    "state's index is its bit string there, so `b_i` IS `pos_(n-1-i)`); `binary` "
+    "on a worldgen world does not, because seven bits cannot rename nineteen "
+    "variables; and `onehot` never does. Rungs with a form are rechecked in "
+    "full. Rungs without one read 'no native form' -- a boundary this axis was "
+    "built to find, not a gap in it, and never scored as a pass."
 )
 WORLDGEN_RECHECK = "n/a — no worldgen transcriber"
 WORLDGEN_RECHECK_WHY = (
@@ -429,8 +446,10 @@ def run_step(spec: PredicateSpec,
         deterministic["detail"] = (
             "killed after %.1fs of wall clock by this harness, on this machine. "
             "This is a statement about the budget and the hardware, NOT about "
-            "the problem: the engine has no timeout of its own, max_levels=%d "
-            "did not bind, and a longer budget or a faster machine may finish it."
+            "the problem: a longer budget or a faster machine may finish it. "
+            "Nothing is claimed about whether max_levels=%d would have bound -- "
+            "a killed child reports no frame, so that is not knowable from this "
+            "row, and an earlier version of this message asserted it anyway."
             % (timeout_seconds, spec.max_levels)
         )
         record = harness._record(spec, deterministic,
@@ -474,6 +493,12 @@ def derived(record: Dict[str, Any], spec: PredicateSpec) -> Dict[str, Any]:
     abstraction = None
     if n_satisfying is not None and spec.n_reachable:
         abstraction = round(n_satisfying / float(spec.n_reachable), 6)
+    # Measured, not inferred from the scheme's name. `binary` on peg-N turns out
+    # to BE the world's variables in reverse declaration order, because
+    # peg_system sorts its states as binary strings and a state's index is
+    # therefore its bit string. Reporting those rungs as unreadable, which this
+    # column did until a reviewer refuted it, was reading the label.
+    renaming = renaming_for(spec)
     return {
         "encoding": spec.encoding_label,
         "scheme": spec.scheme,
@@ -486,11 +511,25 @@ def derived(record: Dict[str, Any], spec: PredicateSpec) -> Dict[str, Any]:
         "n_reachable": spec.n_reachable,
         "encoding_slack": reencode.encoding_slack(spec.n, spec.n_states),
         "abstraction": abstraction,
-        "vocabulary": "world" if spec.scheme in (reencode.NATIVE, reencode.DUAL)
-                      else "state index",
-        "adjudicable": spec.scheme in (reencode.NATIVE, reencode.DUAL),
-        "has_native_form": spec.scheme in (reencode.NATIVE, reencode.DUAL),
+        "vocabulary": ("world" if spec.scheme in (reencode.NATIVE, reencode.DUAL)
+                       else "world (renamed)" if renaming is not None
+                       else "state index"),
+        "adjudicable": renaming is not None
+                       or spec.scheme in (reencode.NATIVE, reencode.DUAL),
+        "has_native_form": renaming is not None
+                           or spec.scheme in (reencode.NATIVE, reencode.DUAL),
+        "is_a_renaming_of_the_world": renaming is not None,
     }
+
+
+def renaming_for(spec: PredicateSpec) -> Optional[Any]:
+    """The measured predicate-for-predicate map onto world variables, or None."""
+    system, recoding, _ = build_recoded(spec)
+    if recoding.desugars():
+        # native/dual already have a native form by construction; asking again
+        # would cost |S| x m x n comparisons to learn what the definitions say.
+        return None
+    return reencode.renaming_map(system, recoding)
 
 
 def _clauses_off_the_row(system, deterministic: Dict[str, Any]):
@@ -561,17 +600,21 @@ def recheck_for(record: Dict[str, Any], spec: PredicateSpec) -> Dict[str, Any]:
             "and nothing to pass.")
     if spec.family != PEG_FAMILY:
         return _blank_recheck(WORLDGEN_RECHECK, WORLDGEN_RECHECK_WHY)
-    if spec.scheme not in (reencode.NATIVE, reencode.DUAL):
-        return _blank_recheck(
-            RECHECK_NOT_AVAILABLE,
-            "the invariant is written in %s predicates, which name state "
-            "indices rather than world facts, so it has no form recheck/ can "
-            "read. Not a pass -- and this is the failure shape the item calls "
-            "'certificate not recheckable'." % spec.scheme)
 
     system, recoding, recoded = build_recoded(spec)
+    renaming = (None if recoding.desugars()
+                else reencode.renaming_map(system, recoding))
+    if not recoding.desugars() and renaming is None:
+        return _blank_recheck(
+            RECHECK_NOT_AVAILABLE,
+            "no predicate-for-predicate map from this %s encoding onto the "
+            "world's variables exists -- checked against every state, not "
+            "assumed from the scheme's name -- so the invariant has no form "
+            "recheck/ can read. Not a pass, and this is the failure shape the "
+            "item calls 'certificate not recheckable'." % spec.scheme)
+
     clauses = _clauses_off_the_row(recoded, det)
-    native = reencode.desugar(recoding, clauses)
+    native = reencode.desugar(recoding, clauses, renaming=renaming)
 
     from engines.ic3_pdr import check as ic3_check
     result = ic3_check.verify(system, native.clauses)
@@ -777,7 +820,11 @@ def monotone_in_predicates(blocks: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         "read_it_as": "a wall clock, so this is a statement about this machine. "
                       "It is reported because a NON-monotone block is robust to "
                       "the machine in a way a monotone one is not: an ordering "
-                      "that reverses under a 20x spread is not noise.",
+                      "that reverses across the block's own spread -- see "
+                      "held_fixed[].ic3_seconds_spread, which this note "
+                      "deliberately does not restate -- is not noise. Where a "
+                      "block's rungs are separated by less than a millisecond, "
+                      "it is; every timing here is a single sample.",
     }
 
 
@@ -993,6 +1040,58 @@ def markdown(payload: Dict[str, Any]) -> str:
                 "-" if timing.get("wall_seconds") is None
                 else "%.3f" % timing["wall_seconds"],
                 cell(column.get("status")),
+            )
+        )
+    return "\n".join(lines)
+
+
+def blocks_markdown(payload: Dict[str, Any]) -> str:
+    """The per-block summary, generated.
+
+    This table was hand-typed in `IC3_BOUNDS.md` for one draft and every one of
+    its six spreads was wrong -- transcribed from an earlier run's stdout and
+    never revisited, in a document whose opening line told the reader the tables
+    were generated. It is rendered here so that `ic3bounds.document --check`
+    covers it like the others.
+
+    Both clocks are printed. The `ic3` column is the engine's own, measured
+    inside the child; the `wall` column includes process start-up, and on the
+    two worldgen blocks -- where every rung is a few hundredths of a second --
+    they disagree about which rung was fastest. A table that printed one of them
+    would be choosing the answer.
+    """
+    lines = [
+        "| block | \\|S\\| | reachable | m from → to | ic3 spread | wall spread "
+        "| fastest by ic3 | its abstraction | its certificate | monotone in m? |",
+        "|---|---|---|---|---|---|---|---|---|---|",
+    ]
+    monotone = {row["board"]: row["monotone"]
+                for row in payload["monotone_in_predicates"]["per_board"]}
+    for block in payload["held_fixed"]:
+        wall_times = [
+            step["timing"]["wall_seconds"]
+            for step in payload["steps"]
+            if _board_key(step) == block["board"]
+            and (step.get("timing") or {}).get("wall_seconds")
+        ]
+        fastest = block.get("fastest") or {}
+        wall_spread = ("-" if not wall_times or min(wall_times) <= 0
+                       else "%.1fx" % (max(wall_times) / min(wall_times)))
+        lines.append(
+            "| %s | %d | %s | %s → %s | %s | %s | %s | %s | %s | %s |"
+            % (
+                block["board"], block["n_states"], block.get("n_reachable"),
+                (block.get("predicate_range") or ["-", "-"])[0],
+                (block.get("predicate_range") or ["-", "-"])[1],
+                "-" if block.get("ic3_seconds_spread") is None
+                else "%.1fx" % block["ic3_seconds_spread"],
+                wall_spread,
+                fastest.get("encoding", "-"),
+                fastest.get("abstraction", "-"),
+                "world vocabulary" if fastest.get("adjudicable")
+                else "**state index**",
+                {True: "yes", False: "**no**", None: "-"}[
+                    monotone.get(block["board"])],
             )
         )
     return "\n".join(lines)

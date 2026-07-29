@@ -292,24 +292,40 @@ def test_findings_name_the_row_and_the_run_fails_on_them():
 
 # ------------------------------------------------------- the ladder is covered
 
-def test_every_ladder_rung_that_answers_has_a_committed_rule_set():
+def test_every_ladder_rung_that_answers_has_a_rule_set_available():
     """A rung whose size has no independent transcription has no column.
 
-    The ladder is (4, 6, 8, 10, 12, 13, 14) and every rung but the last returned
-    an invariant, so every rung but the last needs a case under `recheck/cases/`.
-    n=14 deliberately has none: it timed out, there is no invariant, and a rule
-    set nothing certifies would only be clutter.
+    Every rung but the last returned an invariant, so every rung but the last
+    needs a rule set.  Two ways to have one, and the distinction is the point:
+    the sizes in `build_cases.PEG_GRADIENT` have a **committed** case under
+    `recheck/cases/`, and the rungs added when the ladder was made contiguous are
+    **generated in memory** by `ruleset_for`, which hashes over exactly the bytes
+    `build_cases` would have written.  Both are independent of the engine; only
+    one is on disk.  A rung with neither would have no column at all, and this
+    asserts there is no such rung.
+
+    n=14 deliberately has no committed case: it timed out, there is no invariant,
+    and a rule set nothing certifies would only be clutter.
     """
     answered = [n for n in axis_size.LADDER if n != 14]
-    sizes = {n for n, _, _ in build_cases.PEG_GRADIENT}
-    assert set(answered) <= sizes
+    committed = {n for n, _, _ in build_cases.PEG_GRADIENT}
+    generated = [n for n in answered if n not in committed]
+    assert generated, "the ladder is contiguous, so some rungs are above the "                       "committed gradient -- if not, this test has gone stale"
+
     for n in answered:
         start = axis_size.initial_for(n)
-        assert os.path.exists(column.case_path(n, start)), n
-        certificate = os.path.join(
-            build_cases.CASES_DIR,
-            "%s-ic3.cert.json" % build_cases.peg_name(start, n))
-        assert os.path.exists(certificate), n
+        ruleset, source = column.ruleset_for(n, start, axis_size.goal_for(n))
+        assert ruleset.name == build_cases.peg_name(start, n)
+        if n in committed:
+            assert source == "recheck/cases/%s.rules.json" % ruleset.name
+            assert os.path.exists(column.case_path(n, start)), n
+            certificate = os.path.join(
+                build_cases.CASES_DIR,
+                "%s-ic3.cert.json" % build_cases.peg_name(start, n))
+            assert os.path.exists(certificate), n
+        else:
+            assert "no committed case" in source, n
+
     assert not os.path.exists(column.case_path(14, axis_size.initial_for(14)))
 
 

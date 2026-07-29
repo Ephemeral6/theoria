@@ -112,23 +112,46 @@ def test_the_native_rung_rechecks_against_the_committed_peg_case():
     assert column["engine_n_satisfying"] == column["recheck_n_satisfying"] == 8
 
 
-@pytest.mark.parametrize("scheme", (reencode.BINARY, reencode.ONEHOT))
-def test_a_rung_with_no_native_form_is_not_scored_and_is_not_a_finding(scheme):
+def test_a_rung_with_no_native_form_is_not_scored_and_is_not_a_finding():
     """It is a boundary, not a defect.
 
-    `recheck/` cannot read a certificate written in state-index bits, and that
-    is the answer to one of the three questions the item asked -- 'where does it
+    `recheck/` cannot read a certificate written in state ordinals, and that is
+    the answer to one of the three questions the item asked -- 'where does it
     produce a certificate that cannot be rechecked'.  So the row says so, is
     never counted as a pass, and does NOT fail the run: a run that exited 1 here
     would be reporting its own finding as a crash.
     """
-    _, record = _measure(scheme)
+    _, record = _measure(reencode.ONEHOT)
     column = record["recheck"]
     assert column["status"] == axis_predicates.RECHECK_NOT_AVAILABLE
     assert column["finding"] is False
     assert recheck_column.is_pass(column) is False
     assert column["counts_agree"] is None
     assert "not a pass" in column["detail"].lower()
+
+
+def test_binary_on_peg_is_rechecked_because_it_IS_the_worlds_vocabulary():
+    """The column follows the measurement, not the scheme's name.
+
+    `binary` was reported as unreadable for one draft on the strength of being
+    called `binary`.  On peg-N its predicates are the world's own in reverse
+    declaration order -- a renaming `reencode.renaming_map` finds by comparing
+    every predicate against every state -- so the certificate is readable, and
+    it is rechecked like any other.  Four rungs changed verdict when this
+    stopped being read off the scheme name.
+    """
+    spec, record = _measure(reencode.BINARY)
+    assert record["derived"]["vocabulary"] == "world (renamed)"
+    assert record["derived"]["is_a_renaming_of_the_world"] is True
+    assert record["recheck"]["status"] == "ACCEPT"
+    assert recheck_column.is_pass(record["recheck"]) is True
+
+
+def test_the_adjudicable_column_is_measured_not_read_off_the_scheme():
+    binary = _measure(reencode.BINARY)[1]["derived"]
+    onehot = _measure(reencode.ONEHOT)[1]["derived"]
+    assert binary["adjudicable"] is True and onehot["adjudicable"] is False
+    assert onehot["vocabulary"] == "state index"
 
 
 def test_a_row_without_an_invariant_reads_no_invariant_rather_than_passing():

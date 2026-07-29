@@ -156,14 +156,20 @@ def recheck_native_forms(payload: Dict[str, Any]) -> List[str]:
         det, spec = step["deterministic"], step["spec"]
         if det.get("verdict") != harness.INVARIANT:
             continue
-        if spec.get("scheme") not in (reencode.NATIVE, reencode.DUAL):
-            continue
         if spec.get("family") != axis_predicates.PEG_FAMILY:
             continue
         parsed = axis_predicates.PredicateSpec.from_json(spec)
         system, recoding, recoded = axis_predicates.build_recoded(parsed)
+        # Which rungs have a native form is measured, not read off the scheme:
+        # `binary` on peg IS the world's variables reversed, and skipping it
+        # here on the strength of its name would leave four published
+        # certificates unchecked by this pass.
+        renaming = (None if recoding.desugars()
+                    else reencode.renaming_map(system, recoding))
+        if not recoding.desugars() and renaming is None:
+            continue
         clauses = recheck_column.parse_cnf(det["cnf_text"], recoded.variables)
-        native = reencode.desugar(recoding, clauses)
+        native = reencode.desugar(recoding, clauses, renaming=renaming)
         result = ic3_check.verify(system, native.clauses)
         if not result.holds:
             problems.append(

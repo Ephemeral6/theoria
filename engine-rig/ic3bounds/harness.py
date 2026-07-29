@@ -480,8 +480,10 @@ def run_step(spec: StepSpec,
         deterministic["detail"] = (
             "killed after %.1fs of wall clock by this harness, on this machine. "
             "This is a statement about the budget and the hardware, NOT about "
-            "the problem: the engine has no timeout of its own, max_levels=%d "
-            "did not bind, and a longer budget or a faster machine may finish it."
+            "the problem: a longer budget or a faster machine may finish it. "
+            "Nothing is claimed about whether max_levels=%d would have bound -- "
+            "a killed child reports no frame, so that is not knowable from this "
+            "row, and an earlier version of this message asserted it anyway."
             % (timeout_seconds, spec.max_levels)
         )
         return _record(spec, deterministic, {"wall_seconds": round(wall, 6)},

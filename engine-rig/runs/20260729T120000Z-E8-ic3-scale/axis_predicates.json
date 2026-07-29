@@ -50,7 +50,7 @@
     "column": "steps[].recheck",
     "via": "reencode.desugar -- a dual clause set is rewritten literal for literal into the native vocabulary and handed to recheck/, which shares no code with the engine",
     "cross_check": "engines.ic3_pdr.check.verify re-counts the native form; a bijection cannot change the count, so a disagreement is a finding and fails the run",
-    "not_available": "recheck/ grounds a rule set over the world's declared variables, so a certificate can only be handed to it in that vocabulary. A `dual` clause set has one -- `free_pos3` IS `!pos3`, and `reencode.desugar` rewrites it literal for literal -- so those rungs are rechecked in full. A `binary` or `onehot` clause set does not: its predicates name state indices, not world facts, and there is no rewriting that recovers what was never said. Those rows read 'no native form'. That is a boundary this axis was built to find, not a gap in it, and it is never scored as a pass.",
+    "not_available": "recheck/ grounds a rule set over the world's declared variables, so a certificate can only be handed to it in that vocabulary. Whether a rung's certificate HAS such a form is measured, not read off the scheme's name: reencode.renaming_map asks, for each predicate, whether some world variable and polarity agree with it on every state. `dual` has one by construction (`free_pos3` IS `!pos3`); `binary` on peg turns out to have one too (a state's index is its bit string there, so `b_i` IS `pos_(n-1-i)`); `binary` on a worldgen world does not, because seven bits cannot rename nineteen variables; and `onehot` never does. Rungs with a form are rechecked in full. Rungs without one read 'no native form' -- a boundary this axis was built to find, not a gap in it, and never scored as a pass.",
     "worldgen": "the same reason axis C gives: recheck/ would need a second, independent transcription of worldgen's mechanisms, this axis does not build one, and a rechecker fed by the same adapter would only agree with itself.",
     "taxonomy": {
       "0": "ACCEPT -- the three conditions hold on the emitted predicate",
@@ -87,7 +87,7 @@
           "n_clauses": 4,
           "coverage": "34/64",
           "abstraction": 11.333333,
-          "ic3_seconds": 0.012447
+          "ic3_seconds": 0.01246
         },
         {
           "label": "peg6/native",
@@ -97,7 +97,7 @@
           "n_clauses": 8,
           "coverage": "30/64",
           "abstraction": 10.0,
-          "ic3_seconds": 0.0348
+          "ic3_seconds": 0.035191
         },
         {
           "label": "peg6/dual+3",
@@ -107,7 +107,7 @@
           "n_clauses": 4,
           "coverage": "35/64",
           "abstraction": 11.666667,
-          "ic3_seconds": 0.014683
+          "ic3_seconds": 0.015387
         },
         {
           "label": "peg6/dual+6",
@@ -117,7 +117,7 @@
           "n_clauses": 8,
           "coverage": "30/64",
           "abstraction": 10.0,
-          "ic3_seconds": 0.052248
+          "ic3_seconds": 0.054073
         },
         {
           "label": "peg6/onehot",
@@ -127,15 +127,15 @@
           "n_clauses": 1,
           "coverage": "3/64",
           "abstraction": 1.0,
-          "ic3_seconds": 0.003246
+          "ic3_seconds": 0.00312
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        0.003246,
-        0.052248
+        0.00312,
+        0.054073
       ],
-      "ic3_seconds_spread": 16.096,
+      "ic3_seconds_spread": 17.331,
       "fastest": {
         "label": "peg6/onehot",
         "encoding": "onehot",
@@ -164,7 +164,7 @@
           "n_clauses": 6,
           "coverage": "146/256",
           "abstraction": 36.5,
-          "ic3_seconds": 0.151923
+          "ic3_seconds": 0.157128
         },
         {
           "label": "peg8/native",
@@ -174,7 +174,7 @@
           "n_clauses": 11,
           "coverage": "176/256",
           "abstraction": 44.0,
-          "ic3_seconds": 0.595301
+          "ic3_seconds": 0.596159
         },
         {
           "label": "peg8/dual+4",
@@ -184,7 +184,7 @@
           "n_clauses": 5,
           "coverage": "141/256",
           "abstraction": 35.25,
-          "ic3_seconds": 0.100556
+          "ic3_seconds": 0.099725
         },
         {
           "label": "peg8/dual+8",
@@ -194,7 +194,7 @@
           "n_clauses": 11,
           "coverage": "176/256",
           "abstraction": 44.0,
-          "ic3_seconds": 0.96676
+          "ic3_seconds": 0.97912
         },
         {
           "label": "peg8/onehot",
@@ -204,15 +204,15 @@
           "n_clauses": 1,
           "coverage": "4/256",
           "abstraction": 1.0,
-          "ic3_seconds": 0.077193
+          "ic3_seconds": 0.077527
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        0.077193,
-        0.96676
+        0.077527,
+        0.97912
       ],
-      "ic3_seconds_spread": 12.524,
+      "ic3_seconds_spread": 12.629,
       "fastest": {
         "label": "peg8/onehot",
         "encoding": "onehot",
@@ -241,7 +241,7 @@
           "n_clauses": 7,
           "coverage": "594/1024",
           "abstraction": 118.8,
-          "ic3_seconds": 1.442863
+          "ic3_seconds": 1.506209
         },
         {
           "label": "peg10/native",
@@ -251,7 +251,7 @@
           "n_clauses": 20,
           "coverage": "766/1024",
           "abstraction": 153.2,
-          "ic3_seconds": 9.248183
+          "ic3_seconds": 9.082025
         },
         {
           "label": "peg10/dual+5",
@@ -261,7 +261,7 @@
           "n_clauses": 11,
           "coverage": "759/1024",
           "abstraction": 151.8,
-          "ic3_seconds": 2.444598
+          "ic3_seconds": 2.479081
         },
         {
           "label": "peg10/dual+10",
@@ -271,7 +271,7 @@
           "n_clauses": 20,
           "coverage": "766/1024",
           "abstraction": 153.2,
-          "ic3_seconds": 15.293034
+          "ic3_seconds": 15.351723
         },
         {
           "label": "peg10/onehot",
@@ -281,21 +281,21 @@
           "n_clauses": 1,
           "coverage": "5/1024",
           "abstraction": 1.0,
-          "ic3_seconds": 2.098888
+          "ic3_seconds": 2.080522
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        1.442863,
-        15.293034
+        1.506209,
+        15.351723
       ],
-      "ic3_seconds_spread": 10.599,
+      "ic3_seconds_spread": 10.192,
       "fastest": {
         "label": "peg10/binary",
         "encoding": "binary",
         "n_predicates": 10,
         "abstraction": 118.8,
-        "adjudicable": false
+        "adjudicable": true
       }
     },
     {
@@ -318,7 +318,7 @@
           "n_clauses": 8,
           "coverage": "2386/4096",
           "abstraction": 397.666667,
-          "ic3_seconds": 13.770932
+          "ic3_seconds": 13.359297
         },
         {
           "label": "peg12/native",
@@ -328,7 +328,7 @@
           "n_clauses": 29,
           "coverage": "3466/4096",
           "abstraction": 577.666667,
-          "ic3_seconds": 106.626842
+          "ic3_seconds": 104.701473
         },
         {
           "label": "peg12/dual+6",
@@ -338,7 +338,7 @@
           "n_clauses": 12,
           "coverage": "3063/4096",
           "abstraction": 510.5,
-          "ic3_seconds": 18.913231
+          "ic3_seconds": 19.198868
         },
         {
           "label": "peg12/dual+12",
@@ -348,7 +348,7 @@
           "n_clauses": 29,
           "coverage": "3466/4096",
           "abstraction": 577.666667,
-          "ic3_seconds": 179.676401
+          "ic3_seconds": 176.550179
         },
         {
           "label": "peg12/onehot",
@@ -358,21 +358,21 @@
           "n_clauses": 1,
           "coverage": "6/4096",
           "abstraction": 1.0,
-          "ic3_seconds": 69.874467
+          "ic3_seconds": 56.245604
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        13.770932,
-        179.676401
+        13.359297,
+        176.550179
       ],
-      "ic3_seconds_spread": 13.048,
+      "ic3_seconds_spread": 13.216,
       "fastest": {
         "label": "peg12/binary",
         "encoding": "binary",
         "n_predicates": 12,
         "abstraction": 397.666667,
-        "adjudicable": false
+        "adjudicable": true
       }
     },
     {
@@ -395,7 +395,7 @@
           "n_clauses": 3,
           "coverage": "117/128",
           "abstraction": 2.34,
-          "ic3_seconds": 0.021709
+          "ic3_seconds": 0.020665
         },
         {
           "label": "t1-tokens-lock/native",
@@ -405,7 +405,7 @@
           "n_clauses": 3,
           "coverage": "121/128",
           "abstraction": 2.42,
-          "ic3_seconds": 0.023141
+          "ic3_seconds": 0.022352
         },
         {
           "label": "t1-tokens-lock/onehot",
@@ -415,15 +415,15 @@
           "n_clauses": 7,
           "coverage": "121/128",
           "abstraction": 2.42,
-          "ic3_seconds": 0.62079
+          "ic3_seconds": 0.629765
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        0.021709,
-        0.62079
+        0.020665,
+        0.629765
       ],
-      "ic3_seconds_spread": 28.596,
+      "ic3_seconds_spread": 30.475,
       "fastest": {
         "label": "t1-tokens-lock/binary",
         "encoding": "binary",
@@ -452,7 +452,7 @@
           "n_clauses": 2,
           "coverage": "122/128",
           "abstraction": 2.0,
-          "ic3_seconds": 0.01284
+          "ic3_seconds": 0.012974
         },
         {
           "label": "t2-cycler-lock/native",
@@ -462,7 +462,7 @@
           "n_clauses": 2,
           "coverage": "122/128",
           "abstraction": 2.0,
-          "ic3_seconds": 0.015672
+          "ic3_seconds": 0.014292
         },
         {
           "label": "t2-cycler-lock/onehot",
@@ -472,15 +472,15 @@
           "n_clauses": 6,
           "coverage": "122/128",
           "abstraction": 2.0,
-          "ic3_seconds": 0.488862
+          "ic3_seconds": 0.484297
         }
       ],
       "machine_dependent": true,
       "ic3_seconds_range": [
-        0.01284,
-        0.488862
+        0.012974,
+        0.484297
       ],
-      "ic3_seconds_spread": 38.073,
+      "ic3_seconds_spread": 37.328,
       "fastest": {
         "label": "t2-cycler-lock/binary",
         "encoding": "binary",
@@ -498,8 +498,8 @@
         "n_compared": 5,
         "monotone": false,
         "breaks": [
-          "native (m=6, 0.0348s) is slower than dual+3 (m=9, 0.0147s) although it declares fewer predicates",
-          "dual+6 (m=12, 0.0522s) is slower than onehot (m=64, 0.0032s) although it declares fewer predicates"
+          "native (m=6, 0.0352s) is slower than dual+3 (m=9, 0.0154s) although it declares fewer predicates",
+          "dual+6 (m=12, 0.0541s) is slower than onehot (m=64, 0.0031s) although it declares fewer predicates"
         ]
       },
       {
@@ -507,8 +507,8 @@
         "n_compared": 5,
         "monotone": false,
         "breaks": [
-          "native (m=8, 0.5953s) is slower than dual+4 (m=12, 0.1006s) although it declares fewer predicates",
-          "dual+8 (m=16, 0.9668s) is slower than onehot (m=256, 0.0772s) although it declares fewer predicates"
+          "native (m=8, 0.5962s) is slower than dual+4 (m=12, 0.0997s) although it declares fewer predicates",
+          "dual+8 (m=16, 0.9791s) is slower than onehot (m=256, 0.0775s) although it declares fewer predicates"
         ]
       },
       {
@@ -516,8 +516,8 @@
         "n_compared": 5,
         "monotone": false,
         "breaks": [
-          "native (m=10, 9.2482s) is slower than dual+5 (m=15, 2.4446s) although it declares fewer predicates",
-          "dual+10 (m=20, 15.2930s) is slower than onehot (m=1024, 2.0989s) although it declares fewer predicates"
+          "native (m=10, 9.0820s) is slower than dual+5 (m=15, 2.4791s) although it declares fewer predicates",
+          "dual+10 (m=20, 15.3517s) is slower than onehot (m=1024, 2.0805s) although it declares fewer predicates"
         ]
       },
       {
@@ -525,8 +525,8 @@
         "n_compared": 5,
         "monotone": false,
         "breaks": [
-          "native (m=12, 106.6268s) is slower than dual+6 (m=18, 18.9132s) although it declares fewer predicates",
-          "dual+12 (m=24, 179.6764s) is slower than onehot (m=4096, 69.8745s) although it declares fewer predicates"
+          "native (m=12, 104.7015s) is slower than dual+6 (m=18, 19.1989s) although it declares fewer predicates",
+          "dual+12 (m=24, 176.5502s) is slower than onehot (m=4096, 56.2456s) although it declares fewer predicates"
         ]
       },
       {
@@ -544,7 +544,7 @@
     ],
     "monotone_everywhere": false,
     "machine_dependent": true,
-    "read_it_as": "a wall clock, so this is a statement about this machine. It is reported because a NON-monotone block is robust to the machine in a way a monotone one is not: an ordering that reverses under a 20x spread is not noise."
+    "read_it_as": "a wall clock, so this is a statement about this machine. It is reported because a NON-monotone block is robust to the machine in a way a monotone one is not: an ordering that reverses across the block's own spread -- see held_fixed[].ic3_seconds_spread, which this note deliberately does not restate -- is not noise. Where a block's rungs are separated by less than a millisecond, it is; every timing here is a single sample."
   },
   "cost_of_adjudicability": {
     "rows": [
@@ -553,46 +553,46 @@
         "fastest": "peg6/onehot",
         "fastest_is_adjudicable": false,
         "fastest_abstraction": 1.0,
-        "spread": 16.096
+        "spread": 17.331
       },
       {
         "board": "peg8",
         "fastest": "peg8/onehot",
         "fastest_is_adjudicable": false,
         "fastest_abstraction": 1.0,
-        "spread": 12.524
+        "spread": 12.629
       },
       {
         "board": "peg10",
         "fastest": "peg10/binary",
-        "fastest_is_adjudicable": false,
+        "fastest_is_adjudicable": true,
         "fastest_abstraction": 118.8,
-        "spread": 10.599
+        "spread": 10.192
       },
       {
         "board": "peg12",
         "fastest": "peg12/binary",
-        "fastest_is_adjudicable": false,
+        "fastest_is_adjudicable": true,
         "fastest_abstraction": 397.666667,
-        "spread": 13.048
+        "spread": 13.216
       },
       {
         "board": "t1-tokens-lock",
         "fastest": "t1-tokens-lock/binary",
         "fastest_is_adjudicable": false,
         "fastest_abstraction": 2.34,
-        "spread": 28.596
+        "spread": 30.475
       },
       {
         "board": "t2-cycler-lock",
         "fastest": "t2-cycler-lock/binary",
         "fastest_is_adjudicable": false,
         "fastest_abstraction": 2.0,
-        "spread": 38.073
+        "spread": 37.328
       }
     ],
     "n_boards": 6,
-    "n_boards_where_fastest_is_unreadable": 6,
+    "n_boards_where_fastest_is_unreadable": 4,
     "abstraction_note": "abstraction 1.0 means the invariant admits exactly the reachable states -- the engine computed reachability and returned it as a law. It is sound, it is what the three Lean theorems ask for, and it explains nothing."
   },
   "boundary": null,
@@ -648,10 +648,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.104204,
-        "ic3_seconds": 0.012447,
-        "check_seconds": 7.9e-05,
-        "build_seconds": 0.004473
+        "wall_seconds": 0.099218,
+        "ic3_seconds": 0.01246,
+        "check_seconds": 8.2e-05,
+        "build_seconds": 0.003752
       },
       "derived": {
         "encoding": "binary",
@@ -662,25 +662,32 @@
         "n_reachable": 3,
         "encoding_slack": 0,
         "abstraction": 11.333333,
-        "vocabulary": "state index",
-        "adjudicable": false,
-        "has_native_form": false
+        "vocabulary": "world (renamed)",
+        "adjudicable": true,
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": true
       },
       "recheck": {
-        "status": "n/a \u2014 no native form",
-        "exit_code": null,
-        "ruleset": null,
-        "ruleset_source": null,
-        "certificate": null,
-        "engine_n_states": null,
-        "engine_n_satisfying": null,
-        "recheck_n_states": null,
-        "recheck_n_satisfying": null,
-        "counts_agree": null,
-        "agrees_with_recorded_row": null,
-        "conditions": null,
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg6-011111",
+        "ruleset_source": "recheck/cases/peg6-011111.rules.json",
+        "certificate": "peg6-011111-ic3-invariant",
+        "engine_n_states": 64,
+        "engine_n_satisfying": 34,
+        "recheck_n_states": 64,
+        "recheck_n_satisfying": 34,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
         "finding": false,
-        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "34 of 64 states, counted over 2^6 boolean tuples by the engine and over the product of peg6-011111's declared domains by the rechecker | all three conditions hold over 64 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 4 clause(s), 13 literal(s), 0 tautologies dropped]"
       }
     },
     {
@@ -732,10 +739,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.127977,
-        "ic3_seconds": 0.0348,
+        "wall_seconds": 0.121056,
+        "ic3_seconds": 0.035191,
         "check_seconds": 0.000126,
-        "build_seconds": 0.004145
+        "build_seconds": 0.003702
       },
       "derived": {
         "encoding": "native",
@@ -748,7 +755,8 @@
         "abstraction": 10.0,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -822,10 +830,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.116964,
-        "ic3_seconds": 0.014683,
-        "check_seconds": 8.3e-05,
-        "build_seconds": 0.003888
+        "wall_seconds": 0.103165,
+        "ic3_seconds": 0.015387,
+        "check_seconds": 8.2e-05,
+        "build_seconds": 0.004744
       },
       "derived": {
         "encoding": "dual+3",
@@ -838,7 +846,8 @@
         "abstraction": 11.666667,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -912,10 +921,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.143778,
-        "ic3_seconds": 0.052248,
-        "check_seconds": 0.000217,
-        "build_seconds": 0.003978
+        "wall_seconds": 0.142153,
+        "ic3_seconds": 0.054073,
+        "check_seconds": 0.000125,
+        "build_seconds": 0.003562
       },
       "derived": {
         "encoding": "dual+6",
@@ -928,7 +937,8 @@
         "abstraction": 10.0,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1002,10 +1012,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.097823,
-        "ic3_seconds": 0.003246,
-        "check_seconds": 4.9e-05,
-        "build_seconds": 0.004499
+        "wall_seconds": 0.089387,
+        "ic3_seconds": 0.00312,
+        "check_seconds": 4.3e-05,
+        "build_seconds": 0.004318
       },
       "derived": {
         "encoding": "onehot",
@@ -1018,7 +1028,8 @@
         "abstraction": 1.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no native form",
@@ -1034,7 +1045,7 @@
         "agrees_with_recorded_row": null,
         "conditions": null,
         "finding": false,
-        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "no predicate-for-predicate map from this onehot encoding onto the world's variables exists -- checked against every state, not assumed from the scheme's name -- so the invariant has no form recheck/ can read. Not a pass, and this is the failure shape the item calls 'certificate not recheckable'."
       }
     },
     {
@@ -1086,10 +1097,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.264329,
-        "ic3_seconds": 0.151923,
-        "check_seconds": 0.000456,
-        "build_seconds": 0.011317
+        "wall_seconds": 0.256439,
+        "ic3_seconds": 0.157128,
+        "check_seconds": 0.000396,
+        "build_seconds": 0.010492
       },
       "derived": {
         "encoding": "binary",
@@ -1100,25 +1111,32 @@
         "n_reachable": 4,
         "encoding_slack": 0,
         "abstraction": 36.5,
-        "vocabulary": "state index",
-        "adjudicable": false,
-        "has_native_form": false
+        "vocabulary": "world (renamed)",
+        "adjudicable": true,
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": true
       },
       "recheck": {
-        "status": "n/a \u2014 no native form",
-        "exit_code": null,
-        "ruleset": null,
-        "ruleset_source": null,
-        "certificate": null,
-        "engine_n_states": null,
-        "engine_n_satisfying": null,
-        "recheck_n_states": null,
-        "recheck_n_satisfying": null,
-        "counts_agree": null,
-        "agrees_with_recorded_row": null,
-        "conditions": null,
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg8-01111111",
+        "ruleset_source": "recheck/cases/peg8-01111111.rules.json",
+        "certificate": "peg8-01111111-ic3-invariant",
+        "engine_n_states": 256,
+        "engine_n_satisfying": 146,
+        "recheck_n_states": 256,
+        "recheck_n_satisfying": 146,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
         "finding": false,
-        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "146 of 256 states, counted over 2^8 boolean tuples by the engine and over the product of peg8-01111111's declared domains by the rechecker | all three conditions hold over 256 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 6 clause(s), 24 literal(s), 0 tautologies dropped]"
       }
     },
     {
@@ -1170,10 +1188,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.70072,
-        "ic3_seconds": 0.595301,
-        "check_seconds": 0.000791,
-        "build_seconds": 0.011247
+        "wall_seconds": 0.692565,
+        "ic3_seconds": 0.596159,
+        "check_seconds": 0.000721,
+        "build_seconds": 0.010396
       },
       "derived": {
         "encoding": "native",
@@ -1186,7 +1204,8 @@
         "abstraction": 44.0,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1260,10 +1279,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.198858,
-        "ic3_seconds": 0.100556,
-        "check_seconds": 0.000321,
-        "build_seconds": 0.011481
+        "wall_seconds": 0.200267,
+        "ic3_seconds": 0.099725,
+        "check_seconds": 0.000379,
+        "build_seconds": 0.010877
       },
       "derived": {
         "encoding": "dual+4",
@@ -1276,7 +1295,8 @@
         "abstraction": 35.25,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1350,10 +1370,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 1.072091,
-        "ic3_seconds": 0.96676,
-        "check_seconds": 0.000762,
-        "build_seconds": 0.011328
+        "wall_seconds": 1.077418,
+        "ic3_seconds": 0.97912,
+        "check_seconds": 0.000737,
+        "build_seconds": 0.011953
       },
       "derived": {
         "encoding": "dual+8",
@@ -1366,7 +1386,8 @@
         "abstraction": 44.0,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1440,10 +1461,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.18553,
-        "ic3_seconds": 0.077193,
-        "check_seconds": 0.000177,
-        "build_seconds": 0.014168
+        "wall_seconds": 0.186203,
+        "ic3_seconds": 0.077527,
+        "check_seconds": 0.000157,
+        "build_seconds": 0.014064
       },
       "derived": {
         "encoding": "onehot",
@@ -1456,7 +1477,8 @@
         "abstraction": 1.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no native form",
@@ -1472,7 +1494,7 @@
         "agrees_with_recorded_row": null,
         "conditions": null,
         "finding": false,
-        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "no predicate-for-predicate map from this onehot encoding onto the world's variables exists -- checked against every state, not assumed from the scheme's name -- so the invariant has no form recheck/ can read. Not a pass, and this is the failure shape the item calls 'certificate not recheckable'."
       }
     },
     {
@@ -1524,10 +1546,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 1.60706,
-        "ic3_seconds": 1.442863,
-        "check_seconds": 0.001816,
-        "build_seconds": 0.0662
+        "wall_seconds": 1.66581,
+        "ic3_seconds": 1.506209,
+        "check_seconds": 0.001683,
+        "build_seconds": 0.062527
       },
       "derived": {
         "encoding": "binary",
@@ -1538,25 +1560,32 @@
         "n_reachable": 5,
         "encoding_slack": 0,
         "abstraction": 118.8,
-        "vocabulary": "state index",
-        "adjudicable": false,
-        "has_native_form": false
+        "vocabulary": "world (renamed)",
+        "adjudicable": true,
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": true
       },
       "recheck": {
-        "status": "n/a \u2014 no native form",
-        "exit_code": null,
-        "ruleset": null,
-        "ruleset_source": null,
-        "certificate": null,
-        "engine_n_states": null,
-        "engine_n_satisfying": null,
-        "recheck_n_states": null,
-        "recheck_n_satisfying": null,
-        "counts_agree": null,
-        "agrees_with_recorded_row": null,
-        "conditions": null,
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg10-0111111111",
+        "ruleset_source": "recheck/cases/peg10-0111111111.rules.json",
+        "certificate": "peg10-0111111111-ic3-invariant",
+        "engine_n_states": 1024,
+        "engine_n_satisfying": 594,
+        "recheck_n_states": 1024,
+        "recheck_n_satisfying": 594,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
         "finding": false,
-        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "594 of 1024 states, counted over 2^10 boolean tuples by the engine and over the product of peg10-0111111111's declared domains by the rechecker | all three conditions hold over 1024 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 7 clause(s), 32 literal(s), 0 tautologies dropped]"
       }
     },
     {
@@ -1608,10 +1637,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 9.416306,
-        "ic3_seconds": 9.248183,
-        "check_seconds": 0.005529,
-        "build_seconds": 0.063078
+        "wall_seconds": 9.253802,
+        "ic3_seconds": 9.082025,
+        "check_seconds": 0.005569,
+        "build_seconds": 0.066313
       },
       "derived": {
         "encoding": "native",
@@ -1624,7 +1653,8 @@
         "abstraction": 153.2,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1698,10 +1728,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 2.622338,
-        "ic3_seconds": 2.444598,
-        "check_seconds": 0.003617,
-        "build_seconds": 0.0667
+        "wall_seconds": 2.642298,
+        "ic3_seconds": 2.479081,
+        "check_seconds": 0.002794,
+        "build_seconds": 0.064713
       },
       "derived": {
         "encoding": "dual+5",
@@ -1714,7 +1744,8 @@
         "abstraction": 151.8,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1788,10 +1819,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 15.46561,
-        "ic3_seconds": 15.293034,
-        "check_seconds": 0.005306,
-        "build_seconds": 0.064511
+        "wall_seconds": 15.525903,
+        "ic3_seconds": 15.351723,
+        "check_seconds": 0.00542,
+        "build_seconds": 0.069178
       },
       "derived": {
         "encoding": "dual+10",
@@ -1804,7 +1835,8 @@
         "abstraction": 153.2,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -1878,10 +1910,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 2.390018,
-        "ic3_seconds": 2.098888,
-        "check_seconds": 0.00062,
-        "build_seconds": 0.128687
+        "wall_seconds": 2.370111,
+        "ic3_seconds": 2.080522,
+        "check_seconds": 0.000722,
+        "build_seconds": 0.134411
       },
       "derived": {
         "encoding": "onehot",
@@ -1894,7 +1926,8 @@
         "abstraction": 1.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no native form",
@@ -1910,7 +1943,7 @@
         "agrees_with_recorded_row": null,
         "conditions": null,
         "finding": false,
-        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "no predicate-for-predicate map from this onehot encoding onto the world's variables exists -- checked against every state, not assumed from the scheme's name -- so the invariant has no form recheck/ can read. Not a pass, and this is the failure shape the item calls 'certificate not recheckable'."
       }
     },
     {
@@ -1962,10 +1995,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 14.459812,
-        "ic3_seconds": 13.770932,
-        "check_seconds": 0.009444,
-        "build_seconds": 0.495995
+        "wall_seconds": 14.030923,
+        "ic3_seconds": 13.359297,
+        "check_seconds": 0.009013,
+        "build_seconds": 0.510015
       },
       "derived": {
         "encoding": "binary",
@@ -1976,25 +2009,32 @@
         "n_reachable": 6,
         "encoding_slack": 0,
         "abstraction": 397.666667,
-        "vocabulary": "state index",
-        "adjudicable": false,
-        "has_native_form": false
+        "vocabulary": "world (renamed)",
+        "adjudicable": true,
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": true
       },
       "recheck": {
-        "status": "n/a \u2014 no native form",
-        "exit_code": null,
-        "ruleset": null,
-        "ruleset_source": null,
-        "certificate": null,
-        "engine_n_states": null,
-        "engine_n_satisfying": null,
-        "recheck_n_states": null,
-        "recheck_n_satisfying": null,
-        "counts_agree": null,
-        "agrees_with_recorded_row": null,
-        "conditions": null,
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg12-011111111111",
+        "ruleset_source": "recheck/cases/peg12-011111111111.rules.json",
+        "certificate": "peg12-011111111111-ic3-invariant",
+        "engine_n_states": 4096,
+        "engine_n_satisfying": 2386,
+        "recheck_n_states": 4096,
+        "recheck_n_satisfying": 2386,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
         "finding": false,
-        "detail": "the invariant is written in binary predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "2386 of 4096 states, counted over 2^12 boolean tuples by the engine and over the product of peg12-011111111111's declared domains by the rechecker | all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable [rechecked through the native form: 8 clause(s), 41 literal(s), 0 tautologies dropped]"
       }
     },
     {
@@ -2046,10 +2086,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 107.318056,
-        "ic3_seconds": 106.626842,
-        "check_seconds": 0.033372,
-        "build_seconds": 0.508397
+        "wall_seconds": 105.397402,
+        "ic3_seconds": 104.701473,
+        "check_seconds": 0.034076,
+        "build_seconds": 0.513573
       },
       "derived": {
         "encoding": "native",
@@ -2062,7 +2102,8 @@
         "abstraction": 577.666667,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -2136,10 +2177,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 19.571267,
-        "ic3_seconds": 18.913231,
-        "check_seconds": 0.013042,
-        "build_seconds": 0.497351
+        "wall_seconds": 19.873171,
+        "ic3_seconds": 19.198868,
+        "check_seconds": 0.01364,
+        "build_seconds": 0.506
       },
       "derived": {
         "encoding": "dual+6",
@@ -2152,7 +2193,8 @@
         "abstraction": 510.5,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -2226,10 +2268,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 180.36623,
-        "ic3_seconds": 179.676401,
-        "check_seconds": 0.03495,
-        "build_seconds": 0.499125
+        "wall_seconds": 177.24225,
+        "ic3_seconds": 176.550179,
+        "check_seconds": 0.034484,
+        "build_seconds": 0.505763
       },
       "derived": {
         "encoding": "dual+12",
@@ -2242,7 +2284,8 @@
         "abstraction": 577.666667,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "ACCEPT",
@@ -2316,10 +2359,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 72.684699,
-        "ic3_seconds": 69.874467,
-        "check_seconds": 0.004158,
-        "build_seconds": 1.635556
+        "wall_seconds": 58.840286,
+        "ic3_seconds": 56.245604,
+        "check_seconds": 0.003136,
+        "build_seconds": 1.530834
       },
       "derived": {
         "encoding": "onehot",
@@ -2332,7 +2375,8 @@
         "abstraction": 1.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no native form",
@@ -2348,7 +2392,7 @@
         "agrees_with_recorded_row": null,
         "conditions": null,
         "finding": false,
-        "detail": "the invariant is written in onehot predicates, which name state indices rather than world facts, so it has no form recheck/ can read. Not a pass -- and this is the failure shape the item calls 'certificate not recheckable'."
+        "detail": "no predicate-for-predicate map from this onehot encoding onto the world's variables exists -- checked against every state, not assumed from the scheme's name -- so the invariant has no form recheck/ can read. Not a pass, and this is the failure shape the item calls 'certificate not recheckable'."
       }
     },
     {
@@ -2406,10 +2450,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.403924,
-        "ic3_seconds": 0.021709,
-        "check_seconds": 0.000275,
-        "build_seconds": 0.118066
+        "wall_seconds": 0.122232,
+        "ic3_seconds": 0.020665,
+        "check_seconds": 0.000183,
+        "build_seconds": 0.015331
       },
       "derived": {
         "encoding": "binary",
@@ -2422,7 +2466,8 @@
         "abstraction": 2.34,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2496,10 +2541,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.131157,
-        "ic3_seconds": 0.023141,
-        "check_seconds": 0.000158,
-        "build_seconds": 0.015974
+        "wall_seconds": 0.138891,
+        "ic3_seconds": 0.022352,
+        "check_seconds": 0.000155,
+        "build_seconds": 0.013721
       },
       "derived": {
         "encoding": "native",
@@ -2512,7 +2557,8 @@
         "abstraction": 2.42,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2586,10 +2632,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.731779,
-        "ic3_seconds": 0.62079,
-        "check_seconds": 0.000389,
-        "build_seconds": 0.01579
+        "wall_seconds": 0.734604,
+        "ic3_seconds": 0.629765,
+        "check_seconds": 0.000382,
+        "build_seconds": 0.01907
       },
       "derived": {
         "encoding": "onehot",
@@ -2602,7 +2648,8 @@
         "abstraction": 2.42,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2675,10 +2722,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.274668,
-        "ic3_seconds": 0.01284,
-        "check_seconds": 0.000133,
-        "build_seconds": 0.015493
+        "wall_seconds": 0.132057,
+        "ic3_seconds": 0.012974,
+        "check_seconds": 0.000145,
+        "build_seconds": 0.018521
       },
       "derived": {
         "encoding": "binary",
@@ -2691,7 +2738,8 @@
         "abstraction": 2.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2764,10 +2812,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.125273,
-        "ic3_seconds": 0.015672,
-        "check_seconds": 0.000137,
-        "build_seconds": 0.015582
+        "wall_seconds": 0.116712,
+        "ic3_seconds": 0.014292,
+        "check_seconds": 0.000236,
+        "build_seconds": 0.014005
       },
       "derived": {
         "encoding": "native",
@@ -2780,7 +2828,8 @@
         "abstraction": 2.0,
         "vocabulary": "world",
         "adjudicable": true,
-        "has_native_form": true
+        "has_native_form": true,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2853,10 +2902,10 @@
         "detail": null
       },
       "timing": {
-        "wall_seconds": 0.5973,
-        "ic3_seconds": 0.488862,
-        "check_seconds": 0.000348,
-        "build_seconds": 0.016022
+        "wall_seconds": 0.591125,
+        "ic3_seconds": 0.484297,
+        "check_seconds": 0.000347,
+        "build_seconds": 0.015492
       },
       "derived": {
         "encoding": "onehot",
@@ -2869,7 +2918,8 @@
         "abstraction": 2.0,
         "vocabulary": "state index",
         "adjudicable": false,
-        "has_native_form": false
+        "has_native_form": false,
+        "is_a_renaming_of_the_world": false
       },
       "recheck": {
         "status": "n/a \u2014 no worldgen transcriber",
@@ -2892,8 +2942,8 @@
   "provenance": {
     "prompt_id": "E8-ic3-bounds",
     "branch": "agent/e8-ic3-scale",
-    "base_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
-    "utc": "2026-07-29T10:57:15Z",
+    "base_commit": "df5b4b72a7fd07f775997389d70070ca864defb2",
+    "utc": "2026-07-29T12:07:41Z",
     "command": "python -m ic3bounds.axis_predicates --out runs/20260729T120000Z-E8-ic3-scale --timeout 300",
     "host": {
       "platform": "Windows-11-10.0.26200-SP0",

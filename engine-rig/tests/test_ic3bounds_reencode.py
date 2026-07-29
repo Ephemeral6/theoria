@@ -349,6 +349,60 @@ def test_a_literal_naming_no_predicate_is_refused_rather_than_wrapping():
         recoding.desugar_literal((99, True))
 
 
+# ------------------------------------------- is the vocabulary really foreign?
+
+def test_binary_on_peg_is_the_worlds_own_variables_reversed():
+    """The finding that refuted this package's own `adjudicable` column.
+
+    `peg_system` sorts its states as binary strings, so a state's *index* is its
+    bit string and `b_i` is exactly `pos_(n-1-i)`. Four rungs had been reported
+    as carrying an unreadable certificate on the strength of the scheme's name.
+    """
+    for n in (4, 6, 8):
+        system = _system(n, "0" + "1" * (n - 1), "01" + "0" * (n - 2))
+        recoding = reencode.binary_recoding(system)
+        renaming = reencode.renaming_map(system, recoding)
+        assert renaming is not None
+        assert renaming == tuple((n - 1 - i, True) for i in range(n))
+
+
+def test_onehot_is_genuinely_not_a_renaming():
+    system = _system(*UNSOLVABLE)
+    assert reencode.renaming_map(system, reencode.onehot_recoding(system)) is None
+
+
+def test_binary_on_a_world_that_really_compresses_is_not_a_renaming():
+    """Seven bits cannot rename nineteen variables, and the measurement says so
+    rather than the scheme's name saying it."""
+    from ic3bounds import worldgen_system
+    system = worldgen_system.build_system("t1-tokens-lock")
+    recoding = reencode.binary_recoding(system)
+    assert recoding.n_variables == 7 and len(system.variables) == 19
+    assert reencode.renaming_map(system, recoding) is None
+
+
+def test_a_renamed_certificate_desugars_to_the_same_satisfying_set():
+    """A renaming is still a bijection on states, so the count cannot move."""
+    for n in (4, 6):
+        system = _system(n, "0" + "1" * (n - 1), "01" + "0" * (n - 2))
+        recoding = reencode.binary_recoding(system)
+        recoded = reencode.reencode(system, recoding)
+        renaming = reencode.renaming_map(system, recoding)
+        verdict = pdr.ic3(recoded, max_levels=64)
+        native = reencode.desugar(recoding, verdict.clauses, renaming=renaming)
+        assert ic3_check.verify(system, native.clauses).n_satisfying == \
+               ic3_check.verify(recoded, verdict.clauses).n_satisfying
+
+
+def test_desugar_still_refuses_a_scheme_with_no_renaming():
+    system = _system(*UNSOLVABLE)
+    recoding = reencode.onehot_recoding(system)
+    recoded = reencode.reencode(system, recoding)
+    verdict = pdr.ic3(recoded, max_levels=64)
+    with pytest.raises(reencode.RecodingError, match="no native form"):
+        reencode.desugar(recoding, verdict.clauses, renaming=None)
+
+
 def test_a_recoding_is_hashable_and_serialisable():
     """It is a frozen dataclass with a derived lookup table hidden inside it,
     which is the kind of thing that silently stops being hashable."""

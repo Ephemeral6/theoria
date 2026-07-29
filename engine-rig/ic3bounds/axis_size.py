@@ -7,7 +7,7 @@ point.  This module walks the same family up in board size, keeping the shape of
 the question fixed and changing only |S| = 2^n, so that the numbers either trace a
 line or show where the line stops.
 
-    n = 4, 6, 8, 10, 12, 13, 14        |S| = 16 ... 16384
+    n = 4 ... 14                       |S| = 16 ... 16384
     start = "0" + "1"*(n-1)            the M9 configuration, widened
     goal  = "01" + "0"*(n-2)           a single final state, the M9 goal, widened
 
@@ -20,11 +20,25 @@ then reported the drift as a size effect.  So the goal is always passed
 explicitly, and `check_anchor()` refuses the whole run if the n=4 row does not
 render the M9 CNF character for character.  It raises; it does not warn.
 
-**Cost.**  Measured on the machine this was built on, IC3 here runs at roughly
-|S|^1.9 -- 0.001s at n=4, 0.6s at n=8, 100s at n=12.  `max_levels=64` never binds
-on this family (the deepest convergence seen is frame 12), so the only thing that
-can stop a rung is the wall-clock budget, which is what makes the top of this
-ladder a real boundary rather than an artefact of a knob.
+**Cost.**  Measured on the machine this was built on, log-log regression over
+the answered rungs gives roughly |S|^2.0 -- 0.0005s at n=4, 0.6s at n=8, 100s at
+n=12.  (An earlier note here said 1.9 and "deepest convergence frame 12"; both
+were stale against this module's own artefact, which reaches frame 20 at n=13.
+The 1.9 also came from an all-even ladder, and parity turns out to matter on
+this family -- odd n gives a systematically more vacuous invariant at the same
+|S| -- so the exponent was fitted through a confound.)
+
+`max_levels=64` does not bind on any rung that *answered*: the deepest
+convergence seen is frame 20.  It cannot be said not to bind on a rung that was
+killed, because a killed child reports no frame, and this module no longer says
+otherwise.  What can be said is that frames grow with n (12 at n=12, 14 at n=11,
+20 at n=13), so a cap is a thing the top of this ladder is walking towards
+rather than a thing it is known to have avoided.
+
+**Parity.**  The ladder is walked densely rather than in even steps.  The
+original was `4, 6, 8, 10, 12, 13, 14` -- all even but for one rung -- and that
+hid the fact that odd boards are more vacuous: the near-vacuity flag first fires
+at n=11, which the even ladder skipped, not at n=13 where it was first seen.
 
 **The recheck column.**  E8 asks, per step, whether an *independent* checker's
 recheck passes -- so every rung carries a `recheck` dict beside its
@@ -60,7 +74,11 @@ from ic3bounds.harness import AnchorDrift, StepSpec
 AXIS = "size"
 FAMILY = "peg-1d"
 
-LADDER = (4, 6, 8, 10, 12, 13, 14)
+# Dense, not every-other.  The original all-even ladder plus one odd rung put
+# board parity and board size in the same column: odd boards give a more vacuous
+# invariant at the same |S|, so the even ladder reported the near-vacuity onset
+# two rungs late and fitted a cost exponent through the confound.
+LADDER = (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
 DEFAULT_TIMEOUT_SECONDS = 300.0
 
 ANCHOR_N = 4
@@ -148,6 +166,72 @@ def boundary_of(steps: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
             "detail": step["deterministic"]["detail"],
         }
     return None
+
+
+def vacuity(steps: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    """Where the answers stop being worth having, which is not where they stop.
+
+    `boundary_of` asks only whether a rung produced a verdict, so a rung whose
+    invariant admits 95% of the state space counts exactly as answered as the
+    M9 anchor, which admits half.  `near_vacuous` was being computed on every
+    row and consumed by nothing -- an adversarial pass found it, and this is the
+    consumer.
+
+    `states_excluded` is here because the ratio alone understates it.  On this
+    family the n=13 invariant excludes *fewer states in absolute terms* than the
+    n=12 one, from a state space twice the size: the answer did not merely
+    become relatively weaker, it became weaker.
+    """
+    rows = []
+    for step in steps:
+        det = step["deterministic"]
+        excluded = (None if det.get("n_satisfying") is None
+                    else det["n_states"] - det["n_satisfying"])
+        rows.append({
+            "n": step["spec"]["n"],
+            "n_states": det["n_states"],
+            "coverage_ratio": det.get("coverage_ratio"),
+            "near_vacuous": det.get("near_vacuous"),
+            "states_excluded": excluded,
+            "literal_saturation": det.get("literal_saturation"),
+        })
+    flagged = [row for row in rows if row["near_vacuous"]]
+    clean = [row for row in rows if row["near_vacuous"] is False]
+
+    def rising(subset: Sequence[Dict[str, Any]]) -> Optional[bool]:
+        values = [row["literal_saturation"] for row in subset
+                  if row["literal_saturation"] is not None]
+        if len(values) < 2:
+            return None
+        return all(a <= b for a, b in zip(values, values[1:]))
+
+    return {
+        "threshold": harness.NEAR_VACUOUS_RATIO,
+        "rows": rows,
+        "first_near_vacuous": flagged[0] if flagged else None,
+        "largest_non_vacuous": clean[-1] if clean else None,
+        "read_it_as": "the boundary a reader who wants an ADJUDICABLE invariant "
+                      "should use. `boundary` above is the boundary for a reader "
+                      "who wants any verdict at all, and on this family the two "
+                      "are not the same rung.",
+        "saturation": {
+            "what": "literal_saturation climbing toward 1.0 is IC3 degrading "
+                    "into state enumeration (see harness.py).",
+            # Computed, not asserted. An earlier version of this block stated
+            # flatly that saturation is monotone across the ladder, which was
+            # true of the every-other ladder it was written against and false
+            # of the contiguous one: the sequence splits by board parity, and
+            # asserting a trend the rows can be checked against is exactly the
+            # kind of sentence this package keeps catching itself in.
+            "monotone_overall": rising(rows),
+            "monotone_on_even_boards": rising([r for r in rows if r["n"] % 2 == 0]),
+            "monotone_on_odd_boards": rising([r for r in rows if r["n"] % 2 == 1]),
+            "parity_note": "odd boards sit systematically above even ones. That "
+                           "is the same parity effect that made the original "
+                           "every-other ladder report the near-vacuity onset "
+                           "two rungs late.",
+        },
+    }
 
 
 def escalations(steps: Sequence[Dict[str, Any]]) -> List[str]:
@@ -281,6 +365,7 @@ def report(steps: Sequence[Dict[str, Any]], timeout_seconds: float,
                                     "character for character before it is used.",
         },
         "recheck_findings": recheck_column.findings(steps),
+        "vacuity": vacuity(steps),
         "boundary": boundary_of(steps),
         "escalations": escalations(steps),
         "steps": list(steps),
@@ -337,10 +422,15 @@ def run(ns: Sequence[int] = LADDER,
 def markdown(payload: Dict[str, Any]) -> str:
     """The table, computed from nothing the JSON does not already carry."""
     lines = [
+        # `vacuous?` is in the table because it was being computed on every row
+        # and published on none: the n=13 row carries near_vacuous=true and a
+        # reader of the rendered table could not see it, which is how a rung
+        # that excludes five per cent of the space reads the same as one that
+        # excludes half.
         "| n | \\|S\\| | verdict | clauses | literals | widest | saturation | "
-        "frame | blocked | lit dropped | cls dropped | coverage | wall (s) | "
-        "recheck | recheck=engine |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "frame | blocked | lit dropped | cls dropped | coverage | vacuous? | "
+        "wall (s) | recheck | recheck=engine |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for step in payload["steps"]:
         det = step["deterministic"]
@@ -361,7 +451,7 @@ def markdown(payload: Dict[str, Any]) -> str:
 
         lines.append(
             "| %d | %d | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | "
-            "%s | %s |"
+            "%s | %s | %s |"
             % (
                 step["spec"]["n"], det["n_states"], det["verdict"],
                 cell(det["n_clauses"]), cell(det["n_literals"]),
@@ -369,6 +459,8 @@ def markdown(payload: Dict[str, Any]) -> str:
                 cell(det["converged_at_frame"]), cell(det["states_blocked"]),
                 cell(det["literals_dropped"]), cell(det["clauses_dropped"]),
                 cell(det["coverage"]),
+                "-" if det["near_vacuous"] is None
+                else ("**yes**" if det["near_vacuous"] else "no"),
                 "-" if wall is None else "%.3f" % wall,
                 cell(column.get("status")), counts,
             )
