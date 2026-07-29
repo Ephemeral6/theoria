@@ -1,0 +1,42 @@
+{
+  "killed": 28,
+  "killed_only_by_controls": [],
+  "killed_only_by_suite": [
+    "M06-unknown-status-defaults-to-infeasible",
+    "M14-outcome-hardcodes-the-default-bound",
+    "M17-downgraded-word-contains-global",
+    "M20-error-text-stops-naming-the-budget",
+    "M28-artifact-hardcodes-the-infeasible-code",
+    "M30-success-status-disagreement-ignored",
+    "M31-disagreement-guard-only-one-way"
+  ],
+  "killed_only_by_the_older_c11_file": [
+    "M02-solve_certificate-collapses-to-none"
+  ],
+  "mutants": 31,
+  "not_applied": 0,
+  "not_applied_ids": [],
+  "survived": 3,
+  "survivors": [
+    {
+      "id": "M27-budget-meaning-reads-as-a-verdict",
+      "note": "the prose a human reads contradicts the status word beside it"
+    },
+    {
+      "id": "M29-cell-local-word-renamed",
+      "note": "the other scope word changes under consumers that filter on it"
+    },
+    {
+      "id": "M25-degradation-keys-gated-on-the-run-not-the-label",
+      "note": "cell-local rows in a truncated run also carry the degradation -- the design alternative, expected to survive"
+    }
+  ],
+  "tree": {
+    "dirty_paths": [],
+    "engines_tools_tests_dirty": false,
+    "head": "af884509a7067a5419b851dbed814b56ff685fcb",
+    "head_subject": "E15: fixes the adversarial review required, in the instrument and in the payload",
+    "note": "if `head` is not the commit you are reviewing, or `engines_tools_tests_dirty` is true, these counts describe a different tree than the one you are about to merge"
+  },
+  "wall_seconds": 188.7
+}
