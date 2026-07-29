@@ -1,0 +1,5 @@
+# make_blind builds the V9 attacker trees here on demand.  The tree is
+# reproducible from BLIND_REF and pinned by audit/v9/BLIND_DIGESTS.json, so the
+# bytes do not belong in the repo -- BLINDING.md §1 records that the attackers'
+# copies lived outside it in the first place.
+audit/v9/v9-blind/
