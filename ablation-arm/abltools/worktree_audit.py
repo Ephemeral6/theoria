@@ -147,21 +147,53 @@ def reachable_blobs(repo: str) -> set[str]:
     return {line.split(" ", 1)[0] for line in out.splitlines() if line}
 
 
+def upstream_tree(repo: str) -> dict[str, str]:
+    """path -> blob sha for every file on UPSTREAM.
+
+    Lets the census tell "these bytes are in history" from "this FILE is in
+    history at this path". The two are not the same claim, and only the second
+    one licenses "safe to remove".
+    """
+    out = git("ls-tree", "-r", "--format=%(objectname) %(path)", UPSTREAM, cwd=repo)
+    tree: dict[str, str] = {}
+    for line in out.splitlines():
+        sha, _, path = line.partition(" ")
+        if path:
+            tree[path.strip()] = sha.strip()
+    return tree
+
+
 def blob_hashes(worktree: str, paths: list[str]) -> dict[str, str | None]:
-    """git blob hash for each path, computed BY GIT inside the worktree.
+    """git blob hash for each path, computed BY GIT, keyed by the path as given.
 
     Not hashlib. `core.autocrlf=true` is set repo-wide, so a working file holding
     CRLF corresponds to an LF blob; hashing the bytes on disk would disagree with
     every blob in history and report all of them as unique. `hash-object` applies
     the same filters git would, which is the only way the comparison means
     anything.
+
+    The paths are made ABSOLUTE before being handed to git, and that is not
+    tidiness. `hash-object --stdin-paths` resolves a relative path against the
+    repository's top-level, NOT against the process cwd. For a registered
+    worktree those coincide, so the bug is invisible there. For a directory like
+    `.worktrees/_c1w_salvage` -- inside the repo but not a worktree of it -- the
+    top-level is the MAIN checkout, so every relative path silently addressed a
+    different file. The census duly hashed the main checkout's 164 files, found
+    all of them in history, and reported a salvage directory of unreviewed
+    pre-commit work as safe to delete. A tool that exists to prevent one
+    irreversible mistake was manufacturing the evidence for it.
     """
     if not paths:
         return {}
+    absolute = [os.path.join(worktree, p.replace("/", os.sep)) for p in paths]
+    # The invariant, asserted rather than hoped for: an absolute path has no
+    # resolution ambiguity, so whatever git returns is the file we meant. Every
+    # incarnation of this bug began with a relative path getting in here.
+    assert all(os.path.isabs(a) for a in absolute), "blob_hashes requires absolute paths"
     proc = subprocess.run(
         ["git", "--no-optional-locks", "hash-object", "--stdin-paths"],
         cwd=worktree,
-        input="\n".join(paths) + "\n",
+        input="\n".join(absolute) + "\n",
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -169,40 +201,142 @@ def blob_hashes(worktree: str, paths: list[str]) -> dict[str, str | None]:
     )
     lines = [ln.strip() for ln in proc.stdout.splitlines() if ln.strip()]
     if len(lines) == len(paths):
-        return dict(zip(paths, lines))
-    # A path git refuses (vanished mid-scan, unreadable) desynchronises the
-    # batch, so fall back to one call per path rather than mis-pairing hashes.
+        # Spot-check a SPREAD of paths against the single-path form. A batch that
+        # addressed the wrong files still returns the right NUMBER of perfectly
+        # valid hashes, so counting lines proves nothing. One sample proves
+        # almost nothing either: the first path in `_c1w_salvage` is a file that
+        # happens to be identical in both locations, so a single-sample check sat
+        # there agreeing with a batch that had mis-addressed all 164 entries.
+        idx = sorted({0, len(paths) // 4, len(paths) // 2, 3 * len(paths) // 4, len(paths) - 1})
+        for i in idx:
+            probe = subprocess.run(
+                ["git", "--no-optional-locks", "hash-object", "--", absolute[i]],
+                cwd=worktree, capture_output=True, text=True, encoding="utf-8", errors="replace",
+            ).stdout.strip()
+            if probe and probe != lines[i]:
+                print(
+                    f"WARNING: batch hash for {paths[i]} in {worktree} disagreed with the "
+                    f"single-path form ({lines[i]} vs {probe}); falling back to per-path hashing",
+                    file=sys.stderr,
+                )
+                break
+        else:
+            return dict(zip(paths, lines))
+    # A path git refuses (vanished mid-scan, unreadable, a directory symlink)
+    # desynchronises the batch, so fall back to one call per path rather than
+    # mis-pairing hashes -- a mis-pairing here reads as "somebody else's content
+    # is already in git", which is the false-safe this whole function guards.
     out: dict[str, str | None] = {}
-    for p in paths:
+    for p, ap in zip(paths, absolute):
         one = subprocess.run(
-            ["git", "--no-optional-locks", "hash-object", "--", p],
+            ["git", "--no-optional-locks", "hash-object", "--", ap],
             cwd=worktree, capture_output=True, text=True, encoding="utf-8", errors="replace",
         )
         out[p] = one.stdout.strip() if one.returncode == 0 and one.stdout.strip() else None
     return out
 
 
+def self_check(repo: str) -> list[str]:
+    """Prove the hasher addresses the file it was asked about, before trusting it.
+
+    The failure this catches is silent by nature: a wrong path resolution returns
+    a perfectly valid hash of the wrong file, and a valid hash of a tracked file
+    is always found in history. There is no error to notice -- the census just
+    quietly reports "preserved" for everything. So the check is not "did git
+    succeed" but "did git hash the bytes I have in my hand".
+    """
+    problems: list[str] = []
+
+    # The probe has to be a directory INSIDE the repo that is not a worktree of
+    # it, because that is the only place where "relative to cwd" and "relative
+    # to top-level" name different files. Any run directory will do: the paths
+    # under it do not exist at the top level, so a batch that resolved against
+    # the top level cannot silently return plausible hashes for them.
+    me = os.path.abspath(__file__)
+    base = os.path.dirname(os.path.dirname(me))  # the arm root
+    rel = os.path.relpath(me, base).replace(os.sep, "/")
+
+    got = blob_hashes(base, [rel]).get(rel)
+    direct = subprocess.run(
+        ["git", "--no-optional-locks", "hash-object", "--", me],
+        cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace",
+    ).stdout.strip()
+    if not got or got != direct:
+        problems.append(
+            f"blob_hashes() disagrees with `git hash-object` on this very file "
+            f"({got} vs {direct}); path resolution is wrong and every "
+            f"'preserved' verdict in this run is untrustworthy"
+        )
+
+    # And the sharper case: a directory inside the repo whose relative paths
+    # ALSO exist at the top level, where a mis-resolved batch returns valid
+    # hashes of the wrong files and nothing errors. Reproduced against the repo
+    # root itself -- `ablation-arm/STATUS.md` resolves from either place, so if
+    # the two forms ever disagree the resolution rule has changed under us.
+    arm_rel = os.path.relpath(os.path.join(base, "STATUS.md"), repo).replace(os.sep, "/")
+    if os.path.isfile(os.path.join(repo, arm_rel)):
+        via_batch = blob_hashes(repo, [arm_rel]).get(arm_rel)
+        via_direct = subprocess.run(
+            ["git", "--no-optional-locks", "hash-object", "--", os.path.join(repo, arm_rel)],
+            cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace",
+        ).stdout.strip()
+        if not via_batch or via_batch != via_direct:
+            problems.append(
+                f"blob_hashes() and `git hash-object` disagree on {arm_rel} "
+                f"({via_batch} vs {via_direct})"
+            )
+    return problems
+
+
 def classify_status(porcelain: str) -> dict:
-    """Split `git status --porcelain` into the three things that decide risk:
-    staged/modified tracked files, and untracked files."""
+    """Split `git status --porcelain -z` into the things that decide risk.
+
+    Reads the NUL-delimited form on purpose. The default output C-quotes any
+    path containing a non-ASCII byte -- `"C\\357\\200\\272Users…"` -- and an
+    earlier version of this function merely stripped the surrounding quotes,
+    leaving an escaped string that names no file on disk. `hash-object` then
+    failed on it and the census filed it as "git could not hash this". In a
+    repository where agents write Chinese in filenames, that quietly exempted
+    every non-ASCII name from the uniqueness test while reporting a git
+    limitation that does not exist. `-z` emits raw bytes and never quotes.
+
+    Deletions are separated out rather than counted as modifications. A path
+    staged or seen as deleted is not on disk, so there is nothing to hash and
+    nothing to lose by removing the directory; counting it as risk produced
+    AT-RISK verdicts backed entirely by files that were already gone.
+    """
     modified: list[str] = []
     untracked: list[str] = []
-    for line in porcelain.splitlines():
-        if len(line) < 3:
+    deleted: list[str] = []
+
+    fields = porcelain.split("\0")
+    i = 0
+    while i < len(fields):
+        entry = fields[i]
+        i += 1
+        if len(entry) < 4:
             continue
-        code, path = line[:2], line[3:]
-        # Rename entries read `R  old -> new`; the new path is the one on disk.
-        if " -> " in path:
-            path = path.split(" -> ", 1)[1]
-        path = path.strip('"')
+        code, path = entry[:2], entry[3:]
+        # Under -z a rename emits the new path in this record and the old path
+        # as the NEXT NUL-separated field. Consume it so it is not misread as a
+        # status entry of its own.
+        if code[0] in ("R", "C"):
+            i += 1
         if code == "??":
             untracked.append(path)
+        elif "D" in code:
+            deleted.append(path)
         else:
             modified.append(path)
-    return {"modified": sorted(modified), "untracked": sorted(untracked)}
+    return {
+        "modified": sorted(modified),
+        "untracked": sorted(untracked),
+        "deleted": sorted(deleted),
+    }
 
 
-def audit_one(repo: str, wt: dict, blobs: set[str], self_path: str | None = None) -> dict:
+def audit_one(repo: str, wt: dict, blobs: set[str], self_path: str | None = None,
+              upstream_paths: dict[str, str] | None = None) -> dict:
     path = wt["path"]
     rel = os.path.relpath(path, repo).replace("\\", "/")
     inside = not rel.startswith("..")
@@ -268,7 +402,8 @@ def audit_one(repo: str, wt: dict, blobs: set[str], self_path: str | None = None
         # -uall: an untracked DIRECTORY is reported as a single `dir/` entry by
         # default, which cannot be hashed and would hide however many files are
         # under it. Expanding to files is what makes the uniqueness test total.
-        porcelain = git("status", "--porcelain", "-uall", cwd=path)
+        # -z: raw paths, no C-quoting -- see classify_status.
+        porcelain = git("status", "--porcelain", "-uall", "-z", cwd=path)
     except RuntimeError as exc:
         rec["errors"].append(f"status failed: {exc}")
         rec["disposition"] = "UNKNOWN"
@@ -278,21 +413,36 @@ def audit_one(repo: str, wt: dict, blobs: set[str], self_path: str | None = None
     st = classify_status(porcelain)
     rec["modified_count"] = len(st["modified"])
     rec["untracked_count"] = len(st["untracked"])
+    rec["deleted_count"] = len(st["deleted"])
 
     # The load-bearing step: is any of this content actually only here?
     dirty = st["modified"] + st["untracked"]
     hashes = blob_hashes(path, dirty)
     unique: list[str] = []
     preserved: list[str] = []
+    elsewhere: list[str] = []
     unhashable: list[str] = []
     for p in dirty:
         h = hashes.get(p)
         if h is None:
             unhashable.append(p)
         elif h in blobs:
-            preserved.append(p)
+            # Reachable -- but at THIS path? Blob membership says the bytes
+            # survive, not that the file does. `e11-engine-crosscheck-deep`
+            # holds four SURVEY documents whose bytes exist on a ref only
+            # because a paper copied them verbatim into its own inputs
+            # directory; the run directory that CLAUDE.md's provenance rule
+            # requires exists on no ref at all. "The bytes are somewhere" is a
+            # weaker claim than "safe to remove", and the report should not
+            # print the stronger one.
+            if upstream_paths is not None and upstream_paths.get(p) != h:
+                elsewhere.append(p)
+            else:
+                preserved.append(p)
         else:
             unique.append(p)
+    rec["preserved_elsewhere"] = sorted(elsewhere)
+    rec["preserved_elsewhere_count"] = len(elsewhere)
     # Not truncated. An earlier cut of this capped the list at 60 before the
     # churn split ran, which quietly turned "140 unique paths" into "60 authored"
     # -- an undercount of exactly the number the report exists to state. The JSON
@@ -392,11 +542,20 @@ def decide(rec: dict) -> dict:
                    f"this checkout is the only place that history exists",
         }
 
+    elsewhere = rec.get("preserved_elsewhere_count", 0)
+    if elsewhere:
+        return {
+            "disposition": "RECOVERABLE",
+            "why": f"{elsewhere} path(s) whose bytes are reachable from a ref but NOT at this "
+                   f"path on {UPSTREAM} -- the content survives only as some other file, so the "
+                   f"run directory itself would be lost; check before removing"
+                   + (f"; a further {preserved} path(s) match {UPSTREAM} exactly" if preserved else ""),
+        }
     if preserved:
         return {
             "disposition": "RECLAIMABLE",
             "why": f"merged into {UPSTREAM}; {preserved} dirty path(s), but every one of them "
-                   f"holds content already reachable from a ref",
+                   f"holds content already reachable from a ref at the same path",
         }
     return {
         "disposition": "RECLAIMABLE",
@@ -422,7 +581,16 @@ UBIQUITY_THRESHOLD = 3
 # not one file a script rewrote five times, and the ubiquity heuristic cannot
 # tell those apart. Losing a paragraph is exactly the loss this census exists to
 # prevent, so the heuristic yields to the contract.
-NEVER_CHURN = ("PARTNER_SYNC.md",)
+#
+# `monitor/bus/*/out.jsonl` is the same shape and was missed on the first pass,
+# which is why it is written down rather than left to judgement. It sat at
+# frequency exactly 3 -- the threshold -- and was duly demoted, printing three
+# worktrees under "every one of these is safe to remove" while each held one
+# unpublished agent bus message present in no commit on any ref. An adversarial
+# review found it. The lesson generalises: an append-only stream dirty in N
+# worktrees means N different appends, and ubiquity cannot distinguish that from
+# churn. If another append-only stream appears, it belongs here too.
+NEVER_CHURN = ("PARTNER_SYNC.md", "/out.jsonl")
 
 
 def annotate_churn(records: list[dict]) -> dict:
@@ -473,7 +641,19 @@ def annotate_churn(records: list[dict]) -> dict:
         r["unique_authored_count"] = len(authored)
         r["unique_churn_count"] = len(noise)
         if r.get("disposition") == "AT-RISK" and not authored and not r.get("unhashable_count"):
-            if r.get("commits_ahead") and not r.get("on_remote"):
+            # `commits_ahead` is None when `rev-list --count` could not run --
+            # an unresolvable HEAD, a worktree that moved mid-scan. None is
+            # falsy, so an earlier version of this guard let such a record fall
+            # through and be relabelled "merged into origin/master; nothing on
+            # disk that git does not already have" for a worktree that was
+            # neither merged nor pushed. The unknown case must keep the
+            # pessimistic verdict, not inherit the optimistic one.
+            if r.get("commits_ahead") is None and not r.get("merged"):
+                r["why"] = (
+                    "could not count commits ahead of "
+                    f"{UPSTREAM} and this is on no remote -- unverifiable, treat as only copy"
+                )
+            elif r.get("commits_ahead") and not r.get("on_remote"):
                 pass  # still at risk for its commits, leave the verdict alone
             elif not r.get("registered", True):
                 r["disposition"] = "RECLAIMABLE"
@@ -606,7 +786,15 @@ def main(argv: list[str] | None = None) -> int:
     repo = str(common.parent)
 
     upstream_head = git("rev-parse", UPSTREAM, cwd=repo).strip()
+
+    problems = self_check(repo)
+    if problems:
+        for p in problems:
+            print(f"SELF-CHECK FAILED: {p}", file=sys.stderr)
+        return 2
+
     blobs = reachable_blobs(repo)
+    upstream_paths = upstream_tree(repo)
     self_path = str(Path(__file__).resolve().parent.parent.parent)
 
     wts = enumerate_worktrees(repo)
@@ -614,7 +802,7 @@ def main(argv: list[str] | None = None) -> int:
     for i, wt in enumerate(wts, 1):
         if not args.quiet:
             print(f"[{i}/{len(wts)}] {wt['path']}", file=sys.stderr)
-        records.append(audit_one(repo, wt, blobs, self_path))
+        records.append(audit_one(repo, wt, blobs, self_path, upstream_paths))
 
     churn = annotate_churn(records)
     records.sort(
