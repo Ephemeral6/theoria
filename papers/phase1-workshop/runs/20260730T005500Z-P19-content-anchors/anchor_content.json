@@ -1,0 +1,199 @@
+[
+  {
+    "citation": "theory-compiler/src/theory_compiler/generators/gen_lean.py:722-724",
+    "section": "04_a1.md",
+    "section_line": 128,
+    "n_quotes": 4,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " (02:47) and the discharge at ",
+      " on every reachable state, ",
+      " function with an "
+    ]
+  },
+  {
+    "citation": "cold-start-a2/a2pipeline/probe.py:59",
+    "section": "05_a2.md",
+    "section_line": 204,
+    "n_quotes": 3,
+    "verdict": "HIT",
+    "matched": "from a2world import a2_world"
+  },
+  {
+    "citation": "locate.py:36",
+    "section": "05_a2.md",
+    "section_line": 205,
+    "n_quotes": 3,
+    "verdict": "HIT",
+    "matched": "a2world.ground_truth"
+  },
+  {
+    "citation": "SURVEY-solver-status.md:7-11",
+    "section": "10_adjudication.md",
+    "section_line": 44,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-environment-as-semantics.md:6-7",
+    "section": "10_adjudication.md",
+    "section_line": 48,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-success-as-truth.md:32-33",
+    "section": "10_adjudication.md",
+    "section_line": 52,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-solver-status.md:16",
+    "section": "10_adjudication.md",
+    "section_line": 58,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " plus 11 backticked paths in the prose at "
+    ]
+  },
+  {
+    "citation": "SURVEY-environment-as-semantics.md:12",
+    "section": "10_adjudication.md",
+    "section_line": 62,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " plus 11 backticked paths in the prose at "
+    ]
+  },
+  {
+    "citation": "SURVEY-empty-as-negative.md:87-92",
+    "section": "10_adjudication.md",
+    "section_line": 65,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " plus 11 backticked paths in the prose at "
+    ]
+  },
+  {
+    "citation": "monitor/inbox/archive/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md:168-169",
+    "section": "10_adjudication.md",
+    "section_line": 72,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md:100",
+    "section": "10_adjudication.md",
+    "section_line": 74,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "engine-rig/engines/lp_potential/potential.py:170-171",
+    "section": "10_adjudication.md",
+    "section_line": 78,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " and unsafe at "
+    ]
+  },
+  {
+    "citation": "SURVEY-solver-status.md:308",
+    "section": "10_adjudication.md",
+    "section_line": 79,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " and unsafe at "
+    ]
+  },
+  {
+    "citation": "SURVEY-environment-as-semantics.md:77",
+    "section": "10_adjudication.md",
+    "section_line": 80,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " and unsafe at "
+    ]
+  },
+  {
+    "citation": "engine-rig/engines/probe_frontier/reach.py:94-99",
+    "section": "10_adjudication.md",
+    "section_line": 81,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " and unsafe at "
+    ]
+  },
+  {
+    "citation": "engine-rig/engines/cegis_miner/miner.py:323",
+    "section": "10_adjudication.md",
+    "section_line": 83,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      " and unsafe at "
+    ]
+  },
+  {
+    "citation": "SURVEY-environment-as-semantics.md:37-64",
+    "section": "10_adjudication.md",
+    "section_line": 179,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-solver-status.md:274-376",
+    "section": "10_adjudication.md",
+    "section_line": 193,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-environment-as-semantics.md:138-230",
+    "section": "10_adjudication.md",
+    "section_line": 195,
+    "n_quotes": 0,
+    "verdict": "NOQUOTE"
+  },
+  {
+    "citation": "SURVEY-success-as-truth.md:43-79",
+    "section": "10_adjudication.md",
+    "section_line": 197,
+    "n_quotes": 1,
+    "verdict": "MISS",
+    "quotes_tried": [
+      "zero_space.verify"
+    ]
+  },
+  {
+    "citation": "SURVEY-empty-as-negative.md:30-58",
+    "section": "10_adjudication.md",
+    "section_line": 203,
+    "n_quotes": 4,
+    "verdict": "MISS",
+    "quotes_tried": [
+      "zero_space.verify",
+      "\"proved_unsolvable\": False",
+      "\"error\": \"over budget: …\""
+    ]
+  },
+  {
+    "citation": "cold-start-a0/pipeline/plan_stage.py:59",
+    "section": "11_limitations.md",
+    "section_line": 181,
+    "n_quotes": 2,
+    "verdict": "MISS",
+    "quotes_tried": [
+      "prime.run_prime",
+      "solve(..., prefer=\"stub\")"
+    ]
+  }
+]
