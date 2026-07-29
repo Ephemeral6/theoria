@@ -163,12 +163,27 @@ def test_a_deleted_append_only_file_is_a_risk(monkeypatch):
 
 
 def test_all_files_present_still_reads_green():
-    """NEGATIVE CONTROL against the live repo, where all four exist."""
+    """NEGATIVE CONTROL against the live repo, where all four exist.
+
+    ADV-1/D10: this used to accept `("green", "risk")` and guard the wording
+    assertion behind `if r["status"] == "green"`. `risk` is the **exact** status
+    the fix introduces for an absent watched file, so on any checkout missing one
+    of the four this "negative control" passed without evaluating a single
+    assertion -- it could not fail in the state its positive twin constructs. It
+    only worked because this checkout happens to be complete.
+
+    Now it says what it needs and fails if that is untrue. A missing watched file
+    here is real information, not noise to be tolerated: these are the
+    append-only files whose whole point is that nobody can quietly delete from
+    them.
+    """
     r = scan.probe_append_only()
 
-    assert r["status"] in ("green", "risk")
-    if r["status"] == "green":
-        assert "4/4" in r["detail"]
+    assert r["status"] == "green", (
+        "probe_append_only is %s on a checkout that should be clean: %s"
+        % (r["status"], r["detail"]))
+    assert "4/4" in r["detail"], (
+        "the detail must state checked/total, got %r" % r["detail"])
 
 
 # ---------------------------------------------------------------- finding 8
