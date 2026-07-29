@@ -1,0 +1,67 @@
+{
+  "disagreements": [],
+  "named_world": {
+    "census_seed": 17475932563032345095,
+    "census_weights": [
+      "12",
+      "9",
+      "3",
+      "7",
+      "-1",
+      "11",
+      "10",
+      "-4"
+    ],
+    "e11_seed": 17475932563032345095,
+    "e11_weights": [
+      "12",
+      "9",
+      "3",
+      "7",
+      "-1",
+      "11",
+      "10",
+      "-4"
+    ],
+    "exact_recheck": {
+      "goal_break": true,
+      "goal_gaps": [
+        "1",
+        "13"
+      ],
+      "holds": true,
+      "initial_potential": "9",
+      "inv_closed": true
+    },
+    "index": 2302,
+    "seed_matches_e11": true,
+    "weights_match_e11": true
+  },
+  "rows_agreeing": 639,
+  "rows_compared": 639,
+  "rows_disagreeing": 0,
+  "rule": "on any disagreement E11's hand derivation is authoritative; the census keeps its own number and the divergence is reported",
+  "totals_agree": true,
+  "totals_census": {
+    "certificate_errors": 0,
+    "certificate_issued": 1550,
+    "feasible_when_widened": 1,
+    "goal_truly_unreachable": 2189,
+    "no_certificate": 1450,
+    "silent_and_truly_unreachable": 639,
+    "status_2_at_bound_10": 639,
+    "still_infeasible_when_widened": 638,
+    "worlds": 3000
+  },
+  "totals_e11": {
+    "certificate_errors": 0,
+    "certificate_issued": 1550,
+    "feasible_when_widened": 1,
+    "goal_truly_unreachable": 2189,
+    "no_certificate": 1450,
+    "silent_and_truly_unreachable": 639,
+    "status_2_at_bound_10": 639,
+    "still_infeasible_when_widened": 638,
+    "worlds": 3000
+  }
+}
