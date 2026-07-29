@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T03:56:16Z",
- "cycle": 11,
+ "utc": "2026-07-29T10:09:55Z",
+ "cycle": 12,
  "state": "working",
- "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支"
+ "note": "flag 退休已在生产确认（3 条 CLEARED、零鬼影）。新发现：HELD 只看分支 tip，而 push rejected 只取决于 master——c10 全绿却被扣 6 小时，我按裁判职责重试当场合入；v5-verdict 重试后正确转为真冲突。13 个 flag 已逐条裁决，见 inbox 20260729T100824Z"
 }
