@@ -43,10 +43,15 @@ from ..parser.ast_nodes import (
     NameRef, NumberLit, RuleDecl, TheoryAST, TupleLit,
 )
 from ..problem import ProblemSpec
+from ..writes import check_backend_agreement
 
 GRID_DIRECTIONS = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
 LINE_DIRECTIONS = {"left": -1, "right": 1}
 SPATIAL = {"above": "up", "below": "down", "leftof": "left", "rightof": "right"}
+# Cell functions of the shape `<f>(<instance>, <direction>)`, by how many steps
+# they take. `ahead` is `toward` under the name A0 uses; `beyond` is the cell a
+# pushed box lands on.
+STEPS_TOWARD = {"toward": 1, "ahead": 1, "beyond": 2}
 
 
 class UnsupportedClause(Exception):
@@ -60,6 +65,12 @@ class _Ctx:
         self.directions = LINE_DIRECTIONS if self.line else GRID_DIRECTIONS
         self.instances = {i.name for i in ir.problem.instances}
         self.landmarks = set(ir.landmarks)
+        self.problem = ir.problem
+        #: declared observations per object type, so `count(<Type>)` can ask
+        #: whether a type even has a `present` field before reading one.
+        self._fields = {obj.name: {f.name for f in obj.fields}
+                        for obj in ir.ast.word_table.objects}
+        self._type_of = {i.name: i.type for i in ir.problem.instances}
 
     def field(self, inst: str, obs: str) -> str:
         if inst not in self.instances:
@@ -67,6 +78,9 @@ class _Ctx:
                 f"{inst!r} is not an instance in this problem; the level has "
                 f"{sorted(self.instances)}")
         return f"state.{inst}_{'color' if obs == 'colour' else obs}"
+
+    def has_field(self, inst: str, obs: str) -> bool:
+        return obs in self._fields.get(self._type_of.get(inst, ""), set())
 
 
 def _is_line(ir: WorldIR) -> bool:
@@ -90,25 +104,63 @@ def _cell(expr, ctx: _Ctx) -> str:
         raise UnsupportedClause(
             f"{expr.name!r} is neither an instance nor a declared landmark. If "
             f"it is level data, declare it: `landmark {expr.name}` (E-04).")
+    # `Box.pos` is the same cell as `Box`, written the long way. v0.2's
+    # generator accepted only the short form, so `free(Box.pos)` — the exact
+    # clause ledger X-5 needed to say "the Box is not standing on a wall" —
+    # raised `not a cell expression` rather than compiling.
+    if (isinstance(expr, FieldAccess) and expr.field_name == "pos"
+            and expr.obj in ctx.instances):
+        return ctx.field(expr.obj, "pos")
     if isinstance(expr, FuncCall):
         if expr.name in SPATIAL:
             if len(expr.args) != 1:
                 raise UnsupportedClause(f"{expr.name}(<instance>) takes one argument")
             return f"_neighbour({_cell(expr.args[0], ctx)}, {SPATIAL[expr.name]!r})"
-        if expr.name == "toward":
+        if expr.name in STEPS_TOWARD:
+            # `toward` / `ahead` are one step; `beyond` is two. One spelling per
+            # distance, because a manual that says "the cell past the box" and a
+            # manual that says "the next cell" should not have to say it with
+            # arithmetic the guard language cannot check.
             if len(expr.args) != 2 or not isinstance(expr.args[1], NameRef):
-                raise UnsupportedClause("toward(<instance>, <direction>)")
+                raise UnsupportedClause(f"{expr.name}(<instance>, <direction>)")
             d = expr.args[1].name
             if d not in ctx.directions:
                 raise UnsupportedClause(
                     f"unknown direction {d!r}; this world has "
                     f"{sorted(ctx.directions)}")
-            return f"_neighbour({_cell(expr.args[0], ctx)}, {d!r})"
+            cell = _cell(expr.args[0], ctx)
+            for _ in range(STEPS_TOWARD[expr.name]):
+                cell = f"_neighbour({cell}, {d!r})"
+            return cell
         if expr.name == "pos":
             if len(expr.args) != 1:
                 raise UnsupportedClause("pos(<expression>) takes one argument")
             return _value(expr.args[0], ctx)
     raise UnsupportedClause(f"not a cell expression: {expr!r}")
+
+
+def _self_excluded(expr, ctx: _Ctx) -> List[str]:
+    """Instances whose declared position **is** this cell expression.
+
+    Ledger X-5. `_free` asks whether a cell renders as background, and every
+    live object is painted on the frame — so `free(Box.pos)` asks whether the
+    Box's own cell is empty of the Box, and the answer is unconditionally
+    `False`. The manual could not say "the Box is not standing on a wall", and
+    was wrong about 52 states as a result.
+
+    The exclusion is **syntactic and per-occurrence**: `free(Box.pos)` excludes
+    the Box, `free(ahead(Box, d))` excludes nothing, and `free(Player.pos)`
+    excludes the Player even if the Box happens to be standing there too — that
+    last one is the point, not an oversight. A *semantic* exclusion ("ignore
+    whatever is there") would make `free` true of every occupied cell and
+    destroy the predicate.
+    """
+    if isinstance(expr, NameRef) and expr.name in ctx.instances:
+        return [expr.name]
+    if (isinstance(expr, FieldAccess) and expr.field_name == "pos"
+            and expr.obj in ctx.instances):
+        return [expr.obj]
+    return []
 
 
 def _value(expr, ctx: _Ctx) -> str:
@@ -137,8 +189,59 @@ def _value(expr, ctx: _Ctx) -> str:
     if isinstance(expr, TupleLit):
         return "(" + ", ".join(_value(e, ctx) for e in expr.elements) + ")"
     if isinstance(expr, FuncCall):
+        if expr.name == "count":
+            return _count_expr(expr, ctx)
         return _cell(expr, ctx)
     raise UnsupportedClause(f"cannot evaluate {expr!r}")
+
+
+def _count_expr(call: FuncCall, ctx: _Ctx) -> str:
+    """`count(<Type>)` / `count(<Type>, <field> = <value>)` as a Python integer.
+
+    E-08.  The counting predicate was already implemented, once, inline in the
+    goal compiler and reachable only through `=`.  A guard could not use it at
+    all: `_predicate` reached `unknown predicate 'count'` and refused.  That is
+    the whole of what stopped a manual saying *"passable once k tokens have been
+    collected"* — the comparison operators were already legal in a guard, and so
+    was the shape of the call.
+
+    Lifted here so that the goal and the guard read the **same** count.  Two
+    implementations of a counting rule is how a manual comes to mean one thing
+    when it predicts and another when it decides it has won.
+
+    Deliberately one rung, not the whole ladder (the C9 work order says so, and
+    the expressivity ledger agrees): the condition is one `<field> = <value>`
+    test over declared instances of one type.  No quantifier, no nested count,
+    no counting of cells — a `forall` is a different ledger row and needs its own
+    forcing world.
+    """
+    args = call.args
+    if not args or not isinstance(args[0], NameRef):
+        raise UnsupportedClause("count(<Type>, ...) needs a type name first")
+    type_name = args[0].name
+    names = [i.name for i in ctx.problem.instances if i.type == type_name]
+    if not names:
+        raise UnsupportedClause(
+            f"count({type_name}) — this level declares no instance of that "
+            f"type, so the count is 0 on every state and the clause decides "
+            f"nothing. A manual counting a type the level does not supply is a "
+            f"mismatch between the two, not a guard.")
+    if len(args) == 1:
+        terms = [f"(1 if {ctx.field(n, 'present')} else 0)"
+                 if ctx.has_field(n, "present") else "1" for n in names]
+    elif len(args) == 2 and isinstance(args[1], Comparison):
+        cond = args[1]
+        if not isinstance(cond.left, NameRef) or cond.op != "=":
+            raise UnsupportedClause(
+                "count's condition must be `<field> = <value>`; "
+                f"got {cond!r}")
+        obs, want = cond.left.name, _value(cond.right, ctx)
+        terms = [f"(1 if {ctx.field(n, obs)} == {want} else 0)" for n in names]
+    else:
+        raise UnsupportedClause(
+            f"unsupported count(): {call!r}. One rung only — "
+            f"count(<Type>) or count(<Type>, <field> = <value>).")
+    return "(" + " + ".join(terms) + ")"
 
 
 def _predicate(expr, ctx: _Ctx) -> str:
@@ -146,7 +249,11 @@ def _predicate(expr, ctx: _Ctx) -> str:
         if expr.name == "free":
             if len(expr.args) != 1:
                 raise UnsupportedClause("free(<cell>) takes one argument")
-            return f"_free(state, {_cell(expr.args[0], ctx)})"
+            cell = _cell(expr.args[0], ctx)
+            excluded = _self_excluded(expr.args[0], ctx)
+            if excluded:
+                return f"_free_except(state, {cell}, {tuple(sorted(excluded))!r})"
+            return f"_free(state, {cell})"
         if expr.name == "colored":
             if len(expr.args) != 2 or not isinstance(expr.args[1], NumberLit):
                 raise UnsupportedClause("colored(<cell>, <int>) expected")
@@ -232,6 +339,33 @@ def _effect(rule: RuleDecl, ctx: _Ctx) -> Tuple[List[str], List[str]]:
             f"_neighbour(state.{obj}_pos, {d!r}), {d!r})",
             f"state.{over}_alive = False",
         ]
+    if key == ("slid", 3):
+        # The A0 push, and the event ledger X-1 was filed about. It is
+        # **compound**: the box travels two cells and the pusher takes one. Under
+        # v0.2 that second motion was named nowhere in the manual, so the frame
+        # axiom's "mentions" and the compiled effect disagreed about the Player
+        # on every push — 376 of them. v0.3 makes the pusher an argument, so the
+        # signature names every object the event writes, and
+        # `check_backend_agreement` holds these two lines and the declaration
+        # to the same set.
+        if not isinstance(a[1], NameRef):
+            raise UnsupportedClause(
+                "slid(o, pusher, dir): `pusher` must be an object. It is an "
+                "argument rather than an implicit second write because a rule "
+                "the reader cannot see the whole effect of is X-1 all over again")
+        pusher, d = a[1].name, _direction(a[2], ctx)
+        return [obj, pusher], [
+            f"state.{obj}_pos = _neighbour("
+            f"_neighbour(state.{obj}_pos, {d!r}), {d!r})",
+            f"state.{pusher}_pos = _neighbour(state.{pusher}_pos, {d!r})",
+        ]
+    if key == ("stayed", 1):
+        # Writes nothing, and says so. `certify` forced this event into A0's
+        # vocabulary because `blocked_*` had been written as `moved(Player,
+        # dir)` and pushed the player off the board. Its write set is empty
+        # under the adopted reading, which is what makes a no-op rule
+        # syntactically identifiable — ledger X-3's obligation, now stateable.
+        return [], []
     if key == ("recolored", 2):
         if not isinstance(a[1], NumberLit):
             raise UnsupportedClause("recolored(o, <int>)")
@@ -245,7 +379,7 @@ def _effect(rule: RuleDecl, ctx: _Ctx) -> Tuple[List[str], List[str]]:
     raise UnsupportedClause(
         f"unknown event {event.name}/{len(event.args)}. The manual declares it "
         f"in `events:`; this backend implements moved/2, jumped/2, jumped/3, "
-        f"recolored/2, vanished/1, appeared/1, removed/1.")
+        f"slid/3, stayed/1, recolored/2, vanished/1, appeared/1, removed/1.")
 
 
 def _direction(expr, ctx: _Ctx) -> str:
@@ -262,25 +396,15 @@ def _goal_body(ir: WorldIR, ctx: _Ctx) -> List[str]:
     # `count(<Type>, <field> = <value>) = <n>` — how many instances are still in
     # a given condition. This is the peg goal, and v0.1's generator could not
     # read it at all.
-    if (isinstance(expr, Comparison) and expr.op == "="
+    # One counting predicate, shared with the guard compiler (E-08). It used to
+    # live here inline and only here, which is why a guard could not count and
+    # why `count(<Type>)` on a type with a `present` field counted the vanished
+    # ones too: the goal never had a vanish to get wrong.
+    if (isinstance(expr, Comparison)
             and isinstance(expr.left, FuncCall) and expr.left.name == "count"):
-        args = expr.left.args
-        if not args or not isinstance(args[0], NameRef):
-            raise UnsupportedClause("count(<Type>, ...) needs a type first")
-        type_name = args[0].name
-        names = [i.name for i in ir.problem.instances if i.type == type_name]
-        if len(args) == 1:
-            terms = ["1" for _ in names]
-        elif len(args) == 2 and isinstance(args[1], Comparison):
-            cond = args[1]
-            if not isinstance(cond.left, NameRef):
-                raise UnsupportedClause("count's condition must be `<field> = <value>`")
-            obs, want = cond.left.name, _value(cond.right, ctx)
-            terms = [f"(1 if state.{n}_{obs} == {want} else 0)" for n in names]
-        else:
-            raise UnsupportedClause(f"unsupported count(): {expr.left!r}")
-        total = " + ".join(terms) if terms else "0"
-        return [f"    return ({total}) == {_value(expr.right, ctx)}"]
+        op = "==" if expr.op == "=" else expr.op
+        return [f"    return {_count_expr(expr.left, ctx)} {op} "
+                f"{_value(expr.right, ctx)}"]
     if isinstance(expr, Comparison) and expr.op == "=":
         return [f"    return {_predicate(expr, ctx)}"]
     raise UnsupportedClause(f"unsupported goal {expr!r}")
@@ -372,6 +496,13 @@ def generate_python(ast: TheoryAST, problem: ProblemSpec) -> str:
     touched: Dict[str, List[str]] = {}
     for rule in ir.rules:
         objs, effect = _effect(rule, ctx)
+        # v0.3, ledger X-1. The manual's `events:` declaration is the authority
+        # on which objects a rule writes; this backend is the thing checked
+        # against it. Before the check, `frame persist` was true only relative
+        # to the dictionary above — and an object this code assigns that the
+        # declaration omits is an object the frame axiom promises is unchanged
+        # while the predictor changes it.
+        check_backend_agreement(rule, objs, ir.writes, "gen_python")
         touched[rule.name] = objs
         L.append(f"def _guard_{rule.name}(state, action):")
         L.append('    """%s  [ev: %s  cov: %s]"""' % (
@@ -384,7 +515,7 @@ def generate_python(ast: TheoryAST, problem: ProblemSpec) -> str:
         L.append("")
         L.append("")
         L.append(f"def _effect_{rule.name}(state):")
-        for line in effect:
+        for line in effect or ["pass  # writes {} — nothing happens"]:
             L.append("    " + line)
         L.append("")
         L.append("")
@@ -481,8 +612,15 @@ def _helpers(ir: WorldIR, ctx: _Ctx) -> List[str]:
 
     # `render` and `_cell_colour` exist so guards read the world off the frame
     # rather than through a side door into the state -- one predictor, one view.
-    L.append("def render(state):")
-    L.append('    """The manual drawn back onto a frame."""')
+    L.append("def render(state, _exclude=()):")
+    L.append('    """The manual drawn back onto a frame.')
+    L.append("")
+    L.append("    `_exclude` leaves the named instances off the frame. It exists")
+    L.append("    for `_free_except` and ledger X-5: asking whether an object's")
+    L.append("    own cell is free is a question about the board and the *other*")
+    L.append("    objects, and painting the asker onto the frame first makes the")
+    L.append("    answer unconditionally False.")
+    L.append('    """')
     if ctx.line:
         L.append("    grid = [BACKGROUND] * N_POS")
     else:
@@ -491,12 +629,12 @@ def _helpers(ir: WorldIR, ctx: _Ctx) -> List[str]:
         obs = ir.fields_by_type.get(inst.type, [])
         if "pos" not in obs:
             continue
-        conds = []
+        conds = [f"{inst.name!r} not in _exclude"]
         if "present" in obs:
             conds.append(f"state.{inst.name}_present")
         if "alive" in obs:
             conds.append(f"state.{inst.name}_alive")
-        L.append("    if %s:" % (" and ".join(conds) if conds else "True"))
+        L.append("    if %s:" % " and ".join(conds))
         colour = (f"state.{inst.name}_color" if "color" in obs
                   else f"state.{inst.name}_colour" if "colour" in obs else "1")
         if ctx.line:
@@ -507,17 +645,27 @@ def _helpers(ir: WorldIR, ctx: _Ctx) -> List[str]:
     L.append("    return grid")
     L.append("")
     L.append("")
-    L.append("def _cell_colour(state, cell):")
+    L.append("def _cell_colour(state, cell, _exclude=()):")
     L.append("    if not _in_bounds(cell):")
     L.append("        return None")
     if ctx.line:
-        L.append("    return render(state)[cell]")
+        L.append("    return render(state, _exclude)[cell]")
     else:
-        L.append("    return render(state)[cell[0]][cell[1]]")
+        L.append("    return render(state, _exclude)[cell[0]][cell[1]]")
     L.append("")
     L.append("")
     L.append("def _free(state, cell):")
     L.append("    return _cell_colour(state, cell) == BACKGROUND")
+    L.append("")
+    L.append("")
+    L.append("def _free_except(state, cell, exclude):")
+    L.append('    """`free(<obj>.pos)` — is the asker\'s own cell a legal empty one?')
+    L.append("")
+    L.append("    Ledger X-5. On the board, not a wall, and nobody *else* on it.")
+    L.append("    False exactly when the object stands off the board, on a wall,")
+    L.append("    or on top of another object.")
+    L.append('    """')
+    L.append("    return _cell_colour(state, cell, exclude) == BACKGROUND")
     L.append("")
     L.append("")
     L.append("def occupancy(state):")

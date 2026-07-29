@@ -1,0 +1,14 @@
+{
+  "prompt_id": "V11-negative-control-census",
+  "branch": "agent/v11-negative-control-census",
+  "base_commit": "baf1671",
+  "utc": "2026-07-28T15:20:00Z",
+  "author": "RES-3",
+  "lane": "verify",
+  "territory": "verify-lab",
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "method": "six parallel auditors, one per territory group, each answering the same three questions of every acceptance entry point; answers marked observed-by-running vs read-from-source",
+  "sealed_pile_contact": "none"
+}

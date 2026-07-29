@@ -22,6 +22,22 @@ Three tiers are tried in order and every refusal is recorded:
    NOT unsolvability: it is a manual that has not yet said what winning is,
    and it is reported as `no_goal_declared` so it can never be mistaken for a
    proof.
+
+**A crash is not a finding (E14).** BFS calls the generated `step`, and
+`gen_python` documents that predictor as *total*: "every object the rules do
+not mention is carried over unchanged, **which is what makes this total**".
+Its one declared exception, `AmbiguousTransition`, is itself a constraint-9
+defect signal. So an exception out of `step` is never "that action does not
+apply here" -- it is either a declared violation or a bug in the compiled
+manual. Swallowing it prunes a successor, which shrinks the search tree, which
+makes the queue drain sooner, which makes `status: "unsat"` and its "the whole
+reachable set was enumerated" arrive *faster and more often*. Every crash made
+the health certificate look better. So the crashes are now counted into the
+report, and the exhaustiveness claim is gated on that count being zero: a run
+with crashes reports `status: "unsat_unsound"` and `exhaustive: False`, never
+`unsat`. The shape is copied from `engine-rig/bench/ladder.py:74-82`, which on
+a budget overrun writes `proved_unsolvable: False` *plus* `error: "over
+budget: ..."` and records the ceiling positively in the artifact.
 """
 
 import collections
@@ -44,6 +60,57 @@ BFS_NODE_CAP = 120_000
 #: so the framework already has the right response to this; it just has to be
 #: given the chance to fire.
 BFS_DEADLINE_S = 120.0
+
+#: How many distinct crash sites to keep verbatim in the artifact. The *count*
+#: is never capped -- only the sample of messages is -- so a truncated sample
+#: can never make the count look smaller than it was.
+CRASH_SAMPLE_CAP = 8
+
+
+class StepCrashLog:
+    """Every exception the generated `step` threw, counted, typed and located.
+
+    The account exists so that no field claiming exhaustiveness can be written
+    without it. `as_json()` is emitted on *every* exit of `_tier_bfs`, including
+    the ones where the count is zero -- a zero that is printed is evidence, a
+    zero that is absent is indistinguishable from a report that never looked.
+    """
+
+    def __init__(self, site: str) -> None:
+        self.site = site
+        self.count = 0
+        self.successors_pruned = 0
+        self.by_type: Dict[str, int] = {}
+        self.samples: List[Dict[str, Any]] = []
+
+    def record(self, exc: BaseException, *, action: Any,
+               expansion: int, pruned: int = 1) -> None:
+        self.count += 1
+        self.successors_pruned += pruned
+        kind = type(exc).__name__
+        self.by_type[kind] = self.by_type.get(kind, 0) + 1
+        if len(self.samples) < CRASH_SAMPLE_CAP:
+            self.samples.append({
+                "type": kind,
+                "message": str(exc)[:400],
+                "action": list(action) if isinstance(action, (tuple, list)) else action,
+                "at_expansion": expansion,
+            })
+
+    def as_json(self) -> Dict[str, Any]:
+        return {
+            "site": self.site,
+            "count": self.count,
+            "successors_pruned": self.successors_pruned,
+            "by_type": dict(sorted(self.by_type.items())),
+            "samples": self.samples,
+            "sample_cap": CRASH_SAMPLE_CAP,
+            "note": ("`step` is documented total and its only declared "
+                     "exception, AmbiguousTransition, is itself a constraint-9 "
+                     "defect. So none of these is 'the action does not apply' "
+                     "-- each is a violation or a bug, and each one silently "
+                     "shrank the reachable set this search enumerated."),
+        }
 
 
 def plan(books, namespace: Dict[str, Any], compile_result: Dict[str, Any], *,
@@ -73,15 +140,34 @@ def plan(books, namespace: Dict[str, Any], compile_result: Dict[str, Any], *,
 
     bfs = _tier_bfs(namespace, node_cap)
     report["tiers"].append(bfs)
+    # E14: the crash account travels with every verdict, not only the one it
+    # invalidates -- a reader must never have to infer "no crashes" from silence.
+    for key in ("step_crashes", "search_ceiling"):
+        if key in bfs:
+            report[key] = bfs[key]
     if bfs.get("ok"):
+        crashed = (bfs.get("step_crashes") or {}).get("count") or 0
+        # E14 (adversarial review, correction 2): `optimal` is an
+        # exhaustiveness claim, not a description of the plan. BFS is
+        # length-optimal only if no successor was dropped, and a crash on the
+        # shorter route makes a longer plan look optimal. So it is gated on the
+        # same count everything else is.
         report.update({"status": "sat", "plan": bfs.get("actions"),
                        "backend": "object-state-bfs",
-                       "optimal": True, "expansions": bfs.get("expansions")})
+                       "optimal": not crashed,
+                       "expansions": bfs.get("expansions")})
+        if crashed:
+            report["error"] = bfs.get("error")
+            report["detail"] = bfs.get("detail")
         return report
 
     report["status"] = bfs.get("status", "unsat")
     report["detail"] = bfs.get("detail")
     report["expansions"] = bfs.get("expansions")
+    if "exhaustive" in bfs:
+        report["exhaustive"] = bfs["exhaustive"]
+    if bfs.get("error"):
+        report["error"] = bfs["error"]
     return report
 
 
@@ -128,7 +214,49 @@ def _tier_pddl(compile_result: Dict[str, Any]) -> Dict[str, Any]:
 
 def _tier_bfs(namespace: Dict[str, Any], node_cap: int,
               deadline_s: float = BFS_DEADLINE_S) -> Dict[str, Any]:
-    """Object-state BFS over the manual's own step. Length-optimal, unit costs."""
+    """Object-state BFS over the manual's own step. Length-optimal, unit costs.
+
+    The account is stamped onto the entry **here**, after `_bfs_search` has
+    returned, whichever of its five exits it took. The first version of this
+    change stamped a snapshot at each exit and missed one -- the `ok: True`
+    return -- so a search that crashed and then found the goal published
+    `count: 0`. A false printed zero is worse than an absent one, and it was
+    exactly this ticket's disease surviving inside this ticket's fix. Doing it
+    once, structurally, is what makes that class of miss impossible rather than
+    merely fixed. (Adversarial review, correction 1.)
+    """
+    crashes = StepCrashLog("plan._tier_bfs: step(state, action)")
+    entry = _bfs_search(namespace, node_cap, deadline_s, crashes)
+    entry["step_crashes"] = crashes.as_json()
+    # The ceiling, written down positively rather than left implicit -- the
+    # `ladder.py:226` shape: a reader must be able to check "N < cap" from the
+    # artifact alone instead of trusting that the search would have said so.
+    entry["search_ceiling"] = {"node_cap": node_cap, "deadline_s": deadline_s}
+    if crashes.count and entry.get("ok"):
+        # A plan was found, and successors were dropped getting to it. The plan
+        # itself still replays -- it is a positive certificate -- but nothing
+        # about minimality survives, so say so on the entry the caller reads.
+        entry["error"] = _crash_error(crashes)
+        entry["detail"] = (
+            "a plan of length %s was found, but %d call(s) to `step` raised "
+            "and each removed a successor. The plan is still a plan -- it can "
+            "be replayed -- but it is NOT known to be shortest, because a "
+            "shorter route through a pruned successor would never have been "
+            "seen." % (entry.get("length"), crashes.count))
+    return entry
+
+
+def _crash_error(crashes: StepCrashLog) -> str:
+    return ("step raised %d time(s) (%s); %d successor(s) were pruned without "
+            "adjudication"
+            % (crashes.count,
+               ", ".join("%s x%d" % (k, v)
+                         for k, v in sorted(crashes.by_type.items())),
+               crashes.successors_pruned))
+
+
+def _bfs_search(namespace: Dict[str, Any], node_cap: int, deadline_s: float,
+                crashes: StepCrashLog) -> Dict[str, Any]:
     entry: Dict[str, Any] = {"tier": "object-state-bfs", "ok": False}
     started = time.time()
     step = namespace["step"]
@@ -169,7 +297,10 @@ def _tier_bfs(namespace: Dict[str, Any], node_cap: int,
         for action in actions:
             try:
                 nxt = step(state, action)
-            except Exception:                          # noqa: BLE001
+            except Exception as exc:                   # noqa: BLE001
+                # E14: was a bare `continue`. Dropping the successor here is
+                # what let a crashing predictor pass for a small world.
+                crashes.record(exc, action=action, expansion=expansions)
                 continue
             key = nxt.key()
             if key in seen:
@@ -182,10 +313,31 @@ def _tier_bfs(namespace: Dict[str, Any], node_cap: int,
                 return entry
             queue.append((nxt, path + [list(action)]))
 
-    entry.update({"status": "unsat", "expansions": expansions,
-                  "reachable_states": len(seen),
+    # The queue drained. Whether that means "the whole reachable set" depends
+    # entirely on whether any successor was thrown away on the way, so the two
+    # facts are written together and the claim is gated on the count.
+    entry.update({"expansions": expansions, "reachable_states": len(seen)})
+    if crashes.count:
+        entry.update({
+            "status": "unsat_unsound",
+            "exhaustive": False,
+            "error": _crash_error(crashes),
+            "detail": "the queue drained after %d expansions over %d distinct "
+                      "states, but %d call(s) to the manual's own `step` raised "
+                      "and each one silently removed a successor. `step` is "
+                      "documented total, so those are defects, not "
+                      "inapplicable actions -- the set enumerated here is a "
+                      "SUBSET of the reachable set of the manual as written, "
+                      "and this run is not entitled to say the goal is "
+                      "unreachable. Fix the predictor and re-run."
+                      % (expansions, len(seen), crashes.count),
+        })
+        return entry
+    entry.update({"status": "unsat", "exhaustive": True,
                   "detail": "the whole reachable set (%d states) was enumerated "
-                            "and none satisfies the goal. Constraint 6: this is "
+                            "and none satisfies the goal -- no call to `step` "
+                            "raised, so no successor was dropped and the set is "
+                            "the manual's own. Constraint 6: this is "
                             "a search result, not a theorem -- an unsolvability "
                             "claim needs a certificate and a probe of the "
                             "clauses it depends on." % len(seen)})

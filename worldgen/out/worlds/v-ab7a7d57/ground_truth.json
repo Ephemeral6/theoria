@@ -1,0 +1,392 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 175,
+    "injective": true,
+    "states": 175
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 175,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 175,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 175,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 175,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 175,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "door": 5,
+    "floor": 0,
+    "switch": 3,
+    "switch_on": 4,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "toggle_switch",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_toggle_would_shut_door",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 3,
+    "reachable_states": 175,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 5,
+        "firing_transitions": 5,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_door": {
+        "firing_states": 5,
+        "firing_transitions": 5,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 175,
+        "firing_transitions": 336,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 6,
+        "firing_transitions": 6,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "toggle_switch": {
+        "firing_states": 12,
+        "firing_transitions": 12,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 174,
+        "firing_transitions": 329,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 7,
+        "firing_transitions": 7,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 7,
+    "rules_single_witness": [],
+    "rules_total": 7
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [
+      "door_mirrors_net"
+    ],
+    "declared": [
+      "blocked_by_block",
+      "blocked_by_door",
+      "blocked_by_wall",
+      "blocked_toggle_would_shut_door",
+      "door_mirrors_net",
+      "push",
+      "toggle_switch",
+      "walk",
+      "walk_through_door"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_toggle_would_shut_door"
+    ],
+    "fired": [
+      "blocked_by_block",
+      "blocked_by_door",
+      "blocked_by_wall",
+      "push",
+      "toggle_switch",
+      "walk",
+      "walk_through_door"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    },
+    {
+      "name": "toggle_switch",
+      "reversible": true,
+      "then": "that switch's bit flips 0\u21941 and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in toggle mode"
+    },
+    {
+      "clause": true,
+      "name": "blocked_toggle_would_shut_door",
+      "reversible": true,
+      "then": "nothing changes \u2014 the switch visibly refuses to flip",
+      "when": "act=D and the target cell holds a switch whose flip would leave the door the agent is standing on impassable",
+      "why": "without it the agent ends up inside a solid cell, the door's own `door_presence_tracks_net` invariant fails, and the agent (painted last) erases the closed door's colour, so two states render alike"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "cascade": true,
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 24,
+    "goal": [
+      3,
+      7
+    ],
+    "optimal_length": 8,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 175,
+    "solvable": true,
+    "world_id": "v-ab7a7d57"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2,
+      "door": 5,
+      "switch": 3,
+      "switch_on": 4
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          2
+        ],
+        "kind": "block",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "b",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "toggle",
+          "net": "b"
+        }
+      }
+    ],
+    "families": [
+      "push",
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      3,
+      7
+    ],
+    "intended_solvable": null,
+    "layout": [
+      "#########",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "",
+    "seed": 0,
+    "tier": 2,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "v-ab7a7d57"
+  },
+  "world_id": "v-ab7a7d57"
+}

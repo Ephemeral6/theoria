@@ -7,7 +7,7 @@ account. Nothing in this section is a concession extracted by a reviewer; all of
 it was written down by the runs themselves, and the paths are given so it can be
 checked rather than believed.
 
-### 7.1 The pre-declared clauses, answered
+### 10.1 The pre-declared clauses, answered
 
 **(a) 便宜是预测 — "cheap" is a prediction, not a result.** `Theoria.md`'s cost
 claim (C5, total spend 10⁸ → 10⁶) belongs to Phase 4 and is not evidenced here in
@@ -53,7 +53,7 @@ public, the grammar diff is public, and v0.1 was not edited.
 **(e) 单一 benchmark 家族 — a single benchmark family.** This paper is weaker than
 that clause anticipates: it reports **no benchmark result at all**. Every world
 in §3–§5 was built by us; A1's is peg solitaire. The one thing recomputed over
-ARC trajectories is the battery (§6), and those trajectories are a control-arm
+ARC trajectories is the battery (§7), and those trajectories are a control-arm
 pilot, not a Theoria result.
 
 **(f) 封存堆污染分级与预训练先验 — sealed-pile contamination grading and the
@@ -87,7 +87,7 @@ pretraining-prior caveat.** Two entries, and both are worse than "clean":
   enter model context. Any absolute phrasing of "induced from zero" is
   discounted accordingly. This paper makes no induction claim about any ARC game.
 
-### 7.2 A correction to the repository's own summary
+### 10.2 A correction to the repository's own summary
 
 `CLAUDE.md` states that no game has been played and that all 25 are registered
 `never_audited`. That was true when written and is **not true now**. The
@@ -101,7 +101,7 @@ nothing reached level 2. This is the legitimate use of a development pile, and
 recording it is the point of having one; it is corrected here because a paper
 that repeated `CLAUDE.md`'s sentence would be repeating something false.
 
-### 7.3 What the individual acceptances do not show
+### 10.3 What the individual acceptances do not show
 
 **The theorize step is not a measured LLM step.** This is the largest caveat in
 the paper and it is stated first. `cold-start-a2/A2_REPORT.md` §8 puts it
@@ -196,30 +196,44 @@ inside the loop, from a wrong manual — and one of those bugs manufactured a
 obligation for a theorem that is false. The four-co-derived-forms design is meant
 to make that drift visible; here it took a human reading the plan output.
 
-### 7.4 What the battery cannot yet certify
+### 10.4 What the battery cannot yet certify
 
-Restated from §6 so that the limitations section is complete on its own. Every
-ranked metric's verdict in `battery/artifacts/discrimination.json` is
-`underpowered` or `no-data` — 24 of 29, the other 5 being direction-less
-diagnostics returned as `not-ranked` — and that is arithmetic rather than
-softness: a
-two-sided sign test over four paired games has a smallest attainable p of
-**0.125**, so no metric can clear p < 0.05 on this data however cleanly it
+Restated from §7 so that the limitations section is complete on its own. Every
+ranked metric's verdict is `underpowered` or `no-data` — **31 of 38** on the model
+ladder and **31 of 38** on the specified gradient, the other 7 in each case being
+direction-less diagnostics returned as `not-ranked`
+(`battery/artifacts/discrimination.json`,
+`battery/artifacts/discrimination_arms.json`) — and that is arithmetic rather than
+softness: a two-sided sign test over four paired games has a smallest attainable p
+of **0.125**, so no metric can clear p < 0.05 on this data however cleanly it
 separates, and six non-tied paired games is the floor for the test to be able to
-clear the bar at all. There is no Schema arm and there may never be
-(`baseline-arms/SCHEMA_LOCATE.md`); the model ladder is a substitute and
-`battery/DECISIONS.md` D-B-004 argues why it is weaker. The battery's author also
-wrote the metric definitions, which is structurally impossible to blind, and four
-metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` rather
-than being passed off as predictions.
+clear the bar at all.
 
-One further data-integrity note belongs here rather than in §6: the ledger the
+Two statements this section used to make have been overtaken and are corrected
+rather than left standing. There **is** a Schema arm — 8 runs of released upstream
+trajectories, which is what let process 1 run on the gradient `Theoria.md`
+specifies; what does not exist, and may never, is a *reproduction*, because the
+harness was never published (`baseline-arms/SCHEMA_LOCATE.md`;
+`battery/DECISIONS.md` D-B-019). And the model ladder is no longer the substitute
+for that gradient but a second, differently-confounded pass beside it, which is
+why §7.6 reports P1 separating the two in opposite directions.
+
+What does not change is the part that matters here: the battery's author also
+wrote the metric definitions, which is structurally impossible to blind; five
+metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` — K1,
+K2, K7 and K8 in the v0 seal, K14 added in the v1 table — rather
+than being passed off as predictions; and **21 of 38 metrics have never been
+checked against any known gradient at all** — the entire epistemic family, the
+entire mechanism family, and P4 — a count that adding a whole second control arm
+moved by zero (`battery/artifacts/validation_material.json`).
+
+One further data-integrity note belongs here rather than in §7: the ledger the
 battery reads was produced in part by two concurrent sessions on the same track
 sharing one budget and one API quota without knowing about each other
 (`baseline-arms/INCIDENTS.md` INC-BA-003). The runs are individually accounted,
 but any aggregate read off that ledger inherits the incident.
 
-### 7.5 The one thing this paper claims
+### 10.5 The one thing this paper claims
 
 That the pipeline runs end to end on self-built deterministic worlds; that on
 those worlds a manual can be perfect on replay and wrong about the world in a way
@@ -229,8 +243,11 @@ comparison run; that a machine-checked impossibility can be produced whose
 weights crossed a data boundary between two independently developed tracks and
 whose empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
-passive metrics battery over existing trajectories immediately found three of its
-own metrics measuring something other than what they claim.
+passive metrics battery over existing trajectories, once its anti-gaming register
+was made executable rather than written, contradicted 17 of its own register
+entries by demonstration — 14 of them defence claims
+(`battery/artifacts/gaming_audit.json`) — and found the exploration family's
+declared signature separating the specified gradient backwards.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.

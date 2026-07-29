@@ -78,7 +78,13 @@ cd engine-rig && python -m tools.validate_candidates <path>
 ## PARTNER_SYNC.md
 
 Append-only status board. Write only your own paragraphs; never edit the other
-track's. It is a board, not a conversation — nobody replies. Format:
+track's. It is a board, not a conversation — nobody replies.
+
+**Where append-only starts.** A paragraph is published once it is on the
+mainline; from then on, correct it only by appending a new one that
+supersedes it. On a branch it is still a draft — fix it until it is right
+before the merge. (Two sessions read this differently on 2026-07-28, which
+is why the line is written down.) Format:
 
 ```
 ## [<track>] <ISO8601> <milestone-tag>

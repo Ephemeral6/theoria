@@ -1,0 +1,92 @@
+[
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 5,
+  "has_manifest": true,
+  "kind": "aborted_experiment",
+  "slug": "20260728T012311Z-g50t-first-contact-aborted",
+  "utc": "2026-07-28T01:23:12.106Z",
+  "why": "carries ABORTED.md: a live run stopped on a defect"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "salvage",
+  "slug": "20260728T012311Z-g50t-first-contact-salvage",
+  "utc": "2026-07-28T01:41:53.107Z",
+  "why": "the run_start note or the run_end outcome says salvage: this run exists to close another run's orphaned scorecard, and carries that scorecard"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "salvage",
+  "slug": "20260728T012311Z-g50t-first-contact-salvage2",
+  "utc": "2026-07-28T01:42:28.703Z",
+  "why": "the run_start note or the run_end outcome says salvage: this run exists to close another run's orphaned scorecard, and carries that scorecard"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 6,
+  "has_manifest": true,
+  "kind": "aborted_experiment",
+  "slug": "20260728T014402Z-g50t-first-contact-aborted",
+  "utc": "2026-07-28T01:44:02.435Z",
+  "why": "carries ABORTED.md: a live run stopped on a defect"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "salvage",
+  "slug": "20260728T014402Z-g50t-first-contact-salvage",
+  "utc": "2026-07-28T01:53:24.338Z",
+  "why": "the run_start note or the run_end outcome says salvage: this run exists to close another run's orphaned scorecard, and carries that scorecard"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 7,
+  "has_manifest": true,
+  "kind": "experiment",
+  "slug": "20260728T015354Z-g50t-first-contact",
+  "utc": "2026-07-28T01:53:55.061Z",
+  "why": "a live run that reached its own end"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "salvage",
+  "slug": "20260728T015354Z-g50t-first-contact-salvage",
+  "utc": "2026-07-28T02:41:04.399Z",
+  "why": "the run_start note or the run_end outcome says salvage: this run exists to close another run's orphaned scorecard, and carries that scorecard"
+ },
+ {
+  "archive_material": false,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "process_record",
+  "slug": "20260728T141546Z-S8-provenance-backfill",
+  "utc": null,
+  "why": "no ledger, but a manifest: a tooling or repair pass that touched no environment. It has its own manifest and there is nothing to derive"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "preflight",
+  "slug": "preflight-20260728T012031Z",
+  "utc": "2026-07-28T01:20:31.387Z",
+  "why": "a pre-flight: the live chain exercised for zero billed actions. Cheap, but live, and part of the account"
+ },
+ {
+  "archive_material": true,
+  "billed_actions_from_ledger": 0,
+  "has_manifest": true,
+  "kind": "preflight",
+  "slug": "preflight-20260728T012057Z",
+  "utc": "2026-07-28T01:20:57.774Z",
+  "why": "a pre-flight: the live chain exercised for zero billed actions. Cheap, but live, and part of the account"
+ }
+]

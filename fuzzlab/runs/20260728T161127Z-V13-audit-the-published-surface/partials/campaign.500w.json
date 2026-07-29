@@ -1,0 +1,172 @@
+{
+  "campaign_seed": "0x00005eedc1e4f002",
+  "engine_rig_head": "3c60acb",
+  "engines": [
+    {
+      "elapsed_s": 1.72,
+      "engine": "mdl_segmenter",
+      "family": "gridworld",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "events_agree_with_tracks": 500,
+        "masks_follow_anchors": 500,
+        "masks_partition_the_foreground": 500,
+        "script_bits_identity": 500
+      },
+      "invariants": [
+        "events_agree_with_tracks",
+        "masks_follow_anchors",
+        "masks_partition_the_foreground",
+        "script_bits_identity"
+      ],
+      "n_invariants": 4,
+      "raised": 0,
+      "skipped": 0,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    },
+    {
+      "elapsed_s": 102.28,
+      "engine": "cegis_miner",
+      "family": "gridworld",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "applicable_equals_support": 465,
+        "effects_agree_with_the_evidence": 465,
+        "frontier_guards_are_consistent": 465,
+        "frontier_is_complete_to_size": 465,
+        "guards_partition_the_evidence": 465,
+        "rules_fire_on_the_action_they_name": 465
+      },
+      "invariants": [
+        "applicable_equals_support",
+        "effects_agree_with_the_evidence",
+        "frontier_guards_are_consistent",
+        "frontier_is_complete_to_size",
+        "guards_partition_the_evidence",
+        "rules_fire_on_the_action_they_name"
+      ],
+      "n_invariants": 6,
+      "raised": 0,
+      "skipped": 210,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    },
+    {
+      "elapsed_s": 1.4,
+      "engine": "zero_space",
+      "family": "parityworld",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "law_space_is_complete": 500,
+        "laws_hold_on_trajectory": 500,
+        "membership_agrees": 500,
+        "rank_nullity": 500
+      },
+      "invariants": [
+        "law_space_is_complete",
+        "laws_hold_on_trajectory",
+        "membership_agrees",
+        "rank_nullity"
+      ],
+      "n_invariants": 4,
+      "raised": 0,
+      "skipped": 0,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    },
+    {
+      "elapsed_s": 43.3,
+      "engine": "lp_potential",
+      "family": "jumpgraph",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "certificate_implies_unreachable": 267,
+        "heuristic_is_admissible": 267,
+        "infinite_means_unreachable": 267,
+        "three_conditions_hold": 267
+      },
+      "invariants": [
+        "certificate_implies_unreachable",
+        "heuristic_is_admissible",
+        "infinite_means_unreachable",
+        "three_conditions_hold"
+      ],
+      "n_invariants": 4,
+      "raised": 0,
+      "skipped": 932,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    },
+    {
+      "elapsed_s": 5.93,
+      "engine": "fd_adapter",
+      "family": "blockworld",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "no_plan_means_unsolvable": 500,
+        "optimal_rungs_are_optimal": 500,
+        "plan_replays_to_the_goal": 500
+      },
+      "invariants": [
+        "no_plan_means_unsolvable",
+        "optimal_rungs_are_optimal",
+        "plan_replays_to_the_goal"
+      ],
+      "n_invariants": 3,
+      "raised": 0,
+      "skipped": 0,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    },
+    {
+      "elapsed_s": 0.14,
+      "engine": "probe_frontier",
+      "family": "hypset",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "costs_are_the_world's": 500,
+        "entropy_matches_bruteforce": 500,
+        "partition_matches_truth": 500,
+        "ranking_is_sound": 500,
+        "splits_flag_is_honest": 500
+      },
+      "invariants": [
+        "costs_are_the_world's",
+        "entropy_matches_bruteforce",
+        "partition_matches_truth",
+        "ranking_is_sound",
+        "splits_flag_is_honest"
+      ],
+      "n_invariants": 5,
+      "raised": 0,
+      "skipped": 0,
+      "violated": 0,
+      "worlds_checked": 500,
+      "worlds_generated": 500,
+      "worlds_requested": 500
+    }
+  ],
+  "prompt_id": "E4-property-fuzz",
+  "raises_by_invariant": {},
+  "totals": {
+    "generator_errors": 0,
+    "invariants": 26,
+    "raised": 0,
+    "skipped": 1142,
+    "violated": 0,
+    "worlds_checked": 3000
+  },
+  "violations_by_invariant": {},
+  "worlds_per_engine": 500
+}

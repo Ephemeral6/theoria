@@ -1,0 +1,17 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A12-in-dup-bool-int",
+  "predicate": [
+    "in",
+    [
+      "var",
+      "pos0"
+    ],
+    [
+      1,
+      true
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

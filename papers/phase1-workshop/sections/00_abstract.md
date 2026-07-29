@@ -1,24 +1,35 @@
 # Certifying a world theory against something other than its own past
 
-### Phase 1 of Theoria: four offline acceptances, a passive metrics battery,
-### an examination instrument, and a live run that spent nothing
+### Phase 1 of Theoria: three offline acceptances and a transfer result, a
+### passive metrics battery, an examination instrument, and a live run that
+### spent nothing
 
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
 
-> **Draft status — v0.2.** This is a working draft assembled from the acceptance
-> reports already in the repository. Authorship, affiliation, venue and
-> bibliography are unfilled placeholders, and at ~19 500 words it is roughly five
-> times a workshop budget — the cut is a separate pass, and no material has been
-> dropped yet in order to make it.
+> **Draft status — v0.3.** This is a working draft assembled from the acceptance
+> reports already in the repository. Authorship, affiliation and venue are
+> unfilled placeholders, and at ~23 200 words it is roughly five times a workshop
+> budget — the cut is a separate pass, and no material has been dropped yet in
+> order to make it.
 >
-> v0.2 adds three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
-> preflight) — and renumbers the two that follow them; the map from v0.1 is
-> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`.
-> **§7 is known stale**: the battery was rebuilt from v0 to v2 after that section
-> was written, and it carries a standing note saying so rather than a repair.
+> v0.2 added three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
+> preflight) — and renumbered the two that follow them; the map from v0.1 is
+> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`. v0.3
+> closes the two gaps that renumbering left. **§7 has been re-derived against
+> battery v2** — it reported v0 behind a standing note admitting the battery had
+> moved, and every figure in it is now read from `battery/artifacts/*.json`
+> rather than from a report's prose. **§11 has a bibliography**:
+> `papers/phase1-workshop/references.bib`, 70 records each cross-verified against
+> two independent sources, with the traces in
+> `papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/`; no
+> `[bib: TODO]` marker survives anywhere in the draft, and the records that could
+> not be confirmed twice are named as uncited rather than hedged.
+>
 > `papers/phase1-workshop/OPEN_ITEMS.md` is the derived checklist of everything
-> the two audits left open, including that one.
+> the two audits left open. `papers/phase1-workshop/REVIEW_TRIAGE.md` sorts the
+> referee pass by what each fix costs — writing, re-derivation, or an experiment
+> that has not been run.
 >
 > **The binding rule.** Every quantitative claim in the body carries the
 > repo-relative path of the artefact it came from;
@@ -43,9 +54,11 @@ playbook saying how to win — compiled to four co-derived forms and certified i
 two layers: full-history replay at the pixel, and declared laws discharged in
 Lean with the axiom list inspected.
 
-Phase 1 is offline: four acceptances on self-built deterministic worlds, a
+Phase 1 is offline: three acceptances on self-built deterministic worlds — the
+three `Theoria.md` Part 2 names, A0, A1 and A2 — plus a fourth section reporting
+an early read on claim C3 that the mandate does not list as an acceptance, a
 metrics battery recomputed over trajectories that already existed, an examination
-instrument, and one live run that spent nothing. Seven results.
+instrument, and one live run that spent nothing. Eight results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
 22 356/22 356 pixels with zero anomalies and is nonetheless wrong on 3 of 236
 reachable (state, action) pairs — accuracy 0.000, over the three pairs (n = 3)
@@ -72,30 +85,40 @@ axiom list — the instrument returns `[]` for both — where one is true of its
 world and the other is not. The instrument cannot tell them apart, and is not
 supposed to.
 
-The battery, run over existing trajectories at zero new spend, immediately found
-three of its own metrics measuring something other than what they claim, and
-reports that no metric on this pilot can reach significance — a two-sided sign
-test over four paired games has a smallest attainable *p* of 0.125. **(5)** A
-theory carried unchanged to a second level of the same game re-fits from a single
+**(5)** A metrics battery recomputed over 95 runs across five arms at zero new
+spend, whose harshest reader is its own audit: 34 of 38 executable exploits still
+score a metric at or near its best value while possessing none of the capability
+it claims to measure, 17 of its written register entries — 14 of them defence
+claims — were contradicted by their own demonstration, and the exploration
+family's declared signature separates the
+one gradient the design specifies *backwards*. No metric on this pilot can reach
+significance in any case — a two-sided sign test over four paired games has a
+smallest attainable *p* of 0.125.
+
+**(6)** A theory carried unchanged to a second level of the same game re-fits from a single
 frame and wins with zero engine stages, zero adjudicated candidates and zero
-theorize rounds, at 252/252 against the referee — while the verification work is
-paid in full and at the same rate. Two perturbed levels, each breaking a
+theorize rounds — while the verification work is paid in full and at the same
+rate. It scores 252/252 against the referee, and so does the from-scratch control,
+so the saving is in what each arm cost and not in what either got right. Two perturbed levels, each breaking a
 mechanism the carried theory does not know about, were both caught, and both were
 caught only *after* acting: the free static layer passed them and returned the
-same plan. **(6)** An examination instrument with four question types, a marker
+same plan. **(7)** An examination instrument with four question types, a marker
 calibrated on four synthetic subjects with pre-registered bands, and a leak
 checker that reports 1 790 probes with no hits — and which nonetheless missed two
 real leaks that an adversarial reader found, because the hook the checker needed
 was optional and no paper implemented it. Three of its four papers have never
-been sat. **(7)** A live run against the real API that exercised the whole
+been sat. **(8)** A live run against the real API that exercised the whole
 credential path — key injected in one place, sealed pile untouched by a check on
 the bytes — for zero billable actions.
 
 We claim none of the framework's comparative results. No arm was run against a
 baseline. No game was played *for* this paper: the battery recomputes over
 trajectories that already existed, and the comparative effect sizes it reports
-are across a model ladder within one control arm, not across the framework's
-arms. The theorize step is a checked-in artefact rather than a measured
+run between two *control* arms — bare Claude Code, and released upstream Schema
+trajectories — and across a model ladder within one of them. **None is across the
+framework's own arms**, and the Schema side is another team's agent on another
+team's infrastructure, so every effect size there bundles capability with
+plumbing. The theorize step is a checked-in artefact rather than a measured
 language-model step, and every world is small enough for `decide` to enumerate.
 The contribution is an instrument and a demonstration artefact — Phase 1
 establishes that the instrument exists, that it produces the failure mode on

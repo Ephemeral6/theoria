@@ -1,0 +1,29 @@
+{
+  "first_tick": "2026-07-28T03:16:26Z",
+  "gap_seconds_max": 15578.0,
+  "gap_seconds_median": 300.0,
+  "gap_seconds_min": 42.0,
+  "idle_floor_seconds": 2.0,
+  "last_tick": "2026-07-28T19:16:26Z",
+  "of_those_on_the_hard_list": [
+    "monitor/state.json"
+  ],
+  "of_those_the_superseded_criterion_would_also_have_reported": [
+    "monitor/index.html",
+    "monitor/reflex.lock"
+  ],
+  "paths_it_touches": [
+    "monitor/index.html",
+    "monitor/reflex.lock",
+    "monitor/reflex.log",
+    "monitor/state.json"
+  ],
+  "reading": "The control removes noise that is present during both legs. This writer is present during neither leg ~99.7% of the time and during exactly one leg the rest, so it is a residual FALSE POSITIVE of roughly 0.02262 per run, not a false negative. It is not excluded by path shape, because excluding by path shape is the defect this ticket exists to remove: the superseded criterion would have reported 2 of these 4 paths and hidden the other 2, including monitor/state.json, which is on the hard list.",
+  "residual_false_red_probability_per_run": 0.02262,
+  "run_leg_seconds": 0.95,
+  "source": "monitor/reflex.log (live worktree, read-only)",
+  "superseded_by": "08-live-background-resample.json",
+  "superseded_note": "SUPERSEDED -- its headline residual (0.02262) used gap_seconds_min while its prose used the median, and it was computed from the undersized frame in 05. The measured residual is ~8.7% per run.",
+  "ticks_seen": 127,
+  "what": "the periodic writer the empty-run control cannot subtract, and the residual false-red rate it implies"
+}

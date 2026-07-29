@@ -1,4 +1,16 @@
-"""Figure 1 — the concept-birth timeline of the A0 manual.
+"""SUPERSEDED AS A SOURCE (P9). Kept as the witness, not as the figure.
+
+The paper's figures are now built by the repository's deterministic pipeline at
+``figures/`` -- see ``papers/phase1-workshop/figures/PARITY.md`` and OUTLINE.md.
+This script is retained because it is an *independent* second computation of the
+same numbers, and a second opinion is the only instrument that can catch a first
+one being wrong. ``check_figure_parity.py`` runs it against the pipeline.
+
+Do not cite this file from a section. It is not the figure any more.
+
+--- original docstring follows ---
+
+Figure 1 — the concept-birth timeline of the A0 manual.
 
 Source of truth: ``cold-start-a0/THEORIZE_LOG.md``. Every adjudication in that
 file is a heading of the shape

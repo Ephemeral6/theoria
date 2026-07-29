@@ -182,6 +182,13 @@ its root. They are named in `SOURCES.md` as a known-absent input with the exact
 path to drop in, and the extractor takes a `--ledger` list so adding them is
 configuration, not code.
 
+> **P8 CORRECTION.** There is no `--ledger` list and there never was: `fig02`
+> has no `argparse` at all. P-21 described an interface it planned and did not
+> build, and the sentence survived because nobody had reason to run the command
+> it describes. What is true as of P8 is stronger — a shard dropped into
+> `baseline-arms/out/shards/` is picked up by the `envelope_ledger` rule with no
+> configuration and no code, including one whose filename nobody wrote down.
+
 **Shape.** Cumulative cost (USD) against turn index, one line per run, grouped
 and coloured by model (haiku / sonnet / opus) — the model ladder is v0's
 substitute for the missing Schema arm (`battery/DECISIONS.md` D-B-004, and
@@ -219,8 +226,115 @@ docstring so the next author does not rewrite it.
 > and abandoned** ($2.04) and their own manifests record `outcome: null`; and the
 > arm's dollars and the repo's price table **disagree by −8.3 %**.
 
+> **P8: the interface was the defect, not the arm.** P4's note above closes with
+> the extractor being the part that did not generalise. It was worse than that.
+> Both the roll-up list and the theoria run list were **hand-written tuples of
+> source keys**, and by the time P8 listed the directories both had gone stale:
+>
+> * `ROLLUP_KEYS` named four of the six tracked `pilot_*.json` roll-ups. The two
+>   it missed carry outcomes for `bare_cc-g50t-claude-sonnet-5-ddabe772`
+>   (`budget_exhausted`) and `bare_cc-sk48-claude-sonnet-5-9022a076`
+>   (`model_error`). Both runs were therefore drawn **dotted — "outcome unknown,
+>   not 'fine'"** — while their outcomes sat committed in the repository, and one
+>   of them should have been **dashed**, which is this plate's own warning that a
+>   curve stopped because the API died rather than because the run was thrifty.
+>   *The figure was withholding one of the two warnings it exists to draw.*
+> * `THEORIA_RUNS` named three of the four run directories that carry a
+>   `cost_curve.json`. The fourth is a preflight whose curve is empty — and
+>   `_load_theoria_curves` already had a branch for exactly that case which had
+>   **never once executed**, because the only run that reaches it was not in the
+>   tuple. A hand-maintained list does not merely miss data; it leaves the code
+>   for the missing case unexercised, so nobody finds out whether it was right.
+>
+> Both are the same shape as P4's three defects — *an upstream artefact moved and
+> the figure code did not know* — which is the argument for fixing the shape
+> rather than the two instances. `sources.py` now declares these three families
+> **by rule** (`DISCOVERY`): a directory, a filename pattern, the members
+> required inside it, and a **floor**. Every file a rule finds becomes a real
+> `Source` and is hashed into `SOURCES.sha256` exactly as a hand-written one is,
+> so nothing is read unhashed; what changed is only who enumerates the family.
+>
+> The floor is what keeps this honest. A glob that comes back empty is
+> indistinguishable from a family that *is* empty, so each rule records how many
+> members were on disk when it was written and `verify.sh` gate 0 fails below it.
+> Absent-by-design members (the untracked envelope shards) stay declared through
+> the rule's `expected` list, so `SOURCES.sha256` still *names* them as absent
+> rather than forgetting the input was ever expected.
+>
+> **A gate cannot catch this class, so it got a probe.** Gates 1–7 were all green
+> on the tree that had these two defects: both builds byte-identical, committed
+> tree equal to a fresh build, every source hash unchanged. `check_coverage.py`
+> (gate 8) walks the tree itself and asks whether what is on disk reached the
+> picture. It runs its own negative control first — the roll-up rule narrowed
+> back to the pre-P8 four, with the probe required to fail. That control earned
+> its place immediately: **the probe's first version took its disk inventory from
+> the same registry the figure reads, so narrowing the registry narrowed both
+> sides at once and it stayed green over the exact defect it was written for.**
+> An oracle that calls the thing it audits can only prove that thing
+> self-consistent.
+
+**The three shape metrics** — front-load index, convergence point, context
+growth — are on the plate as of P8, and they are **read, not recomputed**. They
+are `battery/metrics/economy.py`'s E2, E3 and E4, with anti-gaming floors
+(`MIN_TURNS_FOR_SHAPE = 8`: a run that ended on turn four is trivially
+front-loaded), and E2 is one of Phase 4's three primary endpoints. Their
+published per-run values come out of `battery/artifacts/capability_spectrum.json`.
+Writing a second implementation would be writing a second definition of a
+primary endpoint, and two definitions of one number is the drift `SOURCES.md`
+exists to prevent.
+
+Where they are drawn:
+
+* **E2 and E3 are read off panel B**, as the construction that defines them
+  rather than as numbers in a corner. A vertical rule at the head boundary makes
+  a curve's height *there* its front-load index; a tick on each curve marks the
+  turn at which the bill reached 90 % of its total. The head boundary's position
+  is derived from the battery's own `head_turns / turns` support — not copied
+  from `FRONTLOAD_K`, because a hand-copied fact about another file is a fact
+  that will go stale.
+* **E4 gets panel D**, because it is the one shape metric that is not a share of
+  this plate's money: it reads the *token* series, so it survives a change in the
+  price list, and it is the metric that would catch Theoria failing to be what it
+  claims. Plotted against run length, since the metric's own floor is a length.
+* **The turn axes are checked, not assumed.** The battery counts turns in
+  model-call order (`battery/INPUT_FORMAT.md` gap 5); this plate counts
+  `step_idx`. E3's crossing is marked only where the two coincide, and the check
+  is reported either way. It currently agrees on all 12 markable runs — stated as
+  a checked result, because that agreement is the licence to draw the marks.
+
+**What is on the plate when the Theoria column fills in.** The theoria arm draws
+a *bill* today and has **no E2/E3/E4 at all**: battery v2's five arms are
+`bare_cc`, `schema_repro`, `theoria_a0`, `theoria_a0_spike` and `theoria_a2`, and
+the live ARC theoria run is none of them. That is drawn as an absence carrying
+its reason, never as a low score. When a battery run for the live arm lands:
+
+1. **Nothing in `figures/` changes.** The three shape metrics are keyed on
+   `run_id`; a theoria run scored by the battery attaches to its curve at the
+   next build, and panel D's `other arm, scored (0)` becomes a non-zero count.
+2. **Panel D gains hollow marks** and the absence column loses its `3 run(s): no
+   battery run at all` line. Both counts are computed, not written down.
+3. **Panel B's E3 ticks stay conditional.** The theoria arm's step axis is
+   sparse — 5 desk calls across 7 actions, so 2 of 7 turns bought anything — so
+   `axis_agrees` will very likely be false for it and its E3 crossing will be
+   *reported and not marked*. That is the intended behaviour and not a gap to
+   close: marking it would put a fraction-of-decisions on an axis of
+   fraction-of-actions.
+4. **The caveat's arithmetic follows automatically** — arm roster, unscored
+   counts and the mismatch list are all rendered from the data.
+
+What *would* need a decision, and is therefore not pre-decided here: whether a
+theoria E2 may be compared to a `bare_cc` E2 at all, given that the two arms'
+turns are not the same purchase. The plate's standing caveat says they are not,
+and a front-load index computed over each arm's own turns inherits that
+difference rather than cancelling it.
+
 **CSV** `csv/fig02_bill_shape.csv` — columns
-`arm, game_id, model, run_id, turn, cost_usd, cum_cost_usd, frac_of_run, frac_of_spend, failed_step, outcome`.
+`arm, game_id, model, run_id, turn, cost_usd, cum_cost_usd, frac_of_run, frac_of_spend, failed_step, outcome`
+plus, as of P8, the per-run shape block: `e2_frontload_index, e2_status,
+e3_convergence_point, e3_status, e4_context_growth, e4_status, battery_turns,
+turn_axis_agrees`. Each metric carries **both** a value and a status, because a
+blank with `insufficient-data` and a blank with `no-battery-run` are different
+facts and one empty cell for both is how an absence becomes a zero.
 
 ---
 
@@ -471,3 +585,67 @@ have produced a second contract disagreeing with the documented one.
 | 7 | `fig05`, `fig06`, `fig07` written | P-21 planned them and did not reach them |
 | 8 | `theme.check_no_mathtext` | a caveat reading `$0.90 against $0.15` renders as italic `0.90against0.15`: matplotlib eats `$...$` as mathtext. Deterministically wrong, so it survives a determinism check, and invisible in a diff. Found in P4's own first draft of fig02's caveat |
 | 9 | `verify.sh` gate 7 | see §6.7 |
+
+---
+
+## 10. P8 changelog
+
+`P8-billshape-pipeline`, researcher `RES-2`, branch `agent/p8-billshape-pipeline`.
+
+The work order asked for two things: a data adapter so a landed ledger enters
+figure 2 without anyone editing code, and the front-load index / convergence
+point / context-growth fit drawn from the baseline's three-model data. Its stated
+premise — that the theoria column is empty — was one revision stale; P4 had
+already drawn that arm. The defect was one level down, in *how* the arm was
+declared, and that is where the work went.
+
+| # | change | why |
+|---|---|---|
+| 1 | `sources.DISCOVERY`: three declaration rules replacing three hand-written key tuples | a run that lands on disk must reach the picture without a code edit; §3 |
+| 2 | each rule carries a **floor**, checked by gate 0 | a glob that finds nothing looks exactly like a family that is empty |
+| 3 | absent-by-design members stay declared via `expected` | `SOURCES.sha256` must still *name* the untracked shards, not forget them |
+| 4 | duplicate-path guard at registry import | a path declared twice is hashed twice, and the second line reads as drift |
+| 5 | two roll-ups now read: `pilot_g50t_sonnet_rerun`, `pilot_sk48_sonnet_rerun` | drift D-1 — two runs drawn *outcome unknown* with outcomes committed on disk, one of them a `model_error` the plate exists to warn about |
+| 6 | a fourth theoria run directory now read | drift D-2 — and it is the run that finally exercises the empty-curve branch |
+| 7 | the cost-basis caveat picks its run **by rule**, not by name | a caveat anchored to a run id keeps describing that run after a better one lands |
+| 8 | E2 / E3 / E4 read from `capability_spectrum.json`, never recomputed | a second implementation of a Phase 4 primary endpoint is a second definition |
+| 9 | panel D added; panel B gains the E2 head boundary and E3 crossings | the three metrics the work order asked for, drawn as the constructions that define them |
+| 10 | turn-axis agreement checked per run, reported either way | the battery counts decisions, this plate counts `step_idx` |
+| 11 | `check_coverage.py` + `verify.sh` gate 8, with a mandatory negative control | gates 1–7 were green on the tree that had both drifts |
+| 12 | CSV gains 8 shape columns, value **and** status for each metric | one empty cell for two different absences is how an absence becomes a zero |
+| 13 | a `tracked=True` rule discovers only what git tracks; `build_all.py` warns when git cannot say | discovery widens an untracked file's blast radius — a stray `pilot_scratch.json` was invisible to a four-name list and would be hashed and read by a bare glob, on one machine and not on a clean checkout. Demonstrated with a scratch file that the rule correctly refused |
+| 14 | `manifest.py` takes `--prompt-id` / `--worker` | they were constants, so a second run's manifest would have declared itself P4's, and a provenance record naming the wrong prompt reads as authoritative |
+
+**Three things found while doing it, none of them in this territory, none
+touched.** (i) `battery/metrics/economy.py` fills E4's `support["turns"]` from
+`len(run.calls)` while E2/E3 fill the same key from `len(run.turn_costs())` —
+billed calls against decisions, which differ exactly when a decision was
+retried, and they differ on `bare_cc-g50t-claude-sonnet-5-ddabe772` (24 against
+20). Panel D's axis is therefore labelled with what E4 actually counts, and the
+disagreement is a note rather than a silent reconciliation. (ii) The board item's
+premise about the empty theoria column was stale. (iii) The untracked
+`baseline-arms/out/shards/` and `out/campaign/` remain untracked, so ~2 000 cost
+rows and USD 48.39 of campaign spend are still declared-and-absent — the rule now
+picks up *any* shard dropped in, including ones nobody wrote down.
+
+**And one found in P8's own work, twice, which is the part worth reading.** The
+coverage probe's first version was green and worthless: it took its disk-side
+inventory from `sources.discovered(...)`, the same registry the figure reads, so
+when its negative control narrowed that registry back to the pre-P8 roll-up
+list, *both* sides narrowed together and the probe reported nothing over the
+exact defect it had been written to catch. It is `fuzzlab`'s house rule in a new
+place — the judge may not call the engine it is judging — and it was caught only
+because the negative control was written before the probe was believed.
+
+The second version was wrong the same way and was **not** caught by that
+control. It walked the filesystem itself, which felt like the fix, but took the
+root and the pattern it walked *from the rule it was auditing*, and the control
+narrowed `DISCOVERED` — derived state nobody edits — rather than the `Rule`. An
+adversarial reviewer narrowed the `Rule.pattern` instead, which is what a real
+regression looks like, and reproduced drift D-1 with the probe silent: both runs
+back to dotted, their outcomes committed on disk, every gate green. **An oracle
+can be captured through an argument as easily as through a function call**, and
+"it walks the filesystem itself" was never the property that mattered — *where*
+it walks was. The probe now states root, pattern and member filenames as
+literals, and the control narrows the rule. `figures/RUN_STATE.md` records the
+full review round and the fifteen other defects it found.

@@ -1,0 +1,55 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running search (release).
+INFO     search stdin: 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02321.sas'
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02321-blind.plan' < ''"'"'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-02321.sas'"'"''
+[t=0.000159s, 1928 KB] Search code revision: 7120aa0
+[t=0.000250s, 1928 KB] reading input...
+[t=0.001426s, 2176 KB] done reading input!
+[t=0.002608s, 2780 KB] Initializing blind search heuristic...
+[t=0.002635s, 2780 KB] Building successor generator... done!
+[t=0.002699s, 2796 KB] peak memory difference for successor generator creation: 16 KB
+[t=0.002702s, 2796 KB] time for successor generation creation: 0.000055s
+[t=0.002707s, 2796 KB] Variables: 19
+[t=0.002748s, 2796 KB] FactPairs: 80
+[t=0.002751s, 2796 KB] Bytes per state: 4
+[t=0.002768s, 2804 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.002787s, 2816 KB] New best heuristic value for blind: 1
+[t=0.002791s, 2816 KB] g=0, 1 evaluated, 0 expanded
+[t=0.002794s, 2816 KB] f = 1, 1 evaluated, 0 expanded
+[t=0.002805s, 2828 KB] Initial heuristic value for blind: 1
+[t=0.002808s, 2828 KB] pruning method: none
+[t=0.002817s, 2828 KB] f = 2, 3 evaluated, 1 expanded
+[t=0.002825s, 2828 KB] f = 3, 7 evaluated, 3 expanded
+[t=0.002834s, 2828 KB] f = 4, 10 evaluated, 7 expanded
+[t=0.002841s, 2828 KB] f = 5, 13 evaluated, 10 expanded
+[t=0.002848s, 2856 KB] f = 6, 16 evaluated, 13 expanded
+[t=0.002857s, 2856 KB] f = 7, 21 evaluated, 16 expanded
+[t=0.002869s, 2856 KB] f = 8, 30 evaluated, 21 expanded
+[t=0.002885s, 2856 KB] f = 9, 42 evaluated, 30 expanded
+[t=0.002900s, 2868 KB] f = 10, 51 evaluated, 42 expanded
+[t=0.002911s, 2868 KB] f = 11, 56 evaluated, 51 expanded
+[t=0.002918s, 2872 KB] Completely explored state space -- no solution!
+[t=0.002920s, 2872 KB] Actual search time: 0.000111s
+[t=0.002925s, 2872 KB] Expanded 56 state(s).
+[t=0.002925s, 2872 KB] Reopened 0 state(s).
+[t=0.002925s, 2872 KB] Evaluated 56 state(s).
+[t=0.002925s, 2872 KB] Evaluations: 56
+[t=0.002925s, 2872 KB] Generated 160 state(s).
+[t=0.002925s, 2872 KB] Dead ends: 0 state(s).
+[t=0.002925s, 2872 KB] Expanded until last jump: 51 state(s).
+[t=0.002925s, 2872 KB] Reopened until last jump: 0 state(s).
+[t=0.002925s, 2880 KB] Evaluated until last jump: 56 state(s).
+[t=0.002925s, 2880 KB] Generated until last jump: 150 state(s).
+[t=0.002925s, 2880 KB] Number of registered states: 56
+[t=0.002925s, 2880 KB] Int hash set load factor: 56/64 = 0.875000
+[t=0.002925s, 2880 KB] Int hash set resizes: 6
+[t=0.002925s, 2880 KB] Search time: 0.000159s
+[t=0.002925s, 2880 KB] Total time: 0.002925s
+Search stopped without finding a solution.
+search exit code: 12
+
+Driver aborting after search

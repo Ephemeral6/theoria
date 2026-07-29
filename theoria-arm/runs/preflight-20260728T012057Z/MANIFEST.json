@@ -58,6 +58,55 @@
  },
  "outcome": null,
  "prompt_id": "P-8",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "74146df854c41226cb6f11e5a96d281a35f12f654a46d98b1f095beef10a3262",
+   "commits": [],
+   "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
+   "verdict": "no_match",
+   "window": {
+    "first_commit_after": {
+     "arm_sha256": "8a6f7b0090c5649694a48f6e1901096fdb296b66afdb88d58a87f9bb28322112",
+     "commit": "606c5820c26745b51687db9e0e0aa3994402b877",
+     "files": 24,
+     "unix": 1785202610
+    },
+    "last_commit_before": null,
+    "note": "the run happened between these two commits; its arm_version matches neither, so its sources were uncommitted edits somewhere inside that window"
+   }
+  },
+  "base_commit_check": {
+   "base_commit_in_this_manifest": "606c5820c26745b51687db9e0e0aa3994402b877",
+   "base_commit_the_arm_version_reconstructs": null,
+   "detail": "no commit reachable from any ref reconstructs this run's recorded arm_version, so the commit named here cannot be the tree the run ran against. `archive.py` wrote `git rev-parse HEAD` at manifest-writing time. The run's actual sources were uncommitted and are not recoverable from git.",
+   "verdict": "UNSUPPORTED"
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit",
+    "why": "the arm_version this run recorded (74146df854c4, 22 files) is reconstructed by no commit reachable from any ref: the run executed against uncommitted working-tree edits. The commits it fell between are given under `arm_version_lookup.window`; the exact sources are not recoverable from git."
+   },
+   {
+    "field": "base_commit (reproducible)",
+    "why": "no commit reachable from any ref reconstructs this run's recorded arm_version, so the commit named here cannot be the tree the run ran against. `archive.py` wrote `git rev-parse HEAD` at manifest-writing time. The run's actual sources were uncommitted and are not recoverable from git."
+   }
+  ],
+  "mode": "amend",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "this manifest was written by `armtools/archive.py` at the end of its run and is left exactly as it was. Only the fields below are added.",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
  "reconciliation": {
   "env_steps": 18,
   "env_steps_ok": 1,
@@ -108,5 +157,6 @@
   "theory-compiler/src/theory_compiler/generators/gen_python.py": "0e599dfc7f579245663ded9bc15db884694e0c7a56bcad2a3d86c8a25aa010d4",
   "theory-compiler/src/theory_compiler/parser/theory_parser.py": "9deba600ff17bdf19efe829816e0d9c8713600e621a480b3866214fdcf7dda5a"
  },
+ "utc": "2026-07-28T01:20:57.774Z",
  "world": null
 }

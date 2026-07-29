@@ -1,0 +1,287 @@
+{
+  "actions": [
+    "jump(0,1,2)",
+    "jump(1,2,3)",
+    "jump(2,1,0)",
+    "jump(3,2,1)"
+  ],
+  "comment": "Fixture C, 1D peg solitaire on four positions, started at 1101. A move jumps a peg over a neighbouring peg into an empty hole and removes the jumped peg.",
+  "defs": [
+    {
+      "body": [
+        "act"
+      ],
+      "name": "peek",
+      "params": []
+    }
+  ],
+  "goal": [
+    "call",
+    "peek"
+  ],
+  "init": {
+    "pos0": 1,
+    "pos1": 1,
+    "pos2": 0,
+    "pos3": 1
+  },
+  "name": "peg4-1101-act-raw-goal",
+  "provenance": {
+    "goal": "exactly one peg, at position 1 (state 0100)",
+    "hand_verified": "peg4.py's docstring: 1110, 0111 and 1011 are unsolvable; 1101 solves in 2 moves",
+    "world": "engine-rig/fixtures/peg4.py"
+  },
+  "rules": [
+    {
+      "action": "jump(0,1,2)",
+      "effects": {
+        "pos0": [
+          "lit",
+          0
+        ],
+        "pos1": [
+          "lit",
+          0
+        ],
+        "pos2": [
+          "lit",
+          1
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "=",
+          [
+            "var",
+            "pos0"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos1"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos2"
+          ],
+          [
+            "lit",
+            0
+          ]
+        ]
+      ],
+      "name": "jump_0_1_2"
+    },
+    {
+      "action": "jump(1,2,3)",
+      "effects": {
+        "pos1": [
+          "lit",
+          0
+        ],
+        "pos2": [
+          "lit",
+          0
+        ],
+        "pos3": [
+          "lit",
+          1
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "=",
+          [
+            "var",
+            "pos1"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos2"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos3"
+          ],
+          [
+            "lit",
+            0
+          ]
+        ]
+      ],
+      "name": "jump_1_2_3"
+    },
+    {
+      "action": "jump(2,1,0)",
+      "effects": {
+        "pos0": [
+          "lit",
+          1
+        ],
+        "pos1": [
+          "lit",
+          0
+        ],
+        "pos2": [
+          "lit",
+          0
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "=",
+          [
+            "var",
+            "pos2"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos1"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos0"
+          ],
+          [
+            "lit",
+            0
+          ]
+        ]
+      ],
+      "name": "jump_2_1_0"
+    },
+    {
+      "action": "jump(3,2,1)",
+      "effects": {
+        "pos1": [
+          "lit",
+          1
+        ],
+        "pos2": [
+          "lit",
+          0
+        ],
+        "pos3": [
+          "lit",
+          0
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "=",
+          [
+            "var",
+            "pos3"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos2"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "pos1"
+          ],
+          [
+            "lit",
+            0
+          ]
+        ]
+      ],
+      "name": "jump_3_2_1"
+    }
+  ],
+  "schema": "engine-rig/recheck/ruleset-v1",
+  "variables": [
+    {
+      "comment": "1 if position 0 holds a peg",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "pos0"
+    },
+    {
+      "comment": "1 if position 1 holds a peg",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "pos1"
+    },
+    {
+      "comment": "1 if position 2 holds a peg",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "pos2"
+    },
+    {
+      "comment": "1 if position 3 holds a peg",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "pos3"
+    }
+  ]
+}

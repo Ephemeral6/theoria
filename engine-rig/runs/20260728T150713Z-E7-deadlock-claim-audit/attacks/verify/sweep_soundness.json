@@ -1,0 +1,1447 @@
+{
+  "rows": [
+    {
+      "instance": "behind",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "########",
+        "#..#...#",
+        "#......#",
+        "#..#...#",
+        "#..#...#",
+        "########"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "door-swap",
+      "n_goal_states": 0,
+      "n_reachable": 1230,
+      "n_relaxation_dead": 1183,
+      "n_relaxation_dead_outside_theorems": 373,
+      "n_theorem_dead": 810,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 11,
+      "n_truly_dead": 1230,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b2,c16) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead",
+        "at(b2,c46) AND not-goal => dead",
+        "at(b1,c21) AND at(b2,c22) AND not-goal => dead",
+        "at(b1,c22) AND at(b2,c23) AND not-goal => dead",
+        "at(b1,c31) AND at(b2,c21) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "far8-midplayer",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "four-tight",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#.##.#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "pillar",
+      "n_goal_states": 0,
+      "n_reachable": 322,
+      "n_relaxation_dead": 322,
+      "n_relaxation_dead_outside_theorems": 128,
+      "n_theorem_dead": 194,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 6,
+      "n_truly_dead": 322,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#..##.#",
+        "#..#..#",
+        "#.....#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": false,
+      "instance": "stub-wall",
+      "n_goal_states": 1,
+      "n_reachable": 148,
+      "n_relaxation_dead": 105,
+      "n_relaxation_dead_outside_theorems": 63,
+      "n_theorem_dead": 42,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 5,
+      "n_truly_dead": 105,
+      "solvable": true,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c15) AND not-goal => dead",
+        "at(b1,c34) AND not-goal => dead",
+        "at(b1,c51) AND not-goal => dead",
+        "at(b1,c55) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": false
+    },
+    {
+      "instance": "swap-passage",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "swap-passage-strip",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "###.###",
+        "###.###",
+        "#.....#",
+        "###.###",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": false,
+      "instance": "tee",
+      "n_goal_states": 1,
+      "n_reachable": 14,
+      "n_relaxation_dead": 0,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 0,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 0,
+      "n_truly_dead": 0,
+      "solvable": true,
+      "theorems": [],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": false
+    },
+    {
+      "instance": "three-far",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "three-far8",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#...##",
+        "#....#",
+        "#....#",
+        "#.#..#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0000",
+      "n_goal_states": 0,
+      "n_reachable": 64,
+      "n_relaxation_dead": 64,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 64,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 5,
+      "n_truly_dead": 64,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c13) AND not-goal => dead",
+        "at(b2,c34) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c43) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#.##.#",
+        "#....#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0001",
+      "n_goal_states": 0,
+      "n_reachable": 49,
+      "n_relaxation_dead": 49,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 49,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 5,
+      "n_truly_dead": 49,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c24) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead",
+        "at(b3,c14) AND not-goal => dead",
+        "at(b4,c43) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#..#.#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0002",
+      "n_goal_states": 0,
+      "n_reachable": 13,
+      "n_relaxation_dead": 13,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 13,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 13,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b2,c12) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0003",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0004",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#....#",
+        "#..#.#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0005",
+      "n_goal_states": 0,
+      "n_reachable": 444,
+      "n_relaxation_dead": 444,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 444,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 7,
+      "n_truly_dead": 444,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead",
+        "at(b4,c14) AND not-goal => dead",
+        "at(b4,c34) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#...##",
+        "##...#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0006",
+      "n_goal_states": 0,
+      "n_reachable": 12,
+      "n_relaxation_dead": 12,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 12,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 12,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#.##.#",
+        "#....#",
+        "#....#",
+        "##...#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0007",
+      "n_goal_states": 0,
+      "n_reachable": 21,
+      "n_relaxation_dead": 21,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 21,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 21,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c42) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#.#..#",
+        "#..###",
+        "#....#",
+        "#...##",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0008",
+      "n_goal_states": 0,
+      "n_reachable": 1,
+      "n_relaxation_dead": 1,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 1,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 1,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c33) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "##...#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0009",
+      "n_goal_states": 0,
+      "n_reachable": 1749,
+      "n_relaxation_dead": 1749,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 1749,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 15,
+      "n_truly_dead": 1749,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c14) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c31) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead",
+        "at(b3,c41) AND not-goal => dead",
+        "at(b4,c14) AND not-goal => dead",
+        "at(b4,c44) AND not-goal => dead",
+        "at(b1,c13) AND at(b3,c12) AND not-goal => dead",
+        "at(b1,c22) AND at(b3,c32) AND not-goal => dead",
+        "at(b1,c24) AND at(b4,c34) AND not-goal => dead",
+        "at(b1,c32) AND at(b3,c22) AND not-goal => dead",
+        "at(b1,c34) AND at(b4,c24) AND not-goal => dead",
+        "at(b1,c43) AND at(b3,c42) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0010",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0011",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0012",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#..#.#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": false,
+      "instance": "rnd0013",
+      "n_goal_states": 3,
+      "n_reachable": 680,
+      "n_relaxation_dead": 495,
+      "n_relaxation_dead_outside_theorems": 134,
+      "n_theorem_dead": 361,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 8,
+      "n_truly_dead": 495,
+      "solvable": true,
+      "theorems": [
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead",
+        "at(b1,c14) AND at(b2,c13) AND not-goal => dead",
+        "at(b1,c14) AND at(b2,c24) AND not-goal => dead",
+        "at(b1,c34) AND at(b2,c24) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": false
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#..#.#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0014",
+      "n_goal_states": 0,
+      "n_reachable": 537,
+      "n_relaxation_dead": 537,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 537,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 14,
+      "n_truly_dead": 537,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c14) AND not-goal => dead",
+        "at(b1,c21) AND not-goal => dead",
+        "at(b1,c42) AND not-goal => dead",
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead",
+        "at(b3,c14) AND not-goal => dead",
+        "at(b3,c21) AND not-goal => dead",
+        "at(b3,c42) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead",
+        "at(b4,c31) AND not-goal => dead",
+        "at(b1,c13) AND at(b3,c12) AND not-goal => dead",
+        "at(b1,c24) AND at(b3,c34) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "########",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "########"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0015",
+      "n_goal_states": 0,
+      "n_reachable": 204,
+      "n_relaxation_dead": 204,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 204,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 204,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c16) AND not-goal => dead",
+        "at(b1,c66) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#....##",
+        "#..#..#",
+        "#.#...#",
+        "#...#.#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0016",
+      "n_goal_states": 0,
+      "n_reachable": 19,
+      "n_relaxation_dead": 19,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 19,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 19,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c51) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#.#...#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0017",
+      "n_goal_states": 0,
+      "n_reachable": 968,
+      "n_relaxation_dead": 968,
+      "n_relaxation_dead_outside_theorems": 357,
+      "n_theorem_dead": 611,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 7,
+      "n_truly_dead": 968,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c15) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b1,c53) AND not-goal => dead",
+        "at(b1,c55) AND not-goal => dead",
+        "at(b2,c51) AND not-goal => dead",
+        "at(b1,c31) AND at(b2,c41) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#....#",
+        "#.#..#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0018",
+      "n_goal_states": 0,
+      "n_reachable": 13,
+      "n_relaxation_dead": 13,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 13,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 13,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c24) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "########",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#...#..#",
+        "#......#",
+        "########"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0019",
+      "n_goal_states": 0,
+      "n_reachable": 192,
+      "n_relaxation_dead": 192,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 192,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 4,
+      "n_truly_dead": 192,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c56) AND not-goal => dead",
+        "at(b2,c46) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead",
+        "at(b3,c16) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0020",
+      "n_goal_states": 0,
+      "n_reachable": 440,
+      "n_relaxation_dead": 440,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 440,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 8,
+      "n_truly_dead": 440,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c24) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead",
+        "at(b3,c13) AND not-goal => dead",
+        "at(b3,c24) AND not-goal => dead",
+        "at(b3,c41) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#...##",
+        "#..#.#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0021",
+      "n_goal_states": 0,
+      "n_reachable": 92,
+      "n_relaxation_dead": 59,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 70,
+      "n_theorem_dead_outside_relaxation": 11,
+      "n_theorems": 3,
+      "n_truly_dead": 92,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c41) AND not-goal => dead",
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c13) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#...##",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0022",
+      "n_goal_states": 0,
+      "n_reachable": 12,
+      "n_relaxation_dead": 12,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 12,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 12,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c24) AND not-goal => dead",
+        "at(b2,c23) AND not-goal => dead",
+        "at(b3,c33) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "##.#.#",
+        "#....#",
+        "#.#..#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0023",
+      "n_goal_states": 0,
+      "n_reachable": 11,
+      "n_relaxation_dead": 11,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 11,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 11,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c21) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0024",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0025",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "##...#",
+        "#....#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0026",
+      "n_goal_states": 0,
+      "n_reachable": 1524,
+      "n_relaxation_dead": 1524,
+      "n_relaxation_dead_outside_theorems": 68,
+      "n_theorem_dead": 1456,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 11,
+      "n_truly_dead": 1524,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c21) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c12) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b2,c21) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead",
+        "at(b3,c14) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead",
+        "at(b2,c24) AND at(b3,c34) AND not-goal => dead",
+        "at(b2,c34) AND at(b3,c24) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0027",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#....#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0028",
+      "n_goal_states": 0,
+      "n_reachable": 42,
+      "n_relaxation_dead": 42,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 42,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 42,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c42) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#..#.#",
+        "#....#",
+        "#.##.#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0029",
+      "n_goal_states": 0,
+      "n_reachable": 58,
+      "n_relaxation_dead": 58,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 58,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 4,
+      "n_truly_dead": 58,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c41) AND not-goal => dead",
+        "at(b2,c34) AND not-goal => dead",
+        "at(b3,c14) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#....##",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0030",
+      "n_goal_states": 0,
+      "n_reachable": 21,
+      "n_relaxation_dead": 21,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 21,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 21,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c52) AND not-goal => dead",
+        "at(b2,c51) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#.#..#",
+        "#....#",
+        "###.##",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0031",
+      "n_goal_states": 0,
+      "n_reachable": 24,
+      "n_relaxation_dead": 24,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 24,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 24,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c34) AND not-goal => dead",
+        "at(b2,c31) AND not-goal => dead",
+        "at(b3,c11) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "########",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "#......#",
+        "##..#..#",
+        "########"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0032",
+      "n_goal_states": 0,
+      "n_reachable": 128,
+      "n_relaxation_dead": 128,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 128,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 128,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b2,c21) AND not-goal => dead",
+        "at(b2,c51) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#...##",
+        "##...#",
+        "#...##",
+        "#..#.#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0033",
+      "n_goal_states": 0,
+      "n_reachable": 1,
+      "n_relaxation_dead": 1,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 1,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 1,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c12) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0034",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0035",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0036",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0037",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0038",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0039",
+      "n_goal_states": 0,
+      "n_reachable": 552,
+      "n_relaxation_dead": 552,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 552,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 6,
+      "n_truly_dead": 552,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c14) AND not-goal => dead",
+        "at(b1,c25) AND not-goal => dead",
+        "at(b1,c51) AND not-goal => dead",
+        "at(b1,c55) AND not-goal => dead",
+        "at(b2,c15) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#..#.#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0040",
+      "n_goal_states": 0,
+      "n_reachable": 70,
+      "n_relaxation_dead": 70,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 70,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 4,
+      "n_truly_dead": 70,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c43) AND not-goal => dead",
+        "at(b2,c42) AND not-goal => dead",
+        "at(b3,c41) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0041",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#..#.#",
+        "#....#",
+        "#....#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0042",
+      "n_goal_states": 0,
+      "n_reachable": 23,
+      "n_relaxation_dead": 23,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 23,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 23,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b3,c12) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0043",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "#...#.#",
+        "##....#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0044",
+      "n_goal_states": 0,
+      "n_reachable": 62,
+      "n_relaxation_dead": 62,
+      "n_relaxation_dead_outside_theorems": 20,
+      "n_theorem_dead": 42,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 62,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c55) AND not-goal => dead",
+        "at(b2,c55) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "#....##",
+        "##....#",
+        "#.#...#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0045",
+      "n_goal_states": 0,
+      "n_reachable": 115,
+      "n_relaxation_dead": 115,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 115,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 15,
+      "n_truly_dead": 115,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b1,c15) AND not-goal => dead",
+        "at(b2,c45) AND not-goal => dead",
+        "at(b3,c31) AND not-goal => dead",
+        "at(b4,c11) AND not-goal => dead",
+        "at(b4,c15) AND not-goal => dead",
+        "at(b4,c21) AND not-goal => dead",
+        "at(b4,c25) AND not-goal => dead",
+        "at(b4,c42) AND not-goal => dead",
+        "at(b4,c53) AND not-goal => dead",
+        "at(b4,c55) AND not-goal => dead",
+        "at(b1,c12) AND at(b4,c13) AND not-goal => dead",
+        "at(b1,c13) AND at(b4,c12) AND not-goal => dead",
+        "at(b1,c13) AND at(b4,c14) AND not-goal => dead",
+        "at(b1,c14) AND at(b4,c13) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#..#.#",
+        "#...##",
+        "##...#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0046",
+      "n_goal_states": 0,
+      "n_reachable": 39,
+      "n_relaxation_dead": 39,
+      "n_relaxation_dead_outside_theorems": 8,
+      "n_theorem_dead": 31,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 39,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c33) AND not-goal => dead",
+        "at(b1,c42) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#....#",
+        "#..#.#",
+        "#...##",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0047",
+      "n_goal_states": 0,
+      "n_reachable": 30,
+      "n_relaxation_dead": 30,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 30,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 30,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "##....#",
+        "#.....#",
+        "#....##",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0048",
+      "n_goal_states": 0,
+      "n_reachable": 461,
+      "n_relaxation_dead": 461,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 461,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 8,
+      "n_truly_dead": 461,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c51) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b2,c15) AND not-goal => dead",
+        "at(b2,c21) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b2,c45) AND not-goal => dead",
+        "at(b2,c52) AND not-goal => dead",
+        "at(b2,c54) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0049",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#..#.#",
+        "#....#",
+        "#....#",
+        "#...##",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0050",
+      "n_goal_states": 0,
+      "n_reachable": 12,
+      "n_relaxation_dead": 12,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 12,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 2,
+      "n_truly_dead": 12,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c24) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "#..#.#",
+        "##.#.#",
+        "##...#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0051",
+      "n_goal_states": 0,
+      "n_reachable": 35,
+      "n_relaxation_dead": 35,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 35,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 35,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c11) AND not-goal => dead",
+        "at(b2,c41) AND not-goal => dead",
+        "at(b3,c12) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0052",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0053",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0054",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "######",
+        "##...#",
+        "#....#",
+        "#.#..#",
+        "#....#",
+        "######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0055",
+      "n_goal_states": 0,
+      "n_reachable": 32,
+      "n_relaxation_dead": 32,
+      "n_relaxation_dead_outside_theorems": 0,
+      "n_theorem_dead": 32,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 3,
+      "n_truly_dead": 32,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c14) AND not-goal => dead",
+        "at(b2,c14) AND not-goal => dead",
+        "at(b3,c44) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0056",
+      "skipped": "over 2000 states"
+    },
+    {
+      "UNSOUND_theorem_dead_not_truly_dead": 0,
+      "art": [
+        "#######",
+        "#.....#",
+        "##....#",
+        "#.....#",
+        "#.....#",
+        "#.....#",
+        "#######"
+      ],
+      "h2_proves_instance_unsolvable": true,
+      "instance": "rnd0057",
+      "n_goal_states": 0,
+      "n_reachable": 968,
+      "n_relaxation_dead": 968,
+      "n_relaxation_dead_outside_theorems": 357,
+      "n_theorem_dead": 611,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorems": 7,
+      "n_truly_dead": 968,
+      "solvable": false,
+      "theorems": [
+        "at(b1,c12) AND not-goal => dead",
+        "at(b1,c15) AND not-goal => dead",
+        "at(b1,c31) AND not-goal => dead",
+        "at(b1,c51) AND not-goal => dead",
+        "at(b1,c55) AND not-goal => dead",
+        "at(b2,c11) AND not-goal => dead",
+        "at(b1,c13) AND at(b2,c12) AND not-goal => dead"
+      ],
+      "unsound_state_ids": [],
+      "vacuous_soundness_test": true
+    },
+    {
+      "instance": "rnd0058",
+      "skipped": "over 2000 states"
+    },
+    {
+      "instance": "rnd0059",
+      "skipped": "over 2000 states"
+    }
+  ],
+  "summary": {
+    "instances_h2_unsolvable_but_relaxation_alive_somewhere": [
+      "door-swap",
+      "rnd0021"
+    ],
+    "instances_with_witnesses": [
+      "rnd0021"
+    ],
+    "n_h2_proves_unsolvable": 39,
+    "n_instances_analysed": 42,
+    "n_solvable": 3,
+    "n_unsolvable": 39,
+    "n_unsound": 0,
+    "n_with_nonvacuous_soundness_test": 3
+  }
+}

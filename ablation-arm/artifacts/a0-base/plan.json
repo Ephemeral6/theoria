@@ -1,0 +1,41 @@
+{
+  "actions": [
+    "(push-right c5-1 c5-2)",
+    "(push-right c5-2 c5-3)",
+    "(push-up c5-3 c4-3)",
+    "(push-up c4-3 c3-3)",
+    "(press-left c3-3 c3-2 c4-5)",
+    "(push-down c3-3 c4-3)",
+    "(push-right c4-3 c4-4)",
+    "(push-right c4-4 c4-5)",
+    "(push-right c4-5 c4-6)",
+    "(push-right c4-6 c4-7)",
+    "(push-up c4-7 c3-7)",
+    "(push-up c3-7 c2-7)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "right",
+    "right",
+    "up",
+    "up",
+    "left",
+    "down",
+    "right",
+    "right",
+    "right",
+    "right",
+    "up",
+    "up"
+  ],
+  "domain": "domain.pddl",
+  "execution_mismatches": [],
+  "green": true,
+  "length": 12,
+  "manual_reaches_goal": true,
+  "name": "a0-base",
+  "problem": "problem.pddl",
+  "settled_by": "witness",
+  "status": "SAT",
+  "world_reaches_goal": true
+}

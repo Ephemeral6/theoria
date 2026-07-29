@@ -1,0 +1,53 @@
+.................................................F...................... [ 48%]
+........................................................................ [ 97%]
+....                                                                     [100%]
+================================== FAILURES ===================================
+______________ test_the_shell_turns_end_to_end_against_the_mock _______________
+
+tmp_path = WindowsPath('C:/Users/user/AppData/Local/Temp/pytest-of-user/pytest-3061/test_the_shell_turns_end_to_en0')
+
+    def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
+        """No key, no network, no model call, no quota -- and a full ledger."""
+        from harness.run import play                       # noqa: PLC0415
+        from inner.loop import TheoriaArm                  # noqa: PLC0415
+        from proxy.ledger import read_ledger               # noqa: PLC0415
+        from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415
+    
+        game = "g50t-5849a774"
+        slug = "pytest-" + os.path.basename(str(tmp_path))
+    
+        def factory(env_base, run):
+            return TheoriaArm(env_base=env_base, run=run, game_id=game,
+                              budget_actions=6, offline=True)
+    
+        with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+            summary = play(game, slug, factory, env_upstream=mock.base_url,
+                           env_key=DEFAULT_KEY, require_key=False)
+    
+        assert summary["budget"]["actions_ok"] == 6
+        assert summary["model_calls"] == 0                 # offline: zero calls
+        assert summary["scorecard"]["total_actions"] == 6
+    
+        run_dir = os.path.join(ARM, "runs", slug)
+        everything = read_ledger(os.path.join(run_dir, "ledger.jsonl"))
+        # LEDGER_FORMAT.md ¡ì1: one file holds many runs, `run_id` partitions it and
+        # `seq` orders it. The file is append-only, so re-running this test adds a
+        # run rather than replacing one -- which is the property being relied on.
+        records = [r for r in everything if r["run_id"] == summary["run_id"]]
+        events = [r["event"] for r in records]
+        assert events[0] == "run_start" and events[-1] == "run_end"
+        assert all(r["arm"] == "theoria" for r in records)
+        assert sum(1 for e in events if e == "env_step") == 7       # RESET + 6
+        # ¡ì3: step_idx is dense and monotonic within a run.
+        steps = [r["step_idx"] for r in records if r["event"] == "env_step"]
+        assert steps == list(range(len(steps)))
+        # ¡ì2: seq is dense across the whole file, whoever wrote it.
+>       assert [r["seq"] for r in everything] == list(range(1, len(everything) + 1))
+E       assert [1, 2, 3, 4, 5, 6, ...] == [1, 2, 3, 4, 5, 6, ...]
+E         
+E         At index 143 diff: 137 != 144
+E         Use -v to get more diff
+
+tests\test_arm.py:723: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_arm.py::test_the_shell_turns_end_to_end_against_the_mock - ...

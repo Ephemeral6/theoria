@@ -1,0 +1,36 @@
+{
+  "claim": "conditional_unsolvability",
+  "comment": "a plausible mined pattern: b1 cornered, or the player is standing on b1",
+  "kind": "dead_region",
+  "name": "attack-A3-player-on-box-is-dead",
+  "predicate": [
+    "or",
+    [
+      "=",
+      [
+        "var",
+        "b1"
+      ],
+      [
+        "lit",
+        "1,1"
+      ]
+    ],
+    [
+      "=",
+      [
+        "var",
+        "player"
+      ],
+      [
+        "var",
+        "b1"
+      ]
+    ]
+  ],
+  "produced_by": "engines/deadlock_carver (M9)",
+  "ruleset": {
+    "name": "sokoban-open4far"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}

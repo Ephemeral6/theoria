@@ -326,7 +326,8 @@ def run_fast_downward(executable: str, domain_path: str, problem_path: str,
             executable, domain_path, problem_path, plan_path, tier, heuristic
         )
         completed = subprocess.run(
-            command, cwd=workdir, capture_output=True, text=True, timeout=timeout
+            command, cwd=workdir, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=timeout
         )
         # FD talks on stdout; the verdict is in what it said, not only in how it
         # exited, so both streams are read.

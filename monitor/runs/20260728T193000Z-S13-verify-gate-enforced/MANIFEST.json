@@ -1,0 +1,23 @@
+{
+  "prompt_id": "S13-verify-gate-enforced",
+  "branch": "agent/s13-verify-gate-enforced",
+  "base_commit": "d751ccd6ea06a61d3444600abec3c8b45c46ca16",
+  "utc": "2026-07-28T19:30:00Z",
+  "worker": "RES-1",
+  "lane": "campaign",
+  "territory": "monitor",
+  "network": "none",
+  "pile_contact": "none",
+  "gate_survey_before": {"gated": 7, "tests_only": 9, "ungated": 5},
+  "gate_survey_after": {"gated": 8, "tests_only": 9, "ungated": 4},
+  "tests": "20 passed (monitor had zero before this item)",
+  "verify": "GREEN -- monitor/verify.sh: tests, one real scan into mkdtemp, artifact field self-check",
+  "findings": [
+    "the item's premise was stale: 7 territories already had a gate, not 3, and proxy's is named verify_spend.sh",
+    "the old probe matched only verify*.sh, so every .py gate was invisible to it",
+    "the probe false-positived on S13's own ticket text -- prose naming the rule read as a path claim",
+    "monitor itself was ungated and had zero tests: the rig enforcing gates was the one place a defect could hide from every check",
+    "and one did: subprocess.run(text=True) decoded a UTF-8 board listing as GBK on Windows, leaving the page's board panel silently empty",
+    "scan.build wrote three files into monitor/ unconditionally, so monitor's own gate could not run a real scan without dirtying the tree it gates"
+  ]
+}

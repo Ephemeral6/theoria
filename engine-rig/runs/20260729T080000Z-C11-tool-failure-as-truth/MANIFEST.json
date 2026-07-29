@@ -1,0 +1,108 @@
+{
+  "absorbs": [
+    "E12-adopt-the-unsolvable-canon"
+  ],
+  "adversarial_review": "ADVERSARIAL.md -- overturned the #9 classification, the #8 fix, and the '18/18 kills' claim; all three accepted and repaired",
+  "api_calls": 0,
+  "base_commit": "0456383087f4bd269d18af8378bd1b02224a25dc",
+  "branch": "agent/c11-tool-failure-as-truth",
+  "files": [
+    {
+      "path": "engine-rig/tools/p13_fd_dividend.py",
+      "sha256": "fce3ff2cc14106e656c07ea7a0c7e2b5f89b4f00438a870218e94b20de99a195"
+    },
+    {
+      "path": "engine-rig/tools/check_solver_status.py",
+      "sha256": "2c97cb1d7dc7ecd9a3c25274dc5a640a3120ab32e39e7a264f16cd4884eb2a21"
+    },
+    {
+      "path": "engine-rig/tests/test_tool_failure_is_not_truth.py",
+      "sha256": "cbd0af8cd23f143483ddc34b5d1342ef99a6df48fa877ab792cc8499d8326eaf"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/potential.py",
+      "sha256": "9390c0dfaa3a2cb23b1debc61a33ba782ac097531db35740feb7f8a9cec491d1"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/__init__.py",
+      "sha256": "5f2b5e3175456de6b12df7301afe13af352281368a90e357f60616a0848ae5ea"
+    },
+    {
+      "path": "engine-rig/engines/zero_space/zerospace.py",
+      "sha256": "d8f61b34c094ce97ca1f015a17d1662292af022f74e338e73e9d0a7e6c1478f9"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/segmenter.py",
+      "sha256": "8de890e35c08c71760e3e4864404fdc295238b4f3c3b4cf53ca6952ad9d23e26"
+    },
+    {
+      "path": "engine-rig/engines/probe_frontier/reach.py",
+      "sha256": "0248d4773d4aa3822aa909815fc3e8bde6a0132dd1b76a2ad220b2a260cb928a"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/search.py",
+      "sha256": "4051b3ca8133aad1c2dfa200e5b3a2ab469a10b9c41202d33be97e4b25bb0376"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/backends.py",
+      "sha256": "7702b16adf4a12ce0caa0598d0aa55a896226698f87bc047606b1346034ed396"
+    },
+    {
+      "path": "engine-rig/engines/deadlock_carver/__init__.py",
+      "sha256": "620549834a1ae8a6c4baa7fa8139d73e0599b752ffb3dcd017d547cf6e21793a"
+    },
+    {
+      "path": "engine-rig/recheck/verify.py",
+      "sha256": "624a7948778daf498eb66a0ef39f41273b48c5823f39c8db6dd67cd23bb00608"
+    },
+    {
+      "path": "engine-rig/bench/fdrun.py",
+      "sha256": "7a37c8bd2e1a35797ad9b52b7ad7caa049551d716c76ef4dff328f524ff268f9"
+    },
+    {
+      "path": "engine-rig/bench/toolchain.py",
+      "sha256": "3507404c70b21049148257f22a3b249302ff9b5b3aaef107d42f40542da2e6e2"
+    },
+    {
+      "path": "engine-rig/bench/__main__.py",
+      "sha256": "72cc2db90d6f8a06f4ae32ff7286ab2013f16c13e2341eddddd64a1e8afb54b4"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/CORRECTIONS.md",
+      "sha256": "4a47a815d620371915e43504bbdff356b81aee7216f15f0598fdcff05ffeca0a"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/CALIBRATION.md",
+      "sha256": "b613c2ff1593bcad96531348fb1aaea5143c1d16e8c839922cc2e26b831dae52"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/RECONCILIATION.md",
+      "sha256": "fad5f32043d645b3a09948b13a2cfeb2d77db57acf369b4126d9855ee8fcf1ea"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/MUTATION.md",
+      "sha256": "b6f077ab2253f39f93964f2a6bd9c806533c040b9bde065875ddf9d0165475db"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/INBOX-proposals.md",
+      "sha256": "1ce6292d03a247ba7ad1f43e7a0373d93acaac42a22db28a5adef9e31d782c3a"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/RUN_STATE.md",
+      "sha256": "2e6631b09f96de3156ae1ca3721e2c35b379c1d15543d9830ea9f5ec0e5cd27c"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/ADVERSARIAL.md",
+      "sha256": "18b126774c91820f1cc4e1934d0b2d13e5f01a41c1b37f57335c242fda15229a"
+    }
+  ],
+  "network": "none",
+  "note_on_hashes": "files[].sha256 are computed against the working tree at the moment this manifest was written, one commit before base_commit's successor; re-verify after any further edit to this directory.",
+  "prompt_id": "C11-tool-failure-as-truth",
+  "sealed_pile_contact": "none",
+  "spend_usd": 0.0,
+  "standing_check": "python -m tools.check_solver_status -> 0 ERROR, 0 NOTE, 95 files scanned",
+  "territory": "engine-rig",
+  "tests": "engine-rig: python -m pytest -q -- all pass (23 skipped: no Fast Downward build on this machine, .toolchain/ is gitignored by design)",
+  "utc": "2026-07-29T08:00:00Z"
+}

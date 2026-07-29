@@ -38,6 +38,7 @@ import shutil
 import subprocess
 import sys
 import time
+import childio  # noqa: E402  (per-child decoding, see its docstring)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -47,7 +48,7 @@ LOGS = os.path.join(HERE, "dispatch-logs")
 
 def git(*args):
     out = subprocess.run(["git"] + list(args), cwd=ROOT, capture_output=True,
-                         text=True)
+                         text=True, encoding="utf-8", errors="replace")
     return out.stdout
 
 
@@ -97,7 +98,7 @@ def save_registry(reg):
 def pid_alive(pidnum):
     if os.name == "nt":
         out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
-                             capture_output=True, text=True).stdout
+                             capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout
         return str(pidnum) in out
     try:
         os.kill(pidnum, 0)
@@ -194,7 +195,7 @@ def health():
     procs = set()
     if os.name == "nt":
         out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq node.exe", "/FO", "CSV"],
-                             capture_output=True, text=True).stdout
+                             capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout
         procs = {line.split('","')[1] for line in out.splitlines() if line.startswith('"')}
     branches = existing_branches()
     if not os.path.isdir(LOGS):
@@ -304,12 +305,28 @@ def via_task(pid_str, prompt_file):
                             os.path.join(HERE, "_runner.py"), pid_str)
     subprocess.run(["schtasks", "/Create", "/TN", task, "/TR", cmd,
                     "/SC", "ONCE", "/ST", "23:59", "/F"],
-                   capture_output=True, text=True)
+                   capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace")
     r = subprocess.run(["schtasks", "/Run", "/TN", task],
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace")
     ok = r.returncode == 0
     reg = load_registry()
-    reg[pid_str] = {"pid": 0, "task": task, "log": os.path.basename(log_path),
+    # A worker found `pid: 0` copied into three consumers (reap / health /
+    # quota), so every task-launched session was untrackable. Ask the
+    # scheduler for the real pid it started.
+    real_pid = 0
+    try:
+        q = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST",
+                            "/V"], capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace")
+        for line in q.stdout.splitlines():
+            if line.strip().lower().startswith(("pid", "进程 id")):
+                digits = "".join(c for c in line.split(":")[-1] if c.isdigit())
+                if digits:
+                    real_pid = int(digits)
+                break
+    except Exception:
+        pass
+    reg[pid_str] = {"pid": real_pid, "task": task,
+                    "log": os.path.basename(log_path),
                     "started": stamp, "reaped": None, "via": "task"}
     save_registry(reg)
     print("%-20s %s task=%s" % (pid_str, "started" if ok else "FAILED", task))
@@ -318,7 +335,7 @@ def via_task(pid_str, prompt_file):
 
 def task_state(task):
     r = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace")
     if r.returncode != 0:
         return "gone"
     for line in r.stdout.splitlines():

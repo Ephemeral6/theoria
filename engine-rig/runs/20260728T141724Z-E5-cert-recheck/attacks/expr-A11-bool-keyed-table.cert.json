@@ -1,0 +1,40 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A11-bool-keyed-table",
+  "predicate": [
+    "=",
+    [
+      "table",
+      "t",
+      [
+        "var",
+        "pos1"
+      ]
+    ],
+    [
+      "table",
+      "t",
+      [
+        "var",
+        "pos2"
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "t": {
+      "arity": 1,
+      "entries": [
+        [
+          false,
+          "a"
+        ],
+        [
+          true,
+          "b"
+        ]
+      ]
+    }
+  }
+}

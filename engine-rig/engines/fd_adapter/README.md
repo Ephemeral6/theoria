@@ -122,9 +122,11 @@ A minimal gripper: 2 rooms, 2 balls, 2 grippers; move both balls from `rooma` to
 and at least one move is needed since both balls start in the wrong room (1), so
 5 is a lower bound; `pick / pick / move / drop / drop` attains it.
 
-The test suite checks that number three ways that do not share code with the
-search: the literal 5, validation by an independent replayer, and exhaustive
-enumeration showing no plan of length ≤ 4 reaches the goal.
+The test suite checks that number three ways, none of which goes through the
+search's own frontier: the literal 5, replay by `validate.py`, and exhaustive
+enumeration showing no plan of length ≤ 4 reaches the goal. The last two still
+ground the task with `pddl.ground_actions`, as the search does — see the note
+under Modules.
 
 ## The PDDL subset
 
@@ -138,13 +140,19 @@ numeric fluents — raises `PddlError` rather than being silently mis-parsed.
 |---|---|
 | `pddl.py` | tokeniser, parser, typed grounding |
 | `search.py` | the stub: BFS over grounded STRIPS, with the node account and the pruning hook |
-| `validate.py` | independent replay validator — imports the parser, **not** the search |
+| `validate.py` | replay validator — independent of `search`, but shares `ground_actions` with it |
 | `backends.py` | the tier rule, Fast Downward discovery, invocation, `sas_plan` parsing |
 | `fuzz.py` | random gripper instances and the closed-form optimum they are checked against |
 
-`validate.py` re-grounds its own actions on purpose: a bug in the search's
-successor generation (a dropped delete effect, say) must not be able to validate
-itself.
+`validate.py` replays the plan without importing `search`, on purpose: a bug in
+the search's frontier, ordering or duplicate detection must not be able to
+certify its own output, and `solve` runs the replay on every rung, real FD
+included. It does share `pddl.ground_actions` with the search, and that function
+is the successor-generation layer — it decides which instances can fire, with
+which effects — so a dropped delete effect in the grounding is invisible to a
+replay that steps through the same instances. A passing plan is legal under the
+shared grounding, not under the PDDL as written. See DECISIONS.md D-010 and
+D-035.
 
 ## Payload shape — `kind: "plan"` (stable)
 

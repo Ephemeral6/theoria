@@ -1,4 +1,16 @@
-"""Figure 3 — A2's ledger flow, from a false theorem back to a solved level.
+"""SUPERSEDED AS A SOURCE (P9). Kept as the witness, not as the figure.
+
+The paper's figures are now built by the repository's deterministic pipeline at
+``figures/`` -- see ``papers/phase1-workshop/figures/PARITY.md`` and OUTLINE.md.
+This script is retained because it is an *independent* second computation of the
+same numbers, and a second opinion is the only instrument that can catch a first
+one being wrong. ``check_figure_parity.py`` runs it against the pipeline.
+
+Do not cite this file from a section. It is not the figure any more.
+
+--- original docstring follows ---
+
+Figure 3 — A2's ledger flow, from a false theorem back to a solved level.
 
 Source of truth: ``cold-start-a2/artifacts/loop_ledger.json``. The ledger is the
 account of the whole exhibit: two beats to build the thing (a complete manual,

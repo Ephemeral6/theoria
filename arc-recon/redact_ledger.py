@@ -46,7 +46,27 @@ sys.path.insert(0, HERE)
 from client import DATA_DIR, cookie_names        # noqa: E402
 
 LEDGER_PATH = os.path.join(DATA_DIR, "recon_ledger.jsonl")
+CASCADE_RUNS = os.path.join(HERE, "cascade", "runs")
 MARKER = "<redacted INC-008>"
+
+
+def all_ledgers() -> List[str]:
+    """Every request ledger this directory tracks, not just the first one.
+
+    INC-008 was a cookie value written into `data/recon_ledger.jsonl`, so the
+    check was built against that one path -- correct at the time, and a latent
+    hole the moment a second ledger appeared. S5 created exactly that when it
+    salvaged P-20's per-frame probe into `cascade/runs/`, which is four more
+    ledgers of real response bodies. A hygiene check that scans one of five
+    files reports "0 carry a cookie value" either way, which is the shape of
+    check this repository has already been burned by twice (INC-003, INC-009).
+    """
+    found = [LEDGER_PATH] if os.path.exists(LEDGER_PATH) else []
+    for root, _dirs, names in os.walk(CASCADE_RUNS):
+        for name in sorted(names):
+            if name.startswith("ledger.") and name.endswith(".jsonl"):
+                found.append(os.path.join(root, name))
+    return found
 
 
 def scan(path: str = LEDGER_PATH) -> Dict[str, Any]:
@@ -123,28 +143,46 @@ def main(argv: List[str]) -> int:
     parser.add_argument("--check", action="store_true",
                         help="report and change nothing (the default)")
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--path", action="append", metavar="LEDGER",
+                        help="scan this ledger instead of every tracked one "
+                             "(repeatable)")
     args = parser.parse_args(argv)
 
-    if not args.apply:
-        report = scan()
-        print("  %d ledger lines, %d carry a cookie value"
-              % (report["total_lines"], report["entries_with_values"]))
-        for row in report["offenders"][:5]:
-            print("    line %-5d %s  names=%s"
-                  % (row["line"], row["t"], ",".join(row["names"])))
-        if report["entries_with_values"] > 5:
-            print("    ... and %d more" % (report["entries_with_values"] - 5))
-        print("  run with --apply to redact")
-        return 1 if report["entries_with_values"] else 0
+    paths = args.path or all_ledgers()
+    if not paths:
+        print("  no ledger found")
+        return 1
 
-    result = apply()
-    print("  redacted %d entries of %d lines; backup at %s"
-          % (result["changed"], result["total_lines"],
-             os.path.basename(result.get("backup", "-"))))
-    after = scan()
-    print("  re-scan: %d entries still carrying a value"
-          % after["entries_with_values"])
-    return 0 if after["entries_with_values"] == 0 else 1
+    if not args.apply:
+        lines = offenders = 0
+        for path in paths:
+            report = scan(path)
+            lines += report["total_lines"]
+            offenders += report["entries_with_values"]
+            print("  %-46s %5d lines, %d carry a cookie value"
+                  % (os.path.relpath(path, HERE), report["total_lines"],
+                     report["entries_with_values"]))
+            for row in report["offenders"][:5]:
+                print("    line %-5d %s  names=%s"
+                      % (row["line"], row["t"], ",".join(row["names"])))
+            if report["entries_with_values"] > 5:
+                print("    ... and %d more"
+                      % (report["entries_with_values"] - 5))
+        print("  %d ledger lines over %d file(s), %d carry a cookie value"
+              % (lines, len(paths), offenders))
+        print("  run with --apply to redact")
+        return 1 if offenders else 0
+
+    remaining = 0
+    for path in paths:
+        result = apply(path)
+        print("  %-46s redacted %d of %d lines; backup at %s"
+              % (os.path.relpath(path, HERE), result["changed"],
+                 result["total_lines"],
+                 os.path.basename(result.get("backup", "-"))))
+        remaining += scan(path)["entries_with_values"]
+    print("  re-scan: %d entries still carrying a value" % remaining)
+    return 0 if remaining == 0 else 1
 
 
 if __name__ == "__main__":

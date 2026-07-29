@@ -85,10 +85,28 @@ def upstream_pin() -> dict:
 
 
 def arm_version() -> dict:
-    """A hash over this arm's own sources, in the shape proxy.runner uses."""
+    """A hash over this arm's own sources, in the shape proxy.runner uses.
+
+    The two skip tests are substring tests, and they are applied to the path
+    **below** `HERE` rather than to the absolute path. That is a correction:
+    applied to the absolute path, an ancestor directory decides the answer.
+    `.worktrees/runs-cleanup/theoria-arm` -- a perfectly ordinary worktree
+    under CLAUDE.md's naming rule -- contains `\\runs`, so every file was
+    skipped and the function returned `files: 0` and the sha256 of the empty
+    string. A run made there would record an arm version that matches nothing
+    and cannot be made to match anything.
+
+    The tests themselves are left as substring tests, so `runsim/` and
+    `__pycache__x/` are still skipped. Changing that would change the hash of
+    any tree containing such a directory; no tree in this arm's history does
+    (`git log --all --full-history --name-only`), and the same rule is
+    reimplemented over git objects in `armtools/armversion.py`, so every hash
+    ever recorded still reconstructs.
+    """
     digests = {}
     for root, _dirs, names in os.walk(HERE):
-        if "__pycache__" in root or os.sep + "runs" in root:
+        below = root[len(HERE):]
+        if "__pycache__" in below or os.sep + "runs" in below:
             continue
         for name in sorted(names):
             if not name.endswith(".py"):

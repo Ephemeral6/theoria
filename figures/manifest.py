@@ -28,8 +28,13 @@ import build_all  # noqa: E402
 import sources  # noqa: E402
 import theme  # noqa: E402
 
-PROMPT_ID = "P4-figures"
-WORKER = "W-1611"
+#: No defaults, on purpose. These were constants (``P4-figures`` / ``W-1611``)
+#: until P8, so any later run that forgot a flag would have written a manifest
+#: declaring itself P4's -- and a provenance record naming the wrong prompt is
+#: worse than no record, because it reads as authoritative. Making them optional
+#: with the old values as defaults would have left exactly that trap armed for
+#: whoever ran the command without reading this comment, so ``--prompt-id`` and
+#: ``--worker`` are required arguments instead.
 
 
 def _git(*args: str) -> str:
@@ -79,15 +84,15 @@ def collect_inputs() -> tuple[dict[str, str], list[dict[str, str]]]:
     return inputs, excluded
 
 
-def build_manifest() -> dict:
+def build_manifest(prompt_id: str, worker: str) -> dict:
     inputs, excluded = collect_inputs()
     artifacts = collect_artifacts()
     return {
         # CLAUDE.md requires prompt_id / branch / base_commit / utc. The clock
         # read is safe *here* and banned in a figure script: this file writes
         # into figures/runs/, and a run stamp never enters an artefact.
-        "prompt_id": PROMPT_ID,
-        "worker": WORKER,
+        "prompt_id": prompt_id,
+        "worker": worker,
         "utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
         "base_commit": _git("rev-parse", "HEAD"),
@@ -125,6 +130,18 @@ def build_manifest() -> dict:
             "objection that bites is analytic rather than statistical -- A0-prime's toggle "
             "was designed so every case would have a witness, so the contrast demonstrates "
             "the mechanism rather than testing it.",
+            "Three input families -- the theoria runs, the pilot roll-ups and the envelope "
+            "shards -- are declared by RULE rather than by name (sources.DISCOVERY), so a "
+            "run that lands on disk enters the figures at the next build. Every discovered "
+            "file is still hashed into the inputs above. Each rule carries a floor, and "
+            "verify.sh gate 8 walks the tree independently to check that what is on disk "
+            "reached the picture -- gates 1-7 are all green on a figure that quietly omits "
+            "data, which is how two tracked roll-ups went unread until P8.",
+            "Figure 2's E2/E3/E4 are the battery's published values, read from "
+            "capability_spectrum.json, never recomputed here: a second implementation of a "
+            "Phase 4 primary endpoint is a second definition. The live theoria arm has none "
+            "of the three -- it is in none of battery v2's arms -- and that is drawn as an "
+            "absence with its reason rather than as a low score.",
             "battery/artifacts/arm_contrast.json is a v1-era artefact that predates the "
             "schema_repro arm. Figure 3 takes its column axis from capability_spectrum's "
             "own provenance instead, and reports the disagreement rather than absorbing it.",
@@ -134,14 +151,16 @@ def build_manifest() -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__ or "")
-    ap.add_argument("--run-dir", required=True, help="figures/runs/<UTC>-p21")
+    ap.add_argument("--run-dir", required=True, help="figures/runs/<UTC>-<prompt-id>")
+    ap.add_argument("--prompt-id", required=True, help="the board item this build belongs to")
+    ap.add_argument("--worker", required=True, help="who ran it")
     args = ap.parse_args(argv)
 
     run_dir = args.run_dir if os.path.isabs(args.run_dir) else os.path.join(sources.REPO_ROOT, args.run_dir)
     os.makedirs(run_dir, exist_ok=True)
     target = os.path.join(run_dir, "MANIFEST.json")
 
-    manifest = build_manifest()
+    manifest = build_manifest(prompt_id=args.prompt_id, worker=args.worker)
     body = json.dumps(manifest, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     with open(target, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(body)

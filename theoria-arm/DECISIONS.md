@@ -250,3 +250,237 @@ finding about the table. No dollar figure is written into the ledger itself
 (`RunLedger.model_call` refuses `cost`/`cost_usd`, D-004) — the CLI's number
 rides inside the recorded response envelope, which is recorded whole because
 that is what the format says to do.
+
+## D-S8-016 · A backfilled manifest derives or abstains — it never fills in
+
+Five runs had no manifest and had to be given one months of commits later. The
+tempting shortcut is to run `archive.build` over them, because it produces a
+complete-looking file. It also calls `git rev-parse HEAD` and
+`_bootstrap.upstream_pin()`, both of which describe the machine writing the
+manifest rather than the run being described, so the result is a confident
+record of the wrong thing — which is strictly worse than a gap, because a gap
+is visible and a wrong number is not.
+
+`armtools/backfill.py` therefore takes every field from the run's own ledger or
+from git, and where the evidence does not reach, writes `null` with an entry in
+`provenance.missing` saying what is absent and why. `provenance.status` is
+`complete` only when CLAUDE.md's four required fields are all derived. Two of
+the five are `complete`; three are not, and say so.
+
+Two consequences worth naming, because both were tempting and both are wrong:
+
+* **`git branch --contains` is not a source.** It answers which branches hold a
+  commit *today*, so a manifest built on it changes whenever a colleague pushes.
+  The reproducibility check caught it doing exactly that. `branch` now comes
+  from the parent run's contemporaneous manifest, labelled as inherited, or is
+  absent.
+* **A manifest this tool wrote is rebuilt, not amended.** Amending its own
+  output would relabel a derived manifest as a generator-written one and the
+  second run would not reproduce the first.
+
+## D-S8-017 · `base_commit` is checked against the run, not trusted
+
+`arm_version` — a sha256 over this arm's `.py` sources, recorded in every
+`run_start` — is a function of the tree alone, so it can be recomputed at any
+commit and matched (`armtools/armversion.py`). That makes `base_commit`
+falsifiable, and when the four existing manifests were checked, all four failed:
+two named a commit later than the one whose tree their run's sources match, two
+named a commit whose tree the run's own hash contradicts.
+
+Three limits, all of which an adversarial review had to find before they were
+written down, and each of which would have produced a confident wrong answer:
+
+* **The scan must cover every reachable commit, not the arm's own log.** A
+  commit that does not touch the arm carries its parent's hash and is invisible
+  to `git log -- theoria-arm`; one arm version here is shared by 187 commits.
+  Scanning only the arm's log reports `matched` and names one of them. The scan
+  is now over `rev-list --all`, keyed by the arm's subtree so it stays cheap.
+* **`matched` is a claim about `.py` files.** Two commits differing only in a
+  prompt, a log or a fixture are indistinguishable; four of seventeen groups are
+  multi-commit for that reason.
+* **The commit is not "where the run was launched from".** Two of these commits
+  were created 21 s and 57 s *after* their run started — the fix under test was
+  committed mid-run. The hash says the sources were byte-identical to that
+  tree, which is what reproducibility needs, and the manifest says exactly that
+  and gives the arithmetic.
+
+`archive.py` now runs the check at write time and records the verdict beside the
+field rather than leaving a future audit to discover it. It does not *correct*
+`base_commit` — HEAD at archive time is a real fact and worth keeping — it puts
+the reproducible commit next to it and says which is which. A check that can
+only be run by someone who already suspects the answer is not a check.
+
+## D-S8-018 · A test's run directory is not archive material
+
+`runs/` is what Phase 4 reads to account for every action this arm spent. Two
+`pytest-*` directories sat in it. They were gitignored and so never reached the
+repository, but a directory listing could not tell them from runs that cost
+money, and the audit that opened this item counted eleven runs where there were
+nine. Ignoring a thing in git is not the same as keeping it out of the archive.
+Fixtures now write to `.pytest-runs/` and `verify_provenance` fails if one
+reappears under `runs/`.
+
+## D-S8-019 · `arm_version` is computed below the arm root, not on the absolute path
+
+`_bootstrap.arm_version()` skipped a directory when `os.sep + "runs" in root` or
+`"__pycache__" in root`, applied to the **absolute** path. An ancestor directory
+therefore decided the answer: under `.worktrees/runs-cleanup/theoria-arm` — a
+perfectly ordinary name under CLAUDE.md's worktree rule — every file was
+skipped, and the function returned `files: 0` and the sha256 of the empty
+string. A run made in such a worktree records a version that matches nothing and
+never can.
+
+The tests are now applied to the path below the arm root. They remain substring
+tests, so `runsim/` and `__pycache__x/` are still skipped: making them
+component tests would change the hash of any tree containing such a directory,
+and every hash already recorded has to keep reconstructing. No tree in this
+arm's history contains one (`git log --all --full-history --name-only`), which
+is what makes the narrow fix safe and the wide one unnecessary.
+
+Two tests pin it: one that the git-side reimplementation in
+`armtools/armversion.py` agrees with the walk on exactly the cases that separate
+the two readings, and one that the hash is the same wherever the arm is checked
+out. The reimplementation had in fact diverged — it read the rule
+component-wise — and the divergence was silent: it would have surfaced as a real
+run reporting that it matched no commit, for no reason.
+
+## D-A3-001 · A level boundary segments the trajectory; it is not a transition
+
+The beats that reason over the trace — `certify`'s replay, `commit`'s and
+`probe`'s roll-forward, `theorize`'s evidence brief, `books.problem_from_frames`
+— now take `store.since(levels.start)` rather than the whole store
+(`inner/loop.py:_level_store`). The whole store is still what `trace.jsonl`
+records: the boundary is a fact about the run and is kept.
+
+The reason is arithmetic, not taste. ARC advances a level in-band: no action
+causes it, the envelope's `levels_completed` increments and the next frame is a
+different board. `certify.cheap` replays the manual's `step` over every recorded
+action and compares grids, so across such a jump it predicts level N's next
+state and observes level N+1's opening board. That is a `replay_mismatch`; a
+`replay_mismatch` is a surprise; and a surprise is the only thing that calls the
+desk. Left alone, the arm would pay opus prices, twice per level, to repair a
+manual that was never wrong. `problem_from_frames` has the matching defect:
+pooled across a boundary, "the cells that never varied" is the intersection of
+two unrelated boards, which describes neither.
+
+**The alternative that was not taken.** A level advance could be modelled
+*inside* the manual, as an event with a precondition and an effect. That is a
+stronger claim and a more interesting one — it would let the playbook plan
+*through* a boundary. Segmenting is the conservative reading: it says the domain
+is silent about level advance rather than saying something no evidence supports.
+If a later run produces evidence about what completing a level requires, that
+evidence belongs in the playbook and this decision should be revisited.
+
+**What this costs.** Restricting `theorize`'s evidence to the current level
+means the frames of level 1 are not re-shown on level 2. The knowledge is meant
+to survive in the books rather than in the frames — which is Theoria's thesis,
+not a workaround — but it is a real narrowing and the engines see a shorter
+trace at the start of every level. It is recorded here so that a run where the
+manual visibly forgets something is read as evidence about this decision.
+
+## D-A3-002 · Two files travel between levels, and their hashes say so
+
+`Books(root, seed_from=...)` copies exactly `theory.dsl` and `playbook.dsl`, and
+records the sha256 of each in `CARRIED.json`. `problem.json` deliberately does
+not travel: it is computed from the frames of the level being played, so
+carrying it would carry an answer to a question the new level has not asked.
+`generated/` does not travel because the four forms are re-derived from the
+domain, which is what co-derivation means; `snapshots/` does not travel because
+a revision history belongs to the run that made it.
+
+The discipline is `cold-start-a3/a3pipeline/transfer.py`'s, which asserts
+byte-identity by sha256 rather than by inspection. "The manual that played level
+2 is the manual level 1 wrote" is then a checkable claim about artefacts rather
+than a sentence in a report — which is the only form in which C3's transfer
+claim can appear in the paper.
+
+## D-A3-003 · Surprises pending at a boundary are retired, not carried
+
+`Register.retire_pending` marks them `handled_by = "retired: <reason>"`. They
+were fired against a trajectory the arm can no longer show, and carrying them
+would spend a model call adjudicating evidence that no longer exists. Retiring
+is not deleting: the items stay in the register, so `counts()` is unchanged, all
+seven kinds still report (a zero is a measurement), and the constraint-8 audit
+still adds up. What changes is only who closed them — which is itself a datum,
+since "how many surprises died at a boundary rather than being theorized" is a
+number the bill-shape figure can use.
+
+## D-A3-004 · The arm's own vocabulary rides inside `request`, not beside it
+
+`RunLedger.model_call` forwards `**extra` into `Ledger.append`, and
+`canon.MODEL_CALL_FIELDS` is a closed set of ten names. `ModelDesk.call` was
+passing five more — `beat`, `label`, `transport`, `proxied`, `proxy_gap` — as
+top-level keyword arguments, so every completed model call raised
+`NonCanonicalField`.
+
+Two repairs were possible. Widen `canon.py` to admit the five, or move them
+inside `request`, which the ledger passes verbatim. Widening was rejected: the
+closed set is another track's file, and the refusal message states the reason
+the set exists — *"The battery reads two shapes without branching; an extra
+field is a branch."* A field added for one arm's convenience is a branch every
+downstream reader inherits forever.
+
+So they ride inside `request`. That is not a workaround; `request` is defined as
+what this arm sent, and `modelcall.py`'s own comment already said it is the one
+place the arm may add its own vocabulary. The record stays one of the two
+shapes, the sealing provenance D-P8-002 requires survives, and `step_idx` stays
+top-level because it is canonical and the cost curve joins on it.
+
+What this cost, recorded because it is the whole reason the defect mattered:
+the raise landed *after* `cli_cost_usd` was incremented and after
+`binding.record_model_call` had settled the charge. The money was spent and
+booked, and then the run died writing it down — on the first theorize call and
+every one after, with `inner/loop.py` swallowing it as an ordinary desk failure.
+A campaign at full budget would have produced no manual at all.
+
+## D-A3-005 · The game id is kept out of the model by construction, at two ends
+
+`Theoria.md:353` states it as a hard rule: 游戏 ID 永不进模型上下文,全程匿名化.
+The arm satisfied it on every unconditional path and had no anonymiser anywhere
+— it was clean because nobody had wired an id in, not because anything stopped
+them. An adversarial probe showed omission is not enough: an engine that raises
+puts its traceback into `evidence_brief`, an `OSError` message carries the path
+it failed on, and the run slug embedded the game stem. Six occurrences of `g50t`
+landed inside a real 20,975-char prompt.
+
+Closed at the source and at the backstop, deliberately both:
+
+* **Source** — a leg slug is `<utc>-leg<nn>`, with no game in it. Nothing that
+  stringifies a path can pick the id up, including the two channels not yet
+  triggered (`books.compile_all`'s write errors, and Lean's absolute-path
+  diagnostics reaching the next prompt inside a `proof_failure` payload).
+* **Backstop** — `ModelDesk.forbid_in_prompt`, checked at the single point every
+  prompt passes through, and checked *before* the subprocess starts so a leak
+  costs neither money nor the run's admissibility.
+
+Fixing only the source would leave the rule holding by convention again, one
+refactor away from the same defect. Fixing only the backstop would turn a
+recoverable formatting accident into a dead run.
+
+`AnonymityBreach` is its own exception class rather than a `ModelError`, because
+`inner/loop.py` catches desk failures and feeds them back as evidence to
+theorize against. That is right for a timeout and wrong here: a leaked id is a
+defect in the harness, not something the loop can learn from, and a run that
+sent one is inadmissible under the rule whatever it goes on to measure.
+
+## D-A3-006 · The campaign axis is dense; the leg axis is not
+
+`campaign_series()` carries two ordinals per row. `turn` is the leg's own,
+restarting whenever a leg dies and a new one begins. `campaign_turn` is dense
+across the whole campaign.
+
+C2 predicts 前重后轻 — front-heavy, then light, tending to zero after
+convergence. Read off the leg axis, a campaign of several short legs would show
+the cost restarting its climb at every interruption, which is the *shape C2
+predicts*, produced entirely by the bookkeeping. Both are kept so the artefact
+and the claim can be told apart; the campaign axis is the one the claim is about.
+
+The front-load index is not computed here. It is E2 in
+`battery/metrics/economy.py` and one of Phase 4's three primary endpoints, and
+a second implementation of a primary endpoint is a second definition of it.
+This module assembles E2's input and stops.
+
+Legs that produced no series are kept as rows-less entries carrying their error,
+never dropped. A campaign that paid for a leg which yielded nothing is not the
+same object as a campaign with fewer legs, and concatenation is exactly where
+that distinction disappears silently.

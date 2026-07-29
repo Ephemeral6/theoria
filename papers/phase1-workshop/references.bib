@@ -1,0 +1,832 @@
+% references.bib — Phase 1 workshop paper
+%
+% Built at P7 (2026-07-28). Every entry below was cross-verified against two
+% independent sources before being written; the queries, the exact source URLs,
+% and what each source confirmed are in
+% papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/, one file per
+% line of related work, plus an adversarial re-check over a 20% sample.
+%
+% THE RULE THIS FILE IS UNDER. A record that could not be confirmed twice is not
+% here. Where a work has no citable venue, the entry is @misc and says so; no
+% arXiv id, DOI, volume or page range appears in this file that was not resolved
+% against a source. Do not add an entry by hand without adding its trace.
+%
+% Known traps, each of which cost a lookup and would otherwise have shipped:
+%   * Ha & Schmidhuber is TWO records. "World Models" (1803.10122) was never
+%     published under that title; the NeurIPS 2018 paper is 1809.01999 and is
+%     titled "Recurrent World Models Facilitate Policy Evolution". A citation
+%     reading "World Models, NeurIPS 2018" does not exist.
+%   * I-JEPA's own arXiv comment names ICCV. It is CVPR 2023.
+%   * DreamerV3 changed title between preprint ("Diverse Domains") and Nature
+%     ("diverse control tasks").
+%   * Petri 1962 is a TH Darmstadt dissertation. Bonn is the publication locus,
+%     not the awarding institution; "University of Bonn" is a widespread error.
+%   * AlphaProof's Nature paper does not contain "AlphaProof" in its title, so
+%     searching the system name returns nothing and invites invention.
+%   * The Dijkstra sentence is EWD249's own wording. The shorter form usually
+%     quoted is not what EWD249 says — see dijkstra1970notes.
+%
+% AUTHOR-NAME CONVENTION. Where sources disagree on the form of a personal name,
+% this file follows the PROCEEDINGS OF RECORD — the venue whose volume, pages and
+% DOI the entry cites. Aggregators are not authoritative for name spelling:
+% Crossref ASCII-folds some diacritics (Bodík -> Bodik) and abbreviates some
+% given names, and DBLP ASCII-folds too (Dumančić -> Dumancic). Two entries were
+% changed under this rule after the adversarial pass: hao2023rap (the entry cites
+% the EMNLP proceedings, so the ACL Anthology's "Joshua Hong" / "Daisy Wang"
+% replace arXiv's longer forms) and bruce2024genie (PMLR's "Sarah Maria
+% Elisabeth Bechtle" and "De Freitas" replace the shorter arXiv/DBLP forms).
+%
+% DO NOT "CORRECT" THESE. Both look like errors and are not:
+%   * trinh2024alphageometry's DOI reads 10.1038/s41586-*023*-06747-5 on a 2024
+%     paper. Nature DOIs carry the submission-year stamp. It resolves.
+%   * muggleton1994ilptheory's volume is *19--20*. That is a genuine combined
+%     double volume, not a mistyped page range.
+%
+% FIVE ENTRIES ARE PRESENT BUT UNCITED, deliberately: beasley1992pegsolitaire,
+% cropper2021popper, evans2018dilp, hubert2026alphaproof, trinh2024alphageometry.
+% They were confirmed to the same standard as the rest and are kept because they
+% are the obvious next citations if a section is allowed to run longer. They are
+% not orphans and should not be pruned as such.
+%
+% ONE RECORD IS CONFIRMED TO SECONDARY-SOURCE STANDARD ONLY. openai.com returns
+% 403 to automated fetching, so brooks2024sora's 13-name contributor list was
+% confirmed from independent scholarly bibliographies rather than from the page
+% itself. Whoever finalises this file should open it in a browser once. Its
+% publication date (15 Feb 2024) is single-source and is therefore not asserted
+% in the entry.
+
+% =====================================================================
+% Wave I — world models in weights
+% =====================================================================
+
+@misc{ha2018world,
+  title         = {World Models},
+  author        = {Ha, David and Schmidhuber, J{\"u}rgen},
+  year          = {2018},
+  eprint        = {1803.10122},
+  archivePrefix = {arXiv},
+  doi           = {10.48550/arXiv.1803.10122},
+  note          = {arXiv preprint; never published under this title}
+}
+
+@inproceedings{ha2018recurrent,
+  title     = {Recurrent World Models Facilitate Policy Evolution},
+  author    = {Ha, David and Schmidhuber, J{\"u}rgen},
+  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS 2018)},
+  year      = {2018},
+  note      = {arXiv:1809.01999; the refereed companion to ha2018world}
+}
+
+@inproceedings{hafner2019planet,
+  title     = {Learning Latent Dynamics for Planning from Pixels},
+  author    = {Hafner, Danijar and Lillicrap, Timothy and Fischer, Ian and Villegas, Ruben and Ha, David and Lee, Honglak and Davidson, James},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning (ICML 2019)},
+  series    = {PMLR},
+  volume    = {97},
+  pages     = {2555--2565},
+  year      = {2019},
+  note      = {arXiv:1811.04551}
+}
+
+@inproceedings{hafner2020dreamer,
+  title     = {Dream to Control: Learning Behaviors by Latent Imagination},
+  author    = {Hafner, Danijar and Lillicrap, Timothy and Ba, Jimmy and Norouzi, Mohammad},
+  booktitle = {International Conference on Learning Representations (ICLR 2020)},
+  year      = {2020},
+  note      = {arXiv:1912.01603}
+}
+
+@inproceedings{hafner2021dreamerv2,
+  title     = {Mastering Atari with Discrete World Models},
+  author    = {Hafner, Danijar and Lillicrap, Timothy and Norouzi, Mohammad and Ba, Jimmy},
+  booktitle = {International Conference on Learning Representations (ICLR 2021)},
+  year      = {2021},
+  note      = {arXiv:2010.02193}
+}
+
+@article{hafner2025dreamerv3,
+  title   = {Mastering diverse control tasks through world models},
+  author  = {Hafner, Danijar and Pasukonis, Jurgis and Ba, Jimmy and Lillicrap, Timothy},
+  journal = {Nature},
+  volume  = {640},
+  number  = {8059},
+  pages   = {647--653},
+  year    = {2025},
+  doi     = {10.1038/s41586-025-08744-2},
+  note    = {Preprint arXiv:2301.04104 (2023), titled ``Mastering Diverse Domains through World Models''}
+}
+
+@article{schrittwieser2020muzero,
+  title   = {Mastering Atari, Go, chess and shogi by planning with a learned model},
+  author  = {Schrittwieser, Julian and Antonoglou, Ioannis and Hubert, Thomas and Simonyan, Karen and Sifre, Laurent and Schmitt, Simon and Guez, Arthur and Lockhart, Edward and Hassabis, Demis and Graepel, Thore and Lillicrap, Timothy and Silver, David},
+  journal = {Nature},
+  volume  = {588},
+  number  = {7839},
+  pages   = {604--609},
+  year    = {2020},
+  doi     = {10.1038/s41586-020-03051-4},
+  note    = {Preprint arXiv:1911.08265}
+}
+
+@inproceedings{bruce2024genie,
+  title     = {Genie: Generative Interactive Environments},
+  author    = {Bruce, Jake and Dennis, Michael D. and Edwards, Ashley and Parker-Holder, Jack and Shi, Yuge and Hughes, Edward and Lai, Matthew and Mavalankar, Aditi and Steigerwald, Richie and Apps, Chris and Aytar, Yusuf and Bechtle, Sarah Maria Elisabeth and Behbahani, Feryal and Chan, Stephanie C. Y. and Heess, Nicolas and Gonzalez, Lucy and Osindero, Simon and Ozair, Sherjil and Reed, Scott and Zhang, Jingwei and Zolna, Konrad and Clune, Jeff and De Freitas, Nando and Singh, Satinder and Rockt{\"a}schel, Tim},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning (ICML 2024)},
+  series    = {PMLR},
+  volume    = {235},
+  pages     = {4603--4623},
+  year      = {2024},
+  note      = {arXiv:2402.15391}
+}
+
+@inproceedings{assran2023ijepa,
+  title     = {Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture},
+  author    = {Assran, Mahmoud and Duval, Quentin and Misra, Ishan and Bojanowski, Piotr and Vincent, Pascal and Rabbat, Michael and LeCun, Yann and Ballas, Nicolas},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR 2023)},
+  pages     = {15619--15629},
+  year      = {2023},
+  doi       = {10.1109/CVPR52729.2023.01499},
+  note      = {arXiv:2301.08243. The arXiv comment field names ICCV; the venue is CVPR}
+}
+
+@misc{lecun2022path,
+  title        = {A Path Towards Autonomous Machine Intelligence, Version 0.9.2, 2022-06-27},
+  author       = {LeCun, Yann},
+  year         = {2022},
+  howpublished = {Unrefereed manuscript, OpenReview},
+  url          = {https://openreview.net/pdf?id=BZ5a1r-kVsf},
+  note         = {No venue, no DOI. Renderings as ``Open Review 62(1), pp. 1--62'' are an indexing artefact}
+}
+
+@misc{brooks2024sora,
+  title        = {Video generation models as world simulators},
+  author       = {Brooks, Tim and Peebles, Bill and Holmes, Connor and DePue, Will and Guo, Yufei and Jing, Li and Schnurr, David and Taylor, Joe and Luhman, Troy and Luhman, Eric and Ng, Clarence and Wang, Ricky and Ramesh, Aditya},
+  year         = {2024},
+  howpublished = {OpenAI technical report},
+  url          = {https://openai.com/index/video-generation-models-as-world-simulators/},
+  note         = {Company technical report; not peer reviewed, no venue, no DOI. Publication date 15 Feb 2024 is single-source}
+}
+
+% =====================================================================
+% Wave II — world models as editable executable programs
+% =====================================================================
+
+@inproceedings{tang2024worldcoder,
+  title     = {WorldCoder, a Model-Based {LLM} Agent: Building World Models by Writing Code and Interacting with the Environment},
+  author    = {Tang, Hao and Key, Darren and Ellis, Kevin},
+  booktitle = {Advances in Neural Information Processing Systems 37 (NeurIPS 2024)},
+  year      = {2024},
+  doi       = {10.52202/079017-2243},
+  note      = {arXiv:2402.12275}
+}
+
+@inproceedings{hao2023rap,
+  title     = {Reasoning with Language Model is Planning with World Model},
+  author    = {Hao, Shibo and Gu, Yi and Ma, Haodi and Hong, Joshua and Wang, Zhen and Wang, Daisy and Hu, Zhiting},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP 2023)},
+  pages     = {8154--8173},
+  year      = {2023},
+  doi       = {10.18653/v1/2023.emnlp-main.507},
+  note      = {The method is named RAP, Reasoning via Planning, in the body}
+}
+
+@misc{zeng2026schema,
+  title        = {{[schema]}: Frontier Models with the Right Harness Achieve $\sim$99\% on {ARC-AGI-3} Public},
+  author       = {Zeng, Guanning and Wang, Jiani and Ma, Wenjie and Yin, Shaofeng and Wang, Chenyang and Liu, Shichen and Kanazawa, Angjoo and Ni, Wode and Li, Xiuyu and Zanette, Andrea and Feng, Haiwen},
+  year         = {2026},
+  howpublished = {Impossible Research},
+  url          = {https://schema-harness.github.io/},
+  note         = {No paper, no arXiv id, no DOI, no released harness code. Commonly mis-cited as ``Feng et al.''; Feng is the last author. The 98.98\% figure is self-reported on the public set and is not independently verified. See baseline-arms/SCHEMA\_LOCATE.md}
+}
+
+% =====================================================================
+% Active automata learning and FSM conformance testing
+% =====================================================================
+
+@article{angluin1987lstar,
+  title   = {Learning regular sets from queries and counterexamples},
+  author  = {Angluin, Dana},
+  journal = {Information and Computation},
+  volume  = {75},
+  number  = {2},
+  pages   = {87--106},
+  year    = {1987},
+  doi     = {10.1016/0890-5401(87)90052-6},
+  note    = {The L* algorithm, and the origin of the minimally-adequate-teacher setting whose reset assumption section 3 is about}
+}
+
+@article{chow1978wmethod,
+  title   = {Testing Software Design Modeled by Finite-State Machines},
+  author  = {Chow, Tsun S.},
+  journal = {IEEE Transactions on Software Engineering},
+  volume  = {SE-4},
+  number  = {3},
+  pages   = {178--187},
+  year    = {1978},
+  doi     = {10.1109/TSE.1978.231496},
+  note    = {The W-method. Crossref renders the volume as SE-4; many secondary records flatten it to 4}
+}
+
+% =====================================================================
+% Certificates and admissible heuristics in classical planning
+%
+% Three fields were deliberately left out because they could not be confirmed
+% twice: AAAI-15 page numbers, Edelkamp ECP-01 page numbers (two conflicting
+% values in circulation), and whether Beasley has a 1985 first edition. Absent,
+% not guessed.
+%
+% DO NOT "CORRECT" culberson1998pdb's venue. Semantic Scholar renders it as
+% "International Conference on Climate Informatics" — a venue-merge artefact from
+% the CI / Comput. Intell. abbreviation collision. The ISSN and the journal field
+% agree it is Computational Intelligence.
+% =====================================================================
+
+@inproceedings{pommerening2015general,
+  title     = {From Non-Negative to General Operator Cost Partitioning},
+  author    = {Pommerening, Florian and Helmert, Malte and R{\"o}ger, Gabriele and Seipp, Jendrik},
+  booktitle = {Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence (AAAI 2015)},
+  volume    = {29},
+  publisher = {AAAI Press},
+  year      = {2015},
+  doi       = {10.1609/aaai.v29i1.9668},
+  note      = {Page numbers not confirmed in two sources and are therefore omitted}
+}
+
+@inproceedings{seipp2015potential,
+  title     = {New Optimization Functions for Potential Heuristics},
+  author    = {Seipp, Jendrik and Pommerening, Florian and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Fifth International Conference on Automated Planning and Scheduling (ICAPS 2015)},
+  volume    = {25},
+  pages     = {193--201},
+  publisher = {AAAI Press},
+  year      = {2015},
+  doi       = {10.1609/icaps.v25i1.13714}
+}
+
+@inproceedings{pommerening2014lp,
+  title     = {{LP}-Based Heuristics for Cost-Optimal Planning},
+  author    = {Pommerening, Florian and R{\"o}ger, Gabriele and Helmert, Malte and Bonet, Blai},
+  booktitle = {Proceedings of the Twenty-Fourth International Conference on Automated Planning and Scheduling (ICAPS 2014)},
+  volume    = {24},
+  pages     = {226--234},
+  publisher = {AAAI Press},
+  year      = {2014},
+  doi       = {10.1609/icaps.v24i1.13621}
+}
+
+@inproceedings{helmert2009lmcut,
+  title     = {Landmarks, Critical Paths and Abstractions: What's the Difference Anyway?},
+  author    = {Helmert, Malte and Domshlak, Carmel},
+  booktitle = {Proceedings of the Nineteenth International Conference on Automated Planning and Scheduling (ICAPS 2009)},
+  volume    = {19},
+  pages     = {162--169},
+  publisher = {AAAI Press},
+  year      = {2009},
+  doi       = {10.1609/icaps.v19i1.13370}
+}
+
+@article{culberson1998pdb,
+  title   = {Pattern Databases},
+  author  = {Culberson, Joseph C. and Schaeffer, Jonathan},
+  journal = {Computational Intelligence},
+  volume  = {14},
+  pages   = {318--334},
+  year    = {1998},
+  doi     = {10.1111/0824-7935.00065}
+}
+
+@inproceedings{edelkamp2001pdb,
+  title     = {Planning with Pattern Databases},
+  author    = {Edelkamp, Stefan},
+  booktitle = {Proceedings of the Sixth European Conference on Planning (ECP 2001)},
+  address   = {Toledo, Spain},
+  year      = {2001},
+  note      = {Two conflicting page ranges are in circulation (13--24 and 13--34); neither was confirmed, so neither is given}
+}
+
+@inproceedings{eriksson2017certificates,
+  title     = {Unsolvability Certificates for Classical Planning},
+  author    = {Eriksson, Salom{\'e} and R{\"o}ger, Gabriele and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Seventh International Conference on Automated Planning and Scheduling (ICAPS 2017)},
+  volume    = {27},
+  pages     = {88--97},
+  publisher = {AAAI Press},
+  year      = {2017},
+  doi       = {10.1609/icaps.v27i1.13818}
+}
+
+@inproceedings{eriksson2018proofsystem,
+  title     = {A Proof System for Unsolvable Planning Tasks},
+  author    = {Eriksson, Salom{\'e} and R{\"o}ger, Gabriele and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Eighth International Conference on Automated Planning and Scheduling (ICAPS 2018)},
+  volume    = {28},
+  pages     = {65--73},
+  publisher = {AAAI Press},
+  year      = {2018},
+  doi       = {10.1609/icaps.v28i1.13899}
+}
+
+@inproceedings{hoffmann2014unsolvability,
+  title     = {``Distance''? {W}ho Cares? {T}ailoring Merge-and-Shrink Heuristics to Detect Unsolvability},
+  author    = {Hoffmann, J{\"o}rg and Kissmann, Peter and Torralba, {\'A}lvaro},
+  booktitle = {ECAI 2014},
+  series    = {Frontiers in Artificial Intelligence and Applications},
+  volume    = {263},
+  pages     = {441--446},
+  publisher = {IOS Press},
+  year      = {2014},
+  doi       = {10.3233/978-1-61499-419-0-441},
+  note      = {The quotation marks around ``Distance'' are part of the title. Crossref returns this title HTML-escaped and with mangled author names; the IOS Press page has the correct forms}
+}
+
+@article{helmert2006fastdownward,
+  title   = {The Fast Downward Planning System},
+  author  = {Helmert, Malte},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {26},
+  pages   = {191--246},
+  year    = {2006},
+  doi     = {10.1613/jair.1705}
+}
+
+@incollection{berlekamp2004winningways,
+  title     = {Purging Pegs Properly},
+  author    = {Berlekamp, Elwyn R. and Conway, John H. and Guy, Richard K.},
+  booktitle = {Winning Ways for Your Mathematical Plays},
+  edition   = {2},
+  volume    = {4},
+  chapter   = {23},
+  pages     = {803--841},
+  publisher = {A K Peters},
+  year      = {2004},
+  note      = {Origin of the pagoda function. EDITION TRAP: this chapter is volume 4 in the 2004 A K Peters second edition and volume 2 (Games in Particular) in the 1982 Academic Press first edition, where the pagoda material is at pages 729--730}
+}
+
+@book{beasley1992pegsolitaire,
+  title     = {The Ins and Outs of Peg Solitaire},
+  author    = {Beasley, John D.},
+  publisher = {Oxford University Press},
+  address   = {Oxford},
+  year      = {1992},
+  note      = {Both readable bibliographies give 1992. A 1985 Oxford first edition in the Recreations in Mathematics series is plausible but was not confirmable from any reachable catalogue --- re-check with library access before submission}
+}
+
+@inproceedings{kiyomi2001pegsolitaire,
+  title     = {Integer Programming Based Algorithms for Peg Solitaire Problems},
+  author    = {Kiyomi, Masashi and Matsui, Tomomi},
+  booktitle = {Computers and Games},
+  series    = {Lecture Notes in Computer Science},
+  pages     = {229--240},
+  publisher = {Springer},
+  year      = {2001},
+  doi       = {10.1007/3-540-45579-5_15},
+  note      = {Presented at CG 2000. States the pagoda condition in the form lp\_potential solves, and shows the pagoda argument is the linear relaxation of an integer program}
+}
+
+% =====================================================================
+% Program synthesis, version spaces, ILP, action-model learning
+% =====================================================================
+
+@inproceedings{solarlezama2006sketching,
+  title     = {Combinatorial Sketching for Finite Programs},
+  author    = {Solar-Lezama, Armando and Tancau, Liviu and Bod{\'i}k, Rastislav and Seshia, Sanjit A. and Saraswat, Vijay A.},
+  booktitle = {Proceedings of the 12th International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS XII)},
+  pages     = {404--415},
+  publisher = {ACM},
+  year      = {2006},
+  doi       = {10.1145/1168857.1168907}
+}
+
+@phdthesis{solarlezama2008thesis,
+  title  = {Program Synthesis by Sketching},
+  author = {Solar-Lezama, Armando},
+  school = {University of California, Berkeley},
+  year   = {2008},
+  note   = {Technical report UCB/EECS-2008-176. Not indexed by DBLP}
+}
+
+@inproceedings{alur2013sygus,
+  title     = {Syntax-Guided Synthesis},
+  author    = {Alur, Rajeev and Bod{\'i}k, Rastislav and Juniwal, Garvit and Martin, Milo M. K. and Raghothaman, Mukund and Seshia, Sanjit A. and Singh, Rishabh and Solar-Lezama, Armando and Torlak, Emina and Udupa, Abhishek},
+  booktitle = {2013 Formal Methods in Computer-Aided Design (FMCAD)},
+  pages     = {1--8},
+  publisher = {IEEE},
+  year      = {2013},
+  doi       = {10.1109/FMCAD.2013.6679385}
+}
+
+@article{mitchell1982generalization,
+  title   = {Generalization as Search},
+  author  = {Mitchell, Tom M.},
+  journal = {Artificial Intelligence},
+  volume  = {18},
+  number  = {2},
+  pages   = {203--226},
+  year    = {1982},
+  doi     = {10.1016/0004-3702(82)90040-6}
+}
+
+@article{lau2003vsa,
+  title   = {Programming by Demonstration Using Version Space Algebra},
+  author  = {Lau, Tessa and Wolfman, Steven A. and Domingos, Pedro and Weld, Daniel S.},
+  journal = {Machine Learning},
+  volume  = {53},
+  number  = {1--2},
+  pages   = {111--156},
+  year    = {2003},
+  doi     = {10.1023/A:1025671410623}
+}
+
+@article{muggleton1991ilp,
+  title   = {Inductive Logic Programming},
+  author  = {Muggleton, Stephen},
+  journal = {New Generation Computing},
+  volume  = {8},
+  number  = {4},
+  pages   = {295--318},
+  year    = {1991},
+  doi     = {10.1007/BF03037089}
+}
+
+@article{muggleton1994ilptheory,
+  title   = {Inductive Logic Programming: Theory and Methods},
+  author  = {Muggleton, Stephen and De Raedt, Luc},
+  journal = {The Journal of Logic Programming},
+  volume  = {19--20},
+  pages   = {629--679},
+  year    = {1994},
+  doi     = {10.1016/0743-1066(94)90035-3}
+}
+
+@article{cropper2022ilp30,
+  title   = {Inductive Logic Programming At 30: A New Introduction},
+  author  = {Cropper, Andrew and Duman{\v{c}}i{\'c}, Sebastijan},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {74},
+  pages   = {765--850},
+  year    = {2022},
+  doi     = {10.1613/jair.1.13507},
+  note    = {Distinct from the four-author Machine Learning 111(1):147--172 (2022) paper of nearly the same name}
+}
+
+@article{evans2018dilp,
+  title   = {Learning Explanatory Rules from Noisy Data},
+  author  = {Evans, Richard and Grefenstette, Edward},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {61},
+  pages   = {1--64},
+  year    = {2018},
+  doi     = {10.1613/jair.5714}
+}
+
+@article{cropper2021popper,
+  title   = {Learning Programs by Learning from Failures},
+  author  = {Cropper, Andrew and Morel, Rolf},
+  journal = {Machine Learning},
+  volume  = {110},
+  number  = {4},
+  pages   = {801--856},
+  year    = {2021},
+  doi     = {10.1007/s10994-020-05934-z}
+}
+
+@article{yang2007arms,
+  title   = {Learning Action Models from Plan Examples Using Weighted {MAX-SAT}},
+  author  = {Yang, Qiang and Wu, Kangheng and Jiang, Yunfei},
+  journal = {Artificial Intelligence},
+  volume  = {171},
+  number  = {2--3},
+  pages   = {107--143},
+  year    = {2007},
+  doi     = {10.1016/j.artint.2006.11.005}
+}
+
+% =====================================================================
+% Petri invariants, model checking, IC3/PDR
+% =====================================================================
+
+@phdthesis{petri1962kommunikation,
+  title  = {Kommunikation mit Automaten},
+  author = {Petri, Carl Adam},
+  school = {Technische Hochschule Darmstadt},
+  year   = {1962},
+  note   = {Defended 20 June 1962. Published as Schriften des Rheinisch-Westf{\"a}lischen Instituts f{\"u}r Instrumentelle Mathematik an der Universit{\"a}t Bonn, Nr. 2, Bonn, 1962. Bonn is the publication locus, not the awarding institution --- ``University of Bonn'' is a widespread secondary error}
+}
+
+@article{murata1989petri,
+  title   = {Petri Nets: Properties, Analysis and Applications},
+  author  = {Murata, Tadao},
+  journal = {Proceedings of the IEEE},
+  volume  = {77},
+  number  = {4},
+  pages   = {541--580},
+  year    = {1989},
+  doi     = {10.1109/5.24143}
+}
+
+@incollection{colom1991convex,
+  title     = {Convex Geometry and Semiflows in {P/T} Nets: A Comparative Study of Algorithms for Computation of Minimal {P}-Semiflows},
+  author    = {Colom, Jos{\'e} Manuel and Silva Su{\'a}rez, Manuel},
+  booktitle = {Advances in Petri Nets 1990},
+  editor    = {Rozenberg, Grzegorz},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {483},
+  pages     = {79--112},
+  publisher = {Springer},
+  year      = {1991},
+  doi       = {10.1007/3-540-53863-1_22},
+  note      = {Conference 1989 (Bonn); volume published 1991}
+}
+
+@article{ezpeleta1995deadlock,
+  title   = {A {Petri} Net Based Deadlock Prevention Policy for Flexible Manufacturing Systems},
+  author  = {Ezpeleta, Joaqu{\'i}n and Colom, Jos{\'e} Manuel and Mart{\'i}nez, Javier},
+  journal = {IEEE Transactions on Robotics and Automation},
+  volume  = {11},
+  number  = {2},
+  pages   = {173--184},
+  year    = {1995},
+  doi     = {10.1109/70.370500}
+}
+
+@inproceedings{bradley2011ic3,
+  title     = {{SAT}-Based Model Checking without Unrolling},
+  author    = {Bradley, Aaron R.},
+  booktitle = {Verification, Model Checking, and Abstract Interpretation (VMCAI 2011)},
+  editor    = {Jhala, Ranjit and Schmidt, David A.},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {6538},
+  pages     = {70--87},
+  publisher = {Springer},
+  year      = {2011},
+  doi       = {10.1007/978-3-642-18275-4_7}
+}
+
+@inproceedings{een2011pdr,
+  title     = {Efficient Implementation of Property Directed Reachability},
+  author    = {E{\'e}n, Niklas and Mishchenko, Alan and Brayton, Robert K.},
+  booktitle = {Proceedings of the International Conference on Formal Methods in Computer-Aided Design (FMCAD 2011)},
+  pages     = {125--134},
+  publisher = {FMCAD Inc. / IEEE},
+  year      = {2011},
+  note      = {No registered DOI; ACM DL's 10.5555/2157654.2157675 is a placeholder and is deliberately omitted}
+}
+
+@inproceedings{clarke1981skeletons,
+  title     = {Design and Synthesis of Synchronization Skeletons Using Branching-Time Temporal Logic},
+  author    = {Clarke, Edmund M. and Emerson, E. Allen},
+  booktitle = {Logics of Programs, Workshop, Yorktown Heights, New York, May 1981},
+  editor    = {Kozen, Dexter},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {131},
+  pages     = {52--71},
+  publisher = {Springer},
+  year      = {1981},
+  doi       = {10.1007/BFb0025774},
+  note      = {Workshop 1981; volume published 1982}
+}
+
+@inproceedings{queille1982cesar,
+  title     = {Specification and Verification of Concurrent Systems in {CESAR}},
+  author    = {Queille, Jean-Pierre and Sifakis, Joseph},
+  booktitle = {International Symposium on Programming, 5th Colloquium, Torino, April 1982},
+  editor    = {Dezani-Ciancaglini, Mariangiola and Montanari, Ugo},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {137},
+  pages     = {337--351},
+  publisher = {Springer},
+  year      = {1982},
+  doi       = {10.1007/3-540-11494-7_22}
+}
+
+@inproceedings{mcmillan2003interpolation,
+  title     = {Interpolation and {SAT}-Based Model Checking},
+  author    = {McMillan, Kenneth L.},
+  booktitle = {Computer Aided Verification, 15th International Conference (CAV 2003)},
+  editor    = {Hunt Jr., Warren A. and Somenzi, Fabio},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {2725},
+  pages     = {1--13},
+  publisher = {Springer},
+  year      = {2003},
+  doi       = {10.1007/978-3-540-45069-6_1}
+}
+
+% =====================================================================
+% Proof-carrying code, certifying algorithms, specification validity
+% =====================================================================
+
+@inproceedings{necula1997pcc,
+  title     = {Proof-Carrying Code},
+  author    = {Necula, George C.},
+  booktitle = {Proceedings of the 24th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (POPL '97)},
+  pages     = {106--119},
+  publisher = {ACM Press},
+  year      = {1997},
+  doi       = {10.1145/263699.263712}
+}
+
+@inproceedings{necula1996safekernel,
+  title     = {Safe Kernel Extensions Without Run-Time Checking},
+  author    = {Necula, George C. and Lee, Peter},
+  booktitle = {Proceedings of the Second USENIX Symposium on Operating Systems Design and Implementation (OSDI '96)},
+  pages     = {229--243},
+  year      = {1996},
+  doi       = {10.1145/238721.238781}
+}
+
+@inproceedings{appel2001fpcc,
+  title     = {Foundational Proof-Carrying Code},
+  author    = {Appel, Andrew W.},
+  booktitle = {Proceedings of the 16th Annual IEEE Symposium on Logic in Computer Science (LICS 2001)},
+  pages     = {247--256},
+  publisher = {IEEE Computer Society},
+  year      = {2001},
+  doi       = {10.1109/LICS.2001.932501}
+}
+
+@article{mcconnell2011certifying,
+  title   = {Certifying algorithms},
+  author  = {McConnell, Ross M. and Mehlhorn, Kurt and N{\"a}her, Stefan and Schweitzer, Pascal},
+  journal = {Computer Science Review},
+  volume  = {5},
+  number  = {2},
+  pages   = {119--161},
+  year    = {2011},
+  doi     = {10.1016/j.cosrev.2010.09.009}
+}
+
+@article{blum1995checkers,
+  title   = {Designing Programs that Check Their Work},
+  author  = {Blum, Manuel and Kannan, Sampath},
+  journal = {Journal of the ACM},
+  volume  = {42},
+  number  = {1},
+  pages   = {269--291},
+  year    = {1995},
+  doi     = {10.1145/200836.200880}
+}
+
+@techreport{dijkstra1970notes,
+  title       = {Notes on Structured Programming},
+  author      = {Dijkstra, Edsger W.},
+  institution = {Technological University Eindhoven},
+  number      = {EWD249; T.H.-Report 70-WSK-03},
+  year        = {1970},
+  month       = apr,
+  doi         = {10.26153/tsw/53177},
+  note        = {Second edition, April 1970; first version August 1969. The sentence is ``Program testing can be used to show the presence of bugs, but never to show their absence!'' in the section ``On the reliability of mechanisms''. The shorter form usually quoted is not EWD249's wording}
+}
+
+@article{demillo1979social,
+  title   = {Social Processes and Proofs of Theorems and Programs},
+  author  = {De Millo, Richard A. and Lipton, Richard J. and Perlis, Alan J.},
+  journal = {Communications of the ACM},
+  volume  = {22},
+  number  = {5},
+  pages   = {271--280},
+  year    = {1979},
+  doi     = {10.1145/359104.359106}
+}
+
+@article{fetzer1988veryidea,
+  title   = {Program Verification: The Very Idea},
+  author  = {Fetzer, James H.},
+  journal = {Communications of the ACM},
+  volume  = {31},
+  number  = {9},
+  pages   = {1048--1063},
+  year    = {1988},
+  doi     = {10.1145/48529.48530}
+}
+
+@article{boehm1984vandv,
+  title   = {Verifying and Validating Software Requirements and Design Specifications},
+  author  = {Boehm, Barry W.},
+  journal = {IEEE Software},
+  volume  = {1},
+  number  = {1},
+  pages   = {75--88},
+  year    = {1984},
+  doi     = {10.1109/MS.1984.233702}
+}
+
+@inproceedings{ammons2002mining,
+  title     = {Mining Specifications},
+  author    = {Ammons, Glenn and Bod{\'i}k, Rastislav and Larus, James R.},
+  booktitle = {Proceedings of the 29th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (POPL '02)},
+  pages     = {4--16},
+  publisher = {ACM},
+  year      = {2002},
+  doi       = {10.1145/503272.503275}
+}
+
+% =====================================================================
+% LLMs, theorem proving, autoformalisation, and Lean
+% =====================================================================
+
+@inproceedings{demoura2015lean,
+  title     = {The {Lean} Theorem Prover (System Description)},
+  author    = {de Moura, Leonardo and Kong, Soonho and Avigad, Jeremy and van Doorn, Floris and von Raumer, Jakob},
+  booktitle = {Automated Deduction --- CADE-25},
+  series    = {Lecture Notes in Computer Science},
+  publisher = {Springer},
+  pages     = {378--388},
+  year      = {2015},
+  doi       = {10.1007/978-3-319-21401-6_26}
+}
+
+@inproceedings{demoura2021lean4,
+  title     = {The {Lean} 4 Theorem Prover and Programming Language},
+  author    = {de Moura, Leonardo and Ullrich, Sebastian},
+  booktitle = {Automated Deduction --- CADE 28},
+  series    = {Lecture Notes in Computer Science},
+  publisher = {Springer},
+  pages     = {625--635},
+  year      = {2021},
+  doi       = {10.1007/978-3-030-79876-5_37}
+}
+
+@inproceedings{mathlib2020,
+  title     = {The {Lean} Mathematical Library},
+  author    = {{The mathlib Community}},
+  booktitle = {Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP)},
+  pages     = {367--381},
+  publisher = {ACM},
+  year      = {2020},
+  doi       = {10.1145/3372885.3373824}
+}
+
+@misc{polu2020generative,
+  title         = {Generative Language Modeling for Automated Theorem Proving},
+  author        = {Polu, Stanislas and Sutskever, Ilya},
+  year          = {2020},
+  eprint        = {2009.03393},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  note          = {arXiv preprint; no conference venue}
+}
+
+@inproceedings{han2022pact,
+  title     = {Proof Artifact Co-Training for Theorem Proving with Language Models},
+  author    = {Han, Jesse Michael and Rute, Jason and Wu, Yuhuai and Ayers, Edward W. and Polu, Stanislas},
+  booktitle = {International Conference on Learning Representations (ICLR 2022)},
+  year      = {2022},
+  note      = {arXiv:2102.06203}
+}
+
+@inproceedings{lample2022hypertree,
+  title     = {HyperTree Proof Search for Neural Theorem Proving},
+  author    = {Lample, Guillaume and Lacroix, Timoth{\'e}e and Lachaux, Marie-Anne and Rodriguez, Aur{\'e}lien and Hayat, Amaury and Lavril, Thibaut and Ebner, Gabriel and Martinet, Xavier},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  year      = {2022},
+  note      = {arXiv:2205.11491. Author order follows the proceedings, which differs from arXiv}
+}
+
+@inproceedings{jiang2023draft,
+  title     = {Draft, Sketch, and Prove: Guiding Formal Theorem Provers with Informal Proofs},
+  author    = {Jiang, Albert Q. and Welleck, Sean and Zhou, Jin Peng and Lacroix, Timoth{\'e}e and Liu, Jiacheng and Li, Wenda and Jamnik, Mateja and Lample, Guillaume and Wu, Yuhuai},
+  booktitle = {International Conference on Learning Representations (ICLR 2023)},
+  year      = {2023},
+  note      = {arXiv:2210.12283. Author order follows the proceedings}
+}
+
+@inproceedings{yang2023leandojo,
+  title     = {LeanDojo: Theorem Proving with Retrieval-Augmented Language Models},
+  author    = {Yang, Kaiyu and Swope, Aidan M. and Gu, Alex and Chalamala, Rahul and Song, Peiyang and Yu, Shixing and Godil, Saad and Prenger, Ryan and Anandkumar, Anima},
+  booktitle = {Advances in Neural Information Processing Systems 36 (NeurIPS 2023), Datasets and Benchmarks Track},
+  year      = {2023},
+  note      = {arXiv:2306.15626. Datasets and Benchmarks track, not the main track}
+}
+
+@inproceedings{wu2022autoformalization,
+  title     = {Autoformalization with Large Language Models},
+  author    = {Wu, Yuhuai and Jiang, Albert Q. and Li, Wenda and Rabe, Markus N. and Staats, Charles and Jamnik, Mateja and Szegedy, Christian},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  year      = {2022},
+  note      = {arXiv:2205.12615}
+}
+
+@article{hubert2026alphaproof,
+  title   = {Olympiad-level formal mathematical reasoning with reinforcement learning},
+  author  = {Hubert, Thomas and Mehta, Rishi and Sartran, Laurent and others},
+  journal = {Nature},
+  volume  = {651},
+  number  = {8106},
+  pages   = {607--613},
+  year    = {2026},
+  doi     = {10.1038/s41586-025-09833-y},
+  note    = {Describes AlphaProof; ``AlphaProof'' does not appear in the title, which is why searching the system name returns nothing. Year deliberately set to the print issue (2026, PubMed indexes it 2026;651(8106):607-613) because volume, number and pages are the print issue's coordinates; advance online publication was 12 November 2025. 39 authors --- expand `others` if house style requires}
+}
+
+@article{trinh2024alphageometry,
+  title   = {Solving olympiad geometry without human demonstrations},
+  author  = {Trinh, Trieu H. and Wu, Yuhuai and Le, Quoc V. and He, He and Luong, Thang},
+  journal = {Nature},
+  volume  = {625},
+  number  = {7995},
+  pages   = {476--482},
+  year    = {2024},
+  doi     = {10.1038/s41586-023-06747-5},
+  note    = {``AlphaGeometry'' is the system name and is not in the title}
+}

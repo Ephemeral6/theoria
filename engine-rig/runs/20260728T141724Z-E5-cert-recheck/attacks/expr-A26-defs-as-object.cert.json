@@ -1,0 +1,17 @@
+{
+  "claim": "unsolvable",
+  "defs": {
+    "r": {
+      "body": [
+        "and"
+      ],
+      "params": []
+    }
+  },
+  "kind": "inductive_invariant",
+  "name": "A26",
+  "predicate": [
+    "and"
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

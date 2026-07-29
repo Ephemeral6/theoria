@@ -90,8 +90,8 @@ is reachable — which is the point of not enumerating.
 
 ## Importing
 
-Do not trust the producer. `verify()` recomputes everything from the document's
-own contents in integer arithmetic and ignores the `holds` flags:
+`verify()` redoes the arithmetic in integers and ignores the `holds` flags, so a
+producer whose sums are wrong does not get to grade itself:
 
 ```python
 from interop import certificate_export as ce
@@ -101,6 +101,16 @@ assert errors == []
 
 Tests cover tampering in both directions — perturbing a weight, and swapping in a
 goal that no longer breaks the invariant.
+
+What it does not cover is the producer's *premise*. The move witnesses `verify()`
+iterates are the document's own list, and `verify()` never sees the rule set, so
+a document that quietly omits an inconvenient move instance returns `[]` — and
+`checked_over: "all move instances on the full state space"` is an assertion in
+that same document, re-derived by nobody. A clean run entitles you to "the stated
+obligations are discharged over the stated moves", not "the invariant is closed
+under the rules". `recheck/verify.py` is the checker without the gap: it grounds
+the move relation from the declared rules and refuses an `obligations` key
+outright.
 
 ## Modules
 

@@ -1,0 +1,95 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2,
+    "door": 5,
+    "portal": 7,
+    "switch": 3,
+    "switch_on": 4
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        3
+      ],
+      "kind": "block",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        5
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        6,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "latch",
+        "net": "a"
+      }
+    }
+  ],
+  "families": [
+    "portal",
+    "push",
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    7,
+    8
+  ],
+  "intended_solvable": null,
+  "layout": [
+    "##########",
+    "#....#...#",
+    "#.#..#.#.#",
+    "#.#....#.#",
+    "#.#..#.#.#",
+    "#.#..#.#.#",
+    "#........#",
+    "#........#",
+    "##########"
+  ],
+  "notes": "",
+  "seed": 0,
+  "tier": 3,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "v-379c937f"
+}
