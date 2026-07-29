@@ -131,24 +131,53 @@ mattered. Worth a cheap fix in `proxy/` — exclude the known UUID-valued fields
 (`guid`, `card_id`) before matching, so the detector's remaining hits mean
 something.
 
-### HTTP amplification is 1.0 — the "no cookie jar" blocker did not bite
+### CORRECTED — HTTP amplification is 17.0x, and the cookie-jar blocker is real
 
-Measured over the leg's first 39 steps: **39 outbound attempts for 39 steps,
-amplification exactly 1.0**, every request succeeding first try.
+**I got this wrong first and am correcting it rather than quietly editing it,
+because the wrong version was committed.**
 
-That is a correction to a blocker I was handed and repeated. The pre-spend audit
-listed "no cookie jar in `theoria-arm`, so amplification is 5–17× instead of
-~1.25" as a high-severity item, on the evidence of the three P-8 runs (17.0×,
-7.33×, 5.71×). Those numbers are real, but they were measured **before** the
-transport changed — `arc-recon`'s INC-007a landed 13 minutes before the first
-P-8 scorecard opened, and the cookie jar reached `baseline-arms` afterwards.
-Whatever is handling it now (the environment proxy's own forwarding, most
-likely, rather than anything in the arm), this arm is **not** paying an
-amplification penalty on live traffic today.
+What I first reported: "amplification exactly 1.0, every request succeeding
+first try", read as a refutation of the pre-spend audit's "no cookie jar, so
+5-17x" blocker.
 
-So the porting job I listed as an outstanding gap is, on this evidence, not
-needed — and more usefully, the P-8 amplification figures should not be quoted
-as a property of the arm. They are a property of a transport that no longer
-exists. I am recording this as a measurement rather than acting on it: one leg
-is one leg, and the honest statement is "1.0 on 39 live steps of g50t on
-2026-07-29", not "the problem is solved".
+What I measured to get that: `http.attempts` per `env_step`, summed and divided
+by the number of steps. That is *retries within one request*, and it is 1.0
+because the arm's retry envelope is not being exercised — each request is
+answered on its first attempt.
+
+Why it is the wrong quantity: **a failed request is logged as its own
+`env_step`.** The metric that matters, and the one the P-8 figures use, is
+outbound requests per *successful* action. Recomputed on the same leg:
+
+| quantity | value |
+|---|---|
+| `env_step` records | 51 |
+| HTTP 400 | **47** |
+| HTTP 200 | 4 |
+| outbound attempts | 51 |
+| **HTTP per successful action** | **17.0x** |
+
+So the blocker is **confirmed, not refuted** — and at the worst of the three
+P-8 values, not the best. The 400 wave is exactly what the cookie jar fixes
+(`arc-recon` INC-007/007a: cookie arm 20/20 first-attempt RESETs, cookie-less
+arm 0/20; paired canary 11.88 -> 1.25 HTTP/action, and for g50t specifically
+41 -> 3). `baseline-arms/harness/arc_client.py` has the fix;
+`theoria-arm/harness/arc.py` still does not. My earlier sentence "the porting
+job is, on this evidence, not needed" is withdrawn: it is needed, and this leg
+is the evidence.
+
+**The consequence is worse than slow, and it is a budgeting defect.**
+`harness/spend.py` reserves against `HTTP_PER_COMMAND = 1.75`. The measured
+figure for this arm on live g50t is 17.0 — about **ten times** the constant the
+reservation is computed from. So every `plan_caps` call for this arm undersizes
+its action reservation by an order of magnitude, and a leg sized to 12 actions
+reserves ~34 requests while actually needing ~204. The gate will trip mid-leg,
+correctly, on a claim that was wrong when it was made. That is fail-safe, but
+"先算后花" only works if the arithmetic uses a number from this arm's own
+transport rather than one measured on another arm's.
+
+The general lesson, and it is the third time in this run: **a number that looks
+good is the moment to check what it is a number of.** 1.0 was a real
+measurement of the wrong quantity, and it happened to say exactly what would
+have been convenient.
+
