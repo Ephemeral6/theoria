@@ -142,6 +142,71 @@ def last_attempt(branch):
     return memo
 
 
+def flag_branch(path):
+    """The branch a flag file is about, read out of its own header.
+
+    `last_attempt` goes branch -> file; sweeping the directory needs the other
+    direction, and the header has carried `branch:` since `flag` first wrote
+    it. Deriving it from the filename instead would mean undoing the
+    `/` -> `_` substitution, which is not injective: a branch legitimately
+    containing an underscore would come back as a different branch.
+    """
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("```"):
+                    break
+                if line.startswith("branch:"):
+                    return line.partition(":")[2].strip()
+    except OSError:
+        return ""
+    return ""
+
+
+def sweep_stale_flags(todo):
+    """Retire flags for branches that merged by some route other than this one.
+
+    `clear_flag` is only reachable from `try_merge`'s success path, and
+    `unmerged_branches` drops everything already an ancestor of origin/master.
+    Between them, a branch that merged **any other way** -- merged into a
+    sibling agent branch that then merged, or merged by hand -- keeps its flag
+    for good, because `try_merge` is never called on it again to clear it.
+
+    `agent/e9-engine-paper-table` did exactly that on 2026-07-29: it reached
+    master via `3e6d47be`, and hours later its flag was still being counted
+    among the "verify gate red" branches holding up the queue, describing a
+    disagreement in a merged tree that no longer exists.
+
+    This is the failure `clear_flag`'s own docstring names -- a stale flag is
+    not noise, it is the loudest evidence in the directory and it is *wrong* --
+    coming back through the one path the original fix did not cover.
+
+    Deliberately narrow: it clears only flags whose branch is **provably** an
+    ancestor of origin/master. A branch that merely vanished (deleted, renamed,
+    never pushed) keeps its flag, because "I cannot resolve this" and "this is
+    finished" are different facts and only one of them is safe to act on.
+    """
+    waiting, retired = set(todo), []
+    for name in sorted(os.listdir(CI_DIR)) if os.path.isdir(CI_DIR) else []:
+        if not (name.startswith("CONFLICT-") and name.endswith(".md")):
+            continue
+        branch = flag_branch(os.path.join(CI_DIR, name))
+        if not branch or branch in waiting:
+            continue
+        if sh(["git", "rev-parse", "--verify", "--quiet",
+               branch]).returncode != 0:
+            continue                      # unresolvable is not the same as done
+        if sh(["git", "merge-base", "--is-ancestor",
+               branch, "origin/master"]).returncode != 0:
+            continue
+        clear_flag(branch)
+        retired.append(branch)
+    if retired:
+        log_line("SWEEP-FLAGS retired %d stale flag(s): %s"
+                 % (len(retired), ", ".join(retired)))
+    return retired
+
+
 def flag(branch, reason, detail, tip=None):
     """Record a failure, keeping how long it has been failing and on what tip.
 
@@ -454,6 +519,10 @@ def main():
         print("delivered, unmerged:", unmerged_branches() or "none")
         return 0
     todo = starved_first(unmerged_branches())
+    # Before deciding anything, drop verdicts about branches that are already
+    # in master. They cost nothing to keep and everything to read: triage
+    # starts at the biggest, angriest file in the directory.
+    sweep_stale_flags(todo)
     if not todo:
         log_line("IDLE: no delivered branch was waiting")
         return 0
