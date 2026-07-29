@@ -82,7 +82,7 @@
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/pytest.txt",
-      "sha256": "sha256:1e7a89f691a850871b8f8d92b9a34d5e4af110e971c84568d18d1e2751b5e119"
+      "sha256": "sha256:40830e11c265cf7fac33f8261ef61bb6efe2b54dfec15ff3c676f6636e6f2b60"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-scoreless.txt",
