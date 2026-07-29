@@ -24,6 +24,21 @@ Modelled on `ablation-arm/verify.sh`, which S13's ticket names as the shape:
 3. **artifact field self-check** — the run's `state.json` carries the fields the
    page and the probes read, and the gate survey is internally consistent
 
+## The verdict must survive its own output
+
+Every stage's `detail` is text of unknown provenance -- pytest's output, a
+subprocess's stderr, a board listing -- captured with `errors="replace"`, so it
+can legitimately contain U+FFFD. On 2026-07-29 this gate printed
+`== tests FAILED(1)` and then died with `UnicodeEncodeError: 'gbk' codec can't
+encode character '\\ufffd'` *while printing the reason*: the reason was lost, and
+the same line runs on green runs too, so any stage output holding one character
+the console code page cannot represent turned a green gate into a traceback.
+`emit` and `harden_stream` below close that: stdout is reconfigured to UTF-8
+with `errors="replace"`, and every print goes through a fallback that scrubs
+rather than raises. The property is that the gate can always print its verdict
+and its reasons, whatever bytes the stages produced -- a crash must never be
+able to substitute for a verdict.
+
 ## The gate does not dirty the workspace
 
 `scan.build(out_dir=…)` writes into a `mkdtemp` and the repository is left
@@ -58,6 +73,61 @@ import gates                                                       # noqa: E402
 REQUIRED_STATE_FIELDS = ("agents", "board", "constraints", "engines",
                          "findings", "generated_at", "grid", "history",
                          "iteration_loop", "loop_stats")
+
+
+def harden_stream(stream: Any) -> bool:
+    """Make `stream` unable to raise on an unrepresentable character.
+
+    UTF-8 encodes every string Python can hold, so re-pointing the encoding is
+    the fix rather than a workaround; `errors="replace"` is the second belt, for
+    the case where the stream cannot change encoding but can change its error
+    handler. Returns whether anything was reconfigured, which is information the
+    test wants and no caller should branch on.
+
+    Guarded rather than assumed: `sys.stdout` is only a `TextIOWrapper` some of
+    the time. Under pytest's capture, behind a `StringIO`, or after somebody has
+    replaced it with their own object, `reconfigure` is simply absent -- and a
+    gate that died trying to make its own output safe would be the same defect
+    wearing a different hat.
+    """
+    try:
+        stream.reconfigure(encoding="utf-8", errors="replace")
+        return True
+    except (AttributeError, ValueError, OSError, LookupError):
+        pass
+    try:                                   # encoding is fixed; errors may not be
+        stream.reconfigure(errors="replace")
+        return True
+    except (AttributeError, ValueError, OSError, LookupError):
+        return False
+
+
+def emit(text: str = "", stream: Any = None) -> None:
+    """`print`, with the guarantee that it does not raise on this text.
+
+    `harden_stream` handles the streams that can be reconfigured; this handles
+    the ones that cannot, including whatever a caller has substituted for
+    `sys.stdout`. The scrub is lossy on purpose -- a mangled character in a gate
+    log is cosmetic, a traceback in place of the verdict is not.
+
+    Resolved at call time, not bound at import, so monkeypatching `sys.stdout`
+    still works.
+    """
+    out = sys.stdout if stream is None else stream
+    try:
+        print(text, file=out)
+        return
+    except UnicodeEncodeError:
+        pass
+    encoding = getattr(out, "encoding", None) or "ascii"
+    try:
+        scrubbed = text.encode(encoding, "replace").decode(encoding, "replace")
+    except (LookupError, UnicodeError):
+        scrubbed = text.encode("ascii", "replace").decode("ascii")
+    try:
+        print(scrubbed, file=out)
+    except UnicodeEncodeError:             # a stream that lied about `encoding`
+        print(text.encode("ascii", "replace").decode("ascii"), file=out)
 
 
 def _tests() -> Tuple[str, int, str]:
@@ -173,26 +243,33 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
+    # Before anything is printed, and covering both branches below: `--json`
+    # uses `ensure_ascii=False`, so it was exposed to exactly the same crash as
+    # the human report. stderr too -- a traceback is text of unknown provenance
+    # as well.
+    harden_stream(sys.stdout)
+    harden_stream(sys.stderr)
+
     result = verify()
     if args.json:
-        print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+        emit(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return 0 if result["green"] else 1
 
     for stage in result["stages"]:
-        print("=" * 70)
-        print("== %-18s %s" % (stage["stage"],
-                               "ok" if stage["returncode"] == 0
-                               else "FAILED(%d)" % stage["returncode"]))
-        print("=" * 70)
-        print(stage["detail"].strip() or "(no output)")
+        emit("=" * 70)
+        emit("== %-18s %s" % (stage["stage"],
+                              "ok" if stage["returncode"] == 0
+                              else "FAILED(%d)" % stage["returncode"]))
+        emit("=" * 70)
+        emit(stage["detail"].strip() or "(no output)")
     survey = result["gate_survey"]
     if survey and survey["ungated"]:
-        print("\nterritories that merge with nothing checking them: %s"
-              % ", ".join(survey["ungated"]))
-        print("(reported, not a failure -- making it visible is the fix; "
-              "refusing to merge them would stop the repository dead)")
-    print("\n%s" % ("GREEN" if result["green"]
-                    else "RED: " + ", ".join(result["failed"])))
+        emit("\nterritories that merge with nothing checking them: %s"
+             % ", ".join(survey["ungated"]))
+        emit("(reported, not a failure -- making it visible is the fix; "
+             "refusing to merge them would stop the repository dead)")
+    emit("\n%s" % ("GREEN" if result["green"]
+                   else "RED: " + ", ".join(result["failed"])))
     return 0 if result["green"] else 1
 
 
