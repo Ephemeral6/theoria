@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "ea92a46",
+  "branch": "agent/s25-probe-the-merge-queue",
+  "lane": "infra",
+  "prompt_id": "S25-probe-the-merge-queue",
+  "state": "probe + done-vs-tree crosscheck + negative sample delivered; the two mechanical unblocks (v5-battery-freeze, s11-sealed-halfguard) not yet done",
+  "territory": "monitor",
+  "utc": "2026-07-29T02:15:25Z"
+}

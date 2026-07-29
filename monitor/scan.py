@@ -652,6 +652,15 @@ def probe_clock_sanity():
             "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
 
 
+def _merge_queue_probe():
+    """合并队列 —— 二十一个探针里没有一个读过 merge.log（S25）。
+
+    五条已交付分支自 2026-07-28 15:22 起每十分钟被重新 FLAG 一次、堵了十小时，
+    而盘面上完全看不见：合并失败**不产生任何人会看的信号**。
+    """
+    import mergequeue
+    return mergequeue.probe()
+
 def probe_verify_gates():
     """收工闸门：**「声称有却没有」与「本来就没有」是两回事**，分开报。
 
@@ -907,6 +916,7 @@ PROBES = {
     "verify_gates": probe_verify_gates,
     "disk_headroom": probe_disk_headroom,
     "clock_sanity": probe_clock_sanity,
+    "merge_queue": _merge_queue_probe,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,
