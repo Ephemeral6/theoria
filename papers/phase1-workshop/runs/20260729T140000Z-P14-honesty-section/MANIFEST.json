@@ -1,0 +1,8 @@
+{
+  "prompt_id": "P14-honesty-section",
+  "branch": "agent/p14-honesty-section-res2",
+  "base_commit": "b05e1c9",
+  "utc": "2026-07-29T14:00:00Z",
+  "agent": "RES-2",
+  "note": "branch name carries a -res2 suffix: agent/p14-honesty-section already existed on an unrelated tip"
+}
