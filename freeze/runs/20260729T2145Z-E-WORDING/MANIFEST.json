@@ -1,0 +1,50 @@
+{
+  "prompt_id": "S4-freeze-complete/E-WORDING",
+  "branch": "agent/s4-freeze",
+  "base_commit": "d99daa0dad29076042e02c54256086f4130fc915",
+  "utc": "2026-07-29T22:45:00Z",
+  "commits": [
+    "db966b26",
+    "663f3190",
+    "72424bc7"
+  ],
+  "verdict": "verify.sh DRAFT COMPLETE (0 fail, 3 notes); launch_gate BLOCKED with 4 blockers",
+  "stages_wired": [
+    "[15] generated artefacts vs their generators",
+    "[16] one endpoint, one wording"
+  ],
+  "files": [
+    {
+      "path": "freeze/STATS_RULES.md",
+      "sha256": "f1068f7b4d78a72a5a2538bb9de65ce9248bed0e447987ef7f7dd29b26a04b35"
+    },
+    {
+      "path": "freeze/CLAIMS_TEXT.md",
+      "sha256": "25fd68f16d4ce3f86164adec9b785af3d317c2b532fd2b3d0b0ca1128712d3e3"
+    },
+    {
+      "path": "freeze/verify.sh",
+      "sha256": "feb92ecf80310e3c2d41e77c6bb10bff18992a4d45b02213e265cec40b78d5d2"
+    },
+    {
+      "path": "freeze/launch_blockers.json",
+      "sha256": "8c6ad349f70eea0a204432fa9c143708fb6b561ac113131a52c9ea349fc385a9"
+    },
+    {
+      "path": "freeze/RESIDUALS.json",
+      "sha256": "aff8899a5f5a0cab33ec711761452810ba93142ec36b2f6d4ec6dd23017fe529"
+    },
+    {
+      "path": "freeze/launch_gate.py",
+      "sha256": "353465d927f0e8bcb8dea722fc304dabbad5ae35c2ca39aef315230c81999451"
+    },
+    {
+      "path": "freeze/residuals.py",
+      "sha256": "30b9bb365dd71e5d3d91b87118542a5410311ee30ffede9fab98318d6655b226"
+    },
+    {
+      "path": "freeze/build_budget_table.py",
+      "sha256": "c3685e2e42629d5a841e018f1029aef2ce977f1a1bde9ccecb0689c76f2ec920"
+    }
+  ]
+}
