@@ -49,11 +49,14 @@ Three things this gate deliberately does NOT run
   this gate verifies the artefact's *shape and contents*, not that the code
   still produces it.  That is a real gap and it is the direct cost of the
   no-writes rule.
-* `python -m harness.campaign_status` reads only checkpoints -- but it reads
-  them from `out/campaign/`, which is **untracked**, and it `return 1`s when
-  the directory holds no checkpoints.  On any clean checkout that is a
-  guaranteed red for a reason that has nothing to do with the territory being
-  finished, so it is not a rung.
+* `python -m harness.campaign_status` reads only checkpoints -- but it read
+  them from `out/campaign/`, which **was untracked**, and it `return 1`s when
+  the directory holds no checkpoints.  On any clean checkout that was a
+  guaranteed red for a reason that had nothing to do with the territory being
+  finished, so it was not a rung.  **A14 (2026-07-29) committed the four
+  checkpoints, so the reason no longer holds** and rung 3 now runs it: see
+  `check_campaign_status`.  It was the untracked payload, not the checker,
+  that was the problem.
 * anything that reads `ARC_API_KEY`.  Children here are launched with
   `ARC_API_KEY` and `ANTHROPIC_API_KEY` stripped from their environment, so an
   accidental live path fails loudly instead of quietly billing someone.  No
@@ -138,6 +141,30 @@ REQUIRED_ENVELOPE = ("degrees_of_freedom", "excluded", "games", "pooled_cv",
 REQUIRED_CELL = ("actions_ok", "budget", "campaign", "cost_usd", "game_id",
                  "outcome", "repeat", "run_id")
 REQUIRED_POOL = ("all_cells", "campaign", "cells", "clean", "problem_count")
+
+# The four S1 baseline-parity checkpoints A14 committed, one per dev-pile game.
+# 4 is the pile, not a sample of it: a missing checkpoint is a game whose $8-17
+# left no record, which is the whole failure A14 was raised to undo.  Counted
+# as *distinct dev-pile game ids*, not as files -- out/campaign/ is the
+# harness's own output directory, so four copies of one game's checkpoint
+# landing there would satisfy a file count while covering one game.
+MIN_CHECKPOINTS = 4
+
+# The 12 artefacts A14 rescued: 4 checkpoints, 4 shard ledgers, 4 probe logs.
+# Every per-entry check in harness.cost_artefacts passes vacuously on a
+# register with one entry left in it, so the count needs its own floor.
+MIN_COST_ARTEFACTS = 12
+
+# The four checkpoints self-report $48.3861 between them.  The floor is set
+# below that with room for nothing: these are finished, frozen artefacts, not a
+# campaign still accruing, so the only way the total moves is if a checkpoint
+# is removed or rewritten.  $48 catches either without tripping on float
+# formatting.  (The all-in cost was $50.39 -- two aborted launches per game
+# whose spend the checkpoints zeroed on restart, recoverable only from the
+# shard ledgers.  See runs/20260729T100000Z-a14/RECONCILIATION.md.  The floor
+# is deliberately set against what the checkpoints *say*, since that is what
+# this checker reads.)
+MIN_CHECKPOINT_SPEND_USD = 48.0
 
 
 def child_env():
@@ -441,6 +468,98 @@ def committed_envelope_drift(fresh_path):
             % os.path.relpath(newest, HERE).replace(os.sep, "/"))
 
 
+def check_cost_artefacts(problems):
+    """Every artefact that cost money is still where the register says it is.
+
+    A14 (2026-07-29): the four campaign checkpoints and their four shard
+    ledgers -- $50.39 of ARC spend and 8.7 hours of wall clock -- were sitting
+    untracked while five other territories cited their sha256 as evidence.  A
+    single `git clean` would have destroyed the only source for the bare-CC
+    column of the main table, and nothing in this gate would have noticed,
+    because nothing in the repository stated that those files mattered.
+
+    `COST_ARTEFACTS.json` states it and `harness.cost_artefacts` adjudicates
+    it, in its own process so the credential-stripped child rule still holds.
+    Run as a subprocess rather than imported for exactly that reason.
+    """
+    proc = sh([sys.executable, "-m", "harness.cost_artefacts", "--json"])
+    try:
+        report = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        fail(problems, "harness.cost_artefacts produced no readable report "
+                       "(exit %d): %s" % (proc.returncode, proc.stderr.strip()[:300]))
+        return
+    for problem in report["problems"]:
+        fail(problems, "cost artefact: %s" % problem)
+
+    committed = [r for r in report["rows"] if r["disposition"] == "committed"]
+    if len(committed) < MIN_COST_ARTEFACTS:
+        fail(problems, "COST_ARTEFACTS.json lists %d 'committed' artefact(s), "
+                       "floor is %d -- a register gutted to a handful of "
+                       "entries passes every per-entry check and still says "
+                       "nothing" % (len(committed), MIN_COST_ARTEFACTS))
+
+
+def check_campaign_status(problems, dev, sealed):
+    """The four committed checkpoints, read back and adjudicated here.
+
+    Honest about the division of labour: `harness.campaign_status` is a
+    *printer*, not a checker.  It returns 1 only when the glob is empty, and
+    otherwise its sole failure mode is a KeyError on a missing field.  Running
+    it proves the checkpoints parse and that the module still works on a clean
+    checkout -- which is worth having, and is all it proves.  Every floor below
+    is enforced by this function, not by it.
+
+    This rung exists only because A14 committed `out/campaign/*.json`.  Before
+    that the directory was empty on every clean checkout and `campaign_status`
+    returned 1 for a reason that said nothing about the territory, which is why
+    the gate's docstring used to list it under what it deliberately does not
+    run.  Committing the payload turned it from a guaranteed red into a real
+    check, and this is the point of A14 that is worth more than the rescue
+    itself: an artefact nobody can read on a fresh clone cannot be verified by
+    anyone, so it is not evidence yet.
+
+    Read-only -- `harness/campaign_status.py` opens the checkpoints and prints;
+    it writes nothing, so it is safe inside a gate that forbids writes.
+    """
+    proc = sh([sys.executable, "-m", "harness.campaign_status"])
+    if proc.returncode != 0:
+        fail(problems, "harness.campaign_status exited %d: %s"
+             % (proc.returncode, (proc.stderr or proc.stdout).strip()[:300]))
+        return
+
+    paths = sorted(glob.glob(os.path.join(HERE, "out", "campaign",
+                                          "campaign_*.json")))
+
+    spend, ids = 0.0, []
+    for path in paths:
+        doc = load_json(problems, path, os.path.basename(path))
+        if doc is None:
+            continue
+        missing = [f for f in ("cost_usd", "game_id") if f not in doc]
+        if missing:
+            # No default: a missing field is a missing field, and summing 0.0
+            # for it would let an emptied checkpoint slide under the floor.
+            fail(problems, "%s has no %s field(s)"
+                 % (os.path.basename(path), " or ".join(repr(f) for f in missing)))
+            continue
+        spend += doc["cost_usd"]
+        ids.append(doc["game_id"])
+
+    check_pile(problems, dev, sealed, ids, "the committed campaign checkpoints")
+
+    covered = {g for g in ids if g in dev}
+    if len(covered) < MIN_CHECKPOINTS:
+        fail(problems, "the committed checkpoints cover %d dev-pile game(s), "
+                       "floor is %d -- a game's spend left no record"
+             % (len(covered), MIN_CHECKPOINTS))
+
+    if spend < MIN_CHECKPOINT_SPEND_USD:
+        fail(problems, "the committed checkpoints account for $%.2f, floor is "
+                       "$%.2f -- a checkpoint has been removed or rewritten"
+             % (spend, MIN_CHECKPOINT_SPEND_USD))
+
+
 def rung_artefacts(problems, env_out, pool_out, dev, sealed):
     print("[3/3] artefact self-check")
     if env_out:
@@ -450,9 +569,12 @@ def rung_artefacts(problems, env_out, pool_out, dev, sealed):
         check_pool(problems, pool_out)
     rows = check_cells(problems, dev, sealed)
     check_gate_json(problems)
+    check_cost_artefacts(problems)
+    check_campaign_status(problems, dev, sealed)
     if not problems:
         print("   ok    %d recorded cells over %d dev-pile game(s), envelope "
-              "and spend pool both clean, campaign gate green"
+              "and spend pool both clean, campaign gate green, every "
+              "cost-bearing artefact present and byte-identical"
               % (len(rows), len({r["game_id"] for r in rows})))
 
 
