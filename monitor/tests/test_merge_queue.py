@@ -148,3 +148,49 @@ def test_done_on_the_board_but_absent_from_master_is_risk(monkeypatch):
 def test_the_probe_is_registered_in_scan():
     import scan
     assert "merge_queue" in scan.PROBES
+
+
+# --------------------------------------------------- the starvation ordering
+
+def test_the_longest_waiting_branch_is_tried_first(tmp_path, monkeypatch):
+    """Alphabetical order plus a --max cap starves the tail of the queue.
+
+    v5-battery-freeze sat unattempted for 40 minutes across four ticks while
+    the rig merged other branches each time, because it sorts last and the run
+    stops after two successes. Its blocker had already been fixed; nothing
+    retried it to find out.
+    """
+    import ci_merge
+    path = _log(tmp_path, [
+        FLAG % ("2026-07-29T00:00:00Z", "v5-last-alphabetically", "gate red"),
+        FLAG % ("2026-07-29T01:00:00Z", "a1-first-alphabetically", "gate red"),
+    ])
+    monkeypatch.setattr(mergequeue, "LOG", path)
+    order = ci_merge.starved_first(["origin/agent/a1-first-alphabetically",
+                                    "origin/agent/v5-last-alphabetically"])
+    assert order[0] == "origin/agent/v5-last-alphabetically", order
+
+
+def test_a_never_tried_branch_goes_before_everything(tmp_path, monkeypatch):
+    """Nothing is known about a fresh push, so it costs one attempt to find out."""
+    import ci_merge
+    path = _log(tmp_path, [FLAG % ("2026-07-29T00:00:00Z", "old", "gate red")])
+    monkeypatch.setattr(mergequeue, "LOG", path)
+    order = ci_merge.starved_first(["origin/agent/old", "origin/agent/fresh"])
+    assert order[0] == "origin/agent/fresh", order
+
+
+def test_ordering_never_stops_a_merge_run(monkeypatch):
+    """If the heuristic breaks, merging continues unordered.
+
+    Unordered merging is the old behaviour: worse, not broken. A scheduling
+    nicety must never be able to take the merge rig down.
+    """
+    import ci_merge
+
+    def boom(*_a, **_k):
+        raise RuntimeError("log unreadable")
+
+    monkeypatch.setattr(mergequeue, "read_log", boom)
+    got = ci_merge.starved_first(["origin/agent/b", "origin/agent/a"])
+    assert got == ["origin/agent/b", "origin/agent/a"]

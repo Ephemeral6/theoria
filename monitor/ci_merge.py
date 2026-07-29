@@ -299,6 +299,35 @@ def try_merge(branch):
         sh(["git", "worktree", "remove", "--force", wt])
 
 
+def starved_first(branches):
+    """Longest-waiting first, never-tried before that.
+
+    `unmerged_branches()` returns git's order, which is alphabetical, and the
+    loop below stops after `--max` successful merges. So a branch late in the
+    alphabet is only ever reached on a tick where fewer than `--max` earlier
+    branches succeed -- and when the queue is jammed at the front, never.
+
+    Measured, not theorised: `v5-battery-freeze` was last attempted at 01:36
+    and was still sitting unattempted 40 minutes and four ticks later, while
+    the rig merged other branches each time. Its actual blocker had already
+    been fixed hours earlier; nothing retried it to find out.
+
+    Ordering by wait makes the queue fair without a scheduler: a branch that
+    has just been pushed goes first (nothing is known about it yet), then the
+    one that has been waiting longest. It is the same quantity this repo's
+    merge-queue probe reports as its headline, for the same reason -- it only
+    improves when something is really resolved.
+    """
+    try:
+        import mergequeue
+        first, _last, _merged = mergequeue.read_log()
+    except Exception:
+        # Never let the ordering heuristic stop a merge run: unordered merging
+        # is the old behaviour, which is worse but not broken.
+        return list(branches)
+    return sorted(branches, key=lambda b: first.get(b, (0.0, ""))[0])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -307,7 +336,7 @@ def main():
     if m0_alive():
         print("M-0 session alive — CI stands down.")
         return 0
-    todo = unmerged_branches()
+    todo = starved_first(unmerged_branches())
     if args.dry_run or not todo:
         print("delivered, unmerged:", todo or "none")
         return 0
