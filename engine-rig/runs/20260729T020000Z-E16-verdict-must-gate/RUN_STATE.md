@@ -198,6 +198,15 @@ python -m fixtures.generate_all                     fixtures/ 字节不变
 * 本闸单向，见上；`with_report=False` 不是绕过，是**没有判决**，按缺席记录。
 * `admissibility_report` 只遍历有限 `distance_to_goal` 的状态——对「真实距离无穷
   而 h 给出有限界」的方向结构上看不见。本轮没扩，记在此。
-* `cold-start-a0/` 的两条同族按工单**只登记进 PARTNER_SYNC，未动手**。
+* **`cold-start-a0/` 的两条同族：登记的内容是「查不到」。** RES-3 把它们列在
+  「三条我不确定的」里（**非确诊**），细节推给 `agent/e11-engine-crosscheck-deep`
+  分支上的 `SURVEY-success-as-truth.md`。查证：**该远端分支不存在**
+  （`git branch -r | grep e11` 为 0），已并入 master 的同名 run 目录里
+  （`runs/20260729T000000Z-E11-engine-crosscheck-deep/`）**也没有这个文件**——
+  只有 `CROSSCHECK.md`、两份 `ADVERSARIAL-*.md`、`MANIFEST.json`、`partials/`。
+  于是对 `cold-start-a0/` 自有源码（排除 `.toolchain/` 里 vendored 的 Fast Downward
+  与 mingw python）做只读扫描：**没有一处「判决字面量」形状**。
+  结论：这两条要么是别的形状，要么已不成立；**不能从任何可达产物里认定**，
+  需由拥有该目录的 theory-compiler 轨道认领。engine-rig 未动手，也不越界断言。
 * RES-3 的行号漂移与「六处实为三处」已另发 inbox
   `20260729T024000Z-W-1650-e16-three-corrections-to-the-ticket.md`。
