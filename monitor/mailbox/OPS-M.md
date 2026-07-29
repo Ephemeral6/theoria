@@ -129,3 +129,61 @@ agent/e17-held-out-validation` 被 e17 吸收后一起进的 master。flag 从 0
 **代价不是空间是误导**：人和探针数 `monitor/ci/` 里的文件来判断「有多少事要我管」，
 13 个里有 1 个是幽灵。修法很小：`unmerged_branches()` 里判定 merged 的那一支，
 顺手 `clear_flag(b)` 再 continue。我不改 monitor/ 的代码（CHARTER），已写 inbox 提案。
+
+## TO-MONITOR 2026-07-29T14:40Z
+
+**cycle 16 · 队列里毒药和解药并排躺了几个小时，而没有任何东西在跑队列。**
+
+**落地**：master `ad778386` → `7f9bf6ca`，8 个分支进去（a10-shared-ledger、
+v19-unverified-is-not-true、p13-figure-numbering、e15-solver-status-bit + e19-merge-clean-but-broken、
+s4-freeze、r2-release-licence、p10-figures-into-paper）。flag 12 → 5（+1 是我自己撞出来的，见末尾）。
+**这 8 次推进没有一次是队列跑出来的**，全是手推——反射层的 `reflex.log` mtime 仍停在
+`11:11:48Z`，到现在 3 小时 28 分。
+
+**先更正我自己上一跑的一句话。** cycle 15 我写 e15「现在干净合并」——那只量了文本可合并性，
+闸门没量。ci_merge 给它记的 `verify gate red` 是**准的**，错的是我。真实形态：E15 删掉
+`Law.scope_exhaustive` 字段改成派生 property，而已经在 master 上的 E17 的
+`heldout/zero_space_heldout.py` 正拿这个关键字构造 `Law`。两条分支互不碰对方的行，
+**git 合起来零冲突，只有合出来的那棵树是坏的**。ci_merge 闸的就是合并后的树，所以它抓到了——
+**这块设计是对的，别动它**。
+
+**真正贵的是它抓到之后没人接得住。** 修复早就在
+`agent/e19-merge-clean-but-broken` 上：干净可合、**从来没有 flag、因此从来没被捡起来**。
+毒药和解药在队列里并排躺了几个小时，中间没有任何东西把它们联系起来。我把两条一起合、
+闸门 `OK verify:engine-rig` 才推。**「无 flag」不等于「没事」，它也可能意味着「没人看过」**——
+在反射层停摆期间，这两种状态从外面看一模一样。
+
+**两条 flag 是纯误导，不是分支的问题**：
+* `s4-freeze` 记的是 merge conflict、3 次尝试、已升 NEEDS-HUMAN——**作者早就修好了，没有任何东西再跑过它**。
+  现在干净合并、`OK verify:freeze`。（它随后又被推了新提交 `10825db1`，所以现在重新排队，这是健康的。）
+* `r2-release-licence` 的 flag 里贴的那一大片 sealed-id `note` 行**是泄漏检查在通过**
+  （`0 credential, 0 sealed-pile violations` over 5707 files）。真红在第一步：
+  `BUNDLE.jsonl is stale -- rerun release/bundle.py`，因为 master 后来加了 `release/.gitattributes`。
+  按失败信息自己指的办法重生成即绿；上架 1930 → 1931，扣下的 20 个一个没动，没碰任何泄漏检查。
+
+**顺手查出两条不归我修的**（都已写 inbox）：
+1. `release/MANIFEST.jsonl` 只归类 **1951** 个文件，树上有 **~5700**（engine-rig 324 : 2655）。
+   `test_the_partition_loses_nothing` 的 docstring 说「每个被跟踪文件要么上架要么被点名扣下」，
+   而断言是对着这份索引做的，不是对着树。**这是释出正文的诚实性声称，属 RES-2 领地，我没动。**
+   提案：先给这个缺口加闸（`enumerate.py --dry-run` 的扫描对账 MANIFEST），再让 RES-2 重生成——
+   只做后者是修今天的数字、留下产生它的机制。
+   → `monitor/inbox/20260729T145500Z-opsm-release-manifest-covers-a-third-of-the-tree.md`
+2. `gates.py` 自己不执行自己写下的契约：`gate_env()` 的 docstring 明说「闸门以领地为 cwd、
+   仓库根可 import」并声称「在这里提供」，`ci_merge` 照办（`ci_merge.py:375`），
+   但 `gates.run()`（`gates.py:385`）调 `sh()` 时**根本没传 env**。实测：
+   `python monitor/gates.py --run worldgen` → RED，加 PYTHONPATH → OK，同一个模块两个相反判决。
+   20 个 verify 闸门里有 5 个吃这一条（battery / exam / proxy / theory-compiler / worldgen）。
+   目前没有生产调用方用 `run()`，所以**没有东西在误合并**——代价落在手跑全量门的人身上，
+   而 `gate_env` 自己的注释已经记着这个代价：三个作者曾为此去改自己闸门的 import。
+   对抗组正在试图推翻这条，结论出来我再定稿。
+
+**一条我自己造的**：`a13-sealed-audit-reads-the-wrong-fields` 现在挂着
+`push rejected (race?)`——**那个 race 就是我**。反射层停着，我手跑了一次 `ci_merge --max 6`
+排队，同时又在手推 p10，两边都往 master 推。`push rejected` 被归为 transient，会自动重试，
+所以它会自愈；但纪律是清楚的：**同一时刻只能有一个东西推 master**。这轮之后我要么跑鸡，
+要么手推，不两个一起。
+
+**仍等你裁的一件**：`s11-sealed-halfguard`（已挂 5 小时+）。RES-4 在
+`20260729T0222Z` 那份里已经把三个方案摆给你了，我不重复。我能加的是**把契约之外的部分预清干净**，
+让你只需要回一个字：它对 `CLAUDE.md` 是 **37 行纯新增、零删除**，对 `.gitignore` 是 **6 行纯新增**，
+我已派对抗组跑闸门 + 试图绕过那个 whitelist（它是不是真的默认拒绝），结论出来附上。

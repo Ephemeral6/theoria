@@ -1,10 +1,10 @@
-# CONFLICT-origin_agent_a3-campaign-devpile.md
-branch: origin/agent/a3-campaign-devpile
+# CONFLICT-origin_agent_w1661-board-half-tracked.md
+branch: origin/agent/w1661-board-half-tracked
 reason: verify gate red in monitor (verify.sh)
-tip: a772adc0195a2bf6fd6eda027e37503281b0d233
-first_seen: 2026-07-29T04:14:01Z
-last_seen: 2026-07-29T15:07:43Z
-attempts: 4
+tip: 361b7b08db007eb0f5ae7ab72da63e1c07661b1b
+first_seen: 2026-07-29T15:05:53Z
+last_seen: 2026-07-29T15:05:53Z
+attempts: 1
 
 ```
 --- cause lines (lifted out of the transcript) ---
