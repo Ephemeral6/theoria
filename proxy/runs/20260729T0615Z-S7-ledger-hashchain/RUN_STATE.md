@@ -99,3 +99,79 @@ that always passes.
 
 Close S7 as a duplicate of S15 and do not re-supply it. If the remaining work is
 wanted, item (1) above is the one that matters — the other three are tidying.
+
+---
+
+# Correction, 2026-07-29T07:10Z — this run closed S7 too early, and overstated its own novelty
+
+An adversarial re-check of every claim above found six errors. They are recorded
+here rather than edited away, because the run's whole subject is documents that
+kept asserting something after it stopped being true.
+
+## The one that matters: S7 was not a duplicate, and closing it was wrong
+
+S7's item body carries a monitor verdict paragraph that S15's does not:
+
+> **监控裁决：做，且现在做。** … 释出包（P5/R2）里要能附**链头哈希与复核脚本**。
+> 与**花费闸门共用同一条链**即可。
+
+Neither shipped, and this run did not notice:
+
+1. **The release package carries neither the head hash nor the checking script.**
+   `release/MANIFEST.jsonl` lists `proxy/tools/validate_ledger.py` and three
+   siblings but **not** `proxy/tools/verify_chain.py` and not
+   `proxy/tests/test_chain.py`; `grep -rn verify_chain release/` returns zero.
+   The manifest was last regenerated ~70 minutes *before* the chain landed and
+   never re-run. Verified directly: `grep -c verify_chain release/MANIFEST.jsonl`
+   → `0`.
+2. **The spend gate does not share the chain.** `proxy/spend_gate.py` keeps its
+   own money ledger under its own OS file lock and never touches
+   `proxy.ledger.Ledger`; it has no `prev` and no `line_hash`.
+
+So the recommendation "close S7 as a duplicate of S15 and do not re-supply it"
+would have discarded two live requirements. **S7 should not have been marked
+done.** Reported to the monitor and re-supplied as a follow-up item.
+
+## Five factual errors above
+
+3. **"the chain ran in no gate" is false** — and it was the entire justification
+   for the new gate step. Master's `verify_contract.sh` already ended with
+   `pytest proxy -q`, and `tests/test_chain.py` lives under `proxy/`, so all 28
+   chain tests were already running at merge time — including the
+   edit-one-field case the new step re-tests, and the CLI/exit-code path. The
+   new step is a tenth step duplicating a subset of the ninth. It is defensible
+   as a fast, legibly-named canary and it does trip correctly, but "the merge
+   robot could have landed a commit that broke chaining outright" was not true.
+4. **"three documents" was two.** `proxy/STATUS.md` was counted twice (once for
+   the stale bullet, once for the stale test count) and `REDTEAM.md` once.
+5. **"twenty-four hours" was ~14h12m** (chain 2026-07-28T16:03Z → this run
+   06:15Z). The same wrong figure went out on the bus.
+6. **"independent re-derivation" is overstated.** `verify_chain.py:52` imports
+   `line_hash` from `proxy.ledger` — the walk is independent, the hash primitive
+   is shared, so a defect inside `line_hash` is invisible to both the verifier
+   and the new control.
+7. **"that half is still undone" (head publication) is overstated**, and
+   contradicts this document's own "Still open" item 1, which put it correctly.
+   The mechanism exists and is tested: `--emit-head` writes a head to a tracked
+   path and refuses to do so for any non-PASS stream, and an arm can lift
+   `ledger_head` into its tracked `MANIFEST.json`. What is missing is
+   **enforcement** — no gate compares a run's head against a tracked manifest.
+
+On the REDTEAM.md framing: "RED-40 stands" was itself **true** by this run's own
+argument. The stale text was the future-tense paragraph beneath it describing
+the chain as proposed. The edit replaced a correct headline with "half closed";
+the paragraph beneath it is what needed replacing.
+
+## One new finding the re-check surfaced
+
+A **PARTIAL verdict can be manufactured to read as benign.** A record that omits
+`prev` increments an `unchained` counter, appends **no break**, and then becomes
+the predecessor for the next line. So deleting a mid-stream record and stripping
+`prev` from every record after it yields `breaks == []` and verdict `PARTIAL` —
+whose docstring offers the innocent reading, "a stream lifted from v0, or one
+written across the change that introduced the chain". `runner.py` writes that
+verdict into the run record with nothing distinguishing it from legacy data.
+
+Two things limit it: `PARTIAL` exits non-zero, and `--emit-head` refuses any
+non-PASS stream. But a deletion reported as "no breaks" is the wrong shape, and
+`tests/test_chain.py` only ever builds the benign case. Worth its own item.

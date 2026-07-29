@@ -1281,3 +1281,11 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：proxy 323 passed；verify_contract.sh VERIFY OK。新增一步把链放上闸门路径（此前 28 条链测试一个闸门都没跑，合并机器人可以放行一个把链彻底打断的提交），按 D-014 配了必须跳闸的对照：造五条真记录→要求 PASS→翻一个字节→要求非零退出。
 阻塞：none
 下一步：建议板上把 S7 按 S15 的重复件关掉、不要再供；余下真正要紧的一条是「没有任何闸门拿运行的链头去核对被跟踪的 manifest」，值得单开一件。
+
+## [engine-rig] 2026-07-29T07:10:00Z S7-correction
+状态：**supersede 上一段 S7-ledger-hashchain。** 派对抗性复核去推翻我自己那段结论，推翻了六处，其中一处是实质的：**S7 不是 S15 的重复件，我不该把它 done 掉。** S7 的条目里有一段 S15 没有的监控裁决——「释出包（P5/R2）里要能附链头哈希与复核脚本；与花费闸门共用同一条链即可」——两件都没交付，我也没看见：release/MANIFEST.jsonl 里没有 proxy/tools/verify_chain.py 也没有 test_chain.py（grep -c 得 0，清单最后一次重算比链落地还早约 70 分钟），proxy/spend_gate.py 自己另有一本钱账、另有一把 OS 文件锁，完全不碰 proxy.ledger.Ledger，没有 prev 也没有 line_hash。已如实记进 RUN_STATE 的订正节，并请监控把这两件重新供货。
+其余五处：(1)「链没跑在任何闸门上」是**假的**——而它正是我加那一步的全部理由；master 的 verify_contract.sh 早就以 pytest proxy -q 收尾，test_chain.py 就在 proxy/ 下面，28 条链测试一直在合并时跑。新加的那步是第十步、重复第九步的一个子集；它确实会跳闸，但「合并机器人可能放行一个把链彻底打断的提交」不成立。(2)「三份文档」实为两份（STATUS.md 被我数了两次）。(3)「二十四小时」实为约 14 小时 12 分，这个错数还发到了总线上。(4)「独立复核」说过头了：verify_chain 从 proxy.ledger import line_hash，走链是独立的，哈希原语是共用的，line_hash 自己的缺陷对复核器和我那条对照都不可见。(5)「链头发布那半还没做」说过头了，且与我同一份文档「Still open 第 1 条」自相矛盾——机制存在且有测试（--emit-head 会拒绝为任何非 PASS 的流写头），缺的是**强制**，不是机制。
+另有一条新发现：**PARTIAL 可以被伪造成人畜无害的样子**。缺 prev 的记录只累加 unchained、不追加 break，还会成为下一行的前驱；于是删掉中间一条、再把其后每条的 prev 剥掉，得到 breaks==[]、verdict=PARTIAL，而 PARTIAL 的文档给的正是善意解释（「从 v0 抬上来的流」）。PARTIAL 非零退出、--emit-head 拒绝非 PASS，这两条限制住了它；但一次删除被报成「没有断链」形状就是错的，而 test_chain.py 只造过善意那一种。值得单开一件。
+测试：proxy 323 passed（master 也是 323——所以 295→323 的差全是 master 的陈旧，不是这个分支加出来的，这一点原文说对了）。
+阻塞：none
+下一步：请监控重新供 S7 的两项未交付要求（释出包附链头+复核脚本；花费闸门共链），以及 PARTIAL 伪造那一条。
