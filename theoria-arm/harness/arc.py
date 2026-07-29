@@ -63,6 +63,30 @@ class ShortIdRefused(ArcError):
     """INC-005. Refusing to send is the whole point."""
 
 
+class SpendGateStopped(ArcError):
+    """The shared pool refused. The leg is over; it is not a retryable status.
+
+    This exists because of a measured failure. On 2026-07-29 a live leg on
+    `g50t` sent **780 commands for 9 successful actions** -- an HTTP
+    amplification of 86.7 against the 1.75 the reservation was sized on -- and
+    exhausted its 105-request action cap.
+
+    The mechanism: when the pool refuses, `spend_gate.permit` raises inside the
+    env proxy's request handler, the arm sees a transport failure rather than a
+    status, and `_retryable(0)` is True by design (a dropped socket usually
+    *is* worth retrying). So every refused command was retried up to
+    `ACTION_ATTEMPTS = 40` times. The board item's red line -- 闸门红了立刻停,
+    "gate red, stop at once" -- was not implemented anywhere; the gate held the
+    ceiling, which is why nothing was overspent, but the arm spun against it
+    until its wall clock ran out.
+
+    A refusal is therefore asked about *directly*, through the reservation the
+    run holds, rather than inferred from a status code. `SpendBinding` latches
+    the trip, so once it has fired every later question gets the same answer
+    and the arm stops on the first one.
+    """
+
+
 def _retryable(status: int, body: Any) -> bool:
     """arc-recon/precheck._retryable, reproduced. Everything not named here is
     permanent, deliberately -- so a deterministic 500 does not burn 40 attempts."""
@@ -88,7 +112,8 @@ class ArcThroughProxy:
     def __init__(self, env_base: str, game_id: str, budget: Budget,
                  timeout: float = 60.0,
                  on_command: Optional[Callable[[Dict[str, Any]], None]] = None,
-                 sleep=time.sleep):
+                 sleep=time.sleep,
+                 spend_binding=None):
         self._check_full_id(game_id)
         self.env_base = env_base.rstrip("/")
         self.game_id = game_id
@@ -99,6 +124,10 @@ class ArcThroughProxy:
         #: driver uses it to keep RUN_STATE.md current without this module
         #: knowing anything about files.
         self.on_command = on_command
+        #: The run's claim on the shared pool, if it has one. Asked before
+        #: every attempt so a refusal ends the leg instead of being retried
+        #: forty times as a transport failure. `None` offline and in tests.
+        self.spend_binding = spend_binding
 
         self.card_id: Optional[str] = None
         self.guid: Optional[str] = None
@@ -137,6 +166,27 @@ class ArcThroughProxy:
         except json.JSONDecodeError:
             return status, {"raw": raw}
 
+    def _check_spend(self) -> None:
+        """Ask the claim, do not infer from a status code.
+
+        `SpendBinding.check_action` raises `SpendGateTripped` when the pool
+        cannot admit another outbound request, and the binding latches the
+        trip -- so this is cheap to ask before every attempt and answers the
+        same way once it has fired. Anything the gate raises that is *not* a
+        trip (`SpendGateUnavailable`, a released or expired claim) is also
+        terminal: the rule is fail closed, never spend uncounted.
+        """
+        binding = self.spend_binding
+        if binding is None:
+            return
+        try:
+            binding.check_action(1)
+        except Exception as exc:                       # noqa: BLE001
+            raise SpendGateStopped(
+                "the shared spend pool refused another request, so this leg "
+                "stops here rather than retrying into the ceiling: %s: %s"
+                % (type(exc).__name__, exc)) from exc
+
     def _send(self, path: str, body: Dict[str, Any], *, attempts: int,
               note: str, is_reset: bool = False, probe: bool = False
               ) -> Tuple[int, Any, int]:
@@ -145,6 +195,9 @@ class ArcThroughProxy:
         status, parsed = 0, None
         used = 0
         for k in range(attempts):
+            # Before the attempt, not after: a spent claim must cost zero
+            # further sockets. See `_check_spend`.
+            self._check_spend()
             self.budget.check(probe=probe, is_reset=is_reset)
             self.budget.command()
             used += 1

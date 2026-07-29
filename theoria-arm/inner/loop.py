@@ -36,7 +36,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
-from harness.arc import ArcThroughProxy, frames_of
+from harness.arc import ArcThroughProxy, SpendGateStopped, frames_of
 from harness.budget import Budget, BudgetExhausted
 from harness.modelcall import (AnonymityBreach, CostCeilingReached,
                                ModelDesk)
@@ -134,8 +134,13 @@ class TheoriaArm:
                                  commands=budget_commands,
                                  reserve_for_probes=reserve_for_probes)
 
-        self.arc = ArcThroughProxy(env_base, game_id, self.budget,
-                                   on_command=self._on_command)
+        self.arc = ArcThroughProxy(
+            env_base, game_id, self.budget, on_command=self._on_command,
+            # The claim this run draws on, so a refused request ends the leg
+            # rather than being retried into the ceiling. `run.run` is the
+            # ledger; `harness/run.py` hangs the binding on it.
+            spend_binding=getattr(getattr(run, "run", None),
+                                  "spend_binding", None))
         self.store = FrameStore()
         self.books = Books(os.path.join(self.dir, "books"), seed_from=seed_books)
         self.levels = LevelLog()
@@ -471,6 +476,11 @@ class TheoriaArm:
             self.stopped_because = "budget: %s" % exc
         except CostCeilingReached as exc:
             self.stopped_because = "cost ceiling: %s" % exc
+        except SpendGateStopped as exc:
+            # 闸门红了立刻停. Not a retry, not a smaller reservation: the pool
+            # is the one authority that outranks the plan.
+            self.stopped_because = str(exc)
+            self.outcome = "spend_gate_tripped"
         except KeyboardInterrupt:
             self.stopped_because = "interrupted"
         return self._finish()
