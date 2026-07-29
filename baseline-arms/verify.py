@@ -144,8 +144,16 @@ REQUIRED_POOL = ("all_cells", "campaign", "cells", "clean", "problem_count")
 
 # The four S1 baseline-parity checkpoints A14 committed, one per dev-pile game.
 # 4 is the pile, not a sample of it: a missing checkpoint is a game whose $8-17
-# left no record, which is the whole failure A14 was raised to undo.
+# left no record, which is the whole failure A14 was raised to undo.  Counted
+# as *distinct dev-pile game ids*, not as files -- out/campaign/ is the
+# harness's own output directory, so four copies of one game's checkpoint
+# landing there would satisfy a file count while covering one game.
 MIN_CHECKPOINTS = 4
+
+# The 12 artefacts A14 rescued: 4 checkpoints, 4 shard ledgers, 4 probe logs.
+# Every per-entry check in harness.cost_artefacts passes vacuously on a
+# register with one entry left in it, so the count needs its own floor.
+MIN_COST_ARTEFACTS = 12
 
 # The four checkpoints self-report $48.3861 between them.  The floor is set
 # below that with room for nothing: these are finished, frozen artefacts, not a
@@ -483,13 +491,24 @@ def check_cost_artefacts(problems):
         return
     for problem in report["problems"]:
         fail(problems, "cost artefact: %s" % problem)
-    if not report["rows"]:
-        fail(problems, "COST_ARTEFACTS.json lists no artefacts; an empty "
-                       "register is not a clean one")
+
+    committed = [r for r in report["rows"] if r["disposition"] == "committed"]
+    if len(committed) < MIN_COST_ARTEFACTS:
+        fail(problems, "COST_ARTEFACTS.json lists %d 'committed' artefact(s), "
+                       "floor is %d -- a register gutted to a handful of "
+                       "entries passes every per-entry check and still says "
+                       "nothing" % (len(committed), MIN_COST_ARTEFACTS))
 
 
 def check_campaign_status(problems, dev, sealed):
-    """The four committed checkpoints, read back through the real checker.
+    """The four committed checkpoints, read back and adjudicated here.
+
+    Honest about the division of labour: `harness.campaign_status` is a
+    *printer*, not a checker.  It returns 1 only when the glob is empty, and
+    otherwise its sole failure mode is a KeyError on a missing field.  Running
+    it proves the checkpoints parse and that the module still works on a clean
+    checkout -- which is worth having, and is all it proves.  Every floor below
+    is enforced by this function, not by it.
 
     This rung exists only because A14 committed `out/campaign/*.json`.  Before
     that the directory was empty on every clean checkout and `campaign_status`
@@ -511,26 +530,29 @@ def check_campaign_status(problems, dev, sealed):
 
     paths = sorted(glob.glob(os.path.join(HERE, "out", "campaign",
                                           "campaign_*.json")))
-    if len(paths) < MIN_CHECKPOINTS:
-        fail(problems, "%d campaign checkpoint(s) in out/campaign/, floor is "
-                       "%d (one per dev-pile game)"
-             % (len(paths), MIN_CHECKPOINTS))
-        return
 
     spend, ids = 0.0, []
     for path in paths:
         doc = load_json(problems, path, os.path.basename(path))
         if doc is None:
             continue
-        for field in ("cost_usd", "game_id"):
-            if field not in doc:
-                fail(problems, "%s has no %r field"
-                     % (os.path.basename(path), field))
-        spend += doc.get("cost_usd", 0.0)
-        if "game_id" in doc:
-            ids.append(doc["game_id"])
+        missing = [f for f in ("cost_usd", "game_id") if f not in doc]
+        if missing:
+            # No default: a missing field is a missing field, and summing 0.0
+            # for it would let an emptied checkpoint slide under the floor.
+            fail(problems, "%s has no %s field(s)"
+                 % (os.path.basename(path), " or ".join(repr(f) for f in missing)))
+            continue
+        spend += doc["cost_usd"]
+        ids.append(doc["game_id"])
 
     check_pile(problems, dev, sealed, ids, "the committed campaign checkpoints")
+
+    covered = {g for g in ids if g in dev}
+    if len(covered) < MIN_CHECKPOINTS:
+        fail(problems, "the committed checkpoints cover %d dev-pile game(s), "
+                       "floor is %d -- a game's spend left no record"
+             % (len(covered), MIN_CHECKPOINTS))
 
     if spend < MIN_CHECKPOINT_SPEND_USD:
         fail(problems, "the committed checkpoints account for $%.2f, floor is "

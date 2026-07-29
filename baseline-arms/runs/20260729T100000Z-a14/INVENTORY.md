@@ -88,6 +88,59 @@ is ~220 KB packed.
 | `tests/__pycache__/*.pyc` | 6 | 181,290 | LEAVE UNTRACKED | regenerable, free |
 | `.pytest_cache/` | 4 | 7,615 | LEAVE UNTRACKED | regenerable, free |
 
+## B′. The licence question this sweep first got wrong
+
+An adversarial review found that the ruling above was made without consulting
+`release/LICENCE_POSTURE.md`, which is the file that governs it. Corrected here
+rather than quietly.
+
+**8 of the 12 committed files are class B.** Run through the repository's own
+classifier (`release/enumerate.py`, content-based, not a name list):
+
+| files | class | verdict |
+|---|---|---|
+| `out/shards/ledger.*.jsonl` (4) | **B** api-derived-compilation | *needs written permission, default excluded* — "445/555/311/259 record(s) pair an ARC game id with environment payload" |
+| `out/shards/probe_log.*.jsonl` (4) | **B** | *needs written permission* — "data file carrying API transaction marker `\"X-API-Key\"`" |
+| `out/campaign/campaign_*.json` (4) | C derived-statistics | releasable-flagged — names its game, pairs no id with payload |
+
+`LICENCE_POSTURE.md` names `baseline-arms/out/shards/ledger.*.jsonl` in its
+class-B examples **verbatim**, on the authority of ARC's ToS §2 and §4.
+
+**Why committing them is nonetheless right, stated properly this time.** The
+same file draws the line A14 needed and did not cite:
+
+> Caching is separately and explicitly fine … **Holding is permitted;
+> publishing is not.** These are two different questions and the release kit
+> must not merge them.
+
+Tracking is holding. Publication is separately gated by an allow-list, and the
+gate is *automatic and content-based*: `release/enumerate.py --dry-run` in this
+worktree classifies all eight of these files B without anyone adding them to a
+list, and B is `needs-written-permission, default excluded`. The precedent is
+also unambiguous — `baseline-arms/ledger.jsonl` and the eleven `ledger.a7-*` /
+`probe_log.a7-*` shards are class B, already tracked, and already withheld from
+release by `release/FRAME_HASHES.jsonl`.
+
+**Two corrections to what section A says above.**
+
+1. The claim that `out/pilot_*.json`'s tracked `a7-*` counterparts justify
+   committing these was **half an argument**. Those counterparts are tracked
+   *and withheld from release*. The precedent supports tracking; it says
+   nothing in favour of publishing, and section A implied otherwise.
+2. The premise "**Phase 4 publishes every tracked file**" (used above to keep
+   `schema_traces/` out) is **wrong as stated**. It is the right worst-case rule
+   for a *credential* — `CLAUDE.md` uses it that way, and for a secret the
+   worst case is the only case worth planning for. It is not how the release
+   kit treats data: `BUNDLE.jsonl` is an allow-list and class B and D are
+   excluded by default. `schema_traces/` stays out for its own reason (class D,
+   no declared upstream licence), which does not depend on the wrong premise.
+
+**One check A14 could not run.** If `origin` is a *public* remote, pushing is
+arguably the publication §4 names, in which case the line was crossed before
+A14 by the already-tracked class-B files above. Repository visibility is a
+human/ops question, not a research one, and this run made no network call to
+settle it. Raised to the monitor.
+
 ## C. Four findings this sweep turned up that are **not** A14's to fix
 
 Reported to the monitor rather than acted on — three of the four live in other

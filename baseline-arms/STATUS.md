@@ -70,7 +70,7 @@ blob 与磁盘的哈希确实不同，加上就相同。
 检查点入库之后这个理由不成立了，它现在是第三关的一部分。
 **这一点比抢救本身更值钱：干净检出上读不到的产物，还不算证据。**
 
-分片账本一并入库（55 MB 原始）——它们是主记录，且是那 $2.01 差额**唯一**的存活痕迹。
+分片账本一并入库（55 MB 原始）——它们是主记录、被 battery 钉了哈希当证据、且它们的 run_id 不出现在任何别的已跟踪账本里。（初稿还写过第四条理由「它们是那 $2.01 差额唯一的存活痕迹」，**该条为假、已撤回**：`figures/audit/reconcile_cost.csv` 与 `battery/artifacts/capability_spectrum.json` 在 A14 之前就已被跟踪，两者都载有那 8 个孤儿 run。）**许可分级已按 `release/LICENCE_POSTURE.md` 补记**：12 份里 8 份是 class B（api 派生汇编，需书面许可、发布默认排除），4 份检查点是 class C。入库是**持有**不是**发布**——该文件原话「Holding is permitted; publishing is not」——且发布闸是内容判定的，`release/enumerate.py` 无需名单即把这 8 份判为 B。
 体积不是理由：这些是重复的整数网格，逐对象实测
 （`git cat-file --batch-check='%(objectsize:disk)'`）**63,993,495 B 的工作树载荷
 只占 1,009,964 B 的 pack 存储**，63.4 倍；最大的 `ledger.g50t.jsonl` 原始

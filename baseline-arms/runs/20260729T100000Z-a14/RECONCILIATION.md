@@ -34,12 +34,34 @@ check**:
 $48.3861 + $2.0071 = **$50.3932**.
 
 Not a gate breach either way — the four ceilings sum to $164.93 and no game
-came close. But it is a real accounting defect in the harness's restart path,
-and it is worth stating plainly: **the only place the $2.01 still exists is the
-shard ledgers**, which were untracked until this commit. Had the rescue taken
-only the four JSONs the board item named, the discrepancy would have become
-permanently unrecoverable. That is the strongest single argument for the scope
-widening in this run.
+came close. But it is a real accounting defect in the harness's restart path.
+
+### Retraction (2026-07-29, same run, after adversarial review)
+
+An earlier version of this section said **"the only place the $2.01 still
+exists is the shard ledgers"** and called that "the strongest single argument"
+for widening the rescue beyond the four files the board item named.
+
+**That was false, and it is retracted.** Two files tracked *before* A14 already
+carry all eight orphan runs:
+
+* `figures/audit/reconcile_cost.csv` — one row per orphan `run_id`, with
+  `usd_agreed` of 0.293358, 0.256051, 0.27191, 0.23122, 0.205005, 0.255808,
+  0.224769, 0.268951. **Sum: 2.007072**, matching the figure above to six
+  decimal places. It is literally a cost-reconciliation artefact.
+* `battery/artifacts/capability_spectrum.json` — its source, holding the
+  full-precision per-run values.
+
+So the discrepancy was recoverable from tracked git the whole time. The
+aggravating part is that A14 had `capability_spectrum.json` in hand:
+`INVENTORY.md` cites it by name as one of the manifests pinning these ledgers,
+and it was not consulted for the money question.
+
+The real arguments for committing the shard ledgers stand on their own and did
+not need this one: they are the **primary** record (the checkpoints are their
+rollup), battery pins their sha256 as evidence, and their `run_id` set appears
+in no other tracked ledger. The $2.01 line was an overclaim layered on top of a
+case that was already sufficient.
 
 ## Wall clock
 
@@ -51,26 +73,38 @@ populated, so everything here is reconstructed from `started` / `resumed_at` /
   all four ran concurrently, so `g50t` sets the envelope;
 * **serial-equivalent 26.460 h** (ar25 6.054 + g50t 8.673 + sk48 6.623 + tn36 5.111).
 
-## There is no independent register, and saying so matters
+## No *independent* register exists — but two derived ones do, and the first
+## version of this file missed them
 
-The task was to cross-check $48.39 against independent registers. **None
-exists.**
+The task was to cross-check $48.39 against independent registers. **No
+independent measurement exists** — everything below ultimately derives from the
+same per-call `total_cost_usd` values in the shard ledgers. That conclusion
+stands.
+
+What the first version of this table wrongly omitted is that two *tracked*
+registers cover this campaign per-run, even though they are not independent
+measurements of it:
 
 | register | covers this campaign? | note |
 |---|---|---|
 | `out/shards/ledger.*.jsonl` | yes | the primary record; the JSONs are its rollup |
 | `out/campaign/campaign_*.json` | yes | derived, and lossy across restarts |
+| `battery/artifacts/capability_spectrum.json` | **yes, per run** | tracked before A14; full-precision `metrics.E1.value` per `run_id`, orphans included. **Derived from the ledgers, so not independent** — but it is a register and it covers this campaign. |
+| `figures/audit/reconcile_cost.csv` | **yes, per run** | tracked before A14; `usd_agreed` per `run_id`. Marks all 8 orphans `UNCORROBORATED` — "only capability_spectrum covers this run" — which is the same one-source fact stated from the other side. |
 | `proxy/var/spend_gate.jsonl` | **no** | earliest record 2026-07-28T09:26:25Z — 6.5 h *after* the campaign ended. The shared gate did not exist when this money was spent. |
 | `baseline-arms/ledger.jsonl` | **no** | M4 pilot; `run_id` intersection with the shards is empty |
 | `out/campaign_cells.jsonl` | **no** | 19 `phase3-*` cells; no cell for any of these four |
 | `BUDGET_REPORT.md` §11.4 | **no** | reports $2.5275 for the gated `phase3-variance-envelope` ar25 run |
 | `runs/*/MANIFEST.json` | **no** | one manifest, A7 only; its `track_total_including_pilot: 41.57` is a track total and must not be read as this campaign's |
 
-The ledger and the checkpoints are **one measurement written twice**, not two
+The ledger, the checkpoints, `capability_spectrum.json` and
+`reconcile_cost.csv` are **one measurement written four times**, not four
 measurements. So $48.39 / $50.39 is **internally exact and externally
 unverified**: it is what Claude Code's own `total_cost_usd` reported, summed
 correctly. No provider-side billing record is in this repository, and this run
-did not acquire one.
+did not acquire one. Four copies of one number agreeing is not corroboration,
+and `reconcile_cost.csv` says as much itself by marking these runs
+`UNCORROBORATED`.
 
 **There was also no `runs/<id>/MANIFEST.json` for these four campaigns at all**
 until this directory. The provenance canon was not followed when the money was

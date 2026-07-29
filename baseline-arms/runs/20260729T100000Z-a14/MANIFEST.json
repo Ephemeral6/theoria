@@ -9,11 +9,11 @@
     },
     {
       "path": "baseline-arms/COST_ARTEFACTS.json",
-      "sha256": "d2c733825ae6e82f459b837c23e93473fe0c5ceb9a2e5b048a1b07dfaccbd1fc"
+      "sha256": "74021dda8668344ca7d8086d23dcd966062b5658fe4fdf7b16378995b708d908"
     },
     {
       "path": "baseline-arms/harness/cost_artefacts.py",
-      "sha256": "be58c2800c0c564be12152e99c6a348326a59d9fe9460f841a44884e9c83995e"
+      "sha256": "bdb5aef66355535ec62412ab2f04ed3d2ec55b8fad9f76825745578782cef057"
     },
     {
       "path": "baseline-arms/out/campaign/campaign_ar25.json",
@@ -69,35 +69,36 @@
     },
     {
       "path": "baseline-arms/runs/20260729T100000Z-a14/INVENTORY.md",
-      "sha256": "1242099b96c02b6244595b81fc37c2d1e2fd332741faab9e68635f8122beb497"
+      "sha256": "e8f0f61bef20b11c5dfcaf2cc0abbce69b2d22337a89f28ec9e06e5070806b78"
     },
     {
       "path": "baseline-arms/runs/20260729T100000Z-a14/RECONCILIATION.md",
-      "sha256": "16946d359017a9f17ae6b94eb43c1e1412b18ab71af6388441b9a28eee8e6494"
+      "sha256": "9d9553b002c6fe2b762a364aa94ee35edffac673c5ccaf27bc8f07454696e66d"
     },
     {
       "path": "baseline-arms/runs/20260729T100000Z-a14/RUN_STATE.md",
-      "sha256": "995d95119c9563af1a4f7da15067fa5c4e8bc405aa990789d8fa8f51344b4327"
+      "sha256": "50cbafdd44884a21cc0f91fa87b96b4a4e54081a411126203d096c87832a83ed"
     },
     {
       "path": "baseline-arms/runs/20260729T100000Z-a14/build_register.py",
-      "sha256": "98fb5a83f187498d4ce380ec1a23046224fa7c5ca9c606f1ef09dad0cdd5e129"
+      "sha256": "07d76a18c7ef2c3474900f9ff8e5344bb45bd95c4e99bb4ece2b7686102a924c"
     },
     {
       "path": "baseline-arms/tests/test_cost_artefacts.py",
-      "sha256": "9d20d275bac37ba752401087716150efca14aa8be22e44f5a1a1659917ac3b79"
+      "sha256": "ac573e45065cbb295fe353926a28b24459f405d42f1b0e15e30867f1ce1e1725"
     },
     {
       "path": "baseline-arms/verify.py",
-      "sha256": "08290d9626363b2a33d68443e9d91e9554de3059eb95613e3481d27912b1cce5"
+      "sha256": "e1c52c9b18da5011c1a049f6c0603287a99f03ab193543f14a6034cc1e93e67c"
     }
   ],
   "gaps": [
-    "no independent money register exists for this campaign: the shard ledgers and the checkpoints are one measurement written twice, and proxy/var/spend_gate.jsonl post-dates the spend by 6.5 h. $50.39 is internally exact and externally unverified.",
+    "no independent money register exists: the shard ledgers, the checkpoints, battery/artifacts/capability_spectrum.json and figures/audit/reconcile_cost.csv are one measurement written four times, and proxy/var/spend_gate.jsonl post-dates the spend by 6.5 h. $50.39 is internally exact and externally unverified.",
     "the harness restart path drops spend from cost_usd and from the ceiling check ($2.01 across four games). A code defect in this territory, recorded not fixed -- A14 is a rescue ticket.",
     "figures/SOURCES.sha256:24-27 carries stale ABSENT sentinels for the four ledgers this commit tracks; the next figure rebuild may silently change inputs. Other territory: reported to monitor, not touched.",
     "release/MANIFEST.jsonl:148 and battery/runs/P-14/MANIFEST.json:33 pin stale digests for out/campaign_cells.jsonl (append-only growth, not rewriting). Other territories: reported, not touched.",
-    "six tracked out/pilot_*.json are CRLF on disk but LF in git, so raw-byte hashers (figures/sources.py:722, release/enumerate.py:109) would emit spurious diffs in this working tree. Tracked files outside this ticket; reported, not touched."
+    "six tracked out/pilot_*.json are CRLF on disk but LF in git, so raw-byte hashers (figures/sources.py:722, release/enumerate.py:109) would emit spurious diffs in this working tree. Tracked files outside this ticket; reported, not touched.",
+    "8 of the 12 committed files are release/LICENCE_POSTURE.md class B. Holding is permitted and the release allow-list withholds them automatically, but if origin is a public remote then pushing is arguably publication -- in which case the line was crossed before A14 by baseline-arms/ledger.jsonl and the eleven tracked a7-* shards. Repository visibility is an ops question; no network call was made to settle it. Raised to the monitor."
   ],
   "prompt_id": "A14-campaign-json-untracked",
   "scope": "rescue the four bare-CC campaign artefacts into git; verify their digests against the manifest that already consumed them; inventory every other untracked artefact under baseline-arms/ and rule on each; make 'paid for => committed or hashed' an executable rule",
@@ -115,10 +116,12 @@
   "territory": "baseline-arms",
   "utc": "2026-07-29T10:00:00Z",
   "verification": {
+    "adversarial": "two independent refutation passes; six defects found and fixed in-branch: index-vs-HEAD tracking, a non-firing eol tripwire, verdict 'ok' when git is unavailable, a credential test skipping in every worktree, a hand-typed redaction count wrong by 20, and a false claim that the $2.01 survived only in the shard ledgers",
     "eol_negative_control": "scratch repo: without the -text rule blob=5e36b6560513 != disk=d8b04a95ac8f; with it blob==disk",
     "gate": "python verify.py -> green, 3/3 rungs",
+    "licence": "release/enumerate.py --dry-run: red lines clear over 5781 tracked files; 8 of the 12 committed files classify as LICENCE_POSTURE class B (needs written permission, default excluded from release) by content, not by name list",
     "register": "build_register.py --check -> byte-identical re-derivation, including on a simulated clean clone with the gitignored logs removed",
-    "suite": "96 passed, 1 skipped (was 80 passed, 1 skipped)"
+    "suite": "100 passed, 0 skipped (was 80 passed, 1 skipped)"
   },
   "worker": "W-1670"
 }

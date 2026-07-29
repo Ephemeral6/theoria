@@ -32,6 +32,28 @@ CAMPAIGN_RUN = "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4"
 
 GAMES = ["ar25", "g50t", "sk48", "tn36"]
 
+def _redaction_census():
+    """Count `X-API-Key` occurrences and how many are redacted, by reading.
+
+    This number was hand-typed in the first version of this file and was wrong
+    by 20 (14294 for a true 14314) -- inside a script whose docstring promises
+    that facts are computed so nothing is transcribed. An adversarial review
+    caught it. The claim was true; the audit trail asserting it did not
+    reproduce, which is the failure mode this whole run exists to complain
+    about. So it is computed.
+    """
+    total = redacted = 0
+    for g in GAMES:
+        full = os.path.join(TERRITORY, "out", "shards", "probe_log.%s.jsonl" % g)
+        if not os.path.isfile(full):
+            return None, None
+        with open(full, "rb") as fh:
+            blob = fh.read()
+        total += blob.count(b'"X-API-Key"')
+        redacted += blob.count(b'"X-API-Key": "<redacted>"')
+    return total, redacted
+
+
 ENTRIES = []
 
 for g in GAMES:
@@ -46,6 +68,11 @@ for g in GAMES:
             "the bare-CC column of the main table. battery already cites its "
             "sha256 as evidence, so the question of whether it belongs in the "
             "repository was settled before A14 asked it. 4.5 kB.",
+        "licence_class": "C",
+        "licence_note":
+            "release/enumerate.py classifies it C, derived-statistics: it "
+            "names its game but pairs no id with environment payload. "
+            "Releasable-flagged, not withheld.",
         "eol": "crlf",
         "eol_note":
             "Written by the harness in Python text mode on Windows. The pinned "
@@ -69,8 +96,16 @@ for g in GAMES:
             "uncompressed because every row carries a full frame, but it is "
             "repetitive integer grids and packs at 50-76x, so the cost to the "
             "repository is well under a megabyte for all four.",
+        "licence_class": "B",
+        "licence_note":
+            "release/LICENCE_POSTURE.md class B, api-derived-compilation: "
+            "needs written permission, default excluded from release. This "
+            "path is named in that file's class-B examples verbatim. "
+            "Committing is holding, not publishing.",
         "eol": "lf",
     })
+
+_XAK_TOTAL, _XAK_REDACTED = _redaction_census()
 
 for g in GAMES:
     ENTRIES.append({
@@ -86,8 +121,15 @@ for g in GAMES:
             "battery, but its a7-* counterparts for the later campaign are "
             "already tracked, so leaving these out would make the record "
             "inconsistent across two runs of the same harness. Every "
-            "X-API-Key occurrence is '<redacted>' (checked 1:1 over all four "
-            "files, 14294 occurrences, 14294 redacted).",
+            "X-API-Key occurrence is '<redacted>' (counted, not asserted: "
+            "%s occurrences over the four files, %s of them redacted)."
+            % (_XAK_TOTAL, _XAK_REDACTED),
+        "licence_class": "B",
+        "licence_note":
+            "release/LICENCE_POSTURE.md class B, api-derived-compilation: "
+            "needs written permission, default excluded from release. "
+            "Committing is holding, not publishing -- see the licence section "
+            "of runs/20260729T100000Z-a14/INVENTORY.md.",
         "eol": "lf",
     })
 
@@ -144,6 +186,8 @@ def _sha256(path):
         for chunk in iter(lambda: fh.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
 
 
 def _previously_recorded():

@@ -65,12 +65,15 @@ SCHEMA = "baseline-arms/cost-artefacts@1"
 DISPOSITIONS = ("committed", "hash-only")
 
 # Verdicts.  `absent` is a pass only for hash-only entries; the caller decides,
-# not this constant.
+# not this constant.  Everything else in this list is a failure, including
+# `unverified` -- see `_head_blobs`.
 OK = "ok"
 ABSENT = "absent"
 MISSING = "missing"
 UNTRACKED = "untracked"
 DRIFTED = "drifted"
+HEAD_DRIFT = "head-drift"
+UNVERIFIED = "unverified"
 
 
 def _read_register(path=REGISTER):
@@ -93,31 +96,87 @@ def _sha256(path):
     return h.hexdigest()
 
 
-def _tracked_paths(territory=TERRITORY):
-    """Paths git tracks under the territory, territory-relative with / separators.
+def _head_blobs(territory=TERRITORY):
+    """`{path: sha256 of the blob in HEAD}` for everything under the territory.
 
-    Returns None if git cannot answer -- an unavailable git is not the same
-    fact as an untracked file, and the caller must not confuse them.
+    **`HEAD`, deliberately, and not `git ls-files`.** `ls-files` reports the
+    *index*, so a path that was `git add`ed and never committed reads back as
+    tracked -- and this repository's convention is `git commit <paths>` rather
+    than `commit -a` (CLAUDE.md: "Never `git add -A` at the repo root"), which
+    is exactly the operation that leaves staged paths out of the commit. An
+    index-only check would have called such an artefact safe while a fresh
+    clone had no copy of it at all: the A14 failure one notch subtler, and
+    green. An adversarial review of this module found precisely that hole.
+
+    Hashing the blob **content** rather than just checking membership is what
+    makes the eol rule verifiable. If the `out/campaign/*.json -text` rule in
+    `.gitattributes` is ever dropped and the files re-added, git normalises
+    CRLF to LF on the way into the object store; the working tree can still
+    look right while every clone gets different bytes. Comparing the HEAD blob
+    to the pinned digest catches that for all twelve committed artefacts,
+    rather than for the four a single test happens to cover.
+
+    Returns None if git cannot answer. An unavailable git is not the same fact
+    as an untracked file and callers must not conflate them -- see UNVERIFIED.
     """
     try:
-        out = subprocess.run(
-            ["git", "ls-files", "-z", "--", "."],
+        listing = subprocess.run(
+            ["git", "ls-tree", "-r", "-z", "HEAD", "--", "."],
             cwd=territory, capture_output=True, check=True,
         ).stdout
     except (OSError, subprocess.CalledProcessError):
         return None
-    return {p.replace(os.sep, "/") for p in out.decode("utf-8").split("\0") if p}
+
+    oids, paths = [], []
+    for record in listing.split(b"\0"):
+        if not record:
+            continue
+        meta, _, path = record.partition(b"\t")
+        fields = meta.split()
+        if len(fields) < 3 or fields[1] != b"blob":
+            continue                      # submodule or tree; not our business
+        oids.append(fields[2])
+        paths.append(path.decode("utf-8").replace(os.sep, "/"))
+    if not oids:
+        return {}
+
+    try:
+        proc = subprocess.run(
+            ["git", "cat-file", "--batch"], cwd=territory,
+            input=b"\n".join(oids) + b"\n", capture_output=True, check=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+    # `--batch` emits "<oid> <type> <size>\n<contents>\n" per request, so the
+    # payload must be cut by the declared size -- contents are binary and may
+    # contain newlines.
+    blobs, buf = {}, proc.stdout
+    at = 0
+    for path in paths:
+        end_of_header = buf.find(b"\n", at)
+        if end_of_header < 0:
+            return None
+        header = buf[at:end_of_header].split()
+        if len(header) < 3:
+            return None
+        size = int(header[2])
+        start = end_of_header + 1
+        blobs[path] = hashlib.sha256(buf[start:start + size]).hexdigest()
+        at = start + size + 1             # skip the trailing newline
+    return blobs
 
 
 def check(register_path=REGISTER, territory=TERRITORY):
     """Adjudicate every register entry.  Returns (rows, problems)."""
     reg = _read_register(register_path)
-    tracked = _tracked_paths(territory)
+    head = _head_blobs(territory)
     rows, problems = [], []
 
-    if tracked is None:
-        problems.append("git ls-files failed, so 'committed' entries cannot be "
-                        "checked for tracking; refusing to report them as ok")
+    if head is None:
+        problems.append("git could not read HEAD, so 'committed' entries "
+                        "cannot be checked; they are reported 'unverified', "
+                        "never 'ok'")
 
     seen = set()
     for entry in reg["artefacts"]:
@@ -142,12 +201,22 @@ def check(register_path=REGISTER, territory=TERRITORY):
         exists = os.path.isfile(full)
         actual = _sha256(full) if exists else None
 
+        in_head = None if head is None else head.get(path)
+
         if not exists:
             verdict = MISSING if disposition == "committed" else ABSENT
         elif actual != pinned:
             verdict = DRIFTED
-        elif disposition == "committed" and tracked is not None and path not in tracked:
+        elif disposition != "committed":
+            verdict = OK
+        elif head is None:
+            # Unknown is not yes.  Never OK on a machine where the question
+            # could not be asked.
+            verdict = UNVERIFIED
+        elif in_head is None:
             verdict = UNTRACKED
+        elif in_head != pinned:
+            verdict = HEAD_DRIFT
         else:
             verdict = OK
 
@@ -157,6 +226,7 @@ def check(register_path=REGISTER, territory=TERRITORY):
             "verdict": verdict,
             "sha256": pinned,
             "actual_sha256": actual,
+            "head_sha256": in_head,
             "bytes": os.path.getsize(full) if exists else None,
         })
 
@@ -171,9 +241,21 @@ def check(register_path=REGISTER, territory=TERRITORY):
                 % path)
         elif verdict == UNTRACKED:
             problems.append(
-                "%s: disposition 'committed' but git does not track it -- this "
+                "%s: disposition 'committed' but it is not in HEAD -- a clone "
+                "would not have it at all. Staging is not committing, and this "
                 "is exactly the A14 failure the register exists to catch"
                 % path)
+        elif verdict == HEAD_DRIFT:
+            problems.append(
+                "%s: the working tree matches the register but the blob in "
+                "HEAD hashes to %s -- a clone would get different bytes. The "
+                "usual cause is eol translation: check that .gitattributes "
+                "still exempts this path from `text eol=lf`"
+                % (path, in_head[:12]))
+        elif verdict == UNVERIFIED:
+            problems.append(
+                "%s: disposition 'committed' but HEAD could not be read, so "
+                "its presence in the repository is unknown" % path)
 
     return rows, problems
 
