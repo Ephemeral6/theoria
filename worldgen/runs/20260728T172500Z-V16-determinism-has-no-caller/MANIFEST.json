@@ -1,0 +1,82 @@
+{
+  "base_commit": "91d3a866122379ff9a1519fd0c669f905c8b4e15",
+  "branch": "agent/v16-determinism-has-no-caller",
+  "files": [
+    {
+      "path": "worldgen/tests/determinism_sandbox.py",
+      "sha256": "5d2e460780e434980c243c8c5c4f9d447bd07136fafcfbb2ad3fe6d5cffd557c",
+      "size": 19437
+    },
+    {
+      "path": "worldgen/tests/test_determinism_gate.py",
+      "sha256": "0451ed04b265aab9a706e0f1afef8a0d438fc7a33e70587c7f6b6a4507260011",
+      "size": 11240
+    },
+    {
+      "path": "worldgen/RUN_STATE.md",
+      "sha256": "7e6e73cae86460acc40061bb3894270fd58b5a0a325dd42dd12246745af4d1c2",
+      "size": 43937
+    },
+    {
+      "path": "monitor/inbox/20260728T175900Z-V16-determinism-definition-gap.md",
+      "sha256": "89c96a632b05778cb1106f11b2663708000588b90cb1dd78c65f82400bb5befe",
+      "size": 3199
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/pytest.txt",
+      "sha256": "b19c8e8158cea2ffc0ef593b88d0195baad6e005303882b00f6209f80f76786f",
+      "size": 1480
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/stability_3x.txt",
+      "sha256": "34af1094fc9350fb533f9192ee4c3ce9dac3a0c3893e7c78dba0135ede8710de",
+      "size": 357
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/tripwire.log",
+      "sha256": "3b15903e9e0e3575e03789c5bc329a21443389f078c8f25dee1887fd8252266e",
+      "size": 70
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/weakening_table.console.txt",
+      "sha256": "81fa3672f009ebff311b4f679538979b48b41f6ac762dad57bb904145048d620",
+      "size": 1164
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/weakening_table.json",
+      "sha256": "2f4b804bbdbac084a9cf34d5e497b0903134a7126b0e783931d09feb38505801",
+      "size": 51727
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/weakening_table.md",
+      "sha256": "41b81709b513d7f26b77e69c7ff48a0c7d7e890e9a2d38bde73ffe26192098a7",
+      "size": 3550
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/weakening_table.py",
+      "sha256": "149f66e20858c0ffd163e0aa98d07d3d2d5e6924d28453d8ddf41ba7e73cfa81",
+      "size": 7954
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/write_manifest.py",
+      "sha256": "3446c6fb57eca780fc309b3534c33edbb0cdc89420e432d82b91cea00fe9d7df",
+      "size": 2288
+    },
+    {
+      "path": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/zero_caller_tripwire.md",
+      "sha256": "5101941e90edd1ce66498ec6721a928cd15d3ca919816157f7abe82d724ca42b",
+      "size": 3722
+    }
+  ],
+  "lane": "verify",
+  "prompt_id": "V16-determinism-has-no-caller",
+  "territory": "worldgen",
+  "utc": "2026-07-28T18:00:46Z",
+  "what": "a negative control for worldgen.build.check_determinism, which no test in this repository had ever caused to run",
+  "worktree_clean_outside_this_run": [
+    "M worldgen/RUN_STATE.md",
+    "?? worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/",
+    "?? worldgen/tests/determinism_sandbox.py",
+    "?? worldgen/tests/test_determinism_gate.py"
+  ]
+}

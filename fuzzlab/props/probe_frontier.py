@@ -1,4 +1,4 @@
-"""`probe_frontier` — four invariants against a brute-force recomputation.
+"""`probe_frontier` — five invariants against a brute-force recomputation.
 
 `hypset` worlds carry an explicit observation table — hypothesis × action ->
 observation — so every quantity this engine computes can be recomputed directly
@@ -30,8 +30,33 @@ confident false bug report if the oracle gets it wrong. The third one did:
 | `entropy_matches_bruteforce` | the reported entropy is the Shannon entropy in bits of that partition's block sizes |
 | `ranking_is_sound` | `rank_probes` returns every action exactly once, ordered by the total order its docstring states |
 | `splits_flag_is_honest` | `splits` is true exactly when the action actually separates at least two hypotheses |
+| `costs_are_the_world's` | the cost each `ProbeValue` reports is the one the caller's cost map gives that action |
+
+## Why `costs_are_the_world's` had to be added (V-13)
+
+`value_bits_per_cost` is this engine's *reason to exist*: it answers "which
+experiment next". Until V-13 `cost` was read by exactly one invariant, and only
+as a sort key — `ranking_is_sound` asserts that
+`(-value, -entropy, cost, action)` is ascending, and **a uniformly wrong cost is
+still ascending**. `mutants/probe_frontier.py:pf-flatten-reported-costs`
+reports 1.0 for every action, re-sorts under the engine's own key, and was
+pre-registered as an expected survivor; it survived. That is an engine silently
+degraded to pure entropy ranking, with a published
+`value_bits_per_cost` wrong for every non-unit-cost action, invisible to a green
+campaign.
+
+The invariant is two comparisons against `world.cost_map()`, which is the world's
+own declaration and the same object the property hands the engine — so the
+oracle is a lookup, not a recomputation, and there is nothing here for the engine
+to be asked. `ProbeValue.value` is a *property* (`entropy / cost`) and therefore
+unfalsifiable by construction **except at cost zero**, where the engine returns
+a constant `inf` instead of dividing. That branch is asserted. It was not in the
+version of this invariant that first shipped — an `if expected > 0` guard
+excluded precisely the case the sentence claimed to cover, on the 27.6% of
+worlds `hypset` deliberately gives a zero-cost action.
 """
 
+import math
 from typing import Any, Dict, List, Sequence
 
 from fuzzlab import rig  # noqa: F401  (path bootstrap)
@@ -92,7 +117,13 @@ def partition_matches_truth(world: Any) -> List[finding.Finding]:
                 ENGINE, "partition_matches_truth", world,
                 "action %r partitions as %s, the observation table says %s"
                 % (action, normalised, expected),
-                action=action, engine=normalised, truth=expected))
+                # `engine=` here collided with `finding.violated`'s own first
+                # parameter, so the only path that reports this invariant raised
+                # TypeError instead of returning a finding -- for as long as the
+                # invariant has existed. It never showed up because the engine
+                # never partitioned wrongly, so the line never ran. Renamed, and
+                # `test_battery.py` now refuses the collision by parsing.
+                action=action, engine_partition=normalised, truth=expected))
     return out
 
 
@@ -167,11 +198,82 @@ def splits_flag_is_honest(world: Any) -> List[finding.Finding]:
     return out
 
 
+def costs_are_the_world_s(world: Any) -> List[finding.Finding]:
+    """Each `ProbeValue.cost` is the cost the world's own map gives that action.
+
+    `rank_probes(hypotheses, state, actions, costs)` is documented to set
+    `cost=costs.get(action, 1.0)`, and `value` — the engine's headline output,
+    published as `value_bits_per_cost` — is `entropy / cost`. So a cost the
+    engine invented is a `value` the engine invented, and the ranking that
+    follows from it is a recommendation about which experiment to run next.
+
+    The oracle here is `world.cost_map()` itself: the property passes that
+    object in and reads the same object back out, so there is no recomputation
+    to get wrong and nothing to ask the engine. What this invariant adds over
+    `ranking_is_sound` is that the latter only checks the *order*, and an order
+    computed from uniformly wrong costs is still an order.
+
+    `value` is a Python property (`entropy / cost`) and so cannot be made to
+    disagree with its own definition **except at cost zero**, where the engine
+    stops dividing and returns a constant: `frontier.py:42-44` is
+    `self.entropy / self.cost if self.cost else float("inf")`. That branch is
+    the one part of `value` that is a real, falsifiable claim, and it is
+    asserted below.
+
+    **This invariant shipped with that branch excluded and the docstring saying
+    it was checked.** The guard was `if expected > 0`, which is exactly the
+    complement of the zero-cost case, so an engine returning `0.0` instead of
+    `inf` at zero cost passed silently — on the 27.6% of `hypset` worlds that
+    carry a zero-cost action, and `worlds/hypset.py:21` generates them
+    deliberately: "Zero is not a hypothetical -- the ranking divides by it".
+    Caught by an adversarial review, not by the battery. It is recorded here
+    rather than quietly corrected because leaving a "checked" that is not
+    checked inside the invariant written to separate "not checked" from "checked
+    and clean" is the same defect this round exists to remove, one level up.
+    """
+    hypotheses = world.hypotheses()
+    costs = world.cost_map()
+    out: List[finding.Finding] = []
+    for value in engine.rank_probes(hypotheses, world.state, world.actions, costs):
+        expected = costs.get(value.action, 1.0)
+        if abs(value.cost - expected) > EPS:
+            out.append(finding.violated(
+                ENGINE, "costs_are_the_world's", world,
+                "action %r reports cost %r, the world's cost map says %r"
+                % (value.action, value.cost, expected),
+                action=value.action, reported=value.cost, expected=expected))
+            continue
+        if expected == 0:
+            # The documented convention, and the only falsifiable part of
+            # `value`: a free probe is worth unbounded bits per unit cost. An
+            # engine answering 0.0 here would rank every free action last.
+            if value.value != math.inf:
+                out.append(finding.violated(
+                    ENGINE, "costs_are_the_world's", world,
+                    "action %r costs nothing, so value_bits_per_cost must be "
+                    "inf (frontier.py: `entropy / cost if cost else inf`), but "
+                    "the engine reports %r"
+                    % (value.action, value.value),
+                    action=value.action, reported=value.value,
+                    entropy=value.entropy, cost=expected))
+            continue
+        if abs(value.value - value.entropy / expected) > EPS:
+            out.append(finding.violated(
+                ENGINE, "costs_are_the_world's", world,
+                "action %r reports %r bits per unit cost, but %r bits over cost "
+                "%r is %r" % (value.action, value.value, value.entropy,
+                              expected, value.entropy / expected),
+                action=value.action, reported=value.value,
+                entropy=value.entropy, cost=expected))
+    return out
+
+
 INVARIANTS = {
     "partition_matches_truth": partition_matches_truth,
     "entropy_matches_bruteforce": entropy_matches_bruteforce,
     "ranking_is_sound": ranking_is_sound,
     "splits_flag_is_honest": splits_flag_is_honest,
+    "costs_are_the_world's": costs_are_the_world_s,
 }
 
 

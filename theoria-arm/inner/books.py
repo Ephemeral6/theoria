@@ -22,6 +22,7 @@ after every theorize, because the concept-birth timeline that P-8 asks for is
 made of exactly those diffs and cannot be reconstructed afterwards.
 """
 
+import hashlib
 import json
 import os
 import shutil
@@ -57,7 +58,7 @@ class CompileResult(dict):
 class Books:
     """The pair of books for one run, with their snapshots and their forms."""
 
-    def __init__(self, root: str):
+    def __init__(self, root: str, seed_from: Optional[str] = None):
         self.root = root
         self.theory_path = os.path.join(root, "theory.dsl")
         self.playbook_path = os.path.join(root, "playbook.dsl")
@@ -67,6 +68,61 @@ class Books:
         for path in (root, self.generated, self.snapshots):
             os.makedirs(path, exist_ok=True)
         self.revision = 0
+        self.carried: Optional[Dict[str, Any]] = None
+        if seed_from:
+            self.carried = self._carry_in(seed_from)
+
+    # -- carrying the pair in from a previous run --------------------------
+    def _carry_in(self, seed_from: str) -> Dict[str, Any]:
+        """Seed this run's pair from an earlier run's, and prove it by hash.
+
+        Exactly two files travel. `problem.json` deliberately does not: it is
+        *computed* from the frames of the level being played (see the module
+        docstring), so carrying it would be carrying an answer to a question
+        this level has not asked. Nor do `generated/` or `snapshots/` -- the
+        four forms are re-derived from the domain, which is the whole point of
+        co-derivation, and a snapshot history belongs to the run that made it.
+
+        The reference implementation is `cold-start-a3/a3pipeline/transfer.py`,
+        whose test asserts byte-identity by sha256 rather than by inspection.
+        Same discipline here: the hashes go in `CARRIED.json` next to the
+        books, so "the manual that played level 2 is the manual level 1 wrote"
+        is a checkable claim about the artefacts and not a sentence in a
+        report.
+
+        A missing or empty source is not an error -- the first level of the
+        first game has nothing to carry. It is recorded as such, because
+        "carried nothing" and "carried something" produce very different bills
+        and the figure needs to tell them apart.
+        """
+        record: Dict[str, Any] = {"seed_from": seed_from, "carried": {},
+                                  "skipped": []}
+        for name, dst in (("theory.dsl", self.theory_path),
+                          ("playbook.dsl", self.playbook_path)):
+            src = os.path.join(seed_from, name)
+            if not os.path.exists(src):
+                record["skipped"].append({"file": name, "why": "not present"})
+                continue
+            text = _read(src)
+            if not text.strip():
+                record["skipped"].append({"file": name, "why": "empty"})
+                continue
+            _write(dst, text)
+            # The digest is taken over the bytes that are now on disk, not over
+            # the string in hand. `_write` normalises -- it appends a trailing
+            # newline and writes LF -- so hashing `text` would record a value
+            # that describes neither the source file nor the file it sits next
+            # to, and "the manual that played level 2 is the manual level 1
+            # wrote" would stop being a checkable claim about the artefacts.
+            with open(dst, "rb") as fh:
+                digest = hashlib.sha256(fh.read()).hexdigest()
+            record["carried"][name] = {"sha256": digest, "chars": len(text)}
+        record["empty"] = not record["carried"]
+        with open(os.path.join(self.root, "CARRIED.json"), "w",
+                  encoding="utf-8", newline="\n") as fh:
+            json.dump(record, fh, indent=1, sort_keys=True)
+            fh.write("\n")
+        return record
 
     # -- the hand-written pair ---------------------------------------------
     @property

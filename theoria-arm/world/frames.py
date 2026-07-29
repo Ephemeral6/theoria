@@ -146,6 +146,29 @@ class FrameStore:
         self.steps.append(step)
         return step
 
+    def since(self, start_idx: int) -> "FrameStore":
+        """A view of the trace from `start_idx` on, sharing the same `Step`s.
+
+        Every derived property here -- `grids`, `actions`, `constant_cells`,
+        `background` -- is a statement about *one continuous trajectory*. A
+        level boundary is not a transition the manual's `step` function
+        produces: the world is replaced wholesale by the server, no action
+        caused it, and cells that were constant for the whole of level 1 carry
+        no information about level 2's board. Replaying or segmenting across
+        one is a category error that shows up as `replay_mismatch` -- surprise
+        the manual is then charged, at model prices, to "repair".
+
+        So the beats that reason over a trajectory take this view rather than
+        the whole store. The whole store is still what gets written to
+        `trace.jsonl`: the boundary is a fact about the run and is kept.
+
+        The `Step`s are shared, not copied -- `before_hash` and `step_idx` stay
+        as they were recorded, so a step's identity is the same in both views.
+        """
+        view = FrameStore()
+        view.steps = self.steps[start_idx:]
+        return view
+
     # -- the sequence ------------------------------------------------------
     @property
     def current(self) -> Optional[Grid]:

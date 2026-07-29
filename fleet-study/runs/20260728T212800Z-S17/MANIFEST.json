@@ -1,0 +1,49 @@
+{
+  "prompt_id": "S17-fleet-evidence-capture",
+  "branch": "agent/s17-fleet-evidence-capture",
+  "base_commit": "50f7f62",
+  "utc": "2026-07-28T21:28:00Z",
+  "agent": "W-1630",
+  "lane": "infra",
+  "territory": "fleet-study",
+  "predecessor": {
+    "agent": "RES-4",
+    "run": "fleet-study/runs/20260728T151500Z-S17",
+    "died": "session quota, ~2026-07-28T15:47Z, mid-task",
+    "inherited": "184 rows across failures/timeline/counterevidence + 3 rows of assembly + data/README.md",
+    "left_undone": [
+      "human_actions.jsonl -- harvester failed on quota, zero output; the study's hardest quantitative claim",
+      "assembly.jsonl -- 3 of ~8 rows; hot-reconfiguration and the three standard interfaces unmeasured",
+      "EVIDENCE.md -- never started",
+      "deliveries / bus datasets -- named in the item, never harvested",
+      "no verify script"
+    ]
+  },
+  "state": "in progress -- incremental, written as the run proceeds",
+  "capture_window": {
+    "predecessor_covered": "2026-07-27T18:13Z .. 2026-07-28T15:06Z",
+    "this_run_extends_to": "2026-07-28T21:28Z"
+  },
+  "steps": [
+    {
+      "utc": "2026-07-28T21:28Z",
+      "what": "claimed S17 as W-1630; found predecessor branch agent/s17-fleet-evidence-capture with 2 commits; continued it rather than restarting",
+      "evidence": ["git:50f7f62", "git:5e7b661"]
+    },
+    {
+      "utc": "2026-07-28T21:30Z",
+      "what": "confirmed the merge blocker RES-4 flagged: fleet-study absent from ci_merge.py KNOWN_DIRS (line 58-63), so this branch cannot auto-merge",
+      "evidence": ["file:monitor/ci_merge.py"]
+    },
+    {
+      "utc": "2026-07-28T21:35Z",
+      "what": "filed monitor/inbox/20260728T213500Z-W-1630-fleet-study-cannot-merge.md -- the KNOWN_DIRS gap plus RES-4's undelivered arc-recon finding, both outside this territory",
+      "evidence": ["file:monitor/inbox/20260728T213500Z-W-1630-fleet-study-cannot-merge.md"]
+    },
+    {
+      "utc": "2026-07-28T21:36Z",
+      "what": "fanned out 4 read-only harvesters in parallel: human_actions, assembly completion, deliveries+bus, and the 15:00Z-21:28Z increment",
+      "evidence": []
+    }
+  ]
+}

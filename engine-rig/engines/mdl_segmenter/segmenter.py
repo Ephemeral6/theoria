@@ -29,6 +29,15 @@ Frame = Sequence[Sequence[int]]
 IMPOSSIBLE = 10 ** 6  # a cost no real encoding can reach; keeps the matrix square
 
 
+class SegmentationError(RuntimeError):
+    """The segmenter could not explain what it was given.
+
+    Never a statement about the trajectory: a failure to model a transition is
+    raised rather than returned, so it cannot be read downstream as "nothing
+    happened there".
+    """
+
+
 @dataclass(frozen=True)
 class Component:
     """One connected blob in one frame."""
@@ -202,6 +211,25 @@ def _assign(prev: List[Component], cur: List[Component], cost: CostModel):
     for i, j in zip(rows.tolist(), cols.tolist()):
         if i < n and j < m:
             kind, params = meta[(i, j)]
+            if int(matrix[i, j]) >= IMPOSSIBLE:
+                # `_match_cost` returns `(IMPOSSIBLE, None, {})` for "I cannot
+                # explain this pair" and `(0, None, {})` for "nothing changed",
+                # and the driver's `if kind is not None` reads both as the
+                # latter: an unexplained transition would be billed zero bits,
+                # emit no event, and continue the track silently -- the model's
+                # failure published as a fact about the trajectory.
+                #
+                # Every prev can vanish and every cur can appear at finite cost,
+                # so a matching that avoids these cells always exists and the
+                # optimiser has no reason to take one.  That makes this
+                # unreachable rather than merely unlikely, which is why it is an
+                # assertion and not a status flag: if it ever fires, the cost
+                # model is broken and the segmentation is not evidence.
+                raise SegmentationError(
+                    "assignment selected an inexplicable pair (%d, %d) at cost "
+                    "%d; the vanish/appear lanes should always be cheaper"
+                    % (i, j, int(matrix[i, j]))
+                )
             pairs.append((i, j, int(matrix[i, j]), kind, params))
         elif i < n:
             gone.append(i)

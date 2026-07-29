@@ -1,0 +1,176 @@
+{
+ "adversarial_review": {
+  "corrections_applied": 9,
+  "corrections_declined_in_part": [
+   "correction 6: held_out.exact / certify_generated.replay_exact / levels[*].theorem.unsolvable are NOT gated on a mining crash, because none of them consults the mined rules -- gating them would report a defect at a site that has none. Evidence in reconciliation.json under claims_deliberately_out_of_population."
+  ],
+  "stored": "ADVERSARIAL-VERBATIM.md (verbatim, not paraphrased)",
+  "verdicts": {
+   "a_gate_blocks_the_field": "REFUTED",
+   "b_negative_sample_is_constructional": "PARTIALLY REFUTED",
+   "c_reconciliation_read_fairly": "PARTIALLY REFUTED"
+  }
+ },
+ "base_commit": "bcea9801218e02d1e57210711cfa72878b220236",
+ "branch": "agent/e14-crash-is-not-a-finding",
+ "deliverable_number": {
+  "answer": 0,
+  "committed_claims_audited": 13,
+  "committed_claims_declared_out_of_population": 3,
+  "committed_claims_exercised": 12,
+  "committed_claims_not_exercised": 1,
+  "crashes_observed_anywhere_in_the_rerun": 0,
+  "question": "of the exhaustiveness / coverage / no-violation claims standing in the committed artifacts, how many were made on top of an UNCOUNTED crash?"
+ },
+ "files": [
+  {
+   "bytes": 360,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/.gitignore",
+   "sha256": "0794a4b4c823f63c9ac06733a1d919dd1839a8fa1b96d0dcc61efad64e56c458"
+  },
+  {
+   "bytes": 21772,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/ADVERSARIAL-VERBATIM.md",
+   "sha256": "8550c4daad66efbeaaffe7dde3c42d8fe79fb1d4433d3014700ddd21b51c58fd"
+  },
+  {
+   "bytes": 16971,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/REPORT.md",
+   "sha256": "d701d042cd7b15cb2c640186333264da88cebe6d8f4b532d723afa8541938524"
+  },
+  {
+   "bytes": 15069,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/negative_sample.py",
+   "sha256": "4b06fb59de4cbf24d32b26fbf6c9cdea45c6edfe364a0872fa9265f97d300169"
+  },
+  {
+   "bytes": 18462,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/reconcile.py",
+   "sha256": "ce5c3d1fc839c5fca4eff42afba20add54795a4eb8c5c3054f357efb33954b96"
+  },
+  {
+   "bytes": 5429,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/_a0_negative.json",
+   "sha256": "cadebbac761e0ae31fa46b862f3addab819a47261a9f9ad3ec18e71077b34a89"
+  },
+  {
+   "bytes": 48377,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/a0_report_rerun.json",
+   "sha256": "69818064f36bd1b663e254e0fb43ab5300490e57566545a130ccce720d187911"
+  },
+  {
+   "bytes": 15186,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.json",
+   "sha256": "4fce53fcfe3c18c564d48249cb40600827083c9702965f13654da15813123a49"
+  },
+  {
+   "bytes": 1023,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.stdout.txt",
+   "sha256": "d3f0dc27fe33f49cb373f985ca8743fad54e6fc2aae9370b2eff148f47a5ae46"
+  },
+  {
+   "bytes": 711,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-a0-spike.txt",
+   "sha256": "e612321a4e648a786434a8158297212875753cc49677f3d8614df3f45135186a"
+  },
+  {
+   "bytes": 714,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-theoria-arm.txt",
+   "sha256": "6534f4bd9cf7405c4c22d2c5587d670cdea75b68755147743283e24af5023f39"
+  },
+  {
+   "bytes": 3489,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconcile.stdout.txt",
+   "sha256": "7114ff917ceff34f76c7f0dea587a83e5be0ae5e7291174d362e05d0c40661fa"
+  },
+  {
+   "bytes": 7855,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconciliation.json",
+   "sha256": "b667dad98ecf83a905a0a02d4b11e36ee973d42e521d9b64ec942b086caff3ae"
+  },
+  {
+   "bytes": 2069,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-bfs-plan.json",
+   "sha256": "80fc530859e823e9037dab096c17af84737e3ab2ad8d00cb7381cd0152f4319c"
+  },
+  {
+   "bytes": 7067,
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-recertify.json",
+   "sha256": "f90dcc0ea88f1d1bc1fefdda78ed1f5ecd24b21bc6cf08d59790a0e23edca0dc"
+  },
+  {
+   "bytes": 17222,
+   "path": "theoria-arm/inner/plan.py",
+   "role": "changed by this run",
+   "sha256": "e73f204a26b76e9306b5879731e36176e9e6e388e60279d3a804446b88e22f7a"
+  },
+  {
+   "bytes": 19781,
+   "path": "theoria-arm/inner/certify.py",
+   "role": "changed by this run",
+   "sha256": "78efd2e4c5b33e11ddf5c7463cec7deae66c8a7b4f82586d5a5f1c73c8516072"
+  },
+  {
+   "bytes": 45033,
+   "path": "theoria-arm/tests/test_arm.py",
+   "role": "changed by this run",
+   "sha256": "6a27049bf4eb5799099d8e255564302b2d57e802ae9ca402927b5110f09a9b18"
+  },
+  {
+   "bytes": 13046,
+   "path": "theoria-arm/RUN_STATE.md",
+   "role": "changed by this run",
+   "sha256": "01e7ae94c812a700bbc92ecf7b4fa7141b84f5411ed8a7f072bdeebefa3fbfd1"
+  },
+  {
+   "bytes": 24645,
+   "path": "a0-spike/pipeline/stages.py",
+   "role": "changed by this run",
+   "sha256": "8efaea5da6fb1e4a9c9693e6c1095a5fefb0423a16f4f77c548b32b7d77efcfd"
+  },
+  {
+   "bytes": 14076,
+   "path": "a0-spike/pipeline/run_a0.py",
+   "role": "changed by this run",
+   "sha256": "92cd16b643471acfbc95a9941bfe679f100c0296b5035f738fb5dae5dc53d744"
+  },
+  {
+   "bytes": 13879,
+   "path": "a0-spike/pipeline/adapt.py",
+   "role": "changed by this run",
+   "sha256": "52a2f8c3ccd4866eec7cbe8c410a4d18d3bd05088ce387a72c69084e693eb777"
+  },
+  {
+   "bytes": 25273,
+   "path": "a0-spike/tests/test_a0.py",
+   "role": "changed by this run",
+   "sha256": "7379d8e5a98f8457a7542ee392941c0f4197099af51dd567044715f1da0dc703"
+  }
+ ],
+ "instance_sets": [
+  "theoria-arm/runs/20260728T015354Z-g50t-first-contact (archived books + ledger, replayed)",
+  "theoria-arm worked example, unreachable goal, through plan() (BFS exhaustion, three states)",
+  "a0-spike run_a0 full pipeline (synthetic sokoban2 evidence)",
+  "a0-spike adapt.run_all, four injected variants"
+ ],
+ "lane": "verify",
+ "network": "none -- no API call, no model call, no socket. Every script here runs against archived bytes or self-generated fixtures.",
+ "passes": 2,
+ "prompt_id": "E14-crash-is-not-a-finding",
+ "reproduce": [
+  "cd theoria-arm && python runs/20260729T080000Z-E14-crash-is-not-a-finding/reconcile.py",
+  "cd theoria-arm && python runs/20260729T080000Z-E14-crash-is-not-a-finding/negative_sample.py",
+  "cd theoria-arm && python -m pytest",
+  "cd a0-spike && python -m pytest"
+ ],
+ "sealed_pile_contact": "none",
+ "suites": {
+  "a0-spike": "50 passed (was 44)",
+  "theoria-arm": "59 passed (was 51)"
+ },
+ "territory": [
+  "theoria-arm",
+  "a0-spike"
+ ],
+ "utc": "2026-07-29T08:00:00Z"
+}

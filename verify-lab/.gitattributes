@@ -1,0 +1,4 @@
+# LF pinned so core.autocrlf cannot corrupt an artefact. Determinism is a
+# requirement in this repository, not a nicety -- engine-rig/.gitattributes
+# exists for the same reason.
+* text=auto eol=lf

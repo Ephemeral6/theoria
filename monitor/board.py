@@ -32,9 +32,43 @@ ITEMS = os.path.join(BOARD, "items")
 CLAIMED = os.path.join(BOARD, "claimed")
 DONE = os.path.join(BOARD, "done")
 LOG = os.path.join(BOARD, "board.log")
+OPS_STATUS = os.path.join(HERE, "ops-status")
+
+# 赛道的主人。赛道守卫存在的理由是「别让通用工人把某个常驻研究员的队列抽干」——
+# 那个理由只在主人还活着时成立。
+LANE_OWNER = {"campaign": "RES-1", "paper": "RES-2",
+              "verify": "RES-3", "infra": "RES-4"}
+
+# 心跳阈值与判据的唯一出处（scan.py 的 self_driving 探针 import 这两个名字）。
+# **看 mtime，不看 agent 自己写进 json 的 utc**：RES-4 已实测那些时间戳全线漂前，
+# 一个自称的时刻可以把死会话说成活的，而文件被改写的时刻是机器观察到的事实。
+STALE_MIN = 45
 
 for d in (ITEMS, CLAIMED, DONE):
     os.makedirs(d, exist_ok=True)
+
+
+def heartbeat_age(agent):
+    """距上次心跳的分钟数；从未启动过返回 None。"""
+    path = os.path.join(OPS_STATUS, "%s.json" % agent)
+    if not os.path.exists(path):
+        return None
+    return int((time.time() - os.path.getmtime(path)) / 60)
+
+
+def stale_lanes():
+    """主人已停摆的赛道——它们的活对通用工人开放。
+
+    这条规则是 2026-07-29 补的，起因是一次沉默的饿死：板上 21 件全部带赛道，
+    四个赛道主人死了三个，而 `list` 把带赛道的活一律不显示，于是它报
+    「available: (empty)」——三个刚起的通用工人一件也领不到，板却看起来是空的。
+    守卫本身没错，错在它把「主人在忙」和「主人已死」当成了同一件事。"""
+    out = set()
+    for lane, owner in LANE_OWNER.items():
+        age = heartbeat_age(owner)
+        if age is None or age > STALE_MIN:
+            out.add(lane)
+    return out
 
 
 def utc():
@@ -49,8 +83,9 @@ def note(msg):
 
 def meta(path):
     head = open(path, encoding="utf-8").read(800)
-    out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": ""}
-    for key in ("priority", "cell", "territory", "lane"):
+    out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": "",
+           "spend": "", "generic_ok": ""}
+    for key in ("priority", "cell", "territory", "lane", "spend", "generic_ok"):
         m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
@@ -89,6 +124,7 @@ def territories_busy():
 def candidates(lane=None):
     ready = done_ids()
     busy = territories_busy()
+    stale = stale_lanes()
     out = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -104,11 +140,22 @@ def candidates(lane=None):
             continue                        # standing researchers stay in lane
         if lane and not m.get("lane"):
             continue                        # unlaned items are for generic workers
-        if not lane and m.get("lane"):
+        # 花真钱的活不随赛道解封一起下放。赛道守卫此前**顺带**挡住了它——
+        # 章程写的是「只有 RES-1 能花 API 钱」，而那条规矩一直是靠 campaign
+        # 赛道有主在执行的。我把赛道解封之后，那层顺带的保护就没了：
+        # 一个一次性工人可以领走一件在真 API 上打的战役（2026-07-29 当场发生）。
+        # 现在要监控在条目里显式写 `generic_ok: yes` 才放行——花钱得是有人拍板，
+        # 不是某道无关的闸门碰巧还没坏。
+        if (not lane and m.get("spend") == "api"
+                and m.get("generic_ok", "").lower() not in ("yes", "true")):
+            continue
+        if not lane and m.get("lane") and m["lane"] not in stale:
             continue                        # laned items belong to their standing
                                             # researcher; a generic worker must
                                             # not strip a lane bare (monitor,
-                                            # 2026-07-28: the guard was one-sided)
+                                            # 2026-07-28: the guard was one-sided).
+                                            # 主人停摆超 STALE_MIN 则赛道解封——
+                                            # 守卫护的是活人的队列，不是死人的。
         out.append((m["priority"], iid, f, m))
     try:
         sys.path.insert(0, HERE)
@@ -129,11 +176,32 @@ def candidates(lane=None):
 
 
 def cmd_list():
-    print("=== available ===")
-    for pri, iid, _f, m in candidates():
+    stale = stale_lanes()
+    generic = candidates()
+    generic_ids = {iid for _p, iid, _f, _m in generic}
+    print("=== available (通用工人可领 %d) ===" % len(generic))
+    for pri, iid, _f, m in generic:
+        tag = ("lane:" + m["lane"]) if m.get("lane") else "unlaned"
+        if m.get("lane") in stale:
+            tag += "（主人停摆，已解封）"
         print("  p%d  %-28s cell=%-3s territory=%-14s %s"
-              % (pri, iid, m["cell"], m["territory"],
-                 ("lane:" + m["lane"]) if m.get("lane") else ""))
+              % (pri, iid, m["cell"], m["territory"], tag))
+    # 赛道守卫会把有主的活挡在 candidates() 之外。**它们仍然是活。**
+    # 只印 available 的旧写法让「板上没活」和「活全都有主」长得一模一样，
+    # 而这两件事该派的人完全不同。
+    reserved = []
+    for lane in sorted(LANE_OWNER):
+        for pri, iid, _f, m in candidates(lane):
+            if iid not in generic_ids:
+                reserved.append((pri, iid, lane, LANE_OWNER[lane], m))
+    if reserved:
+        print("=== reserved（有主，等其赛道研究员来领 %d） ===" % len(reserved))
+        for pri, iid, lane, owner, m in sorted(reserved):
+            age = heartbeat_age(owner)
+            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
+                  % (pri, iid, lane, owner,
+                     "未启动" if age is None else "%d分钟前" % age,
+                     m["territory"]))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):

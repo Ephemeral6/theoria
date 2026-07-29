@@ -514,6 +514,65 @@ FINDINGS = [
         "action": "P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。",
     },
     {
+        "id": "F-17",
+        "severity": "high",
+        "title": "工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全"
+                 "【已裁决·监控代行：五件上板】",
+        "body": "RES-3 的三路只读普查（报告在 engine-rig/runs/20260729T000000Z-"
+                "E11-engine-crosscheck-deep/SURVEY-*.md）扫约 340 处判据点，判不安全 48 处。"
+                "**它们几乎全部偏向好消息**，这才是这条finding的要害——不是随机的错，"
+                "是有方向的错。四个家族：退出码当证明（p13_fd_dividend.py:129 裸 "
+                "returncode==12，而正确谓词 backends.proves_unsolvable 就在它已经 import 的"
+                "模块里）、缺省值当成立（worldgen/core/truth.py:279 的 .get('holds', True)，"
+                "35 份基准真值里 13 份因此报『不变量全部成立』）、崩溃当发现"
+                "（theoria-arm/inner/plan.py:172 吞异常后仍宣布『穷举了整个可达集』——"
+                "**崩得越多，健康证明越干净**）、读不开当干净（release/check_redlines.py:207 "
+                "让封存红线报无发现，而同包 enumerate.py:220 对同一情形判 needs_human）。\n\n"
+                "**目前没有已发表结论被推翻，但有已发表数字依赖读者重新推导**："
+                "lp_potential 的 29.2% 不完备率成立，是因为复核员自己去取了 HiGHS 的 status"
+                "（639 例沉默里 638 例是 status 2）——引擎自己把 status 1/2/3/4 塌成了同一个 "
+                "None。方法不健全而结论当前为真，两者必须分开说。",
+        "action": "【已裁决·监控代行 2026-07-29】五件上板，全部要求带负样本："
+                  "S23-unreadable-is-not-clean（p1，动的是封存红线闸门，含 RES-4 报的 "
+                  "arc-recon/contamination.py:338 退出码只反映 sha256）、"
+                  "V19-unverified-is-not-true、E14-crash-is-not-a-finding、"
+                  "E15-solver-status-bit、P14-honesty-section（写进论文，不藏进 limitations）。"
+                  "C10 改形：从『定正典』改为『采纳已有的 backends.proves_unsolvable』——"
+                  "新写会产生第二条正典，而两条正典正是这件工单要治的病。"
+                  "cold-start-a0/ 的同族缺陷只登记进 PARTNER_SYNC，不动手（非本轨道领地）。",
+    },
+    {
+        "id": "F-18",
+        "severity": "high",
+        "title": "engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是"
+                 "「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】",
+        "body": "对偶普查（RES-3 第四路，约 105 处判据点，判不安全 8 处）的最重一条："
+                "`grep -ril \"held_out|held-out\" engine-rig/engines engine-rig/tools` "
+                "**零命中**，而 `zero_space.verify` 是在**拟合它的同一条轨迹上**复验的——"
+                "按 GF(2) 的构造那近乎恒真，那句 AssertionError 几乎不可能触发。\n\n"
+                "三条独立发现指向同一件事：DECISIONS 的 D-003 明写 zero_space 只承诺"
+                "在观测证据上守恒（边界，不是缺陷）；E9 把 g50t 放在该边界的**已测**一侧，"
+                "而那一侧从来没有东西检查过正确性；本轮发现整个 rig 没有留出验证。\n\n"
+                "**同一路的正面结果同等重要，不许只报病例**：「求解器返回计划就认定可解」"
+                "在本仓库**没有发生**——`fd_adapter` 三档全部无条件 validate_plan()，"
+                "且 `validate.py` **刻意不 import `search`**：验证器不认识搜索器，"
+                "这是结构保证而非承诺。这是「引擎提议、LLM 裁决」少有的硬证据。\n\n"
+                "对偶的真实形状不是「没验」，是**「验了、写进产物、然后不拿它把关」**："
+                "`lp_potential/potential.py:255` 的 `\"admissible\": True` 是字面量，"
+                "而真检查躺在同一份 payload 的 `admissibility_check` 里；"
+                "`deadlock_carver.run()` 是 carve→report→emit 中间没有一个 if，"
+                "于是一条定理和一份证伪它的报告并排发布，谁也不压过谁。",
+        "action": "【已裁决·监控代行 2026-07-29】(1) 论文改词：在 E17 交付之前，"
+                  "正文凡写「已验证」处一律改为「在观测证据上自洽」——不是措辞保守，"
+                  "是那些格子当前的真实含义；已写进 P14-honesty-section。"
+                  "(2) 两件上板且**不许合并**（验收线一个是接线、一个是新数字）："
+                  "E16-verdict-must-gate（两处判决接到头条字段 + 负样本）、"
+                  "E17-held-out-validation（ENGINE_TABLE 边界列先写实话，再给 "
+                  "zero_space/lp_potential 各补一次真留出验证）。"
+                  "依据：RES-3 自己提出的切法，与 A9/V16 同一条——"
+                  "把验收线切到能被复核的大小。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",

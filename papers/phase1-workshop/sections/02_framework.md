@@ -115,7 +115,10 @@ game spend.
 > 每个阶段边界定义一个最小可发表单元——Phase 1 结:A0–A2 + 电池对既有轨迹的回算,
 > 独立可成 workshop 文
 
-This paper is that unit and nothing more. It reports the three acceptances and
-the battery's recompute, now in its third version. It reports no play, no
+This paper is that unit and nothing more. It reports the three acceptances, the
+battery's recompute — its third round, labelled `battery_version: "v2"` in
+`battery/artifacts/capability_spectrum.json` because both the reports and the
+artefacts count from zero — and, in §6, an early read on claim C3 that the mandate
+does not list as an acceptance at all. It reports no play, no
 baseline comparison of the framework's own arms, and
 no claim from the Phase 3 claim menu.
