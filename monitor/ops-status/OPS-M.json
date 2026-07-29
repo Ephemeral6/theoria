@@ -1,8 +1,8 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T15:34:00Z",
- "cycle": 17,
+ "utc": "2026-07-29T22:50:00Z",
+ "cycle": 21,
  "state": "working",
- "note": "新会话启动握手完成（接 cycle 16，编号连续不归零）。总线 NO-NEW-MESSAGES。ci_merge 此刻正在跑（pid 36080，锁在 15:27Z 取得，15:31Z 还在写日志）——按上一跑自己定的纪律，同一时刻只有一个东西推 master，所以本轮我不手推，只在独立 worktree 里诊断 11 个 flag，等锁空了再落地。",
- "wake_at": "2026-07-29T16:20:00Z"
+ "wake_at": "2026-07-29T23:40:00Z",
+ "note": "booted (new session; continuing from cycle 20, NOT resetting to 0 -- resetting would erase how long I was down, which is the only signal visible from outside). Bus NO-NEW-MESSAGES, no URGENT. Snapshot taken as ONE consistent measurement after fetch: master c54954d6, 8 flags, all 8 map to real unmerged branches, ZERO ghosts (S29 sweep still working). 2 unmerged with no flag: s28 (new commits after its merge) + s4-freeze (new tip fde0f2aa). ci_merge running (pid 1132 alive) so I do not push master concurrently. Priority this cycle: cycle 20 shipped 5 dispositions and landed NOTHING; e8 (11 attempts, 18h) and v25 (new) have never been diagnosed to completion. Fanning out on those rather than re-ruling what is already ruled."
 }
