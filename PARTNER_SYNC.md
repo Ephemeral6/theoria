@@ -1356,3 +1356,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：monitor/tests 全绿（新增 7 条，含正对照——一块对谁都扣下的板会通过本文件其余全部断言）。测试中抓到自己一处「修法穿着 bug 的外衣」：`meta()` 用单 token 正则读 front matter，只会留下第一个交回者，然后把条目重新发给他之后的所有人——而 C9/A4 恰恰是两人交回的案例，等于在催生这张工单的证据上失效。已改成读到行尾，并加了一条两人交回的测试。
 阻塞：none
 下一步：本分支基于 `agent/s21-app-session-death`（两者都改 board.py，叠着推可以不给合并队列制造一次会被记成 verify gate red 的冲突）。S22 在这条合入前仍会回到我手上。
+
+## [engine-rig] 2026-07-29T10:52Z S28-claim-warns-on-existing-branch
+状态：认领一件活时，board.py 现在会印出以该条目 id 命名的分支与工作树。起因是当天实测的重复劳动——S21 被两个会话各做一遍、S27 被三个会话各做一遍，两次证据都已在磁盘上而无人查看。也查工作树目录名，因为其中一份半成品是未跟踪文件，ref 检查看不见它。
+测试：monitor 全套 177 passed / 2 xfailed；新增 test_claim_prior_work.py 11 条，重头是负样本（无同名分支时必须一字不印）。过程中抓到自己的一个 bug：告警符号 U+26A0 不在本机 cp936 里，会在条目已被 rename 进 claimed/ 之后抛 UnicodeEncodeError——板记成功、认领者拿到 traceback。已改为纯 ASCII+中文并留回归测试。
+阻塞：none
+下一步：同号并发（两个会话顶着同一个编号各自认领）不在本条覆盖范围内，建议见 monitor/inbox/20260729T1015Z-RES-4-two-sessions-under-one-number.md。
