@@ -151,3 +151,56 @@ u={'input_tokens':0,'output_tokens':0,'cache_creation_input_tokens':3478,
 print('S14 delta $%.4f/call'%pt.cost('claude-opus-5',u)['usd'])
 PY
 ```
+
+---
+
+## 5. 补记：§3 的「不知道」部分解决了，因为我先前漏了数据
+
+写完 §1–§4 之后又查了一遍，**上面的 n=7 不是它的全部实测数据**。
+遗漏的原因值得记下来：A3 战役的产物在 **它自己尚未合并的 worktree** 里
+（`.worktrees/a3-campaign-devpile/`），master 上没有，所以第一遍扫 `theoria-arm/runs/`
+扫不到。
+
+补上之后：
+
+**(a) `A3-campaign-devpile` 本身不含花费。** `rehearsal/campaign.json` 是
+`spent_usd = 0.0`、`elapsed_s = 1.9`、mock desk 的**排练**。
+它的 `levels_completed = 0` 与 `stopped = 「3 legs in a row completed no level」`
+**不能读作能力信号**——桌面是假的。
+
+**(b) 但有三次真实的 haiku 桌面调用，且在 §14 变化之后**
+（`20260729T0035Z-a3-desk-live-proof2`，07-29 00:29–00:36，**晚于 07-28 13:00**）：
+
+| 输出 tok | cache-write（1h） | $ / 调用 |
+|---|---|---|
+| 16,925 | 11,796 | 0.114256 |
+| 22,614 | 12,990 | 0.146292 |
+| 19,406 | 13,777 | 0.132608 |
+
+**均值 $0.1310/调用，构成仍是约 86% 输出 token。**
+所以 §3 的问题对 haiku 档**有答案了**：变化之后它的桌面调用仍是输出主导，
+§14 加项在这一档值 **$0.0055（约 4.8%）**。opus 那 7 次仍在夹缝里，仍未知。
+
+**(c) 一个可操作的缺陷（属于它的轨道，我不改）**：CLI 报的模型 id 是
+`claude-haiku-4-5-20251001`，而 `pricing_v1` 的键是 `claude-haiku-4-5`——
+**没有这个带日期的别名**，于是 `proxy/cost.py` 对上面三次调用一律返回
+`usd: null, unpriced: "model ... is not in pricing_v1"`。
+它的闸门另有一条路（取 CLI 自报的 `total_cost_usd`），所以**池子里的数是对的**；
+但**冻结价目表无法重算这三次**，而按该表自己的说明，能重算正是它存在的理由
+（「a later price change re-prices history」）。**是缺别名，不是价错了。**
+
+**(d) 一个我差点误报为异常、查了之后确认不是的东西。** 池子里那笔
+**$4.00 整、`actions=0`、无模型**的记录，看着很像手工塞进去的数。它不是：
+
+```
+"outcome": "raised_before_a_price",  "unpriced": true,
+"why": "the CLI raised before an envelope carrying a price came back"
+```
+
+**CLI 在带价格的信封回来之前就抛了，于是按保守价 $4.00 记账**——
+fail-closed，宁可把未知成本记贵也不记 0。这与本轨道 D-017 的纪律是同一条。
+**记在这里是因为「看着像异常」本身会被下一个人重新发现一次**，
+而结论是：不必再查，它是对的。
+
+**对 §1 结论的影响：无。** 两个档、两批数据，构成都是输出主导，
+固定加项都是小量（opus 2.0%、haiku 4.8%），偏袒方向不变。
