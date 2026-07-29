@@ -327,5 +327,305 @@ def test_the_enumerator_reaches_the_shape_test_through_the_shared_module(repo, m
     )
 
 
+# ------------------------------------------- defect 4: the encoding the scan ran over
+# The three defects above were found by a review of the classifier. A review of
+# *that fix* found the same sentence twice more, and this is the first of them.
+#
+# `classify` decides which games a file names with `g.encode() in blob` -- a UTF-8
+# needle over raw bytes. In a UTF-16 file every character carries an interleaved
+# NUL, so no id can ever match, `named` comes back empty, and the next line returns
+# **class A / releasable** on the evidence "no ARC game id appears in this file":
+# this work order's title sentence, about a comparison that was blind. Demonstrated
+# live on five records of `{"game_id": "<dev id>", "frame": [[...]]}` written as
+# UTF-16.
+#
+# `check_redlines` grew `unsearchable_encoding` for exactly this and wired it into
+# both of its own scans. `enumerate.py` did not call it -- the same "true of the
+# module, false of the package" split as defect 3, in the same function, three
+# lines away.
+
+
+def _wide(dev_id: str, encoding: str = "utf-16") -> bytes:
+    """Five id/frame records in an encoding a UTF-8 substring search cannot see.
+
+    Five, not one: the point is a file with real payload in it, so that "no ARC
+    game id appears in this file" is as false as it can be made.
+    """
+    body = "".join(
+        json.dumps({"game_id": dev_id, "frame": [[i, i + 1], [i + 2, i + 3]]}) + "\n"
+        for i in range(5)
+    )
+    return body.encode(encoding)
+
+
+@pytest.mark.parametrize("name", ["arm/wide.jsonl", "arm/wide.log"])
+def test_a_wide_encoded_frame_stream_is_not_releasable_on_a_scan_that_missed_it(
+        repo, name):
+    """THE defect, second occurrence. `enumerate.py:282`, `g.encode() in blob`.
+
+    Both names, because the two reach the branch by different routes -- `.jsonl`
+    is JSON-shaped by suffix and `.log` is JSON-shaped because its bytes will not
+    decode -- and before this change both arrived at class A / releasable with
+    the evidence "no ARC game id appears in this file", over a file that names a
+    development-pile game five times and carries five frames beside it.
+
+    The assertion is not merely that the class changed. It is that the manifest
+    stops *asserting* something about a comparison it could not run: an absence
+    found by a blind search is not a finding.
+    """
+    _add(repo, name, _wide(_dev_id()))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}[name]
+
+    assert row["class"] != "A", row
+    assert "no ARC game id appears" not in row["evidence"], (
+        "the manifest still claims no game id is in a file it could not search"
+    )
+    assert row["class"] == "?", row
+    assert row["verdict"] == "needs_human"
+    # The reason has to name the encoding, not the file. A reader who is told
+    # "undetermined" and not why goes looking for a parse error that is not there.
+    assert "wide encoding" in row["evidence"] and "fffe" in row["evidence"], row
+
+
+@pytest.mark.parametrize("name", ["arm/narrow.jsonl", "arm/narrow.log"])
+def test_the_same_records_in_utf8_still_classify_as_a_compilation(repo, name):
+    """The positive control, and the one that proves what the guard keys on.
+
+    Byte-for-byte the same five records, written as UTF-8. If these also came
+    back `?` the refusal above would be about the *content* -- a stream of frames
+    -- and the fix would be a gate that reddens at the thing it is supposed to
+    classify. They must still be class B: an id paired with a frame, read and
+    ruled on.
+    """
+    _add(repo, name, _wide(_dev_id(), "utf-8"))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}[name]
+
+    assert row["class"] == "B", row
+    assert "wide encoding" not in row["evidence"], row
+
+
+def test_a_wide_stream_with_no_byte_order_mark_is_undetermined_too(repo):
+    """The second branch of `unsearchable_encoding`, which has no BOM to go on.
+
+    A UTF-16LE file saved without a byte-order mark -- what a Windows tool
+    produces when it is handed an already-open stream -- starts with `{\\x00`, so
+    the BOM table above it matches nothing. Every character still carries its
+    interleaved NUL, so the UTF-8 needle is just as blind and the old code
+    returned class A on the same sentence. The NUL-density test is what catches
+    it; this pins that the enumerator, and not only `check_redlines`, reaches it.
+    """
+    _add(repo, "arm/wide_nobom.jsonl", _wide(_dev_id(), "utf-16-le"))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}["arm/wide_nobom.jsonl"]
+
+    assert row["class"] == "?", row
+    assert "no ARC game id appears" not in row["evidence"]
+    assert "NUL bytes" in row["evidence"], row
+
+
+def test_an_ordinary_binary_is_not_swept_up_by_the_nul_density_test(repo):
+    """The positive control for the branch above, and the reason it is a *density*
+    test rather than a NUL test.
+
+    Compressed binaries -- the PNG plates in `figures/` are the live case -- carry
+    NULs too, and there are 40-odd of them tracked. A rule that called every one
+    of them undetermined would put the whole figures directory into the human
+    queue at every release, which is how a gate stops being read. `figures/`
+    stayed at zero `?` rows across this change; this keeps it that way.
+    """
+    png = (b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR"
+           + bytes((i * 7 + 13) % 251 + 1 for i in range(600)))
+    _add(repo, "figures/plate.png", png)
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}["figures/plate.png"]
+
+    assert row["class"] == "A", row
+    assert row["evidence"] == "no ARC game id appears in this file"
+
+
+def test_a_matched_api_marker_outranks_the_encoding_refusal(repo):
+    """Order inside `classify`, pinned because the obvious fix gets it backwards.
+
+    Dropping the encoding guard at the top of the function would be tidier and
+    wrong: blindness cannot make a match *false*. A marker that was found was
+    found, and a NUL-padded transaction log -- a `.jsonl` a crashed writer left
+    with a preallocated tail -- is still a log of retrieved data under ToS 4.
+    Downgrading it from B to `?` would move an API-derived compilation out of
+    needs-written-permission and into a queue, which is the permissive direction.
+
+    The second file is the same shape with the marker taken out, and it is what
+    makes this test say something: it proves the encoding guard really does fire
+    on these bytes, so B above is the ordering and not an accident.
+    """
+    tail = b"\x00" * 4096
+    logged = json.dumps({"kind": "arc_api_call", "status": 200}).encode() + b"\n" + tail
+    quiet = json.dumps({"note": "preallocated, never written"}).encode() + b"\n" + tail
+    assert any(m in logged for m in enum.API_TRANSACTION_MARKERS), "fixture premise"
+    assert not any(m in quiet for m in enum.API_TRANSACTION_MARKERS), "fixture premise"
+    _add(repo, "arc-recon/probe_log.jsonl", logged)
+    _add(repo, "arc-recon/preallocated.jsonl", quiet)
+
+    rows = {r["path"]: r for r in enum.build(enum._tracked())}
+
+    assert rows["arc-recon/probe_log.jsonl"]["class"] == "B", rows["arc-recon/probe_log.jsonl"]
+    assert "API transaction marker" in rows["arc-recon/probe_log.jsonl"]["evidence"]
+    assert rows["arc-recon/preallocated.jsonl"]["class"] == "?", (
+        rows["arc-recon/preallocated.jsonl"]
+    )
+
+
+# --------------------------- defect 5: the payload keys, and what "pairs" means
+# The other half of what the review of the fix found. Defect 2 removed
+# `check_redlines`'s three-field literal in favour of `PAYLOAD_MARKERS`, and left
+# `enumerate.PAYLOAD_KEYS` -- a four-field literal for the same idea -- exactly
+# where it was. So the guard went into one of the two readers again, one level up:
+# eleven files carrying `scorecard` or `state` bodies kept class C under the
+# positive sentence "no record pairs an id with environment payload", and
+# `theoria-arm/runs/20260728T235841Z-leg01/run.json` is a literal ARC scorecard
+# response, `card_id` and `guid` and all. Eight files moved C -> B on this tree
+# when the constant became the only list.
+#
+# Widening the field set alone would have walked into the false red
+# `check_redlines._pairings` was rewritten to avoid, so the pairing test was
+# scoped at the same time: a whole-document `.json` parses as exactly ONE record,
+# at which point "record by record" degrades into "somewhere in this file".
+
+
+def test_the_payload_keys_are_the_shared_constant_and_not_a_second_literal(repo):
+    """THE defect. `enumerate.py:91`.
+
+    Equality is the weaker half and identity is the point: the literal that was
+    just deleted **agreed** with `PAYLOAD_MARKERS` on two fields for its whole
+    life, and agreement is what a drifting copy looks like right up until someone
+    edits one of them. A re-typed tuple is a different object, so `is` fails on it
+    even on the day it is typed correctly, which is the only day it will be right.
+    """
+    assert enum.PAYLOAD_KEYS is redlines.PAYLOAD_FIELDS, (
+        "the payload fields are declared in two places again; the last time this "
+        "was true the two lists disagreed by five fields"
+    )
+    assert enum.PAYLOAD_KEYS == redlines.PAYLOAD_FIELDS
+    assert "scorecard" in enum.PAYLOAD_KEYS and "state" in enum.PAYLOAD_KEYS, (
+        "the fields this enumerator's own docstring calls class-B payload"
+    )
+
+
+def test_a_scorecard_body_beside_a_dev_id_is_a_compilation(repo):
+    """The live file, reduced: `theoria-arm/runs/20260728T235841Z-leg01/run.json`.
+
+    A card id, per-environment action counts, per-run guids and a state -- this
+    is an ARC scorecard response, verbatim, stored under a run directory. Under
+    the four-field literal `scorecard` was not a payload key, so the row read
+    class C / releasable-flagged with the evidence "no record pairs an id with
+    environment payload -- statistics about the games, not material from them",
+    which is a positive claim and a false one. Three sibling `run.json` files and
+    four more scorecard corpora carried the same sentence.
+    """
+    _add(repo, "theoria-arm/runs/leg01/run.json", json.dumps({
+        "arm": "theoria",
+        "run_id": "r-971917cab1644056",
+        "summary": {"scorecard": {
+            "card_id": "card-08557baf3b06715b",
+            "environments": [{
+                "id": _dev_id(),
+                "actions": 6,
+                "completed": False,
+                "runs": [{"actions": 6, "guid": "guid-1d6cda5ee7d35295"}],
+            }],
+        }},
+    }))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}["theoria-arm/runs/leg01/run.json"]
+
+    assert row["class"] == "B", row
+    assert "no record pairs an id with" not in row["evidence"], row
+
+
+def test_a_payload_field_in_one_branch_and_an_id_in_another_is_not_a_pairing(repo):
+    """The false red that widening the field set walks straight into, which is why
+    the scope was tightened in the same change.
+
+    `monitor/state.json`, reduced: an agent roster whose entries carry their own
+    `state` and the actions an operator may take on them, and a board listing that
+    quotes a game id in an unrelated branch of the same document. A whole-document
+    `.json` is ONE record, so a record-level pairing test is file-level
+    co-occurrence wearing a different name -- and under it this document is class
+    B / needs-written-permission, an agent monitor withheld from the release
+    because it says "idle" in one place and names a game in another.
+
+    (The real file's `state` values are strings, which `_is_payload` declines for
+    a second and independent reason. The object form is used here so the scope is
+    the only thing standing between this document and class B.)
+    """
+    _add(repo, "monitor/state.json", json.dumps({
+        "board": {"listing": f"R3 - release classifier - {_dev_id()} stays out"},
+        "agents": {"ops": [{
+            "id": "OPS-A",
+            "state": {"phase": "idle", "since": "2026-07-30T02:00:00Z"},
+            "available_actions": ["claim", "release", "escalate"],
+        }]},
+    }))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}["monitor/state.json"]
+
+    assert row["class"] == "C", row
+    assert "no record pairs an id with environment payload" in row["evidence"], row
+
+
+def test_the_scope_still_reaches_an_id_inside_the_payload_value(repo):
+    """The positive control for the scoping, and the case that kills the obvious
+    tightening ("the id must be a sibling of the payload field").
+
+    A scorecard keyed by game id names no `game_id` anywhere near it: the id is
+    *in* the payload. That is the same pairing seen from the other side, and it is
+    the shape `proxy/tests/fixtures/scorecard_corpus.json` is in. A scope that
+    only looked upwards for an identifying field would report this document as
+    carrying statistics about games nobody played.
+    """
+    _add(repo, "proxy/fixtures/scorecard_corpus.json", json.dumps({
+        "summary": {"scorecard": {"cards": {_dev_id(): {"score": 2, "actions": 41}}}},
+    }))
+
+    rows = {r["path"]: r for r in enum.build(enum._tracked())}
+    assert rows["proxy/fixtures/scorecard_corpus.json"]["class"] == "B", (
+        rows["proxy/fixtures/scorecard_corpus.json"]
+    )
+
+
+def test_a_prose_sampling_frame_is_not_an_ARC_frame(repo):
+    """`battery/artifacts/capability_spectrum.json`, and the one place these two
+    modules are meant to disagree.
+
+    `check_redlines._filled` counts `"a sentence"` as a filled marker on purpose:
+    it is answering "did any sealed material get out", where `"full_reset": false`
+    is a real command sent to a real game and a false negative is an incident.
+    `enumerate._is_payload` is answering a licence question -- is this material
+    *from* a game -- and an ARC frame is a grid of ints, never a sentence. The
+    battery's central artefact carries two metric cells whose `frame` field is the
+    *sampling* frame, described in prose; on the key name alone the one file the
+    paper's capability claim rests on was withheld from the release.
+
+    Two modules, two questions, two justified answers. This test exists so that
+    the next person to notice the disagreement finds a reason rather than a drift,
+    and so that "unify them" is a change that fails a test instead of a tidy-up.
+    """
+    prose = "3 state-action pair(s) the full-history trace never covered"
+    _add(repo, "battery/artifacts/capability_spectrum.json", json.dumps({
+        "cells": [{"metric": "unseen_pairs", "game_id": _dev_id(), "frame": prose}],
+    }))
+
+    rows = {r["path"]: r for r in enum.build(enum._tracked())}
+    row = rows["battery/artifacts/capability_spectrum.json"]
+    assert row["class"] == "C", row
+
+    # The disagreement, asserted rather than described: the sealed check's fill
+    # test says this value is present, and it is right to. Only the licence
+    # classifier declines it.
+    assert redlines._filled(prose) is True
+    assert enum._is_payload(prose) is False
+
+
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(pytest.main([__file__, *sys.argv[1:]]))

@@ -74,7 +74,21 @@ import check_redlines as redlines  # noqa: E402
 MANIFEST = os.path.join(_HERE, "MANIFEST.jsonl")
 
 #: Environment payload: the fields that make a record *material from* a game.
-PAYLOAD_KEYS = ("frame", "frames", "action_input", "available_actions")
+#:
+#: **Derived, never re-typed.** This was a four-field literal
+#: (`frame, frames, action_input, available_actions`) beside
+#: `check_redlines.PAYLOAD_MARKERS`, which declares eight. An adversarial review
+#: of this very change caught the consequence: widening the constant in
+#: `check_redlines` and leaving the literal here reproduced, one level up, the
+#: defect this work order is named after -- **the guard went into one of the two
+#: readers.** Eleven files carrying `scorecard` or `state` bodies stayed class C
+#: under the positive sentence "no record pairs an id with environment payload",
+#: and one of them (`theoria-arm/runs/20260728T235841Z-leg01/run.json`) is a
+#: literal ARC scorecard response, `card_id` and `guid` and all.
+#:
+#: `enumerate.py`'s own docstring had already named `scorecard` as class-B
+#: payload; only the literal disagreed.
+PAYLOAD_KEYS = redlines.PAYLOAD_FIELDS
 
 #: Markers of an API transaction log, independent of game id -- a probe log of
 #: requests is a compilation of retrieved data even where a record names no game.
@@ -241,6 +255,30 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
                     "ToS 4 regardless of which games it names",
                 }
 
+    # A *negative* conclusion from a byte scan is only worth the encoding it was
+    # run over. `g.encode()` builds a UTF-8 needle, and in a UTF-16 file every
+    # character carries an interleaved NUL, so no id can ever match -- and the
+    # branch below then prints "no ARC game id appears in this file", which is
+    # this work order's title sentence, about a comparison that was blind.
+    # Demonstrated on five records of `{"game_id": "<dev id>", "frame": [[...]]}`
+    # written as UTF-16: class A, releasable, on that exact evidence string.
+    #
+    # `check_redlines` grew `unsearchable_encoding` for this and wired it into
+    # its own two scans. This file did not call it -- the same "true of the
+    # module, false of the package" split as defect 3, in the same function,
+    # three lines away. An adversarial review of this change found it.
+    #
+    # Order matters: the API-transaction scan above stays where it is, because a
+    # marker that *matched* is a positive finding and blindness cannot make a
+    # match false. Only the absence conclusion has to be withheld.
+    blind = redlines.unsearchable_encoding(blob)
+    if blind:
+        return {
+            "class": "?",
+            "evidence": f"{blind}, so the UTF-8 byte scan that decides which ARC games "
+            "this file names could not see its text -- whether it names any is undetermined",
+        }
+
     named = sorted(g for g in game_ids if g.encode() in blob)
     if not named:
         return {"class": "A", "evidence": "no ARC game id appears in this file"}
@@ -252,12 +290,22 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
             "constants, guards or narrative carry no environment payload",
         }
 
-    verdict = _records_pairing(_abs(rel), named, jsonl)
+    verdict, why = _records_pairing(_abs(rel), named, jsonl)
     if verdict is None:
+        # `why` comes from `redlines.read_json_records`, which knows which of
+        # several things went wrong. It used to be discarded here and replaced
+        # with the flat phrase "could not be parsed as JSON" -- which was wrong
+        # for every row it was actually printed over. All three `?` rows on this
+        # tree take the *first* early return in `json_shaped`
+        # (`blob.decode("utf-8-sig")` raises), so nothing was ever handed to a
+        # JSON parser; `pytest-baseline.txt` holds 45 lines of which none begins
+        # with `{`, and its only defect is three mojibake byte pairs. A gate that
+        # misnames its own reason is the disease this work order is about, so it
+        # does not get to have it.
         return {
             "class": "?",
-            "evidence": f"names ARC game(s) {', '.join(named)} but could not be parsed as "
-            "JSON, so whether it carries environment payload is undetermined",
+            "evidence": f"names ARC game(s) {', '.join(named)} but {why}, so whether it "
+            "carries environment payload is undetermined",
         }
     if verdict:
         return {
@@ -290,8 +338,16 @@ def _is_payload(value) -> bool:
     return isinstance(value, (list, dict)) and bool(value)
 
 
-def _records_pairing(path: str, named: list[str], jsonl: bool) -> int | None:
-    """Count of records pairing an ARC id with payload; ``None`` if unparseable.
+def _records_pairing(path: str, named: list[str], jsonl: bool) -> tuple[int | None, str | None]:
+    """``(count, None)`` of records pairing an ARC id with payload, or ``(None, why)``.
+
+    The reason travels with the refusal, as it already did in
+    `check_redlines._records_pairing_sealed_with_payload`. Returning a bare
+    `None` let the caller substitute a reason of its own invention -- it printed
+    "could not be parsed as JSON" over three files that never reached a JSON
+    parser, because `json_shaped` had already refused them at
+    `blob.decode("utf-8-sig")`. Misnaming the reason a gate went red is how the
+    gate gets cleared by someone fixing the wrong thing.
 
     The `None` was already right here when `check_redlines` was still answering
     the same question with `[]`. What was wrong is that it was right *separately*
@@ -305,17 +361,53 @@ def _records_pairing(path: str, named: list[str], jsonl: bool) -> int | None:
     lazy generator unwound on a malformed line thousands of records in, throwing
     away every count already made.
     """
-    records, _why = redlines.read_json_records(path, jsonl)
+    records, why = redlines.read_json_records(path, jsonl)
     if records is None:
-        return None
+        return None, why
     n = 0
     for rec in records:
-        blob = json.dumps(rec)
+        blob = json.dumps(rec, default=str)
         if not any(g in blob for g in named):
             continue
-        if any(_is_payload(d.get(k)) for d in redlines._walk(rec) for k in PAYLOAD_KEYS):
+        if _pairs_in_scope(rec, named):
             n += 1
-    return n
+    return n, None
+
+
+def _pairs_in_scope(rec, named: list[str]) -> bool:
+    """Does this record pair an id with payload *the record ties to that id*?
+
+    The old test was `any(g in json.dumps(rec))` and then a payload field
+    **anywhere beneath the record**. That is co-occurrence with an extra step,
+    and `check_redlines._pairings` was rewritten on this same branch to stop
+    doing exactly it -- with the reason written down: record-level pairing reads
+    as record-by-record only while records are small, and a whole-document
+    `.json` parses as exactly ONE record, at which point "record by record"
+    degrades into "somewhere in this file". Leaving the loose version here would
+    have been the third pair of drifting readers this work order produced.
+
+    So the scope comes from `redlines._walk_scoped`: an id owns a payload field
+    when it is named in that node's own scalar fields or an ancestor's, or when
+    it is **inside the payload value itself** (a scorecard keyed by game id names
+    no sibling `game_id`).
+
+    What deliberately does **not** come from `check_redlines` is the fill test.
+    `_filled` there counts `False` and `"a sentence"` as present, because
+    `"full_reset": false` is a real command sent to a real game and the sealed
+    red line must see it. Here the question is a licence class, and
+    `battery/artifacts/capability_spectrum.json` carries a `frame` field holding
+    a *sampling* frame described in prose. Two different questions, two
+    justified answers -- and the difference is written down here so that the
+    next person to notice it finds a reason rather than a drift.
+    """
+    for node, in_scope in redlines._walk_scoped(rec, named):
+        for field in PAYLOAD_KEYS:
+            value = node.get(field)
+            if not _is_payload(value):
+                continue
+            if in_scope or any(g in json.dumps(value, default=str) for g in named):
+                return True
+    return False
 
 
 def _review_note(rel: str, blob: bytes, cls: str) -> str | None:

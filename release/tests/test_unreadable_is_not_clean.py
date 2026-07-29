@@ -71,6 +71,23 @@ def _sealed_id() -> str:
     return ids[0]
 
 
+def _dev_id() -> str:
+    """One DEVELOPMENT-pile id, read from the cut rather than hardcoded.
+
+    The enumerator tests below need a game id that `check_sealed` will *not* fire
+    on, so that the file's fate is decided by `enumerate.classify` alone and by
+    nothing upstream of it. The dev pile has been played and its ids are already
+    in tracked ledgers; the sealed pile is not what those tests are about.
+    """
+    with open(REAL_PILES, encoding="utf-8") as fh:
+        piles = json.load(fh)
+    dev = piles.get("dev", piles.get("dev_pile", []))
+    ids = sorted(g if isinstance(g, str) else g.get("game_id", "") for g in dev)
+    ids = [g for g in ids if g]
+    assert ids, "the cut file yielded no development ids; this fixture cannot be built"
+    return ids[0]
+
+
 def _git(repo: str, *args: str) -> None:
     subprocess.run(
         ["git", "-C", repo, *args],
@@ -604,6 +621,106 @@ def test_the_enumerator_exits_nonzero_when_it_could_not_classify_something(repo,
     assert "devtrace.json" in capsys.readouterr().err
 
 
+# ------------------------------- the reason a row went `?`, which was invented
+# `_records_pairing` returns `(None, why)` and `why` comes from
+# `read_json_records`, which is the only thing in the package that knows which of
+# several things went wrong. `classify` used to discard it and print a flat
+# "could not be parsed as JSON" -- and that sentence was wrong for every row it
+# was ever actually printed over. All three `?` rows on this tree take the FIRST
+# early return in `json_shaped`: `blob.decode("utf-8-sig")` raises, so nothing was
+# ever handed to a JSON parser. `pytest-baseline.txt` holds 45 lines of which none
+# begins with `{`; its entire defect is three mojibake byte pairs, one of them
+# `\xa1\xec` at offset 1805.
+#
+# A misnamed reason is not cosmetic here. It is the instruction the next person
+# follows: told "could not be parsed as JSON", they go looking for the malformed
+# record, do not find one, and clear the gate on the grounds that the gate is
+# broken. That is the disease this whole work order is about, so the gate does not
+# get to have it.
+
+
+def _mojibake_baseline(dev_id: str) -> bytes:
+    """ASCII console output with one non-UTF-8 byte pair in it.
+
+    `release/runs/.../pytest-baseline.txt`, reduced: a captured test run whose
+    only defect is that a couple of characters came back from a non-UTF-8
+    console. `0xa1` is a continuation byte with nothing to continue, so
+    `bytes.decode("utf-8")` raises on it wherever it sits -- which is what the
+    real file does, at offset 1805.
+    """
+    head = (
+        "============================= test session starts ==============================\n"
+        "platform win32 -- Python 3.13.0, pytest-8.3.2\n"
+        f"battery/tests/test_ledger.py::test_dev_pile_ids[{dev_id}] PASSED\n"
+        "battery/tests/test_ledger.py::test_frames_round_trip PASSED\n"
+    ).encode()
+    tail = b"\n============================= 2 passed in 0.41s ==============================\n"
+    return head + b"warning: \xa1\xec from a non-UTF-8 console\n" + tail
+
+
+def test_the_undetermined_evidence_does_not_invent_a_json_parser_that_never_ran(repo):
+    """THE defect. `enumerate.py:307`, the `?` branch's evidence string.
+
+    This file never reaches a JSON parser: `json_shaped` calls it structured
+    because its bytes will not decode as text at all, and `read_json_records`
+    then fails on the same `open(encoding="utf-8-sig")`. The row that came out
+    said "could not be parsed as JSON", which sends a reader hunting for a
+    malformed record in a file that has no records in it and no malformed
+    anything -- only two bytes from the wrong codepage.
+    """
+    _add(repo, "release/runs/pytest-baseline.txt", _mojibake_baseline(_dev_id()))
+
+    row = {r["path"]: r for r in enum.build(enum._tracked())}[
+        "release/runs/pytest-baseline.txt"]
+
+    assert row["class"] == "?", row
+    assert row["verdict"] == "needs_human"
+    assert "could not be parsed as JSON" not in row["evidence"], (
+        "the manifest still names a parse that was never attempted"
+    )
+    assert "UnicodeDecodeError" in row["evidence"], row
+    assert "JSONDecodeError" not in row["evidence"], row
+
+
+def test_a_decode_failure_and_a_parse_failure_do_not_get_the_same_sentence(repo):
+    """The two ways a structured file goes unread, in one tree, side by side.
+
+    Under the flat phrase these two rows were **character-for-character
+    identical** -- same class, same verdict, same evidence -- for a file with a
+    bad byte and a file with a bad record, which are different problems with
+    different remedies. One is a re-encode, the other is a broken writer.
+
+    The third file is the positive control: a stream that parses must still be
+    read and ruled on, or the reasons above are just two spellings of a gate that
+    reddens at everything.
+    """
+    dev = _dev_id()
+    _add(repo, "release/runs/pytest-baseline.txt", _mojibake_baseline(dev))
+    _add(repo, "arm/session.log",
+         json.dumps({"game_id": dev, "frame": [[1]]}) + "\n"
+         + json.dumps({"game_id": dev, "frame": [[2]]}) + "\n"
+         + '{"game_id": "' + dev + '", "frame": [[3]],,,}\n')
+    _add(repo, "arm/good.jsonl",
+         json.dumps({"game_id": dev, "frame": [[4]]}) + "\n"
+         + json.dumps({"game_id": dev, "frame": [[5]]}) + "\n")
+
+    rows = {r["path"]: r for r in enum.build(enum._tracked())}
+    undecodable = rows["release/runs/pytest-baseline.txt"]
+    unparseable = rows["arm/session.log"]
+
+    assert undecodable["class"] == unparseable["class"] == "?", (undecodable, unparseable)
+    assert undecodable["evidence"] != unparseable["evidence"], (
+        "two different failures are still reported with one invented sentence"
+    )
+    # Each reason is the one its own reader gave, and names where to look.
+    assert "UnicodeDecodeError" in undecodable["evidence"], undecodable
+    assert "line 3" in unparseable["evidence"], unparseable
+    assert "JSONDecodeError" in unparseable["evidence"], unparseable
+    assert "UnicodeDecodeError" not in unparseable["evidence"], unparseable
+
+    assert rows["arm/good.jsonl"]["class"] == "B", rows["arm/good.jsonl"]
+
+
 def test_the_checklist_sees_an_unclassified_row_no_item_matches():
     """`report()` only inspects rows some pattern matched, and the ten patterns
     do not cover the tree."""
@@ -665,12 +782,17 @@ def test_the_enumerator_routes_its_parse_through_the_shared_reader(tmp_path, mon
     path = tmp_path / "x.jsonl"
     path.write_text('{"game_id": "zz00-dead", "frame": [[1]]}\n', encoding="utf-8")
 
-    assert enum._records_pairing(str(path), ["zz00-dead"], True) == 1
+    assert enum._records_pairing(str(path), ["zz00-dead"], True) == (1, None)
 
     monkeypatch.setattr(redlines, "read_json_records",
                         lambda *_a, **_k: (None, "forced by the test"))
-    assert enum._records_pairing(str(path), ["zz00-dead"], True) is None, (
-        "enumerate.py still parses through a copy of its own"
+    verdict, why = enum._records_pairing(str(path), ["zz00-dead"], True)
+    assert verdict is None, "enumerate.py still parses through a copy of its own"
+    # The reason has to travel with the refusal, not be re-invented downstream.
+    # `classify` used to discard it and print "could not be parsed as JSON" over
+    # files no parser had been handed.
+    assert why == "forced by the test", (
+        "the reader's reason was dropped, so the caller is free to make one up"
     )
 
 
