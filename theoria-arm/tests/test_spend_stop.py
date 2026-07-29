@@ -1,11 +1,20 @@
 """闸门红了立刻停 — a refused pool ends the leg, it does not get retried.
 
 This file exists because of a measured failure rather than a hypothesis. On
-2026-07-29 a live leg on `g50t` sent **780 commands for 9 successful actions**
-(HTTP amplification 86.7 against the 1.75 its reservation was sized on) and
-exhausted its 105-request action cap. Nothing was overspent -- the gate held --
-but the arm spun against a closed gate until its wall clock ran out, and wrote
-an 81 MB `candidates.jsonl` doing it.
+2026-07-29 a live leg on `g50t` (`runs/20260729T004020Z-leg01`) issued **2000
+arm-level attempts for 9 successful actions** and exhausted its 105-request
+action cap. Nothing was overspent -- the gate held -- but the arm spun against a
+closed gate until its wall clock ran out, and wrote a 201 MB `candidates.jsonl`
+doing it.
+
+**Corrected 2026-07-29:** this docstring first said "780 commands ... HTTP
+amplification 86.7", and "81 MB". All three were mid-run readings of counters
+that were still moving; the leg ended at 2000 attempts, a ratio of 222.222, and
+201 MB. Only **104** attempts were ever forwarded to the network
+(`http.forwarded=true`), so the transport ratio was 11.6, not 86.7. See
+`harness/arc.py::SpendGateStopped` for the full correction. What the tests below
+assert is unaffected -- they are about stopping, not about the size of the
+number that made stopping necessary.
 
 The mechanism: a refusal raises inside the env proxy's request handler, so the
 arm sees a *transport failure* rather than a status, and `_retryable(0)` is True

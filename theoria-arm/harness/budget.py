@@ -98,8 +98,29 @@ class Budget:
             "resets": self.resets,
             "commands_sent": self.commands_sent,
             "actions_left": self.actions_left,
+            # Attempts, not outbound requests. `Budget.command()` is called once
+            # per arm-level attempt, and an attempt that the proxy refuses
+            # before the wire increments it just the same. On
+            # `runs/20260729T004020Z-leg01` that gap was 2000 attempts against
+            # 104 records with `http.forwarded=true` -- so this number read
+            # 222.222 for a leg whose transport managed 11.6 requests per
+            # successful action, and a mid-run reading of it was quoted as
+            # "86.7x amplification" in a commit message and a docstring.
+            #
+            # It is not renamed, because RUN_STATE.json readers and
+            # `armtools/archive.py`'s reconciliation block already carry the old
+            # key. It is stated instead: what it measures, and what it does not.
+            "attempt_amplification": (round(self.commands_sent / self.actions_ok, 3)
+                                      if self.actions_ok else None),
             "http_amplification": (round(self.commands_sent / self.actions_ok, 3)
                                    if self.actions_ok else None),
+            "http_amplification_is_really_attempts": True,
+            "http_amplification_note": (
+                "arm-level attempts per successful ACTION, including attempts "
+                "that never reached the network. The arm cannot compute the "
+                "transport ratio: only the proxy ledger knows which attempts "
+                "were forwarded (`http.forwarded`). Divide that count by "
+                "`actions_ok` for the real one."),
         }
 
     def __repr__(self) -> str:

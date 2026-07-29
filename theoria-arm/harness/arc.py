@@ -67,9 +67,27 @@ class SpendGateStopped(ArcError):
     """The shared pool refused. The leg is over; it is not a retryable status.
 
     This exists because of a measured failure. On 2026-07-29 a live leg on
-    `g50t` sent **780 commands for 9 successful actions** -- an HTTP
-    amplification of 86.7 against the 1.75 the reservation was sized on -- and
-    exhausted its 105-request action cap.
+    `g50t` (`runs/20260729T004020Z-leg01`) issued **2000 arm-level attempts for
+    9 successful actions** and exhausted its 105-request action cap.
+
+    **Correction, 2026-07-29:** the first version of this docstring called that
+    "an HTTP amplification of 86.7 against the 1.75 the reservation was sized
+    on". Both numbers were wrong to put side by side, and an adversarial re-read
+    of the ledger took them away:
+
+    * 86.7 was a mid-run reading of `commands_sent / actions_ok`, a counter that
+      was still climbing while `actions_ok` had been frozen at 9 for an hour. It
+      reached **222.222** by the time the leg stopped. It was a clock, not a
+      measurement -- and `780` appears in no artefact at all.
+    * Only **104** of those 2000 attempts ever reached the network: 104 ledger
+      records carry `http.forwarded=true`, and the last one is at t+502s of a
+      10308s leg. The transport ratio for this leg is **104/9 = 11.6**, which
+      sits inside the 5.7-17x band the three genuinely live legs show.
+    * 1.75 is not this arm's number either; see `spend.HTTP_PER_COMMAND`.
+
+    The defect this class fixes is real and unchanged. Only the headline number
+    was wrong, and it was wrong in the direction that made the transport look
+    guilty of something the retry loop did.
 
     The mechanism: when the pool refuses, `spend_gate.permit` raises inside the
     env proxy's request handler, the arm sees a transport failure rather than a

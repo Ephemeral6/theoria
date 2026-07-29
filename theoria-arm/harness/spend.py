@@ -209,10 +209,45 @@ def assert_one_true_pool(gate: SpendGate,
 #: unpriced.
 MODEL_CALL_CEILING_USD = 4.00
 
-#: Arm-level outbound attempts per successful ACTION, measured post-cookie-fix.
-#: `Budget.command()` is called once per attempt inside `arc._send`'s loop, so
-#: `commands_sent / actions_ok` is exactly this ratio.
+#: **Borrowed, not measured on this arm.** The comment that used to stand here
+#: said 1.75 was "measured post-cookie-fix" and that
+#: `Budget.as_json()["http_amplification"]` is exactly this ratio. Both halves
+#: were false, and the second one is why nobody caught the first:
+#:
+#: * The source is `arc-recon/data/incidents.jsonl:16` (INC-011), whose
+#:   `side_by_side` cell reads `http_calls_gameplay 35 / executed_commands 20`.
+#:   That is HTTP calls per **executed command**. This constant is consumed at
+#:   `plan_caps` below as HTTP per **successful action** -- a different
+#:   denominator. Per successful action the same cell is 35/18 = 1.94.
+#: * That cell is the **`bare_cc` arm**, on `ar25`, with **`cookies=True`**.
+#:   This arm has no cookie jar (grep `cookie` in `harness/arc.py`: nothing).
+#:   INC-011's own text forbids the reuse: *"confirmed as descriptions of the
+#:   OLD transport and are now obsolete as forward estimates. Re-derive rather
+#:   than reinterpret."*
+#: * No `theoria-arm` run has ever reported 1.75. Its observed
+#:   `commands_sent/actions_ok` values are 1.083, 1.167, 1.2, 1.25 (all **mock**
+#:   -- `env_proxy.upstream` is `127.0.0.1`), then 5.714, 7.333, 17.0 live, then
+#:   222.222 on the leg that hit its command ceiling.
+#:
+#: The value is left at 1.75 rather than replaced. The live samples say this
+#: arm's transport is somewhere in 5.7-17x when it is actually retrying, so 1.75
+#: under-reserves; but a replacement of "12" was considered and rejected --
+#: **not one observed run sits between 1.25 and 5.714**, so any number in that
+#: gap is interpolation into empty space, and swapping one unfounded constant
+#: for another buys nothing but a fresh false comment. What is fixed here is the
+#: provenance, and `HTTP_PER_COMMAND_IS_VALIDATED` below, which makes every
+#: reservation carry the fact that its sizing constant is borrowed.
 HTTP_PER_COMMAND = 1.75
+
+#: Whether `HTTP_PER_COMMAND` has ever been measured on *this* arm's transport,
+#: in *this* constant's own denominator. It has not. A reservation sized on it
+#: records this, so a leg cannot be planned on a borrowed number without the
+#: plan saying so.
+HTTP_PER_COMMAND_IS_VALIDATED = False
+HTTP_PER_COMMAND_PROVENANCE = (
+    "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, "
+    "ar25, cookies=True, 35 http / 20 executed commands. Different arm, "
+    "different transport, different denominator from the one plan_caps uses.")
 
 #: Multiplier over the measured ratio. The measurement is a mean over one run;
 #: the retry envelope (`arc.ACTION_ATTEMPTS = 40`) means the tail is long, and a
@@ -358,6 +393,8 @@ def plan_caps(*, actions: int, commands: int,
         "actions_budget": actions,
         "commands_ceiling": commands,
         "http_per_command": HTTP_PER_COMMAND,
+        "http_per_command_is_validated": HTTP_PER_COMMAND_IS_VALIDATED,
+        "http_per_command_provenance": HTTP_PER_COMMAND_PROVENANCE,
         "retry_safety": RETRY_SAFETY,
         "fixed_commands": FIXED_COMMANDS,
         "env_max_attempts": env_max_attempts,
