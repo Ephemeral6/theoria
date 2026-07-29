@@ -3,7 +3,7 @@
 ### 1.0 The setting, and two words that must not be confused
 
 **ARC-AGI-3** is the benchmark this project is aimed at. An agent is dropped into
-a small world it has never seen — a 64×64 grid, sixteen colours, deterministic
+a small game it has never seen — a 64×64 grid, sixteen colours, deterministic
 rules, the rules hidden — and can do exactly two things: act, and observe
 (`Theoria.md` §1.0). Twenty-five games are public; each is a ladder of levels; the
 agent's only verbs are `RESET` and up to six per-game actions, and a *scorecard*
@@ -27,12 +27,15 @@ and §9's two live runs against the API on one development-pile game.
 
 ### 1.1 Where the field's checking regime stops
 
-The strongest published result on ARC-AGI-3 belongs to the second wave of world
+The strongest reported result on ARC-AGI-3 belongs to the second wave of world
 models, the one that writes the world down as a program: the model is an editable,
 executable artefact, and it is verified by replaying the entire recorded history
-against it. `Theoria.md` §3.1 reports that line reaching **98.98 %** — a game
-score on ARC-AGI-3, not a replay-fidelity figure, and one for which this paper's
-sources give no denominator, so none is asserted here.
+against it. `Theoria.md` §3.1 reports that line reaching **98.98 %**. Two
+qualifications travel with that figure and this paper carries both. It is a *game
+score*, not a replay-fidelity figure — replay is the verification regime, not the
+thing measured. And it is self-reported on a project page rather than in a paper,
+against a public set whose composition our sources do not state, so §11.1 treats
+it as prior work's own summary and not as a measurement of ours.
 
 Read the three waves together and what each of them upgrades is the same thing:
 not the model, the **checking regime** (`Theoria.md` §3.1). Weights admit only
@@ -49,8 +52,9 @@ opened, measured and closed with every number attached to a file.
 Start where the evidence is strongest, which is not where the framework performs
 well.
 
-To score this work we wrote a battery of **38 metrics over five families**
-(`battery/artifacts/capability_spectrum.json`), and beside it an **anti-gaming
+To score this work we wrote a battery of **38 metrics over five families** —
+epistemic (14), economy (7), exploration (6), mechanism (6) and planning (5)
+(`battery/artifacts/capability_spectrum.json`) — and beside it an **anti-gaming
 register**: one entry per metric saying, in prose, how that metric could be
 cheated, and two hand-set booleans — `accidental` and `defended` — that a
 mechanical rule reads to decide whether the metric may enter the *main table*, the
@@ -78,46 +82,74 @@ wrong: `P4` was monotone in failure, so one action against a twelve-step plan
 outscored any solved run; `K12` read six self-reported booleans out of a file its
 own producer wrote and scored 1.000 for zero environment actions; and `E2`, a
 `Theoria.md` Phase 4 primary endpoint, could be driven to 0.993 by dumping the
-whole bill on turn one.
+whole bill on turn one (`battery/REPORT_V2.md`, which names that figure in prose;
+it is not in `battery/artifacts/`).
 
 **Then we did it again, blind.** The first round's exploit writers could see the
 register they were attacking (`battery/BLINDING.md`). A later round could not: six
 mutually invisible attackers, working from a source tree stripped of the register,
-the exploits, every report and every real value, against success criteria written
-down and committed *before* any attack, with the ordering provable by
-`git merge-base --is-ancestor` (`battery/PREREG_V9.md`). They wrote 112 attacks,
-of which 95 landed, each one required to submit runs that an independent poverty
-certificate had judged to have done no real work (`battery/audit/v9/check.py`):
+the exploits and every report, against thresholds written down and committed
+*before* any attack, with the ordering provable by `git merge-base --is-ancestor`
+(`battery/PREREG_V9.md`). They wrote 105 attacks, of which 91 landed:
 
 > **37 of the 38 metrics were driven to their pre-registered threshold, and the
-> main table went from nine metrics to zero.**
+> main table fell from nine metrics to two.**
 > — `battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json`
-> (`verdict.gameable` 37, `verdict.b14_baseline_main` 9, `verdict.main` empty);
-> summarised at `battery/STATUS.md` and carried into `battery/METRICS.md`
+> (`verdict.gameable` 37, `verdict.b14_baseline_main` 9); summarised at
+> `battery/STATUS.md` and carried into `battery/METRICS.md`
 
-The 38th is not a survivor. `M3` was re-recorded as `undetermined` rather than
-robust because no path through it calls its own success predicate: it returns the
-same thing for a genuinely capable arm as for an attacker. The direct consequence
-is that one of `Theoria.md` Phase 4's three primary endpoints now has no
-process-4-cleared metric underneath it (`battery/STATUS.md`).
+The last two went afterwards, and **not blind**: a sighted adversarial review,
+whose author had read everything, wrote seven more attacks of which four landed,
+knocking out `E1`; and `M3` was re-recorded from `main` to `undetermined`
+(`battery/audit/v9/REPORT.md` §9). `M3` is not a survivor of the blind round
+either — it was re-recorded because no path through it calls its own success
+predicate, so it returns the same thing for a genuinely capable arm as for an
+attacker. With the main table empty, the front-load index `E2`, one of
+`Theoria.md` Phase 4's three primary endpoints, has no metric underneath it that
+cleared the audit (`battery/STATUS.md`).
 
-Three limits keep this from being larger than it is, and none of them is small.
-Eleven of the 38 exploits hard-code their own success rather than reading it back
-from the scorer, so for those eleven "the exploit landed" means only that the
-metric returned a value (`battery/audit/exploits/exploration_planning.py`). The
-register was written by the same author as the metrics, which makes the first
-round a self-check; only the blind round is an independent test. And the result is
-existential — it says *these* attacks landed on *these* metrics — so it is not
-weakened by the battery's tiny sample, and equally it licenses nothing about
-metrics we did not write.
+**Five limits, and none of them is small.** Eleven of the 38 first-round exploits
+hard-code their own success rather than reading it back from the scorer, so for
+those eleven "the exploit landed" means only that the metric returned a value
+(`battery/audit/exploits/exploration_planning.py`). The register was written by
+the same author as the metrics, which makes the first round a self-check. The
+blind round's own pre-registration was breached: the adjudication implementation
+was **not** in the pre-registered commit, and its `NOT defended` clause was
+collapsed after the results were seen, in the direction that emptied the table
+(`battery/PREREG_V9.md`, revision 1, which calls this the round's worst lapse).
+The poverty certificate that was to establish that an attack had done no real work
+**passed all 105 attacks and rejected none**, so on this data set it has no
+demonstrated selectivity and what carried the claim was attacker discipline, not
+the checker (`battery/audit/v9/REPORT.md` §7). And of the nine demotions the round
+produced, its own report grades three *weak*, because for count-shaped diagnostics
+the threshold is close to unavoidable — "driven to threshold" is not everywhere a
+defeat.
+
+What survives all five is narrower than the headline and still worth having: a
+register whose entries are executable, and whose `succeeded` is read back from the
+scorer instead of asserted, falsified 17 of its own author's written claims, and a
+second round run against criteria fixed in advance overturned the first round's
+survivors. The result is existential — *these* attacks landed on *these* metrics —
+so it is not weakened by the battery's tiny sample, and equally it licenses nothing
+about metrics we did not write.
 
 One further finding is upstream of cheating altogether. **The epistemic family
 cannot rank two manuals at all**: for any pair differing by one concept or one
 clause, at least one `higher`-direction metric prefers each, and a single manual
-that describes nothing holds nineteen of the twenty metrics in that audit's scope
+that describes nothing holds eighteen of the twenty metrics in that audit's scope
 at their best reading simultaneously (`battery/audit/exploits/mechanism_epistemic.py`,
-`omnibus_manual`). That lands on the two families which are also entirely
-unvalidated.
+`omnibus_manual`; §7.7 says nineteen, from before `K12`'s defence landed). That
+lands on the two families which are also entirely unvalidated.
+
+One bookkeeping fact belongs here rather than in a footnote, because this paper's
+binding rule is provenance. The first round's numbers above are read from
+`battery/artifacts/gaming_audit.json`, which `battery/PREREG_V9.md` froze so that
+the blind round could be judged against a fixed baseline. Re-running the same code
+against the tree as it now stands gives 33 exploits landing and 19 contradicted
+entries rather than 34 and 17
+(`battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/gaming_audit.json`).
+The frozen file is the right one to cite for a baseline; §7.1's claim that the
+battery's artefacts regenerate on demand is not true of this one.
 
 ### 1.3 The same failure inside the pipeline
 
@@ -163,9 +195,10 @@ Be precise about what was named, because the precision is the whole argument. R-
 names three **directions** — `press_up`, `press_down`, `press_right` — and one
 concrete configuration, "drive the Cart to (2,2) and push DOWN into an unpressed
 Button". It does not enumerate the coordinate pairs; the phrase "the three pairs
-R-05 named" appears in `THEORIZE_LOG.md`'s seal section and `A0_REPORT.md` §2,
-both written at M6 *after* the score existed, and this paper does not inherit that
-gloss as if it were the pre-registration. The claim that survives is still the one
+R-05 named" appears in `THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
+makes the same gloss in different words — both written at M6 *after* the score
+existed, and this paper does not inherit either as if it were the
+pre-registration. The claim that survives is still the one
 that matters: R-05 named the three directions, predicted the manual would be wrong
 on them, and predicted that replay would not notice. All three held.
 
@@ -173,16 +206,19 @@ The ground truth was first opened at M6, after M4 and M5 were green — M5 being
 unsolvable-variant milestone, not a planning stage — and only by the scoring
 script; no clause was written or revised afterwards
 (`cold-start-a0/THEORIZE_LOG.md`, "Ground-truth seal"; the same stamp is carried in
-`cold-start-a0/artifacts/score_vs_truth.json` as `seal`). **That stamp is a
-declaration written by the authors' own script, not a control.** And the seal has a
-hole which the log names rather than hides: the same instance both built the A0
-world and adjudicated it (`cold-start-a0/THEORIZE_LOG.md`, preamble). No
-ground-truth file was read, and every verdict is written to be re-derivable from
-the candidate stream alone, but `cold-start-a0/A0_REPORT.md` §6.3 counts this as a
-threat to the result rather than a footnote, and this paper carries it the same
-way. Note the asymmetry with §1.2: the battery's blind round has a
-committed-before-the-fact ordering that a third party can check; A0's seal does
-not.
+`cold-start-a0/artifacts/score_vs_truth.json` as `seal`). That stamp is a
+declaration written by the authors' own script, not a control.
+
+The seal has a hole, and the log names it rather than hiding it: **the same
+instance both built the A0 world at M1 and adjudicated it at M3**
+(`cold-start-a0/THEORIZE_LOG.md`, preamble). No ground-truth file was read, and
+every verdict is written to be re-derivable from the candidate stream alone, but
+`cold-start-a0/A0_REPORT.md` §6.3 counts this as a threat to the result rather
+than a footnote, and this paper carries it the same way. Neither A0's seal nor the
+battery's blind round (§1.2) is a clean pre-registration: A0's is a self-declaration
+a third party cannot audit, and the blind round's adjudication rule was amended
+after the results were seen. They fail differently, and neither is offered as the
+standard the other should have met.
 
 ### 1.4 The same failure as a file you can diff
 
@@ -215,21 +251,25 @@ Scoped to what was actually run:
 
 1. **A negative result about measurement, obtained by attacking our own
    instrument.** An anti-gaming register rewritten from prose into executable
-   exploits, then re-attacked blind against pre-registered criteria: 34 of 38
+   exploits, then re-attacked blind against pre-registered thresholds: 34 of 38
    metrics gamed in the first round and 37 of 38 in the blind one, 17 written
    register entries contradicted by their own demonstration, and the table of
-   metrics trusted to rank arms reduced to zero
-   (`battery/artifacts/gaming_audit.json`;
-   `battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json`).
-   This is the one contribution here that does not require believing the
-   framework, and the one that is not guaranteed by its own construction.
+   metrics trusted to rank arms cut from nine to two blind and to zero by a
+   sighted follow-up (`battery/artifacts/gaming_audit.json`;
+   `battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json`;
+   the five limits on all of it are in §1.2 and are not small). This is the one
+   contribution here that does not require believing the framework, and the one
+   that is not guaranteed by its own construction.
 2. **An artefact that produces the replay-invisible failure on demand, together
    with the repair loop that closes it** — 打脸 (refute) → 定位 (locate) → 戳探
    (probe) → 修订 (revise) → 重证 (re-certify) → 解出 (solve), each beat settled by
-   an artefact (`cold-start-a2/artifacts/loop_ledger.json`: 8 beats, 8 pass,
-   0 fail).
+   an artefact — these six are `L1`–`L6` of
+   `cold-start-a2/artifacts/loop_ledger.json`, whose other two beats build the
+   exhibit rather than repair it; all 8 pass, 0 fail.
 3. **A cold-start pipeline run end to end on self-built worlds**, from pixels
-   through engine proposals, adjudication, four co-derived forms, certification and
+   through engine proposals — six offline solvers that mine candidate rules and
+   certificates but never adjudicate them — through adjudication, the four
+   co-derived forms (Lean, Python, PDDL, Markdown), certification and
    planning — with a paired A0/A0′ contrast, **uncontrolled by construction**,
    in which the second world's manual reaches 228/228 = 100 % while covering only
    107/228 = 47 % of its own state-action pairs. The two worlds differ in
@@ -269,8 +309,10 @@ Stated here rather than deferred, because §1.5's list is the part a reader is
 entitled to hold us to.
 
 Every pipeline result — A0, A0′, A1, A2, A3 — was produced offline, on small
-deterministic worlds this project built itself; no game was played for it and no
-network was touched (`cold-start-a2/A2_REPORT.md` §7). The battery is passive: it
+deterministic worlds this project built itself; no game was played for any of them
+and no network was touched (`cold-start-a2/A2_REPORT.md` §7 for A2;
+`cold-start-a3/A3_REPORT.md` for A3, whose unit under test is a *level* of a
+self-built world and not a game). The battery is passive: it
 recomputes over trajectories that already existed and spends nothing new
 (`battery/REPORT_V2.md`). No sealed-pile game was played or read for any result
 here — though §10.1 records that the sealed pile is nonetheless no longer clean,

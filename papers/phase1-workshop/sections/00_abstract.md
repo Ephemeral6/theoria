@@ -9,7 +9,7 @@
 
 > **Draft status — v0.4.** A working draft assembled from the acceptance reports
 > already in the repository. Authorship, affiliation and venue are unfilled
-> placeholders, and at roughly 23 700 words it is about five times a workshop
+> placeholders, and at roughly 27 500 words it is about six times a workshop
 > budget; the cut is a separate pass and no material has been dropped to make it.
 > v0.4 rewrote this abstract and §1 against five independent reviews
 > (`papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/`); the
@@ -34,22 +34,27 @@
 
 ## Abstract
 
-**ARC-AGI-3 drops an agent into a small world it has never seen** — a 64×64 grid,
+**ARC-AGI-3 drops an agent into a small game it has never seen** — a 64×64 grid,
 sixteen colours, deterministic rules, the rules hidden — and lets it do two
-things: act, and look. The strongest published result on it makes the world model
-an editable, executable program and verifies that program by replaying the entire
-recorded history against it. But a model that replays its own history perfectly
-can still be bankrupt as an account of the world, and the error is invisible to
-precisely that check. Each wave of this lineage has upgraded the same thing — the
-*checking regime* — and the regime has stopped at "true of what already happened".
+things: act, and look. The strongest reported result on it, self-reported on a
+project page rather than in a paper (§11.1), makes the world model an editable,
+executable program and verifies that program by replaying the entire recorded
+history against it. But a model that replays its own history perfectly can still
+be bankrupt as an account of the world, and the error is invisible to precisely
+that check. Each wave of this lineage has upgraded the same thing — the *checking
+regime* — and the regime has stopped at "true of what already happened".
 
 We report the closed-system phase of Theoria, a framework in which the world model
 is an explicit, hand-maintained theory: a **manual** saying what the world is and
-a **playbook** saying how to win, compiled to four co-derived forms and certified
-in two layers — full-history replay at the pixel, and declared laws discharged in
-Lean with the axiom list inspected. Neither layer certifies the manual against the
-world. This paper is mostly about what that costs, and the most damaging evidence
-for it comes not from the framework's runs but from our own measuring instrument.
+a **playbook** saying how to win, compiled to four co-derived forms — Lean,
+Python, PDDL and Markdown — and certified in two layers: full-history replay at
+the pixel, and declared laws discharged in Lean with the axiom list inspected.
+Neither layer certifies the manual against the world. **The one thing this paper
+claims is that we built that instrument, ran it end to end on small deterministic
+worlds we constructed ourselves, and then held our own measurements to the same
+adversarial standard, where it did the most damage.** That is a claim about an
+artefact and a negative result about a measuring instrument. It is not a result
+about world models.
 
 **The strongest result is a negative one about our own metrics.** We wrote a
 38-metric battery to score this work, and a register saying, for each metric, how
@@ -59,31 +64,40 @@ battery's own scorer grades, with success recomputed from the scorer rather than
 asserted by the author — showed that **34 of the 38 metrics can be driven to a
 good score by a run possessing none of the capability being measured**, and that
 **17 of the register's own written entries were contradicted by their own
-demonstration, 14 of them claims that a metric had been defended**. A later blind
-round — six mutually invisible attackers working from a stripped source tree,
-against success criteria committed before any attack — moves every one of those
-numbers further in the same direction and takes the table of metrics considered
-safe for ranking arms from nine to zero. A subsidiary finding is upstream of
-cheating altogether: for any two manuals differing by one clause, the epistemic
-family contains a metric preferring each, so it cannot rank them at all.
+demonstration, 14 of them claims that a metric had been defended**. A later round,
+in which six mutually invisible attackers worked from a stripped source tree
+against thresholds committed before any attack, raised the first number to **37 of
+38** and cut the table of metrics trusted to rank arms from nine to two; a sighted
+follow-up review removed the last two. Both rounds carry defects we state rather
+than bury — the adjudication rule was amended after the results were seen, and the
+mechanical check meant to certify that an attack did no real work rejected none of
+the 105 attacks it saw. A subsidiary finding is upstream of cheating altogether:
+for any two manuals differing by one clause, the epistemic family contains a
+metric preferring each, so it cannot rank them at all.
 
-**The pipeline, offline.** Three acceptances on worlds we built ourselves, plus an
-early read on a claim the mandate does not list as an acceptance. On a 9×9 world,
-the induced manual replays 276/276 frames and 22 356/22 356 pixels with zero
-anomalies and is nonetheless wrong on all three of the 236 reachable
-(state, action) pairs the trajectory never covered — accuracy 0.000 over three
-pairs (n = 3). The miss was written down in the adjudication log, by direction,
-*before* the ground truth was opened. A second world, in which an irreversible
-latch becomes a reversible toggle, yields a manual that is 228/228 correct while
-covering only 47 % of its own state-action pairs; the two worlds differ in four
-ways at once, so this is a design lesson demonstrated by construction rather than
-a hypothesis tested. A pagoda-style impossibility certificate computed by a linear
+**The pipeline, offline.** Three acceptances, plus an early read on a claim the
+mandate does not list as an acceptance — all of them on small deterministic worlds
+we built ourselves, none of them on an ARC-AGI-3 game. On a 9×9 world, the induced
+manual replays 276/276 frames and 22 356/22 356 pixels with zero anomalies, and
+agrees with the world's whole transition function on 233 of 236 reachable
+(state, action) pairs; the three it misses are exactly the three the trajectory
+never covered, and on those three its accuracy is 0.000 (n = 3). The miss was
+written down in the adjudication log, by direction, *before* the ground truth was
+opened — though the seal on that ordering is the authors' own declaration, and the
+same instance built the world and adjudicated it. A second world, in which an
+irreversible latch becomes a reversible toggle, yields a manual that is 228/228
+correct while covering only 47 % of its own state-action pairs; the two worlds
+differ in four ways at once, so this is a design lesson demonstrated by
+construction rather than a hypothesis tested, and a replay-invisible clause seeded
+into it was caught by a coverage probe and, unplanned, by the Lean transcription.
+A pagoda-style impossibility certificate computed by a linear
 program in one track crosses a JSON boundary into a second, which re-verifies
 every obligation rather than trusting the producer and emits a Lean proof with an
 empty axiom list — shown to be non-decorative by a negative control that makes it
 fail. And an exhibit: a manual with one rule deleted passes replay at 100 %, its
 planner returns UNSAT, and Lean signs an axiom-free impossibility theorem that an
-18-action episode refutes; the repair loop then closes in six recorded beats. The
+18-action episode refutes; the repair loop then closes in its six recorded beats
+(L1–L6 of an eight-beat ledger whose other two build the exhibit). The
 artefact is a *pair* of Lean files identical in generator, tactic, dependency
 surface and axiom list — `#print axioms` returns `[]` for both — of which one is
 true of its world and the other is not. The instrument cannot tell them apart and
@@ -99,8 +113,10 @@ checker reports 1 790 probes with no hits and which nonetheless missed two real
 leaks an adversarial reader found, and three of whose four papers have never been
 sat; and two live runs against the real API on one development-pile game — a
 preflight that sent 18 commands for zero billable actions and zero dollars, and a
-first-contact run that spent seven actions and $6.32 in model calls, whose
-manifest carries the byte-level scan showing no sealed-pile game was touched.
+first-contact run that spent seven actions and, by the provider's own arithmetic,
+$6.32 in model calls — our price table says $5.80 and the manifest records the
+disagreement — whose manifest carries the byte-level scan showing no sealed-pile
+game was touched.
 
 **What we do not claim.** No arm was run against another system's baseline, there
 is no language-model baseline anywhere in this paper, and the three arms of the

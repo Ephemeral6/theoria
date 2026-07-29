@@ -152,3 +152,16 @@ ellipses). C FIGDATA fails on `fig1_concept_timeline.json`, also pre-existing.
 **This run introduced no new failure and fixed none of the inherited ones** — both
 belong to the figures item, not this one. Baseline captured by running the same
 script on `master` before the rewrite.
+
+## The adversarial round, which overturned the first draft's headline
+
+`ADVERSARIAL_ROUND.md` in this directory is the record. Three reviewers ran
+against the first draft of this rewrite; two of them converged independently on
+the same six defects, the worst being that **the blind audit round took the
+battery's main table from nine metrics to two, not to zero** — the last two went to
+a *sighted* follow-up review. All six are corrected in the delivered text, and the
+blind round's own pre-registration breach, which the first draft omitted and had
+in fact leaned on, is now disclosed. That file also carries the lay reader's 4/10
+and the three follow-up items this run generates, of which the first — **§7.7 must
+be re-derived against the blind round** — is the largest inconsistency left in the
+paper.

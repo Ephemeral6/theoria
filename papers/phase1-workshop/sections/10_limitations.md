@@ -259,10 +259,13 @@ was made executable rather than written, contradicted 17 of its own register
 entries by demonstration — 14 of them defence claims
 (`battery/artifacts/gaming_audit.json`) — found the exploration family's declared
 signature separating the specified gradient backwards, and, when re-attacked blind
-against criteria committed in advance, had 37 of its 38 metrics driven to their
-thresholds and its main table reduced to zero
+against thresholds committed in advance, had 37 of its 38 metrics driven to those
+thresholds and its main table cut from nine to two — and to zero by a sighted
+follow-up review
 (`battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json`;
-§7.7 reports the earlier round, whose artefacts were frozen before this one).
+§7.7 reports the earlier round, whose artefacts were frozen before this one, and
+§1.2 states the five limits that qualify all of it — including that the
+adjudication rule was amended after the results were seen).
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.

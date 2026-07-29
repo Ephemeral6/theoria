@@ -1,11 +1,16 @@
-## 9 · The preflight — every link in the live chain, for zero quota
+## 9 · The live chain — a preflight for zero quota, and the first-contact run
 
 Everything reported so far is offline. Phase 3 is not, and the step between them
 is the one where a framework quietly stops being closed: the arm acquires a
 credential, the credential acquires a network, and the record of what happened
-becomes something the arm itself wrote. This section reports the run that
-exercised that chain **before** any of it could cost anything, and — as much as
-it reports the result — what the run does *not* establish.
+becomes something the arm itself wrote. **Two** runs exercised that chain and this
+section reports both, because no single run establishes all of it: the
+**preflight**, which ran the whole sequence **before** any of it could cost
+anything, and the **first-contact run**, which spent quota on one development-pile
+game and is the one whose manifest carries the byte-level sealing scan. Most of
+what follows is about the preflight; §9.4 says which claims belong to which run.
+As much as it reports the result, this section reports what the runs do *not*
+establish.
 
 ### 9.1 The trick, and the sequence
 
@@ -100,7 +105,7 @@ credibility comes from an adversarial pass by an independent context — 46
 attacks, **29 of which landed on first contact**, four rated critical, all 46 now
 blocked and resident in the suite (`proxy/REDTEAM.md`, `proxy/STATUS.md`).
 
-### 9.3 Four things this run does not establish
+### 9.3 Four things the preflight does not establish
 
 The gap between what the shell is designed to guarantee and what this run
 demonstrates is wide enough to be worth enumerating.
