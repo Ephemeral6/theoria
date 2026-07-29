@@ -1,0 +1,13 @@
+{
+ "base_commit": "7a830f96c87aab9f958959de2dd75fb169c7ef55",
+ "branch": "agent/a3-campaign-devpile",
+ "clock_note": "Local time here is UTC+08; this dir is stamped in true UTC.",
+ "cycle": 32,
+ "files": [],
+ "kind": "process_record",
+ "prompt_id": "A3-campaign-devpile",
+ "utc": "2026-07-29T17:56:06Z",
+ "why": "an adversarial re-derivation of the per-model desk ceiling table, which cycle 31 had written and every test had passed. Both entries of OBSERVED_USD_PER_SECOND were taken from the worst call over its own duration rather than the worst rate, so both understated (opus-5 by 17.0%, haiku by 5.2%), and MODEL_CALL_CEILINGS_USD['claude-opus-5'] was $5.00 against the $5.96 its own documented rule produces. The arm's primary model was carrying exactly the defect the table exists to prevent. Corrected, and pinned by a test that re-derives from the archive instead of re-reading the constants.",
+ "worker": "RES-1",
+ "zero_api": "no network call, no billed action, no dollar. Every number here comes from desk_log.json files already in runs/ and from proxy/pricing/pricing_v1.json."
+}

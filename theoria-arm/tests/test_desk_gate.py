@@ -23,8 +23,10 @@ What is checked, in the order the defect report asked for it:
      free headroom before anything is reserved.
 """
 
+import glob
 import json
 import os
+import re
 import sys
 
 import pytest
@@ -858,13 +860,18 @@ def test_every_model_ceiling_covers_a_call_that_runs_to_the_timeout():
     The flat $4.00 failed that standard in the single scenario that uses it.
     The ceiling is what an unpriced call is charged, and a call becomes
     unpriced by raising -- of which the commonest cause is the 1800s timeout.
-    At the observed opus-5 rate of $0.0024676/s a call that runs the full
-    timeout costs $4.44, so the number charged for it was $0.44 short of the
+    At the observed opus-5 rate of $0.0028860/s a call that runs the full
+    timeout costs $5.19, so the number charged for it was $1.19 short of the
     only case it existed to cover.
 
     Asserted as arithmetic rather than as a remembered figure, so that moving
     the timeout or re-measuring a rate re-checks the ceilings instead of
     silently invalidating them.
+
+    **What this test does not do**, which is why the one below it exists: it
+    reads `OBSERVED_USD_PER_SECOND` as given. A rate constant that is itself too
+    low passes here and takes the ceiling down with it -- which is what happened
+    to opus-5 (rate 17% low, ceiling $0.96 below its own rule, both green here).
     """
     for model, rate in spend_mod.OBSERVED_USD_PER_SECOND.items():
         implied = rate * spend_mod.MODEL_CALL_TIMEOUT_S
@@ -889,6 +896,65 @@ def test_the_dated_model_id_the_cli_reports_resolves_to_a_ceiling():
     # cheapest: no measurement is the case to be most careful about.
     assert (spend_mod.model_call_ceiling_for("some-model-released-tomorrow")
             == max(spend_mod.MODEL_CALL_CEILINGS_USD.values()))
+
+
+def _archive_worst_per_model():
+    """Worst rate and worst call per model, re-derived from every desk log.
+
+    Deliberately independent of `harness.spend`: it re-reads the archive rather
+    than trusting the constants, because trusting the constants is the failure
+    this exists to catch.
+    """
+    worst_rate, worst_call = {}, {}
+    for path in glob.glob(os.path.join(_bootstrap.path("runs"), "*",
+                                       "desk_log.json")):
+        with open(path, encoding="utf-8") as handle:
+            for record in json.load(handle):
+                if not isinstance(record, dict) or "cli_cost_usd" not in record:
+                    continue
+                model = re.sub(r"-\d{8}$", "", record["model"])
+                usd = float(record["cli_cost_usd"])
+                secs = record["elapsed_ms"] / 1000.0
+                worst_rate[model] = max(worst_rate.get(model, 0.0), usd / secs)
+                worst_call[model] = max(worst_call.get(model, 0.0), usd)
+    return worst_rate, worst_call
+
+
+def test_the_ceiling_table_still_covers_the_archive():
+    """Re-derive the sizing inputs from the logs; do not re-read the constants.
+
+    The test above checks the ceilings against `OBSERVED_USD_PER_SECOND`. That
+    catches a ceiling lowered under a correct rate, and nothing else -- a rate
+    constant that is itself too low sails through it, and drags the ceiling down
+    with it. Both happened at once on opus-5: the rate was taken as the worst
+    *call* divided by its own duration (the dearest call is a long one, so that
+    ratio is middling; the costliest second belongs to a shorter call), which
+    read 17% low, and the ceiling was set to $5.00 while `4 x $1.489011 = $5.96`
+    was already the binding half of the documented rule. Every existing test was
+    green throughout.
+
+    So this one goes back to the archive for both maximands. It is the only
+    check here that would have failed before the correction.
+    """
+    worst_rate, worst_call = _archive_worst_per_model()
+    assert worst_rate, "no desk logs in the archive: this test checked nothing"
+
+    for model, rate in sorted(worst_rate.items()):
+        recorded = spend_mod.OBSERVED_USD_PER_SECOND.get(model)
+        assert recorded is not None, (
+            "%s appears in the archive with no recorded rate" % model)
+        assert recorded >= rate, (
+            "%s: the recorded rate $%.7f/s is below the worst rate in the "
+            "archive, $%.7f/s. A rate that understates makes every ceiling "
+            "derived from it understate too." % (model, recorded, rate))
+
+        implied = max(rate * spend_mod.MODEL_CALL_TIMEOUT_S,
+                      4 * worst_call[model])
+        ceiling = spend_mod.model_call_ceiling_for(model)
+        assert ceiling >= implied, (
+            "%s: ceiling $%.2f is below $%.4f, which is what this table's own "
+            "stated rule -- max(timeout x rate, 4x worst call) -- produces from "
+            "the archive." % (model, ceiling, implied))
 
 
 def test_a_haiku_call_that_goes_unpriced_is_not_charged_the_opus_ceiling(

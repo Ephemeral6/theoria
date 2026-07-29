@@ -1,0 +1,20 @@
+per call
+  claude-opus-5                253.1s  cli=$0.730485  derived=$0.718927  derived/cli=0.9842  usd/s=0.002886  20260728T014402Z-g50t-first-contact-aborted
+  claude-opus-5                587.6s  cli=$1.332953  derived=$1.321400  derived/cli=0.9913  usd/s=0.002268  20260728T015354Z-g50t-first-contact
+  claude-opus-5                332.7s  cli=$0.868224  derived=$0.853970  derived/cli=0.9836  usd/s=0.002610  20260728T015354Z-g50t-first-contact
+  claude-opus-5                608.2s  cli=$1.425431  derived=$1.406925  derived/cli=0.9870  usd/s=0.002344  20260728T015354Z-g50t-first-contact
+  claude-opus-5                603.4s  cli=$1.489011  derived=$1.469180  derived/cli=0.9867  usd/s=0.002468  20260728T015354Z-g50t-first-contact
+  claude-opus-5                449.3s  cli=$1.202039  derived=$1.180625  derived/cli=0.9822  usd/s=0.002675  20260728T015354Z-g50t-first-contact
+  claude-haiku-4-5-20251001    179.8s  cli=$0.114256  derived=$0.108226  derived/cli=0.9472  usd/s=0.000636  20260729T0035Z-a3-desk-live-proof2
+  claude-haiku-4-5-20251001    241.3s  cli=$0.146292  derived=$0.139059  derived/cli=0.9506  usd/s=0.000606  20260729T0035Z-a3-desk-live-proof2
+  claude-haiku-4-5-20251001    208.0s  cli=$0.132608  derived=$0.124593  derived/cli=0.9396  usd/s=0.000638  20260729T0035Z-a3-desk-live-proof2
+
+per model
+  claude-haiku-4-5-20251001  n=3  max usd/s=0.000638  max call=$0.146292  worst derived/cli=0.9396
+  claude-opus-5              n=6  max usd/s=0.002886  max call=$1.489011  worst derived/cli=0.9822
+
+the two facts a ceiling has to respect
+  * the price table under-derives by up to 6.0% against the CLI's own figure,
+    and never over-derives. A ceiling read off the table alone is short by that much.
+  * usd/s differs by ~4.5x between the two models this arm has run, so one
+    flat constant is either too high for the cheap one or too low for the dear one.

@@ -220,14 +220,42 @@ MODEL_CALL_CEILING_USD = 4.00
 MODEL_CALL_TIMEOUT_S = 1800
 
 #: Observed dollars per second of wall clock, per model, from live desk runs.
-#: opus-5: `runs/20260728T015354Z-g50t-first-contact/desk_log.json`, worst of
-#: five calls -- $1.489011 over 603 414 ms. haiku: the three settled calls of
-#: `runs/20260729T0035Z-a3-desk-live-proof2`, worst $0.146292 over 241 344 ms.
+#: The **worst rate** over every call in the archive, which is not the same as
+#: the worst call over its own duration -- see below.
+#:
+#: opus-5: $0.730485 over 253 110 ms, from
+#: `runs/20260728T014402Z-g50t-first-contact-aborted/desk_log.json`.
+#: haiku-4-5: $0.132608 over 207 993 ms, from
+#: `runs/20260729T0035Z-a3-desk-live-proof2/desk_log.json`.
+#: Reproduce with `runs/20260729T1745Z-A3-per-model-ceiling/measure_desk_rates.py`.
+#:
 #: Rates rather than totals, because the ceiling has to bound a call that runs
 #: to the timeout and no observed call has yet done so.
+#:
+#: **Corrected 2026-07-29, cycle 32.** The first version of this table took each
+#: model's most *expensive* call and divided by that call's own duration. That is
+#: the wrong maximand: the dearest call is usually also a long one, so dividing
+#: by its length gives a middling rate. The costliest *second* belongs to a
+#: shorter call. Both entries were understated -- opus-5 by **17.0%** (0.0024676
+#: against an observed 0.0028860, the aborted run's single call, which the old
+#: comment named two paragraphs earlier without drawing on it) and haiku-4-5 by
+#: 5.2%. `test_the_ceiling_table_still_covers_the_archive` recomputes both from
+#: the archive on every run so this cannot drift back silently.
+#:
+#: Rounded **up** at the seventh decimal, not to nearest: opus-5's true figure is
+#: 0.0028860377/s, and writing 0.0028860 here would leave the recorded rate below
+#: the observed one -- a smaller instance of the same defect. The archive test
+#: catches it, which is how this line came to say 0.0028861.
 OBSERVED_USD_PER_SECOND = {
-    "claude-opus-5": 0.0024676,
-    "claude-haiku-4-5": 0.000606,
+    "claude-opus-5": 0.0028861,
+    "claude-haiku-4-5": 0.0006376,
+}
+
+#: The worst single settled call per model, the other half of the sizing rule.
+#: Same runs and same script as `OBSERVED_USD_PER_SECOND`.
+OBSERVED_WORST_CALL_USD = {
+    "claude-opus-5": 1.489011,
+    "claude-haiku-4-5": 0.146292,
 }
 
 #: The pre-flight ceiling for one desk call, **per model**.
@@ -250,6 +278,25 @@ OBSERVED_USD_PER_SECOND = {
 #: old flat value: an unrecognised model is the case with no measurement behind
 #: it, and that is the one place to be most, not least, conservative.
 #:
+#: **`claude-opus-5` was $5.00 and is now $6.00 (corrected 2026-07-29, cycle 32).**
+#: $5.00 did not satisfy the rule stated one paragraph above, on either the old
+#: rate table or the corrected one: `4 x $1.489011 = $5.96` already exceeded it,
+#: and at the corrected rate a full-timeout call is `1800 x 0.0028860 = $5.19`.
+#: So the arm's **primary** model was carrying a ceiling below the number this
+#: whole change exists to guarantee -- the same failure, one model over. It was
+#: found by re-deriving the table from the archive rather than by re-reading it,
+#: which is the only method that would have found it.
+#:
+#: **Models with no measurement are scaled from opus-5 by output list price and
+#: then given a 1.25x throughput margin**, because price alone scales the wrong
+#: way. The one cross-model check available says so: haiku's price-scaled rate is
+#: `0.0028860 x (5/25) = 0.000577`, and haiku actually bills **0.0006376**, 10.5%
+#: more, because the cheaper tier emits tokens faster and dollars-per-second is
+#: price x throughput. Price-ratio scaling therefore *under*-estimates cheaper
+#: models, which is the unsafe direction, and the margin is sized from that one
+#: observation rather than chosen. n = 1: it is a correction of known sign and
+#: roughly known magnitude, not a calibrated constant.
+#:
 #: **A tension worth naming rather than smoothing over**, because one number is
 #: doing two jobs with opposite optima. As *pre-flight headroom* it wants to be
 #: generous -- `check()` verifies headroom exists and consumes nothing, so a
@@ -261,12 +308,14 @@ OBSERVED_USD_PER_SECOND = {
 #: unilaterally: it changes what the pool reports as spent, which is the
 #: monitor's to rule on.
 MODEL_CALL_CEILINGS_USD = {
-    "claude-opus-5":   5.00,       # 1800s x 0.0024676 = 4.44
-    "claude-opus-4-8": 5.00,       # same list price as opus-5
-    "claude-fable-5": 10.00,       # output $50/M, 2x opus
-    "claude-mythos-5": 10.00,
-    "claude-sonnet-5": 3.00,       # output $15/M, 0.6x opus
-    "claude-haiku-4-5": 1.25,      # 1800s x 0.000606 = 1.09
+    # measured on this arm
+    "claude-opus-5":   6.00,       # max(1800 x 0.0028860, 4 x 1.489011) = 5.96
+    "claude-haiku-4-5": 1.25,      # max(1800 x 0.0006376, 4 x 0.146292) = 1.15
+    # not measured here: opus-5 x output-price ratio x 1.25 throughput margin
+    "claude-opus-4-8": 6.00,       # same list price as opus-5, same family
+    "claude-fable-5": 15.00,       # output $50/M -> 6.00 x 2.0 x 1.25
+    "claude-mythos-5": 15.00,
+    "claude-sonnet-5": 4.50,       # output $15/M -> 6.00 x 0.6 x 1.25
 }
 
 
