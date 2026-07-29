@@ -302,7 +302,31 @@ def main():
             pass
 
         # 5. light dashboard refresh
-        run([sys.executable, os.path.join(HERE, "scan.py")], timeout=600)
+        #
+        # S30: the return code used to be thrown away -- not even bound. A scan
+        # that crashed therefore left the board frozen on the previous numbers
+        # while this line logged the cycle as `quiet`, which is the same
+        # sentence a healthy idle cycle writes. The two must not be the same
+        # sentence.
+        #
+        # A timeout raises rather than returning, and it used to take the whole
+        # reflex cycle down with it -- so it is caught here and turned into an
+        # event, not into silence and not into a dead heartbeat.
+        try:
+            scan_rc = run([sys.executable, os.path.join(HERE, "scan.py")],
+                          timeout=600).returncode
+        except subprocess.TimeoutExpired:
+            scan_rc = "timeout(600s)"
+        except Exception as exc:                    # noqa: BLE001 -- reported
+            scan_rc = "%s: %s" % (type(exc).__name__, exc)
+        if scan_rc != 0:
+            events.append("SCAN FAILED (rc=%s) — 盘面应已改写为红色失败页；"
+                          "若没有，失败出口本身也挂了" % scan_rc)
+            # Deliberately does not change reflex's own exit code: the other
+            # four duties in this cycle may all have succeeded, and failing
+            # the scheduled task for a dashboard refresh would make *reflex*
+            # look dead. The signal lives in the heartbeat line instead, where
+            # it reads differently from `quiet` -- which was the whole point.
 
         rlog(" | ".join(events) if events else "quiet")
         return 0

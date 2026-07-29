@@ -70,9 +70,16 @@ import gates                                                       # noqa: E402
 #: What `index.html`, `app.html` and the probes read out of a scan. A scan that
 #: still runs but stops emitting one of these is a broken page nobody notices,
 #: because the page renders and the missing panel just looks empty.
+#:
+#: S30 added the last three. `scan_ok` is the field that distinguishes a scan
+#: that failed from a scan that found nothing to report; `generated_epoch` and
+#: `stale_after_s` are what let the page compute its own age instead of
+#: trusting the backend to still be alive. Losing any of them silently would
+#: restore exactly the invisibility S30 removed, so the gate holds them.
 REQUIRED_STATE_FIELDS = ("agents", "board", "constraints", "engines",
                          "findings", "generated_at", "grid", "history",
-                         "iteration_loop", "loop_stats")
+                         "iteration_loop", "loop_stats",
+                         "scan_ok", "generated_epoch", "stale_after_s")
 
 
 def harden_stream(stream: Any) -> bool:
@@ -185,6 +192,15 @@ def _fields(out_dir: str, survey: Dict[str, Any]) -> Tuple[str, int, str]:
     if not state.get("findings") and "findings" in state:
         problems.append("`findings` is empty -- every probe returned nothing, "
                         "which is a broken scan rather than a clean repository")
+
+    # S30. `_real_run` above already turns a raising `scan.build` into a red
+    # gate, so this can only fire if `build` ever starts catching its own
+    # crash and returning a failure state normally -- which is the same
+    # invisibility one level up, and is worth a second, cheap tripwire.
+    if state.get("scan_ok") is not True:
+        problems.append("`scan_ok` is %r after a run the gate believed "
+                        "succeeded -- a crash was swallowed somewhere between "
+                        "`build()` and here" % (state.get("scan_ok"),))
 
     # The board panel is the field that was silently empty before S13, so it
     # gets checked for content and not merely for presence.
