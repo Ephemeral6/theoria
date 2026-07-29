@@ -1,0 +1,1088 @@
+{
+  "control_arms": [
+    "bare_cc",
+    "schema_repro"
+  ],
+  "metrics": {
+    "E1": {
+      "computed_runs": 38,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "summary": "38 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 38
+    },
+    "E2": {
+      "computed_runs": 28,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99"
+      ],
+      "summary": "28 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 28
+    },
+    "E3": {
+      "computed_runs": 28,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99"
+      ],
+      "summary": "28 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 28
+    },
+    "E4": {
+      "computed_runs": 30,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "summary": "30 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 30
+    },
+    "E5": {
+      "computed_runs": 38,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "summary": "38 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 38
+    },
+    "E6": {
+      "computed_runs": 36,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "summary": "36 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 36
+    },
+    "E7": {
+      "computed_runs": 30,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "summary": "30 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 30
+    },
+    "K1": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K10": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K11": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K12": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K13": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K14": {
+      "computed_runs": 5,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K2": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K3": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K4": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K5": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K6": {
+      "computed_runs": 5,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K7": {
+      "computed_runs": 5,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K8": {
+      "computed_runs": 5,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "K9": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M1": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M2": {
+      "computed_runs": 6,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M3": {
+      "computed_runs": 0,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M4": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M5": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "M6": {
+      "computed_runs": 2,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "theoria_a0_spike/a0-spike",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "P1": {
+      "computed_runs": 39,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "summary": "39 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 39
+    },
+    "P2": {
+      "computed_runs": 30,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "summary": "30 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 30
+    },
+    "P3": {
+      "computed_runs": 36,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "30 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 30
+    },
+    "P4": {
+      "computed_runs": 1,
+      "control_sources": [],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "none — never computed on a control arm",
+      "validation_games": [],
+      "validation_runs": 0
+    },
+    "P5": {
+      "computed_runs": 47,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "41 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 41
+    },
+    "X1": {
+      "computed_runs": 38,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "32 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 32
+    },
+    "X2": {
+      "computed_runs": 38,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "32 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 32
+    },
+    "X3": {
+      "computed_runs": 32,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "26 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 26
+    },
+    "X4": {
+      "computed_runs": 38,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "32 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 32
+    },
+    "X5": {
+      "computed_runs": 47,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-recheck/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/g50t-5849a774",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/g50t-5849a774",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "41 control runs over 4 games (m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 41
+    },
+    "X6": {
+      "computed_runs": 25,
+      "control_sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
+      "sources": [
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-unit-price-remeasure/sk48-d8078629",
+        "bare_cc/phase3-unit-price-remeasure/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/phase3-variance-envelope/sk48-d8078629",
+        "bare_cc/phase3-variance-envelope/tn36-ef4dde99",
+        "bare_cc/unlabelled/tn36-ef4dde99"
+      ],
+      "summary": "25 control runs over 4 games (m4-pilot, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled); process 1: no-data",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 25
+    }
+  },
+  "n_unvalidated": 21,
+  "rule": "validation material is control arms only (Theoria.md Phase 2 process 1); Theoria runs make a metric computable, not validated",
+  "unvalidated": [
+    "K1",
+    "K10",
+    "K11",
+    "K12",
+    "K13",
+    "K14",
+    "K2",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K7",
+    "K8",
+    "K9",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "P4"
+  ]
+}

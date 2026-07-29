@@ -1,0 +1,397 @@
+{
+  "arms_present": [
+    "bare_cc"
+  ],
+  "available": false,
+  "confounds": [
+    "arm and harness are bundled: the Schema side is an upstream agent on upstream infrastructure, not this project's harness running a different model. A separating metric has separated capability together with plumbing.",
+    "the Schema side is upstream *released* material, not a reproduction we ran. baseline-arms/SCHEMA_PATH_A.md section 6: the score column <复现值> stays empty and this pass does not fill it.",
+    "upstream declares no licence for this material (SCHEMA_LOCATE.md 2.3), so the payload is gitignored and only derived statistics appear in any artefact."
+  ],
+  "control_runs": 41,
+  "gradient": "bare_cc (weaker) vs schema_repro (stronger), paired by game",
+  "metrics": {
+    "E1": {
+      "direction": "neutral",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "E2": {
+      "direction": "higher",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E3": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E4": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E5": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E6": {
+      "direction": "neutral",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "E7": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K1": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K10": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K11": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K12": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K13": {
+      "direction": "lower",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K14": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K2": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K3": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K4": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K5": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K6": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K7": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K8": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K9": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M1": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M2": {
+      "direction": "higher",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M3": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M4": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M5": {
+      "direction": "higher",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M6": {
+      "direction": "neutral",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "P1": {
+      "direction": "higher",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "P2": {
+      "direction": "higher",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "P3": {
+      "direction": "lower",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "P4": {
+      "direction": "lower",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "P5": {
+      "direction": "neutral",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "X1": {
+      "direction": "lower",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "X2": {
+      "direction": "higher",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "X3": {
+      "direction": "higher",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "X4": {
+      "direction": "lower",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "X5": {
+      "direction": "neutral",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "X6": {
+      "direction": "higher",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    }
+  },
+  "power": "a two-sided sign test needs 6 non-tied paired games to be able to reach p<0.05 at all; the pilot has 4",
+  "specified_by": "Theoria.md Phase 2 process 1 -- CC vs Schema"
+}
