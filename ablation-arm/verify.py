@@ -255,12 +255,44 @@ def _assertions(run_all: Dict[str, Any], exhibits: Dict[str, Any],
 
 # ------------------------------------------- the numbers nobody has compared
 
+def _calibration() -> Dict[str, Any]:
+    """A4b's measurements, keyed by claim name. Empty when it has not been run.
+
+    The block below was written when nothing in this arm measured P-2 or P-4 and
+    said so, correctly, at the time. `calibrate.py` now measures them. A gate
+    that keeps reporting "the instrument does not exist" after the instrument
+    exists is not being cautious; it is stating something false, and a reader of
+    `verify.json` would get the pre-A4b story from a file dated today.
+    """
+    path = os.path.join(HERE, "artifacts", "calibration.json")
+    if not os.path.isfile(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError):
+        return {}
+    return {p["name"]: p for p in payload.get("predictions", [])
+            if isinstance(p, dict) and p.get("name")}
+
+
+def _status(name: str, unmeasured: str, calibration: Dict[str, Any]) -> str:
+    """`unmeasured` unless A4b measured this claim, in which case its verdict."""
+    got = calibration.get(name)
+    if not got:
+        return unmeasured
+    return ("MEASURED (calibrate.py, A4b) -- holds=%s. %s"
+            % (got.get("holds"), got.get("caveat") or got.get("claim") or ""))
+
+
 def _recorded(run_all: Dict[str, Any], exhibits: Dict[str, Any]) -> Dict[str, Any]:
     worlds = run_all["worlds"]
+    calibration = _calibration()
     return {
         "P-1": {
             "what": "replay accuracy, byte-equal to the full arm",
-            "status": "RECORDED -- no second arm has been run",
+            "status": _status("P-1", "RECORDED -- no second arm has been run",
+                              calibration),
             "numbers": {k: {"pixels_checked":
                             w["beats"]["certify"]["report"]["pixels_checked"],
                             "anomalies":
@@ -270,23 +302,32 @@ def _recorded(run_all: Dict[str, Any], exhibits: Dict[str, Any]) -> Dict[str, An
         },
         "P-2": {
             "what": "behavioural / held-out accuracy, equal to the full arm",
-            "status": "RECORDED -- and the instrument is missing, not just the "
-                      "comparison: nothing in this arm computes a held-out "
-                      "split. A4b needs one built before P-2 can be read.",
+            "status": _status(
+                "P-2",
+                "RECORDED -- and the instrument is missing, not just the "
+                "comparison: nothing in this arm computes a held-out "
+                "split. A4b needs one built before P-2 can be read.",
+                calibration),
             "numbers": None,
         },
         "P-4": {
             "what": "this arm is cheaper, not dearer",
-            "status": "RECORDED -- and there is no cost instrument here either. "
-                      "The arm is offline, so its dollar cost is zero and the "
-                      "comparison 1.11 wants is about search and proof fuel, "
-                      "which nothing measures yet. A4b's largest gap.",
+            "status": _status(
+                "P-4",
+                "RECORDED -- and there is no cost instrument here either. "
+                "The arm is offline, so its dollar cost is zero and the "
+                "comparison 1.11 wants is about search and proof fuel, "
+                "which nothing measures yet. A4b's largest gap.",
+                calibration),
             "numbers": {"api_calls": 0, "model_calls": 0, "usd": 0.0},
         },
         "P-5(identical)": {
             "what": "the A0 verdict is *identical* to the full arm's",
-            "status": "RECORDED -- the verdict and its settling are here; the "
-                      "equality needs the full arm",
+            "status": _status(
+                "P-5(identical)",
+                "RECORDED -- the verdict and its settling are here; the "
+                "equality needs the full arm",
+                calibration),
             "numbers": {"verdict": worlds["a0-no-button"]["verdict"],
                         "settled_by":
                             worlds["a0-no-button"]["beats"]["plan"]["settled_by"]},
