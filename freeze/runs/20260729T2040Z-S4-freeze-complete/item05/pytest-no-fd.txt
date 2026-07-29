@@ -1,0 +1,27 @@
+.......ss.................ss............................sssss........... [ 12%]
+............sss......................................................... [ 24%]
+............................................s........................... [ 37%]
+.........ss............................................................. [ 49%]
+........................................................................ [ 61%]
+........................................................................ [ 74%]
+........................................................................ [ 86%]
+....ssss...s.........s..s..s...........ssss............................. [ 99%]
+.....                                                                    [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_audit_claim.py:124: Fast Downward is not installed
+SKIPPED [1] tests\test_audit_claim.py:138: Fast Downward is not installed
+SKIPPED [1] tests\test_audit_verify.py:298: no Fast Downward reachable
+SKIPPED [1] tests\test_audit_verify.py:313: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:358: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:368: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:381: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:394: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:413: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:886: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:903: no Fast Downward reachable
+SKIPPED [1] tests\test_bench.py:919: no Fast Downward reachable
+SKIPPED [1] tests\test_fd_adapter.py:180: Fast Downward is not installed
+SKIPPED [1] tests\test_fd_ladder.py:413: Fast Downward is not installed
+SKIPPED [1] tests\test_fd_ladder.py:432: Fast Downward is not installed
+SKIPPED [12] tests\test_tool_failure_is_not_truth.py:349: forgery is refused before any obligation is evaluated
+554 passed, 27 skipped in 34.87s

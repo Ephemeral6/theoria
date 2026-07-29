@@ -46,17 +46,25 @@
 | 2 | DSL 语法版本（两本书） | ⚠ 有，两本书版本不齐 | `CONTRACTS/dsl_grammar_v0.2.md`（+ v0.1 承载攻略书） |
 | 3 | 生成器 | ⚠ 有，但有分叉与版本串缺失 | `theory-compiler/.../generators/` + `cold-start-a0/compile/` |
 | 4 | 提示词 | ⚠ 有，**零版本化** | `theoria-arm/inner/theorize.py` + `grammar_card.py` + `baseline-arms/harness/bare_cc.py` |
-| 5 | 引擎清单与版本 | ⛔ **缺清单** | 代码在 `engine-rig/engines/`；**清单文件不存在，需现写** |
+| 5 | 引擎清单与版本 | ⚠ 清单已写，**八个包零版本串** | `freeze/ENGINE_MANIFEST.md`（生成物，`build_engine_manifest.py --verify` 盯住）+ `engine-rig/ENGINE_TABLE.md`；版本串缺口 ⛔ 5-b |
 | 6 | 戳探策略 | ⚠ 无统一文档 | `engine-rig/engines/probe_frontier/README.md` + 两处模块 docstring |
 | 7 | 规划器配置 | ⚠ 有，**Theoria 臂未钉版** | `engine-rig/engines/fd_adapter/backends.py`；`theoria-arm/inner/plan.py:112` 未传 `prefer=` |
 | 8 | 指标电池 v1 | ⚠ 有，但两个主终点无实现 | `battery/` |
 | 9 | 变体算子库 | ✅ 有 | `proxy/variants.py` + `proxy/variants/` + `exam/artifacts/variant_specs/` |
 | 10 | 统计裁决规则 | ✅ 本套件 | `freeze/STATS_RULES.md` |
 | 11 | claim 逐字文本与双结局 | ✅ 本套件 | `freeze/CLAIMS_TEXT.md` |
-| 12 | 预算表 | ⛔ **缺** | 原料在 `baseline-arms/BUDGET_REPORT.md`；算术在 `freeze/PENDING_FIVE.md` §4 |
-| 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，**但依据 untracked** | `freeze/STATS_RULES.md` §5；证据 `baseline-arms/out/campaign/` **不在 git 里** |
+| 12 | 预算表 | ⚠ 表已写，**12 个情景无一装得下** | `freeze/BUDGET_TABLE.md`（机器层由 `build_budget_table.py --verify` 盯住）；三个数仍 needs_human |
+| 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，依据**已可哈希**；13-d 脆、⛔ 13-f 无产出判据 | `freeze/STATS_RULES.md` §5 + §5.7 + `n_feasibility.py`；依据 `baseline-arms/out/campaign/`（`9307f139`）+ A7 包络 + `freeze/VARIANCE_BASIS.md` |
 
-**计数：13 项全部有落点或有标注。✅ 3 · ⚠ 8 · ⛔ 2。**
+**计数（2026-07-29，S4-freeze-complete 收工时）：13 项全部有落点或有标注。✅ 3 · ⚠ 10 · ⛔ 0。**
+
+两处原 ⛔ 本轮落地：第 5 项有了 `freeze/ENGINE_MANIFEST.md`（八个包、55 行钉住、
+枚举撞名单列一列），第 12 项有了 `freeze/BUDGET_TABLE.md`（三个口径分开记，
+12 个情景全枚举）。**但「⛔ 归零」不等于「可以冻结」**：两份新文件各自带回了
+更硬的消息——八个包**零个版本串**（⛔ 5-b），以及**12 个情景一个都装不下**
+（真实余额 $111.35 对最便宜的封存主表 $175.55，且唯一算得起的配置正是已被证明
+`levels_completed ≡ 0` 的那个）。逐项残余、owner 与可执行清除条件见
+`freeze/RESIDUALS.json`，闸门是 `freeze/residuals.py --verify`（verify.sh 阶段 14）。
 
 ---
 
@@ -113,7 +121,8 @@
 只记一个 "v0.2" 是**不准确的**。建议记成
 `manual=v0.2 (dsl_grammar_v0.2.md) / playbook=v0.1 text (dsl_grammar_v0.2.md:262 → dsl_grammar_v0.1.md)`。
 
-**⚠ 待办 2-b（订正）**：`dsl_grammar_v0.2.md:39` 写 `## theory.dsl — five sections`，
+**⚠ 待办 2-c（订正；2026-07-29 由 `2-b` 改号，见下）**：`dsl_grammar_v0.2.md:39`
+写 `## theory.dsl — five sections`，
 底下定义了**六节**（`word_table` :41、`semantics` :81、`events` :159、`rules` :166、
 `goal` :187、`laws` :192）。文档数错了自己的节数。
 （顺带澄清一处流传的误记：`goal:` **在**语法里，v0.1/v0.2 都有，
@@ -121,6 +130,12 @@
 `cold-start-a3/DECISIONS.md` D-A3-004。）
 
 **已核实无在飞工作**：分支 `agent/p10-contracts-v02` 已并入 master，其 worktree 是并后残留。
+
+> **改号记录（2026-07-29，S4-freeze-complete）**：上面那条订正与下面这条 G5
+> **原先共用编号 `2-b`**，是 `freeze/residuals.py` 的查重第一次跑就抓出来的。
+> 一码两义的后果不是难看，是「2-b 补完了吗」有两个答案，
+> 于是其中一条可以被当成另一条关掉。保留 `2-b` 给 G5（`RECONCILE.md:220-221`
+> 已按这个号引用它），把上面那条改号为 `2-c`。
 
 **⛔ 待办 2-b（G5，自 S4 移植，2026-07-29 复核）—— v0.2 的冻结政策挂在一个
 不存在的 tag 上，而且这个引用自指、无法事后补救。**
@@ -415,15 +430,57 @@ RES-1 建议 19，理由如上；预算行由监控确认。** 在此之前上�
 **裁定：⟨n⟩ = 2。** 完整论证 `freeze/STATS_RULES.md` §5，
 复算 `freeze/runs/2026-07-28T1200Z-p22/envelope_stats.py`。
 
-**⛔ 缺 13-a —— ⟨n⟩ 的唯一依据是 untracked 的。**
-`baseline-arms/out/campaign/`（48 个 episode，4 局 × 12 重复）
-`git ls-files` 返回 **0 个文件**。
-**不在 git 里 = 不可哈希 = 不能进预注册。冻结前必须提交。**
+**✅ 13-a 已消解（2026-07-29，S4-freeze-complete）—— 依据已在 git 里。**
+原文作「`baseline-arms/out/campaign/` `git ls-files` 返回 **0 个文件**，
+不可哈希、不能进预注册」。提交 `9307f139`（A14，master 的祖先）把那四个文件
+加入了版本控制，`git ls-files` 现返回 **4 个文件**，索引与盘上字节一致。
+逐文件 sha256 见 `freeze/VARIANCE_BASIS.md` §2。
+**这只解决了「引得到」**：⟨n⟩ 依据的实质不足另见 13-d 与 `STATS_RULES.md` §5.7。
 
-**⚠ 待办 13-b —— 两份包络记录尚未对账。**
-`BUDGET_REPORT.md` §11 记的是更早的一次（只有 ar25 三格，G4 触发，
-「战役停在 1/4」）；`out/campaign/` 里这 48 格是后来跑的更完整的一批。
-两处并存且互不引用，读者会困惑。
+**✅ 13-b 已对账（2026-07-29，`freeze/VARIANCE_BASIS.md` §4）——
+并且对出了一处比「读者会困惑」严重得多的事。**
+原文以为两份记录是「早的一次」与「后来更完整的一批」；`STATS_RULES.md` §5.2 的
+来历更正已经撤回了「后来跑的」这个说法（那 48 格正是 INC-BA-003 的争用源本身）。
+实况是树上有**两份都已跟踪**的依据——依据甲 `out/campaign/`（S1 基线对齐，48 集）
+与依据乙 `baseline-arms/runs/20260728T103135Z-a7/envelope.json`（A7 方差包络，
+其 `RUN_STATE.md:17-20` 自陈存在的目的就是给 Phase 4 定 ⟨n⟩）——
+而**两份对同一个量差约 20 倍**（格内合并 CV 0.4915 vs 0.0248），
+且 A7 自己的定量建议是 **n=3**，落在 `Theoria.md:368` 的 n=1/n=2 菜单之外。
+**裁决（RES-1）：⟨n⟩ 仍 = 2。** 三条理由：(1) 菜单是冻结条款，n=3 需要改
+`Theoria.md:368` 而不是选一份依据；(2) 两份依据都测不到三个主终点中的任何一个
+（§5.2 发现一），所以 20 倍之差是两把不同尺子量代理量的差，不是对同一个终点的
+两个估计；(3) 按 §5.7 的算术，在实测 q 下 n=2 与 n=3 的预期活格数是 0.78 与 1.16，
+**都够不到任何地板**——在 n 上争 2 还是 3 是在一个不起作用的旋钮上争。
+A7 的 n=3 建议记为**已阅并被上述第 (1)(3) 条驳回**，不是被忽略。
+
+**⚠ 待办 13-d —— 代理量的方差检验会随 ar25 一局的取舍翻面。**
+`freeze/VARIANCE_BASIS.md` §5：按树上唯一写下过的阈值 0.10
+（`STATS_RULES.s4draft.md:265-266`，自陈「是判断不是推导」）判，
+**剔掉 ar25 → 局内 CV 最大 0.0370 → 「方差小」→ n=1 可辩护**；
+**含 ar25 → 0.2756 → n=2**。阈值恰落在两者之间（一侧 2.7 倍、另一侧 2.8 倍）。
+裁定不翻（它靠的是「三个主终点一个都没测到」，与 CV 无关），
+但**任何倚在 CV 数上的 ⟨n⟩ 论证都是脆的，引用时必须两面并排给出**。
+补法：这是一处**登记项**，不是待修缺陷——`STATS_RULES.md` §5.3 已按
+`s4draft:272-275` 的「两套结果并排报告」要求照做；剩下的一半（对封存战役的
+预注册敏感性承诺，`RECONCILE.md:258` G15）不是本套件能关的。
+
+**✅ 13-e 已修（2026-07-29，本轮，RES-1）—— 生成的清单曾否认这项有值，与散文的裁定直接打架。**
+`freeze/build_manifest.py:229-243` → `freeze/MANIFEST.json` 第 13 项曾写
+「**No value exists anywhere on master**」并声明任何记着「n = 2, ruled」的草稿
+「is withdrawn」；而**同一目录、同一提交**的 `freeze/STATS_RULES.md:705`
+（master 上就有）裁定 `⟨n⟩ = 2`。冻结包对外同时给出两个互斥的事实，
+且错在**多说的方向**上——它把一个已裁定的值报成了没有值。
+**owner：RES-1。已于本轮修（见下）**：该 note 的两个前提都在它写下之后变了
+（依据由 A14 转为已跟踪；裁定落在 §5.5/§5.7）。
+
+**⛔ 缺 13-f —— 「这一格出数了」在树上没有定义，于是任何 q 都能被代进来。**
+`STATS_RULES.md` §5.7 需要一个 q（单个 rep 不出数的概率）才能说 ⟨n⟩ 够不够，
+而**三个主终点各自「一次观测算成立」的判据**有两个至今没有实现（⛔ 8-a、8-b）。
+后果不是抽象的：本节第一版正是因为没有产出判据，才把一个 harness 中止常数
+（47/48，产生它的规则已被 D-016 删除）当成 q 用了一整轮而无人能拦。
+U3 从 Lean 产出物裁、不要求通关，所以「格死」对三个终点**不是同一个事件**。
+**补法**：8-a / 8-b 落地时，每个终点同时写一句「本终点的一次观测何时算成立」，
+并让 `n_feasibility.py` 从那里取 q 的定义。owner：battery（8-a/8-b）+ RES-1（接线）。
 
 **⚠ 待办 13-c —— n=2 不替代包络的修复。**
 `BUDGET_REPORT.md` §11.5 列的两件事（INC-BA-003 跨会话闸门、

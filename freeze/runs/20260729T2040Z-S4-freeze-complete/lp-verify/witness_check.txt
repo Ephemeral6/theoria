@@ -1,0 +1,43 @@
+=== 1. My own BFS over the FULL geometry set ===
+geometries: ['jump(0,1,2)', 'jump(1,2,3)', 'jump(2,1,0)', 'jump(3,2,1)']
+distance 0011 -> 0100 (full moves): 1
+    0011 --jump(3,2,1)--> 0100
+distance 0011 -> 0100 with jump(3,2,1) withheld: None
+
+=== 2. Cross-check against the committed fixture's own table ===
+fixture distance_to_goal['0011'] = 1
+fixture solvable['1101']        = True
+my geoms == fixture positions   : True
+
+=== 3. The real engine, jump(3,2,1) withheld ===
+heldout/peg.py matches committed Fixture C: True []
+moves the engine is handed (reduced): ['jump(0,1,2)', 'jump(1,2,3)', 'jump(2,1,0)']
+outcome.status  : certified
+weights         : ['0', '1/2', '-1/2', '0']
+conditions      : {'inv_init': True, 'inv_closed': True, 'goal_break': True}
+holds           : True
+claim           : goal unreachable from 0011
+rendering       : potential(s) = sum of w over occupied cells; every legal move leaves it non-increasing, and every goal state has potential > potential(0011), so no goal state is reachable from 0011
+
+--- my own exact re-check of the three conditions ---
+pot(0011) = -1/2   pot(0100) = 1/2
+  jump(0,1,2): delta = -1  OK(<=0)
+  jump(1,2,3): delta = 0  OK(<=0)
+  jump(2,1,0): delta = 0  OK(<=0)
+  jump(3,2,1): delta = 1  RAISES  <== WITHHELD
+
+=== 4. The emit gate, both graphs ===
+candidates(..., graph=FULL)    -> 0 rows
+candidates(..., graph=REDUCED) -> 2 rows
+premises_against_graph(cert, FULL)   : {'move_list_complete': False, 'missing_moves': ['jump(3,2,1)'], 'moves_raising_potential': ['jump(3,2,1)'], 'goal_states_match_graph': True, 'certificate_goal_states': ['0100'], 'graph_goal_states': ['0100'], 'sound_over_graph': False}
+premises_against_graph(cert, REDUCED): {'move_list_complete': True, 'missing_moves': [], 'moves_raising_potential': [], 'goal_states_match_graph': True, 'certificate_goal_states': ['0100'], 'graph_goal_states': ['0100'], 'sound_over_graph': True}
+
+the invariant row that a partial-evidence caller emits:
+   engine       'lp_potential'
+   kind         'invariant'
+   status       'candidate'
+   payload.claim            'goal unreachable from 0011'
+   payload.holds            True
+   payload.conditions       {'inv_init': True, 'inv_closed': True, 'goal_break': True}
+   payload.move_instances   ['jump(0,1,2)', 'jump(1,2,3)', 'jump(2,1,0)']
+   payload.premise_check.sound_over_graph True

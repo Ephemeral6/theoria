@@ -176,14 +176,14 @@
       "absent": [],
       "n": 5,
       "name": "引擎清单与版本",
-      "note": "**There is no engine manifest file.** The roster exists only as prose in STATUS.md. Eight engines are on disk; `CLAUDE.md:51` still says six (Theoria.md never enumerates them -- the 'six' is CLAUDE.md's claim, and earlier drafts mis-cited it). Worse for a manifest: two engines report someone else's name -- `deadlock_carver/__init__.py:43` sets `ENGINE = \"fd_adapter\"` and `ic3_pdr/__init__.py:51` sets `ENGINE = \"lp_potential\"` (D-018, the frozen enum), so 'eight engines, eight tags' cannot be read off the enum by any consumer.",
+      "note": "The manifest now exists: `freeze/ENGINE_MANIFEST.md`, generated and gated by `freeze/build_engine_manifest.py --verify`. `engine-rig/ENGINE_TABLE.md` is the roster and per-engine boundary authority it pins and cites. Still `partial`, not `ready`: **no file in `engine-rig/` carries a version string** (measured -- `git grep` over 175 tracked .py/.toml/.cfg at HEAD returns two hits, both Fast Downward's own version plumbing), and 6 of the 8 packages have moved since the milestone tag that names them, so a pin at any tag misses six engines' bytes and the only version handles left are the git tree sha1 and the freeze commit. Eight engines are on disk; `CLAUDE.md:51` still says six (Theoria.md never enumerates them -- the 'six' is CLAUDE.md's claim, and earlier drafts mis-cited it). Worse for a manifest: two engines report someone else's name -- `deadlock_carver/__init__.py:43` sets `ENGINE = \"fd_adapter\"` and `ic3_pdr/__init__.py:51` sets `ENGINE = \"lp_potential\"` (D-018, the frozen enum), so 'eight engines, eight tags' cannot be read off the enum by any consumer.",
       "paths": [
         {
           "files": 40,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "engine-rig/engines",
-          "sha256": "889bb6f7141042adec2128737c5bc0309b4165ad80a1e715cb3d980258444aff",
+          "sha256": "6c6101f678034d9a78c58eb01584e29fa89d2f6993b1b16124c0be5367ea902f",
           "tracked": true
         },
         {
@@ -191,7 +191,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/STATUS.md",
-          "sha256": "68cff5fde1d5c1c653f746ab29412a205d74f63a921c6e0391921f7cf8fff6e6",
+          "sha256": "1af5bb26b0175a0f70ca98b8eb0a315c4063c7e31a6c5c5c4f31baab80fe3a97",
           "tracked": true
         },
         {
@@ -199,7 +199,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/ENGINE_TABLE.md",
-          "sha256": "1f839dafab9a8b12de04492e94a33f78b13ddb0e9f0d08bb54cd5c540888cca9",
+          "sha256": "5d078f16885a2b243428d75495ee29be323e24a3d4cf65a591b298d0003a2ddc",
           "tracked": true
         },
         {
@@ -209,9 +209,25 @@
           "path": "engine-rig/artifacts/candidates.jsonl",
           "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a",
           "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/ENGINE_MANIFEST.md",
+          "sha256": "6ce103f9022c65b36ca103360e25b7b51ccb6a11ade15c8cb7d1cc8cffc99d1f",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/build_engine_manifest.py",
+          "sha256": "39e1197233e081473b471317505324f2c4c510cee5bc8148644287a91b904754",
+          "tracked": true
         }
       ],
-      "status": "blocked"
+      "status": "partial"
     },
     {
       "absent": [],
@@ -300,7 +316,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/METRICS.md",
-          "sha256": "0956bf68cbfebd8b0ab36365bda6beaf353bf7678cacd9a333fc0eaa9b2c7fd1",
+          "sha256": "c6861db536020501cf7319a399050a5257568cffbba2696504d53e4f0adc652b",
           "tracked": true
         },
         {
@@ -312,11 +328,11 @@
           "tracked": true
         },
         {
-          "files": 29,
+          "files": 30,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "battery/audit",
-          "sha256": "1a7604907a274c5bd7bd72a74b548985dac063d1637a1dab8c6b70f56ba857e8",
+          "sha256": "e48605057b3ac12c1893ee88dd605f026e386a2e468c5d59bb9c5b9424a78038",
           "tracked": true
         },
         {
@@ -357,7 +373,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/variants.py",
-          "sha256": "18305dd00680295cec8530323f4d96e41f6f29f394d59b2dd6a7656e4fec8b76",
+          "sha256": "6aa0a2fac07e7b8c1d7207d76de2fd52537943dce12b88f27b02ebeb445744ec",
           "tracked": true
         },
         {
@@ -373,7 +389,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/mutate.py",
-          "sha256": "510951065133eaca3cf63471ffda3f433606fb23a8b42321a1f3bd258185cc81",
+          "sha256": "6a998983245fa3599be15c8b7e6268cd601730be9ea6a9e100a02b9c1e3b33e8",
           "tracked": true
         },
         {
@@ -381,7 +397,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/out/worlds/MUTATIONS.json",
-          "sha256": "3933dd226fcaaa06d1d72fc37ac8bda0ab23ca66a0d226c2e35ee085b1d74d81",
+          "sha256": "4f72250a878195222bc242da5fc0a7966ee26f30e62d6947e18c276fa09e54fb",
           "tracked": true
         },
         {
@@ -397,7 +413,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "exam/artifacts/variant_specs",
-          "sha256": "daf912fd158c582c2be4a179abca9b881aa47b96f9f6a40d6773de7e6b6d0486",
+          "sha256": "e9889f81ffd95fef36629f9e210ba046fe35459e8347ed9c3f6cc88c5ad6059b",
           "tracked": true
         }
       ],
@@ -414,7 +430,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "fe41213d6327b5681256ecb973ca3f207d1bd288ca162cdc23788ef3a06d8d09",
+          "sha256": "05e56246b905ea3bd308a47338a0eacf66eefa59d3c0625b085aa9b80b293a46",
           "tracked": true
         },
         {
@@ -439,7 +455,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
-          "sha256": "5168da9ed32bf2ba613157bc6b59894543c79d20566038316d9d020f35a493f7",
+          "sha256": "0ded1cc4cf207b4d31056230f97c506cb5af7a82a3502cd0825c48b002c02027",
           "tracked": true
         }
       ],
@@ -464,7 +480,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/cost.py",
-          "sha256": "3d6782fa7dcf060de994f6e33c001f5866447bccdb6fd23b0a7476c7ec90544d",
+          "sha256": "d2d5878d508a360d04a2ccd1c35a64f341ad42982a6d269fac72a628e1692fe8",
           "tracked": true
         },
         {
@@ -498,14 +514,14 @@
       "absent": [],
       "n": 13,
       "name": "每格重复数 ⟨n⟩",
-      "note": "**No value exists anywhere on master**, and this is blocked upstream rather than by paperwork: the variance campaign that would decide it is gated red at 1 game of 4 (`STATUS.md:12`), all three cells `api_unusable`, $2.5275 spent. `DECISIONS.md:176` states the trap plainly -- using an n=2 sample to choose n is circular -- and `:188` says ⟨n⟩ must be remeasured. Two tags STATUS.md names against its own rows do not exist in `git tag`: `baseline-arms-m5-variance` and `baseline-arms-m6-path-a`. Any earlier draft that recorded 'n = 2, ruled' was citing an unmerged file and is withdrawn.",
+      "note": "⟨n⟩ = 2, ruled at `STATS_RULES.md:705` (§5.5) -- **on master**, in this same kit. This note said the opposite until 2026-07-29 ('No value exists anywhere on master', and any draft recording 'n = 2, ruled' 'is withdrawn'), which made the generated manifest and the prose ruling publish two mutually exclusive facts about the same item, erring in the direction of claiming less than the tree supports (gap 13-e). Both of that note's premises had since changed under it: the evidence is tracked as of `9307f139` (A14), and the ruling is not on an unmerged branch. Withdrawn, and the item is now `partial` rather than `blocked` -- the value and a hashable basis both exist. What is still true and keeps it off `ready`: (a) the upstream variance campaign is red at 1 game of 4 (`STATUS.md:12`), all three cells `api_unusable`, $2.5275 spent, and `DECISIONS.md:176` names the trap -- choosing n from an n=2 sample is circular; (b) two tracked bases disagree ~20x on the proxy quantity and A7's own sizing says n=3, off Theoria.md:368's menu (`VARIANCE_BASIS.md` §4, ruled: menu binds, and §5.7 makes the 2-vs-3 argument moot); (c) the variance test flips on whether ar25 is included (gap 13-d); (d) two tags STATUS.md names against its own rows do not exist in `git tag`: `baseline-arms-m5-variance`, `baseline-arms-m6-path-a`. And the load-bearing caveat: `STATS_RULES.md` §5.7 shows ⟨n⟩ is not the instrument that buys cell survival at all -- at the measured q=0.979, n=2 yields 0.78 live cells of 19, so the campaign is gated on §9.11 (the infrastructure death rate), not on this number.",
       "paths": [
         {
           "files": 1,
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/STATUS.md",
-          "sha256": "70347b0b2e7a5f3093d15f39c29af91dcffcb9d8f5eabb0a4663710a964d35d0",
+          "sha256": "c84bb9e07cf887f60aebd58e7e6aa04d078485a0dea9bb26339faa571fa77feb",
           "tracked": true
         },
         {
@@ -523,9 +539,41 @@
           "path": "baseline-arms/out/campaign_cells.jsonl",
           "sha256": "ebe6396e3cd3a1960b4d86bb7a71eb90da7b3d030504ed9f23f9adc43fecc54a",
           "tracked": true
+        },
+        {
+          "files": 4,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "baseline-arms/out/campaign",
+          "sha256": "99955701e09baebd83fa0785e4bd73b0741235f933e81d51d237a42827e2e6f7",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/runs/20260728T103135Z-a7/envelope.json",
+          "sha256": "acefc0826642b25486456801fbad8f3ef95edb5d5ee4f9cb015de5236dcfbbd8",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/STATS_RULES.md",
+          "sha256": "05e56246b905ea3bd308a47338a0eacf66eefa59d3c0625b085aa9b80b293a46",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/VARIANCE_BASIS.md",
+          "sha256": "943b0655f7a0744d59247e050424dab5ad349d7d8e8fccc7d84c0ef64bab3a56",
+          "tracked": true
         }
       ],
-      "status": "blocked"
+      "status": "partial"
     },
     {
       "absent": [
@@ -583,8 +631,8 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "5427a78aebea67fd0a0437a05997e5e386feed97",
-    "dirty": true
+    "commit": "d4fb6d727a5614bb07a585fb3da669b680f9eb70",
+    "dirty": false
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
@@ -592,10 +640,10 @@
       "arc-recon/data/campaign_freeze.json",
       "battery/BATTERY_V1.md"
     ],
-    "blocked": 7,
+    "blocked": 5,
     "freeze_ready": false,
     "items": 13,
-    "partial": 8,
+    "partial": 10,
     "ready": 0,
     "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing."
   }

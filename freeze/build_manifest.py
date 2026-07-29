@@ -123,11 +123,21 @@ ITEMS = [
                 "automated check.",
     },
     {
-        "n": 5, "name": "引擎清单与版本", "status": "blocked",
+        "n": 5, "name": "引擎清单与版本", "status": "partial",
         "paths": ["engine-rig/engines", "engine-rig/STATUS.md",
-                  "engine-rig/ENGINE_TABLE.md", "engine-rig/artifacts/candidates.jsonl"],
-        "note": "**There is no engine manifest file.** The roster exists only "
-                "as prose in STATUS.md. Eight engines are on disk; `CLAUDE.md:51` "
+                  "engine-rig/ENGINE_TABLE.md", "engine-rig/artifacts/candidates.jsonl",
+                  "freeze/ENGINE_MANIFEST.md", "freeze/build_engine_manifest.py"],
+        "note": "The manifest now exists: `freeze/ENGINE_MANIFEST.md`, generated "
+                "and gated by `freeze/build_engine_manifest.py --verify`. "
+                "`engine-rig/ENGINE_TABLE.md` is the roster and per-engine "
+                "boundary authority it pins and cites. Still `partial`, not "
+                "`ready`: **no file in `engine-rig/` carries a version string** "
+                "(measured -- `git grep` over 175 tracked .py/.toml/.cfg at HEAD "
+                "returns two hits, both Fast Downward's own version plumbing), "
+                "and 6 of the 8 packages have moved since the milestone tag that "
+                "names them, so a pin at any tag misses six engines' bytes and "
+                "the only version handles left are the git tree sha1 and the "
+                "freeze commit. Eight engines are on disk; `CLAUDE.md:51` "
                 "still says six (Theoria.md never enumerates them -- the 'six' "
                 "is CLAUDE.md's claim, and earlier drafts mis-cited it). Worse "
                 "for a manifest: two engines report someone else's name -- "
@@ -226,19 +236,39 @@ ITEMS = [
                 "written as ⟨…⟩. See PENDING_FIVE.md.",
     },
     {
-        "n": 13, "name": "每格重复数 ⟨n⟩", "status": "blocked",
+        "n": 13, "name": "每格重复数 ⟨n⟩", "status": "partial",
         "paths": ["baseline-arms/STATUS.md", "baseline-arms/DECISIONS.md",
-                  "baseline-arms/out/campaign_cells.jsonl"],
-        "note": "**No value exists anywhere on master**, and this is blocked "
-                "upstream rather than by paperwork: the variance campaign that "
-                "would decide it is gated red at 1 game of 4 (`STATUS.md:12`), "
-                "all three cells `api_unusable`, $2.5275 spent. `DECISIONS.md:176` "
-                "states the trap plainly -- using an n=2 sample to choose n is "
-                "circular -- and `:188` says ⟨n⟩ must be remeasured. Two tags "
-                "STATUS.md names against its own rows do not exist in `git tag`: "
-                "`baseline-arms-m5-variance` and `baseline-arms-m6-path-a`. "
-                "Any earlier draft that recorded 'n = 2, ruled' was citing an "
-                "unmerged file and is withdrawn.",
+                  "baseline-arms/out/campaign_cells.jsonl",
+                  "baseline-arms/out/campaign",
+                  "baseline-arms/runs/20260728T103135Z-a7/envelope.json",
+                  "freeze/STATS_RULES.md", "freeze/VARIANCE_BASIS.md"],
+        "note": "⟨n⟩ = 2, ruled at `STATS_RULES.md:705` (§5.5) -- **on master**, "
+                "in this same kit. This note said the opposite until 2026-07-29 "
+                "('No value exists anywhere on master', and any draft recording "
+                "'n = 2, ruled' 'is withdrawn'), which made the generated "
+                "manifest and the prose ruling publish two mutually exclusive "
+                "facts about the same item, erring in the direction of claiming "
+                "less than the tree supports (gap 13-e). Both of that note's "
+                "premises had since changed under it: the evidence is tracked as "
+                "of `9307f139` (A14), and the ruling is not on an unmerged "
+                "branch. Withdrawn, and the item is now `partial` rather than "
+                "`blocked` -- the value and a hashable basis both exist. What is "
+                "still true and keeps it off `ready`: (a) the upstream variance "
+                "campaign is red at 1 game of 4 (`STATUS.md:12`), all three "
+                "cells `api_unusable`, $2.5275 spent, and `DECISIONS.md:176` "
+                "names the trap -- choosing n from an n=2 sample is circular; "
+                "(b) two tracked bases disagree ~20x on the proxy quantity and "
+                "A7's own sizing says n=3, off Theoria.md:368's menu "
+                "(`VARIANCE_BASIS.md` §4, ruled: menu binds, and §5.7 makes the "
+                "2-vs-3 argument moot); (c) the variance test flips on whether "
+                "ar25 is included (gap 13-d); (d) two tags STATUS.md names "
+                "against its own rows do not exist in `git tag`: "
+                "`baseline-arms-m5-variance`, `baseline-arms-m6-path-a`. "
+                "And the load-bearing caveat: `STATS_RULES.md` §5.7 shows ⟨n⟩ is "
+                "not the instrument that buys cell survival at all -- at the "
+                "measured q=0.979, n=2 yields 0.78 live cells of 19, so the "
+                "campaign is gated on §9.11 (the infrastructure death rate), not "
+                "on this number.",
     },
 ]
 

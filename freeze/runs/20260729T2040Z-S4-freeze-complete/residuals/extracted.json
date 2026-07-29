@@ -1,0 +1,1230 @@
+[
+ {
+  "code": "H-1",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 36,
+  "statement": "仓库根 `.gitattributes` 只有 `PARTNER_SYNC.md merge=union` 与 `monitor/board/** text eol=lf`（本轮实测），没有全局 `text=auto eol=lf`，所以同一份 `CONTRACTS/dsl_grammar_v0.2.md` 在 master 工作树是 CRLF（22,725 字节）、在另一个 worktree 是 LF（22,348 字节），工作树哈希跨 checkout 不可复现。",
+  "paths": [
+   ".gitattributes",
+   "CONTRACTS/dsl_grammar_v0.2.md",
+   "CONTRACTS/dsl_grammar_v0.1.md",
+   "engine-rig/.gitattributes"
+  ],
+  "territory": "repo-root",
+  "territories": [
+   "repo-root",
+   "CONTRACTS",
+   "engine-rig"
+  ],
+  "why_first": "只有根 `.gitattributes` 能覆盖 CONTRACTS/ 与其余未自管的子树；engine-rig 已自己钉了 LF，CONTRACTS 只是症状出现的地方。",
+  "kind": "fix_code",
+  "clears_when": "git show master:.gitattributes | grep -q 'text=auto'  且在任一 worktree 里 git check-attr text eol -- CONTRACTS/dsl_grammar_v0.2.md 报 'text: auto' 与 'eol: lf'。（二选一的另一半：freeze/MANIFEST.md 逐条记下每个受哈希路径的 EOL 约定，此时改为 grep -q 'eol' freeze/MANIFEST.md 并逐路径核对。）",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "1-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 81,
+  "statement": "`proxy/ledger.py` 与 `proxy/env_proxy.py` 被 `theoria-arm/README.md` 称作「the same frozen writer」，但它们背后只有 `proxy/__init__.py` 的 `LEDGER_VERSION = \"1.0\"` 一个字符串，没有任何自校验机制——全仓只有 `proxy/scoring/frozen.json` 真的自校验，所以散文里的「frozen」在账本这一侧是空话。",
+  "paths": [
+   "proxy/ledger.py",
+   "proxy/env_proxy.py",
+   "proxy/scoring/frozen.json",
+   "proxy/__init__.py",
+   "theoria-arm/README.md"
+  ],
+  "territory": "proxy",
+  "territories": [
+   "proxy",
+   "theoria-arm"
+  ],
+  "why_first": "冻结机制要么加在 proxy/ 里，要么在清单里写明没有；`theoria-arm/README.md` 的措辞只是它的下游描述。",
+  "kind": "human_decision",
+  "clears_when": "二选一皆可查：git show master:proxy/ledger.py | grep -q 'frozen.json'（frozen.json 机制已推广到 ledger/env_proxy），或 grep -q '账本靠版本串不靠哈希' freeze/MANIFEST.md（清单明写）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "1-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 87,
+  "statement": "模型调用不过代理：`proxy/model_proxy.py` 按设计剥掉 `Authorization`，本仓只有 `ARC_API_KEY`，上游对每次请求回 401，于是模型走 `claude -p`、每条账本记 `proxied: false`，账本里的 `request` 是臂发给 CLI 的 prompt 而不是 CLI 发给 Anthropic 的 `/v1/messages` 体——这本账不能用来谈输入 token 的构成。",
+  "paths": [
+   "proxy/model_proxy.py",
+   "theoria-arm/evidence/model-proxy-401.jsonl",
+   "theoria-arm/DECISIONS.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "proxy",
+   "theoria-arm"
+  ],
+  "why_first": "文中逐字「这需要预注册里的一行，不是一个修复」，落点是 freeze 的定稿清单；proxy 与 theoria-arm 只提供证据。",
+  "kind": "register_limitation",
+  "clears_when": "定稿清单里存在一条点名 model-proxy 401 与 `proxied: false` 的 limitation：grep -q 'model_proxy' freeze/MANIFEST.json && grep -q 'proxied' freeze/MANIFEST.json",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "1-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 94,
+  "statement": "分数对账义务在这个 API 上不可履行——线上命令响应没有 `score` 字段，分数只存在于 `scorecard/close` 的成功响应里，`theoria-arm/armtools/archive.py` 因此报 `unavailable` 并改对 `levels_completed` 与动作数（INC-TA-002）。",
+  "paths": [
+   "theoria-arm/armtools/archive.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "theoria-arm"
+  ],
+  "why_first": "标「（登记）」——落点是定稿清单的一条 limitation；theoria-arm 的代码已按这个事实实现，不需要改。",
+  "kind": "register_limitation",
+  "clears_when": "grep -q 'INC-TA-002' freeze/MANIFEST.json 且该条目点名 `scorecard/close` 与 `unavailable` 回退。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "2-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 109,
+  "statement": "两本书的语法版本不齐：`CONTRACTS/dsl_grammar_v0.2.md:262` 写 `## playbook.dsl — Unchanged from v0.1`，即说明书语法在 v0.2 而攻略书语法的实效文本仍在 v0.1，两个版本装在一个文件里，冻结清单第 2 项只记一个 \"v0.2\" 是不准确的。",
+  "paths": [
+   "CONTRACTS/dsl_grammar_v0.2.md:262",
+   "CONTRACTS/dsl_grammar_v0.1.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "CONTRACTS"
+  ],
+  "why_first": "只需把清单第 2 项的版本串写成 manual/playbook 两半，不需要改 CONTRACTS 里的任何字节。",
+  "kind": "write_document",
+  "clears_when": "grep -q 'playbook=v0.1' freeze/MANIFEST.json（第 2 项版本串同时点名 manual=v0.2 与 playbook=v0.1 text）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "2-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 116,
+  "statement": "`CONTRACTS/dsl_grammar_v0.2.md:39` 逐字写 `## theory.dsl — five sections`（本轮实测仍如此），而其下定义了六节（`word_table`:41、`semantics`:81、`events`:159、`rules`:166、`goal`:187、`laws`:192）——文档数错了自己的节数。本条原编号也是 `2-b`，与同文件 :132 的 ⛔ G5 残留碰号；本次抽取期间（并发编辑）已改号为 `2-c`，文中自记「订正；2026-07-29 由 `2-b` 改号」。",
+  "paths": [
+   "CONTRACTS/dsl_grammar_v0.2.md:39",
+   "CONTRACTS/dsl_grammar_v0.2.md:41",
+   "CONTRACTS/dsl_grammar_v0.2.md:81",
+   "CONTRACTS/dsl_grammar_v0.2.md:159",
+   "CONTRACTS/dsl_grammar_v0.2.md:166",
+   "CONTRACTS/dsl_grammar_v0.2.md:187",
+   "CONTRACTS/dsl_grammar_v0.2.md:192"
+  ],
+  "territory": "CONTRACTS",
+  "kind": "write_document",
+  "clears_when": "git show master:CONTRACTS/dsl_grammar_v0.2.md | sed -n '39p' | grep -q 'six sections' 且同文件 theory.dsl 之下的 `^### ` 节数实测为 6。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "2-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 132,
+  "statement": "`CONTRACTS/dsl_grammar_v0.2.md:10` 逐字写「v0.2 is frozen **at the tag that carries this line**」，而本轮实测仓库 24 个 tag 全是 `engine-rig-m*` 一族、无一指向 DSL 语法，且这个引用自指——事后补切一个 tag，它指向的提交里「此行」所在内容已与写下时不同，「携带此行」指哪一版本本身有歧义，所以整个 v0.2/v0.3 演化政策与 `:16-18` 三处「that tag」的历史叙述都挂在一个空引用上，补 tag 修不好，必须改写那句话。",
+  "paths": [
+   "CONTRACTS/dsl_grammar_v0.2.md:10",
+   "CONTRACTS/dsl_grammar_v0.2.md:16-18",
+   "freeze/build_manifest.py"
+  ],
+  "territory": "CONTRACTS",
+  "kind": "human_decision",
+  "clears_when": "git show master:CONTRACTS/dsl_grammar_v0.2.md | grep -c 'that tag' 为 0，且 `:10` 改为指名一个具体锚点（`git tag -l | grep -q '^contracts-dsl-v0.2$'`，或该行含一个 7+ 位提交哈希，或该行指名 ⟨FREEZE_COMMIT⟩）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "**这条属于 `CONTRACTS/`，两条赛道都不得单方面改**（`CLAUDE.md`：`candidates_schema.md` 冻结、`dsl_grammar_v0.1.md` 归 theory-compiler 赛道）。因此本条只登记，不动手；由监控转 theory-compiler 赛道或作为契约变更走 S9 的流程。"
+ },
+ {
+  "code": "3-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 175,
+  "statement": "树上存在两套完整生成器族（`theory-compiler/src/theory_compiler/generators/` 与 `cold-start-a0/compile/` 的 `gen_*_a0.py` + `compile_a0.py`），而 A 系管线调用的是 `_a0` 那套，清单若不写明封存战役实际调用哪一套，哈希的和跑的就不是同一份。",
+  "paths": [
+   "theory-compiler/src/theory_compiler/generators/",
+   "cold-start-a0/compile/",
+   "theoria-arm/inner/_bootstrap.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "theory-compiler"
+  ],
+  "why_first": "`RECONCILE.md` H-5 已裁定两套一并哈希并逐臂写明，所以要动的是清单文本，不是两套后端的代码。",
+  "kind": "write_document",
+  "clears_when": "grep -q 'cold-start-a0/compile' freeze/MANIFEST.json 且第 3 项同时列出两套后端并逐臂（theoria / theoria_ablate）标注调用哪一套。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "3-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 178,
+  "statement": "还没有实测确认 Theoria 臂在线路径上实际导入的是哪一套生成器——文中只据 `_bootstrap.py` 推断它导入 `theory-compiler`，并自己写着「定稿前需实测确认」。",
+  "paths": [
+   "theoria-arm/inner/_bootstrap.py",
+   "theory-compiler/src/theory_compiler/generators/",
+   "cold-start-a0/compile/"
+  ],
+  "territory": "theoria-arm",
+  "territories": [
+   "theoria-arm",
+   "theory-compiler"
+  ],
+  "why_first": "要测的是臂在线路径上的导入实况，只有 theoria-arm 能跑出这个事实；theory-compiler 是被导入的那一侧，不必改。",
+  "kind": "write_document",
+  "clears_when": "cd theoria-arm && python -c \"import sys; sys.path.insert(0,'.'); import inner.loop; print(sorted(m for m in sys.modules if 'theory_compiler' in m or '_a0' in m))\" 的输出落进一个 run 目录，且 freeze/MANIFEST.json 第 3 项引用该输出。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "3-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 180,
+  "statement": "生成器零版本标记且三处互相不一致：`theory-compiler/pyproject.toml` 写 `version = \"0.1.0\"`，实现的却是语法 v0.2，而 `gen_pddl.py:5` 的 docstring 还引 \"the dsl_grammar_v0.1 contract\"。",
+  "paths": [
+   "theory-compiler/pyproject.toml",
+   "theory-compiler/src/theory_compiler/generators/gen_pddl.py:5"
+  ],
+  "territory": "theory-compiler",
+  "kind": "fix_code",
+  "clears_when": "git show master:theory-compiler/pyproject.toml | grep -E '^version' 与 git show master:theory-compiler/src/theory_compiler/generators/gen_pddl.py | sed -n '5p' 引用同一个语法版本（v0.2），三处一致。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "4-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 202,
+  "statement": "提示词零版本化：本轮实测全仓没有任何 `PROMPT_VERSION`（唯一命中是 `freeze/build_manifest.py:120` 里陈述它不存在的那句话），没有 prompt 哈希、没有带日期的 prompt 文件，唯一溯源是两个 `.py` 的 git 历史与逐 run 归档，而 `Theoria.md:353` 把提示词列为过拟合的第三条通道并要求每次迭代做 diff 审查。",
+  "paths": [
+   "theoria-arm/inner/theorize.py",
+   "theoria-arm/inner/grammar_card.py",
+   "baseline-arms/harness/bare_cc.py",
+   "theoria-arm/runs/<slug>/desk/call-*.md"
+  ],
+  "territory": "theoria-arm",
+  "territories": [
+   "theoria-arm",
+   "baseline-arms"
+  ],
+  "why_first": "三份提示词里有两份在 theoria-arm，`PROMPT_VERSION` 与 CI 断言要先在这一侧立起来，baseline-arms 的 `bare_cc.py` 跟着同一个约定。",
+  "kind": "fix_code",
+  "clears_when": "git grep -l 'PROMPT_VERSION' master -- theoria-arm baseline-arms 非空，且 freeze/MANIFEST.json 第 4 项以这三个文件的 blob 哈希为定义，且 freeze/verify.sh 有一个阶段在这三个哈希漂移时判红。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "5-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 229,
+  "statement": "全仓没有任何机器可读的引擎清单：`engine-rig/artifacts/` 只有 `candidates.jsonl`，本轮实测没有 `VERSIONS` 文件也没有 `engines_manifest.json`，`tools/run_all.py` 只落 `candidates.jsonl` 不落报告，而流传的 `cold-start-a0/artifacts/engines_report.json` 是一次运行的报告、无引擎版本串、无哈希、不按引擎名分行，用不了。",
+  "paths": [
+   "engine-rig/engines/",
+   "engine-rig/artifacts/",
+   "engine-rig/tools/run_all.py",
+   "cold-start-a0/artifacts/engines_report.json",
+   "freeze/ENGINES.md",
+   "freeze/engines_manifest.json"
+  ],
+  "territory": "engine-rig",
+  "territories": [
+   "engine-rig",
+   "freeze"
+  ],
+  "why_first": "版本串与哈希只能从 `engine-rig/engines/` 那一侧供出（见 5-b/5-c/5-d）；清单文件本身可以落在 freeze/，但没有 engine-rig 的输入它写不出来。",
+  "kind": "write_document",
+  "clears_when": "test -f freeze/ENGINES.md || test -f freeze/engines_manifest.json，且该清单逐引擎给出名称 + 版本 + blob 哈希，行数等于 ls -d engine-rig/engines/*/ | wc -l（实测 8，不是 6）。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "5-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 237,
+  "statement": "引擎带名字不带版本：本轮实测八个 `engine-rig/engines/*/__init__.py` 每个只有一个 `ENGINE` 名称串，没有任何 `VERSION` 或 `__version__`，所以「引擎清单与版本」里版本那一半在树上根本不存在。",
+  "paths": [
+   "engine-rig/engines/mdl_segmenter/__init__.py",
+   "engine-rig/engines/cegis_miner/__init__.py",
+   "engine-rig/engines/zero_space/__init__.py",
+   "engine-rig/engines/lp_potential/__init__.py",
+   "engine-rig/engines/fd_adapter/__init__.py",
+   "engine-rig/engines/probe_frontier/__init__.py",
+   "engine-rig/engines/deadlock_carver/__init__.py",
+   "engine-rig/engines/ic3_pdr/__init__.py"
+  ],
+  "territory": "engine-rig",
+  "kind": "fix_code",
+  "clears_when": "for d in engine-rig/engines/*/; do git show master:${d}__init__.py | grep -qE '^(VERSION|__version__)' || exit 1; done",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "5-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 239,
+  "statement": "冻结枚举 `engine-rig/common/candidates.py:27` 的 `ENGINES` 恰好六个名字，而 `engines/` 下实有 8 个模块——本轮实测 `deadlock_carver/__init__.py` 设 `ENGINE = \"fd_adapter\"`、`ic3_pdr/__init__.py` 设 `ENGINE = \"lp_potential\"`（D-018 起靠 `payload.producer` 自报身份），所以按枚举生成的引擎清单会把 8 个模块静默并成 6 行。",
+  "paths": [
+   "engine-rig/common/candidates.py:27",
+   "engine-rig/engines/deadlock_carver/__init__.py:43",
+   "engine-rig/engines/ic3_pdr/__init__.py:51",
+   "engine-rig/DECISIONS.md"
+  ],
+  "territory": "engine-rig",
+  "kind": "write_document",
+  "clears_when": "引擎清单的行数等于 ls -d engine-rig/engines/*/ | wc -l（8），且 `deadlock_carver` 与 `ic3_pdr` 各自单列并注明其 `ENGINE` 别名指向 `fd_adapter` / `lp_potential`。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "5-d",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 247,
+  "statement": "里程碑标签实有九个——本轮实测 24 个 tag 里 `engine-rig-m9-deadlock-ic3-probe` 在列，而 m9 正是承载 `deadlock_carver` + `ic3_pdr` 的那个，所以按 m8 冻结的清单（以及 `CLAUDE.md` 里「八个里程碑」「六个引擎」的说法）盖不住 `engines/` 里现有的代码。",
+  "paths": [
+   "engine-rig/engines/deadlock_carver/",
+   "engine-rig/engines/ic3_pdr/",
+   "CLAUDE.md"
+  ],
+  "territory": "engine-rig",
+  "territories": [
+   "engine-rig",
+   "repo-root"
+  ],
+  "why_first": "标签与模块都在 engine-rig；根 `CLAUDE.md` 的「八个里程碑/六个引擎」只是它的下游转述。",
+  "kind": "write_document",
+  "clears_when": "git tag -l 'engine-rig-m*' | wc -l 为 9，且引擎清单点名 m9：grep -q 'm9-deadlock-ic3-probe' freeze/ENGINES.md（或 freeze/engines_manifest.json）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "6-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 263,
+  "statement": "全仓没有 `PROBE*.md`（本轮实测唯一相关的是引擎自己的 `engine-rig/engines/probe_frontier/README.md`）：戳探策略散在一个引擎 README 与两处模块 docstring（`theoria-arm/inner/probe.py`、`cold-start-a2/a2pipeline/probe.py`）里，没有一份可以整体哈希的戳探策略文档。",
+  "paths": [
+   "engine-rig/engines/probe_frontier/README.md",
+   "theoria-arm/inner/probe.py",
+   "cold-start-a2/a2pipeline/probe.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "engine-rig",
+   "theoria-arm"
+  ],
+  "why_first": "两条出路都以清单为落点（现写一份策略文档，或明写「本项 = 这三个文件的哈希之和」），两边的代码都不必动。",
+  "kind": "write_document",
+  "clears_when": "test -f freeze/PROBE_POLICY.md，或 freeze/MANIFEST.json 第 6 项逐条列出这三个路径的 blob 哈希并在 note 里明写「本项 = 这三个文件的哈希之和」。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "7-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 283,
+  "statement": "四个离线 spike 都显式传 `prefer=\"stub\"`，而 `theoria-arm/inner/plan.py` 调 `fd_adapter.solve_parsed(...)` 不传 `prefer=`（文中记 :112，本轮实测该调用已漂到 master 的 :198，缺参数属实），于是 `prefer=None`、`choose_tier` 规则 4 生效——封存战役里 Theoria 臂用 `fd-optimal` 还是 `stub-bfs`，取决于跑它那台机器的 `$FAST_DOWNWARD`。",
+  "paths": [
+   "theoria-arm/inner/plan.py:198",
+   "engine-rig/engines/fd_adapter/backends.py",
+   "cold-start-a0/pipeline/plan_stage.py:59",
+   "cold-start-a2/a2pipeline/plan.py:70",
+   "cold-start-a3/a3pipeline/plan.py:98",
+   "a0-spike/pipeline/run_a0.py:161"
+  ],
+  "territory": "theoria-arm",
+  "territories": [
+   "theoria-arm",
+   "engine-rig"
+  ],
+  "why_first": "缺的那个参数在臂侧的调用点上；`fd_adapter.choose_tier` 的三级阶梯行为是设计如此，不需要改。",
+  "kind": "fix_code",
+  "clears_when": "git show master:theoria-arm/inner/plan.py | grep -A4 'solve_parsed(' | grep -q 'prefer='（档位钉死），或 freeze/MANIFEST.json 第 7 项记下 `$FAST_DOWNWARD` 二进制的 sha256 并声明它是冻结环境的一部分。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "7-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 293,
+  "statement": "环境里没有 LP 求解器（未找到 CPLEX），所以 FD 的 LP 类配置在本项目不可用；且 FD 的 driver 在 Windows 上无法自行限时限内存，只能用外部 subprocess timeout。",
+  "paths": [
+   "engine-rig/engines/fd_adapter/backends.py",
+   "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "engine-rig"
+  ],
+  "why_first": "标「（登记）」——落点是清单里的一条 limitation；`backends.py` 已按这个事实实现（外部 subprocess timeout）。",
+  "kind": "register_limitation",
+  "clears_when": "grep -q 'CPLEX' freeze/MANIFEST.json 且该条目同时记下「Windows 上用外部 subprocess timeout」。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "8-a",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 312,
+  "statement": "主终点「U3 达成率」全仓没有任何实现：`battery/metrics/__init__.py` 的 `REGISTRY`（实测 38 条）里没有对应 id，`battery/model.py` 有 `Step.won` / `Step.level` 但没有任何指标消费 `.won`，唯一关注关卡的 `M3` 在守卫之后是故意未实现的（`battery/metrics/mechanism.py:73-76`）——这一项要从零写。",
+  "paths": [
+   "battery/metrics/__init__.py",
+   "battery/model.py",
+   "battery/metrics/mechanism.py:73-76",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "battery",
+  "kind": "fix_code",
+  "clears_when": "cd battery && python -c \"from metrics import REGISTRY; assert any('u3' in k.lower() for k in REGISTRY)\"，且该指标端到端算出一次并在「无一局取胜」的输入上判 0 —— 即 freeze/launch_blockers.json 的 9.14 双靶通过、python freeze/launch_gate.py exit 0。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "8-b",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 317,
+  "statement": "主终点「判决题准确率(含特异度)」没有电池 id：它有实现但在考卷轨道（`exam/grading/mark.py:95 confusion()`，`sensitivity`:135 / `specificity`:136，经 `exam/papers/verdict.py:1252` 调用），电池里最近的亲戚 `M5` 只有灵敏度、无特异度，所以三个主终点里这一个不在电池的注册表上。",
+  "paths": [
+   "exam/grading/mark.py:95",
+   "exam/grading/mark.py:135",
+   "exam/grading/mark.py:136",
+   "exam/papers/verdict.py:1252",
+   "battery/metrics/"
+  ],
+  "territory": "battery",
+  "territories": [
+   "battery",
+   "unclear"
+  ],
+  "why_first": "两条出路里只有「给它一个电池 id」要动代码，而只有 battery 能发 id；`exam/` 这个领地不在给定枚举里（记为 unclear），它的实现不必改。",
+  "kind": "human_decision",
+  "clears_when": "cd battery && python -c \"from metrics import REGISTRY; assert any('specific' in str(v).lower() for v in REGISTRY.values())\"（给了电池 id），或 grep -q 'exam 轨道计算' freeze/MANIFEST.json（明写本终点不在电池内）。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "8-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 323,
+  "statement": "`battery/DECISIONS.md:122` 仍写 \"A hand-written reference for twenty-eight metrics…\"，是 v0 期的陈旧串，`REGISTRY` 实测 38 条（`REPORT_V0.md` 的 \"29 metrics\" 是对的，它显式限定在 v0）。",
+  "paths": [
+   "battery/DECISIONS.md:122",
+   "battery/metrics/__init__.py",
+   "battery/REPORT_V0.md"
+  ],
+  "territory": "battery",
+  "kind": "write_document",
+  "clears_when": "git show master:battery/DECISIONS.md | sed -n '122p' | grep -qv 'twenty-eight' 且 cd battery && python -c \"from metrics import REGISTRY; print(len(REGISTRY))\" 输出 38 与该行一致。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "8-d",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 327,
+  "statement": "`battery/PREDICTIONS.md` 已从起草时的 240 行两批长成 603 行四批 + 一段标注，所以冻结清单第 8 项要哈希的「逐指标方向预测」现在是四批，不写清哪一批进冻结就留了一个事后挑批次的口子；且 v1/v2/v2.1 的封条比 v0 弱并且它们自己说了（`L140` \"weaker than v0's, materially\"、`L163` 承认部分 v1 指标在臂上是 post-diction），不能与 v0 平级引用。",
+  "paths": [
+   "battery/PREDICTIONS.md",
+   "battery/PREDICTIONS.md:78",
+   "battery/PREDICTIONS.md:122-127",
+   "battery/PREDICTIONS.md:140",
+   "battery/PREDICTIONS.md:163"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "battery"
+  ],
+  "why_first": "要决定的是清单第 8 项声明哪一批为预注册文本；`PREDICTIONS.md` 是 append-only，不许改。",
+  "kind": "write_document",
+  "clears_when": "freeze/MANIFEST.json 第 8 项逐批列出 `PREDICTIONS.md` 的四批行段、标明哪一批进冻结哪一批只作背景，且对 v1/v2/v2.1 标注弱封条：grep -q 'v2.1' freeze/MANIFEST.json。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "13-c",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 468,
+  "statement": "n=2 不替代包络本身的修复：`baseline-arms/BUDGET_REPORT.md` §11.5 列的两件事（INC-BA-003 跨会话闸门、中止阈值随预算缩放）在修好并重跑包络之前，关于臂方差的任何数值主张都不许进论文（`STATS_RULES.md` §5.5 硬条款）。",
+  "paths": [
+   "baseline-arms/BUDGET_REPORT.md",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "baseline-arms",
+  "kind": "fix_code",
+  "clears_when": "与 §9.11 同一个条件：freeze/launch_blockers.json 的 9.11 条目 state=implemented 且带命令模板与两个靶子，python freeze/launch_gate.py 对该行报 clear。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "13-d",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 448,
+  "statement": "代理量的方差检验会随 ar25 一局的取舍翻面：按树上唯一写下过的阈值 0.10（`STATS_RULES.s4draft.md:265-266`，自陈「是判断不是推导」）判，剔掉 ar25 则局内 CV 最大 0.0370 →「方差小」→ n=1 可辩护，含 ar25 则 0.2756 → n=2，阈值恰落在两者中间（一侧 2.7 倍、另一侧 2.8 倍），所以任何倚在 CV 数上的 ⟨n⟩ 论证都是脆的，引用时必须两面并排给出。",
+  "paths": [
+   "freeze/VARIANCE_BASIS.md",
+   "freeze/STATS_RULES.s4draft.md:265-266",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "register_limitation",
+  "clears_when": "freeze/STATS_RULES.md §5.3 把含/剔 ar25 两套 CV 并排报出（grep -q '0.0370' freeze/STATS_RULES.md 与 grep -q '0.2756' freeze/STATS_RULES.md 都命中）且写明它们与阈值 0.10 的关系；剩下的一半（对封存战役的预注册敏感性承诺）随 G15 一同关。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "补法：这是一处**登记项**，不是待修缺陷——`STATS_RULES.md` §5.3 已按 `s4draft:272-275` 的「两套结果并排报告」要求照做；剩下的一半（对封存战役的预注册敏感性承诺，`RECONCILE.md:258` G15）不是本套件能关的。"
+ },
+ {
+  "code": "13-e",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 459,
+  "statement": "生成的清单否认这项有值：`freeze/build_manifest.py:229-243` → `freeze/MANIFEST.json` 第 13 项曾写「No value exists anywhere on master」并声明任何记着「n = 2, ruled」的草稿「is withdrawn」，而同一目录同一提交的 `freeze/STATS_RULES.md` 已裁定 ⟨n⟩ = 2——冻结包对外同时给出两个互斥的事实，且错在多说的方向上；注意本段自记 owner 为 RES-1 且「已于本轮修」，但标记仍留在 `⛔ 缺`（而同节的 13-a/13-b 已改成 `✅`），这一不一致本身就是一条待办。",
+  "paths": [
+   "freeze/build_manifest.py:229-243",
+   "freeze/MANIFEST.json",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "fix_code",
+  "clears_when": "python freeze/build_manifest.py --verify 后，grep -c 'No value exists anywhere on master' freeze/MANIFEST.json 为 0，且第 13 项写明 ⟨n⟩ = 2 及其依据路径。",
+  "severity": "launch_blocker",
+  "doc_says_owner": "**owner：RES-1。已于本轮修（见下）**"
+ },
+ {
+  "code": "A-1′",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 480,
+  "statement": "消融臂只有离线形态——`ablation-arm/ablcore/` 无 harness、无环境回路、无模型掌台、无 HTTP、不读 API key，`REPORT.md` §3(c) 两臂的美元列都是 `NOT MEASURED`、§7 限制 5 逐字说这一列 \"cannot be filled offline\"，所以 C5 要的「总账 10⁸→10⁶ 里哪几个数量级归工程、哪几个归理解」这个切分一个数都取不到；另有一处一行的阻塞：本轮实测 master 的 `proxy/ledger.py` `ARMS` 仍是六个名字、没有 `theoria_ablate`，而 `:204` 对未注册臂名硬拒，所以消融臂在登记之前一个字节的账本都写不出来。",
+  "paths": [
+   "ablation-arm/DESIGN.md",
+   "ablation-arm/REPORT.md",
+   "ablation-arm/STATUS.md",
+   "ablation-arm/DECISIONS.md",
+   "proxy/ledger.py:36",
+   "proxy/ledger.py:204"
+  ],
+  "territory": "proxy",
+  "territories": [
+   "proxy",
+   "ablation-arm"
+  ],
+  "why_first": "在线形态的第一步是把 `theoria_ablate` 加进 `proxy/ledger.py` 的 `ARMS`——在那之前消融臂连账本都写不出来，而这一行只有 proxy 轨道能改。",
+  "kind": "fix_code",
+  "clears_when": "git show master:proxy/ledger.py | grep -q 'theoria_ablate'，且 ablation-arm 有一个能跑线上一局的入口（test -f ablation-arm/harness/run.py），且 ablation-arm/REPORT.md §3(c) 的美元列不再是 NOT MEASURED。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "另外 `proxy/ledger.py:36` 的 `ARMS` 里**没有 `theoria_ablate`**，而 `:204` 对未注册臂名硬拒，所以消融臂在登记之前**一个字节的账本都写不出来**——一行改动，但在 proxy 轨道的领地里，消融臂自己不能改（`ablation-arm/DECISIONS.md` D-AB-004）。工单 `A4-ablation-online` **被无人认领地退回看板**。"
+ },
+ {
+  "code": "A-2",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 481,
+  "statement": "`schema_repro` 臂不存在且大概率永远不存在（`baseline-arms/SCHEMA_LOCATE.md`：官方 harness 从未发布），所以设计里的三臂实为两臂 + 消融臂，C1 的「唯一」、C2 的「vs Schema 平坦」、C5 的「10⁸」都失去同壳对照。",
+  "paths": [
+   "baseline-arms/SCHEMA_LOCATE.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "baseline-arms"
+  ],
+  "why_first": "事实不可改（`RECONCILE.md` H-2：「事实不可改；claim 措辞可改」），要动的是 claim 逐字文本与清单里的 limitation。",
+  "kind": "register_limitation",
+  "clears_when": "freeze/CLAIMS_TEXT.md 的 C1/C2/C5 三段逐字文本都不以 Schema 为比较对象（凡出现 Schema 处都落在「未能纳入同壳对照」或 §限制 的措辞里），且定稿清单含一条点名 SCHEMA_LOCATE.md 的 limitation。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "A-3",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 482,
+  "statement": "具体那一处（`cold-start-a0/certify/fd_conformance.py` 工作树脏）已消解，但一般形式仍成立且没有执行形态：哈希前必须复核工作树干净，否则哈的是别人在飞的字节——而本仓同时有多个并发 worktree（本次抽取期间就实测到 `freeze/STATS_RULES.md` 在被另一个 subagent 改动）。",
+  "paths": [
+   "cold-start-a0/certify/fd_conformance.py",
+   "freeze/build_manifest.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "repo-root"
+  ],
+  "why_first": "这是一条冻结时的前置检查，落点是 build_manifest/verify 的一个阶段，不属于任何一个赛道的代码。",
+  "kind": "fix_code",
+  "clears_when": "python freeze/build_manifest.py --verify 在 git status --porcelain 对任何被哈希路径非空时 exit≠0，且用一个故意弄脏的受哈希路径实测过它会红。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "A-4",
+  "file": "freeze/MANIFEST_DRAFT.md",
+  "line": 483,
+  "statement": "具体那一处（`CLAUDE.md` 说「没有任何游戏被玩过、25 局全 `never_audited`」）已消解，但 `CLAUDE.md` 会漂，冻结前必须再核一次它关于开发堆已玩 4 局、封存堆零 API 接触、INC-BA-001 与 F-11 裁定的那几行；注意根 `CLAUDE.md` 现仍写「六个引擎」「八个里程碑」（与 5-c/5-d 矛盾），即这条的一般形式此刻已经有活的实例。",
+  "paths": [
+   "CLAUDE.md:136-141",
+   "baseline-arms/TOUCHED_GAMES.md",
+   "arc-recon/data/contamination_log.jsonl"
+  ],
+  "territory": "repo-root",
+  "territories": [
+   "repo-root",
+   "arc-recon",
+   "baseline-arms"
+  ],
+  "why_first": "要复核的字节在根 `CLAUDE.md` 里；arc-recon 与 baseline-arms 只是它引用的证据源。",
+  "kind": "write_document",
+  "clears_when": "在冻结提交上跑：grep -q 'trajectories_reviewed' CLAUDE.md && grep -q 'F-11' CLAUDE.md && python -c \"import io,json;print(json.load(io.open('arc-recon/data/claim_set.json',encoding='utf-8'))['claim_set_size'])\" 输出 19 且与 CLAUDE.md 的叙述一致。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-PF3-model-version-strings",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 74,
+  "statement": "三个模型 id 里只有 `claude-haiku-4-5-20251001` 是带日期的版本串，`claude-opus-5` 与 `claude-sonnet-5` 是别名——别名会在服务端指向新的快照，而那正是 `Theoria.md:377`「数月项目，模型会漂」要防的那件事，所以用它们钉版本等于没钉。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "baseline-arms/BUDGET_REPORT.md",
+   "baseline-arms/AUDIT.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "baseline-arms"
+  ],
+  "why_first": "解析出带日期快照 id、或宣告「本项无法钉死」并列为 limitation，两条出路都是清单里的一行；baseline-arms 只提供实测账本。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 的模型项对每一档给出一个带日期的快照 id（形如 -20251001 结尾），或含一条逐字 limitation「本项无法钉死」并要求账本记下响应侧自报的 model 串（git show master:proxy/ledger.py | grep -q 'response_model'）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-PF3-main-table-tier",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 99,
+  "statement": "「主表在哪一档模型上跑」还没定，而三臂必须同模型（`Theoria.md:353`）、模型档位是第二个维度不是臂的属性，所以主表档位不定死就等于把一个能事后挑选的维度留在冻结包里。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "baseline-arms/BUDGET_REPORT.md"
+  ],
+  "territory": "freeze",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 明写主表档位（单一 model id）并写明另一档若跑即为敏感性分析。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-PF4.2-budget-B",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 128,
+  "statement": "`Theoria.md:377` 要冻结的 ⟨$/局硬顶、总局数、止损⟩ 三个数一个都没定，树上只有原料（`baseline-arms/BUDGET_REPORT.md`、`out/campaign_gate.json`）与算术（`freeze/runs/2026-07-28T1200Z-p22/budget_calc.py`），且三条使那张表成为下界而非估计的事情必须随预算一起交给人：Theoria 臂不按 $/环境动作计价（单次线上 theorize 就花了 $1.31，且没有任何「每局 theorize 轮数」的线上实测）、上表按 S1 乐观下界算、`proxy/cost.py` 少算 6.8%。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "baseline-arms/BUDGET_REPORT.md",
+   "baseline-arms/out/campaign_gate.json",
+   "freeze/runs/2026-07-28T1200Z-p22/budget_calc.py",
+   "proxy/cost.py"
+  ],
+  "territory": "monitor",
+  "territories": [
+   "monitor",
+   "freeze"
+  ],
+  "why_first": "文中逐字「本条动的是钱，钱是监控的」——三个数只有监控能填，freeze 只是它们的落盘处。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 的预算项给出三个数值（$/局硬顶、总局数、止损）且该项内不再出现 ⟨…⟩ 占位。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "🔴 **needs_human — 本条动的是钱，钱是监控的。** ⟨$/局硬顶、总局数、止损⟩ 由监控定（k / Δ / B 同一批）。"
+ },
+ {
+  "code": "NH-PF4.2.1-sealed-game-count",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 171,
+  "statement": "实际开跑与预算的局数还没定：RES-1 建议 claim 层 19 局（理由：多跑的 ft09/ls20 买到的数据进不了任何一条主张、这笔支出是从封存确证跑那笔钱里扣的、F-11 的排除在封存战役一局未跑之前故「跑 19」是预注册而非事后收窄），但这是建议不是裁定，监控确认前上界口径仍是按 21 局算的那张表。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "arc-recon/data/claim_set.json",
+   "freeze/PENDING_FIVE.md",
+   "freeze/MANIFEST_DRAFT.md"
+  ],
+  "territory": "monitor",
+  "territories": [
+   "monitor",
+   "freeze"
+  ],
+  "why_first": "局数是预算行的一部分，文中逐字要求由监控确认；freeze 只落盘。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 的预算项写死总局数为一个整数，且 freeze/ 下不再出现「RES-1 建议 19，理由如上；预算行由监控确认」这种未定措辞。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "🔴 **needs_human — 本条动的是钱，钱是监控的。**"
+ },
+ {
+  "code": "NH-PF4.3-delta",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 195,
+  "statement": "⟨Δ⟩ 分数容差在树上定不了：定它需要知道 Theoria 臂在真实局上的分数量级，而至今没有任何一局被 Theoria 臂打完（首触是三次中止、11 个动作），唯一参照点是 `Theoria.md:270-271` 的赌注表（裸 CC 42.83%、Schema 上游 98.98%），且它必须在 Phase 3 开发堆跑完之后、封存战役开跑之前拍。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "Theoria.md:357",
+   "Theoria.md:272",
+   "Theoria.md:270-271"
+  ],
+  "territory": "monitor",
+  "territories": [
+   "monitor",
+   "repo-root"
+  ],
+  "why_first": "Δ 与 k/B 同属监控裁定的那一批（`RECONCILE.md`:427）；`Theoria.md` 只是它的出处。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 里 ⟨Δ⟩ 是一个数值且不再是占位，并附一条它是在哪一批开发堆数字上定的记录。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "⟨$/局硬顶、总局数、止损⟩ 由监控定（k / Δ / B 同一批）。"
+ },
+ {
+  "code": "NH-PF4.4-k",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 205,
+  "statement": "⟨k⟩（`Theoria.md:357` 的 Phase 3 开发堆 U3 达成退出条件局数）未定，开发堆只有 4 局故 k ∈ {1,2,3,4}；同时文中警告 k 与 `STATS_RULES.md` §1.2 的 ⟨X⟩ 不是同一个数（k 的分母是开发堆 4 局，⟨X⟩ 的分母是 claim 层 19 局），混用会把 Phase 3 的退出条件读成 Phase 4 的地板。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "Theoria.md:357",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "monitor",
+  "territories": [
+   "monitor",
+   "freeze"
+  ],
+  "why_first": "k 与 Δ/B 同属监控那一批（`RECONCILE.md`:427）；freeze 只负责把它与 ⟨X⟩ 分列两行防混用。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 写死 ⟨k⟩ ∈ {1,2,3,4} 的一个整数，且与 ⟨X⟩ 分列两行并各自注明分母（4 局 / 19 局）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "⟨$/局硬顶、总局数、止损⟩ 由监控定（k / Δ / B 同一批）。"
+ },
+ {
+  "code": "NH-PF5-venue-deadline",
+  "file": "freeze/PENDING_FIVE.md",
+  "line": 246,
+  "statement": "⟨目标会议与死线⟩ 树上零依据——全仓没有任何会议名、投稿日期或 deadline 的记录（`papers/` 现有的是 Phase 1 workshop 文的草稿，不是 Phase 4 主论文的投稿计划），而按 `Theoria.md:381` 死线定在哪一级阶段边界，决定止损时交付哪个最小可发表单元。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "papers/"
+  ],
+  "territory": "monitor",
+  "territories": [
+   "monitor",
+   "papers"
+  ],
+  "why_first": "会议与死线是项目层的决定，`papers/` 只承接它的交付物。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 或 papers/ 下存在一条写死会议名 + 投稿日期 + 对应阶段交付单元的记录。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.1",
+  "file": "freeze/STATS_RULES.md",
+  "line": 903,
+  "statement": "U3 达成率改为单样本比率、不做跨臂配对检验，这偏离 `Theoria.md:373` 的字面读法，§9 表的类型格至今仍写 `needs_human`——而 `RECONCILE.md` 的 H-1 已于 2026-07-29 在用户放行下由 RES-1 裁定采纳（并加了「跨臂 p 值根本不计算」这一条 P-22 没有的），所以同一件事在 §9 表与裁定表里状态相反。",
+  "paths": [
+   "freeze/STATS_RULES.md",
+   "freeze/RECONCILE.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "sed -n '896p' freeze/STATS_RULES.md | grep -q 'needs_human' 为假（该行类型格改为「已裁定（H-1，2026-07-29）」并指回 RECONCILE.md 裁定表）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.2",
+  "file": "freeze/STATS_RULES.md",
+  "line": 904,
+  "statement": "U3 判据 (c)「非平凡定理」的可执行检查全仓没有任何实现，而 G1 把判据 (b) 从空公理集放宽为白名单之后 (c) 是「恒真定理冒充 U3」唯一的门；该检查必须能拒绝 `cold-start-a3/theory/generated_l1_vacuous/`（D-A3-007 记着这份真空产物自己发生过一次：三条义务全过、`#print axioms` 为空、certify 整列绿、什么也没证），未实现不得开跑封存战役。",
+  "paths": [
+   "cold-start-a3/theory/generated_l1_vacuous/",
+   "cold-start-a3/DECISIONS.md",
+   "freeze/launch_blockers.json",
+   "freeze/launch_gate.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "theory-compiler"
+  ],
+  "why_first": "这条只能通过在 `freeze/launch_blockers.json` 里给出命令模板 + 两个靶子来清（写「已实现」不算），所以 freeze 侧先动；检查代码本身落在产出 Lean 的那棵树（`cold-start-a3/`）。",
+  "kind": "fix_code",
+  "clears_when": "python freeze/launch_gate.py exit 0 —— 前提是 freeze/launch_blockers.json 的 9.2 条目 state=implemented、cmd 模板含 {target}，且同一模板对正靶 exit 0、对负靶 cold-start-a3/theory/generated_l1_vacuous exit≠0（闸自己会两边都跑）。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.14",
+  "file": "freeze/STATS_RULES.md",
+  "line": 905,
+  "statement": "U3 达成率本身没有任何计算代码——三个主终点之一却无 prediction、无 battery id（`freeze/build_manifest.py:173-178` 引 `battery/PREDICTIONS.md:585` 与 `battery/runs/…V18…/ENDPOINTS.md:15` 的 \"unfalsifiable\"），`Step.won` 无人消费；为一个算不出来的量冻结裁决规则，冻的是一句不可执行的话，未实现不得开跑。",
+  "paths": [
+   "freeze/build_manifest.py:173-178",
+   "battery/PREDICTIONS.md:585",
+   "battery/model.py",
+   "battery/metrics/__init__.py",
+   "freeze/launch_blockers.json"
+  ],
+  "territory": "battery",
+  "territories": [
+   "battery",
+   "freeze"
+  ],
+  "why_first": "达成率的实现只能落在电池里（`REGISTRY` 加一条消费 `Step.won` 的指标）；freeze 侧只是把它登记成一条可跑的命令。",
+  "kind": "fix_code",
+  "clears_when": "freeze/launch_blockers.json 的 9.14 条目给出 cmd 模板 + 两个存在于盘上的靶子，且 python freeze/launch_gate.py 对该行报 clear：达成率能端到端算出一次，并在「无一局取胜」的输入上被拒。",
+  "severity": "launch_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.3",
+  "file": "freeze/STATS_RULES.md",
+  "line": 906,
+  "statement": "`schema_repro` 不存在（`baseline-arms/SCHEMA_LOCATE.md`：官方 harness 从未发布），三臂实为两臂 + 消融臂，释出与 claim 文本需按两臂写、C1「唯一稳定达到 U3」的比较对象需重述——类型格仍写 `needs_human`，而 `RECONCILE.md` H-2 已裁定主对照臂 = `bare_cc`、全篇不得以 Schema 为比较对象。",
+  "paths": [
+   "baseline-arms/SCHEMA_LOCATE.md",
+   "freeze/CLAIMS_TEXT.md",
+   "freeze/RECONCILE.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "baseline-arms"
+  ],
+  "why_first": "H-2 已把事实定死（「事实不可改；claim 措辞可改」），剩下的动作全在 freeze 的 claim 逐字文本与 §9 表里。",
+  "kind": "register_limitation",
+  "clears_when": "sed -n '899p' freeze/STATS_RULES.md | grep -q 'needs_human' 为假（改为「已裁定（H-2）」），且 freeze/CLAIMS_TEXT.md 的 C1/C2/C5 全部不以 Schema 为比较对象。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.4",
+  "file": "freeze/STATS_RULES.md",
+  "line": 907,
+  "statement": "⟨X⟩（U3 达成率地板）未拍：本轨道建议 claim 层 14/19（硬下限 10）、clean 层 10/12（硬下限 7），依据是 §1.2 的两张 Clopper–Pearson 表，但取值必须在任何封存局开跑之前与它所依据的开发堆数字一并落盘，否则「事后调 ⟨X⟩」这条钻法没有闸。",
+  "paths": [
+   "freeze/STATS_RULES.md",
+   "freeze/runs/2026-07-28T1200Z-p22/thresholds.py",
+   "freeze/tiers.py"
+  ],
+  "territory": "freeze",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 里 ⟨X⟩ 是整数且 ≥10（claim）与 ≥7（clean），且 python freeze/runs/2026-07-28T1200Z-p22/thresholds.py 的输出与该取值同时落盘。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.5",
+  "file": "freeze/STATS_RULES.md",
+  "line": 908,
+  "statement": "⟨S_min⟩（特异度地板）未拍，建议 0.5；它是一票否决项——某臂全局合计特异度 < ⟨S_min⟩ 时本终点判为不成立无论 BA 多高，所以取值不定死就等于把「一律答不可解」那条钻法的闸留空（`exam/STATUS.md` 记着 `bluffer` 假臂实测灵敏度 1.0 / 特异度 0.0）。",
+  "paths": [
+   "freeze/STATS_RULES.md",
+   "exam/grading/mark.py:136",
+   "exam/STATUS.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "unclear"
+  ],
+  "why_first": "取值是冻结文本里的一个数；`exam/` 那一侧（不在给定领地枚举里，记为 unclear）的实现已经算得出特异度。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 里 ⟨S_min⟩ 是一个 0–1 的数值，且 §2.2 的一票否决条款引用同一个数。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.6",
+  "file": "freeze/STATS_RULES.md",
+  "line": 909,
+  "statement": "⟨m⟩（考卷子集局数）的取值未拍——选法已于 2026-07-29 裁定（`claim_set.json` 的 `claim_set` 按 `game_id` Unicode 码位升序取前 ⟨m⟩ 局、约束 m ≤ 19），但 m 不定就无法在任何封存局开跑之前把 ⟨m⟩ 局的名单落盘哈希，而「开跑前落盘」正是这条防钻条款的全部内容。",
+  "paths": [
+   "arc-recon/data/claim_set.json",
+   "freeze/STATS_RULES.md",
+   "freeze/PENDING_FIVE.md",
+   "freeze/verify.sh"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "arc-recon"
+  ],
+  "why_first": "选法已经是冻结文本的一部分，只差一个整数；`claim_set.json` 只被读，不被改。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 写死 ⟨m⟩ 的整数值（≤19）并落盘该 m 下的前缀名单，且 bash freeze/verify.sh 第 9 阶段对该名单逐行比对通过。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.7",
+  "file": "freeze/STATS_RULES.md",
+  "line": 910,
+  "statement": "⟨R⟩（每格重跑上限）未拍，建议 3；在 §5.2 报的 97.9% episode 死亡率下 ⟨R⟩=3 也未必够，而每一次重跑都在花钱、也在稀释预注册，所以这个数不定死「作废重跑」就是事实上的无限重跑。",
+  "paths": [
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 里 ⟨R⟩ 是一个整数，且 §7 的未决格条款引用同一个数。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.8",
+  "file": "freeze/STATS_RULES.md",
+  "line": 911,
+  "statement": "`theoria − 消融臂` 的 E2 配对差算主终点还是探索性未拍：它是 C5「工程省 vs 理解省」的切分（`Theoria.md:274`），但算主终点会让 family 从 3 变 4、与「主终点限三个」冲突，本轨道建议探索性。",
+  "paths": [
+   "freeze/STATS_RULES.md",
+   "battery/metrics/economy.py"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "battery"
+  ],
+  "why_first": "这是一条统计裁决的归类，落点是冻结文本；`economy.py` 的 `E2` 实现不因此改。",
+  "kind": "human_decision",
+  "clears_when": "freeze/MANIFEST.json 的 family 明列恰好三个主终点且 `theoria − 消融臂` 的 E2 差被逐字标为探索性（或 family 改为 4 并同步 Holm 校正的门槛）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.9",
+  "file": "freeze/STATS_RULES.md",
+  "line": 912,
+  "statement": "缓存一致性检查（`cache_read_input_tokens` 与 `input_tokens` 同向）未实现，而 `battery/PREDICTIONS.md:122-127` 自陈「if the three arms cache differently, E2/E3/E5 measure the harness」并说防线就是这个检查、\"and it is not yet implemented\"；不实现则 E2 降级为探索性、主终点只剩两个。",
+  "paths": [
+   "battery/PREDICTIONS.md:122-127",
+   "proxy/ledger.py",
+   "battery/metrics/economy.py"
+  ],
+  "territory": "proxy",
+  "territories": [
+   "proxy",
+   "battery"
+  ],
+  "why_first": "同向性要在写账本的那一侧检查（token 字段由 `proxy/ledger.py` 记），电池只是它的下游消费者。",
+  "kind": "fix_code",
+  "clears_when": "存在一个能对一批账本判红的检查（在人造反例上 exit≠0、在真实账本上 exit 0）且它进了 freeze/verify.sh；否则 freeze/MANIFEST.json 必须把 E2 标为探索性并把主终点数改成 2。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.10",
+  "file": "freeze/STATS_RULES.md",
+  "line": 913,
+  "statement": "`proxy/cost.py` 把 1 小时缓存写按 5 分钟计价（`pricing_v1.json` 的 `cache_creation_input_tokens_1h` 读取缺陷），实测少算 6.8%，不修好三臂的成本轴不可比、报出的预算也是错的。",
+  "paths": [
+   "proxy/cost.py",
+   "proxy/pricing_v1.json"
+  ],
+  "territory": "proxy",
+  "kind": "fix_code",
+  "clears_when": "对一条含 1h 缓存写的账本记录，cost.py 算出的金额与按 `pricing_v1.json` 的 1h 单价手算的值相等（差 0），且有一个测试固定这一条。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.11",
+  "file": "freeze/STATS_RULES.md",
+  "line": 914,
+  "statement": "包络重跑（INC-BA-003 跨会话闸门 + 中止阈值随预算缩放）未做：97.9% 的 episode 死亡率使 §7 的「作废重跑」事实上变成无限重跑，且 §5.7 算出在 q = 0.9792 下 n=2 在 claim 层 19 格里只预期活 0.78 格——要够到地板 14/19 必须先把 q 压到 0.513 以下，未修不得开跑封存战役。",
+  "paths": [
+   "baseline-arms/BUDGET_REPORT.md",
+   "baseline-arms/INCIDENTS.md",
+   "baseline-arms/out/campaign/",
+   "freeze/launch_blockers.json"
+  ],
+  "territory": "baseline-arms",
+  "territories": [
+   "baseline-arms",
+   "freeze"
+  ],
+  "why_first": "跨会话闸门与阈值缩放都在 baseline-arms 的 harness 里，且 launch_blockers.json 的 9.11 条目自带 `owner_hint: baseline-arms`。",
+  "kind": "fix_code",
+  "clears_when": "freeze/launch_blockers.json 的 9.11 条目 state=implemented 且带命令模板与两个靶子，python freeze/launch_gate.py 对该行报 clear；实质条件是重跑后的包络给出 q ≤ 0.513（STATS_RULES §5.7）。",
+  "severity": "launch_blocker",
+  "doc_says_owner": "`freeze/launch_blockers.json` 9.11：\"owner_hint\": \"baseline-arms\""
+ },
+ {
+  "code": "9.12",
+  "file": "freeze/STATS_RULES.md",
+  "line": 915,
+  "statement": "判决题的 `bluffer` 阴性对照还没钉进流程：`exam/STATUS.md` 记着它实测拿到灵敏度 1.0 / 特异度 0.0 / 总分 0.265，在本规则下必须被判为不成立，但没有任何流程强制每次都跑它，所以「一律答不可解」这条钻法的封堵没有可执行的守卫。",
+  "paths": [
+   "exam/STATUS.md",
+   "exam/grading/mark.py",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "unclear",
+  "territories": [
+   "unclear",
+   "freeze"
+  ],
+  "why_first": "钉进流程的动作落在出考卷/评分那一侧（`exam/`，不在给定领地枚举里），freeze 只冻结这条纪律的文字。",
+  "kind": "fix_code",
+  "clears_when": "exam 的门（verify.sh 或测试）里存在一条断言：`bluffer` 假臂在本规则下判为不成立（特异度 0.0 < ⟨S_min⟩），且删掉该断言会判红。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "9.13",
+  "file": "freeze/STATS_RULES.md",
+  "line": 916,
+  "statement": "`scipy.stats.wilcoxon` 的 `method` 没冻死：同一组数据 `exact` 给 p = 0.5417、`approx` 给 0.0266，差二十倍、跨过 α = 0.05 两次，而 scipy 默认 `method=\"auto\"` 会按样本量与并列自动切换，等于把一个能翻转结论的选择留给运行时的数据形状。",
+  "paths": [
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "fix_code",
+  "clears_when": "存在一个落盘的模拟脚本与其输出（freeze/runs/*/ 下，用本项目真实形状的数据跑 exact 与 approx 两条路），且冻结脚本里 wilcoxon(...) 的同一行显式写死 zero_method=\"pratt\"、method=\"exact\"|\"approx\"、alternative=\"two-sided\"：git grep -n 'wilcoxon(' -- freeze | grep -q 'method='。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "A16-launch-gate-wired",
+  "file": "freeze/STATS_RULES.md",
+  "line": 955,
+  "statement": "开跑前置条件的可执行半边（`freeze/launch_gate.py`）目前尚未接入任何会花钱的路径——`freeze/verify.sh` 只把它的裁决当 NOTE 报，所以三条 launch blocker 在实际开跑那一刻没有任何东西会因为它们而拒绝花钱；接线本身被登记为看板项 `A16-launch-gate-wired`。",
+  "paths": [
+   "freeze/launch_gate.py",
+   "freeze/verify.sh",
+   "freeze/launch_blockers.json",
+   "freeze/runs/20260729T155500Z-S4-launch-gate/"
+  ],
+  "territory": "freeze",
+  "kind": "fix_code",
+  "clears_when": "会花钱的入口（各臂 harness 的 run 入口）在启动前调用 python freeze/launch_gate.py 并在 exit≠0 时拒绝开跑，且 freeze/verify.sh 把它的非零裁决当红而不是 NOTE：bash freeze/verify.sh 在人造一条未清 blocker 时 exit≠0。",
+  "severity": "registered",
+  "doc_says_owner": "接线登记为 `A16-launch-gate-wired`。"
+ },
+ {
+  "code": "NH-CT-premise-schema-absent",
+  "file": "freeze/CLAIMS_TEXT.md",
+  "line": 23,
+  "statement": "一条贯穿全篇的前提修正仍标 `needs_human`：`schema_repro` 臂不存在（`baseline-arms/SCHEMA_LOCATE.md`）且没有任何低成本合规路径造出它，于是 C1 的「唯一」、C2 的「vs Schema 平坦」、C5 的「10⁸」都失去同壳对照，本文给了每条 claim 的重述（`:37`、`:147` 等）但「要不要这样重述是人的决定」——而 `RECONCILE.md` H-2 其实已经裁定过同一件事。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "baseline-arms/SCHEMA_LOCATE.md",
+   "freeze/CLAIMS_TEXT.md:37",
+   "freeze/CLAIMS_TEXT.md:147",
+   "freeze/RECONCILE.md"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "baseline-arms"
+  ],
+  "why_first": "重述的落点是 claim 逐字文本本身；baseline-arms 只提供「那条臂不存在」这个事实。",
+  "kind": "human_decision",
+  "clears_when": "grep -c 'needs_human' freeze/CLAIMS_TEXT.md 为 0（三处「重述（needs_human…）」标记改为「已裁定（H-2，2026-07-29）」或删除）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G6",
+  "file": "freeze/RECONCILE.md",
+  "line": 232,
+  "statement": "S4 的 §14 外部工具链表与「没有 Python 依赖锁是头号技术债」只进了 `build_manifest.py` 的 X-2，散文尚未展开，所以冻结包里没有一处成文地记着外部工具链版本与依赖锁的缺失。",
+  "paths": [
+   "freeze/MANIFEST_DRAFT.s4draft.md:232-247",
+   "freeze/build_manifest.py"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "freeze/MANIFEST_DRAFT.md（或定稿清单）含一节外部工具链表（FD / Lean / scipy 等的版本与 sha256）并明写没有 Python 依赖锁这件事：grep -qE '依赖锁|requirements.*lock' freeze/MANIFEST_DRAFT.md。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G8",
+  "file": "freeze/RECONCILE.md",
+  "line": 244,
+  "statement": "电池 v1/v2/v2.1 的版本冲突与「冻 SHA 不冻标签」尚未移植进冻结稿；`agent/v5-battery-freeze` 上的 `BATTERY_V1.md` 已独立做出同样裁定，而本轮实测该文件在 master 上不存在（`freeze/MANIFEST.json` 的 `absent_paths` 里就有 `battery/BATTERY_V1.md`），所以清单第 8 项要哈希的那份「电池 v1 定义」目前指向一个不在主线上的文件。",
+  "paths": [
+   "freeze/MANIFEST_DRAFT.s4draft.md:156-168",
+   "battery/BATTERY_V1.md",
+   "freeze/MANIFEST.json"
+  ],
+  "territory": "battery",
+  "territories": [
+   "battery",
+   "freeze"
+  ],
+  "why_first": "`BATTERY_V1.md` 还在 `agent/v5-battery-freeze` 分支上，先落 master 才可能被清单哈希。",
+  "kind": "write_document",
+  "clears_when": "git ls-files battery/BATTERY_V1.md 非空，且 python freeze/build_manifest.py --verify 的 absent_paths 不再含它。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "`agent/v5-battery-freeze` 上的 `BATTERY_V1.md` 已独立做出同样裁定。"
+ },
+ {
+  "code": "G9",
+  "file": "freeze/RECONCILE.md",
+  "line": 246,
+  "statement": "效应量与精确检验尚未移植：Hodges–Lehmann 估计 + 95% 分布自由区间、「p 值不单独出现在摘要里」、局数 20 上下时三个检验一律取精确版本——这三条都不在现行 `STATS_RULES.md` 里，所以冻结的统计规则只冻了 p 值不冻效应量。",
+  "paths": [
+   "freeze/STATS_RULES.s4draft.md:202-208",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "grep -q 'Hodges' freeze/STATS_RULES.md 且 §4 含「p 值不单独出现在摘要里」的逐字条款。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G10",
+  "file": "freeze/RECONCILE.md",
+  "line": 248,
+  "statement": "S4 的 §15「十二行冻结前必办表（带 owner）」与 C1 的消融臂门槛 ⟨g⟩ 构造都没有移植——也就是说这份冻结套件目前没有任何一张带 owner 的必办表（正是本工单要补的东西），而 ⟨g⟩ 那个「只会削弱本方主张、不会加强它，所以可以安全预注册」的不对称门也不在冻结文本里；另外 `RECONCILE.md:158-166` 记着移植 ⟨g⟩ 与 `T_min` 时必须同时在 `PENDING_FIVE.md` 里给它们开小节，否则三处引用照样落空。",
+  "paths": [
+   "freeze/MANIFEST_DRAFT.s4draft.md:224-228",
+   "freeze/STATS_RULES.s4draft.md:227",
+   "freeze/STATS_RULES.s4draft.md:170",
+   "freeze/CLAIMS_TEXT.s4draft.md:198-199",
+   "freeze/PENDING_FIVE.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "冻结套件里存在一张逐行带 owner 的必办表（`freeze/RESIDUALS.json` + 无 owner 即判红的闸即其执行形态），且 grep -q 'g⟩' freeze/PENDING_FIVE.md 与 grep -q 'T_min' freeze/PENDING_FIVE.md 都命中。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": "记在此处由 G7/G10 的移植人处理：**移植 ⟨g⟩ 与 `T_min` 时必须同时在 `PENDING_FIVE.md` 里给它们开小节，否则移植完链接照样落空。**"
+ },
+ {
+  "code": "G11",
+  "file": "freeze/RECONCILE.md",
+  "line": 251,
+  "statement": "`theory_grammar.lark` 是死文件、必须在冻结清单里显式排除——尚未移植，所以清单目前既没有哈希它也没有声明排除它，读者无法分辨「漏了」与「故意不含」。",
+  "paths": [
+   "freeze/MANIFEST_DRAFT.s4draft.md:64-66",
+   "theory-compiler/src/theory_compiler/theory_grammar.lark"
+  ],
+  "territory": "freeze",
+  "territories": [
+   "freeze",
+   "theory-compiler"
+  ],
+  "why_first": "动作是清单里加一行显式排除并写明理由；`.lark` 文件本身不必删。",
+  "kind": "write_document",
+  "clears_when": "grep -q 'theory_grammar.lark' freeze/MANIFEST.json 且该条目标为显式排除（excluded）并给出理由。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G12",
+  "file": "freeze/RECONCILE.md",
+  "line": 252,
+  "statement": "「措辞四条硬规」未移植，尤其第一条「主张只能出自本文件，映不回去的一律降级为描述」——而 `freeze/CLAIMS_TEXT.md:90` 已经在引用这条硬规（「措辞四条硬规第 1 条在这种分歧下首先失效」），即现行文本引用了一条它自己不含的规则。",
+  "paths": [
+   "freeze/CLAIMS_TEXT.s4draft.md:182-192",
+   "freeze/CLAIMS_TEXT.md:90"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "freeze/CLAIMS_TEXT.md 里「措辞四条硬规」四条逐字成文（不只是被引用）：该文件含一节标题带「措辞」且其下有四条编号条款。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G13",
+  "file": "freeze/RECONCILE.md",
+  "line": 254,
+  "statement": "C4 的自我批评未移植：证书那句话无论结果如何都会出现在论文里（它是交付物事实而非结果），因此可能被读成一句永远为真的宣传语——这条自陈不在现行 `CLAIMS_TEXT.md` 的 C4 里。",
+  "paths": [
+   "freeze/CLAIMS_TEXT.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "freeze/CLAIMS_TEXT.md 的 C4 段含一条逐字自陈：该句是交付物事实、不构成结果性证据。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G14",
+  "file": "freeze/RECONCILE.md",
+  "line": 256,
+  "statement": "「不做中期分析」未移植：统计脚本在全部单元跑完前不得运行、随冻结包哈希、跑一次、任何重跑都是 incident——这条纪律不在现行 `STATS_RULES.md` 里，而没有它，跑到一半偷看结果不留任何痕迹。",
+  "paths": [
+   "freeze/STATS_RULES.s4draft.md:236-242",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "grep -q '中期分析' freeze/STATS_RULES.md 且该条款写明统计脚本只许在全部单元跑完后运行一次、重跑即 incident。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "G15",
+  "file": "freeze/RECONCILE.md",
+  "line": 258,
+  "statement": "ar25 degraded 的预注册敏感性分析与 S4 §7 的五条自陈弱点未移植，尤其 7.1「局数由封存堆大小决定而非功效分析，所以『未达显著』不能读成『无差异』」——这条不进论文 limitations 就等于默许把 null result 读成无差异。",
+  "paths": [
+   "freeze/STATS_RULES.s4draft.md:272-275",
+   "freeze/STATS_RULES.s4draft.md:281-292",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "grep -q '功效分析' freeze/STATS_RULES.md 且该小节逐条列出五条自陈弱点（可数为 5）。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-RC-h5-online-ablation-backend",
+  "file": "freeze/RECONCILE.md",
+  "line": 282,
+  "statement": "Theoria 臂与它自己的消融臂跑的是两套不同的编译后端（Theoria 臂调 `theory-compiler/.../generators/`，消融臂调 `cold-start-a0/compile/`），那是第二刀，而 `ablation-arm/DESIGN.md:29-30` 依 `Theoria.md:280` 只许切一刀，且这第二刀正落在 C2 依赖的那个对比上；文中「建议列为上线前置条件」，但它既不在 `STATS_RULES.md` §9 也不在 `freeze/launch_blockers.json` 里。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "ablation-arm/DESIGN.md:29-30",
+   "ablation-arm/ablcore/compile_abl.py:38",
+   "ablation-arm/ablcore/compile_abl.py:49-52",
+   "theory-compiler/src/theory_compiler/generators/",
+   "cold-start-a0/compile/"
+  ],
+  "territory": "ablation-arm",
+  "territories": [
+   "ablation-arm",
+   "theory-compiler"
+  ],
+  "why_first": "文中逐字「现在没建，改起来最便宜」——在线消融臂还没写，所以在它建起来时选同一套后端是零成本的；theory-compiler 那一侧不必动。",
+  "kind": "human_decision",
+  "clears_when": "二选一皆可查：在线消融臂的编译调用点与 Theoria 臂指向同一套后端（git grep -n 'compile' -- ablation-arm | grep -q 'theory_compiler'），或 freeze/MANIFEST.json 同时哈希两套后端并在 C2/C5 段落里写出这处分叉的具名限制。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-RC-h3-integer-cell-rule",
+  "file": "freeze/RECONCILE.md",
+  "line": 280,
+  "statement": "H-3 已裁定二值终点按整数规则聚合（n=2 一胜一负判未达成），而 `STATS_RULES.md` §6 的格值条款仍写「U3（二值）：格值 = 达成的 rep 数 / n ∈ {0, 0.5, 1}」（本轮实测在现行第 837 行）——Clopper–Pearson 只吃整数成功数，`RECONCILE.md` 自己写着「两句话不能同时进冻结文件」「裁定为整数规则后，`:559` 必须跟着改」，而那一改至今没做。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "freeze/STATS_RULES.md:837",
+   "freeze/RECONCILE.md:273",
+   "freeze/STATS_RULES.md"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "sed -n '837p' freeze/STATS_RULES.md | grep -q '0.5' 为假（§6 的 U3 格值改为整数规则：n=2 一胜一负 = 未达成），且 §1.2 的 Clopper–Pearson 分子仍是整数。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ },
+ {
+  "code": "NH-RC-h1-262-373-contradiction",
+  "file": "freeze/RECONCILE.md",
+  "line": 279,
+  "statement": "`Theoria.md:262`（四个 U 问题「只排座次，不当证据」）与 `:373`（U3 达成率列为主终点）自相矛盾，两种操作化都绕不开它，所以 C1 的 limitations 正文必须显式记这处矛盾——而本轮实测 `freeze/CLAIMS_TEXT.md` 全文既不出现 `262` 也不出现 `373`，且 C1 第 41 行指向的那个「§限制」小节在该文件里并不存在（只有 C3 有一节限制）。（本 id 由本次抽取铸造，文中无编号。）",
+  "paths": [
+   "freeze/CLAIMS_TEXT.md:41",
+   "freeze/RECONCILE.md:279"
+  ],
+  "territory": "freeze",
+  "kind": "write_document",
+  "clears_when": "grep -q 'Theoria.md:262' freeze/CLAIMS_TEXT.md 且 C1 之下存在一个被 `:41` 指得到的「限制」小节。",
+  "severity": "freeze_blocker",
+  "doc_says_owner": null
+ }
+]
