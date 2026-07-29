@@ -2,13 +2,19 @@
 
     cd battery && python verify.py        # or from anywhere; cwd does not matter
 
-Three rungs, and the territory is finished only if all three are green:
+Four rungs, and the territory is finished only if all four are green:
 
   1. the suite passes;
   2. the real pipeline runs once, offline -- the whole capability spectrum
      recomputed from the ledgers on disk;
   3. the seven artefacts that run produced have the fields they claim to have,
-     and their counts clear an explicit floor.
+     and their counts clear an explicit floor;
+  4. the committed documents state process 1's true separation count, and the
+     ceiling that count is a consequence of has not gone stale.
+
+Rung 4 was added by V22, after a cell whose maximum attainable score was zero
+was carried elsewhere as 60%.  Rungs 1-3 were green the whole time and would
+have stayed green: nothing in them reads a sentence.
 
 Rung 3 is the one that is usually missing.  A green suite says the metrics do
 what their author thought; it does not say the recompute ran, and it does not
@@ -98,6 +104,12 @@ MIN_CONTROL_RUNS = 5
 # 2 rungs: a "model ladder" of one model is not a gradient.
 MIN_LADDER = 2
 
+# The sentence STATUS.md has to carry verbatim, with the two counts filled in
+# from the committed artefact.  A whole sentence rather than a bare digit,
+# because a status document is full of digits and a gate that accepted any of
+# them would pass on a STATUS.md that never mentions process 1 at all.
+STATUS_CLAIM = "%d 条指标里 `discriminating` %d 条"
+
 
 def sh(argv, cwd=REPO):
     """Run a stage, decoding as UTF-8 rather than as the host locale.
@@ -128,7 +140,7 @@ def fail(problems, message):
 
 
 def rung_tests(problems):
-    print("[1/3] suite")
+    print("[1/4] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -145,7 +157,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_dir):
-    print("[2/3] one real run -- the whole spectrum recomputed from the "
+    print("[2/4] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -174,7 +186,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[3/3] artefact self-check")
+    print("[3/4] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -277,6 +289,152 @@ def rung_artifact_fields(problems, out_dir):
                                 for k, v in sorted(statuses.items()))))
 
 
+def rung_separation_claim(problems):
+    """[4/4] the documents state the true separation count, and cannot go stale.
+
+    Added by V22.  Process 1's headline number is **zero** -- no metric
+    separates the specified gradient -- and the way that number went wrong was
+    not that anybody computed it incorrectly.  It was that nothing checked the
+    prose against the artefact, so a cell whose maximum attainable score was 0
+    was carried elsewhere as 60% for weeks.  Rungs 1-3 would all have been
+    green throughout: the suite passes, the recompute runs, and
+    `discrimination_arms.json` has every field it claims to have while
+    separating nothing at all.  That is exactly the shape rung 3's docstring
+    warns about, one level up -- a structurally perfect file holding no result.
+
+    This rung reads the **committed** artefact rather than the scratch
+    recompute, because the claim in a committed document is about the committed
+    numbers; a clean checkout legitimately recomputes a smaller spectrum (see
+    `shipped_note`) and judging the prose against that would be red for a
+    reason that is not a defect.
+
+    The third check is the one worth having.  "Zero is unreachable here" is
+    true only while the pile stays too small to reach it, so the gate derives
+    the threshold instead of trusting the sentence, and **flips direction**
+    when the data grow: the moment a metric pairs enough games for p<0.05 to be
+    attainable, the ceiling paragraph becomes false and this turns red until
+    somebody rewrites it.  A gate that could only catch the claim going too
+    high would let it rot in the other direction.
+    """
+    print("[4/4] the separation claim in the committed documents")
+    path = os.path.join(SHIPPED, "discrimination_arms.json")
+    if not os.path.exists(path):
+        fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
+                       "there is no artefact for the documents to agree with")
+        return
+    with open(path, encoding="utf-8") as fh:
+        try:
+            doc = json.load(fh)
+        except json.JSONDecodeError as exc:
+            fail(problems, "committed discrimination_arms.json is not JSON: %s"
+                 % exc)
+            return
+
+    metrics = doc.get("metrics") or {}
+    if not metrics:
+        fail(problems, "committed discrimination_arms.json judges no metrics")
+        return
+    separating = sorted(m for m, e in metrics.items()
+                        if e.get("verdict") == "discriminating")
+    # The sign test's **non-tied** n, not `n_paired_games`.  `2/2**n` is a
+    # function of the former, and the two already differ here: P3, X2 and X3
+    # pair four games and score three.  Keying the staleness flip on paired
+    # games would fire the moment the pile reached six even if every metric
+    # lost a pair to a tie -- n=5, floor 0.0625, the ceiling paragraph still
+    # true -- and demand the rewriting of a correct sentence.
+    paired = max((_non_tied(e) for e in metrics.values()), default=0)
+    needed = docs_sign_test_games_needed()
+
+    documents = {}
+    for name in ("METRICS.md", "STATUS.md"):
+        try:
+            with open(os.path.join(HERE, name), encoding="utf-8") as fh:
+                documents[name] = fh.read()
+        except OSError as exc:
+            fail(problems, "could not read %s: %s" % (name, exc))
+    if len(documents) < 2:
+        return
+
+    # (a) METRICS.md is generated, so this is not a duplicate of test_docs: it
+    # catches the file being hand-edited after generation, which is the one
+    # failure the generator cannot see.
+    headline = "**%d of %d metrics separate" % (len(separating), len(metrics))
+    if headline not in documents["METRICS.md"]:
+        fail(problems, "METRICS.md does not carry the artefact's headline %r "
+                       "-- regenerate with `python -m battery.docs`"
+             % headline)
+
+    # (b) the number a reader of STATUS.md walks away with.  Checked as one
+    # derived sentence rather than as "does the digit appear somewhere": the
+    # first draft of this gate looked for `str(n_separating)` inside the W-13
+    # section, which a document containing `0.125` or `80 run` satisfies
+    # without saying anything.  Its own negative control caught it.
+    claim = STATUS_CLAIM % (len(metrics), len(separating))
+    if claim not in documents["STATUS.md"]:
+        fail(problems, "STATUS.md does not state the separation count; it must "
+                       "contain %r verbatim, so that the number a reader walks "
+                       "away with is the number in the artefact" % claim)
+
+    # (c) the anti-staleness flip.
+    ceiling_claimed = "unreachable for every metric" in documents["METRICS.md"]
+    if paired < needed:
+        if separating:
+            fail(problems, "arithmetic contradiction: the best-covered metric "
+                           "pairs %d game(s) and the sign test needs %d to "
+                           "reach p<0.05 at all, yet %d metric(s) are recorded "
+                           "as `discriminating` (%s)"
+                 % (paired, needed, len(separating), ", ".join(separating)))
+        if not ceiling_claimed:
+            fail(problems, "the pile is still too small to attain p<0.05 (%d "
+                           "paired game(s) against the %d needed), but "
+                           "METRICS.md no longer says so -- a bare zero reads "
+                           "as `the metrics failed` when it means `the test "
+                           "could not be sat`" % (paired, needed))
+    elif ceiling_claimed:
+        fail(problems, "METRICS.md still says `discriminating` is unreachable, "
+                       "but the best-covered metric now pairs %d game(s) and "
+                       "only %d are needed. The ceiling paragraph is stale and "
+                       "the zero now means something else -- rewrite it before "
+                       "this goes green" % (paired, needed))
+
+    if not problems:
+        print("   ok    %d separating of %d judged; %d paired game(s) against "
+              "the %d the sign test needs; both documents agree"
+              % (len(separating), len(metrics), paired, needed))
+
+
+def _non_tied(entry):
+    """One metric's sign-test `n`, taken from `docs.py` rather than restated.
+
+    Same reason as `docs_sign_test_games_needed`: the gate and the document it
+    checks must not hold two definitions of the count the arithmetic is a
+    function of.
+    """
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.docs import _non_tied as impl
+    return impl(entry)
+
+
+def docs_sign_test_games_needed():
+    """The threshold, from the generator rather than restated here.
+
+    Imported late and by function so that this gate and `METRICS.md` cannot
+    disagree about what "enough games" means: there is one definition, in
+    `battery/docs.py`, derived in turn from `audit/stats.py`'s own formula.
+
+    The repo root goes on `sys.path` first because this file is documented as
+    runnable directly -- `python battery/verify.py`, cwd irrelevant -- and in
+    that mode the interpreter puts `battery/` on the path, not its parent, so
+    `import battery` fails. Restating the threshold here to dodge the import
+    would give the gate its own copy of the number it exists to check.
+    """
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.docs import _sign_test_games_needed
+    return _sign_test_games_needed()
+
+
 def shipped_note(out_dir):
     """How the fresh spectrum compares with the one that is committed.
 
@@ -329,11 +487,14 @@ def main():
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
 
+    rung_separation_claim(problems)
+
     print()
     if problems:
         print("battery: RED (%d problem(s))" % len(problems))
         return 1
-    print("battery: green -- suite, one real run, artefact fields")
+    print("battery: green -- suite, one real run, artefact fields, "
+          "separation claim")
     return 0
 
 
