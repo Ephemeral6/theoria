@@ -285,18 +285,69 @@ class Heuristic:
             best = min(best, math.ceil(Fraction(required) / self.max_decrease))
         return float(best)
 
-    def as_json(self) -> Dict[str, object]:
+    def entitlement(self, admissibility_check: Optional[Sequence[Dict[str, object]]]
+                    = None) -> Dict[str, object]:
+        """What actually licenses calling this heuristic admissible, itemised.
+
+        The bound is `h(s) = min_g ceil((potential(s) - potential(g)) / M)`, and
+        the argument for it is: every legal move leaves the potential
+        non-increasing and drops it by at most `M`, so k moves cannot close a gap
+        wider than `k*M`.  That argument is exactly the certificate's
+        `inv_closed` condition plus `M`'s definition -- which means the licence is
+        `certificate.holds`, the exact rational re-check, and **not** the author's
+        confidence.  A certificate whose `conditions` are empty has not been
+        re-checked at all and `holds` is false for that reason too.
+
+        `admissibility_check`, when the caller has one, is the empirical half:
+        h against the true shortest path on every state with a finite one.  It is
+        a sample, not a proof, so it can only ever *subtract* -- a single row with
+        `admissible: false` is a counterexample and settles the matter.
+        """
+        proved = self.certificate.holds
+        rows = list(admissibility_check) if admissibility_check is not None else None
+        if rows is None:
+            sampled: Optional[bool] = None
+            counterexamples: List[Dict[str, object]] = []
+        else:
+            counterexamples = [r for r in rows if not r.get("admissible")]
+            sampled = not counterexamples
         return {
+            "certificate_holds": proved,
+            "certificate_conditions": dict(self.certificate.conditions),
+            "empirical_check": "not run" if sampled is None else (
+                "%d state(s), %d counterexample(s)" % (len(rows or []), len(counterexamples))
+            ),
+            "counterexamples": counterexamples,
+            "admissible": bool(proved) and (sampled is not False),
+        }
+
+    def as_json(self, admissibility_check: Optional[Sequence[Dict[str, object]]] = None
+                ) -> Dict[str, object]:
+        """The payload.  `admissible` is derived here and nowhere else.
+
+        It used to be the literal `True`, sitting beside an `admissibility_check`
+        the headline never read -- so a heuristic built on a certificate that
+        fails its own exact re-check still published `"admissible": true`.  The
+        headline and the evidence are now computed by one expression, in one
+        place, because two sites that agree on today's data are exactly what
+        D-033 found drifting apart.
+        """
+        basis = self.entitlement(admissibility_check)
+        payload: Dict[str, object] = {
             "form": "potential_lower_bound",
             "weights": [str(w) for w in self.certificate.weights],
             "max_decrease": str(self.max_decrease),
             "goal_states": list(self.certificate.goal_states),
             "formula": "h(s) = min_g ceil((potential(s) - potential(g)) / M), "
                        "infinite when potential(s) < potential(g)",
-            "admissible": True,
+            "admissible": basis["admissible"],
+            "admissible_basis": basis,
             "rendering": "at least ceil((potential(s) - potential(goal)) / %s) moves remain"
                          % self.max_decrease,
         }
+        if admissibility_check is not None:
+            payload["admissibility_check"] = list(admissibility_check)
+        return payload
 
 
 def heuristic_from(certificate: Certificate) -> Heuristic:

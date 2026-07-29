@@ -111,9 +111,32 @@ the safe direction (see DECISIONS.md D-008).
   "goal_states": ["0100"],
   "formula": "h(s) = min_g ceil((potential(s) - potential(g)) / M), ...",
   "admissible": true,
+  "admissible_basis": {
+    "certificate_holds": true,
+    "certificate_conditions": {"inv_init": true, "inv_closed": true, "goal_break": true},
+    "empirical_check": "3 state(s), 0 counterexample(s)",
+    "counterexamples": [],
+    "admissible": true
+  },
   "admissibility_check": [{"state":"1101","h":0.0,"true_distance":2,"admissible":true}]
 }
 ```
+
+`admissible` is **derived, not asserted** (D-034). It was a literal `true` until
+E16, sitting beside an `admissibility_check` that nothing read. It is now
+`certificate_holds AND no counterexample`, computed in `Heuristic.as_json` from
+the check passed into it — one expression, so the headline and the evidence
+cannot drift apart. `admissible_basis` shows the working: which half licenced the
+verdict, and which rows refuted it.
+
+Two things the derivation does *not* claim. The proof half is
+`certificate.holds`, the exact rational re-check — and that re-check iterates the
+move list the producer handed it, so it is silent about a move geometry missing
+from that list (D-035, site 1). The empirical half is a **sample** against known
+shortest paths, so it can only ever subtract: rows that all say `admissible` do
+not prove admissibility, but one row that says otherwise settles it. An
+`admissibility_check` omitted entirely leaves `empirical_check: "not run"` in the
+basis rather than being scored as a pass.
 
 ## API
 
