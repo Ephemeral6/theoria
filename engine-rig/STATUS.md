@@ -114,15 +114,27 @@ UNSAT the bundled search found. `runs/p13-fd-real/DIVIDEND.md`.
 closed-form optimum and the sokoban fixtures extended by size. Full numbers in
 `runs/20260728T072633Z-E2-fd-ladder-bench/`.
 
-* **Fast Downward's cost here is startup, not search.** Every FD row on the batch
-  sits between 140 and 260 ms almost regardless of instance; on `sokoban-far6`
-  the search itself is 4.1 ms of a 181 ms bill. The crossover against the bundled
-  rung is at `gripper-08`, ~10^4 stub expansions. Every instance this rig
-  currently generates is below it, so **D-025's determinism pin costs nothing in
-  speed today.**
-* **`ipdb` never pays on this batch**: `sokoban-far6` 1794 ms end to end against
-  `lmcut`'s 181 ms, for 18 expansions against 47. Its pattern databases are built
-  before it searches.
+* **Fast Downward's cost here is startup, not search — on the typical row.**
+  (E13 corrected the three numbers in this bullet against `ladder.json`; they had
+  been written from a different bench execution and one of them was in no
+  artifact at all. `ENGINE_TABLE.md`'s `fd_adapter` row is now the probed
+  version and this paragraph is downstream of it, not the other way round.)
+  Driver startup — subprocess wall minus FD's own total — is the tight quantity:
+  144.5 to 181.2 ms, median 154.9, across all 51 timed FD rungs. The median rung
+  spends 0.2 % of its 163.3 ms wall inside search, and on `sokoban-far6` the
+  lmcut search is 4.1 ms of a 187.3 ms bill — **not the 181 ms this bullet used
+  to say, which appears in no artifact for that row.** The claim fails upward
+  twice: search dominates on `gripper-10`/lmcut (502.9 ms of 666.2), and the
+  slowest row is neither startup nor search. The crossover against the bundled
+  rung is at `gripper-08`, ~10^4 stub expansions. Every instance the *engines*
+  in this rig currently generate is below it — the bench's own gripper ladder
+  runs past it — so **D-025's determinism pin costs nothing in speed today.**
+* **`ipdb` never pays on this batch**: `sokoban-far6` 1796.8 ms end to end
+  against `lmcut`'s 187.3 ms, for 18 expansions against 47. Its pattern
+  databases are built before it searches, and the bench's middle clock says so
+  rather than leaving it to inference: `fd_total` is 1615.6 ms of that 1796.8,
+  and the run's log records 1.621222 s in the hill-climbing pattern-collection
+  generator.
 * **LAMA's first plan reaches 3.4x the optimum** (`open4far`: 37 against 11) while
   being the only rung that scales — 43 expansions at `gripper-10` where `lmcut`
   expands 66,176. `plan.optimal = False` there is load-bearing.
