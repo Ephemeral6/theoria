@@ -388,9 +388,10 @@ STANDING_DEAD_MIN = STALE_MIN * 2
 def standing_verdict(agent, now=None):
     """Is this standing session dead? Returns (dead: bool, why: str).
 
-    Three conditions, and **all three** must hold. Each alone has an innocent
-    reading, which is exactly why the original sweep refused to touch standing
-    sessions at all:
+    Three conditions, and **all three** must hold -- and unlike the first
+    version of this function, all three are now actually implemented. Each
+    alone has an innocent reading, which is exactly why the original sweep
+    refused to touch standing sessions at all:
 
       * heartbeat older than two cycles -- but a session deep in one long task
         legitimately goes quiet for a while;
@@ -416,7 +417,8 @@ def standing_verdict(agent, now=None):
     if not os.path.exists(hb):
         return False, "no heartbeat file at all -- never started, not died"
     try:
-        age_min = (now - os.path.getmtime(hb)) / 60.0
+        hb_mtime = os.path.getmtime(hb)
+        age_min = (now - hb_mtime) / 60.0
     except OSError as exc:
         return False, "heartbeat unreadable (%s); refusing to guess" % exc
     if age_min < STANDING_DEAD_MIN:
@@ -437,8 +439,38 @@ def standing_verdict(agent, now=None):
         return False, ("URGENT is only %.0f min old -- not yet one cycle, it "
                        "may simply not have come round" % urgent_age)
 
-    return True, ("heartbeat %.0f min old (>%d), and an URGENT posted %.0f min "
-                  "ago (>%d) is still unread"
+    # The third condition, and the only *positive* evidence in the whole test.
+    # The other two are silences, and a silence is the absence of proof rather
+    # than proof of absence. Traffic on the outbound bus after the heartbeat is
+    # the session demonstrably doing something, so it overrides both.
+    #
+    # It was described in three places -- the commit message, this function's
+    # own docstring, and reflex.py's comment -- and implemented in none. Ten
+    # tests encoded the two-signal behaviour, so nothing could have caught the
+    # divergence: the tests agreed with the code against the documentation.
+    #
+    # It is not academic. At 18:52:20Z a claim was released 48 minutes after
+    # RES-3 wrote to its out.jsonl at 18:04:28Z, and the holder objected on the
+    # spot. This condition would have refused that release.
+    #
+    # Wired as a *refusal only*: it can keep a claim, never free one. That
+    # makes it impossible for this change to cause a wrongful release, which is
+    # the only failure here that costs anything irreversible.
+    out = os.path.join(HERE, "bus", agent, "out.jsonl")
+    try:
+        if os.path.exists(out) and os.path.getmtime(out) > hb_mtime:
+            spoke_min = (now - os.path.getmtime(out)) / 60.0
+            return False, ("bus out.jsonl was written %.0f min ago, after the "
+                           "heartbeat -- the session was demonstrably alive "
+                           "more recently than its own heartbeat says"
+                           % spoke_min)
+    except OSError:
+        # Unreadable is not evidence of death; fall through to the two silences
+        # only if they already convicted, which they have by this point.
+        pass
+
+    return True, ("heartbeat %.0f min old (>%d), an URGENT posted %.0f min ago "
+                  "(>%d) is still unread, and no bus traffic since the heartbeat"
                   % (age_min, STANDING_DEAD_MIN, urgent_age, STANDING_CYCLE_MIN))
 
 
@@ -457,8 +489,13 @@ def cmd_sweep(dry=False, include_standing=False):
 
     一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
     领地被锁，新工人领不到活。判据保守——只清 W-* 前缀（一次性工人）且其
-    计划任务已不在运行的；App/常驻会话（APP-*/RES-*）一律不动，它们的存活
-    从任务表看不出来。"""
+    计划任务已不在运行的。
+
+    **App/常驻会话（APP-*/RES-*）默认仍然不动**，但 `--include-standing` 下
+    改由 `standing_verdict()` 判定：心跳陈旧 + URGENT 悬而未答 + 心跳之后没有
+    总线流量，三条同时成立才释放。这段话原本写着「一律不动」，而 S21 已经加了
+    那个模式——**文档比代码旧了一轮**，正是本函数所属那一类问题的元层版本，
+    所以在此对齐而不是留着。"""
     import subprocess
     out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
                          capture_output=True)
