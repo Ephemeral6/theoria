@@ -37,7 +37,8 @@ scorecard close that needed two tries — 404, then 200.
 witness: `total_actions: 0`, `actions: 0`, `level_actions: [0,0,0,0,0,0,0]`,
 `score: 0.0`. The arm's reconciliation agrees — `successful_actions: 0` over 18
 `env_steps` — and the cost block records `model_calls: 0`, `usd: 0.0`
-(`.../MANIFEST.json`, `.../run.json`).
+(`theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json`,
+`theoria-arm/runs/preflight-20260728T012057Z/run.json`).
 
 The run also produced three findings that only a live chain can produce, and
 they are the reason a dry run against a mock would not have substituted:

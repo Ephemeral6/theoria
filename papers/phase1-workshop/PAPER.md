@@ -623,7 +623,7 @@ extraction, then `mdl_segmenter`, multi-track CEGIS, `zero_space` and
 `probe_frontier`, producing **29 schema-valid candidates** (M2;
 `cold-start-a0/artifacts/candidates.jsonl`. `THEORIZE_LOG.md`'s Round 0 opens on
 28 — it counts the 28 it adjudicated, the 29th row being a `plan`); then LLM
-adjudication of every candidate into `theory/theory.dsl` — **3 objects, 7 rules,
+adjudication of every candidate into `cold-start-a0/theory/theory.dsl` — **3 objects, 7 rules,
 2 invariants, 1 pending theorem**, reasoning recorded in
 `cold-start-a0/THEORIZE_LOG.md` (M3); then the four co-derived forms, cheap
 certify at **22 356/22 356 pixels**, a Lean `inv_all` with an **empty axiom
@@ -637,7 +637,7 @@ with their verdicts, one probe designed and never ruled on, the manual's two
 revisions with their triggers, the three compiler defects, and the expressivity
 ledger. It is parsed out of `cold-start-a0/THEORIZE_LOG.md`'s own headings by
 `figures/fig06_concept_timeline.py` rather than retyped; the plate is
-`figures/out/light/fig06_concept_timeline.svg` (and `out/dark/`), and every
+`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
 number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
 is unflattering: the manual was revised **zero** times by certify, and every
 iteration that did happen was in the compiler.
@@ -1385,7 +1385,7 @@ not a held-out split — A3 has no held-out set.
 
 **And the control scores the same.** The third row of that artefact is "the
 control arm's manual, induced from level 2's own sweep", and it is also right on
-**252 of 252** (`score_vs_truth.json`, `results[2]`, `theory/generated_l2_scratch/`).
+**252 of 252** (`score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
 Earlier drafts of this section reported the carried manual's 252/252 and did not
 print the control's, which made an undiscriminating number look like the result.
 It is not: **on accuracy the two arms are tied at ceiling, and this measurement
@@ -2221,7 +2221,8 @@ scorecard close that needed two tries — 404, then 200.
 witness: `total_actions: 0`, `actions: 0`, `level_actions: [0,0,0,0,0,0,0]`,
 `score: 0.0`. The arm's reconciliation agrees — `successful_actions: 0` over 18
 `env_steps` — and the cost block records `model_calls: 0`, `usd: 0.0`
-(`.../MANIFEST.json`, `.../run.json`).
+(`theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json`,
+`theoria-arm/runs/preflight-20260728T012057Z/run.json`).
 
 The run also produced three findings that only a live chain can produce, and
 they are the reason a dry run against a mock would not have substituted:

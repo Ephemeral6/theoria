@@ -81,6 +81,7 @@ ADJUDICATED_AMBIGUITY = {
         "figures/out/light/fig05_a2_repair_loop.svg",
         "figures/out/light/fig06_concept_timeline.svg",
         "figures/out/light/fig07_a0_vs_a0prime.svg",
+        "figures/out/dark/fig06_concept_timeline.svg",
         "figures/csv/fig05_a2_repair_loop.csv",
         "figures/csv/fig06_concept_timeline.csv",
         "figures/csv/fig07_a0_vs_a0prime.csv",
