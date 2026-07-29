@@ -1,0 +1,145 @@
+{
+  "const_solvable_bare": {
+    "awarded": 8.0,
+    "possible": 34.0,
+    "fraction": 0.235294,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 8.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 0.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "none": 17
+    }
+  },
+  "const_unsolvable_bare": {
+    "awarded": 9.0,
+    "possible": 34.0,
+    "fraction": 0.264706,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 0.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 9.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "none": 17
+    }
+  },
+  "const_abstain_bare": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "fraction": 0.0,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 0.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 0.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "none": 17
+    }
+  },
+  "abstain_tokens": {
+    "abstain": 0.0,
+    "no_verdict": 0.0,
+    "unknown": 0.0,
+    "unsure": 0.0
+  },
+  "const_unsolvable_search": {
+    "awarded": 11.0,
+    "possible": 34.0,
+    "fraction": 0.323529,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 0.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 11.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "none": 8,
+      "search_exhaustion": 5,
+      "search_not_credible": 4
+    }
+  },
+  "const_unsolvable_best_certificate": {
+    "awarded": 18.0,
+    "possible": 34.0,
+    "fraction": 0.529412,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 0.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 18.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "certificate": 9,
+      "none": 8
+    }
+  },
+  "certificates_accepted_on_solvable_items": [],
+  "const_solvable_best_witness": {
+    "awarded": 16.0,
+    "possible": 34.0,
+    "fraction": 0.470588,
+    "by_truth_claim": {
+      "solvable": {
+        "n": 8,
+        "awarded": 16.0,
+        "possible": 16.0
+      },
+      "unsolvable": {
+        "n": 9,
+        "awarded": 0.0,
+        "possible": 18.0
+      }
+    },
+    "reasons": {
+      "none": 9,
+      "witness": 8
+    }
+  },
+  "marginal_payoff": {
+    "items": 17,
+    "n_unsolvable": 9,
+    "n_solvable": 8,
+    "pay_for_true_unsolvable_bare": 1.0,
+    "pay_for_false_unsolvable": 0.0,
+    "pay_for_abstain": 0.0,
+    "expected_gain_of_bluffing_unsolvable_over_abstaining_per_item": 0.529412,
+    "expected_gain_of_bluffing_solvable_over_abstaining_per_item": 0.470588,
+    "downside_of_either_bluff": 0.0,
+    "paper_asymmetry_points": 1.0
+  }
+}
