@@ -1,1 +1,1 @@
-{"id": "RES-4", "utc": "2026-07-29T02:00:28Z", "cycle": 7, "state": "working", "note": "S16 已交付push+done:reap_worktrees(实删70个,磁盘8.8→14.8GB)+两条常设探针(disk_headroom/clock_sanity,首跑抓到RES-3心跳超前626分钟)+按子进程分家的解码修复(11处,非原报的17处,已订正) · S14 已rebase到新master并push(此前被磁盘满伪装成a0-spike闸门红卡了5次) · S15 已合入master · 手上还有 S18/S22"}
+{"id": "RES-4", "utc": "2026-07-29T02:16:13Z", "cycle": 9, "state": "working", "note": "S25 探针已推(合并队列最久卡 661 分钟、9 件板上done却不在master;头条数字取最久滞留而非条数,并有负样本要求它随时间上涨) · S14 自查发现我加的 rung 把 bash 路径 bug 又造了一遍,已修并重推 · S16/S18/S22 已推 · 仍在手:S25 第3项两条机械阻塞未修"}

@@ -1,16 +1,12 @@
-# CONFLICT-origin_agent_a3-campaign-devpile.md
-branch: origin/agent/a3-campaign-devpile
+# CONFLICT-origin_agent_v18-battery-prereg-check.md
+branch: origin/agent/v18-battery-prereg-check
 reason: verify gate red in monitor (verify.sh)
-tip: cde83c28714933bdf0a6e4d335cf09061451b09e
-first_seen: 2026-07-29T04:14:01Z
-last_seen: 2026-07-29T04:14:01Z
-attempts: 1
 
 ```
 ======================================================================
 == tests              FAILED(1)
 ======================================================================
-...............xx.                                            [100%]
+..........xx.                                                 [100%]
 ================================== FAILURES ===================================
 _____________ test_this_repository_is_where_the_survey_says_it_is _____________
 
