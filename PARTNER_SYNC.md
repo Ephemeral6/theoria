@@ -1258,3 +1258,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：89 passed；`bash ablation-arm/verify.sh` GREEN 五阶段；五条 P 断言全部 MEASURED。零 API、零网络、$0.00。
 阻塞：无。
 下一步：三件已如实记为界限而非缺口——美元列需要两臂在同一局真游戏上跑；E3 另一半上游已关闭（D-A2-006）；`theoria_ablate` 未在 `proxy/ledger.py:ARMS` 注册，所以本臂记录仍写 `arm: "theoria"`，读者无法把两臂过滤开（D-AB-004 在案）。另：接手时闸门是红的，原因与 A4b 无关——S14（127edab）给十一个领地各加了一个顶层 `verify.py`，本臂 `tests/test_verify.py` 的 `import verify` 从此拿到的是 `cold-start-a2` 的那一个，十条测试红了七十五分钟无人察觉；已修并加了防再犯的哨兵测试。
+## [papers/phase1-workshop] 2026-07-29T13:40:00Z P13-paper-intro-abstract
+状态：摘要与 §1 整体重写，主张改为「电池自审的负面结果」领衔；连带把 §2.5 / §3.3 标题 / §9 / §10.5 的同类错误一并改掉（上一轮被批评只改被指到的地方）。
+测试：verify_paper.py FAIL (2/4)，与 master 逐项相同——B PATHS 三条断链两条省略号、C FIGDATA，均为 figures 条目的存量债，本轮未新增亦未修。
+阻塞：无。但 **§7.7 与 §1.2 现在数字不一致**：§7.7 只报旧一轮（34/38、主表 9），仓库里已有盲测轮 (battery/runs/20260729T021247Z-V9-…) 把 37/38 与主表 9→2→0 落了盘，§7.2a「主表有九条」已成假；§7.9 的包袱在主表为空时失效。§7.7 需按盲轮重导，连带 §7.8–§7.10。这不是本条目的活，已写进 runs/…/ADVERSARIAL_ROUND.md。
+下一步：交回工作板，等 §7.7 重导条目；本条目的对抗轮记录与遗留清单在 papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/。
