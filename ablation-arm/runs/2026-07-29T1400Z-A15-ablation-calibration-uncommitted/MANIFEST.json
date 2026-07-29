@@ -1,0 +1,45 @@
+{
+  "prompt_id": "A15-ablation-calibration-uncommitted",
+  "branch": "agent/a15-ablation-calibration-uncommitted",
+  "base_commit": "b60a15373b1ad1945030791af459f30acfaf7749",
+  "utc": "2026-07-29T14:00:00Z",
+  "worker": "W-1672",
+  "territory": "ablation-arm",
+  "api_calls": 0,
+  "sealed_pile_contact": false,
+  "files": [
+    {
+      "path": "ablation-arm/abltools/worktree_audit.py",
+      "sha256": "4a2db8174053ff0d76c230a5f1921c1edc0f2b3c081c48fcff7f518b2d8bd878"
+    },
+    {
+      "path": "ablation-arm/abltools/verify_a15.py",
+      "sha256": "4604b235bdc3ba568e55d5ad077491075bd57bfae00156bc9d5d8d5994aa62f4"
+    },
+    {
+      "path": "ablation-arm/abltools/__init__.py",
+      "sha256": "053c624b52fcbb6602561269cf906b491501a8ed9b72619413ffcaacbfdb4f00"
+    },
+    {
+      "path": "ablation-arm/runs/2026-07-29T1400Z-A15-ablation-calibration-uncommitted/worktree_census.json",
+      "sha256": "ea9ea92a5b8b31b83a1b3ff691ddded09c3c1bf778defc61c1e09fa908d030a0"
+    },
+    {
+      "path": "ablation-arm/runs/2026-07-29T1400Z-A15-ablation-calibration-uncommitted/worktree_census.md",
+      "sha256": "5b165e4ac3e736f393fe4fb422f1c57c7b9a1d56634bf0f3535d6f1512e8a3ca"
+    },
+    {
+      "path": "ablation-arm/runs/2026-07-29T1400Z-A15-ablation-calibration-uncommitted/RUN_STATE.md",
+      "sha256": "6acf1c36512093f39908a5d956f70e560379b12b168cbb446b375075cf830fa9"
+    }
+  ],
+  "gates": {
+    "abltools.verify_a15": "green",
+    "ablation-arm/verify.sh": "green"
+  },
+  "adversarial_review": {
+    "defects_found": 7,
+    "all_failed_toward": "safe-to-delete",
+    "all_fixed": true
+  }
+}
