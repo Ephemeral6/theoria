@@ -27,11 +27,15 @@ than preventing anything; a warning is not in the artefact, and the artefact is
 what gets read six weeks later; the bit is in the ledger, hashes into the
 chain, replays, and can be given readers.
 
-**It was given two readers, because a bit nobody reads is decoration (D-031).**
-`env_proxy` writes one `variant_degenerate` incident per session (new incident
-kind, contract change C-006, classified `additive` by
-`tools/contract.py`). `tools/check_variant_degeneracy.py` reads any ledger and
-exits 2. `verify.py` gains rung 5, which plays a game built to trip the guard,
+**It was given three readers, because a bit nobody reads is decoration
+(D-031).** `tools/check_variant_degeneracy.py` reads any ledger and **exits 2**.
+`runner` scans the ledger every run writes and records `variant_degeneracy` in
+that run's own record, so R-V22 fires without anyone typing anything —
+`verify.py` requires the key. `env_proxy` writes one `variant_degenerate`
+incident per session (new incident kind, contract change C-006, classified
+`additive` by `tools/contract.py`) for the human who reads the ledger later.
+The three are not peers and D-032a says so: only the first exits non-zero.
+`verify.py` also gains rung 5, which plays a game built to trip the guard,
 requires a refusal, strips the markers from that same ledger and requires a
 pass.
 

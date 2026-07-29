@@ -11,5 +11,5 @@ env_step records carrying a win_tighten rewrite: 33 of 126
 variant_degenerate incidents: 0
 
 $ python -m proxy.tools.check_variant_degeneracy <ledger>
-C:\Users\user\AppData\Local\Temp\v22-evidence-0642m4cq\scoring.jsonl: PASS (126 records, 0 degenerate rewrite(s))
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoring.jsonl: PASS (126 records, 62 carrying a variant, 0 degenerate rewrite(s), 0 unreadable line(s))
 exit=0

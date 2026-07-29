@@ -12,7 +12,7 @@ variant_degenerate incidents: 1
   {"game_id": "ar25-0c556536", "kind": "variant_degenerate", "reason": "score_absent", "require_score": 2, "seq": 60, "variant_id": "t-absent"}
 
 $ python -m proxy.tools.check_variant_degeneracy <ledger>
-C:\Users\user\AppData\Local\Temp\v22-evidence-0642m4cq\scoreless.jsonl: REFUSED (127 records, 33 degenerate rewrite(s))
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoreless.jsonl: REFUSED (127 records, 62 carrying a variant, 33 degenerate rewrite(s), 0 unreadable line(s))
   seq 59  variant t-absent  require_score=2  reason=score_absent
     this game reported no score, so `score_at_least` is unsatisfiable at every value: the win condition was not tightened, it was abolished. Reading an absent score as a shortfall is deliberate -- the other direction would let a game that never reports a score win a tightened variant outright -- but the variant's claim no longer follows from the construction it names. Whether a game reports a score is a protocol question, answerable without playing it; answer it before using win_tighten on that game.
   seq 62  variant t-absent  require_score=2  reason=score_absent

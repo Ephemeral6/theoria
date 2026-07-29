@@ -4,5 +4,5 @@ SCORELESS SESSION, `degenerate` marker removed from 33 record(s)
 The same bytes otherwise. If this still went red, the guard would be reading something other than the marker and the marker would be load-bearing for nothing.
 
 $ python -m proxy.tools.check_variant_degeneracy <stripped ledger>
-C:\Users\user\AppData\Local\Temp\v22-evidence-0642m4cq\scoreless-unmarked.jsonl: PASS (127 records, 0 degenerate rewrite(s))
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoreless-unmarked.jsonl: PASS (127 records, 62 carrying a variant, 0 degenerate rewrite(s), 0 unreadable line(s))
 exit=0

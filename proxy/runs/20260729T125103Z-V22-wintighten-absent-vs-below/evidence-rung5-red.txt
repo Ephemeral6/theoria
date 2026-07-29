@@ -6,7 +6,7 @@ verify.py rung 5, deliberately broken two ways
 
 -- neutered  (guard always exits 0)
    problems: 1
-   a win_tighten against a scoreless world was not refused (exit 0): C:\Users\user\AppData\Local\Temp\rung5-scratch-_jkum0ig\ledger_degenerate.jsonl: REFUSED (87 records, 13 degenerate rewrite(s))
+   a win_tighten against a scoreless world was not refused (exit 0): C:\Users\user\AppData\Local\Temp\rung5-scratch-pyijuy68\ledger_degenerate.jsonl: REFUSED (87 records, 42 carrying a variant, 13 degenerate rewrite(s), 0 unreadable line(s))
 
 -- paranoid  (guard always exits 2)
    problems: 1
