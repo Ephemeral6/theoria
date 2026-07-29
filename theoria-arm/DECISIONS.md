@@ -311,3 +311,83 @@ seven kinds still report (a zero is a measurement), and the constraint-8 audit
 still adds up. What changes is only who closed them — which is itself a datum,
 since "how many surprises died at a boundary rather than being theorized" is a
 number the bill-shape figure can use.
+
+## D-A3-004 · The arm's own vocabulary rides inside `request`, not beside it
+
+`RunLedger.model_call` forwards `**extra` into `Ledger.append`, and
+`canon.MODEL_CALL_FIELDS` is a closed set of ten names. `ModelDesk.call` was
+passing five more — `beat`, `label`, `transport`, `proxied`, `proxy_gap` — as
+top-level keyword arguments, so every completed model call raised
+`NonCanonicalField`.
+
+Two repairs were possible. Widen `canon.py` to admit the five, or move them
+inside `request`, which the ledger passes verbatim. Widening was rejected: the
+closed set is another track's file, and the refusal message states the reason
+the set exists — *"The battery reads two shapes without branching; an extra
+field is a branch."* A field added for one arm's convenience is a branch every
+downstream reader inherits forever.
+
+So they ride inside `request`. That is not a workaround; `request` is defined as
+what this arm sent, and `modelcall.py`'s own comment already said it is the one
+place the arm may add its own vocabulary. The record stays one of the two
+shapes, the sealing provenance D-P8-002 requires survives, and `step_idx` stays
+top-level because it is canonical and the cost curve joins on it.
+
+What this cost, recorded because it is the whole reason the defect mattered:
+the raise landed *after* `cli_cost_usd` was incremented and after
+`binding.record_model_call` had settled the charge. The money was spent and
+booked, and then the run died writing it down — on the first theorize call and
+every one after, with `inner/loop.py` swallowing it as an ordinary desk failure.
+A campaign at full budget would have produced no manual at all.
+
+## D-A3-005 · The game id is kept out of the model by construction, at two ends
+
+`Theoria.md:353` states it as a hard rule: 游戏 ID 永不进模型上下文,全程匿名化.
+The arm satisfied it on every unconditional path and had no anonymiser anywhere
+— it was clean because nobody had wired an id in, not because anything stopped
+them. An adversarial probe showed omission is not enough: an engine that raises
+puts its traceback into `evidence_brief`, an `OSError` message carries the path
+it failed on, and the run slug embedded the game stem. Six occurrences of `g50t`
+landed inside a real 20,975-char prompt.
+
+Closed at the source and at the backstop, deliberately both:
+
+* **Source** — a leg slug is `<utc>-leg<nn>`, with no game in it. Nothing that
+  stringifies a path can pick the id up, including the two channels not yet
+  triggered (`books.compile_all`'s write errors, and Lean's absolute-path
+  diagnostics reaching the next prompt inside a `proof_failure` payload).
+* **Backstop** — `ModelDesk.forbid_in_prompt`, checked at the single point every
+  prompt passes through, and checked *before* the subprocess starts so a leak
+  costs neither money nor the run's admissibility.
+
+Fixing only the source would leave the rule holding by convention again, one
+refactor away from the same defect. Fixing only the backstop would turn a
+recoverable formatting accident into a dead run.
+
+`AnonymityBreach` is its own exception class rather than a `ModelError`, because
+`inner/loop.py` catches desk failures and feeds them back as evidence to
+theorize against. That is right for a timeout and wrong here: a leaked id is a
+defect in the harness, not something the loop can learn from, and a run that
+sent one is inadmissible under the rule whatever it goes on to measure.
+
+## D-A3-006 · The campaign axis is dense; the leg axis is not
+
+`campaign_series()` carries two ordinals per row. `turn` is the leg's own,
+restarting whenever a leg dies and a new one begins. `campaign_turn` is dense
+across the whole campaign.
+
+C2 predicts 前重后轻 — front-heavy, then light, tending to zero after
+convergence. Read off the leg axis, a campaign of several short legs would show
+the cost restarting its climb at every interruption, which is the *shape C2
+predicts*, produced entirely by the bookkeeping. Both are kept so the artefact
+and the claim can be told apart; the campaign axis is the one the claim is about.
+
+The front-load index is not computed here. It is E2 in
+`battery/metrics/economy.py` and one of Phase 4's three primary endpoints, and
+a second implementation of a primary endpoint is a second definition of it.
+This module assembles E2's input and stops.
+
+Legs that produced no series are kept as rows-less entries carrying their error,
+never dropped. A campaign that paid for a leg which yielded nothing is not the
+same object as a campaign with fewer legs, and concatenation is exactly where
+that distinction disappears silently.
