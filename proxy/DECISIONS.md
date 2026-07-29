@@ -615,3 +615,83 @@ Not yet done, and listed so it is not mistaken for done: the frozen scorer has
 no chain check and therefore no forged negative control (D-014 requires one),
 `validate_ledger.py` does not walk the chain, and `upgrade_ledger.py` does not
 yet mark lifted streams unchained.
+
+## D-030 · The two shapes stop being closed, because a writer that runs after the money is spent may not refuse
+
+`canon.py` used to refuse any field `LEDGER_FORMAT.md` §3/§4 did not list. The
+reason given was a reader's reason — "the battery reads two shapes without
+branching, and an extra field is a branch someone eventually has to write" —
+and it was applied to the writer, where the same rule is paid for in a
+different currency.
+
+INC-TA-006 is the invoice. `model_call`'s field set was closed *after* P-8
+started writing `beat`/`label`/`transport`/`proxied`/`proxy_gap` on that record.
+Arms import `proxy/` as a library, so the closure arrived on a commit the
+`theoria` arm had never touched, in a directory it may not edit. The first live
+desk call was refused at serialisation **after the provider had been paid
+$2.695**, the reply was discarded, and the arm's `except Exception` turned it
+into "the desk failed" — so the run would have kept paying $2.70 a call until
+its ceiling stopped it.
+
+The principle that follows is not "be lenient". It is that a **ledger record is
+written after the fact**: by the time the writer sees a `model_call`, the
+request is sent and the money is spent. A refusal cannot un-spend it. It can
+only destroy the evidence that it happened, which is the one thing an
+append-only record surface exists to prevent. **Refusing to record is strictly
+worse than recording something a reader may have to skip.**
+
+So an unlisted field on `env_step`/`model_call` is now warned about (`UnknownField`,
+tallied in `Ledger.unknown_fields`) and written. What stays a refusal is
+everything that is *wrong* rather than merely unknown: a v0 spelling, a dollar
+figure (§5), a caller-set envelope field, a missing required field, a type that
+would produce a plausible wrong number. Those were the properties the closure
+was credited with, and none of them ever depended on it.
+
+The reader side moves with it. `validate_ledger.py` reports an unlisted field as
+a **notice** and leaves the verdict alone, because the frozen scorer calls it
+from S-12 and a scorer that fails a run over a field it could ignore is the same
+mistake one direction over. `notices` is a separate out-parameter rather than a
+`severity` key on `problems`, so the widespread `assert validate_records(...) == []`
+keeps meaning what it meant and no caller can promote a notice to a failure by
+forgetting to filter.
+
+**What is given up.** A typo in a field name is now a typo on disk instead of an
+exception, and the two shapes are no longer literally two shapes. The first is
+the intended trade — the typo is visible in the warning, the tally and the
+validator's notices, and the alternative was losing the record. The second was
+never quite true anyway: the format has always promised that a *defined* field
+does not change meaning under one `v`, and a reader that handles what it knows
+and ignores the rest was correct before this change and is correct after it.
+
+## D-031 · A tightening is announced; the detector is what makes the rule real
+
+`proxy/CONTRACT_CHANGES.md` is the procedure: widening what the proxies accept
+is free, narrowing it is a breaking change that needs a PARTNER_SYNC
+announcement, one cycle of notice, and a compatibility window in which the old
+form warns rather than refuses.
+
+A protocol with no detector is prose, and prose is what failed in D-030 — the
+closure was made by someone who had a written reason and did not know they were
+breaking another track. So `proxy/canon_contract.json` pins `canon.describe()`,
+`proxy/tools/contract.py` diffs the live registry against the pin and labels
+each difference `additive` / `tightening` / `neutral`, and
+`tests/test_contract_changes.py` fails the suite the moment they disagree.
+
+The classifier earns its keep on one distinction a set-diff gets backwards:
+a name added to a shape's `fields` frees writers, and a name added to its
+`required` refuses them. Both are "a list grew".
+
+**Stated limits.** It cannot verify that an announcement was made — a test
+cannot read PARTNER_SYNC and judge a paragraph. It cannot enforce the wait. And
+it only sees `canon.describe()`, so the spend gate's protocol, the guard's
+verdict semantics and the pricing tables are covered by the rule in prose and by
+nothing in code. What it does is remove the excuse the incident actually had, by
+putting the question in front of whoever changes the contract at the moment they
+change it.
+
+The half this directory cannot do for itself is the importer's:
+`python -m proxy.tools.contract --fingerprint` goes in a run manifest and gets
+**diffed between runs**. That is W-1521's standing recommendation after
+INC-TA-006, and it is the same shape as the `upstream_pin` finding — a pin that
+is written and never compared documents an incident afterwards rather than
+preventing one.

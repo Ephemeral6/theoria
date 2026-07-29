@@ -196,6 +196,19 @@ def _run_game(game_id: str, *,
                              "lines": chain["lines"],
                              "verdict": chain["verdict"]}
 
+    # Fields this run wrote that LEDGER_FORMAT.md §3/§4 does not list. Empty is
+    # the normal state. Non-empty is either a typo that is now a typo on disk,
+    # or a field the format should be listing -- and without this the only
+    # durable trace of either is a stderr warning nobody kept, since Python
+    # dedups a repeated warning to one line. `Ledger.unknown_fields` was
+    # offered as the backstop; a backstop nothing reads is a comment.
+    #
+    # Written after `ledger_head` and read from the in-memory `RunLedger`, not
+    # from the file, so the two records are independent: an unlisted field is a
+    # fact about what this run wrote, and the chain verdict is a fact about the
+    # bytes on disk. Neither may be inferred from the other.
+    record["unknown_ledger_fields"] = dict(run.unknown_fields)
+
     os.makedirs(runs_dir, exist_ok=True)
     with open(os.path.join(runs_dir, run_id + ".json"), "w",
               encoding="utf-8", newline="") as fh:

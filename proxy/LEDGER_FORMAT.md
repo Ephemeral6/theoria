@@ -22,10 +22,13 @@ the same `v`.
 
 **F-16 ruled this document the canon** and `baseline-arms/harness/ledger.py`'s
 earlier spelling the dialect to be migrated. Since P-9 that ruling is enforced
-rather than asserted: a field this document does not define cannot be written
+rather than asserted: a spelling this document *forbids* cannot be written
 (`proxy/canon.py` refuses it before serialisation) and cannot be accepted
-(`validate_ledger.py` refuses it on read). The migrator is
-`proxy/tools/upgrade_ledger.py` and its interface is `proxy/CANON_MIGRATION.md`.
+(`validate_ledger.py` refuses it on read). A field it merely does not mention is
+a different case and is kept, with a warning — §6 says why, and the reason has a
+price tag on it. The migrator is `proxy/tools/upgrade_ledger.py` and its
+interface is `proxy/CANON_MIGRATION.md`; the procedure for changing this
+document in a way that narrows it is `proxy/CONTRACT_CHANGES.md`.
 
 ---
 
@@ -237,6 +240,53 @@ One arm↔model interaction through the model proxy.
 | `call_idx` | int | monotonic within `run_id` |
 | `step_idx` | int \| null | the `env_step` this call was deciding, when the arm declares it. Lets the battery put cost on a per-turn axis. |
 | `game_id` | string \| null | the game this run is playing. Optional in the format — adding a *required* field is what §8 bumps `v` for — but **this writer always supplies it**, because one run is one arm playing one game once, so the game is a property of the run. The Phase 2 battery asked for it: without it a run that thought and never acted lands as `unknown`, and a sealed-pile guardrail can only filter model traffic by rejoining it to `env_step` records. |
+| `beat` | string \| null | which loop beat spent the call (`theorize`, `probe_design`, …) |
+| `label` | string \| null | a short free tag distinguishing calls within one beat |
+| `transport` | string \| null | how the call was made: `https-proxy`, `claude-code-cli`, … |
+| `proxied` | bool \| null | whether this record was observed at `model_proxy` or written by the arm's own writer |
+| `proxy_gap` | string \| null | when `proxied` is false, why — one sentence, naming the obstacle |
+
+### The five that describe how the call was made
+
+These arrived in P-8, were in use before this section was written, and are
+listed here because they carry things nothing else on the record carries. They
+are optional; no `v` bump (§8).
+
+`beat` is the one that changes what the ledger can prove. Theoria.md constraint
+8 says the large model appears at theorize and at probe design and **nowhere
+else** — execute, certify, plan and the engines are zero-call by construction.
+Without `beat` that is a claim in a design document. With it, grouping this
+file's `model_call` records by `beat` either returns those two values or returns
+the counter-example. A constraint that is checkable from the artefact is a
+different kind of object from one that is asserted about it, and this field is
+the whole difference.
+
+**Stated at its real size:** that query is over `model_call.beat`. Ledgers
+written while §4 was closed have `beat` nested inside `request` instead — the
+workaround the closure forced on the one arm that writes it — so a checker over
+those must read both depths, which is precisely the reader branch the closure
+was invented to avoid. The top-level spelling is canonical again as of C-001
+(`CONTRACT_CHANGES.md`); until the arm un-nests, the two depths coexist and any
+constraint-8 check has to say which one it read.
+
+`proxied` and `proxy_gap` state the **complete record** property at its real
+size rather than one size up. `false` means the bits were written by the arm
+rather than observed at the proxy, so completeness rests on the arm's own
+writer; `proxy_gap` says what stopped the proxy from seeing it. A reader that
+cannot tell the two cases apart reads the weaker one as the stronger one, which
+is the failure mode this whole document exists to prevent.
+
+`transport` is load-bearing for cost comparison across arms. An arm that reaches
+the model through a `claude-code-cli` subprocess gets no prompt caching, so its
+cache-read count is a **structural zero** and not a small number; comparing it
+with a proxied arm's ~10⁸ compares a transport property with a framework
+property (INC-TA-005). The field is what lets a battery notice before it does.
+
+**These five fields spent $2.695 getting here.** §4 was closed after P-8 landed,
+on a commit the arm that writes them never touched, and the closure refused the
+first live call's record after the provider had already been paid. That is
+INC-TA-006; it is why the two shapes are no longer closed (§6) and why
+`proxy/CONTRACT_CHANGES.md` exists.
 
 ### Credential handling
 
@@ -262,7 +312,12 @@ to disk verbatim. The claim is now stated at the size it actually holds:
 * **`model_call.request` and `model_call.response` are exempt from the
   pattern pass.** §4 requires them verbatim, and a long run of alphanumerics
   there is ordinary model output. An arm that puts a key in a prompt still
-  raises the incident; the bytes still go to disk.
+  raises the incident; the bytes still go to disk. **The exemption stops
+  there**: a field on a `model_call` that this section does not list is *not*
+  required verbatim by anything, so it goes through the pattern pass like
+  environment traffic. Before §6 became additive-safe such a field could not
+  reach disk at all, and letting it inherit the verbatim exemption would have
+  been a new route for a credential the vault has never been told about.
 * **A secret that does not look like one cannot be recognised.** A writer
   cannot redact what it has never been told and cannot see. That is a
   limitation, not a bug, and it is written here rather than left to be
@@ -301,12 +356,61 @@ Same envelope, different `event`. They exist so that `env_step` and
 `run_start` additionally carries `scorer` (the frozen scorer's fingerprint) and,
 on a migrated stream, a `lifted` block — see §7.
 
-**Auxiliary payloads are open; the two shapes are closed.** `canon.py` enforces
-each auxiliary's required keys and lets anything else through, because a
-`run_start` carries whatever a run needs to describe itself. `env_step` and
-`model_call` accept nothing outside §3 and §4: the battery reads two shapes
-without branching, and an extra field is a branch someone eventually has to
-write.
+**Auxiliary payloads are open, and the two shapes are additive-safe.**
+`canon.py` enforces each auxiliary's required keys and lets anything else
+through, because a `run_start` carries whatever a run needs to describe itself.
+On `env_step` and `model_call` it enforces the required fields, the banned
+spellings and the types — and a field §3/§4 does not list is **warned about and
+written**, not refused.
+
+This section used to say the two shapes were closed, and the reason it gave was
+that "the battery reads two shapes without branching, and an extra field is a
+branch someone eventually has to write". That reasoning is about readers, and it
+was applied to the writer, where the price is paid in a different currency. The
+writer runs *after* the request: by the time it sees a `model_call`, the
+provider has been paid. Refusing the record cannot un-spend the money — it only
+destroys the evidence that it was spent. INC-TA-006 is that sentence with a
+number attached: $2.695, zero `model_call` records, one discarded reply, and a
+run that would have kept paying until its ceiling stopped it.
+
+**Refusing to record is strictly worse than recording something a reader may
+have to skip.** So what remains a refusal is the set of things that are *wrong*
+rather than merely unknown:
+
+| still refused | why it is not just "unknown" |
+|---|---|
+| a v0 spelling (`frame`, `timestamp`, …) | two spellings of one thing is the drift F-16 ruled on; the refusal names the replacement and the migrator |
+| one of the five banned dollar spellings, **at any depth** | §5 — a price in an append-only file is wrong the day the price changes and cannot be corrected. Scanned inside `usage` and inside every unlisted field, because a field the format has never heard of may not be a back door for one it bans |
+| an envelope field set by a caller | §2 — `seq` and `ts` are the writer's, and a caller setting them is forging ordering |
+| a missing **required** field | the record is not lossy, it is uninterpretable |
+| a type that would produce a plausible wrong number | `True` sums as 1; a bare frame where a list belongs is a lost observation; `bool("false")` is `True`, so a string `proxied` would read as proxy-observed |
+
+**What §5's ban is, exactly.** It is a list of *names* — `cost`, `cost_usd`,
+`total_cost_usd`, `price_usd`, `score_pct` — not a semantic price detector. A
+field called `usd_spent` is not on the list and is written, and that was already
+true of auxiliary payloads, which have always been open. What changed is that
+the two shapes now behave like the auxiliaries. If you want a name refused, add
+it to `canon.BANNED_SPELLINGS`; §2 of `CONTRACT_CHANGES.md` classes that as a
+tightening, so it gets announced.
+
+**`event` and `arm` are still hard refusals** (`ledger.EVENTS`, `ledger.ARMS`),
+and the reason that is not the after-the-money refusal this section argues
+against: both are fixed when the run's ledger is constructed, so a wrong one
+fails on the run's very first record — before any request is sent and any dollar
+is spent. A refusal in the first second of a run is a typo caught; a refusal on
+record 40 is evidence destroyed.
+
+Readers are not thereby asked to branch. §8's guarantee is that a *defined*
+field never changes meaning under one `v`; a reader that handles what it knows
+and ignores the rest was always correct and still is. What it now also gets is a
+stream that exists. `validate_ledger.py` reports an unlisted field as a
+**notice** and leaves the verdict alone, for the same reason in the other
+direction — the frozen scorer calls it from S-12, and a scorer that fails a run
+over a field it could ignore is INC-TA-006 read-side.
+
+Adding a field to §3 or §4 is free and needs no announcement. **Taking one away
+is a breaking change** for every track that imports `proxy/` as a library, and
+`proxy/CONTRACT_CHANGES.md` is the procedure for it.
 
 ## 7. Compatibility
 
@@ -327,6 +431,13 @@ block that says strictly more: the source path, its sha256, the migrator's
 version, the record counts, the fields dropped and the holes v0 left. Every
 lifted record belongs to a run, so nothing is unattributed.
 
+That paragraph's premise expired with §6's closure: a shape *can* carry an extra
+marker now. The decision stands anyway, on the reason that outlived the premise
+— the `lifted` block says strictly more than a per-record boolean would, and
+provenance belongs where it can be stated once and completely. Noted here rather
+than quietly rewritten, because "the constraint that forced this is gone" is
+exactly the thing a later reader needs to know when they weigh the same choice.
+
 Lifted records **do** carry a `frame_hash`: v0's `frame` was already the whole
 frame list, so the hash is computable and is computed.
 
@@ -334,3 +445,22 @@ frame list, so the hash is computable and is computed.
 
 `v` is bumped when a field's meaning changes or a required field is added.
 Readers must reject a record whose `v` they do not know rather than guess.
+
+`v` is **not** bumped when an optional field is added, because nothing breaks:
+under §6 an unlisted field was already accepted with a notice, so listing it
+only stops the notice. That asymmetry is the whole rule, and it generalises past
+this file — **widening what is accepted is free, narrowing it is a breaking
+change**, whether the narrowing is a `v` bump, a new required field, a field
+removed from §3/§4, a new banned spelling, or a closure like the one that cost
+$2.695. A narrowing arrives at the other tracks the moment it is on the mainline,
+because they import `proxy/` as a library rather than vendoring it, so it can
+land on a commit they never touched.
+
+The procedure for a narrowing — announce, wait a cycle, ship a compatibility
+window — is `proxy/CONTRACT_CHANGES.md`. Its mechanical half is
+`proxy/canon_contract.json`, which pins `canon.describe()`, and
+`python -m proxy.tools.contract`, which diffs the live registry against the pin
+and labels each difference `additive` or `tightening`. Importing tracks should
+record `python -m proxy.tools.contract --fingerprint` in their run manifests and
+**diff it between runs**: a pin that is written and never compared documents an
+incident afterwards instead of preventing one.
