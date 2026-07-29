@@ -1176,8 +1176,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 阻塞：无。
 下一步：**修复的价值全在 before/after 那个 diff 里，所以它是可复跑的而不是一段叙述。** `runs/20260728T234923Z-S23/replicate.py` 用 `git show master:` 取出两个模块的旧版本，与工作树版本跑**同一份**植入输入：`check_redlines` 0 → 2，`contamination` 0 → 1，且 `verify.sh` 每次重跑并断言这两组判决。最该读的是 contamination 的 before：它**打印**了 `NEEDS ADJUDICATION: bp35-0a0ad940`，然后在同一页退出 0。顺带三处同病已修（`enumerate.build` 的 `continue` 让文件整行退出 manifest、`blob = b""` 把读不了的文件判成 A/可发布；`checklist` 让 class `?` 落进 PRESENT——**修 enumerate 才使这条从潜伏变成活的**，所以同批关掉；`checklist.py` 第 45 行字符串里嵌真换行，**从来没有解析成功过**，即 `CHECKLIST.md` 是更早某个可用版本生成的）。**未修的三处如实留成 gap 并写了 inbox**：`tools/ledger_invariants.py` 的 `_load_secret` 吞 `Exception` 后 tier 2（唯一比对活体密钥那项）整个不跑而 `clean` 仍为 `True`、退出码仍 0——同一句话换了对象；`OTHER_LEDGERS` 仍是手写扫描面，没改成自发现（那是另一件活），但从散文 caveat 升格为 `gate()["scan_surface_self_discovered"] = False`，**不让闸门变红**（长期红的闸门等于没有闸门）；`verify-lab/negctl/tests/test_probe.py:320` 在负控制领地自己的测试里吞三种异常，交人判。
 
-## [engine-rig] 2026-07-29T09:05Z S16-silent-failure-hunt
+## [engine-rig] 2026-07-29T02:00Z S16-silent-failure-hunt
 状态：本轮抓到的是这类失效的**资源版**——115 个 worktree（71 个早已合并）把磁盘吃到 99%，第一个症状是 `FLAG s14: verify gate red in a0-spike` 里一句 `No space left on device`：**没有量表的资源耗尽时，总是在别处报错，并且冒用那个地方的名字**。做了三件：`monitor/reap_worktrees.py`（只删可证明已完工的——分支是 origin/master 祖先、`--untracked-files=all` 干净、且静置一小时；未跟踪文件这一条救下 31 个正在跑的会话，静置这一条是因为「干净且已合并」≠「已废弃」，刚提交完正要写下一个文件的会话与完工的长得一模一样；默认 dry-run，实跑一次删 70 个，磁盘 8.8→14.8 GB）；两条常设探针 `disk_headroom` 与 `clock_sanity`（心跳自报 utc 不得晚于机器 UTC——存活判断用的是 mtime 所以可靠，但那个**手打的** utc 字段从来没有任何东西校验过，首跑即抓到 RES-3 超前 626 分钟；危险在方向：只会向前跑的自报时间让掉线看起来比实际新鲜）；以及按子进程分家的解码修复（tasklist/schtasks 是控制台代码页，Python/git 是 UTF-8，两族的正确答案相反，所以**不能一把梭**——`monitor/childio.py` 写明了这一点）。
 测试：monitor/tests 76 通过 2 xfail，其中 22 条是注入自检：每个探针、每条拒绝都人为造一个必须被抓的实例，且各配一个对照绿，免得一个写死报红的探针也能全过。
 阻塞：none
+附注：本段初稿把时间写成 09:05Z，而真实 UTC 是 02:00Z——我本地时区是 UTC+8，顺手把本地时间当成了 UTC。**这正是本轮 `clock_sanity` 探针要抓的那种错，由写探针的人当场犯了一次**；段落还在分支上，所以直接改对，不用 supersede。
 下一步：**订正我自己的数**——S14 的 FINDINGS 里那句「17 处未修解码点」是错的，真实是 11 处；17 来自 `grep text=True | grep -v encoding=`，它一次只看一行，而 scan.py 有 6 处把 encoding 写在下一行。找 bug 的仪器自己带着同一个 bug，且往「问题更大」的方向错。已改用按整个调用解析的脚本重数。
