@@ -60,7 +60,7 @@ python canary.py replay ar25-0c556536 --note "S22 cross-session residue, session
 | 速率余量 | 充足，600 RPM 上限、历史 0 次触顶 |
 | 凭据 | `.env` 有 `ARC_API_KEY`（未读其值） |
 | S23 次序 | 已解除，`contamination.py` 现在遇 `SEALED GAME ADDRESSED` 非零退出 |
-| 冻结闸门 | 需现场 `check-freeze` 确认（上次全 PASS） |
+| 冻结闸门 | **已现场确认**：2026-07-29T10:31Z 跑 `python canary.py check-freeze` → `campaigns are not frozen`，exit 0 |
 
 ## 已知的证据缺口（跑的人应该知道，别把结论写过头）
 
