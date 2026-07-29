@@ -368,7 +368,18 @@ CONTINUES = re.compile(r"^\s*(?:\||[-*+]\s|\d+\.\s|>)")
 #: nothing also fails, as STALE: `figures/reconcile_cost.py`'s rule, that a
 #: declaration which has stopped being true is removed rather than left to
 #: excuse a regression that comes back the other way.
-ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {}
+ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
+    ("01_intro.md", "falsified 17 of its own author's written claims"):
+        "§1.2 states and cites this same contradicted-entry count "
+        "(`battery/artifacts/gaming_audit.json`, `n_disagreements`), and the "
+        "frozen-baseline paragraph below records that a rerun now gives 19. A "
+        "summary sentence repeating the path would be noise, not provenance.",
+    ("03_a0.md", "that it held on every one of the 275"):
+        "The support count is stated and cited two lines above, in the block "
+        "quoting `cold-start-a0/THEORIZE_LOG.md` L-02. This block draws the "
+        "empirical-regularity-versus-proof distinction from it and introduces "
+        "no new measurement.",
+}
 
 
 def _blocks(text: str):
@@ -432,6 +443,36 @@ def _quantities(block: str) -> tuple[list[str], list[str]]:
     if "█CITE█" in text:
         return [], []
     return DIGIT.findall(text), WORDNUM.findall(text)
+
+
+def coverage_uncited(sections=None) -> tuple[int, int, list[tuple]]:
+    """How much weaker than the rule this check is, as a number.
+
+    A single citation clears its whole block, so the check licenses blocks in
+    which one path stands behind many quantities. Usually that is correct -- the
+    41 values in section 7's effect-size table all come from the one artefact
+    its preamble names -- but "usually" is not a guarantee, and the ratio is the
+    honest measure of the gap between what E proves and what the binding rule
+    asks. It is reported rather than gated on, because there is no threshold
+    here anybody has calibrated.
+    """
+    sections = SECTIONS if sections is None else Path(sections)
+    blocks, quantities, worst = 0, 0, []
+    for section in sorted(sections.glob("*.md")):
+        if section.name in EXEMPT_SECTIONS:
+            continue
+        for lineno, block in _blocks(section.read_text(encoding="utf-8")):
+            marked = _mark_citations(block)
+            if "█CITE█" not in marked:
+                continue
+            n = len(DIGIT.findall(marked)) + len(WORDNUM.findall(marked))
+            if not n:
+                continue
+            blocks += 1
+            quantities += n
+            worst.append((n, marked.count("█CITE█"), section.name, lineno))
+    worst.sort(reverse=True)
+    return blocks, quantities, worst[:5]
 
 
 def scan_uncited(sections=None, rulings=None):

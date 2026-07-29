@@ -671,8 +671,9 @@ against are in `papers/phase1-workshop/figures/PARITY.md`.
 loop as a whole.
 
 **`zero_space` recovered the Button↔Door dependency as a conservation law.**
-Handed 152 anonymous indicator bits, with no vocabulary for buttons or doors, it
-returned
+Handed 152 anonymous indicator bits (`cold-start-a0/A0_REPORT.md` §3;
+`cold-start-a0/artifacts/engines_report.json`, `zero_space.features`), with no
+vocabulary for buttons or doors, it returned
 
 ```
 [cell (3,2) shows 8]  +  [cell (4,5) shows 5]   ≡  1   (mod 2)
@@ -849,8 +850,9 @@ it. Adding four evidence levels that make "blocked while crossing" reachable gav
 **39,960 well-formed states across five levels, 0 mismatches**, at a cost of
 **1,966 actions instead of 341**.
 
-T-10 injected single-rule variants and measured detection latency. Latency tracks
-*firing frequency*, not the size of the change: `ghost` (walls stop being solid,
+`a0-spike/THEORIZE_LOG.md` T-10 injected single-rule variants and measured
+detection latency. Latency tracks *firing frequency*, not the size of the
+change: `ghost` (walls stop being solid,
 on a rule that fires nearly every action) is caught in **6 actions**; `nocross`
 is **never caught in 341 actions** on the level it was learned on, and in **6**
 elsewhere. The consequential one is `push1`, which flips the truth value of
@@ -1492,7 +1494,7 @@ The free half of the valve saw nothing. The static check reads the board, and
 neither control touches the board; Lean re-proved a domain that was still
 internally consistent. Only replay — which costs plan-length actions and arrives
 only *after* acting — could see that the transition function had changed. The
-report states the consequence plainly:
+report states the consequence plainly (`cold-start-a3/A3_REPORT.md` §5):
 
 > Carrying a domain to a new level buys a plan for zero actions and buys **no
 > free assurance that the plan is valid**; the assurance costs plan-length
@@ -1519,9 +1521,10 @@ not noise:
 > **how much of a manual is convention rather than content**, and it is most of
 > the surface.
 
-The blind arm also spent 5 theorize rounds to the cold start's 1, and the report
-records that two of those five — 40 % of its adjudication budget — went to
-toolchain conformance rather than to the world.
+The blind arm also spent 5 theorize rounds to the cold start's 1
+(`cold-start-a3/artifacts/bill_table.md`), and the report records that two of
+those five — 40 % of its adjudication budget — went to toolchain conformance
+rather than to the world (`cold-start-a3/A3_REPORT.md` §4).
 
 ### 6.5 What A3 does not show
 
