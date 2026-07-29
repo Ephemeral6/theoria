@@ -469,3 +469,46 @@ def test_a_leg_that_died_before_spending_is_not_charged_a_ceiling(tmp_path):
     assert failed["cost_accounting"]["governing_source"] == \
         "gate-settled-never-spent"
     assert report["spent_usd"] == 0.0
+
+
+def test_a_failed_git_lookup_says_why_instead_of_writing_a_bare_null(
+        tmp_path, monkeypatch):
+    """`branch` and `base_commit` are required fields, so a null in either is a
+    hole in the provenance -- and the 2026-07-29 g50t campaign wrote both as
+    null with nothing on disk explaining it.
+
+    The old `_git` collapsed every failure into `None`: a thrown exception and
+    a non-zero exit with empty stdout were indistinguishable from each other
+    and, after `out.stdout.strip() or None`, from a repository that simply had
+    no answer. Re-running the same command by hand afterwards succeeded, which
+    is what makes this worth a test -- a transient failure that erases its own
+    reason cannot be chased later.
+    """
+    camp._GIT_FAILURES.clear()
+    c = _Fake([], prompt_id="A3", out_dir=str(tmp_path),
+              games=["g50t-5849a774"])
+    # After construction: the constructor reads the real `piles.json` under
+    # REPO, and that guard is not the thing under test here.
+    monkeypatch.setattr(camp, "REPO", str(tmp_path / "not-a-repo"))
+    manifest = c.manifest()
+
+    assert manifest["branch"] is None and manifest["base_commit"] is None
+    gap = manifest["provenance_gap"]
+    assert gap["missing_required"] == ["branch", "base_commit"]
+    # The point of the whole change: a reason, not an absence.
+    assert gap["why"] and gap["why"] != "no reason was recorded"
+    assert any("rev-parse" in cmd for cmd in gap["why"])
+
+
+def test_a_complete_manifest_carries_no_provenance_gap(tmp_path):
+    """The negative control. `provenance_gap` must appear only when a required
+    field is genuinely missing, or it degrades into noise that gets skimmed
+    past -- which is how the null got shipped in the first place.
+    """
+    camp._GIT_FAILURES.clear()
+    c = _Fake([], prompt_id="A3", out_dir=str(tmp_path),
+              games=["g50t-5849a774"])
+    manifest = c.manifest()
+
+    assert manifest["branch"] and manifest["base_commit"]
+    assert "provenance_gap" not in manifest

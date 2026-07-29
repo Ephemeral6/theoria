@@ -736,7 +736,7 @@ class Campaign:
         gets its own from `armtools.archive`, and that is the one the figure-2
         discovery rule looks for.
         """
-        return {
+        manifest = {
             "prompt_id": self.prompt_id,
             "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
             "base_commit": _git("rev-parse", "HEAD"),
@@ -755,18 +755,59 @@ class Campaign:
             "spent_usd": round(self.spent_usd, 6),
             "stopped": self.stopped,
         }
+        # A required field that is null must say so out loud. Without this the
+        # only signal is a `null` in a file nobody re-reads, and the campaign
+        # that produced one looked exactly like a campaign that did not.
+        missing = [k for k in ("prompt_id", "branch", "base_commit", "utc")
+                   if not manifest.get(k)]
+        if missing:
+            manifest["provenance_gap"] = {
+                "missing_required": missing,
+                "why": dict(_GIT_FAILURES) or "no reason was recorded",
+                "note": ("CLAUDE.md requires these four. This manifest is "
+                         "incomplete and any run reconstructed from it is "
+                         "unanchored -- treat the gap as a defect to chase, "
+                         "not as a field that happens to be empty."),
+            }
+        return manifest
+
+
+_GIT_FAILURES: Dict[str, str] = {}
 
 
 def _git(*args: str) -> Optional[str]:
+    """Best-effort git -- but never a *silent* None.
+
+    `branch` and `base_commit` are required manifest fields (CLAUDE.md), so a
+    None here is a hole in the provenance rather than a missing nicety. The
+    first version of this collapsed every failure into `None`, and that is how
+    the 2026-07-29 g50t campaign wrote a MANIFEST.json with both required
+    fields null without anything noticing: git was asked, git failed, and the
+    only trace of it was an absence. Re-running `_git` by hand afterwards
+    succeeded, so the failure was transient -- which is exactly the kind that
+    stays invisible when the reason is thrown away.
+
+    Falling back is still right; a campaign should not refuse to start because
+    git was slow. Losing the reason is the part that was wrong.
+    """
+    key = " ".join(args)
     try:
         import subprocess                              # noqa: PLC0415
         out = subprocess.run(("git",) + args, cwd=REPO, capture_output=True,
                              text=True, timeout=15)
-        return out.stdout.strip() or None
-    except Exception:                                  # noqa: BLE001
-        # A manifest missing its commit is worth more than a campaign that
-        # refused to start because git was slow.
+    except Exception as exc:                           # noqa: BLE001
+        _GIT_FAILURES[key] = "%s: %s" % (type(exc).__name__, exc)
         return None
+    value = out.stdout.strip()
+    if not value:
+        # A non-zero exit with an empty stdout looked identical to success
+        # under `out.stdout.strip() or None`. It is not: stderr says why.
+        _GIT_FAILURES[key] = (
+            "git exited %d with empty stdout; stderr: %s"
+            % (out.returncode, out.stderr.strip()[:200] or "(none)"))
+        return None
+    _GIT_FAILURES.pop(key, None)
+    return value
 
 
 # -- the entry point --------------------------------------------------------
