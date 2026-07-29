@@ -1,18 +1,16 @@
 {
-  "cycle": 31,
-  "utc": "2026-07-29T02:37Z",
-  "last_audited_commit": "c246f94",
-  "range_this_cycle": "156018f..c246f94 (155 files)",
+  "cycle": 32,
+  "utc": "2026-07-29T03:09Z",
+  "last_audited_commit": "ecb31ff",
+  "range_this_cycle": "c246f94..ecb31ff (107 files)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "纪律漂移（复发）": "主线删除 2→3。87a1e63（merge e16，同样被合并两次）改写已发布行：492 passed→500、verify 29/29→35/35，并加了「对抗复核推翻了我的第一版」。三次越线全部是把数字改得更准——这条纪律至今只抓到诚实的自我订正。cycle 27 的三条修法一条未落地：BASELINE 仍 1（对）、merge-base --is-ancestor 在 prompts/ops/CHARTER 零命中、ci_merge 仍重复合并同一分支。",
-    "队列": "阻塞 6→5（冲突 3、verify 2）。",
-    "纪律其余": "封存 ID 仅登记与冲突日志，密钥零命中。"
+    "证据复核": "V9「37/38 指标可被刷、主表九项全降级」有真产物：battery/artifacts/gaming_audit.json、battery/audit/gaming.py、run 目录 20260729T021247Z（戳正确）。它自报三个防御一个都没救回指标、唯一未被攻破的那个也因从不调用 ok() 而记 undetermined——自曝比外审狠，正面样本。",
+    "纪律": "主线 append-only 停在 3，本区间零新增；封存 ID 仅登记文件；密钥零命中。",
+    "欠账": "ci_merge 的「同一分支不重复合并」仍未落地。已第三次也是最后一次提出；无新证据可加，不再重复占用总线。"
   },
-  "reports_this_cycle": [
-    "DRIFT-20260729T0236Z-it-happened-again-and-the-rule-only-ever-catches-honest-corrections.md"
-  ],
+  "reports_this_cycle": [],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "优先合并 v15-census-sampling-frame 与 v11-negative-control-census（已有裁决建立在其上）；合不进则至少把 MATRIX_V15.md / NEGATIVE_CONTROL.md / KNOWN_GAPS.json 取到 master",
