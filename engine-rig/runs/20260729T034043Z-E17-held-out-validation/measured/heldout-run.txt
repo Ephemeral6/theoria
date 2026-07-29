@@ -1,0 +1,42 @@
+$ python -m heldout.run --out runs/20260729T034043Z-E17-held-out-validation/results.json
+zero_space -- 120 parityworld worlds, 60 transitions each
+  gate fit==analyse: 120/120 worlds ok
+  Z-S1                   laws=1140   delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local        laws=960    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n10-k2 laws=200    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n10-k3 laws=200    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n6-k2  laws=120    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n6-k3  laws=120    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n8-k2  laws=160    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/cell_local/n8-k3  laws=160    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global            laws=180    delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n10-k2     laws=20     delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n10-k3     laws=40     delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n6-k2      laws=20     delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n6-k3      laws=40     delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n8-k2      laws=20     delta_hit=100.0%  value_hit=100.0%
+  Z-S1/global/n8-k3      laws=40     delta_hit=100.0%  value_hit=100.0%
+  Z-S2                   laws=8480   delta_hit=77.1%  value_hit=77.1%
+  Z-S2/cell_local        laws=6800   delta_hit=92.9%  value_hit=92.9%
+  Z-S2/cell_local/n10-k2 laws=1840   delta_hit=95.7%  value_hit=95.7%
+  Z-S2/cell_local/n10-k3 laws=1640   delta_hit=95.1%  value_hit=95.1%
+  Z-S2/cell_local/n6-k2  laws=640    delta_hit=87.5%  value_hit=87.5%
+  Z-S2/cell_local/n6-k3  laws=520    delta_hit=84.6%  value_hit=84.6%
+  Z-S2/cell_local/n8-k2  laws=1160   delta_hit=93.1%  value_hit=93.1%
+  Z-S2/cell_local/n8-k3  laws=1000   delta_hit=92.0%  value_hit=92.0%
+  Z-S2/global            laws=1680   delta_hit=13.1%  value_hit=13.1%
+  Z-S2/global/n10-k2     laws=320    delta_hit=0.0%  value_hit=0.0%
+  Z-S2/global/n10-k3     laws=440    delta_hit=22.7%  value_hit=22.7%
+  Z-S2/global/n6-k2      laws=160    delta_hit=0.0%  value_hit=0.0%
+  Z-S2/global/n6-k3      laws=200    delta_hit=20.0%  value_hit=20.0%
+  Z-S2/global/n8-k2      laws=240    delta_hit=0.0%  value_hit=0.0%
+  Z-S2/global/n8-k3      laws=320    delta_hit=25.0%  value_hit=25.0%
+  Z-S1   novelty: 0/2160 held-out rows are new; 120/120 splits withhold nothing new
+  Z-S2   novelty: 7200/7200 held-out rows are new; 0/780 splits withhold nothing new
+  delta misses total: 1940
+lp_potential -- 289 pegN instances, 2422 held-out cases
+  gate graph==fixture peg4: True
+  baseline: 105 certs, 184 silent, 0 false; L2 0/506 states violate h<=d
+  held-out: 1408 certs (1014 silent), inv_closed hit 26.4%, false certs 58 (4.1%)
+  emit gate (complete graph): let through 0; (reduced graph, the caller's) let through 1408, of which false 58
+exit=0
