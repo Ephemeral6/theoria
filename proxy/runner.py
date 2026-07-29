@@ -252,10 +252,28 @@ def run_game(*args, **kwargs) -> Dict[str, Any]:
     The reservation is re-derived here rather than threaded out, because
     `_run_game` releases its own on the happy path and flips `reservation_owned`
     when it does; this only has to catch the paths where it never got there.
+
+    The run id is minted *here* rather than inside `_run_game`, and that is the
+    fix for S29's third defect rather than an incidental tidy-up. The ownership
+    filter below used to read
+
+        if holder.run_id != kwargs.get("run_id") and kwargs.get("run_id") is not None:
+
+    and `run_id` was generated inside `_run_game`, so an ordinary caller never
+    passed one, the second conjunct was always False, and the `continue` never
+    fired: a crash released *every* reservation that appeared in the shared pool
+    while this run was alive, including other sessions'. Deleting the dead
+    conjunct alone would have inverted the bug -- with `kwargs["run_id"]` still
+    None, every entry would mismatch and the cleanup would release nothing.
+    Both halves are needed: the filter becomes real only once this level knows
+    the id it is filtering on. `_run_game` still does `run_id or new_run_id()`,
+    so passing one in changes nothing else.
     """
-    from .spend_gate import default_gate
+    from .spend_gate import default_gate, NoReservation
     gate = kwargs.get("spend_gate") or default_gate()
     declared = kwargs.get("spend_reservation")
+    run_id = kwargs.get("run_id") or new_run_id()
+    kwargs["run_id"] = run_id
     before = {r["reservation_id"] for r in gate.totals().live}
     try:
         return _run_game(*args, **kwargs)
@@ -267,12 +285,21 @@ def run_game(*args, **kwargs) -> Dict[str, Any]:
             for entry in gate.totals().live:
                 if entry["reservation_id"] in before:
                     continue
-                if entry["holder"].get("run_id") != kwargs.get("run_id") \
-                        and kwargs.get("run_id") is not None:
+                if (entry["holder"] or {}).get("run_id") != run_id:
                     continue
-                gate.release(
-                    _Handle(entry["reservation_id"], entry["campaign"]),
-                    reason="run ended without releasing its claim")
+                # `expect_holder` restates the same claim to the gate, which
+                # refuses if it disagrees. Belt and braces on purpose: this
+                # filter has already been silently wrong once, and the cost of
+                # being wrong is another session losing its headroom.
+                try:
+                    gate.release(
+                        _Handle(entry["reservation_id"], entry["campaign"]),
+                        reason="run ended without releasing its claim",
+                        expect_holder={"run_id": run_id})
+                except NoReservation:
+                    # It went away between the snapshot and here -- released by
+                    # its owner, or expired. Not ours to force.
+                    pass
 
 
 class _Handle:
