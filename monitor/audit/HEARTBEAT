@@ -1,1 +1,1 @@
-2026-07-29T03:09Z cycle=32 audited_to=ecb31ff reports=0 (V9 gaming audit verified artifact-backed)
+2026-07-29T04:03Z cycle=32 audited_to=fec3f10 reports=0 (ci_merge hold landed under user instruction; one self-caught false positive)
