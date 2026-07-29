@@ -198,12 +198,75 @@ reaching the claim the test is about. Changed to `k.get("run_id") or ...` so the
 fake stands in for the level that used to mint the id, and the assertion that
 fires is the one about ownership.
 
+## The theoria-arm gate this turns red, and why it is NOT a repricing
+
+`theoria-arm/tests/test_arm.py::test_the_archive_stays_accountable` fails on this
+branch and passes with the four `proxy/*.py` changes stashed. It was put to an
+independent adjudicator with two hypotheses — *legitimate red, the archive really
+was priced from unmeasured usage* versus *over-strict, my rule misfires on a
+shape that is legitimately complete*. **Neither is right, and the answer matters
+because the first one would have been a much bigger claim than the truth.**
+
+Not one archived usage block trips `missing_usage_keys`. The five drifting runs
+contain **zero `model_call` records at all** — they are the salvage and preflight
+runs, which make ARC HTTP calls and no model calls. The drift is a pure
+*schema-shape* change: `price_run`'s return dict gained three keys, and
+`armtools/archive.costs()` embeds that dict verbatim into `MANIFEST.json`, which
+`verify_provenance._idempotence` compares **byte for byte** against manifests
+written before those keys existed. Flattened leaf by leaf, the difference is:
+
+```
+/cost/from_price_table/unmeasured_calls       absent -> 0
+/cost/from_price_table/missing_usage_keys     absent -> null
+/cost/from_price_table/unpriced_usage_keys    absent -> null
+```
+
+Three leaves, identical in all five. `usd_total`, `per_model`, `model_calls`,
+`pricing.sha256` and `unpriced_models` are byte-identical. Monkeypatching
+`price_run` to drop exactly those three keys turns the check green — *"9
+manifests, all byte-stable under re-derivation"*. So 100% of the drift is the
+added keys and 0% is repricing.
+
+**Two corrections to what this file and the commit message say elsewhere:**
+
+* It is **five** runs, not four. Pytest's assertion repr truncated the middle of
+  the list; `20260728T012311Z-g50t-first-contact-salvage2` is the fifth. A
+  failure message that elides part of its own evidence is worth writing down in a
+  run whose subject is exactly that.
+* `unpriced_usage_keys` is a **second, independent** schema addition riding in
+  this commit. `cost()` had always computed it and `price_run` dropped it on the
+  floor; surfacing it is a good change and it is not the one the work order
+  asked for. It contributes to the drift as much as `missing_usage_keys` does.
+
+**What is not being done, and why.** The fix is to regenerate the five
+backfilled manifests (`cd theoria-arm && python -m armtools.backfill --all`) —
+the path the archive's own tooling advertises, and provably safe here because the
+re-derived bytes differ only in the three leaves above. **`theoria-arm` is
+RES-1's territory under `A3-campaign-devpile`**, so it is handed over on the bus
+with this evidence rather than done here.
+
+The tempting alternative — emit the new keys only when non-empty, so the old
+bytes reproduce and nothing goes red — is **refused**. It would make "priced
+under the S29 rule, nothing unmeasured" indistinguishable from "priced under the
+old rule, which never looked", which is the same collapse the whole item is about.
+
+**One piece of evidence for keeping the rule as it is.**
+`theoria-arm/evidence/model-proxy-401.jsonl` holds **65 `model_call` records with
+`"usage": {}`** — HTTP 401s against `claude-haiku-4-5-20251001`, both required
+keys absent. Under master's `cost()`, `price_run` reports those as 65 calls
+totalling `$0.00` with `unpriced_models: null`. That file is not under `runs/`
+and not in any manifest, so it does not affect this test — but it is precisely
+the shape this item exists to stop, and it is real, not hypothetical.
+
 ## Result so far
 
 ```
-python -m pytest proxy   ->  380 passed
+python -m pytest proxy                 ->  392 passed
+python -m pytest proxy/tests/test_cost.py  ->   12 passed
+bash proxy/verify_spend.sh             ->  VERIFY: green
 ```
 
-Defect 1 (`proxy/cost.py`, empty/partial usage priced as a well-formed zero) is
-being handled separately and is not yet folded in; this file will be extended
-when it is.
+All three defects are folded in. Zero API calls, $0.00, zero sealed-pile
+contact. The one gate that goes red because of this branch is in `theoria-arm`
+and is a schema addition, not a repricing — see the section above, and the bus
+handover to RES-1.
