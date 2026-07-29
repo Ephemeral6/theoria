@@ -59,12 +59,40 @@ for d in (ITEMS, CLAIMED, DONE):
     os.makedirs(d, exist_ok=True)
 
 
-def heartbeat_age(agent):
-    """距上次心跳的分钟数；从未启动过返回 None。"""
+def heartbeat_evidence(agent):
+    """(距上次心跳的分钟数, 证据来源)；从未启动过返回 `(None, "never-started")`。
+
+    S28：旧写法只看 `ops-status/<编号>.json` 的 **mtime**，而那是一个**被 git
+    跟踪**的文件——任何 merge / reset / autostash 都能把一个死会话的心跳摸活。
+    现场证据：`OPS-R.json` 自报 05:59Z，`heartbeat_age` 返回 12 分钟，
+    reflog 显示 10:19:43Z 有一次 reset 摸新了它。
+
+    而这个误差**只朝一个方向走**：年龄偏小 → 主人算活着 → 赛道继续预留、
+    领地继续上锁、认领不被交回。所以这里改成优先读
+    `ops-status/<编号>.lock`——它未被跟踪且已被 `.gitignore` 忽略
+    （根 `.gitignore` 第 24 行），所以 git 碰不到它，是唯一没被污染的信号。
+    `standing.py` 的 `occupied()` 早就在用锁新鲜度 + 单调 cycle 这一对判据。
+
+    锁不存在时仍然回落到 json 的 mtime，**但来源会说出来**（`"mtime-touchable"`），
+    这样「量到了 3 分钟」和「量到了 3 分钟，但这个数可能是 merge 摸出来的」
+    不再是同一个答案。第三个值在这里不是一个数字，是那个数字的出处。
+    """
+    lock = os.path.join(OPS_STATUS, "%s.lock" % agent)
+    if os.path.exists(lock):
+        return int((time.time() - os.path.getmtime(lock)) / 60), "lock"
     path = os.path.join(OPS_STATUS, "%s.json" % agent)
     if not os.path.exists(path):
-        return None
-    return int((time.time() - os.path.getmtime(path)) / 60)
+        return None, "never-started"
+    return int((time.time() - os.path.getmtime(path)) / 60), "mtime-touchable"
+
+
+def heartbeat_age(agent):
+    """距上次心跳的分钟数；从未启动过返回 None。
+
+    薄封装，保持原有契约（调用方遍布 board / scan / standing）。
+    要知道这个数可不可信，用 `heartbeat_evidence()`。
+    """
+    return heartbeat_evidence(agent)[0]
 
 
 def stale_lanes():
@@ -97,7 +125,11 @@ def meta(path):
     out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": "",
            "spend": "", "generic_ok": "", RELEASED_BY: ""}
     for key in ("priority", "cell", "territory", "lane", "spend", "generic_ok"):
-        m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
+        # S28（顺带抓到的）：`\s*` 跨行，所以一个**空**的 `lane:` 会把下一行的第一个
+        # 非空白 token 吃进来当值——实测 `lane:` 后面跟着标题行时解析出 `"#"`。
+        # 于是一个写坏了的字段静默变成一个**看起来合理**的值，正是本条目的病症：
+        # 「没写」和「写了这个」编码成同一个东西。`[^\S\n]*` 只吃行内空白。
+        m = re.search(r"^%s:[^\S\n]*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
     # To end of line, not `\S+`: this one is a comma-separated list, and the
@@ -273,6 +305,52 @@ def candidates(lane=None):
     return out
 
 
+def withheld_items(shown_ids):
+    """就绪、没人认领、却在 `list` 的任何分区里都不出现的条目 —— 连原因一起。
+
+    S28：`list` 印 available / reserved / blocked / claimed 四段，而领地互斥
+    （`candidates()` 里的 `if m["territory"] in busy: continue`）把条目从**每一段
+    里都抹掉**。于是板读起来是「人人有活干」，而不是「卡住了」。
+    实测（2026-07-29，真板）：`items/` 里 11 件，`list` 一件都不提的有 **8 件**，
+    而它印的是 `available: 1`。
+
+    赛道无主是第二类隐身：`reserved` 那段只遍历 `LANE_OWNER` 的键，
+    所以一条**没有常驻研究员**的赛道上的活，两段都进不去。
+
+    做法是**集合差**而不是逐条枚举原因：先拿到已经印出去的 id，剩下的就是被
+    withheld 的，再去诊断为什么。这样将来 `candidates()` 多加一条排除规则，
+    这段不会跟着漏——只会诊断成 `原因不明`，而那本身就是一句要报的话。
+    """
+    busy = territories_busy()
+    stale = stale_lanes()
+    ready = done_ids()
+    claimed = set(claimed_map())
+    out = []
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        iid = item_id(f)
+        if iid in shown_ids or iid in claimed or iid in ready:
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        if [d for d in m["deps"] if d not in ready]:
+            continue                    # `blocked` 那段已经报过了
+        lane = m.get("lane") or ""
+        if m["territory"] in busy:
+            why = "领地 %s 被 %s 占着" % (m["territory"], busy[m["territory"]])
+        elif lane and lane not in LANE_OWNER:
+            why = "赛道 %s 没有常驻研究员" % lane
+        elif (m.get("spend") == "api"
+              and m.get("generic_ok", "").lower() not in ("yes", "true")):
+            why = "花 API 钱，缺监控的 generic_ok 签字"
+        elif lane and lane not in stale:
+            why = "赛道 %s 有主（%s），等其研究员来领" % (lane, LANE_OWNER[lane])
+        else:
+            why = "原因不明 —— 排除规则变了而这段没跟上"
+        out.append((m["priority"], iid, m["territory"], why))
+    return sorted(out)
+
+
 def cmd_list():
     stale = stale_lanes()
     generic = candidates()
@@ -295,11 +373,18 @@ def cmd_list():
     if reserved:
         print("=== reserved（有主，等其赛道研究员来领 %d） ===" % len(reserved))
         for pri, iid, lane, owner, m in sorted(reserved):
-            age = heartbeat_age(owner)
+            age, source = heartbeat_evidence(owner)
+            # 心跳年龄的**出处**跟年龄一起印。只有锁是 git 碰不到的；
+            # 回落到被跟踪文件的 mtime 时，这个数可能是一次 merge 摸出来的，
+            # 而误差方向恰好是「主人还活着，这件活继续给他留着」。
+            if age is None:
+                hb = "未启动"
+            elif source == "lock":
+                hb = "%d分钟前" % age
+            else:
+                hb = "%d分钟前(mtime，可被 merge 摸新)" % age
             print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
-                  % (pri, iid, lane, owner,
-                     "未启动" if age is None else "%d分钟前" % age,
-                     m["territory"]))
+                  % (pri, iid, lane, owner, hb, m["territory"]))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -312,6 +397,15 @@ def cmd_list():
         print("=== blocked ===")
         for iid, pend in blocked:
             print("  %-28s waits on %s" % (iid, ",".join(pend)))
+    # 第五段。就绪但在上面每一段里都不出现的条目——不印它们，
+    # 「板上没活」与「活都被挡住了」就是同一个画面。
+    shown = generic_ids | {iid for _p, iid, _l, _o, _m in reserved}
+    shown |= {iid for iid, _pend in blocked}
+    hidden = withheld_items(shown)
+    if hidden:
+        print("=== territory-blocked (%d) ===" % len(hidden))
+        for pri, iid, territory, why in hidden:
+            print("  p%d  %-28s territory=%-14s %s" % (pri, iid, territory, why))
     cm = claimed_map()
     if cm:
         print("=== claimed ===")
@@ -433,7 +527,15 @@ def cmd_claim(worker, lane=None):
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
         try:
             os.rename(src, dst)                # atomic: first one wins
-        except OSError:
+        except FileNotFoundError:
+            # S28：这里原来是裸 `except OSError: continue`。**唯一预期的竞态是
+            # 另一个工人抢先把条目 rename 走了**，那正是 FileNotFoundError；
+            # 其余 OSError 全都被顺手吞掉，然后这个循环走完、印出 BOARD-EMPTY
+            # ——而工人被告知那意味着「收尾退出」。异常被丢弃，`note()` 只在
+            # 成功路径调用，所以一次假的 BOARD-EMPTY 在 board.log 里零痕迹。
+            # 触发条件比看上去常见：监控自身持续在 open 这些文件，
+            # 而 Windows 的 WinError 32（文件被占用）是 OSError 的子类。
+            # 对照组是 `cmd_done` / `cmd_release`——同一个 rename，它们完全不捕获。
             continue
         note("CLAIM %s by %s" % (iid, worker))
         print("---8<--- item %s ---8<---" % iid)

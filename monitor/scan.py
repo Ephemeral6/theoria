@@ -27,6 +27,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
+import childio  # noqa: E402  (per-child decoding; see its docstring)
+
 # S30. `spec.py` is the hand-written judgement file the fleet edits every
 # cycle, so a SyntaxError in it is the single most likely way this program
 # dies. Imported bare, that death happened *before* `main()` -- before the
@@ -535,9 +537,17 @@ def probe_append_only():
     # frozen; on a branch, fix it until it is right.
     BASELINE = {"PARTNER_SYNC.md": 1}
     offenders = []
+    # S28：`if not exists(path): continue` 之后仍然把 `len(watched)` 报成
+    # 「已核查干净」——**而删除恰恰是这条规则的最大违反**。实测：把
+    # battery/PREDICTIONS.md 当作不存在，这个探针照旧返回
+    # `green / 4 个追加式文件无新增删除`。缺失从此单列，且文案改成 checked/total。
+    absent = []
+    checked = 0
     for path in watched:
         if not exists(path):
+            absent.append(path)
             continue
+        checked += 1
         # --first-parent: only what actually appeared on the mainline counts.
         # A branch-local fix before merge never published anything, so it is
         # not a violation (OPS-A, 2026-07-28: my earlier ruling cited it wrongly).
@@ -566,9 +576,16 @@ def probe_append_only():
                 "detail": "追加式文件出现删除：" + "； ".join(offenders) +
                           "。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。"}
     exempt = sum(BASELINE.values())
+    if absent:
+        # 整个文件不见了，是这条规则能被违反的最彻底的方式。
+        return {"status": "risk",
+                "detail": "追加式文件**不存在**：%s。已核查 %d/%d 件，"
+                          "其余无新增删除——但缺失的那几件无法断言。"
+                          % ("、".join(absent), checked, len(watched))}
     return {"status": "green",
-            "detail": "%d 个追加式文件无新增删除（%d 行历史删除已裁决豁免："
-                      "同窗口自我订正）。" % (len(watched), exempt)}
+            "detail": "已核查 %d/%d 个追加式文件，无新增删除"
+                      "（%d 行历史删除已裁决豁免：同窗口自我订正）。"
+                      % (checked, len(watched), exempt)}
 
 
 OPS_DUTY = [
@@ -632,9 +649,15 @@ def probe_scheduled_tasks():
             "TheoriaServe": "本地服务 :8787（前端拉数据）"}
     rows, bad = [], []
     for name, role in want.items():
-        out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
-                             capture_output=True, text=True,
-                             encoding="utf-8", errors="replace")
+        # S28：这里原来强制 `encoding="utf-8"` 读 schtasks，而 schtasks 是
+        # Windows 内建、印的是**控制台代码页**（本机 cp936）。于是英文
+        # `Disabled` 一次也不会出现、中文「已禁用」被 `errors="replace"` 换成
+        # U+FFFD，**`disabled` 对任何任务恒为 False**——而这个探针存在的理由
+        # 正是「两个 ops 报告 TheoriaReflex 处于 Disabled 而板上无人提及」。
+        # 实测同一次查询：forced-utf-8 得到 `ģʽ:  ��������`（U+FFFD 满屏），
+        # run_console 得到 `模式: 正在运行`。规则写在 childio.py 的 docstring 里。
+        out = childio.run_console(["schtasks", "/Query", "/TN", name,
+                                   "/FO", "LIST"])
         if out.returncode != 0:
             rows.append("%s **未注册**（%s）" % (name, role))
             bad.append(name)
@@ -891,8 +914,20 @@ def probe_verify_gates():
 
     survey = gates_mod.survey(ROOT)
     ungated = survey["ungated"]
-    coverage = "领地 %d：自带闸门 %d、仅测试套件 %d、**无闸门 %d**" % (
-        survey["n_territories"], len(survey["gated"]),
+    # S28：`survey["decorative"]` 一直被算出来、一直被丢掉。`gates.py` 的注释
+    # 逐字写着「'19 gated' 和 '19 gates known to work' 是两个不同的断言」，
+    # 而这条探针**读了前一个、印了后一个**。实测此刻：自带闸门 24 个，
+    # 其中 **22 个从没被证明能变红**，而旧文案只印「自带闸门 24、无闸门 0」，
+    # 状态 green。
+    #
+    # 刻意**不**据此压成 partial：那 22 个里至少有几个有未声明的阴性对照，
+    # 长期压下去等于长期喊狼来了，而喊狼的检查会被关掉——一条被关掉的检查
+    # 和一条不存在的检查是同一回事（这条探针自己的 docstring 就这么写的）。
+    # 所以让**数字**可见，而不是让**告警**变响。
+    decorative = survey["decorative"]
+    coverage = ("领地 %d：自带闸门 %d（其中 **%d 个从未被证明能变红**）、"
+                "仅测试套件 %d、**无闸门 %d**") % (
+        survey["n_territories"], len(survey["gated"]), len(decorative),
         len(survey["tests_only"]), len(ungated))
 
     if missing:
@@ -914,12 +949,27 @@ def probe_verify_gates():
 
 
 def _supply():
-    """板上还剩几件可领 —— 供货是监控的单点，见底就是全员空转。"""
-    out = subprocess.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
-                         cwd=ROOT, capture_output=True, text=True,
-                 encoding="utf-8", errors="replace").stdout
-    avail = len([l for l in out.splitlines() if l.startswith("  p")])
-    claimed = out.count(" by ")
+    """板上还剩几件可领 —— 供货是监控的单点，见底就是全员空转。
+
+    S28：这里原来是**去数 `board.py list` 输出里 `"  p"` 开头的行**，而 board.py
+    的 available 段和 reserved 段都印这个前缀（现在还多了 territory-blocked 段）。
+    于是仓库里有两个互相矛盾的供货数，**被渲染出来的是错的那个**：
+    实测同一时刻，前缀匹配数出 4（页面印「供货充足」绿色），
+    而 `board.candidates()` 是 1；`reflex.py` 早就在用后者并诚实地记 `SUPPLY-LOW:1`。
+
+    改成直接问 `board`。数一个渲染给人看的字符串，本来就是在拿排版当 API。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import board as board_mod
+        avail = len(board_mod.candidates())
+        claimed = len(board_mod.claimed_map())
+    except Exception as exc:                    # noqa: BLE001 -- 报出来
+        # 问不到就说问不到。这个探针存在的理由是「见底就是全员空转」，
+        # 而「数不出来」绝不能长得像「板上很充足」。
+        return {"status": "risk",
+                "detail": "**板查不出来**（%s: %s）——供货数未知，"
+                          "不要当成充足。" % (type(exc).__name__, exc)}
     if avail == 0:
         return {"status": "risk",
                 "detail": "**板已见底**：%d 件在做，0 件可领——有人交付即空转，"
@@ -930,6 +980,23 @@ def _supply():
                           % (avail, claimed)}
     return {"status": "green",
             "detail": "板上 %d 件可领、%d 件在做，供货充足。" % (avail, claimed)}
+
+
+def _ack_required():
+    """回执词表**从 bus 协议取**，不在这里手打第二份。
+
+    取不到就退回三个词的字面量——比缩水的两个词安全，因为漏报一条欠着的
+    urgent 正是这次要修的那个静默失败。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        from bus import ACK_REQUIRED
+        return ACK_REQUIRED
+    except Exception:
+        return ("order", "urgent", "question")
+
+
+_ACK_REQUIRED = _ack_required()
 
 
 def _bus_probe():
@@ -966,8 +1033,16 @@ def _bus_probe():
                     r = json.loads(l)
                     if r.get("kind") == "ack":
                         acked.add(r.get("ref"))
+        # S28：这里原来手打了一个缩水的集合 `("order", "question")`，
+        # 把 `urgent` 漏在「欠回执」之外。而 `bus.py` 自己的 `ACK_REQUIRED`
+        # 是三个，`cmd_read` 会**永远重发**一条没回执的 urgent，
+        # 状态行却印「指令全部已读并回执」。
+        # 漏掉的那个失败模式是最要紧的一种：**心跳还在写、cycle 还在推进、
+        # 就是不执行指令的活会话，无人报告。**
+        # （`notice` 不纳入——协议明说无需回执。这正是导入而不是手打的理由：
+        # 这个词表属于 bus 协议，不属于盘面。）
         pend = [m["seq"] for m in sent
-                if m["kind"] in ("order", "question") and m["seq"] not in acked]
+                if m["kind"] in _ACK_REQUIRED and m["seq"] not in acked]
         if pend:
             owed.append("%s(%d)" % (a, len(pend)))
     if never:
@@ -2619,8 +2694,16 @@ def build(with_tests=False, out_dir=None):
                  encoding="utf-8", errors="replace").stdout
     dd = os.path.join(HERE, "board", "done")
     cd = os.path.join(HERE, "board", "claimed")
+    # S28 的孪生缺陷：和 `_supply()` 同一个前缀匹配，同样把 reserved（以及现在的
+    # territory-blocked）段数进「可领」。前端拿这个数当可领件数显示。
+    try:
+        sys.path.insert(0, HERE)
+        import board as _bmod
+        _available = len(_bmod.candidates())
+    except Exception:
+        _available = None       # 前端据此显示「不知道」，而不是显示一个漂亮的数
     state["board"] = {
-        "available": len([l for l in bl.splitlines() if l.startswith("  p")]),
+        "available": _available,
         "claimed": len(os.listdir(cd)) if os.path.isdir(cd) else 0,
         "done": len(os.listdir(dd)) if os.path.isdir(dd) else 0,
         "blocked": bl.count("waits on"),
