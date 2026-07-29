@@ -1053,6 +1053,124 @@ def probe_standing():
                          "　→ **超过两个周期没跳，例行已停**" if stale else "")}
 
 
+def _accounts_rows():
+    """账号池的结构化行。读不出来返回空表——**空表不等于「没问题」**，
+    页面据此显示「账号池不可读」，而不是显示一个漂亮的空白。"""
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        return _acct.status()
+    except Exception:
+        return []
+
+
+def _agent_account(agent_id):
+    """这个 agent 最近一次是跑在哪个账号上的；不知道就是 None，不猜。"""
+    logs = rel("monitor", "dispatch-logs")
+    if not os.path.isdir(logs):
+        return None
+    best, best_m = None, 0
+    for name in os.listdir(logs):
+        if not (name.startswith(agent_id + "-") and name.endswith(".log")):
+            continue
+        path = os.path.join(logs, name)
+        try:
+            m = os.path.getmtime(path)
+        except OSError:
+            continue
+        if m > best_m:
+            best, best_m = path, m
+    if not best:
+        return None
+    try:
+        with open(best, encoding="utf-8", errors="replace") as fh:
+            for _ in range(4):
+                line = fh.readline()
+                if not line:
+                    break
+                hit = re.search(r"account=(\S+)", line)
+                if hit:
+                    a = hit.group(1)
+                    return None if a.startswith("default") else a
+    except OSError:
+        return None
+    return None
+
+
+def _fleet_rows():
+    """现役舰队：六个常驻岗 + 在跑的一次性工人。
+
+    「活着」问的是**计划任务表**（无头是唯一启动路径之后它就是权威）与
+    **工作板上的动作**，不问 agent 的自述——自述的时刻会漂前，文件的 mtime
+    会被一次 merge 摸新，而一行 CLAIM/DONE 只可能由活着的会话写出来。"""
+    try:
+        sys.path.insert(0, HERE)
+        import board as board_mod
+        import standing as standing_mod
+    except Exception:
+        return {"error": "fleet modules unreadable"}
+    try:
+        live = standing_mod.running_tasks()
+    except Exception:
+        live = set()
+    claimed = {}
+    try:
+        for f in os.listdir(board_mod.CLAIMED):
+            if f.endswith(".md"):
+                parts = f[:-3].split(".")
+                if len(parts) >= 2:
+                    claimed.setdefault(parts[1], []).append(parts[0])
+    except OSError:
+        pass
+    roles = {"RES-1": "战役", "RES-2": "论文", "RES-3": "验证",
+             "RES-4": "基建", "OPS-M": "合并", "OPS-A": "审计"}
+    rows = []
+    for aid, role in roles.items():
+        rows.append({
+            "id": aid, "role": role,
+            "alive": aid in live,
+            "account": _agent_account(aid),
+            "holding": sorted(claimed.get(aid, [])),
+            "idle_min": board_mod.heartbeat_age(aid),
+        })
+    workers = sorted(w for w in live if w.startswith("W-"))
+    return {"standing": rows, "workers": workers,
+            "workers_holding": {w: sorted(claimed.get(w, [])) for w in workers}}
+
+
+def _landed_gap():
+    """板上说交付了几件，其中几件的分支还没进 master。
+
+    这一格是今天最贵的一课的量化：把「板上 done」当成「已落地」计分，
+    headline 就虚高了 11.5 个百分点。"""
+    out = {"done": 0, "stuck": [], "flagged": 0}
+    try:
+        sys.path.insert(0, HERE)
+        import board as board_mod
+        out["done"] = len(board_mod.done_ids())
+    except Exception:
+        pass
+    try:
+        import mergequeue as mq
+        stuck = mq.done_not_on_master()      # [{item, branch, state}, ...]
+        out["stuck"] = [{"item": r.get("item"), "state": r.get("state")}
+                        for r in stuck][:12]
+        out["stuck_n"] = len(stuck)
+    except Exception as exc:
+        # 不知道就说不知道，不写 0。第一版这里写了 `sorted(stuck)`，
+        # 而它返回的是一串 dict——排序当场抛异常，`stuck_n` 变成 None，
+        # 页面于是显示「差额未知」。那次是对的：**它没有把失败画成零**。
+        out["stuck_n"] = None
+        out["stuck_error"] = type(exc).__name__
+    try:
+        ci = rel("monitor", "ci")
+        out["flagged"] = len([f for f in os.listdir(ci)
+                              if f.startswith("CONFLICT-")]) if os.path.isdir(ci) else 0
+    except OSError:
+        pass
+    return out
+
+
 def probe_accounts():
     """账号池：谁登录了、谁的窗口开着、下一个窗口几点重开。
 
@@ -2243,6 +2361,14 @@ def build(with_tests=False, out_dir=None):
         "blocking_findings": sum(1 for f in spec.FINDINGS if f["severity"] == "blocking"),
         "probes": probe_results,
         "tickets": load_prompts(),
+        # 页面渲染，扫描计算——这条分工是本仓的既有契约。下面三块是
+        # 2026-07-29 舰队改制之后页面需要而旧 state 里没有的：
+        # 账号池的**结构化**行（不是一句散文）、每个 agent 跑在哪个账号上、
+        # 以及「板上 done」与「进了 master」的差额。最后一条是今天最重要的
+        # 新区分：把前者当成后者，正是 headline 虚高 11.5 个百分点的机制。
+        "accounts": _accounts_rows(),
+        "fleet": _fleet_rows(),
+        "landed": _landed_gap(),
     }
     state["progress"] = compute_progress(phases)
     state["paper_progress"] = compute_paper_progress()

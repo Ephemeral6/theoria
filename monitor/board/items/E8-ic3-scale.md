@@ -1,0 +1,18 @@
+priority: 3
+cell: E2
+territory: engine-rig
+deps: none
+released_by: --help
+
+# E8 · IC3 的边界在哪：它兜得住多大的形状
+
+M9 让 IC3/PDR 在 peg 0111（LP 无线性证书那个配置）上拿到了非线性归纳不变量，
+这条工序的存在理由已兑现。现在量它的**边界**：状态空间规模 / 谓词数量 / 世界机制
+复合度三个维度上，它在哪里开始超时或产出不可复核的证书。
+
+用 worldgen 的世界族做梯度（`worldgen/` 只读 import），每档记录：求解时间、
+不变量大小、独立检查器复核是否通过、以及失败时的失败形态（超时 / 泛化失败 /
+证书不可复核）。产出 `engine-rig/IC3_BOUNDS.md` 与可重生成的表。
+这决定论文里能不能说「LP 够不着的形状由它兜」——现在只有一个点，说不了一条线。
+
+> **--help 于 2026-07-29T15:54:41Z 交回**：accidental claim by RES-3: passed --help to board.py claim and it was taken as a worker id
