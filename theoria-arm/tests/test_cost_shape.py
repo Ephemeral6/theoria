@@ -55,10 +55,19 @@ EXPECTED_FIELDS = (
     "pricing",
     "unpriced_models",
     "usd_total",
-    # S29 / `71b882c8`. `usd_total` is a lower bound; these three are the only
-    # channels that say why it is short, and they are three and not one because
-    # an unmeasured call is not an unpriced model and neither is a counted key
-    # the table has no rate for.
+    # S29 / `71b882c8`. `usd_total` is a lower bound and these three are the
+    # channels that say why it is short.
+    #
+    # An earlier version of this comment said they were "the only" channels,
+    # and `0d88d423` corrected that claim in `archive.py` while leaving it
+    # standing here -- which is the copy a reader trimming the declaration
+    # reaches first. Corrected: `unpriced_usage_keys` is **redundant**. Its
+    # producer (`proxy/cost.py`) and `usage_keys_the_table_cannot_price`
+    # (`archive.py`) are both `sorted(...) or None` over the same per-record
+    # `table.cost()` call on the same records, so dropping it loses nothing.
+    # The other two have no sibling. They are three rather than one because an
+    # unmeasured call is not an unpriced model and neither is a counted key the
+    # table has no rate for -- that part was always right.
     "missing_usage_keys",
     "unmeasured_calls",
     "unpriced_usage_keys",

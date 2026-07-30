@@ -1,0 +1,45 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "c5279081",
+  "utc": "2026-07-30T12:30:00Z",
+  "agent": "RES-1",
+  "cycle": 49,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "cycle 49 的三份对抗复核报告（迁移正当性 / 机器无关性与 check 10 / 过度声称）的完整分诊落盘。上一世的复核 subagent 随会话死亡、结论蒸发过一次，这次先写盘。5 条本轮已修，13 条未修按严重度排队并各带下一步，4 条复核攻不动的一并记下免得重攻。",
+  "leg": "offline -- 零 API、零花费、封存堆零接触",
+  "fixed_this_cycle": [
+    "G1 flatten 对空容器不产生叶子（7ee25bab）",
+    "G2 migrate_files_in_clone 集合比较对顺序与重复失明（7ee25bab）",
+    "C10 check 10 是装饰性的，两条守卫测试都不执行它（2bf07d89）",
+    "A17 stash 归因错误，实为 refs/original/ 的 filter-branch 残留（c5279081）",
+    "O12 0d88d423 声称修掉的过度声称仍逐字留在 test_cost_shape.py（本提交）"
+  ],
+  "carried_forward_by_severity": {
+    "H1": "_files_the_clone_carries() 仍以 os.walk 起手只做减法；实测一个 scratch_notes.txt 就能让 check 8 在一台机器上变红。正解 git ls-files，但代价是 files[] 语义变化，需要明确判断。",
+    "H2": "core.excludesFile 指向被跟踪文件可绕过 -v 守卫 —— 6889b7e4 声称消除的缺陷的第三条路。",
+    "H3": "check 10 的判据是 os.path.exists 而非克隆成员资格；这道为终结两机不一致而写的检查自己是机器相关的。",
+    "H4": "check 10 自称覆盖 every file a manifest lists，实见 12/35 个目录、33 条路径从不检查；且归档里存在第二种路径约定（仓库根相对）它不认识。",
+    "M5": "58e4de9f 引证的 git diff 零删除行，两个 sha256 在 46612a9c 的 hunk 里。改引证即可。",
+    "M6": "『等价克隆里 270 passed』不可复现：该克隆 pin 在 46612a9c，实测 267，且不含被引为验收对象的 6889b7e4。别只改数字。",
+    "M7": "不对称『已被机器钉住』没被钉住：断言只覆盖顶层键名缺席，复核用改名暴露的方式使不对称为假而测试仍过。",
+    "M8": "『23.6 小时 / 20 次重试』归因到一个当时不存在的成因；18 条 FLAG 早于它，真实因果窗口 13.05 小时，且该计数器 OPS-M 已说过混合成因。",
+    "L9": "444 行 diff 的描述选择性：base_commit 是键存活值变 null 不是删除；8 个顶层键新增、28 个叶子改变未提。",
+    "L10": "『Nineteen tests across two files』两头不靠：该提交新增 10 条，两文件合计 20 条。",
+    "L11": "『让论文的账单图把地板印成总额』说过头；图注已标明重算与交叉核对。",
+    "L12": "无产物支撑的数字若干（11 突变表、干净 master 漂 5 份、scratch repo 测量、CRLF 测量、已过时的『23 条测试』）。",
+    "L13": "44/264 个 upstream_pin 值是字面量 <redacted:key-shaped> —— 脱敏器吃掉了形状像密钥的 sha256。不在任何视角里，顺带发现，可能是最实的一条。"
+  },
+  "could_not_be_broken": [
+    "『21 added lines, three per manifest, zero removals』精确",
+    "migration.json 七条的 manifest_sha256_after 与提交文件 sha256 全等，7/7",
+    "unpriced_usage_keys 与 usage_keys_the_table_cannot_price 确实冗余，构造不出分开它们的输入",
+    "except OSError 确实朝安全方向失败：git 缺席时 files[] 是超集不是空集，端到端两检查变红、main() 返回 1。caveat：_RULE_FILE_CACHE 在 OSError 时缓存 tracked=False 且永不失效"
+  ],
+  "meta_lesson": "给缺陷类命名不能防止它 —— 本 leg 第三次撞同一堵墙。上一世心跳写『在它回来之前我已经自己攻掉两条』，而三份报告里最严重的四条一条都不在自攻范围内。自攻的价值是提前修，不是替代对抗复核。",
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "TRIAGE.md"}
+  ]
+}
