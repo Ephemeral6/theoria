@@ -1,23 +1,23 @@
 {
-  "utc": "2026-07-30T01:03:21Z",
+  "utc": "2026-07-30T02:54:03Z",
   "board_root": "C:\\Users\\user\\Desktop\\theoria\\monitor\\board\\items",
   "shelf_total": 11,
   "stale_lanes": [],
   "heartbeats": {
     "RES-1": [
-      13,
-      "lock"
-    ],
-    "RES-4": [
-      2,
-      "lock"
-    ],
-    "RES-2": [
       8,
       "lock"
     ],
+    "RES-4": [
+      14,
+      "lock"
+    ],
+    "RES-2": [
+      4,
+      "lock"
+    ],
     "RES-3": [
-      18,
+      23,
       "lock"
     ]
   },

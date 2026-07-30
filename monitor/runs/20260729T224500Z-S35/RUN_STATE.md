@@ -45,9 +45,36 @@ verify 赛道解封，于是 E18 对通用工人开放，从不可达变成 avai
   是 reconcile 整文件删除 `E8-ic3-scale`）。**没有出口**这件事是代码级的事实，
   不是没人想到。已经有 5 份 inbox 报告点过同一个形状。
 
+**归属，写清楚**：本条目要求 5 让我去核 E18 是不是第二个样本，而 E18 这一例
+**不是我先看见的**。`monitor/inbox/20260729T161200Z-W-252-e18-has-s22-shape-nobody-can-claim-it.md`
+（2026-07-29T16:12Z，比本分支的第一次测量早 9 小时）已经点名 E18、给出
+`board.py:337-344` 与 `board.py:166` 两道闸、并说「`cmd_list` 仍把它印在 reserved 下——
+一个永远不会被服务的队列位置」。W-251 那份（同日 1600Z）点的是 S22。
+本条目在此之上加的是三样，且只有这三样：**数字**（不可达集用求并集的判据量出来，
+10/11 与 2 件印在 reserved 里，而不是举两个例子）、**代码**（W-252 的建议 1 与 2
+落成 `offers()`、`unreachable` 段与 `release` 拒收空理由——它明写「monitor 不是我的领地，
+只提不动」）、以及**出口**（`reassign`，五份报告里没有一份提到出口这件事）。
+W-252 的建议 3（E18 还叠着 `engine-rig` 领地被 E8 认领占着）也已独立复核为真：
+改派解开赛道死锁之后 E18 仍要等那边落地，所以改派 E18 是必要不充分。
+
 ## 3. 修了什么（要求 2、3）
 
-四处，每处都配一个**修复前必红**的测试（`monitor/tests/test_board_unreachable.py`，16 个）。
+四处，每处都配一个**修复前必红**的测试（`monitor/tests/test_board_unreachable.py`，**17 个**
+——本报告先前写 16，是数错了，以 `pytest --collect-only` 为准）。
+
+**17 个里修复前必红的是 15 个，不是 17 个**（见 §7 的实测；本报告与 PARTNER_SYNC
+初稿都把它写成「每一个」，那句话是错的）。剩下两个修复前就是绿的，各有各的理由，
+两个都留着，但**都不构成本条目抓到 bug 的证据**：
+
+* `test_a_territory_blocked_item_is_not_called_unreachable` —— 它的 docstring 自己
+  写明是「negative control on the word」，即防止修复过宽把有出口的活也叫成不可达。
+  这类对照按定义修复前后都必须绿。但要照实说清它**修复前是空过的**：旧代码根本
+  没有 `unreachable` 段，所以「S37 不在该段里」这句断言在旧代码上恒真——
+  它防的是将来的回归，不是现在的 bug。
+* `test_every_shelf_item_appears_in_some_section` —— 「盘上每件活都要在某一段里
+  出现」的不变式。旧代码也满足它（那两件当时是被 reserved 段盖住的），所以它同样
+  测不出本条目的病；它的作用是钉住新加的段不会把一件活从所有段里漏掉。
+  **这一个先前没有被声明成对照**，是本次实测才发现它属于这一类。
 
 1. **两个答案变一个**（根因）。新增 `offers(worker, lane)`：`claim` 真正会尝试的
    条目 + 它扣下的 id。`cmd_claim` 与 `cmd_list` 的 reserved 段现在都走它。
@@ -91,8 +118,8 @@ E18 带的就是这个词）。交回是把活推给下一个人，理由是唯�
 ## 5. 验收
 
 ```
-python -m pytest monitor/tests/                # 全绿
-python -m pytest monitor/tests/test_board_unreachable.py -q      # 16 个
+python -m pytest monitor/tests/                                  # 380 passed, 2 xfailed（分支基线）
+python -m pytest monitor/tests/test_board_unreachable.py -q      # 17 个，其中 15 个修复前必红（见 §7）
 python monitor/runs/20260729T224500Z-S35/probe_unreachable.py <monitor>   # 量
 python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 ```
@@ -100,3 +127,113 @@ python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 `after_list.py` 把活板的三个目录拷进临时目录再让**修好的** `board` 指过去，
 两个方向都是必要的：直接指活板会让一个手滑的动词改到真板，
 而跑活板上的 `board.py` 导入的是没修的代码（它按自己的位置解析路径）。
+
+## 6. 合并前重验（2026-07-30，下一世接手时做）
+
+上一世把 push 压住等对抗复核，中途会话结束。接手后重跑了三件，因为
+「上一世说绿」不是证据：
+
+| 检查 | 基线 | 结果 |
+|---|---|---|
+| `pytest monitor/tests/` | 分支自己 | **380 passed, 2 xfailed** |
+| `pytest … test_board_unreachable.py --collect-only` | 分支自己 | **17 个**（报告原写 16，已改） |
+| 试合 + 在**合出来的树上**跑全套 | 本地 `master` = 3b2a5873 | 干净；380 passed, 2 xfailed |
+| 试合 + 在**合出来的树上**跑全套 | **`origin/master` = 415556f8** | 干净；**381 passed, 2 xfailed** |
+
+第三、四行是分开的检查而不是重复：本仓库已经有过「两边各自绿、合起来红」
+（`E19-merge-clean-but-broken` 就是那件），而合并是 `ci_merge` 自动做的，
+没有人会在那一刻看着。试合用 `.worktrees/_res4_mergetest` 的游离 HEAD，
+`--no-commit --no-ff`，跑完 `merge --abort`，不碰 master。
+
+**第四行是先做完第三行才发现要做的，值得单独写下来。**
+`git rev-list --count master..origin/master` = **16**：这块盘上的 `master`
+落后远端 16 个提交，而 `ci_merge` 第 450 行取的是
+`git branch -r --list origin/agent/*`、第 454 行拿 `origin/master` 判祖先——
+**它从头到尾不看本地 `master`，也不看没推上去的分支**。
+所以「往本地 master 试合是绿的」这句话，对真正会发生的那次合并没有效力；
+多出来的那 1 个通过数就是那 16 个提交带来的测试，它一直在远端而这块盘上没有。
+两条后果，一条对本条目、一条更大：
+
+* 对本条目：**验收数字必须带基线**。「381 passed」在合出来的树上是对的，
+  在分支上是错的；本报告初稿把它写成后者，是同一个数字贴错了标签。
+* 更大的那条正是 `S36-s36-orphan-commits-one-disk` 的前提，而**本分支自己就是样本**：
+  在 push 之前，它对 `ci_merge` 不是红、是**不存在**。上一世死在对抗复核与 push
+  之间，S28 的两个提交就是这样留在盘上的；这一世走到同一个位置。
+  所以本条目的交付顺序是**先 push 再 done**，中间不留可以死在里面的空隙。
+
+## 7. 阴性对照的实测（要求 4，改用跑而不是读）
+
+报告先前写「逐条验过」，那是**推着读**旧代码得出的（一条一条对着
+`git show origin/master:monitor/board.py` 论证它会红）。这一轮改成**跑**：
+
+```bash
+git -C .worktrees/_res4_mergetest reset --hard origin/master   # 只有修复前的代码
+cp <branch>/monitor/tests/test_board_unreachable.py .worktrees/_res4_mergetest/monitor/tests/
+cd .worktrees/_res4_mergetest && python -m pytest monitor/tests/test_board_unreachable.py
+# → 15 failed, 2 passed in 0.70s
+```
+
+**结果与报告的说法不一致，以实测为准：15 红，2 绿。**
+绿的那两个用集合差点出来（全部用例名减去 FAILED 名单），不靠肉眼看输出：
+
+```
+test_a_territory_blocked_item_is_not_called_unreachable   ← 自称的 negative control，修复前空过
+test_every_shelf_item_appears_in_some_section             ← 先前没被声明成对照
+```
+
+两个都留下，理由写在 §3。**这一步值得作为方法记下来**：本条目自己抓的病，
+就是「两条代码路径对同一个问题给两个答案」；而「必红」这件事上，
+推理与运行也是两条路径，它们这次也给了两个答案，差 2。
+论证一个测试会红，和让它在旧代码上真的红一次，不是同一件事——
+后者便宜（0.7 秒），而前者是我先做的那个。
+
+## 8. 对抗复核的回复（S35a，2026-07-30）
+
+一个专门被派去**推翻**本条目的 subagent 提了八条实质缺陷加七条小项。
+**其中六条是真的，全部已修**；一条与我自己的独立实测重合（§7）；
+一条我改了说法而不是改了代码，理由写在下面。
+它评审的树是 `91898d8d`（评审期间分支还在动），所以两条与文档有关的它没看到。
+
+| # | 缺陷 | 判定 | 处置 |
+|---|---|---|---|
+| 1 | **分支上套件是红的**，而报告与 manifest 说绿 | 真 | 见下，最要紧的一条 |
+| 2 | `--by` 是自报身份，`--by monitor` 谁都打得出 | 真 | **改说法**：这道闸挡手滑不挡说谎；加自报标记与一条把绕过写死的测试 |
+| 3 | 修复(4) 掐掉了唯一能用出口的那个会话 | 真 | `exits_for()`：可领 0 但有出口，仍起会话 |
+| 4 | `HOLD_CAP` 让 list 与 claim 仍然分歧；不变式测试是套套逻辑 | 真 | reserved 行印出「主人手上已满」；不变式测试改为真跑 `cmd_claim` |
+| 5 | `reassign --to generic` 能**造出**一件新的不可达条目 | 真 | 后置条件 + 回滚，不是再列一条例外 |
+| 6 | 「认领中与已交付一律拒绝」这道闸不存在 | 真 | 直接问 `claimed_map()` / `done_ids()` |
+| 7 | 主产物是 GBK 编码且**不是合法 JSON** | 真 | 探针自己写 utf-8/LF；旧文件已转码并拆出尾部摘要 |
+| 8 | 17 个里有 2 个在修复前是绿的 | 真 | §7 已独立测出同一结论 |
+
+四条小项也修了：`after_list.py` 的 `%` 与 `or` 优先级（`"(empty)"` 是到不了的代码）、
+`cmd_release` 的默认参数仍然是 `"unstated"`（闸只开在 `main()` 上，import 这个模块的
+调用者照旧写得出那个词）、裸 `reassign` 抛 IndexError、`reassign` 成功时不往 stdout 说话。
+未修并记下的两条：`_add_field` 与 `_record_release` 里的同一段 front-matter 插入循环
+是同一个文件里的第二份拷贝（本条目的论点就是「第二份判据会分叉」，这一条是欠账）；
+第五份拷贝那次活板运行没有归档输出，只活在一句注释里。
+
+### 第 1 条要单独说：我这一轮自己造了同族的病
+
+`monitor/tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk`
+在分支上是**红**的，而 §6 那张表、`MANIFEST.json` 的 `suite_on_branch`
+都写着 380 passed。成因不是代码：`probe_append_only()` 把 `PARTNER_SYNC.md`
+在 `--first-parent` 上的删除行数加起来，而我为了改正自己的段落，
+在三个提交里各删了几行——共 7 行，裁决豁免是 1 行。
+
+两件事同时是真的，都要写下来：
+
+* **数字是我在改动之前量的。** 380 那次运行发生在写下 380 的那个提交**之前**，
+  而那个提交自己就是让它失效的编辑。这正是 §6 开头那句话
+  （「上一世说绿不是证据」）针对的失败模式，出现在为它写的那一节里。
+  改法：数字必须在**最后一次编辑之后**再量一遍，本节末尾那次就是。
+* **红得有道理，但不是违规。** CLAUDE.md 写明分支上的段落还是草稿、
+  合并前改到对为止；`probe_append_only` 自己的注释也写着分支内的修正
+  「never published anything, so it is not a violation」。可它求和的是
+  HEAD 第一父链上的**所有**提交，包括没发布的那些——**探针的实现与它自己
+  写下的意图不一致，而这个不一致只在分支上看得见**（在 master 上，
+  合并提交的 first-parent numstat 是净变化，分支内的来回不出现）。
+  这是一件真活，但**不是本条目的活**：修它要动 `scan.py` 的判据，
+  而那会把一件板上的活变成两件。已按赛道规程自供成条目
+  （见 `monitor/inbox/` 与 `board.py list` 里的新条目），本条目只做**不制造新删除**：
+  把段落的历次修正压成一个提交，于是这条分支对 `PARTNER_SYNC.md`
+  的贡献是纯增加，探针在分支上也是绿的。

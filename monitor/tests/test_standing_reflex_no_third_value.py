@@ -139,7 +139,11 @@ def test_the_unknown_sentinel_has_its_own_skip_reason():
     failed to read."""
     src = open(os.path.join(HERE, "standing.py"), encoding="utf-8").read()
     i = src.index('why = "BOARD-QUERY-FAILED')
-    j = src.index('why = "no work (unread=0 held=0 claimable=0)"')
+    # S35a: matching the whole sentence pinned the *wording* of a neighbouring
+    # branch, so adding `exits=` to it turned this ordering assertion into a
+    # ValueError -- a test about branch order failing for a reason that has
+    # nothing to do with branch order. Match the branch, not the prose.
+    j = src.index('why = "no work (')
     assert i < j, "the unknown branch must be tested before the 'no work' branch"
 
 

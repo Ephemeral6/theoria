@@ -18,12 +18,29 @@
     "monitor/board.py",
     "monitor/standing.py",
     "monitor/tests/test_board_unreachable.py",
-    "monitor/tests/test_standing_reflex_no_third_value.py"
+    "monitor/tests/test_standing_reflex_no_third_value.py",
+    "monitor/inbox/20260730T0210Z-RES-4-e18-needs-a-reassignment-decision.md",
+    "PARTNER_SYNC.md"
   ],
   "measured": {
     "unreachable_before": 10,
     "printed_as_reserved_before": 2,
     "s22_stuck_since": "2026-07-29T10:36:56Z",
-    "e18_stuck_since": "2026-07-29T12:37:38Z"
+    "e18_stuck_since": "2026-07-29T12:37:38Z",
+    "tests_new_file": 17,
+    "suite_on_branch": "380 passed, 2 xfailed",
+    "suite_on_trial_merge_into_3b2a5873": "380 passed, 2 xfailed (local master, NOT the base ci_merge uses)",
+    "suite_on_trial_merge_into_origin_master_415556f8": "381 passed, 2 xfailed (the base ci_merge actually uses)",
+    "local_master_behind_origin_master": 16,
+    "tests_red_before_fix": "15 of 17 (measured by running the new file against origin/master, not by reasoning)",
+    "tests_green_before_fix": [
+      "test_a_territory_blocked_item_is_not_called_unreachable",
+      "test_every_shelf_item_appears_in_some_section"
+    ]
+  },
+  "prior_art": {
+    "e18_sample_first_reported_by": "W-252",
+    "where": "monitor/inbox/20260729T161200Z-W-252-e18-has-s22-shape-nobody-can-claim-it.md",
+    "note": "S22 shape: W-251 20260729T1600Z. This item adds the count, the code, and the exit -- not the observation."
   }
 }

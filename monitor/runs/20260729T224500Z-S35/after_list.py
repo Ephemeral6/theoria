@@ -44,8 +44,11 @@ def main():
         board.OPS_STATUS = os.path.join(tmp, "ops-status")
         board.prior_work = lambda iid, repo=None: []
         print("# live board copied from %s" % LIVE)
-        print("# unreachable set: %s"
-              % ", ".join(sorted(board.unreachable_ids())) or "(empty)")
+        # S35a（对抗复核抓到）：原来是 `% ", ".join(...) or "(empty)"`。
+        # `%` 比 `or` 结合得紧，所以 `"(empty)"` 是**到不了的代码**，空集会印
+        # 出一个后面什么也没有的标签。这是本条目交付的那个「看」的脚本。
+        ids = sorted(board.unreachable_ids())
+        print("# unreachable set: %s" % (", ".join(ids) if ids else "(empty)"))
         print()
         board.cmd_list()
     finally:
