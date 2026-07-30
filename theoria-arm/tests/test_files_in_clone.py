@@ -325,6 +325,11 @@ def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     _git(["init", "-q"], str(root))
     _write_gitignore(root, "runs/*/trace.jsonl\n")
     (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
+    # Tracked, not merely written. Check 10 asks the index rather than the disk
+    # (see `test_check_ten_asks_the_index_not_the_disk`), so an untracked file
+    # here would be correctly reported as dangling and the green half of this
+    # test would prove nothing about explanation.
+    _git(["add", "-f", "runs/somerun/certify.json"], str(root))
     _archive_material_run(run_dir)
 
     def verdict(*paths):
@@ -349,6 +354,148 @@ def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     assert "gone.json" in red["detail"]
     assert "certify.json" not in red["detail"], (
         "the detail blames a path that is present")
+
+
+def _check_ten_row(runs_root, monkeypatch):
+    """Check 10's own row from a real `run()`. `armversion.scan` stubbed for the
+    reason given in `test_check_ten_catches_a_dangling_reference`: it is check
+    8's, unrelated here, and it costs 136 seconds against this repository."""
+    from armtools import armversion, verify_provenance   # noqa: PLC0415
+
+    monkeypatch.setattr(armversion, "scan", lambda *a, **k: {})
+    rows = [r for r in verify_provenance.run(str(runs_root)).rows
+            if r["check"] == CHECK_TEN]
+    assert len(rows) == 1, "check 10 did not run at all: %r" % rows
+    return rows[0]
+
+
+def test_check_ten_asks_the_index_not_the_disk(tmp_path, monkeypatch):
+    """The repair for H3, in both directions.
+
+    Check 10 was written to end a defect -- "the same commit gets two answers on
+    two machines" -- and its first predicate was `os.path.exists`, which has that
+    defect. A file present in the run directory but tracked nowhere passed here
+    and dangled in every clone, so the check policing machine-dependence was
+    machine-dependent by the same mechanism, one file away from the code it was
+    policing.
+
+    Both halves matter, and the second is the one a lazy fix loses:
+
+    * present but untracked -> RED. It is not in the clone.
+    * tracked but deleted from this working tree -> GREEN. It **is** in the
+      clone; the disk being short of it is this machine's business. A fix that
+      demanded both tracked *and* present would keep the machine-dependence and
+      merely add a condition.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "stray.json").write_text("{}\n", encoding="utf-8")
+    _git(["add", "-f", "runs/somerun/kept.json"], str(root))
+
+    def verdict(*paths):
+        (run_dir / "MANIFEST.json").write_text(
+            json.dumps({"files": [{"path": p} for p in paths]}),
+            encoding="utf-8")
+        return _check_ten_row(runs_root, monkeypatch)
+
+    # Precondition, or the test below proves nothing: both files are on the disk,
+    # so `os.path.exists` -- the predicate this replaces -- would pass both.
+    assert (run_dir / "kept.json").exists()
+    assert (run_dir / "stray.json").exists()
+
+    assert verdict("kept.json")["ok"] is True
+
+    red = verdict("kept.json", "stray.json")
+    assert red["ok"] is False, ("a listed file that no clone would carry passed "
+                               "because it happened to be on this disk")
+    assert "stray.json" in red["detail"]
+    assert "kept.json" not in red["detail"]
+
+    # ...and the other direction. Delete the tracked one: a clone still has it.
+    os.remove(str(run_dir / "kept.json"))
+    assert verdict("kept.json")["ok"] is True, (
+        "a tracked artefact missing from this working tree was called dangling; "
+        "the clone is the reference, not the disk")
+
+
+def test_check_ten_rejects_a_path_that_is_not_of_this_run(tmp_path, monkeypatch):
+    """An absolute path and a `..` escape both pass `os.path.exists`.
+
+    `os.path.join(run_dir, "C:/Windows/win.ini")` throws the run directory away
+    and returns the absolute path, which exists; `../../armtools/backfill.py`
+    exists as well. Neither is an artefact of the run, and a manifest listing one
+    is describing a file it does not own -- so it is reported as its own kind of
+    fault, not silently folded into "dangling", because the reader needs to be
+    told which of the two things went wrong.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    _git(["add", "-f", "runs/somerun/kept.json"], str(root))
+    outside = root / "outside.json"
+    outside.write_text("{}\n", encoding="utf-8")
+    _git(["add", "-f", "outside.json"], str(root))
+
+    def verdict(*paths):
+        (run_dir / "MANIFEST.json").write_text(
+            json.dumps({"files": [{"path": p} for p in paths]}),
+            encoding="utf-8")
+        return _check_ten_row(runs_root, monkeypatch)
+
+    escape = "../../outside.json"       # run_dir is `<root>/runs/somerun`
+    # Precondition: it exists *and* is tracked, so neither the old predicate nor
+    # a naive tracked-set lookup against the repository root would object.
+    assert os.path.exists(os.path.join(str(run_dir), escape))
+    red = verdict("kept.json", escape)
+    assert red["ok"] is False, "a path climbing out of the run directory passed"
+    assert "not a path inside the run" in red["detail"]
+
+    for absolute in (str(outside), "/etc/passwd", "C:/Windows/win.ini"):
+        red = verdict("kept.json", absolute)
+        assert red["ok"] is False, "an absolute path passed: %r" % absolute
+        assert "not a path inside the run" in red["detail"]
+
+    assert verdict("kept.json")["ok"] is True, (
+        "the shape gate rejects an ordinary run-relative path")
+
+
+def test_check_ten_has_no_answer_rather_than_a_green_when_git_cannot_be_asked(
+        tmp_path, monkeypatch):
+    """The third value, and why it is not folded into either verdict.
+
+    A `runs/` tree outside any repository: git exits non-zero, so nothing can be
+    said about what a clone would carry. The old predicate returned green here --
+    the file is on the disk, and that was the whole question. The new one must
+    not, and must also not report every listed path as dangling: that would be a
+    red naming paths that are probably fine, which trains a reader to ignore it.
+
+    This is the same shape as the reflex layer being quieter about a broken board
+    than about an empty one: an unknown rendered as a known.
+    """
+    runs_root = tmp_path / "runs"                    # deliberately not a repo
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _archive_material_run(run_dir)
+    (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "certify.json"}]}), encoding="utf-8")
+
+    assert backfill.paths_the_clone_ships(str(run_dir)) is None
+    row = _check_ten_row(runs_root, monkeypatch)
+    assert row["ok"] is False, ("a tree where the question cannot be asked read "
+                               "as green")
+    assert "no answer" in row["detail"]
+    assert "certify.json" not in row["detail"], (
+        "the detail blames a path when the truth is that git could not be asked")
 
 
 def test_check_ten_is_not_skipped_into_silence(tmp_path):

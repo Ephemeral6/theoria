@@ -1026,6 +1026,79 @@ def _repo_top(run_dir: str) -> Optional[str]:
     return top
 
 
+def paths_the_clone_ships(run_dir: str) -> Optional[set]:
+    """Every path the repository tracks under `run_dir`, relative to it.
+
+    `git ls-files` reads the **index**, so it answers "what does this repository
+    carry here" without consulting the working tree's contents at all. That is
+    the property `os.path.exists` cannot have and check 10 needs: a file that
+    was committed and then deleted locally is still listed (a clone has it), and
+    a file sitting in the directory that nobody ever added is not listed (a
+    clone does not). Two machines on the same commit therefore get the same
+    answer, which is the whole point -- the stray `.DS_Store` that lands in a
+    run directory can no longer change a verdict.
+
+    What this is **not**: a claim about the published commit. The index includes
+    a staged-but-uncommitted addition, so an author who has `git add`-ed this
+    run's artefacts passes before committing them. That is deliberate -- the
+    alternative (`git ls-tree HEAD`) would make every new run red until its
+    commit exists, and the verifier is meant to be runnable while the work is
+    being done. The dependence that remains is on a declared, reviewable state
+    (the index) rather than on whatever else happens to be on the disk.
+
+    `None`, not `set()`, when git cannot answer -- no git binary, or a directory
+    that is not inside a repository. The empty set would say "this repository
+    tracks nothing here", which a caller cannot distinguish from a true answer
+    and which would render as "every listed path is dangling": a red the
+    verifier cannot substantiate. `None` is the third value, and the caller has
+    to say so out loud rather than fold it into either verdict.
+
+    Deliberately **not** memoised: `_RULE_FILE_CACHE` can be, because whether a
+    rule file is tracked does not change inside one process, but a caller may
+    stage files between two calls in a test.
+    """
+    try:
+        proc = subprocess.run(["git", "ls-files", "-z"], cwd=run_dir,
+                              capture_output=True, check=False)
+    except OSError:
+        return None
+    if proc.returncode != 0:
+        return None
+    return {p.replace(os.sep, "/")
+            for p in proc.stdout.decode("utf-8", "replace").split("\0") if p}
+
+
+def path_is_inside_the_run(rel_path: str) -> bool:
+    """Is this the kind of path that names a file *of this run*?
+
+    Rejects absolute paths (POSIX or Windows-drive), and anything that climbs
+    out with `..`. Both currently pass check 10: `os.path.join(run_dir,
+    "C:/Windows/win.ini")` discards the run directory entirely and the result
+    exists, and `../../armtools/backfill.py` exists too. Neither is an artefact
+    of the run, and a manifest that lists one is making a claim about a file it
+    does not own.
+
+    String arithmetic on purpose, not `os.path.realpath`: realpath resolves
+    symlinks by asking the disk, so it can answer differently on two machines --
+    the exact defect this check is being repaired for. A path's *shape* is a
+    property of the manifest, and the manifest is the same in every clone.
+    """
+    q = rel_path.replace("\\", "/")
+    if q.startswith("/") or (len(q) > 1 and q[1] == ":" and q[0].isalpha()):
+        return False
+    depth = 0
+    for part in q.split("/"):
+        if part in ("", "."):
+            continue
+        if part == "..":
+            depth -= 1
+            if depth < 0:
+                return False
+        else:
+            depth += 1
+    return depth > 0
+
+
 def _files_the_clone_carries(run_dir: str) -> List[str]:
     """The run's artefacts that this repository actually ships.
 

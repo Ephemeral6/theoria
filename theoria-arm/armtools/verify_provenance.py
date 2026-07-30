@@ -249,7 +249,25 @@ def run(runs_root: Optional[str] = None) -> Checks:
     #       -v` and get the reason. What must not happen is a manifest pointing
     #       at a file that is neither present nor explained anywhere: a dangling
     #       reference with no way for a reader to find out what became of it.
+    #       And "in the clone" is asked of the **index**, not of the disk. The
+    #       first version of this check asked `os.path.exists`, and an
+    #       adversarial pass measured what that costs: a path that is present
+    #       here but tracked nowhere passes, and dangles in every clone. A check
+    #       written to end "the same commit gets two answers on two machines" was
+    #       itself machine-dependent, by the same mechanism, one file away from
+    #       the one it was policing. `backfill.paths_the_clone_ships` asks git
+    #       what the repository carries; presence is no longer consulted at all,
+    #       which is what makes the answer the same everywhere. Its cost is
+    #       stated where it is implemented: the index, so a staged-but-uncommitted
+    #       artefact counts.
+    #
+    #       Three verdicts, not two. If git cannot be asked, this check has no
+    #       answer -- and "no answer" must not be rendered as either green (the
+    #       failure mode that made the reflex layer quieter about a broken board
+    #       than about an empty one) or as "everything is dangling" (a red naming
+    #       paths that are probably fine).
     dangling = []
+    unanswerable = []
     for row in survey:
         if not row["archive_material"]:
             continue
@@ -258,17 +276,31 @@ def run(runs_root: Optional[str] = None) -> Checks:
         listed = [(e.get("path") if isinstance(e, dict) else e)
                   for e in (manifest.get("files") or [])]
         listed = [p for p in listed if p]
-        absent = [p for p in listed
-                  if not os.path.exists(os.path.join(run_dir, p))]
+        shipped = backfill.paths_the_clone_ships(run_dir)
+        if shipped is None:
+            if listed:
+                unanswerable.append(row["slug"])
+            continue
+        stray = [p for p in listed if not backfill.path_is_inside_the_run(p)]
+        for path in sorted(set(stray)):
+            dangling.append("%s -> %s (not a path inside the run)"
+                            % (row["slug"], path))
+        absent = [p for p in listed if p not in shipped and p not in set(stray)]
         explained = backfill._ignored_paths(run_dir, absent)
         for path in sorted(set(absent) - explained):
             dangling.append("%s/%s" % (row["slug"], path))
+    detail = "every listed path is either tracked by this repository or " \
+             "named by a `.gitignore` rule that says why it is not shipped"
+    if dangling:
+        detail = "listed, not shipped, and unexplained: %r" % dangling
+    if unanswerable:
+        detail = ("git could not be asked what these runs ship, so this check "
+                  "has no answer for them: %r" % sorted(unanswerable)) \
+                 + ((" (and: %s)" % detail) if dangling else "")
     checks.check("every file a manifest lists is in the clone or excluded by "
                  "the repository's own rules",
-                 not dangling,
-                 "listed, absent, and unexplained: %r" % dangling if dangling
-                 else "every listed path is either present or named by a "
-                      "`.gitignore` rule that says why it is not shipped")
+                 not dangling and not unanswerable,
+                 detail)
     return checks
 
 

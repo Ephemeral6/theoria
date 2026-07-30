@@ -139,3 +139,27 @@ aggregate at least three distinct causes across the day」。
 **自攻的价值是提前修，不是替代对抗复核。** 自己攻自己抓不到的正是自己的盲区，
 而这一轮盲区恰好落在我攻过的那个函数里（空容器）、我没想到要攻的同源脚本里
 （`migrate_files_in_clone`）、和我刚加的那道闸门里（check 10）。
+
+---
+
+## 追加：cycle 50 的处置（2026-07-30T13:20Z，本节只追加，上文不改）
+
+* **H1 —— 定型，未修。** 缺陷复验成立，但复核推荐的处方（`git ls-files`）被测量否掉：
+  `build()` 跑在产物被提交之前，`ls-files` 对每个新 run 返回空，而 `verify.py` 的
+  `MIN_RUN_FILES` 下限是 8。两个候选设计与代价见
+  `runs/20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG/`。推荐 D1，**H3 先做**。
+* **H3 —— 已修**（`runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/`）。
+  判据从 `os.path.exists` 改成「仓库装运它」（`git ls-files`，读索引不读工作树），
+  顺带关掉同源的三条（绝对路径 / `..` 逃逸 / 目录），并把「git 问不出来」做成第三个判词。
+  **但归档今天的判词一个字没变**：逐条量过 12 个 archive_material run 的 107 条 listed path，
+  「在盘上但未被跟踪且未被解释」**0 条**，换判据后新增 dangling **0 条**。
+  H3 是这道检查的**性质**缺陷（会在未来说谎），不是当前归档里的污点——别把它讲成后者。
+* **H4 —— 未修，但现在有数字，且比 H3 实**：越过 `archive_material` 过滤器去量，
+  9 个非归档 run 的 51 条 listed path 里 **23 条是真的悬空**，全部在
+  `runs/20260729T080000Z-E14-crash-is-not-a-finding`，全部是**仓库根相对**写法。
+  它们绿只因为没被看（E14 无 ledger、有 manifest → `process_record` → 每道检查都跳过）。
+  **所以 H4 的缺陷在过滤器里，不在判据里，改 check 10 的判据永远碰不到它。**
+  下一步需要一个裁决而不是一次改动：E14 那套仓库根相对是**第二种合法约定**
+  （则 check 10 要认两种约定），还是**一份不合规的 manifest**（则修 E14）。
+  放宽过滤器会同时拉进 23 个 `process_record` run，代价要先量。
+* 其余（H2 / M5 / M6 / M7 / M8 / L9–L13）未动，顺序不变。

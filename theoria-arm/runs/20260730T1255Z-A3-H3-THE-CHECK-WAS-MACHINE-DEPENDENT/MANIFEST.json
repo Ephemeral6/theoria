@@ -1,0 +1,23 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "07a17a7c",
+  "utc": "2026-07-30T12:55:00Z",
+  "agent": "RES-1",
+  "cycle": 50,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "H3 修好：check 10 的判据从 os.path.exists 改成『仓库装运它』(git ls-files 读索引)。这道为终结『同一个提交在两台机器上两个答案』而写的检查，自己是机器相关的、同一个机制、离它所监管的代码一个文件远。附带关掉三条同源缺口（绝对路径、.. 逃逸、目录），因为它们全都靠 os.path.join + exists 通过；并把『git 问不出来』做成第三个判词而不是绿。",
+  "leg": "offline -- 零 API、零花费、封存堆零接触",
+  "why_h3_before_h1": "H1 的推荐设计 D1 是『check 8 不再重导 files[]，交给 check 10 独占』。check 10 的判据只要还是 os.path.exists，D1 就只是把机器相关性从一道检查搬到另一道，而不是拿掉。定型见 runs/20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG/。",
+  "changed": [
+    "armtools/backfill.py: 新增 paths_the_clone_ships(run_dir) -> Optional[set]（git ls-files -z，读索引不读工作树；git 答不出来返回 None 而不是空集）与 path_is_inside_the_run(rel_path) -> bool（纯字符串判形状，不用 realpath —— realpath 问磁盘，会在两台机器上给两个答案，正是本次要修的病）",
+    "armtools/verify_provenance.py: check 10 的判据换成 tracked-or-explained + 形状闸门，三个判词（绿 / 红 / 无答案）",
+    "tests/test_files_in_clone.py: 现有 check 10 测试的 fixture 改为把 certify.json 真的 git add（原来只写盘 —— 新判据下它本该是红的，那半个绿证明不了任何事）；新增三条测试"
+  ],
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "mutations.json"}
+  ]
+}
