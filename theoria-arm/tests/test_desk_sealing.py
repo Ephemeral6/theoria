@@ -36,10 +36,11 @@ import pytest
 import _bootstrap                                     # noqa: F401  (sys.path)
 
 from harness.modelcall import (SCRUBBED_FROM_DESK_ENV, AnonymityBreach,
-                               ModelDesk)
+                               CredentialBreach, ModelDesk)
 from inner.loop import _forbidden_substrings
 
 from proxy.guard import SealedPileGuard, stem
+from proxy.redact import VAULT
 
 
 DEV_GAME = "g50t-5849a774"
@@ -151,6 +152,55 @@ def test_the_desk_subprocess_inherits_no_redirect_and_no_game_credential(
     # the desk is being scrubbed, not starved.
     assert seen.get("THEORIA_DESK_CONTROL") == "must-survive"
     assert "PATH" in seen or "Path" in seen
+
+
+def test_the_credential_cannot_reach_the_desk_under_a_name_nobody_listed(
+        monkeypatch):
+    """The name-based scrub is blind to the value; this is the value's test.
+
+    `SCRUBBED_FROM_DESK_ENV` is a list of the four ways we have already been
+    bitten. `_invoke` builds the desk's environment from `dict(os.environ)`,
+    and `CLAUDE.md` documents `set -a; . ./.env; set +a` as *the* way to load
+    the key -- so the credential being in this process's environment is the
+    documented workflow. Under any fifth name the four-name pop misses it.
+
+    Run with a sentinel, never the real key: `VAULT.register` is what makes a
+    string a secret to this process, so a sentinel registered the same way
+    exercises the same path. The sentinel is deliberately not key-shaped --
+    `proxy/redact.py:_KEYISH` raises an incident on 32+ char alphanumerics and
+    on UUIDs, and a test using a key-shaped sentinel would be measuring the
+    detector instead of the scrub.
+    """
+    sentinel = "sentinel-not-a-real-credential-desk"
+    VAULT.register(sentinel, force=True)
+    monkeypatch.setenv("ARC_API_KEY_BACKUP", sentinel)
+    monkeypatch.setenv("THEORIA_DESK_CONTROL", "must-survive")
+
+    seen = {}
+    monkeypatch.setattr(subprocess, "run",
+                        lambda cmd, **kw: seen.update(kw.get("env") or {})
+                        or _unreachable())
+
+    desk = ModelDesk(_FakeRun(), model="claude-opus-5")
+    with pytest.raises(CredentialBreach) as exc:
+        desk._invoke("hello", "claude-opus-5")
+
+    assert "ARC_API_KEY_BACKUP" in str(exc.value)
+    assert sentinel not in str(exc.value), "the breach message quoted the secret"
+    assert seen == {}, "the subprocess was reached before the value was checked"
+
+    # Positive control, and it is the load-bearing half: without it, an
+    # `_invoke` that raised `CredentialBreach` unconditionally -- or one that
+    # popped every variable -- would pass everything above. Same call, same
+    # environment, sentinel not registered: it must get *past* the credential
+    # check and die later, on `_FakeRun`'s missing spend binding.
+    VAULT._secrets.remove(sentinel)
+    with pytest.raises(Exception) as ok:
+        desk._invoke("hello", "claude-opus-5")
+    assert not isinstance(ok.value, CredentialBreach)
+    assert seen.get("ARC_API_KEY_BACKUP") == sentinel, (
+        "the control did not reach the subprocess, so it controls nothing")
+    assert seen.get("THEORIA_DESK_CONTROL") == "must-survive"
 
 
 def test_anthropic_base_url_is_named_by_the_scrub_list():

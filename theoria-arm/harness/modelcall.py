@@ -87,6 +87,8 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
+from proxy.redact import VAULT
+
 #: The CLI is started here, outside the repository, for baseline-arms' D-009
 #: reason: Claude Code walks parent directories looking for CLAUDE.md, and a
 #: desk started inside the repo would read Theoria.md, the pile cut, the other
@@ -118,6 +120,35 @@ PROVIDER = "anthropic-claude-code-cli"
 #: to launch the arm.
 SCRUBBED_FROM_DESK_ENV = ("ARC_API_KEY", "ANTHROPIC_BASE_URL",
                           "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_API_KEY")
+
+
+class CredentialBreach(RuntimeError):
+    """A registered secret was about to be handed to the desk subprocess.
+
+    Sibling of `AnonymityBreach`, and for its reason: this is a defect in the
+    harness, not something the loop can learn from by gathering more evidence.
+    `inner/loop.py` re-raises both rather than recording them as desk failures.
+
+    It exists because the scrub above is **by name**, and a name-based scrub is
+    blind to the value. `Theoria.md:305`'s Phase 1 line is a conjunction --
+    *no credential inside the arm* AND *egress bypassing the two proxies must
+    fail* -- and the first conjunct had no test anywhere in this arm. Measured
+    rather than argued (`runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/`): with a
+    sentinel key handed to a live `Run`, the credential is resident at
+    `run._cfg.api_key` and in the process-wide `VAULT`. So the first conjunct
+    is false at the process boundary, and whether that reading is the binding
+    one is the monitor's call, not this file's.
+
+    What is *not* the monitor's call is the consequence. `_invoke` builds the
+    desk's environment with `dict(os.environ)`, and `CLAUDE.md` documents
+    `set -a; . ./.env; set +a` as the way to load the key -- so the credential
+    being in this process's environment is the *documented* workflow, not a
+    hypothetical. Under any other variable name (`ARC_API_KEY_BACKUP`, a CI
+    runner's own convention, a `.env` copied to a second name) the four-name
+    pop misses it and the value goes to a subprocess this ledger does not
+    control. Whatever "inside the arm" turns out to mean, the credential
+    reaching the desk is a leak under every reading of it.
+    """
 
 
 def call_field(record: Dict[str, Any], name: str) -> Any:
@@ -582,6 +613,21 @@ class ModelDesk:
         # is worse than a broken one: nothing goes red.
         for var in SCRUBBED_FROM_DESK_ENV:
             env.pop(var, None)
+        # ... and then by value, because the four names above are a list of the
+        # ways we have already been bitten. `VAULT.scrub_text` returns a
+        # changed string exactly when the text contains a secret the process
+        # has registered, so this asks the question the name list cannot: is
+        # any value here the credential, whatever it is called? Popping first
+        # and raising second means a caller that swallows the exception still
+        # does not get a subprocess that can see the key.
+        leaked = sorted(k for k, v in env.items()
+                        if isinstance(v, str) and VAULT.scrub_text(v) != v)
+        for var in leaked:
+            env.pop(var, None)
+        if leaked:
+            raise CredentialBreach(
+                "a registered secret is in the desk environment under %s; "
+                "the name-based scrub does not cover it" % ", ".join(leaked))
 
         started = time.time()
         with tempfile.TemporaryDirectory(dir=NEUTRAL_PARENT) as cwd:
