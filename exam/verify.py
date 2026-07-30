@@ -12,7 +12,15 @@ Five stages, and each answers a different question:
 | `pytest` | do the exam's own properties hold, including the regressions for the defects that shipped? |
 | `run_exam --calibrate` | does the marker still reproduce four known scores before it marks anything? |
 | `run_selftest` | does the marker behave correctly *between* its endpoints, and does every injected fault still get caught? |
+| `artefact_locations` | does any tracked artefact record where its builder stood? |
 | `determinism` | do two builds in fresh interpreters produce byte-identical sheets? |
+
+`artefact_locations` covers a dimension `determinism` cannot see by
+construction. The determinism stage compares two in-process builds' sheet
+digests and never opens `exam/artifacts/build_manifest.json` -- so it was not
+falsely green, it was answering a narrower question, and the marked sheets
+really are location-independent. What went unmeasured was the build manifest,
+which recorded twelve absolute paths naming whichever worktree ran last. V27.
 
 **The self-test's uncaught faults are reported and do not gate.** A run that
 discovers a fault no check catches has done its job; turning that into a red
@@ -87,6 +95,8 @@ def main(argv: List[str] | None = None) -> int:
         _run("pytest", [py, "-m", "pytest", "exam/tests", "-q"]),
         _run("run_exam --calibrate", [py, "-m", "exam.tools.run_exam", "--calibrate"]),
         _run("run_selftest", [py, "-m", "exam.tools.run_selftest"]),
+        _run("artefact_locations",
+             [py, "-m", "exam.tools.check_artefact_locations"]),
         _determinism(),
     ]
 
