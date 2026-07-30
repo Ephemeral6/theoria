@@ -30,7 +30,6 @@ EXCLUDED_NAMES = {
     "MANIFEST.json",
     "BASELINE-cycle94.md",
     "restamp_manifest.py",
-    "_manifest_check.py",
     "_survey_manifests.py",
 }
 EXCLUDED_DIRS = {"__pycache__"}

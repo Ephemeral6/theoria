@@ -66,6 +66,20 @@ def test_manifest_covers_every_tracked_artefact_in_the_run_directory():
         "tracked in the run directory and absent from MANIFEST.json: %s" % unlisted)
 
 
+def test_the_coverage_exclusions_are_pinned_and_not_an_open_door():
+    """`test_manifest_covers_...` skips whatever `EXCLUDED_NAMES` contains, so
+    without this the coverage test can be satisfied by adding a file's name to
+    that set.  The escape hatch has to be a stated list, not a growable one."""
+    restamp = _load_restamp()
+    assert restamp.EXCLUDED_NAMES == {
+        "MANIFEST.json",          # cannot hash itself
+        "BASELINE-cycle94.md",    # another session's cycle log, not this run's
+        "restamp_manifest.py",    # generates the manifest
+        "_survey_manifests.py",   # measures all 13 runs, produces nothing here
+    }, ("the manifest's exclusion list changed; every entry is justified in "
+        "MANIFEST.json's own `note`, so the note has to change with it")
+
+
 def test_manifest_hashes_match_the_published_bytes():
     """Three-way: the stamp, the disk, and the index must agree.
 
