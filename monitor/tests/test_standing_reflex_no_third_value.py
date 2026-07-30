@@ -347,6 +347,15 @@ def _drive_sweep(monkeypatch, tmp_path, status):
                         lambda a: {"unread": 1, "held": 0, "claimable": 1,
                                    "any": True})
     monkeypatch.setattr(standing.board_mod, "heartbeat_age", lambda a: 999)
+    # The pause switch is a gate ahead of the launch too, and it is the only one
+    # that was reading the *real checkout* from inside a unit test: `PAUSE` is an
+    # absolute path into `monitor/`, and 954eb44c committed `monitor/FLEET_PAUSE`
+    # as a tracked file. From that commit on, `sweep()` returned `[]` before any
+    # bookkeeping ran, and these three tests measured the fleet's operational
+    # state instead of the accounting they are named after. Point `PAUSE` at a
+    # path under tmp that does not exist, so the real `paused()` still runs --
+    # stubbing the predicate out would stop testing it.
+    monkeypatch.setattr(standing, "PAUSE", str(tmp_path / "FLEET_PAUSE-absent"))
 
     standing.sweep()
     return len(launches), len(staggers)
@@ -377,6 +386,13 @@ def test_a_launch_the_scheduler_accepted_is_counted_even_if_its_health_is_unknow
                    "died-on-arrival(gone)"):
         launches, staggers = _drive_sweep(monkeypatch, tmp_path, status)
 
+        # Both assertions below hold at zero, so a sweep that never launched
+        # anything passes them vacuously -- which is what happened between
+        # 954eb44c and this commit while its two siblings went red. A cap test
+        # has to reach the cap before "it did not exceed the cap" means anything.
+        assert launches > 0, (
+            "status %r launched nothing at all -- a gate ahead of the launch "
+            "declined, so this test measured nothing" % status)
         assert launches <= standing.MAX_STANDING, (
             "status %r launched %d sessions past the cap of %d"
             % (status, launches, standing.MAX_STANDING))

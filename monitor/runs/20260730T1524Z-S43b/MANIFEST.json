@@ -1,0 +1,33 @@
+{
+  "prompt_id": "S43b",
+  "parent_item": "S43-S43-three-guards-reverted",
+  "branch": "agent/s43b-merge-events-dead",
+  "base_commit": "8a5a83f923a28454cebbf3b9669389bf72a8b6dc",
+  "utc": "2026-07-30T15:24:00Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_cost_usd": 0.0,
+  "sealed_pile_contact": false,
+  "what": "Three reds on origin/master@8a5a83f9 that no branch owns: one is the merge of my own S43 branch landing a hybrid (merge_events defined, never called, logic re-inlined), two are unit tests of sweep() launch accounting reading the real tracked monitor/FLEET_PAUSE out of the checkout.",
+  "measured": {
+    "master_reds_before": [
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_the_ci_merge_step_is_not_reimplemented_anywhere",
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_a_declined_launch_is_not_counted_and_not_staggered",
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_a_running_launch_is_both_counted_and_reported_started"
+    ],
+    "master_reds_not_addressed_here": [
+      "monitor/tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green",
+      "monitor/tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk",
+      "monitor/tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green"
+    ],
+    "vacuous_pass_found": "test_a_launch_the_scheduler_accepted_is_counted_even_if_its_health_is_unknown was green at launches==0 (0 <= MAX_STANDING, staggers==launches==0)",
+    "negative_control": "with the PAUSE monkeypatch line deleted and everything else as delivered, the same file gives 3 FAILED including the formerly-vacuous test (fails at the new `launches > 0` assertion). Restored and re-measured green."
+  },
+  "files": [
+    "monitor/reflex.py",
+    "monitor/tests/test_standing_reflex_no_third_value.py",
+    "monitor/runs/20260730T1524Z-S43b/MANIFEST.json",
+    "monitor/runs/20260730T1524Z-S43b/RUN_STATE.md"
+  ]
+}
