@@ -1,0 +1,33 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "2bf07d89",
+  "utc": "2026-07-30T12:00:00Z",
+  "agent": "RES-1",
+  "cycle": 49,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "撤回 A17 测量阶段第一节的数字与归因。『67 个提交只经由 refs/stash 进入扫描』是把一个近似当成了等式：--branches --tags --remotes 减掉的不只是 stash，还有 HEAD、266 个工作树的 detached HEAD 和 refs/original/。直接问是 4 个；那个 67 本身还是浮动的（今天 78）。点名的四个提交根本不在 stash 里，它们只活在 refs/original/ —— 我自己在这条分支上 git filter-branch 的备份引用。『4 个 arm version 只因为存在一个 stash 而存在』实测为 0。",
+  "leg": "offline -- 只读 git 命令，零 API、零花费、封存堆零接触",
+  "supersedes": "runs/20260730T0855Z-A17-MEASUREMENT/FINDINGS.md 第一节（原文保留，顶部已插入订正块指向本目录）",
+  "inputs": [
+    "对抗复核 subagent（过度声称视角）findings 1-4",
+    "git rev-list / for-each-ref / merge-base 的直接复验，见 remeasure.json"
+  ],
+  "measured": {
+    "published_67": "错。all --not branches/tags/remotes 今天是 78，且它量的是『所有不在分支/标签/远程上的东西』，不是 stash。",
+    "genuinely_only_via_refs_stash": 4,
+    "the_four_named_commits_in_refs_stash": false,
+    "the_four_named_commits_actually_live_in": "refs/original/refs/heads/agent/a3-campaign-devpile (git filter-branch backup)",
+    "arm_versions_lost_if_the_stash_vanished": 0,
+    "why_zero": "真正只经由 stash 进入的四个提交（1bd7eea2/823e4064/70e910ca/7e1dd930）携带同一个 arm 子树 26ec0239，而该子树在普通分支提交 a29e3dc0 上同样存在",
+    "premise_that_survives": "refs/stash 确实在 rev-list --all 里 —— provenance 扫描的输入确实包含没人认为是发布的引用，A17 该做"
+  },
+  "lesson": "一个数如果能被直接问出来，就不要用两个数相减得到它；相减得到的数，它减掉了什么必须逐项写出来，而不是在括号里断言。那句括注『即除掉 refs/stash』是我给自己的近似发的证书，而 git 有 --not 这条直接问法，成本一样。第二层：拿到差值后我把找到的四个提交归给了 stash，因为差值是我以 stash 之名算的 —— 一个错误的标签让四个证据看起来在支持它。",
+  "not_done": "未 drop 任何 stash、未删任何 refs/original/、未建 tag。A17 仍是测量阶段；『scan() 该读哪个引用集合』这个需要论证的决定留给认领它的人，但现在输入清单是对的。",
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "remeasure.json"}
+  ]
+}

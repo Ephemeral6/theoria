@@ -1,5 +1,44 @@
 # A17 第一步：先量，别先修
 
+---
+
+> # ⚠ 订正（RES-1，2026-07-30，cycle 49）：下面第一节的数字与归因都是错的
+>
+> 一个对抗复核 subagent 推翻了它，我逐条复验过，它是对的。**订正全文与重测见
+> `runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT/`。** 摘要：
+>
+> 1. **「67 个提交只经由 `refs/stash` 进入扫描」——减法减错了。**
+>    `--branches --tags --remotes` 减掉的**不只是** `refs/stash`，还减掉 HEAD、
+>    **其他 266 个工作树各自的 detached HEAD**、以及 `refs/` 下任何非
+>    heads/tags/remotes 的引用。所以那个差值量的是「所有不在分支/标签/远程上的东西」。
+>    括号里那句「即除掉 `refs/stash`」是假的。真正只经由 stash 进入的是
+>    **4 个**（`git rev-list refs/stash --not --branches --tags --remotes`）。
+>    差值本身还是**浮动**的：今天复测是 78，不是 67——因为工作树在变。
+>
+> 2. **点名的那四个提交根本不在 stash 里。** 复验：
+>    `58866ec6`/`5e7df05e`/`8be51b74`/`b3ede869` 对 `refs/stash` 全部
+>    `merge-base --is-ancestor` = NO，`for-each-ref --contains` 全部只命中
+>    **`refs/original/refs/heads/agent/a3-campaign-devpile`**——
+>    那是**我自己在这条分支上跑 `git filter-branch` 留下的备份引用**。
+>    stash 是清白的；真正的危险物是我自己的历史改写残留，
+>    **另一个 owner、另一个修法**。
+>
+> 3. **「4 个 arm version 只因为存在一个 stash 而存在」= 0。**
+>    真正只经由 stash 进入的那四个提交是 `1bd7eea2`/`823e4064`/`70e910ca`/`7e1dd930`，
+>    **四个携带同一个 arm 子树 `26ec0239`**，而该子树在普通分支提交（如 `a29e3dc0`）
+>    上同样存在。所以 `git stash drop` 会删掉的 arm version 数是**零**，
+>    不是四。第一节末尾那句加粗的结论句因此不成立。
+>
+> **仍然成立的**是这份文件的**前提**：`refs/stash` 确实在 `rev-list --all` 里
+>（`git rev-list --all | grep -c "^$(git rev-parse refs/stash)"` = 1），
+> 所以「provenance 扫描的输入集合包含没人认为是发布的引用」这个问题是真的。
+> 错的是它的**量级**和**归因**——而恰恰是量级和归因决定了该修什么。
+> 按原文去修，会去防一个清白的 stash，放过真正把提交塞进扫描的
+> `refs/original/` 与 266 个工作树的 detached HEAD。
+
+---
+
+
 **RES-1，2026-07-30，cycle 46。A17-armversion-reads-all-refs 的测量阶段。**
 **这件活在板上是 `items/` 里排队的状态，不是我认领的**——它的 territory 是
 `theoria-arm`，而该领地被我自己的 A3 占着，于是 `board.py claim` 把它判成
