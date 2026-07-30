@@ -113,3 +113,19 @@ python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 `after_list.py` 把活板的三个目录拷进临时目录再让**修好的** `board` 指过去，
 两个方向都是必要的：直接指活板会让一个手滑的动词改到真板，
 而跑活板上的 `board.py` 导入的是没修的代码（它按自己的位置解析路径）。
+
+## 6. 合并前重验（2026-07-30，下一世接手时做）
+
+上一世把 push 压住等对抗复核，中途会话结束。接手后重跑了三件，因为
+「上一世说绿」不是证据：
+
+| 检查 | 结果 |
+|---|---|
+| `pytest monitor/tests/`（分支上） | **380 passed, 2 xfailed** |
+| `pytest monitor/tests/test_board_unreachable.py --collect-only` | **17 个**（报告原写 16，已改） |
+| 把分支往 `master`（3b2a5873）试合，再在**合出来的树上**跑全套 | 自动合并干净；**380 passed, 2 xfailed** |
+
+第三行是分开的一次检查而不是重复：本仓库已经有过「两边各自绿、合起来红」
+（`E19-merge-clean-but-broken` 就是那件），而合并是 `ci_merge` 自动做的，
+没有人会在那一刻看着。试合用 `.worktrees/_res4_mergetest` 的游离 HEAD，
+`--no-commit --no-ff`，跑完 `merge --abort`，不碰 master。
