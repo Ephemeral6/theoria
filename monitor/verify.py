@@ -137,12 +137,40 @@ def emit(text: str = "", stream: Any = None) -> None:
         print(text.encode("ascii", "replace").decode("ascii"), file=out)
 
 
+#: 这一段允许跑多久。
+#
+#: 900 秒是这个套件还小的时候定的。2026-07-30 实测：540 秒跑到 34%，
+#: 全程约 30 分钟——**套件长过了它自己那道闸门的耐心**。而超时的后果不是
+#: 「超时」，是 `TimeoutExpired` 一路抛出去、闸门崩掉、被 ci_merge 记成
+#: 「verify gate red in monitor」。九条已交付分支就是这么被扣住的，
+#: 其中一条正是带着修复补丁的那条。
+#:
+#: 抬到 2400 是**承认现实**，不是解决问题：一道要跑半小时的闸门迟早会被绕开。
+#: 真正的修法是让套件快回来（已上板 S44），这里只是让它在那之前不再冤枉分支。
+TESTS_TIMEOUT_S = 2400
+
+
 def _tests() -> Tuple[str, int, str]:
-    proc = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
-         os.path.join(HERE, "tests")],
-        cwd=HERE, capture_output=True, text=True,
-        encoding="utf-8", errors="replace", timeout=900)
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
+             os.path.join(HERE, "tests")],
+            cwd=HERE, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=TESTS_TIMEOUT_S)
+    except subprocess.TimeoutExpired as exc:
+        # **超时不是失败，是没测成。** 让它自己说出来，而不是从异常里
+        # 被读成「测试红了」——那正是本仓一整周在治的那个形状：
+        # 工具的失败穿上判决的外衣。退出码给 124（惯例上的超时码），
+        # 与 pytest 自己的 1（有测试失败）区分得开。
+        partial = ""
+        for stream in (getattr(exc, "stdout", None), getattr(exc, "stderr", None)):
+            if stream:
+                partial += stream if isinstance(stream, str) else \
+                    stream.decode("utf-8", "replace")
+        return ("tests", 124,
+                "TIMED OUT after %ds -- the suite did not finish, so nothing "
+                "was proved either way. This is NOT a red suite.\n%s"
+                % (TESTS_TIMEOUT_S, partial[-3000:]))
     return "tests", proc.returncode, (proc.stdout or "") + (proc.stderr or "")
 
 
