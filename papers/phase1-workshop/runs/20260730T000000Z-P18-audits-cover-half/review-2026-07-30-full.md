@@ -6,41 +6,597 @@
 2026-07-30. Prior rounds consulted: REVIEW.md (1318 lines / 75885 B),
 review-d-adversarial.md (2572 lines / 157782 B).
 
-**Word count method.** `wc -w PAPER.md` = **35 624**. A whitespace split in
-Python gives 36 256 (the two differ on how CJK punctuation is tokenised);
-stripping fenced code blocks gives 36 152, stripping markdown table rows as well
-gives 34 439. Every one of those is in the same band. The paper's own draft note
-(PAPER.md L12, `sections/00_abstract.md` L12) says "roughly 27 500 words". See
-**B7**.
+**Word count method.** `wc -w PAPER.md` = **35 624**. A whitespace split in Python
+gives 36 256 (the two differ on CJK tokenisation); stripping fenced code blocks
+gives 36 152; stripping markdown table rows as well gives 34 439. All in the same
+band. The paper's own draft note says "roughly 27 500 words" — see **B7**.
 
 **Remit.** Attackability and evidence sufficiency over the whole current text,
-with priority on §7–§12 (PAPER.md L1669–3729), which no prior round has read:
-`REVIEW.md` pins the first draft (1318 lines, 32 % of the current text by bytes)
-and `review-d-adversarial.md` pins v0.3 (2572 lines, 66 %). §7.2a, §7.7a, §7.10a,
-§8, §9, §10 in its entirety, and §11.4/§11.5 as they now stand have never been
+with priority on §7–§12 (PAPER.md L1669–3729), which no prior round has read.
+`REVIEW.md` pins the first draft (1318 lines, 32 % of the current text by bytes);
+`review-d-adversarial.md` pins v0.3 (2572 lines, 66 %). §7.2a, §7.7a, §7.10a, all
+of §8, all of §9, all of §10, and §11.4/§11.5 as they now stand have never been
 reviewed by anyone.
 
-**Method.** Every file cited below was opened. Where the paper cites a JSON
-field the field was read; where it cites a count the count was recomputed in
-Python against the artefact, not against the report prose. Where the paper cites
-a test assertion the test file was opened. No network, no API calls, no sealed
-pile reads: the only ARC game ids appearing below are the four development-pile
-ids.
+**Method.** Every file cited below was opened. Where the paper cites a JSON field
+the field was read; where it cites a count the count was recomputed in Python
+against the artefact, not against the report prose; where it cites a commit the
+commit was resolved; where it cites a test assertion the test file was opened.
+The paper's own `verify_paper.py` was run. No network, no API calls, no sealed
+pile reads — the only ARC ids appearing anywhere below are the four
+development-pile ids.
 
 **Prior-status convention.** Each finding carries one of:
-**missed** (no prior round names it), **logged and knowingly kept** (a prior
-round or the paper's own checklist names it and it stands), or **new damage**
-(introduced by material written after both prior rounds).
+**missed** (no prior round names it), **logged and knowingly kept** (a prior round
+or the paper's own checklist names it and it stands unactioned), or **new damage**
+(introduced or invalidated by material written after both prior rounds).
+The distinction matters, because a rebuttal can answer the second and cannot
+answer the first.
+
+**Section-to-file offsets used throughout** (PAPER.md line = section line + offset):
+`00_abstract.md` +2 · `06_a3_transfer.md` +1452 · `07_battery.md` +1668 ·
+`08_exam.md` +2324 · `09_preflight.md` +2520 · `10_adjudication.md` +2734 ·
+`11_limitations.md` +3197 · `12_related.md` +3485.
 
 ---
 
 ## Recommendation
 
-*(filled at the end of this document — see "Recommendation and defence")*
+**Weak reject.**
+
+Defence in one paragraph. This is a materially different paper from the one the
+two prior rounds rejected, and most of what they killed is genuinely dead: the
+title no longer sells transfer or the exam, "Eight results." is gone, §11.5 has
+had "controlled" and "independently developed" surgically removed and replaced
+with the honest forms, the abstract now carries the n = 3 denominator, the seal's
+declaration status, the 252/252 tie between both A3 arms, and the sentence
+"That is a demonstration of a failure mode, not evidence about anything" that
+§12.3 instructed it to carry. §7 is, on the numbers, the most rigorously
+sourced section I have audited in a draft: I recomputed 95 runs, 5 arms, 38
+metrics, 1433/2066/111 status counts, all eight cross-arm effect sizes with their
+medians and sign tests, 32 clusters over 703 pairs, `n_unvalidated: 21`, and the
+V9 commit ancestry — every one reproduced exactly, several to six decimals, and
+where the paper and its own source report disagree the paper is right. §10.1's
+refusal to publish an aggregate it cannot defend is the best methodological
+paragraph in the draft. So the case for rejection is not that the paper is
+careless. It is that the paper's binding rule — every number points at a file —
+has acquired a failure mode the rule cannot catch: **the artefacts move and the
+prose does not.** Four of my six blocking findings are sentences that were true
+when written and are false against the tree today, three of them in §8 alone, and
+two of them (B1, B4) are sentences whose *rhetorical* function is to accuse the
+project of exactly the drift they have themselves undergone — §10.2 lectures the
+reader about a done-marker read as a landed fix, on a fix that landed; §8 reports
+a leak checker "that silently did nothing" using a field that now records it
+doing something. That is not a citation error a reviewer forgives; it is the one
+class of error this paper has told the reader to check it for, and it now fires
+against the paper. Add a length of 35 624 words against a ~4 000-word workshop
+budget — 8.9×, where the draft note claims 6× and 27 500 words, itself a false
+self-measurement — a figure pipeline three of whose six plates are uncited under
+declared exemptions that §6 and §7 falsify, and the paper's own `verify_paper.py`
+exiting FAIL. Every blocking item is a writing fix or a re-transcription; none
+needs an experiment. That is why this is weak reject and not reject: I would
+argue for acceptance of the *next* draft. I cannot argue for this one, because a
+referee who runs the checks the paper invites finds four false sentences in the
+region no prior referee read.
 
 ---
 
 ## Blocking findings
 
-*(in progress)*
+### B1 · §8.2/§8.4 — "n = 1 per handover tier" is false; the tree holds a six-reader cohort with a bootstrap CI and an annulment
 
+* PAPER.md **L2402–2406** — `sections/08_exam.md` **L78–82**
+* PAPER.md **L2479–2480** — `sections/08_exam.md` **L155–156**
+
+The paper:
+
+> **Only one paper has been sat by a real subject.** Two fresh subagent readers,
+> given a bundle and a sheet and nothing else, each scored 46.0/46.0 on the
+> handover paper (`exam/artifacts/reports/p15-handover-a0.reader-tier{1,2}.report.json`).
+
+and, in the section titled *What the exam does not establish*:
+
+> **n = 1 per handover tier**, on a saturated sheet.
+
+`exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.json` records a **second
+handover sitting with six readers** — `answers/reader-a1|a2|a3` and
+`reader-b1|b2|b3` — reported as `bootstrap_over_examinees.n_tier1: 3`,
+`n_tier2: 3`, 20 000 resamples, `ci95: [0.0, 0.0]`, `excludes_zero: false`,
+`delta: 0.0`, `conclusive: false`, over 31 items and 58 points. A *first* V11
+cohort exists as well and was voided (`exam/runs/20260728T202101Z-V11-handover-auto/VOIDED.md`).
+The r2 run also carries `by_family.optimal_action.annulled: true` with the note
+"delta 0.0 here is not a null result" — material that is *unflattering*, and that
+the paper therefore has no motive to suppress and every reason to report.
+
+So: n is 3 per tier, not 1; there are two real sittings plus one voided one, not
+one; and the exam now has a bootstrap confidence interval and a family annulment
+that the paper does not mention. **Missed** — §8 postdates both prior rounds, and
+the paper's own `verify_paper.py` gate E blessed the false bullet with a written
+ruling ("Restates the sample size of the handover result cited one block
+above — one report per tier, both named there"), so the mechanical check
+*certified* the stale number. That is worth saying on its own: a gate that reads
+the paper against the paper cannot see the tree move.
+
+**Fix.** Report the V11-r2 cohort. `n = 3 per tier` with a bootstrap CI that
+includes zero is a *better* honest result than `n = 1`, and the annulment is
+exactly the kind of self-reported defect §8 is otherwise good at.
+
+---
+
+### B2 · §8.3 — the paper quotes `label_sets_checked: []` from a file that no longer contains it, and the hole it describes was closed a day before this review
+
+* PAPER.md **L2459–2462** — `sections/08_exam.md` **L135–138**
+
+> The repair added label derivation from the key, and it did not fully close the
+> hole: `exam/artifacts/leakage.json` records `label_sets_checked: []` for the
+> handover and adaptation papers, so the positional and metadata checks still run
+> on nothing for two of the four.
+
+Read the field. `exam/artifacts/leakage.json`, all four papers:
+
+| paper | `label_sets_checked` |
+|---|---|
+| `p15-heldout-a0` | `["event", "level_name"]` |
+| `p15-handover-a0` | `["rule"]` |
+| `p15-adaptation-a0` | `["exact_on_heldout", "label", "verdict"]` |
+| `p15-verdict-a2` | `["board_size_class", "class", "search_credible", "witness_length"]` |
+
+None is empty. The `[]` values were true at commits `2a20777f` and `d43d8f60`
+(2026-07-28) and were removed at **`1f378483` (2026-07-30)**, whose message is
+"exam: the leak gate was passing, and two of four papers were green because
+nothing looked at them" — i.e. the exam track found and fixed precisely the hole
+§8.3 describes, one day before this review, and §8 was last touched 2026-07-29.
+
+This is the paper's declared characteristic failure mode firing on its own
+signature sentence: §8.3's subheading is "Leak protection, and **the check that
+silently did nothing**". **New damage** (the artefact moved under the prose).
+The *class* of finding survives — an optional check is a check that does not
+run — but the instance is retracted by the tree, and the paper claims it is live.
+
+**Fix.** Rewrite to past tense against the commit, and cite `1f378483` so the
+closure is auditable rather than invisible.
+
+---
+
+### B3 · §8.3/abstract — "Two real leaks shipped" is now three, and §8.4's "closing it is not done" is done
+
+* PAPER.md **L2441** ("**Two real leaks shipped, and the cheater found both.**") — `sections/08_exam.md` **L118**
+* PAPER.md **L119** (abstract: "nonetheless missed two real leaks an adversarial reader found") — `sections/00_abstract.md` **L117**
+* PAPER.md **L2484–2488** ("**The calibration bands are outside the rubric digest** … Closing it is not done.") — `sections/08_exam.md` **L160–164**
+
+`exam/DECISIONS.md` **D-EX-018** records a *third* shipped leak, found after §8 was
+written and not by the cheater: the optimal-action items carried
+`"tags": ["optimal_action", "level:stile", "dead"]`, `Item.sheet_side()` prints
+`tags`, and the token `dead` is the answer to the two sharpest items on the sheet.
+An entire six-reader V11 cohort was voided over it. It was missed by
+`metadata_hits` for a reason worth a paper of its own — the checker buckets on the
+whole `tags` *value*, every item carries a unique `level:` token, so every bucket
+held one item and D-EX-011's singleton exclusion dismissed them all. It was caught
+by a new test, `test_no_single_tag_token_predicts_an_answer`, which reports exactly
+one offender: `('dead', ['none'], 2)`.
+
+Separately, §8.4's bullet says the calibration bands sit outside the rubric digest
+and "Closing it is not done." **D-EX-016** closes it: `selftest.protocol_digest()`
+over `mark.py`, `calibration.py`, `selftest.py`, pinned by
+`test_a_widened_band_changes_the_protocol_digest`.
+
+So the abstract's "missed two real leaks" understates the instrument's blindness
+by one, and §8.4 lists as open a gap the tree has shut. Both are **missed** and
+both are **new damage**. The first is the more serious: the paper's honesty
+argument in §8 is *we report the leaks that got past us*, and it is now one leak
+behind its own directory.
+
+**Fix.** Three leaks, and name that the third was found by a test rather than by
+the adversarial reader — which strengthens §8.3's actual thesis (static checks are
+cheap and necessary) rather than weakening it.
+
+---
+
+### B4 · §10.2 — the one unrepaired census finding is repaired, on the mainline, and the paper's meta-finding about it is now false
+
+* PAPER.md **L2853–2854** (the quoted expression) — `sections/10_adjudication.md` **L119–120**
+* PAPER.md **L2857–2861** ("Thirteen worlds … **13 of 35**") — `sections/10_adjudication.md` **L123–127**
+* PAPER.md **L2867–2870** (the meta-finding) — `sections/10_adjudication.md` **L133–136**
+
+The paper:
+
+> **Default value taken as truth.** `worldgen/core/truth.py` derives a
+> manifest-level claim as
+> `"invariants_all_hold": all(i.get("holds", True) for i in invariants)`. …
+> Thirteen worlds carry at least one unverified invariant and every one of them
+> publishes the boolean as true … so it is **13 of 35**. …
+> This is the one of the four that is **not** repaired, and how it is not repaired
+> belongs in the section: the fix is filed as done on the internal work board
+> while **the line stands byte-for-byte unchanged on the mainline**. A done-marker
+> read as a landed fix is the same error one level up.
+
+`worldgen/core/truth.py:472` on `master` reads:
+
+```
+        "invariants_all_hold": all_invariants_hold(invariants),
+```
+
+`all_invariants_hold` is defined at `:285–293` — "Not `no violations` — that is
+the old bug in one line. An unverified invariant is a claim nobody exercised" —
+returning false on both `INV_VIOLATED` and `INV_UNVERIFIED`. The module docstring
+at `:14–17` records the repair in past tense ("It **was** a two-class boolean read
+with `.get(\"holds\", True)` **until V19**"). Two commits carry it: `23ec1793`
+("worldgen: 'I could not check this' was being written as 'this holds'") and
+`abd9d47b` ("the adversarial pass found the defect rebuilt inside its own
+repair"), both 2026-07-29.
+
+And the downstream number is gone too. Recomputed over
+`worldgen/out/worlds/*/ground_truth.json`: **35 worlds, 0 with an unverified or
+`holds`-less invariant, 0 still publishing `invariants_all_hold: true` on one.**
+The denominator (35) the paper re-derived is right; the numerator (13) is now zero.
+
+I checked the other three families in §10.2 and they are all sound —
+`p13_fd_dividend.py:171` now writes `backends.proves_unsolvable(rung, done.returncode, log)`;
+`a0-spike/pipeline/stages.py` splits `no_separating_guard` from `synthesis_crashed`
+and gates `all_guards_searched` on `not self.crashes`; `lp_potential/potential.py`
+raises `LpUnavailable` on every non-success except status 2. Only the one the
+paper singles out as *unrepaired* is repaired.
+
+This is the worst finding in the review, and not because of the stale number. The
+sentence "A done-marker read as a landed fix is the same error one level up" is the
+paper accusing its own work board of a specific epistemic sin — and the accusation
+is false, because the fix landed and the paper is the thing that did not follow.
+An unfriendly referee reads that paragraph aloud and sits down. **Missed** (§10
+postdates both rounds) and **new damage**.
+
+**Fix.** Either report the repair — with `23ec1793`, and with `abd9d47b`'s much
+better story that the adversarial pass found the defect *rebuilt inside its own
+repair*, which is a stronger instance of the section's thesis than the stale one —
+or drop the family and keep three.
+
+---
+
+### B5 · Length — 35 624 words against ~4 000, and the paper's own statement of its length is wrong by 30 %
+
+* PAPER.md **L12–14** — `sections/00_abstract.md` **L10–12**
+
+> at roughly **27 500 words** it is about **six times** a workshop budget
+
+`wc -w PAPER.md` = **35 624**. Every reasonable variant lands in the same band
+(36 256 by whitespace split; 36 152 excluding fenced code; 34 439 excluding
+markdown tables as well). Against a ~4 000-word workshop budget that is
+**8.9×**, not six. The stated 27 500 is low by ~8 100 words — about the size of
+§7 — and the ratio is understated by half a section's worth of factor.
+
+Two reasons this is blocking rather than mechanical. First, this is a **quantitative
+claim about the paper's own artefact, in the draft note that establishes the
+binding rule two paragraphs later**, and it is falsifiable by one command. It is the
+single easiest number in the document for a referee to check and it is wrong.
+Second, the trajectory is the finding: `REVIEW.md` measured 11 451 words and called
+it 2.5–3× budget; `OPEN_ITEMS.md` E1 says "the draft has grown since and this pass
+adds three sections"; it is now 3.1× the length that triggered that item. No
+workshop takes an 8.9× submission, and no amount of correctness in §7 changes that.
+
+**Logged and knowingly kept** as a category (`OPEN_ITEMS.md` E1,
+`REVIEW_TRIAGE.md` §F item 6) — but the *false self-measurement* is **missed**, and
+it is a different finding from the length itself.
+
+**Fix.** Recompute and state the real number, or cut. The two prior rounds both
+noted that this item gets strictly harder every time a section lands; three
+sections have landed since.
+
+---
+
+### B6 · §6.2 — the four zeros in the bill are entailments of the arm's definition, printed as measurements, and the abstract quotes them as a result
+
+* PAPER.md **L1499–1509** (the bill table and the paragraph under it) — `sections/06_a3_transfer.md` **L45–59**
+* PAPER.md **L1476** ("which is what makes the comparison a measurement rather than an anecdote") — `sections/06_a3_transfer.md` **L24**
+* PAPER.md **L113–114** (abstract: "wins with zero engine stages and zero adjudicated candidates") — `sections/00_abstract.md` **L111–112**
+
+The transfer arm is defined at PAPER.md L1482 as the arm "given L1's two books,
+unchanged", which "re-derived exactly one thing: the problem instance". An arm
+handed a finished manual and forbidden to re-derive it *cannot* run an engine
+stage, adjudicate a candidate, hold a theorize round or write a clause. So four of
+the seven rows —
+
+```
+| engine stages           | 1  | 0 | 0 |
+| candidates adjudicated  | 35 | 0 | 0 |
+| theorize rounds         | 5  | 0 | 0 |
+| DSL clauses written     | 33 | 0 | 0 |
+```
+
+— are the experimental design printed as a table. The paragraph under it calls
+them "the interesting column" and no sentence in §6 says they are definitional.
+The two non-definitional rows (0.032, 0.029) divide by a cold-start column that
+§6.5 item 3 concedes is "an upper bound on evidence rather than a forecast", i.e.
+a denominator nobody would pay.
+
+**Logged by P12 (F13, blocking) and unactioned.** I re-file it because the section
+around it has since improved in exactly the way that makes its persistence worse:
+§6.2 now *does* disclose that the control arm also scores 252/252 and that "this
+measurement cannot separate transfer from induction at all" — verified against
+`cold-start-a3/artifacts/score_vs_truth.json`, `results[1]` and `results[2]`, both
+`pairs_correct: 252` of `pairs_checked: 252`. Having conceded that accuracy cannot
+separate the arms, §6 rests the entire transfer claim on the bill, and the bill's
+headline rows are definitional. And §6.1's "which is what makes the comparison a
+measurement rather than an anecdote" now stands two paragraphs above the sentence
+saying the comparison measures nothing separating.
+
+The paper knows how to write this disclaimer: §3.3 does it beautifully for A0/A0′
+("the outcome is entailed by the construction"), and §11.5 now carries that
+concession forward. §6 is the section that did not get it. Selective honesty is
+worse than none, because it shows the authors can tell the difference.
+
+**Fix.** P12's minimal edit, unchanged and still right: one sentence under the
+table saying four of the zeros are entailments of the arm's definition and that the
+section's non-definitional results are the frame/action ratios, the 252/252 tie,
+and §6.3's negative controls.
+
+---
+
+## Major findings
+
+### M1 · §12.1's wave table puts "this line of work" in a row the paper's own title denies
+
+PAPER.md **L3545** — `sections/12_related.md` **L60**.
+
+> | III | **formal theory** | replay + proof + active experiment | **true of everything (and refutable by reality)** | this line of work |
+
+The column is headed "claims it can carry". Waves I and II are described by what
+published systems achieved; wave III's cell is an aspiration from `Theoria.md` §3.1,
+and the paper's own title is **"Neither layer certifies the manual against the
+world"**. §5.6 and §12.2's proof-carrying-code paragraph both establish that the
+Lean layer certifies relative to the induced manual, so the regime as *run here*
+does not carry "true of everything". The table is attributed ("reproduced from
+`Theoria.md` §3.1") but nothing tells the reader that the paper's headline result is
+that row III's cell was not reached. A referee reading the related-work table
+against the title has the contradiction in ten seconds. **Missed** — §12's table
+predates the current title, which changed at v0.4. Fix: one line under the table
+saying the third row is the design's target and this paper's result is that neither
+of its two layers delivers it.
+
+### M2 · Three of six figures are uncited, and the declared exemptions are falsified by §6 and §7
+
+`figures/check_figure_citations.py` (run: 3 cited, 3 uncited by declaration, 0
+unaccounted for) reports:
+
+* `fig02_bill_shape` — "the cost/bill panel has no home section yet — section 6's cost discussion cites numbers, not the plate"
+* `fig03_capability_spectrum` — "the battery's capability spectrum is a Phase-4 artefact and **the workshop paper stops at Phase 1**"
+* `fig04_a3_transfer` — "**A3 transfer has no section in the workshop paper's outline**; cite it or retire the plate"
+
+§6 *is* A3 transfer (PAPER.md L1453–1668, 216 lines) and §6.2 is titled "The bill";
+§7 *is* the battery and cites `battery/artifacts/capability_spectrum.json` roughly
+ten times. So the gate is green on three declarations the paper's own table of
+contents falsifies. This is `REVIEW.md`'s old "three deterministic extractors, zero
+references" finding returning inverted: the reason the plates are uncited is now
+recorded as fact, and the fact is stale. **Missed.**
+
+Secondary, and cheaper: `papers/phase1-workshop/figures/` still ships
+`fig1_concept_timeline.py`, `fig2_coverage_accuracy.py`, `fig3_loop_ledger.py` and
+three JSON payloads that no sentence in any section references — only
+`README.md:32–34` does. Two parallel figure pipelines, one of which the paper
+does not use, and gate C FIGDATA certifies the unused one as byte-deterministic.
+
+### M3 · The paper ships with its own verification gate red
+
+`python papers/phase1-workshop/verify_paper.py` exits **FAIL (1/7)** on
+`G AUDITSTAMP`: `CITECHECK.md` and `REVIEW.md` carry no ` ```audit-stamp ` block.
+Six of seven gates pass and pass impressively (225 distinct path citations, 0
+broken; 415 claim blocks, 0 uncited; 93 bare-filename citations, 0 ambiguous). But
+the red one is the gate that requires an audit to pin what it audited — which is
+the exact defect that made this re-run necessary. A paper whose draft note points
+the reader at `verify_paper.py` as the mechanical test of its binding rule should
+not ship with that script returning non-zero. **Missed.**
+
+### M4 · §11.5 still restores "predicted in advance and later measured"; the abstract has the hedge and the floor paragraph does not
+
+PAPER.md **L3459–3460** — `sections/11_limitations.md` **L262–263**.
+
+P12's F2 named three phrases in this paragraph. Two are fixed and fixed well:
+"controlled" is now "an A0/A0′ contrast which is **not** controlled … the outcome
+is entailed by the construction (§3.3)", and "two independently developed tracks"
+is now "two sessions that do not import each other's code". The third stands
+unchanged: "**predicted in advance and later measured**", with no reference to the
+seal's status. The abstract, by contrast, now carries "though the seal on that
+ordering is the authors' own declaration, and the same instance built the world and
+adjudicated it" (PAPER.md L89–90). So the *abstract* is more careful than the
+paragraph headed "The one thing this paper claims", which is the paragraph a
+programme committee reads third. **Logged (P12 F2) and partially actioned** — two of
+three, and the residue is in the highest-leverage sentence of the three.
+
+### M5 · Every experiment is n = 1 (or n = 3), and the paper still never says so once
+
+P12's F14 asked for a single cumulative sentence. `grep -n "n = 1"` over
+`sections/` returns exactly two hits: `03_a0.md:146` and `08_exam.md:156` — and
+B1 shows the second is now false. No sentence anywhere states the cumulative fact:
+A0 one world; A0′ one world, one seeded error, one revision; A1 one 5-hole fixture;
+A2 one world, one deleted rule, one loop; A3 one game, two levels; the exam one
+paper; the preflight one run; the battery four paired games with an arithmetic
+sign-test floor of 0.125 that no metric can clear. §11.3 and §11.4 state every
+component in place. The synthesis is what a referee says from the floor, and
+saying it first converts a gotcha into a citation. **Logged (P12 F14), unactioned.**
+
+### M6 · §8.2 rests "the marker is calibrated" on two endpoints that are entailed by the fakes' definitions
+
+PAPER.md **L2385–2387** — `sections/08_exam.md` **L61–63**: "It calibrates. The
+oracle scores exactly 1.000 and the null exactly 0.000 on all four papers."
+
+An oracle is the subject defined to emit the key and a null is the subject defined
+to answer nothing; under an all-or-nothing rubric 1.000 and 0.000 follow from the
+definitions. The endpoints do test one real thing — that the rubric accepts the
+key and does not award for silence — but they test the *marker's ends*, not the
+exam. The paper does immediately say "the interesting numbers are the middle two"
+and reports the memoriser's 1.00/0.15 split and the bluffer's sensitivity 1.0 /
+specificity 0.0, which is the right move. What it does not report is that the exam
+track itself reached this conclusion and acted on it: `exam/DECISIONS.md`
+**D-EX-012** is titled "the marker is tested in the middle of its range, not only at
+the ends", from commit `d43d8f60` ("the marker was only ever tested at its
+endpoints, and the middle had a hole in it"). §8.2 is describing the pre-D-EX-012
+calibration story. **Missed**; this is the remit's "definition printed as a
+measurement" in §7–§12, and it is the clearest instance in that region.
+
+### M7 · §12.2 says neither `ic3_pdr` nor `deadlock_carver` is exercised by any result in this paper; §10.4 reports a result about `deadlock_carver`
+
+PAPER.md **L3640–3641** — `sections/12_related.md` **L155–156**, against PAPER.md
+**L2992–2999** — `sections/10_adjudication.md` **L259–265**, which reports
+`PruningReport.same_answer` published beside the theorem it refutes, and the gating
+repair. §10's own opening insists it is "placed here, **as a result**, rather than
+in §11 with the limitations". The two sentences are reconcilable — §10.4 reports a
+defect *in* the engine rather than a number *from* it — but nothing in the text
+does the reconciling, and §12.2's sentence is bolded. **Missed.** One clause fixes it.
+
+### M8 · §7.2a's own charge lands on §7.2's table, and the paper prints the rounding anyway
+
+PAPER.md **L1781–1785** — `sections/07_battery.md` **L113–117**. §7.2a correctly
+observes that with n = 4 per side every δ is a multiple of 1/16, so "the table's
+−0.562 and −0.188 print three decimals onto a quantity with thirty-three reachable
+values", and correctly calls this the same error §7.4 calls out for K2. The
+artefact values are `-0.5625` and `-0.1875` (`battery/artifacts/discrimination_arms.json`,
+`metrics.X3`, `metrics.X2`) — verified. Having diagnosed it, §7.2 (PAPER.md L1737,
+L1739) still prints the truncated three-decimal forms rather than the exact
+sixteenths. A paper that identifies a presentational overstatement and then commits
+it two subsections earlier invites the reader to ask which other diagnoses were
+not acted on. **Missed.** Minor to fix, major in what it signals.
+
+---
+
+## Minor findings
+
+* **§7.2's δ truncation is also arithmetically wrong-way.** `-0.5625` rounds to
+  `-0.562` only under round-half-to-even; `-0.1875` → `-0.188` uses
+  round-half-away. Two conventions in one table (PAPER.md L1737/L1739). Print
+  `−9/16` and `−3/16`, or four decimals.
+* **§10.2's `worldgen` denominator survives its numerator.** "`worldgen/out/worlds/`
+  holds 35 directories with a `ground_truth.json`" recomputes to exactly 35
+  (PAPER.md L2860–2861). Credit where due; only the 13 is dead (B4).
+* **§12.2's `deadlock_carver`/`ic3_pdr` sentence and §2.2.** `REVIEW.md`'s old minor
+  item asked §2.2 to name `deadlock_carver`; §12.2 now names it, which is a different
+  place. Consistency item only.
+* **The exam's cheater evidence remains prose.** §8.4 discloses this correctly
+  (PAPER.md L2489–2493, `sections/08_exam.md` L165–168): the brief prompts are
+  digested in the run manifest but the directory is gitignored and no transcript is
+  archived. It is the right disclosure; note only that B3's third leak *does* have
+  an artefact (a named test with a named offender), so the balance of evidence in
+  §8.3 has shifted toward the static side since the section was written.
+* **`OPEN_ITEMS.md` A4 is discharged by this document** and should be struck; B5,
+  B6 and C1/C2's residue in §11.5 (M4) should be added to §C.
+
+---
+
+## What I tried to kill and could not
+
+Listed so a rebuttal knows which shots are covered, and because a referee who
+invents defects is useless. Each was checked against the artefact, not the prose.
+
+1. **"§7 reports a stale battery version."** No. `battery/artifacts/capability_spectrum.json`
+   self-reports `battery_version: "v2"`, and I recomputed every headline figure in
+   §7.1 from the file: 95 runs, arms `{bare_cc: 80, schema_repro: 8, theoria_a2: 4,
+   theoria_a0: 2, theoria_a0_spike: 1}` = 5, four development-pile game ids plus 7
+   game-less self-built runs, 38 cards, and status counts of exactly
+   **1433 ok / 2066 not-applicable / 111 insufficient-data**. Every number matches.
+2. **"Your provenance claim is decoration."** No, and the paper pre-empts it: §7.1
+   says one of seven artefacts carries `provenance.input_digests`. I checked all
+   seven — `capability_spectrum.json` `True`, the other six `False`. The paper says
+   "this paper had the stronger claim in it until the sentence was checked", which
+   is the correct disclosure.
+3. **"Your §7.2 effect-size table is transcribed from the report."** No. All eight
+   rows reproduce exactly from `discrimination_arms.json` — δ, both medians, the
+   direction flag and the tier — and the paper is *right* where its own
+   `REPORT_V2.md` is wrong (E4 did not collapse; the report says the economy family
+   did). §7.2a's P3 attack also reproduces: `sign_test {wins 1, losses 2, ties 1,
+   n 3, p_value 1.0}` beside `cliffs_delta -0.375` with
+   `agrees_with_declared_direction: true`.
+4. **"The V9 blind round's 'main table of two' is unsupported."** It is supported to
+   the commit. `git show 0b6e4939:battery/runs/.../v9_gaming_audit.json` gives
+   `verdict.main = ["E1", "M3"]` and `n_attacks = 105`; the delivered `efc21d12`
+   gives `main = []`, `undetermined = ["M3"]`, `n_attacks = 112`. The paper reports
+   both readings, says they are about different code, and says why. This is the best
+   provenance work in the draft.
+5. **"The pre-registration ancestry claim is asserted."** No. `battery/audit/v9/verdict.py`
+   first enters the repository in `520dc5dd` ("105 blind attacks, 37 of 38 metrics
+   gamed, three defences") and the pre-registration is `9892d23c`
+   ("pre-registration, poverty certificate, blinding — before any attack"), both
+   2026-07-29, in that order. Verified by `--diff-filter=A`.
+6. **"§11.4's 31-of-38 is rounded from something."** No. Recomputed:
+   `discrimination.json` = 18 no-data + 13 underpowered + 7 not-ranked;
+   `discrimination_arms.json` = 23 + 8 + 7. Both give 31 and 7 exactly, as stated.
+7. **"§9.4's cost reconciliation is post-hoc."** No. `theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`
+   carries `cost.cli_reported_usd 6.317658`, `cost.from_price_table.usd_total
+   5.795338`, `cost.relative_delta -0.0827`, `cost.delta_usd -0.52232`, and
+   `cost.cache_ttl_diagnosis.under_billed_usd 0.436763` — 83.62 % of the gap, as
+   §9.4 says, with the mechanism named (`proxy/cost.py` reads the flat usage key,
+   not the nested `cache_creation` object). The paper takes the *conservative*
+   number. This is exemplary.
+8. **"§10 publishes an aggregate it cannot defend."** The opposite. §10.1 refuses
+   340/48, refuses 445/56, refuses its own earlier 85/56, and gives four escalating
+   reasons ending in demonstrated cross-pass disagreement on three named files. I
+   checked the survey copies exist at
+   `runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/` at 92/283/420/118
+   lines, and `SURVEY-solver-status.md:7-11` carries the criterion the section says
+   it does. Refusing a headline you could have printed is rare and should be said.
+9. **"§8's 1 790 probes is a round number."** It is 363 + 58 + 1284 + 85 = 1790
+   exactly, with `probe_hits: 0` and `structural_hits: 0` on all four papers, and
+   §8.3's next sentence is "That number is worth almost nothing on its own". Item
+   counts 80/29/60/17 match `n_items` on all four. Attack fails.
+10. **"The A3 252/252 is a one-sided denominator."** It was; it is not now. §6.2
+    prints the control arm's 252/252 beside the carried manual's and says the
+    measurement "cannot separate transfer from induction at all". Verified against
+    `results[1]` and `results[2]`. Credit — this is the paper fixing a defect of
+    exactly the class it criticises in §7.
+11. **"Title/abstract sell transfer and the exam while §11.5 disclaims them."**
+    **Closed.** This was P12's F1, its top blocking item. The title is now "Neither
+    layer certifies the manual against the world"; the subtitle sells "an explicit,
+    machine-checkable world theory run offline on worlds we built ourselves — and a
+    metrics battery attacked by its own executable exploit register"; and the
+    abstract's own scope paragraph (PAPER.md L138–139) says "Transfer, the exam, the
+    ordering claim, the bill shape and the cost magnitude are **reported here and
+    claimed nowhere**", which is the exact complement of §11.5's disclaimer at
+    L3484–3485. The two sentences now agree. Remit item 1: **no contradiction remains.**
+12. **"'Eight results.' vs §12.3's instruction."** **Closed.** `grep` over
+    `sections/00_abstract.md` returns no "Eight results." — the count is gone
+    entirely, and the abstract's opening now reads "**The one thing this paper
+    claims is that we built that instrument …** That is a claim about an artefact and
+    a negative result about a measuring instrument. It is not a result about world
+    models." §12.3's closing instruction ("the abstract should not read as though it
+    were") is now obeyed at PAPER.md L107–108: "That is a demonstration of a failure
+    mode, not evidence about anything." Remit item 2: **consistent.** This was P12's
+    F3 and it is the cleanest close in the draft.
+13. **"K2 = 0.000 to three decimals over n = 3, undisclosed."** Closed and stays
+    closed — PAPER.md L87 carries "(n = 3)" and §7.4 calls the three decimals a
+    presentational overstatement in the paper's own voice.
+
+---
+
+## Verdicts on the six specific checks requested
+
+| # | check | verdict |
+|---|---|---|
+| 1 | Title/subtitle/abstract vs the "one thing this paper claims" section (now **§11.5**, PAPER.md L3447–3485, `sections/11_limitations.md` L250–285) | **Closed.** The title no longer sells transfer or the exam; the abstract's scope paragraph and §11.5's disclaimer are now complements rather than contradictions. The residue is M4 — §11.5 still says "predicted in advance and later measured" without the seal caveat the abstract carries. |
+| 2 | `sections/00_abstract.md` ~L61 — "Eight results." | **Gone.** No result count appears anywhere in the abstract. Consistent with the hedges, and with §12.3's standing instruction. |
+| 3 | Word count vs a ~4 000-word workshop budget | **35 624** (`wc -w`). **8.9× budget.** The draft note's "roughly 27 500 words … about six times" is wrong by ~8 100 words and by a factor of ~1.5 on the ratio. **B5, blocking.** |
+| 4a | Figures/scripts no sentence references | **Three of six**: `fig02_bill_shape`, `fig03_capability_spectrum`, `fig04_a3_transfer`, exempted by declarations that §6 and §7 falsify. Plus three orphaned scripts and three payloads in `papers/phase1-workshop/figures/`. **M2.** |
+| 4b | Sections whose evidence is n = 1 | **All of them.** §3 §4 §5 §6 §8 §9 are n = 1 in their own unit; §7 is four paired games with an attainable-p floor of 0.125. §8's stated n = 1 is now false (n = 3 per tier, **B1**). The cumulative sentence is still missing — **M5**. |
+| 5 | Definition printed as a measurement in §7–§12 | **§8.2's oracle 1.000 / null 0.000** is the clearest instance (**M6**); the §6.2 bill is the worse instance overall but sits in §6 (**B6**). §7 is clean here: §7.6 names E5 "a price list, and that was deducible" in its own voice, §7.10's "an arm with no manual cannot have a repair loop" is labelled as in-principle, and §11.4 calls its own 31/38 "arithmetic rather than softness". |
+
+---
+
+## Summary table
+
+| # | finding | file:line (PAPER.md / section) | severity | prior status |
+|---|---|---|---|---|
+| B1 | "n = 1 per handover tier" false; six-reader cohort with bootstrap CI and an annulment unreported | L2402 / L2479 · `08_exam.md` L78 / L155 | **blocking** | missed |
+| B2 | `label_sets_checked: []` quoted from a file that no longer contains it | L2460 · `08_exam.md` L136 | **blocking** | missed (new damage) |
+| B3 | "Two real leaks" is three; §8.4's band-digest gap is closed by D-EX-016 | L2441, L119, L2484 · `08_exam.md` L118, L160; `00_abstract.md` L117 | **blocking** | missed (new damage) |
+| B4 | §10.2's "not repaired … byte-for-byte unchanged on the mainline" is false; 13 of 35 is now 0 of 35 | L2853, L2857, L2869 · `10_adjudication.md` L119, L123, L133 | **blocking** | missed (new damage) |
+| B5 | 35 624 words (8.9× budget); draft note claims 27 500 and 6× | L12–14 · `00_abstract.md` L10–12 | **blocking** | length logged (E1); the false self-measurement missed |
+| B6 | §6.2's four definitional zeros printed as the result, quoted in the abstract | L1499–1509, L113 · `06_a3_transfer.md` L45–59; `00_abstract.md` L111 | **blocking** | logged (P12 F13), unactioned |
+| M1 | §12.1 wave-III row claims "true of everything" for "this line of work" against the paper's own title | L3545 · `12_related.md` L60 | major | missed |
+| M2 | 3 of 6 figures uncited under declarations §6 and §7 falsify; 3 further orphaned scripts | `figures/check_figure_citations.py` | major | partially logged (REVIEW minor, now inverted) |
+| M3 | `verify_paper.py` exits FAIL on G AUDITSTAMP | — | major | missed |
+| M4 | §11.5 keeps "predicted in advance and later measured" without the seal caveat the abstract carries | L3459 · `11_limitations.md` L262 | major | logged (P12 F2), 2 of 3 actioned |
+| M5 | no cumulative n = 1 sentence anywhere | — | major | logged (P12 F14), unactioned |
+| M6 | §8.2's oracle/null endpoints are definitional; D-EX-012 unreported | L2385 · `08_exam.md` L61 | major | missed |
+| M7 | §12.2 "neither engine is exercised by any result" vs §10.4 | L3640 · `12_related.md` L155 | major | missed |
+| M8 | §7.2a diagnoses the three-decimal overstatement and §7.2 prints it | L1737, L1739, L1781 · `07_battery.md` L69–71, L113 | major | missed |
+
+Thirteen findings. **Every one is a writing fix or a re-transcription against an
+artefact that already exists.** None needs a run, none needs an API call, none
+needs a game. That is the same conclusion `REVIEW_TRIAGE.md` reached in July and it
+is still the most important fact about this paper: the distance between it and a
+defensible submission is a day of editing and a cut, not an experiment.
