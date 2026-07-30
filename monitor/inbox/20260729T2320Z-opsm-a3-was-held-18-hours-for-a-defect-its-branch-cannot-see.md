@@ -113,3 +113,95 @@ is; today it silently means "green only on the machine that wrote it".
 * Whether the S29 author intended "reported not fixed" as a sanctioned deferral
   or an oversight. I quote it; I do not read intent into it.
 * The RED measurement was taken at `c54954d6`; master is now `a197b39f`.
+
+---
+
+# APPENDED 2026-07-30T00:05Z — adversarial result. Core confirmed causally; two of my universals broken.
+
+As promised above, this is appended rather than edited. An adversarial verifier
+re-derived everything in its own clean worktrees without reading the first
+diagnostician's.
+
+## Strengthened
+
+* **Clean master is RED — confirmed, and at the *current* master too.** The
+  verifier did not assume the `c54954d6` result transfers: it re-ran at
+  `a197b39f` and got the same RED, same 5 drifted manifests, same
+  `test_arm.py:866`. Worktree provably clean
+  (`git status --porcelain --ignored` → 0 lines).
+* **The instrument objection is dead.** It drove the gate through the
+  worktree's own `gates.gate_for()` / `gate_env()`, mirroring
+  `ci_merge.py:543-544` — not a hand-set `PYTHONPATH`. The known `gates.run()`
+  env defect is real but **not load-bearing here**: both paths return RED.
+* **Causation, not correlation.** Reverse-applying *only* `71b882c8`'s
+  `proxy/cost.py` hunk turns check #8 to `OK … 9 manifests, all byte-stable`
+  and the whole gate to `green / RETURNCODE 0`. The hunk is **necessary and
+  sufficient** for the red; no second cause hides behind it.
+
+## Corrections to what I wrote above
+
+**1. "It blocks every branch touching `theoria-arm`, not just a3" — overstated.
+Withdrawn as a universal.** Enumerating all 24 `origin/*` branches by
+ci_merge's own `touched_dirs` semantics, **a3 is the only branch that touches
+`theoria-arm` at all.** So the statement generalises from n = 1: there is no
+counterexample to find, and no confirming instance either. The mechanism is
+real — any future theoria-arm branch would hit this wall — but I asserted a
+population claim on a population of one. That is the same error class as the
+rest of this cycle: a conclusion stated wider than the measurement supports.
+
+**2. "Nothing here is a merge-referee action" — over-strong.** It quantifies
+over an action space nobody enumerated. The verifier named one route I had not
+considered and did not rule out: a *tracked sidecar* in the run directory
+recording `path` + `sha256` for deliberately-untracked artefacts, read by
+`backfill` when building `files[]`. That is non-circular — it does not read the
+manifest it derives, so it would not make `_idempotence` tautological the way
+reading the old sha back would — and non-lossy. **It was not implemented or
+tested**, so I am not proposing it; I am recording that my "no action exists"
+was never bounded.
+
+**3. The drift count on the merged tree is 7, not 6** (I wrote the union as 7 in
+the table but described Cause B loosely). `leg01-salvage` drifts *only* from
+Cause A, which vindicates naming `leg01` alone as Cause B.
+
+## New, and it closes the obvious escape route
+
+**Reverting `71b882c8`'s `cost.py` on master is not available as a fix.** It
+turns `proxy` from green to RED:
+
+```
+proxy on clean master:  392 passed … green / RETURNCODE 0
+proxy with cost.py reverted:
+  tests\test_cost.py:29: from proxy.cost import REQUIRED_USAGE_KEYS, PriceTable, price_run
+  E   ImportError: cannot import name 'REQUIRED_USAGE_KEYS' from 'proxy.cost'
+  Interrupted: 1 error during collection
+```
+
+So the one green tree anybody has constructed is **not a mergeable branch**.
+Whoever owns this must fix it forward — re-render the archives under a ruling,
+or add the sidecar — not by backing out the spend-accounting fix. That fix is
+itself a real safety win (it stops a partial measurement from being priced as a
+confident number 26× under the true bill), and trading it away to turn a gate
+green would be the worst available outcome.
+
+## Cause B, re-verified independently
+
+Both files are genuinely gitignored (`theoria-arm/.gitignore:30` and `:4`), and
+Cause B **survives the Cause-A fix**: with `cost.py` reverted on the merged
+tree, exactly one manifest still drifts — `20260729T004020Z-leg01`. The
+re-render diff drops precisely two entries and nothing else. `backfill.py:534`
+builds `files` by `os.walk(run_dir)`, so in the fresh checkout ci_merge makes,
+those two files cannot exist.
+
+The lossiness is confirmed and worse than I stated: `candidates.jsonl` is
+**201,586,613 bytes** and its sha256 matches the manifest exactly, so that
+manifest line is a **true and currently unique** record of an artefact that
+cannot be pushed at all (GitHub's 100 MB limit). Re-rendering destroys the only
+record that exists.
+
+## Still not verified after the attack
+
+* Whether re-rendering `leg01` **plus** fixing Cause A reaches green — requires
+  modifying an archived `MANIFEST.json`, which is forbidden. Untested.
+* The sidecar route — named, not built, not run.
+* Whether the gate would be green in a tree where the two ignored files are
+  physically present. The sha match makes it near-certain; it was not observed.
