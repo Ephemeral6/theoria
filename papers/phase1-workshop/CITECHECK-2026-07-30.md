@@ -189,6 +189,36 @@ at row level**. That is a gap in verification depth, not in coverage: slice C
 exists, is complete, enumerates all four passes and states its own limits. But it
 is the one fifth of this stamp resting on a single author.
 
+> **CLOSED.** `row-sample-audit-C.md` is the missing draw, same declared method:
+> **42 rows, 42 HOLD, 0 WRONG, 0 UNVERIFIABLE**, none dropped, with every Pass B
+> finding and every Pass D row taken entire rather than sampled, and the
+> confirmed-correct rows recomputed from bytes rather than inspected. The
+> abstract's strongest result was the highest-priority row and did not move. So
+> §7–§8 now rest on two readers, and the second moved nothing.
+>
+> Three corrections it produced, none of which touches the cover:
+>
+> 1. **A defect in the gate, not in the slice.** Gate E's ruling for §8.4 says the
+>    handover reports are "cited one block above". They are cited in block [12];
+>    the ruled block is [24], ~76 lines earlier, with all of §8.3 between. And a
+>    ruling clears its whole merged block, which `_blocks()` merges the six-bullet
+>    §8.4 list into — so it also exempts slice C's B2 (high), B3 (high), C9 and
+>    D1. §8's only two uncited quantitative blocks are both ruled, so a green
+>    `E UNCITED` says nothing about §8.4. This is the defect gate F already records
+>    against itself: a ruling whose stated evidence is false, which nothing checks.
+> 2. **This index's Pass A figures for C are one low.** 57 distinct citations, not
+>    56; 54 resolve as written, not 53 — so the 313 and 282 aggregates are each one
+>    low too. The missing token is `.gitattributes` at PAPER L2316, which slice C's
+>    extractor did not classify as path-like although the slice *did* open the file
+>    and read it correctly. Recorded rather than silently bumped, because every
+>    figure in the table above is attributed to the slice that produced it, and
+>    editing a slice's number in this index would break that attribution. **"0
+>    broken paths" is unaffected and was re-checked over every path in the span,
+>    not a sample.**
+> 3. §7 carries **three** gate-E rulings, not four. Of the five in slice C's span,
+>    three hold in full, one has a stale locator ("four lines above" is fifteen,
+>    the paragraph having grown after the ruling was written), one is item 1 above.
+
 ---
 
 ## Known defects in the surrounding run record, not fixed here
