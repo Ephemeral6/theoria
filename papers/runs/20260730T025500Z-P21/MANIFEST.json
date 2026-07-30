@@ -1,0 +1,15 @@
+{
+  "prompt_id": "P-P21-line-anchor-range",
+  "branch": "agent/p-p21-line-anchor-range",
+  "base_commit": "0da14b27",
+  "base_note": "branched off agent/s-p20-nosecret-noop rather than origin/master on purpose: both items edit papers/phase1-workshop/verify_paper.py, and this repository's merge log is mostly HELD-on-conflict. Stacking costs nothing if P20 merges first and avoids a conflict in the same file if it does not.",
+  "utc": "2026-07-30T02:55:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "in-progress",
+  "summary": "P19 measured the paper's line-anchored citations and ruled: wire the range check (free today, 22/22 INRANGE), do not build the content-anchor gate (12 of 12 reds false). The first half was adopted and never wired. verify_paper.py's PATH_TOKEN and CITE_TOKEN both match the :722-724 tail and both drop it -- the tail exists so a line-anchored citation is matched at all, and then nothing looks at the number.",
+  "findings": [],
+  "measurement": {},
+  "verification": {}
+}

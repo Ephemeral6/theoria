@@ -43,19 +43,19 @@ def test_the_fixture_names_are_what_this_file_assumes():
 # --------------------------------------------------------------- it fires
 
 def test_an_ambiguous_bare_filename_fails(tmp_path):
-    flagged, _, _ = scan(tmp_path, f"The run is recorded in `{AMBIGUOUS}`.\n")
+    flagged, _, _, _ = scan(tmp_path, f"The run is recorded in `{AMBIGUOUS}`.\n")
     assert len(flagged) == 1
     assert flagged[0][2] == AMBIGUOUS
 
 
 def test_a_unique_bare_filename_passes(tmp_path):
     """Locatable is the bar. One candidate is locatable."""
-    flagged, _, _ = scan(tmp_path, f"The design is in `{UNIQUE}`.\n")
+    flagged, _, _, _ = scan(tmp_path, f"The design is in `{UNIQUE}`.\n")
     assert flagged == []
 
 
 def test_a_repo_relative_path_passes(tmp_path):
-    flagged, _, _ = scan(
+    flagged, _, _, _ = scan(
         tmp_path, "The run is recorded in `papers/phase1-workshop/PAPER.md`.\n")
     assert flagged == []
 
@@ -68,20 +68,20 @@ def test_a_path_whose_basename_is_ambiguous_still_passes(tmp_path):
     tree -- flagging the very form it is asking authors to use.
     """
     assert len(vp._candidates("STATUS.md")) > 1
-    flagged, _, _ = scan(tmp_path, "Recorded in `cold-start-a0/STATUS.md`.\n")
+    flagged, _, _, _ = scan(tmp_path, "Recorded in `cold-start-a0/STATUS.md`.\n")
     assert flagged == []
 
 
 def test_a_line_anchored_path_passes(tmp_path):
     """The form P16 found check B could not see; F must not re-flag it."""
-    flagged, _, _ = scan(
+    flagged, _, _, _ = scan(
         tmp_path, "See `papers/phase1-workshop/verify_paper.py:12-14`.\n")
     assert flagged == []
 
 
 def test_a_non_artefact_token_is_not_a_citation(tmp_path):
     """`Step.won` is a field, `zero_space` an engine. Neither is a file."""
-    flagged, _, _ = scan(
+    flagged, _, _, _ = scan(
         tmp_path, "`Step.won` is read by `zero_space` and by `env._state`.\n")
     assert flagged == []
 
@@ -89,7 +89,7 @@ def test_a_non_artefact_token_is_not_a_citation(tmp_path):
 def test_the_abstract_is_exempt(tmp_path):
     (tmp_path / "00_abstract.md").write_text(
         f"Recorded in `{AMBIGUOUS}`.\n", encoding="utf-8")
-    flagged, _, _ = vp.scan_bare(tmp_path, {})
+    flagged, _, _, _ = vp.scan_bare(tmp_path, {})
     assert flagged == []
 
 
@@ -99,7 +99,7 @@ RULING = ("07_body.md", AMBIGUOUS)
 
 
 def test_a_ruling_silences_its_token(tmp_path):
-    flagged, hits, _ = scan(
+    flagged, hits, _, _ = scan(
         tmp_path, f"Each run writes a `{AMBIGUOUS}`.\n", {RULING: "names a kind"})
     assert flagged == []
     assert hits[RULING] == 1
@@ -109,13 +109,13 @@ def test_a_ruling_is_scoped_to_its_section(tmp_path):
     """A ruling written for one section must not excuse another."""
     (tmp_path / "08_other.md").write_text(
         f"Recorded in `{AMBIGUOUS}`.\n", encoding="utf-8")
-    flagged, _, _ = scan(
+    flagged, _, _, _ = scan(
         tmp_path, f"Each run writes a `{AMBIGUOUS}`.\n", {RULING: "names a kind"})
     assert [f[0] for f in flagged] == ["08_other.md"]
 
 
 def test_a_ruling_that_matches_nothing_is_stale(tmp_path):
-    _, hits, _ = scan(tmp_path, "Nothing is cited here.\n", {RULING: "names a kind"})
+    _, hits, _, _ = scan(tmp_path, "Nothing is cited here.\n", {RULING: "names a kind"})
     assert hits[RULING] == 0
 
 
@@ -160,7 +160,7 @@ def test_a_name_matching_nothing_fails(tmp_path):
     citing it was read by nobody.
     """
     assert vp._candidates("ledger_summary.jsonl") == []
-    flagged, _, _ = scan(tmp_path, "The consolidated ledger is `ledger_summary.jsonl`.\n")
+    flagged, _, _, _ = scan(tmp_path, "The consolidated ledger is `ledger_summary.jsonl`.\n")
     assert len(flagged) == 1
     assert flagged[0][3] == 0
 
@@ -169,7 +169,7 @@ def test_the_wrong_case_is_not_a_citation(tmp_path):
     """NTFS is case-insensitive, `_candidates` is not, and casing is what
     authors get wrong -- so `Status.md` opened any of the nine real STATUS.md
     for the author and matched none of them for the check."""
-    flagged, _, _ = scan(tmp_path, "The run is in `Status.md`.\n")
+    flagged, _, _, _ = scan(tmp_path, "The run is in `Status.md`.\n")
     assert len(flagged) == 1
 
 
@@ -180,7 +180,7 @@ def test_the_wrong_case_is_not_a_citation(tmp_path):
 def test_sibling_notation_does_not_evade(tmp_path, body, n):
     """Section 7 cites siblings as `{a0-base,a2-base}`, so this is the paper's
     own idiom with the directory removed -- one keystroke, not a contrivance."""
-    flagged, _, seen = scan(tmp_path, body)
+    flagged, _, seen, _ = scan(tmp_path, body)
     assert seen == n and flagged, f"slipped past check F:\n{body}"
 
 

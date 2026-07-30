@@ -157,13 +157,16 @@ SECTIONS = HERE / "sections"
 # match at all, so the citation was invisible to this check -- it was neither ok
 # nor BROKEN, it simply was not there. Found by check E's triage, and it was
 # check B's blind spot first.
-# The `:722-724` tail is optional and dropped, exactly as in CITE_TOKEN. Without
-# it check B did not match a line-anchored citation *at all* -- and a path B never
-# matches is a path B never resolves, so `no/such/dir/thing.md:3` was accepted by
-# check E and called broken by nobody. Adding a line number to a citation was a
-# way to stop it being checked.
+# The `:722-724` tail is optional. It was added so that a line-anchored citation
+# would be matched *at all* -- before it, a path B never matched was a path B
+# never resolved, so `no/such/dir/thing.md:3` was accepted by check E and called
+# broken by nobody, and adding a line number to a citation was a way to stop it
+# being checked. It was then thrown away, which is the other half of the same
+# hole and what P21 closes: the number is now captured and checked against the
+# file's length. See `anchor_overruns`.
 PATH_TOKEN = re.compile(
-    r"`([A-Za-z0-9_.\-/{},]+/[A-Za-z0-9_.\-/{},]*?)(?::\d+(?:[-–]\d+)?)?`")
+    r"`([A-Za-z0-9_.\-/{},]+/[A-Za-z0-9_.\-/{},]*?)"
+    r"(?::(?P<anchor>\d+(?:[-–]\d+)?))?`")
 
 # Tokens that look like paths but are not repository paths.
 NOT_A_PATH = re.compile(
@@ -395,6 +398,42 @@ def classify(token: str) -> str:
     return "BROKEN"
 
 
+def resolve_cited(token: str) -> Path | None:
+    """The file a resolving citation points at, or None."""
+    for base in (ROOT, HERE):
+        if (base / token).is_file():
+            return base / token
+    return None
+
+
+def anchor_overruns(path: Path, anchor: str) -> tuple[int, int] | None:
+    """`(last line named, lines in the file)` if the anchor runs off the end.
+
+    P19 measured this at **zero yield on the paper** -- 22 line-anchored
+    citations, 22 in range -- and adopted it anyway, for two reasons worth
+    keeping beside the code. It is free exactly once: today nothing has to be
+    rewritten to make it pass, and that stops being true the moment somebody
+    cites line 900 of a 300-line file. And it cannot silently degrade
+    afterwards.
+
+    **What it catches is not what P18 got wrong.** P18's `:148` for a line that
+    is at `:149` is in range and wrong, and no range check can see that. P19
+    built the content-anchor gate that could, measured it at 2 HIT / 12 MISS / 8
+    NOQUOTE, hand-checked two of the twelve MISSes and found both false, and
+    ruled against shipping it: twelve false reds is a gate somebody switches off
+    inside one session, and a switched-off gate is worse than a written-down
+    limit because it reads like coverage. That ruling stands. So the sentence
+    this check is allowed to print is the narrow one -- *in range* -- and never
+    *correct*.
+    """
+    last = int(re.split(r"[-–]", anchor)[-1])
+    try:
+        n = len(path.read_text(encoding="utf-8", errors="replace").splitlines())
+    except OSError:
+        return None
+    return (last, n) if last > n else None
+
+
 def check_paths() -> tuple[bool, list[str]]:
     """B. Every cited path resolves, and unambiguously.
 
@@ -416,13 +455,33 @@ def check_paths() -> tuple[bool, list[str]]:
     """
     notes: list[str] = []
     seen: dict[str, tuple[str, str]] = {}  # token -> (verdict, first section seen in)
+    anchored: dict[tuple[str, str], str] = {}  # (token, anchor) -> first section
     for section in sorted(SECTIONS.glob("*.md")):
-        for token in PATH_TOKEN.findall(section.read_text(encoding="utf-8")):
+        for m in PATH_TOKEN.finditer(section.read_text(encoding="utf-8")):
+            token, anchor = m.group(1), m.group("anchor")
+            if anchor:
+                anchored.setdefault((token, anchor), section.name)
             if token in seen:
                 continue
             verdict = classify(token)
             if verdict != "skip":
                 seen[token] = (verdict, section.name)
+
+    overrun: list[str] = []
+    for (token, anchor), where in sorted(anchored.items()):
+        if seen.get(token, ("skip",))[0] not in ("ok", "RULED"):
+            continue  # the path itself is already a finding; do not report twice
+        path = resolve_cited(token)
+        if path is None:
+            continue
+        span = anchor_overruns(path, anchor)
+        if span is not None:
+            last, total = span
+            overrun.append(
+                f"  OUTOFRANGE {token}:{anchor}   ({where}) -- the file resolves "
+                f"and has {total} lines, so line {last} is not in it. The path "
+                f"half of this citation was checked and the number half was "
+                f"parsed and thrown away")
 
     def of(kind: str) -> list[str]:
         return sorted(t for t, (v, _) in seen.items() if v == kind)
@@ -441,6 +500,10 @@ def check_paths() -> tuple[bool, list[str]]:
                  f"{len(elided)} elided, {len(broken)} broken, "
                  f"{len(miscased)} miscased, {len(local)} paper-local, "
                  f"{len(unshareable)} unshareable, {len(stale)} stale rulings")
+    notes.append(f"  {len(anchored)} of them carry a line anchor: "
+                 f"{len(overrun)} run off the end of the file. In range is not "
+                 f"the same as correct -- see anchor_overruns()")
+    notes.extend(fail(o) for o in overrun)
     for t in broken:
         notes.append(fail(f"  BROKEN    {t}   ({seen[t][1]}) -- resolves from neither the repo "
                           f"root nor beside PAPER.md"))
@@ -472,7 +535,7 @@ def check_paths() -> tuple[bool, list[str]]:
             f"citation is gone, or the collision behind it is. A ruling that excuses "
             f"nothing is removed, not left to excuse the next token by that name."))
     return not (broken or amb or elided or miscased or local
-                or unshareable or stale), notes
+                or unshareable or stale or overrun), notes
 
 
 def check_figdata() -> tuple[bool, list[str]]:
@@ -801,8 +864,12 @@ EXEMPT_SECTIONS = {"00_abstract.md"}
 # The split matters for the bare-filename citations CITECHECK counted -- section
 # 10 cites `SURVEY-solver-status.md:16`, which exists but not at a path a reader
 # resolves. That is a style finding B owns; calling it "uncited" would be false.
-# The trailing `:170-171` is a line anchor, not part of the name.
-CITE_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/{},]+)(?::\d+(?:[-–]\d+)?)?`")
+# The trailing `:170-171` is a line anchor, not part of the name -- and it is
+# captured rather than discarded, because 14 of the paper's 22 line-anchored
+# citations are bare filenames, which check B never sees. A range check wired
+# into B alone would cover 8 of 22.
+CITE_TOKEN = re.compile(
+    r"`([A-Za-z0-9_.\-/{},]+)(?::(?P<anchor>\d+(?:[-–]\d+)?))?`")
 ARTEFACT_SUFFIX = (
     ".md", ".json", ".jsonl", ".py", ".lean", ".dsl", ".bib",
     ".csv", ".svg", ".txt", ".toml", ".yaml", ".yml", ".sh",
@@ -1314,13 +1381,14 @@ def scan_bare(sections=None, rulings=None):
     rulings = ADJUDICATED_BARE if rulings is None else rulings
     hits = {k: 0 for k in rulings}
     flagged, seen = [], 0
+    overran: list[tuple] = []
     for section in sorted(Path(sections).glob("*.md")):
         if section.name in EXEMPT_SECTIONS:
             continue
         for lineno, line in enumerate(
                 section.read_text(encoding="utf-8").splitlines(), 1):
             for m in CITE_TOKEN.finditer(line):
-                raw = m.group(1)
+                raw, anchor = m.group(1), m.group("anchor")
                 if "/" in raw:
                     continue
                 # `{STATUS.md}` and `STATUS.md,DECISIONS.md` both slipped: the
@@ -1333,7 +1401,19 @@ def scan_bare(sections=None, rulings=None):
                     if not token.lower().endswith(ARTEFACT_SUFFIX):
                         continue
                     seen += 1
-                    n = len(_candidates(token))
+                    cands = _candidates(token)
+                    n = len(cands)
+                    # A bare name with one candidate is locatable, which is all
+                    # F asks -- and 14 of the paper's 22 line-anchored citations
+                    # are exactly this shape, invisible to check B for having no
+                    # `/`. Wiring the range check into B alone would have covered
+                    # 8 of 22, so the other half lives here, where the file has
+                    # already been resolved.
+                    if n == 1 and anchor:
+                        span = anchor_overruns(ROOT / cands[0], anchor)
+                        if span is not None:
+                            overran.append((section.name, lineno, token, anchor,
+                                            cands[0], span))
                 # `n == 1` is the only clean verdict. Zero is *worse* than many:
                 # a bare name matching nothing is an invented citation, and it
                 # was the one case this check waved through -- check B skips it
@@ -1348,13 +1428,13 @@ def scan_bare(sections=None, rulings=None):
                         hits[key] += 1
                         continue
                     flagged.append((section.name, lineno, token, n))
-    return flagged, hits, seen
+    return flagged, hits, seen, overran
 
 
 def check_bare() -> tuple[bool, list[str]]:
     """F. No body citation is a bare filename that could mean several files."""
     notes: list[str] = []
-    flagged, hits, seen = scan_bare()
+    flagged, hits, seen, overran = scan_bare()
     stale = [k for k, n in hits.items() if not n]
 
     # A ruling here is keyed by (section, token) with no text anchor, so unlike
@@ -1379,7 +1459,14 @@ def check_bare() -> tuple[bool, list[str]]:
 
     notes.append(
         f"  {seen} bare-filename citations: {len(flagged)} ambiguous, "
-        f"{len(ADJUDICATED_BARE) - len(stale)} ruled, {len(stale)} stale rulings")
+        f"{len(ADJUDICATED_BARE) - len(stale)} ruled, {len(stale)} stale rulings, "
+        f"{len(overran)} line anchors past the end of the file")
+    for name, lineno, token, anchor, cand, (last, total) in overran:
+        notes.append(fail(
+            f"  OUTOFRANGE {name}:{lineno} -- `{token}:{anchor}` resolves to "
+            f"{cand}, which has {total} lines, so line {last} is not in it. F "
+            f"resolved the file and dropped the number; this is the half of the "
+            f"anchor that was never read."))
     for name, lineno, token, n in flagged:
         if n:
             notes.append(fail(
@@ -1399,7 +1486,7 @@ def check_bare() -> tuple[bool, list[str]]:
             f"  STALE     {key[0]} `{key[1]}` is ruled and no longer appears. "
             f"A ruling that excuses nothing is removed, not left to excuse a "
             f"regression that comes back the other way."))
-    return not flagged and not stale, notes
+    return not flagged and not stale and not overran, notes
 
 
 #: (tag, blurb, fn, reads_sections).

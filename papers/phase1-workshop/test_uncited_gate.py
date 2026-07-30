@@ -184,13 +184,22 @@ def test_backticked_ten_thousand_is_a_known_residual(tmp_path):
 
 def test_a_line_anchor_does_not_hide_a_path_from_check_b(tmp_path):
     """E accepts any path-shaped token; B is what resolves it. B could not see
-    a line-anchored one at all, so `foo.md:3` was checked by neither."""
-    assert vp.PATH_TOKEN.findall("(`no/such/dir/thing.md:3`)") == [
-        "no/such/dir/thing.md"]
+    a line-anchored one at all, so `foo.md:3` was checked by neither.
+
+    Updated by P21: the anchor is still not part of the path, but it is now
+    *captured* rather than discarded, so the number half of the citation has
+    somewhere to be checked. Matching the tail and then throwing it away was the
+    other half of the same hole."""
+    m = vp.PATH_TOKEN.search("(`no/such/dir/thing.md:3`)")
+    assert m.group(1) == "no/such/dir/thing.md"
+    assert m.group("anchor") == "3"
     assert vp.classify("no/such/dir/thing.md") == "BROKEN"
-    # ...and the anchor is dropped, not treated as part of the path.
-    assert vp.PATH_TOKEN.findall("(`papers/phase1-workshop/verify_paper.py:12-14`)") == [
-        "papers/phase1-workshop/verify_paper.py"]
+    m = vp.PATH_TOKEN.search("(`papers/phase1-workshop/verify_paper.py:12-14`)")
+    assert m.group(1) == "papers/phase1-workshop/verify_paper.py"
+    assert m.group("anchor") == "12-14"
+    # A citation with no anchor still has none -- the group is optional, not
+    # defaulted, so `if anchor:` is the whole test at every call site.
+    assert vp.PATH_TOKEN.search("(`papers/verify.py`)").group("anchor") is None
 
 
 def test_a_broad_ruling_cannot_silence_several_blocks(monkeypatch, tmp_path):
