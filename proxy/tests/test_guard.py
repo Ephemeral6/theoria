@@ -82,3 +82,78 @@ def test_the_fingerprint_carries_the_cut_hash():
     fingerprint = SealedPileGuard().fingerprint()
     assert fingerprint["sha256"].startswith("3feca53e")
     assert fingerprint["n_sealed"] == 21
+
+
+# -- the join is the guard's own construction, and must not invent games -----
+
+def test_an_arm_name_beside_a_game_id_does_not_invent_a_third_game():
+    """`_texts` joins the body's values to catch an id split across two fields.
+    With keys sorted, `{"arm": ..., "game_id": ...}` joins to
+    `bare_ccar25-0c556536`, whose 6-character stem `ccar25` is in neither pile
+    -- so the guard refused a development game as `unknown_game`, for an id
+    nobody sent. Any value ending in one or two alphanumerics does this; an
+    arm's name is merely where it was found.
+
+    Fails closed, so this was a false denial and never a leak. Its cost is that
+    the arm loses its scorecard: `MockArm.play` ignores the 403 and the run
+    finishes with `card_id=None`, reconciling UNDETERMINED instead of aborting.
+    """
+    guard = SealedPileGuard()
+    for arm in ("bare_cc", "schema_repro", "theoria", "probe", "replay",
+                "mock_arm"):
+        for game in ("ar25-0c556536", "g50t-5849a774", "sk48-d8078629",
+                     "tn36-ef4dde99"):
+            verdict = guard.check_request("/api/scorecard/open", "",
+                                          {"arm": arm, "game_id": game})
+            assert verdict["decision"] == "allow", (arm, game, verdict)
+
+
+def test_a_short_value_before_a_game_id_does_not_invent_one_either():
+    """The mechanism is the alphanumeric tail, not the underscore and not the
+    arm field -- so it is asserted on the shape rather than on one name."""
+    guard = SealedPileGuard()
+    for before in ("v2", "x-y2", "a.b1", "q", "2", "tag:v2", "card-x"):
+        verdict = guard.check_request(
+            "/api/cmd/RESET", "", {"a": before, "b": "ar25-0c556536"},
+            is_command=True)
+        assert verdict["decision"] == "allow", (before, verdict)
+
+
+def test_red_a_sealed_id_split_behind_a_stub_is_still_caught():
+    """The failing path, and the reason the join's scan drops the left anchor.
+
+    `re.findall` does not overlap, so a stub in front of a split id used to let
+    a phantom consume it: `{"a": "x_ab" + stem + "-", "b": "&lt;hex8&gt;"}` yielded
+    only `ab&lt;stem&gt;-&lt;hex8&gt;`, an unregistered stem. Under the default
+    `unknown_policy="deny"` that still refused, but for the wrong reason and
+    under `unknown_policy="allow"` it refused nothing at all -- the sealed id
+    was never seen. Scanning the join for every overlapping candidate and
+    keeping the registered ones catches it as what it is.
+    """
+    for policy in ("deny", "allow"):
+        guard = SealedPileGuard(unknown_policy=policy)
+        verdict = guard.check_request(
+            "/api/cmd/RESET", "",
+            {"a": "x_ab" + stem(SEALED) + "-", "b": SEALED.split("-", 1)[1]},
+            is_command=True)
+        assert verdict["decision"] == "deny", (policy, verdict)
+        assert verdict["rule"] == "sealed_pile", (policy, verdict)
+        assert verdict["game_id"] == SEALED, (policy, verdict)
+
+
+def test_a_sealed_id_split_across_two_fields_is_still_caught():
+    """D-022's original case, unchanged by the narrowing.
+
+    It is caught on the bare stem `dc22` -- found in the first value on its own
+    (RED-20), before the join is reached -- rather than on the reassembled id.
+    Asserted as the stem for that reason: the join is the second line of
+    defence here, not the first.
+    """
+    guard = SealedPileGuard()
+    verdict = guard.check_request(
+        "/api/cmd/RESET", "",
+        {"a": stem(SEALED) + "-", "b": SEALED.split("-", 1)[1]},
+        is_command=True)
+    assert verdict["decision"] == "deny"
+    assert verdict["rule"] == "sealed_pile"
+    assert verdict["game_id"] in (SEALED, stem(SEALED))

@@ -35,6 +35,24 @@ from .paths import PILES, REPO
 _GAME_ID = re.compile(
     r"(?<![A-Za-z0-9])([A-Za-z0-9]{2,6})-([0-9A-Fa-f]{8})(?![A-Za-z0-9])")
 
+#: The same shape, matched **overlapping and without the left anchor**, for use
+#: on the concatenation of a body's values only.
+#:
+#: Two reasons it differs from `_GAME_ID`. First, the join has no word
+#: boundaries to respect -- it is an artefact, not something a server will
+#: read -- so anchoring on the left there only decides *which* of several
+#: overlapping candidates is reported, and the leftmost is the wrong one:
+#: in `"x_ab" + "ls20-9607627b"` a left-anchored scan returns `abls20-9607627b`
+#: and, because `re.findall` does not overlap, the real `ls20-9607627b` is
+#: consumed and never seen. Second, a zero-width lookahead yields every start
+#: position, so every candidate stem is offered to the register instead of
+#: just one.
+#:
+#: Everything this finds is then filtered against the registered stems -- see
+#: `_ids_in_join`. That filter is what makes dropping the anchor safe.
+_GAME_ID_JOINED = re.compile(
+    r"(?=([A-Za-z0-9]{2,6})-([0-9A-Fa-f]{8})(?![A-Za-z0-9]))")
+
 #: Any run of alphanumerics, used to catch a **bare stem**. `ls20` on its own
 #: matched nothing before (RED-20), and a bare stem is not a typo: INC-005
 #: recorded that the live API answers short ids with a fake 200, so a request
@@ -212,16 +230,28 @@ class SealedPileGuard:
 
     # -- request inspection ------------------------------------------------
     def _texts(self, path: str, query: str, body: Any, raw: Any,
-               headers: Any) -> List[str]:
-        """Every piece of text a request is made of.
+               headers: Any) -> Tuple[List[str], Optional[str]]:
+        """Every piece of text a request is made of, and the join, separately.
 
         The red team got a sealed id past the old scan six different ways, and
         five of them were the same mistake: the guard looked at the fields it
         expected. So this collects *everything* -- the path, the query, every
         header value and name, the raw bytes as text (which is the only thing
-        left when the body will not parse), every string in the parsed body
-        including dictionary **keys**, and the concatenation of those strings
-        in a stable order, which is what catches an id split across two fields.
+        left when the body will not parse), and every string in the parsed body
+        including dictionary **keys**.
+
+        The second return value is the concatenation of the body's values, in
+        key order, which is what catches an id split across two fields --
+        `{"a": "ls20-", "b": "9607627b"}` is one id to the server and was two
+        harmless strings to the guard. The join is over **values only**:
+        including the keys would interleave them between the halves and defeat
+        the point. It is partial -- a different key order breaks it, and D-022
+        says so -- but partial and closing beats open.
+
+        It is returned apart from the real texts rather than appended to them
+        because it is not text any server will read; it is a probe the guard
+        manufactures, and ids found only in it have to be judged by a stricter
+        rule. See `_ids_in_join`.
         """
         texts: List[str] = [path or "", query or ""]
 
@@ -258,15 +288,7 @@ class SealedPileGuard:
         walk(body)
         texts.extend(values)
         texts.extend(keys)
-        # An id split across two fields -- {"a": "ls20-", "b": "9607627b"} --
-        # is one id to the server and was two harmless strings to the guard.
-        # The join is over **values only**, in key order: including the keys
-        # would interleave them between the halves and defeat the point. It is
-        # partial -- a different key order breaks it, and D-022 says so -- but
-        # partial and closing beats open.
-        if len(values) > 1:
-            texts.append("".join(values))
-        return texts
+        return texts, ("".join(values) if len(values) > 1 else None)
 
     @staticmethod
     def _normalise(text: str) -> List[str]:
@@ -312,12 +334,54 @@ class SealedPileGuard:
                                 found.append(nested)
         return found
 
+    def _ids_in_join(self, text: str) -> List[str]:
+        """Ids in the manufactured join -- registered stems only.
+
+        The join is the guard's own construction, so anything found in it that
+        is **not a game this cut knows about** is an artefact of the
+        concatenation rather than something the request named. Reporting those
+        denies real work for ids nobody sent: `{"arm": "bare_cc", "game_id":
+        "ar25-0c556536"}` joins to `bare_ccar25-0c556536`, whose 6-character
+        stem `ccar25` is in neither pile, so the request was refused as
+        `unknown_game`. Any value ending in one or two alphanumerics does this;
+        `bare_cc` is simply the one that is an arm's name.
+
+        Filtering to the register is what makes it safe to drop `_GAME_ID`'s
+        left anchor here, and dropping the anchor makes this scan strictly
+        **stronger** than the one it replaces: with overlapping candidates,
+        `{"a": "x_abls20-", "b": "9607627b"}` now yields `ls20-9607627b` and
+        denies as `sealed_pile`. The anchored, non-overlapping scan returned
+        only `abls20-9607627b` and, under `unknown_policy="allow"`, let the
+        sealed id through.
+
+        What is given up is `unknown_game` discovery for an id that is split
+        across two fields *and* whose stem is in neither pile -- which is never
+        a sealed game, since the sealed set is a fixed enumeration.
+        """
+        found: List[str] = []
+        for reading in self._normalise(text):
+            for stem_part, hex_part in _GAME_ID_JOINED.findall(reading):
+                if stem_part.lower() not in self._all_stems:
+                    continue
+                candidate = "%s-%s" % (stem_part, hex_part)
+                if candidate not in found:
+                    found.append(candidate)
+            for token in _TOKEN.findall(reading):
+                if token.lower() in self._all_stems and token not in found:
+                    found.append(token)
+        return found
+
     def game_ids_in(self, path: str, query: str, body: Any,
                     raw: Any = None, headers: Any = None) -> List[str]:
         """Every game id a request mentions, wherever it hides."""
         found: List[str] = []
-        for text in self._texts(path, query, body, raw, headers):
+        texts, joined = self._texts(path, query, body, raw, headers)
+        for text in texts:
             for game_id in self._ids_in_text(text):
+                if game_id not in found:
+                    found.append(game_id)
+        if joined is not None:
+            for game_id in self._ids_in_join(joined):
                 if game_id not in found:
                     found.append(game_id)
         return found

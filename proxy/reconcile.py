@@ -158,6 +158,59 @@ def _leg(verdict: str, **detail: Any) -> Dict[str, Any]:
     return record
 
 
+def _model_usage_for(record: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The provider's own line for this call's model, if the envelope has one.
+
+    `claude -p` returns `response.modelUsage`, a per-model breakdown with token
+    counts and a `costUSD`. It is the only second witness to a call's usage
+    anywhere in the format: the raw `/v1/messages` transport returns `usage`
+    and no breakdown, so a record written by `model_proxy` has nothing to check
+    against. That is a real limit and is reported as one -- see
+    `amount_not_witnessed` and the leg's note.
+
+    `None` when the envelope carries no usable breakdown for this model. A
+    `modelUsage` covering several models is normal (the CLI bills its own
+    `ai-title` sub-call to a cheaper model in the same envelope), so the
+    lookup is by this record's model rather than over the whole map.
+    """
+    response = record.get("response")
+    if not isinstance(response, dict):
+        return None
+    breakdown = response.get("modelUsage")
+    if not isinstance(breakdown, dict):
+        return None
+    mine = breakdown.get(record.get("model"))
+    if not isinstance(mine, dict):
+        return None
+    # A single envelope covering several turns re-aggregates, and the per-call
+    # equality stops holding for a reason that is not a defect.
+    iterations = (record.get("usage") or {}).get("iterations")
+    if isinstance(iterations, list) and len(iterations) > 1:
+        return None
+    return mine
+
+
+def _should_state_a_price(record: Dict[str, Any]) -> bool:
+    """Did this call come back on a transport that always reports a price?
+
+    A `claude -p` success envelope always carries `total_cost_usd`. Its absence
+    there is evidence that was lost, which is INCOMPLETE. Its absence on the
+    HTTP transport is the format, which is ABSENT -- and conflating the two
+    would put the entire mock and `/v1/messages` corpus permanently yellow,
+    the failure this module's docstring is about.
+    """
+    response = record.get("response")
+    request = record.get("request")
+    transport = None
+    if isinstance(request, dict):
+        transport = request.get("transport")
+    if transport is None and isinstance(response, dict):
+        transport = response.get("transport")
+    return (transport == "claude-code-cli"
+            and isinstance(response, dict)
+            and response.get("subtype") == "success")
+
+
 # -- the legs ---------------------------------------------------------------
 
 def _leg_actions(steps: List[Dict[str, Any]],
@@ -232,12 +285,26 @@ def _leg_cost(records: List[Dict[str, Any]],
     declared = _as_int((run_end or {}).get("model_calls"))
 
     if not calls and declared in (None, 0):
+        # `votes=False`, and that is the whole of the fix. This used to carry
+        # the default `votes=True`, and the verdict loop tests only for
+        # INCOMPLETE, so NOT_APPLICABLE fell through to PASS and a run with no
+        # bill printed the same word as a run whose bill reconciled -- the
+        # exact reading the note below forbids.
+        #
+        # Not promoted to INCOMPLETE, deliberately. A replay run can never have
+        # model calls, so failing it here would make a permanently yellow
+        # signal out of a structural fact, and a signal that can never be green
+        # gets switched off. Declaring the leg non-voting keeps PASS meaning
+        # "every leg that could vote agreed", and `legs_voting` in the report
+        # says how many that was.
         return _leg("NOT_APPLICABLE",
+                    votes=False,
                     recorded=False, derivable=True,
                     quantity="usage x pricing_ref, via proxy/cost.py",
                     model_calls=0,
                     note="the run made no model calls, so there is no bill to "
-                         "reconcile. Not the same as a bill that reconciled.")
+                         "reconcile. Not the same as a bill that reconciled, "
+                         "so this leg does not vote.")
 
     tables: Dict[str, Any] = {}
     drifted: List[Dict[str, Any]] = []
@@ -248,6 +315,9 @@ def _leg_cost(records: List[Dict[str, Any]],
     unmeasured_keys: List[str] = []
     usd_total = 0.0
     priced_calls = 0
+    usage_disputed: List[Dict[str, Any]] = []
+    amount_unwitnessed: List[Any] = []
+    amount_witnessed = 0
 
     for record in calls:
         ref = record.get("pricing_ref")
@@ -292,6 +362,38 @@ def _leg_cost(records: List[Dict[str, Any]],
         usd_total += priced["usd"]
         priced_calls += 1
 
+        # C-3. Until this check the derived bill was computed here and compared
+        # to nothing: multiplying every `usage` block by 900000 moved the total
+        # from $0.00035 to $540.00 and the leg still said AGREE, because the
+        # only thing it verified was the price *table's* digest. Hash-checking
+        # the price list is not verifying an amount.
+        #
+        # There is no declared total in the ledger to compare against -- §5 and
+        # `canon.BANNED_SPELLINGS` keep dollar figures out of it on purpose. But
+        # a CLI envelope carries the provider's own per-model breakdown, and its
+        # token counts are a second independent witness to the very numbers the
+        # bill is derived from. Integers on both sides, so this is an equality
+        # and needs no tolerance -- and a tolerance is exactly what would make
+        # it green by construction.
+        witness = _model_usage_for(record)
+        if witness is None:
+            if _should_state_a_price(record):
+                amount_unwitnessed.append(record.get("call_idx"))
+            continue
+        amount_witnessed += 1
+        usage = record.get("usage") or {}
+        for ours, theirs in (("input_tokens", "inputTokens"),
+                             ("output_tokens", "outputTokens"),
+                             ("cache_creation_input_tokens",
+                              "cacheCreationInputTokens"),
+                             ("cache_read_input_tokens",
+                              "cacheReadInputTokens")):
+            if int(usage.get(ours) or 0) != int(witness.get(theirs) or 0):
+                usage_disputed.append({"call_idx": record.get("call_idx"),
+                                       "key": ours,
+                                       "usage": usage.get(ours),
+                                       "model_usage": witness.get(theirs)})
+
     disagreements: List[str] = []
     if drifted:
         disagreements.append(
@@ -307,8 +409,26 @@ def _leg_cost(records: List[Dict[str, Any]],
             "C-2: run_end declares %d model_call(s) and the ledger holds %d; "
             "the cost axis is a sum over those records, so a miscount is a "
             "miscounted bill" % (declared, len(calls)))
+    if usage_disputed:
+        disagreements.append(
+            "C-3: %d model_call(s) record a `usage` block that disagrees with "
+            "the per-model breakdown in their own response envelope, so the "
+            "numbers the bill is derived from are not the numbers the provider "
+            "billed: %s"
+            % (len(usage_disputed),
+               "; ".join("call %s %s is %s, modelUsage says %s"
+                         % (d["call_idx"], d["key"], d["usage"],
+                            d["model_usage"])
+                         for d in usage_disputed[:5])))
 
     incomplete: List[str] = []
+    if amount_unwitnessed:
+        incomplete.append(
+            "%d model_call(s) came back on a transport that always states a "
+            "price and carry no per-model breakdown, so the amount cannot be "
+            "cross-checked against anything (call_idx %s)"
+            % (len(amount_unwitnessed),
+               ", ".join(str(i) for i in amount_unwitnessed[:5])))
     if missing_ref:
         incomplete.append("%d model_call(s) carry no pricing_ref, so no table "
                           "is named and no dollar figure is derivable"
@@ -345,9 +465,19 @@ def _leg_cost(records: List[Dict[str, Any]],
         usd_total=round(usd_total, 6) if priced_calls else None,
         price_table_drift=drifted[:10] or None,
         not_derivable=incomplete or None,
+        amount_witnessed_calls=amount_witnessed,
+        amount_not_witnessed=len(calls) - amount_witnessed,
+        usage_disputed=usage_disputed[:10] or None,
         note="no dollar figure is recorded (LEDGER_FORMAT.md 5); this leg "
              "checks that the bill is still derivable from the usage and the "
-             "table each call pinned",
+             "table each call pinned, and -- on envelopes that carry a "
+             "per-model breakdown -- that the usage it is derived from is the "
+             "usage the provider billed (C-3). Records with no breakdown are "
+             "counted in `amount_not_witnessed` and their amount is NOT "
+             "cross-checked: the raw /v1/messages transport this proxy owns "
+             "returns no second witness, so on that path a uniformly inflated "
+             "usage block still reconciles. That gap is the leg's, not the "
+             "run's",
         disagreements=disagreements or None)
 
 
@@ -490,6 +620,11 @@ def reconcile_run(run_id: str, ledger_path: str = LEDGER_PATH,
                           "detail": rejected[:10] or None},
         "steps": len(steps),
         "legs": legs,
+        # PASS means "every leg that could vote agreed", so how many that was
+        # is part of the verdict rather than something a reader has to
+        # reconstruct from `legs`.
+        "legs_voting": sorted(name for name in RECONCILIATION_KEY
+                              if legs[name]["votes"]),
         "gaps": gaps,
         # Surfaced under the name it has always had, so callers do not break.
         # `gaps.score_per_step` is where the label lives; the name below is

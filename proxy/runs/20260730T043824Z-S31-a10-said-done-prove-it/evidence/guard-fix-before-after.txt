@@ -1,0 +1,26 @@
+The join is the guard's own construction. What each scan finds in it:
+
+joined text                            OLD scan                   NEW scan
+------------------------------------------------------------------------------------------------
+bare_ccar25-0c556536                   ccar25-0c556536            ar25-0c556536
+x_abbp35-9607627b                      abbp35-9607627b            bp35-9607627b
+ls20-9607627b                          ls20-9607627b              ls20-9607627b
+card-eebea48ea61a6232ar25-0c556536     -                          ar25-0c556536
+
+  bare_ccar25-0c556536                   arm name + dev game (the false denial)
+  x_abbp35-9607627b                      sealed id split, with a stub
+  ls20-9607627b                          a plain sealed id
+  card-eebea48ea61a6232ar25-0c556536     a real card id + dev game
+
+Consequences, measured through check_request:
+
+  six arms x four dev games, all allow: True 
+  split sealed id, unknown_policy=deny  -> deny sealed_pile bp35-9607627b
+  split sealed id, unknown_policy=allow -> deny sealed_pile bp35-9607627b
+
+Before this change the same body yielded only 'ab<stem>-9607627b', an
+unregistered stem: denied as unknown_game under the default policy, and
+ALLOWED under unknown_policy='allow', with the sealed id never seen.
+re.findall does not overlap, so the phantom consumed the real id.
+Nothing in the repo sets that policy today -- it was a latent hazard on
+a constructor knob, not a live leak.

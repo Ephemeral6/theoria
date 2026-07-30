@@ -1,0 +1,23 @@
+Requirement 4: a record whose amount does not reconcile must turn the
+check red. Before C-3 there was nothing to turn red -- the derived bill
+was computed and compared to nothing.
+
+run                                usd_total    cost leg   verdict
+--------------------------------------------------------------------------
+CLI envelope, usage as billed      1.296152     AGREE      PASS
+same, usage x 900000               1166536.8    DISAGREE   FAIL
+HTTP transport, no witness         0.0          AGREE      PASS
+
+The inflated run, in full:
+  derived bill      : 1166536.8
+  provider stated   : 1.307727  (response.total_cost_usd)
+  disputed fields   : ['input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens']
+  other legs        : actions=AGREE score_per_run=AGREE
+
+Both other legs AGREE, which is why this stream reconciled PASS before
+C-3: every check the leg ran was about the price *table*, not the bill.
+
+The limit, stated rather than hidden: the third row is the transport
+this proxy owns. /v1/messages returns usage and no per-model breakdown,
+so C-3 has no second witness there and an inflated usage block on that
+path still reconciles. amount_not_witnessed reports it per run.

@@ -1,0 +1,20 @@
+records: 113
+
+by arm (ALL records):
+  mock_arm     78
+  replay       35
+
+by event:
+  env_step             63
+  model_call           32
+  env_meta             6
+  incident             6
+  run_start            3
+  run_end              3
+
+by arm, EXCLUDING event=incident (i.e. actual arm activity):
+  mock_arm     74
+  replay       33
+
+incident records: 6
+real-arm records (arm not in {mock_arm,replay} and event!=incident): 0

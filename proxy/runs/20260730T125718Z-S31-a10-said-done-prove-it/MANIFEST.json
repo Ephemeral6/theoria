@@ -1,0 +1,42 @@
+{
+  "api_calls": 0,
+  "base_commit": "935728b9d4535df100b629985d71ea62f869c025",
+  "branch": "agent/s31-a10-said-done-prove-it",
+  "cell": "S3",
+  "files": [
+    {
+      "path": "proxy/runs/20260730T125718Z-S31-a10-said-done-prove-it/NO_LIVE_CALL.md",
+      "sha256": "67beba36298ea4b6fe2aae1ebf231736761395e86f00a1954dff8bd92686cb3c"
+    },
+    {
+      "path": "proxy/runs/20260730T125718Z-S31-a10-said-done-prove-it/RUN_STATE.md",
+      "sha256": "2597b7340f352cefdaf3e22a8b496aa6f1a0b9c31bf3d7defde359b17b044009"
+    }
+  ],
+  "goal": "Third pickup of S31. Verify the relay's four requirements independently, close the provenance it left open, and get the branch onto the mainline -- it held 8 commits of finished work that had never been pushed.",
+  "prompt_id": "S31-a10-said-done-prove-it",
+  "relay": {
+    "chain": [
+      "W-1691 (died mid-sentence)",
+      "W-1702 (8 commits, unpushed)",
+      "W-1710 (this run)"
+    ],
+    "first_action": "git push -u origin agent/s31-a10-said-done-prove-it",
+    "prior_manifest_status_was": "in-progress",
+    "prior_run": "proxy/runs/20260730T043824Z-S31-a10-said-done-prove-it",
+    "why_first": "The 8 commits existed on one disk and no remote ref. ci_merge only merges branches present on origin, so an unpushed branch is not red to it -- it does not exist. This is S36's recorded failure mode reproduced exactly, on an item whose own subject is 'the board says done and master cannot show it'. Preserving the work outranked assessing it.",
+    "why_trusted": "Not trusted on assertion. proxy/verify.py re-run green end to end (414 passed, 5/5 stages) after merging current origin/master into the branch; proxy/tools/audit_delivery.py re-run and its verdict read; the ruling put through an adversarial pass whose brief was to refute it."
+  },
+  "sealed_pile_contact": "none",
+  "status": "done",
+  "territory": "proxy",
+  "usd_spent": 0.0,
+  "utc": "2026-07-30T12:57:18Z",
+  "verify": "proxy/verify.py green: 414 passed, 5/5 stages, at base_commit",
+  "worker": "W-1710",
+  "writes_only": [
+    "proxy/",
+    "PARTNER_SYNC.md",
+    "monitor/inbox/"
+  ]
+}
