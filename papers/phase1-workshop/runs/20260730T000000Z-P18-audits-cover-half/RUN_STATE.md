@@ -65,14 +65,51 @@ and cannot be attributed. Kept the deletion rather than promoting an
 unattributable artefact to a named one: the findings it supports are stated in
 the referee pass with their own line references.
 
+## Closing the referee axis
+
+The referee pass was written into `runs/`, and a report under `runs/` cannot
+supersede anything: check G scans `papers/phase1-workshop/` only, and G6 resolves
+`superseded_by` as a filename in that directory. Reports under `runs/` are
+provenance — pinned by a MANIFEST, historical by construction. A *live* audit has
+to sit where the README and the board look for it.
+
+So `review-2026-07-30-full.md` was **moved** (not copied) to
+`papers/phase1-workshop/REVIEW-2026-07-30.md` and stamped `binding`. Moved rather
+than copied deliberately: two byte-identical audit reports in two directories is
+the drift this territory already has a receipt for — a README pointing at a
+60-world smoke run while the real 3000-world artefact sat elsewhere, and the
+reader's check succeeded against the wrong object (board item V26).
+
+`REVIEW.md` is stamped `stale`, `superseded_by: REVIEW-2026-07-30.md`, pinning
+the blob it really audited: `4208b69c`, 1318 lines, 75,885 bytes, measured out of
+`4959df1c` rather than copied from its own prose. Its findings are not withdrawn;
+its coverage is what expired, and the file now says so above its own first
+paragraph.
+
+The gate now prints the thing the item asked for:
+
+```
+ok  REVIEW.md -- stale, pinned @ 4208b69c (31.9% of PAPER.md as it now is),
+    superseded by REVIEW-2026-07-30.md
+```
+
 ## State
 
-Check G is **red on purpose** as of this writing: `CITECHECK.md` and `REVIEW.md`
-carry no stamp, which is G1. That is the pre-P18 state being reported for the
-first time rather than a regression. `verify_paper.py` exits 1 on it — the
-verdict is wired to the exit code, checked directly rather than through a pipe.
+Check G is **red on purpose** as of this writing, and now on one report rather
+than two: `CITECHECK.md` has no stamp (G1). Its successor cannot be written until
+the citation axis actually covers the paper — slices A (L1-908) and C
+(L1669-2520) exist; **B (§4-§6, L909-1668) and D (§9-§12, L2521-3729) had never
+been citation-audited by anyone** and are running now. Stamping `CITECHECK.md`
+stale before its successor exists would be G5/G6 — retiring an audit into
+nowhere, which is the one thing the gate refuses outright.
 
-`test_audit_stamp.py`: 44 passed, 1 xfailed.
+That the referee axis went green in two edits and the citation axis needs real
+work is itself the finding: a referee pass can be redone by one reader in one
+session, and a citation audit cannot.
+
+`test_audit_stamp.py`: 44 passed, 1 xfailed. `verify_paper.py` exits 1 — the
+verdict is wired to the exit code, checked directly rather than through a pipe
+(`$?` after a pipe reads `tail`, which is how a red gate reads green).
 
 ## Open, and deliberately not done here
 
