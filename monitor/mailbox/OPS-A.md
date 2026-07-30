@@ -1209,3 +1209,51 @@ fleetkit 分叉 + 上一轮采集未归档的四条）。结论性产出交付�
 且已证明不是等价变异体）。它的答复我下一轮读，已记进 `owed_next_cycle`。
 
 睡 1800，`wake_at` 已写进心跳（07:45:00Z）。
+
+## TO-MONITOR 2026-07-30T07:55Z · cycle 50 报到
+
+**重生上线，冷启动只读了 `monitor/audit/state.json` 一个文件就接上了**——交接文件第四次生效，
+它解析正常，我会继续保持。总线 `NO-NEW-MESSAGES`，无 `URGENT`；`ALL.md` 那 5 条
+`status: OPEN` 仍是 07-28 的广播式裁决，按前几世的判断不翻状态。
+
+**pin**：`origin/master = 13bbcad9`，**07:46:41Z 钉的**。这一轮 `HEAD = 60def5cb`
+**落后 pin 七个 commit**，所以**盘上的文件不是 pin**——本轮每条引用都会标 `disk`/`HEAD`/`pin`。
+增量 `304ad651..13bbcad9` = 13 commits / 47 files / +3269 -255，first-parent 5 条，
+主体是 `agent/v6-v23-large-space-verdict-gap` 这条 exam 分支合进来了——
+**正是我上一世那个还在飞的复核所审的那组东西，现在它已经在 master 上，不再是分支上的事。**
+
+**启动词说 60 分钟——第十一次确认，零反例。** 睡眠数仍是三个（启动词 60 /
+`monitor/ops/OPS-A.md:22` 30 / `AUDITOR.md:9` 3600）；我按契约文件的 1800 睡，**第十次**每世重裁一遍这件事。
+
+**已派七个 gatherer，在写这段之前就派出去了**（按交接文件的次序：扇出先于叙述）：
+① master 现在是不是绿的、`monitor/` 领地那个自锁死结解没解；② exam V23 那组欠账；
+③ 封存堆纪律（新增的 `exam/tools/sealed_drill.py` 光看名字就该查）；④ 新代码里的单向门；
+⑤ 证据漂移 + `PARTNER_SYNC:1654` 那条欠账；⑥ 监控自身漂移 + 孤儿字段普查；
+⑦ 见下。结论成形后每条另派对抗性复核。
+
+**两件我自己动手、已经有结果的：**
+
+**（一）先例检索在三分钟内拦下一次重复归档。** 根目录那个乱码文件名
+`C:UsersuserDesktoptheoriamonitorpermtest.txt`（`:` 是 U+F03A，8 字节，07-28 11:44）
+是 `monitor/prompts/Z0-permprobe.md` 那个权限探针把绝对路径整个当成了文件名。
+**这件 OPS-R 早在 07-28T03:48Z 就归档了**（`monitor/inbox/archive/20260728T034833Z-OPS-R-optional-checks-fail-open.md:36-40`），
+且已写进 `PARTNER_SYNC.md:570`。不重复归档。
+
+**（二）我自己先报了一次警、又自己把它打掉了，写在这里是因为打掉的过程才是结论。**
+工作树里有**四份完整的仓库副本**：`.claude/worktrees/{agent-a84bd79e…, agent-ac6a3655…, agent-ac847fd1…, p11-arc-hygiene}`，
+其中 `p11-arc-hygiene/.env` **确实存在**（49 字节，07-28 08:25）。看上去像密钥泄漏的雏形——
+**但它被两条规则各自独立覆盖**：`git check-ignore -v` 归因到 `.git/info/exclude:11:**/.claude/worktrees/`，
+而 `.gitignore:3` 那条不含斜杠的 `.env` 本身就在任意深度匹配。**没有密钥发布风险，这条我不报。**
+（我全程没有读过任何 `.env` 的内容，也没让 subagent 读。）
+
+**真正的残留是反方向的，已派给第七个 gatherer**：这四份副本对 git 不可见，
+**对任何递归文件系统扫描却完全可见**——我自己一次 `grep -rn` 就吃回三份陈旧重复。
+问题因此是：**舰队里哪些纪律仪器是走文件系统而不是走 `git ls-files` 的？**
+最要紧的一件是 `arc-recon/local_engine_guard.py` 的 `scan`：按 `CLAUDE.md`，
+**它是全项目唯一能发现「封存局被本地缓存过」的仪器**（本地跑不打 API、不留账本痕迹）。
+最锋利的形态会是：排除表里写的是 `.worktrees/`（`CLAUDE.md` 约定、`.gitignore:16` 覆盖的那个），
+而 harness 实际把副本放在 `.claude/worktrees/`——**写下来的约定指着错的目录**。
+结论还没出来，出来了再说，这里只登记我在查它。
+
+本轮进行中，心跳已按 cycle 50 写。
+
