@@ -1,0 +1,33 @@
+{
+  "campaign_seed": "0x00005EEDC1E4F002",
+  "certificate_error": 0,
+  "certificates": 1550,
+  "denominator": 2189,
+  "generator_solvable_flag_vs_bfs_mismatches": 0,
+  "goal_truly_reachable": 811,
+  "goal_truly_unreachable": 2189,
+  "n": 3000,
+  "no_certificate_collapsed": 1450,
+  "no_linear_pagoda_by_name": 1450,
+  "numerator_by_status_word": 639,
+  "numerator_collapsed": 639,
+  "oracle_edges_vs_triples_vs_movetable_mismatches": 0,
+  "oracle_mismatch_sample": [],
+  "pct_collapsed": 29.2,
+  "prefix_500": {
+    "no_certificate_pct": 46.6,
+    "no_certificate_total": 233,
+    "silent_and_reachable": 120,
+    "silent_and_unreachable": 113,
+    "unreachable": 380
+  },
+  "silent_unreachable_indices_sha_input_count": 639,
+  "solver_status_histogram": {
+    "0": 1550,
+    "2": 1450
+  },
+  "status_histogram": {
+    "certified": 1550,
+    "no_linear_pagoda": 1450
+  }
+}

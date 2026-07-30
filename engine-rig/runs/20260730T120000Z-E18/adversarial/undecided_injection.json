@@ -1,0 +1,130 @@
+{
+  "A_synthetic_rows": {
+    "corpus": "10 unreachable worlds: 4 certified(st 0), 3 infeasible(st 2), 3 iteration-limit(st 1)",
+    "module_says": {
+      "_caliber.delta_numerator": 3,
+      "_caliber.old_rule_numerator": 9,
+      "_caliber.worlds_where_the_rules_differ": 3,
+      "_incompleteness.numerator": 6
+    },
+    "note": "_incompleteness counts `not certificate_issued`, the collapsed two-valued predicate; a status-1 world therefore lands in the 'engine is silent because no linear pagoda exists' numerator. _caliber then adds the same worlds again as `extra`.",
+    "truth": {
+      "correct_delta": 3,
+      "new_rule_numerator (status == 2 only)": 3,
+      "old_rule_numerator (status != 0)": 6
+    },
+    "verdict": {
+      "new_numerator_wrongly_includes_undecided": true,
+      "old_numerator_double_counts": true,
+      "old_numerator_overshoot": 3
+    }
+  },
+  "B_real_iteration_limit": {
+    "found": [
+      {
+        "exception": null,
+        "i": 0,
+        "maxiter": 0,
+        "solver_status": 1,
+        "status": "budget"
+      },
+      {
+        "exception": null,
+        "i": 0,
+        "maxiter": 1,
+        "solver_status": 1,
+        "status": "budget"
+      },
+      {
+        "exception": null,
+        "i": 1,
+        "maxiter": 0,
+        "solver_status": 1,
+        "status": "budget"
+      },
+      {
+        "exception": null,
+        "i": 1,
+        "maxiter": 1,
+        "solver_status": 1,
+        "status": "budget"
+      }
+    ],
+    "note": "scipy/HiGHS with maxiter=0/1 on these tiny LPs; empty list means HiGHS refuses to be starved on this corpus, which is itself evidence for how unreachable statuses 1/3/4 are here"
+  },
+  "C_wider_box_with_an_injected_undecided": {
+    "bounds_table": {
+      "100": {
+        "agrees_with_e11_all_three": false,
+        "bound": 100,
+        "certificate_error": 0,
+        "e11_prose_all_three": 638,
+        "feasible": 0,
+        "status_counts": {
+          "no_linear_pagoda": 1
+        },
+        "still_infeasible": 1,
+        "undecided": 0
+      },
+      "10000": {
+        "agrees_with_e11_all_three": false,
+        "bound": 10000,
+        "certificate_error": 0,
+        "e11_prose_all_three": 638,
+        "feasible": 0,
+        "status_counts": {
+          "no_linear_pagoda": 1
+        },
+        "still_infeasible": 1,
+        "undecided": 0
+      },
+      "1000000": {
+        "agrees_with_e11_all_three": false,
+        "bound": 1000000,
+        "certificate_error": 0,
+        "e11_prose_all_three": 638,
+        "feasible": 0,
+        "status_counts": {
+          "undecided": 1
+        },
+        "still_infeasible": 0,
+        "undecided": 1
+      }
+    },
+    "box_blocked_recomputed": 1,
+    "box_blocked_worlds": [
+      {
+        "first_bound": 1000000,
+        "i": 1,
+        "seed": 13663193353711698519,
+        "solver_status": 1,
+        "status": "lp_unavailable"
+      }
+    ],
+    "injection": "lp_potential.decide raises LpUnavailable(BUDGET) at bound=10**6 only",
+    "no_farkas_recomputed": 0,
+    "note": "box_blocked is documented as 'silent-and-unreachable worlds that stop being silent once the weight box is widened -- the box, not the mathematics, was doing the refusing'. An LpUnavailable is not that. `_no_farkas` then subtracts it from 639.",
+    "ran": true,
+    "same_set_of_worlds": true,
+    "still_infeasible_at_all_three": 0,
+    "verdict": {
+      "a_failed_solve_was_counted_as_box_blocked": true,
+      "bounds_table_status_counts_at_1e6": {
+        "undecided": 1
+      },
+      "bounds_table_undecided_field_at_1e6": 1,
+      "no_farkas_was_decremented_by_a_solver_failure": true
+    },
+    "world": {
+      "i": 1,
+      "reachable_set": 7,
+      "seed": 13663193353711698519
+    }
+  },
+  "D_same_set_of_worlds": {
+    "verdict": "`same_set_of_worlds` is a subset test on the 1-element box_blocked list, not on the two 639s. It is True for the empty list, so on the real corpus it is a test that {2302} is one of the 639 -- which _wider_box guarantees by construction, since it selects `silent` with the identical predicate _denominators uses. It can never fail on real data and is therefore not evidence for claim D.",
+    "what_the_field_compares": "set(w['i'] for w in wider['box_blocked']['worlds']) <= set(r['i'] for r in silent_unreachable)",
+    "with_a_box_blocked_world_outside_the_numerator": false,
+    "with_empty_box_blocked_list": true
+  }
+}
