@@ -1,5 +1,30 @@
 # REVIEW — adversarial pass over `papers/phase1-workshop/PAPER.md`
 
+```audit-stamp
+target: papers/phase1-workshop/PAPER.md
+sha256: 4208b69cdd6197a7b5f401223601a56b476d8c9a2f7a471b1412ab469c6dbd7d
+lines: 1318
+bytes: 75885
+scope: full text as of commit 4959df1c, the first assembled draft
+status: stale
+superseded_by: REVIEW-2026-07-30.md
+date: 2026-07-28
+```
+
+> **This report is stale and is kept for the record.** It audited the whole paper
+> as it stood on 2026-07-28 — 1318 lines, 75,885 bytes. `PAPER.md` is now 3729
+> lines and 237,872 bytes, so this pass covers **31.9% of it by bytes**, and none
+> of §7–§12. Its findings about the text it read are not withdrawn; its *coverage*
+> is what expired. `REVIEW-2026-07-30.md` is the pass that covers the current
+> text. The stamp above is what P18 added on 2026-07-30: until then this file
+> asserted its state in prose only, and `verify_paper.py` reported PASS while the
+> gap opened.
+>
+> `lines: 1318` is the newline-byte count (`wc -l` semantics). The prose below and
+> `CITECHECK.md` both say "1319", counting the last line without a trailing
+> newline; in a staleness stamp that off-by-one is indistinguishable from a paper
+> that gained one line, which is why the stamp fixes the convention.
+
 **Reviewed state.** `PAPER.md`, 75 885 bytes / 11 451 words, mtime 08:47, together with
 `PROVENANCE.md` (08:45), `README.md` (08:42), `sections/*.md` and `figures/*.py`. The
 draft was being edited during the first half of this pass; §2.2 and §5.4 improved under
