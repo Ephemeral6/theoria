@@ -1,0 +1,17 @@
+{
+  "prompt_id": "C14-four-forms-is-three-and-a-half",
+  "branch": "agent/c14-four-forms-is-three-and-a-half",
+  "base_commit": "1a86d67d1de0b6609a5205ea502ab41dae8677d5",
+  "utc": "2026-07-30T04:57:51Z",
+  "worker": "W-1701",
+  "territory": "crosscheck",
+  "what": "Measure how many DSL-expressible actions compile to semantically non-empty PDDL; verify independently with a planner that has never heard of the generator; register the gap cross-track; state the current truth value of the four-forms claim.",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "reads_only": [
+    "theory-compiler/ (imported read-only, not modified)",
+    "cold-start-a0/, cold-start-a2/, cold-start-a3/, a0-spike/, ablation-arm/, theoria-arm/ (DSL corpus, read-only)",
+    "cold-start-a0/.toolchain/downward/ (Fast Downward 24.06+, machine-local, gitignored)"
+  ],
+  "files": []
+}

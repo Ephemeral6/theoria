@@ -1,0 +1,3 @@
+returncode: 1
+
+pddl.exceptions.PDDLValidationError: invalid name 'and': it is a keyword
