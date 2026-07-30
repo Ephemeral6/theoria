@@ -203,9 +203,17 @@ this and should not be read as support.
 This is not a discovery the theory-compiler track hid. It disclosed the gap and
 the paper did not follow:
 
-* `PARTNER_SYNC.md:923` — *"于是两个包都没有规划形态，四形态实际是四缺一，这写在每个包的封面上"*
+* `PARTNER_SYNC.md`, paragraph **`## [theory-compiler] 2026-07-28T15:10:00Z C8-handover-package`**
+  (line 923 as of `cc7e414e`, at character offset ~601 of that 1231-character
+  line) — *"于是两个包都没有规划形态，四形态实际是四缺一，这写在每个包的封面上"*
   ("so neither package has a planning form; four forms is really four-minus-one,
   and it is written on each package's cover page").
+  Cited by heading first, then line: `PARTNER_SYNC.md` is append-only, and
+  P-P22 recorded that a line anchor into a growing log is a moving target —
+  correct in the author's tree, out of range in the commit that carries the
+  claim. Appending (which this item also does) does not shift earlier lines, so
+  923 is stable here; the heading is given anyway because it survives edits that
+  a number does not.
 * `theory-compiler/DECISIONS.md:615` — **D-TC-032**: *"移交包——「四形态」是承诺，不是清单；生成不等于校验"*
   ("four forms is a promise, not an inventory; generating is not validating").
 * `theory-compiler/DECISIONS.md:575-578` — **D-TC-031**: *"四形态之一允许是散文，不允许是错的"*
