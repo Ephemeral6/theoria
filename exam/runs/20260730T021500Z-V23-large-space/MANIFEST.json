@@ -5,11 +5,11 @@
  "files": [
   {
    "path": "CRITERION.md",
-   "sha256": "250321050656c9982929bf846bcd82c6d3d58f954d698eae9c15298f4835693d"
+   "sha256": "e4e151a2f5511965f371afa9ffb2f135575c3e1c4a02aa81902c1ddd58c4e49e"
   },
   {
    "path": "RUN_STATE.md",
-   "sha256": "6acc1acf70b29cdc95a27c91ff11f9dbd76d90ab18966b558300b56bd82ce753"
+   "sha256": "ea13b0eb230b3ce0c70f8c1f50cab435df57a71fababa5853828706c7b84d33c"
   },
   {
    "path": "adversarial/attack_barbell.json",

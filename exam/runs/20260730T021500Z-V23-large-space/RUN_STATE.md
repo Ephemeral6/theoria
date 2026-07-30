@@ -864,3 +864,62 @@ Metadata keys are read from the existing manifest and written back unchanged:
 the script re-stamps, it does not author. That boundary matters — `note`,
 `base_commit` and `prompt_id` are claims a human made and a script has no
 standing to regenerate them.
+
+### The manifest was verified against the wrong bytes, six times (cycle 106)
+
+The commit immediately above this section says "Manifest 26 entries, 0
+mismatches, recomputed by the script rather than by the round that wrote it."
+That count is real and it was computed over the **working copy**. Two of the 26
+files — `CRITERION.md` and `RUN_STATE.md` — carried CRLF on disk, and every blob
+under `exam/` is LF, because `exam/.gitattributes` pins `* text eol=lf`. So for
+those two the manifest's sha256 was not the sha256 of the bytes at the commit
+carrying it, which is precisely what the manifest's own `note` says it is. The
+correction is appended rather than substituted: the message is published and
+cannot be edited, and this is the run's third instance of a claim whose own
+artefact refutes it.
+
+**Why nothing saw it.** `git diff` on those two files was *empty*. Check-in
+normalisation converts a CRLF working copy back to LF on the way into the index,
+so git reports the file unchanged while the bytes a hasher reads are 737 and 769
+bytes longer than the bytes git stores. `git status` said `M` and `git diff
+--numstat` said nothing, which is the signature. Round five's audit of this
+manifest — "17 of the then 23 entries matched and 6 did not" — hashed the
+working copy too, so its 17 is a number about this machine's checkout rather
+than about the repository. That does not overturn round five's six findings:
+all six were files a later commit had genuinely moved without re-stamping, and
+they reproduce against the index. It does mean the *method* was wrong in a
+direction that could only ever hide mismatches, never invent them.
+
+**Scope, measured rather than assumed.** Four tracked files under `exam/` had
+CRLF working copies: `exam/DECISIONS.md`, `exam/STATUS.md`, and this run's
+`CRITERION.md` and `RUN_STATE.md` — all four edited by this run, all four by a
+tool that writes native line endings. `.gitattributes` governs checkout and
+check-in; it does not govern what a program writes to a file afterwards, and
+nothing in this repository was watching that gap. All four are normalised.
+
+**Three fixes, one of them a negative control.** `restamp_manifest.py` now
+refuses to stamp a file whose working copy contains CRLF, with the reason in the
+exception rather than in a comment — hashing the disk is only correct while disk
+and index coincide, so the coincidence is asserted instead of assumed.
+`exam/tests/test_run_manifest_v23.py` asserts the three-way agreement of stamp,
+disk and index (two-way against the index alone passes with an unstaged edit
+sitting in the working copy; two-way against the disk alone is the bug being
+fixed), that no tracked file under `exam/` carries CRLF, and — the control —
+that the guard actually raises on CRLF input and stays quiet on LF. A guard
+nobody has watched fire is not a guard.
+
+**Not fixed here, and it is somebody's ticket already.** The same measurement
+run across all 13 `exam/runs/*/MANIFEST.json` against published bytes rather
+than the working copy (`_survey_manifests.py`, in this directory) finds **36
+stale hashes in 8 of 13 manifests**, plus 50 tracked files listed in no
+manifest. Two path conventions are in use — some manifests are relative to their
+own run directory, others to the repo root — which is why the first version of
+that script reported nearly every entry as absent, and why no cross-run checker
+existed before. A large share of the 36 are entries pinning files *outside* the
+run directory (`exam/leakage.py`, `exam/STATUS.md`, `exam/artifacts/leakage.json`),
+which later runs edit by design: **a manifest that pins shared sources is
+guaranteed to rot, and that is a design question rather than a defect.** The
+rest are runs' own artefacts moving after their stamp, which is the defect.
+Both belong to `V2-V25-verify-does-not-check-what-is-committed`, whose subject
+is the same sentence one level up — a check that runs, goes green, and is not
+measuring what its name claims.

@@ -36,6 +36,29 @@ EXCLUDED_NAMES = {
 EXCLUDED_DIRS = {"__pycache__"}
 
 
+class WorkingCopyIsNotPublished(Exception):
+    """A listed file's disk bytes are not the bytes git will publish."""
+
+
+def _assert_published_bytes(rel, data):
+    """`exam/.gitattributes` pins `* text eol=lf`, so for every file under
+    `exam/` the working copy and the committed blob are the same bytes -- unless
+    a tool wrote CRLF after checkout, which is not something git undoes in the
+    working tree.  Round six's manifest was stamped over two such files, so its
+    hashes did not match the bytes at the commit carrying them, which is exactly
+    what the manifest's own `note` says they are.  Nothing could see it: `git
+    diff` is empty for these files, because check-in normalisation makes them
+    equal again on the way into the index.
+
+    Hashing the disk bytes is only correct while the two coincide, so the
+    coincidence is asserted rather than assumed."""
+    if b"\r\n" in data:
+        raise WorkingCopyIsNotPublished(
+            "%s has CRLF in the working copy; exam/.gitattributes pins LF, so "
+            "git will publish different bytes than these and the stamp would be "
+            "wrong at the commit that carries it. Normalise the file first." % rel)
+
+
 def artefacts():
     out = []
     for root, dirs, files in os.walk(HERE):
@@ -49,9 +72,12 @@ def artefacts():
 
 
 def stamp():
-    return [{"path": p,
-             "sha256": hashlib.sha256(open(os.path.join(HERE, p), "rb").read()).hexdigest()}
-            for p in artefacts()]
+    out = []
+    for p in artefacts():
+        data = open(os.path.join(HERE, p), "rb").read()
+        _assert_published_bytes(p, data)
+        out.append({"path": p, "sha256": hashlib.sha256(data).hexdigest()})
+    return out
 
 
 def main():
