@@ -163,6 +163,31 @@ def dispositions(path=None):
     return out
 
 
+#: 保存用的命名空间。**`ci_merge` 枚举的是 `origin/agent/*`**（`ci_merge.py:450`），
+#: 所以推到 `preserve/*` 保住字节而**不排进合并队列**。
+#:
+#: 为什么这一步必须与合并分开：本次普查里判 `push` 的分支，基线落后 890 到 972
+#: 个提交，其中一条（p12）的 F-15 通道与 master 选定的机制正面冲突，而板上
+#: 连一件 `territory: baseline-arms` 的开放条目都没有。把它们推回 `agent/*`
+#: 等于同时做两个决定：**保存**（谁都该做，越快越好）与**接受这个写法**
+#: （要一个所有者，而且可能要重写）。合成一个动作，代价是后者拦住前者——
+#: 而拦住的那段时间里，字节只有一份。
+#:
+#: `refs/remotes/origin/preserve/*` 也满足判据的条件二，所以推完再 fetch，
+#: 这些提交就自动离开普查——出口不需要在别处再记一笔状态。
+PRESERVE_PREFIX = "preserve/"
+
+
+def preserve_command(branch):
+    """把一条分支的字节推到保存命名空间的那一条命令。
+
+    出口要**印出来能照着敲**。S35 的教训：一个只在报告里描述的出口，
+    在板上被印了四次而移动了零次。
+    """
+    slug = branch.replace("/", "-")
+    return ("git push origin %s:refs/heads/%s%s" % (branch, PRESERVE_PREFIX, slug))
+
+
 def status(repo=None, disp_path=None):
     """探针判词。`scan.py` 用的就是这个。
 
@@ -207,9 +232,11 @@ def status(repo=None, disp_path=None):
                 "detail": "孤立提交 %d 个，分布在 %d 条分支上；"
                           "未裁决 %d 条（%s），已判 push 但还没推 %d 条（%s）。"
                           "对 ci_merge 而言这些工作不是红，是**不存在**。"
+                          "保存（不排合并队列）：%s"
                           % (c["orphan_commits"], c["branches_at_risk"],
                              len(unjudged), "、".join(unjudged[:4]) or "无",
-                             len(to_push), "、".join(to_push[:4]) or "无")}
+                             len(to_push), "、".join(to_push[:4]) or "无",
+                             preserve_command((unjudged or to_push)[0]))}
     return {"status": "partial", "census": c,
             "detail": "孤立提交 %d 个，分布在 %d 条分支上，**每一条都已裁决**"
                       "（superseded/abandoned/deliberate-local），无人等着推。"

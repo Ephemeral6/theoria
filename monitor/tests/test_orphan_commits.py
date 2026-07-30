@@ -225,3 +225,34 @@ def test_the_census_reports_how_stale_its_evidence_is(tmp_path):
     st = oc.status(repo=w, disp_path=os.path.join(w, "nope.json"))
     assert "fetch_age_min" in st["census"]
     assert st["census"]["fetch_age_min"] is not None
+
+
+def test_preserving_a_branch_takes_it_out_of_the_census(tmp_path):
+    """出口的**后置条件**，写成测试（S35a 学到的那一招：问真正的谓词，
+    不要只相信动作报告了成功）。
+
+    推到 `preserve/*` 之后，那些提交从 `refs/remotes/origin/preserve/*`
+    可达，条件二不再成立，普查因此自动放手——出口不需要在别处再记状态。
+    而 `ci_merge` 枚举的是 `origin/agent/*`，所以这一步**不**把它排进合并队列。
+    """
+    w = _repo(tmp_path)
+    _commit(w, "agent/precious", "p.txt", "the only copy\n", "real work")
+    _run("git", "checkout", "-q", "master", cwd=w)
+    disp = os.path.join(w, "nope.json")
+    assert oc.status(repo=w, disp_path=disp)["status"] == "risk"
+
+    cmd = oc.preserve_command("agent/precious")
+    assert cmd == ("git push origin agent/precious:"
+                   "refs/heads/preserve/agent-precious"), cmd
+    _run(*cmd.split(), cwd=w)
+    _run("git", "fetch", "origin", cwd=w)
+
+    st = oc.status(repo=w, disp_path=disp)
+    assert st["status"] == "green", \
+        "preserved bytes still counted as one-disk-only: %s" % st["detail"]
+
+    # ...而分支本身**没有**被推回 agent/*，也就是没有排进合并队列。
+    refs = _run("git", "ls-remote", "--heads", "origin", cwd=w)
+    assert "refs/heads/preserve/agent-precious" in refs
+    assert "refs/heads/agent/precious" not in refs, \
+        "preserving queued a merge; the two decisions got welded together again"
