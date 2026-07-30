@@ -72,10 +72,6 @@
    "sha256": "0623968374629378f44beb008ece719555e096de29e32f657360a66dc7207805"
   },
   {
-   "path": "candidates.jsonl",
-   "sha256": "e5c2226a52bf71b094b1643310693fcae29e3e04874f60feff35392182c22180"
-  },
-  {
    "path": "certify.json",
    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
   },
@@ -114,10 +110,6 @@
   {
    "path": "theorize.json",
    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
-  },
-  {
-   "path": "trace.jsonl",
-   "sha256": "f6a373fee6a4e13503a83dcfc50921ecb4130c0eaa3bf45630b3ff0c74a55539"
   },
   {
    "path": "turn_series.json",

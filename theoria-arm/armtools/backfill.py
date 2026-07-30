@@ -42,6 +42,7 @@ import fnmatch
 import hashlib
 import json
 import os
+import subprocess
 import sys
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
@@ -531,10 +532,7 @@ def build(slug: str, *, runs_root: Optional[str] = None,
         })
         prov["status"] = "incomplete"
 
-    files = sorted(
-        os.path.relpath(os.path.join(root, name), run_dir).replace(os.sep, "/")
-        for root, _dirs, names in os.walk(run_dir) for name in names
-        if "__pycache__" not in root and name != "MANIFEST.json")
+    files = _files_the_clone_carries(run_dir)
 
     orphans = [c["card_id"] for c in opened
                if c["card_id"] not in {s.get("card_id") for s in closed}]
@@ -915,6 +913,77 @@ def _scorecard_recovered_elsewhere(run_id: Optional[str], runs_root: str,
                             "unreachable from this file."),
                 }
     return None
+
+
+def _ignored_paths(run_dir: str, rel_paths: List[str]) -> set:
+    """Which of `rel_paths` the repository's own ignore rules exclude.
+
+    One `git check-ignore` call for the batch. `git` answers from `.gitignore`
+    alone, so it answers the same in a clone that does not have the file as on
+    the machine that made it -- which is the entire property this is here for.
+    A missing or broken `git` returns the empty set: that direction fails
+    *towards* listing a file, which shows up as drift, rather than towards
+    silently dropping one.
+
+    `-z` and bytes, not newlines and `text=True`. The first draft of this used
+    `input="\\n".join(...)` with `text=True` and was wrong on the platform it
+    runs on: Python translates `\\n` to `os.linesep` on write, so on Windows git
+    received `candidates.jsonl\\r`, matched nothing, and reported that no path
+    was ignored -- while the identical command in a shell reported both. It
+    failed in the safe direction and would still have been a bug that only ever
+    showed up as "the same commit measures differently on two machines", which
+    is the exact class of defect this function exists to remove.
+    """
+    if not rel_paths:
+        return set()
+    try:
+        proc = subprocess.run(
+            ["git", "check-ignore", "-z", "--stdin"],
+            input=b"\0".join(p.encode("utf-8") for p in rel_paths),
+            cwd=run_dir, capture_output=True, check=False)
+    except OSError:
+        return set()
+    return {p.replace(os.sep, "/")
+            for p in proc.stdout.decode("utf-8", "replace").split("\0") if p}
+
+
+def _files_the_clone_carries(run_dir: str) -> List[str]:
+    """The run's artefacts that this repository actually ships.
+
+    `build()` used to hand back a raw `os.walk` of the run directory, which made
+    the manifest a function of the working tree rather than of the repository.
+    The consequence was measured, not theorised: `20260729T004020Z-leg01`'s
+    manifest lists `candidates.jsonl` and `trace.jsonl`, both excluded by
+    `theoria-arm/.gitignore` (the candidate stream is 201 MB, over GitHub's
+    limit; traces are large and re-derivable from the ledger). On the machine
+    that produced them the walk sees them and check 8 is green. In any fresh
+    clone -- which is what `ci_merge` builds and therefore what the merge queue
+    actually ran -- the walk cannot see them, `build()` returns a shorter list,
+    and check 8 is red. **The same commit, checked by the same code, got two
+    different answers depending on whose disk it was on.** A gate like that is
+    not an instrument.
+
+    So the list is what the repository carries, and the manifest means one
+    thing: these are the run's artefacts, and you have them.
+
+    What that costs, said plainly rather than left to be discovered: the
+    `sha256` of an excluded artefact is no longer carried forward. That is not
+    recoverable by being cleverer here -- **the existence of a file the
+    repository deliberately does not ship is not re-derivable in a clone at
+    all**, so any field holding it could only be copied out of the manifest
+    being verified, and a field that a re-derivation copies from its own target
+    is a field check 8 cannot check. Putting unverifiable data inside a
+    verified structure does not make it verified; it makes the verification
+    mean less. The record of those artefacts lives where it can be read
+    honestly: `.gitignore` names them and says why, `RUN_STATE.md` narrates
+    them, and the pre-migration manifest is in git history with the hashes.
+    """
+    walked = sorted(
+        os.path.relpath(os.path.join(root, name), run_dir).replace(os.sep, "/")
+        for root, _dirs, names in os.walk(run_dir) for name in names
+        if "__pycache__" not in root and name != "MANIFEST.json")
+    ignored = _ignored_paths(run_dir, walked)
+    return [p for p in walked if p not in ignored]
 
 
 def _is_backfilled(runs_root: str, slug: str) -> bool:

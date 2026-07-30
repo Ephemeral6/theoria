@@ -216,6 +216,59 @@ def run(runs_root: Optional[str] = None) -> Checks:
                  not silent, "unverified base_commit in %r" % silent if silent
                  else "each base_commit is either derived from the recorded "
                       "arm_version or carries a check that says it is not")
+
+    # 10 -- every path a manifest lists can be accounted for by a reader who has
+    #       only the clone. This exists because check 8 cannot do it, and the
+    #       reason is worth stating rather than leaving to be rediscovered.
+    #
+    #       Check 8 re-derives, and it dispatches: `backfill` manifests go
+    #       through `build()`, which walks the run directory and so does notice a
+    #       path that is not there; `amend` manifests go through
+    #       `amend_payload()`, which by contract leaves the original manifest
+    #       exactly as written and never looks at `files[]` at all. So four
+    #       archived manifests list a `trace.jsonl` -- three of them list one
+    #       that does not exist on any machine in this repository -- and check 8
+    #       passes them, not because they are right but because of which branch
+    #       they took. A check that opens its eyes on one code path is worse than
+    #       no check, because its green gets read as coverage.
+    #
+    #       The tempting repair -- route everything through `build()` -- is
+    #       wrong, and measurably so: forcing `20260729T105729Z-leg01` through it
+    #       produces a 444-line diff that deletes `base_commit`,
+    #       `base_commit_check` and the whole `budget` block, because `build()`
+    #       reconstructs from the ledger and those fields were never in it.
+    #       `build()` is genuinely the wrong deriver for an `amend` manifest. The
+    #       dispatch is right; what was missing was this, which does not care
+    #       which deriver a manifest uses.
+    #
+    #       What it demands is not "the file is here". An artefact the repository
+    #       deliberately does not ship is still a real artefact -- `.gitignore`
+    #       names `candidates.jsonl` (201 MB, over GitHub's limit) and
+    #       `runs/*/trace.jsonl` (large, re-derivable from the ledger) and says
+    #       why for each. A reader sent to one of those can run `git check-ignore
+    #       -v` and get the reason. What must not happen is a manifest pointing
+    #       at a file that is neither present nor explained anywhere: a dangling
+    #       reference with no way for a reader to find out what became of it.
+    dangling = []
+    for row in survey:
+        if not row["archive_material"]:
+            continue
+        manifest = _manifest(runs_root, row["slug"]) or {}
+        run_dir = os.path.join(runs_root, row["slug"])
+        listed = [(e.get("path") if isinstance(e, dict) else e)
+                  for e in (manifest.get("files") or [])]
+        listed = [p for p in listed if p]
+        absent = [p for p in listed
+                  if not os.path.exists(os.path.join(run_dir, p))]
+        explained = backfill._ignored_paths(run_dir, absent)
+        for path in sorted(set(absent) - explained):
+            dangling.append("%s/%s" % (row["slug"], path))
+    checks.check("every file a manifest lists is in the clone or excluded by "
+                 "the repository's own rules",
+                 not dangling,
+                 "listed, absent, and unexplained: %r" % dangling if dangling
+                 else "every listed path is either present or named by a "
+                      "`.gitignore` rule that says why it is not shipped")
     return checks
 
 

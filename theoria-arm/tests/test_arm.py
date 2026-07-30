@@ -889,18 +889,25 @@ def test_arm_version_does_not_depend_on_where_the_arm_is_checked_out(tmp_path):
 
 
 def test_the_archive_stays_accountable():
-    """`verify_provenance`'s nine checks, run as part of the suite.
+    """`verify_provenance`'s ten checks, run as part of the suite.
 
     The archive is the thing Phase 4 reads back to account for every ARC action
     this arm spent. A check that only runs when somebody remembers to run it is
     not a guarantee.
+
+    The count is asserted so that a check cannot quietly disappear -- a suite
+    that runs nine checks and a suite that runs eight both print green. It went
+    from nine to ten with check 10 ("every file a manifest lists is in the clone
+    or excluded by the repository's own rules"), which exists because check 8
+    dispatches and therefore cannot see a stale `files[]` in an `amend`
+    manifest.
     """
     from armtools import verify_provenance               # noqa: PLC0415
 
     checks = verify_provenance.run()
     assert not checks.failed, [
         "%s: %s" % (r["check"], r["detail"]) for r in checks.failed]
-    assert len(checks.rows) == 9
+    assert len(checks.rows) == 10
 
 
 # ------------------------------------------- E14: a crash is not a finding
