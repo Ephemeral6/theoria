@@ -11,8 +11,15 @@ mirrored in the manifest's own `note`:
 
   * `__pycache__/`      byte-unstable, not an artefact
   * `BASELINE-cycle94.md`  another session's cycle log, not this run's artefact
-  * helper scripts named below, which are tools for reading the manifest rather
-    than artefacts of the run
+  * `restamp_manifest.py` itself, which would otherwise be a hash of the
+    generator inside the thing it generates
+
+`_survey_manifests.py` was excluded here until cycle 107 on the grounds that it
+"produces nothing this run claims". That was false: the run cites its census --
+36 stale hashes across 8 of 13 manifests -- as evidence, and its sibling
+`_survey_stale_kinds.py` was listed all along. An exclusion whose stated reason
+is contradicted by the document it serves is the defect this file exists to
+stop.
 
 Usage:  python restamp_manifest.py [--check]
   (no args)  rewrite MANIFEST.json
@@ -30,7 +37,6 @@ EXCLUDED_NAMES = {
     "MANIFEST.json",
     "BASELINE-cycle94.md",
     "restamp_manifest.py",
-    "_survey_manifests.py",
 }
 EXCLUDED_DIRS = {"__pycache__"}
 

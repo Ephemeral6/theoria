@@ -75,7 +75,6 @@ def test_the_coverage_exclusions_are_pinned_and_not_an_open_door():
         "MANIFEST.json",          # cannot hash itself
         "BASELINE-cycle94.md",    # another session's cycle log, not this run's
         "restamp_manifest.py",    # generates the manifest
-        "_survey_manifests.py",   # measures all 13 runs, produces nothing here
     }, ("the manifest's exclusion list changed; every entry is justified in "
         "MANIFEST.json's own `note`, so the note has to change with it")
 
