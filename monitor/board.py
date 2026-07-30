@@ -597,6 +597,104 @@ def _git(repo, *args):
     return out.stdout.decode("utf-8", "replace").splitlines()
 
 
+#: The two directories on this machine that hold worktrees.
+#:
+#: `.worktrees/` is the one CLAUDE.md tells agents to use. `.claude/worktrees/`
+#: is created by the harness itself, without asking, and S36 is the reason it is
+#: named here: three PAID shards sat in `.claude/worktrees/p11-arc-hygiene` and
+#: evaded two separate duplicate-work checks at once, because both checks globbed
+#: only the first of the two directories. The check meant to prevent duplicated
+#: paid work was blind in the only directory where duplicated paid work has ever
+#: actually happened.
+#:
+#: This tuple is NOT the enumeration mechanism -- `git worktree list` is, and it
+#: is root-agnostic by construction, so it also covers roots nobody listed here
+#: (ci_merge builds worktrees under %TEMP%). The tuple is only for the SECOND
+#: pass: finding checkouts on disk that git no longer has a registration for.
+#: Those are invisible to `git worktree list` and to `reap_worktrees.py`, and
+#: there are 6 of them on this machine today.
+WORKTREE_ROOTS = (".worktrees", os.path.join(".claude", "worktrees"))
+
+
+def _registered_worktrees(repo):
+    """Absolute paths of every worktree git knows about, main checkout EXCLUDED.
+
+    `git worktree list --porcelain` emits the MAIN worktree as its first record
+    and every linked one after it, wherever on disk they live. That is the whole
+    reason this is not a glob: a glob covers whichever root its author had in
+    mind, and this machine has at least three (`.worktrees/`,
+    `.claude/worktrees/`, and %TEMP% for `ci_merge`'s throwaway trees).
+
+    Parsing follows `reap_worktrees.py:worktrees()`. Paths are normalised because
+    git prints forward slashes on Windows while `os.listdir` joins produce back
+    slashes, and the two must compare equal or every registered worktree looks
+    like an orphan.
+    """
+    paths = [line[len("worktree "):].strip()
+             for line in _git(repo, "worktree", "list", "--porcelain")
+             if line.startswith("worktree ")]
+    here = os.path.normcase(os.path.normpath(repo))
+    out = []
+    for p in paths[1:]:                     # [0] is the main checkout
+        norm = os.path.normpath(p)
+        if os.path.normcase(norm) == here:
+            # The tree we are standing in is not news about somebody else.
+            continue
+        out.append(norm)
+    return out
+
+
+def _orphan_worktrees(repo, registered):
+    """Checkout directories on disk that `git worktree list` does not know.
+
+    Empirically 6 of these exist here (`_advscratch`, `_c1w_salvage`,
+    `_e1_salvage`, `_res3_v26merge`, `opsm21-adv4-probe`,
+    `opsm28-master-control`): git has forgotten the registration but the working
+    files are still sitting there, so they are exactly the half-finished work
+    this warning exists to surface, and neither `git worktree list` nor
+    `reap_worktrees.py` can see any of them.
+
+    Only DIRECTORIES count. `.worktrees/` also holds 12 loose files -- probe
+    scripts and findings dumps parked there by previous sessions -- and counting
+    those as worktrees would inflate every census by 12.
+    """
+    known = {os.path.normcase(p) for p in registered}
+    known.add(os.path.normcase(os.path.normpath(repo)))
+    out = []
+    for root in WORKTREE_ROOTS:
+        base = os.path.join(repo, root)
+        if not os.path.isdir(base):
+            continue
+        try:
+            names = sorted(os.listdir(base))
+        except OSError:                     # advisory only; never break a claim
+            continue
+        for name in names:
+            full = os.path.normpath(os.path.join(base, name))
+            if not os.path.isdir(full):     # a loose file is not a worktree
+                continue
+            if os.path.normcase(full) in known:
+                continue
+            out.append(full)
+    return out
+
+
+def _worktree_label(repo, path):
+    """`.worktrees/foo`, `.claude/worktrees/foo`, or an absolute path.
+
+    The old message hard-coded `工作树 .worktrees/%s`, which was not merely
+    cosmetic: a hit in `.claude/worktrees/` would have been *reported as* living
+    in `.worktrees/`, sending the reader to look in a directory where it is not.
+    """
+    try:
+        rel = os.path.relpath(path, repo)
+    except ValueError:                      # different drive on Windows
+        return path.replace("\\", "/")
+    if rel.startswith(".."):                # outside the repo, e.g. %TEMP%
+        return path.replace("\\", "/")
+    return rel.replace("\\", "/")
+
+
 def prior_work(iid, repo=None):
     """Lines warning that somebody may already have worked this item.
 
@@ -608,6 +706,12 @@ def prior_work(iid, repo=None):
     Worktree directories are checked as well as branches, because the third
     S27 copy was an **untracked** file inside a worktree: no branch, no commit,
     nothing for a ref-based check to find, but the directory name was there.
+
+    S41: that worktree half used to be `os.listdir(repo/'.worktrees')` and
+    nothing else, so it saw one of this machine's two worktree roots. It now
+    runs in two passes -- `git worktree list --porcelain` for everything git has
+    registered anywhere, then a directory sweep of both roots for checkouts git
+    has forgotten -- and says which pass and which root each hit came from.
     """
     repo = repo or REPO
     slug = iid.lower()
@@ -631,10 +735,22 @@ def prior_work(iid, repo=None):
                         % short)
         else:
             hits.append("  分支 %s（领先 master %s 个提交）" % (short, ahead))
-    wt = os.path.join(repo, ".worktrees")
-    for d in sorted(os.listdir(wt)) if os.path.isdir(wt) else []:
-        if slug in d.lower():
-            hits.append("  工作树 .worktrees/%s（可能有未提交、甚至未跟踪的半成品）" % d)
+    registered = _registered_worktrees(repo)
+    for path in registered:
+        if slug not in os.path.basename(path).lower():
+            continue
+        label = _worktree_label(repo, path)
+        if os.path.isdir(path):
+            hits.append("  工作树 %s（git 已注册；可能有未提交、甚至未跟踪的半成品）"
+                        % label)
+        else:
+            hits.append("  工作树 %s（git 仍有注册，但目录已不在盘上）" % label)
+    for path in _orphan_worktrees(repo, registered):
+        if slug not in os.path.basename(path).lower():
+            continue
+        hits.append("  工作树 %s（未注册的孤立检出，git worktree list 与 "
+                    "reap_worktrees.py 都看不见它；可能有未提交、甚至未跟踪的半成品）"
+                    % _worktree_label(repo, path))
     if not hits:
         return []
     # ASCII and Chinese only: this console is cp936, and U+26A0 (the obvious

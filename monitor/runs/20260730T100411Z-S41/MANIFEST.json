@@ -1,0 +1,12 @@
+{
+  "prompt_id": "S41-S41-prior-work-scans-one-of-two",
+  "branch": "agent/s41-prior-work-scans-one-of-two",
+  "base_commit": "7972a075778a367f6260adfa6f0a4691999b4f5b",
+  "utc": "20260730T100411Z",
+  "territory": "monitor",
+  "researcher": "RES-4",
+  "files": [
+    "monitor/board.py",
+    "monitor/tests/test_prior_work_both_roots.py"
+  ]
+}
