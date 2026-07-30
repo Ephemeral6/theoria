@@ -52,14 +52,22 @@ The plates are **not** renamed: `build_all.FIGURES`, `check_coverage.py`,
   `paper_map.py`; reword a caption in `paper_map.py`, never in the output.
 
 A plate with a declared source missing is marked `pending` in the index and its
-caption, naming what is absent. Figure 6 is the live case: the four envelope
-ledger shards are untracked in `master`.
+caption, naming what is absent. There is no live case: A14 committed the envelope
+ledger shards, so as of V23 every declared source is on disk and tracked, and no
+plate is `pending`. (Figure 6 was the live case, on the strength of those four
+shards being untracked in `master`.)
 
-`verify.sh` is the thing to run before committing. It builds everything twice
-into separate trees and requires the results to be **byte-identical**, checks
-the committed tree against a fresh build so a stale figure cannot hide behind a
-green determinism check, re-hashes every declared input, and refuses a figure
-script that touches the filesystem outside `sources.py`.
+`verify.sh` is the thing to run before committing. It names the tree, branch and
+commit it is running on before it does anything else — a green from the wrong
+worktree is byte-identical to a green from the right one, and this pipeline has
+already produced one confident false negative that way. It then builds everything
+twice into separate trees and requires the results to be **byte-identical**,
+checks the committed tree against a fresh build so a stale figure cannot hide
+behind a green determinism check, re-hashes every declared input, refuses a
+figure script that touches the filesystem outside `sources.py`, and re-derives
+the manifest's `[tracked]`/`[untracked]` column from `git ls-files` — the one
+column in `SOURCES.sha256` that is asserted rather than measured, and therefore
+the one column the gate that regenerates it cannot audit.
 
 Gate 8 is a different kind of check and worth knowing about separately. Gates
 1–7 are all satisfied by a figure that quietly *omits* data, and P8 found two

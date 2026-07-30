@@ -1,0 +1,21 @@
+  refused: a [tracked] line relabelled [untracked] (the A14 defect)
+           check_tracking.9ol92e7i.sha256:5: baseline-arms/BUDGET_REPORT.md is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+  refused: a digest corrupted in its first byte
+           check_tracking.6cirpfpy.sha256:5: baseline-arms/BUDGET_REPORT.md
+  refused: a present file recorded absent
+           check_tracking.vxpxlihn.sha256:5: baseline-arms/BUDGET_REPORT.md is recorded [absent-optional] with the ABSENT sentinel, and it is on disk. A figure is drawing this file's absence while the file is there.
+  refused: an unknown status nobody is checking
+           check_tracking.gca6e3bx.sha256:5: unknown status [probably-fine] for baseline-arms/BUDGET_REPORT.md
+  refused: a [tracked] line for a path that is not on disk
+           check_tracking.oqzwwli5.sha256:5: no/such/file.json is recorded [tracked] but is not on disk; a manifest line for a file that is not there is not a hash, it is a hope.
+  refused: an absent-status line carrying a real digest
+           check_tracking.ur4u3nzw.sha256:5: no/such/file.json is recorded [absent-optional] but carries a digest (5678a00b92df...) instead of the ABSENT sentinel.
+  refused: a path spelled with backslashes
+           check_tracking.01sg30cg.sha256:5: path 'baseline-arms\\BUDGET_REPORT.md' uses backslash separators; repo-relative paths use '/'. Left undiagnosed this becomes a false 'git does not track it' about a file git tracks.
+  refused: the manifest truncated to a single source line
+           check_tracking.j9xvyixg.sha256 carries 1 source line(s); this probe was written against 61. Lines can only be added by declaring a source, so fewer than the floor means the manifest lost claims -- and a probe that audits what is left and calls that green is how a truncated file passes.
+  refused: a [tracked] line for figures/STATUS.md, which is on disk and not committed (the forward direction of the A14 defect)
+           check_tracking.03n8cwwr.sha256:5: figures/STATUS.md is recorded [tracked] and is not committed at HEAD. This build is not reproducible from a clean checkout.
+negative control fires on all 9 planted defects
+61 manifest line(s): 61 tracked, 0 untracked, 0 absent; 61 digest(s) recomputed, every status re-derived from git
+probe exit=0

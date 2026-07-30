@@ -1,0 +1,41 @@
+figures/SOURCES.sha256: 6 revision(s)
+
+revision   when (UTC+0800)            lines  match  DRIFT  unver
+----------------------------------------------------------------
+87751026   2026-07-28T17:06:26+08:00     43     39      0      4
+f0e43896   2026-07-28T19:17:44+08:00     47     43      0      4
+9239eb1c   2026-07-28T19:34:17+08:00     50     46      0      4
+059f6ed1   2026-07-28T22:21:44+08:00     54     50      0      4
+abd8d0cb   2026-07-29T13:15:53+08:00     61     57      0      4
+a5f597dd   2026-07-30T00:19:27+08:00     61     61      0      0
+
+no committed drift at any revision.
+
+Entry counts are the other number the ticket names. 50 is reproducible:
+  87751026 2026-07-28T17:06:26+08:00  43 entries
+  f0e43896 2026-07-28T19:17:44+08:00  47 entries
+  9239eb1c 2026-07-28T19:34:17+08:00  50 entries
+  059f6ed1 2026-07-28T22:21:44+08:00  54 entries
+  abd8d0cb 2026-07-29T13:15:53+08:00  61 entries
+  a5f597dd 2026-07-30T00:19:27+08:00  61 entries
+
+maximum staleness each revision reached before the next regeneration:
+(manifest at R vs the tree just before the next manifest commit)
+  87751026 vs just before f0e43896      0 drifted, 4 unverifiable
+  f0e43896 vs just before 9239eb1c      0 drifted, 4 unverifiable
+  9239eb1c vs just before 059f6ed1      1 drifted, 4 unverifiable
+      baseline-arms/BUDGET_REPORT.md
+  059f6ed1 vs just before abd8d0cb      7 drifted, 4 unverifiable
+      baseline-arms/BUDGET_REPORT.md
+      cold-start-a0/THEORIZE_LOG.md
+      cold-start-a0/artifacts/candidates.jsonl
+      theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json
+      theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json
+      theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json
+      theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json
+  abd8d0cb vs just before a5f597dd      4 drifted, 0 unverifiable
+      baseline-arms/out/shards/ledger.ar25.jsonl
+      baseline-arms/out/shards/ledger.g50t.jsonl
+      baseline-arms/out/shards/ledger.sk48.jsonl
+      baseline-arms/out/shards/ledger.tn36.jsonl
+  a5f597dd vs HEAD                      0 drifted, 0 unverifiable

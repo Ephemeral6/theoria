@@ -28,9 +28,18 @@
 #      plate -- "the paper shows the figure the pipeline built", checked
 #  12. the index's digests match the files on disk, and the paper numbering is
 #      1..N with no gaps
+#  13. the committed manifest's own claims, re-derived without asking sources.py
+#      -- the status column is the one field in it that is asserted rather than
+#      measured, and gate 4 cannot audit it because gate 4 reads the assertion
 #
 # Runs every gate and reports all failures, rather than stopping at the first,
 # except where a later gate cannot mean anything without an earlier one.
+#
+# Line 1 of the output names the tree. That is not decoration: this pipeline has
+# already produced one confident false negative by running in a linked worktree
+# where the inputs under audit did not exist, and a green from the wrong tree is
+# byte-identical to a green from the right one
+# (monitor/inbox/20260729T1440Z-RES-1-worktree-cwd-green-on-the-wrong-tree.md).
 
 set -uo pipefail
 
@@ -48,6 +57,12 @@ step() { printf '\n== %s ==\n' "$*"; }
 trap 'rm -rf "$SCRATCH"' EXIT
 rm -rf "$SCRATCH"
 mkdir -p "$SCRATCH"
+
+# Which tree, which branch, which commit -- printed before any gate runs, so a
+# transcript can never be read as evidence about a tree it was not taken on.
+say "tree  : $HERE"
+say "branch: $(git -C "$HERE" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '(not a git checkout)')"
+say "commit: $(git -C "$HERE" rev-parse --short HEAD 2>/dev/null || echo '(unknown)')"
 
 # ---------------------------------------------------------------------------
 step "0. required data sources present"
@@ -86,6 +101,30 @@ if ! FIGURES_OUT="$SCRATCH/B/out" FIGURES_CSV="$SCRATCH/B/csv" FIGURES_SHA="$SCR
     exit 1
 fi
 say "ok  ($(grep -c '  img  ' "$SCRATCH/B.log") images)"
+
+# ---------------------------------------------------------------------------
+step "2b. what the two builds warned about"
+# ---------------------------------------------------------------------------
+# `build_all.py` prints a WARN for every weakened guarantee -- a rule whose
+# tracked-only filter could not be applied, a source folded in untracked, a file
+# a rule would read if it were committed, a figure that fell back to a weaker
+# axis. verify then threw both transcripts away on success, so every one of those
+# warnings was written to a file nobody read unless the build had already failed.
+# A weaker guarantee that nobody is told about is the failure mode this directory
+# keeps rediscovering, and it had one of its own in its reporting path.
+#
+# Reported, not failed: some of these are legitimate (a release tarball has no
+# git index to check against). It gets its own step so a warning cannot be
+# misread as belonging to the byte-comparison below.
+WARNED=0
+for pass_log in "$SCRATCH/A.log" "$SCRATCH/B.log"; do
+    if grep -q '^WARN: ' "$pass_log" 2>/dev/null; then
+        WARNED=1
+        say "$(basename "$pass_log" .log):"
+        grep '^WARN: ' "$pass_log" | sed 's/^/    /'
+    fi
+done
+[ "$WARNED" -eq 0 ] && say "ok  (neither build pass warned)"
 
 # ---------------------------------------------------------------------------
 step "3. A vs B, byte for byte"
@@ -374,6 +413,33 @@ PY
     sed 's/^/    /' "$SCRATCH/index.txt" | head -20 >&2
 else
     say "ok  ($(tail -n 1 "$SCRATCH/index.txt"), every digest recomputed)"
+fi
+
+# ---------------------------------------------------------------------------
+step "13. the manifest's own claims, re-derived from outside sources.py"
+# ---------------------------------------------------------------------------
+# Gate 4 diffs the committed manifest against a freshly generated one. Both come
+# out of sources.py, so gate 4 proves the manifest is what that module currently
+# says -- and the digest column survives that, because it is measured from the
+# file either way. The status column does not: sources.manifest_rows writes
+# [tracked] / [untracked] from a boolean somebody declared. A14 committed the
+# fifteen envelope ledger shards while the envelope_ledger rule still read
+# tracked=False, and for roughly 31 hours the committed manifest asserted
+# [untracked] about fifteen files git tracked -- with gate 4 green the whole
+# time, correctly by its own definition, because both sides of it were reading
+# the same wrong sentence.
+#
+# So this gate reads the *artefact* and asks git, os.path and its own sha256.
+# check_tracking.py must never import sources.py; the negative control runs
+# FIRST and plants one defect per claim a manifest line makes.
+#
+# It checks the COMMITTED manifest, not the scratch build -- the defect it exists
+# for is one both trees share.
+if ! "$PYTHON" check_tracking.py --selftest > "$SCRATCH/tracking.txt" 2>&1; then
+    fail "the committed manifest's claims do not survive re-derivation:"
+    sed 's/^/    /' "$SCRATCH/tracking.txt" | head -24 >&2
+else
+    say "ok  ($(tail -n 2 "$SCRATCH/tracking.txt" | tr '\n' ' ' | sed 's/  */ /g'))"
 fi
 
 # ---------------------------------------------------------------------------

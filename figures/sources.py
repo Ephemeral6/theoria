@@ -41,7 +41,21 @@ import hashlib
 import json
 import os
 import subprocess
+import time
 from dataclasses import dataclass, field
+
+#: `git log` is retried before it is believed: a busy repository refuses it
+#: transiently, and this pipeline draws a figure from its output. The backoff is
+#: wall-clock only -- nothing derived from it reaches an artefact, so it cannot
+#: make a build non-deterministic. The *absence* of the retry could, and did.
+_GIT_LOG_ATTEMPTS = 4
+_GIT_LOG_BACKOFF_S = 0.25
+
+#: Places where this module legitimately degraded, with the reason. Reported by
+#: ``build_all.py``, never swallowed -- a figure drawn from a history that could
+#: not be read is a different figure, and it must say so somewhere other than in
+#: its own small print.
+GIT_DEGRADED: list[str] = []
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(_HERE)
@@ -378,6 +392,58 @@ DISCOVERY: tuple[Rule, ...] = (
         "pilot_sk48_sonnet_rerun.json were not, so two runs with committed outcomes were "
         "drawn as outcome-unknown -- one of them a model_error the plate exists to warn about.",
     ),
+    # V23 CORRECTION (2026-07-29). This rule was written `tracked=False,
+    # optional=True, floor=0` with an `expected` tuple naming four shard paths,
+    # because the shards were untracked in master and "absent is the expected
+    # state". All fifteen are committed now -- `baseline-arms`' own routine
+    # commits brought the eleven `a7*` ones on 2026-07-28, and A14 (`9307f139`)
+    # brought the four dev-pile ledgers a day later -- so every word of that
+    # reasoning is now false. A14 is where it became impossible to miss, not
+    # where it started: the first manifest revision to print `[untracked]` about
+    # an already-committed file is `059f6ed1`, 2026-07-28T14:21Z, naming four
+    # `a7*` shards. Three consequences, all of which
+    # `SOURCES.sha256` was structurally unable to report, because
+    # `manifest_rows` derives the `[tracked]`/`[untracked]` column from *this
+    # declaration* and never from git -- so the manifest and a fresh build
+    # agreed on the same false statement and gate 4 stayed green over it:
+    #
+    #   1. fifteen lines of the committed manifest claimed `[untracked]` about
+    #      files git tracks;
+    #   2. `tracked=False` short-circuits the git filter in `_scan`, so a stray
+    #      untracked `ledger.*.jsonl` dropped into the shard directory would be
+    #      hashed and drawn on this machine and not on a clean checkout -- the
+    #      exact hole `_tracked_paths` exists to close, left open on the
+    #      largest input family in the registry;
+    #   3. `floor=0` plus `optional=True` meant deleting all fifteen kept
+    #      `check_required()` green while fig02's bill silently lost the whole
+    #      envelope campaign. "A family that silently emptied out reads exactly
+    #      like a family that is fine" is this module's own sentence, and its
+    #      biggest family was the exception to it.
+    #
+    # The declaration now follows the tree. `check_tracking.py` (verify.sh gate
+    # 13) exists so that the next time these two disagree, something says so:
+    # it asks git, not this file.
+    #
+    # V23 SECOND PASS, after an adversarial review broke the first one. That
+    # version also set `floor=15, optional=False`, reasoning that a tracked file
+    # going missing is a broken checkout and should stop the build. True in this
+    # repository and false in the one place it matters most:
+    # `release/LICENCE_POSTURE.md:48` classifies these shards **class B --
+    # excluded from the release by default**, to be shipped as "a sha256 per file
+    # plus a reproduction script, so a reader with their own key regenerates
+    # rather than receives". So the default release tree has zero shards, and
+    # `floor=15, optional=False` turns gate 0 red there before any other gate
+    # runs -- breaking the very reproduction path `release/REPRODUCING.md`
+    # documents. `optional=True` and a floor of zero are correct for a family
+    # that is deliberately absent downstream.
+    #
+    # The guarantee that floor was reaching for is kept, and derived rather than
+    # counted: `tracked_but_missing()` asks git which shards are committed and
+    # requires each of them to be on disk. Strictly stronger than `floor=15`
+    # (it also catches a sixteenth committed shard going missing), and it needs
+    # no number to age -- which also settles the objection that 15 was a
+    # hand-copied count of the kind `README.md:148-151` forbids. It was. The
+    # answer was not to defend it but to derive it.
     Rule(
         name="envelope_ledger",
         root="baseline-arms/out/shards",
@@ -387,21 +453,14 @@ DISCOVERY: tuple[Rule, ...] = (
         figures=("fig02_bill_shape",),
         what="envelope campaign ledger shard, same two dialects as the pilot ledger",
         floor=0,
-        floor_note="untracked in master by design, so the floor is zero: absent is the "
-        "expected state, and a build that required them could not run from a clean "
-        "checkout. The four known shard paths are declared below regardless, so the "
-        "manifest names them as absent rather than forgetting them.",
-        tracked=False,
+        floor_note="zero, and derived rather than counted. These shards are tracked as of "
+        "A14 but are class B in release/LICENCE_POSTURE.md -- excluded from the release "
+        "tree by default -- so absent is a legal state downstream and a numeric floor "
+        "would stop a release build. What must hold instead is that every shard git "
+        "*does* track is on disk, which tracked_but_missing() checks against git rather "
+        "than against a number, and which also covers shards nobody has written down.",
+        tracked=True,
         optional=True,
-        expected=(
-            "baseline-arms/out/shards/ledger.ar25.jsonl",
-            "baseline-arms/out/shards/ledger.g50t.jsonl",
-            "baseline-arms/out/shards/ledger.sk48.jsonl",
-            "baseline-arms/out/shards/ledger.tn36.jsonl",
-        ),
-        expected_note="untracked in master; a figure built on it cannot be rebuilt from a "
-        "clean checkout. Drop it in and it is picked up automatically -- and now so is any "
-        "shard whose name nobody wrote down here.",
     ),
 )
 
@@ -434,18 +493,24 @@ def _tracked_paths(root: str) -> frozenset[str] | None:
     clean checkout. It also keeps the promise the work order actually asked for
     -- a run that lands enters the figure with **no code edit** -- because
     committing the data is not a code edit.
+
+    **V23: one repo-wide call, cached, retried, and never silently ``None``.**
+    This used to run one ``git ls-files -- <root>`` per caller. Three problems,
+    all measured rather than reasoned about: (1) it had no retry, while
+    ``git_log`` two hundred lines below was given one for exactly the transient
+    failure this host produces under the merge daemon; (2) its ``None`` was only
+    ever recorded in ``TRACKING_UNAVAILABLE`` when the caller happened to be
+    ``_scan``, so for the seventeen roots the *other* callers ask about, a
+    transient failure produced a clean report and no warning at all; and (3) the
+    per-root fan-out meant forty git spawns per build, on the host whose git
+    spawns are the thing failing. One cached call for the whole repository fixes
+    all three at once.
     """
-    try:
-        proc = subprocess.run(
-            ["git", "-C", REPO_ROOT, "ls-files", "-z", "--", root],
-            capture_output=True,
-            text=True,
-            check=True,
-            env={**os.environ, "GIT_PAGER": "cat"},
-        )
-    except (OSError, subprocess.CalledProcessError):
+    tracked = _all_tracked_paths()
+    if tracked is None:
         return None
-    return frozenset(p for p in proc.stdout.split("\0") if p)
+    prefix = root.rstrip("/") + "/"
+    return frozenset(p for p in tracked if p == root or p.startswith(prefix))
 
 
 #: Rules whose tracked-only filter could not be applied, with the reason. Empty
@@ -454,6 +519,92 @@ def _tracked_paths(root: str) -> frozenset[str] | None:
 #: guarantee that nobody is told about is the failure mode this repository keeps
 #: rediscovering.
 TRACKING_UNAVAILABLE: list[str] = []
+
+#: Memoised result of the one repo-wide ``git ls-files``. ``False`` means "asked
+#: and could not be told"; ``None`` means "not asked yet".
+_ALL_TRACKED: frozenset[str] | None | bool = None
+
+
+def in_git_work_tree() -> bool:
+    """Is ``REPO_ROOT`` inside a git work tree?
+
+    The discriminator that matters for degrading gracefully, and it is **not**
+    ``shutil.which("git")``. Almost every machine has a git binary; a release
+    tarball has one too. What a release tarball does not have is a repository.
+    Asking the wrong question here turned "build from a tarball" into a hard
+    failure -- see ``git_log``.
+    """
+    try:
+        subprocess.run(
+            ["git", "-C", REPO_ROOT, "rev-parse", "--git-dir"],
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**os.environ, "GIT_PAGER": "cat"},
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return False
+    return True
+
+
+def _all_tracked_paths() -> frozenset[str] | None:
+    """Every repo-relative path git tracks, once per process. ``None`` if unknown.
+
+    Retried like ``git_log``, and when it finally cannot answer it says which of
+    the two reasons applies -- no repository (legitimate: a release tarball) or
+    a repository that refused (not legitimate: something is wrong and the
+    tracked-only guarantee is silently off).
+    """
+    global _ALL_TRACKED
+    if _ALL_TRACKED is not None:
+        return None if _ALL_TRACKED is False else _ALL_TRACKED  # type: ignore[return-value]
+
+    argv = ["git", "-C", REPO_ROOT, "ls-files", "-z"]
+    env = {**os.environ, "GIT_PAGER": "cat"}
+    last: BaseException | None = None
+    for attempt in range(_GIT_LOG_ATTEMPTS):
+        try:
+            proc = subprocess.run(
+                argv, capture_output=True, text=True, check=True, env=env
+            )
+            _ALL_TRACKED = frozenset(p for p in proc.stdout.split("\0") if p)
+            return _ALL_TRACKED
+        except (OSError, subprocess.CalledProcessError) as exc:
+            last = exc
+            if attempt + 1 < _GIT_LOG_ATTEMPTS:
+                time.sleep(_GIT_LOG_BACKOFF_S * (attempt + 1))
+
+    _ALL_TRACKED = False
+    if not in_git_work_tree():
+        TRACKING_UNAVAILABLE.append(
+            f"{REPO_ROOT} is not a git work tree, so no source's tracked/untracked "
+            "status could be checked and the tracked-only filter did not apply. "
+            "Expected when building from a release tarball; a figure built here is "
+            "not a figure whose inputs were verified as committed."
+        )
+    else:
+        detail = getattr(last, "stderr", None) or str(last)
+        TRACKING_UNAVAILABLE.append(
+            f"git ls-files failed {_GIT_LOG_ATTEMPTS} times in a real work tree "
+            f"({str(detail).strip()}), so the tracked-only filter did not apply and "
+            "no source's status could be checked. This is not the release-tarball "
+            "case; something is wrong and the guarantee is off."
+        )
+    return None
+
+
+def _raw_scan(rule: Rule, entries: list[str] | None = None) -> list[str]:
+    """Entry names matching ``rule.pattern``, sorted, **before** the git filter.
+
+    Split out of ``_scan`` so ``untracked_but_present`` can ask what is on disk
+    without also asking what git thinks -- the two answers are the finding.
+    """
+    if entries is None:
+        try:
+            entries = os.listdir(rule.abs_root)
+        except OSError:
+            return []
+    return sorted(e for e in entries if fnmatch.fnmatchcase(e, rule.pattern))
 
 
 def _scan(rule: Rule) -> list[str]:
@@ -473,7 +624,7 @@ def _scan(rule: Rule) -> list[str]:
     # tree yielding a different SOURCES.sha256 and different images depending on
     # the operating system. _scan sorts os.listdir for exactly this class of
     # reason and would otherwise have left the case folding to the platform.
-    named = sorted(e for e in entries if fnmatch.fnmatchcase(e, rule.pattern))
+    named = _raw_scan(rule, entries)
     if not rule.tracked:
         return named  # untracked by design; the floor for these rules is zero
 
@@ -623,30 +774,179 @@ def discovered_groups(name: str) -> list[tuple[str, dict[str, Source]]]:
 
 
 def untracked_inclusions() -> list[str]:
-    """Present-but-untracked members a rule folded into this build.
+    """Present-but-untracked sources this build folded in.
 
-    Only ``tracked=False`` rules can produce these, and only the envelope shards
-    are such a rule. It is a real exposure and it is named rather than left to
-    surface as an unexplained hash diff: a working tree holding the shards
-    builds a different figure from a clean checkout, so ``SOURCES.sha256`` moves
-    and gates 4 and 6 go red. That was already true of the four paths this rule
-    replaced; what is new is that the reason arrives with the red gate.
+    A source that is on disk, is read by a figure, and is not in git's index
+    builds a different figure here from a clean checkout: ``SOURCES.sha256``
+    moves and gates 4 and 6 go red. It is a real exposure and it is named
+    rather than left to surface as an unexplained hash diff.
+
+    **V23 (2026-07-29) widened this from rules to every declared source.** It
+    used to skip any ``tracked=True`` rule on the argument that ``_scan``
+    already filters those against git -- true for rules, and false for the
+    thirty-odd hand-written ``Source`` entries above, which are never filtered
+    at all. So the one class it covered was the class that could not occur, and
+    the class that could occur was the one it skipped. It now asks git about
+    every source it is about to hash, whatever declared it.
+    """
+    out = []
+    by_root: dict[str, frozenset[str] | None] = {}
+    for src in SOURCES:
+        if not src.exists():
+            continue
+        root = src.path.rsplit("/", 1)[0] if "/" in src.path else "."
+        if root not in by_root:
+            by_root[root] = _tracked_paths(root)
+        tracked = by_root[root]
+        if tracked is None or src.path in tracked:
+            continue
+        out.append(
+            f"source {src.key!r} folded in {src.path}, which is present here and not "
+            "tracked. This build is not reproducible from a clean checkout, and "
+            "verify.sh gates 4 and 6 will report a hash difference with this as the "
+            "cause."
+        )
+    return out
+
+
+def tracking_mismatches() -> list[str]:
+    """Sources whose declared ``tracked`` flag disagrees with git's index.
+
+    The reason this function exists, stated as the bug it would have caught:
+    ``manifest_rows`` writes the ``[tracked]`` / ``[untracked]`` column from
+    ``Source.tracked``, a *declared* boolean. ``verify.sh`` gate 4 then compares
+    a committed manifest against a freshly generated one -- both sides read the
+    same declaration, so if the declaration is wrong they agree and the gate is
+    green. The fifteen envelope ledger shards were committed -- eleven by
+    ``baseline-arms`` on 2026-07-28, four by A14 (``9307f139``) the next day --
+    while the ``envelope_ledger`` rule still said ``tracked=False``; the manifest
+    asserted ``[untracked]`` about tracked files from ``059f6ed1``
+    (2026-07-28T14:21Z) onward, and no gate could
+    see it, because no gate was asking anything other than the file that was
+    wrong.
+
+    This asks git. That is the whole point: two independently sourced
+    descriptions of the same fact can disagree, and the disagreement is the
+    finding -- the rule ``check_coverage.py`` is built on, applied to the one
+    column of ``SOURCES.sha256`` that is an assertion rather than a measurement.
+
+    Returns a list of human-readable mismatches, empty when the declaration and
+    the tree agree. Absent sources are skipped: git has nothing to say about
+    whether a file that is not there would be tracked, and ``check_required``
+    owns absence.
+    """
+    out = []
+    by_root: dict[str, frozenset[str] | None] = {}
+    for src in sorted(SOURCES, key=lambda s: s.path):
+        if not src.exists():
+            continue
+        root = src.path.rsplit("/", 1)[0] if "/" in src.path else "."
+        if root not in by_root:
+            by_root[root] = _tracked_paths(root)
+        tracked = by_root[root]
+        if tracked is None:
+            # TRACKING_UNAVAILABLE carries this now -- and only since V23's second
+            # pass. It used to be appended solely by `_scan`, so it covered a
+            # rule's own root and none of the seventeen roots the hand-written
+            # sources live under: for those, a transient git failure produced a
+            # clean report and no warning anywhere. `_all_tracked_paths` is one
+            # cached call that records its own unavailability, so this `continue`
+            # is now the truthful version of what this comment always claimed.
+            continue
+        in_git = src.path in tracked
+        if in_git == src.tracked:
+            continue
+        if in_git:
+            out.append(
+                f"{src.path} is declared tracked=False (source {src.key!r}) but git "
+                "tracks it. SOURCES.sha256 is writing '[untracked]' about a committed "
+                "file, and gate 4 cannot see it because both sides of that gate read "
+                "the same declaration. Flip the declaration."
+            )
+        else:
+            out.append(
+                f"{src.path} is declared tracked=True (source {src.key!r}) but git does "
+                "not track it. SOURCES.sha256 is writing '[tracked]' about a file that "
+                "is not in the tree, so this build is not reproducible from a clean "
+                "checkout."
+            )
+    return out
+
+
+def tracked_but_missing() -> list[str]:
+    """Files a ``tracked=True`` rule would read, that git tracks and disk lacks.
+
+    The derived form of a floor, and the reason ``envelope_ledger`` no longer
+    carries a number. A rule's floor asks "are there at least N members?", which
+    means somebody has to keep N right, and N is wrong the moment the family
+    grows or the release excludes it. This asks the question the floor was
+    standing in for: **git says this file is part of the tree, and it is not
+    here.** No number to age, and it covers members nobody wrote down.
+
+    Empty when git cannot be asked -- a release tarball has no index to compare
+    against, and ``TRACKING_UNAVAILABLE`` already says so loudly. That is the
+    whole reason this is a separate check and not a floor: a floor cannot tell
+    "deliberately excluded downstream" from "lost", and git can.
     """
     out = []
     for r in DISCOVERY:
-        if r.tracked:
+        if not r.tracked:
             continue
         tracked = _tracked_paths(r.root)
-        for src in DISCOVERED[r.name]:
-            if not src.exists():
+        if tracked is None:
+            continue
+        for rel in sorted(tracked):
+            entry = rel[len(r.root) + 1 :]
+            if "/" in entry if r.kind == "file" else False:
                 continue
-            if tracked is not None and src.path in tracked:
-                continue
+            if r.kind == "file":
+                if not fnmatch.fnmatchcase(entry, r.pattern):
+                    continue
+            else:
+                head, _, member = entry.partition("/")
+                if not fnmatch.fnmatchcase(head, r.pattern) or member not in r.members:
+                    continue
+            if not os.path.exists(os.path.join(REPO_ROOT, *rel.split("/"))):
+                out.append(
+                    f"rule {r.name!r}: git tracks {rel} and it is not on disk. A member "
+                    "this rule reads has left the working tree, so the figure is built "
+                    "from less than the repository holds."
+                )
+    return out
+
+
+def untracked_but_present() -> list[str]:
+    """Files a ``tracked=True`` rule would read if they were committed.
+
+    The gap the tracked-only filter opens, named rather than left implicit. A
+    ``tracked=False`` rule folded an untracked member in and warned; a
+    ``tracked=True`` rule drops it, which is the right call for determinism and
+    the wrong silence for a cost-bearing ledger -- "paid data on disk that no
+    plate draws" looks exactly like "no such data". So it is a warning, not a
+    failure: commit it or delete it, but do not let it sit there unmentioned.
+    """
+    out = []
+    for r in DISCOVERY:
+        if not r.tracked:
+            continue
+        tracked = _tracked_paths(r.root)
+        if tracked is None:
+            continue
+        for entry in sorted(_raw_scan(r)):
+            rel = f"{r.root}/{entry}"
+            if r.kind == "file":
+                if rel in tracked or not os.path.isfile(
+                    os.path.join(REPO_ROOT, *rel.split("/"))
+                ):
+                    continue
+            else:
+                if any(p == rel or p.startswith(rel + "/") for p in tracked):
+                    continue
             out.append(
-                f"rule {r.name!r} folded in {src.path}, which is present here and not "
-                "tracked. This build is not reproducible from a clean checkout, and "
-                "verify.sh gates 4 and 6 will report a hash difference with this as the "
-                "cause."
+                f"rule {r.name!r} did not read {rel}: it matches the rule and git does "
+                "not track it, so it is excluded for determinism. If it carries data a "
+                "figure should draw, commit it; if not, delete it. Right now it is on "
+                "disk and in no picture."
             )
     return out
 
@@ -730,30 +1030,89 @@ def sha256_file(abspath: str) -> str:
 def git_log(rel_path: str) -> list[dict]:
     """``git log --follow`` over one path, oldest first.
 
-    Committer timestamps are in ISO-8601 UTC. Returns ``[]`` rather than
-    raising when git is unavailable, and the caller degrades to the ordinal
-    axis -- a figure should not fail to build because a checkout is shallow.
+    Committer timestamps are in ISO-8601 UTC. Returns ``[]`` when there is no
+    git to ask, and the caller degrades to the ordinal axis -- a figure should
+    not fail to build because it is being built from a release tarball.
+
+    **V23 CORRECTION (2026-07-29): "git is unavailable" and "git said no" are
+    not the same event, and treating them as one made this function a silent
+    source of two different figures.** It used to catch
+    ``subprocess.CalledProcessError`` alongside ``OSError`` and return ``[]``
+    for both. `git log` fails transiently on a busy repository -- this one has
+    a hundred-odd linked worktrees and a merge daemon ticking through
+    ``git worktree add`` and ``git fetch`` -- and when it did, fig06 lost its
+    entire commit-timestamp axis and drew the ordinal one instead, saying so on
+    the plate, with nothing anywhere reporting that anything had gone wrong.
+
+    Caught in this run: ``verify.sh`` pass A degraded and pass B did not, so
+    gate 3 went red with a diff full of empty timestamp columns. That is the
+    lucky case. The unlucky one is both passes degrading together, which is
+    gate 3 green, gate 6 green, and a committed figure quietly missing its
+    axis -- the same shape as everything else this ticket is about.
+
+    So: a missing git binary still degrades, once, loudly (``GIT_DEGRADED``,
+    which ``build_all.py`` prints). A git that answers with an error is
+    retried, and if it keeps failing it raises. A build that cannot read the
+    history it draws should stop, not draw something else.
     """
-    try:
-        proc = subprocess.run(
-            [
-                "git",
-                "-C",
-                REPO_ROOT,
-                "log",
-                "--follow",
-                "--date=format-local:%Y-%m-%dT%H:%M:%SZ",
-                "--format=%H%x1f%cd%x1f%s",
-                "--",
-                rel_path,
-            ],
-            capture_output=True,
-            text=True,
-            check=True,
-            env={**os.environ, "TZ": "UTC", "GIT_PAGER": "cat"},
+    argv = [
+        "git",
+        "-C",
+        REPO_ROOT,
+        "log",
+        "--follow",
+        "--date=format-local:%Y-%m-%dT%H:%M:%SZ",
+        "--format=%H%x1f%cd%x1f%s",
+        "--",
+        rel_path,
+    ]
+    env = {**os.environ, "TZ": "UTC", "GIT_PAGER": "cat"}
+    last: BaseException | None = None
+    for attempt in range(_GIT_LOG_ATTEMPTS):
+        try:
+            proc = subprocess.run(
+                argv, capture_output=True, text=True, check=True, env=env
+            )
+            break
+        except (OSError, subprocess.CalledProcessError) as exc:
+            # OSError is retried too, and that is the case this run was actually
+            # bitten by. Spawning a process can fail transiently on a loaded
+            # Windows host -- this repository runs a merge daemon over a hundred
+            # linked worktrees -- and the old code read a failure to *start* git
+            # as "there is no git here", which is a different fact with a
+            # different correct response.
+            last = exc
+            if attempt + 1 < _GIT_LOG_ATTEMPTS:
+                time.sleep(_GIT_LOG_BACKOFF_S * (attempt + 1))
+    else:
+        # Which of the two it is decided by asking, not by inferring from the
+        # exception type: a tree that is not a git work tree is a legitimate
+        # degrade (a release tarball is exactly that), and anything else is a
+        # build that could not read the history it draws and must not quietly
+        # draw something else.
+        #
+        # V23 SECOND PASS. The first version of this asked `shutil.which("git")`,
+        # which is the wrong question and was caught by an adversarial review
+        # before it shipped: a release tarball has a git binary and no
+        # repository, so `which` said "git is here", the else-branch raised, and
+        # the tarball build died -- in the very case this function's docstring
+        # promises to survive. `in_git_work_tree()` asks about the repository.
+        if not in_git_work_tree():
+            note = (
+                f"{REPO_ROOT} is not a git work tree; {rel_path} has no "
+                "commit-timestamp axis and the figure falls back to its ordinal one"
+            )
+            if note not in GIT_DEGRADED:
+                GIT_DEGRADED.append(note)
+            return []
+        detail = getattr(last, "stderr", None) or str(last)
+        raise RuntimeError(
+            f"git log failed {_GIT_LOG_ATTEMPTS} times for {rel_path!r} in a real "
+            f"git work tree, so this is not the release-tarball case: {str(detail).strip()}\n"
+            "Refusing to draw the ordinal axis instead. A figure built from a "
+            "history this build could not read is a different figure, and "
+            "returning [] here is what made that difference invisible."
         )
-    except (OSError, subprocess.CalledProcessError):
-        return []
     rows = []
     for line in proc.stdout.splitlines():
         if not line.strip():
@@ -805,4 +1164,9 @@ def check_required() -> list[str]:
     like a family that is fine.
     """
     missing = [s.path for s in SOURCES if not s.optional and not s.exists()]
-    return missing + floor_violations()
+    # tracked_but_missing is the third door, and the one that replaced a floor:
+    # "git says this file is in the tree and it is not here" is a broken working
+    # tree, not an empty family, and it is silent in every other check. It
+    # reports nothing when git cannot be asked, so a release tarball -- where
+    # these members are excluded on purpose -- still builds.
+    return missing + floor_violations() + tracked_but_missing()

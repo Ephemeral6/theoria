@@ -106,6 +106,21 @@ def main(argv: list[str] | None = None) -> int:
         print(f"WARN: {warning}", file=sys.stderr)
     for warning in sources.untracked_inclusions():
         print(f"WARN: {warning}", file=sys.stderr)
+    # The status column of SOURCES.sha256 is the one field in it that is asserted
+    # rather than measured, so it is the one field a regeneration cannot correct.
+    # Warned here at build time, and checked against git by check_tracking.py at
+    # gate 13 -- because for two days the manifest said [untracked] about fifteen
+    # committed files and every gate agreed with it.
+    for warning in sources.tracking_mismatches():
+        print(f"WARN: {warning}", file=sys.stderr)
+    # A file that matches a rule, is on disk, and is not committed. The
+    # tracked-only filter drops it -- correctly, for determinism -- and dropping
+    # a cost-bearing ledger silently is how "paid data nobody draws" comes to
+    # look exactly like "no such data".
+    for warning in sources.untracked_but_present():
+        print(f"WARN: {warning}", file=sys.stderr)
+    # GIT_DEGRADED is populated during the build, not before it, so it is
+    # reported again at the end -- see the second loop after the figures run.
 
     wanted = tuple(args.only) if args.only else FIGURES
     unknown = [w for w in wanted if w not in FIGURES]
@@ -167,6 +182,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.no_manifest:
         manifest = sources.write_manifest()
         print(f"sources hashed -> {os.path.relpath(manifest, _HERE)}")
+
+    # Populated while the figures ran, so it can only be reported here. A build
+    # that fell back to a weaker axis produced a different figure, and the only
+    # place that difference is currently visible is the plate's own small print.
+    for warning in sources.GIT_DEGRADED:
+        print(f"WARN: {warning}", file=sys.stderr)
 
     if failures:
         print(f"\nFAIL: {len(failures)} figure(s) failed: {', '.join(failures)}", file=sys.stderr)

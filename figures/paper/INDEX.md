@@ -173,16 +173,16 @@ trusting it.
 
 | artefact | sha256 |
 |---|---|
-| `figures/paper/light/figure6_bill_shape.pdf` | `e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205` |
-| `figures/paper/light/figure6_bill_shape.png` | `9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461` |
-| `figures/paper/light/figure6_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
-| `figures/paper/dark/figure6_bill_shape.pdf` | `6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f` |
-| `figures/paper/dark/figure6_bill_shape.png` | `557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c` |
-| `figures/paper/dark/figure6_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
-| `figures/out/light/fig02_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
-| `figures/out/light/fig02_bill_shape.png` | `5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e` |
-| `figures/out/dark/fig02_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
-| `figures/out/dark/fig02_bill_shape.png` | `a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989` |
+| `figures/paper/light/figure6_bill_shape.pdf` | `0c90e1d37cf4d510443cb941f2849b519b72839082129e3fcd855b2e766ea870` |
+| `figures/paper/light/figure6_bill_shape.png` | `32dd812648abae94b39ff6355df9ed8d96bb924ae16308bb10a17ead88a4f82a` |
+| `figures/paper/light/figure6_bill_shape.svg` | `81f8179b0aa5ca794bfced04495ca2a39432fee3233525ccd500a7acd61c6bbf` |
+| `figures/paper/dark/figure6_bill_shape.pdf` | `ac0516f8d0a649da86b8edb093168472f58c48eff2a545aaf50c340242531e44` |
+| `figures/paper/dark/figure6_bill_shape.png` | `f88511e61ef4b2c32e2e2cfab099b0ccf4e0831b4b509d20922fec5a1b11bc6f` |
+| `figures/paper/dark/figure6_bill_shape.svg` | `df5874668558f1df817cbf3c33e364879654382bb161f15bdeeb602298e0b960` |
+| `figures/out/light/fig02_bill_shape.svg` | `81f8179b0aa5ca794bfced04495ca2a39432fee3233525ccd500a7acd61c6bbf` |
+| `figures/out/light/fig02_bill_shape.png` | `cbaaa5ac0c387aace698cd79ad701dbbcf73ca8e3e9e20730d247a93b3c84ca9` |
+| `figures/out/dark/fig02_bill_shape.svg` | `df5874668558f1df817cbf3c33e364879654382bb161f15bdeeb602298e0b960` |
+| `figures/out/dark/fig02_bill_shape.png` | `e05a7327d3fc3ca1a25c465ab2e0027be46eeb9e1fffff38388a450437ac38fc` |
 
 | data source | sha256 | what |
 |---|---|---|
