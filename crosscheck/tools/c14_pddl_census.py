@@ -72,7 +72,6 @@ SKIP_DIRS = {".worktrees", "worktrees", ".claude", ".git", "__pycache__",
 # adapter's.  It only needs to find blocks and atoms.
 
 ACTION_RE = re.compile(r"\(:action\s+(\S+)")
-PREDICATES_RE = re.compile(r"\(:predicates(.*?)\n\s*\)", re.S)
 ATOM_RE = re.compile(r"\(\s*([A-Za-z][A-Za-z0-9_\-]*)")
 VAR_RE = re.compile(r"\?([A-Za-z][A-Za-z0-9_\-]*)")
 
@@ -80,12 +79,42 @@ VAR_RE = re.compile(r"\?([A-Za-z][A-Za-z0-9_\-]*)")
 LOGICAL = {"and", "or", "not", "when", "forall", "exists", "imply", "="}
 
 
+def _balanced_block(text: str, head: str) -> str:
+    """The body of ``(head ...)``, found by counting parens rather than by regex.
+
+    This was a regex (``\\(:predicates(.*?)\\n\\s*\\)``) and it had a silent false
+    negative: it required the block to close on a line of its own, so a domain
+    that wrote ``… (holding ?x))`` inline matched nothing, ``declared_predicates``
+    returned the empty set, and **every** action in that domain was reported
+    ``undeclared-predicate``.  Demonstrated on
+    ``engine-rig/engines/fd_adapter/domain.pddl`` -- a gripper domain Fast Downward
+    solves -- which scored 0 of 3.
+
+    ``gen_pddl`` always formats ``\\n  )``, so this never bit the C14 numbers; it
+    would have bitten the first person to point the instrument at PDDL from
+    anywhere else, which is exactly what the positive control now does.
+    """
+    at = text.find(head)
+    if at < 0:
+        return ""
+    depth, i = 0, at
+    while i < len(text):
+        if text[i] == "(":
+            depth += 1
+        elif text[i] == ")":
+            depth -= 1
+            if depth == 0:
+                return text[at + len(head):i]
+        i += 1
+    return text[at + len(head):]
+
+
 def declared_predicates(domain: str) -> set:
     """Names inside the domain's ``(:predicates ...)`` block."""
-    m = PREDICATES_RE.search(domain)
-    if not m:
+    body = _balanced_block(domain, "(:predicates")
+    if not body:
         return set()
-    return {name for name in ATOM_RE.findall(m.group(1)) if name not in LOGICAL}
+    return {name for name in ATOM_RE.findall(body) if name not in LOGICAL}
 
 
 def action_blocks(domain: str) -> list:
