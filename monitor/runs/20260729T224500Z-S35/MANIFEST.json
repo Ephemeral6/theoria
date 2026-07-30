@@ -1,0 +1,29 @@
+{
+  "prompt_id": "S35-s35-reserved-but-unreachable",
+  "branch": "agent/s35-reserved-but-unreachable",
+  "base_commit": "3b2a5873",
+  "utc": "2026-07-30T02:05:00Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_spend_usd": 0.0,
+  "files": [
+    "probe_unreachable.py",
+    "measure-before.json",
+    "measure-after-live.txt",
+    "after_list.py",
+    "RUN_STATE.md"
+  ],
+  "changed": [
+    "monitor/board.py",
+    "monitor/standing.py",
+    "monitor/tests/test_board_unreachable.py",
+    "monitor/tests/test_standing_reflex_no_third_value.py"
+  ],
+  "measured": {
+    "unreachable_before": 10,
+    "printed_as_reserved_before": 2,
+    "s22_stuck_since": "2026-07-29T10:36:56Z",
+    "e18_stuck_since": "2026-07-29T12:37:38Z"
+  }
+}

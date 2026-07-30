@@ -319,12 +319,20 @@ def work_for(agent, lane):
     而 `sweep` 为 -1 留了单独一条 skip 理由。这是刻意的——
     把「测不到」算成「有活」会让一个板坏掉的夜里每一跳都起一个花钱的会话，
     而那个会话读的是同一块坏板；算成「没活」就是这个 bug 本身。
-    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。"""
+    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。
+
+    S35：问的是 `offers(agent, lane)`，不是 `candidates(lane)`。差别不是措辞——
+    `candidates` 答「这件活属于这条赛道吗」，而这里要的答案是「**这个编号**领得到
+    几件」，两者在一件被它自己交回过的活上正好相反。旧写法把这种活算作 1，
+    于是每隔 `MIN_RELAUNCH_MIN` 就为它起一个真会话，那个会话跑
+    `board.py claim <agent> --lane <lane>` 拿到 BOARD-EMPTY 再退出。
+    实测这样卡着的有两件（S22 14.9 小时、E18 12.9 小时），
+    也就是说这个分歧是**按会话计费**的。"""
     unread = unread_count(agent)
     held = sum(1 for f in os.listdir(board_mod.CLAIMED)
                if f.endswith(".%s.md" % agent))
     try:
-        claimable = len(board_mod.candidates(lane))
+        claimable = len(board_mod.offers(agent, lane)[0])
     except Exception as exc:                    # noqa: BLE001 -- reported below
         claimable = CLAIMABLE_UNKNOWN
         log("BOARD-QUERY-FAILED lane=%s agent=%s %s: %s"

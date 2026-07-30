@@ -1,0 +1,147 @@
+{
+  "utc": "2026-07-30T01:03:21Z",
+  "board_root": "C:\\Users\\user\\Desktop\\theoria\\monitor\\board\\items",
+  "shelf_total": 11,
+  "stale_lanes": [],
+  "heartbeats": {
+    "RES-1": [
+      13,
+      "lock"
+    ],
+    "RES-4": [
+      2,
+      "lock"
+    ],
+    "RES-2": [
+      8,
+      "lock"
+    ],
+    "RES-3": [
+      18,
+      "lock"
+    ]
+  },
+  "reachable": 1,
+  "deps_blocked": [],
+  "unreachable_reserved": [
+    {
+      "id": "E18-survey-numbers-reproducible",
+      "lane": "verify",
+      "owner": "RES-3",
+      "released_by": [
+        "RES-3"
+      ],
+      "territory": "engine-rig",
+      "priority": 1,
+      "territory_busy_with": null,
+      "lane_stale": false
+    },
+    {
+      "id": "S22-access-check-close",
+      "lane": "infra",
+      "owner": "RES-4",
+      "released_by": [
+        "RES-4"
+      ],
+      "territory": "arc-recon",
+      "priority": 3,
+      "territory_busy_with": null,
+      "lane_stale": false
+    }
+  ],
+  "unreachable_other": [
+    {
+      "id": "A16-A16-launch-gate-wired",
+      "lane": "campaign",
+      "owner": "RES-1",
+      "released_by": [],
+      "territory": "theoria-arm",
+      "priority": 2,
+      "territory_busy_with": "A3-campaign-devpile",
+      "lane_stale": false
+    },
+    {
+      "id": "A3-campaign-level2",
+      "lane": "campaign",
+      "owner": "RES-1",
+      "released_by": [],
+      "territory": "theoria-arm",
+      "priority": 1,
+      "territory_busy_with": "A3-campaign-devpile",
+      "lane_stale": false
+    },
+    {
+      "id": "A8-campaign-ledger-pipeline",
+      "lane": "campaign",
+      "owner": "RES-1",
+      "released_by": [],
+      "territory": "theoria-arm",
+      "priority": 2,
+      "territory_busy_with": "A3-campaign-devpile",
+      "lane_stale": false
+    },
+    {
+      "id": "E3-engines-online",
+      "lane": "campaign",
+      "owner": "RES-1",
+      "released_by": [],
+      "territory": "theoria-arm",
+      "priority": 3,
+      "territory_busy_with": "A3-campaign-devpile",
+      "lane_stale": false
+    },
+    {
+      "id": "R4-worktree-rescue",
+      "lane": "",
+      "owner": null,
+      "released_by": [],
+      "territory": "theoria-arm",
+      "priority": 1,
+      "territory_busy_with": "A3-campaign-devpile",
+      "lane_stale": false
+    },
+    {
+      "id": "S36-s36-orphan-commits-one-disk",
+      "lane": "infra",
+      "owner": "RES-4",
+      "released_by": [],
+      "territory": "monitor",
+      "priority": 2,
+      "territory_busy_with": "S35-s35-reserved-but-unreachable",
+      "lane_stale": false
+    },
+    {
+      "id": "S4-S4-E23-TIERS",
+      "lane": "campaign",
+      "owner": "RES-1",
+      "released_by": [],
+      "territory": "freeze",
+      "priority": 3,
+      "territory_busy_with": "S4-S4-E1-HOLES",
+      "lane_stale": false
+    },
+    {
+      "id": "V2-V25-verify-does-not-check-what-is-committed",
+      "lane": "verify",
+      "owner": "RES-3",
+      "released_by": [],
+      "territory": "exam",
+      "priority": 3,
+      "territory_busy_with": "V6-V23-large-space-verdict-gap",
+      "lane_stale": false
+    }
+  ]
+}
+
+--- 判据：不可达 = 就绪、未认领、依赖已满、而上面每个身份都领不到 ---
+shelf=11  reachable=1  deps-blocked=0  UNREACHABLE=10 (其中 reserved 段印出来的 2)
+  E18-survey-numbers-reproducible          lane=verify   owner=RES-3  released_by=RES-3
+  S22-access-check-close                   lane=infra    owner=RES-4  released_by=RES-4
+  A16-A16-launch-gate-wired                lane=campaign owner=RES-1  released_by=-
+  A3-campaign-level2                       lane=campaign owner=RES-1  released_by=-
+  A8-campaign-ledger-pipeline              lane=campaign owner=RES-1  released_by=-
+  E3-engines-online                        lane=campaign owner=RES-1  released_by=-
+  R4-worktree-rescue                       lane=-        owner=-      released_by=-
+  S36-s36-orphan-commits-one-disk          lane=infra    owner=RES-4  released_by=-
+  S4-S4-E23-TIERS                          lane=campaign owner=RES-1  released_by=-
+  V2-V25-verify-does-not-check-what-is-committed lane=verify   owner=RES-3  released_by=-

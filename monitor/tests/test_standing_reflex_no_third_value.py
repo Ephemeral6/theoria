@@ -48,6 +48,20 @@ def crashing_board(monkeypatch):
 
 
 @pytest.fixture
+def no_lane_gate(monkeypatch):
+    """Take lane ownership out of the picture for the `work_for` cases.
+
+    S35 made `work_for` ask `offers(agent, lane)` instead of
+    `candidates(lane)`, and `offers` starts with the LANE-NOT-YOURS guard --
+    which consults the **live** `ops-status/` locks. Without this fixture these
+    tests would pass or fail depending on whether RES-4 happened to be
+    heartbeating while they ran, and the thing under test here is the third
+    value, not lane gating (which has its own tests)."""
+    monkeypatch.setattr(board_mod, "LANE_OWNER", {})
+    return {}
+
+
+@pytest.fixture
 def quiet_log(monkeypatch):
     """Capture standing.log lines instead of writing the live log file."""
     lines = []
@@ -60,7 +74,7 @@ def quiet_log(monkeypatch):
 # --------------------------------------------------------------------------
 
 def test_crashed_board_query_is_not_reported_as_an_empty_board(
-        crashing_board, quiet_log, monkeypatch):
+        crashing_board, no_lane_gate, quiet_log, monkeypatch):
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
 
@@ -74,7 +88,7 @@ def test_crashed_board_query_is_not_reported_as_an_empty_board(
 
 
 def test_the_discarded_exception_is_now_on_the_record(
-        crashing_board, quiet_log, monkeypatch):
+        crashing_board, no_lane_gate, quiet_log, monkeypatch):
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
 
@@ -84,7 +98,8 @@ def test_the_discarded_exception_is_now_on_the_record(
     assert any("_Boom" in l for l in quiet_log), "the exception type must survive"
 
 
-def test_a_genuinely_empty_board_still_reads_as_zero(quiet_log, monkeypatch):
+def test_a_genuinely_empty_board_still_reads_as_zero(no_lane_gate, quiet_log,
+                                                     monkeypatch):
     """NEGATIVE CONTROL. The fix adds a third value; it must not relabel the
     second one. An empty board is a measurement, and it must still be 0."""
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
@@ -98,12 +113,18 @@ def test_a_genuinely_empty_board_still_reads_as_zero(quiet_log, monkeypatch):
     assert quiet_log == [], "a healthy empty board must log nothing at all"
 
 
-def test_a_board_with_work_still_reads_as_work(quiet_log, monkeypatch):
+def test_a_board_with_work_still_reads_as_work(no_lane_gate, quiet_log,
+                                               monkeypatch):
     """NEGATIVE CONTROL for the other direction."""
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
+    # Real rows, not `["a", "b"]`. The old fake got away with the wrong shape
+    # because `len()` does not look inside; S35 made the caller read the item's
+    # front matter, and a fake that lies about the shape stops standing in for
+    # the thing it fakes.
     monkeypatch.setattr(standing.board_mod, "candidates",
-                        lambda lane=None: ["a", "b"])
+                        lambda lane=None: [(1, "A1-x", "A1-x.md", {}),
+                                           (2, "B2-y", "B2-y.md", {})])
 
     w = standing.work_for("RES-9", "infra")
 
