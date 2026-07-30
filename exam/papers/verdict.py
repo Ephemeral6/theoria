@@ -445,8 +445,29 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
     # shipped operator -- produced 2^60 against a true 29,791, and `_large_space`
     # stamped `exhaustive_feasible: False` on it. Repro in this run's
     # `verify_checker_claims.py`. D-EX-021.
-    sources = [_dip_source(level, reach, switch) for _d, switch in candidates[:m]]
+    #
+    # The second premise, and it is a different one: the m dips must move m
+    # *independent* latch bits. `Level.switch_index` (rubrics_verdict.py) is
+    # keyed on the cell, so two entries naming the same cell share one bit and
+    # the 2^m family counts masks the level cannot hold. Measured: a `comb_open`
+    # whose `switches` list repeats one cell 60 times yielded 2^60 = 1.15e18
+    # against a true 359 reachable states, and neither the lane premise nor
+    # `LARGE_SPACE_THRESHOLD` refused it -- only `Level.wellformed_problems()`
+    # did, from `_self_check` at the very end of `build()`, long after
+    # `_large_space` had written the false record. A bound must defend its own
+    # premise where it is claimed, not rely on a check three call frames away.
+    # Gated on `candidates[:m]` rather than on `level.switches`, because a
+    # duplicate that never enters the prefix never enters the bound: a repeated
+    # entry naming a wall is skipped above and the bound over the real alcoves
+    # stays sound. Repro in this run's `repro_duplicate_switch.py`. D-EX-028.
+    chosen = [switch for _d, switch in candidates[:m]]
+    sources = [_dip_source(level, reach, switch) for switch in chosen]
     problems = _lane_problems(level, [s for s in sources if s is not None])
+    if m and len(set(chosen)) != m:
+        problems.append(
+            "the first %d dips name only %d distinct cells; duplicates share "
+            "one latch bit, so 2^%d counts latch masks the level cannot hold"
+            % (m, len(set(chosen)), m))
     if m and (len(sources) != m or problems):
         raise AssertionError(
             "%s: the 2^m family is not demonstrated on this board -- %s. The "
@@ -696,7 +717,7 @@ def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
     # exactly when a forward enumeration of the level's own state space finishes,
     # which `_small_space` establishes by running one and `_large_space` refuses
     # by demonstrating a 2^m lower bound.
-    search_credible = bool(state_space["exhaustive_feasible"])
+    search_credible = bool(state_space["naive_enumeration_feasible"])
     truth: Dict[str, Any] = {
         "claim": claim,
         "class": klass,
@@ -753,7 +774,14 @@ def _small_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "%s did not finish enumerating under the cap of %d; it is not a "
             "small-space item" % (level_doc["level_id"], MAX_ENUMERATION))
     return {
-        "exhaustive_feasible": True,
+        # Renamed from `exhaustive_feasible`: the claim this field can carry is
+        # about the *naive* method -- forward enumeration over the full
+        # (cart, button, latch mask) state -- and not about exhaustive search in
+        # general. On the class (ii) side the old name was flatly false; see
+        # `_large_space` and D-EX-028. Renamed on both sides so the two records
+        # keep saying the same thing about the same method.
+        "naive_enumeration_feasible": True,
+        "enumeration_attempted": True,
         "enumerated": result["states"],
         "cap": result["cap"],
         "truncated": False,
@@ -774,10 +802,34 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             % (level_doc["level_id"], bound["lower_bound"], LARGE_SPACE_THRESHOLD))
     quotient = positional_states(Level(level_doc))
     return {
-        "exhaustive_feasible": False,
+        # NOT `exhaustive_feasible`. The old name claimed no exhaustive method
+        # is feasible here, and that is false: every shipped class (ii) item is
+        # settled by an exhaustive computation over at most 600 nodes in at most
+        # 5 ms, against these bounds of 1e18-1e36. What is true is the narrower
+        # statement -- the *naive* method, forward enumeration over the full
+        # (cart, button, latch mask) state, which is the method class (i) is
+        # graded on, cannot terminate here. D-EX-028.
+        "naive_enumeration_feasible": False,
+        # The previous record said `"truncated": False` next to
+        # `"enumerated": None`, which is literally true only because no
+        # enumeration was ever attempted and reads exactly like one that ran and
+        # came back clean. `truncated` is null when nothing was run, and the
+        # flag below says so outright rather than leaving it to be inferred.
+        "enumeration_attempted": False,
         "enumerated": None,
+        "truncated": None,
         "cap": MAX_ENUMERATION,
-        "truncated": False,
+        "enumeration_refused_because": (
+            "the construction exhibits 2^%d = %d distinct reachable states, "
+            "past the cap of %d, so a forward enumeration under this cap cannot "
+            "terminate. Derived from the bound rather than timed, because a "
+            "timeout would not carry the claim (engine-rig D-024) and because "
+            "running it on every build costs seconds for a result the bound "
+            "already fixes. The enumerator is nonetheless run against every "
+            "class (ii) level in the suite, by "
+            "`test_class_ii_levels_actually_truncate_the_enumerator`, so the "
+            "derivation's premise is checked rather than trusted."
+            % (bound["m"], bound["lower_bound"], MAX_ENUMERATION)),
         "lower_bound": bound["lower_bound"],
         "m": bound["m"],
         "dippable_switches": bound["dippable_switches"],
@@ -792,7 +844,13 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "level. It ignores `step_limit` entirely, and it carries no latch "
             "state, so on a require_all_switches board it can report the goal "
             "reachable when the level is unsolvable. `lower_bound` remains the "
-            "honest statement of what a complete search must cover."
+            "honest statement of what a *naive* complete search must cover. "
+            "D-EX-028 amends what that unsoundness licenses: it is one-sided. "
+            "An over-approximation yields false `solvable`, never false "
+            "`unsolvable`, so a goal in a different component IS a sound "
+            "unsolvability proof -- which is why this item's own answer key is "
+            "allowed to be computed that way, and why the search barrier here "
+            "is apparent rather than real."
             % quotient),
     }
 
@@ -1289,8 +1347,14 @@ def build() -> Paper:
             "classes": {
                 "small_unsolvable": "exhaustive search feasible; the question "
                                     "is the reason, not the verdict",
-                "large_unsolvable": "enumeration out of reach; only invariant "
-                                    "reasoning answers",
+                # Was "enumeration out of reach; only invariant reasoning
+                # answers". The second clause is withdrawn: it is a universal
+                # over all methods that no experiment can establish, and it is
+                # false as stated, since these boards are settled by an
+                # exhaustive walk of a 300-node relaxed graph. D-EX-028.
+                "large_unsolvable": "naive enumeration out of reach; the item "
+                                    "is scored on selecting a method that is "
+                                    "not naive enumeration",
                 "solvable_hard": "the false-positive trap",
             },
             "large_space_threshold": LARGE_SPACE_THRESHOLD,

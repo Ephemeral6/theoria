@@ -1,0 +1,137 @@
+{
+  "items": [
+    {
+      "claimed_lower_bound": 1329227995784915872903807060280344576,
+      "components_total": 2,
+      "goal_component": [
+        5,
+        1
+      ],
+      "item": "ii1",
+      "level_id": "gantry",
+      "m": 120,
+      "note": "goal room sealed by a solid separator row",
+      "positional_states": 180,
+      "ratio_bound_over_relaxed_nodes": "4.431e+33",
+      "relaxed_graph_edges": 950,
+      "relaxed_graph_nodes": 300,
+      "settled_by_partition": true,
+      "start_component": [
+        1,
+        1
+      ],
+      "timing_seconds": {
+        "compute_lower_bound": 0.0021,
+        "enumerate_quotient": 0.0004,
+        "settle_via_components": 0.001
+      }
+    },
+    {
+      "claimed_lower_bound": 1329227995784915872903807060280344576,
+      "components_total": 1,
+      "cut_cell": [
+        4,
+        2
+      ],
+      "cut_components_total": 2,
+      "cut_goal_component": [
+        5,
+        1
+      ],
+      "cut_graph_nodes": 300,
+      "cut_start_component": [
+        1,
+        1
+      ],
+      "goal_component": [
+        1,
+        1
+      ],
+      "item": "ii2",
+      "level_id": "lattice",
+      "m": 120,
+      "note": "cut set of size one at (4,2)",
+      "positional_states": 180,
+      "ratio_bound_over_relaxed_nodes": "4.416e+33",
+      "relaxed_graph_edges": 954,
+      "relaxed_graph_nodes": 301,
+      "settled_by_cut_set": true,
+      "settled_by_partition": false,
+      "start_component": [
+        1,
+        1
+      ],
+      "timing_seconds": {
+        "compute_lower_bound": 0.0019,
+        "enumerate_quotient": 0.0004,
+        "settle_via_components": 0.0007,
+        "settle_via_cut_set": 0.0001
+      }
+    },
+    {
+      "claimed_lower_bound": 1152921504606846976,
+      "components_total": 1,
+      "goal_component": [
+        1,
+        1
+      ],
+      "item": "ii3",
+      "level_id": "spindle",
+      "m": 60,
+      "note": "step budget 150 against a relaxed distance",
+      "positional_states": 600,
+      "ratio_bound_over_relaxed_nodes": "1.922e+15",
+      "relaxed_distance_start_to_goal": 199,
+      "relaxed_graph_edges": 1994,
+      "relaxed_graph_nodes": 600,
+      "settled_by_budget": true,
+      "settled_by_partition": false,
+      "start_component": [
+        1,
+        1
+      ],
+      "step_limit": 150,
+      "timing_seconds": {
+        "compute_lower_bound": 0.0047,
+        "enumerate_quotient": 0.0012,
+        "settle_via_components": 0.0016
+      }
+    },
+    {
+      "claimed_lower_bound": 332306998946228968225951765070086144,
+      "components_total": 1,
+      "goal_column": 1,
+      "goal_component": [
+        1,
+        1
+      ],
+      "item": "ii4",
+      "level_id": "orchard",
+      "m": 118,
+      "note": "monotone cart column under a forbidden action",
+      "positional_states": 177,
+      "ratio_bound_over_relaxed_nodes": "1.846e+33",
+      "relaxed_graph_edges": 594,
+      "relaxed_graph_nodes": 180,
+      "settled_by_monotone_column": true,
+      "settled_by_partition": false,
+      "start_column": 2,
+      "start_component": [
+        1,
+        1
+      ],
+      "surviving_column_deltas": [
+        0,
+        1
+      ],
+      "timing_seconds": {
+        "compute_lower_bound": 0.0012,
+        "enumerate_quotient": 0.0003,
+        "settle_via_components": 0.0004,
+        "settle_via_monotone_column": 0.0
+      }
+    }
+  ],
+  "sound_direction": "relaxed_edges over-approximates the cart's moves, so start-component != goal-component is a sound unsolvability proof; the converse is not sound and is not used",
+  "what": "size and cost of the exhaustive computation that settles each shipped class (ii) item, against the search it claims is infeasible"
+}

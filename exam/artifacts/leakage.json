@@ -704,7 +704,8 @@
         "board_size_class",
         "class",
         "search_credible",
-        "witness_length"
+        "witness_length",
+        "witness_source"
       ],
       "metadata_fields_checked": [
         "points",
@@ -765,6 +766,20 @@
               "can_fire_at_all": false,
               "n": 8,
               "untestable_at_alpha": true
+            }
+          ],
+          "p_fire_familywise_in_label_set": 0.0
+        },
+        "witness_source": {
+          "cuts": [],
+          "cuts_tried_in_label_set": 0,
+          "group_power": [
+            {
+              "best_k": 3,
+              "best_p_fire": 0.0178571,
+              "can_fire_at_all": true,
+              "n": 8,
+              "untestable_at_alpha": false
             }
           ],
           "p_fire_familywise_in_label_set": 0.0
@@ -970,6 +985,56 @@
             "scored_tokens": 0,
             "single_holder_tokens": 8
           }
+        ],
+        "witness_source": [
+          {
+            "declined": "constant",
+            "field": "points",
+            "scored_values": 0
+          },
+          {
+            "constant_tokens": 0,
+            "declined": "single-holder tokens are not scorable",
+            "field": "points",
+            "scored_tokens": 0,
+            "single_holder_tokens": 0
+          },
+          {
+            "declined": "constant",
+            "field": "tags",
+            "scored_values": 0
+          },
+          {
+            "constant_tokens": 2,
+            "declined": "single-holder tokens are not scorable",
+            "field": "tags",
+            "scored_tokens": 0,
+            "single_holder_tokens": 0
+          },
+          {
+            "declined": "constant",
+            "field": "kind",
+            "scored_values": 0
+          },
+          {
+            "constant_tokens": 1,
+            "declined": "single-holder tokens are not scorable",
+            "field": "kind",
+            "scored_tokens": 0,
+            "single_holder_tokens": 0
+          },
+          {
+            "field": "item_id",
+            "scored_values": 0,
+            "singleton_values": 8
+          },
+          {
+            "constant_tokens": 0,
+            "declined": "single-holder tokens are not scorable",
+            "field": "item_id",
+            "scored_tokens": 0,
+            "single_holder_tokens": 8
+          }
         ]
       },
       "n_items": 17,
@@ -1105,6 +1170,35 @@
             "18": 842.5,
             "416": 1091.667,
             "98": 761.0
+          }
+        },
+        "witness_source": {
+          "chance_baseline": 0.625,
+          "chance_label": "\"search\"",
+          "clustered_by_answer": false,
+          "example_ids_by_answer": {
+            "\"construction\"": [
+              "vq-0ffc3cd33f",
+              "vq-6bab2f307c",
+              "vq-8c4f14b152"
+            ],
+            "\"search\"": [
+              "vq-1881c8c383",
+              "vq-9e0aefdf80",
+              "vq-abe007cdfa",
+              "vq-c480b494f3"
+            ]
+          },
+          "label_counts": {
+            "\"construction\"": 3,
+            "\"search\"": 5
+          },
+          "n": 8,
+          "order_runs": 5,
+          "order_runs_max": 8,
+          "sheet_length_mean_by_answer": {
+            "\"construction\"": 1091.667,
+            "\"search\"": 826.2
           }
         }
       },
