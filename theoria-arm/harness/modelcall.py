@@ -96,6 +96,29 @@ NEUTRAL_PARENT = tempfile.gettempdir()
 
 PROVIDER = "anthropic-claude-code-cli"
 
+#: Environment variables removed before the desk subprocess starts.
+#:
+#: `ARC_API_KEY` is the game credential: `CLAUDE.md` seals it inside the
+#: environment proxy, and the desk has no business holding it.
+#:
+#: The three `ANTHROPIC_*` names are the redirect surface, and they are here
+#: because A11 found the comment below the pop claimed to cover them and did
+#: not. `ANTHROPIC_BASE_URL` is exactly how the model proxy was wired when it
+#: was tried (see the module docstring), so it is a variable someone in this
+#: repo has genuinely exported; `ANTHROPIC_AUTH_TOKEN` and `ANTHROPIC_API_KEY`
+#: are the credentials that would make a redirected endpoint answer instead of
+#: refusing. Inheriting any of them turns a desk call into a request this
+#: ledger cannot see, while `total_cost_usd` still comes back in the CLI's
+#: envelope and the run still looks fully accounted for.
+#:
+#: The CLI authenticates with its own stored OAuth bearer, so removing these
+#: takes nothing away from it. If a future run genuinely needs to point the
+#: desk somewhere else, that is a recorded act -- pass it explicitly and write
+#: down where it went -- not something inherited from whatever shell happened
+#: to launch the arm.
+SCRUBBED_FROM_DESK_ENV = ("ARC_API_KEY", "ANTHROPIC_BASE_URL",
+                          "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_API_KEY")
+
 
 def call_field(record: Dict[str, Any], name: str) -> Any:
     """Read `beat`/`label`/`transport` off a `model_call` record, either shape.
@@ -548,7 +571,17 @@ class ModelDesk:
         env = dict(os.environ)
         # The desk must not be able to reach the game credential, and must not
         # inherit a base URL that would send it somewhere unrecorded.
-        env.pop("ARC_API_KEY", None)
+        #
+        # The second half of that sentence was a comment and nothing else until
+        # A11 read it: only `ARC_API_KEY` was popped, and `ANTHROPIC_BASE_URL`
+        # was inherited from whatever launched the arm. One exported variable
+        # in the operator's shell would have redirected every desk call to an
+        # endpoint this ledger never sees -- and the run would still have
+        # produced a full, plausible, correctly-priced transcript, because the
+        # cost comes back in the CLI's own envelope. A silently redirected desk
+        # is worse than a broken one: nothing goes red.
+        for var in SCRUBBED_FROM_DESK_ENV:
+            env.pop(var, None)
 
         started = time.time()
         with tempfile.TemporaryDirectory(dir=NEUTRAL_PARENT) as cwd:

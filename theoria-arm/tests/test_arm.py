@@ -64,9 +64,22 @@ def test_the_arm_has_no_path_to_the_game_credential():
 
 
 def test_the_desk_env_drops_the_game_credential():
-    source = open(os.path.join(ARM, "harness", "modelcall.py"),
-                  encoding="utf-8").read()
-    assert 'env.pop("ARC_API_KEY", None)' in source
+    """Kept as a cheap tripwire; the real assertion moved and is stronger.
+
+    This used to grep `modelcall.py` for the literal `env.pop("ARC_API_KEY",
+    None)`. A source-text assertion pins the spelling, not the behaviour: it
+    stayed green through the whole period in which the line above it promised
+    the desk could not "inherit a base URL that would send it somewhere
+    unrecorded" while `ANTHROPIC_BASE_URL` was inherited on every call (A11's
+    F3). It would equally have gone red on a rename that changed nothing.
+
+    `tests/test_desk_sealing.py` now asserts the outcome -- what is in the
+    environment dict actually handed to `subprocess.run` -- with a positive
+    control that an unrelated variable survives. What is left here is the
+    membership check, which is worth keeping only because it is free.
+    """
+    from harness.modelcall import SCRUBBED_FROM_DESK_ENV  # noqa: PLC0415
+    assert "ARC_API_KEY" in SCRUBBED_FROM_DESK_ENV
 
 
 # ------------------------------------------------------------------- budget

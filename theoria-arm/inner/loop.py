@@ -107,6 +107,52 @@ LEVEL_SIGNAL_UNKNOWN = True
 MAX_LEVEL_ADVANCE_ATTEMPTS = 2
 
 
+def _forbidden_substrings(game_id: str) -> Tuple[str, ...]:
+    """Every id that may not appear in a prompt this run sends.
+
+    Two groups, and the second is the one A11 found missing.
+
+    **The game being played**, full id and stem. The stem is the half that
+    actually leaks: it is what a run slug embeds, so it is what an absolute
+    path in an engine traceback or a Lean diagnostic carries into the prompt
+    (`Theoria.md:353`).
+
+    **Every sealed game**, full id and stem. Until now this list held only the
+    id being played, which reads as sufficient and is not: the environment path
+    is guarded by `SealedPileGuard` inside `EnvProxy`, but *the model path does
+    not traverse that guard at all* -- `harness/modelcall.py` starts a
+    subprocess and talks to a different upstream, so nothing between the arm
+    and the desk has ever consulted the cut. A sealed id reaching model context
+    is `Theoria.md:353`'s fourth channel opening from the inside: the desk is a
+    pretrained model, and naming a sealed game to it is the same contamination
+    as reading about that game, which `CLAUDE.md` forbids in those words. This
+    is not hypothetical plumbing -- the *first* group exists precisely because
+    an adversarial probe got six occurrences of `g50t` into a 20,975-char
+    prompt through an engine traceback, and that channel does not know or care
+    which pile the id it is carrying belongs to.
+
+    Sourced from the frozen cut rather than a literal list, so widening the cut
+    cannot leave this behind. `proxy/guard.py` belongs to another track and is
+    imported, never edited. If the cut cannot be read the arm **fails closed**:
+    a run that cannot enumerate the sealed pile is a run that cannot promise it
+    kept the pile out of a prompt.
+    """
+    forbidden = {game_id, game_id.split("-")[0]}
+
+    from proxy.guard import SealedPileGuard, stem     # noqa: PLC0415
+    guard = SealedPileGuard()
+    for sealed_id in guard.sealed:
+        forbidden.add(sealed_id)
+        forbidden.add(stem(sealed_id))
+
+    # The game being played is a dev-pile id, so this cannot fire today; it
+    # would fire if a caller ever handed this arm a sealed id, and at that
+    # point every prompt would be unsendable, which is the correct outcome and
+    # a confusing one to debug without being told why.
+    forbidden.discard("")
+    return tuple(sorted(forbidden))
+
+
 class TheoriaArm:
     def __init__(self, *, env_base: str, run, game_id: str,
                  budget_actions: int = 120,
@@ -159,11 +205,7 @@ class TheoriaArm:
             run.run, model=model, pricing_ref=pricing,
             cost_ceiling_usd=None if offline else cost_ceiling_usd,
             transcript_dir=os.path.join(self.dir, "desk"),
-            # Both the full id and its stem. The stem is the half that actually
-            # leaks: it is what a run slug embeds, so it is what an absolute
-            # path in an engine traceback or a Lean diagnostic carries into the
-            # prompt. `Theoria.md:353`.
-            forbid_in_prompt=(game_id, game_id.split("-")[0]))
+            forbid_in_prompt=_forbidden_substrings(game_id))
 
         #: How many commands had been recorded when the desk was last called.
         #: The evidence gate in `_theorize_and_certify` turns on it.
