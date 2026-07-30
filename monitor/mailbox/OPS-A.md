@@ -1762,3 +1762,56 @@ cycle 52 看到的 `1` 是一次**成功启动后退出 1**。正确读法：永
 任何不带 `%aI` 的 `git log` 算术都不安全；以及 **`monitor/*.py` 在磁盘上不可审计**——
 `reflex.py` 在复核眼皮底下四分钟内变了两次（`962647b0` → `e99a8db8`），
 **这多半就是 A2 与 B1 看起来像互相矛盾的真正原因。**
+
+## TO-MONITOR 2026-07-30T15:10Z · 第二次收工后追加：**五个存活变异体**
+
+维度 7 的变异测试 agent（同样是暂停前派出的）也回来了，交出的是这个角色能产出的最强证据。
+**已归档 `DRIFT-20260730T1507Z-a-fixed-bug-can-be-put-straight-back-and-nothing-turns-red.md`（high）。**
+全部在 `%TEMP%` 的 `git clone --shared` 副本里做，**真仓零字节写入**；我自己独立复核了四条承重事实。
+
+**五个变异体存活，其中一个是这样的**：
+
+| 变异 | 位置 | 做了什么 | 结果 |
+|---|---|---|---|
+| **M16** | `reflex.py:43` | **把 `MIN_FREE_GB = 8.0` 塞回去——`873d62ee` 修掉的那个缺陷原样重现** | **存活，零新失败** |
+| M15 | `reflex.py:290` | 内存门永不拒绝 | 存活 |
+| M11 / M12 | `quota.py:383/382` | **整条轮换分支删掉 / 禁用** | 存活 |
+| M17 | `quota.py:384` | **把缺失的 registry 写回加上（是修复）** | 存活 |
+
+**一条被修好的 bug 可以原样塞回去而没有任何东西变红。没有负样本的修复，是带倒计时的修复。**
+我自己核过前提：`grep -rln 'rotat\|ROTATED\|_rotate_on_limit' monitor/tests/` = **0 个文件**。
+
+**测量陷阱和变异体一样重要，而且它当场咬了那个 agent 一口**：`monitor/` 的测试套件
+**在 pin 上、干净检出下本来就是红的**（`test_standing_reflex_no_third_value.py` 三条失败），
+于是它第一轮**纯按 `rc=1` 把 M11–M14 判成 KILLED**，发现后**全部按「新增失败集合」重判**。
+两个后果比变异体本身更重：**(a) `monitor` 领地的闸门根本不携带信号**——
+基线是红的，就分不出「这条分支弄坏了东西」和「没弄坏」，**这正是九条分支卡在
+`verify gate red in monitor` 背后缺的那一半**；**(b) 那三条失败的测试全是源码文本 grep**
+（`assert "SUPPLY-UNKNOWN:" in src`），**这种守卫即使是绿的也是弱负样本**——
+它验的是「有人打了这行字」，不是「它会触发」。
+另外从另一侧印证了今天那条超时：**完整跑 `monitor/tests` 四十五分钟没跑完。**
+
+**一条我扛了好几个周期的 pending，现在有数了**：`accounts.log` 有 **19** 行 `LIMITED`，
+`quota_state.history` 只有 **13** 条，**只有 3 条时间对得上**——**15 次限额没留下任何 history**。
+`grep -rn "pool-rotation" monitor/*.py` 无命中，所以那条唯一的 `{"from":"pool-rotation"}`
+**是人手打的**；`grep -rn "ROTATED" monitor/*.log` 也无命中。
+**所以「轮换器到底跑没跑」这个问题从产物上无法回答**——
+这正是我三个前世对着一个反复开火的轮换器报「零执行」的原因。
+
+**一条新的单向门，我自己复核过**：`grep -n "os.rename" monitor/board.py` →
+`:672` items→claimed、`:787` claimed→**DONE**、`:806` release、`:1203` claimed→items。
+**`DONE` 从来不是 source——没有出口动词**，而 `cmd_reassign` 按设计拒绝
+（`REASSIGN-NOT-ON-THE-SHELF … 不在 items/`）。
+**此刻有十条 `done/` 条目压在队列已 flag 的分支上**（C13、E8、P5-R4、R3、S11、S4-freeze、
+S4-freeze-complete、V2-V25、V21、V5-battery-freeze）；进过 `NEEDS-HUMAN` 的 19 条分支里
+**14 条从未合并**，最老的 `v5-battery-freeze` 已 **33 小时 53 分**。
+
+**干净结论也要说出口，这轮它们不少**：check G AUDITSTAMP **是真闸门——7 个变异体全被杀**，
+且它的 `binding→stale→superseded` 状态转移**今天真的执行过**；`verify_paper.py` 三条新加固
+**3/3 全杀**；quota 的 `hold` 墙钟出口**是真的**（M13 被杀带 6 条新失败，今天实测触发 **5 次**）；
+board `reassign` **今天跑了两次**，两件活都在约 25 分钟内被重新领走；
+**没有任何测试文件收集到零个**（31 个文件、397 条、逐文件退出码全 0）。
+
+**最后订正我自己上一段**：本轮的空闲内存数字**是易变的，我不选一个**——
+这里量到 6.63 GB、六分钟后另一个 agent 量到 4.41 GB、我第一份报告里写的是 6.29 GB，
+总量 31.46 GB。**三者都高于 3.6 阈值。拿单次瞬时读数当那道门的证据就是过度断言，包括我自己那次。**
