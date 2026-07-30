@@ -112,7 +112,40 @@ class PriceTable:
         lines: Dict[str, float] = {}
         lines["input_tokens"] = measured["input_tokens"] * per_token_in
         lines["output_tokens"] = measured["output_tokens"] * per_token_out
+        # Cache writes are priced from the **breakdown** when the envelope
+        # carries one. `usage.cache_creation` splits the write into
+        # `ephemeral_1h_input_tokens` and `ephemeral_5m_input_tokens`, and the
+        # flat `cache_creation_input_tokens` beside it is their total. Pricing
+        # the flat key charges every write at the 5m multiplier (1.25), and a
+        # 1h write bills at 2.0 -- so on the seven real archived calls, all of
+        # them 100% 1h, this understated the model's line by ~6%
+        # ($1.229967 derived against $1.296152 billed on one of them).
+        #
+        # The table already carried `cache_creation_input_tokens_1h`; nothing
+        # ever wrote a usage key by that name, so the rate sat unused while the
+        # bill went out at the wrong one.
+        breakdown = usage.get("cache_creation")
+        priced_from_breakdown = False
+        if isinstance(breakdown, dict):
+            for field, multiplier in (
+                    ("ephemeral_1h_input_tokens",
+                     self.cache.get("cache_creation_input_tokens_1h")),
+                    ("ephemeral_5m_input_tokens",
+                     self.cache.get("cache_creation_input_tokens"))):
+                count = int(breakdown.get(field) or 0)
+                if count and multiplier is not None:
+                    lines[field] = count * per_token_in * multiplier
+                    priced_from_breakdown = True
+
         for field, multiplier in self.cache.items():
+            if field == "cache_creation_input_tokens" and priced_from_breakdown:
+                # Already charged, at the rate each half actually bills at.
+                continue
+            if field.endswith("_1h"):
+                # Priced from the breakdown above. No envelope has ever carried
+                # a flat usage key by this name; reading one would double-charge
+                # a run whose breakdown was also present.
+                continue
             count = int(usage.get(field) or 0)
             if count:
                 lines[field] = count * per_token_in * multiplier
