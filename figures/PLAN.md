@@ -38,6 +38,70 @@ the CSV diff says so first.
 | **English labels.** | Font determinism: matplotlib's bundled DejaVu Sans has no CJK coverage, so CJK text renders as tofu boxes and the SVG path data depends on whatever system font is substituted. Prose stays bilingual; figures do not. |
 | **No `not-applicable` cell is drawn as zero.** Absent is drawn as absent. | `battery/REPORT_V0.md`'s whole complaint: a metric can be perfect and still measure the wrong thing. Rendering a structural gap as a 0 bar is the graphical form of that error. |
 
+> **V23 CORRECTION (2026-07-29).** The "Tracked sources only" row above, and every
+> other statement in this file that calls `baseline-arms/out/shards/` or
+> `out/campaign/` untracked, is obsolete: A14 committed all of it (`9307f139` for
+> the four dev-pile ledger shards).
+>
+> Superseded by this note, cited by quotation rather than by line number — the
+> first draft of this block cited lines and every pointer was wrong by exactly
+> the length of the block itself, which is a small lesson about hand-copied
+> coordinates in a file that grows:
+>
+> * **§0 rule 4** above — "`baseline-arms/out/shards/` and `out/campaign/` are
+>   **untracked** in `master` and therefore excluded". They are discovered and
+>   hashed like anything else now.
+> * **§3**, "(envelope campaign ledgers) are **untracked in `master`**".
+> * **§8's absent-by-design note**, "Absent-by-design members (the untracked
+>   envelope shards) stay declared through `expected`" — and every other mention
+>   of `expected`. That tuple is deleted; all four paths are discovered.
+> * **P8 change 3**, "absent-by-design members stay declared via `expected` |
+>   `SOURCES.sha256` must still *name* the untracked shards, not forget them".
+> * **§11 caveat (iii)**, "remain untracked, so ~2 000 cost rows…".
+> * **house rule 5**, "Figure 6 is the live case: four untracked envelope
+>   shards". No plate is `pending` any more.
+>
+> **House rule 13** is the one that got *sharper*, and it is worth
+> reading again: a `tracked=True` rule discovers only what git tracks. The
+> `envelope_ledger` rule was the single `tracked=False` exception, so it was the
+> one family that rule did not protect — and `SOURCES.sha256`'s status column is
+> written from that same declared boolean, never from git. When A14 committed the
+> shards, fifteen manifest lines began asserting `[untracked]` about tracked
+> files, and **gate 4 could not see it, because gate 4 compares a committed
+> manifest with a regenerated one and both sides read the declaration.** The rule
+> is now `tracked=True`, keeping `optional=True` and `floor=0` — see the next
+> paragraph for why the floor stays at zero — and gate 14 (`check_tracking.py`)
+> re-derives the status column from `git ls-tree -r HEAD` without importing
+> `sources.py`. Full account:
+> `runs/20260729T172327Z-V23-figures-sources-absent/FINDINGS.md` F-3 and
+> `runs/20260730T034952Z-V23-figures-sources-absent/FINDINGS.md`.
+>
+> (This sentence read `tracked=True, optional=False, floor=15` until W-1692
+> landed the block. That was the *first* attempt's declaration, which the very
+> next paragraph withdraws and the code never carried — a correction block whose
+> summary line contradicted its own reasoning two paragraphs later, left in the
+> file for a day because nothing reads a paragraph against the code it describes.
+> Recorded rather than quietly overwritten: the failure mode this whole file is
+> about is a statement nothing checks.)
+>
+> **`envelope_ledger` keeps a floor of zero, and the guarantee is derived
+> instead.** V23's first attempt set `floor=15, optional=False`, on the reasoning
+> that a tracked file going missing is a broken checkout that should stop the
+> build. True here, false where it matters most: `release/LICENCE_POSTURE.md`
+> classes these shards **B — excluded from the release by default**, so the
+> release tree has none of them and a numeric floor turns gate 0 red before any
+> other gate runs, breaking the reproduction path `release/REPRODUCING.md`
+> documents. An adversarial review caught it before it shipped.
+>
+> House rule 5 also had a point against it: 15 was a hand-copied count of exactly
+> the kind this file forbids. Both objections have one answer — derive it.
+> `sources.tracked_but_missing()` asks git which members are committed and
+> requires each of those to be on disk. Strictly stronger than `floor=15` (it
+> catches a sixteenth committed shard going missing too), silent where git cannot
+> be asked, and carrying no number to age. The floors on `theoria_run` (4) and
+> `pilot_rollup` (6) stay as they are: those families are not excluded anywhere
+> downstream, and for them a high-water mark is the right instrument.
+
 ### Determinism knobs (all in `figures/theme.py`)
 
 * `mpl.rcParams['svg.hashsalt']` pinned — otherwise SVG element ids are salted per process.

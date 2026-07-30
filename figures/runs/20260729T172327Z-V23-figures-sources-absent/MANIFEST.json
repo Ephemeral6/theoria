@@ -1,0 +1,126 @@
+{
+  "prompt_id": "V23-figures-sources-absent",
+  "branch": "agent/v23-figures-sources-absent",
+  "base_commit": "580c645d120b81ce12fe6bd0917fe51100e9e873",
+  "utc": "20260729T172327Z",
+  "worker": "W-1681",
+  "cell": "V5",
+  "territory": "figures",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "goal": "Board item V23 as written: re-register the four dev-pile ledger hashes in figures/SOURCES.sha256, run figures/verify.sh green, explain why a red gate produced no signal, adjudicate the remaining source hashes line by line, and dispose of the three uncited plates in figures/STATUS.md.",
+  "files": [
+    {
+      "path": "figures/sources.py",
+      "sha256": "1988b8cfd3c0a6cb92cac267b1e01833737dc3ada3389f0e2fd22a7cbd893a1a",
+      "bytes": 41534
+    },
+    {
+      "path": "figures/check_tracking.py",
+      "sha256": "e39634c58e3e3c5996b3fcca64f7ca561afbc1bb2eea8c04dc20563d706f2121",
+      "bytes": 12187
+    },
+    {
+      "path": "figures/verify.sh",
+      "sha256": "4421cc18e6ce1f0c6c0881373dcaf24a51d626a4f634990a79425b6da192fc26",
+      "bytes": 21120
+    },
+    {
+      "path": "figures/build_all.py",
+      "sha256": "eb30fb033eaf9909ab1630c2e1e5810e8299a39d28c643e9321ad48a879bd83c",
+      "bytes": 8248
+    },
+    {
+      "path": "figures/fig02_bill_shape.py",
+      "sha256": "bf777910085dc5f03643d37953e3e40e2adbb6669eea5d646b764e917417b1cb",
+      "bytes": 71367
+    },
+    {
+      "path": "figures/SOURCES.sha256",
+      "sha256": "2d9878885530cc102f245aadbd16d80ce159a57f15e57ac6cffb5529c1fc7b45",
+      "bytes": 7730
+    },
+    {
+      "path": "figures/STATUS.md",
+      "sha256": "eca78c5802d8641f1ebd9fc95e89f435345849565a9961a15745cf84f1153ebd",
+      "bytes": 9213
+    },
+    {
+      "path": "figures/SOURCES.md",
+      "sha256": "38a9162e5255dced4e0858a8a7d2e2bfc32994514d39eb849d55e0bc47ceb074",
+      "bytes": 14483
+    },
+    {
+      "path": "figures/README.md",
+      "sha256": "1de69420241130da3cc54b2581366057b675780e46123ca0604e668c04619494",
+      "bytes": 10052
+    },
+    {
+      "path": "figures/PLAN.md",
+      "sha256": "54969e8e83875ba4f58cf7b8668465f380c730068efeffed0118b8f7fb5c1d91",
+      "bytes": 49365
+    },
+    {
+      "path": "figures/paper/index.json",
+      "sha256": "6b4ec947c2c07e7d903777381c4bbab249bdc784ad49c50505b9b5b0390eecf8",
+      "bytes": 47144
+    },
+    {
+      "path": "figures/paper/INDEX.md",
+      "sha256": "f19dc83c01f9fcefcfb56f53446bf65f69ee8753a7840c768f6d87839537eb5a",
+      "bytes": 25431
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/FINDINGS.md",
+      "sha256": "56bbca44d405286a4a4dd651fa5953743bdc4a00a79f7fe7493c82e1e7bb39dc",
+      "bytes": 22949
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/RUN_STATE.md",
+      "sha256": "ebc2c496f61c3900613d9d7e1c0983d658cd7b41af5962da4f9cd0155996c958",
+      "bytes": 9863
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/verify.BEFORE.txt",
+      "sha256": "e8a283f6a90640b49f9c901c3058380157425f0226c0275146aa0ae8edf71090",
+      "bytes": 1867
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/verify.AFTER.txt",
+      "sha256": "b7b4a6f1016ef35c1d5b800dfe18a08b9549b658a231620d51a92f6b5703b13e",
+      "bytes": 2257
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/check_tracking.BEFORE.txt",
+      "sha256": "eed32eb7e6efa4c738768a6381ad0a68132b27d3a8cd9358a686f24a579b2a68",
+      "bytes": 3826
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/check_tracking.selftest.txt",
+      "sha256": "d72e6e487b8d3f67df3c86f00c2184d35484e33cf1cf6b1f205df2ceecf27aab",
+      "bytes": 4576
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/build_all.log",
+      "sha256": "4eeea50b03541606b4b35ab8188e0f95091a6c2187021245c2a667f52fc848b5",
+      "bytes": 23286
+    },
+    {
+      "path": "figures/runs/20260729T172327Z-V23-figures-sources-absent/check_tracking.AFTER.txt",
+      "sha256": "c4124fa6992cadbd4b1c5c004c577eaa82cdb034b9d336da657426d927f284bb",
+      "bytes": 872
+    }
+  ],
+  "gates": {
+    "verify.sh": "green, 14 gates (0..13)",
+    "before": "verify.BEFORE.txt exit 0 at 580c645d",
+    "after": "verify.AFTER.txt exit 0"
+  },
+  "new_gate": {
+    "id": 13,
+    "probe": "figures/check_tracking.py",
+    "negative_control": "3 planted defects, all refused",
+    "shown_failing_on": "580c645d: 15 problems while verify.sh was green on all 13 gates"
+  },
+  "premise_correction": "The item states gate 4 is red now and that 13 of 50 manifest lines have drifted. Neither holds at base 580c645d: verify.BEFORE.txt is green on all 13 gates and true digest drift is 0 of 61 lines (a5f597dd had already regenerated the manifest). The gate WAS red for 31h13m, 2026-07-28T09:06:26Z to 2026-07-29T16:19:27Z, and the ABSENT lines were false when written rather than later: the shards were created on disk 2026-07-27T18:23Z, fifteen hours before 87751026 recorded them absent. What was live at 580c645d is a different defect the item did not name: 15 of 61 lines asserted [untracked] about git-tracked files, which gate 4 cannot see because both sides of it read the same declaration. See FINDINGS.md F-1 and F-3."
+}
