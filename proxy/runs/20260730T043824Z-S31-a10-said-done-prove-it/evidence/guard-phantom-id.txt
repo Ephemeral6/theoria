@@ -1,0 +1,32 @@
+Guard verdict on POST /api/scorecard/open with body {'arm': <arm>, 'game_id': 'ar25-0c556536'}
+(the body proxy/mock/arm_mock.py:107-108 actually sends)
+
+arm           values joined (guard.py:266) decision       phantom id
+--------------------------------------------------------------------------------------
+bare_cc       bare_ccar25-0c556536        DENY           ['ccar25-0c556536']
+mock_arm      mock_armar25-0c556536       ALLOW          -
+probe         probear25-0c556536          ALLOW          -
+replay        replayar25-0c556536         ALLOW          -
+schema_repro  schema_reproar25-0c556536   ALLOW          -
+theoria       theoriaar25-0c556536        ALLOW          -
+
+Only bare_cc is denied, and it is denied for a game id that was never sent.
+
+Mechanism: guard.py:265-267 appends ''.join(values) -- values only, key order --
+to catch an id split across two fields ({'a':'ls20-','b':'9607627b'}, D-022).
+With keys sorted, 'arm' precedes 'game_id', so the join is <arm><game_id>.
+_GAME_ID (guard.py:35-36) is anchored (?<![A-Za-z0-9]) rather than \b, so a
+stem may begin immediately after '_'. 'bare_cc' + 'ar25-...' yields the
+6-character stem 'ccar25', which is inside the {2,6} bound, so it matches.
+
+The regex's OWN documented counter-example still matches:
+   game_idar25-0c556536     current=[('idar25', '0c556536')] with \b=[]
+   bare_ccar25-0c556536     current=[('ccar25', '0c556536')] with \b=[]
+
+guard.py:31-34 states this case 'must not read as an id called idar25-0c556536'.
+It does. The \b form it was changed away from rejects both; the change that
+was made to close one hole opened this one.
+
+Direction of failure: CLOSED. The phantom is in neither pile, so the guard
+denies. No sealed game is reachable through this -- it is a false denial,
+not a leak. Consequence: the bare_cc arm cannot open a scorecard at all.

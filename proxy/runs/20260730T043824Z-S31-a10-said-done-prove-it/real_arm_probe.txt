@@ -1,0 +1,31 @@
+S31 real-arm write-path probe
+====================================================================
+
+run: proxy.runner.run_game(arm='bare_cc') against the loopback mocks,
+     ledger redirected to a scratch file. $0.00, no network, no key.
+
+records written: 63
+
+AXIS 1 -- arm identity is an experimental arm, ignoring incidents
+   real-arm records: 61
+     {"arm": "bare_cc", "event": "run_start", "run_id": "r-5b3d7ed34072406c", "seq": 1}
+     {"arm": "bare_cc", "event": "guard_block", "run_id": "r-5b3d7ed34072406c", "seq": 2}
+     {"arm": "bare_cc", "event": "env_step", "run_id": "r-5b3d7ed34072406c", "seq": 4}
+     {"arm": "bare_cc", "event": "model_call", "run_id": "r-5b3d7ed34072406c", "seq": 5}
+     ... and 57 more
+
+AXIS 2 -- the run reached a non-localhost upstream
+   r-5b3d7ed34072406c  env_upstream=http://127.0.0.1:49174  model_upstream=http://127.0.0.1:49175
+   live runs: 0
+
+VERDICT
+   axis 1 = 61  (yes: the writer accepts a real arm and recorded one)
+   axis 2 = 0  (no: nothing left this machine)
+
+   The write end is NOT broken. `proxy/var/ledger.jsonl` holds zero
+   real-arm records because no caller has ever passed a real arm to it,
+   not because a real arm was passed and dropped.
+
+   And this run is exactly the forgery: had its ledger not been
+   redirected, an audit asking only axis 1 would now call A10
+   delivered, on 61 mock records.
