@@ -114,7 +114,8 @@ def _enumerate_a2_level(doc):
     seen = {start}
     queue = [start]
     sums = set()
-    by_kind = {}
+    sum_by_kind = {}
+    count_by_kind = {}
     branches = {}
     transitions = 0
     while queue:
@@ -157,11 +158,12 @@ def _enumerate_a2_level(doc):
                 kind = "blocked"
             # Every transition of a kind must agree, or "the" sum for that kind
             # is not a well-defined number and this probe is measuring an average.
-            if kind in by_kind and by_kind[kind] != bits:
+            if kind in sum_by_kind and sum_by_kind[kind] != bits:
                 raise AssertionError(
                     "A2 %s transitions disagree on their coefficient sum: "
-                    "%d and %d" % (kind, by_kind[kind], bits))
-            by_kind[kind] = bits
+                    "%d and %d" % (kind, sum_by_kind[kind], bits))
+            sum_by_kind[kind] = bits
+            count_by_kind[kind] = count_by_kind.get(kind, 0) + 1
 
             state = (nxt, npressed, nmask)
             if state not in seen and nxt not in level.lost_cells:
@@ -172,9 +174,24 @@ def _enumerate_a2_level(doc):
                         "probe refuses to report a partial sweep as a "
                         "measurement" % (doc["level_id"], A2_STATE_BOUND))
                 queue.append(state)
+    # `coefficient_sum_by_kind` and `transitions_by_kind` are two different
+    # things and were one field until now: the old name was `by_kind` and it
+    # held the sums, so `a2_plain_move: 0` and `a2_blocked: 0` reached the
+    # record reading like counts -- i.e. like "no plain move and no blocked
+    # transition was ever seen", which would empty the measurement out, when
+    # what they say is that those transitions' coefficient sum *is* 0, which is
+    # the result. The counts are now published beside the sums instead of being
+    # unobtainable, and `transitions_by_branch` keeps the per-branch tallies
+    # this function was already computing and then discarding with a `sorted()`
+    # over the keys -- "all six branches covered" says nothing about a branch
+    # covered by four transitions in one level, and that is exactly what a
+    # reader needs in order to distrust it.
     return {"level_id": doc["level_id"], "latch_bits": len(level.switch_index),
             "states": len(seen), "transitions": transitions,
-            "sums": sorted(sums), "by_kind": dict(by_kind),
+            "sums": sorted(sums),
+            "coefficient_sum_by_kind": dict(sum_by_kind),
+            "transitions_by_kind": dict(count_by_kind),
+            "transitions_by_branch": dict(branches),
             "branches": sorted(branches)}
 
 
@@ -215,11 +232,24 @@ def _measure_a2_coefficient_sums():
     """
     docs = [V.comb_open("lp-iface-comb%d" % n, n, 1, n) for n in (2, 3, 4, 5)]
     docs.append(V.a2_echo())
+    # `updraft`, `cistern`, `quarry` and `meander` are here because the first
+    # run that published per-branch counts showed what the branch *set* had been
+    # hiding: `portal` was taken by exactly 1 transition out of 51164 and the
+    # `button press` kind by exactly 1, with `button` / `door_open` /
+    # `door_closed` at 2 each -- all of them inside `a2_echo` alone.  The
+    # agreement check below ("every transition of a kind must agree, or the sum
+    # is not well defined") cannot fire on a sample of one: there is nothing for
+    # the single transition to disagree with, so for `button press` the check
+    # was decorative.  Coverage asserted as a set of branch names looked
+    # complete while resting on single observations.
+    docs.extend([V.updraft(), V.cistern(), V.quarry(), V.meander()])
 
     per_level = [_enumerate_a2_level(doc) for doc in docs]
 
     sums = set()
-    by_kind = {}
+    sum_by_kind = {}
+    count_by_kind = {}
+    count_by_branch = {}
     branches = set()
     transitions = 0
     states = 0
@@ -228,12 +258,43 @@ def _measure_a2_coefficient_sums():
         branches.update(row["branches"])
         transitions += row["transitions"]
         states += row["states"]
-        for kind, value in row["by_kind"].items():
-            if kind in by_kind and by_kind[kind] != value:
+        for kind, value in row["coefficient_sum_by_kind"].items():
+            if kind in sum_by_kind and sum_by_kind[kind] != value:
                 raise AssertionError(
                     "levels disagree on the coefficient sum of an A2 %s: "
-                    "%d and %d" % (kind, by_kind[kind], value))
-            by_kind[kind] = value
+                    "%d and %d" % (kind, sum_by_kind[kind], value))
+            sum_by_kind[kind] = value
+        for kind, n in row["transitions_by_kind"].items():
+            count_by_kind[kind] = count_by_kind.get(kind, 0) + n
+        for branch, n in row["transitions_by_branch"].items():
+            count_by_branch[branch] = count_by_branch.get(branch, 0) + n
+
+    # Coverage asserted as a set of names, with the sample sizes discarded, is
+    # how `portal x1` and `button press x1` passed for complete.  Adding
+    # `updraft`, `cistern`, `quarry` and `meander` did not move them: those four
+    # levels raised `plain move` 27923 -> 28337 and `blocked` 11864 -> 12166
+    # across four fresh geometries, and left `button press` at 1, `portal` at 1
+    # and each door branch at 2, because **`atrium` is the only level in
+    # `verdict.py` that has a button, a door or a portal at all**.  So this is
+    # not a gap that more of the shipped levels can close, and the record says
+    # so instead of implying otherwise.  THIN is 3 because the agreement check
+    # above needs two observations to be capable of firing and a third to be
+    # worth calling a sample.
+    THIN = 3
+    thin = {"threshold": THIN,
+            "kinds": {k: n for k, n in sorted(count_by_kind.items()) if n < THIN},
+            "branches": {b: n for b, n in sorted(count_by_branch.items())
+                         if n < THIN},
+            "note": ("Every kind and branch listed here was observed fewer than "
+                     "%d times, all of them inside `atrium`, the only shipped "
+                     "level with a button, a door or a portal. For a kind seen "
+                     "once the cross-transition agreement assertion cannot fire "
+                     "-- there is nothing for the single observation to "
+                     "disagree with -- so its coefficient sum is a single "
+                     "measurement, not a confirmed constant. The general claim "
+                     "rests on the monotonicity argument, which these "
+                     "transitions are consistent with and do not "
+                     "independently establish." % THIN)}
 
     missing = [b for b in STEP_BRANCHES if b not in branches]
     if missing:
@@ -247,7 +308,10 @@ def _measure_a2_coefficient_sums():
             "Level.step took a branch this probe does not know about: %s"
             % (extra,))
 
-    return {"sums": sorted(sums), "by_kind": by_kind,
+    return {"sums": sorted(sums), "coefficient_sum_by_kind": sum_by_kind,
+            "transitions_by_kind": count_by_kind,
+            "transitions_by_branch": count_by_branch,
+            "thin_coverage": thin,
             "branches": sorted(branches), "transitions": transitions,
             "states": states, "per_level": per_level,
             "level_ids": [row["level_id"] for row in per_level]}
@@ -393,17 +457,34 @@ def probe_d():
         print("  %-16s latch bits=%2d  states=%6d  transitions=%7d  sums=%s"
               % (row["level_id"], row["latch_bits"], row["states"],
                  row["transitions"], row["sums"]))
-    for label, value in sorted(a2["by_kind"].items()):
-        print("  A2 %-18s: coefficient sum = %+d" % (label, value))
-    print("  Level.step branches covered: %s" % (a2["branches"],))
+    for label, value in sorted(a2["coefficient_sum_by_kind"].items()):
+        print("  A2 %-18s: coefficient sum = %+d  (over %d transitions)"
+              % (label, value, a2["transitions_by_kind"][label]))
+    # Printed with counts, because "covered" is the claim and the count is the
+    # only thing that says how thinly.  `portal` and `door_open` come from one
+    # level between them, and a reader is entitled to see that here rather than
+    # having to reconstruct it from `per_level`.
+    print("  Level.step branches covered: %s"
+          % ", ".join("%s x%d" % (b, a2["transitions_by_branch"][b])
+                      for b in a2["branches"]))
+    thin = a2["thin_coverage"]
+    if thin["kinds"] or thin["branches"]:
+        print("  THIN (<%d observations, so the agreement check is weak or "
+              "vacuous): kinds=%s branches=%s"
+              % (thin["threshold"], thin["kinds"] or "{}",
+                 thin["branches"] or "{}"))
     print("  lp_potential Move    : coefficient sum = -1, always")
     print("  => no assignment of (src, over, dst) expresses an A2 transition.")
     OUT["D_verdict"] = {
         "lp_move_coefficient_sum": -1,
-        "a2_plain_move": a2["by_kind"]["plain move"],
-        "a2_latching_move": a2["by_kind"]["latching move"],
-        "a2_blocked": a2["by_kind"]["blocked"],
-        "a2_button_press": a2["by_kind"]["button press"],
+        # Named for their unit.  `a2_plain_move: 0` stood here and read as a
+        # count of plain moves -- 0 of them -- when it was that kind's
+        # coefficient sum, which is the finding.  Sums and counts are now two
+        # fields with the word in the key.
+        "a2_coefficient_sum_by_kind": a2["coefficient_sum_by_kind"],
+        "a2_transitions_by_kind": a2["transitions_by_kind"],
+        "a2_transitions_by_branch": a2["transitions_by_branch"],
+        "a2_thin_coverage": a2["thin_coverage"],
         "a2_coefficient_sums_measured": a2["sums"],
         "a2_transitions_enumerated": a2["transitions"],
         "a2_states_enumerated": a2["states"],
