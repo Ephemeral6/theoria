@@ -1,5 +1,39 @@
 # DRIFT-a-red-verdict-whose-every-cited-file-is-a-dead-copy
 
+> ┌─ 更正（cycle 51，2026-07-30T10:15Z，对抗性复核提出，我采纳）──────────────────────────────
+> │ **1. suggest 3 是错的，而它错的方式正好证明了另一份报告的论点。** 本报告说 S41 引用的
+> │ `monitor/runs/20260730T0440Z-S39/FINDINGS.md` 不存在，并说「下面这张表是对它的重建」。
+> │ 实测：**它存在**，在 `351ef03f`，分支 `agent/s39-writes-into-the-live-master-tree` 上——
+> │ 一条正被合并死结扣着的分支，`git show` 一条命令就能取。**而我的重建是错的**：
+> │ 本报告数出「4 个仪器只跳过 `.worktrees`」，那份权威表写的是 **7**（且它自己只点名了 6，
+> │ `check_solver_status.py:333`、`triage_credential_incidents.py:146`、`test_contamination_gate.py:401`、
+> │ `cold-start-a2/verify.py:145`、`fleet-study/census.py:200`、`ablation-arm/tests/test_readonly.py:712`——
+> │ 所以那份分支文档自己也差一个）。**教训：一个文件「不在树上」不等于「不存在」；
+> │ 先 `git log --all --diff-filter=A -- <path>` 再说它不存在。** 这条进 self_correction_rule。
+> │ **2. 一处引用是假的**：本报告说 `monitor/index.html` 里有 `conflict_scan`——`grep -c` = **0**。
+> │ 页面上有的是渲染后的中文 detail（「合并冲突标记」1 次、`.worktrees/opsm19-v21` 1 次），不是探针键名。
+> │ 实质不变（它确实被渲染出去了），但字符串引错了。
+> │ **3. 数字已经长大（不是当时错，是已经变了）**：`conflict_scan` 现在点名 **5** 个文件而非 4
+> │ （新增 `.worktrees/opsm28-conf-v5/battery/verify.py`，3 个标记）；`.git/worktrees` 登记数 **260**（当时 225），
+> │ 且在同一次会话的两次调用之间从 272 变到 258，**目录在活着变**；一次完整重走得 **1,349,079 文件 / 54.9 秒**
+> │ （当时 1,233,001 / 93.7 秒，文件数 +9.6%，秒数低是 FS 缓存热）。**静态领地逐字节复现**：
+> │ `.claude` 16,238、`engine-rig` 2,689 与原文完全一致。
+> │ **3b. 本报告 suggest §1 把这个一行修法的收益低估了一个数量级以上——这条最要紧，因为它会让人给一行改动降优先级。**
+> │ 原文写「省下每次约 94 秒」。**93.7 秒只是枚举（`os.walk`）的时间，不含枚举之后对每个文件的 `.read()`。**
+> │ 实测（另一个 agent 用 `Win32_Process` 的 I/O 计数器读活着的扫描进程，未启动也未杀死任何进程）：
+> │ 一次扫描要读 **54.5 GiB 文件内容**——`probe_credential_hygiene`（`scan.py:148` 走树、`:156`
+> │ `open(...).read()`，**完全没有扩展名过滤**，连二进制一起读）**30.81 GiB / 1,349,073 个文件**，
+> │ 加 `probe_conflicts`（`:330/338/341`，11 种扩展名）**23.67 GiB / 946,360 个文件**。
+> │ **`.worktrees/` + `.claude/worktrees/` 占其中 99.46% 的文件数与 99.26% 的字节数**；
+> │ 全仓非 worktree 文件只有 **7,324 个 / 234.2 MiB**。活进程佐证：PID 44268 在第 694 秒读到 **30.54 GiB**，
+> │ 与实测树体积 30.81 GiB 相差 1% 以内——那正是第 3 个探针走完全树的时刻，之后继续爬升即第二次遍历重读同一批文件
+> │ （本机 31.5 GiB 内存、剩 5 GiB，30.81 GiB 的工作集缓不住，第二遍是真的回盘读）。
+> │ **所以那一行 `SKIP_DIRS` 省下的不是 94 秒，而是十分钟到八十五分钟。** 顺带一条没人报过的：
+> │ `:156` 读**所有**内容而不做扩展名过滤，这本身是独立于 worktree 的一笔浪费。
+> │ **4. 一处条件限定**：「删掉这些死副本就翻绿」在 09:54:32Z 那一版成立（detail 只含 (a) 款），
+> │ 但 pin 上被跟踪的那一版（02:44:39 生成）的 risk 来自 **(c) 款跨领地提交**，同样的编辑对它无效。
+> └────────────────────────────────────────────────────────────────────────────────────
+
 severity: medium-high
 dimension: 7 (a check whose red cannot be acted on) → 8 (the monitor auditing itself)
 

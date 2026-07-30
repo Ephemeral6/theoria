@@ -1,5 +1,24 @@
 # DRIFT-the-decision-register-understates-its-own-committed-evidence
 
+> ┌─ 更正（cycle 51，2026-07-30T10:15Z，对抗性复核提出，我采纳）──────────────────────────────
+> │ **1. 「两个从句都是假的」说过头了。** 从句 2 同时涵盖 3.06 ms 与 3.66 ms：`0.00306` 确实已提交，
+> │ **但 3.66 ms 确实没有任何制品**——`grep -rn "0.0036\|3\.66"` 在整个 run 目录里只命中散文
+> │ （`CRITERION.md:372` 明写「The 3.66 ms rerun is prose-only and is not what the bound rests on」，
+> │ 以及 `RUN_STATE.md:315,:376`）。所以从句 2 是**半真**，而**这一半正是 run 自己披露过、本报告漏掉的那一半**。
+> │ 报本身没错（登记册确实低报了自己的证据），但「全假」这个量词错了。
+> │ **2. 180 这个数，本报告没有推导出来。** 正文列的行加起来是 21+3+71 = **95**，而且把 `control_rows`
+> │ 折进去了——`control_rows` 不属于那 347（147+63+200 = 410）。180 的正确定义是**那 347 行里被截断的行数**
+> │ （109+71，51.9%），`CRITERION.md:419-420` 本来就写对了（「180 of the 347 sweep rows — 52% —
+> │ never produced a meaningful predicate value at all」，机制在 `attack_straddle.py:81-84`）。
+> │ **数字是对的，段落没有支撑它。这是证据漂移的一种，出现在一份专治证据漂移的报告里。**
+> │ **3. 引用路径不完整**：正文写 `CRITERION.md:418-421` / `:360-374` / `:51`，但**不存在 `exam/CRITERION.md`**；
+> │ 完整路径是 `exam/runs/20260730T021500Z-V23-large-space/CRITERION.md`。行号内容无误。
+> │ **4. 逐条复现无误的部分**（复核用独立命令重跑）：四个值 `.00306/.00149/.00075/.00001`，
+> │ 且 `1486875e` 上同样是四个（`.00308/.00153/.00075/.00001`）；`1486875e` 是写下该句的**唯一**提交
+> │ （`git log -S'3.1 ms per item' --all` 只有它）；347 = 147+200；24 个 `bound_is_sound:false` 行**全部** `truncated=True`
+> │ 且 `measured_states == 200000`；**既未截断又读 false 的行数 = 0**。
+> └────────────────────────────────────────────────────────────────────────────────────
+
 severity: low-medium
 dimension: 3 (evidence drift) — **in the unusual direction: the register claims *less* evidence than it holds**
 
