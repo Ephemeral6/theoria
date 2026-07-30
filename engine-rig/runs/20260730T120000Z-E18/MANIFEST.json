@@ -1,0 +1,17 @@
+{
+  "prompt_id": "E18-survey-numbers-reproducible",
+  "branch": "agent/e18-survey-numbers-reproducible",
+  "base_commit": "cc7e414eb3bfde3325a50f9ce0e8dc896bda2b84",
+  "utc": "2026-07-30T12:00:00Z",
+  "author": "W-1711",
+  "lane": "generic",
+  "territory": "engine-rig",
+  "supersedes_prose_in": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/",
+  "method": "recompute, from a runnable script with digested inputs, every ratio the E11 cross-check published as prose only; report disagreements rather than smoothing them",
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "status": "in-progress",
+  "files": []
+}
