@@ -1,0 +1,15 @@
+{
+  "prompt_id": "S-P20-nosecret-noop",
+  "branch": "agent/s-p20-nosecret-noop",
+  "base_commit": "45307105",
+  "utc": "2026-07-30T01:45:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "in-progress",
+  "summary": "Six silent-pass holes in papers/phase1-workshop/verify_paper.py, found by an adversarial audit under S34 and filed as this item. Headline: check D NOSECRET builds its secret list from a gitignored .env and so iterates zero times in every worktree ci_merge checks out -- the check standing between the ARC key and the Phase 4 release manifest is a no-op everywhere it matters.",
+  "key_shape_note": "The ARC key is a canonical UUID: length 36, dashes at 8/13/18/23, parses as uuid.UUID. Established by reading .env through arc-recon/client.py and printing PROPERTIES ONLY (length, charset predicates, dash positions) -- the value was never printed, written, or committed. The shape is recorded here because check D's docstring already promises 'nothing shaped like the ARC key' and a shape detector cannot be written without it; a 36-char UUID shape discloses no part of a 128-bit value.",
+  "findings": [],
+  "measurement": {},
+  "verification": {}
+}
