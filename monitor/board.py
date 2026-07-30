@@ -511,8 +511,15 @@ def cmd_list():
                 hb = "%d分钟前" % age
             else:
                 hb = "%d分钟前(mtime，可被 merge 摸新)" % age
-            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
-                  % (pri, iid, lane, owner, hb, m["territory"]))
+            # S35a（对抗复核抓到）：`cmd_claim` 里的 `HOLD_CAP` 闸在 `offers()`
+            # **之前**就返回，所以这一段（问的是 `offers`）会把「手上已经满了」
+            # 的主人写成「等其研究员来领」——本条目要修的那个分歧，往下一道闸
+            # 又复现了一次。这一类会自己解开（主人交付即松），所以它不是不可达；
+            # 但那句话仍然是错的，所以把是哪一种印出来。
+            cap = "" if held_by(owner) < HOLD_CAP else \
+                "（主人手上已满 %d/%d，交付后才领得到）" % (held_by(owner), HOLD_CAP)
+            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s%s"
+                  % (pri, iid, lane, owner, hb, m["territory"], cap))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -782,7 +789,15 @@ def cmd_done(iid, worker):
     return 0
 
 
-def cmd_release(iid, worker, reason="unstated"):
+def cmd_release(iid, worker, reason=""):
+    # S35a（对抗复核抓到）：这个默认值原来就是 `"unstated"`，而 `main()` 的那道
+    # 闸只挡命令行。**任何一个 import 这个模块的调用者仍然写得出那个词**——
+    # 也就是本条目声称要消灭的那个字符串，仍然由默认参数提供着。闸开在门上，
+    # 门框上还留着一个洞：判据要写在函数里，不是写在它的一个调用点上。
+    if not (reason or "").strip():
+        print("RELEASE-NEEDS-A-REASON %s：交回要带理由，"
+              "下一个人只有这句话可读。" % iid)
+        return 2
     src = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
     if not os.path.exists(src):
         print("not claimed by you")
@@ -827,12 +842,40 @@ def cmd_reassign(iid, to, by, why):
         # 认领中的活是别人正在飞的上下文，已交付的活 `done/` 说了算。
         print("REASSIGN-NOT-ON-THE-SHELF %s 不在 items/（认领中或已交付）。" % iid)
         return 1
+    # S35a（对抗复核抓到）：上面那个 `exists` **不是**「认领中与已交付一律拒绝」
+    # 这条守卫。它假设认领中/已交付的条目不在 `items/` 里，而这块板**记录在案的
+    # 失败模式恰恰是三个目录同时有它**（`claimed_map()` 上方那段写的 E8-ic3-scale
+    # 同时在 items/、claimed/、done/，A13 在两处）。也就是说这条守卫只在从不出事
+    # 的时候成立，出事时正好失效——本条目自己抓的病的同一个形状：
+    # **守卫问的问题不是它印出来的那句话**。现在直接问那两个真正的集合。
+    if iid in claimed_map():
+        who = claimed_map()[iid]
+        print("REASSIGN-CLAIMED %s 已被 %s 认领（items/ 里还留着一份，"
+              "这块板复活过条目）；改派会把一份改了赛道的拷贝留在 items/，"
+              "而 %s 手上那份说的是另一条。先让认领人交付或 release。"
+              % (iid, who, who))
+        return 5
+    if iid in done_ids():
+        print("REASSIGN-DELIVERED %s 在 done/ 里（items/ 里这份是复活出来的）。"
+              "改派它会往 board.log 写一行对已交付的活的判断，"
+              "并在条目正文里留一条签了名的记录——先把复活的那份收掉。" % iid)
+        return 5
     m = meta(path)
     lane = m.get("lane") or ""
     owner = LANE_OWNER.get(lane)
     if by != "monitor" and by != owner:
         # LANE-NOT-YOURS 的镜像。改派在队列之间搬活，无守卫的版本就是一条把
         # 别人赛道抽干的路——自报 `--lane` 曾经就是那样一个洞。
+        #
+        # **但要照实说清这道闸挡得住什么**（S35a，对抗复核抓到，本条目初版的
+        # 报告把它写成了「否则这是一条把别人赛道抽干的路」，那是过头话）：
+        # `by` 是命令行上**自报的**，`--by monitor` 任何人都打得出来，于是抽干
+        # 别人赛道的那条路仍然通着。这道闸挡的是**手滑**，不是**说谎**——
+        # 和 `claim <worker>` 自报编号是同一档，这块板从来没有身份验证。
+        # 本条目**没有**修好它：修它要给舰队一个真的身份边界，那是另一件活。
+        # 现在做的是三件小事：不再声称它挡得住抽干；`--by monitor` 在 board.log
+        # 里标成自报（`by monitor(self-asserted)`），使它可被回溯审计；并有一条
+        # 测试**把这个绕过写成既成事实**，免得下一个读者把它读成一道安全闸。
         print("REASSIGN-NOT-YOURS %s 现在归 %s（%s 赛道）；只有它或 monitor 能改派。"
               % (iid, owner or "无人", lane or "无"))
         return 3
@@ -858,10 +901,37 @@ def cmd_reassign(iid, to, by, why):
                           flags=re.M)
     text = text.rstrip("\n") + "\n\n> **%s 于 %s 改派给 %s**：%s\n" % (
         by, utc(), to, why.strip())
+    before = open(path, encoding="utf-8").read()
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)
+    # S35a（对抗复核抓到）：**这个动词能造出一件新的不可达条目**，而它是为了
+    # 消灭不可达条目才存在的。实测：一件 `spend: api` 且没有 monitor 签
+    # `generic_ok` 的活，`--to generic` 之后退出 0、无任何提示，而它从此
+    # 谁也领不到（花钱守卫只对未带赛道的条目开火，见 `candidates()`）。
+    #
+    # 补的不是「再列一条 spend 的例外」——那正是本条目在 `unreachable_ids()`
+    # 里拒绝的写法（重述规则的第二份判据只会再分叉一次）。补的是**后置条件**：
+    # 写完就去问那个真正的谓词，落进不可达集就整份回滚。将来 `candidates()`
+    # 再加任何一条排除规则，这道闸自动跟上。
+    if iid in unreachable_ids():
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(before)
+        print("REASSIGN-WOULD-STRAND %s 改派到 %s 之后没有任何身份领得到它"
+              "（后置条件不成立，已回滚，条目一字未改）。\n"
+              "  常见成因：`spend: api` 的活改派给 generic —— 花钱守卫要求"
+              "监控在条目里显式写 `generic_ok: yes`。\n"
+              "  先解决那一条，或改派到一条有主的赛道。" % (iid, to))
+        return 4
+    # `monitor` 这个身份没有任何东西验证过（见上面那道闸的注释），所以日志里
+    # 记它是**自报的**。审计一行「by monitor」和一行「by monitor(self-asserted)」
+    # 的差别，就是回头查得清与查不清的差别。
     note("REASSIGN %s from %s to %s by %s (%s)"
-         % (iid, lane or "unlaned", to, by, why.strip()))
+         % (iid, lane or "unlaned", to,
+            "monitor(self-asserted)" if by == "monitor" else by, why.strip()))
+    # 成功时也要在 stdout 上说一句。舰队里的 agent 读的是 stdout，而这个动词
+    # 原来只往 board.log 写——对调用者而言，成功与静默的失败长得一样。
+    print("REASSIGNED %s：%s → %s（by %s）。理由已写进条目正文与 board.log。"
+          % (iid, lane or "unlaned", to, by))
     return 0
 
 
@@ -1177,6 +1247,14 @@ def main():
         return cmd_release(a[1], a[2], " ".join(a[3:]))
     if a[0] == "reassign":
         # board.py reassign <id> --to <lane|generic> --by <who> --why <...>
+        # S35a：`a[1]` 裸着写会让「打错命令」变成一个 IndexError 回溯。
+        # 这个动词是给一个卡住的人用的出口，而回溯读起来像板坏了。
+        if len(a) < 2:
+            print("用法：board.py reassign <id> --to <赛道|generic> "
+                  "--by <who> --why <理由>\n  赛道：%s 或 generic"
+                  % "/".join(sorted(LANE_OWNER)))
+            return 2
+
         def opt(name, rest=False):
             if name not in a:
                 return ""

@@ -42,6 +42,15 @@ def claimable_by(worker, lane):
 
 
 def main():
+    # `--json <path>`: write the document to a file with an explicit encoding
+    # instead of letting a shell redirect decide it.
+    json_out = ""
+    if "--json" in sys.argv:
+        i = sys.argv.index("--json") + 1
+        json_out = sys.argv[i] if i < len(sys.argv) else ""
+        if not json_out:
+            print("usage: probe_unreachable.py [<monitor>] [--json <path>]")
+            return 2
     lanes = sorted(board.LANE_OWNER)
     stale = board.stale_lanes()
     ready = board.done_ids()
@@ -97,7 +106,20 @@ def main():
         "unreachable_reserved": reserved_unreachable,
         "unreachable_other": other_unreachable,
     }
-    print(json.dumps(out, indent=2, ensure_ascii=False))
+    # S35a: the probe used to only `print` the JSON and rely on
+    # `> measure-before.json` to land it -- so **the artefact's bytes were a
+    # function of the console code page**. The first one was written that way:
+    # GBK, `json.load` raises UnicodeDecodeError under utf-8, and 1059 bytes
+    # of human summary follow the document, so it was not even valid JSON.
+    # CLAUDE.md requires byte-reproducible artefacts; a redirect broke that.
+    # Now the probe writes the file itself (explicit utf-8 + LF); the summary
+    # goes to stdout and, if asked, to its own file.
+    if json_out:
+        with open(json_out, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
+        print("# JSON -> %s (utf-8, LF)" % json_out)
+    else:
+        print(json.dumps(out, indent=2, ensure_ascii=False))
     print("\n--- 判据：不可达 = 就绪、未认领、依赖已满、而上面每个身份都领不到 ---")
     print("shelf=%d  reachable=%d  deps-blocked=%d  UNREACHABLE=%d (其中 reserved 段印出来的 %d)"
           % (len(shelf), len(reach), len(deps_blocked),
