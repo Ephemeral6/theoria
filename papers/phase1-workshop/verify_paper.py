@@ -1370,6 +1370,13 @@ HEADNUM = re.compile(r"^\s*#+\s*\d+(?:\.\d+)*[a-z]?\s*")
 #: nothing also fails, as STALE: `figures/reconcile_cost.py`'s rule, that a
 #: declaration which has stopped being true is removed rather than left to
 #: excuse a regression that comes back the other way.
+#:
+#: **Writing a ruling: if you state a distance to the evidence, state it in
+#: blocks and name the artefact.** `locator_findings()` checks both, and both
+#: halves of that sentence are there because a ruling broke on them. Line
+#: distances decay -- "four lines above" became fifteen when the paragraph above
+#: grew, while the block it meant never moved. Distances with nothing named are
+#: unfalsifiable, and both entries written that way turned out to be wrong.
 ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
     ("01_intro.md", "falsified 17 of its own author's written claims"):
         "§1.2 states and cites this same contradicted-entry count "
@@ -1388,32 +1395,89 @@ ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
         "and −0.188 restate rows of §7.2's table, whose preamble cites "
         "`battery/artifacts/discrimination_arms.json`.",
     ("07_battery.md", "bill shape's distribution rests on 67 runs"):
-        "A one-sentence restatement of the E2 distribution established four "
-        "lines above, where it carries `battery/artifacts/capability_spectrum.json`, "
+        "A one-sentence restatement of the E2 distribution established one "
+        "block above, where it carries `battery/artifacts/capability_spectrum.json`, "
         "set against the empty capability column §7.10a evidences from "
-        "`baseline-arms/runs/20260728T103135Z-a7/envelope.json`.",
+        "`baseline-arms/runs/20260728T103135Z-a7/envelope.json`. (Corrected "
+        "2026-07-30: this read \"four lines above\" and the distribution is "
+        "fifteen lines above -- the paragraph was extended after the ruling was "
+        "written. The block it names never moved, which is why locators here are "
+        "block-relative now: a line count decays with the prose around it and a "
+        "block count does not.)",
     ("08_exam.md", "the 0.000 that could be computed from two"):
         "The arithmetic this paragraph explicitly declines to report as a "
-        "measurement. Both artefacts it would be computed from are cited one "
-        "block above, and each records `tier2_minus_tier1` as null rather than "
-        "a delta; a path here would point at a number the paper is refusing.",
-    ("08_exam.md", "**n = 1 per handover tier**, on a saturated"):
-        "Restates the sample size of the handover result cited one block above "
-        "(one report per tier, both named there). This bullet list is the "
-        "section's statement of what the exam does not establish.",
+        "measurement. Both artefacts it would be computed from are cited two "
+        "blocks above -- "
+        "`exam/artifacts/reports/p15-handover-a0.reader-tier{1,2}.report.json`, "
+        "one report per tier -- and each records `tier2_minus_tier1` as null "
+        "rather than a delta; a path here would point at a number the paper is "
+        "refusing. (Corrected 2026-07-30: this read \"one block above\" and "
+        "named nothing. One block above is the block quoting the exam's status "
+        "file, whose only citation is `Theoria.md`; neither report is in it.)",
+    # WITHDRAWN 2026-07-30 -- ("08_exam.md", "**n = 1 per handover tier**, on a
+    # saturated"): "Restates the sample size of the handover result cited one
+    # block above (one report per tier, both named there). This bullet list is
+    # the section's statement of what the exam does not establish."
+    #
+    # The one factual assertion in that sentence was false, and it is recorded
+    # here rather than deleted because the entry is the evidence. One block above
+    # the ruled block is the §8.4 *heading* (`08_exam.md` L152 = PAPER L2476),
+    # which cites nothing; two above cites `exam/guard.py` and
+    # `exam/tests/test_core.py`; three above cites `exam/artifacts/leakage.json`.
+    # The two handover reports are cited in block [12] (`08_exam.md` L78 = PAPER
+    # L2402), twelve blocks and 76 lines earlier, in §8.2, with the whole of §8.3
+    # in between. Verified by walking `_blocks()` over the section.
+    #
+    # The blast radius is the larger half, and it is why this is withdrawn rather
+    # than re-worded. A ruling clears its whole block, and the ruled block is the
+    # entire 18-line six-bullet list at L154-171 (PAPER L2478-2495) -- the only
+    # ruling in this table whose block is a list rather than one paragraph. So a
+    # ruling written about the `n = 1` bullet also exempted "**The cheater's
+    # numbers are prose, not artefacts** ... no cheater response or transcript is
+    # archived" (refuted by `exam/artifacts/answers/p15-verdict-a2.cheater-v4.answers.json`,
+    # which exists and is scored), "**Two cheater agents, four sheets, one pass**"
+    # (a sentence `exam/STATUS.md` L267-273 has struck through), and *the leaks
+    # that remain are the ones nobody has looked for yet* (introduced as a
+    # quotation from "the directory" and present nowhere in the repository).
+    # `08_exam.md` has exactly two uncited quantitative blocks and both were
+    # ruled, so a green `E UNCITED` said nothing whatsoever about §8.4. `BROAD`
+    # cannot see it: merging makes six bullets one block, so the ruling matched
+    # exactly one and looked well-scoped.
+    #
+    # A truthful re-wording was available -- the handover result *is* cited, in
+    # §8.2 -- and was rejected. It would have kept the same five bullets exempt
+    # while conceding that the evidence is twelve blocks away, which is not the
+    # thing check E tests. A false green is worse than a red gate; that is the
+    # whole finding. So the block now reports UNCITED, which is true of it.
+    #
+    # Same failure class as the `11_limitations.md` entry in `ADJUDICATED_BARE`,
+    # which already records against an earlier version of itself "a ruling whose
+    # stated evidence was false, and nothing here would have caught that."
+    # `locator_findings()` below is the answer to "nothing here would have caught
+    # that", and it is what found the two milder cases in this table.
     ("10_adjudication.md", "around 340 points examined, 48 judged unsafe"):
         "The headline is quoted in order to be refused, and the four numbered "
         "reasons that follow are the argument that no aggregate over these "
-        "passes exists. Every row of the table two blocks above carries its own "
-        "survey file. Attaching provenance would dignify a number the section "
-        "declines to publish.",
+        "passes exists. Every row of the per-pass table one block above carries "
+        "its own survey file (`SURVEY-solver-status.md`, "
+        "`SURVEY-empty-as-negative.md`, `SURVEY-environment-as-semantics.md`, "
+        "`SURVEY-success-as-truth.md`), and that block's preamble cites "
+        "`papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/"
+        "inputs-verbatim/`. Attaching provenance would dignify a number the "
+        "section declines to publish. (Corrected 2026-07-30: this read \"two "
+        "blocks above\" and named nothing. Two above is the §10.1 heading, which "
+        "cites nothing; `_blocks()` merges the table into its preamble, so the "
+        "table is one block above, not two.)",
     ("07_battery.md", "and the main table moved twice"):
-        "A heading, summarising the two moves the block below states and cites: "
-        "19 -> 6 on demonstration and 6 -> 9 after four defences "
+        "A heading, summarising the two moves the block two blocks below states "
+        "and cites: 19 -> 6 on demonstration and 6 -> 9 after four defences "
         "(`battery/artifacts/gaming_audit.json`, with the intermediate 6 "
         "attributed to `battery/REPORT_V2.md`). Twice is scoped to this "
         "subsection; the further 9 -> 2 -> 0 is 7.7a's blind round and is "
-        "counted there, which is why a reader tallying both sections gets four.",
+        "counted there, which is why a reader tallying both sections gets four. "
+        "(Corrected 2026-07-30: this read \"the block below\", which is the "
+        "prose-register paragraph and cites nothing. `locator_findings` caught it; "
+        "the row-sample audit had it as slack.)",
     ("09_preflight.md", "a preflight for zero quota"):
         "A section title. `zero quota` names the thing the section is about -- a "
         "run staged so that no step could cost anything -- and 9.4 is where the "
@@ -1606,6 +1670,223 @@ def coverage_uncited(sections=None) -> tuple[int, int, list[tuple]]:
     return blocks, quantities, worst[:5]
 
 
+#: A ruling's own locator: a stated distance and direction to the evidence.
+#:
+#: "one block above", "four lines above", "two blocks above", "the block below" --
+#: these are not prose, they are assertions, and `_blocks()` can check every one
+#: of them. Until this existed nothing did: the `11_limitations.md` entry in
+#: `ADJUDICATED_BARE` records against an earlier version of *itself* that its
+#: stated evidence was false and "nothing here would have caught that", and the
+#: withdrawn `08_exam.md` §8.4 entry above was the same defect three tables later
+#: -- a ruling asserting the handover reports were cited one block above, where one
+#: block above is a heading that cites nothing, silencing five bullets it was
+#: never about.
+#:
+#: An explicit count is required, or the bare `the block above` / `the block
+#: below` (which means one). Without that requirement the first draft read "the
+#: frozen-baseline paragraph below" in `01_intro.md`'s ruling as "one paragraph
+#: below" and reported a defect that was not there. A phrase that *identifies* a
+#: paragraph is not a phrase that counts them.
+RULING_LOCATOR = re.compile(r"""(?ix)
+    \b (?P<n> one|two|three|four|five|six|seven|eight|nine|ten|\d+ )
+       \s+ (?P<unit> block|line|paragraph ) s?
+       \s+ (?P<dir> above|below|up|down|earlier|later ) \b
+  | \b the \s+ (?P<unit2> block|paragraph ) \s+ (?P<dir2> above|below ) \b
+""")
+
+_LOCATOR_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+                  "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+
+#: A backticked artefact inside a ruling's own text: what the ruling says will be
+#: found at the location it names.
+RULING_PATH = re.compile(r"`([^`]+)`")
+
+
+def _locator(reason: str):
+    """(n, unit, going_back, at) from a ruling's text, or None.
+
+    `at` is the offset of the match, so `_ruling_paths` can read the locator's own
+    sentence rather than the whole justification -- see the demonstration there.
+    """
+    m = RULING_LOCATOR.search(reason)
+    if not m:
+        return None
+    if m.group("unit2"):
+        return (1, m.group("unit2").lower(),
+                m.group("dir2").lower() == "above", m.start())
+    raw = m.group("n").lower()
+    n = int(raw) if raw.isdigit() else _LOCATOR_WORDS[raw]
+    return (n, m.group("unit").lower(),
+            m.group("dir").lower() in ("above", "up", "earlier"), m.start())
+
+
+#: A ruling's own history, in a trailing parenthetical. Everything inside one
+#: describes what was found at the **wrong** place, so it is the last text whose
+#: paths may be used to confirm a locator. See `_ruling_paths`.
+RULING_NOTE = re.compile(r"\((?:Corrected|Withdrawn|Superseded)\b", re.I)
+
+#: A sentence boundary in a ruling: `.`/`;` then space then a capital or a
+#: bracket. `.json`/`.md` inside a path never matches -- no space follows.
+RULING_SENTENCE = re.compile(r"(?<=[.;])\s+(?=[A-Z(])")
+
+
+def _ruling_paths(reason: str, near: int | None = None) -> list[str]:
+    """Artefacts the ruling names *at the place it is pointing*.
+
+    `:7-11` line anchors are stripped: the ruling points at a file, and the check
+    is whether the file is where it says.
+
+    `near` is the offset of the locator match, and passing it is what makes this
+    a check rather than a formality. Harvesting every backticked path in the whole
+    justification and accepting the target block if **any** of them is in it means
+    a careful ruling defeats the check: the more contrasts it draws and the more of
+    its own history it records, the more decoy paths it supplies. Demonstrated on a
+    shipped entry -- `08_exam.md`'s "0.000" ruling names the handover reports as its
+    evidence and `Theoria.md` in its correction note, as the thing that is in the
+    block one above. Changing "two blocks above" to "one block above" made the
+    locator exactly the falsehood the note documents, and it passed on `Theoria.md`.
+    **The note written to record the bug was concealing it.**
+
+    So: correction notes are cut first, then only the locator's own sentence is
+    read. A path a ruling mentions while saying where the evidence is *not* cannot
+    confirm where it is.
+    """
+    if near is not None:
+        note = RULING_NOTE.search(reason)
+        if note and note.start() > near:
+            reason = reason[:note.start()]
+        elif note:
+            return []                     # the locator is inside its own note
+        start = 0
+        for m in RULING_SENTENCE.finditer(reason):
+            if m.end() > near:
+                break
+            start = m.end()
+        end = next((m.start() for m in RULING_SENTENCE.finditer(reason)
+                    if m.start() > near), len(reason))
+        reason = reason[start:end]
+    out = []
+    for tok in RULING_PATH.findall(reason):
+        tok = tok.split(":")[0].strip()
+        if "/" in tok or tok.lower().endswith(ARTEFACT_SUFFIX):
+            out.append(tok)
+    return out
+
+
+def _target_block(blocks: list, i: int, anchor_line: int,
+                  n: int, unit: str, back: bool):
+    """The block a locator resolves to, or None if it points off the section.
+
+    Line distances resolve *to a block*, not to a line, and that is deliberate.
+    A ruling's claim is "the evidence block is over there"; measuring to the cited
+    path's own line instead would have failed `03_a0.md`'s ruling, which is
+    correct -- it says "two lines above", the restated support count is two lines
+    above in a blockquote, and the path that block carries sits seven lines above.
+    Measuring to the block absorbs that and still catches a locator pointing at
+    the wrong block, which is the failure that matters.
+    """
+    if unit in ("block", "paragraph"):
+        t = i - n if back else i + n
+        return t if 0 <= t < len(blocks) else None
+    line = anchor_line - n if back else anchor_line + n
+    fallback = None
+    for k, (ln, body) in enumerate(blocks):
+        end = ln + len(body.splitlines()) - 1
+        if ln <= line <= end:
+            return k
+        if back and end < line:
+            fallback = k                      # nearest block above the target
+        elif not back and ln > line and fallback is None:
+            fallback = k                      # nearest block below it
+    return fallback
+
+
+def locator_findings(table: dict, sections=None, anchor_is_token: bool = False):
+    """[(key, message)] for every ruling whose own stated locator is false.
+
+    Cheap: one `_blocks()` walk per section already done by the caller's scan,
+    one regex over each ruling's text, no I/O beyond the section files. It checks
+    the one part of a ruling that is a fact rather than a judgement -- whether the
+    evidence is where the ruling says it is. Whether §8.4's bullets *should* need
+    a path is a call somebody has to make; whether the handover reports are cited
+    one block above is not.
+
+    A ruling that states a distance and names no artefact is reported too. That is
+    not pedantry: "cited one block above" with nothing named is unfalsifiable, and
+    both entries that read that way were wrong. If a ruling states a distance it
+    must say what will be found there, or state no distance.
+    """
+    sections = SECTIONS if sections is None else Path(sections)
+    out: list[tuple[tuple[str, str], str]] = []
+    for (name, anchor), reason in table.items():
+        loc = _locator(reason)
+        if loc is None:
+            continue
+        n, unit, back, at = loc
+        path = sections / name
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        blocks = _blocks(text)
+        i = anchor_line = None
+        for k, (ln, body) in enumerate(blocks):
+            if anchor in " ".join(body.split()):
+                # The anchor's *own* line, not the block's first. A writer
+                # counting lines counts from the sentence being ruled on, so for
+                # any anchor below its block's first line the two disagree by the
+                # anchor's offset -- and a true "six lines above" was reported as
+                # running off the end of the section. The last line from which the
+                # anchor is still reachable is the line it starts on.
+                lines = body.splitlines()
+                i, anchor_line = k, ln
+                for j in range(len(lines)):
+                    if anchor in " ".join(" ".join(lines[j:]).split()):
+                        anchor_line = ln + j
+                    else:
+                        break
+                break
+        if anchor_is_token:
+            # F keys on a token, so the distance is measured from the token's own
+            # line -- `02_framework.md`'s `playbook.dsl` ruling says "four lines
+            # up" and means four lines up from the token, which is exact.
+            for lineno, line in enumerate(text.splitlines(), 1):
+                if anchor in line:
+                    anchor_line = lineno
+                    if i is None:
+                        i = next((k for k, (ln, b) in enumerate(blocks)
+                                  if ln <= lineno < ln + len(b.splitlines())), None)
+                    break
+        if i is None or anchor_line is None:
+            continue                      # a stale anchor; the STALE rule owns it
+        where = f"{n} {unit}{'s' if n != 1 else ''} {'above' if back else 'below'}"
+        named = _ruling_paths(reason, near=at)
+        if not named:
+            out.append(((name, anchor), fail(
+                f"  LOCATOR   {name} → {anchor!r} says the evidence is {where} "
+                f"and names no artefact to look for there. An unfalsifiable "
+                f"locator is how a false one survives; name the file or drop the "
+                f"distance.")))
+            continue
+        t = _target_block(blocks, i, anchor_line, n, unit, back)
+        if t is None:
+            out.append(((name, anchor), fail(
+                f"  LOCATOR   {name} → {anchor!r} says {where}, which is off the "
+                f"end of the section.")))
+            continue
+        body = blocks[t][1]
+        if any(p in body for p in named):
+            continue
+        actual = sorted({k - i for k, (ln, b) in enumerate(blocks)
+                         if any(p in b for p in named)}, key=abs)
+        out.append(((name, anchor), fail(
+            f"  LOCATOR   {name} → {anchor!r} says the evidence is {where}, but "
+            f"the block there (L{blocks[t][0]}) carries none of "
+            f"{', '.join(named)}. Nearest block offsets carrying it: "
+            f"{actual or 'none in this section'}. A ruling whose stated evidence "
+            f"is false silences its whole block on a claim nobody checked.")))
+    return out
+
+
 def scan_uncited(sections=None, rulings=None):
     """(flagged, hits, scanned) over a sections directory.
 
@@ -1649,8 +1930,20 @@ MIN_ANCHOR = 24
 def check_uncited() -> tuple[bool, list[str]]:
     """E. No quantitative claim block in the body cites nothing at all."""
     notes: list[str] = []
-    flagged, hits, scanned = scan_uncited()
+    # Locators first, and a ruling with a false one does not get to silence its
+    # block: it is dropped from the table before the scan, so the block reports
+    # UNCITED. That is the point of the mechanism. A ruling whose one factual
+    # assertion is wrong has not been checked by anybody, and the previous
+    # behaviour -- print the ruling, clear the block -- is what let the §8.4 entry
+    # exempt five bullets carrying three refuted claims.
+    bad_locators = locator_findings(ADJUDICATED_UNCITED)
+    invalid = {k for k, _ in bad_locators}
+    flagged, hits, scanned = scan_uncited(
+        rulings={k: v for k, v in ADJUDICATED_UNCITED.items() if k not in invalid})
     stale = [k for k, n in hits.items() if not n]
+    for key, msg in bad_locators:
+        notes.append(msg)
+        stale.append(key)
 
     # A ruling that silences more than one block is as wrong as one that
     # silences none, and the length floor does not catch it: the adversarial
@@ -1701,7 +1994,13 @@ def check_uncited() -> tuple[bool, list[str]]:
             f"resolvable path anywhere in the block"))
         notes.append(fail(f"            {flat[:140]}"))
     for key, reason in ADJUDICATED_UNCITED.items():
-        if key in stale:
+        # `and not hits.get(key)` because `stale` also collects BROAD, ANCHOR and
+        # LOCATOR failures, each of which has already printed its own reason.
+        # Printing "matched no block" after them said something false about a
+        # ruling that matched several, or one.
+        if key in invalid:
+            continue                      # its LOCATOR line already said why
+        if key in stale and not hits.get(key):
             notes.append(fail(
                 f"  STALE     {key[0]} → {key[1]!r} matched no block. The claim it "
                 f"ruled on was rewritten or removed; drop the entry rather than "
@@ -1821,8 +2120,14 @@ def scan_bare(sections=None, rulings=None):
 def check_bare() -> tuple[bool, list[str]]:
     """F. No body citation is a bare filename that could mean several files."""
     notes: list[str] = []
-    flagged, hits, seen, overran = scan_bare()
+    bad_locators = locator_findings(ADJUDICATED_BARE, anchor_is_token=True)
+    invalid = {k for k, _ in bad_locators}
+    flagged, hits, seen, overran = scan_bare(
+        rulings={k: v for k, v in ADJUDICATED_BARE.items() if k not in invalid})
     stale = [k for k, n in hits.items() if not n]
+    for key, msg in bad_locators:
+        notes.append(msg)
+        stale.append(key)
 
     # A ruling here is keyed by (section, token) with no text anchor, so unlike
     # check E's it cannot be scoped to one claim -- which means one entry
@@ -1869,6 +2174,14 @@ def check_bare() -> tuple[bool, list[str]]:
         if n:
             notes.append(f"  ruled     {key[0]} `{key[1]}` ({n}x) -- {ADJUDICATED_BARE[key]}")
     for key in stale:
+        # The guard check E's STALE loop already has, and this one was missing:
+        # a LOCATOR-invalid ruling is appended to `stale` too, so without it the
+        # entry is reported twice and the second reason is **false** -- the token
+        # does still appear; what is wrong is where the ruling says its evidence
+        # is. A gate that prints a false reason for a true finding teaches the
+        # reader to stop believing its reasons.
+        if key in invalid:
+            continue                      # its LOCATOR line already said why
         notes.append(fail(
             f"  STALE     {key[0]} `{key[1]}` is ruled and no longer appears. "
             f"A ruling that excuses nothing is removed, not left to excuse a "
