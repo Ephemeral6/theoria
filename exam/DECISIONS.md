@@ -970,8 +970,9 @@ it would be false.
 2. **The reference enumerator, measured to truncate.** Circular as evidence
    about the level — we chose the enumerator — but not circular as the
    complement of the claim class (i) already makes, since `_small_space` defines
-   `exhaustive_feasible: True` by exactly this enumerator terminating under
-   exactly this cap. Its only admissible use is that parity, and it must be run.
+   `naive_enumeration_feasible: True` by exactly this enumerator terminating
+   under exactly this cap. Its only admissible use is that parity, and it must
+   be run.
    It previously was not merely unmeasured but counterfactually recorded:
    `_large_space` hardcoded `"truncated": False`, true only because no
    enumeration was ever attempted, and reading as though one had run and come
@@ -1004,6 +1005,13 @@ an apparent search barrier**. That is weaker than the design document's claim an
 it is the one the artefacts support. It is also the more useful one: it is
 falsifiable by a single counterexample examinee, whereas a universal over all
 methods is not establishable by any experiment.
+
+This **supersedes D-EX-027's closing line on the field name** — "`search_credible`
+is `state_space["exhaustive_feasible"]` again, which is what it always was", in
+D-EX-027 above — in the name and not in the substance: credibility is still not
+derived from the quotient, but the field `verdict.py:720` reads is now
+`state_space["naive_enumeration_feasible"]`, and `exhaustive_feasible` exists
+nowhere in the code.
 
 ### A bound must defend its own premise where it is claimed
 

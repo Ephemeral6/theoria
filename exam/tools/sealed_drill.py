@@ -469,6 +469,22 @@ def build_items(spec_dir: str, out_dir: str) -> Tuple[List[Item], List[Dict[str,
             "spec": spec_record,
         })
 
+        # `solve()` raises `OracleTruncated` rather than returning a truncated
+        # result, so reaching this line is itself the proof that the enumeration
+        # terminated -- in `reachable_nodes` nodes. Built here, once, so that
+        # `search_credible` below is read off the same record the examinee's
+        # marker reads, and the two cannot drift apart.
+        space = {
+            "naive_enumeration_feasible": True,
+            "enumeration_attempted": True,
+            "enumerated": oracle["reachable_nodes"],
+            "truncated": False,
+            "arithmetic": (
+                "the oracle enumerated this world to completion in %d nodes, so "
+                "a complete search is a reason available on it"
+                % oracle["reachable_nodes"]),
+        }
+
         items.append(Item(
             item_id=_opaque_id(entry["key"]),
             rubric_id=RUBRIC_ID,
@@ -485,7 +501,20 @@ def build_items(spec_dir: str, out_dir: str) -> Tuple[List[Item], List[Dict[str,
                 "oracle_witness": oracle["witness"],
                 "justification": entry["justification"],
                 "spec": spec_record,
-                "search_credible": True,
+                # `search_credible` was the literal `True`, with no `state_space`
+                # record at all -- an assertion, in the one field D-EX-028 spent a
+                # whole run turning into a measurement everywhere else. Two real
+                # consequences. `rubrics_verdict`'s marker reads
+                # `truth.get("state_space", {}).get("arithmetic", "large")`, so the
+                # missing record silently printed the word "large" at the examinee;
+                # and if the catalogue ever gains a world naive enumeration cannot
+                # exhaust -- exactly what D-EX-028 asks for, to close
+                # `classes_absent: ["large_unsolvable"]` -- the drill would pay
+                # search credit for a search that cannot run, on an unmeasured
+                # `True`, with nothing going red. Missing treated as pass, in the
+                # field the run had just finished making honest.
+                "state_space": space,
+                "search_credible": space["naive_enumeration_feasible"],
                 "weights": {"verdict": 0.5, "justification": 0.5},
             },
             leak_probes=[variant_id, spec_record["spec_sha256"],
@@ -883,9 +912,10 @@ def run(out_dir: str) -> Dict[str, Any]:
                 "classes_absent_because":
                     "worldgen's largest world has 2654 reachable states "
                     "(t3-full-house), so no world in the catalogue can stand in "
-                    "for a state space exhaustive search cannot reach. Class "
-                    "(ii) of Theoria.md:259 is rehearsed in procedure only, "
-                    "never in difficulty. Recorded rather than simulated.",
+                    "for a state space naive forward enumeration cannot "
+                    "exhaust. Class (ii) of Theoria.md:259 is rehearsed in "
+                    "procedure only, never in difficulty. Recorded rather than "
+                    "simulated.",
             },
         }
         payload["reason_ceiling"] = _reason_ceiling(paper)

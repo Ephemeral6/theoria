@@ -108,21 +108,31 @@ are mixed across boards so board identity carries no signal.
   searcher also answers correctly, possibly for a reason that does not transfer.
   The rubric therefore scores the **reason** separately: a machine-checked
   certificate scores full, "I searched and found nothing" scores partial.
-* **(ii) large-space unsolvable** — enumeration is out of reach and the bound is
-  computed rather than asserted (2⁶⁰ to 2¹²⁰ configurations).
+* **(ii) large-space unsolvable** — **naive** enumeration is out of reach and
+  the bound is computed rather than asserted (2⁶⁰ to 2¹²⁰ configurations). Not
+  "no exhaustive method is feasible here": every shipped item of this class is
+  settled by an exhaustive computation over at most 600 nodes in at most 5 ms, so
+  the item is scored on **selecting a method that is not naive enumeration**, and
+  the design document's "only invariant reasoning can answer" is withdrawn.
+  D-EX-028.
 * **(iii) solvable but hard** — the false-positive trap, each with a computed
   witness plan. A framework with a taste for unsolvability proofs gets caught
   here or nowhere.
 
-**The quotient is published beside the bound, and is not a search space.** The
-four class (ii) items have **180, 180, 600 and 177** reachable `(cart, button)`
-states against a `lower_bound` of 2^60 to 2^120, and the temptation to conclude
-that a solver can therefore just search the quotient is strong enough that this
-run gave in to it and had to be talked out by an adversarial reviewer. The
-quotient ignores `step_limit` outright and carries no latch state, so on a
-`require_all_switches` board it will call an unsolvable level solvable. Both
-numbers are in the truth file and the note beside them says which is which.
-D-EX-027, and `STATUS.md` open weakness 27.
+**The quotient is published beside the bound, and its unsoundness is one-sided.**
+The four class (ii) items have **180, 180, 600 and 177** reachable `(cart,
+button)` states against a `lower_bound` of 2^60 to 2^120. The quotient ignores
+`step_limit` outright and carries no latch state, so on a `require_all_switches`
+board it can report the goal reachable when the level is unsolvable — which is
+why `search_credible` is not derived from it (D-EX-022, withdrawn by D-EX-027).
+D-EX-028 amends what that unsoundness licenses: it runs **in one direction
+only**. An over-approximation yields false `solvable`, never false `unsolvable`,
+so a goal in a different component **is** a sound unsolvability proof — which is
+why this item's own answer key is allowed to be computed that way, and why the
+search barrier here is apparent rather than real. `lower_bound` remains the
+honest statement of what a *naive* complete search must cover. Both numbers are
+in the truth file and the note beside them says which claim each can carry.
+D-EX-027 and D-EX-028, and `STATUS.md` open weakness 27.
 
 **Every solvable item says where its witness came from.** Five of the eight are
 breadth-first search output and three are constructions. A plan that replays and

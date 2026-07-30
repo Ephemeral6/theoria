@@ -6,14 +6,14 @@
         "ok": true,
         "why": "at least 199 commands are needed (verified against a relaxation admitting 199) and the budget is 150"
       },
-      "check_certificate_seconds": 0.00308,
-      "components_seconds": 0.00022,
+      "check_certificate_seconds": 0.00306,
+      "components_seconds": 0.00019,
       "n_components": 1,
       "positional_states": 600,
-      "positional_states_seconds": 0.00116,
+      "positional_states_seconds": 0.00118,
       "relaxed_distance": 199,
-      "relaxed_distance_seconds": 0.0015,
-      "relaxed_edges_seconds": 0.0014,
+      "relaxed_distance_seconds": 0.00152,
+      "relaxed_edges_seconds": 0.00142,
       "relaxed_graph_nodes": 600,
       "relaxed_graph_undirected_edges": 997,
       "row_col_deltas": [
@@ -29,7 +29,7 @@
         ]
       ],
       "subset_lower_bound_m": 60,
-      "subset_lower_bound_seconds": 0.00474
+      "subset_lower_bound_seconds": 0.00494
     },
     "board": "5x202",
     "certificate": {
@@ -46,12 +46,14 @@
       "cap": 200000,
       "dippable_switches": 400,
       "enumerated": null,
-      "exhaustive_feasible": false,
+      "enumeration_attempted": false,
+      "enumeration_refused_because": "the construction exhibits 2^60 = 1152921504606846976 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
       "lower_bound": 1152921504606846976,
       "m": 60,
+      "naive_enumeration_feasible": false,
       "positional_states": 600,
-      "quotient_note": "600 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-      "truncated": false
+      "quotient_note": "600 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+      "truncated": null
     },
     "switch_count": 400,
     "variant_id": "a2var-ii3-spindle-budget",
@@ -69,10 +71,10 @@
       "components_seconds": 7e-05,
       "n_components": 1,
       "positional_states": 177,
-      "positional_states_seconds": 0.00028,
+      "positional_states_seconds": 0.00033,
       "relaxed_distance": null,
       "relaxed_distance_seconds": 0.0,
-      "relaxed_edges_seconds": 0.00033,
+      "relaxed_edges_seconds": 0.00035,
       "relaxed_graph_nodes": 180,
       "relaxed_graph_undirected_edges": 297,
       "row_col_deltas": [
@@ -87,7 +89,7 @@
         ]
       ],
       "subset_lower_bound_m": 118,
-      "subset_lower_bound_seconds": 0.00122
+      "subset_lower_bound_seconds": 0.00171
     },
     "board": "5x62",
     "certificate": {
@@ -105,12 +107,14 @@
       "cap": 200000,
       "dippable_switches": 118,
       "enumerated": null,
-      "exhaustive_feasible": false,
+      "enumeration_attempted": false,
+      "enumeration_refused_because": "the construction exhibits 2^118 = 332306998946228968225951765070086144 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
       "lower_bound": 332306998946228968225951765070086144,
       "m": 118,
+      "naive_enumeration_feasible": false,
       "positional_states": 177,
-      "quotient_note": "177 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-      "truncated": false
+      "quotient_note": "177 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+      "truncated": null
     },
     "switch_count": 120,
     "variant_id": "a2var-ii4-orchard-noleft",
@@ -128,7 +132,7 @@
       "components_seconds": 0.0001,
       "n_components": 2,
       "positional_states": 180,
-      "positional_states_seconds": 0.00036,
+      "positional_states_seconds": 0.0004,
       "relaxed_distance": null,
       "relaxed_distance_seconds": 0.0,
       "relaxed_edges_seconds": 0.00065,
@@ -147,7 +151,7 @@
         ]
       ],
       "subset_lower_bound_m": 120,
-      "subset_lower_bound_seconds": 0.00207
+      "subset_lower_bound_seconds": 0.00344
     },
     "board": "8x62",
     "certificate": {
@@ -171,12 +175,14 @@
       "cap": 200000,
       "dippable_switches": 120,
       "enumerated": null,
-      "exhaustive_feasible": false,
+      "enumeration_attempted": false,
+      "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
       "lower_bound": 1329227995784915872903807060280344576,
       "m": 120,
+      "naive_enumeration_feasible": false,
       "positional_states": 180,
-      "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-      "truncated": false
+      "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+      "truncated": null
     },
     "switch_count": 120,
     "variant_id": "a2var-ii1-gantry-sealed",
@@ -190,14 +196,14 @@
         "ok": true,
         "why": "every path from the start to the goal occupies one of [[4, 2]], and each of those is a declared hazard"
       },
-      "check_certificate_seconds": 0.00153,
+      "check_certificate_seconds": 0.00149,
       "components_seconds": 0.0001,
       "n_components": 1,
       "positional_states": 180,
-      "positional_states_seconds": 0.00035,
+      "positional_states_seconds": 0.00042,
       "relaxed_distance": null,
       "relaxed_distance_seconds": 0.0,
-      "relaxed_edges_seconds": 0.00069,
+      "relaxed_edges_seconds": 0.00066,
       "relaxed_graph_nodes": 301,
       "relaxed_graph_undirected_edges": 477,
       "row_col_deltas": [
@@ -213,7 +219,7 @@
         ]
       ],
       "subset_lower_bound_m": 120,
-      "subset_lower_bound_seconds": 0.00203
+      "subset_lower_bound_seconds": 0.00243
     },
     "board": "8x62",
     "certificate": {
@@ -234,12 +240,14 @@
       "cap": 200000,
       "dippable_switches": 120,
       "enumerated": null,
-      "exhaustive_feasible": false,
+      "enumeration_attempted": false,
+      "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
       "lower_bound": 1329227995784915872903807060280344576,
       "m": 120,
+      "naive_enumeration_feasible": false,
       "positional_states": 180,
-      "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-      "truncated": false
+      "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+      "truncated": null
     },
     "switch_count": 120,
     "variant_id": "a2var-ii2-lattice-bridge",
