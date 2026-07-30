@@ -1126,7 +1126,7 @@ ITERATION_LOOP = [
 # --------------------------------------------------------------------------
 
 PAPER_PLAN = [
-    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 87,
+    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 89,
      "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
      "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
      "evidence": "六引擎 + M9 + FD 三档定价 + 500 世界 23 不变量零违规；世界工厂 20 世界；契约 v0.3；A0/A0′/A1/A2/A3 五件离线验收全绿"},
@@ -1158,7 +1158,7 @@ PAPER_PLAN = [
      "slot": "§5 统计口径 · 双结局文本",
      "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
      "evidence": "冻结包起草 + Phase 1 收口交付；统计规则草案在盘"},
-    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 62,
+    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 65,
      "slot": "全文（3.2 的八节骨架）",
      "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
      "evidence": "PAPER.md 2512 行成稿，含引文核查、评审分诊、待办清单；五视角评审在跑"},
@@ -1187,7 +1187,7 @@ GRID_ROWS = [
 
 GRID = {
     "E1": {"pct": 100, "note": "六引擎全绿 + 500 世界性质轰炸零违规", "active": ["E1-property-fuzz", ]},
-    "E2": {"pct": 85, "note": "八引擎出货、510 测试收集；但 ENGINE_TABLE 不在 master，E11 四缺陷在 master 健在", "active": ["P-13"]},
+    "E2": {"pct": 92, "note": "ENGINE_TABLE.md 已在 master 且边界列非空；lp_potential 的 admissible 改为读 admissibility_check", "active": ["P-13"]},
     "E3": {"pct": 25,  "note": "引擎在线供货（经 theoria-arm 调用）", "active": []},
     "E4": {"pct": 0,  "note": "封存战役中的引擎供给", "active": []},
     "E5": {"pct": 45, "note": "MANIFEST 中 engines/ 40 文件全 class A releasable；306 哈希 match / 18 stale", "active": []},
@@ -1217,7 +1217,7 @@ GRID = {
     "V5": {"pct": 55, "note": "build_all 今天必然非零退出（EXPECTED_IDS 止于 E-07）；50 源哈希 13 条已漂移", "active": ["P-21"]},
 
     "P1": {"pct": 85, "note": "方法论与骨架", "active": []},
-    "P2": {"pct": 76, "note": "12 节非占位 23667 词；但两份审计只覆盖半篇，五视角评审给 Reject", "active": ["P-23"]},
+    "P2": {"pct": 80, "note": "P14 的诚实措辞已落进 PAPER.md（master 上可见 self-consistent 口径）", "active": ["P-23"]},
     "P3": {"pct": 35, "note": "四样材料三样是离线的，第四样不在正文；线上只有 preflight 与一局首触", "active": ["P3-case-study", ]},
     "P4": {"pct": 15, "note": "预注册包不存在；k/Δ/B 由监控在工单里暂定——工单里的决定不是预注册", "active": []},
     "P5": {"pct": 55, "note": "release/ + 复现脚本 + 许可条款", "active": ["P-19"]},

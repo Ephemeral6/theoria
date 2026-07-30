@@ -3,3 +3,14 @@
 # line's bytes and break that merge, and any hash taken over the ledger with it.
 # Same reasoning as engine-rig/.gitattributes.
 * text eol=lf
+
+# A14 (2026-07-29). The four campaign artefacts were written by the harness on
+# Windows in Python text mode, so their bytes on disk are CRLF -- and the sha256
+# that battery/runs/20260728T061147Z-v3/MANIFEST.json pinned when it consumed
+# them as evidence was taken over those CRLF bytes. Under the `* text eol=lf`
+# rule above, `git add` would normalise them to LF and every clone would then
+# hold a file whose digest no longer matches the one already cited. That is a
+# silent break in the evidence chain, so eol translation is switched off for
+# these paths and the bytes are stored verbatim. `diff` keeps them readable in
+# review despite -text. Do not "fix" the line endings: the digests are the point.
+out/campaign/*.json -text diff

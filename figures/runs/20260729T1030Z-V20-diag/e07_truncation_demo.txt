@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "C:\Users\user\Desktop\theoria\.worktrees\v20-figures-pipeline-red\figures\fig06_concept_timeline.py", line 1513, in build
+    data, notes = extract()
+                  ~~~~~~~^^
+  File "C:\Users\user\Desktop\theoria\.worktrees\v20-figures-pipeline-red\figures\fig06_concept_timeline.py", line 671, in extract
+    parsed = parse_log(sources.read_text("a0_theorize_log"))
+  File "C:\Users\user\Desktop\theoria\.worktrees\v20-figures-pipeline-red\figures\fig06_concept_timeline.py", line 391, in parse_log
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: THEORIZE_LOG.md: entry ids do not match the declared set. unexpected=['E-08', 'E-09'] missing=[]
+EXPECTED_IDS at HEAD, E-family tail: ['E-01', 'E-02', 'E-03', 'E-04', 'E-05', 'E-06', 'E-07', 'E-08', 'E-09']
+simulating pre-abd8d0cb EXPECTED_IDS -> ['E-01', 'E-02', 'E-03', 'E-04', 'E-05', 'E-06', 'E-07']

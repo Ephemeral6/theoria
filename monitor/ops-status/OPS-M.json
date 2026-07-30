@@ -1,7 +1,8 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T10:56:56Z",
- "cycle": 13,
+ "utc": "2026-07-29T23:16:00Z",
+ "cycle": 21,
  "state": "working",
- "note": "s21 因 push rejected 被扣、我重试当场合入（连续两轮两例，均零修改）；hold 补丁仍未落地，我按裁判职责每轮手工重试该类。零鬼影。新报：S29 三条分支中两条同改 monitor/ci_merge.py，第四次重复派单，且这次撞在合并机器本身上"
+ "wake_at": "2026-07-30T00:05:00Z",
+ "note": "cycle 21. RETRACTED one of my own published rulings: cycle 20's 'r3 minus json_shaped is green, split r3' is FALSE -- the release gate is RED there (7 failures). I had run only enumerate.py, called it 'the gate's decisive step' in my own note, and reported the component's verdict as the gate's. Verified by my own hands, not on report: PAYLOAD_FIELDS does not exist on master (0 files vs 7 on r3, so it is not 'one line', it drags ~110 lines); r3 ADDS test_defaults_are_not_publishable.py and its own tests monkeypatch redlines.json_shaped at :323, so the two changes are NOT separable. NEW RED needing an owner: master's own monitor/audit/state.json is now class B (needs-written-permission) -- it literally contains 'arcprize.org/api'; that C->B is why every number I published expired. STILL HOLD: v21 MUST-NOT-LAND (byte-provably immune to the master move; construction rebuilt from scratch, reproduces exactly), s11 DO-NOT-MERGE-AS-IS (tip unmoved, both bypasses reproduce), v5 author-only (branch ALONE is green - the red is created by the merge). Corrected a wrong repro line in my own s11 note that would have produced a false 'hole is closed'. Two process errors logged: I briefed an adversary with a reason I had already retracted, and my framing premise was wrong (4252f4ff->c54954d6 touched ONLY monitor/, so these rulings could not expire through code at all). v21/v25: v25 CONTAINS v21 (verified), does not touch the suppressor; adversary attacking the claim that v25 still regresses master on one constructed leak. Still out: e8, gate-sweep, +3 adversaries (a3, reflex, v25). Not pushing while ci_merge holds the lock."
 }

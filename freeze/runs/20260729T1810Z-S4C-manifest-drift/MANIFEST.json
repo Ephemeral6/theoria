@@ -1,0 +1,12 @@
+{
+ "prompt_id": "S4-freeze-complete",
+ "branch": "agent/s4-freeze",
+ "base_commit": "eaeddc14a67f8399d412b679d5a922e36434cea7",
+ "utc": "2026-07-29T18:03:44Z",
+ "cycle": 34,
+ "kind": "process_record",
+ "worker": "RES-1",
+ "files": [],
+ "why": "freeze/MANIFEST.json had drifted from the tree and nothing checked. build_manifest.py --verify existed, was correct, and its own docstring called it \"what belongs in a gate\" -- it was in no gate. Regenerated (12 content hashes stale, generated_from.dirty was true) and wired --verify into verify.sh as stage [12], as a hard failure.",
+ "zero_api": "no network call, no billed action, no dollar."
+}

@@ -42,9 +42,13 @@
       "arc-recon/data/recon_ledger.jsonl": {
         "clean": true,
         "contacts": {},
+        "criterion": "a sealed game is present when its full id appears anywhere in the payload, or its short stem appears as a whole token; the URL is searched as a payload like any other. Whether a hit is a contact or a listing is the caller's call, not this module's.",
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 1231,
         "present": true,
+        "record_shapes": {
+          "call": 1231
+        },
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 21,
@@ -76,9 +80,13 @@
       "baseline-arms/ledger.jsonl": {
         "clean": true,
         "contacts": {},
+        "criterion": "a sealed game is present when its full id appears anywhere in the payload, or its short stem appears as a whole token; the URL is searched as a payload like any other. Whether a hit is a contact or a listing is the caller's call, not this module's.",
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 560,
         "present": true,
+        "record_shapes": {
+          "episode": 560
+        },
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -110,9 +118,15 @@
       "baseline-arms/probe_log.jsonl": {
         "clean": true,
         "contacts": {},
+        "criterion": "a sealed game is present when its full id appears anywhere in the payload, or its short stem appears as a whole token; the URL is searched as a payload like any other. Whether a hit is a contact or a listing is the caller's call, not this module's.",
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 1956,
         "present": true,
+        "record_shapes": {
+          "call": 1922,
+          "episode": 19,
+          "summary": 15
+        },
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -418,9 +432,13 @@
   "sealed_api_audit": {
     "clean": true,
     "contacts": {},
+    "criterion": "a sealed game is present when its full id appears anywhere in the payload, or its short stem appears as a whole token; the URL is searched as a payload like any other. Whether a hit is a contact or a listing is the caller's call, not this module's.",
     "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
     "ledger_lines": 1231,
     "present": true,
+    "record_shapes": {
+      "call": 1231
+    },
     "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
     "sealed_games_contacted": [],
     "sealed_ids_seen_in_responses": 21,

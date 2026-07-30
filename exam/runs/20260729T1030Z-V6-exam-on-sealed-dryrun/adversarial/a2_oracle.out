@@ -1,0 +1,68 @@
+A2-A  solve()'s folded/resumed graph vs a from-scratch replay search
+      (cap = the counter cap in the INDEPENDENT decider; solve() always
+       folds at budget+1, or at 0 when no step_limit is declared)
+
+case                        solve   wit    | independent, per cap
+------------------------------------------------------------------------------------------------
+drill:walk-forbid-down      U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+drill:walk-forbid-up        S       10     | cap0:S/10  cap3:S/10  cap8:S/10  cap16:S/10
+drill:walk-remap-down-to-up U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+drill:walk-remap-left-to-ri S       10     | cap0:S/10  cap3:S/10  cap8:S/10  cap16:S/10
+drill:walk-budget-nine      U       -      | cap10:U/-  cap13:U/-  cap18:U/-  cap26:U/-
+drill:walk-budget-ten       S       10     | cap11:S/10  cap14:S/10  cap19:S/10  cap27:S/10
+drill:walk-cut-row-four     U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+drill:walk-cut-half         S       14     | cap0:S/14  cap3:S/14  cap8:S/14  cap16:S/14
+drill:bridge-cut-column-thr U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+drill:walk-win-tighten-scor U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+two-step-limits-20-and-9    U       -      | cap10:U/-  cap13:U/-  cap18:U/-  cap26:U/-
+two-step-limits-40-and-10   S       10     | cap11:S/10  cap14:S/10  cap19:S/10  cap27:S/10
+two-step-limits-equal-10    S       10     | cap11:S/10  cap14:S/10  cap19:S/10  cap27:S/10
+limit-zero                  U       -      | cap1:U/-  cap4:U/-  cap9:U/-  cap17:U/-
+loss-plus-budget-14         S       14     | cap15:S/14  cap18:S/14  cap23:S/14  cap31:S/14
+loss-plus-budget-13         U       -      | cap14:U/-  cap17:U/-  cap22:U/-  cap30:U/-
+loss-on-start-cell          U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+loss-on-goal-cell           U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+win-tighten-plus-budget-12  U       -      | cap13:U/-  cap16:U/-  cap21:U/-  cap29:U/-
+win-tighten-value-zero      U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+forbid-plus-budget-10       S       10     | cap11:S/10  cap14:S/10  cap19:S/10  cap27:S/10
+remap-onto-forbidden        S       10     | cap0:S/10  cap3:S/10  cap8:S/10  cap16:S/10
+push-corridor-budget-5      S       5      | cap6:S/5  cap9:S/5  cap14:S/5  cap22:S/5
+push-corridor-budget-4      U       -      | cap5:U/-  cap8:U/-  cap13:U/-  cap21:U/-
+push-open-budget-3          U       -      | cap4:U/-  cap7:U/-  cap12:U/-  cap20:U/-
+fragile-budget-6            S       4      | cap7:S/4  cap10:S/4  cap15:S/4  cap23:S/4
+fragile-forbid-right        U       -      | cap0:U/-  cap3:U/-  cap8:U/-  cap16:U/-
+gravity-cut-2-3             S       10     | cap0:S/10  cap3:S/10  cap8:S/10  cap16:S/10
+gravity-budget-10           S       10     | cap11:S/10  cap14:S/10  cap19:S/10  cap27:S/10
+gravity-budget-9            U       -      | cap10:U/-  cap13:U/-  cap18:U/-  cap26:U/-
+switch-toggle-forbid-up     S       9      | cap0:S/9  cap3:S/9  cap8:S/9  cap16:S/9
+tokens-lock-budget-10       S       8      | cap11:S/8  cap14:S/8  cap19:S/8  cap27:S/8
+cycler-gate-budget-6        S       5      | cap7:S/5  cap10:S/5  cap15:S/5  cap23:S/5
+------------------------------------------------------------------------------------------------
+0 disagreements over 33 cases x 4 caps
+
+A2-B  does OracleTruncated fire before a wrong answer can be returned?
+------------------------------------------------------------------------------------------------
+  budget 10 (solvable): full search -> solvable=True in 120 nodes
+     node_limit=1      -> OracleTruncated (refused to answer)
+     node_limit=5      -> OracleTruncated (refused to answer)
+     node_limit=20     -> OracleTruncated (refused to answer)
+     node_limit=60     -> OracleTruncated (refused to answer)
+     node_limit=119    -> OracleTruncated (refused to answer)
+     node_limit=120    -> solvable=True nodes=120
+  budget 9 (unsolvable): full search -> solvable=False in 119 nodes
+     node_limit=1      -> OracleTruncated (refused to answer)
+     node_limit=5      -> OracleTruncated (refused to answer)
+     node_limit=20     -> OracleTruncated (refused to answer)
+     node_limit=60     -> OracleTruncated (refused to answer)
+     node_limit=118    -> OracleTruncated (refused to answer)
+     node_limit=119    -> solvable=False nodes=119
+
+A2-C  is the counter really unread when no step_limit is declared?
+------------------------------------------------------------------------------------------------
+   self.commands = 0          # commands since the last RESET, RESET excluded
+   self.commands = 0
+   self.commands += 1
+   if self.commands > op["limit"]:
+   "commands": self.commands,
+   -> the only read is the step_limit comparison; the only writes are the
+      RESET zeroing and the pre-step_limit increment.

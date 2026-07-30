@@ -4,6 +4,13 @@
 #
 #     cd arc-recon && bash verify.sh
 #
+# A gate nobody has made fail on purpose is decorative (S20), and this one was:
+# it had no negative sample, and A13 found out why that matters -- the sealed
+# audit reported "560 calls, sealed ADDRESSED: NONE" over a file whose fields it
+# could not read. The three records that used to walk through it are built and
+# required to go red in the file below.
+# negative-sample: arc-recon/test_sealed_audit_negatives.py
+#
 # Exit 0 means: the offline suite passes, the shipped canary schedule is
 # internally consistent with the shipped canary spec, the pile cut still hashes
 # to its published value, no sealed game appears in any request we have ever

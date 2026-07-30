@@ -1,0 +1,93 @@
+# negative control -- does `build_engine_manifest.py --verify` actually catch drift?
+
+Worktree `C:/Users/user/Desktop/theoria/.worktrees/s4-freeze`, branch
+`agent/s4-freeze`, HEAD `5822e5e5c4c87e42f834ddca76f3af56eee3e7b6`.
+`engine-rig/` clean throughout; nothing outside `freeze/` was written.
+
+The baseline copy is kept beside this file as `ENGINE_MANIFEST.baseline.md` and
+the live file is restored from it after every mutation, so a control that dies
+half way cannot leave a mutated manifest on the branch.
+
+FOUR checks, one per detector plus one for the CRLF trap, because a verifier with
+one detector and four failure modes is a verifier that is green for three:
+
+  A. a hash moves                          -> the row detector must NAME the row
+  B. a derived count moves, hashes intact  -> the rendering detector must fire
+  C. the pin block is gone                 -> unchecked, must not pass
+  D. the whole file is CRLF on disk        -> must stay GREEN (a false red here
+     is the exact failure `MANIFEST_DRAFT.md`'s 哈希纪律 warns about: a red gate
+     on an identical tree teaches people to regenerate until it is green)
+
+==============================================================
+## 0. BEFORE -- clean tree, unmutated manifest
+==============================================================
+$ python freeze/build_engine_manifest.py --verify
+freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+exit=0
+
+==============================================================
+## A. one hex character in one pinned hash
+==============================================================
+mutate the lp_potential package tree sha1, in the ENGINE-HASHES block only:
+  f29152f2e95b18472d776df6e658d099a0f387a1  ->  ...a2
+(the comparison is symmetric, so this is also what a moved TREE looks like)
+$ python freeze/build_engine_manifest.py --verify
+DRIFT: freeze/ENGINE_MANIFEST.md no longer describes this tree.
+       1 row(s) disagree:
+  DRIFTED  engine-rig/engines/lp_potential
+             pinned  tree f29152f2e95b18472d776df6e658d099a0f387a2
+             at HEAD tree f29152f2e95b18472d776df6e658d099a0f387a1
+       regenerate it and read the diff before freezing.
+exit=1
+
+==============================================================
+## B. a derived count moves; every hash still correct
+==============================================================
+mutate the measured pass count in section 5 prose: 554 -> 553.
+No hash changes, so detector A stays silent and detector B has to fire.
+$ python freeze/build_engine_manifest.py --verify
+DRIFT: every pinned hash matches, but the rendered manifest does not.
+       something outside the hash block moved -- a derived count, a constant,
+       a caveat, or a hand edit to a generated file. Regenerate and diff.
+exit=1
+
+==============================================================
+## C. the machine-readable pin block is deleted
+==============================================================
+the worst case: nothing to compare against, so the manifest must NOT pass.
+$ python freeze/build_engine_manifest.py --verify
+DRIFT: the ENGINE-HASHES block is missing or malformed.
+       every hash in this manifest is therefore unchecked.
+exit=1
+
+==============================================================
+## D. every LF on disk turned into CRLF -- must stay GREEN
+==============================================================
+rewrote the file CRLF; CR count = 339
+$ python freeze/build_engine_manifest.py --verify
+freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+exit=0 (0 is the required answer)
+Why it holds: --verify reads the file in text mode, so universal newlines
+collapse CRLF to LF before the comparison, and every hash it compares came
+from git rather than from disk bytes.
+
+==============================================================
+## AFTER -- restored from the baseline copy
+==============================================================
+$ python freeze/build_engine_manifest.py --verify
+freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+exit=0
+
+$ cmp freeze/ENGINE_MANIFEST.md <baseline>
+byte-identical to the baseline
+
+$ python freeze/build_engine_manifest.py   # regenerate; must be a no-op
+wrote freeze/ENGINE_MANIFEST.md
+  8 packages, 55 pinned rows, 2 version string(s) found
+  2/8 milestone tags still describe HEAD's bytes
+  engine-rig/ is clean, so HEAD is what is on disk
+regeneration is byte-identical -- the generator is deterministic
+
+VERDICT: A, B and C all go red and exit 1, each through its own detector
+and naming the right thing; D stays green as it must; the restored file
+verifies green and regenerates byte-for-byte.

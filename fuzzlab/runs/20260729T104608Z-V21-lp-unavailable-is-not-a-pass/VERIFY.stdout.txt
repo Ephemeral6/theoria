@@ -1,0 +1,51 @@
+[ok  ] oracle and battery tests
+        ........................................................................ [ 55%]
+        ..........................................................               [100%]
+[ok  ] campaign smoke, all six engines
+          "worlds_checked": 360
+        }
+        
+        -> out\campaign.json
+[FAIL] engine-rig's own suite (the tree under test)
+                        laws.append(
+        >                   Law(vector=vector, features=list(features),
+                                value=gf2.dot(vector, encoded[0]), scope=scope,
+                                scope_exhaustive=not truncated)
+                        )
+        E               TypeError: Law.__init__() got an unexpected keyword argument 'scope_exhaustive'
+        
+        heldout\zero_space_heldout.py:80: TypeError
+        =========================== short test summary info ===========================
+        FAILED tests/test_heldout.py::test_the_fit_reproduces_the_engine_without_going_through_the_gate
+        FAILED tests/test_heldout.py::test_withholding_an_operation_strictly_enlarges_the_recovered_space
+        FAILED tests/test_heldout.py::test_the_score_reads_the_heldout_side_and_not_the_train_side
+        FAILED tests/test_heldout.py::test_the_scored_witness_really_refutes_the_law
+        FAILED tests/test_heldout.py::test_row_novelty_is_measured_and_the_random_split_withholds_nothing_new
+
+last campaign totals: {"generator_errors": 0, "invariants": 26, "raised": 0, "skipped": 152, "unavailable": 0, "violated": 0, "worlds_checked": 360}
+
+FAILED: engine-rig's own suite (the tree under test)
+exit=1
+
+--- note on the exit code, added by hand ---
+Stages 1 and 2 (fuzzlab's own tests; the six-engine campaign smoke) are ok.
+Stage 3 runs engine-rig's own suite and fails: 5 tests in
+engine-rig/tests/test_heldout.py raise
+  TypeError: Law.__init__() got an unexpected keyword argument 'scope_exhaustive'
+engine-rig alone: 5 failed, 548 passed, 27 skipped.
+
+This is NOT a fuzzlab defect and not caused by this item. It is a semantic merge
+conflict between E-15 and E-17, surfaced by merging
+origin/agent/e15-solver-status-bit into this branch before any work began:
+
+  613e478f (pre-merge)  Law.scope_exhaustive is a dataclass FIELD  (= True)
+  92b140db (post-merge) Law.scope_exhaustive is a derived PROPERTY
+
+while engine-rig/heldout/zero_space_heldout.py:80 (E-17, already on the branch)
+constructs Law(..., scope_exhaustive=not truncated). Git merged them textually
+clean because they are different files.
+
+  git diff --stat 92b140db HEAD -- engine-rig   ->  empty
+
+so no byte of engine-rig was touched by this item, and fuzzlab never modifies
+engine-rig (house rule). Reported, not fixed. See RUN_STATE.md section 8.

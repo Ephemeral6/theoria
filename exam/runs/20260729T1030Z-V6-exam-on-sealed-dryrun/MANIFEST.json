@@ -1,0 +1,143 @@
+{
+  "adversarial": "runs/.../adversarial/ -- 9 re-runnable attack scripts; 1 blocking, 5 serious, 5 minor. All fixed except the sheet-arithmetic examinee, recorded as a limitation in SEALED_DRILL.md section 5.",
+  "base_commit": "c1a60420fb718ec57088335448840ee23ed1ee2d",
+  "branch": "agent/v6-exam-on-sealed-dryrun",
+  "digest_basis": "sha256 over the bytes on disk; exam/.gitattributes pins LF for everything under exam/, so these are the bytes a clone gets. The generator asserts no CRLF rather than trusting it.",
+  "entrypoint": "python -m exam.tools.sealed_drill",
+  "files": [
+    {
+      "path": "exam/SEALED_DRILL.md",
+      "sha256": "b845ebe44dbe202da131a214df334b6667e15cda6fa981017b8f69cffbdec9b6"
+    },
+    {
+      "path": "exam/drill_certificates.py",
+      "sha256": "01f23807bd9a394a46744417429a49d9f84df72d985f8d0794aaaf485fb15895"
+    },
+    {
+      "path": "exam/drill_wrapper.py",
+      "sha256": "c11e745b2f2204b6f7d2635994b43b380934f4879042742d205987700d4b155a"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/DRILL.json",
+      "sha256": "0c399c9210ff535308449b3b4abd2c6da1f74aab159536376c36549a737fc122"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/PLAN.md",
+      "sha256": "60950b9d6c326cb9384aab34b158c2958496e0658d3fa7ee76076ce5502e42df"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/RUN_STATE.md",
+      "sha256": "a612e4090d9cbf41200a3d892c8716c5aae86a389c7f05ce9fccd59d520a30ae"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a1_wrapper_fidelity.py",
+      "sha256": "28c1ff98693d12869388a3d69a1de1072bca3229b27b720c66937f0799b499e1"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a2_oracle.out",
+      "sha256": "cad7ba7bdb491599282ef8249a99621c8062351fa1feadbb163ab8a7abefc11d"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a2_oracle.py",
+      "sha256": "aab9863b71aac725b37b9e3c2651737c8be0c3f0a3f1e2e3afce49edca39232c"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a3_certificates.py",
+      "sha256": "c9563d381c86b660d67e6fa164d0bbb0c850596925c7f8a726eb27e2c70b7a6f"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a3b_certificates_round2.py",
+      "sha256": "31631632487b9850ef03a9635fe49fda217eef78db6e289481b093b97258bc52"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a3c_portal_undeclared.py",
+      "sha256": "267b05d8ac1a297402f5ef3346388282b307f58a754cd45bcdd9ae0669af8ea2"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a4_guard.py",
+      "sha256": "dd63e4ee883c7acdd2ca984d197bc2e19c5851283602676d1cf217210e7a682a"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a5_sheet_cheater.py",
+      "sha256": "68c3104823ae52fce47b15988795b3614de3c2326cf91a5fdd40f8259f52f309"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a6_numbers.py",
+      "sha256": "f7835c0beae2939f7ccc3bc96860d90e5327b63cd07cac384e1c87f305eae29b"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/adversarial/a7_citations.py",
+      "sha256": "553e0c34fbb3cd6b7af569b0584c25e54b8d3d40166504099fb2d5d648d5539e"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/sheet.json",
+      "sha256": "5725e3dcd7134811872267a23ab3c4365b89b525d39e2322d20afda5f754dcc9"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/truth.json",
+      "sha256": "749a1373cca41642a57e93052cf479cebc74b4b4aeb43463938725bf9570417b"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-bridge-cut-column-three.json",
+      "sha256": "0b9a0dc8ea5470c866169f6018a5eed53952a41dd5496be33f4e50c43e0979b2"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-budget-nine.json",
+      "sha256": "d8ecd9e60a7486ad38c6c147ea470735018e91645940f511ba3474039bf092e9"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-budget-ten.json",
+      "sha256": "f97b6170ea1d94ea0e4cedcdbb2d73a14bf313038be94327c565458771f9bb85"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-cut-half.json",
+      "sha256": "10a5ccea1a9f0ef539f02ffccd1053c9bedc7f39b7bbcf22db292d3b29aa129b"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-cut-row-four.json",
+      "sha256": "12cddcc52012c0d942cc9bcaccd5715eecde599e05d01a6e13b84bdef2947fa0"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-forbid-down.json",
+      "sha256": "2daa4a1c1888a9103176f7680ef08bb36f64bb58293232e3fe354505e1b2fdcd"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-forbid-up.json",
+      "sha256": "3fd26bedc755f1f4ab0e5c89d215e3ec9416f59c5388c1992656142802ef3206"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-remap-down-to-up.json",
+      "sha256": "2ba6df8f304f026df03de2a153d76f5b36e52c3a9599bb55f8f3bf403f99fcd6"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-remap-left-to-right.json",
+      "sha256": "6cde4d83200e27524b281905e66a5ad550940a391c554c62a82787aef8d17184"
+    },
+    {
+      "path": "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/variant_specs/drill-walk-win-tighten-scoreless.json",
+      "sha256": "018e852a1ec4ee97d00f36eb9cd4367ebd1ef8800964c692773b2a03d0418fdc"
+    },
+    {
+      "path": "exam/tests/test_sealed_drill.py",
+      "sha256": "e3f71d3d4a8d4d12d591fcbd151b0da3bb048fa72982d7b6070c8fda604f3fae"
+    },
+    {
+      "path": "exam/tools/sealed_drill.py",
+      "sha256": "787346914fd1328e0a859f641a4eda3acdb32b45266a106e27f7ca180e6fafb2"
+    }
+  ],
+  "full_suite": "python -m pytest exam/tests -q  (394 passed, 2 xfailed)",
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls_on_any_generation_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V6-exam-on-sealed-dryrun",
+  "python": "3.13.13",
+  "run_id": "20260729T1030Z-V6-exam-on-sealed-dryrun",
+  "tests": "python -m pytest exam/tests/test_sealed_drill.py -q  (52 passed)",
+  "utc": "2026-07-29T11:26:18Z",
+  "worktree_dirty": true
+}

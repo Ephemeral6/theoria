@@ -1,0 +1,17 @@
+Replaying 13 reviewer escapees against the repaired suite.
+
+F1-swallow-state-exception         F1   pytest RED     1 failed, 22 passed in 0.30s
+F1-swallow-edge-exception          F1   pytest RED     1 failed, 23 passed in 0.31s
+F2-state-count-from-input          F2   pytest RED     1 failed, 24 passed in 0.31s
+F2-slice-the-state-loop            F2   pytest RED     1 failed, 157 passed in 4.73s
+F2-slice-the-edge-loop             F2   pytest RED     1 failed, 52 passed in 0.58s
+F2-halve-the-edge-loop             F2   pytest RED     1 failed, 52 passed in 0.60s
+F2-zero-the-edge-count             F2   pytest RED     1 failed, 25 passed in 0.31s
+F3-markdown-classifies-itself      F3   pytest RED     1 failed, 81 passed in 0.89s
+F4-delete-VIOLATED-literal         F4   pytest RED     1 failed, 71 passed in 0.88s
+F4-hardcode-summary-true           F4   pytest RED     1 failed, 78 passed in 0.88s
+F4-drop-unverified-bullet          F4   pytest RED     1 failed, 72 passed in 0.88s
+F8-hardcode-all-hold-true          F8   pytest RED     1 failed, 15 passed in 0.30s
+F10-drop-the-conservation-check    F10  pytest RED     1 failed, 20 passed in 0.30s
+
+STILL ESCAPING: none -- all 13 replayed escapees are now caught.

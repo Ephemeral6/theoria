@@ -1824,3 +1824,39 @@
 2026-07-29T10:08:05Z MERGED origin/agent/c10-unsolvable-proof-canon (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
 2026-07-29T10:08:05Z CLEARED flag for origin/agent/c10-unsolvable-proof-canon (merged)
 2026-07-29T10:08:11Z FLAG origin/agent/v5-verdict-three-types: merge conflict
+2026-07-29T10:24:30Z FLAG origin/agent/s21-app-session-death: push rejected (race?)
+2026-07-29T10:25:44Z MERGED origin/agent/s27-release-must-stick (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:29:35Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T10:29:44Z FLAG origin/agent/s4-freeze: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T07:43:30Z]
+2026-07-29T10:29:45Z HELD 10 unchanged since last verdict: p10-figures-into-paper (merge conflict, 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a10-shared-ledger-real-arms (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); e8-ic3-scale (merge conflict, 1x); v19-unverified-is-not-true (merge conflict, 1x)
+2026-07-29T10:42:58Z MERGED origin/agent/p7-p14-battery-section-blind-round (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T10:44:09Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:56:07Z MERGED origin/agent/s21-app-session-death (dirs: ; gates: none)
+2026-07-29T10:56:07Z CLEARED flag for origin/agent/s21-app-session-death (merged)
+2026-07-29T11:01:28Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T11:04:05Z MERGED origin/agent/s27-credential-triage (dirs: proxy; gates: verify:proxy(verify.py))
+2026-07-29T11:12:21Z MERGED origin/agent/p15-capability-column (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T11:13:25Z MERGED origin/agent/s28-claim-warns-on-existing-branch (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:19:43Z CLEARED-BY-OPS-M flags for a10-shared-ledger-real-arms, v19-unverified-is-not-true, p13-figure-numbering (merged to master by hand: the conflict resolutions were made in a previous session's worktrees and ci_merge cannot reproduce them)
+2026-07-29T14:24:26Z CLEARED-BY-OPS-M e15-solver-status-bit: merged to master together with origin/agent/e19-merge-clean-but-broken. e15 alone turns engine-rig RED against master -- it removes Law.scope_exhaustive, which heldout/zero_space_heldout.py (E17, already on master) constructs. Neither branch touches the other's lines, so the pair merges without a textual conflict and only the merged tree is broken. e19 already carried the fix and had never been picked up. Gate on the combined tree: OK verify:engine-rig(verify.py).
+2026-07-29T14:27:55Z CLEARED-BY-OPS-M s4-freeze: the flag was stale twice over. It recorded tip 3c0bff72 and reason 'merge conflict' with 3 attempts and a NEEDS-HUMAN escalation; the branch is now at fd8096ba, merges clean, and gates OK verify:freeze(verify.sh). Nothing was wrong with it -- nothing retried it.
+2026-07-29T14:27:55Z CLEARED-BY-OPS-M r2-release-licence: the flag's quoted output was misleading, not the flag. Those 'note' lines about sealed-pile ids are check_redlines.py passing (0 violations over 5707 files); the actual red was release/tests/test_bundle.py -- 'BUNDLE.jsonl is stale, rerun release/bundle.py' plus a partition test failing on release/.gitattributes, which master added after the branch built its bundle. Fixed by running the regeneration the failure names. Ships 1930 -> 1931; the 20 held-back files are unchanged; no leakage or sealed-pile check was touched.
+2026-07-29T14:37:00Z CLEARED-BY-OPS-M p10-figures-into-paper: the flag predates the p13 merge and lists neither fig06 nor figures/verify.sh, both of which were conflicting by the time anyone looked. Real conflict was one file: master (P4/A12) and p10 had each added a 'gate 9' to verify.sh. Both kept -- master's stays 9, p10's publication-profile three become 10/11/12, cross-references fixed. figures/out/** was regenerated from the merged sources with build_all.py rather than hand-picked; the rebuild moved eight files the conflict never named. Gate OK verify:figures(verify.sh).
+2026-07-29T14:37:30Z FLAG origin/agent/a13-sealed-audit-reads-the-wrong-fields: push rejected (race?)
+2026-07-29T14:40:25Z MERGED origin/agent/s29-third-condition (dirs: .gitignore,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:45:23Z MERGED origin/agent/s29-triage-red-gates (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:46:02Z FLAG origin/agent/s29-triage-the-five-red-gates: merge conflict
+2026-07-29T14:48:45Z FLAG origin/agent/s30-clock-sanity-widen: push rejected (race?)
+2026-07-29T14:49:02Z MERGED origin/agent/s31-fleetkit-gate (dirs: fleetkit; gates: verify:fleetkit(verify.py))
+2026-07-29T14:49:11Z FLAG origin/agent/s32-close-gate-gap: verify gate red in browser-ops (verify.py)
+2026-07-29T14:49:19Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict
+2026-07-29T14:53:12Z MERGED origin/agent/v21-lp-unavailable-is-not-a-pass (dirs: PARTNER_SYNC.md,engine-rig,fuzzlab; gates: verify:engine-rig(verify.py),verify:fuzzlab(verify.py); a gate dirtied the worktree: fuzzlab/out/campaign.json,fuzzlab/out/findings.jsonl)
+2026-07-29T14:56:27Z MERGED origin/agent/v22-wintighten-absent-vs-below (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T15:01:40Z MERGED origin/agent/v6-exam-on-sealed-dryrun (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T15:02:51Z MERGED origin/agent/p16-uncited-number-gate (dirs: PARTNER_SYNC.md,papers; gates: pytest:papers)
+2026-07-29T15:05:53Z FLAG origin/agent/w1661-board-half-tracked: verify gate red in monitor (verify.sh)
+2026-07-29T15:07:43Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T15:07:59Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T15:08:24Z MERGED origin/agent/s4-freeze (dirs: PARTNER_SYNC.md,freeze; gates: verify:freeze(verify.sh))
+2026-07-29T15:08:26Z HELD 3 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); v5-verdict-three-types (merge conflict, 2x)
+2026-07-29T15:09:16Z CLEARED-BY-OPS-M v5-verdict-three-types: the conflict was two appends at EOF that git could not align, nothing substantive. Master's side was V7's strict xfail; the branch's side of the hunk was empty because its ten tests had already auto-merged higher up. Test count is the exact union -- base 39 / master 40 / branch 49 / merged 50, nothing dropped. Full suite on the merged tree: 359 passed, 2 xfailed. Gate DRIFT exam + DRIFT monitor, both non-blocking and both regenerating their own artefacts.

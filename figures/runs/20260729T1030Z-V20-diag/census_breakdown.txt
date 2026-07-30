@@ -1,0 +1,112 @@
+===== A. paper BODY only (PAPER.md, sections/, OUTLINE.md, README.md, assemble.py, verify_paper.py) =====
+--- fig02 ---
+(0 hits in paper body)
+--- fig03 ---
+(0 hits in paper body)
+--- fig04 ---
+(0 hits in paper body)
+--- fig05 ---
+papers/phase1-workshop/PAPER.md:1163:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/PAPER.md:1164:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/PAPER.md:1165:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/sections/05_a2.md:134:**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+papers/phase1-workshop/sections/05_a2.md:135:`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+papers/phase1-workshop/sections/05_a2.md:136:`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+papers/phase1-workshop/OUTLINE.md:72:| 3 | A2 打脸→重证 ledger flow | `figures/fig05_a2_repair_loop.py` | `figures/out/{light,dark}/fig05_a2_repair_loop.{svg,png}` | `figures/csv/fig05_a2_repair_loop.csv` |
+papers/phase1-workshop/verify_paper.py:20:                                 paper cites the root pipeline's fig05/06/07
+papers/phase1-workshop/verify_paper.py:78:        "figures/fig05_a2_repair_loop.py",
+papers/phase1-workshop/verify_paper.py:81:        "figures/out/light/fig05_a2_repair_loop.svg",
+papers/phase1-workshop/verify_paper.py:85:        "figures/csv/fig05_a2_repair_loop.csv",
+--- fig06 ---
+papers/phase1-workshop/PAPER.md:642:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/PAPER.md:643:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/PAPER.md:644:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/sections/03_a0.md:31:`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+papers/phase1-workshop/sections/03_a0.md:32:`figures/out/light/fig06_concept_timeline.svg` (and `figures/out/dark/fig06_concept_timeline.svg`), and every
+papers/phase1-workshop/sections/03_a0.md:33:number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+papers/phase1-workshop/OUTLINE.md:70:| 1 | concept-birth timeline, with triggers | `figures/fig06_concept_timeline.py` | `figures/out/{light,dark}/fig06_concept_timeline.{svg,png}` | `figures/csv/fig06_concept_timeline.csv` |
+papers/phase1-workshop/verify_paper.py:79:        "figures/fig06_concept_timeline.py",
+papers/phase1-workshop/verify_paper.py:82:        "figures/out/light/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:84:        "figures/out/dark/fig06_concept_timeline.svg",
+papers/phase1-workshop/verify_paper.py:86:        "figures/csv/fig06_concept_timeline.csv",
+--- fig07 ---
+papers/phase1-workshop/PAPER.md:714:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/PAPER.md:715:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/PAPER.md:716:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/sections/03_a0.md:103:**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+papers/phase1-workshop/sections/03_a0.md:104:`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+papers/phase1-workshop/sections/03_a0.md:105:`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+papers/phase1-workshop/OUTLINE.md:71:| 2 | A0 vs A0′ coverage × accuracy | `figures/fig07_a0_vs_a0prime.py` | `figures/out/{light,dark}/fig07_a0_vs_a0prime.{svg,png}` | `figures/csv/fig07_a0_vs_a0prime.csv` |
+papers/phase1-workshop/verify_paper.py:80:        "figures/fig07_a0_vs_a0prime.py",
+papers/phase1-workshop/verify_paper.py:83:        "figures/out/light/fig07_a0_vs_a0prime.svg",
+papers/phase1-workshop/verify_paper.py:87:        "figures/csv/fig07_a0_vs_a0prime.csv",
+
+===== B. papers/ parity+review machinery =====
+fig02 in papers/phase1-workshop/figures/: 0
+fig02 in papers/**/runs/: 1
+fig02 in other papers/*.md: 
+fig03 in papers/phase1-workshop/figures/: 0
+fig03 in papers/**/runs/: 0
+fig03 in other papers/*.md: 
+fig04 in papers/phase1-workshop/figures/: 0
+fig04 in papers/**/runs/: 0
+fig04 in other papers/*.md: 
+fig05 in papers/phase1-workshop/figures/: 6
+fig05 in papers/**/runs/: 2
+fig05 in other papers/*.md: papers/phase1-workshop/OUTLINE.md papers/phase1-workshop/PAPER.md 
+fig06 in papers/phase1-workshop/figures/: 10
+fig06 in papers/**/runs/: 11
+fig06 in other papers/*.md: papers/phase1-workshop/OUTLINE.md papers/phase1-workshop/PAPER.md 
+fig07 in papers/phase1-workshop/figures/: 8
+fig07 in papers/**/runs/: 5
+fig07 in other papers/*.md: papers/phase1-workshop/OUTLINE.md papers/phase1-workshop/PAPER.md 
+
+===== C. release manifest / repo README / figures PLAN+README+RUN_STATE =====
+--- fig02 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 6
+  figures/README.md: 2
+  figures/RUN_STATE.md: 6
+  figures/SOURCES.md: 0
+--- fig03 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 6
+  figures/README.md: 3
+  figures/RUN_STATE.md: 5
+  figures/SOURCES.md: 0
+--- fig04 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 5
+  figures/README.md: 1
+  figures/RUN_STATE.md: 2
+  figures/SOURCES.md: 0
+--- fig05 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 4
+  figures/README.md: 1
+  figures/RUN_STATE.md: 2
+  figures/SOURCES.md: 0
+--- fig06 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 4
+  figures/README.md: 1
+  figures/RUN_STATE.md: 3
+  figures/SOURCES.md: 2
+--- fig07 ---
+  release/: 6
+  root README.md: 0
+0
+  figures/PLAN.md: 5
+  figures/README.md: 1
+  figures/RUN_STATE.md: 3
+  figures/SOURCES.md: 0

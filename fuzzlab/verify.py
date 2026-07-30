@@ -60,6 +60,15 @@ def main() -> int:
         print("last campaign totals: %s" % json.dumps(totals, sort_keys=True))
         if totals.get("violated"):
             print("  violations are the product, not a failure — see fuzzlab/BUGS.md")
+        # `unavailable` is the one total that is not a reading about the engines.
+        # It counts worlds no invariant judged because a tool could not compute,
+        # and it is printed apart from `skipped` because most skips are the
+        # engine correctly declining and this is nobody knowing. Non-zero means
+        # the campaign measured less than its coverage column claims.
+        if totals.get("unavailable"):
+            print("  %d world(s) unjudged because a tool could not compute — "
+                  "this run's coverage was not earned; see skips_by_cause"
+                  % totals["unavailable"])
 
     print()
     if failures:

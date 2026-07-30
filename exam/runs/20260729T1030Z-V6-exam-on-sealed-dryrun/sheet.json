@@ -1,0 +1,468 @@
+{
+  "instructions": "What the examinee sees: the board, the wrapper's edit, and the question.\n\nThe class is not here, the claim is not here, and the justification is not\nhere.  `points` is equal on every item so it carries nothing either.\n",
+  "items": [
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-f607216a98",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "limit": 9,
+          "op": "step_limit"
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-926b9e5736",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "limit": 10,
+          "op": "step_limit"
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-feb147a057",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "cells": [
+            [
+              4,
+              1
+            ]
+          ],
+          "op": "observation_loss",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-613106da8e",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "action": "DOWN",
+          "op": "forbid_action"
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-caa1445372",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "from": "LEFT",
+          "op": "remap_action",
+          "to": "RIGHT"
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          1,
+          5
+        ],
+        "grid": [
+          "#######",
+          "#.....#",
+          "#.#.#.#",
+          "#.....#",
+          "#######"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-039711aa7e",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-fragile-bridge",
+      "wrapper_edit": [
+        {
+          "cells": [
+            [
+              1,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "op": "observation_loss",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-d4860af4d2",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "cells": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "op": "observation_loss",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-bdf0ae469d",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "action": "UP",
+          "op": "forbid_action"
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-369a5c101b",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "op": "win_tighten",
+          "require": {
+            "kind": "score_at_least",
+            "value": 1
+          }
+        }
+      ]
+    },
+    {
+      "board": {
+        "goal": [
+          5,
+          7
+        ],
+        "grid": [
+          "#########",
+          "#...#...#",
+          "#.#.#.#.#",
+          "#.#...#.#",
+          "#.#####.#",
+          "#.......#",
+          "#########"
+        ],
+        "start": [
+          1,
+          1
+        ]
+      },
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "item_id": "dq-2b42f864d7",
+      "kind": "verdict",
+      "points": 2.0,
+      "question": "Under the wrapper edit shown, is this world solvable within one episode? Answer 'solvable' or 'unsolvable', and give a certificate (invariant, cut_set or counting) or a witness.",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "world": "t1-walk-maze",
+      "wrapper_edit": [
+        {
+          "from": "DOWN",
+          "op": "remap_action",
+          "to": "UP"
+        }
+      ]
+    }
+  ],
+  "n_items": 10,
+  "paper_id": "drill-verdict-worldgen",
+  "question_type": "verdict",
+  "rubric_digest": "drill:520df88ad0ee48ae3faf050680e27955",
+  "rubric_module_digest": null,
+  "schema": "exam/v0.1",
+  "total_points": 20.0,
+  "world": {
+    "cut_version": "v1",
+    "n_dev": 4,
+    "n_sealed": 21,
+    "note": "ids withheld: this block rides on the sheet, and a sheet has no business naming a live game, dev pile included.",
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a"
+  }
+}

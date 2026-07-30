@@ -33,6 +33,53 @@ DENOMINATOR_LIMIT = 1000
 # solver's budget or arithmetic.
 HIGHS_INFEASIBLE = 2
 
+# ------------------------------------------------------------ the status bit
+#
+# One word per way the LP can end, kept apart all the way to the caller.  The
+# split that matters is `decided` vs not: `certified` and `no_linear_pagoda` are
+# statements about the *configuration*, the other three are statements about
+# HiGHS.  Collapsing them -- which this engine did until E15 -- lets an
+# iteration limit publish itself as a geometric fact.
+
+CERTIFIED = "certified"                 # HiGHS 0: weights found and re-checked
+NO_LINEAR_PAGODA = "no_linear_pagoda"   # HiGHS 2: proved infeasible, in the box
+BUDGET = "budget"                       # HiGHS 1: iteration limit
+UNBOUNDED = "unbounded"                 # HiGHS 3: unbounded relaxation
+NUMERICAL = "numerical"                 # HiGHS 4: numerical difficulties
+UNDECIDED = "undecided"                 # any status this table does not know
+
+#: The whole mapping, in one place, so a reader can check the claim "only 2 is
+#: an answer" against a table instead of against control flow.
+STATUS_WORDS: Dict[int, str] = {
+    0: CERTIFIED,
+    1: BUDGET,
+    HIGHS_INFEASIBLE: NO_LINEAR_PAGODA,
+    3: UNBOUNDED,
+    4: NUMERICAL,
+}
+
+#: Outcomes that say something about the configuration rather than the solver.
+DECIDED_STATUSES = (CERTIFIED, NO_LINEAR_PAGODA)
+
+STATUS_MEANINGS: Dict[str, str] = {
+    CERTIFIED: "weights found and re-checked in exact rationals",
+    # The hedge is in the payload, not only in the write-up.  An adversarial
+    # review found this string was the one unqualified existence claim that
+    # reached an emitted artifact while the "floating point, no Farkas dual"
+    # caveat lived only in Markdown -- i.e. exactly the shape this item exists
+    # to remove, one level up: a solver's word wearing the costume of a proof.
+    NO_LINEAR_PAGODA: (
+        "HiGHS reported the LP infeasible in floating point, so no weight "
+        "function of this shape was found with |w_i| <= bound; no exact "
+        "rational infeasibility certificate (Farkas dual) is produced, so this "
+        "is the solver's verdict, not a proof of non-existence"
+    ),
+    BUDGET: "HiGHS hit its iteration limit; feasibility was not decided",
+    UNBOUNDED: "the relaxation was unbounded; feasibility was not decided",
+    NUMERICAL: "HiGHS reported numerical difficulties; feasibility was not decided",
+    UNDECIDED: "HiGHS returned a status this engine does not recognise",
+}
+
 
 class CertificateError(Exception):
     """The LP returned weights that do not survive exact re-checking."""
@@ -49,7 +96,17 @@ class LpUnavailable(RuntimeError):
     limit publish itself as a geometric fact, which is exactly the reading
     Theoria's constraint 6 forbids.  A caller that wants the old collapse can
     catch this; it cannot get it by accident.
+
+    Since E15 this exception is the *narrow* interface: `solve` returns an
+    `LpOutcome` naming which of the three it was, and only the compatibility
+    wrapper `solve_certificate` still throws.
     """
+
+    def __init__(self, message: str, outcome: Optional["LpOutcome"] = None):
+        super().__init__(message)
+        #: The full structured result, so a caller catching this does not have
+        #: to parse the message to learn which status fired.
+        self.outcome = outcome
 
 
 @dataclass(frozen=True)
@@ -122,6 +179,77 @@ class Certificate:
         }
 
 
+@dataclass(frozen=True)
+class LpOutcome:
+    """What the LP ended up saying -- including *that* it did not say anything.
+
+    The engine used to hand the caller a `Certificate` or a bare `None`, and the
+    `None` carried four different meanings at once (E15).  This object carries
+    the one bit that was being lost: whether the silence is a fact about the
+    configuration or a fact about HiGHS.
+
+    `no_linear_pagoda` is deliberately not spelled "infeasible": the LP is
+    infeasible, the *configuration* is what the caller wants to know about, and
+    the box `|w_i| <= bound` sits between the two.  `bound` therefore travels
+    with the verdict rather than being a defaulted argument nobody records --
+    E11 found one world in 3000 that is infeasible at `bound=10` and feasible at
+    `bound=100`, so the number is load-bearing.
+    """
+
+    status: str
+    solver_status: int
+    solver_message: str
+    bound: int
+    margin: int
+    certificate: Optional[Certificate] = None
+
+    @property
+    def decided(self) -> bool:
+        """Did the solver answer the question that was asked of it?"""
+        return self.status in DECIDED_STATUSES
+
+    @property
+    def no_linear_pagoda(self) -> bool:
+        """True only where HiGHS *reported* the LP infeasible -- status 2.
+
+        This is the predicate the whole item exists for.  A caller must never
+        reconstruct it as `certificate is None`: that expression is also true
+        for an iteration limit.
+
+        "Reported", not "proved".  The reading is floating point and no exact
+        rational infeasibility certificate (Farkas dual) is produced, so this is
+        the solver's verdict about the LP -- attributable, which is the whole
+        point, but not a proof that no such weight function exists.  E11 §7 said
+        the same about the same 638 worlds; separating status 2 from status 1
+        does not upgrade it, and the word here should not imply otherwise.
+        """
+        return self.status == NO_LINEAR_PAGODA
+
+    @property
+    def meaning(self) -> str:
+        return STATUS_MEANINGS.get(self.status, STATUS_MEANINGS[UNDECIDED])
+
+    def as_json(self) -> Dict[str, object]:
+        return {
+            "form": "lp_outcome",
+            "status": self.status,
+            "solver": "scipy.optimize.linprog (HiGHS)",
+            "solver_status": self.solver_status,
+            "solver_message": self.solver_message,
+            "decided": self.decided,
+            "no_linear_pagoda": self.no_linear_pagoda,
+            "bound": self.bound,
+            "margin": self.margin,
+            "meaning": self.meaning,
+            # Stated on every row, not only the ones where it bit: a reader of
+            # `no_linear_pagoda` is entitled to know the claim is boxed.
+            "scope_of_claim": (
+                "linear pagodas with |w_i| <= %d and goal margin >= %d; weights "
+                "outside the box are not examined" % (self.bound, self.margin)
+            ),
+        }
+
+
 # ------------------------------------------------------------------ the LP
 
 def moves_from_graph(graph: Dict[str, object]) -> List[Move]:
@@ -139,26 +267,31 @@ def _occupancy(state: str) -> List[int]:
     return [1 if cell == "1" else 0 for cell in state]
 
 
-def solve_certificate(graph: Dict[str, object], initial: str,
-                      goal_states: Optional[Sequence[str]] = None,
-                      margin: int = 1, bound: int = 10) -> Optional[Certificate]:
-    """Find pagoda weights proving `initial` cannot reach the goal, or None.
+def solve(graph: Dict[str, object], initial: str,
+          goal_states: Optional[Sequence[str]] = None,
+          margin: int = 1, bound: int = 10,
+          solver_options: Optional[Dict[str, object]] = None) -> LpOutcome:
+    """Look for pagoda weights proving `initial` cannot reach the goal.
 
-    Returning None is a real answer, and only ever that one: it means HiGHS
-    **proved the LP infeasible** (status 2), so no weight function of this shape
-    exists.  Every other way the solver can stop -- iteration limit, numerical
-    difficulties, an unbounded relaxation -- raises `LpUnavailable`, because
-    those say nothing about the configuration and the caller's docstring reads
-    `None` as though they did.
+    Always returns an `LpOutcome`.  There is no return value that means two
+    things: `certified` carries the weights, `no_linear_pagoda` means HiGHS
+    **proved the LP infeasible** (status 2), and `budget` / `unbounded` /
+    `numerical` / `undecided` each name one way the solver stopped without
+    deciding.  Only `no_linear_pagoda` is a statement about the configuration.
 
-    One thing `None` still under-states, recorded rather than fixed here: the
-    box `bound` is a solver parameter, not part of the pagoda definition, so an
-    infeasibility is infeasibility *within* `|w_i| <= bound`.  Weights outside
-    the box can exist -- E11's exhaustive sweep found one instance in 3000
-    (seed 17475932563032345095, weights [12,9,3,7,-1,11,10,-4], verified in
-    exact rationals).  This direction is sound: `None` never certifies anything,
-    it only declines to.  It is the engine's documented incompleteness (CLAUDE.md),
-    widened slightly by a constant.
+    What `no_linear_pagoda` still under-states, and why `bound` is on the
+    outcome: the box is a solver parameter, not part of the pagoda definition,
+    so an infeasibility is infeasibility *within* `|w_i| <= bound`.  Weights
+    outside the box can exist -- E11's exhaustive sweep found one instance in
+    3000 (seed 17475932563032345095, weights [12,9,3,7,-1,11,10,-4], verified in
+    exact rationals).  This direction is sound: declining never certifies
+    anything.  It is the engine's documented incompleteness (CLAUDE.md), widened
+    slightly by a constant.
+
+    `solver_options` is passed straight to `linprog`.  It exists so a negative
+    control can drive the real solver into a real iteration limit (`maxiter`)
+    instead of substituting a fake result object -- a test that stubs the solver
+    proves the branch is reachable, not that HiGHS ever reaches it.
     """
     goals = list(goal_states or graph["goal_states"])  # type: ignore[index]
     moves = moves_from_graph(graph)
@@ -204,18 +337,53 @@ def solve_certificate(graph: Dict[str, object], initial: str,
         b_ub=np.array(rhs, dtype=float),
         bounds=bounds,
         method="highs",
+        options=dict(solver_options) if solver_options else None,
     )
-    if not result.success:
-        # HiGHS status codes: 0 optimal, 1 iteration limit, 2 infeasible,
-        # 3 unbounded, 4 numerical difficulties.  Only 2 is an answer.
-        if result.status != HIGHS_INFEASIBLE:
-            raise LpUnavailable(
-                "linprog stopped without deciding feasibility: status %r (%s). "
-                "This is a fact about the solver, not about the configuration, "
-                "so no unreachability claim follows from it."
-                % (result.status, getattr(result, "message", ""))
-            )
-        return None
+    # HiGHS status codes: 0 optimal, 1 iteration limit, 2 infeasible,
+    # 3 unbounded, 4 numerical difficulties.  The table is the classification;
+    # nothing below re-derives it from `success`.
+    word = STATUS_WORDS.get(int(result.status), UNDECIDED)
+    message = str(getattr(result, "message", ""))
+    outcome = LpOutcome(
+        status=word,
+        solver_status=int(result.status),
+        solver_message=message,
+        bound=bound,
+        margin=margin,
+    )
+    # `success` and the status table disagreeing would mean one of the two is
+    # being read wrong; that is a defect in this function, not a fact about the
+    # world, so it is raised rather than classified.  The check is symmetric on
+    # purpose (E15's M30 survivor): the interesting direction is not the one
+    # that was guarded first.  `status == 0` with `success` false would fall
+    # through to `result.x` and mint a Certificate out of whatever the failed
+    # solve left behind -- and `certificate.holds` would then report it as a
+    # CertificateError, i.e. as *weights that failed re-checking*, when the
+    # truth is that no solve succeeded at all.  Refusing keeps a solver
+    # contradiction from being laundered into a statement about the geometry,
+    # which is the whole thesis of this item.
+    if bool(result.success) != (word == CERTIFIED):
+        # The outcome attached to the refusal is rebuilt as `undecided`, not
+        # handed over as `word`.  `word` here is the reading the engine has just
+        # announced it does not trust, and an exception carrying
+        # `decided is True` would let a caller read a verdict off a refusal --
+        # the same collapse this item removes from the return path, reappearing
+        # on the error path.  What survives is the raw `solver_status`, so the
+        # contradiction stays diagnosable without being quotable.
+        raise LpUnavailable(
+            "linprog reported success=%r with status %r, which this engine "
+            "reads as %r; the two disagree, so it refuses to classify."
+            % (bool(result.success), result.status, word),
+            LpOutcome(
+                status=UNDECIDED,
+                solver_status=int(result.status),
+                solver_message=message,
+                bound=bound,
+                margin=margin,
+            ),
+        )
+    if word != CERTIFIED:
+        return outcome
 
     weights = [
         Fraction(float(value)).limit_denominator(DENOMINATOR_LIMIT)
@@ -234,7 +402,43 @@ def solve_certificate(graph: Dict[str, object], initial: str,
             "LP weights %r fail exact re-checking: %r"
             % ([str(w) for w in weights], certificate.conditions)
         )
-    return certificate
+    return LpOutcome(
+        status=CERTIFIED,
+        solver_status=int(result.status),
+        solver_message=message,
+        bound=bound,
+        margin=margin,
+        certificate=certificate,
+    )
+
+
+def solve_certificate(graph: Dict[str, object], initial: str,
+                      goal_states: Optional[Sequence[str]] = None,
+                      margin: int = 1, bound: int = 10,
+                      solver_options: Optional[Dict[str, object]] = None
+                      ) -> Optional[Certificate]:
+    """`solve`, narrowed to the older two-valued interface.
+
+    Kept because a dozen call sites read `Certificate | None`, and because the
+    narrowing is the honest one: `None` here means *only* `no_linear_pagoda`,
+    and every undecided outcome raises `LpUnavailable` carrying the outcome
+    itself.  New callers should use `solve` -- this signature cannot express
+    "the solver gave up" without an exception, which is precisely the shape that
+    made the status bit easy to lose.
+    """
+    outcome = solve(graph, initial, goal_states=goal_states, margin=margin,
+                    bound=bound, solver_options=solver_options)
+    if outcome.status == CERTIFIED:
+        return outcome.certificate
+    if outcome.status == NO_LINEAR_PAGODA:
+        return None
+    raise LpUnavailable(
+        "linprog stopped without deciding feasibility: %s -- status %r (%s). "
+        "This is a fact about the solver, not about the configuration, so no "
+        "unreachability claim follows from it."
+        % (outcome.status, outcome.solver_status, outcome.solver_message),
+        outcome,
+    )
 
 
 # ------------------------------------------------------- exact verification

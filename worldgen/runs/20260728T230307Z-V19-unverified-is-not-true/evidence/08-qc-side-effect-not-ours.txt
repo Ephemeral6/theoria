@@ -1,0 +1,33 @@
+V19 encountered the known out/qc/ side effect (registered by V12).
+Running 'python -m worldgen.verify' once rewrote committed QC artefacts.
+
+Attribution: QC reads only out/worlds/<id>/raw_trace.jsonl (run_qc.py:81,170).
+V19 modified no raw_trace.jsonl, spec.json, coverage.json or reversibility.json.
+So this dirt is NOT V19's -- it is the pre-existing defect, left for its owner.
+
+=== git diff --stat worldgen/out/qc/ immediately after verify ===
+ worldgen/out/qc/QC.json                            | 133 +++-
+ worldgen/out/qc/t1-portal-oneway/candidates.jsonl  |  10 +-
+ .../out/qc/t1-portal-oneway/engines_report.json    |  24 +
+ worldgen/out/qc/t1-switch-latch/candidates.jsonl   |  64 +-
+ .../out/qc/t1-switch-latch/engines_report.json     | 692 ++++++++++++++++++--
+ worldgen/out/qc/t1-switch-toggle/candidates.jsonl  |  70 +--
+ .../out/qc/t1-switch-toggle/engines_report.json    | 698 +++++++++++++++++++--
+ worldgen/out/qc/t1-walk-maze/candidates.jsonl      |  22 +-
+ worldgen/out/qc/t1-walk-maze/engines_report.json   |  24 +
+ worldgen/out/qc/t2-lock-fragile/candidates.jsonl   |  54 +-
+ worldgen/out/qc/t2-switch-push/candidates.jsonl    |   8 +-
+ worldgen/out/qc/v-707a64ad/candidates.jsonl        |  52 +-
+ worldgen/out/qc/v-707a64ad/engines_report.json     | 355 +++++++++--
+ worldgen/out/qc/v-a3446614/candidates.jsonl        |  10 +-
+ worldgen/out/qc/v-a3446614/engines_report.json     |  24 +
+ worldgen/out/qc/v-ce732813/candidates.jsonl        |  14 +-
+ worldgen/out/qc/v-ce732813/engines_report.json     |  24 +
+ worldgen/out/qc/v-efe43df1/candidates.jsonl        |   8 +-
+ 18 files changed, 1980 insertions(+), 306 deletions(-)
+
+=== untracked files verify created ===
+?? worldgen/out/qc/t2-lock-fragile/engines_report.json
+
+ACTION TAKEN: reverted to HEAD and removed the untracked file, so this branch
+carries only V19's own change. Not fixed -- not ours to fix.

@@ -1,0 +1,127 @@
+==============================================================================
+0. PROVENANCE
+==============================================================================
+HEAD = 5822e5e5c4c87e42f834ddca76f3af56eee3e7b6
+  baseline-arms/runs/20260728T103135Z-a7/envelope.json
+    sha256=acefc0826642b25486456801fbad8f3ef95edb5d5ee4f9cb015de5236dcfbbd8  bytes=11418
+  baseline-arms/out/campaign_cells.jsonl
+    sha256=ebe6396e3cd3a1960b4d86bb7a71eb90da7b3d030504ed9f23f9adc43fecc54a  bytes=26765
+
+==============================================================================
+1. WHAT A7 EXCLUDED, AND WHY -- the tree's definition of `degraded`
+==============================================================================
+{
+  "ar25-0c556536": {
+    "cells": 3,
+    "reason": "degraded: measured under INC-BA-003's concurrent-campaign load, and killed by an abort threshold that did not scale with the action budget (BUDGET_REPORT 11.2). Kept in the record and in every cumulative gate; not re-run, and not used to estimate a spread that would be the contention's and not the arm's."
+  }
+}
+degrees_of_freedom = 6  (= 9 cells - 3 games, ar25 already out)
+
+==============================================================================
+2. A7's WITHIN-CELL DISPERSION, AS RECORDED (ar25 EXCLUDED)
+==============================================================================
+game             metric                  n       mean        sd       cv
+g50t-5849a774    actions_ok              3    30.0000    0.0000   0.0000
+g50t-5849a774    action_success_rate     3     1.0000    0.0000   0.0000
+g50t-5849a774    levels_completed        3     0.0000    0.0000     null
+g50t-5849a774    usd_per_action          3     0.0371    0.0014   0.0372
+sk48-d8078629    actions_ok              3    27.0000    1.0000   0.0370
+sk48-d8078629    action_success_rate     3     0.9000    0.0333   0.0370
+sk48-d8078629    levels_completed        3     0.0000    0.0000     null
+sk48-d8078629    usd_per_action          3     0.0500    0.0018   0.0359
+tn36-ef4dde99    actions_ok              3    23.6667    0.5774   0.0244
+tn36-ef4dde99    action_success_rate     3     0.8163    0.0145   0.0177
+tn36-ef4dde99    levels_completed        3     0.0000    0.0000     null
+tn36-ef4dde99    usd_per_action          3     0.0443    0.0012   0.0267
+
+pooled within-cell CV (envelope.json:pooled_cv):
+  action_success_rate    0.018258
+  actions_ok             0.020477
+  cost_usd               0.035147
+  http_per_action        0.095740
+  levels_completed       null
+  usd_per_action         0.033244
+  wall_seconds           0.067055
+
+A7's own sizing recommendation (envelope.json:sizing):
+  action_success_rate    cv=0.018258  n_for_ci_10pct=3  n_for_ci_20pct=2  n_to_detect_25pct_difference=3  n_to_detect_50pct_difference=3
+  actions_ok             cv=0.020477  n_for_ci_10pct=3  n_for_ci_20pct=2  n_to_detect_25pct_difference=3  n_to_detect_50pct_difference=3
+  cost_usd               cv=0.035147  n_for_ci_10pct=3  n_for_ci_20pct=3  n_to_detect_25pct_difference=3  n_to_detect_50pct_difference=3
+  http_per_action        cv=0.09574  n_for_ci_10pct=7  n_for_ci_20pct=4  n_to_detect_25pct_difference=5  n_to_detect_50pct_difference=3
+  levels_completed       cv=None  note=no usable CV: the metric was constant or its mean was zero across every repeat. A quantity with no spread needs no repeats to estimate -- and one that is identically zero, like levels_completed, cannot be compared between arms at all.
+  usd_per_action         cv=0.033244  n_for_ci_10pct=3  n_for_ci_20pct=3  n_to_detect_25pct_difference=3  n_to_detect_50pct_difference=3
+  wall_seconds           cv=0.067055  n_for_ci_10pct=5  n_for_ci_20pct=3  n_to_detect_25pct_difference=4  n_to_detect_50pct_difference=3
+
+==============================================================================
+3. THE ar25 SENSITIVITY -- include vs exclude the 3 degraded cells
+==============================================================================
+ar25 degraded cells recovered from baseline-arms/out/campaign_cells.jsonl: 3
+  repeat=1 actions_ok= 11 actions_failed=10 budget=30 levels_completed=0 outcome=api_unusable   started=2026-07-27T18:21:28Z
+  repeat=2 actions_ok= 14 actions_failed=10 budget=30 levels_completed=0 outcome=api_unusable   started=2026-07-27T18:21:28Z
+  repeat=3 actions_ok= 19 actions_failed=10 budget=30 levels_completed=0 outcome=api_unusable   started=2026-07-27T18:21:28Z
+
+cross-check: A7's envelope cells started 18:21:28Z; the campaign_*.json
+batch of section 5.2 started 18:19:36Z. Two distinct batches, as 5.2 says.
+
+--- per-game actions_ok, both ways ---
+game              n     mean       sd       cv  standing
+g50t-5849a774     3   30.000    0.000   0.0000  included
+sk48-d8078629     3   27.000    1.000   0.0370  included
+tn36-ef4dde99     3   23.667    0.577   0.0244  included
+ar25-0c556536     3   14.667    4.041   0.2756  EXCLUDED by A7 (degraded)
+
+--- the decision variable, computed both ways ---
+
+  EXCLUDING ar25 (A7 main analysis, 9 cells, 3 games)
+    cells                          : 9   df=6
+    pooled within-cell CV actions_ok: 0.0248
+    pooled within-cell CV succ.rate : 0.0232
+    max within-game CV              : 0.0370
+    between-game CV of means        : 0.1178
+    levels_completed (U3) variance  : 0.0  (floor: 0 in every cell)
+    primary endpoints measured      : 0 of 3
+    small-variance threshold 0.10   : PASS (max wcv < 0.10)   -- see STATS_RULES.s4draft.md:265-266 for where 0.10 comes from
+
+  INCLUDING ar25 (pre-registered sensitivity, 12 cells, 4 games)
+    cells                          : 12   df=8
+    pooled within-cell CV actions_ok: 0.0882
+    pooled within-cell CV succ.rate : 0.0455
+    max within-game CV              : 0.2756
+    between-game CV of means        : 0.2784
+    levels_completed (U3) variance  : 0.0  (floor: 0 in every cell)
+    primary endpoints measured      : 0 of 3
+    small-variance threshold 0.10   : FAIL (max wcv >= 0.10)   -- see STATS_RULES.s4draft.md:265-266 for where 0.10 comes from
+
+==============================================================================
+4. THE TWO TRACKED BASES DISAGREE -- and that is the finding
+==============================================================================
+basis                                         cells  pooled CV     reads as
+campaign_*.json (section 5.2, 10-fail abort)     48     0.4915        LARGE
+A7 envelope excl ar25 (30-action budget)          9     0.0248        SMALL
+A7 envelope incl ar25 (sensitivity)              12     0.0882        MIXED
+
+Ratio between the two tracked estimates of the SAME quantity
+(within-cell dispersion of bare_cc on the dev pile): 0.4915 / 0.0248 = 19.8x
+
+Neither basis measures ANY of the three primary endpoints. On the one
+endpoint both do record -- levels_completed -- both are identically 0
+(48/48 and 9/9, and 12/12 with ar25 in). Sample variance 0 is a floor,
+not a small variance.
+
+Theoria.md:368: 'variance small => n=1 defensible, otherwise n=2'.
+A 20x disagreement between two tracked measurements of the
+same quantity is not 'variance small'. It is 'variance unknown'.
+'Otherwise' covers unknown. => n = 2, with and without ar25.
+
+BUT NOTE WHAT DID FLIP, in section 3 above: on the A7 basis the SURROGATE
+dispersion test flips on ar25's inclusion --
+  excl ar25: max within-game CV 0.0370 < 0.10  => 'small' => n=1 defensible
+  incl ar25: max within-game CV 0.2756 >= 0.10 => 'not small' => n=2
+So any n argument resting on the CV number is FRAGILE: one game's standing
+decides it. The argument that does NOT flip is the endpoint argument --
+0 of 3 primary endpoints measured, levels_completed identically 0, in every
+subset of every basis. n=2 survives on that, and only on that.
+
+Note also A7's own sizing says n_to_detect_25pct_difference = 3 for every
+metric it could size. No tracked basis anywhere argues for n=1.

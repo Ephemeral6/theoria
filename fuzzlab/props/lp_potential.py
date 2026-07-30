@@ -29,6 +29,14 @@ wrong.
 re-checking — is documented behaviour (D-007), so it is recorded as `skipped`
 with the reason rather than counted as a defect.
 
+`LpUnavailable` — HiGHS stopped without deciding (status 1/3/4) — is `skipped`
+too, and under a **different cause**: `solver_unavailable`, class `unavailable`,
+against `no_certificate`'s `declined`. The distinction is the whole of V-21 and
+it is not cosmetic. `no_certificate` is the engine looking and correctly having
+nothing to say; `solver_unavailable` is nobody knowing. See
+`_skip_solver_unavailable` for the measured cost of confusing them, and
+`tests/test_solver_unavailable.py` for the regression.
+
 ## The bare `return []`, and what it was hiding (V-13)
 
 All four invariants used to open with `if cert is None: return []` (or
@@ -76,7 +84,10 @@ from fuzzlab.oracles import search
 from fuzzlab.props import finding
 
 from engines import lp_potential as engine  # noqa: E402
-from engines.lp_potential.potential import CertificateError  # noqa: E402
+from engines.lp_potential.potential import (  # noqa: E402
+    CertificateError,
+    LpUnavailable,
+)
 
 FAMILY = "jumpgraph"
 ENGINE = "lp_potential"
@@ -142,7 +153,60 @@ def _skip_certificate_error(world: Any, invariant: str,
         ENGINE, invariant, world,
         "CertificateError — the LP succeeded but the rational snap failed exact "
         "re-checking. Documented behaviour (DECISIONS.md D-007), not a defect.",
-        error=str(exc))]
+        cause="certificate_error", error=str(exc))]
+
+
+def _skip_solver_unavailable(world: Any, invariant: str,
+                             exc: LpUnavailable) -> List[finding.Finding]:
+    """The solver did not compute, so this world is unjudged — and says which.
+
+    `engines.lp_potential.run` raises `LpUnavailable` for HiGHS status 1, 3 and 4
+    (E-15): an iteration limit, an unbounded relaxation, numerical difficulties.
+    None of the three is a statement about the configuration, so the engine
+    refuses to return the `(None, None)` that downstream reads as *no linear
+    pagoda separates the goal from the start*.
+
+    That refusal has to land somewhere, and before V-21 it landed nowhere: this
+    module caught `CertificateError` in four places and `LpUnavailable` in none,
+    so it escaped to `finding.run_invariants`, became a `raised`, and
+    `invariant_worlds_evaluated` -- which subtracts `skipped` and only `skipped`
+    -- counted the world as **evaluated**.  Measured on 12 worlds with HiGHS
+    starved to `maxiter=0`: the four invariants reported 11 worlds evaluated
+    each, against **5** for the same worlds with the solver running normally.
+    Blinding the battery raised the coverage it claimed, because the honest
+    declines are subtracted and the blind spots are not.
+
+    It is a `skipped` and not a `violated`: an iteration limit is not the engine
+    doing something it says it does not do, and filing it as a violation would
+    accuse the engine of the one behaviour E-15 was written to produce.  It is
+    `cause_class == "unavailable"` and not `"declined"`: `no_certificate` is the
+    engine looking and correctly having nothing to say, this is nobody knowing.
+    `tests/test_battery.py` fails the suite on a non-zero `unavailable` and
+    `campaign.main` exits non-zero on one, so the number is gated rather than
+    filed -- in the 25-world test *and* in the 500-world artifact.
+    """
+    outcome = getattr(exc, "outcome", None)
+    data: Dict[str, Any] = {"error": str(exc)}
+    if outcome is not None:
+        # `highs_status_word`, not `lp_status`: for the common case that string
+        # is "budget" (potential.py's word for HiGHS status 1), and fuzzlab has
+        # a *different* cause-class also called `budget` meaning "this battery
+        # chose not to pay".  A row reading {"cause_class": "unavailable",
+        # "lp_status": "budget"} puts two meanings of one word in one record,
+        # one of which is the class the record is deliberately not in.
+        data.update(highs_status_word=outcome.status,
+                    solver_status=outcome.solver_status,
+                    solver_message=outcome.solver_message, decided=outcome.decided,
+                    bound=outcome.bound, margin=outcome.margin)
+    return [finding.skipped(
+        ENGINE, invariant, world,
+        "LpUnavailable — the solver stopped without deciding feasibility (%s). "
+        "This is a fact about HiGHS, not about the configuration, so no claim "
+        "about %r follows and this invariant judged nothing here. Not the "
+        "documented incompleteness: that is `no_certificate`, where the engine "
+        "looked and correctly declined."
+        % (getattr(outcome, "status", "status unavailable"), world.initial),
+        cause="solver_unavailable", **data)]
 
 
 # --------------------------------------------------------------- invariants
@@ -151,6 +215,8 @@ def certificate_implies_unreachable(world: Any) -> List[finding.Finding]:
     """Soundness, and only soundness.  Incompleteness is documented and not checked."""
     try:
         cert, _heuristic = _solve(world)
+    except LpUnavailable as exc:
+        return _skip_solver_unavailable(world, "certificate_implies_unreachable", exc)
     except CertificateError as exc:
         return _skip_certificate_error(world, "certificate_implies_unreachable", exc)
     if cert is None:
@@ -162,7 +228,7 @@ def certificate_implies_unreachable(world: Any) -> List[finding.Finding]:
         return [finding.skipped(
             ENGINE, "certificate_implies_unreachable", world,
             "BFS hit the state budget, so 'unreachable' could not be proved "
-            "either way", initial=world.initial)]
+            "either way", cause="bfs_budget", initial=world.initial)]
     if distance is not None:
         return [finding.violated(
             ENGINE, "certificate_implies_unreachable", world,
@@ -183,6 +249,8 @@ def three_conditions_hold(world: Any) -> List[finding.Finding]:
     """
     try:
         cert, _heuristic = _solve(world)
+    except LpUnavailable as exc:
+        return _skip_solver_unavailable(world, "three_conditions_hold", exc)
     except CertificateError as exc:
         return _skip_certificate_error(world, "three_conditions_hold", exc)
     if cert is None:
@@ -229,6 +297,8 @@ def heuristic_is_admissible(world: Any) -> List[finding.Finding]:
     """
     try:
         cert, heuristic = _solve(world)
+    except LpUnavailable as exc:
+        return _skip_solver_unavailable(world, "heuristic_is_admissible", exc)
     except CertificateError as exc:
         return _skip_certificate_error(world, "heuristic_is_admissible", exc)
     if heuristic is None:
@@ -237,11 +307,12 @@ def heuristic_is_admissible(world: Any) -> List[finding.Finding]:
     states = list(world.graph.get("states") or ())
     if not states:
         return [finding.skipped(ENGINE, "heuristic_is_admissible", world,
-                                "graph carries no state list to sweep")]
+                                "graph carries no state list to sweep",
+                                cause="no_state_list")]
     if len(states) > SWEEP_BUDGET:
         return [finding.skipped(ENGINE, "heuristic_is_admissible", world,
                                 "%d states exceeds the sweep budget" % len(states),
-                                n_states=len(states))]
+                                cause="sweep_budget", n_states=len(states))]
 
     step = _successors(world.graph)
     goals = _goal_set(world)
@@ -265,17 +336,23 @@ def infinite_means_unreachable(world: Any) -> List[finding.Finding]:
     """`h(s) == inf` is a claim of unreachability, and it has to be true."""
     try:
         cert, heuristic = _solve(world)
+    except LpUnavailable as exc:
+        return _skip_solver_unavailable(world, "infinite_means_unreachable", exc)
     except CertificateError as exc:
         return _skip_certificate_error(world, "infinite_means_unreachable", exc)
     if heuristic is None:
         return [_skip_no_certificate(world, "infinite_means_unreachable")]
 
     states = list(world.graph.get("states") or ())
-    if not states or len(states) > SWEEP_BUDGET:
+    if not states:
         return [finding.skipped(
             ENGINE, "infinite_means_unreachable", world,
-            "no state list, or %d states exceeds the sweep budget" % len(states),
-            n_states=len(states))]
+            "graph carries no state list to sweep", cause="no_state_list")]
+    if len(states) > SWEEP_BUDGET:
+        return [finding.skipped(
+            ENGINE, "infinite_means_unreachable", world,
+            "%d states exceeds the sweep budget" % len(states),
+            cause="sweep_budget", n_states=len(states))]
 
     step = _successors(world.graph)
     goals = _goal_set(world)
@@ -294,7 +371,8 @@ def infinite_means_unreachable(world: Any) -> List[finding.Finding]:
         if not exhausted:
             out.append(finding.skipped(
                 ENGINE, "infinite_means_unreachable", world,
-                "BFS from %r hit the state budget" % state, state=state))
+                "BFS from %r hit the state budget" % state,
+                cause="bfs_budget", state=state))
             break
     return out
 

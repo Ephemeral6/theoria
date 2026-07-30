@@ -24,6 +24,21 @@ Modelled on `ablation-arm/verify.sh`, which S13's ticket names as the shape:
 3. **artifact field self-check** — the run's `state.json` carries the fields the
    page and the probes read, and the gate survey is internally consistent
 
+## The verdict must survive its own output
+
+Every stage's `detail` is text of unknown provenance -- pytest's output, a
+subprocess's stderr, a board listing -- captured with `errors="replace"`, so it
+can legitimately contain U+FFFD. On 2026-07-29 this gate printed
+`== tests FAILED(1)` and then died with `UnicodeEncodeError: 'gbk' codec can't
+encode character '\\ufffd'` *while printing the reason*: the reason was lost, and
+the same line runs on green runs too, so any stage output holding one character
+the console code page cannot represent turned a green gate into a traceback.
+`emit` and `harden_stream` below close that: stdout is reconfigured to UTF-8
+with `errors="replace"`, and every print goes through a fallback that scrubs
+rather than raises. The property is that the gate can always print its verdict
+and its reasons, whatever bytes the stages produced -- a crash must never be
+able to substitute for a verdict.
+
 ## The gate does not dirty the workspace
 
 `scan.build(out_dir=…)` writes into a `mkdtemp` and the repository is left
@@ -55,9 +70,71 @@ import gates                                                       # noqa: E402
 #: What `index.html`, `app.html` and the probes read out of a scan. A scan that
 #: still runs but stops emitting one of these is a broken page nobody notices,
 #: because the page renders and the missing panel just looks empty.
+#:
+#: S30 added the last three. `scan_ok` is the field that distinguishes a scan
+#: that failed from a scan that found nothing to report; `generated_epoch` and
+#: `stale_after_s` are what let the page compute its own age instead of
+#: trusting the backend to still be alive. Losing any of them silently would
+#: restore exactly the invisibility S30 removed, so the gate holds them.
 REQUIRED_STATE_FIELDS = ("agents", "board", "constraints", "engines",
                          "findings", "generated_at", "grid", "history",
-                         "iteration_loop", "loop_stats")
+                         "iteration_loop", "loop_stats",
+                         "scan_ok", "generated_epoch", "stale_after_s")
+
+
+def harden_stream(stream: Any) -> bool:
+    """Make `stream` unable to raise on an unrepresentable character.
+
+    UTF-8 encodes every string Python can hold, so re-pointing the encoding is
+    the fix rather than a workaround; `errors="replace"` is the second belt, for
+    the case where the stream cannot change encoding but can change its error
+    handler. Returns whether anything was reconfigured, which is information the
+    test wants and no caller should branch on.
+
+    Guarded rather than assumed: `sys.stdout` is only a `TextIOWrapper` some of
+    the time. Under pytest's capture, behind a `StringIO`, or after somebody has
+    replaced it with their own object, `reconfigure` is simply absent -- and a
+    gate that died trying to make its own output safe would be the same defect
+    wearing a different hat.
+    """
+    try:
+        stream.reconfigure(encoding="utf-8", errors="replace")
+        return True
+    except (AttributeError, ValueError, OSError, LookupError):
+        pass
+    try:                                   # encoding is fixed; errors may not be
+        stream.reconfigure(errors="replace")
+        return True
+    except (AttributeError, ValueError, OSError, LookupError):
+        return False
+
+
+def emit(text: str = "", stream: Any = None) -> None:
+    """`print`, with the guarantee that it does not raise on this text.
+
+    `harden_stream` handles the streams that can be reconfigured; this handles
+    the ones that cannot, including whatever a caller has substituted for
+    `sys.stdout`. The scrub is lossy on purpose -- a mangled character in a gate
+    log is cosmetic, a traceback in place of the verdict is not.
+
+    Resolved at call time, not bound at import, so monkeypatching `sys.stdout`
+    still works.
+    """
+    out = sys.stdout if stream is None else stream
+    try:
+        print(text, file=out)
+        return
+    except UnicodeEncodeError:
+        pass
+    encoding = getattr(out, "encoding", None) or "ascii"
+    try:
+        scrubbed = text.encode(encoding, "replace").decode(encoding, "replace")
+    except (LookupError, UnicodeError):
+        scrubbed = text.encode("ascii", "replace").decode("ascii")
+    try:
+        print(scrubbed, file=out)
+    except UnicodeEncodeError:             # a stream that lied about `encoding`
+        print(text.encode("ascii", "replace").decode("ascii"), file=out)
 
 
 def _tests() -> Tuple[str, int, str]:
@@ -116,6 +193,15 @@ def _fields(out_dir: str, survey: Dict[str, Any]) -> Tuple[str, int, str]:
         problems.append("`findings` is empty -- every probe returned nothing, "
                         "which is a broken scan rather than a clean repository")
 
+    # S30. `_real_run` above already turns a raising `scan.build` into a red
+    # gate, so this can only fire if `build` ever starts catching its own
+    # crash and returning a failure state normally -- which is the same
+    # invisibility one level up, and is worth a second, cheap tripwire.
+    if state.get("scan_ok") is not True:
+        problems.append("`scan_ok` is %r after a run the gate believed "
+                        "succeeded -- a crash was swallowed somewhere between "
+                        "`build()` and here" % (state.get("scan_ok"),))
+
     # The board panel is the field that was silently empty before S13, so it
     # gets checked for content and not merely for presence.
     board = state.get("board")
@@ -142,11 +228,55 @@ def _fields(out_dir: str, survey: Dict[str, Any]) -> Tuple[str, int, str]:
                                   % len(REQUIRED_STATE_FIELDS))
 
 
+def _board_states_disjoint() -> Tuple[str, int, str]:
+    """No id may be in `done/` and also on the shelf or under claim.
+
+    This is a **post-merge** check by nature, which is why it lives in the gate
+    and not only in `board.py`. Board state is a set of tracked files; a merge
+    from a branch based before a `done` restores `items/<id>.md`, because git
+    compares trees and cannot see that a file in a *different* directory means
+    the work is finished. No verb in `board.py` runs during a merge, so no
+    guard inside `board.py` can be the whole answer -- something has to look at
+    the result afterwards.
+
+    Measured on 2026-07-29: `E8-ic3-scale` was delivered by W-1660 at 12:16:28Z
+    and re-claimed four times after that, sitting in `items/`, `claimed/` and
+    `done/` at once. Nothing errored. `list` showed it as ordinary available
+    work, and each of those workers spent a launch redoing a delivered item.
+
+    Red, not a warning: the cost is a whole session per occurrence and the fix
+    is one command (`board.py reconcile --fix`).
+    """
+    sys.path.insert(0, HERE)
+    import board                                          # noqa: PLC0415
+
+    res = board.resurrected()
+    if not res:
+        return ("board states disjoint", 0,
+                "no id is in done/ and on the shelf at the same time "
+                "(%d delivered, %d claimed)"
+                % (len(board.done_ids()), len(board.claimed_map())))
+    lines = ["%d delivered item(s) are back on the board -- a merge resurrected "
+             "them. Run `python monitor/board.py reconcile --fix`." % len(res)]
+    for iid, st in sorted(res.items()):
+        where = []
+        if st["in_items"]:
+            where.append("items/")
+        for by in st["claimed_by"]:
+            where.append("claimed/ by %s" % by)
+        lines.append("  %-34s delivered by %-8s still in %s"
+                     % (iid, st["deliverer"], " + ".join(where)))
+    return "board states disjoint", 1, "\n".join(lines)
+
+
 def verify() -> Dict[str, Any]:
     out_dir = tempfile.mkdtemp(prefix="monitor-verify-")
     stages: List[Dict[str, Any]] = []
 
     label, code, detail = _tests()
+    stages.append({"stage": label, "returncode": code, "detail": detail[-2000:]})
+
+    label, code, detail = _board_states_disjoint()
     stages.append({"stage": label, "returncode": code, "detail": detail[-2000:]})
 
     label, code, detail, survey = _real_run(out_dir)
@@ -173,26 +303,33 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
+    # Before anything is printed, and covering both branches below: `--json`
+    # uses `ensure_ascii=False`, so it was exposed to exactly the same crash as
+    # the human report. stderr too -- a traceback is text of unknown provenance
+    # as well.
+    harden_stream(sys.stdout)
+    harden_stream(sys.stderr)
+
     result = verify()
     if args.json:
-        print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
+        emit(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False))
         return 0 if result["green"] else 1
 
     for stage in result["stages"]:
-        print("=" * 70)
-        print("== %-18s %s" % (stage["stage"],
-                               "ok" if stage["returncode"] == 0
-                               else "FAILED(%d)" % stage["returncode"]))
-        print("=" * 70)
-        print(stage["detail"].strip() or "(no output)")
+        emit("=" * 70)
+        emit("== %-18s %s" % (stage["stage"],
+                              "ok" if stage["returncode"] == 0
+                              else "FAILED(%d)" % stage["returncode"]))
+        emit("=" * 70)
+        emit(stage["detail"].strip() or "(no output)")
     survey = result["gate_survey"]
     if survey and survey["ungated"]:
-        print("\nterritories that merge with nothing checking them: %s"
-              % ", ".join(survey["ungated"]))
-        print("(reported, not a failure -- making it visible is the fix; "
-              "refusing to merge them would stop the repository dead)")
-    print("\n%s" % ("GREEN" if result["green"]
-                    else "RED: " + ", ".join(result["failed"])))
+        emit("\nterritories that merge with nothing checking them: %s"
+             % ", ".join(survey["ungated"]))
+        emit("(reported, not a failure -- making it visible is the fix; "
+             "refusing to merge them would stop the repository dead)")
+    emit("\n%s" % ("GREEN" if result["green"]
+                   else "RED: " + ", ".join(result["failed"])))
     return 0 if result["green"] else 1
 
 

@@ -1,0 +1,43 @@
+{
+  "prompt_id": "P19-P19",
+  "branch": "agent/p19-content-anchors",
+  "base_commit": "5a997ef8",
+  "utc": "2026-07-30T00:55:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "question": "Gate B resolves a cited path and never opens the file. Measure the exposure and decide whether a content-anchored citation check is cheap enough to build.",
+  "why_it_matters": "OPEN_ITEMS C15 plus B4's 'nothing resolves the anchor inside the file', and P18 then produced the instance: TheoriaLean.lean:148 cited for a line at :149, on the citation carrying that ruling's refusal.",
+  "status": "delivered",
+  "ruling": "do not build the content-anchor gate; close C15 as a recorded limitation. Adopt the range check, which has zero yield today and therefore cannot regress silently.",
+  "measurements": {
+    "line_anchored_citations": 22,
+    "sections_covered": ["04_a1.md", "05_a2.md", "10_adjudication.md", "11_limitations.md"],
+    "NOFILE": 0,
+    "OUTOFRANGE": 0,
+    "INRANGE": 22,
+    "range_check_yield": "0 -- a range check catches nothing on this paper",
+    "content_probe": {"HIT": 2, "MISS": 12, "NOQUOTE": 8},
+    "miss_precision": "hand-checked 2 of 12; both false reds (plan_stage.py:59 is correct and the paper elides it; gen_lean.py:722-724 is correct and the checker extracted junk instead of the real quote)"
+  },
+  "why_the_gate_fails": [
+    "backtick pairing over markdown is unreliable -- double-backtick inline spans defeat a single-backtick regex; a correct version needs a CommonMark inline lexer",
+    "backticked filenames are citations rather than content (filtered; moved MISS from 14 to 12)",
+    "the paper legitimately elides inside quotations -- solve(..., prefer=\"stub\") -- which no substring test handles and which is good writing, not a defect"
+  ],
+  "deliverables": {
+    "FINDINGS.md": "the measurement and the ruling",
+    "census.py": "executable census of line-anchored citations; NOFILE / OUTOFRANGE / INRANGE",
+    "census.json": "row-level output, 22 rows",
+    "anchor_content.py": "the content-anchor probe that was measured and rejected",
+    "anchor_content.json": "row-level output"
+  },
+  "checked_in_passing": "section 10.7's account of the SURVEY-*.md citations is accurate, not stale: the originals are untracked on an unpushed branch and the paper cites the committed byte-verbatim copies under runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/, which is what the census resolved them to.",
+  "limitations": [
+    "the census covers sections/ only; P18's own defect was in a runs/ artefact and nothing scans those",
+    "'all 22 INRANGE' is not 'all 22 correct' -- spot-checked, not proved",
+    "no independent adversary; subagent launches were dying on API 529 through the session, and the conclusion is a negative one, which is the direction a self-review is least trustworthy in"
+  ]
+}

@@ -3,10 +3,23 @@
 Every input is cited.  Nothing here is a target; it is the arithmetic a human
 needs in order to set <B>.
 """
+# The path insert has to run before `tiers` can be imported, but it must not
+# come before the docstring: a module docstring is only `__doc__` if it is the
+# first statement, and with the import block above it this text was a dead
+# expression -- `python -c "import budget_calc; print(budget_calc.__doc__)"`
+# printed None.  `thresholds.py` next door has it in the right order.
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.dirname(
+    _os.path.abspath(__file__)))))
+from tiers import tiers as _tiers
+_T = _tiers()
 PUBLIC_ACTIONS = 17135   # BUDGET_REPORT.md 3.1 (parenthetical)
 DEV_ACTIONS    = 3014    # BUDGET_REPORT.md 3.1 table
 SEALED_ACTIONS = PUBLIC_ACTIONS - DEV_ACTIONS
-SEALED_GAMES   = 21      # CLAUDE.md pile cut / arc-recon/data/piles.json
+# Was `21` (the whole sealed pile) until 2026-07-29.  The campaign is costed
+# over the games a claim may actually name -- 19 after F-11's quarantine -- and
+# the number is read from the claim set rather than typed.  See freeze/tiers.py.
+SEALED_GAMES   = _T["claim"]["n"]
 
 # $/successful action, measured.  BUDGET_REPORT.md 2.1 (pilot) and 11.2 (envelope).
 UNIT = {

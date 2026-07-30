@@ -364,3 +364,44 @@ itself a defence, so some diagnostics fell to `reference` and some did not. The
 artefact marks neutral tiers advisory and explains that *direction*, not tier,
 excludes a diagnostic from an ordering. Normalising the disagreement would have
 concealed that a hand-set boolean is still doing work here.
+
+### D-B-023 · The blinding source is a pinned sha, because a moving ref is a silent blinding failure
+
+`make_blind.py` built the attackers' trees from a hardcoded absolute path into
+`.worktrees/v9-battery-gaming-audit`. The obvious complaint is that the path is
+machine-local and the worktree is one cleanup from gone. The real one is that a
+worktree has a HEAD and a HEAD moves.
+
+Blinding happened at `9892d23c` — prereg, poverty certificate and blinding, all
+in one commit, before any attack. The branch then ran on to `0d586b6f`, and
+`520dc5dd` in between added the three defences the attacks had just provoked.
+Rebuilding from the path today produces 5 of the 10 files it reads differing
+from what the
+attackers saw, and puts `unsound(` — recorded in `BLINDING.md` §3 item 8 as a
+**zero-hit** term — into the blind 13 times. Nothing about that failure is
+visible from outside: the tree builds, the attacks run, a verdict comes out.
+
+So the source is `BLIND_REF`, a full 40-character sha. **Not a branch name**: a
+branch name is more readable and would have reproduced exactly the same drift
+one indirection later, which is the mistake worth naming. Files are read with
+`git cat-file blob`, not `git show`, so smudge and eol filters cannot make the
+bytes depend on the machine's `core.autocrlf` either.
+
+Every failure raises `BlindingError` and exits 2 — unresolvable ref, missing
+file at the ref, not inside a git work tree. There is no fallback to the working
+tree and no default directory, on the principle that an audit which blinds
+badly and still reports is worse than one that does not run: the second stops,
+the first publishes.
+
+Two things keep the pin honest. `BLIND_REF` must equal the `prereg_commit` the
+V9 run manifest recorded, checked by test, so the constant and the provenance
+record cannot drift apart. And `audit/v9/BLIND_DIGESTS.json` records the twelve
+sha256s of the blinded tree — no manifest had ever recorded a digest of it, so
+until now "re-run the blinding and compare" had nothing to compare against.
+
+The comparison that replaced it is two-sided, because a one-sided one is
+passable by an empty tree. The blind must contain no post-attack vocabulary
+(the negative control, `BLINDING.md` §3.8) **and** must still contain the one
+registered leak — K2's `thin()` string carrying `39960` and "3 adversarial
+gaps" (`BLINDING.md` §3.7). A rebuild missing the known leak is not the tree
+the attackers saw either.

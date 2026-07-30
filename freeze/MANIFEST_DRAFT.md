@@ -8,8 +8,19 @@
 
 > **冻结清单(首局开跑前提交，全部哈希)**：内环代码、DSL 语法版本(两本书)、生成器、提示词、**引擎清单与版本**、戳探策略、规划器配置、**指标电池 v1(定义与代码、逐指标方向预测)**、变体算子库、**统计裁决规则**(见下)、claim 逐字文本与双结局、预算表、每格重复数 ⟨n⟩(由开发堆方差在冻结前定：方差小则 n=1 可辩护，否则 n=2)。
 
-**哈希基准提交：`25eee107` (master)。** 起草期间 master 在动（并发轨道），
-定稿时必须整批重取。
+**哈希基准提交：`⟨FREEZE_COMMIT — 待重取⟩`。**
+起草时用的是 `25eee107` (master, 2026-07-28)，**那是一个已经过期的占位值，不是冻结提交**。
+起草期间 master 在动（并发轨道），起草之后仍在动：**2026-07-29 复核，本文表格里
+31 个 blob/tree 哈希有 17 个已经和 master 对不上**——`battery/` 一族全部
+（目录树、`metrics/__init__.py`、`economy.py`、`PREDICTIONS.md`、`METRICS.md`），
+外加 `theoria-arm/inner|harness`（含 `plan.py`、`loop.py`）、`proxy/`（含 `ledger.py`、
+`scoring/frozen.json`）、`theory-compiler/.../generators/`、`baseline-arms/harness/bare_cc.py`、
+`engine-rig/engines/probe_frontier|fd_adapter`。
+
+因此，**下表所有 40 位哈希只对 `25eee107` 成立，不得当作冻结值引用**。
+定稿时必须在**真正的冻结提交**上用 `freeze/build_manifest.py --verify` 整批重取，
+并把那个提交号回填到本行的 `⟨…⟩` 里。**在回填之前，本行永远读作「待重取」，
+而不是「已钉在 25eee107」。**（每条哈希后附的 `@25eee107` 标记就是这个意思。）
 
 ## 哈希纪律 —— 先读这条，否则清单不可复现
 
@@ -35,17 +46,25 @@
 | 2 | DSL 语法版本（两本书） | ⚠ 有，两本书版本不齐 | `CONTRACTS/dsl_grammar_v0.2.md`（+ v0.1 承载攻略书） |
 | 3 | 生成器 | ⚠ 有，但有分叉与版本串缺失 | `theory-compiler/.../generators/` + `cold-start-a0/compile/` |
 | 4 | 提示词 | ⚠ 有，**零版本化** | `theoria-arm/inner/theorize.py` + `grammar_card.py` + `baseline-arms/harness/bare_cc.py` |
-| 5 | 引擎清单与版本 | ⛔ **缺清单** | 代码在 `engine-rig/engines/`；**清单文件不存在，需现写** |
+| 5 | 引擎清单与版本 | ⚠ 清单已写，**八个包零版本串** | `freeze/ENGINE_MANIFEST.md`（生成物，`build_engine_manifest.py --verify` 盯住）+ `engine-rig/ENGINE_TABLE.md`；版本串缺口 ⛔ 5-b |
 | 6 | 戳探策略 | ⚠ 无统一文档 | `engine-rig/engines/probe_frontier/README.md` + 两处模块 docstring |
 | 7 | 规划器配置 | ⚠ 有，**Theoria 臂未钉版** | `engine-rig/engines/fd_adapter/backends.py`；`theoria-arm/inner/plan.py:112` 未传 `prefer=` |
 | 8 | 指标电池 v1 | ⚠ 有，但两个主终点无实现 | `battery/` |
 | 9 | 变体算子库 | ✅ 有 | `proxy/variants.py` + `proxy/variants/` + `exam/artifacts/variant_specs/` |
 | 10 | 统计裁决规则 | ✅ 本套件 | `freeze/STATS_RULES.md` |
 | 11 | claim 逐字文本与双结局 | ✅ 本套件 | `freeze/CLAIMS_TEXT.md` |
-| 12 | 预算表 | ⛔ **缺** | 原料在 `baseline-arms/BUDGET_REPORT.md`；算术在 `freeze/PENDING_FIVE.md` §4 |
-| 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，**但依据 untracked** | `freeze/STATS_RULES.md` §5；证据 `baseline-arms/out/campaign/` **不在 git 里** |
+| 12 | 预算表 | ⚠ 表已写，**12 个情景无一装得下** | `freeze/BUDGET_TABLE.md`（机器层由 `build_budget_table.py --verify` 盯住）；三个数仍 needs_human |
+| 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，依据**已可哈希**；13-d 脆、⛔ 13-f 无产出判据 | `freeze/STATS_RULES.md` §5 + §5.7 + `n_feasibility.py`；依据 `baseline-arms/out/campaign/`（`9307f139`）+ A7 包络 + `freeze/VARIANCE_BASIS.md` |
 
-**计数：13 项全部有落点或有标注。✅ 3 · ⚠ 8 · ⛔ 2。**
+**计数（2026-07-29，S4-freeze-complete 收工时）：13 项全部有落点或有标注。✅ 3 · ⚠ 10 · ⛔ 0。**
+
+两处原 ⛔ 本轮落地：第 5 项有了 `freeze/ENGINE_MANIFEST.md`（八个包、55 行钉住、
+枚举撞名单列一列），第 12 项有了 `freeze/BUDGET_TABLE.md`（三个口径分开记，
+12 个情景全枚举）。**但「⛔ 归零」不等于「可以冻结」**：两份新文件各自带回了
+更硬的消息——八个包**零个版本串**（⛔ 5-b），以及**12 个情景一个都装不下**
+（真实余额 $111.35 对最便宜的封存主表 $175.55，且唯一算得起的配置正是已被证明
+`levels_completed ≡ 0` 的那个）。逐项残余、owner 与可执行清除条件见
+`freeze/RESIDUALS.json`，闸门是 `freeze/residuals.py --verify`（verify.sh 阶段 14）。
 
 ---
 
@@ -55,7 +74,7 @@
 `cold-start-a0/`、`cold-start-a2/`、`cold-start-a3/`、`a0-spike/` 是同一个环的**四次离线证明**，
 不是臂本身——冻结清单里要区分开，否则哈希了四份离线件却漏掉真正上场的那份。
 
-| 路径 | 是什么 | tree/blob sha1 |
+| 路径 | 是什么 | tree/blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `theoria-arm/inner/` | 五拍编排 + 两本书 + 七种意外（10 文件） | `a8ee59c759bb7e45de439320590c999fe11e6a27` |
 | `theoria-arm/inner/loop.py` | `class TheoriaArm`，环本体 | `5f21d674f790f08eada4cf80d25b2b8a9917f16d` |
@@ -88,7 +107,7 @@
 
 ## 2. DSL 语法版本（两本书） ⚠
 
-| 路径 | 是什么 | blob sha1 |
+| 路径 | 是什么 | blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `CONTRACTS/dsl_grammar_v0.2.md` | **现行语法**，`Version: 0.2 · Status: 定稿 · Effective: 2026-07-28` | `4956d77cb4c5b36cef0d7b977577ff1bfed5ad9f` |
 | `CONTRACTS/dsl_grammar_v0.1.md` | v0.1，冻结不得改；**仍是攻略书的实效文本** | `e441aa6e40fe442edc570ce142ef4db2822bcd3b` |
@@ -102,7 +121,8 @@
 只记一个 "v0.2" 是**不准确的**。建议记成
 `manual=v0.2 (dsl_grammar_v0.2.md) / playbook=v0.1 text (dsl_grammar_v0.2.md:262 → dsl_grammar_v0.1.md)`。
 
-**⚠ 待办 2-b（订正）**：`dsl_grammar_v0.2.md:39` 写 `## theory.dsl — five sections`，
+**⚠ 待办 2-c（订正；2026-07-29 由 `2-b` 改号，见下）**：`dsl_grammar_v0.2.md:39`
+写 `## theory.dsl — five sections`，
 底下定义了**六节**（`word_table` :41、`semantics` :81、`events` :159、`rules` :166、
 `goal` :187、`laws` :192）。文档数错了自己的节数。
 （顺带澄清一处流传的误记：`goal:` **在**语法里，v0.1/v0.2 都有，
@@ -111,11 +131,48 @@
 
 **已核实无在飞工作**：分支 `agent/p10-contracts-v02` 已并入 master，其 worktree 是并后残留。
 
+> **改号记录（2026-07-29，S4-freeze-complete）**：上面那条订正与下面这条 G5
+> **原先共用编号 `2-b`**，是 `freeze/residuals.py` 的查重第一次跑就抓出来的。
+> 一码两义的后果不是难看，是「2-b 补完了吗」有两个答案，
+> 于是其中一条可以被当成另一条关掉。保留 `2-b` 给 G5（`RECONCILE.md:220-221`
+> 已按这个号引用它），把上面那条改号为 `2-c`。
+
+**⛔ 待办 2-b（G5，自 S4 移植，2026-07-29 复核）—— v0.2 的冻结政策挂在一个
+不存在的 tag 上，而且这个引用自指、无法事后补救。**
+
+`CONTRACTS/dsl_grammar_v0.2.md:10` 逐字写着：
+
+> **Freeze policy.** v0.2 is frozen **at the tag that carries this line**.
+
+**该 tag 不存在。** 本轮实测：仓库共 **24 个 tag**，全部是 `engine-rig-m*` 一族，
+没有任何一个指向 DSL 语法（`git tag -l | grep -i 'dsl\|grammar'` 空）。
+同一文件 `:16-18` 还三次以「that tag」为锚点叙述修订项 11–14 的先后，
+所以**整个 v0.2/v0.3 的演化政策与它的历史叙述都挂在一个空引用上**。
+
+**比 S4 的记述更糟的一点，是这个引用自指。** 「携带此行的那个 tag」在写下时
+就无法满足：现在补切一个 tag，它指向的提交里「此行」所在的文件内容已经与
+写下这句话时不同，于是「携带此行」究竟指哪一版本本身有歧义。**这不是补个 tag
+就能修的，必须改写那句话。**
+
+三条出路，冻结前必须选一条并落盘（**保持现状不是选项**——清单里会留下一个
+查不动的版本串，而版本串查不动，整份释出清单的可复现性就断在这里）：
+
+1. 切一个具名 tag（如 `contracts-dsl-v0.2`），并把 `:10` 改成**指名该 tag**，
+   不再自指；`:16-18` 的三处「that tag」一并改成同一个名字。
+2. 改为**指名提交哈希**（v0.2 定稿那一版的 blob/commit），彻底不用 tag。
+3. 声明 v0.2 的冻结锚点就是**冻结包本身**（`⟨FREEZE_COMMIT⟩`），
+   即 v0.2 随本释出一起冻结——最省事，但要接受「v0.2 定稿于 2026-07-28」
+   这句话与锚点日期不一致，需在文件里说明。
+
+**这条属于 `CONTRACTS/`，两条赛道都不得单方面改**（`CLAUDE.md`：
+`candidates_schema.md` 冻结、`dsl_grammar_v0.1.md` 归 theory-compiler 赛道）。
+因此本条只登记，不动手；由监控转 theory-compiler 赛道或作为契约变更走 S9 的流程。
+
 ---
 
 ## 3. 生成器 ⚠
 
-| 路径 | 是什么 | tree/blob sha1 |
+| 路径 | 是什么 | tree/blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `theory-compiler/src/theory_compiler/generators/` | 规范四形态（5 文件） | `f69d55d4d39b783be2cc2604135c377fe7cc9831` |
 | ├ `gen_lean.py` | Lean 4 | `f0a903aad45955224c5a711117ec3cd49d96ba77` |
@@ -143,7 +200,7 @@
 
 ## 4. 提示词 ⚠ —— 四项里最薄弱的一处
 
-| 路径 | 是什么 | blob sha1 |
+| 路径 | 是什么 | blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `theoria-arm/inner/theorize.py` | **Theoria 臂 prompt**：`PREAMBLE` L122-167、`OUTPUT_CONTRACT` L169-201、`build_prompt()` L204-253 | `569dd97cfc854b2321947cbec000f26db847b44b` |
 | `theoria-arm/inner/grammar_card.py` | `CARD` L16-182，逐字递给掌台的语法卡 | `851e6262ae641bc0047620228fa663ca96c0be8f` |
@@ -204,7 +261,7 @@
 
 ## 6. 戳探策略 ⚠ —— 无统一文档
 
-| 路径 | 是什么 | tree/blob sha1 |
+| 路径 | 是什么 | tree/blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `engine-rig/engines/probe_frontier/` | 引擎（frontier / reach / scenario / sokoban_probe） | `1b42a43d4ce1515f8a85f68904a37981cf24790a` |
 | `engine-rig/engines/probe_frontier/README.md` | **现有的策略文档**：假设分割熵、贪心 argmax、单位成本比特、全序确定性排序 | `e7078ea27de6560927ac8fc864f2996f37aa2bf4` |
@@ -224,7 +281,7 @@ FD 24.06+ commit `7120aa01`，winlibs GCC 16.1.0，235 targets，无补丁；
 套件在 FD 可达时 255 passed，不可达时 252 passed + 3 skipped（`engine-rig/STATUS.md`）。
 **但产物路径故意钉在 stub 上**（D-025，为了产物跨机器字节一致）。
 
-| 路径 | 是什么 | blob sha1 |
+| 路径 | 是什么 | blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `engine-rig/engines/fd_adapter/backends.py` | 全部配置面：`FD_DEFAULT_HEURISTIC="lmcut"`、`FD_SEARCH`、`TIERS`、`choose_tier()`、`run_fast_downward(timeout=120)` | `7b7bc83dfb052984ea960207a4f9630bf114f642` |
 | `engine-rig/engines/fd_adapter/__init__.py` | **`ARTIFACT_TIER = backends.STUB` ← 那个钉子** | `dc8eee51cba38276d084f5e5e0a6ff429f2ade15` |
@@ -248,12 +305,12 @@ FD 的 driver 在 Windows 上无法自行限时限内存，故用外部 subproce
 
 ## 8. 指标电池 v1 ⚠ —— 三个主终点里两个没有实现
 
-| 路径 | 是什么 | tree/blob sha1 |
+| 路径 | 是什么 | tree/blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `battery/` | 全部（57 tracked 文件） | `48d91b4d3b113c56e576e832c59b25abb91a061c` |
 | `battery/metrics/__init__.py` | **`REGISTRY`**，实测 **38 条**指标 | `bfc578c0310c45f7da818ae0a6c0beda4c7b9016` |
 | `battery/metrics/economy.py` | 含 **`E2` = 前载指数**（主终点三） | `0f956887a5999dee032a867d0259f3052b5a4de6` |
-| `battery/PREDICTIONS.md` | **逐指标方向预测**（v0 L1-130 + v1 L131-240），append-only | `83b39faa032659ff07096fbc5b9a677644fbb654` |
+| `battery/PREDICTIONS.md` | **逐指标方向预测**，append-only。**⚠ 起草时的结构描述已过期**，见下方 8-d | `83b39faa032659ff07096fbc5b9a677644fbb654` |
 | `battery/METRICS.md` | 生成物（`python -m battery.docs`），`tests/test_docs.py` 盯漂移 | `596dce0c0e6a144ac62979aabcf8fdcae0924689` |
 | `battery/artifacts/` | 6 份 JSON：区分力、抗游戏审计、冗余、能力谱、臂对照、验证材料 | （随目录） |
 
@@ -275,11 +332,39 @@ FD 的 driver 在 Windows 上无法自行限时限内存，故用外部 subproce
 "A hand-written reference for twenty-eight metrics…"——v0 期的陈旧串，
 实际 38。（`REPORT_V0.md` 的 "29 metrics" 是**正确**的，它显式限定在 v0。）
 
+**⚠ 待办 8-d（订正，2026-07-29 复扫）—— `PREDICTIONS.md` 已经不是两批了。**
+本文起草时写的是「v0 L1-130 + v1 L131-240」，那在基准提交 `25eee107` 上**是对的**
+（该 blob 正好 240 行、两批）。到 2026-07-29，同一文件是 **603 行、四批 + 一段标注**：
+
+| 批 | 行 | 预注册日 |
+|---|---|---|
+| v0 | `L1-130` | 电池 v0 |
+| v1 —— nine further metrics | `L131-243` | 2026-07-28 |
+| v2 —— the CC vs Schema contrast | `L244-392` | 2026-07-28 |
+| v2.1 —— four defences | `L393-511` | 2026-07-28 |
+| 标注 · V18 冻结前复核 | `L512-603` | 2026-07-29（**标注，不是预测**，正文一字未改） |
+
+三条后果，都要进定稿清单：
+
+1. **`v0 L1-130` 那半句仍然准确，坏掉的是「到 240 行为止」。** 追加是真 append：
+   已逐段比对 `25eee107` 的 blob 与当前 blob，v0 正文一字未动，
+   所以**全仓引用 v0 的行号锚点全部仍然有效**——已复核 `PREDICTIONS.md:78`（E2 那行）
+   与 `:122-127`（缓存混杂那条自陈），两处都还指着原句。
+   `CLAIMS_TEXT.md:86`、`STATS_RULES.md:172`、`:202` 因此**不需要改**。
+2. **冻结清单第 8 项要哈希的是「逐指标方向预测」，而它现在是四批。**
+   定稿时要么把四批一并声明为预注册文本，要么明写**哪一批进冻结、哪一批只作背景**。
+   `Theoria.md:368` 只说「逐指标方向预测」，没说哪一版；不写清楚就是留了一个
+   事后挑批次的口子。
+3. **v1/v2/v2.1 的封条比 v0 弱，而且它们自己说了。** `L140` 起 v1 自陈
+   "and it is weaker than v0's, materially"；`L163` 承认部分 v1 指标在臂上
+   是 post-diction。**这三批不能和 v0 平级引用**，弱封条必须随预注册一起报。
+   （这与 `RECONCILE.md` 移植清单 G8 的「电池 v1/v2/v2.1 版本冲突」是同一件事。）
+
 ---
 
 ## 9. 变体算子库 ✅
 
-| 路径 | 是什么 | tree/blob sha1 |
+| 路径 | 是什么 | tree/blob sha1 @`25eee107`（过期占位） |
 |---|---|---|
 | `proxy/variants.py` | **算子库本体**：`LEGAL_OPERATORS` :34 = `forbid_action`, `remap_action`, `step_limit`, `observation_loss`, `win_tighten`；`CLAIMS` :37 = `solvable`/`unsolvable`/`unchanged`；`class Variant` :54 拒收任何没有 ≥40 字符建设性 `justification` 的 spec（:70-77） | `71a2fa1c01088e03678d3d9a89c2fb0fce43540c` |
 | `proxy/variants/` | 4 份注入式变体 spec | `29a7f13d9dc11d4435493a59961d88a6c8d0c17e` |
@@ -324,6 +409,20 @@ FD 的 driver 在 Windows 上无法自行限时限内存，故用外部 subproce
 算术已经备好在 `freeze/PENDING_FIVE.md` §4（含封存堆 21 局 / 14,121 基线动作 /
 三臂 × n 的逐档报价与墙钟）。**填数是人的事。**
 
+**🔴 局数：RES-1 建议 19，监控确认**（2026-07-29，RECONCILE 裁定二，
+详见 `freeze/PENDING_FIVE.md` §4.2.1）。上面那张表按**跑满封存堆**算，
+是**上界**，故意保留不删。建议按 claim 层 **19 局**预算并开跑，理由三条：
+**(a)** claim 集就是 19，多出的 `ft09` / `ls20` 买到的数据进不了任何一条主张
+（F-11 已隔离，三层报告里没有它们的位置）；
+**(b)** 不能成为主张的支出，是从封存确证跑——真正的 Phase 4 终点——那笔钱里扣的，
+而监控的常设约束正是这笔钱不许被开发堆战役饿死（两局三臂 n=2 ≈ $463 haiku /
+$1,177 opus，不是零头）；
+**(c)** F-11 的排除裁定在 **2026-07-28**，封存战役**一局未跑**，
+所以「跑 19」是**预注册**而非事后收窄——**这一点必须写进论文正文**，
+否则「我们丢了两局」会被读成一个自由度。
+**本条动的是钱（⟨$/局硬顶、总局数、止损⟩ 由监控定），故仍标 needs_human：
+RES-1 建议 19，理由如上；预算行由监控确认。** 在此之前上界口径是现行数字。
+
 ---
 
 ## 13. 每格重复数 ⟨n⟩ ⚠ —— 已裁定 n=2，但依据不在 git 里
@@ -331,15 +430,57 @@ FD 的 driver 在 Windows 上无法自行限时限内存，故用外部 subproce
 **裁定：⟨n⟩ = 2。** 完整论证 `freeze/STATS_RULES.md` §5，
 复算 `freeze/runs/2026-07-28T1200Z-p22/envelope_stats.py`。
 
-**⛔ 缺 13-a —— ⟨n⟩ 的唯一依据是 untracked 的。**
-`baseline-arms/out/campaign/`（48 个 episode，4 局 × 12 重复）
-`git ls-files` 返回 **0 个文件**。
-**不在 git 里 = 不可哈希 = 不能进预注册。冻结前必须提交。**
+**✅ 13-a 已消解（2026-07-29，S4-freeze-complete）—— 依据已在 git 里。**
+原文作「`baseline-arms/out/campaign/` `git ls-files` 返回 **0 个文件**，
+不可哈希、不能进预注册」。提交 `9307f139`（A14，master 的祖先）把那四个文件
+加入了版本控制，`git ls-files` 现返回 **4 个文件**，索引与盘上字节一致。
+逐文件 sha256 见 `freeze/VARIANCE_BASIS.md` §2。
+**这只解决了「引得到」**：⟨n⟩ 依据的实质不足另见 13-d 与 `STATS_RULES.md` §5.7。
 
-**⚠ 待办 13-b —— 两份包络记录尚未对账。**
-`BUDGET_REPORT.md` §11 记的是更早的一次（只有 ar25 三格，G4 触发，
-「战役停在 1/4」）；`out/campaign/` 里这 48 格是后来跑的更完整的一批。
-两处并存且互不引用，读者会困惑。
+**✅ 13-b 已对账（2026-07-29，`freeze/VARIANCE_BASIS.md` §4）——
+并且对出了一处比「读者会困惑」严重得多的事。**
+原文以为两份记录是「早的一次」与「后来更完整的一批」；`STATS_RULES.md` §5.2 的
+来历更正已经撤回了「后来跑的」这个说法（那 48 格正是 INC-BA-003 的争用源本身）。
+实况是树上有**两份都已跟踪**的依据——依据甲 `out/campaign/`（S1 基线对齐，48 集）
+与依据乙 `baseline-arms/runs/20260728T103135Z-a7/envelope.json`（A7 方差包络，
+其 `RUN_STATE.md:17-20` 自陈存在的目的就是给 Phase 4 定 ⟨n⟩）——
+而**两份对同一个量差约 20 倍**（格内合并 CV 0.4915 vs 0.0248），
+且 A7 自己的定量建议是 **n=3**，落在 `Theoria.md:368` 的 n=1/n=2 菜单之外。
+**裁决（RES-1）：⟨n⟩ 仍 = 2。** 三条理由：(1) 菜单是冻结条款，n=3 需要改
+`Theoria.md:368` 而不是选一份依据；(2) 两份依据都测不到三个主终点中的任何一个
+（§5.2 发现一），所以 20 倍之差是两把不同尺子量代理量的差，不是对同一个终点的
+两个估计；(3) 按 §5.7 的算术，在实测 q 下 n=2 与 n=3 的预期活格数是 0.78 与 1.16，
+**都够不到任何地板**——在 n 上争 2 还是 3 是在一个不起作用的旋钮上争。
+A7 的 n=3 建议记为**已阅并被上述第 (1)(3) 条驳回**，不是被忽略。
+
+**⚠ 待办 13-d —— 代理量的方差检验会随 ar25 一局的取舍翻面。**
+`freeze/VARIANCE_BASIS.md` §5：按树上唯一写下过的阈值 0.10
+（`STATS_RULES.s4draft.md:265-266`，自陈「是判断不是推导」）判，
+**剔掉 ar25 → 局内 CV 最大 0.0370 → 「方差小」→ n=1 可辩护**；
+**含 ar25 → 0.2756 → n=2**。阈值恰落在两者之间（一侧 2.7 倍、另一侧 2.8 倍）。
+裁定不翻（它靠的是「三个主终点一个都没测到」，与 CV 无关），
+但**任何倚在 CV 数上的 ⟨n⟩ 论证都是脆的，引用时必须两面并排给出**。
+补法：这是一处**登记项**，不是待修缺陷——`STATS_RULES.md` §5.3 已按
+`s4draft:272-275` 的「两套结果并排报告」要求照做；剩下的一半（对封存战役的
+预注册敏感性承诺，`RECONCILE.md:258` G15）不是本套件能关的。
+
+**✅ 13-e 已修（2026-07-29，本轮，RES-1）—— 生成的清单曾否认这项有值，与散文的裁定直接打架。**
+`freeze/build_manifest.py:229-243` → `freeze/MANIFEST.json` 第 13 项曾写
+「**No value exists anywhere on master**」并声明任何记着「n = 2, ruled」的草稿
+「is withdrawn」；而**同一目录、同一提交**的 `freeze/STATS_RULES.md:705`
+（master 上就有）裁定 `⟨n⟩ = 2`。冻结包对外同时给出两个互斥的事实，
+且错在**多说的方向**上——它把一个已裁定的值报成了没有值。
+**owner：RES-1。已于本轮修（见下）**：该 note 的两个前提都在它写下之后变了
+（依据由 A14 转为已跟踪；裁定落在 §5.5/§5.7）。
+
+**⛔ 缺 13-f —— 「这一格出数了」在树上没有定义，于是任何 q 都能被代进来。**
+`STATS_RULES.md` §5.7 需要一个 q（单个 rep 不出数的概率）才能说 ⟨n⟩ 够不够，
+而**三个主终点各自「一次观测算成立」的判据**有两个至今没有实现（⛔ 8-a、8-b）。
+后果不是抽象的：本节第一版正是因为没有产出判据，才把一个 harness 中止常数
+（47/48，产生它的规则已被 D-016 删除）当成 q 用了一整轮而无人能拦。
+U3 从 Lean 产出物裁、不要求通关，所以「格死」对三个终点**不是同一个事件**。
+**补法**：8-a / 8-b 落地时，每个终点同时写一句「本终点的一次观测何时算成立」，
+并让 `n_feasibility.py` 从那里取 q 的定义。owner：battery（8-a/8-b）+ RES-1（接线）。
 
 **⚠ 待办 13-c —— n=2 不替代包络的修复。**
 `BUDGET_REPORT.md` §11.5 列的两件事（INC-BA-003 跨会话闸门、
@@ -352,11 +493,60 @@ FD 的 driver 在 Windows 上无法自行限时限内存，故用外部 subproce
 
 | # | 事 | 出处 |
 |---|---|---|
-| A-1 | **消融臂不存在。** `Theoria.md:376` 称它「必设」「活命臂」。分支 `agent/p18-ablation-arm` 与 master 逐字节相同；worktree 里 `ablation-arm/` 是**空目录**；只有工单 `monitor/prompts/P-18-ablation-arm.md` 存在，它要求的 `DESIGN.md` 与 `verify.sh` 都没有。**没有消融臂，C5 与 C2 的切分做不出来。** | 树上实查 |
+| A-1 | ~~**消融臂不存在。**~~ **已过期，见下方 A-1′。** 起草时（`25eee107`）`ablation-arm/` 确是空目录、只有工单。**2026-07-29 复扫：臂已建成并标定。** | 树上实查（已作废） |
+| A-1′ | **消融臂已建成，但只有离线形态；C5 的成本切分仍然做不出来。** 见下方展开。 | `ablation-arm/{DESIGN,REPORT,STATUS}.md` |
 | A-2 | `schema_repro` 臂不存在且大概率永远不存在（官方 harness 从未发布）。三臂实为**两臂 + 消融臂**。 | `baseline-arms/SCHEMA_LOCATE.md` |
-| A-3 | `cold-start-a0/certify/fd_conformance.py` 工作树脏（` M`，未提交）。哈希前先处理。 | `git status` |
-| A-4 | `CLAUDE.md` 说「没有任何游戏被玩过、25 局全 `never_audited`」——**已不成立**。开发堆 4 局已升 `trajectories_reviewed`；`arc-recon/README.md` 另记 INC-BA-001 的 9 局封存污染。 | `baseline-arms/TOUCHED_GAMES.md` |
+| A-3 | ~~`cold-start-a0/certify/fd_conformance.py` 工作树脏（` M`，未提交）~~ **已消解**（2026-07-29 复扫：`git status --porcelain` 对该路径返回空）。但**这条的一般形式仍然成立**：哈希前必须复核工作树干净，否则哈的是别人在飞的字节。 | `git status`（2026-07-29 复核） |
+| A-4 | ~~`CLAUDE.md` 说「没有任何游戏被玩过、25 局全 `never_audited`」~~ **已消解**（2026-07-29 复扫：`CLAUDE.md:136-141` 现已写明开发堆 4 局 `trajectories_reviewed`、封存堆零 API 接触、INC-BA-001 的 9 局知识污染与 F-11 的 19 局裁定）。**留在表里是为了记住它曾经错过**——`CLAUDE.md` 会漂，冻结前要再核一次。 | `CLAUDE.md:136-141`；`baseline-arms/TOUCHED_GAMES.md` |
+
+### A-1′ 展开 —— 消融臂现状（2026-07-29 复扫）
+
+**建成了什么。** `ablation-arm/` 在树上，`agent/p18-ablation-arm` 之后又经
+`a4a-ablation-build` / `a4b-ablation-calibrate` / `bus2-ablation-readonly` 并入 master：
+`DESIGN.md`（刀口论证，代码之前定稿）、`REPORT.md`（标定结果）、`DECISIONS.md`、
+`STATUS.md`、`RUN_STATE.md`、`README.md`，`ablcore/` **九个模块**
+（`certify_abl` `compile_abl` `downgrade` `ledger_abl` `outside` `pin` `plan_abl`
+`playbook` `surprise`），加 `run_arm.py` / `calibrate.py` / `verify.py` / `verify.sh`
+与 `artifacts/`。门：`python -m pytest -q` → 74 passed；`bash ablation-arm/verify.sh` → GREEN, exit 0。
+
+**刀口在哪。** `DESIGN.md` §3：切在 **U2|U3 边界**——保留表示层（对象化、DSL、重放、
+规划、六引擎、便宜层 certify），删掉定理义务（`Theoria.md:237-248` 第 6、9 两条全切，
+第 1、5 两条部分切）。只切一刀，因为 `Theoria.md:280` 说切两刀就归因不了。
+
+**它给了什么（这是真结果，可引用）。** `REPORT.md` §2/§4/§5：A0 上两臂 19 行里
+**14 行完全相同、3 行有差且全部是证书行、2 行不可比**；消融臂在每个可测单位上更便宜
+（Lean 4.1 s→0、形式化字节 149 773→0、定向戳探世界步 12→0、修复拍 8→0）。
+A2 上两臂由同一份说明书证出**同一个假定理**，全臂被一个 18 步反例打脸并修好，
+消融臂把一个 18 步可解的关卡归档为不可解。**「工程省 vs 理解省」这条区分本身，
+现在有了一个可复核的机械演示**：工程省 = 删掉证明义务后仍然存活的那部分省钱，
+理解省 = 只有证明义务能买到的「被证伪的能力」。
+
+**它没给什么 —— 三条，不许略过。**
+
+1. **没有成本切分的数。** `REPORT.md` §3(c)：**两臂的美元列都是 NOT MEASURED**，
+   不是 0、不是平局；§7 限制 5 逐字写「cannot be filled offline」。
+   C5 要的是**总账 10⁸→10⁶ 里哪几个数量级归工程、哪几个归理解**，
+   而这个切分需要全臂与消融臂**跑同一局线上游戏**。
+2. **这个臂没有线上形态。** `STATUS.md`：`ablcore/` 里**没有 harness、没有环境回路、
+   没有模型掌台、没有 HTTP、不读 API key**；`ledger_abl.py:9` 自陈
+   "Zero API calls, zero network, zero dollars"。工单 `A4-ablation-online`
+   **被无人认领地退回看板**。另外 `proxy/ledger.py:36` 的 `ARMS`
+   里**没有 `theoria_ablate`**，而 `:204` 对未注册臂名硬拒，
+   所以消融臂在登记之前**一个字节的账本都写不出来**——一行改动，
+   但在 proxy 轨道的领地里，消融臂自己不能改（`ablation-arm/DECISIONS.md` D-AB-004）。
+3. **标定的是机制，不是效应量。** `REPORT.md` §7 限制 1：两个自建离线世界，
+   零 API 接触、零封存堆接触，「No number here transfers to a live game as a magnitude」；
+   限制 2：两臂**按设计共用一份说明书**，所以 A0 的分数/重放相等**部分是构造性的**，
+   不能读成「消融臂学得一样好」。
+
+**因此 A-1 的正确状态不是「已解决」，是「降级」**：
+它不再挡住 **C2**（切分工具存在了，且刀口有论证、有门、有测试），
+但仍然挡住 **C5**（切分要的数一个都没有，且离线拿不到）。
+定稿清单里 A-1 应写作：**消融臂 = 已建成的离线标定臂；线上臂缺，
+且是 C5 成本切分的唯一取数途径。**
 
 ---
 
-*起草：engine-rig 轨道，工单 P-22，2026-07-28。哈希基准 `25eee107`。*
+*起草：engine-rig 轨道，工单 P-22，2026-07-28。*
+*哈希基准：起草值 `25eee107` **已过期**，冻结提交待重取（见本文开头）。*
+*陈旧扫描复核：2026-07-29，RES-3（`RECONCILE.md` §三 必修三）。*

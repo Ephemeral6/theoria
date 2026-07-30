@@ -1,0 +1,13 @@
+{
+  "bound": 10,
+  "decided": false,
+  "form": "lp_outcome",
+  "margin": 1,
+  "meaning": "HiGHS hit its iteration limit; feasibility was not decided",
+  "no_linear_pagoda": false,
+  "scope_of_claim": "linear pagodas with |w_i| <= 10 and goal margin >= 1; weights outside the box are not examined",
+  "solver": "scipy.optimize.linprog (HiGHS)",
+  "solver_message": "Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible)",
+  "solver_status": 1,
+  "status": "budget"
+}

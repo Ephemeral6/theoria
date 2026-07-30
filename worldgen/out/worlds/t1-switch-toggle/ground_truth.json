@@ -15,12 +15,22 @@
     6,
     7
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "door_presence_tracks_net"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +38,7 @@
       "name": "grid_shape",
       "statement": "every frame is 6 x 7",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +46,7 @@
       "name": "door_presence_tracks_net",
       "statement": "a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     }
   ],

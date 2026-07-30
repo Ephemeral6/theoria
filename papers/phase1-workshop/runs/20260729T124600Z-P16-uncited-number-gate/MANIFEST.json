@@ -1,0 +1,41 @@
+{
+  "prompt_id": "P16-P16-uncited-number-gate",
+  "branch": "agent/p16-uncited-number-gate",
+  "base_commit": "9bc8c8806840a1b0942df6dbb17bd5e5e999ed5e",
+  "utc": "2026-07-29T12:46:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "1293359e969126735c2bd6283eabfaf4d8e4f9ba48b54c2f33aca1eaa4aedcc5"
+    },
+    {
+      "path": "papers/phase1-workshop/test_uncited_gate.py",
+      "sha256": "eaf3a1c7d49961e9eeb6c7bbbf9337fa7f2846495e6055625b93d74bf3687547"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "b3721ce8bd0b9a67c6f1e1c84e20df4a95be3e44aa84061fa8920e97f61fe0f7"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T124600Z-P16-uncited-number-gate/mutation_check.py",
+      "sha256": "809f905fcf12cf676e4d96897ff49828f9f174b99977fafe2b46b6b4f45468b6"
+    }
+  ],
+  "result": {
+    "verify_paper": "PASS 5/5",
+    "test_uncited_gate": "62 passed",
+    "mutation_check": "21/21 caught",
+    "blocks_scanned": 414,
+    "uncited": 0,
+    "ruled": 10,
+    "stale": 0,
+    "path_citations": 213,
+    "broken_paths": 0,
+    "adversarial_passes": 2
+  }
+}

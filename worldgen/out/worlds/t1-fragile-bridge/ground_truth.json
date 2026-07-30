@@ -15,12 +15,24 @@
     5,
     7
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "single_armed_tile",
+      "armed_tile_under_agent",
+      "tile_state_is_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 42,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +40,7 @@
       "name": "grid_shape",
       "statement": "every frame is 5 x 7",
       "states_checked": 42,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +48,7 @@
       "name": "single_armed_tile",
       "statement": "at most one fragile tile is armed at any instant",
       "states_checked": 42,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,13 +56,16 @@
       "name": "armed_tile_under_agent",
       "statement": "an armed fragile tile's cell is the agent's cell",
       "states_checked": 42,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "tile_state_is_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 168,
+      "verified": true
     }
   ],
   "invariants_all_hold": true,

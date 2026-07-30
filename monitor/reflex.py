@@ -74,6 +74,36 @@ def save_loop(state):
     os.replace(tmp, LOOP)
 
 
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
+
+
 def main():
     if os.path.exists(LOCK):
         if time.time() - os.path.getmtime(LOCK) < 1500:
@@ -121,6 +151,12 @@ def main():
                   "--include-standing"])
         events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
                    if "freed from" in l]
+        # S28 sibling of the ci_merge blind spot: a sweep that crashed prints no
+        # "freed from" lines, which is the same observation as a sweep that
+        # found nothing to free -- and this one decides whether dead sessions'
+        # claims go back on the board.
+        if sw.returncode != 0:
+            events.append("sweep:EXIT-%d" % sw.returncode)
         # A standing release is reported separately and by name. It is a much
         # bigger event than reaping a one-shot worker -- it says a researcher
         # is gone -- and folding the two into one `sweep:` line would bury the
@@ -148,10 +184,14 @@ def main():
             events.append("serve:restarted")
 
         # 1. reap
-        out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
-                   "--reap"]).stdout
-        killed = [l for l in out.splitlines() if "killed" in l]
+        reap = run([sys.executable, os.path.join(HERE, "dispatch.py"), "--reap"])
+        killed = [l for l in reap.stdout.splitlines() if "killed" in l]
         events += ["reap:" + l.split()[0] for l in killed]
+        # S28 sibling: `.stdout` used to be taken off the call inline, so the
+        # return code was not merely ignored, it was unrecoverable -- a reaper
+        # that died read exactly like a reaper with nothing to reap.
+        if reap.returncode != 0:
+            events.append("reap:EXIT-%d" % reap.returncode)
 
         # 2. quota
         q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
@@ -193,12 +233,23 @@ def main():
         # 0b. worker headcount — long-lived workers claim their own items from
         # the board, so the monitor controls only the population, never the
         # per-item dispatch. Target scales with what the board still holds.
+        # S28: `except Exception: avail, claimed = 0, 0` made a crashed board
+        # query indistinguishable from an empty board -- and `if not hold and
+        # avail:` then skipped the whole refill loop without a word. Measured:
+        # a raising `candidates()` yielded avail=0 in silence
+        # (EVIDENCE-3-standing-reflex.md). -1 is the third value: not measured.
         try:
             import board as board_mod
             avail = len(board_mod.candidates())
             claimed = len(board_mod.claimed_map())
-        except Exception:
+        except Exception as exc:                # noqa: BLE001 -- reported
+            # Refill needs a headcount target derived from board depth, and the
+            # depth is exactly what could not be read, so skipping stays the
+            # right action. The change is that it is now on the record: a
+            # sentinel nobody reads would be this same bug with a new number.
             avail, claimed = 0, 0
+            events.append("BOARD-QUERY-FAILED:%s(refill-skipped)"
+                          % type(exc).__name__)
         if not hold and avail:
             reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
             reg = (json.load(open(reg_path, encoding="utf-8"))
@@ -251,34 +302,46 @@ def main():
                    if os.path.exists(reg_path) else {})
             state = load_loop()
             deaths = state.get("death_counts", {})
-            remote = run(["git", "branch", "-r", "--list", "origin/agent/*",
-                          "--format=%(refname:short)"]).stdout.lower()
-            revived = 0
-            for pid_str, entry in sorted(reg.items()):
-                if pid_str.startswith(("M-", "A-", "B-", "R-")):
-                    continue        # ops run in the user's app now
-                if entry.get("reaped") not in ("exited",
-                                               "killed-permission-wall"):
-                    continue
-                slug = (pid_str.lower().replace("-", "")
-                        if len(pid_str) <= 4 else pid_str.lower())
-                if "agent/%s" % slug in remote:
-                    continue        # it delivered; nothing to revive
-                n = deaths.get(pid_str, 0)
-                if n >= MAX_DEATHS:
-                    events.append("three-strikes:%s" % pid_str)
-                    continue
-                if revived:
-                    time.sleep(45)   # stagger is law
-                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
-                         "--only", pid_str])
-                if "launched" in r.stdout:
-                    deaths[pid_str] = n + 1
-                    revived += 1
-                    events.append("revive:%s(#%d)" % (pid_str, n + 1))
-            if revived or deaths != state.get("death_counts", {}):
-                state["death_counts"] = deaths
-                save_loop(state)
+            # S28 sibling, and the worst of the three: `.stdout.lower()` used to
+            # be taken off the call inline, so a git failure produced an empty
+            # string rather than an error -- and an empty `remote` is not a
+            # neutral value here. Every `in remote` test below goes False, so
+            # every dead session reads as "never delivered", so the loop
+            # **revives sessions that had already finished**. The silent failure
+            # direction is the one that spends real API money.
+            _remote = run(["git", "branch", "-r", "--list", "origin/agent/*",
+                           "--format=%(refname:short)"])
+            if _remote.returncode != 0:
+                events.append("revive:GIT-EXIT-%d(loop-skipped)"
+                              % _remote.returncode)
+            else:
+                remote = _remote.stdout.lower()
+                revived = 0
+                for pid_str, entry in sorted(reg.items()):
+                    if pid_str.startswith(("M-", "A-", "B-", "R-")):
+                        continue        # ops run in the user's app now
+                    if entry.get("reaped") not in ("exited",
+                                                   "killed-permission-wall"):
+                        continue
+                    slug = (pid_str.lower().replace("-", "")
+                            if len(pid_str) <= 4 else pid_str.lower())
+                    if "agent/%s" % slug in remote:
+                        continue        # it delivered; nothing to revive
+                    n = deaths.get(pid_str, 0)
+                    if n >= MAX_DEATHS:
+                        events.append("three-strikes:%s" % pid_str)
+                        continue
+                    if revived:
+                        time.sleep(45)   # stagger is law
+                    r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                             "--only", pid_str])
+                    if "launched" in r.stdout:
+                        deaths[pid_str] = n + 1
+                        revived += 1
+                        events.append("revive:%s(#%d)" % (pid_str, n + 1))
+                if revived or deaths != state.get("death_counts", {}):
+                    state["death_counts"] = deaths
+                    save_loop(state)
 
         # 4. ci merge — runs even under quota hold: it spends zero tokens
         # (git + pytest only), and a worker's proposal caught it being
@@ -286,23 +349,50 @@ def main():
         if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
-            merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-            flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-            events += merged + flagged
+            events += merge_events(r)
 
         # 4b. supply alarm — authoring items needs judgment, so reflex cannot
         # refill the board itself; what it can do is make a dry board loud
         # instead of silent. Idle agents look identical to busy ones.
+        # S28: this alarm was wrapped in `except Exception: pass`, which is the
+        # sharpest form of the bug -- a broken board is **quieter than an empty
+        # one**, because an empty one at least emits SUPPLY-LOW:0 and a broken
+        # one emitted nothing at all. Measured before the fix: a raising
+        # `candidates()` produced events=[] (EVIDENCE-3-standing-reflex.md).
         try:
             import board as board_mod
             depth = len(board_mod.candidates())
             if depth <= 2:
                 events.append("SUPPLY-LOW:%d" % depth)
-        except Exception:
-            pass
+        except Exception as exc:                # noqa: BLE001 -- reported
+            events.append("SUPPLY-UNKNOWN:%s" % type(exc).__name__)
 
         # 5. light dashboard refresh
-        run([sys.executable, os.path.join(HERE, "scan.py")], timeout=600)
+        #
+        # S30: the return code used to be thrown away -- not even bound. A scan
+        # that crashed therefore left the board frozen on the previous numbers
+        # while this line logged the cycle as `quiet`, which is the same
+        # sentence a healthy idle cycle writes. The two must not be the same
+        # sentence.
+        #
+        # A timeout raises rather than returning, and it used to take the whole
+        # reflex cycle down with it -- so it is caught here and turned into an
+        # event, not into silence and not into a dead heartbeat.
+        try:
+            scan_rc = run([sys.executable, os.path.join(HERE, "scan.py")],
+                          timeout=600).returncode
+        except subprocess.TimeoutExpired:
+            scan_rc = "timeout(600s)"
+        except Exception as exc:                    # noqa: BLE001 -- reported
+            scan_rc = "%s: %s" % (type(exc).__name__, exc)
+        if scan_rc != 0:
+            events.append("SCAN FAILED (rc=%s) — 盘面应已改写为红色失败页；"
+                          "若没有，失败出口本身也挂了" % scan_rc)
+            # Deliberately does not change reflex's own exit code: the other
+            # four duties in this cycle may all have succeeded, and failing
+            # the scheduled task for a dashboard refresh would make *reflex*
+            # look dead. The signal lives in the heartbeat line instead, where
+            # it reads differently from `quiet` -- which was the whole point.
 
         rlog(" | ".join(events) if events else "quiet")
         return 0

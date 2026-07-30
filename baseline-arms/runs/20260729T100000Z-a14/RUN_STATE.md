@@ -1,0 +1,186 @@
+# A14 · the four campaign artefacts were paid for and were in nobody's git
+
+**Worker** W-1670 · **branch** `agent/a14-campaign-json-untracked` ·
+**base** `b60a1537` · **2026-07-29T10:00Z**
+**Zero API calls, zero dollars, zero sealed-pile contact.** Pure salvage; no new claim.
+
+## What was true when this started
+
+`git ls-files baseline-arms/out/campaign` returned nothing. Four bare-CC
+campaign checkpoints and the four shard ledgers they roll up were sitting
+untracked in one machine's working tree — and five separate territories were
+already citing their sha256 as evidence:
+
+* `battery/runs/20260728T061147Z-v3/MANIFEST.json:145-152` (8 digests)
+* `figures/SOURCES.sha256` and `figures/sources.py`
+* `battery/artifacts/capability_spectrum.json:809-813`
+* `proxy/CANON_MIGRATION.md` §2 and `proxy/runs/p9-shell-harden/`
+* `verify-lab/NEGATIVE_CONTROL.md`, `arc-recon/ACCESS_CHECK.md`, `PARTNER_SYNC.md`
+
+## Step 1 — the gate the ticket put first
+
+**8/8 digests match, byte for byte.** The four checkpoints against battery's
+`:145-148` and the four ledgers against `:149-152`. Nothing was altered after
+being consumed as evidence, so the stop-and-report branch did not fire and this
+is a rescue rather than an incident. Full table: `DIGESTS.csv`.
+
+## The trap on the way in — the part worth remembering
+
+The four checkpoints are **CRLF on disk**, and the digests battery pinned were
+taken over those CRLF bytes. `baseline-arms/.gitattributes` sets
+`* text eol=lf`.
+
+A plain `git add` would therefore have normalised them into the object store,
+and **every clone would have held a file whose sha256 no longer matched the one
+already cited** — with no error, no warning in `git status` (which normalises on
+compare and calls them clean), and nothing anywhere to notice. The salvage would
+have destroyed the thing it was salvaging.
+
+Fixed by an `out/campaign/*.json -text diff` rule, and verified three ways:
+
+1. `git cat-file blob :<path>` reproduces the disk bytes exactly, for all four;
+2. a scratch-repo negative control — with `core.autocrlf=true` and only
+   `* text eol=lf`, blob `5e36b656…` ≠ disk `d8b04a95…`; adding the `-text` rule
+   makes them equal. **The rule is load-bearing, not decorative;**
+3. `tests/test_cost_artefacts.py::test_committed_campaign_json_bytes_survive_git`
+   asserts the attribute is still set, that `git status` is clean, and that
+   `git show HEAD:./<path>` equals the working tree.
+
+   The blob comparison alone was **not** the tripwire the first version claimed:
+   adversarial review showed that deleting the rule does not rewrite an existing
+   blob, so that assertion stays green until the next `git add` — by which time
+   the digest is already broken. The `check-attr` and `git status` assertions
+   are what actually fire the moment the rule goes. Whole-repository coverage
+   now comes from `harness.cost_artefacts` comparing the **HEAD blob's** sha256
+   to the pinned digest for all twelve artefacts, not four.
+
+Only the campaign JSONs are CRLF; the eight shard files are LF and unaffected.
+
+## Step 2 — what was committed, and why it is more than the ticket named
+
+The ticket named four files. Twelve went in.
+
+| | files | why |
+|---|---|---|
+| `out/campaign/campaign_*.json` | 4 | the ticket's scope; pinned by battery |
+| `out/shards/ledger.*.jsonl` | 4 | **the primary record** — the checkpoints are its rollup — and pinned by battery too |
+| `out/shards/probe_log.*.jsonl` | 4 | the HTTP layer a published `proxy/` verdict argues from; hashed nowhere before this |
+
+The case for the ledgers: they are the **primary** record (the checkpoints are
+their rollup), battery pins their sha256 as evidence, and their `run_id` set
+appears in no other tracked ledger. An earlier draft added a fourth argument —
+that they were the only surviving trace of the $2.01 the checkpoints dropped —
+and **that one was false and is retracted**: `figures/audit/reconcile_cost.csv`
+and `battery/artifacts/capability_spectrum.json` were both tracked before A14
+and both carry all eight orphan runs. See `RECONCILIATION.md`.
+
+Size was the one real objection and it was settled by measuring per object:
+**63,993,495 B of working-tree payload costs 1,009,964 B of packed git
+storage** (63.4×; `ledger.g50t.jsonl` is 38.3 MB raw and 607 KB on disk). These
+are repetitive 64×64 integer grids, which is why.
+
+Red lines checked before committing, not assumed:
+* the `ARC_API_KEY` value appears in **none** of the twelve files;
+* every `X-API-Key` occurrence in the probe logs is `<redacted>` — **14,314
+  occurrences, 14,314 redacted**, counted by the register generator rather than
+  typed (an earlier draft said 14,294, hand-transcribed and wrong by 20);
+* **no sealed-pile id appears anywhere** in the twelve.
+
+## Step 3 — the sweep
+
+12 plain-untracked files (63,993,495 B) and 206 gitignored (88,247,208 B), each
+with a ruling and a reason: `INVENTORY.md`. The one group left deliberately
+untracked is `schema_traces/**` — third-party data with no declared upstream
+licence, whose tracked `MANIFEST.json` already *is* the hash-only record
+(165/165 digests independently recomputed and matched).
+
+## Step 4 — the rule, made executable rather than written down
+
+`COST_ARTEFACTS.json` (generated by `build_register.py`, never hand-edited)
+states the disposition of 24 artefacts; `harness/cost_artefacts.py` adjudicates
+it; `verify.py` rung 3 runs it. Twelve `committed` entries must exist, be
+tracked, and hash correctly; twelve `hash-only` entries may be absent — that is
+what the disposition buys — but must match if present.
+
+`build_register.py --check` re-derives the register byte-for-byte, and was
+tested against a **simulated clean clone** (gitignored logs removed) to confirm
+hash-only digests carry forward rather than being recomputed or invented.
+
+## Beyond the ticket
+
+**`harness.campaign_status` is a gate rung again.** `verify.py` had explicitly
+demoted it — "it reads them from `out/campaign/`, which is **untracked** … on
+any clean checkout that is a guaranteed red". Committing the payload removed the
+reason, so rung 3 now runs it and checks 4 checkpoints, their game ids against
+the pile cut, and a $48 spend floor. It was the untracked payload, not the
+checker, that was the problem — and that generalises: **an artefact nobody can
+read on a fresh clone is not evidence yet.**
+
+## Verification
+
+| | |
+|---|---|
+| suite | **100 passed, 0 skipped** (was 80 passed, 1 skipped) |
+| gate | `python verify.py` → **green**, 3/3 rungs |
+| register | `--check` byte-identical, including on a simulated clean clone |
+| eol control | scratch repo: without the rule blob ≠ disk; with it blob = disk. Also tested against `core.autocrlf` true/input/false, `core.eol`, a global attributes file, and `git archive` tar/zip — the rule holds in all of them |
+| licence | `release/enumerate.py --dry-run` → red lines clear over 5781 tracked files; the 8 class-B additions are classified by content and excluded by default |
+| adversarial | two independent refutation passes; **six defects found and fixed** — see below |
+
+## What the adversarial passes broke, and what changed because of it
+
+Both passes were told to refute rather than confirm. They did, and the fixes are
+in this branch rather than in a list of caveats:
+
+1. **The tracking check read the index, not `HEAD`.** `git ls-files` reports
+   staged paths, so a file `git add`ed and never committed passed as stored —
+   and this repo commits by path, which is exactly how that state arises. It
+   would have called an artefact safe that no clone possessed. Now
+   `git ls-tree HEAD` + a sha256 of the **blob content**, which also extends the
+   eol guarantee from 4 files to all 12.
+2. **The eol tripwire did not fire** when the rule was deleted (above).
+3. **`check()` returned `verdict: "ok"` when git was unavailable**, while its
+   own message said it was refusing to. A caller adjudicating on rows would have
+   certified unverified artefacts. New `unverified` verdict.
+4. **The credential test was skipping in every worktree** — `.env` was resolved
+   as the territory's parent, but it lives at the main checkout root. Now via
+   `git rev-parse --git-common-dir`, plus a positive control that plants a fake
+   key across a chunk boundary and asserts the scanner finds it.
+5. **"14,294 `X-API-Key` occurrences" was hand-typed and wrong** (14,314) — in a
+   generator whose docstring promises facts are computed. Now counted.
+6. **The `$2.01` claim was false** (above), and the licence question had not
+   been asked at all (`INVENTORY.md` §B′).
+
+Two floors were also added that the review showed were missing: a count floor on
+the register (per-entry checks all pass vacuously on a one-entry register) and
+`MIN_CHECKPOINTS` now counting **distinct dev-pile game ids** rather than files,
+since `out/campaign/` is the harness's own output directory.
+
+## Gaps — stated, not fixed
+
+1. **No independent money register exists.** The ledgers, the checkpoints,
+   `capability_spectrum.json` and `reconcile_cost.csv` are one measurement
+   written four times; `proxy/var/spend_gate.jsonl` post-dates the spend by
+   6.5 h. $50.39 is internally exact and **externally unverified**.
+2. **The harness restart path drops spend** — $2.01 across four games, missing
+   from `cost_usd` *and* from the ceiling check. Recorded as `STATUS.md` GAP-4;
+   a code fix, not a rescue, so not done here.
+3. **`figures/SOURCES.sha256:24-27` holds stale `ABSENT` sentinels for exactly
+   the four ledgers this commit tracks.** This commit makes them present in
+   every checkout, so the next figure rebuild may silently change its inputs.
+   Other territory — reported to the monitor, not touched.
+4. **`release/MANIFEST.jsonl:148`** pins a stale digest/size for
+   `out/campaign_cells.jsonl` (append-only growth, not rewriting), so the
+   Phase 4 published-surface manifest no longer describes what it would publish.
+   Other territory — reported, not touched.
+5. **Repository visibility is unchecked.** 8 of the 12 committed files are
+   `release/LICENCE_POSTURE.md` class B: holding is permitted, publishing needs
+   written permission, and the release allow-list withholds them automatically.
+   If `origin` is a *public* remote, pushing is arguably publication — in which
+   case the line was crossed before A14 by `baseline-arms/ledger.jsonl` and the
+   eleven tracked `a7-*` shards. A human/ops question; no network call was made
+   to settle it. Raised to the monitor.
+6. **Six tracked `out/pilot_*.json` are CRLF on disk but LF in git** — the same
+   trap one layer out, and raw-byte hashers in `figures/` and `release/` would
+   emit spurious diffs in this working tree. Reported, not touched: fixing it
+   means re-materialising tracked files while other sessions are live here.

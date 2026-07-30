@@ -628,6 +628,12 @@ premise about the empty theoria column was stale. (iii) The untracked
 rows and USD 48.39 of campaign spend are still declared-and-absent — the rule now
 picks up *any* shard dropped in, including ones nobody wrote down.
 
+**P10's note on this section.** The three defects above are all *"an upstream
+artefact moved and the figure code did not know"*. P10 found the same shape one
+layer further in — inside the renderer, where the figure did not know its own
+layout — and the two wrong fixes it shipped first were both byte-identical
+across two builds. See §11.
+
 **And one found in P8's own work, twice, which is the part worth reading.** The
 coverage probe's first version was green and worthless: it took its disk-side
 inventory from `sources.discovered(...)`, the same registry the figure reads, so
@@ -649,3 +655,91 @@ can be captured through an argument as easily as through a function call**, and
 it walks was. The probe now states root, pattern and member filenames as
 literals, and the control narrows the rule. `figures/RUN_STATE.md` records the
 full review round and the fifteen other defects it found.
+
+---
+
+## 11. P10 changelog
+
+`P10-figures-into-paper`, worker `W-1253`, branch `agent/p10-figures-into-paper`.
+
+The work order asked for publication-spec artefacts named after the paper's
+figure numbers, a caption per figure naming its source files and run, a
+generated index, and body-text edits. The first three are here. The fourth is a
+`papers/` edit and `papers` is another session's territory, so it ships as
+`runs/20260728T134521Z-P10-figures-into-paper/HANDOVER-papers.md` — apply-ready
+and not applied. The item's own text asked for both (`territory: figures`, then
+"不改 papers/ 之外的东西"); `board.py` had already resolved it by only handing
+out an item whose territory is free.
+
+| # | change | why |
+|---|---|---|
+| 1 | `paper_map.py`: the paper-number ↔ plate join, with `RunRef` resolving run identity out of declared sources | §3.2's numbering and the paper's have never agreed; nothing joined them, so "see Figure 2" resolved to a different artefact from the one this pipeline builds |
+| 2 | numbers assigned by **order of first citation**, keeping Figures 1–3 on their existing subjects | any other assignment renumbers prose another session is editing. `RES-2` reached the same three assignments independently in `a636c0c` |
+| 3 | `theme.save` writes a second profile: `paper/{light,dark}/figureN_<slug>.{pdf,png,svg}`, 300 dpi, from the same in-memory figure | a copy step produces a second artefact that can drift; two writes of one object cannot. PDF because that is what a submission consumes, and `pdf.compression = 0` has been pinned since P-21 for a format nobody emitted |
+| 4 | `paper_index.py`: `INDEX.md`, `index.json`, `captions/figureN.md`, all derived | §10 above is a changelog of what hand-maintained lists do here. A caption listing its own inputs by hand is `ROLLUP_KEYS` with a friendlier face |
+| 5 | `pending` is derived from whether a declared source is absent, never typed | a completeness flag that is asserted is a completeness flag that will be wrong. Figure 6 is the live case: four untracked envelope shards |
+| 6 | captions split into a printed block and a provenance block | Figure 6 reads 19 tracked files. Naming all nineteen under the plate is not a caption; naming none is not provenance. The cap is stated in the caption itself, per §10's "no silent caps" |
+| 7 | **`theme._freeze_layout`** — solve the layout once, before any write, and pin it | see below; this is the substantial one |
+| 8 | **`theme._unfeed_wrapped_text`** — `wrap=True` text is excluded from the layout | see below |
+| 9 | gates 9–11; gates 3 and 6 extended over `paper/` | a new output format does not deserve an exemption from the determinism gate |
+| 10 | `*.pdf binary` in `.gitattributes` | PDF streams contain byte sequences that look like CRLF; an autocrlf checkout would corrupt them. The same failure `*.svg text eol=lf` prevents, in the other direction |
+
+### The two output profiles were already two different pictures
+
+`figure.constrained_layout.use` is on and the layout engine **re-solves on every
+`savefig`**. The solve depends on text extents, extents are measured in pixels,
+and pixels depend on dpi. `save()` wrote SVG first and PNG second, so the
+committed `out/<theme>/x.svg` was solved once at `figure.dpi = 100` and the
+committed `out/<theme>/x.png` was solved again at `savefig.dpi = 200`. **They
+have different geometry, and have had since P-21.** Both builds produce the
+difference identically, so gate 3 was green over it for the pipeline's whole
+life — the "deterministically wrong" class `README.md` warns about, found here
+by a gate written to ask a different question.
+
+`fig07_a0_vs_a0prime` was worse. Its layout never converged at all, and it did
+not oscillate — it **drifted**, both side margins moving inward by 0.0048 of the
+figure on every pass, constant amplitude and constant direction, still going at
+pass 25. Lag-2 and lag-3 movement came in at exactly 2× and 3× the per-pass
+step, which is what distinguishes a drift from a limit cycle. The cause is a
+feedback loop: a `wrap=True` text's extent is a *function of* the width available
+to it, and constrained layout sizes the axes from the extents of what they
+contain. So `fig07`'s committed SVG and PNG sat about 25 px apart at 200 dpi.
+
+The fix removes the loop at the arm that should never have been in it — wrapped
+text is placed by hand in space the figure already reserves (`theme.caveat` in
+the bottom corner; fig07's banner in a dedicated `axis("off")` panel), so the
+engine measuring it was double-counting. After that, five plates settle in 4–8
+passes and `fig07` reaches floating-point noise on the second.
+
+**Two wrong fixes preceded it, and the interesting thing is that gate 3 passed
+both.** Freezing after a single draw at `figure.dpi` visibly wrecked `fig03` —
+heatmap narrowed, the five arm headers collided into `bare_ccschema_repro`,
+every in-cell value clipped. Freezing after a single draw at `savefig.dpi` did
+the same damage in smaller measure. Both were perfectly reproducible. Only
+looking at the plate found them, which is what §6's closing line already said:
+*gates prove reproducibility, not correctness.*
+
+`LAYOUT_TOLERANCE` is a tolerance rather than `==` because constrained layout
+converges geometrically: only `fig03` reaches a bit-exact fixed point, and
+requiring one failed five figures out of six.
+
+**What moved in the committed tree**, stated exactly rather than as "sub-pixel":
+
+* **All 12 SVGs changed.** That *is* the fix — each was previously the
+  single-pass, 100 dpi solve, and each now carries the same converged layout as
+  its own PNG.
+* **`fig03` and `fig06` PNGs are byte-identical to the pre-P10 files**, in both
+  themes. That is the check that the layout being shipped is the layout that was
+  reviewed: those two already sat at the converged solution.
+* **`fig02`, `fig04`, `fig05` and `fig07` PNGs changed.** Three moved slightly —
+  `fig05`'s raster differs on 1.6 % of its pixels, confined to panels B–E, and
+  `fig04`'s is almost entirely a uniform one-pixel horizontal shift; no
+  annotation, legend or label changes place in either. `fig07` moved the most,
+  because it is the plate that was drifting. All four were compared panel by
+  panel against their pre-P10 renderings, in both themes, before being committed.
+
+The comparison also turned up three **pre-existing** cosmetic collisions, none of
+them touched here because none is P10's to fix: fig02 panel B's "marker: game"
+legend overlays the trend lines; fig05 panel E's reference rule at x = 1.000
+passes through its legend text; fig04 panel E's "3 supplied" label sits on a
+light hatch in the light theme only.

@@ -1,0 +1,570 @@
+{
+  "items": [
+    {
+      "item_id": "dq-f607216a98",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": {
+          "bound": 10,
+          "kind": "counting",
+          "limit": 9
+        },
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "A counting argument, not a search. The agent starts at (1,1) and the goal is (5,7); one command moves it at most one cell along one axis, so any winning sequence has length at least |5-1| + |7-1| = 10. The variant allows nine commands. Ten is more than nine, so no winning sequence fits, whatever the walls look like.",
+        "operators": [
+          {
+            "limit": 9,
+            "op": "step_limit"
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "step_limit"
+          ],
+          "spec_file": "variant_specs/drill-walk-budget-nine.json",
+          "spec_file_sha256": "d8ecd9e60a7486ad38c6c147ea470735018e91645940f511ba3474039bf092e9",
+          "spec_sha256": "sha256:f3f2eaecad6141001586be593d19cb2932444c610a73a57b05765e4af2df40e9",
+          "variant_id": "drill-walk-budget-nine"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-926b9e5736",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "justification": "One command more than walk-budget-nine, which is the whole content: the Manhattan bound of 10 is achieved, not merely approached, because column 1 and row 5 are both clear. The ten-command route is the witness. This is the tight side of the boundary, and it is here so that a budget argument cannot be waved at any budget -- a framework that answers unsolvable whenever it sees a step_limit fails this item.",
+        "operators": [
+          {
+            "limit": 10,
+            "op": "step_limit"
+          }
+        ],
+        "oracle_solvable": true,
+        "oracle_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "step_limit"
+          ],
+          "spec_file": "variant_specs/drill-walk-budget-ten.json",
+          "spec_file_sha256": "f97b6170ea1d94ea0e4cedcdbb2d73a14bf313038be94327c565458771f9bb85",
+          "spec_sha256": "sha256:34ff3dd8c42ad6e0859f5e99cae183e4432692a1fd5168e2c70dede3cd42b41f",
+          "variant_id": "drill-walk-budget-ten"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-feb147a057",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "justification": "Half of walk-cut-row-four's cut, and therefore not a cut. With (4,1) lethal the column-1 descent is closed, but the second crossing at (4,7) is untouched and the route through row 1 columns 5-7, column 7 down, and row 5 leftward still reaches the goal. An incomplete separation proves nothing, and this item is the specificity test for that: the reasoning shape is identical to the item above and the answer is opposite.",
+        "operators": [
+          {
+            "cells": [
+              [
+                4,
+                1
+              ]
+            ],
+            "op": "observation_loss",
+            "value": 6
+          }
+        ],
+        "oracle_solvable": true,
+        "oracle_witness": [
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "UP",
+          "UP",
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "observation_loss"
+          ],
+          "spec_file": "variant_specs/drill-walk-cut-half.json",
+          "spec_file_sha256": "10a5ccea1a9f0ef539f02ffccd1053c9bedc7f39b7bbcf22db292d3b29aa129b",
+          "spec_sha256": "sha256:54cc26af209b95d258bc47b97e5664d54b41bde5fd1391f08186b8f94a4302ed",
+          "variant_id": "drill-walk-cut-half"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": [
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "UP",
+          "UP",
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-613106da8e",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": {
+          "goal_value": 5,
+          "initial_value": 1,
+          "invariant": "agent_row",
+          "kind": "invariant"
+        },
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "t1-walk-maze has no mechanisms at all, so the agent's row changes only by the command it issues: UP decreases it by one, DOWN increases it by one, LEFT and RIGHT leave it alone. Forbidding DOWN removes the only command that can increase the row. The agent starts on row 1 and the goal is on row 5, so the row would have to increase by four and cannot increase at all. Unsolvable by construction, with no reference to the board's walls.",
+        "operators": [
+          {
+            "action": "DOWN",
+            "op": "forbid_action"
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "forbid_action"
+          ],
+          "spec_file": "variant_specs/drill-walk-forbid-down.json",
+          "spec_file_sha256": "2daa4a1c1888a9103176f7680ef08bb36f64bb58293232e3fe354505e1b2fdcd",
+          "spec_sha256": "sha256:66a9e350dc577bd848f2b7b80be42c6243f5d16353381fc4c544d80c369d41c2",
+          "variant_id": "drill-walk-forbid-down"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-caa1445372",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "justification": "Also non-injective, also loses a command, and does not bite: the route down column 1 and along row 5 never issues LEFT, so removing LEFT from the alphabet costs nothing. The pair with walk-remap-down-to-up is the point -- 'the variant destroyed an action' is not on its own a reason to answer unsolvable, and an arm that reasons from the operator's shape rather than the board gets exactly one of these two right.",
+        "operators": [
+          {
+            "from": "LEFT",
+            "op": "remap_action",
+            "to": "RIGHT"
+          }
+        ],
+        "oracle_solvable": true,
+        "oracle_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "LEFT",
+          "LEFT",
+          "LEFT",
+          "LEFT",
+          "LEFT",
+          "LEFT"
+        ],
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "remap_action"
+          ],
+          "spec_file": "variant_specs/drill-walk-remap-left-to-right.json",
+          "spec_file_sha256": "6cde4d83200e27524b281905e66a5ad550940a391c554c62a82787aef8d17184",
+          "spec_sha256": "sha256:0fb521b2f429bb0374f74899c03acacecbfc2ad6560116d881ae2a91a9160b17",
+          "variant_id": "drill-walk-remap-left-to-right"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-039711aa7e",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": {
+          "cells": [
+            [
+              1,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          "kind": "cut_set"
+        },
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "The start (1,1) and the goal (1,5) sit either side of column 3, and column 3 is open on rows 1, 2 and 3 only. (2,3) is walled in on both sides -- (2,2) and (2,4) are walls -- so its only neighbours are (1,3) and (3,3). Declaring a loss on those two therefore severs column 3 entirely, including the cell they surround. A second world is used here so the cut-set form is not demonstrated only on the one board it was written against, and this one carries a mechanism (consumable) while the maze carries none.",
+        "operators": [
+          {
+            "cells": [
+              [
+                1,
+                3
+              ],
+              [
+                3,
+                3
+              ]
+            ],
+            "op": "observation_loss",
+            "value": 6
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "observation_loss"
+          ],
+          "spec_file": "variant_specs/drill-bridge-cut-column-three.json",
+          "spec_file_sha256": "0b9a0dc8ea5470c866169f6018a5eed53952a41dd5496be33f4e50c43e0979b2",
+          "spec_sha256": "sha256:767a3da6c998cfd9176d7695a70b922312a00dc787aec3474d40cd0e63d63d68",
+          "variant_id": "drill-bridge-cut-column-three"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-fragile-bridge"
+      }
+    },
+    {
+      "item_id": "dq-d4860af4d2",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": {
+          "cells": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              7
+            ]
+          ],
+          "kind": "cut_set"
+        },
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "Row 4 of this board is '#.#####.#': every cell is wall except columns 1 and 7. The start is on row 1 and the goal on row 5, so every route crosses row 4, and it can only cross at (4,1) or (4,7). Declaring a loss on both cells cuts the board in two. This is a separation argument read off the layout -- no path is enumerated, and the two cells are exactly the frontier.",
+        "operators": [
+          {
+            "cells": [
+              [
+                4,
+                1
+              ],
+              [
+                4,
+                7
+              ]
+            ],
+            "op": "observation_loss",
+            "value": 6
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "observation_loss"
+          ],
+          "spec_file": "variant_specs/drill-walk-cut-row-four.json",
+          "spec_file_sha256": "12cddcc52012c0d942cc9bcaccd5715eecde599e05d01a6e13b84bdef2947fa0",
+          "spec_sha256": "sha256:c8ee80d52b6c720301e048566a467a0d6d7f30ad81afa18c3f7089f6bdf1d0ea",
+          "variant_id": "drill-walk-cut-row-four"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-bdf0ae469d",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "justification": "The mirror of walk-forbid-down, and the reason it is here: the same operator on the same board, one command over. The route DOWN DOWN DOWN DOWN RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT walks down column 1 and then along row 5, and issues no UP, so forbidding UP leaves it intact. Solvable, witnessed by construction. A framework that says unsolvable here is producing a false alarm.",
+        "operators": [
+          {
+            "action": "UP",
+            "op": "forbid_action"
+          }
+        ],
+        "oracle_solvable": true,
+        "oracle_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "forbid_action"
+          ],
+          "spec_file": "variant_specs/drill-walk-forbid-up.json",
+          "spec_file_sha256": "3fd26bedc755f1f4ab0e5c89d215e3ec9416f59c5388c1992656142802ef3206",
+          "spec_sha256": "sha256:2a5e59c586fd65e040493764a556594fc2602bc0bc85cdd5347013d99f39ae23",
+          "variant_id": "drill-walk-forbid-up"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-369a5c101b",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": null,
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "This variant is in the drill to be reported, not to be admired. worldgen keeps no score -- its recorded trace carries t, frame, action and win, and nothing else -- so the body the wrapper sees always has score None. The frozen win_tighten rewrites WIN to NOT_FINISHED whenever the score is absent or below the requirement, so on a scoreless game it rewrites every win, at every requirement, unconditionally. The variant is unsolvable, but not because anything about this board is hard: the operator has degenerated from a tightening into a total ban. No certificate is offered because the frozen grammar has no form for 'the win condition is unsatisfiable because the game reports no score'.",
+        "operators": [
+          {
+            "op": "win_tighten",
+            "require": {
+              "kind": "score_at_least",
+              "value": 1
+            }
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "win_tighten"
+          ],
+          "spec_file": "variant_specs/drill-walk-win-tighten-scoreless.json",
+          "spec_file_sha256": "018e852a1ec4ee97d00f36eb9cd4367ebd1ef8800964c692773b2a03d0418fdc",
+          "spec_sha256": "sha256:ed407cf62e02488fb968ecc834abacf27423385990ce1e6b4009f237cac2f6b6",
+          "variant_id": "drill-walk-win-tighten-scoreless"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-walk-maze"
+      }
+    },
+    {
+      "item_id": "dq-2b42f864d7",
+      "points": 2.0,
+      "rubric_id": "drill.worldgen.claim_and_certificate",
+      "tags": [
+        "verdict",
+        "worldgen-drill"
+      ],
+      "truth": {
+        "certificate": {
+          "goal_value": 5,
+          "initial_value": 1,
+          "invariant": "agent_row",
+          "kind": "invariant"
+        },
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "justification": "The same row invariant reached by a different operator. After the remap the four commands perform UP, UP, LEFT and RIGHT: the alphabet still has four commands, and the board is untouched, but no command performs DOWN any more. The row can never increase, and the goal is four rows below the start. This variant matters because it is the case where a remap is not a relabelling -- it is non-injective, and the action it collides onto is the one the route needed.",
+        "operators": [
+          {
+            "from": "DOWN",
+            "op": "remap_action",
+            "to": "UP"
+          }
+        ],
+        "oracle_solvable": false,
+        "oracle_witness": null,
+        "search_credible": true,
+        "spec": {
+          "operators": [
+            "remap_action"
+          ],
+          "spec_file": "variant_specs/drill-walk-remap-down-to-up.json",
+          "spec_file_sha256": "2ba6df8f304f026df03de2a153d76f5b36e52c3a9599bb55f8f3bf403f99fcd6",
+          "spec_sha256": "sha256:1269acd856b93450022c46924b3df8120fcfa20eb51f1efa936757ac6e368487",
+          "variant_id": "drill-walk-remap-down-to-up"
+        },
+        "weights": {
+          "justification": 0.5,
+          "verdict": 0.5
+        },
+        "witness": null,
+        "world_id": "t1-walk-maze"
+      }
+    }
+  ],
+  "notes": {
+    "classes": [
+      "small_unsolvable",
+      "solvable_hard"
+    ],
+    "prompt_id": "V6-exam-on-sealed-dryrun"
+  },
+  "paper_id": "drill-verdict-worldgen",
+  "question_type": "verdict",
+  "rubric_digest": "drill:520df88ad0ee48ae3faf050680e27955",
+  "schema": "exam/v0.1"
+}

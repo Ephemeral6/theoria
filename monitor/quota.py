@@ -200,9 +200,20 @@ def quota_line(log_name):
     path = os.path.join(LOGS, log_name)
     if not os.path.exists(path):
         return None
-    for line in open(path, encoding="utf-8", errors="ignore"):
-        if SIG_RE.search(line):
-            return line.strip()[:200]
+    # **和日志普扫用同一把尺子。** 这里原来用宽签名表 `SIG_RE`，理由是
+    # 「先确认进程已死才读日志，所以宽一点不会误伤」——那个理由今天失效了：
+    # `pid_alive(0)` 恒真的缺陷一修，大量此前被当成「还活着」的会话第一次
+    # 走到这条路上来，于是一份**讨论**限额的审计报告（正文里有 `quota`、
+    # `rate limit` 这些词）被读成了撞上限额，OPS-A 当场被判死。
+    # 一个补丁把下一个缺陷放了出来——这正是今晚普查的第二层结论。
+    for raw in open(path, encoding="utf-8", errors="ignore"):
+        line = raw.strip()
+        if not line or len(line) > 300:
+            continue
+        if any(mark in line for mark in PROSE_MARKS):
+            continue
+        if HARD_RE.search(line):
+            return line[:200]
     return None
 
 
@@ -258,8 +269,81 @@ def scan_logs_for_limit(window_s=3600, since_ts=0.0, skip=()):
             if any(mark in line for mark in PROSE_MARKS):
                 continue            # 在讨论限额，不是撞上限额
             if HARD_RE.search(line):
+                _LAST_SCANNED_LOG["path"] = path   # 归因用：是哪个账号撞的
                 return line[:200]
+    _LAST_SCANNED_LOG["path"] = None
     return None
+
+
+def account_of_log(log_name):
+    """这条日志属于哪个账号。读不出来就是 `None`——**不猜**。
+
+    `_runner.py` 在日志头写 `account=<id>`。没有这一位，一次限额就无法归因，
+    而归因错的代价是把好账号也关掉，等于自己砍掉一半产能。
+    """
+    if not log_name:
+        return None
+    path = log_name if os.path.isabs(log_name) else os.path.join(LOGS, log_name)
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            for _ in range(8):      # 头几行就够，别读整个日志
+                line = fh.readline()
+                if not line:
+                    break
+                m = re.search(r"account=(\S+)", line)
+                if m:
+                    acct = m.group(1)
+                    return None if acct.startswith("default") else acct
+    except OSError:
+        return None
+    return None
+
+
+def _rotate_on_limit(hits, fresh, reg):
+    """把这次限额归到某个账号头上；返回 `rotated` / `hold` / `no-pool`。
+
+    `rotated` 意味着**还有别的账号能跑**，调用方不该冻结舰队。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+    except Exception:
+        return "no-pool"
+    pool = _acct.load_config()
+    if not pool:
+        return "no-pool"
+
+    hint = (hits[0][1] if hits else fresh) or ""
+    # 用哪条日志归因：注册簿里那条死会话的日志优先，否则是普扫命中的那一条。
+    acct = None
+    for pid_str, _line in hits:
+        acct = account_of_log((reg.get(pid_str) or {}).get("log", ""))
+        if acct:
+            break
+    if acct is None and fresh:
+        acct = _last_scanned_account()
+    if acct is None:
+        # 归因不出来就**不动任何账号**，交回原来的全局逻辑。
+        # 关错一个账号比冻结整队更贵，而且更难发现。
+        return "no-pool"
+
+    st = {"detected_at": now_utc(), "reset_hint": hint}
+    due = reopen_at(st)
+    until = due.strftime("%Y-%m-%dT%H:%M:%SZ") if due else now_utc()
+    _acct.mark_limited(acct, until, hint)
+    others = [a for a in pool if a != acct and _acct.usable(a)]
+    return "rotated" if others else "hold"
+
+
+#: `scan_logs_for_limit` 命中的那份日志，供归因使用。模块级而非返回值，
+#: 是为了不改它已有的签名与两个调用点；写在这里是让这个耦合可见。
+_LAST_SCANNED_LOG = {"path": None}
+
+
+def _last_scanned_account():
+    return account_of_log(_LAST_SCANNED_LOG.get("path") or "")
 
 
 def check():
@@ -290,6 +374,16 @@ def check():
             entry["reaped"] = "quota-requeued"
             if pid_str not in st["requeue"]:
                 st["requeue"].append(pid_str)
+    # 归因到账号，然后**只关那一个账号的窗口**。
+    #
+    # 有账号池时，一次限额是**关于那个账号**的事实，不是关于舰队的。旧写法把
+    # 它读成整队冻结，于是 03:27–04:30 全员停机一小时，而另一个账号的窗口
+    # 从头到尾开着。只有当池里每个账号都关着，才轮到全局 hold。
+    rotated = _rotate_on_limit(hits, fresh, reg)
+    if rotated == "rotated":
+        save_state(st)          # requeue 已在上面填好，模式保持 normal
+        print("ROTATED — 该账号的窗口已关，舰队转到其余账号继续。")
+        return 0
     if hits or fresh:
         already = st.get("mode") == "hold"
         if not already:

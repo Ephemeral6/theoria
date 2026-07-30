@@ -1,0 +1,47 @@
+{
+  "base_commit": "443211ddfedbdfd284a16748e95102d344731fdb",
+  "branch": "agent/v20-figures-pipeline-red",
+  "digest_basis": "sha256 over the bytes on disk. figures/.gitattributes pins LF for every extension listed here -- run artefacts (*.json/*.log/*.txt/*.jsonl) and the attributes file itself were added in this item -- so these are the bytes a clone gets. The generator asserts no CRLF rather than trusting it.",
+  "files": [
+    {
+      "path": "figures/.gitattributes",
+      "sha256": "7ee6a44b3b2ac7e5611cc9f5cb5a5fbcef54456fab6f55eae51928dbbac2008b"
+    },
+    {
+      "path": "figures/README.md",
+      "sha256": "865ec9009956eb5b0ad72a063da87caa65a7e6dfddc532a4f6a15e6a395692e3"
+    },
+    {
+      "path": "figures/check_figure_citations.py",
+      "sha256": "053e21244bf97e7fc3b393ffbd8889e0d675ddf1d32886b671a99c70fafc703d"
+    },
+    {
+      "path": "figures/fig06_concept_timeline.py",
+      "sha256": "8837c51848293d8d47e5b8c1cee2857845dd55bf1d8d5e526ebed4b2fa86264e"
+    },
+    {
+      "path": "figures/runs/20260729T1045Z-V20-fixes/RUN_STATE.md",
+      "sha256": "1b4ffb70c953d1b3eaf8cd999db0bb14a9c203957a62672f3a70de1a1134a89e"
+    },
+    {
+      "path": "figures/runs/20260729T1045Z-V20-fixes/demo.log",
+      "sha256": "1e0d2622c88443a37c8e2d315b51ddf7386e61586f4cf2403c5100628675d429"
+    },
+    {
+      "path": "figures/runs/20260729T1045Z-V20-fixes/demo.py",
+      "sha256": "d3b4f9f8e1b6acb4bbe5561881367b8d68dd00e26a2eb4e0a3727d1753f093a4"
+    },
+    {
+      "path": "figures/runs/20260729T1045Z-V20-fixes/verify.log",
+      "sha256": "9803b6434a9eeeabe4f45715402e1b66f9576bf8d13ac4bb6a13b48c1820fa73"
+    },
+    {
+      "path": "figures/verify.sh",
+      "sha256": "1ca354e13849ddfb1d0d2dab2e9092146efffd3c3fb2196e1610b6424109a351"
+    }
+  ],
+  "prompt_id": "V20-figures-pipeline-red",
+  "utc": "2026-07-29T10:45:00Z",
+  "utc_correction": "The first version of this manifest, and this directory's original name, said 16:00:00Z. That was the local clock (+0800) written into a field that means UTC; the work actually ran about 10:45-11:00Z. Corrected rather than left, because a provenance record whose timestamp is five hours out is worse than no timestamp -- it looks authoritative. Recorded because the same error was made independently in this session's heartbeats on the same day.",
+  "what": "two fixes: fig06 EXPECTED_IDS derived from the declared source; a figure-citation gate that enumerates build_all.FIGURES instead of hard-coding three"
+}

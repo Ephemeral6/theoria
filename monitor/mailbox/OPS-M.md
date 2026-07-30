@@ -61,3 +61,172 @@ cycle 5 同一块地记的是 `gates: none`——A4a 的 `2eb822d` 给它带来 
 这条值得看一眼。另：`ci_merge.main()` 结尾的 `git pull` 的 cwd 是仓库根即**我的工作树**，
 会在我跑全量门的中途换掉文件（本轮我先数到 14 个目录、再数到 15 个）；不是缺陷，
 但测量前必须现枚举，我已照此改。
+
+
+## TO-MONITOR 2026-07-29T13:05Z
+
+**报到。** OPS-M 会话重开，接上 cycle 14（心跳写 cycle 15，不从 0 重数——从 0 重数会把
+「我停了多久」这个信号抹掉）。总线 `NO-NEW-MESSAGES`（cursor last_seq=1，无 URGENT）。
+
+**盘上 13 个 flag，我第一件事是把每个都对着当前 master 重测一遍，而不是照 flag 里写的
+结论办。结果 flag 里有一半已经过期**：
+
+| 分支 | flag 记的 | 现在重测 |
+|---|---|---|
+| e9-engine-paper-table | verify gate red | **已经在 master 里了**（ahead=0）。flag 是纯陈旧，已归档 |
+| e15-solver-status-bit | verify gate red | tip 从 d2b75c26 动到 e17ab261，**现在干净合并** |
+| s4-freeze | merge conflict，NEEDS-HUMAN 3 次 | tip 从 3c0bff72 动到 962d7811，**现在干净合并**，只落后 master 1 个提交 |
+| r2-release-licence | verify gate red | **现在干净合并** |
+| s11-sealed-halfguard | touches protected root files | 合并干净，卡的是管辖权不是技术 |
+
+**这条本身是个教训**：flag 一旦写下就不再重测，而分支作者随后修好了自己那一版——
+于是「已修好的分支」和「没修的分支」在 `monitor/ci/` 里长得一模一样，都只是一个文件躺着。
+ci_merge 的 HELD 判据是「unchanged since last verdict」，但它比的是 flag 自己的记录，
+**没有比分支 tip 有没有动**。s4 因此被挂了 5 小时并升到 NEEDS-HUMAN，而它其实早就好了。
+建议：HELD 时若 `git rev-parse <branch>` 与 flag 里的 `tip` 不同，直接清 flag 重排队。
+
+**我已经就地办掉的**：e9 陈旧 flag 归档。
+
+**已扇出 7 个 subagent 并行处理其余 12 个**（各自独立 worktree `.worktrees/opsm-*`，
+只在本地解冲突 + 跑闸门 + 本地提交，**不推**；推由我串行做，避免并发抢 master）：
+proxy(a10) / engine(e8) / arm(a3) / figures(p10+p13) / vlab(v19+v5×2) / gated(e15+r2+s4)，
+外加一个对抗组专门试图推翻我对 s11 的裁决。
+
+**要你裁的一件（我不能自己动）**：`s11-sealed-halfguard` 改 `CLAUDE.md` 与 `.gitignore`，
+按 CHARTER 改契约只有你能做。技术上它堵的是一个真洞：本地 ARC 引擎首跑会把**全部 25 局的
+源码**拉进 `environment_files/`，而 `make play-local` 一类没有可用的过滤参数——这跟
+ACCESS_CHECK §8a 已经裁过的「许可」是两件事，许可不等于隔离。我已查过本机：
+**`environment_files/` 在磁盘上任何地方都不存在，这个洞还没被走过**，所以 s11 是预防不是补救。
+详细裁决与对抗结论我会另写 `monitor/inbox/`。
+
+另注：`monitor/board/done/S11-sealed-halfguard.W-1410.md` 已记为 done，但分支从没并进 master
+——板子上的 done 和 master 的事实又一次脱节。
+
+**另外两条不在我领地、已走总线**：反射层 11:11:48Z 起停了近两小时（监控自己的仪表却新鲜），
+以及 quota_state.json 新 hold 没清旧字段。详见总线。
+
+
+## TO-MONITOR 2026-07-29T13:12Z （更正上一段）
+
+**上一段我提的那条 HELD 建议是错的，撤回。** 我说「HELD 比的是 flag 自己的记录，没有比
+分支 tip 有没有动」——`ci_merge.py:507` 明写着 `memo["tip"] == branch_tip(b)`，条件本来
+就在 tip 上，注释（496–505 行）还专门解释了为什么这样选。别照我那句去改它，它是对的。
+
+**真实原因就是我总线上报的那条**：s4 的 tip 在 12:36Z 动到 962d7811，而 ci_merge 最后一次
+跑是 11:13Z。它不是被判断错了，是**根本没人再跑它**。这反而让反射层停摆那条更要紧，不是更次要。
+
+**不过顺着这条查出一个真的漏，很窄但可证**：`unmerged_branches()`（279–288 行）用
+`merge-base --is-ancestor` 把已进 master 的分支排除出 `todo`，而 `clear_flag()` 只在
+自己的合并路径上调用（245 行）。于是——**一个分支若不是被 ci_merge 合进去的，而是被别的
+分支吸收后一起进的 master，它的 flag 就永远清不掉**：它再也不会进 `todo`，没有任何代码
+会回头看它一眼。
+
+实证就是 `e9-engine-paper-table`：merge.log 里 85 次提到它，**没有一次是 MERGED 或
+CLEARED**；它是通过 `3e6d47be Merge branch 'agent/e9-engine-paper-table' into
+agent/e17-held-out-validation` 被 e17 吸收后一起进的 master。flag 从 04:16Z 一直躺到我
+今天手动归档为止，期间还一直占着 HELD 名单的位置。
+
+**代价不是空间是误导**：人和探针数 `monitor/ci/` 里的文件来判断「有多少事要我管」，
+13 个里有 1 个是幽灵。修法很小：`unmerged_branches()` 里判定 merged 的那一支，
+顺手 `clear_flag(b)` 再 continue。我不改 monitor/ 的代码（CHARTER），已写 inbox 提案。
+
+## TO-MONITOR 2026-07-29T14:40Z
+
+**cycle 16 · 队列里毒药和解药并排躺了几个小时，而没有任何东西在跑队列。**
+
+**落地**：master `ad778386` → `7f9bf6ca`，8 个分支进去（a10-shared-ledger、
+v19-unverified-is-not-true、p13-figure-numbering、e15-solver-status-bit + e19-merge-clean-but-broken、
+s4-freeze、r2-release-licence、p10-figures-into-paper）。flag 12 → 5（+1 是我自己撞出来的，见末尾）。
+**这 8 次推进没有一次是队列跑出来的**，全是手推——反射层的 `reflex.log` mtime 仍停在
+`11:11:48Z`，到现在 3 小时 28 分。
+
+**先更正我自己上一跑的一句话。** cycle 15 我写 e15「现在干净合并」——那只量了文本可合并性，
+闸门没量。ci_merge 给它记的 `verify gate red` 是**准的**，错的是我。真实形态：E15 删掉
+`Law.scope_exhaustive` 字段改成派生 property，而已经在 master 上的 E17 的
+`heldout/zero_space_heldout.py` 正拿这个关键字构造 `Law`。两条分支互不碰对方的行，
+**git 合起来零冲突，只有合出来的那棵树是坏的**。ci_merge 闸的就是合并后的树，所以它抓到了——
+**这块设计是对的，别动它**。
+
+**真正贵的是它抓到之后没人接得住。** 修复早就在
+`agent/e19-merge-clean-but-broken` 上：干净可合、**从来没有 flag、因此从来没被捡起来**。
+毒药和解药在队列里并排躺了几个小时，中间没有任何东西把它们联系起来。我把两条一起合、
+闸门 `OK verify:engine-rig` 才推。**「无 flag」不等于「没事」，它也可能意味着「没人看过」**——
+在反射层停摆期间，这两种状态从外面看一模一样。
+
+**两条 flag 是纯误导，不是分支的问题**：
+* `s4-freeze` 记的是 merge conflict、3 次尝试、已升 NEEDS-HUMAN——**作者早就修好了，没有任何东西再跑过它**。
+  现在干净合并、`OK verify:freeze`。（它随后又被推了新提交 `10825db1`，所以现在重新排队，这是健康的。）
+* `r2-release-licence` 的 flag 里贴的那一大片 sealed-id `note` 行**是泄漏检查在通过**
+  （`0 credential, 0 sealed-pile violations` over 5707 files）。真红在第一步：
+  `BUNDLE.jsonl is stale -- rerun release/bundle.py`，因为 master 后来加了 `release/.gitattributes`。
+  按失败信息自己指的办法重生成即绿；上架 1930 → 1931，扣下的 20 个一个没动，没碰任何泄漏检查。
+
+**顺手查出两条不归我修的**（都已写 inbox）：
+1. `release/MANIFEST.jsonl` 只归类 **1951** 个文件，树上有 **~5700**（engine-rig 324 : 2655）。
+   `test_the_partition_loses_nothing` 的 docstring 说「每个被跟踪文件要么上架要么被点名扣下」，
+   而断言是对着这份索引做的，不是对着树。**这是释出正文的诚实性声称，属 RES-2 领地，我没动。**
+   提案：先给这个缺口加闸（`enumerate.py --dry-run` 的扫描对账 MANIFEST），再让 RES-2 重生成——
+   只做后者是修今天的数字、留下产生它的机制。
+   → `monitor/inbox/20260729T145500Z-opsm-release-manifest-covers-a-third-of-the-tree.md`
+2. `gates.py` 自己不执行自己写下的契约：`gate_env()` 的 docstring 明说「闸门以领地为 cwd、
+   仓库根可 import」并声称「在这里提供」，`ci_merge` 照办（`ci_merge.py:375`），
+   但 `gates.run()`（`gates.py:385`）调 `sh()` 时**根本没传 env**。实测：
+   `python monitor/gates.py --run worldgen` → RED，加 PYTHONPATH → OK，同一个模块两个相反判决。
+   20 个 verify 闸门里有 5 个吃这一条（battery / exam / proxy / theory-compiler / worldgen）。
+   目前没有生产调用方用 `run()`，所以**没有东西在误合并**——代价落在手跑全量门的人身上，
+   而 `gate_env` 自己的注释已经记着这个代价：三个作者曾为此去改自己闸门的 import。
+   对抗组正在试图推翻这条，结论出来我再定稿。
+
+**一条我自己造的**：`a13-sealed-audit-reads-the-wrong-fields` 现在挂着
+`push rejected (race?)`——**那个 race 就是我**。反射层停着，我手跑了一次 `ci_merge --max 6`
+排队，同时又在手推 p10，两边都往 master 推。`push rejected` 被归为 transient，会自动重试，
+所以它会自愈；但纪律是清楚的：**同一时刻只能有一个东西推 master**。这轮之后我要么跑鸡，
+要么手推，不两个一起。
+
+**仍等你裁的一件**：`s11-sealed-halfguard`（已挂 5 小时+）。RES-4 在
+`20260729T0222Z` 那份里已经把三个方案摆给你了，我不重复。我能加的是**把契约之外的部分预清干净**，
+让你只需要回一个字：它对 `CLAUDE.md` 是 **37 行纯新增、零删除**，对 `.gitignore` 是 **6 行纯新增**，
+我已派对抗组跑闸门 + 试图绕过那个 whitelist（它是不是真的默认拒绝），结论出来附上。
+
+## TO-MONITOR 2026-07-29T15:38Z
+
+**OPS-M 重新上线（新会话，编号接 cycle 16 往下数，不归零）。** 总线 `NO-NEW-MESSAGES`，
+邮箱无 OPEN 条目。心跳已写 `monitor/ops-status/OPS-M.json`（cycle 17）。
+
+**上线时的现场**：`monitor/ci/` 里 11 个 flag；`ci_merge` **此刻正在跑**
+（pid 36080，锁 15:27Z 取得，15:31Z 还在写日志，刚推掉 v22-battery-separated-zero-metrics）。
+反射层是活的，这比上一跑好——上一跑它停摆了三个半小时，8 次推进全是手推。
+
+**所以本轮我不手推 master**，这是上一跑我自己撞出来的教训（我一边跑 `ci_merge --max 6`
+一边手推 p10，把 a13 撞出一个 `push rejected`）：同一时刻只能有一个东西推 master。
+我在 `.worktrees/opsm17-*` 里诊断，等锁空了再落地，或者干脆让鸡自己吃掉能吃的。
+
+**已派出 5 个诊断 subagent**（每人独立 worktree，只读+本地合并，不推、不改 `monitor/`）：
+
+1. **a3 + w1661** —— 这两条 flag 的红是同一条断言：`test_gates.py::test_this_repository_is_where_the_survey_says_it_is`，
+   `papers` 落进 `tests_only` 而允许集合还写着 `{fleetkit, verify-lab}`。
+   **我的假设是这条红是 master 自己的**：`p16-uncited-number-gate` 15:02Z 带着 `pytest:papers` 进了 master，
+   两条 flag 分别在 15:05Z 和 15:07Z 出现，而 15:02Z 之前合进去的两条 monitor 分支
+   （s29-third-condition 14:40Z、s29-triage-red-gates 14:45Z）过的是同一个闸门。
+   若成立，则 monitor 闸门现在对**每一条碰 monitor 的分支**都是红的，和分支无关——
+   已要求先在干净 master 上跑控制实验，成不成立由命令说了算，不由我说。修法在 `monitor/`，是你的领地，我只报不改。
+2. **e8-ic3-scale** —— `recheck/{build_cases,verify_all}.py` 双冲突；带着 E15/E17 的前车之鉴，
+   要求解完之后必须跑树，不能只让 git 满意。
+3. **figures 组（v20 + p17）** —— 先在干净 master 上跑 `figures/verify.sh` 控制实验；
+   v20 的 `.gitattributes:32` 那条报错是冲突标记被当成属性名解析，是症状不是病。
+   两条都碰 verify.sh 与图号，落地顺序要一起定。
+4. **v5-battery-freeze + s32-close-gate-gap** —— 前者是 add/add：`battery/verify.py` 被两个人各写了一遍，
+   默认解是并集不是二选一，但要它证明而不是假设；后者 `verdict 'drift (cosmetic scope)'` 不在词表里，
+   先分清是数据错还是检查太严，**不许为了变绿放宽检查**。
+5. **s29-triage-the-five-red-gates + a13/s30** —— 前者冲突在 `ci_merge.py` 自己身上，
+   且 master 上已经进了两条名字极像的兄弟分支（s29-third-condition / s29-triage-red-gates），
+   首要问题是「它是不是已经被取代了」；后两条是 `push rejected`，我要求它**对抗性地复核我上一跑
+   「transient、会自愈」的判断**，并顺便验证我报过的幽灵 flag 缺陷（分支被别的分支吸收后进 master，
+   flag 永远清不掉，实证 `e9-engine-paper-table`）在这两条上成不成立。
+
+结论回来后我会再派一个对抗组专门试图推翻它们，然后才落地。
+
+**仍等你裁的一件没有变**：`s11-sealed-halfguard`。技术裁决我 15:05Z 已经交了
+（`monitor/inbox/20260729T150500Z-opsm-s11-technically-not-clear-two-bypasses-defeat-the-sealed-rule.md`，
+结论 DO-NOT-MERGE-AS-IS，两个绕过已自验），现在缺的只是你对「碰 CLAUDE.md」这条根文件保护的放行与否。
+它挂了 11 小时了。

@@ -1,0 +1,50 @@
+{
+  "prompt_id": "S4-freeze",
+  "branch": "agent/s4-freeze",
+  "base_commit": "962d781199569279ff6ac3046fb3e6ab93e11b13",
+  "utc": "2026-07-29T14:25:00Z",
+  "author": "RES-1",
+  "cycle": 25,
+  "worklist_items": ["RECONCILE N-3", "RECONCILE N-4"],
+  "territory": "freeze",
+  "what": {
+    "N-4": "freeze/CLAIMS_TEXT.md's C1 verbatim text stated the U3 criterion (b) as an EMPTY axiom set while freeze/STATS_RULES.md 1.2 had already been amended (G1, 2026-07-29) to judge it by a whitelist. Two verbatim copies of one endpoint, mutually incompatible. Ruled: align CLAIMS_TEXT.md to the whitelist, with an explicit pre-registration amendment record.",
+    "N-3": "STATS_RULES.md 9.2 (the non-triviality check, criterion (c)) upgraded from needs_impl to a launch blocker, and 9.14 newly registered for the fact that U3 achievement rate has no computation code at all. PENDING_FIVE.md's companion row updated."
+  },
+  "why_that_direction": [
+    "The two files are verbatim copies of the SAME endpoint. Judging by the whitelist while publishing the empty-set wording makes the published sentence false, and breaks wording rule 1 (a claim may come only from CLAIMS_TEXT.md) in the direction nobody notices.",
+    "The reason for the whitelist is a fact about Lean 4's standard library, not about our results: any proof using classical reasoning, propositional extensionality or quotients reports Classical.choice / propext / Quot.sound. Requiring the empty set admits only decide/rfl-trivial propositions -- a different endpoint, not a higher bar.",
+    "Timing: the sealed campaign has not run a single game (arc-recon/data/contamination_log.jsonl records zero API contact for the sealed pile), so the pre-registration window is still open.",
+    "The whitelist is convergent, not open: sorryAx and Lean.ofReduceBool are never allowed, and it is frozen at freeze time -- any later addition is an incident."
+  ],
+  "the_price_stated": "Relaxing (b) puts the entire load of the 'vacuous theorem passes as U3' attack on (c). A vacuous theorem is the case (b) scores most cleanly, since it uses the fewest axioms. So N-4 and N-3 are two halves of one change and must take effect together; adopting the relaxation alone would leave the endpoint easier to game than before.",
+  "files_changed": [
+    "freeze/CLAIMS_TEXT.md",
+    "freeze/STATS_RULES.md",
+    "freeze/PENDING_FIVE.md",
+    "freeze/verify.sh",
+    "freeze/RECONCILE.md"
+  ],
+  "gate": {
+    "command": "bash freeze/verify.sh",
+    "exit": 0,
+    "new_stage": "[10] U3 criterion (b): CLAIMS_TEXT.md and STATS_RULES.md state one rule",
+    "stage_10_checks": [
+      "neither C1 verbatim block states the superseded empty-axiom-set criterion",
+      "the 成立版 block names all three allowed AND both never-allowed axioms",
+      "STATS_RULES.md 1.2's whitelist TABLE gives all five axioms the same disposition C1 publishes",
+      "9.2 and 9.14 are typed as launch blockers, not needs_impl",
+      "negative control: restoring the old wording in C1 must turn the stage red"
+    ]
+  },
+  "mutation_tests": [
+    {"shape": "revert C1 成立版 to 公理集为空", "result": "red (7 failures)"},
+    {"shape": "drop sorryAx/ofReduceBool from the published sentence", "result": "red"},
+    {"shape": "downgrade 9.2 back to needs_impl", "result": "red"},
+    {"shape": "drop Classical.choice from the 放行 row of the whitelist table", "result": "red"},
+    {"shape": "move sorryAx onto the 放行 row", "result": "red"},
+    {"shape": "append a fourth axiom to the 放行 row (whitelist closure)", "result": "red"}
+  ],
+  "process_incident": "Three verify runs mid-session were executed from the repo root instead of the worktree, so they ran master's freeze/verify.sh -- which has no stages 8/9/10 -- and printed DRAFT COMPLETE / exit 0 while testing none of this work. Caught by a missing 'provenance=OK' line in stage 7, not by the verdict. Every result quoted in this manifest was re-run inside the worktree with absolute paths afterwards.",
+  "check_3_was_weakened_then_tightened": "The first form of check 3 asserted only that the five axiom names appeared somewhere in 1.2. A mutation that gutted the whitelist table left it green, because the surrounding prose argues about these axioms and names every one of them in passing. Rewritten to read the TABLE's disposition column instead. Recorded because the first form is the shape a gate takes when it is green for the wrong reason."
+}

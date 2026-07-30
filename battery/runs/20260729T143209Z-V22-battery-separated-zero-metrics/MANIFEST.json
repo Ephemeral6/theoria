@@ -1,0 +1,52 @@
+{
+  "prompt_id": "V22-battery-separated-zero-metrics",
+  "branch": "agent/v22-battery-separated-zero-metrics",
+  "base_commit": "b60a15373b1ad1945030791af459f30acfaf7749",
+  "utc": "2026-07-29T14:32:09Z",
+  "worker": "W-1671",
+  "cell": "V3",
+  "territory": "battery",
+  "kind": "analysis-only",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "battery_rerun": false,
+  "reads": [
+    "battery/artifacts/discrimination_arms.json",
+    "battery/artifacts/discrimination.json",
+    "battery/artifacts/capability_spectrum.json",
+    "battery/audit/discriminate.py",
+    "battery/audit/stats.py",
+    "battery/metrics/",
+    "battery/STATUS.md",
+    "battery/METRICS.md"
+  ],
+  "baseline_tests": "python -m pytest battery -q -> 319 passed (pre-change)",
+  "files": [
+    {
+      "path": "battery/METRICS.md",
+      "sha256": "c6861db536020501cf7319a399050a5257568cffbba2696504d53e4f0adc652b"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "fbf57353d03f3b31618400e5359d655525fba3fc44fd7bd1d803a15d16bd68a2"
+    },
+    {
+      "path": "battery/docs.py",
+      "sha256": "d5a1ab7643eaa577aaf352043986aab52acefc762937bfdb988f50ece9588da2"
+    },
+    {
+      "path": "battery/verify.py",
+      "sha256": "fff7bdb04c235bd1ee308d2d3d4c67c31a2df0dd371a835202f2eb2ff445950b"
+    },
+    {
+      "path": "battery/tests/test_verify_separation_claim.py",
+      "sha256": "790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5"
+    }
+  ],
+  "tests": {
+    "pytest_battery": "335 passed",
+    "verify_py": "exit 0 (four rungs)",
+    "negative_controls": "16 in tests/test_verify_separation_claim.py"
+  },
+  "adversarial_review": "11 findings, 9 adopted; 3 changed the deliverable materially (see RUN_STATE.md)"
+}

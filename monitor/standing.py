@@ -50,8 +50,25 @@ STATE = os.path.join(HERE, "standing_state.json")
 #: 编号 → 赛道。与 board.LANE_OWNER 互为反表；两份定义会漂移，所以从那里读。
 import board as board_mod                                          # noqa: E402
 
-#: 同时最多几个常驻会话。四个全开会和无头工人抢同一个额度窗口。
-MAX_STANDING = 3
+#: 除四个赛道研究员之外，还要自动续命的常驻岗位。
+#
+#: 2026-07-29 裁决：八个 App 会话退休，其中两个岗位有独立价值、必须活下来，
+#: 另两个不必——`OPS-B`（浏览器专员）那条路已废；`OPS-R`（harness 回顾员）
+#: 的活由监控每轮的对抗性普查覆盖，不需要一个常驻会话空转。
+#:
+#: **`OPS-A` 是审计我自己的那一个，所以它最不能少。** 由被审计者来重启审计员
+#: 本身就别扭，但比没有审计员好；这一条写在这里，是为了让这个别扭是可见的。
+STANDING_OPS = {"OPS-A": "audit", "OPS-M": "merge"}
+
+#: 同时最多几个常驻会话。全开会和无头工人抢同一个额度窗口。
+#
+#: 用户 2026-07-29 定的数：四个赛道研究员 + OPS-M。OPS-A 仍在自动续命名单里，
+#: 但**排在最后拿名额**——六个全开正是今天 05:39 撞上 session limit 的规模，
+#: 四个工人在四秒内一起死。
+MAX_STANDING = 5
+
+#: 抢名额的顺序：研究员在前，合并裁判次之，审计员最后。
+STANDING_ORDER = ["RES-1", "RES-2", "RES-3", "RES-4", "OPS-M", "OPS-A"]
 
 #: 起会话的内存门槛。
 #
@@ -129,6 +146,25 @@ def running_tasks():
 
 
 def quota_held():
+    """有没有**真的**没车可发。
+
+    有账号池之后，全局 `quota_state.mode == "hold"` 不再等于「不能发车」——
+    它只说明**某一个**账号撞了限额。2026-07-29 正式启动时当场发生：账号 a 窗口
+    开着、板上有活、内存 9.3 GB，而例行程序对六个岗位一律报 `quota hold`，
+    因为它问的是那个全局旗标。**轮换器修好了，可发车的判据没跟上，
+    于是新机制被旧判据挡在门外。**
+
+    所以先问池子：只要还有一个账号可用，就不是 hold。池子不存在或读不出来时，
+    才回落到全局旗标——那是没有池子时唯一的判据。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        pool = _acct.load_config()
+        if pool:
+            return not any(_acct.usable(a) for a in pool)
+    except Exception:
+        pass
     path = os.path.join(HERE, "quota_state.json")
     try:
         return json.load(open(path, encoding="utf-8")).get("mode") == "hold"
@@ -248,17 +284,53 @@ def occupied(agent, state):
     return None
 
 
+def ops_work_for(agent):
+    """监督岗有没有事可做：**自它上次心跳以来，舰队动过没有。**
+
+    它们不领板上的活，所以拿 `candidates()` 当判据是错的——那会让一个审计员
+    在什么都没发生的夜里每十五分钟醒一次、读一圈仓库、烧掉一个窗口。
+    判据用板日志的推进：没有新的 CLAIM/DONE，就没有新的东西可审、可合。"""
+    unread = unread_count(agent)
+    path = os.path.join(HERE, "ops-status", "%s.json" % agent)
+    since = os.path.getmtime(path) if os.path.exists(path) else 0
+    moved = (os.path.exists(BOARD_LOG)
+             and os.path.getmtime(BOARD_LOG) > since)
+    return {"unread": unread, "held": 0, "claimable": 1 if moved else 0,
+            "any": bool(unread or moved)}
+
+
+#: `claimable` 的第三个值：**板查过了，但没查出来**。
+#: 不是 0（板是空的），也不是正数（板上有活）。
+CLAIMABLE_UNKNOWN = -1
+
+
 def work_for(agent, lane):
-    """这个编号现在有没有活。三个来源，任一非空即算有。"""
+    """这个编号现在有没有活。三个来源，任一非空即算有。
+
+    `claimable` 有三个值，不是两个：正数是「板上有这么多活」，`0` 是
+    「查过了，板上没活」，`CLAIMABLE_UNKNOWN`(-1) 是「查都没查成」。
+    在 2026-07-29 的普查之前这里只有两个值——板查询崩溃被 `except Exception`
+    写成 `0`，于是渲染出来是「无活可做」。那**比真空板更安静**：真空板至少会
+    发 `SUPPLY-LOW:0`，而那条告警自己也裹在同一个 `except: pass` 里。
+    实测两者当时的返回值完全相等（`work_for` 的字典逐字节相同），
+    见 `runs/20260729T2035Z-S28/EVIDENCE-3-standing-reflex.md`。
+
+    **-1 不当作「有活」也不当作「没活」**：`any` 只在真的量到活时为真，
+    而 `sweep` 为 -1 留了单独一条 skip 理由。这是刻意的——
+    把「测不到」算成「有活」会让一个板坏掉的夜里每一跳都起一个花钱的会话，
+    而那个会话读的是同一块坏板；算成「没活」就是这个 bug 本身。
+    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。"""
     unread = unread_count(agent)
     held = sum(1 for f in os.listdir(board_mod.CLAIMED)
                if f.endswith(".%s.md" % agent))
     try:
         claimable = len(board_mod.candidates(lane))
-    except Exception:
-        claimable = 0
+    except Exception as exc:                    # noqa: BLE001 -- reported below
+        claimable = CLAIMABLE_UNKNOWN
+        log("BOARD-QUERY-FAILED lane=%s agent=%s %s: %s"
+            % (lane, agent, type(exc).__name__, exc))
     return {"unread": unread, "held": held, "claimable": claimable,
-            "any": bool(unread or held or claimable)}
+            "any": bool(unread or held or claimable > 0)}
 
 
 def sweep(dry=False, only=None):
@@ -267,13 +339,14 @@ def sweep(dry=False, only=None):
     held = quota_held()
     gb = free_gb()
     started = []
-    n_standing = sum(1 for a in board_mod.LANE_OWNER.values() if a in live)
+    lane_of = {a: l for l, a in board_mod.LANE_OWNER.items()}
+    roster = [(lane_of.get(a), a) for a in STANDING_ORDER]
+    n_standing = sum(1 for _l, a in roster if a in live)
 
-    for lane, agent in sorted(board_mod.LANE_OWNER.items(),
-                              key=lambda kv: kv[1]):
+    for lane, agent in roster:
         if only and agent != only:
             continue
-        w = work_for(agent, lane)
+        w = ops_work_for(agent) if agent in STANDING_OPS else work_for(agent, lane)
         age = board_mod.heartbeat_age(agent)
         busy = occupied(agent, state)     # 只调用一次：它会写状态
         why = None
@@ -288,6 +361,10 @@ def sweep(dry=False, only=None):
                    % (gb, HEADROOM_GB, PER_SESSION_GB))
         elif n_standing >= MAX_STANDING:
             why = "standing cap %d reached" % MAX_STANDING
+        elif w["claimable"] == CLAIMABLE_UNKNOWN:
+            # 第三个值必须走第三条路。旧代码在这里印「no work」——
+            # 一句关于板的断言，而板恰恰是刚才没读成的那个东西。
+            why = "BOARD-QUERY-FAILED: claimable unknown, not claiming it is zero"
         elif not w["any"]:
             why = "no work (unread=0 held=0 claimable=0)"
         else:
@@ -309,6 +386,11 @@ def sweep(dry=False, only=None):
             continue
 
         import dispatch
+        # S28：`via_task` 现在返回状态字符串而不是布尔——"running" /
+        # "died-on-arrival(...)" / "declined" / "state-unknown"。
+        # **注意 `if ok:` 对任何非空字符串都为真**，所以这里必须显式比较，
+        # 否则「起来了然后立刻死了」会被记成一次成功启动，
+        # 也就是这次要修的那个假信号原封不动地换了个位置。
         ok = dispatch.via_task(agent, os.path.join("ops", "%s.md" % agent))
         state.setdefault(agent, {})["last_launch_epoch"] = time.time()
         state[agent]["last_launch_utc"] = time.strftime(
@@ -318,8 +400,27 @@ def sweep(dry=False, only=None):
         save_state(state)
         log("START %s (lane=%s) ok=%s [unread=%d held=%d claimable=%d]"
             % (agent, lane, ok, w["unread"], w["held"], w["claimable"]))
-        if ok:
+        # ADV-2/D13：**上一版把三件事挂在同一个谓词上，这是一次真的回归，
+        # 而且是本次修复自己引入的。** `n_standing`（上限记账）和 45 秒错峰
+        # 一起被移进了 `if ok == "running":`，于是任何一个**读状态失败**
+        # ——`state-unknown`、一次 `/Query` 抖动导致的 `died-on-arrival(gone)`、
+        # 或者 8 秒的 `LAUNCH_SETTLE_S` 内还没翻到 Running——都会把两道安全阀
+        # 同时摘掉。实测（六人名册，MAX_STANDING=5）：
+        #
+        #   via_task -> running          launches=5 staggers=5 cap-refusals=1
+        #   via_task -> state-unknown    launches=6 staggers=0 cap-refusals=0
+        #
+        # 六个一起无错峰，正是 standing.py:65-68 记下的 05:39 撞 session limit
+        # 的那个规模。而此时 `schtasks /Run` **已经把会话起起来了**——摘掉阀门
+        # 的理由是「我不确定它活着」，后果是「再多起一个」。
+        #
+        # 两个谓词，两件事，不许再合并：
+        #   * 调度器收下了（`!= "declined"`）→ 会话已经生出来了 → 记账 + 错峰；
+        #   * 状态确实是 running → 研究员真的起来了 → 才算一次成功启动。
+        # 旧的布尔 `ok` 恰好是前者，本次修复把它换成了后者，而正确做法是两者都留。
+        if ok == "running":
             started.append(agent)
+        if ok != "declined":
             n_standing += 1
             time.sleep(45)       # 错峰：同时起会互相踩额度与内存
 

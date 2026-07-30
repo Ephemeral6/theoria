@@ -195,7 +195,10 @@ rather than about the run.
 **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
 identifies 116 470 cache-creation tokens written at the one-hour multiplier and
 priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
-the $0.52 gap**. Correcting it takes the disagreement from 8.3 % to **1.35 %**, and
+the $0.52 gap**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cache_ttl_diagnosis` against `cost.delta_usd`). Correcting it takes the
+disagreement from 8.3 % to **1.35 %**, and
 the residual has no identified cause. So this is not an unexplained discrepancy
 between two accountings; it is a priced, located defect in one of them with a small
 remainder. **Every dollar figure in this paper is the provider's number**, which is
