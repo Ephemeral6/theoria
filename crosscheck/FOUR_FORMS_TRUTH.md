@@ -41,15 +41,44 @@ Its `push-up`, from `cold-start-a0/theory/generated/domain.pddl` — generated f
     :effect (and (not (at ?from)) (at ?to)))
 ```
 
-So a bare headline of "the four-forms claim is false" would be **wrong**, and would
-have an author retract a claim that is defensible for the arms the paper reports
-planning results on. The defensible finding is narrower and still serious:
+**But B is not a general PDDL backend that happens to live elsewhere.** Its entire
+state space is one cell plus one boolean (`(at ?c)`, `(switched)`); it requires an
+object literally named `Cart`, a `Door`, a `Button`/`Switch` and a landmark
+`portal_exit`; it accepts exactly five event kinds; and it needs a **played trace**,
+not the manual alone. It cannot represent a second moving object — the repository
+already records the consequence, D-A6-001: *"the planner returns UNSAT for a manual
+that is correct, silently and with confidence."* Every world after A0 needed a local
+patch to use it, the last of which is whole-domain text surgery.
 
-> The theory-compiler track's PDDL backend — the one whose output is shipped in the
-> handover packages and written by the live arm — produces nothing usable, 0 of 303.
-> A second, arm-local backend produces working PDDL for the A-arm worlds. The paper
-> presents "four co-derived forms" as one property of one compile path, and it is
-> not.
+**Every planning number in the paper is B's**, not A's — A0's 12-step SAT plan and
+Button-less UNSAT (`cold-start-a0/artifacts/fd_real.json`, whose `c5-1` cell naming
+and three-parameter `press-left` are uniquely B's), A2's results, A3/A6's transfer
+plans. So **no empirical planning claim in the paper is falsified by A being
+broken.** What A being broken falsifies is the *framework* claim about the fourth
+form. Keep those two apart.
+
+A bare headline of "the four-forms claim is false" would therefore be **wrong**, and
+would have an author retract a claim that is defensible for the arms the paper
+reports planning results on. The defensible finding is narrower and still serious:
+
+> The framework's **general** PDDL backend produces nothing usable — 0 of 303
+> actions well-formed and non-empty — and it is the backend on **both documented
+> compile paths from the two books**, so the live arm's handbook and both handover
+> packages carry no working planning form. A second, **hand-fitted** backend
+> produces everything the paper reports, but its state is one cell and one boolean,
+> it hard-codes the object names, it needs a played trace rather than the manual
+> alone, and it returns a confident UNSAT for a correct manual containing a second
+> moving object. **Neither is "the manual compiles to PDDL" in general form**, and
+> no document in either track records that these are two different programs.
+
+**The sharpest single fact.**
+`theory-compiler/handover_packages/a0-cart/manual/MANUAL.dsl` is **byte-identical**
+to `cold-start-a0/theory/theory.dsl` (verified: one sha256 across both). The
+repository simultaneously ships that manual with a working, real-Fast-Downward-solved
+PDDL form under `cold-start-a0/theory/generated/domain.pddl`, **and** publishes on
+that package's own front page that its planning form could not be generated
+(`handover_packages/a0-cart/README.md:33-34`). Both statements are true; they are
+about different programs; nothing in the package says so.
 
 Everything in §1–§5 below is scoped to backend A unless it says otherwise.
 Mapping of which artefacts and which paper claims depend on which backend:
