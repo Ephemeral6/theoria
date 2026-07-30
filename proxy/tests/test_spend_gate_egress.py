@@ -126,27 +126,161 @@ def test_a_usage_value_that_int_rejects_does_not_erase_the_call():
 
 # -- leaked holds: fail-closed is not an excuse for an unusable pool --------
 
+def _pool(tmp_path, name="pool.jsonl", **over):
+    from proxy.spend_gate import SpendGate, SpendPolicy
+    spec = {"v": "1.0", "pool": "p", "usd_ceiling": 10.0, "action_ceiling": 100,
+            "ledger": str(tmp_path / name), "default_ttl_seconds": 3600,
+            "default_run_caps": {"usd": 5.0, "actions": 50}}
+    spec.update(over)
+    return SpendGate(SpendPolicy(spec, source=None))
+
+
 def test_a_crashed_run_does_not_strand_the_pools_headroom(tmp_path,
                                                           monkeypatch):
     """43 crashed runs took the shared pool offline for the full TTL with
     nothing actually spent. Fail-closed, but the recovery was to wait an hour --
-    which is not a recovery anyone accepts twice."""
+    which is not a recovery anyone accepts twice.
+
+    S29 rewrote this test because it was vacuous twice over, and both vacuities
+    pointed the same way -- green.
+
+    (1) `_run_game` was monkeypatched to raise *immediately*, so no reservation
+        was ever taken. `held_usd == 0.0` was therefore true before the cleanup
+        code existed, and stayed true no matter what that code did. A test for
+        "the crash cleanup gives the headroom back" that never puts any
+        headroom out.
+    (2) It passed `run_id="r-crash"`, which no ordinary caller passes -- the id
+        used to be minted inside `_run_game`. So the one input that decided
+        whether the ownership filter ran at all was supplied only by the test.
+
+    The fake now does what the real `_run_game` does before it dies: reserve,
+    with the same `holder` shape, using the run id it was handed.
+    """
     from proxy import runner
-    from proxy.spend_gate import SpendGate, SpendPolicy
 
-    gate = SpendGate(SpendPolicy({
-        "v": "1.0", "pool": "p", "usd_ceiling": 10.0, "action_ceiling": 100,
-        "ledger": str(tmp_path / "pool.jsonl"), "default_ttl_seconds": 3600,
-        "default_run_caps": {"usd": 5.0, "actions": 50}}, source=None))
+    gate = _pool(tmp_path)
+    taken = {}
 
-    def explode(*a, **k):
+    def reserve_then_die(game_id, **k):
+        # `k.get(...) or`, not `k[...]`: before the fix nothing put a run id in
+        # kwargs, and a KeyError here would fail this test for the wrong
+        # reason -- it would never reach the claim it is supposed to be about.
+        res = gate.reserve("c-crash", 5.0, 50,
+                           holder={"run_id": k.get("run_id") or "r-minted-low",
+                                   "arm": "mock_arm", "game_id": game_id})
+        taken["id"] = res.reservation_id
         raise RuntimeError("the arm died mid-run")
-    monkeypatch.setattr(runner, "_run_game", explode)
+    monkeypatch.setattr(runner, "_run_game", reserve_then_die)
 
+    # No `run_id=` here on purpose: this is the shape a real caller uses, and
+    # it is the shape the old filter could not see.
     with pytest.raises(RuntimeError):
-        runner.run_game("ar25-0c556536", run_id="r-crash", spend_gate=gate)
+        runner.run_game("ar25-0c556536", spend_gate=gate)
+
+    assert taken["id"], "the fake must actually claim headroom, or this is (1)"
     assert gate.totals().held_usd == 0.0
     assert gate.totals().free_usd == 10.0
+
+
+def test_crash_cleanup_releases_only_the_crashing_runs_own_claim(tmp_path,
+                                                                 monkeypatch):
+    """The negative sample for S29's third defect: two sessions, one crash.
+
+    `run_game`'s cleanup compares the live set against a snapshot taken before
+    the run, and releases everything new. The ownership filter that was meant
+    to narrow that to *this* run's claim read
+
+        holder.run_id != kwargs.get("run_id") and kwargs.get("run_id") is not None
+
+    with the id minted one level down, so the second conjunct was always False
+    and the `continue` never fired. A crash therefore released every claim that
+    appeared in the shared pool while it was alive. `release` validated
+    nothing, so the other session's headroom went back to the pool and the
+    ledger recorded `run ended without releasing its claim` against it -- a line
+    that reads exactly like the thing the cleanup was written to do.
+
+    The other session's claim is taken *after* the snapshot, which is what makes
+    it indistinguishable from the crashing run's own by timing alone.
+    """
+    from proxy import runner
+
+    gate = _pool(tmp_path)
+    other = {}
+
+    def other_session_claims_then_we_die(game_id, **k):
+        # A different session, mid-run, on the same shared pool.
+        other["res"] = gate.reserve("c-other", 3.0, 10,
+                                    holder={"run_id": "r-other-session",
+                                            "arm": "mock_arm",
+                                            "game_id": game_id})
+        # See the note in the test above on `k.get(...) or`: before the fix the
+        # id was minted a level down and never reached kwargs, which is the
+        # defect itself -- so the fake stands in for that lower level.
+        gate.reserve("c-mine", 2.0, 10,
+                     holder={"run_id": k.get("run_id") or "r-minted-low",
+                             "arm": "mock_arm", "game_id": game_id})
+        raise RuntimeError("the arm died mid-run")
+    monkeypatch.setattr(runner, "_run_game", other_session_claims_then_we_die)
+
+    with pytest.raises(RuntimeError):
+        runner.run_game("ar25-0c556536", spend_gate=gate)
+
+    live = {r["reservation_id"]: r for r in gate.totals().live}
+    assert other["res"].reservation_id in live, (
+        "the crashing run released a claim it did not hold")
+    # Its own is gone, so this is not passing by doing nothing at all.
+    assert len(live) == 1
+    assert gate.totals().held_usd == 3.0
+
+
+def test_release_refuses_a_claim_the_caller_does_not_hold(tmp_path):
+    """`release` used to append a record for any id at all, without looking.
+
+    Two consequences, and the second is the one that bites: an id that matches
+    no claim was a silent no-op that still wrote a line reading like a
+    successful release, and an id belonging to someone else was honoured.
+    """
+    from proxy.spend_gate import NoReservation
+
+    gate = _pool(tmp_path)
+    res = gate.reserve("c", 1.0, 5, holder={"run_id": "r-owner"})
+
+    class _H:
+        def __init__(self, rid, campaign):
+            self.reservation_id, self.campaign = rid, campaign
+
+    with pytest.raises(NoReservation):
+        gate.release(_H("res-never-existed", "c"), reason="typo")
+    with pytest.raises(NoReservation):
+        gate.release(_H(res.reservation_id, "c"),
+                     expect_holder={"run_id": "r-someone-else"})
+    # The claim is untouched by either refusal.
+    assert gate.totals().held_usd == 1.0
+    gate.release(_H(res.reservation_id, "c"),
+                 expect_holder={"run_id": "r-owner"})
+    assert gate.totals().held_usd == 0.0
+
+
+def test_a_policy_with_a_non_finite_ceiling_refuses_to_load(tmp_path):
+    """The negative sample for S29's second defect.
+
+    `finite()` has been in this module all along, with a docstring explaining
+    that NaN voids every later comparison -- and it was applied to every amount
+    a caller passes in and to none of the policy's own fields. `usd_ceiling <= 0`
+    is False for both NaN and +inf, so the constructor waved them through, and
+    `check` / `reserve` / `_first_breach` then compared against a ceiling no
+    total could ever reach. `verify_spend.sh`'s dedicated "the pool policy is
+    readable and has a ceiling" check printed `inf` and exited 0.
+    """
+    from proxy.spend_gate import SpendGateUnavailable
+
+    for bad in (float("nan"), float("inf"), float("-inf")):
+        with pytest.raises(SpendGateUnavailable):
+            _pool(tmp_path, usd_ceiling=bad)
+        # `default_run_caps.usd` is the same hole by another route: it is what a
+        # run declaring no budget of its own is given.
+        with pytest.raises(SpendGateUnavailable):
+            _pool(tmp_path, default_run_caps={"usd": bad, "actions": 50})
 
 
 def test_the_standalone_proxies_release_what_they_claimed():

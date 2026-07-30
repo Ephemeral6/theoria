@@ -1,0 +1,382 @@
+=== adversarial/a1_continue_kills_token_check.py ===
+METADATA_FIELDS order : ('points', 'tags', 'kind')
+tags per item         :
+    q00 ['verdict', 'pair0', 'ridge'] -> dead
+    q01 ['verdict', 'pair0', 'ridge'] -> dead
+    q02 ['verdict', 'pair1', 'ridge'] -> dead
+    q03 ['verdict', 'pair1', 'ridge'] -> dead
+    q04 ['verdict', 'level:04', 'ridge'] -> dead
+    q05 ['verdict', 'level:05', 'gorge'] -> live
+    q06 ['verdict', 'level:06', 'gorge'] -> live
+    q07 ['verdict', 'level:07', 'gorge'] -> live
+    q08 ['verdict', 'level:08', 'gorge'] -> live
+    q09 ['verdict', 'level:09', 'gorge'] -> live
+
+hits                  : [{'field': 'tags', 'token': 'gorge', 'predicts': 1.0, 'majority_floor': 0.5, 'n': 10, 'carried_by': 5, 'with_token': {'live': 5}, 'without_token': {'dead': 5}}, {'field': 'tags', 'token': 'ridge', 'predicts': 1.0, 'majority_floor': 0.5, 'n': 10, 'carried_by': 5, 'with_token': {'dead': 5}, 'without_token': {'live': 5}}]
+token hits            : [{'field': 'tags', 'token': 'gorge', 'predicts': 1.0, 'majority_floor': 0.5, 'n': 10, 'carried_by': 5, 'with_token': {'live': 5}, 'without_token': {'dead': 5}}, {'field': 'tags', 'token': 'ridge', 'predicts': 1.0, 'majority_floor': 0.5, 'n': 10, 'carried_by': 5, 'with_token': {'dead': 5}, 'without_token': {'live': 5}}]
+
+Is `ridge` a perfect predictor?  carriers = ['q00', 'q01', 'q02', 'q03', 'q04']
+their answers          = ['dead']
+
+check_paper: RED a1 leaks its own answers: [{'check': 'metadata', 'label_source': '<declared>', 'field': 'tags', 'token': 'gorge', 'predicts': 1.0, 'majority_floor': 0.5, 'n': 10, 'carried_by': 5, 'with_token': {'live
+
+--- control: identical leak, no singleton collapse ---
+token hits            : [('tags', 'gorge', 1.0), ('tags', 'ridge', 1.0)]
+=== adversarial/a10_mutation_test.py ===
+Tests (baseline all pass):
+   0  test_a_clean_paper_is_not_flagged
+   1  test_a_constant_token_predicts_nothing_and_is_skipped
+   2  test_a_degenerate_whole_value_subset_does_not_disable_the_token_check
+   3  test_a_subset_correction_does_not_desensitise_the_token_check
+   4  test_a_subset_with_one_answer_left_is_not_a_prediction
+   5  test_a_token_leak_hidden_by_a_unique_marker_is_caught
+   6  test_a_token_on_one_item_is_an_identifier_not_a_rule
+   7  test_every_shipped_paper_derives_at_least_one_label_set
+   8  test_the_old_whole_value_check_alone_would_have_missed_it
+   9  test_unscored_singleton_values_are_counted_not_discarded
+
+A '.' means the test still PASSED against the broken implementation
+(i.e. it does not pin that behaviour); 'X' means it caught the mutation.
+
+mutation                                               0  1  2  3  4  5  6  7  8  9   caught
+A: token check deleted                                 .  .  X  .  .  X  .  .  .  .   2/10  FAIL(AssertionError)
+B: _token_hits_within stubbed to []                    .  .  X  .  .  X  .  .  .  .   2/10  FAIL(AssertionError)
+C: both holder guards removed                          X  X  .  .  X  X  X  .  .  X   6/10  FAIL(IndexError)
+D: `len(holders) == n` guard removed                   X  X  .  .  X  X  X  .  .  X   6/10  FAIL(IndexError)
+E: `len(holders) < 2` guard removed                    .  .  .  .  .  .  .  .  .  .   0/10  
+F: MIN_TOKEN = 1                                       .  .  .  .  .  .  .  .  .  .   0/10  
+G: MIN_TOKEN = 99 (no token ever survives)             .  .  X  .  .  X  .  .  .  .   2/10  FAIL(AssertionError)
+H: MIN_LABELLED = 1                                    .  .  .  .  .  .  .  .  .  .   0/10  
+I: MIN_LABELLED = 99 (no label set derived)            .  .  .  .  .  .  .  X  .  .   1/10  FAIL(AssertionError)
+J: derive_label_sets reverted to the 60% floor         .  .  .  .  .  .  .  X  .  .   1/10  FAIL(AssertionError)
+K: singleton counting removed                          .  .  .  .  .  .  .  .  .  X   1/10  FAIL(AssertionError)
+L: degenerate-subset guard removed (pre-V21 behaviour)   .  .  .  .  X  .  .  .  .  .   1/10  FAIL(AssertionError)
+M: the `continue` bug reintroduced                     .  .  X  .  .  .  .  .  .  .   1/10  FAIL(AssertionError)
+N: subset floor assigned back to the group floor       .  .  X  .  .  .  .  .  .  .   1/10  FAIL(AssertionError)
+O: METADATA_FIELDS narrowed to ('points',)             .  .  X  .  .  X  .  .  .  X   3/10  FAIL(AssertionError)
+P: token-level floor comparison weakened to >=         .  .  .  .  .  .  .  .  .  .   0/10  
+Q: field_tokens always returns the empty set           .  .  X  .  .  X  .  .  .  .   2/10  FAIL(AssertionError)
+R: floor contamination, spelled to EVADE test 3's source grep   .  .  X  .  .  .  .  .  .  .   1/10  FAIL(AssertionError)
+S: floor contamination, spelled the exact way test 3 greps for   .  .  X  .  .  .  .  .  .  .   1/10  FAIL(AssertionError)
+=== adversarial/a11_test_quality.py ===
+the fixture's tokens and what they would score if the guard were gone:
+   unique00     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique01     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique02     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique03     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique04     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique05     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique06     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique07     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique08     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique09     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique10     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   unique11     carried_by=1   rate=0.583  (needs > 0.900 and > 0.500)
+   verdict      carried_by=12  rate=0.500  (needs > 0.900 and > 0.500)
+
+Every single-holder token scores 0.583.  The tolerance is 0.900.  The
+test would be green with the guard deleted, so it pins nothing.
+
+A fixture that WOULD pin it (see a6 M5): 11 items answer `live`, 1
+answers `dead`, and only the `dead` one carries the token.
+   ridge carried_by=1 rate=1.000  floor=0.917  -> would be a HIT
+   live gate says: []
+
+========================================================================
+(2) test_a_subset_correction_does_not_desensitise_the_token_check
+========================================================================
+the assertion is:  assert "floor = max(" not in src
+current source contains it?  False
+   floor = max(floor, floor_here)                 caught by the grep? True
+   floor = floor_here = max(floor, x)             caught by the grep? False
+   floor  =  max(floor, x)                        caught by the grep? False
+   floor = max (floor, x)                         caught by the grep? False
+   floor += max(0.0, floor_here - floor)          caught by the grep? False
+   floor = floor_here if floor_here > floor else floor caught by the grep? False
+
+Four of six respellings of the identical regression slip past.  a10
+mutation R (`floor = floor_here = max(`) is a real behavioural
+regression that this test does not see; only
+test_a_degenerate_whole_value_subset_does_not_disable_the_token_check
+catches it, and it catches it for a different reason.
+=== adversarial/a12_independent_audit.py ===
+       LOO 1.000   token:board=stepping
+       LOO 1.000   token:board=latching
+       LOO 1.000   token:board=latches
+       LOO 1.000   token:board=good
+       LOO 1.000   token:board=for
+       LOO 1.000   len:win_requires
+       LOO 0.941   token:board=ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  -- truth:witness_length     n=8   LOO baseline=0.000  gate_derived=True gate_hits=0
+       LOO 0.875   value:win_requires
+       LOO 0.875   value:level_id
+       LOO 0.875   token:win_requires=false
+       LOO 0.875   token:level_id=lattice
+       LOO 0.875   token:level_id=atrium
+       LOO 0.875   token:board=x
+       LOO 0.875   token:board=until
+       LOO 0.875   token:board=transition
+       LOO 0.875   token:board=to
+       LOO 0.875   token:board=teleport
+       LOO 0.875   token:board=switch
+       LOO 0.875   token:board=stepping
+==============================================================================
+v11-handover-a0   n_items=31
+  gate derives : ['plan_len', 'rule', 'solvable', 'why']
+  I examine    : ['truth:class', 'truth:plan_len', 'truth:rule', 'truth:solvable', 'truth:why']
+  -- truth:class              n=10  LOO baseline=0.600  gate_derived=False gate_hits=n/a
+       LOO 0.900   token:definition=name
+       LOO 0.900   token:definition=a
+  -- truth:plan_len           n=6   LOO baseline=0.000  gate_derived=True gate_hits=0
+       (nothing beats baseline+0.25)
+  -- truth:rule               n=7   LOO baseline=0.000  gate_derived=True gate_hits=0
+       LOO 0.429   token:state=5
+       LOO 0.429   token:state=3
+       LOO 0.286   token:state=2
+       LOO 0.286   token:board=p
+       LOO 0.286   token:board=b
+       LOO 0.286   position/2
+  -- truth:solvable           n=8   LOO baseline=0.750  gate_derived=True gate_hits=0
+       LOO 1.000   count:board
+  -- truth:why                n=5   LOO baseline=0.000  gate_derived=True gate_hits=0
+       (nothing beats baseline+0.25)
+=== adversarial/a2_real_papers_instrument.py ===
+p15-handover-a0 n_items=29 derived label fields: ['rule']
+  [rule                  ] kind="step_semantics"             n=11  points  constant-field     token-check SKIPPED
+  [rule                  ] kind="step_semantics"             n=11  tags    scored             token-check ran with floor=0.2727 (group floor 0.2727)
+  [rule                  ] kind="step_semantics"             n=11  kind    constant-field     token-check SKIPPED
+==============================================================================
+p15-heldout-a0 n_items=80 derived label fields: ['event', 'level_name']
+  [event                 ] kind=null                         n=80  points  constant-field     token-check SKIPPED
+  [event                 ] kind=null                         n=80  tags    scored             token-check ran with floor=0.4000 (group floor 0.4000)
+  [event                 ] kind=null                         n=80  kind    constant-field     token-check SKIPPED
+  [level_name            ] kind=null                         n=80  points  constant-field     token-check SKIPPED
+  [level_name            ] kind=null                         n=80  tags    scored             token-check ran with floor=0.2625 (group floor 0.2625)
+  [level_name            ] kind=null                         n=80  kind    constant-field     token-check SKIPPED
+==============================================================================
+p15-verdict-a2 n_items=17 derived label fields: ['board_size_class', 'class', 'search_credible', 'witness_length']
+  [board_size_class      ] kind="verdict"                    n=17  points  constant-field     token-check SKIPPED
+  [board_size_class      ] kind="verdict"                    n=17  tags    constant-field     token-check SKIPPED
+  [board_size_class      ] kind="verdict"                    n=17  kind    constant-field     token-check SKIPPED
+  [class                 ] kind="verdict"                    n=17  points  constant-field     token-check SKIPPED
+  [class                 ] kind="verdict"                    n=17  tags    constant-field     token-check SKIPPED
+  [class                 ] kind="verdict"                    n=17  kind    constant-field     token-check SKIPPED
+  [search_credible       ] kind="verdict"                    n=17  points  constant-field     token-check SKIPPED
+  [search_credible       ] kind="verdict"                    n=17  tags    constant-field     token-check SKIPPED
+  [search_credible       ] kind="verdict"                    n=17  kind    constant-field     token-check SKIPPED
+  [witness_length        ] kind="verdict"                    n=8   points  constant-field     token-check SKIPPED
+  [witness_length        ] kind="verdict"                    n=8   tags    constant-field     token-check SKIPPED
+  [witness_length        ] kind="verdict"                    n=8   kind    constant-field     token-check SKIPPED
+==============================================================================
+v11-handover-a0 n_items=31 derived label fields: ['plan_len', 'rule', 'solvable', 'why']
+  [plan_len              ] kind="optimal_action"             n=6   points  constant-field     token-check SKIPPED
+  [plan_len              ] kind="optimal_action"             n=6   tags    scored             token-check ran with floor=0.1667 (group floor 0.1667)
+  [plan_len              ] kind="optimal_action"             n=6   kind    constant-field     token-check SKIPPED
+  [rule                  ] kind="step_semantics"             n=7   points  constant-field     token-check SKIPPED
+  [rule                  ] kind="step_semantics"             n=7   tags    scored             token-check ran with floor=0.4000 (group floor 0.2857)  <<< FLOOR RAISED
+  [rule                  ] kind="step_semantics"             n=7   kind    constant-field     token-check SKIPPED  <<< FLOOR RAISED
+  [solvable              ] kind="optimal_action"             n=8   points  constant-field     token-check SKIPPED
+  [solvable              ] kind="optimal_action"             n=8   tags    degenerate-subset  token-check SKIPPED (the A1 bug, since fixed)  <<<
+  [solvable              ] kind="optimal_action"             n=8   kind    constant-field     token-check SKIPPED
+  [why                   ] kind="rule_justification"         n=5   points  constant-field     token-check SKIPPED
+  [why                   ] kind="rule_justification"         n=5   tags    scored             token-check ran with floor=0.2000 (group floor 0.2000)
+  [why                   ] kind="rule_justification"         n=5   kind    constant-field     token-check SKIPPED
+=== adversarial/a3_what_the_skip_hid.py ===
+group kind = "optimal_action"  n = 8
+   v11-opt-01   tags=['optimal_action', 'level:stile']              -> false
+   v11-opt-02   tags=['optimal_action', 'level:flume']              -> true
+   v11-opt-03   tags=['optimal_action', 'level:warren']             -> true
+   v11-opt-04   tags=['optimal_action', 'level:cairn']              -> false
+   v11-opt-05   tags=['optimal_action', 'level:kiln']               -> true
+   v11-opt-06   tags=['optimal_action', 'level:warren']             -> true
+   v11-opt-07   tags=['optimal_action', 'level:flume']              -> true
+   v11-opt-08   tags=['optimal_action', 'level:kiln']               -> true
+   group floor = 0.75 Counter({'true': 6, 'false': 2})
+   metadata_hits reports: []
+   _token_hits_within (called directly, bypassing the skip):
+   ...and with the *group* floor for every token, per field tags:
+      action         carried_by=8 rate=None  with={'false': 2, 'true': 6} without={}
+      cairn          carried_by=1 rate=0.875  with={'false': 1} without={'false': 1, 'true': 6}
+      flume          carried_by=2 rate=0.75  with={'true': 2} without={'false': 2, 'true': 4}
+      kiln           carried_by=2 rate=0.75  with={'true': 2} without={'false': 2, 'true': 4}
+      level          carried_by=8 rate=None  with={'false': 2, 'true': 6} without={}
+      optimal        carried_by=8 rate=None  with={'false': 2, 'true': 6} without={}
+      stile          carried_by=1 rate=0.875  with={'false': 1} without={'true': 6, 'false': 1}
+      warren         carried_by=2 rate=0.75  with={'true': 2} without={'false': 2, 'true': 4}
+=== adversarial/a4_label_sets_before_after.py ===
+============================================================================
+p15-adaptation-a0      n_items=60
+  OLD (60% floor): 0  []
+  NEW (MIN_LABELLED=4): 3  ['exact_on_heldout', 'label', 'verdict']
+  ADDED: ['exact_on_heldout', 'label', 'verdict']
+     + exact_on_heldout       on 12/60 items, alphabet=['false', 'true']
+     + label                  on  6/60 items, alphabet=['"solvable"', '"unsolvable"']
+     + verdict                on  6/60 items, alphabet=['"solvable"', '"unsolvable"']
+============================================================================
+p15-handover-a0        n_items=29
+  OLD (60% floor): 0  []
+  NEW (MIN_LABELLED=4): 1  ['rule']
+  ADDED: ['rule']
+     + rule                   on 11/29 items, alphabet=['"blocked_box_crossing"', '"blocked_box_landing"', '"blocked_wall"', '"push2"', '"walk"']
+============================================================================
+p15-heldout-a0         n_items=80
+  OLD (60% floor): 2  ['event', 'level_name']
+  NEW (MIN_LABELLED=4): 2  ['event', 'level_name']
+  ADDED: []
+============================================================================
+p15-verdict-a2         n_items=17
+  OLD (60% floor): 3  ['board_size_class', 'class', 'search_credible']
+  NEW (MIN_LABELLED=4): 4  ['board_size_class', 'class', 'search_credible', 'witness_length']
+  ADDED: ['witness_length']
+     + witness_length         on  8/17 items, alphabet=['18', '416', '98']
+============================================================================
+v11-handover-a0        n_items=31
+  OLD (60% floor): 0  []
+  NEW (MIN_LABELLED=4): 4  ['plan_len', 'rule', 'solvable', 'why']
+  ADDED: ['plan_len', 'rule', 'solvable', 'why']
+     + plan_len               on  6/31 items, alphabet=['14', '16', '21', '22', '24', '25']
+     + rule                   on  7/31 items, alphabet=['"blocked_box_crossing"', '"blocked_box_landing"', '"blocked_wall"', '"push2"', '"walk"']
+     + solvable               on  8/31 items, alphabet=['false', 'true']
+     + why                    on  5/31 items, alphabet=['"Only push2\'s effect moves the Box, and the condition in the claim is exactly the negation of push2\'s guard, quantified over all four directions. The two blocked_box_* clauses describe the same situations but their effect is that nothing moves, so the claim does not rest on them."', '"This is blocked_wall\'s guard and blocked_wall\'s effect, and nothing else\'s: the guard names a cell ahead that is not free and no Box on it."', '"Totality is a property of the five rules together -- remove any one and some situation is left unaccounted for. The goal clause says when the game is won, not what happens, so it carries no part of this claim."', '"Two clauses and no more: push2 conserves the Box\'s column parity, and the goal clause is what makes winning mean the Box standing on the target. Drop either and the claim fails -- with a one-cell push the parity is not conserved; with a different victory condition the parity is irrelevant."', '"push2 is the only clause whose effect moves the Box, and it moves it two cells along one axis, so a column index changes by 0 or 2. The other four clauses move the Player or nothing; the claim does not depend on what they do."']
+============================================================================
+sum of the four BUILDERS papers' items: 186
+=== adversarial/a5_metadata_fields_coverage.py ===
+   unchecked action                 on 80/80  distinct_values=4    distinct_tokens=3
+   unchecked frame_before           on 80/80  distinct_values=79   distinct_tokens=0
+   unchecked item_id                on 80/80  distinct_values=80   distinct_tokens=81
+   unchecked legend                 on 80/80  distinct_values=1    distinct_tokens=4
+   unchecked level                  on 80/80  distinct_values=5    distinct_tokens=3
+   CHECKED   points                 on 80/80  distinct_values=1    distinct_tokens=0
+   CHECKED   tags                   on 80/80  distinct_values=2    distinct_tokens=2
+============================================================================
+p15-verdict-a2  n_items = 17
+   unchecked board                  on 17/17  distinct_values=12   distinct_tokens=44
+   unchecked budget                 on 17/17  distinct_values=5    distinct_tokens=2
+   unchecked commands               on 17/17  distinct_values=4    distinct_tokens=3
+   unchecked hazards                on 17/17  distinct_values=5    distinct_tokens=0
+   unchecked item_id                on 17/17  distinct_values=17   distinct_tokens=17
+   CHECKED   kind                   on 17/17  distinct_values=1    distinct_tokens=1
+   unchecked level_id               on 17/17  distinct_values=9    distinct_tokens=9
+   unchecked objective              on 17/17  distinct_values=1    distinct_tokens=4
+   CHECKED   points                 on 17/17  distinct_values=1    distinct_tokens=0
+   unchecked question               on 17/17  distinct_values=1    distinct_tokens=10
+   unchecked relabelled             on 17/17  distinct_values=2    distinct_tokens=2
+   CHECKED   tags                   on 17/17  distinct_values=1    distinct_tokens=2
+   unchecked win_requires           on 17/17  distinct_values=2    distinct_tokens=9
+   unchecked world                  on 17/17  distinct_values=1    distinct_tokens=0
+============================================================================
+v11-handover-a0  n_items = 31
+   unchecked action                 on  7/31  distinct_values=3    distinct_tokens=3
+   unchecked board                  on 15/31  distinct_values=14   distinct_tokens=0
+   unchecked candidate_boards       on  1/31  distinct_values=1    distinct_tokens=9
+   unchecked candidates             on  5/31  distinct_values=2    distinct_tokens=9
+   unchecked claim                  on  5/31  distinct_values=5    distinct_tokens=66
+   unchecked definition             on 10/31  distinct_values=9    distinct_tokens=36
+   unchecked item_id                on 31/31  distinct_values=31   distinct_tokens=5
+   CHECKED   kind                   on 31/31  distinct_values=5    distinct_tokens=9
+   unchecked level                  on 15/31  distinct_values=5    distinct_tokens=10
+   unchecked name                   on 10/31  distinct_values=10   distinct_tokens=13
+   CHECKED   points                 on 31/31  distinct_values=3    distinct_tokens=0
+   unchecked prompt                 on 31/31  distinct_values=16   distinct_tokens=66
+   unchecked quoted                 on  1/31  distinct_values=1    distinct_tokens=42
+   unchecked state                  on 15/31  distinct_values=13   distinct_tokens=2
+   CHECKED   tags                   on 31/31  distinct_values=16   distinct_tokens=22
+=== adversarial/a6_misses.py ===
+--------------------------------------------------------------------------
+M4-list-length               gate=GREEN  metadata_hits=0
+    M4: dead items carry the tag `pad` twice, live items once.  Every token is on every item so the token check skips them all; every whole value is unique so the value check scores nothing.  Length is a signal tokenising to a *set* destroys by construction.
+      q00 {'item_id': 'q00', 'points': 2.0, 'tags': ['verdict', 'level:00', 'pad', 'pad'], 'kind': 'probe', 'body': 'board 0'} -> dead
+      q01 {'item_id': 'q01', 'points': 2.0, 'tags': ['verdict', 'level:01', 'pad', 'pad'], 'kind': 'probe', 'body': 'board 1'} -> dead
+      q02 {'item_id': 'q02', 'points': 2.0, 'tags': ['verdict', 'level:02', 'pad', 'pad'], 'kind': 'probe', 'body': 'board 2'} -> dead
+      q03 {'item_id': 'q03', 'points': 2.0, 'tags': ['verdict', 'level:03', 'pad', 'pad'], 'kind': 'probe', 'body': 'board 3'} -> dead
+--------------------------------------------------------------------------
+M5-single-holder             gate=GREEN  metadata_hits=0
+    M5: one item is dead and it is the only one carrying `ridge`.  Had the token been scored: rate = (1 + 11)/12 = 1.000 against a floor of 11/12 = 0.917 -- a hit.  `len(holders) < 2` throws it away.  A single item answered free is exactly the leak `points` 2-vs-3 was.
+      q00 {'item_id': 'q00', 'points': 2.0, 'tags': ['verdict', 'level:00', 'ridge'], 'kind': 'probe', 'body': 'board 0'} -> dead
+      q01 {'item_id': 'q01', 'points': 2.0, 'tags': ['verdict', 'level:01'], 'kind': 'probe', 'body': 'board 1'} -> live
+      q02 {'item_id': 'q02', 'points': 2.0, 'tags': ['verdict', 'level:02'], 'kind': 'probe', 'body': 'board 2'} -> live
+      q03 {'item_id': 'q03', 'points': 2.0, 'tags': ['verdict', 'level:03'], 'kind': 'probe', 'body': 'board 3'} -> live
+--------------------------------------------------------------------------
+M6-value-level-still-works   gate=RED (M6-value-level-still-works leaks its own answers: [{'check': 'metadata', 'label_source': ') metadata_hits=1
+    M6 (CONTROL, expected RED): the original points 2-vs-3 leak. Tokens are too short to survive tokenising; the whole-value net catches it.  STATUS.md's claim about this is TRUE.
+      q00 {'item_id': 'q00', 'points': 2.0, 'tags': ['verdict'], 'kind': 'probe', 'body': 'board 0'} -> dead
+      q01 {'item_id': 'q01', 'points': 2.0, 'tags': ['verdict'], 'kind': 'probe', 'body': 'board 1'} -> dead
+      q02 {'item_id': 'q02', 'points': 2.0, 'tags': ['verdict'], 'kind': 'probe', 'body': 'board 2'} -> dead
+      q03 {'item_id': 'q03', 'points': 2.0, 'tags': ['verdict'], 'kind': 'probe', 'body': 'board 3'} -> dead
+--------------------------------------------------------------------------
+M7-floor-contamination       gate=RED (M7-floor-contamination leaks its own answers: [{'check': 'metadata', 'label_source': '<dec) metadata_hits=3
+    M7: see a7_floor_contamination.py -- `floor` is assigned once before the field loop and raised inside it, so a later field is scored against a floor computed on an earlier field's subset.
+      q00 {'item_id': 'q00', 'points': 2.0, 'tags': ['verdict', 'level:00', 'ridge'], 'kind': 'probe', 'body': 'board 0'} -> dead
+      q01 {'item_id': 'q01', 'points': 2.0, 'tags': ['verdict', 'level:01', 'ridge'], 'kind': 'probe', 'body': 'board 1'} -> dead
+      q02 {'item_id': 'q02', 'points': 2.0, 'tags': ['verdict', 'level:02', 'ridge'], 'kind': 'probe', 'body': 'board 2'} -> dead
+      q03 {'item_id': 'q03', 'points': 2.0, 'tags': ['verdict', 'level:03', 'ridge'], 'kind': 'probe', 'body': 'board 3'} -> dead
+
+==========================================================================
+paper                        gate     metadata_hits
+M1-unchecked-field           GREEN    0
+M1b-item-id                  GREEN    0
+M1c-item-id-leak             GREEN    0
+M2-short-token               GREEN    0
+M3-two-field-xor             GREEN    0
+M4-list-length               GREEN    0
+M5-single-holder             GREEN    0
+M6-value-level-still-works   RED      1
+M7-floor-contamination       RED      3
+=== adversarial/a7_floor_contamination.py ===
+group floor              : 0.5
+`ridge` with_token       : {'dead': 23, 'live': 1}
+`ridge` without_token    : {'dead': 2, 'live': 24}
+`ridge` predicts         : 0.94  (tolerance 0.90)
+
+points scored subset     : {'dead': 19, 'live': 1} seen = 20
+points floor_here        : 0.95
+
+metadata_hits            : [{'field': 'tags', 'token': 'ridge', 'predicts': 0.94, 'majority_floor': 0.5, 'n': 50, 'carried_by': 24, 'with_token': {'dead': 23, 'live': 1}, 'without_token': {'dead': 2, 'live': 24}}]
+token hits               : [{'field': 'tags', 'token': 'ridge', 'predicts': 0.94, 'majority_floor': 0.5, 'n': 50, 'carried_by': 24, 'with_token': {'dead': 23, 'live': 1}, 'without_token': {'dead': 2, 'live': 24}}]
+check_paper              : RED A7 leaks its own answers: [{'check': 'metadata', 'label_source': '<declared>', 'field': 'tags', 'token': 'ridge', 'predicts': 0.94, 'majority_floor': 0.5, 'n': 
+
+--- same paper, `points` made constant so nothing can raise the floor ---
+token hits               : [('tags', 'ridge', 0.94, 0.5)]
+=== adversarial/a8_false_positive_rate.py ===
+Exhaustive enumeration over ALL answer vectors x ALL token subsets
+(two-symbol alphabet, both symbols present -- the check needs that):
+
+  n   subsets_scored   fired   P(false positive | random token)
+  4   140              20      0.1429
+  5   750              50      0.0667
+  6   3472             112     0.0323
+  7   14994            238     0.0159
+  8   62484            492     0.0079
+  9   255510           1002    0.0039
+  10  1034264          2024    0.0020
+
+Same, conditioned on a balanced-ish answer vector (the realistic case):
+  n   split   subsets   fired   P
+  4   2/2     10        2       0.2000
+  5   3/2     25        2       0.0800
+  6   3/3     56        2       0.0357
+  8   4/4     246       2       0.0081
+  8   6/2     246       2       0.0081
+  12  6/6     4082      26      0.0064
+
+Interpretation: a `tags` field carrying t independent tokens gets t
+independent chances.  At n=4, 2/2, TWO of the six possible 2-item
+tokens fire -- 1 in 3 for 2-item tokens, 1 in 5 over all scored subsets.
+The real papers' smallest scored groups (see a2): v11 `why` n=5,
+v11 `plan_len` n=6, p15-adaptation `label`/`verdict` n=6.
+=== adversarial/a9_permutation_null.py ===
+paper                  label field              n  real    P(fires | shuffled labels)
+p15-adaptation-a0      exact_on_heldout        12  0       0.013   (token-level only 0.013)
+p15-adaptation-a0      label                    6  0       0.000   (token-level only 0.000)
+p15-adaptation-a0      verdict                  6  0       0.000   (token-level only 0.000)
+p15-handover-a0        rule                    11  0       0.000   (token-level only 0.000)
+p15-heldout-a0         event                   80  0       0.000   (token-level only 0.000)
+p15-heldout-a0         level_name              80  0       0.000   (token-level only 0.000)
+p15-verdict-a2         board_size_class        17  0       0.000   (token-level only 0.000)
+p15-verdict-a2         class                   17  0       0.000   (token-level only 0.000)
+p15-verdict-a2         search_credible         17  0       0.000   (token-level only 0.000)
+p15-verdict-a2         witness_length           8  0       0.000   (token-level only 0.000)
+v11-handover-a0        plan_len                 6  0       0.000   (token-level only 0.000)
+v11-handover-a0        rule                     7  0       0.000   (token-level only 0.000)
+v11-handover-a0        solvable                 8  0       0.117   (token-level only 0.117)
+v11-handover-a0        why                      5  0       0.000   (token-level only 0.000)

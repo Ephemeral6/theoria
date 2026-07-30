@@ -1,0 +1,50 @@
+[FAIL] E UNCITED -- every quantitative claim block cites an artefact
+  327 claim blocks scanned across 12 body sections: 23 uncited, 0 ruled, 0 stale rulings
+  UNCITED   01_intro.md:128 -- quantities [17] with no resolvable path anywhere in the block
+            What survives all five is narrower than the headline and still worth having: a register whose entries are executable, and whose `succeeded` 
+  UNCITED   03_a0.md:50 -- quantities [152] with no resolvable path anywhere in the block
+            **`zero_space` recovered the Button↔Door dependency as a conservation law.** Handed 152 anonymous indicator bits, with no vocabulary for but
+  UNCITED   03_a0.md:66 -- quantities [275] with no resolvable path anywhere in the block
+            The rule says *when* it happens; the law says *that it held on every one of the 275 transitions*. The distinction matters and §12.1's own ta
+  UNCITED   03_a0.md:229 -- quantities [6, 341, 6] with no resolvable path anywhere in the block
+            T-10 injected single-rule variants and measured detection latency. Latency tracks *firing frequency*, not the size of the change: `ghost` (w
+  UNCITED   06_a3_transfer.md:123 -- quantities [zero] with no resolvable path anywhere in the block
+            The free half of the valve saw nothing. The static check reads the board, and neither control touches the board; Lean re-proved a domain tha
+  UNCITED   06_a3_transfer.md:154 -- quantities [5, 1, 40] with no resolvable path anywhere in the block
+            The blind arm also spent 5 theorize rounds to the cold start's 1, and the report records that two of those five — 40 % of its adjudication b
+  UNCITED   07_battery.md:113 -- quantities [4, 1, 16, 0.562, 0.188, seventeen] with no resolvable path anywhere in the block
+            A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the table's −0.562 and −0.188 print three decimals onto a qua
+  UNCITED   07_battery.md:527 -- quantities [5, twenty] with no resolvable path anywhere in the block
+            Retired is not deleted, only excluded from being counted as a separate finding; and the two K-only clusters — {K10, K8} and {K14, K5, K7}, t
+  UNCITED   07_battery.md:535 -- quantities [257, 703, 64, thirty] with no resolvable path anywhere in the block
+            A cluster count near the metric count is not reassuring, and the artefact refuses to let it read as thirty independent findings: **257 of 70
+  UNCITED   07_battery.md:572 -- quantities [zero] with no resolvable path anywhere in the block
+            Three non-zero values exist in the tree, and all three are the ablation arm's self-built offline worlds rather than ARC games — `ablation-ar
+  UNCITED   07_battery.md:596 -- quantities [67, 0.229, 0.250, 53, 67, 1, zero] with no resolvable path anywhere in the block
+            One thing this section deliberately does **not** do with that fact, because the temptation is obvious and the evidence refuses it: it does n
+  UNCITED   07_battery.md:615 -- quantities [67] with no resolvable path anywhere in the block
+            The difference worth reporting is that the bill shape's distribution rests on 67 runs and the capability column rests on none.
+  UNCITED   08_exam.md:38 -- quantities [7, 47, 49, 96] with no resolvable path anywhere in the block
+            The held-out rubric's refusal of per-cell credit is worth quoting, because it is the kind of scoring choice that silently manufactures a res
+  UNCITED   08_exam.md:77 -- quantities [46.0, 46.0, 1, 2] with no resolvable path anywhere in the block
+            **Only one paper has been sat by a real subject.** Two fresh subagent readers, given a bundle and a sheet and nothing else, each scored 46.0
+  UNCITED   08_exam.md:95 -- quantities [0.000] with no resolvable path anywhere in the block
+            The exam has no cost instrument, so the quantity the framework actually predicts was not measured. We report the tier difference as **unmeas
+  UNCITED   08_exam.md:117 -- quantities [3.0, 2.0, 17, 17, 47.5] with no resolvable path anywhere in the block
+            **Two real leaks shipped, and the cheater found both.** The verdict paper's `points` field encoded the answer — 3.0 for solvable, 2.0 for un
+  UNCITED   08_exam.md:124 -- quantities [3, 4] with no resolvable path anywhere in the block
+            The reason the static checks missed them is the most transferable thing in this section: > `answer_labels` was an *optional* hook on each pa
+  UNCITED   08_exam.md:151 -- quantities [1] with no resolvable path anywhere in the block
+            * **Three of four papers have no real result.** Held-out, adaptation and verdict exist as machinery and as calibration runs. Nothing has sat
+  UNCITED   09_preflight.md:195 -- quantities [116 470, 0.436763, 83.6, 0.52, 8.3, 1.35] with no resolvable path anywhere in the block
+            **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis` identifies 116 470 cache-creation tokens written at the one-h
+  UNCITED   10_adjudication.md:3 -- quantities [zero] with no resolvable path anywhere in the block
+            §2.2 states the division this framework is built on: **engines emit candidates, never verdicts**, and what enters the manual is written down
+  UNCITED   10_adjudication.md:38 -- quantities [340, 56] with no resolvable path anywhere in the block
+            **No total is published here, and no rate.** The obvious headline — around 340 points examined, 56 judged unsafe — does not survive, and nei
+  UNCITED   10_adjudication.md:70 -- quantities [45, 97, 105, 8] with no resolvable path anywhere in the block
+            Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate exit-code readings" that reached the work items and the di
+  UNCITED   10_adjudication.md:83 -- quantities [340, 48, 85, 56, 85, 56] with no resolvable path anywhere in the block
+            An earlier draft of this section replaced the disputed 340 / 48 with an enumerated 85 / 56 and called that the countable figure. It is not: 
+
+verify_paper: FAIL (1/5) -- E UNCITED

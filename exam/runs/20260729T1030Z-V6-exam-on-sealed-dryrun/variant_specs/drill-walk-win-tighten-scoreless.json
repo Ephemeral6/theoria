@@ -1,0 +1,17 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "unsolvable",
+  "justification": "This variant is in the drill to be reported, not to be admired. worldgen keeps no score -- its recorded trace carries t, frame, action and win, and nothing else -- so the body the wrapper sees always has score None. The frozen win_tighten rewrites WIN to NOT_FINISHED whenever the score is absent or below the requirement, so on a scoreless game it rewrites every win, at every requirement, unconditionally. The variant is unsolvable, but not because anything about this board is hard: the operator has degenerated from a tightening into a total ban. No certificate is offered because the frozen grammar has no form for 'the win condition is unsatisfiable because the game reports no score'.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "op": "win_tighten",
+      "require": {
+        "kind": "score_at_least",
+        "value": 1
+      }
+    }
+  ],
+  "variant_id": "drill-walk-win-tighten-scoreless"
+}

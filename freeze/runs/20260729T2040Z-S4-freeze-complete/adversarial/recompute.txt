@@ -1,0 +1,83 @@
+REFUTATION recompute transcript -- adversarial review of STATS_RULES.md 5.7
+all bytes via `git show HEAD:<path>` unless noted
+
+== 1. 5.7's table, closed form from Fraction(47,48) ==
+q = 0.9791666666666666
+  n=  1 cell_survival=0.020833 live/19=  0.3958 live/12= 0.2500
+  n=  2 cell_survival=0.041233 live/19=  0.7834 live/12= 0.4948
+  n=  3 cell_survival=0.061207 live/19=  1.1629 live/12= 0.7345
+  n=  5 cell_survival=0.099916 live/19=  1.8984 live/12= 1.1990
+  n= 10 cell_survival=0.189849 live/19=  3.6071 live/12= 2.2782
+  n= 20 cell_survival=0.343655 live/19=  6.5294 live/12= 4.1239
+  n= 63 cell_survival=0.734560 live/19= 13.9566 live/12= 8.8147
+  n= 64 cell_survival=0.740090 live/19= 14.0617 live/12= 8.8811
+  n= 85 cell_survival=0.832963 live/19= 15.8263 live/12= 9.9956
+  n_required(14/19) = 63.41020849344386
+  n_required(10/12) = 85.10543125778086
+  q_max n=2: 14/19=0.512989 10/19=0.688247 10/12=0.408248
+  EXPECTED['n_required_for_claim_floor']=63.44 vs closed form 63.410208 -> rel 4.7e-4 < TOL 2e-3 (passes; the constant is a typo)
+
+== 2. api_unusable <=> actions_failed == 10, 48/48, zero exceptions ==
+  ar25: budget=748 status=episode_limit_hit started=2026-07-27T18:19:36Z resumed_at=2026-07-27T18:42:09Z
+  g50t: budget=879 status=episode_limit_hit started=2026-07-27T18:19:36Z resumed_at=2026-07-27T18:42:09Z
+  sk48: budget=1070 status=episode_limit_hit started=2026-07-27T18:19:36Z resumed_at=2026-07-27T18:42:09Z
+  tn36: budget=317 status=episode_limit_hit started=2026-07-27T18:19:36Z resumed_at=2026-07-27T18:42:09Z
+    outcome=api_unusable   actions_failed= 10 count=47
+    outcome=game_over      actions_failed=  8 count=1
+  actions_ok min=9 max=73 mean=30.3  all>=8: True
+
+== 3. current bare_cc.py rule would fire 0 times (ledger reconstruction) ==
+  episodes matched to ledger: 48/48   actions_failed mismatches: 0
+  MAX consecutive failure run over all 48 episodes = 5
+  CONSECUTIVE_FAILURE_ABORT=10 (bare_cc.py:77) -> fires in 0 episodes (max run 5 < 10)
+  cumulative_failure_cap = max(10,budget) = 317..1070 -> 10 failures never reaches it => 0 failure_grind
+  => q under today's harness = 0/48
+
+== 4. second tracked basis: campaign_cells.jsonl ==
+  ar25-0c556536    rep1 api_unusable     ok= 11 failed= 10 budget=30 started=2026-07-27T18:21:28Z
+  ar25-0c556536    rep2 api_unusable     ok= 14 failed= 10 budget=30 started=2026-07-27T18:21:28Z
+  ar25-0c556536    rep3 api_unusable     ok= 19 failed= 10 budget=30 started=2026-07-27T18:21:28Z
+  g50t-5849a774    rep1 budget_exhausted ok= 30 failed=  0 budget=30 started=2026-07-28T12:22:33Z
+  g50t-5849a774    rep2 budget_exhausted ok= 30 failed=  0 budget=30 started=2026-07-28T12:22:33Z
+  g50t-5849a774    rep3 budget_exhausted ok= 30 failed=  0 budget=30 started=2026-07-28T12:22:33Z
+  sk48-d8078629    rep1 budget_exhausted ok= 26 failed=  4 budget=30 started=2026-07-28T12:47:41Z
+  sk48-d8078629    rep2 budget_exhausted ok= 28 failed=  2 budget=30 started=2026-07-28T12:47:41Z
+  sk48-d8078629    rep3 budget_exhausted ok= 27 failed=  3 budget=30 started=2026-07-28T12:47:41Z
+  tn36-ef4dde99    rep1 gave_up          ok= 23 failed=  5 budget=30 started=2026-07-28T13:14:49Z
+  tn36-ef4dde99    rep2 gave_up          ok= 24 failed=  5 budget=30 started=2026-07-28T13:14:50Z
+  tn36-ef4dde99    rep3 budget_exhausted ok= 24 failed=  6 budget=30 started=2026-07-28T13:14:50Z
+  counts: {'api_unusable': 3, 'budget_exhausted': 7, 'gave_up': 2}
+
+== 5. candidate q's and their consequences at n=2 ==
+  basis-A episode-level              q=0.9792 CP95=[0.8893,0.9995] live@n2(pt)=  0.78 live@n2(CI n-favourable end)=  0.02
+  basis-A game-level (restart chains) q=1.0000 CP95=[0.3976,1.0000] live@n2(pt)=  0.00 live@n2(CI n-favourable end)= 16.00
+  basis-B all 12                     q=0.2500 CP95=[0.0549,0.5719] live@n2(pt)= 17.81 live@n2(CI n-favourable end)= 12.79
+  basis-B A7 kept 9                  q=0.0000 CP95=[0.0000,0.3363] live@n2(pt)= 19.00 live@n2(CI n-favourable end)= 16.85
+  basis-B +gave_up                   q=0.4167 CP95=[0.1517,0.7233] live@n2(pt)= 15.70 live@n2(CI n-favourable end)=  9.06
+
+== 6. E[live] >= 14 is the wrong criterion; P(live>=14) at n=2 ==
+  q=0.9792 p_live=0.0412 E[live]=  0.78 P(live>=14)=0.0000
+  q=0.5130 p_live=0.7368 E[live]= 14.00 P(live>=14)=0.6173
+  q=0.4607 p_live=0.7878 E[live]= 14.97 P(live>=14)=0.8001
+  q=0.3363 p_live=0.8869 E[live]= 16.85 P(live>=14)=0.9846
+  q=0.2500 p_live=0.9375 E[live]= 17.81 P(live>=14)=0.9992
+  q_max at n=2 for P(live>=14)>=0.80 : 0.4607   (5.7 writes 0.5130, at which P=0.6173)
+
+== 7. G7 (4.1.0) threshold, the gate that actually binds the two paired endpoints ==
+  claim layer: excluded >=7 of 19 -> inconclusive; so need live >= 13; q^n <= 6/19
+  q_max n=2 = sqrt(6/19) = 0.5620  (5.7 applies 0.5130, from the U3 floor, to all three endpoints)
+
+== 8. n>=3: pairwise positive correlation does NOT bound P(all dead) below by q^n ==
+  exchangeable 3-vector: P(000)=0.18 P(exactly1)=0.08 each P(exactly2)=0.16 each P(111)=0.1
+  probabilities sum to 0.9999999999999999; marginal q=0.5
+  P(a given pair both dead)=0.26 > q^2=0.25  => rho=+0.040 (pairwise POSITIVE)
+  P(all three dead)=0.1 < q^3=0.125  => independence is NOT the n-favourable side at n=3
+  fix: assume a common-shock mixture (associated); then P(all)=E[Q^n] >= q^n for every n (Jensen)
+
+== 9. gate audit: changing the pre-registered FLOORS does not turn --verify red ==
+  verify() hardcodes 14 (n_feasibility.py:140-141 and :153); FLOORS is never read by verify().
+  mutant_floors.py = n_feasibility.py with FLOORS['claim-14/19'] 14 -> 10, nothing else changed
+  $ python -X utf8 mutant_floors.py --verify  ->  EXIT 0
+  ...and it prints q<=0.6882 under the label 'claim-14/19', so the weakened floor is not visible
+  5.7:825-826 claims FLOORS and EXPECTED are sealed together ('change one and the other goes red') -- FALSE
+  verify.sh:827-836's negative control perturbs EXPECTED, not FLOORS, so it cannot see this

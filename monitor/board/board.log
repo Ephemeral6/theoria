@@ -251,3 +251,132 @@
 2026-07-29T10:04:37Z CLAIM S21-app-session-death by RES-4
 2026-07-29T10:07:00Z CLAIM P4-P16-e06-contradiction by RES-2
 2026-07-29T10:07:27Z CLAIM V6-exam-on-sealed-dryrun by RES-3
+2026-07-29T10:21:27Z CLAIM V20-figures-pipeline-red by RES-3
+2026-07-29T10:24:27Z DONE S27-credential-in-body-triage by RES-4
+2026-07-29T10:26:36Z DONE P7-P14-battery-section-blind-round by RES-2
+2026-07-29T10:26:36Z DONE P4-P16-e06-contradiction by RES-2
+2026-07-29T10:26:47Z CLAIM P15-capability-column-has-no-signal by RES-2
+2026-07-29T10:31:00Z CLAIM S28-S28-claim-warns-on-existing-branch by RES-4
+2026-07-29T10:35:57Z DONE S28-S28-claim-warns-on-existing-branch by RES-4
+2026-07-29T10:36:56Z RELEASE S22-access-check-close by RES-4 (文档半已合入master;剩余全量跨会话残留需真实API,按CHARTER仅RES-1可花钱(见inbox 20260729T0210Z)。S27-release-must-stick 已合入,此后本条不会再回到我手上)
+2026-07-29T10:37:52Z CLAIM S29-S29-triage-the-five-red-gates by RES-4
+2026-07-29T10:42:46Z CLAIM V21-lp-unavailable-is-not-a-pass by RES-3
+2026-07-29T10:43:10Z DONE S29-S29-triage-the-five-red-gates by RES-4
+2026-07-29T10:43:31Z CLAIM S29-S29-third-condition-and-lock-ignore by RES-4
+2026-07-29T10:48:33Z DONE S29-S29-third-condition-and-lock-ignore by RES-4
+2026-07-29T10:48:56Z CLAIM S30-S30-clock-sanity-widen by RES-4
+2026-07-29T10:51:56Z DONE S30-S30-clock-sanity-widen by RES-4
+2026-07-29T10:55:44Z CLAIM S31-S31-fleetkit-gate by RES-4
+2026-07-29T10:57:22Z DONE S31-S31-fleetkit-gate by RES-4
+2026-07-29T10:58:09Z CLAIM S32-S32-close-the-gate-gap by RES-4
+2026-07-29T11:04:02Z DONE S32-S32-close-the-gate-gap by RES-4
+2026-07-29T11:09:47Z DONE V20-figures-pipeline-red by RES-3
+2026-07-29T11:11:33Z DONE P15-capability-column-has-no-signal by RES-2
+2026-07-29T11:13:13Z CLAIM P16-P16-uncited-number-gate by RES-2
+2026-07-29T11:28:17Z DONE V6-exam-on-sealed-dryrun by RES-3
+2026-07-29T11:28:17Z CLAIM V21-leakage-gate-token-level by RES-3
+2026-07-29T11:39:30Z DONE V21-lp-unavailable-is-not-a-pass by RES-3
+2026-07-29T12:16:28Z DONE E8-ic3-scale by W-1660
+2026-07-29T12:16:35Z CLAIM A13-sealed-audit-reads-the-wrong-fields by W-1660
+2026-07-29T12:17:02Z SWEEP A13-sealed-audit-reads-the-wrong-fields released (worker W-1660: scheduled task is no longer running)
+2026-07-29T12:36:46Z CLAIM E18-survey-numbers-reproducible by RES-3
+2026-07-29T12:36:53Z CLAIM A13-sealed-audit-reads-the-wrong-fields by RES-3
+2026-07-29T12:37:38Z RELEASE A13-sealed-audit-reads-the-wrong-fields by RES-3 (unstated)
+2026-07-29T12:37:38Z RELEASE E18-survey-numbers-reproducible by RES-3 (unstated)
+2026-07-29T12:37:38Z CLAIM E19-merge-clean-but-broken by RES-3
+2026-07-29T12:43:49Z DONE E19-merge-clean-but-broken by RES-3
+2026-07-29T12:44:10Z CLAIM V6-V22-wintighten-absent-vs-below by RES-3
+2026-07-29T12:47:12Z CLAIM A13-sealed-audit-reads-the-wrong-fields by RES-4
+2026-07-29T13:57:50Z DONE V6-V22-wintighten-absent-vs-below by RES-3
+2026-07-29T14:30:08Z CLAIM A14-campaign-json-untracked by W-1670
+2026-07-29T14:30:53Z CLAIM V22-battery-separated-zero-metrics by W-1671
+2026-07-29T14:31:41Z CLAIM A15-ablation-calibration-uncommitted by W-1672
+2026-07-29T14:32:09Z DONE P16-P16-uncited-number-gate by RES-2
+2026-07-29T14:32:29Z CLAIM P17-P17-bare-filename-citations by RES-2
+2026-07-29T15:06:06Z DONE P17-P17-bare-filename-citations by RES-2
+2026-07-29T15:06:24Z CLAIM P17-P17-machine-checked-ruling by RES-2
+2026-07-29T15:08:17Z DONE V22-battery-separated-zero-metrics by W-1671
+2026-07-29T15:08:20Z CLAIM E8-ic3-scale by W-1671
+2026-07-29T15:12:54Z DONE A14-campaign-json-untracked by W-1670
+2026-07-29T15:16:52Z DONE A15-ablation-calibration-uncommitted by W-1672
+2026-07-29T15:27:02Z SWEEP E8-ic3-scale released (worker W-1671: scheduled task is no longer running)
+2026-07-29T15:40:32Z DONE A13-sealed-audit-reads-the-wrong-fields by RES-4
+2026-07-29T15:40:47Z CLAIM R3-release-classifier-defaults by RES-4
+2026-07-29T15:41:01Z CLAIM S-S33-monitor-gate-red-on-master by RES-4
+2026-07-29T15:54:30Z CLAIM E8-ic3-scale by --help
+2026-07-29T15:54:41Z RELEASE E8-ic3-scale by --help (accidental claim by RES-3: passed --help to board.py claim and it was taken as a worker id)
+2026-07-29T15:59:18Z CLAIM E8-ic3-scale by W-130
+2026-07-29T16:01:29Z CLAIM S29-measurement-missing-is-not-zero by RES-4
+2026-07-29T16:13:41Z DONE S-S33-monitor-gate-red-on-master by RES-4
+2026-07-29T16:32:02Z SWEEP E8-ic3-scale released (worker W-130: scheduled task is no longer running)
+2026-07-29T17:21:23Z CLAIM S30-scan-crash-is-invisible by W-1680
+2026-07-29T17:22:09Z CLAIM V23-figures-sources-absent by W-1681
+2026-07-29T17:22:52Z CLAIM V24-battery-blind-hardcoded-path by W-1682
+2026-07-29T17:35:11Z DONE P17-P17-machine-checked-ruling by RES-2
+2026-07-29T17:36:27Z CLAIM P18-P18-certificate-verb-ruling by RES-2
+2026-07-29T17:44:25Z DONE V24-battery-blind-hardcoded-path by W-1682
+2026-07-29T18:00:34Z RECONCILE A13-sealed-audit-reads-the-wrong-fields by RES-4 (stale claimed/ entry removed: done/ record exists from 2026-07-29T15:40:32Z and the branch content is already on master -- the claim file was resurrected by a merge from a branch based before the DONE. See the same failure on E8-ic3-scale.)
+2026-07-29T18:00:45Z DONE S4-freeze by RES-1
+2026-07-29T18:00:49Z CLAIM S4-freeze-complete by RES-1
+2026-07-29T18:11:48Z DONE S30-scan-crash-is-invisible by W-1680
+2026-07-29T18:14:46Z DONE S29-measurement-missing-is-not-zero by RES-4
+2026-07-29T18:14:55Z CLAIM S4-S34-done-items-resurrect by RES-4
+2026-07-29T18:18:29Z DONE V21-leakage-gate-token-level by RES-3
+2026-07-29T18:19:05Z CLAIM V2-V25-leakage-loo-and-multiplicity by RES-3
+2026-07-29T18:21:23Z RECONCILE E8-ic3-scale removed items/E8-ic3-scale.md (already delivered by W-1660 at 2026-07-29T12:16:28Z; a merge from a branch based before that DONE put it back, and it was re-claimed four times after. done/ is authoritative. Its delivery branch agent/e8-ic3-scale is unmerged for an unrelated ci_merge conflict -- that is a merge problem, not an unfinished item.)
+2026-07-29T18:21:23Z RECONCILE E8-ic3-scale removed claimed/E8-ic3-scale.W-1671.md (already delivered by W-1660 at 2026-07-29T12:16:28Z; a merge from a branch based before that DONE put it back, and it was re-claimed four times after. done/ is authoritative. Its delivery branch agent/e8-ic3-scale is unmerged for an unrelated ci_merge conflict -- that is a merge problem, not an unfinished item.)
+2026-07-29T18:30:32Z DONE R3-release-classifier-defaults by RES-4
+2026-07-29T18:30:32Z CLAIM P5-R4-ruling-path-for-undetermined by RES-4
+2026-07-29T18:32:02Z SWEEP V23-figures-sources-absent released (worker W-1681: scheduled task is no longer running)
+2026-07-29T19:00:38Z DONE S4-S34-done-items-resurrect by RES-4
+2026-07-29T19:01:45Z DONE P5-R4-ruling-path-for-undetermined by RES-4
+2026-07-29T19:01:54Z CLAIM S28-no-third-value-in-the-monitor by RES-4
+2026-07-29T20:52:37Z DONE P18-P18-certificate-verb-ruling by RES-2
+2026-07-29T20:53:06Z CLAIM P19-P19 by RES-2
+2026-07-29T21:00:34Z DONE P19-P19 by RES-2
+2026-07-29T22:10:52Z DONE V2-V25-leakage-loo-and-multiplicity by RES-3
+2026-07-29T22:12:10Z CLAIM V-V26-handover-leak-ruling by RES-3
+2026-07-29T22:41:27Z DONE S4-freeze-complete by RES-1
+2026-07-29T22:41:27Z CLAIM S4-E-WORDING by RES-1
+2026-07-29T22:41:58Z DONE S4-E-WORDING by RES-1
+2026-07-29T22:43:06Z CLAIM S4-S4-E1-HOLES by RES-1
+2026-07-29T22:44:13Z DONE S28-no-third-value-in-the-monitor by RES-4
+2026-07-29T22:44:34Z CLAIM S35-s35-reserved-but-unreachable by RES-4
+2026-07-29T22:45:37Z CLAIM S-S34-papers-owes-a-verify-gate by RES-2
+2026-07-29T23:56:02Z CLAIM V23-figures-sources-absent by --help
+2026-07-29T23:56:34Z RELEASE V23-figures-sources-absent by RES-3 (undoing accidental claim: `board.py claim --help` claims the top item to a worker literally named "--help"; release rejects it as an option so the file had to be renamed back by hand)
+2026-07-30T00:44:12Z DONE V-V26-handover-leak-ruling by RES-3
+2026-07-30T00:44:12Z CLAIM V6-V23-large-space-verdict-gap by RES-3
+2026-07-30T00:54:59Z DONE S-S34-papers-owes-a-verify-gate by RES-2
+2026-07-30T00:55:15Z CLAIM S-P20-nosecret-noop by RES-2
+2026-07-30T02:48:02Z DONE S-P20-nosecret-noop by RES-2
+2026-07-30T02:49:06Z CLAIM P-P21-line-anchor-range by RES-2
+2026-07-30T02:59:39Z DONE P-P21-line-anchor-range by RES-2
+2026-07-30T03:00:31Z CLAIM P-P22-anchor-rots-at-commit by RES-2
+2026-07-30T03:00:43Z DONE S4-S4-E1-HOLES by RES-1
+2026-07-30T03:01:11Z CLAIM S4-S4-E23-TIERS by RES-1
+2026-07-30T03:03:44Z DONE P-P22-anchor-rots-at-commit by RES-2
+2026-07-30T03:11:12Z DONE S35-s35-reserved-but-unreachable by RES-4
+2026-07-30T03:11:24Z CLAIM S36-s36-orphan-commits-one-disk by RES-4
+2026-07-30T03:12:02Z REASSIGN S22-access-check-close from infra to campaign by RES-4 (remaining work needs real API spend; CHARTER gives that to RES-1 only (inbox 20260729T0210Z). Handed back by me four times -- the loop was mine, and it cannot end on my side of the lane guard.)
+2026-07-30T03:33:46Z DONE S4-S4-E23-TIERS by RES-1
+2026-07-30T03:35:16Z CLAIM S22-access-check-close by RES-1
+2026-07-30T03:35:35Z DONE S36-s36-orphan-commits-one-disk by RES-4
+2026-07-30T03:35:52Z CLAIM S38-S38-append-only-probe-branch-blind by RES-4
+2026-07-30T03:42:18Z CLAIM V23-figures-sources-absent by --help
+2026-07-30T03:42:47Z RELEASE V23-figures-sources-absent by --help (claimed by accident: RES-3 ran 'board.py claim --help', and board.py parses raw sys.argv so the flag became the worker id)
+2026-07-30T03:45:35Z CLAIM P18-audits-cover-half-the-paper by W-1690
+2026-07-30T03:46:28Z CLAIM S31-a10-said-done-prove-it by W-1691
+2026-07-30T03:47:23Z CLAIM V23-figures-sources-absent by W-1692
+2026-07-30T03:47:56Z DONE S38-S38-append-only-probe-branch-blind by RES-4
+2026-07-30T03:48:17Z CLAIM V25-worldgen-unchecked-is-not-holding by W-1693
+2026-07-30T03:49:04Z CLAIM S39-S39-writes-into-the-live-master-tree by RES-4
+2026-07-30T03:55:17Z DONE S22-access-check-close by RES-1
+2026-07-30T04:22:03Z SWEEP P18-audits-cover-half-the-paper released (worker W-1690: scheduled task is no longer running)
+2026-07-30T04:22:03Z SWEEP S31-a10-said-done-prove-it released (worker W-1691: scheduled task is no longer running)
+2026-07-30T04:22:03Z SWEEP V23-figures-sources-absent released (worker W-1692: scheduled task is no longer running)
+2026-07-30T04:22:03Z SWEEP V25-worldgen-unchecked-is-not-holding released (worker W-1693: scheduled task is no longer running)
+2026-07-30T04:22:23Z CLAIM P18-audits-cover-half-the-paper by RES-3
+2026-07-30T04:34:49Z CLAIM C13-certificate-bridge-two-halves by W-1700
+2026-07-30T04:35:42Z CLAIM C14-four-forms-is-three-and-a-half by W-1701
+2026-07-30T04:36:34Z CLAIM S31-a10-said-done-prove-it by W-1702

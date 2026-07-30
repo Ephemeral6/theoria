@@ -58,7 +58,12 @@ PREFIX = "verify"
 
 #: Directories that are not territories: no code, nothing to gate.
 NOT_TERRITORIES = {".git", ".worktrees", ".claude", ".toolchain", "__pycache__",
-                   ".pytest_cache", ".vscode", ".idea"}
+                   ".pytest_cache", ".vscode", ".idea",
+                   # 2026-07-29: 某个 agent 在仓库根建了 `scratchpad/`（三个
+                   # 一次性脚本，一个都没被 git 跟踪）。它不是领地——没有可交付物、
+                   # 没有闸门要跑。**但它该被记成「不该存在」而不是「未设闸门」**：
+                   # 按 CLAUDE.md，临时文件属于会话的 scratchpad 目录，不进仓库树。
+                   "scratchpad"}
 
 
 #: `bash` 在 PATH 上解析到的是 **WSL** 的 bash——另一个 Linux，`/mnt/c` 挂载、

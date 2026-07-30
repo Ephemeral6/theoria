@@ -195,7 +195,7 @@ Be precise about what was named, because the precision is the whole argument. R-
 names three **directions** — `press_up`, `press_down`, `press_right` — and one
 concrete configuration, "drive the Cart to (2,2) and push DOWN into an unpressed
 Button". It does not enumerate the coordinate pairs; the phrase "the three pairs
-R-05 named" appears in `THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
+R-05 named" appears in `cold-start-a0/THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
 makes the same gloss in different words — both written at M6 *after* the score
 existed, and this paper does not inherit either as if it were the
 pre-registration. The claim that survives is still the one
@@ -276,9 +276,12 @@ Scoped to what was actually run:
    mechanism, rule count, state count and explorer budget at once, and §3.3 shows
    the outcome is entailed by the construction rather than discovered by it
    (`cold-start-a0/A0_REPORT.md` §8).
-4. **A machine-checked impossibility certificate whose weights cross a data
-   boundary.** The pagoda weights are produced by an independent engine's linear
-   program and transported as a JSON certificate
+4. **A machine-checked impossibility whose invariant weights crossed a data
+   boundary.** The impossibility is the machine-checked object — a Lean theorem
+   with an empty axiom list (§4.2) — and the certificate is what crossed. The
+   distinction is worth the extra clause: the certificate is a JSON document, and
+   what re-checks it is Python, not a kernel. The pagoda weights are produced by
+   an independent engine's linear program and transported as that certificate
    (`engine-rig/interop/certificates/pagoda_5_11011_to_00010.json`); the consuming
    side re-verifies every obligation rather than trusting the certificate's own
    `verified` flag (`theory-compiler/STATUS.md`). The two sides are sessions that

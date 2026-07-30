@@ -1,0 +1,37 @@
+{
+  "prompt_id": "P-P22-anchor-rots-at-commit",
+  "branch": "agent/p-p22-anchor-rots-at-commit",
+  "base_commit": "f67b2a88",
+  "base_note": "stacked on agent/p-p21-line-anchor-range, which is stacked on agent/s-p20-nosecret-noop; all three touch papers/phase1-workshop/verify_paper.py or its run records.",
+  "utc": "2026-07-30T03:15:00Z",
+  "closed_utc": "2026-07-30T03:20:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "delivered",
+  "summary": "P21 found three out-of-range line anchors in the papers run records, two of them RES-2's own in S34's record. This item appends the correction and files the fleet-wide pattern as a proposal rather than acting on it.",
+  "findings": [
+    {"id": "P22-1",
+     "what": "papers/runs/20260729T224939Z-S34/RUN_STATE.md cites monitor/ci/merge.log seven times by line number. All seven are correct -- merge.log is append-only and the committed blob is a byte-exact prefix of the working tree's, checked -- and FIVE of the seven are past the end of merge.log in the commit S34 shipped (1862 lines). Read from the repo root's working tree, committed beside a checkout that was further behind.",
+     "resolution": "a correction appended to the record (not an edit -- the record is provenance and the error is the finding), replacing every line anchor with the UTC timestamp in column 1, which append-only guarantees and a line number does not. No substantive claim changes: the claims are carried by the entries, and every entry is where the document said it was."},
+    {"id": "P22-2",
+     "what": "P21's range check saw two of the five, because the other three are written as a bare `:1894` with no filename inside the backticks. That citation form is read by NO check in this repository: check B needs a '/', check F needs a basename with an artefact suffix, and the anchor check hangs off both.",
+     "resolution": "recorded, not gated. Whether a bare `:NNNN` is a defect depends on each territory's citation convention, and this is one territory."},
+    {"id": "P22-3",
+     "what": "the fleet-wide version: every territory writes runs/, and any of them can cite a growing log",
+     "resolution": "filed as monitor/inbox/20260730T0315Z-RES-2-a-line-anchor-into-a-growing-log-is-wrong-when-committed.md. Three proposals, only the first recommended: write 'cite append-only logs by timestamp, not by line' into the provenance convention. Building a gate is explicitly NOT recommended -- P19 already paid that tuition, and gating the run records today is 109 findings on arrival."}
+  ],
+  "measurement": {
+    "merge_log_lines_in_the_shipped_commit": 1862,
+    "merge_log_lines_in_the_repo_root_working_tree": 2048,
+    "committed_blob_is_a_prefix_of_the_working_tree": true,
+    "citations_in_s34_record": 7,
+    "citations_correct_against_a_tree_that_has_them": 7,
+    "citations_past_the_end_of_the_shipped_commit": 5,
+    "citations_the_p21_check_can_see": 2
+  },
+  "verification": {
+    "gate": "papers: green -- verify_paper: PASS (6/6), 184 passed, unchanged by this item",
+    "note": "this item ships prose and a proposal, not code. The gate is run to show the appended correction does not break check B, E or F -- an appended table of paths and timestamps is exactly the kind of text those checks read."
+  }
+}

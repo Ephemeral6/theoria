@@ -1,0 +1,11 @@
+occurrences:            93
+distinct tokens:        23
+ambiguous tokens:       4
+ambiguous occurrences:  4
+
+   41 candidates  x1   ground_truth.json
+   15 candidates  x1   playbook.dsl
+   13 candidates  x1   theory.dsl
+    6 candidates  x1   THEORIZE_LOG.md
+
+cited but absent from the tree: none

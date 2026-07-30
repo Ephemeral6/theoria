@@ -38,6 +38,69 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 ---
 
+## Process 1 — what this battery has actually separated
+
+**0 of 38 metrics separate the specified capability gradient (bare_cc (weaker) vs schema_repro (stronger), paired by game).**
+
+| process-1 verdict | n | metrics |
+|---|---|---|
+| `underpowered` | 8 | `E4`, `P1`, `P2`, `P3`, `X1`, `X2`, `X3`, `X4` |
+| `no-data` | 23 | `E2`, `E3`, `E5`, `E7`, `K1`, `K10`, `K12`, `K13`, `K14`, `K2`, `K3`, `K4`, `K5`, `K6`, `K8`, `K9`, `M1`, `M2`, `M3`, `M4`, `M5`, `P4`, `X6` |
+| `not-ranked` | 7 | `E1`, `E6`, `K11`, `K7`, `M6`, `P5`, `X5` |
+
+**The zero is a ceiling, not a result.** `audit/stats.py` puts the
+smallest attainable two-sided p at `2 / 2**n`, over the sign test's
+**non-tied** `n`, and `audit/discriminate.py` reaches `underpowered`
+whenever that floor exceeds 0.05 — before the effect size can license
+anything. Clearing 0.05 needs **6** non-tied paired games; the
+development pile is four games and the best-covered metric here
+manages **4** (metrics losing a pair to an exact tie do worse still,
+with a floor of 0.25). So on this pile, with game-level pairing,
+`discriminating` is unreachable for every metric no matter how
+cleanly it separates — rerunning the identical pass returns this same
+zero by arithmetic. It is evidence about the design, not about the
+metrics.
+
+**The denominator is 8, not 38.** Only 8 metrics carried both a
+declared direction and enough paired games to be put to the question
+at all (`E4`, `P1`, `P2`, `P3`, `X1`, `X2`, `X3`, `X4`). The other 30 were never asked: 7 are `neutral`
+diagnostics that rank nothing by construction, and the rest have no
+paired control-arm material — whole families of them, because no
+baseline control arm carries an explicit theory or a repair record.
+Note what that decomposition says about the diagnostic flag: it costs
+the tested denominator only 2 metrics (`P5`, `X5`), because the remaining
+neutrals had no paired data to be tested on regardless. The battery
+is not hiding failures behind `neutral`; it is short of material.
+
+**And 0 of those 8 are `main` tier — because the main table holds 0
+metrics in total.** Process 1 is not the only gate a metric has to
+pass to carry an ordering claim: the anti-gaming audit demotes
+anything an arm could optimise by accident with no defence
+implemented, and this document's rule is that `reference` metrics are
+excluded from ordering claims entirely. After the V9 adversarial
+review that demotion emptied the table. So the set that is both
+eligible for the specified gradient and admissible for an ordering
+claim is **empty**, and it would still be empty if the pile were
+large enough to power the test. Any reading of the effect sizes below
+that reaches for the large clean ones (`E4`, `P1`, `P2`, `P3`, `X1`, `X2`, `X3`, `X4`) is reaching for
+`reference` metrics, which this battery has already said may not
+carry an ordering. **This is the more binding of the two limits, and
+unlike the power ceiling it is not fixed by more games.**
+
+**How to say this in a paper.** Not *"the battery is validated"*, and
+not *"the metrics failed"*. `0 of 38` is true as written and false as
+read. The defensible sentence is: *of 38 registered metrics only 8
+were eligible for the specified gradient; none reached significance,
+but on four paired games the smallest attainable two-sided p is 0.125
+at best and 0.25 where a pair ties, so this is a power ceiling and not
+a null result.* Process 1 is **undetermined**, not negative. The
+effect sizes in
+`artifacts/discrimination_arms.json` are the only quantities here
+anyone should read — including the ones pointing the wrong way, which
+a bare verdict tally hides.
+
+---
+
 ## 探索 · Exploration — systematic, or circling?
 
 | id | direction | tier | needs | 验证材料 | definition |

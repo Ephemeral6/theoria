@@ -1,0 +1,90 @@
+{
+  "prompt_id": "S-S34-papers-owes-a-verify-gate",
+  "branch": "agent/s34-papers-verify-gate",
+  "base_commit": "c54954d67b5c1a382a3bb0e47b95003ce277ca08",
+  "utc": "2026-07-29T22:49:39Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "summary": "S34 asked for a verify gate papers already had. The gate existed (S32, ca23738a) and the survey already counted papers as gated; S33 had already retired the tests_only allowance the item asked to remove. The premise was stale on arrival. Delivered instead: the two defects that closing the hole created, plus two found while fixing them.",
+  "findings": [
+    {
+      "id": "D0",
+      "claim": "the filed debt was already closed; do not write a second gate",
+      "evidence": "gates.survey(): papers in gated[], kind=verify, name=verify.py. monitor/tests/test_gates.py:159 pins tests_only == {'verify-lab'}; papers is absent. Contrary to the item's prediction, test_gates.py does not go red once -- the sets it pins are unchanged by this work."
+    },
+    {
+      "id": "D1",
+      "claim": "papers/verify.py reds on any committed top-level directory under papers/, including the runs/ CLAUDE.md mandates",
+      "evidence": "old paper_dirs() returned every subdirectory not starting with . or __. Reproduced at 71e9dc00: mkdir papers/runs/probe -> 'FAIL runs ships no gate', exit 1. at base commit c54954d6, `git ls-tree -r --name-only c54954d6 | grep -cE '(^|/)runs/'` is 3870 across 22 top-level directories (the first draft said 3706 and bound it to no command; that figure reproduces at no commit on this branch's ancestry -- corrected in the cycle-35 pass, see D5).",
+      "adversarial_correction": "Latent, never fired. grep 'red in papers' monitor/ci/merge.log is empty: this territory's provenance has always gone to papers/phase1-workshop/runs/, one level below where paper_dirs() looked. On the branch path it would fail the offending branch, not master. Not runs/-specific."
+    },
+    {
+      "id": "D2",
+      "claim": "adding verify.py retired papers' own test suite from merge gating",
+      "evidence": "gates.py:192 gate_for() returns in the find_gate branch and never reaches has_tests() at :213. merge.log:1856 (15:02:51Z) ran pytest:papers once; :1872 (15:55:51Z) switched to verify:papers(verify.py); :1894/:1938/:1948 all verify. So pytest:papers ran once ever over test_uncited_gate.py's 62 tests; test_bare_gate.py's 20 arrived at 18:02:35Z and have never been run by CI.",
+      "adversarial_correction": "Not a displacement anyone could see: S32 authored verify.py at 11:03Z when papers held no test at all, and P16's suite arrived at 15:02Z in between. The loss lives only in the merge order. The precedent was already in writing -- test_gates.py:163-166 records the identical event for proxy and says the only reason it was acceptable is that proxy/verify.py:260 re-invokes the superseded gate."
+    },
+    {
+      "id": "D3",
+      "claim": "gates.py's negative-sample declaration can be shadowed by a gate's own prose",
+      "evidence": "NEGATIVE_SAMPLE.search (gates.py:160) takes the first match anywhere in the file. This gate's docstring discusses the mechanism, so survey() read the declared sample as a single backtick: {'declared': '`', 'exists': False}. Failed safe here; would not have if the prose had named an existing path. Filed as monitor/inbox/20260729T231500Z-RES-2-negative-sample-shadowed-by-prose.md -- gates.py is monitor's."
+    },
+    {
+      "id": "D4",
+      "claim": "the delegator had three more silences, all found by an adversarial audit and fixed here",
+      "evidence": "--timeout was parsed and passed to nothing, and even once applied its 1800 default matched ci_merge.py:543's own 1800 kill, so the outer kill always won (now 1500); sub-gates got no PYTHONPATH, the entitlement gates.gate_env() states, so it held under ci_merge and not under the documented human invocation; a gate exiting 0 with no output printed '(no output)' on the ok line and took the territory green. The recursion guard could also have skipped stage 3 while still exiting 0, so it now refuses to fire outside pytest."
+    },
+    {
+      "id": "D5",
+      "claim": "this delivery's own gate printed a green line asserting a check that had not executed -- the defect class D2/D4/stage 3 exist to catch, committed by the gate about itself",
+      "evidence": "Probe A, cycle 35. THEORIA_PAPERS_VERIFY_INNER=1 alone is refused (RED, exit 1). INNER=1 plus PYTEST_CURRENT_TEST=<any> skips stage 3, exits 0, and printed \"papers: green -- 1 paper(s), each gated by its own check, and the checks' own suite run\". The skip itself is unavoidable (same shape as the legitimate nested run; the alternative to exiting 0 is a fork bomb) and two variables no merge sets is a narrow door. The false sentence was not. Undetected through cycles 33 and 34 because every test asserted on run_suite()'s return value or the exit code and nothing read the sentence.",
+      "fix": "run_suite() returns (ok, detail, ran). `ran` must be a third value because `ok` cannot carry it -- the skip is genuinely green -- and is returned rather than sniffed out of detail's prose so the caller cannot get it wrong. main() prints \"...suite NOT run (stage 3 skipped)\" on that path. Five suite call sites updated to the 3-tuple, each now also asserting `ran`, which was the missing assertion. Pinned by test_the_skipped_summary_does_not_claim_the_suite_ran; restoring the unconditional \"run\" reds that test and only that one (1 failed, 25 passed)."
+    }
+  ],
+  "measurement": {
+    "stage_3_is_not_decorative": {
+      "claim": "stage 3 is not decorative",
+      "method": "mutate phase1-workshop/verify_paper.py MIN_ANCHOR 24 -> 0 (one of three guards the audit showed could be deleted with papers still green), run cd papers && python verify.py, restore",
+      "result": "stage 2 green (verify_paper: PASS 6/6), stage 3 red (pytest exited 1: 1 failed, 73 passed), gate exit 1. Before this change the same mutation merged. verify_paper.py restored byte-for-byte, git diff clean."
+    },
+    "delegator_suite_is_not_decorative": {
+      "claim": "the delegator's own suite is load-bearing, not decoration",
+      "method": "four independent mutations of papers/verify.py, each reverted after; run papers/test_verify_delegator.py",
+      "result": "4/4 caught, each by the test named for that property rather than by a blanket failure: 'if not tail:'->'if False:' reds test_a_gate_that_says_nothing_is_red (1 failed, 24 passed); MIN_PAPERS 1->0 reds test_no_paper_at_all_is_red_not_a_vacuous_pass + test_provenance_alone_does_not_satisfy_the_floor (2 failed, 23 passed); NO_TESTS_COLLECTED 5->999 reds test_a_vanished_suite_is_red (1 failed, 24 passed); strays.append->skipped.append reds test_an_unrecognised_directory_is_still_red + test_a_directory_without_the_marker_is_not_silently_dropped (2 failed, 23 passed). git diff verify.py clean after."
+    },
+    "citation_audit": {
+      "claim": "every citation in RUN_STATE.md and the docstring resolves",
+      "method": "Probe B, cycle 35: read each cited line; re-derive each count by collection or by git ls-tree",
+      "result": "Resolve as claimed: gates.py :160/:177/:192/:213, test_gates.py :159/:163-166, ci_merge.py:543 (the 1800s kill), proxy/verify.py:260, and merge.log :1838/:1856/:1872/:1875/:1894/:1938/:1948. grep -c 'red in papers' merge.log still 0. All five quoted test names exist. Counts by collection: test_uncited_gate.py 62, test_bare_gate.py 20, test_verify_delegator.py 26. TWO WRONG, both corrected: (1) 3706 files under */runs/ reproduces at no commit on this ancestry -- 3870 at c54954d6 by (^|/)runs/, 3745 by ^[^/]+/runs/; the claim it supports holds at all three figures, which is why it survived two readings; docstring and RUN_STATE now carry the query and the commit. (2) RUN_STATE said '23 tests' in one sentence and '25 passed' in another; now 26 in both."
+    }
+  },
+  "verification": {
+    "papers_gate": "exit 0 -- 1 paper, verify_paper: PASS (6/6), 108 tests passed",
+    "delegator_suite": "papers/test_verify_delegator.py: 26 passed",
+    "monitor_gate_tests": "monitor/tests/test_gates.py + test_gate_negative_sample.py: 18 passed -- checked because papers leaving survey()['decorative'] (22 -> 21) changes survey output, and a master-side red in monitor holds every branch (merge.log:1875). Nothing pins the live decorative set.",
+    "negative_sample_resolves": "gates.negative_sample_of('.', 'papers/verify.py') -> {'declared': 'papers/test_verify_delegator.py', 'exists': True}; gate_for -> {'kind': 'verify', 'name': 'verify.py'}. Re-checked after the cycle-35 docstring edit, because D3 is that prose can shadow the declaration.",
+    "worktree_not_dirtied": "git status --porcelain byte-identical before and after a full gate run."
+  },
+  "follow_up": "S-P20-nosecret-noop (priority 1): six silent-pass holes inside phase1-workshop/verify_paper.py, headed by check D NOSECRET building its secret list from a gitignored .env and so iterating zero times in every worktree ci_merge checks out.",
+  "files": [
+    {
+      "path": "papers/.gitattributes",
+      "sha256": "837ab1c7ec2f3a39d66e2cb66d0ca289912d67c5bef36159dbad346678bf0497"
+    },
+    {
+      "path": "papers/verify.py",
+      "sha256": "0b08896e87d2efdd6118a021b82cdc9e95d5943e9061ce547f36779492583c63"
+    },
+    {
+      "path": "papers/test_verify_delegator.py",
+      "sha256": "2a5c05a716f233f1143d0332a8c02654f6bc75769c3bcd17fc062c002afbf916"
+    },
+    {
+      "path": "papers/runs/20260729T224939Z-S34/RUN_STATE.md",
+      "sha256": "87286b9c91e9dac269e8dbfbfd5ca1151037555f1ad1888a77a0c7c73972cf25"
+    }
+  ],
+  "cycles": "33 wrote and staged it; 34 resumed, re-ran the gate green, dispatched two adversaries against its own delivery and died before either returned; 35 ran both probes itself, found D5 plus two wrong numbers, and committed. Recorded because both earlier cycles had already declared this delivery finished.",
+  "files_note": "Sealed as the last action before the commit. The cycle-34 manifest declared RUN_STATE.md as 15d8319c... while disk was 28fd318e... -- narrative appended after the hash was taken -- and omitted papers/.gitattributes entirely. A stale seal in a provenance manifest is the same defect this delivery files against others, so the order is fixed: hash last, never mid-edit."
+}

@@ -1,0 +1,704 @@
+{
+ "occurrences": [
+  {
+   "section": "01_intro.md",
+   "line": 8,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 33,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 41,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 46,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 84,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 108,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 198,
+   "token": "A0_REPORT.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "01_intro.md",
+   "line": 242,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 3,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 10,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 16,
+   "token": "playbook.dsl",
+   "n_candidates": 15
+  },
+  {
+   "section": "02_framework.md",
+   "line": 21,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 35,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 59,
+   "token": "THEORIZE_LOG.md",
+   "n_candidates": 6
+  },
+  {
+   "section": "02_framework.md",
+   "line": 74,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 92,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 96,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 112,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "02_framework.md",
+   "line": 120,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "03_a0.md",
+   "line": 130,
+   "token": "A0P_REPORT.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "03_a0.md",
+   "line": 202,
+   "token": "prime_report.json",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 5,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 11,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 19,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 46,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 46,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 47,
+   "token": "PARTNER_SYNC.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 48,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "04_a1.md",
+   "line": 89,
+   "token": "gen_lean.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 5,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 37,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 65,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 149,
+   "token": "locate.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 152,
+   "token": "locate.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 160,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 170,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "05_a2.md",
+   "line": 235,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "06_a3_transfer.md",
+   "line": 6,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 5,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 45,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 55,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 326,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 493,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "07_battery.md",
+   "line": 643,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "08_exam.md",
+   "line": 47,
+   "token": "mark.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "08_exam.md",
+   "line": 93,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 33,
+   "token": "SURVEY-solver-status.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 34,
+   "token": "SURVEY-empty-as-negative.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 35,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 36,
+   "token": "SURVEY-success-as-truth.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 44,
+   "token": "SURVEY-solver-status.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 46,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 48,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 51,
+   "token": "SURVEY-empty-as-negative.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 52,
+   "token": "SURVEY-success-as-truth.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 58,
+   "token": "SURVEY-solver-status.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 62,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 65,
+   "token": "SURVEY-empty-as-negative.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 79,
+   "token": "SURVEY-solver-status.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 80,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 127,
+   "token": "ground_truth.json",
+   "n_candidates": 41
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 179,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 193,
+   "token": "SURVEY-solver-status.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 195,
+   "token": "SURVEY-environment-as-semantics.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 197,
+   "token": "SURVEY-success-as-truth.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 200,
+   "token": "validate.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 203,
+   "token": "SURVEY-empty-as-negative.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 214,
+   "token": "ladder.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 237,
+   "token": "validate.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 287,
+   "token": "potential.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "10_adjudication.md",
+   "line": 323,
+   "token": "p13_fd_dividend.py",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 3,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 12,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 48,
+   "token": "theory.dsl",
+   "n_candidates": 13
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 63,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 67,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 71,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 92,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 102,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 148,
+   "token": "A0P_REPORT.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 170,
+   "token": "CLAUDE.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 190,
+   "token": "fd_real.json",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 195,
+   "token": "BLOCKER_FAST_DOWNWARD.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 228,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "11_limitations.md",
+   "line": 284,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 13,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 29,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 48,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 50,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 50,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 53,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 62,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  },
+  {
+   "section": "12_related.md",
+   "line": 67,
+   "token": "Theoria.md",
+   "n_candidates": 1
+  }
+ ],
+ "candidates": {
+  "Theoria.md": [
+   "Theoria.md"
+  ],
+  "A0_REPORT.md": [
+   "cold-start-a0/A0_REPORT.md"
+  ],
+  "playbook.dsl": [
+   "cold-start-a0/theory/playbook.dsl",
+   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/playbook.dsl",
+   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/playbook.dsl",
+   "cold-start-a3/theory/playbook.dsl",
+   "cold-start-a3/theory/push/playbook.dsl",
+   "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/playbook.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/playbook.dsl"
+  ],
+  "THEORIZE_LOG.md": [
+   "a0-spike/THEORIZE_LOG.md",
+   "cold-start-a0/THEORIZE_LOG.md",
+   "cold-start-a0/prime/THEORIZE_LOG.md",
+   "cold-start-a2/THEORIZE_LOG.md",
+   "cold-start-a3/THEORIZE_LOG.md",
+   "theoria-arm/THEORIZE_LOG.md"
+  ],
+  "A0P_REPORT.md": [
+   "cold-start-a0/prime/A0P_REPORT.md"
+  ],
+  "prime_report.json": [
+   "cold-start-a0/prime/artifacts/prime_report.json"
+  ],
+  "CLAUDE.md": [
+   "CLAUDE.md"
+  ],
+  "PARTNER_SYNC.md": [
+   "PARTNER_SYNC.md"
+  ],
+  "gen_lean.py": [
+   "theory-compiler/src/theory_compiler/generators/gen_lean.py"
+  ],
+  "locate.py": [
+   "cold-start-a2/a2pipeline/locate.py"
+  ],
+  "mark.py": [
+   "exam/grading/mark.py"
+  ],
+  "SURVEY-solver-status.md": [
+   "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-solver-status.md"
+  ],
+  "SURVEY-empty-as-negative.md": [
+   "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-empty-as-negative.md"
+  ],
+  "SURVEY-environment-as-semantics.md": [
+   "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-environment-as-semantics.md"
+  ],
+  "SURVEY-success-as-truth.md": [
+   "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-success-as-truth.md"
+  ],
+  "ground_truth.json": [
+   "cold-start-a0/artifacts/ground_truth.json",
+   "cold-start-a0/prime/artifacts/ground_truth.json",
+   "cold-start-a0/prime/prime/artifacts/ground_truth.json",
+   "cold-start-a2/artifacts/ground_truth.json",
+   "cold-start-a3/artifacts/ground_truth.json",
+   "cold-start-a3/runs/p-17/ground_truth.json",
+   "worldgen/out/worlds/t1-cycler-gate/ground_truth.json",
+   "worldgen/out/worlds/t1-fragile-bridge/ground_truth.json",
+   "worldgen/out/worlds/t1-portal-oneway/ground_truth.json",
+   "worldgen/out/worlds/t1-push-corridor/ground_truth.json",
+   "worldgen/out/worlds/t1-push-open/ground_truth.json",
+   "worldgen/out/worlds/t1-switch-latch/ground_truth.json",
+   "worldgen/out/worlds/t1-switch-toggle/ground_truth.json",
+   "worldgen/out/worlds/t1-tokens-lock/ground_truth.json",
+   "worldgen/out/worlds/t1-walk-maze/ground_truth.json",
+   "worldgen/out/worlds/t2-cycler-lock/ground_truth.json",
+   "worldgen/out/worlds/t2-gravity-push/ground_truth.json",
+   "worldgen/out/worlds/t2-lock-fragile/ground_truth.json",
+   "worldgen/out/worlds/t2-portal-pair/ground_truth.json",
+   "worldgen/out/worlds/t2-portal-paired/ground_truth.json",
+   "worldgen/out/worlds/t2-switch-push/ground_truth.json",
+   "worldgen/out/worlds/t2-unsolvable-nodoor/ground_truth.json",
+   "worldgen/out/worlds/t3-cycler-portal-lock/ground_truth.json",
+   "worldgen/out/worlds/t3-full-house/ground_truth.json",
+   "worldgen/out/worlds/t3-gravity-fragile/ground_truth.json",
+   "worldgen/out/worlds/t3-latch-maze/ground_truth.json",
+   "worldgen/out/worlds/v-1383db02/ground_truth.json",
+   "worldgen/out/worlds/v-29ace70e/ground_truth.json",
+   "worldgen/out/worlds/v-379c937f/ground_truth.json",
+   "worldgen/out/worlds/v-57cfb2b4/ground_truth.json",
+   "worldgen/out/worlds/v-659c9594/ground_truth.json",
+   "worldgen/out/worlds/v-7048ee5e/ground_truth.json",
+   "worldgen/out/worlds/v-707a64ad/ground_truth.json",
+   "worldgen/out/worlds/v-a3446614/ground_truth.json",
+   "worldgen/out/worlds/v-ab7a7d57/ground_truth.json",
+   "worldgen/out/worlds/v-bd2babb4/ground_truth.json",
+   "worldgen/out/worlds/v-c52c42ed/ground_truth.json",
+   "worldgen/out/worlds/v-ce732813/ground_truth.json",
+   "worldgen/out/worlds/v-d2c2b1b9/ground_truth.json",
+   "worldgen/out/worlds/v-eb4c5810/ground_truth.json",
+   "worldgen/out/worlds/v-efe43df1/ground_truth.json"
+  ],
+  "validate.py": [
+   "engine-rig/engines/fd_adapter/validate.py"
+  ],
+  "ladder.py": [
+   "engine-rig/bench/ladder.py"
+  ],
+  "potential.py": [
+   "engine-rig/engines/lp_potential/potential.py"
+  ],
+  "p13_fd_dividend.py": [
+   "engine-rig/tools/p13_fd_dividend.py"
+  ],
+  "theory.dsl": [
+   "a0-spike/theory/theory.dsl",
+   "cold-start-a0/theory/theory.dsl",
+   "cold-start-a2/theory/theory.dsl",
+   "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/theory.dsl",
+   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/theory.dsl"
+  ],
+  "fd_real.json": [
+   "cold-start-a0/artifacts/fd_real.json"
+  ],
+  "BLOCKER_FAST_DOWNWARD.md": [
+   "cold-start-a0/BLOCKER_FAST_DOWNWARD.md"
+  ]
+ }
+}

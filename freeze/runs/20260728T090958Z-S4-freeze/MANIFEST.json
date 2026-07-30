@@ -1,0 +1,29 @@
+{
+  "prompt_id": "S4-freeze",
+  "branch": "agent/s4-freeze",
+  "base_commit": "7cb6775b59431f7f56fb2383c42d6c6efd65ba41",
+  "utc": "2026-07-28T09:09:58Z",
+  "worker": "W-1541",
+  "territory": "freeze",
+  "deliverables": [
+    "freeze/MANIFEST_DRAFT.md",
+    "freeze/STATS_RULES.md",
+    "freeze/CLAIMS_TEXT.md",
+    "freeze/PENDING_FIVE.md"
+  ],
+  "collision": {
+    "what": "The same four files were dispatched twice: board item S4-freeze and prompt monitor/prompts/P-22-freeze-kit.md.",
+    "prior_draft": ".worktrees/wt-p22/freeze/ on branch agent/p22-freeze-kit at dc9fad1",
+    "prior_draft_state": "untracked -- `git status --short` in that worktree shows only `?? freeze/`, so from the board's side the work did not exist",
+    "resolution": "The P-22 draft is the base; this round's independent draft is merged into it and two factual defects in it are corrected. Nothing was written into .worktrees/wt-p22/.",
+    "reported_to": "monitor/inbox/20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md"
+  },
+  "inputs": [
+    { "path": "Theoria.md", "role": "upstream text: Phase 4 freeze list (13 items), statistical adjudication rules, claim menu C1-C5, the five pending values" },
+    { "path": ".worktrees/wt-p22/freeze/", "role": "prior uncommitted draft, used as the base" },
+    { "path": "baseline-arms/out/", "role": "variance envelope evidence for the n decision" },
+    { "path": "baseline-arms/INCIDENTS.md", "role": "INC-BA-003, the contention incident behind the ar25 degraded ruling" },
+    { "path": "arc-recon/data/precheck.json", "role": "determinism precheck, 4/4 games PASS" }
+  ],
+  "files": []
+}

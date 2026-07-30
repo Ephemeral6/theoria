@@ -1824,3 +1824,240 @@
 2026-07-29T10:08:05Z MERGED origin/agent/c10-unsolvable-proof-canon (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
 2026-07-29T10:08:05Z CLEARED flag for origin/agent/c10-unsolvable-proof-canon (merged)
 2026-07-29T10:08:11Z FLAG origin/agent/v5-verdict-three-types: merge conflict
+2026-07-29T10:24:30Z FLAG origin/agent/s21-app-session-death: push rejected (race?)
+2026-07-29T10:25:44Z MERGED origin/agent/s27-release-must-stick (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:29:35Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T10:29:44Z FLAG origin/agent/s4-freeze: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T07:43:30Z]
+2026-07-29T10:29:45Z HELD 10 unchanged since last verdict: p10-figures-into-paper (merge conflict, 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a10-shared-ledger-real-arms (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); e8-ic3-scale (merge conflict, 1x); v19-unverified-is-not-true (merge conflict, 1x)
+2026-07-29T10:42:58Z MERGED origin/agent/p7-p14-battery-section-blind-round (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T10:44:09Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:56:07Z MERGED origin/agent/s21-app-session-death (dirs: ; gates: none)
+2026-07-29T10:56:07Z CLEARED flag for origin/agent/s21-app-session-death (merged)
+2026-07-29T11:01:28Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T11:04:05Z MERGED origin/agent/s27-credential-triage (dirs: proxy; gates: verify:proxy(verify.py))
+2026-07-29T11:12:21Z MERGED origin/agent/p15-capability-column (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T11:13:25Z MERGED origin/agent/s28-claim-warns-on-existing-branch (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:19:43Z CLEARED-BY-OPS-M flags for a10-shared-ledger-real-arms, v19-unverified-is-not-true, p13-figure-numbering (merged to master by hand: the conflict resolutions were made in a previous session's worktrees and ci_merge cannot reproduce them)
+2026-07-29T14:24:26Z CLEARED-BY-OPS-M e15-solver-status-bit: merged to master together with origin/agent/e19-merge-clean-but-broken. e15 alone turns engine-rig RED against master -- it removes Law.scope_exhaustive, which heldout/zero_space_heldout.py (E17, already on master) constructs. Neither branch touches the other's lines, so the pair merges without a textual conflict and only the merged tree is broken. e19 already carried the fix and had never been picked up. Gate on the combined tree: OK verify:engine-rig(verify.py).
+2026-07-29T14:27:55Z CLEARED-BY-OPS-M s4-freeze: the flag was stale twice over. It recorded tip 3c0bff72 and reason 'merge conflict' with 3 attempts and a NEEDS-HUMAN escalation; the branch is now at fd8096ba, merges clean, and gates OK verify:freeze(verify.sh). Nothing was wrong with it -- nothing retried it.
+2026-07-29T14:27:55Z CLEARED-BY-OPS-M r2-release-licence: the flag's quoted output was misleading, not the flag. Those 'note' lines about sealed-pile ids are check_redlines.py passing (0 violations over 5707 files); the actual red was release/tests/test_bundle.py -- 'BUNDLE.jsonl is stale, rerun release/bundle.py' plus a partition test failing on release/.gitattributes, which master added after the branch built its bundle. Fixed by running the regeneration the failure names. Ships 1930 -> 1931; the 20 held-back files are unchanged; no leakage or sealed-pile check was touched.
+2026-07-29T14:37:00Z CLEARED-BY-OPS-M p10-figures-into-paper: the flag predates the p13 merge and lists neither fig06 nor figures/verify.sh, both of which were conflicting by the time anyone looked. Real conflict was one file: master (P4/A12) and p10 had each added a 'gate 9' to verify.sh. Both kept -- master's stays 9, p10's publication-profile three become 10/11/12, cross-references fixed. figures/out/** was regenerated from the merged sources with build_all.py rather than hand-picked; the rebuild moved eight files the conflict never named. Gate OK verify:figures(verify.sh).
+2026-07-29T14:37:30Z FLAG origin/agent/a13-sealed-audit-reads-the-wrong-fields: push rejected (race?)
+2026-07-29T14:40:25Z MERGED origin/agent/s29-third-condition (dirs: .gitignore,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:45:23Z MERGED origin/agent/s29-triage-red-gates (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:46:02Z FLAG origin/agent/s29-triage-the-five-red-gates: merge conflict
+2026-07-29T14:48:45Z FLAG origin/agent/s30-clock-sanity-widen: push rejected (race?)
+2026-07-29T14:49:02Z MERGED origin/agent/s31-fleetkit-gate (dirs: fleetkit; gates: verify:fleetkit(verify.py))
+2026-07-29T14:49:11Z FLAG origin/agent/s32-close-gate-gap: verify gate red in browser-ops (verify.py)
+2026-07-29T14:49:19Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict
+2026-07-29T14:53:12Z MERGED origin/agent/v21-lp-unavailable-is-not-a-pass (dirs: PARTNER_SYNC.md,engine-rig,fuzzlab; gates: verify:engine-rig(verify.py),verify:fuzzlab(verify.py); a gate dirtied the worktree: fuzzlab/out/campaign.json,fuzzlab/out/findings.jsonl)
+2026-07-29T14:56:27Z MERGED origin/agent/v22-wintighten-absent-vs-below (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T15:01:40Z MERGED origin/agent/v6-exam-on-sealed-dryrun (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T15:02:51Z MERGED origin/agent/p16-uncited-number-gate (dirs: PARTNER_SYNC.md,papers; gates: pytest:papers)
+2026-07-29T15:05:53Z FLAG origin/agent/w1661-board-half-tracked: verify gate red in monitor (verify.sh)
+2026-07-29T15:07:43Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T15:07:59Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T15:08:24Z MERGED origin/agent/s4-freeze (dirs: PARTNER_SYNC.md,freeze; gates: verify:freeze(verify.sh))
+2026-07-29T15:08:26Z HELD 3 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); v5-verdict-three-types (merge conflict, 2x)
+2026-07-29T15:09:16Z CLEARED-BY-OPS-M v5-verdict-three-types: the conflict was two appends at EOF that git could not align, nothing substantive. Master's side was V7's strict xfail; the branch's side of the hunk was empty because its ten tests had already auto-merged higher up. Test count is the exact union -- base 39 / master 40 / branch 49 / merged 50, nothing dropped. Full suite on the merged tree: 359 passed, 2 xfailed. Gate DRIFT exam + DRIFT monitor, both non-blocking and both regenerating their own artefacts.
+2026-07-29T15:17:46Z MERGED origin/agent/a14-campaign-json-untracked (dirs: PARTNER_SYNC.md,baseline-arms; gates: verify:baseline-arms(verify.py))
+2026-07-29T15:18:38Z MERGED origin/agent/a15-ablation-calibration-uncommitted (dirs: PARTNER_SYNC.md,ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a0-base/episode.jsonl.lock,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl.lock,ablation-arm/artifacts/a2-charitable/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl.lock)
+2026-07-29T15:31:08Z FLAG origin/agent/p17-bare-filename-citations: verify gate red in figures (verify.sh)
+2026-07-29T15:31:32Z MERGED origin/agent/v22-battery-separated-zero-metrics (dirs: PARTNER_SYNC.md,battery; gates: verify:battery(verify.py))
+2026-07-29T15:39:17Z MERGED origin/agent/a13-sealed-audit-reads-the-wrong-fields (dirs: arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T15:39:17Z CLEARED flag for origin/agent/a13-sealed-audit-reads-the-wrong-fields (merged)
+2026-07-29T15:39:19Z HELD 4 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x)
+2026-07-29T15:53:31Z FLAG origin/agent/s29-triage-the-five-red-gates: verify gate red in monitor (verify.sh)
+2026-07-29T15:54:39Z FLAG origin/agent/s30-clock-sanity-widen: verify gate red in monitor (verify.sh)
+2026-07-29T15:55:51Z MERGED origin/agent/s32-close-gate-gap (dirs: CONTRACTS,PARTNER_SYNC.md,browser-ops,monitor,papers; gates: verify:CONTRACTS(verify.py),verify:browser-ops(verify.py),verify:monitor(verify.sh),verify:papers(verify.py); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T15:55:51Z CLEARED flag for origin/agent/s32-close-gate-gap (merged)
+2026-07-29T15:55:53Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); w1661-board-half-tracked (verify gate red in monitor (verify.sh), 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T16:01:59Z CLEARED-BY-OPS-M s29-triage-the-five-red-gates, s30-clock-sanity-widen, w1661-board-half-tracked: all three recorded 'verify gate red in monitor (verify.sh)', and that red was master's own, not theirs. From 15:02:43Z (ee0d43d9, p16-uncited-number-gate) master carried the first test_*.py under papers/, which flipped papers from ungated to tests_only while monitor/tests/test_gates.py still pinned the allowed set as {verify-lab, fleetkit}; verify.sh on clean origin/master with nothing merged failed that single test, reproduced at two master tips and with PYTHONPATH removed. s32-close-gate-gap gave papers a real gate at 15:55:51Z and master is green again. None of the three could ever have been retried on their own: the hold rule compares the branch tip only, the reason is not transient, and the tip does not move when the cause of the red is on the other side of the merge -- so a branch flagged for a master-side red is held forever, including agent/s29-triage-the-five-red-gates, which is itself carrying the base-aware hold rule that fixes this. w1661 adds two inbox documents and no code.
+2026-07-29T16:01:59Z NOTE-BY-OPS-M a3-campaign-devpile: its flag is NOT cleared, but the reason recorded on it is wrong and the NEEDS-HUMAN counter overstates it. The 'verify gate red in monitor' of 15:07:43Z was master's, as above; a3's own red is in theoria-arm -- tests/test_arm.py::test_the_archive_stays_accountable, manifest re-derivation drift on leg 20260729T004020Z-leg01 -- which is green on clean master and red with a3 merged. ci_merge walks sorted(dirs) and returns on the first red, so monitor was masking theoria-arm. The '4 attempts' aggregate at least three distinct causes across the day (tests red in theoria-arm 01:55-02:18Z; an older monitor red 02:32-04:14Z; theoria-arm's verify red 05:25Z and 10:29Z; p16's stale assertion 15:07Z). Escalation is a semantic call for theoria-arm's owner, not a merge; inbox item written.
+2026-07-29T16:02:30Z MERGED origin/agent/s4-freeze (dirs: PARTNER_SYNC.md,freeze; gates: verify:freeze(verify.sh))
+2026-07-29T16:04:17Z MERGED origin/agent/s29-triage-the-five-red-gates (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T16:06:07Z MERGED origin/agent/s30-clock-sanity-widen (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T16:07:29Z BLOCKED: another merge holds the lock; merged nothing
+2026-07-29T16:07:45Z MERGED origin/agent/w1661-board-half-tracked (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T16:07:47Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T16:18:42Z MERGED origin/agent/s33-monitor-gate-red (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T16:18:44Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T16:32:17Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T16:47:08Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T17:02:12Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 4x); e8-ic3-scale (merge conflict, 2x); v20-figures-pipeline-red (merge conflict, 1x); p17-bare-filename-citations (verify gate red in figures (verify.sh), 1x)
+2026-07-29T17:17:08Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T17:17:13Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T17:21:59Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 5 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T17:22:07Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T17:22:14Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict
+2026-07-29T17:37:55Z FLAG origin/agent/p17-bare-filename-citations: push rejected (race?)
+2026-07-29T18:02:35Z MERGED origin/agent/p17-machine-checked-ruling (dirs: PARTNER_SYNC.md,engine-rig,figures,freeze,monitor,papers,proxy,release,worldgen; gates: verify:engine-rig(verify.py),verify:figures(verify.sh),verify:freeze(verify.sh),verify:monitor(verify.sh),verify:papers(verify.py),verify:proxy(verify.py),verify:release(verify.sh),verify:worldgen(verify.py); a gate dirtied the worktree: monitor/index.html,monitor/state.json,release/runs/20260728T234923Z-S23/after/contamination.planted.txt,release/runs/20260728T234923Z-S23/before/contamination.planted.txt,worldgen/out/qc/t2-lock-fragile/engines_report.json)
+2026-07-29T18:04:33Z MERGED origin/agent/v24-battery-blind-hardcoded-path (dirs: PARTNER_SYNC.md,battery,monitor; gates: verify:battery(verify.py),verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T18:17:14Z CLEARED flag for origin/agent/p17-bare-filename-citations (merged)
+2026-07-29T18:17:14Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/p17-bare-filename-citations
+2026-07-29T18:20:04Z MERGED origin/agent/s29-measurement-missing (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T18:23:15Z MERGED origin/agent/s30-scan-crash-is-invisible (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T18:32:53Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)
+2026-07-29T18:32:59Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict
+2026-07-29T18:33:01Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T18:33:05Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T18:38:18Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 6 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T18:38:24Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T18:38:45Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)
+2026-07-29T18:38:50Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T14:49:19Z]
+2026-07-29T18:49:27Z MERGED origin/agent/opsa-c41-pool-three-readers (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T18:49:29Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T18:49:33Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T18:55:10Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 7 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T18:55:17Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 5 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T18:55:35Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)
+2026-07-29T18:55:40Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-29T14:49:19Z]
+2026-07-29T18:56:21Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)
+2026-07-29T18:56:27Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict
+2026-07-29T19:02:08Z CLEARED flag for origin/agent/v20-figures-pipeline-red (merged)
+2026-07-29T19:02:08Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/v20-figures-pipeline-red
+2026-07-29T19:02:54Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)
+2026-07-29T19:05:28Z MERGED origin/agent/s34-done-items-resurrect (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T19:05:29Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 5 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T19:05:33Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 5 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T19:10:52Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 8 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T19:10:59Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 6 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T19:11:19Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T18:38:45Z]
+2026-07-29T19:12:12Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T19:12:18Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T19:23:05Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)
+2026-07-29T19:23:07Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x)
+2026-07-29T19:32:08Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T19:37:08Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T19:52:13Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:07:08Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:17:15Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:27:08Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:37:20Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:47:24Z HELD 8 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 5x); v5-battery-freeze (merge conflict, 5x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 8x); e8-ic3-scale (merge conflict, 6x); s4-freeze (verify gate red in freeze (verify.sh), 3x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 3x); v21-leakage-gate-token-level (merge conflict, 3x); r4-ruling-path (verify gate red in release (verify.sh), 2x)
+2026-07-29T20:57:33Z MERGED origin/agent/p18-certificate-verb-ruling (dirs: PARTNER_SYNC.md,papers; gates: verify:papers(verify.py))
+2026-07-29T20:57:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 6 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T20:57:38Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 6 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T21:03:38Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 9 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T21:03:44Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 7 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T21:04:05Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T18:38:45Z]
+2026-07-29T21:04:56Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T21:05:03Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T21:06:00Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T21:14:50Z MERGED origin/agent/opsa-c42-build-lane-gates (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-29T21:15:02Z MERGED origin/agent/p19-content-anchors (dirs: PARTNER_SYNC.md,papers; gates: verify:papers(verify.py))
+2026-07-29T21:22:23Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 7 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T21:22:27Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 7 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T21:27:48Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 10 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T21:27:54Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 8 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T21:28:21Z MERGED origin/agent/s4-freeze (dirs: PARTNER_SYNC.md,freeze; gates: verify:freeze(verify.sh))
+2026-07-29T21:28:21Z CLEARED flag for origin/agent/s4-freeze (merged)
+2026-07-29T21:29:10Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T21:29:16Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 5 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T21:30:06Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T21:42:29Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 8 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T21:42:35Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 8 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T21:49:03Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 11 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T21:49:10Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 9 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T21:49:12Z HELD 3 unchanged since last verdict: r3-release-classifier-defaults (verify gate red in release (verify.sh), 5x); v21-leakage-gate-token-level (merge conflict, 5x); r4-ruling-path (verify gate red in release (verify.sh), 4x)
+2026-07-29T22:02:23Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 8x); v5-battery-freeze (merge conflict, 8x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 11x); e8-ic3-scale (merge conflict, 9x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 5x); v21-leakage-gate-token-level (merge conflict, 5x); r4-ruling-path (verify gate red in release (verify.sh), 4x)
+2026-07-29T22:15:04Z MERGED origin/agent/opsa-c43-refuters-earned-their-keep (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-29T22:15:11Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict
+2026-07-29T22:15:13Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 9 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T22:15:18Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 9 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T22:21:20Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 12 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T22:21:27Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 10 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T22:22:26Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T22:22:33Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 6 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T22:23:33Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T22:35:32Z MERGED origin/agent/s28-no-third-value-in-the-monitor (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-29T22:35:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 10 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T22:35:39Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 10 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T22:41:45Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 13 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T22:41:52Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T22:42:48Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T22:42:54Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 7 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T22:43:50Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T22:43:57Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict
+2026-07-29T23:00:41Z MERGED origin/agent/s28-no-third-value-in-the-monitor (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T23:00:43Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 11 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T23:00:50Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T23:08:14Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 14 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T23:08:25Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 12 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T23:09:27Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)
+2026-07-29T23:10:39Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T23:10:47Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 8 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T23:11:57Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T23:12:05Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T22:15:11Z]
+2026-07-29T23:27:28Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 12 attempts since 2026-07-29T04:19:41Z]
+2026-07-29T23:27:34Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 12 attempts since 2026-07-29T04:33:05Z]
+2026-07-29T23:33:44Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 15 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T23:33:50Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 13 attempts since 2026-07-29T04:15:47Z]
+2026-07-29T23:34:33Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)
+2026-07-29T23:35:22Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 9 attempts since 2026-07-29T18:32:53Z]
+2026-07-29T23:35:28Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 9 attempts since 2026-07-29T18:32:59Z]
+2026-07-29T23:36:22Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-29T19:02:54Z]
+2026-07-29T23:36:28Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-29T22:15:11Z]
+2026-07-29T23:47:24Z HELD 9 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 12x); v5-battery-freeze (merge conflict, 12x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 15x); e8-ic3-scale (merge conflict, 13x); s4-freeze (verify gate red in freeze (verify.sh), 2x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 9x); v21-leakage-gate-token-level (merge conflict, 9x); r4-ruling-path (verify gate red in release (verify.sh), 8x)
+2026-07-30T00:05:19Z MERGED origin/agent/opsa-c44-find-the-line-that-refuses (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-30T00:05:25Z FLAG origin/agent/v26-handover-leak-ruling: merge conflict
+2026-07-30T00:05:26Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 13 attempts since 2026-07-29T04:19:41Z]
+2026-07-30T00:05:44Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 13 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T00:12:46Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 16 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T00:12:54Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 14 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T00:13:43Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T00:14:56Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 10 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T00:15:12Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 10 attempts since 2026-07-29T18:32:59Z]
+2026-07-30T00:17:13Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 9 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T00:17:24Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict  [NEEDS-HUMAN: 5 attempts since 2026-07-29T22:15:11Z]
+2026-07-30T00:32:25Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 14 attempts since 2026-07-29T04:19:41Z]
+2026-07-30T00:32:37Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 14 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T00:39:17Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 17 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T00:39:27Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 15 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T00:40:14Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T00:41:26Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 11 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T00:41:38Z FLAG origin/agent/v21-leakage-gate-token-level: merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-29T18:32:59Z]
+2026-07-30T00:42:50Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 10 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T00:42:59Z FLAG origin/agent/v25-leakage-loo-and-multiplicity: merge conflict  [NEEDS-HUMAN: 6 attempts since 2026-07-29T22:15:11Z]
+2026-07-30T00:48:11Z MERGED origin/agent/v26-handover-leak-ruling (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/leakage.json)
+2026-07-30T00:48:11Z CLEARED flag for origin/agent/v26-handover-leak-ruling (merged)
+2026-07-30T01:02:22Z CLEARED flag for origin/agent/v21-leakage-gate-token-level (merged)
+2026-07-30T01:02:22Z CLEARED flag for origin/agent/v25-leakage-loo-and-multiplicity (merged)
+2026-07-30T01:02:22Z SWEEP-FLAGS retired 2 stale flag(s): origin/agent/v21-leakage-gate-token-level, origin/agent/v25-leakage-loo-and-multiplicity
+2026-07-30T01:04:50Z MERGED origin/agent/opsa-c45-find-the-second-refusal (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-30T01:05:08Z MERGED origin/agent/s34-papers-verify-gate (dirs: PARTNER_SYNC.md,papers; gates: verify:papers(verify.py))
+2026-07-30T01:17:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 15 attempts since 2026-07-29T04:19:41Z]
+2026-07-30T01:17:21Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 15 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T01:22:50Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 18 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T01:22:57Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 16 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T01:23:39Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T01:24:31Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 12 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T01:25:26Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 11 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T01:37:08Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 15x); v5-battery-freeze (merge conflict, 15x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 18x); e8-ic3-scale (merge conflict, 16x); s4-freeze (verify gate red in freeze (verify.sh), 5x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 12x); r4-ruling-path (verify gate red in release (verify.sh), 11x)
+2026-07-30T01:55:23Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 15x); v5-battery-freeze (merge conflict, 15x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 18x); e8-ic3-scale (merge conflict, 16x); s4-freeze (verify gate red in freeze (verify.sh), 5x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 12x); r4-ruling-path (verify gate red in release (verify.sh), 11x)
+2026-07-30T02:07:13Z HELD 7 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 15x); v5-battery-freeze (merge conflict, 15x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 18x); e8-ic3-scale (merge conflict, 16x); s4-freeze (verify gate red in freeze (verify.sh), 5x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 12x); r4-ruling-path (verify gate red in release (verify.sh), 11x)
+2026-07-30T02:30:39Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 19 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T02:30:42Z HELD 6 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 15x); v5-battery-freeze (merge conflict, 15x); e8-ic3-scale (merge conflict, 16x); s4-freeze (verify gate red in freeze (verify.sh), 5x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 12x); r4-ruling-path (verify gate red in release (verify.sh), 11x)
+2026-07-30T02:45:01Z MERGED origin/agent/s35-reserved-but-unreachable (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-30T02:45:02Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 16 attempts since 2026-07-29T04:19:41Z]
+2026-07-30T02:45:08Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 16 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T02:52:18Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 20 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T02:52:27Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 17 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T02:53:19Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T02:54:24Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 13 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T02:55:54Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 12 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T03:07:50Z MERGED origin/agent/p-p21-line-anchor-range (dirs: PARTNER_SYNC.md,papers; gates: verify:papers(verify.py))
+2026-07-30T03:08:12Z MERGED origin/agent/p-p22-anchor-rots-at-commit (dirs: PARTNER_SYNC.md,papers; gates: verify:papers(verify.py))
+2026-07-30T03:26:05Z MERGED origin/agent/s35-reserved-but-unreachable (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-30T03:31:07Z MERGED origin/agent/s36-orphan-commits-one-disk (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-30T03:47:41Z MERGED origin/agent/s36-orphan-commits-one-disk (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-30T03:48:38Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)
+2026-07-30T03:48:41Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files  [NEEDS-HUMAN: 17 attempts since 2026-07-29T04:19:41Z]
+2026-07-30T03:48:50Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 17 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T04:03:14Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 21 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T04:03:57Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 18 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T04:06:01Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T04:08:26Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 14 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T04:10:58Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 13 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T04:29:32Z MERGED origin/agent/opsa-c47-a-receipt-a-reset-and-a-timestamp-that-lies (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-30T04:38:27Z MERGED origin/agent/s22-residue-fullsweep (dirs: arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)

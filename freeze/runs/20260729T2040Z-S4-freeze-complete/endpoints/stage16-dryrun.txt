@@ -1,0 +1,19 @@
+[16] one endpoint, one wording: the three primary endpoints agree across the two files
+  FAIL  E1 what 非平凡 (criterion c) actually requires: stated in STATS_RULES.md (S1) but NOT in CLAIMS_TEXT.md (C1) -- §9.2: after (b) was relaxed to the whitelist, (c) is the only gate left -- stage [10] guards (b) in both directions and nothing guards (c)
+  FAIL  E2 the analysis unit / denominator: stated in NEITHER file (S2 / C4) -- C4 is 主骨 and names no n at all; the sealed 21 reading is available in the published sentence, and stage [8] cannot see an ABSENT 19
+  FAIL  E2 the clean-tier replication: stated in NEITHER file (S2 / C4) -- and the exam runs on the front prefix of the codepoint order, where the clean games are scarce: 2 at m=5, 4 at m=10, 7 only at m=14
+  FAIL  E2 how the specificity floor is aggregated: stated in STATS_RULES.md (*) but NOT in CLAIMS_TEXT.md (*) -- macro vs micro specificity are different numbers, and this floor is a one-vote veto
+  FAIL  E2 which half of `exam` supplies the marks: stated in STATS_RULES.md (*) but NOT in CLAIMS_TEXT.md (*) -- `exam` also has a total score, which C4 itself quotes (bluffer 0.265)
+  FAIL  E2 that the pairing count is ⟨m⟩, not 19: stated in NEITHER file (* / *) -- §0 declares 19/12 globally; the exam can only ever have ⟨m⟩ pairs, and §4.1's 19/3 and §4.1.0's 12/3 thresholds are computed on the wrong n
+  NOTE  E2 `memoriser` as a mandatory negative control: stated in NEITHER file (* / *) -- the drafts pin `bluffer`, which the specificity floor already kills; `memoriser` scores BA = 1.000 on this endpoint (exam/DECISIONS.md D-EX-015)
+  FAIL  E3 the `thin` disposition: stated in STATS_RULES.md (*) but NOT in CLAIMS_TEXT.md (*) -- C2 成立版 reports a median 在 claim 层 19 局上, but the test runs on 19 minus thin minus void
+  FAIL  * the sign-test fallback: stated in STATS_RULES.md (*) but NOT in CLAIMS_TEXT.md (*) -- §4.1 switches to the sign test when ties exceed 1/3; every verbatim block says `Wilcoxon 符号秩 p` -- adjudicate by one test, publish another
+  FAIL  * the inconclusive outcome: stated in STATS_RULES.md (*) but NOT in CLAIMS_TEXT.md (*) -- §4.1.0 mandates a verbatim inconclusive text and forbids using either outcome version; CLAIMS_TEXT.md has no third block and its mechanical procedure has two branches
+  FAIL  E3 `theoria − 消融臂`: C2's 成立版 makes it a conjunct of the claim while STATS_RULES.md §3.2 still types it needs_human/exploratory -- either it is a FOURTH primary endpoint (Theoria.md:373 says three) or the verbatim claim rests on a quantity no test backs
+  FAIL  E3 C2 成立版 conditions the claim on the ablation difference being 非零 with no test, no α and no direction -- the same file rules two sections later that 「更高」是一个检验，不是一个形容词
+  NOTE  E2 STATS_RULES.md §2.2 sends the reader to §3 for the paired test; §3 is endpoint THREE and the tests are in §4
+  PASS  negative control fires: mutating the BA formula in C4 ((灵敏度 + 特异度)/2 -> (灵敏度 + 特异度)/3) turns probe E2/scalar red
+  PASS  negative control fires: mutating the U3 denominator in C1's 成立版 (⟨X_obs/19⟩ -> ⟨X_obs/21⟩) turns probe E1/unit red
+  NOTE  one-endpoint-one-wording: 11 hard divergence(s), 1 soft, out of 27 probes (see endpoints/WORDING_AUDIT.md for the ranked list and the proposed fixes)
+
+standalone summary: FAIL=11 NOTE=3

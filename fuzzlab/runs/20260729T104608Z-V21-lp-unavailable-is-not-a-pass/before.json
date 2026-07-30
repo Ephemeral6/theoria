@@ -1,0 +1,38 @@
+{
+  "live": {
+    "invariant_worlds_evaluated": {
+      "certificate_implies_unreachable": 5,
+      "heuristic_is_admissible": 5,
+      "infinite_means_unreachable": 5,
+      "three_conditions_hold": 5
+    },
+    "kinds": {
+      "raised": 0,
+      "skipped": 28,
+      "violated": 0
+    }
+  },
+  "solver_options": {
+    "maxiter": 0
+  },
+  "starved": {
+    "failures_len": 0,
+    "first_finding": "[raised] lp_potential.certificate_implies_unreachable seed=0x66b2c80140c3c9e2 -- LpUnavailable: lp_potential declines to answer: budget (HiGHS hit its iteration limit; feasibility was not decided). HiGHS status 1; Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible). No claim about 00101100 follows.",
+    "invariant_worlds_evaluated": {
+      "certificate_implies_unreachable": 11,
+      "heuristic_is_admissible": 11,
+      "infinite_means_unreachable": 11,
+      "three_conditions_hold": 11
+    },
+    "kinds": {
+      "raised": 44,
+      "skipped": 4
+    }
+  },
+  "verdict": {
+    "every_world_still_counted_as_evaluated": false,
+    "nothing_fails": true,
+    "reading": "with the solver starved of every iteration, the battery reports 11 evaluated worlds per invariant -- the same number as a clean run would -- and 0 failures. The unavailability is invisible in the coverage column and inert in the gate."
+  },
+  "worlds": 12
+}

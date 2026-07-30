@@ -1,0 +1,20 @@
+=== git ls-files baseline-arms/out/campaign/ ===
+100644 fd946d9fd17d0e65bb4d42260ac88a2dc03c84b6 0	baseline-arms/out/campaign/campaign_ar25.json
+100644 e6a017137aae98b12773a3955a1f6936a7ce9517 0	baseline-arms/out/campaign/campaign_g50t.json
+100644 51ce355596d6d013e732829ba8ca3cb5091b1e9d 0	baseline-arms/out/campaign/campaign_sk48.json
+100644 fa263911e4ea5fa2cb4ef6fad8b3dd3aef3b6f17 0	baseline-arms/out/campaign/campaign_tn36.json
+
+=== check-ignore (exit 1 = not ignored) ===
+exit=1
+
+=== git status of that dir (empty = clean, tracked blob == disk) ===
+(end)
+
+=== which commit added them ===
+9307f139 A14: the four campaign artefacts were paid for and were in nobody's git
+
+=== is that commit an ancestor of HEAD? ===
+YES 9307f139 is ancestor of HEAD
+
+=== on master? ===
+YES on origin/master

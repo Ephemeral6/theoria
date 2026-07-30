@@ -1,0 +1,23 @@
+{
+  "prompt_id": "S4-freeze-complete",
+  "branch": "agent/s4-freeze",
+  "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+  "utc": "2026-07-29T20:40:00Z",
+  "agent": "RES-1",
+  "cycle": 36,
+  "what": "把 Theoria.md:368 冻结清单 13 项补齐到可提交：两处 ⛔（5 引擎清单、12 预算表）、13 项的依据与 ⟨n⟩ 的最终裁定、以及『缺，由谁在哪补』这半句的可执行形式。",
+  "fanout": [
+    "item05 · 引擎清单与版本（⛔ 5-a/5-b）",
+    "item12 · 预算表（⛔ 12）",
+    "item13 · ⟨n⟩ 依据与 ar25 敏感性（⚠ 13-a..13-c）",
+    "residuals · 全套件残余项抽取（给 RESIDUALS.json 当原料）",
+    "A3-unpriced · 另一件在手活的取证，不属本条目（写在 theoria-arm/runs/）"
+  ],
+  "res1_own_work": [
+    "STATS_RULES.md §5.7 —— ⟨n⟩ 与基础设施死亡率的算术：n 不是买存活率的工具",
+    "freeze/n_feasibility.py —— §5.7 的每个数可重算，含结构性前提检查",
+    "freeze/residuals.py —— 每处缺口必须带 owner / 落点 / 可执行清除条件",
+    "13-e 修复：build_manifest.py 第 13 项曾否认 ⟨n⟩ 有值，与 STATS_RULES.md:705 互斥",
+    "VARIANCE_BASIS.md §6 第 1 条判为不成立（独立复算留一表五行全对）"
+  ]
+}

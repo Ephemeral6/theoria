@@ -18,7 +18,7 @@ from typing import Any, Dict, Optional
 from .env_proxy import EnvProxy, EnvProxyConfig
 from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
-from .tools import verify_chain
+from .tools import check_variant_degeneracy, verify_chain
 from .model_proxy import ModelProxy, ModelProxyConfig
 from .paths import LEDGER_PATH, RUNS_DIR, UPSTREAM_ARC, UPSTREAM_MODEL
 from .spend_gate import default_campaign, default_gate
@@ -163,6 +163,28 @@ def _run_game(game_id: str, *,
                                 "undetermined_checks":
                                     score_report["undetermined_checks"]}
 
+    # R-V22, applied to this run's own ledger rather than left as a command
+    # somebody might type. A `win_tighten` against a game that reports no score
+    # does not tighten the win condition, it removes it -- so the run's verdict
+    # is still valid but its *reason* is the protocol rather than the board,
+    # and the item does not count toward the reason score. An adversarial pass
+    # observed that nothing obliged anyone to run the detector on a real run,
+    # which made the rule a command wearing a JSON key; this is the line that
+    # makes it fire by itself.
+    #
+    # Recorded, not raised. By the time this runs the game has been played and
+    # the money is spent; refusing here would destroy the evidence rather than
+    # prevent anything, which is D-030 exactly.
+    degeneracy = check_variant_degeneracy.scan_file(ledger_path)
+    record["variant_degeneracy"] = {
+        "verdict": degeneracy["verdict"],
+        "degenerate_rewrites": len(degeneracy["findings"]),
+        "variant_records": degeneracy["variant_records"],
+        "skipped_lines": degeneracy["skipped_lines"],
+        "exam_eligible": all(v["exam_eligible"] for v in degeneracy["variants"]),
+        "rule": "R-V22 (proxy/DECISIONS.md D-032)",
+    }
+
     # D-024 / RED-40.  The chain inside the ledger only makes tampering
     # *evident*; on its own it stops nobody from rewriting the whole file and
     # recomputing every link.  What closes that is publishing the head
@@ -230,10 +252,28 @@ def run_game(*args, **kwargs) -> Dict[str, Any]:
     The reservation is re-derived here rather than threaded out, because
     `_run_game` releases its own on the happy path and flips `reservation_owned`
     when it does; this only has to catch the paths where it never got there.
+
+    The run id is minted *here* rather than inside `_run_game`, and that is the
+    fix for S29's third defect rather than an incidental tidy-up. The ownership
+    filter below used to read
+
+        if holder.run_id != kwargs.get("run_id") and kwargs.get("run_id") is not None:
+
+    and `run_id` was generated inside `_run_game`, so an ordinary caller never
+    passed one, the second conjunct was always False, and the `continue` never
+    fired: a crash released *every* reservation that appeared in the shared pool
+    while this run was alive, including other sessions'. Deleting the dead
+    conjunct alone would have inverted the bug -- with `kwargs["run_id"]` still
+    None, every entry would mismatch and the cleanup would release nothing.
+    Both halves are needed: the filter becomes real only once this level knows
+    the id it is filtering on. `_run_game` still does `run_id or new_run_id()`,
+    so passing one in changes nothing else.
     """
-    from .spend_gate import default_gate
+    from .spend_gate import default_gate, NoReservation
     gate = kwargs.get("spend_gate") or default_gate()
     declared = kwargs.get("spend_reservation")
+    run_id = kwargs.get("run_id") or new_run_id()
+    kwargs["run_id"] = run_id
     before = {r["reservation_id"] for r in gate.totals().live}
     try:
         return _run_game(*args, **kwargs)
@@ -245,12 +285,21 @@ def run_game(*args, **kwargs) -> Dict[str, Any]:
             for entry in gate.totals().live:
                 if entry["reservation_id"] in before:
                     continue
-                if entry["holder"].get("run_id") != kwargs.get("run_id") \
-                        and kwargs.get("run_id") is not None:
+                if (entry["holder"] or {}).get("run_id") != run_id:
                     continue
-                gate.release(
-                    _Handle(entry["reservation_id"], entry["campaign"]),
-                    reason="run ended without releasing its claim")
+                # `expect_holder` restates the same claim to the gate, which
+                # refuses if it disagrees. Belt and braces on purpose: this
+                # filter has already been silently wrong once, and the cost of
+                # being wrong is another session losing its headroom.
+                try:
+                    gate.release(
+                        _Handle(entry["reservation_id"], entry["campaign"]),
+                        reason="run ended without releasing its claim",
+                        expect_holder={"run_id": run_id})
+                except NoReservation:
+                    # It went away between the snapshot and here -- released by
+                    # its owner, or expired. Not ours to force.
+                    pass
 
 
 class _Handle:

@@ -9,9 +9,16 @@ stating because they are easy to lose:
   and `check_invariants` runs every declared invariant over the *whole* reachable
   set.  A ground truth that disagrees with the world therefore fails at build
   time rather than at scoring time;
-* **invariants are exercised, not asserted.**  An invariant with no callable
-  `check` is recorded as prose and reported as unverified — the distinction is
-  kept in the JSON so a reader can tell which is which;
+* **invariants are exercised, not asserted.**  Every invariant lands in exactly
+  one of three classes — `holds`, `violated`, `unverified` — and
+  `invariants_all_hold` is true only when the last two are both empty.  It was a
+  two-class boolean read with `.get("holds", True)` until V19, which meant a
+  prose-only invariant, carrying no `holds` key at all, was silently counted as
+  holding: thirteen shipped worlds said `invariants_all_hold: true` while their
+  own `GROUND_TRUTH.md` said `unverified` about the same claim.  **No
+  machine-read field in this module may be more optimistic than the Markdown
+  rendered beside it**, because the Markdown is what a human audits and the JSON
+  is what the gates actually consume;
 * **the reversibility stamp is measured.**  `core/reversibility.py` derives, per
   rule, how many times one trajectory can witness it.  That is A0′'s criterion
   (`cold-start-a0/prime/A0P_REPORT.md` §1) applied as an outgoing inspection.
@@ -189,33 +196,215 @@ def invariant_table(world: GridWorld) -> List[Dict[str, Any]]:
     return out
 
 
+#: The three classes an invariant row can land in.  They are a partition, not a
+#: pair with an escape hatch, and that is the whole point of V19: the previous
+#: shape was a single `holds` boolean read with `.get("holds", True)`, so a row
+#: that carried **no** `holds` key at all — every prose-only invariant — was read
+#: as *holding*.  Thirteen of the thirty-five shipped `ground_truth.json` files
+#: said `invariants_all_hold: true` while their own `GROUND_TRUTH.md` said
+#: `prose only, unverified` about the same claim.  The Markdown was honest and
+#: only the machine-read boolean lied, which is the worse way round: the build
+#: gate, the mutation report and the exam all read the boolean.
+INV_HOLDS = "holds"
+INV_VIOLATED = "violated"
+INV_UNVERIFIED = "unverified"
+INV_STATUSES = (INV_HOLDS, INV_VIOLATED, INV_UNVERIFIED)
+
+
+def classify_invariants(invariants: Sequence[Dict[str, Any]]) -> Dict[str, List[str]]:
+    """Partition invariant rows into `holds` / `violated` / `unverified`.
+
+    **Total and disjoint, and it defaults toward the bad news.** A row is
+    `holds` only when it says so three ways at once — `status == "holds"`,
+    `verified is True`, `holds is True` — because the failure this replaces was
+    exactly a missing key being read as a present one. A row is `violated`
+    when it says `status == "violated"`, or when it is verified and does not
+    hold (a row that disagrees with itself is not given the benefit of the
+    doubt). **Everything else — a missing `status`, an unrecognised one, a row
+    from an older writer that has neither — is `unverified`.**
+
+    The `unverified` bucket is therefore the sink, and no row can escape the
+    partition: `tests/test_invariant_status.py` asserts the three lists
+    reconstruct the input names exactly, on adversarial rows as well as real
+    ones. That assertion is the one that matters. A three-way split whose
+    third class is quietly bypassable is the two-way split again wearing a
+    third name.
+    """
+    holds: List[str] = []
+    violated: List[str] = []
+    unverified: List[str] = []
+    for row in invariants:
+        name = row.get("name", "<unnamed>")
+        status = row.get("status")
+        if (status == INV_HOLDS and row.get("verified") is True
+                and row.get("holds") is True):
+            holds.append(name)
+        elif status == INV_VIOLATED or (row.get("verified") is True
+                                        and row.get("holds") is False):
+            violated.append(name)
+        else:
+            unverified.append(name)
+    return _conserving({INV_HOLDS: holds, INV_VIOLATED: violated,
+                        INV_UNVERIFIED: unverified}, len(invariants))
+
+
+def _conserving(status: Dict[str, List[str]], expected: int) -> Dict[str, List[str]]:
+    """Return `status` if it accounts for exactly `expected` rows; else raise.
+
+    Conservation, checked rather than argued. The name-keyed partition test
+    cannot see a row with no `name` at all — such a row is filed under
+    `<unnamed>`, and two of them collapse to one entry under any set
+    comparison — so the property that actually has to hold is the **count**.
+
+    A separate function so that it can have a negative control of its own. A
+    check written inline can only be exercised by breaking the code around it,
+    which means in practice it is never exercised.
+    """
+    landed = sum(len(status[k]) for k in INV_STATUSES)
+    if landed != expected:
+        raise ValueError("classify_invariants lost %d of %d rows: %r"
+                         % (expected - landed, expected, status))
+    return status
+
+
+def _sole_class(status: Dict[str, List[str]]) -> str:
+    """The one class a single-row `classify_invariants` result landed in.
+
+    Raises if the partition put one row in none or several — which cannot
+    happen while `classify_invariants` stays exhaustive and disjoint, and is
+    worth failing loudly on if it ever stops being either, because every
+    renderer downstream would otherwise pick a class by accident.
+    """
+    landed = [k for k in INV_STATUSES if status[k]]
+    if len(landed) != 1:
+        raise ValueError("one invariant row landed in %d classes: %r"
+                         % (len(landed), status))
+    return landed[0]
+
+
+def all_invariants_hold(invariants: Sequence[Dict[str, Any]]) -> bool:
+    """True only when every invariant is in the `holds` class.
+
+    Not `no violations` — that is the old bug in one line. An unverified
+    invariant is a claim nobody exercised, and a claim nobody exercised is not
+    a claim that holds.
+    """
+    status = classify_invariants(invariants)
+    return not status[INV_VIOLATED] and not status[INV_UNVERIFIED]
+
+
 def check_invariants(world: GridWorld,
                      states: Optional[Sequence] = None) -> List[Dict[str, Any]]:
+    """Exercise every declared invariant and stamp each row with its `status`.
+
+    Two kinds of callable are honoured, because two kinds of claim are made:
+
+    * `check(world, state) -> bool` — a predicate on one state, run over the
+      whole reachable set;
+    * `edge_check(world, prev, action, next) -> bool` — a predicate on one
+      *transition*, run over the whole reachable graph. Monotonicity claims
+      (`latch_monotone`, `collection_is_monotone`, `tile_state_is_monotone`)
+      are transition properties; they were declared with `check: None` and a
+      comment saying a single-state predicate could not express them, which was
+      correct, and then the JSON reported them as holding anyway.
+
+    An invariant with neither callable is still recorded — as `unverified`, with
+    no `holds` key at all, so that a reader who reaches for one gets a
+    `KeyError` rather than a default.
+
+    **A callable that ran on nothing is also `unverified`.** Handed an empty
+    `states`, a single-state `check` never executes and `not violations` is
+    vacuously true — which would report `holds` on zero evidence and put V19's
+    defect straight back in a place with a callable in it, where nobody would
+    think to look for it. So the evidence count is part of the verdict.
+    Unreachable through `ground_truth` (`world.reachable()` always contains the
+    initial state) and reachable through `mutate.py`, which passes an explicit
+    state list.
+
+    **A callable that raises is filed as `violated`, not `unverified`, and that
+    is a judgement call worth naming.** Strictly, an exception means the claim
+    could not be evaluated, so `unverified` is the more literal class. It is
+    filed as a violation because a `check` that raises on a reachable state is a
+    broken check, and `unverified`'s remedy line — "give it a `check`" — would
+    be advice it has already taken. Both classes block the build, so nothing
+    escapes either way; the choice only affects which sentence a reader is told,
+    and neither choice can make the verdict more optimistic than the truth.
+    """
     states = list(world.reachable()) if states is None else list(states)
     results: List[Dict[str, Any]] = []
     for inv in invariant_table(world):
         check = inv.get("check")
-        row = {"name": inv["name"], "statement": inv["statement"]}
-        if check is None:
+        edge_check = inv.get("edge_check")
+        row: Dict[str, Any] = {"name": inv["name"], "statement": inv["statement"]}
+        if check is None and edge_check is None:
             row["verified"] = False
-            row["note"] = "prose only — not checkable on a single state"
+            row["status"] = INV_UNVERIFIED
+            row["note"] = ("prose only — no callable check, so this claim is "
+                           "unverified, which is not the same as true")
             results.append(row)
             continue
-        violations = []
-        for state in states:
-            try:
-                ok = bool(check(world, state))
-            except Exception as exc:
-                ok = False
-                violations.append({"state": list(state.key()), "error": repr(exc)})
-                break
-            if not ok:
-                violations.append({"state": list(state.key())})
-                if len(violations) >= 3:
+
+        # Both counters are incremented **inside** their loop, from the call that
+        # actually happened.  They were written as `len(states)` and as a
+        # separately-maintained `edges` outside the body, which meant the number
+        # published in `ground_truth.json` described the input rather than the
+        # work: slice the iterable to one element and the artefact still
+        # reported twenty-six states checked.  That number is the entire
+        # argument of this cell's stage 2 ("84 to 10616 transitions, not a
+        # default"), so an unpinned count is the claim quietly evaporating.
+        violations: List[Dict[str, Any]] = []
+        evidence = 0
+        if check is not None:
+            checked = 0
+            for state in states:
+                try:
+                    ok = bool(check(world, state))
+                except Exception as exc:
+                    checked += 1
+                    violations.append({"state": list(state.key()), "error": repr(exc)})
                     break
+                checked += 1
+                if not ok:
+                    violations.append({"state": list(state.key())})
+                    if len(violations) >= 3:
+                        break
+            row["states_checked"] = checked
+            evidence += checked
+
+        if edge_check is not None and len(violations) < 3:
+            edges = 0
+            for prev, action, nxt, _rule in world.transitions(states):
+                try:
+                    ok = bool(edge_check(world, prev, action, nxt))
+                except Exception as exc:
+                    edges += 1
+                    violations.append({"state": list(prev.key()), "action": action,
+                                       "next": list(nxt.key()), "error": repr(exc)})
+                    break
+                edges += 1
+                if not ok:
+                    violations.append({"state": list(prev.key()), "action": action,
+                                       "next": list(nxt.key())})
+                    if len(violations) >= 3:
+                        break
+            row["transitions_checked"] = edges
+            evidence += edges
+
+        if not violations and evidence == 0:
+            # The callable exists and never ran. `not violations` is true here
+            # for the same reason `.get("holds", True)` was: nothing was
+            # measured. Say so.
+            row["verified"] = False
+            row["status"] = INV_UNVERIFIED
+            row["note"] = ("a check is declared but ran on no states and no "
+                           "transitions, so nothing was measured — vacuously "
+                           "unfalsified is not verified")
+            results.append(row)
+            continue
+
         row["verified"] = True
-        row["states_checked"] = len(states)
         row["holds"] = not violations
+        row["status"] = INV_VIOLATED if violations else INV_HOLDS
         if violations:
             row["violations"] = violations
         results.append(row)
@@ -276,7 +465,11 @@ def ground_truth(world: GridWorld, diagnose: bool = True) -> Dict[str, Any]:
         "rule_correspondence": rule_correspondence(world),
         "frame_determines_state": frame_determines_state(world),
         "invariants": invariants,
-        "invariants_all_hold": all(i.get("holds", True) for i in invariants),
+        # The partition is published, not just its conjunction, so a consumer
+        # that wants "no violations" can ask for that explicitly instead of
+        # getting it by accident out of a boolean that claims to mean more.
+        "invariant_status": classify_invariants(invariants),
+        "invariants_all_hold": all_invariants_hold(invariants),
         "solvability": solve,
         "reversibility": stamp,
     }
@@ -321,22 +514,64 @@ def to_markdown(truth: Dict[str, Any]) -> str:
         lines.append("| `%s` | %s | %s | %s | %s |" % (
             rule["name"], rule["when"], rule["then"], rule.get("reversible", "—"),
             stamp_cell))
-    if corr and not corr.get("agrees", True):
+    # `corr.get("agrees", True)` was the same shape as the defect this cell is
+    # named for: a missing verdict read as a good one, so a `truth` dict with no
+    # `rule_correspondence` — or one carrying the block but not the verdict —
+    # rendered a clean Markdown page.  The Markdown is the half a human audits,
+    # so "we did not measure it" has to look different from "it agreed".
+    if "rule_correspondence" not in truth or "agrees" not in corr:
+        lines += ["", "**Rule correspondence was not measured for this world**, "
+                      "so nothing below should be read as agreement."]
+    elif not corr["agrees"]:
         lines += ["", "**Rule table disagrees with the world.**"]
         for key in ("declared_never_fires", "fired_undeclared", "declared_duplicates"):
             if corr.get(key):
                 lines.append("* `%s`: %s"
                              % (key, ", ".join("`%s`" % n for n in corr[key])))
 
-    lines += ["", "## Invariants", ""]
-    for inv in truth["invariants"]:
-        if not inv.get("verified"):
-            lines.append("* **%s** — %s  _(prose only, unverified)_"
-                         % (inv["name"], inv["statement"]))
-        else:
-            lines.append("* **%s** — %s  _(checked on %d reachable states: %s)_"
-                         % (inv["name"], inv["statement"], inv["states_checked"],
-                            "holds" if inv["holds"] else "**VIOLATED**"))
+    # **One classifier, called twice — never two classifiers agreeing by habit.**
+    # This section used to decide each bullet for itself, with `if not
+    # inv.get("verified")` and `inv["holds"]` — *truthiness*, which is exactly
+    # what `classify_invariants` refuses and what
+    # `test_invariant_status.py::...truthy is not True` forbids one function
+    # further down. The two disagreed: a row `{verified: 1, holds: 1}` was
+    # `unverified` in the JSON and printed as `holds` here. That is this cell's
+    # own thesis violated in the direction it warns about hardest — the line a
+    # human reads was the more forgiving of the two.
+    #
+    # So the Markdown asks the same function the JSON asked, per row.
+    status = truth.get("invariant_status") or classify_invariants(truth["invariants"])
+    per_row = [(inv, _sole_class(classify_invariants([inv])))
+               for inv in truth["invariants"]]
+    lines += ["", "## Invariants", "",
+              "%d hold, %d violated, %d unverified — `invariants_all_hold` is "
+              "`%s`. **An unverified invariant is not a satisfied one**, so it "
+              "counts against that boolean exactly as a violation does; the two "
+              "are kept in separate lists because they call for different work."
+              % (len(status[INV_HOLDS]), len(status[INV_VIOLATED]),
+                 len(status[INV_UNVERIFIED]),
+                 "true" if truth["invariants_all_hold"] else "false"),
+              ""]
+    for inv, klass in per_row:
+        if klass == INV_UNVERIFIED:
+            lines.append("* **%s** — %s  _(**unverified** — %s)_"
+                         % (inv["name"], inv["statement"],
+                            inv.get("note", "no callable check ran")))
+            continue
+        scope = []
+        if "states_checked" in inv:
+            scope.append("%d reachable states" % inv["states_checked"])
+        if "transitions_checked" in inv:
+            scope.append("%d transitions" % inv["transitions_checked"])
+        # A verified row with no evidence count is a row whose artefact lost the
+        # number this cell's stage-2 argument rests on. Say that, rather than
+        # printing a reassuring dash: `"no states"` was the old fallback and it
+        # read as a rendering quirk instead of as missing evidence.
+        lines.append("* **%s** — %s  _(checked on %s: %s)_"
+                     % (inv["name"], inv["statement"],
+                        " and ".join(scope)
+                        or "**an unrecorded amount of evidence**",
+                        "holds" if klass == INV_HOLDS else "**VIOLATED**"))
 
     solve = truth["solvability"]
     lines += ["", "## Solvability", ""]
@@ -346,10 +581,22 @@ def to_markdown(truth: Dict[str, Any]) -> str:
     else:
         cert = solve["certificate"]
         lines.append("**Unsolvable.** %s" % cert["statement"])
-        blockers = cert.get("blocking_entities") or []
-        if blockers:
+        # `cert.get("blocking_entities") or []` collapsed two different facts
+        # into one silent page: "the blocker analysis ran and found none" and
+        # "the blocker analysis is not in this certificate". The same shape as
+        # the rest of this cell, in the same file — a missing measurement
+        # rendering as a clean result.
+        if "blocking_entities" not in cert:
             lines.append("")
-            for row in blockers:
+            lines.append("_This certificate carries no blocker analysis — no "
+                         "entity has been ruled in or out._")
+        elif not cert["blocking_entities"]:
+            lines.append("")
+            lines.append("_The blocker analysis ran and attributed the "
+                         "unsolvability to no single entity._")
+        else:
+            lines.append("")
+            for row in cert["blocking_entities"]:
                 lines.append("* `%s` at %r — %s" % (row["entity"]["kind"],
                                                     tuple(row["entity"]["cell"]),
                                                     row["verdict"]))

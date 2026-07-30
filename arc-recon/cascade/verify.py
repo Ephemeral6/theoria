@@ -41,6 +41,7 @@ from client import load_api_key                            # noqa: E402
 from precheck import hash_frames                           # noqa: E402
 from cascade import spec                                   # noqa: E402
 from cascade.probe import hash_one, resolve_env            # noqa: E402
+import sealed as sealed_mod                                # noqa: E402
 
 
 def read_jsonl(path: str) -> List[Dict[str, Any]]:
@@ -55,8 +56,80 @@ def read_jsonl(path: str) -> List[Dict[str, Any]]:
 
 
 def sealed_ids() -> List[str]:
-    with open(os.path.join(ARC_RECON, "data", "piles.json"), encoding="utf-8") as fh:
-        return json.load(fh)["sealed_pile"]
+    """The sealed pile, from the one module that owns the question (A13).
+
+    This used to open `piles.json` itself, which made it the third independent
+    implementation of "is this id sealed" in `arc-recon/`. The three had drifted:
+    A7 below compared full ids only, so the bare stem `probe.py` puts in every
+    scorecard's `tags` was invisible to it, and `contamination.py` could not see
+    it either because it only looked inside `request_body["game_id"]`.
+    """
+    return sealed_mod.sealed_pile()
+
+
+def audited_ledgers(run_dir: str) -> List[str]:
+    """Every `ledger.*.jsonl` in the run directory, discovered rather than named.
+
+    A13: the loop below builds filenames from `spec.SEQUENCES` -- the four
+    development games -- so a file called `ledger.<sealed-id>.jsonl` dropped into
+    a run directory was never `os.path.exists`-ed, never opened, and contributed
+    nothing to `checked`. The sealed check cannot be the one check that only
+    looks where it expects the answer to be no. `redact_ledger.all_ledgers`
+    already discovers these files this way; this is the same routine, applied to
+    the audit that most needs it.
+    """
+    if not os.path.isdir(run_dir):
+        return []
+    return sorted(
+        os.path.join(run_dir, name) for name in os.listdir(run_dir)
+        if name.startswith("ledger.") and name.endswith(".jsonl")
+    )
+
+
+def undiscovered_ledger_failures(run_dir: str,
+                                 sealed: List[str] = None) -> Dict[str, Any]:
+    """A7b -- every ledger in the run directory, not only the named ones.
+
+    A13: `verify()` builds its filenames from `spec.SEQUENCES`, the four
+    development games, so a file called `ledger.<sealed-id>.jsonl` sitting
+    beside them was never `os.path.exists`-ed, never opened, and contributed
+    nothing to `checked`. A7 then reported PASS over a directory it had not
+    finished reading -- the sealed check being the one check that only looked
+    where it expected the answer to be no.
+
+    The file *name* is checked as well as its contents. Naming a run file after
+    a sealed game is already the thing the cut forbids, whatever the file turns
+    out to hold, and a run that produced no records for it is not thereby
+    innocent.
+
+    Separated from `verify()` so it can be tested: `verify()` loads the API key
+    for its secret sweep, and a check about sealed games should not require a
+    credential to exercise.
+    """
+    sealed = sealed if sealed is not None else sealed_ids()
+    failures: List[str] = []
+    expected = {os.path.join(run_dir, "ledger.%s.jsonl" % game)
+                for game in spec.SEQUENCES}
+    undiscovered = 0
+    entries_read = 0
+    for path in audited_ledgers(run_dir):
+        name = os.path.basename(path)
+        for sealed_id, why in sealed_mod.hits(name, sealed).items():
+            failures.append("A7b %s: run file is named after sealed game %s (%s)"
+                            % (name, sealed_id, why))
+        if path in expected:
+            continue                     # already read, entry by entry, by verify()
+        undiscovered += 1
+        for entry in read_jsonl(path):
+            entries_read += 1
+            for sealed_id, why in sealed_mod.hits_in_any(
+                    [entry.get("request_body"), entry.get("url"),
+                     entry.get("final_url")], sealed).items():
+                failures.append(
+                    "A7b %s: sealed game %s appears in a request (%s), in a "
+                    "ledger no game sequence names" % (name, sealed_id, why))
+    return {"failures": failures, "undiscovered": undiscovered,
+            "entries_read": entries_read}
 
 
 def note_prefix(game: str, step: Dict[str, Any]) -> str:
@@ -162,11 +235,20 @@ def verify(run_dir: str) -> int:
             headers = entry.get("request_headers") or {}
             if headers.get("X-API-Key") not in (None, "<redacted>"):
                 failures.append("A6 %s: X-API-Key not redacted in the ledger" % game)
-            request = entry.get("request_body") or {}                   # A7
-            for sealed_id in sealed:
-                if sealed_id in json.dumps(request):
-                    failures.append("A7 %s: sealed game %s appears in a request"
-                                    % (game, sealed_id))
+            # A7 -- one criterion, shared with contamination.py. Was: a full-id
+            # substring of `json.dumps(request_body or {})`, which missed a bare
+            # stem, missed the URL entirely, and turned a body of `None` into
+            # `{}` so that a GET passed without being looked at.
+            for sealed_id, why in sealed_mod.hits_in_any(
+                    [entry.get("request_body"), entry.get("url"),
+                     entry.get("final_url")], sealed).items():
+                failures.append("A7 %s: sealed game %s appears in a request (%s)"
+                                % (game, sealed_id, why))
+
+    a7b = undiscovered_ledger_failures(run_dir, sealed)
+    failures.extend(a7b["failures"])
+    checked["undiscovered_ledgers"] = a7b["undiscovered"]
+    checked["ledger_entries"] += a7b["entries_read"]
 
     if checked["actions"] > spec.BUDGET_TOTAL:                          # A5
         failures.append("A5 total: %d executed actions > cap %d"

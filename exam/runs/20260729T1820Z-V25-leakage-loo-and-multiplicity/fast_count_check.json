@@ -1,0 +1,161 @@
+{
+  "bounds_hold": true,
+  "differential": {
+    "cases": 2130,
+    "mismatches": []
+  },
+  "nonzero": [
+    {
+      "agree": true,
+      "fast": 10,
+      "k": 3,
+      "oracle": 10,
+      "sizes": [
+        75,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "tolerance": 0.9
+    },
+    {
+      "agree": true,
+      "fast": 5,
+      "k": 4,
+      "oracle": 5,
+      "sizes": [
+        75,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "tolerance": 0.9
+    },
+    {
+      "agree": true,
+      "fast": 1,
+      "k": 5,
+      "oracle": 1,
+      "sizes": [
+        75,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "tolerance": 0.9
+    },
+    {
+      "agree": true,
+      "fast": 64222354820657532200,
+      "k": 35,
+      "oracle": 64222354820657532200,
+      "sizes": [
+        40,
+        30,
+        4,
+        3,
+        2,
+        1
+      ],
+      "tolerance": 0.6
+    },
+    {
+      "agree": true,
+      "fast": 1,
+      "k": 2,
+      "oracle": 1,
+      "sizes": [
+        6,
+        2
+      ],
+      "tolerance": 0.9
+    },
+    {
+      "agree": true,
+      "fast": 2,
+      "k": 6,
+      "oracle": 2,
+      "sizes": [
+        6,
+        6
+      ],
+      "tolerance": 0.9
+    },
+    {
+      "agree": true,
+      "fast": 1,
+      "k": 2,
+      "oracle": 1,
+      "sizes": [
+        4,
+        2
+      ],
+      "tolerance": 0.9
+    }
+  ],
+  "timings": [
+    {
+      "classes": 2,
+      "k": 3,
+      "n": 80,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 4,
+      "k": 3,
+      "n": 80,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 6,
+      "k": 40,
+      "n": 78,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 8,
+      "k": 3,
+      "n": 80,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 12,
+      "k": 3,
+      "n": 120,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 20,
+      "k": 5,
+      "n": 200,
+      "p_fire": 0.0,
+      "seconds": 0.0
+    },
+    {
+      "classes": 6,
+      "k": 3,
+      "n": 80,
+      "p_fire": 0.00012171372930866602,
+      "seconds": 0.0
+    }
+  ],
+  "tolerances": [
+    0.9,
+    0.75,
+    0.5,
+    0.99,
+    1.0,
+    0.875
+  ]
+}

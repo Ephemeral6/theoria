@@ -1,0 +1,40 @@
+﻿
+=== heldout / label=event  n=80 floor=0.4000 ===
+  lift=+0.0000 acc=0.4000  frame_before                       unique={'"blocked_landing"': 10, '"move"': 11, '"blocked_edge"': 8, '"push"': 31, '"blocked_crossing"': 10, '"blocked_wall"': 8} repeated={'"move"': 1, '"push"': 1}
+
+=== heldout / label=level_name  n=80 floor=0.2625 ===
+  lift=+0.0250 acc=0.2875  frame_before                       unique={'"crossing_LEFT"': 16, '"crossing_DOWN"': 21, '"crossing_UP"': 14, '"match"': 11, '"crossing_RIGHT"': 16} repeated={'"crossing_UP"': 2}
+
+=== heldout / label=split  n=80 floor=0.5000 ===
+  lift=+0.0250 acc=0.5250  frame_before                       unique={'"heldout"': 40, '"replay"': 38} repeated={'"replay"': 2}
+
+=== handover: no small-alphabet truth field ===
+
+=== adaptation: no small-alphabet truth field ===
+
+=== verdict / label=board_size_class  n=17 floor=0.5882 ===
+  lift=+0.0000 acc=0.5882  level_id                           unique={'"large"': 3, '"small"': 4} repeated={'"small"': 6, '"large"': 4}
+  lift=+0.0000 acc=0.5882  hazards                            unique={'"large"': 2, '"small"': 2} repeated={'"small"': 8, '"large"': 5}
+  lift=+0.0000 acc=0.5882  commands                           unique={'"small"': 2} repeated={'"small"': 8, '"large"': 7}
+  lift=+0.0000 acc=0.5882  budget                             unique={'"large"': 2, '"small"': 2} repeated={'"small"': 8, '"large"': 5}
+  lift=+0.0000 acc=0.5882  board.legend                       unique={'"small"': 2} repeated={'"small"': 8, '"large"': 7}
+  lift=+0.0000 acc=0.5882  board.grid                         unique={'"large"': 5, '"small"': 5} repeated={'"small"': 5, '"large"': 2}
+  lift=+0.0000 acc=0.5882  board                              unique={'"large"': 5, '"small"': 5} repeated={'"small"': 5, '"large"': 2}
+
+=== verdict / label=claim  n=17 floor=0.5294 ===
+  lift=+0.2353 acc=0.7647  level_id                           unique={'"unsolvable"': 6, '"solvable"': 1} repeated={'"solvable"': 7, '"unsolvable"': 3}
+  lift=+0.1765 acc=0.7059  board.grid                         unique={'"solvable"': 3, '"unsolvable"': 7} repeated={'"solvable"': 5, '"unsolvable"': 2}
+  lift=+0.1765 acc=0.7059  board                              unique={'"solvable"': 3, '"unsolvable"': 7} repeated={'"solvable"': 5, '"unsolvable"': 2}
+  lift=+0.0588 acc=0.5882  commands                           unique={'"unsolvable"': 2} repeated={'"solvable"': 8, '"unsolvable"': 7}
+  lift=+0.0000 acc=0.5294  hazards                            unique={'"solvable"': 2, '"unsolvable"': 2} repeated={'"solvable"': 6, '"unsolvable"': 7}
+  lift=+0.0000 acc=0.5294  budget                             unique={'"unsolvable"': 2, '"solvable"': 2} repeated={'"solvable"': 6, '"unsolvable"': 7}
+  lift=+0.0000 acc=0.5294  board.legend                       unique={'"unsolvable"': 1, '"solvable"': 1} repeated={'"solvable"': 7, '"unsolvable"': 8}
+
+=== verdict / label=class  n=17 floor=0.4706 ===
+  lift=+0.1176 acc=0.5882  level_id                           unique={'"large_unsolvable"': 3, '"small_unsolvable"': 3, '"solvable_hard"': 1} repeated={'"solvable_hard"': 7, '"small_unsolvable"': 2, '"large_unsolvable"': 1}
+  lift=+0.1176 acc=0.5882  commands                           unique={'"small_unsolvable"': 2} repeated={'"solvable_hard"': 8, '"large_unsolvable"': 4, '"small_unsolvable"': 3}
+  lift=+0.0588 acc=0.5294  board.grid                         unique={'"solvable_hard"': 3, '"large_unsolvable"': 4, '"small_unsolvable"': 3} repeated={'"solvable_hard"': 5, '"small_unsolvable"': 2}
+  lift=+0.0588 acc=0.5294  board                              unique={'"solvable_hard"': 3, '"large_unsolvable"': 4, '"small_unsolvable"': 3} repeated={'"solvable_hard"': 5, '"small_unsolvable"': 2}
+  lift=+0.0000 acc=0.4706  hazards                            unique={'"solvable_hard"': 2, '"small_unsolvable"': 1, '"large_unsolvable"': 1} repeated={'"solvable_hard"': 6, '"large_unsolvable"': 3, '"small_unsolvable"': 4}
+  lift=+0.0000 acc=0.4706  budget                             unique={'"large_unsolvable"': 1, '"solvable_hard"': 2, '"small_unsolvable"': 1} repeated={'"solvable_hard"': 6, '"large_unsolvable"': 3, '"small_unsolvable"': 4}
+  lift=+0.0000 acc=0.4706  board.legend                       unique={'"small_unsolvable"': 1, '"solvable_hard"': 1} repeated={'"solvable_hard"': 7, '"large_unsolvable"': 4, '"small_unsolvable"': 4}

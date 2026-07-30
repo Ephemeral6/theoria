@@ -1,0 +1,791 @@
+{
+  "base_commit": "c1a60420fb718ec57088335448840ee23ed1ee2d",
+  "branch": "agent/v6-exam-on-sealed-dryrun",
+  "calibration": {
+    "bluffer": {
+      "awarded": 6.0,
+      "confusion": {
+        "by_class": {
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 6,
+            "n_negative": 0,
+            "n_positive": 6,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 6
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 4,
+            "n": 4,
+            "n_negative": 4,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 0.0,
+            "tn": 0,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 4,
+          "n": 10,
+          "n_negative": 4,
+          "n_positive": 6,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "tn": 0,
+          "tp": 6
+        },
+        "positive_class": "unsolvable"
+      },
+      "fraction": 0.3,
+      "possible": 20.0
+    },
+    "claim_only": {
+      "awarded": 10.0,
+      "confusion": {
+        "by_class": {
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 6,
+            "n_negative": 0,
+            "n_positive": 6,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 6
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 4,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 4,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 10,
+          "n_negative": 4,
+          "n_positive": 6,
+          "sensitivity": 1.0,
+          "specificity": 1.0,
+          "tn": 4,
+          "tp": 6
+        },
+        "positive_class": "unsolvable"
+      },
+      "fraction": 0.5,
+      "possible": 20.0
+    },
+    "contrarian": {
+      "awarded": 4.0,
+      "confusion": {
+        "by_class": {
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 6,
+            "fp": 0,
+            "n": 6,
+            "n_negative": 0,
+            "n_positive": 6,
+            "sensitivity": 0.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 0
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 4,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 4,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 6,
+          "fp": 0,
+          "n": 10,
+          "n_negative": 4,
+          "n_positive": 6,
+          "sensitivity": 0.0,
+          "specificity": 1.0,
+          "tn": 4,
+          "tp": 0
+        },
+        "positive_class": "unsolvable"
+      },
+      "fraction": 0.2,
+      "possible": 20.0
+    },
+    "null": {
+      "awarded": 0.0,
+      "confusion": {
+        "by_class": {
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 6,
+            "coverage_negative": null,
+            "coverage_positive": 0.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 6,
+            "n_negative": 0,
+            "n_positive": 6,
+            "sensitivity": null,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 0
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 4,
+            "abstained_on_positive": 0,
+            "coverage_negative": 0.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 4,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": null,
+            "tn": 0,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 4,
+          "abstained_on_positive": 6,
+          "coverage_negative": 0.0,
+          "coverage_positive": 0.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 10,
+          "n_negative": 4,
+          "n_positive": 6,
+          "sensitivity": null,
+          "specificity": null,
+          "tn": 0,
+          "tp": 0
+        },
+        "positive_class": "unsolvable"
+      },
+      "fraction": 0.0,
+      "possible": 20.0
+    },
+    "oracle": {
+      "awarded": 19.0,
+      "confusion": {
+        "by_class": {
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 6,
+            "n_negative": 0,
+            "n_positive": 6,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 6
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 4,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 4,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 10,
+          "n_negative": 4,
+          "n_positive": 6,
+          "sensitivity": 1.0,
+          "specificity": 1.0,
+          "tn": 4,
+          "tp": 6
+        },
+        "positive_class": "unsolvable"
+      },
+      "fraction": 0.95,
+      "possible": 20.0
+    }
+  },
+  "coverage": {
+    "certificate_kinds_exercised": [
+      "counting",
+      "cut_set",
+      "invariant"
+    ],
+    "classes_absent": [
+      "large_unsolvable"
+    ],
+    "classes_absent_because": "worldgen's largest world has 2654 reachable states (t3-full-house), so no world in the catalogue can stand in for a state space exhaustive search cannot reach. Class (ii) of Theoria.md:259 is rehearsed in procedure only, never in difficulty. Recorded rather than simulated.",
+    "classes_present": [
+      "small_unsolvable",
+      "solvable_hard"
+    ],
+    "operators_exercised": [
+      "forbid_action",
+      "observation_loss",
+      "remap_action",
+      "step_limit",
+      "win_tighten"
+    ]
+  },
+  "failures": [],
+  "findings": [
+    {
+      "certificate_check": {
+        "alphabet": {
+          "DOWN": null,
+          "LEFT": "LEFT",
+          "RIGHT": "RIGHT",
+          "UP": "UP"
+        },
+        "checked_without_enumerating_states": true,
+        "kind": "invariant",
+        "ok": true,
+        "why": "no forwarded command changes agent_row in the direction of the goal (1 -> 5), so agent_row is monotone and the goal is on the unreachable side"
+      },
+      "certificate_kind": "invariant",
+      "certificate_offered": true,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-forbid-down",
+      "operators": [
+        "forbid_action"
+      ],
+      "oracle_nodes": 3,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "forbid_action"
+        ],
+        "spec_file": "variant_specs/drill-walk-forbid-down.json",
+        "spec_file_sha256": "2daa4a1c1888a9103176f7680ef08bb36f64bb58293232e3fe354505e1b2fdcd",
+        "spec_sha256": "sha256:66a9e350dc577bd848f2b7b80be42c6243f5d16353381fc4c544d80c369d41c2",
+        "variant_id": "drill-walk-forbid-down"
+      },
+      "variant_id": "drill-walk-forbid-down",
+      "witness_check": null,
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "kind": null,
+        "ok": false,
+        "why": "no certificate was offered for this claim"
+      },
+      "certificate_kind": null,
+      "certificate_offered": false,
+      "claimed": "solvable",
+      "class": "solvable_hard",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-forbid-up",
+      "operators": [
+        "forbid_action"
+      ],
+      "oracle_nodes": 17,
+      "oracle_solvable": true,
+      "oracle_witness_length": 10,
+      "spec": {
+        "operators": [
+          "forbid_action"
+        ],
+        "spec_file": "variant_specs/drill-walk-forbid-up.json",
+        "spec_file_sha256": "3fd26bedc755f1f4ab0e5c89d215e3ec9416f59c5388c1992656142802ef3206",
+        "spec_sha256": "sha256:2a5e59c586fd65e040493764a556594fc2602bc0bc85cdd5347013d99f39ae23",
+        "variant_id": "drill-walk-forbid-up"
+      },
+      "variant_id": "drill-walk-forbid-up",
+      "witness_check": {
+        "commands_used": 10,
+        "declared": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "wins": true
+      },
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "alphabet": {
+          "DOWN": "UP",
+          "LEFT": "LEFT",
+          "RIGHT": "RIGHT",
+          "UP": "UP"
+        },
+        "checked_without_enumerating_states": true,
+        "kind": "invariant",
+        "ok": true,
+        "why": "no forwarded command changes agent_row in the direction of the goal (1 -> 5), so agent_row is monotone and the goal is on the unreachable side"
+      },
+      "certificate_kind": "invariant",
+      "certificate_offered": true,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-remap-down-to-up",
+      "operators": [
+        "remap_action"
+      ],
+      "oracle_nodes": 3,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "remap_action"
+        ],
+        "spec_file": "variant_specs/drill-walk-remap-down-to-up.json",
+        "spec_file_sha256": "2ba6df8f304f026df03de2a153d76f5b36e52c3a9599bb55f8f3bf403f99fcd6",
+        "spec_sha256": "sha256:1269acd856b93450022c46924b3df8120fcfa20eb51f1efa936757ac6e368487",
+        "variant_id": "drill-walk-remap-down-to-up"
+      },
+      "variant_id": "drill-walk-remap-down-to-up",
+      "witness_check": null,
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "kind": null,
+        "ok": false,
+        "why": "no certificate was offered for this claim"
+      },
+      "certificate_kind": null,
+      "certificate_offered": false,
+      "claimed": "solvable",
+      "class": "solvable_hard",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-remap-left-to-right",
+      "operators": [
+        "remap_action"
+      ],
+      "oracle_nodes": 20,
+      "oracle_solvable": true,
+      "oracle_witness_length": 10,
+      "spec": {
+        "operators": [
+          "remap_action"
+        ],
+        "spec_file": "variant_specs/drill-walk-remap-left-to-right.json",
+        "spec_file_sha256": "6cde4d83200e27524b281905e66a5ad550940a391c554c62a82787aef8d17184",
+        "spec_sha256": "sha256:0fb521b2f429bb0374f74899c03acacecbfc2ad6560116d881ae2a91a9160b17",
+        "variant_id": "drill-walk-remap-left-to-right"
+      },
+      "variant_id": "drill-walk-remap-left-to-right",
+      "witness_check": {
+        "commands_used": 10,
+        "declared": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "wins": true
+      },
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "checked_without_enumerating_states": true,
+        "kind": "counting",
+        "ok": true,
+        "why": "the goal is 10 cells away in Manhattan distance and one command moves the agent at most one cell, so at least 10 commands are needed; the variant allows 9"
+      },
+      "certificate_kind": "counting",
+      "certificate_offered": true,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-budget-nine",
+      "operators": [
+        "step_limit"
+      ],
+      "oracle_nodes": 119,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "step_limit"
+        ],
+        "spec_file": "variant_specs/drill-walk-budget-nine.json",
+        "spec_file_sha256": "d8ecd9e60a7486ad38c6c147ea470735018e91645940f511ba3474039bf092e9",
+        "spec_sha256": "sha256:f3f2eaecad6141001586be593d19cb2932444c610a73a57b05765e4af2df40e9",
+        "variant_id": "drill-walk-budget-nine"
+      },
+      "variant_id": "drill-walk-budget-nine",
+      "witness_check": null,
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "kind": null,
+        "ok": false,
+        "why": "no certificate was offered for this claim"
+      },
+      "certificate_kind": null,
+      "certificate_offered": false,
+      "claimed": "solvable",
+      "class": "solvable_hard",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-budget-ten",
+      "operators": [
+        "step_limit"
+      ],
+      "oracle_nodes": 120,
+      "oracle_solvable": true,
+      "oracle_witness_length": 10,
+      "spec": {
+        "operators": [
+          "step_limit"
+        ],
+        "spec_file": "variant_specs/drill-walk-budget-ten.json",
+        "spec_file_sha256": "f97b6170ea1d94ea0e4cedcdbb2d73a14bf313038be94327c565458771f9bb85",
+        "spec_sha256": "sha256:34ff3dd8c42ad6e0859f5e99cae183e4432692a1fd5168e2c70dede3cd42b41f",
+        "variant_id": "drill-walk-budget-ten"
+      },
+      "variant_id": "drill-walk-budget-ten",
+      "witness_check": {
+        "commands_used": 10,
+        "declared": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "wins": true
+      },
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "checked_without_enumerating_states": true,
+        "component_size_without_cut": 15,
+        "kind": "cut_set",
+        "ok": true,
+        "why": "deleting [(4, 1), (4, 7)] disconnects the goal from the start on the board, so every route crosses one of them"
+      },
+      "certificate_kind": "cut_set",
+      "certificate_offered": true,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-cut-row-four",
+      "operators": [
+        "observation_loss"
+      ],
+      "oracle_nodes": 17,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "observation_loss"
+        ],
+        "spec_file": "variant_specs/drill-walk-cut-row-four.json",
+        "spec_file_sha256": "12cddcc52012c0d942cc9bcaccd5715eecde599e05d01a6e13b84bdef2947fa0",
+        "spec_sha256": "sha256:c8ee80d52b6c720301e048566a467a0d6d7f30ad81afa18c3f7089f6bdf1d0ea",
+        "variant_id": "drill-walk-cut-row-four"
+      },
+      "variant_id": "drill-walk-cut-row-four",
+      "witness_check": null,
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "kind": null,
+        "ok": false,
+        "why": "no certificate was offered for this claim"
+      },
+      "certificate_kind": null,
+      "certificate_offered": false,
+      "claimed": "solvable",
+      "class": "solvable_hard",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-cut-half",
+      "operators": [
+        "observation_loss"
+      ],
+      "oracle_nodes": 18,
+      "oracle_solvable": true,
+      "oracle_witness_length": 14,
+      "spec": {
+        "operators": [
+          "observation_loss"
+        ],
+        "spec_file": "variant_specs/drill-walk-cut-half.json",
+        "spec_file_sha256": "10a5ccea1a9f0ef539f02ffccd1053c9bedc7f39b7bbcf22db292d3b29aa129b",
+        "spec_sha256": "sha256:54cc26af209b95d258bc47b97e5664d54b41bde5fd1391f08186b8f94a4302ed",
+        "variant_id": "drill-walk-cut-half"
+      },
+      "variant_id": "drill-walk-cut-half",
+      "witness_check": {
+        "commands_used": 14,
+        "declared": [
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT",
+          "UP",
+          "UP",
+          "RIGHT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "wins": true
+      },
+      "world": "t1-walk-maze"
+    },
+    {
+      "certificate_check": {
+        "checked_without_enumerating_states": true,
+        "component_size_without_cut": 5,
+        "kind": "cut_set",
+        "ok": true,
+        "why": "deleting [(1, 3), (3, 3)] disconnects the goal from the start on the board, so every route crosses one of them"
+      },
+      "certificate_kind": "cut_set",
+      "certificate_offered": true,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "bridge-cut-column-three",
+      "operators": [
+        "observation_loss"
+      ],
+      "oracle_nodes": 7,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "observation_loss"
+        ],
+        "spec_file": "variant_specs/drill-bridge-cut-column-three.json",
+        "spec_file_sha256": "0b9a0dc8ea5470c866169f6018a5eed53952a41dd5496be33f4e50c43e0979b2",
+        "spec_sha256": "sha256:767a3da6c998cfd9176d7695a70b922312a00dc787aec3474d40cd0e63d63d68",
+        "variant_id": "drill-bridge-cut-column-three"
+      },
+      "variant_id": "drill-bridge-cut-column-three",
+      "witness_check": null,
+      "world": "t1-fragile-bridge"
+    },
+    {
+      "certificate_check": {
+        "kind": null,
+        "ok": false,
+        "why": "no certificate was offered for this claim"
+      },
+      "certificate_kind": null,
+      "certificate_offered": false,
+      "claimed": "unsolvable",
+      "class": "small_unsolvable",
+      "construction_agrees_with_oracle": true,
+      "key": "walk-win-tighten-scoreless",
+      "operators": [
+        "win_tighten"
+      ],
+      "oracle_nodes": 24,
+      "oracle_solvable": false,
+      "oracle_witness_length": null,
+      "spec": {
+        "operators": [
+          "win_tighten"
+        ],
+        "spec_file": "variant_specs/drill-walk-win-tighten-scoreless.json",
+        "spec_file_sha256": "018e852a1ec4ee97d00f36eb9cd4367ebd1ef8800964c692773b2a03d0418fdc",
+        "spec_sha256": "sha256:ed407cf62e02488fb968ecc834abacf27423385990ce1e6b4009f237cac2f6b6",
+        "variant_id": "drill-walk-win-tighten-scoreless"
+      },
+      "variant_id": "drill-walk-win-tighten-scoreless",
+      "witness_check": null,
+      "world": "t1-walk-maze"
+    }
+  ],
+  "green": true,
+  "guard": {
+    "checks": [
+      {
+        "check": "cut_integrity",
+        "detail": "piles.json verified against its own digest",
+        "passed": true
+      },
+      {
+        "check": "sealed_full_ids",
+        "detail": "all 21 refused with SealedPileError",
+        "passed": true
+      },
+      {
+        "check": "sealed_short_ids",
+        "detail": "all 21 refused with SealedPileError",
+        "passed": true
+      },
+      {
+        "check": "dev_pile_ids",
+        "detail": "all 4 refused with UnknownGameError",
+        "passed": true
+      },
+      {
+        "check": "synthetic_control",
+        "detail": "all 20 worldgen worlds accepted, so the guard discriminates rather than refusing everything",
+        "passed": true
+      }
+    ],
+    "counts": {
+      "dev_pile_ids": {
+        "failed": 0,
+        "probed": 4
+      },
+      "sealed_full_ids": {
+        "failed": 0,
+        "probed": 21
+      },
+      "sealed_short_ids": {
+        "failed": 0,
+        "probed": 21
+      },
+      "synthetic_control": {
+        "failed": 0,
+        "probed": 20
+      }
+    },
+    "cut_digest": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "fired": true,
+    "n_sealed": 21
+  },
+  "leakage": {
+    "failures": [],
+    "probes": 60
+  },
+  "paper_id": "drill-verdict-worldgen",
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls_on_any_generation_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V6-exam-on-sealed-dryrun",
+  "python": "3.13.13",
+  "reason_ceiling": {
+    "awarded": 19.0,
+    "capped_items": [
+      {
+        "item_id": "dq-369a5c101b",
+        "variant_id": "drill-walk-win-tighten-scoreless",
+        "why": "the claim is unsolvable and the frozen certificate grammar (invariant / cut_set / counting) has no form for it, so the reason half is unpayable to anyone, ground truth included"
+      }
+    ],
+    "fraction": 0.95,
+    "possible": 20.0
+  }
+}

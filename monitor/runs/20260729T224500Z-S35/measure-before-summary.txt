@@ -1,0 +1,12 @@
+--- 判据：不可达 = 就绪、未认领、依赖已满、而上面每个身份都领不到 ---
+shelf=11  reachable=1  deps-blocked=0  UNREACHABLE=10 (其中 reserved 段印出来的 2)
+  E18-survey-numbers-reproducible          lane=verify   owner=RES-3  released_by=RES-3
+  S22-access-check-close                   lane=infra    owner=RES-4  released_by=RES-4
+  A16-A16-launch-gate-wired                lane=campaign owner=RES-1  released_by=-
+  A3-campaign-level2                       lane=campaign owner=RES-1  released_by=-
+  A8-campaign-ledger-pipeline              lane=campaign owner=RES-1  released_by=-
+  E3-engines-online                        lane=campaign owner=RES-1  released_by=-
+  R4-worktree-rescue                       lane=-        owner=-      released_by=-
+  S36-s36-orphan-commits-one-disk          lane=infra    owner=RES-4  released_by=-
+  S4-S4-E23-TIERS                          lane=campaign owner=RES-1  released_by=-
+  V2-V25-verify-does-not-check-what-is-committed lane=verify   owner=RES-3  released_by=-

@@ -1,0 +1,35 @@
+{
+ "_what": "The executable half of STATS_RULES.md §9's 开跑前置条件 rows. Read by freeze/launch_gate.py, which is the thing that answers 'may the sealed campaign spend?'. §9 is the authority for WHICH rows are blockers; this file records, per row, the command that clears one.",
+ "_how_a_blocker_clears": "state=implemented, plus a cmd template containing {target}, plus two targets that both exist on disk. The gate runs the SAME template against positive_target (must exit 0) and negative_target (must exit non-zero). A check that only ever runs on things it should pass cannot be told apart from a stub, so the rejection is the half that carries the weight.",
+ "_how_it_does_not_clear": "Editing this file. Every field here is an instruction to run something; none of them is believed.",
+ "_written": "2026-07-29, S4, RES-1",
+
+ "blockers": {
+  "9.2": {
+   "subject": "U3 criterion (c): an executable non-triviality check",
+   "state": "unimplemented",
+   "why": "No code anywhere evaluates criterion (c). The N-4 adversarial round's own reading: (c) will otherwise be written after the sealed campaign has run, by someone who wants C1 to hold. Since the G1 revision relaxed criterion (b) from an empty axiom set to a whitelist, (c) is the only remaining barrier against a tautology passing as U3.",
+   "negative_target_when_implemented": "cold-start-a3/theory/generated_l1_vacuous",
+   "negative_target_exists": true,
+   "note": "The negative control is already on disk and is not hypothetical: D-A3-007 records this vacuous certificate arising on its own -- three obligations green, #print axioms empty, nothing proved. Any check offered for this row must reject it."
+  },
+
+  "9.11": {
+   "subject": "envelope re-run (INC-BA-003 + abort-threshold scaling)",
+   "state": "implemented",
+   "why": "Both halves have landed, and this entry said so was possible: 'if the re-run has in fact landed, this entry is what has to change, and it has to change into a command.' (a) Abort-threshold scaling: D-016 (baseline-arms/DECISIONS.md) split the old absolute `actions_failed >= 10` into a consecutive rule (`bare_cc.py:77 CONSECUTIVE_FAILURE_ABORT`, outcome `api_unusable`) and a budget-scaled cumulative cap (`cumulative_failure_cap(budget) = max(10, budget)`, outcome `failure_grind`). (b) Envelope re-run: `baseline-arms/runs/20260728T103135Z-a7/envelope.json`, 9 cells run 2026-07-28 post-fix, all `budget_exhausted` with `actions_failed: 0` and `action_success_rate: 1.0`. Found by the S4-freeze-complete adversarial round on 2026-07-29 while refuting STATS_RULES.md 5.7's first version, which had cited this row as an open blocker owned by someone else.",
+   "cmd": ["python", "-c", "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); o=[r['outcome'] for g in d.get('games',{}).values() for r in g['repeats']]+[e['outcome'] for e in d.get('episodes',[])]; sys.exit(0 if o and 'api_unusable' not in o else 1)", "{target}"],
+   "positive_target": "baseline-arms/runs/20260728T103135Z-a7/envelope.json",
+   "negative_target": "baseline-arms/out/campaign/campaign_ar25.json",
+   "residual_not_blocking": "ar25-0c556536's three degraded cells were never re-run (that file's own `excluded` field). That keeps a pessimistic reading of the cell-yield rate on the books (3/12 rather than 0/9, STATS_RULES.md 5.7.2) but is not a launch blocker: the rule that produced those three verdicts no longer exists in the code, and D-016 already ruled the verdict 'guaranteed by construction, not earned by the API'. Cost to close it anyway: 3 cells, one game, order $3-4. Owner RES-1 (campaign lane -- it spends).",
+   "owner_hint": "baseline-arms"
+  },
+
+  "9.14": {
+   "subject": "U3 attainment rate has no implementation at all",
+   "state": "unimplemented",
+   "why": "One of the three primary endpoints, with no prediction, no battery id, and no consumer for Step.won (build_manifest.py:173-178, PREDICTIONS.md:585, battery ENDPOINTS.md:15 'unfalsifiable'). Freezing a statistical ruling over a quantity nothing computes freezes an unexecutable sentence.",
+   "clears_when": "the rate can be computed end to end at least once, and the computation rejects a run in which no game was won"
+  }
+ }
+}

@@ -1,0 +1,19 @@
+{
+  "prompt_id": "S29-measurement-missing-is-not-zero",
+  "branch": "agent/s29-measurement-missing",
+  "base_commit": "7852ef305bc7c12254a9f15e9362db79b9813529",
+  "utc": "2026-07-29T17:00:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "proxy",
+  "what": "\"not measured\" and \"measured, and it was zero\" were the same literal, in three places on the spending path.",
+  "api_spend_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "files": [
+    "proxy/cost.py",
+    "proxy/spend_gate.py",
+    "proxy/runner.py",
+    "proxy/tests/test_spend_gate_egress.py",
+    "proxy/runs/20260729T1700Z-S29-measurement/RUN_STATE.md"
+  ]
+}

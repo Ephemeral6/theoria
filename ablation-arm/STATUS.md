@@ -230,3 +230,89 @@ Unchanged and re-verified: no API call, no dollar, no sealed-pile contact, and
 no byte written into any upstream tree. `pin.hash_tree` runs either side of
 every full run (386 files across six trees), and `tests/test_readonly.py`
 asserts nothing moved.
+
+## A15 — the calibration was never stranded, and 505 other files are
+
+`A15-ablation-calibration-uncommitted` was raised on the belief that this arm's
+`artifacts/calibration.json` existed only inside
+`.worktrees/a4b-ablation-calibrate/` and had never been committed — visible to an
+auditor, invisible to the paper, and one worktree cleanup from gone.
+
+**It had been committed.** `agent/a4b-ablation-calibrate` is an ancestor of
+`origin/master`, the artefact is tracked, and the blob on master, the file in the
+a4b worktree and the file in a fresh checkout all carry sha256 `9a311e6c…65c0`.
+The audit read a path under `.worktrees/` and inferred that the only copy lived
+there. That inference is the interesting part, because it is available to anyone
+and it is wrong 57 times out of 114 here.
+
+**The staleness question outlived the false premise**, and it is the one that
+mattered: an outdated comparison table is worse than no table. The calibration
+pins its own evidence — 17 upstream files under `cold-start-a0/` and
+`cold-start-a2/`, each with a sha256, plus `upstream_unchanged`. All 17 still
+match at `b60a1537`; 172 commits have landed since the calibration commit
+`f7df3168` and not one touches either directory. Re-running `calibrate.py`
+reproduces every semantic field — the 19-row A0 table, the a2 fork, all five
+prediction verdicts, all 17 source hashes — and differs only in three Lean
+wall-clock timings the artefact already declares non-deterministic (`limits[3]`)
+and in `upstream_trees_hashed`, a file count that moves whenever any track
+commits anything and which the artefact documents as meaningful only as a
+same-run before/after comparison.
+
+That check is now executable rather than remembered:
+
+```bash
+cd ablation-arm && python -m abltools.verify_a15
+```
+
+It re-hashes all 17 pins and goes red if any of them drifts.
+
+### The census, and why `git status` is the wrong instrument
+
+`abltools/worktree_audit.py` is a read-only census of every worktree in the repo:
+what would be lost if it were deleted. It never deletes, checks out, fetches or
+writes anywhere but its two report files.
+
+The first pass called 66 of 117 worktrees at risk because git status was dirty —
+more than half the repository, which is a list nobody can act on. Dirtiness is
+not loss: `opsm16-a3` shows 138 modified files and not one unique byte, because
+they are a stale checkout's copies of things master has since moved past. So the
+test is content, not status. Every modified and untracked file is hashed with
+`git hash-object` — run inside its own worktree, so `core.autocrlf=true` and any
+`.gitattributes` apply as git would apply them — and looked up against every
+object reachable from every ref. Only content reachable from nothing counts.
+
+**622 authored files across 37 worktrees are reachable from nothing** — at the census this run committed. The counts move: successive runs minutes apart saw 117 down to 114 worktrees, because branches merge, `ci-merge-*` worktrees rotate through the OS temp directory, and one directory was deleted mid-run. `worktree_census.json` records the `upstream_head` its numbers belong to and is the authority. Three of
+those worktrees hold live paid runs that cannot be re-created: `e3-engines-online`
+($8.40 on sk48, 252 commands, and the board item is still unclaimed),
+`wt-p8` ($7.09 on g50t — its *committed* `RUN_STATE.json` says `not_started` and
+`$0.00` while the working tree says finished and `$7.09`, so the repository's
+current record of that round is wrong), and `wt-p12` (~4500 lines of harness and
+tests plus three paid tn36 runs). None of the three branches is on origin. They
+are not this arm's territory, so A15 reports them and stops; the escalation is
+`monitor/inbox/2026-07-29T1430Z-W-1672-worktrees-hold-the-only-copy-of-paid-runs.md`.
+
+`.worktrees/_tmp_v5b` was deleted by another process *between two runs of the
+census*, five minutes apart, contents unrecorded. The census is a reading of a
+live repository, not a fact; re-run it immediately before acting on it, and read
+the commit-delta the gate prints.
+
+Seven defects in the census were found and fixed before it shipped, three of them
+by a subagent tasked with refuting it rather than checking it. All seven failed
+toward "safe to delete". The worst: `git hash-object --stdin-paths` resolves
+relative paths against the repository top-level rather than the cwd, so for a
+directory inside the repo that is not a worktree of it, the census hashed the
+main checkout's files instead — reporting `_c1w_salvage` as holding nothing
+unique when 128 of its 164 files exist in no commit on any ref. It was caught
+only because an independent triage disagreed with the number. The full list is in
+this run's `RUN_STATE.md`; the lesson worth keeping is that a self-check can be
+defeated by its own fallback, and that one sampled path proves nothing.
+
+### A note for whoever adds tooling to this arm next
+
+The census first went in at `ablation-arm/tools/` and turned `verify.sh` red.
+`cold-start-a2/`, `cold-start-a3/`, `engine-rig/`, `theory-compiler/` and `exam/`
+each ship a top-level `tools/`, several ahead of this arm on `sys.path`, so
+`tests/test_no_shadow.py` fired exactly as designed. The fix was `abltools/`,
+following the precedent `theoria-arm/armtools/` already set — **not** adding
+`"tools"` to `DECLARED_SHADOWS`, which would have bought a green gate by
+weakening the test that caught the problem. Put arm tooling in `abltools/`.

@@ -4,6 +4,13 @@
 #
 #     cd arc-recon && bash verify.sh
 #
+# A gate nobody has made fail on purpose is decorative (S20), and this one was:
+# it had no negative sample, and A13 found out why that matters -- the sealed
+# audit reported "560 calls, sealed ADDRESSED: NONE" over a file whose fields it
+# could not read. The three records that used to walk through it are built and
+# required to go red in the file below.
+# negative-sample: arc-recon/test_sealed_audit_negatives.py
+#
 # Exit 0 means: the offline suite passes, the shipped canary schedule is
 # internally consistent with the shipped canary spec, the pile cut still hashes
 # to its published value, no sealed game appears in any request we have ever
@@ -71,6 +78,16 @@ step "no cookie value reached the ledger (the INC-008 field)" python redact_ledg
 # rather than a rule inside a writer.
 step "ledger invariants hold on the artefacts themselves" \
     python tools/ledger_invariants.py --all
+
+# The local engine never makes an API call, so the ledger audit above is
+# structurally blind to it. This is the only check that covers that path.
+step "the local-engine guard still refuses what it claims to refuse" \
+    python local_engine_guard.py selftest
+
+# If a cache exists at all it is swept by NAME -- no file is opened. An absent
+# directory is the normal case and exits 0.
+step "no sealed game's source is sitting in a local cache" \
+    python local_engine_guard.py scan environment_files ../environment_files
 
 echo
 if [ "$fail" -eq 0 ]; then

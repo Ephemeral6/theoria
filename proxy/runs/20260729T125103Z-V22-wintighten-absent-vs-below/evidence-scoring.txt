@@ -1,0 +1,15 @@
+SCORING SESSION -- the world scores; the floor is above anything it can reach, so win_tighten fires for a genuine shortfall
+===========================================================================================================================
+
+env_step records carrying a win_tighten rewrite: 33 of 126
+
+  seq 59   {"degenerate": false, "effect": "WIN rewritten to NOT_FINISHED", "op": "win_tighten", "reason": "score_below", "require_score": 99, "score": 3}
+  seq 61   {"degenerate": false, "effect": "WIN rewritten to NOT_FINISHED", "op": "win_tighten", "reason": "score_below", "require_score": 99, "score": 3}
+  seq 63   {"degenerate": false, "effect": "WIN rewritten to NOT_FINISHED", "op": "win_tighten", "reason": "score_below", "require_score": 99, "score": 3}
+  ... 30 more, identical but for `occurrence`
+
+variant_degenerate incidents: 0
+
+$ python -m proxy.tools.check_variant_degeneracy <ledger>
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoring.jsonl: PASS (126 records, 62 carrying a variant, 0 degenerate rewrite(s), 0 unreadable line(s))
+exit=0

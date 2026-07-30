@@ -1,0 +1,191 @@
+family,metric,tier,direction,arm,n_runs,median,normalised,status,note
+economy,E1,reference,neutral,bare_cc,78,0.759744,0.5000,ok,"runs: ok=78, not-applicable=2; row has no spread across arms; normalised fixed at 0.5; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E1,reference,neutral,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: no model call carries a cost; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E1,reference,neutral,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: the run records no model calls; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E1,reference,neutral,theoria_a0_spike,0,,,not-applicable,"runs: not-applicable=1; reason: the run records no model calls; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E1,reference,neutral,theoria_a2,0,,,not-applicable,"runs: not-applicable=4; reason: the run records no model calls; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E2,main,higher,bare_cc,67,0.229020,0.5000,ok,"runs: ok=67, insufficient-data=11, not-applicable=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; control arm"
+economy,E2,main,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: no model call carries a cost; no cross-arm contrast; control arm
+economy,E2,main,higher,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast
+economy,E2,main,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no model calls; no cross-arm contrast
+economy,E2,main,higher,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast
+economy,E3,main,lower,bare_cc,67,0.914286,0.5000,ok,"runs: ok=67, insufficient-data=11, not-applicable=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; control arm"
+economy,E3,main,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: no model call carries a cost; no cross-arm contrast; control arm
+economy,E3,main,lower,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast
+economy,E3,main,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no model calls; no cross-arm contrast
+economy,E3,main,lower,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast
+economy,E4,reference,lower,bare_cc,70,0.200474,0.0000,ok,"runs: ok=70, insufficient-data=8, not-applicable=2; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E4,reference,lower,schema_repro,4,0.053614,1.0000,ok,"runs: ok=4, not-applicable=4; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E4,reference,lower,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E4,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E4,reference,lower,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E5,reference,lower,bare_cc,78,0.033513,0.5000,ok,"runs: ok=78, not-applicable=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E5,reference,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: no model call carries a cost; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+economy,E5,reference,lower,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E5,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E5,reference,lower,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E6,reference,neutral,bare_cc,76,6.660920,0.5000,ok,"runs: ok=76, not-applicable=4; row has no spread across arms; normalised fixed at 0.5; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E6,reference,neutral,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: the source records no HTTP attempt count per step; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E6,reference,neutral,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: the source records no HTTP attempt count per step; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E6,reference,neutral,theoria_a0_spike,0,,,not-applicable,"runs: not-applicable=1; reason: the run records no environment steps; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E6,reference,neutral,theoria_a2,0,,,not-applicable,"runs: not-applicable=4; reason: the source records no HTTP attempt count per step; neutral: not oriented, support rather than a ranking; no cross-arm contrast; demoted to reference tier by the gaming audit"
+economy,E7,reference,lower,bare_cc,70,0.230189,0.5000,ok,"runs: ok=70, insufficient-data=8, not-applicable=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+economy,E7,reference,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: no model call records the size of the prompt it was sent; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+economy,E7,reference,lower,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E7,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+economy,E7,reference,lower,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K1,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K1,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K1,reference,higher,theoria_a0,2,0.993644,0.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K1,reference,higher,theoria_a0_spike,1,1.000000,1.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K1,reference,higher,theoria_a2,3,1.000000,1.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K10,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K10,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K10,reference,higher,theoria_a0,2,1.500000,1.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K10,reference,higher,theoria_a0_spike,1,1.000000,0.6667,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K10,reference,higher,theoria_a2,3,0.000000,0.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K11,main,neutral,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm keeps no explicit theory; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+epistemic,K11,main,neutral,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm keeps no explicit theory; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+epistemic,K11,main,neutral,theoria_a0,2,2.000000,1.0000,ok,"runs: ok=2; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K11,main,neutral,theoria_a0_spike,1,0.000000,0.0000,ok,"runs: ok=1; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K11,main,neutral,theoria_a2,3,1.000000,0.5000,ok,"runs: ok=3, not-applicable=1; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K12,main,higher,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; control arm"
+epistemic,K12,main,higher,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; control arm"
+epistemic,K12,main,higher,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast"
+epistemic,K12,main,higher,theoria_a0_spike,1,0.000000,0.0000,ok,runs: ok=1; no cross-arm contrast
+epistemic,K12,main,higher,theoria_a2,1,1.000000,1.0000,ok,"runs: ok=1, not-applicable=3; no cross-arm contrast"
+epistemic,K13,reference,lower,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+epistemic,K13,reference,lower,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+epistemic,K13,reference,lower,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K13,reference,lower,theoria_a0_spike,1,1.095244,0.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K13,reference,lower,theoria_a2,1,0.262295,1.0000,ok,"runs: ok=1, not-applicable=3; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K14,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K14,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K14,reference,higher,theoria_a0,2,498.0,1.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K14,reference,higher,theoria_a0_spike,0,,,insufficient-data,runs: insufficient-data=1; reason: no concept carries a compression account; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K14,reference,higher,theoria_a2,3,-5.000000,0.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K2,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4; control arm
+epistemic,K2,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4; control arm
+epistemic,K2,reference,higher,theoria_a0,1,0.000000,0.0000,ok,"runs: ok=1, insufficient-data=1; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4"
+epistemic,K2,reference,higher,theoria_a0_spike,1,1.000000,1.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4
+epistemic,K2,reference,higher,theoria_a2,0,,,insufficient-data,"runs: insufficient-data=3, not-applicable=1; reason: no held-out pairs; every reachable pair was covered; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4"
+epistemic,K3,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K3,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K3,reference,higher,theoria_a0,2,2.500000,0.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K3,reference,higher,theoria_a0_spike,1,4.000000,1.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K3,reference,higher,theoria_a2,3,3.000000,0.3333,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K4,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4; control arm
+epistemic,K4,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4; control arm
+epistemic,K4,reference,higher,theoria_a0,2,1.000000,0.5000,ok,runs: ok=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4
+epistemic,K4,reference,higher,theoria_a0_spike,1,1.000000,0.5000,ok,runs: ok=1; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4
+epistemic,K4,reference,higher,theoria_a2,3,1.000000,0.5000,ok,"runs: ok=3, not-applicable=1; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; bound pair K2/K4"
+epistemic,K5,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K5,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K5,reference,higher,theoria_a0,2,2.000000,0.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K5,reference,higher,theoria_a0_spike,1,2.000000,0.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K5,reference,higher,theoria_a2,3,3.000000,1.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K6,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K6,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K6,reference,higher,theoria_a0,2,853.7,1.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K6,reference,higher,theoria_a0_spike,0,,,insufficient-data,runs: insufficient-data=1; reason: no concept carries a compression account; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K6,reference,higher,theoria_a2,3,505.0,0.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K7,main,neutral,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm keeps no explicit theory; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+epistemic,K7,main,neutral,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm keeps no explicit theory; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+epistemic,K7,main,neutral,theoria_a0,2,1.000000,0.0000,ok,"runs: ok=2; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K7,main,neutral,theoria_a0_spike,0,,,insufficient-data,"runs: insufficient-data=1; reason: no concept carries a compression account; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K7,main,neutral,theoria_a2,3,2.000000,1.0000,ok,"runs: ok=3, not-applicable=1; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+epistemic,K8,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K8,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K8,reference,higher,theoria_a0,2,0.000000,0.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K8,reference,higher,theoria_a0_spike,0,,,insufficient-data,runs: insufficient-data=1; reason: no probes were designed; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K8,reference,higher,theoria_a2,3,0.800000,1.0000,ok,"runs: ok=3, not-applicable=1; no cross-arm contrast; demoted to reference tier by the gaming audit"
+epistemic,K9,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K9,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this arm keeps no explicit theory; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+epistemic,K9,reference,higher,theoria_a0,2,3.000000,0.5000,ok,runs: ok=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K9,reference,higher,theoria_a0_spike,0,,,insufficient-data,runs: insufficient-data=1; reason: the arm has no playbook; no cross-arm contrast; demoted to reference tier by the gaming audit
+epistemic,K9,reference,higher,theoria_a2,0,,,insufficient-data,"runs: insufficient-data=3, not-applicable=1; reason: the arm has no playbook; no cross-arm contrast; demoted to reference tier by the gaming audit"
+exploration,X1,reference,lower,bare_cc,73,0.282051,0.6528,ok,"runs: ok=73, insufficient-data=7; demoted to reference tier by the gaming audit; control arm"
+exploration,X1,reference,lower,schema_repro,8,0.012348,1.0000,ok,runs: ok=8; demoted to reference tier by the gaming audit; control arm
+exploration,X1,reference,lower,theoria_a0,2,0.789124,0.0000,ok,runs: ok=2; demoted to reference tier by the gaming audit
+exploration,X1,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; demoted to reference tier by the gaming audit
+exploration,X1,reference,lower,theoria_a2,4,0.776642,0.0161,ok,runs: ok=4; demoted to reference tier by the gaming audit
+exploration,X2,reference,higher,bare_cc,73,1.000000,1.0000,ok,"runs: ok=73, insufficient-data=7; demoted to reference tier by the gaming audit; control arm"
+exploration,X2,reference,higher,schema_repro,8,0.998871,0.9930,ok,runs: ok=8; demoted to reference tier by the gaming audit; control arm
+exploration,X2,reference,higher,theoria_a0,2,0.838051,0.0000,ok,runs: ok=2; demoted to reference tier by the gaming audit
+exploration,X2,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; demoted to reference tier by the gaming audit
+exploration,X2,reference,higher,theoria_a2,4,0.890699,0.3251,ok,runs: ok=4; demoted to reference tier by the gaming audit
+exploration,X3,reference,higher,bare_cc,65,0.000000,0.0000,ok,"runs: ok=65, insufficient-data=15; demoted to reference tier by the gaming audit; control arm"
+exploration,X3,reference,higher,schema_repro,8,0.000000,0.0000,ok,runs: ok=8; demoted to reference tier by the gaming audit; control arm
+exploration,X3,reference,higher,theoria_a0,2,0.258715,1.0000,ok,runs: ok=2; demoted to reference tier by the gaming audit
+exploration,X3,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; demoted to reference tier by the gaming audit
+exploration,X3,reference,higher,theoria_a2,4,0.091257,0.3527,ok,runs: ok=4; demoted to reference tier by the gaming audit
+exploration,X4,reference,lower,bare_cc,73,0.062500,0.7225,ok,"runs: ok=73, insufficient-data=7; demoted to reference tier by the gaming audit; control arm"
+exploration,X4,reference,lower,schema_repro,8,0.006098,1.0000,ok,runs: ok=8; demoted to reference tier by the gaming audit; control arm
+exploration,X4,reference,lower,theoria_a0,2,0.209353,0.0000,ok,runs: ok=2; demoted to reference tier by the gaming audit
+exploration,X4,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; demoted to reference tier by the gaming audit
+exploration,X4,reference,lower,theoria_a2,4,0.061835,0.7258,ok,runs: ok=4; demoted to reference tier by the gaming audit
+exploration,X5,reference,neutral,bare_cc,80,11.00,0.0000,ok,"runs: ok=80; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit; control arm"
+exploration,X5,reference,neutral,schema_repro,8,444.5,1.0000,ok,"runs: ok=8; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit; control arm"
+exploration,X5,reference,neutral,theoria_a0,2,41.00,0.0692,ok,"runs: ok=2; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"
+exploration,X5,reference,neutral,theoria_a0_spike,0,,,not-applicable,"runs: not-applicable=1; reason: the run records no environment steps; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"
+exploration,X5,reference,neutral,theoria_a2,4,41.50,0.0704,ok,"runs: ok=4; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"
+exploration,X6,reference,higher,bare_cc,71,1.000000,0.5000,ok,"runs: ok=71, insufficient-data=2, not-applicable=7; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+exploration,X6,reference,higher,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: no step in this run failed, so there is no failure to respond to; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+exploration,X6,reference,higher,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: no step in this run failed, so there is no failure to respond to; no cross-arm contrast; demoted to reference tier by the gaming audit"
+exploration,X6,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast; demoted to reference tier by the gaming audit
+exploration,X6,reference,higher,theoria_a2,0,,,not-applicable,"runs: not-applicable=4; reason: no step in this run failed, so there is no failure to respond to; no cross-arm contrast; demoted to reference tier by the gaming audit"
+mechanism,M1,reference,lower,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: no ground truth is available for this run; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+mechanism,M1,reference,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this run carries no mechanism annotation; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+mechanism,M1,reference,lower,theoria_a0,2,33.50,1.0000,ok,runs: ok=2; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M1,reference,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: this run carries no mechanism annotation; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M1,reference,lower,theoria_a2,4,76.75,0.0000,ok,runs: ok=4; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M2,reference,higher,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: no ground truth is available for this run; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+mechanism,M2,reference,higher,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this run carries no mechanism annotation; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm
+mechanism,M2,reference,higher,theoria_a0,2,1.000000,0.5000,ok,runs: ok=2; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M2,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: this run carries no mechanism annotation; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M2,reference,higher,theoria_a2,4,1.000000,0.5000,ok,runs: ok=4; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M3,main,lower,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: no ground truth is available for this run; no cross-arm contrast; control arm
+mechanism,M3,main,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: this run carries no mechanism annotation; no cross-arm contrast; control arm
+mechanism,M3,main,lower,theoria_a0,0,,,insufficient-data,runs: insufficient-data=2; reason: the run never reached a second level; transfer cannot be measured within one level; no cross-arm contrast
+mechanism,M3,main,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast
+mechanism,M3,main,lower,theoria_a2,0,,,insufficient-data,runs: insufficient-data=4; reason: the run never reached a second level; transfer cannot be measured within one level; no cross-arm contrast
+mechanism,M4,reference,lower,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+mechanism,M4,reference,lower,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+mechanism,M4,reference,lower,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit"
+mechanism,M4,reference,lower,theoria_a0_spike,1,12.00,0.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M4,reference,lower,theoria_a2,1,11.00,1.0000,ok,"runs: ok=1, not-applicable=3; no cross-arm contrast; demoted to reference tier by the gaming audit"
+mechanism,M5,reference,higher,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+mechanism,M5,reference,higher,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+mechanism,M5,reference,higher,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; no cross-arm contrast; demoted to reference tier by the gaming audit"
+mechanism,M5,reference,higher,theoria_a0_spike,1,0.750000,0.0000,ok,runs: ok=1; no cross-arm contrast; demoted to reference tier by the gaming audit
+mechanism,M5,reference,higher,theoria_a2,1,1.000000,1.0000,ok,"runs: ok=1, not-applicable=3; no cross-arm contrast; demoted to reference tier by the gaming audit"
+mechanism,M6,main,neutral,bare_cc,0,,,not-applicable,"runs: not-applicable=80; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+mechanism,M6,main,neutral,schema_repro,0,,,not-applicable,"runs: not-applicable=8; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; neutral: not oriented, support rather than a ranking; no cross-arm contrast; control arm"
+mechanism,M6,main,neutral,theoria_a0,0,,,not-applicable,"runs: not-applicable=2; reason: this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+mechanism,M6,main,neutral,theoria_a0_spike,1,0.750000,0.0000,ok,"runs: ok=1; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+mechanism,M6,main,neutral,theoria_a2,1,1.000000,1.0000,ok,"runs: ok=1, not-applicable=3; neutral: not oriented, support rather than a ranking; no cross-arm contrast"
+planning,P1,reference,higher,bare_cc,78,0.766194,0.0000,ok,"runs: ok=78, not-applicable=2; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+planning,P1,reference,higher,schema_repro,4,1.015264,1.0000,ok,"runs: ok=4, not-applicable=4; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+planning,P1,reference,higher,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P1,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P1,reference,higher,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P2,reference,higher,bare_cc,70,-0.124935,0.0000,ok,"runs: ok=70, insufficient-data=8, not-applicable=2; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+planning,P2,reference,higher,schema_repro,4,0.008214,1.0000,ok,"runs: ok=4, not-applicable=4; no cross-arm contrast; demoted to reference tier by the gaming audit; control arm"
+planning,P2,reference,higher,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P2,reference,higher,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P2,reference,higher,theoria_a2,0,,,not-applicable,runs: not-applicable=4; reason: the run records no model calls; no cross-arm contrast; demoted to reference tier by the gaming audit
+planning,P3,main,lower,bare_cc,71,0.000000,1.0000,ok,"runs: ok=71, insufficient-data=9; control arm"
+planning,P3,main,lower,schema_repro,8,0.000000,1.0000,ok,runs: ok=8; control arm
+planning,P3,main,lower,theoria_a0,2,0.148536,0.0000,ok,runs: ok=2
+planning,P3,main,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps
+planning,P3,main,lower,theoria_a2,4,0.093593,0.3699,ok,runs: ok=4
+planning,P4,main,lower,bare_cc,0,,,not-applicable,runs: not-applicable=80; reason: no ground truth is available for this run; no cross-arm contrast; control arm
+planning,P4,main,lower,schema_repro,0,,,not-applicable,runs: not-applicable=8; reason: no optimal plan length is known; no cross-arm contrast; control arm
+planning,P4,main,lower,theoria_a0,0,,,not-applicable,runs: not-applicable=2; reason: no optimal plan length is known; no cross-arm contrast
+planning,P4,main,lower,theoria_a0_spike,0,,,not-applicable,runs: not-applicable=1; reason: the run records no environment steps; no cross-arm contrast
+planning,P4,main,lower,theoria_a2,1,1.000000,0.5000,ok,"runs: ok=1, not-applicable=3; row has no spread across arms; normalised fixed at 0.5; no cross-arm contrast"
+planning,P5,reference,neutral,bare_cc,80,0.263158,1.0000,ok,"runs: ok=80; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit; control arm"
+planning,P5,reference,neutral,schema_repro,8,0.000000,0.0000,ok,"runs: ok=8; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit; control arm"
+planning,P5,reference,neutral,theoria_a0,2,0.000000,0.0000,ok,"runs: ok=2; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"
+planning,P5,reference,neutral,theoria_a0_spike,0,,,not-applicable,"runs: not-applicable=1; reason: the run records no environment steps; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"
+planning,P5,reference,neutral,theoria_a2,4,0.000000,0.0000,ok,"runs: ok=4; neutral: not oriented, support rather than a ranking; demoted to reference tier by the gaming audit"

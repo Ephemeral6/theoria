@@ -8041,7 +8041,7 @@
   "n_items": 80,
   "paper_id": "p15-heldout-a0",
   "question_type": "heldout",
-  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
   "rubric_module_digest": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
   "schema": "exam/v0.1",
   "total_points": 80.0,

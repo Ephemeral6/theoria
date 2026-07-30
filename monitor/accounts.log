@@ -1,0 +1,8 @@
+2026-07-29T13:04:55Z SCAFFOLD a -> C:\Users\user/.claude-accounts/a
+2026-07-29T13:04:55Z SCAFFOLD b -> C:\Users\user/.claude-accounts/b
+2026-07-29T14:03:03Z LIMITED b until 2026-07-29T15:00:00Z (You've hit your session limit · resets 11pm (Asia/Shanghai))
+2026-07-29T15:27:08Z LIMITED a until 2026-07-29T17:10:00Z (You've hit your session limit · resets 1:10am (Asia/Shanghai))
+2026-07-29T15:52:09Z LIMITED a until 2026-07-29T17:10:00Z (You've hit your session limit · resets 1:10am (Asia/Shanghai))
+2026-07-29T16:07:11Z LIMITED a until 2026-07-29T17:10:00Z (You've hit your session limit · resets 1:10am (Asia/Shanghai))
+2026-07-29T16:17:10Z LIMITED a until 2026-07-29T17:10:00Z (You've hit your session limit · resets 1:10am (Asia/Shanghai))
+2026-07-29T16:32:09Z LIMITED b until 2026-07-29T20:30:00Z (You've hit your session limit · resets 4:30am (Asia/Shanghai))

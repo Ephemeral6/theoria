@@ -106,7 +106,7 @@ def law_space_is_complete(world: Any) -> List[finding.Finding]:
     encoded = [_encode(s, index) for s in world.states]
     if not encoded:
         return [finding.skipped(ENGINE, "law_space_is_complete", world,
-                                "world has no states")]
+                                "world has no states", cause="no_states")]
 
     differences = [x ^ encoded[0] for x in encoded[1:]]
     expected = gf2.null_space(differences, n_cols)
@@ -177,6 +177,7 @@ def membership_agrees(world: Any) -> List[finding.Finding]:
     if n_cols > MEMBERSHIP_BUDGET * 4:
         return [finding.skipped(ENGINE, "membership_agrees", world,
                                 "%d features exceeds the sweep budget" % n_cols,
+                                cause="feature_sweep_over_budget",
                                 n_features=n_cols)]
     out: List[finding.Finding] = []
     for vector in result.basis:

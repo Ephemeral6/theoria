@@ -1,0 +1,24 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "unsolvable",
+  "justification": "Row 4 of this board is '#.#####.#': every cell is wall except columns 1 and 7. The start is on row 1 and the goal on row 5, so every route crosses row 4, and it can only cross at (4,1) or (4,7). Declaring a loss on both cells cuts the board in two. This is a separation argument read off the layout -- no path is enumerated, and the two cells are exactly the frontier.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "cells": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          7
+        ]
+      ],
+      "op": "observation_loss",
+      "value": 6
+    }
+  ],
+  "variant_id": "drill-walk-cut-row-four"
+}

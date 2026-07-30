@@ -1,0 +1,83 @@
+{
+  "budgets": {
+    "mem_limit_bytes": 2621440000,
+    "note": "the ladder stops at the first rung that needs more",
+    "time_limit_seconds": 60.0
+  },
+  "extrapolation_to_large_space_threshold": {
+    "basis_bytes_per_state": 472.6,
+    "basis_rung_cap": 3000000,
+    "basis_states_per_second": 67159.3,
+    "caveat": "Both figures are LOWER bounds on the true cost and the time one is the weaker. Rate is measured while the whole working set is resident; at 10^12 states nothing is resident and every dictionary probe is a disk seek, so the real running time is not states/rate. And 10^12 is itself only the class (ii) THRESHOLD -- the shipped gantry bound is 2^120 = 1.33e36, 24 orders of magnitude past it, and no reduction in constants closes 24 orders of magnitude. The bound is not tight-ish; it is not in the same universe.",
+    "implied_bytes": 472600000000000,
+    "implied_terabytes": 472.6,
+    "linear_in_states": {
+      "implied_days": 172.34,
+      "implied_seconds": 14889970.6,
+      "implied_years": 0.472
+    },
+    "power_law_fit": {
+      "fitted_exponent_b_in_t_eq_a_N_pow_b": 1.4865,
+      "fitted_over_rungs": [
+        200000,
+        3000000
+      ],
+      "implied_seconds": 7242675303.893189,
+      "implied_years": 229.5065310382662,
+      "why": "b > 1 because the enumerator keeps one command path per state and copies it on every expansion; the cost per state rises with BFS depth. Measured rungs: 200000 states in 0.80s (250785 st/s); 1000000 states in 7.79s (128299 st/s); 3000000 states in 44.67s (67159 st/s)"
+    },
+    "target_states": 1000000000000
+  },
+  "level": {
+    "constructor": "comb_room('gantry', 60, None) + remap LEFT<->RIGHT",
+    "item": "ii1",
+    "level_id": "gantry",
+    "step_limit": null,
+    "switches": 120
+  },
+  "rungs": [
+    {
+      "baseline_rss_bytes": 27541504,
+      "bytes_per_state": 434.2,
+      "cap": 200000,
+      "completed": true,
+      "observed_peak_rss_bytes": 114384896,
+      "peak_rss_bytes": 114384896,
+      "seconds": 0.7974965999892447,
+      "states": 200000,
+      "states_per_second": 250784.8,
+      "truncated": true
+    },
+    {
+      "baseline_rss_bytes": 27561984,
+      "bytes_per_state": 433.8,
+      "cap": 1000000,
+      "completed": true,
+      "observed_peak_rss_bytes": 461336576,
+      "peak_rss_bytes": 461336576,
+      "seconds": 7.794281699985731,
+      "states": 1000000,
+      "states_per_second": 128299.2,
+      "truncated": true
+    },
+    {
+      "baseline_rss_bytes": 27635712,
+      "bytes_per_state": 472.6,
+      "cap": 3000000,
+      "completed": true,
+      "observed_peak_rss_bytes": 1445335040,
+      "peak_rss_bytes": 1445335040,
+      "seconds": 44.66990749997785,
+      "states": 3000000,
+      "states_per_second": 67159.3,
+      "truncated": true
+    },
+    {
+      "cap": 10000000,
+      "completed": false,
+      "observed_peak_rss_bytes": 1605697536,
+      "stopped_by": "time_limit",
+      "wall_seconds_before_kill": 60.138
+    }
+  ]
+}

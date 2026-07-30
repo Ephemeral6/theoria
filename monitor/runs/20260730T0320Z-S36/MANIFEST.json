@@ -1,0 +1,44 @@
+{
+  "prompt_id": "S36-s36-orphan-commits-one-disk",
+  "branch": "agent/s36-orphan-commits-one-disk",
+  "base_commit": "223f78a8 (origin/master; branched from the remote, not this disk's master -- S35 measured local master 16 commits behind)",
+  "utc": "2026-07-30T03:20:00Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_spend_usd": 0.0,
+  "files": [
+    "census.json",
+    "census-after-preserve.json",
+    "RUN_STATE.md"
+  ],
+  "changed": [
+    "monitor/orphan_commits.py",
+    "monitor/scan.py",
+    "monitor/tests/test_orphan_commits.py",
+    "monitor/orphan_dispositions.json"
+  ],
+  "measured": {
+    "orphan_commits": 34,
+    "branches_at_risk": 10,
+    "item_text_said": "41 across 12 branches",
+    "why_the_numbers_differ": "the item's shell one-liner counted `git cherry` novelty only. Intersecting with `rev-list --branches --not --remotes` removes three e8-* worktrees (4 each) whose content IS upstream, and s-p20-nosecret-noop -- exactly the inflation the item warned about when it said use patch-id, not file diff. It also ADDS opsm/m16-engine-red, which the item's loop never looked at because it only walked refs/heads/agent.",
+    "tests": "10, all passing",
+    "after_adjudication_and_preserve": {
+      "orphan_commits": 3,
+      "branches": 2,
+      "status": "partial",
+      "why_not_green": "3 commits are still a single copy (s35a-backup deliberate-local, opsm/m16-engine-red superseded); a ruling must not turn the light green",
+      "preserved_to": "refs/heads/preserve/* on origin -- 7 branches; ci_merge enumerates origin/agent/* only, so preserving queues no merge"
+    }
+  },
+  "adjudication": {
+    "method": "two subagents read every diff and compared content against all 26 origin refs; I rechecked each evidence chain and overturned one verdict (v26: needs-owner -> push, because needs-owner is not a verdict, it is 'not yet judged', and it would have left those bytes at one copy)",
+    "verdicts": {
+      "push": 7,
+      "abandoned": 1,
+      "superseded": 1,
+      "deliberate-local": 1
+    }
+  }
+}

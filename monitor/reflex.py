@@ -16,6 +16,7 @@ The reflex never commits to git and never authors or edits prompts.
 
 import json
 import os
+import socket
 import subprocess
 import sys
 import time
@@ -30,7 +31,16 @@ MAX_DEATHS = 3
 WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
                     # now (memory admission, 45s stagger, orphan sweep, quota
                     # gate), so worker supply no longer waits for a human.
-MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
+# 补员的内存门槛。
+#
+# 8 这个总量数是机器崩过一次之后拍的，而那次崩溃的原因是**并发数**（约二十个
+# 会话同时起），不是总量。`standing.py` 2026-07-29 已经改成「余量 + 每会话开销」，
+# 这里没跟上——于是整夜的 reflex.log 是一串 `worker-hold:low-memory(7.5GB)`、
+# `(7.3GB)`、`(6.7GB)`：**补员机制一直存在，一直没有触发过**，
+# 舰队的人手全靠我手动加。两处判据对同一件事给不同答案，就是这个下场。
+HEADROOM_GB = 3.0        # 不动用的余量
+PER_SESSION_GB = 0.6     # 单个会话的保守估计（实测 0.42–0.52）
+MIN_FREE_GB = HEADROOM_GB + PER_SESSION_GB
 
 
 def rlog(msg):
@@ -72,6 +82,36 @@ def save_loop(state):
     json.dump(state, open(tmp, "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
     os.replace(tmp, LOOP)
+
+
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
 
 
 def main():
@@ -134,7 +174,6 @@ def main():
         # (needs admin), so reflex keeps the port alive itself. Without this
         # the page dies at every reboot and the user has to notice.
         try:
-            import socket
             s = socket.socket()
             s.settimeout(1)
             dead = s.connect_ex(("127.0.0.1", 8787)) != 0
@@ -142,10 +181,29 @@ def main():
         except Exception:
             dead = True
         if dead:
-            subprocess.Popen(["cmd", "/c", "start", "/min", "",
-                              os.path.join(HERE, "serve.cmd")],
-                             creationflags=0x00000008 | 0x01000000)
-            events.append("serve:restarted")
+            # 旧写法两个毛病，合起来让页面死了很久而日志一直说「已重启」：
+            # (1) 经 `cmd /c start` 起服务在这个环境里根本不生效——实测端口始终
+            #     关着；直接 Popen 那个 http.server 就成；
+            # (2) **无论成没成都追加 `serve:restarted`**，于是「重启成功」与
+            #     「重启失败」写出同一行。这条自动机制因此隐形失效，
+            #     而它本来就是为了「页面死了没人发现」而存在的。
+            try:
+                subprocess.Popen([sys.executable, "-m", "http.server", "8787",
+                                  "--bind", "127.0.0.1"],
+                                 cwd=HERE,
+                                 stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL,
+                                 creationflags=0x00000008 | 0x01000000)
+            except Exception as exc:
+                events.append("serve:spawn-FAILED:%s" % type(exc).__name__)
+            else:
+                time.sleep(3)          # 起得来就在这个时间内起来了
+                probe = socket.socket()
+                probe.settimeout(2)
+                up = probe.connect_ex(("127.0.0.1", 8787)) == 0
+                probe.close()
+                events.append("serve:restarted" if up
+                              else "serve:restart-FAILED(port still shut)")
 
         # 1. reap
         out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
@@ -286,9 +344,7 @@ def main():
         if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
-            merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-            flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-            events += merged + flagged
+            events += merge_events(r)
 
         # 4b. supply alarm — authoring items needs judgment, so reflex cannot
         # refill the board itself; what it can do is make a dry board loud

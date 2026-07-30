@@ -36,7 +36,8 @@ credible exhaustive search earns 40 % of it, and an *invalid* certificate
 short-circuits to zero with no fallback.
 
 The held-out rubric's refusal of per-cell credit is worth quoting, because it is
-the kind of scoring choice that silently manufactures a result:
+the kind of scoring choice that silently manufactures a result
+(`exam/grading/rubrics_heldout.py`):
 
 > on a 7x7 A0 board a typical transition changes two cells, so an examinee that
 > returns the input frame unchanged already scores 47/49 = 96 % under a
@@ -119,7 +120,9 @@ That number is worth almost nothing on its own, and the directory says why.
 yielded **17 of 17 claims with no board reasoning at all**, measured rather than
 estimated. And the held-out paper's world description published the dynamics in
 prose, taking a reader from 47.5 % to essentially full marks. Both are fixed
-(uniform point values; a world block that no longer states dynamics).
+(uniform point values; a world block that no longer states dynamics); both yields
+were confirmed against the answer key before anything was changed
+(`exam/DECISIONS.md` D-EX-011).
 
 The reason the static checks missed them is the most transferable thing in this
 section:
@@ -130,7 +133,7 @@ section:
 > does not run, and it fails in the direction that looks like success.
 
 The repair added label derivation from the key, and it did not fully close the
-hole: `leakage.json` records `label_sets_checked: []` for the handover and
+hole: `exam/artifacts/leakage.json` records `label_sets_checked: []` for the handover and
 adaptation papers, so the positional and metadata checks still run on nothing for
 two of the four. The directory's own reading is the one we adopt — "the static
 checks are necessary and cheap, and the adversarial reader is the one that found

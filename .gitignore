@@ -15,3 +15,16 @@ monitor/dispatch-logs/
 .claude/settings.local.json
 .worktrees/
 monitor/refresh.log
+
+# 常驻会话的运行时状态：谁还活着、谁持有哪把锁。**是状态，不是产物。**
+# 此前它们既未被跟踪也未被忽略，于是任何一次 `git add -A` 都会顺手把它们
+# 扫上主线——游离的 autostash 提交 a9476dd1 里已经有这四个 .lock 作为已跟踪
+# 条目。被跟踪之后更糟：一份"谁活着"的快照会随分支来回，读到的是别的机器
+# 别的时刻的存活情况，而它长得跟当下的一模一样。
+monitor/ops-status/*.lock
+monitor/standing_state.json
+# The local ARC engine caches every game's SOURCE here on first run, sealed pile
+# included. Never committed: the Phase 4 manifest publishes everything tracked,
+# and this is ARC's content, not ours. See CLAUDE.md's pile-cut section and
+# arc-recon/local_engine_guard.py, which refuses any unfiltered pull.
+environment_files/

@@ -1,0 +1,700 @@
+{
+  "balance": {
+    "action_ceiling": 24000,
+    "actions_remaining": 18810,
+    "actions_spent_on_test_traffic": 3308,
+    "actions_used": 5190,
+    "ceiling_usd": 214.9,
+    "gate_blind_spot_usd": 67.4098,
+    "gate_visible_headroom_usd": 178.7577,
+    "gate_visible_usd": 36.1423,
+    "pool_only_measured_usd": 0.4133,
+    "pool_only_placeholder_usd": 4.0,
+    "pricing_v1_vs_self_reported_theoria_pct": -8.39,
+    "programme_measured_usd": 103.5521,
+    "programme_nominal_usd": 107.5521,
+    "remaining_measured_usd": 111.3479,
+    "remaining_nominal_usd": 107.3479,
+    "tracked_bare_cc_usd": 94.7829,
+    "tracked_theoria_usd": 8.3559
+  },
+  "citations": {
+    "absent": [],
+    "drifted": [],
+    "lines": [
+      {
+        "cite": "proxy/spend_policy.json:4",
+        "expect": "\"usd_ceiling\": 214.9",
+        "state": "ok"
+      },
+      {
+        "cite": "proxy/spend_policy.json:5",
+        "expect": "\"action_ceiling\": 24000",
+        "state": "ok"
+      },
+      {
+        "cite": "proxy/spend_policy.json:6",
+        "expect": "\"ledger\": \"proxy/var/spend_gate.jsonl\"",
+        "state": "ok"
+      },
+      {
+        "cite": "proxy/.gitignore:3",
+        "expect": "var/",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:119",
+        "expect": "3014",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:121",
+        "expect": "17135",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:420",
+        "expect": "$50.00",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:688",
+        "expect": "0.0435",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:689",
+        "expect": "0.1460",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:690",
+        "expect": "0.1793",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/BUDGET_REPORT.md:836",
+        "expect": "15–20%",
+        "state": "ok"
+      },
+      {
+        "cite": "baseline-arms/runs/20260728T103135Z-a7/THEORIA_ARM_COST.md:52",
+        "expect": "1.0935",
+        "state": "ok"
+      },
+      {
+        "cite": "monitor/board/claimed/A3-campaign-devpile.RES-1.md:54",
+        "expect": "B = $60",
+        "state": "ok"
+      },
+      {
+        "cite": "freeze/STATS_RULES.md:26",
+        "expect": "bare_cc",
+        "state": "ok"
+      },
+      {
+        "cite": "freeze/STATS_RULES.md:712",
+        "expect": "⟨n⟩ = 2",
+        "state": "ok"
+      },
+      {
+        "cite": "freeze/STATS_RULES.md:777",
+        "expect": "0.78",
+        "state": "ok"
+      },
+      {
+        "cite": "freeze/STATS_RULES.md:791",
+        "expect": "0.513",
+        "state": "ok"
+      }
+    ],
+    "sections": [
+      {
+        "cite": "freeze/STATS_RULES.md §5.7",
+        "state": "ok"
+      },
+      {
+        "cite": "freeze/n_feasibility.py",
+        "state": "ok"
+      }
+    ]
+  },
+  "factors": {
+    "arms": 3,
+    "claim_set_len": 19,
+    "claim_set_size": 19,
+    "clean_len": 12,
+    "dev_baseline_actions": 3014,
+    "dev_pile": 4,
+    "envelope_action_budget": 30,
+    "n_public": 25,
+    "n_reps": 2,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "public_baseline_actions": 17135,
+    "quarantined": [
+      "ft09-0d8bbf25",
+      "ls20-9607627b"
+    ],
+    "sealed_pile": 21
+  },
+  "format": "theoria/freeze-budget-table/1",
+  "generated_from": {
+    "branch": "agent/s4-freeze",
+    "commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+    "dirty": true
+  },
+  "policy": {
+    "action_ceiling": 24000,
+    "default_run_actions": 600,
+    "default_run_usd": 5.0,
+    "ledger_rel": "proxy/var/spend_gate.jsonl",
+    "path": "proxy/spend_policy.json",
+    "sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+    "usd_ceiling": 214.9
+  },
+  "pool": {
+    "abspath_is_main_checkout": true,
+    "actions": 5190,
+    "actions_test_like": 3308,
+    "by_campaign_nonzero": {
+      "phase3-unit-price-recheck": {
+        "actions": 33,
+        "lines": 63,
+        "unpriced_usd": 0.0,
+        "usd": 1.3595
+      },
+      "phase3-unit-price-remeasure": {
+        "actions": 487,
+        "lines": 659,
+        "unpriced_usd": 0.0,
+        "usd": 19.8332
+      },
+      "phase3-variance-envelope": {
+        "actions": 504,
+        "lines": 773,
+        "unpriced_usd": 0.0,
+        "usd": 10.5364
+      },
+      "phase3-variance-envelope-quota-probe": {
+        "actions": 0,
+        "lines": 1,
+        "unpriced_usd": 0.0,
+        "usd": 0.0201
+      },
+      "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2": {
+        "actions": 15,
+        "lines": 19,
+        "unpriced_usd": 4.0,
+        "usd": 4.3932
+      }
+    },
+    "by_model": {
+      "claude-haiku-4-5-20251001": {
+        "calls": 306,
+        "max": 4.0,
+        "mean": 0.053232,
+        "median": 0.036804,
+        "min": 0.0,
+        "usd": 16.2891
+      },
+      "claude-opus-5": {
+        "calls": 70,
+        "max": 0.125015,
+        "mean": 0.1168,
+        "median": 0.115574,
+        "min": 0.111983,
+        "usd": 8.176
+      },
+      "claude-sonnet-5": {
+        "calls": 102,
+        "max": 0.244602,
+        "mean": 0.114286,
+        "median": 0.111818,
+        "min": 0.088163,
+        "usd": 11.6572
+      },
+      "mock-model-1": {
+        "calls": 28,
+        "max": 0.0,
+        "mean": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "usd": 0.0
+      }
+    },
+    "campaigns": 109,
+    "kinds": {
+      "release": 2280,
+      "reserve": 2280,
+      "spend": 7314
+    },
+    "lines": 11874,
+    "max_seq": 11874,
+    "path": "proxy/var/spend_gate.jsonl",
+    "present": true,
+    "price_corrections": [],
+    "sha256": "8b02a32413b7615eb168bd7339837fba3e02335dec23cbec39e6044f796fbb18",
+    "unpriced": [
+      {
+        "actions": 0,
+        "beat": "theorize",
+        "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+        "model": "claude-haiku-4-5-20251001",
+        "outcome": "raised_before_a_price",
+        "seq": 7418,
+        "usd": 4.0,
+        "why": "the CLI raised before an envelope carrying a price came back"
+      }
+    ],
+    "unpriced_calls": 1,
+    "unpriced_usd": 4.0,
+    "usd": 36.1423,
+    "usd_measured": 32.1423
+  },
+  "pricing": {
+    "cache_multipliers": {
+      "cache_creation_input_tokens": 1.25,
+      "cache_creation_input_tokens_1h": 2.0,
+      "cache_read_input_tokens": 0.1
+    },
+    "dated_haiku_key_present": false,
+    "effective": "2026-07-28",
+    "models": [
+      "claude-fable-5",
+      "claude-haiku-4-5",
+      "claude-mythos-5",
+      "claude-opus-4-6",
+      "claude-opus-4-7",
+      "claude-opus-4-8",
+      "claude-opus-5",
+      "claude-sonnet-4-6",
+      "claude-sonnet-5",
+      "mock-model-1"
+    ],
+    "path": "proxy/pricing/pricing_v1.json",
+    "sha256": "ed81118ae10b3a07c14288a48d33c404d48bf6853c0303a26457f6e736334e9a",
+    "table_sha256_as_loaded": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42"
+  },
+  "projection": {
+    "cell_survival_at_n": {
+      "1": 0.020833,
+      "2": 0.041233,
+      "3": 0.061207
+    },
+    "cells": 57,
+    "death_rate_q": 0.979167,
+    "episodes_nominal": 114,
+    "live_cells_of_19_at_n": {
+      "1": 0.3958,
+      "2": 0.7834,
+      "3": 1.1629
+    },
+    "margin_applied": 1.18,
+    "mean_baseline_actions_per_game": 672.4286,
+    "n_to_reach_floor": 64,
+    "q_ceiling_for_floor_at_n": {
+      "2": 0.513,
+      "3": 0.6408
+    },
+    "rows": [
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 6737,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": true,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "envelope-30",
+        "tier": "claude-haiku-4-5-20251001",
+        "usd_per_episode": 1.305,
+        "usd_total": 148.77,
+        "usd_total_with_margin": 175.5486
+      },
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 215597,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "envelope-30",
+        "tier": "claude-haiku-4-5-20251001",
+        "usd_per_episode": 1.305,
+        "usd_total": 4760.64,
+        "usd_total_with_margin": 5617.5552
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 151014,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-haiku-4-5-20251001",
+        "usd_per_episode": 29.2506,
+        "usd_total": 3334.5733,
+        "usd_total_with_margin": 3934.7965
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 4832448,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-haiku-4-5-20251001",
+        "usd_per_episode": 29.2506,
+        "usd_total": 106706.3451,
+        "usd_total_with_margin": 125913.4873
+      },
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 10636,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": true,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "envelope-30",
+        "tier": "claude-opus-5",
+        "usd_per_episode": 4.38,
+        "usd_total": 499.32,
+        "usd_total_with_margin": 589.1976
+      },
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 340358,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "envelope-30",
+        "tier": "claude-opus-5",
+        "usd_per_episode": 4.38,
+        "usd_total": 15978.24,
+        "usd_total_with_margin": 18854.3232
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 238403,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-opus-5",
+        "usd_per_episode": 98.1746,
+        "usd_total": 11191.9011,
+        "usd_total_with_margin": 13206.4433
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 7628890,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-opus-5",
+        "usd_per_episode": 98.1746,
+        "usd_total": 358140.8366,
+        "usd_total_with_margin": 422606.1872
+      },
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 15253,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": true,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "envelope-30",
+        "tier": "claude-sonnet-5",
+        "usd_per_episode": 5.379,
+        "usd_total": 613.206,
+        "usd_total_with_margin": 723.5831
+      },
+      {
+        "actions_per_episode": 30.0,
+        "arc_requests": 488102,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "envelope-30",
+        "tier": "claude-sonnet-5",
+        "usd_per_episode": 5.379,
+        "usd_total": 19622.592,
+        "usd_total_with_margin": 23154.6586
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 341890,
+        "basis": "nominal",
+        "episodes": 114,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 2,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-sonnet-5",
+        "usd_per_episode": 120.5664,
+        "usd_total": 13744.5745,
+        "usd_total_with_margin": 16218.5979
+      },
+      {
+        "actions_per_episode": 672.43,
+        "arc_requests": 10940467,
+        "basis": "n-to-reach-floor",
+        "episodes": 3648,
+        "fits_action_ceiling": false,
+        "fits_remaining_measured": false,
+        "n": 64,
+        "scenario": "S1-baseline-actions",
+        "tier": "claude-sonnet-5",
+        "usd_per_episode": 120.5664,
+        "usd_total": 439826.3835,
+        "usd_total_with_margin": 518995.1326
+      }
+    ],
+    "sealed_baseline_actions_21": 14121
+  },
+  "source": "Theoria.md:368 冻结清单第 12 项「预算表」; Theoria.md:377 ⟨$/局硬顶、总局数、止损⟩",
+  "tracked_bare_cc": {
+    "calls": 2764,
+    "cross_file_duplicate_keys": 0,
+    "files": {
+      "baseline-arms/ledger.jsonl": {
+        "calls": 274,
+        "unpriceable_calls": 165,
+        "usd_pricing_v1": 5.6246,
+        "usd_self_reported": 12.6606
+      },
+      "baseline-arms/out/shards/ledger.a7-g50t.jsonl": {
+        "calls": 90,
+        "unpriceable_calls": 90,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 3.342
+      },
+      "baseline-arms/out/shards/ledger.a7-sk48.jsonl": {
+        "calls": 90,
+        "unpriceable_calls": 90,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 4.0475
+      },
+      "baseline-arms/out/shards/ledger.a7-tn36.jsonl": {
+        "calls": 89,
+        "unpriceable_calls": 89,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 3.1468
+      },
+      "baseline-arms/out/shards/ledger.a7recheck.jsonl": {
+        "calls": 30,
+        "unpriceable_calls": 30,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 1.3595
+      },
+      "baseline-arms/out/shards/ledger.a7smoke.jsonl": {
+        "calls": 3,
+        "unpriceable_calls": 3,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 0.0
+      },
+      "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl": {
+        "calls": 30,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 2.2425,
+        "usd_self_reported": 3.4411
+      },
+      "baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl": {
+        "calls": 30,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 2.3383,
+        "usd_self_reported": 3.6043
+      },
+      "baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl": {
+        "calls": 10,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.7384,
+        "usd_self_reported": 1.1307
+      },
+      "baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl": {
+        "calls": 33,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 2.9644,
+        "usd_self_reported": 3.9982
+      },
+      "baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl": {
+        "calls": 33,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 2.8741,
+        "usd_self_reported": 4.1174
+      },
+      "baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl": {
+        "calls": 36,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 2.4223,
+        "usd_self_reported": 3.5416
+      },
+      "baseline-arms/out/shards/ledger.ar25.jsonl": {
+        "calls": 556,
+        "unpriceable_calls": 556,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 12.1119
+      },
+      "baseline-arms/out/shards/ledger.g50t.jsonl": {
+        "calls": 667,
+        "unpriceable_calls": 667,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 17.1182
+      },
+      "baseline-arms/out/shards/ledger.sk48.jsonl": {
+        "calls": 423,
+        "unpriceable_calls": 423,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 12.3936
+      },
+      "baseline-arms/out/shards/ledger.tn36.jsonl": {
+        "calls": 370,
+        "unpriceable_calls": 370,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 8.7695
+      }
+    },
+    "runs": 95,
+    "unpriceable_calls": 2483,
+    "usd_pricing_v1": 19.2045,
+    "usd_self_reported": 94.7829
+  },
+  "tracked_theoria": {
+    "calls": 7,
+    "cross_file_duplicate_keys": 0,
+    "files": {
+      "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl": {
+        "calls": 1,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 1.2184,
+        "usd_self_reported": 1.3077
+      },
+      "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl": {
+        "calls": 1,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.641,
+        "usd_self_reported": 0.7305
+      },
+      "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl": {
+        "calls": 5,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 5.7953,
+        "usd_self_reported": 6.3177
+      },
+      "theoria-arm/runs/20260728T235841Z-leg01/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T235842Z-leg02/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T235843Z-leg01/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/a3-gate-mock/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      }
+    },
+    "runs": 3,
+    "unpriceable_calls": 0,
+    "usd_pricing_v1": 7.6547,
+    "usd_self_reported": 8.3559
+  },
+  "unit_prices": [
+    {
+      "cells": 9,
+      "cite": "baseline-arms/BUDGET_REPORT.md:688",
+      "http_per_action": 1.97,
+      "success_rate": 0.906,
+      "tier": "claude-haiku-4-5-20251001",
+      "usd_per_model_call": 0.0392,
+      "usd_per_success_action": 0.0435
+    },
+    {
+      "cells": 3,
+      "cite": "baseline-arms/BUDGET_REPORT.md:689",
+      "http_per_action": 3.11,
+      "success_rate": 0.8,
+      "tier": "claude-opus-5",
+      "usd_per_model_call": 0.1168,
+      "usd_per_success_action": 0.146
+    },
+    {
+      "cells": 3,
+      "cite": "baseline-arms/BUDGET_REPORT.md:690",
+      "http_per_action": 4.46,
+      "success_rate": 0.722,
+      "tier": "claude-sonnet-5",
+      "usd_per_model_call": 0.1143,
+      "usd_per_success_action": 0.1793
+    }
+  ],
+  "verdict": {
+    "fitting_scenarios": [],
+    "sealed_table_fits": false,
+    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18810 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+  }
+}

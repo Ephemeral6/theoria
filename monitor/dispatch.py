@@ -95,6 +95,89 @@ def save_registry(reg):
     json.dump(reg, open(REGISTRY, "w", encoding="utf-8"), indent=2)
 
 
+#: 死因账本。`_runner.py` 每个会话退出时写一条。
+EXITS = os.path.join(LOGS, "exits.json")
+
+#: `via_task` 起完之后等多久再问调度器「它还在吗」。
+#: 只要够长到让一个撞限额/缺 CLI 的会话死掉（实测这类死亡在 1-2 秒内），
+#: 又短到不拖住舰队循环——`sweep` 本来就在两次启动之间等 45 秒。
+LAUNCH_SETTLE_S = 8
+
+
+def read_exits(path=None):
+    """读死因账本，**读不出来就说读不出来**。
+
+    S28：这个文件已经记了 27 次非零退出，而**全仓没有任何一处读它**。
+    接上它就得到一个权威的存活/死因来源——`standing.log` 的 `START ... ok=True`
+    做不到这件事，因为那是调度器的收据，不是会话的命。
+
+    返回 `{"ok": bool, "problem": str|None, "data": {...}}`。
+    `ok=False` 时 `data` 是能救回多少算多少，**不是一个漂亮的空字典**：
+    空账本（还没有人死过）与读不出来（写的人一直在被静默丢弃）是两件事，
+    而后者恰恰意味着这个来源本身正在骗人。
+    """
+    import json
+    p = path or EXITS
+    if not os.path.exists(p):
+        return {"ok": True, "problem": None, "data": {}, "missing": True}
+    try:
+        raw = open(p, encoding="utf-8").read()
+    except OSError as exc:
+        return {"ok": False, "problem": "unreadable: %s" % exc, "data": {}}
+    try:
+        data = json.loads(raw)
+        if not isinstance(data, dict):
+            return {"ok": False, "problem": "not an object", "data": {}}
+        return {"ok": True, "problem": None, "data": data}
+    except Exception as exc:
+        first = "%s: %s" % (type(exc).__name__, exc)
+    try:
+        # 并发写者共用过一个临时文件名，产出「一个完整对象 + 另一个的尾巴」。
+        # 前缀通常仍是完整的，救得回来——但**救回来不等于没事**：
+        # `ok` 仍然是 False，因为写入端此刻正在丢记录。
+        data, end = json.JSONDecoder().raw_decode(raw)
+        if isinstance(data, dict):
+            return {"ok": False, "data": data,
+                    "problem": "corrupt: %s; recovered valid prefix, %d "
+                               "trailing bytes discarded" % (first,
+                                                             len(raw) - end)}
+    except Exception:
+        pass
+    return {"ok": False, "problem": "corrupt: %s" % first, "data": {}}
+
+
+def exit_summary(short_s=60, path=None):
+    """死因账本的摘要，给盘面用。
+
+    `probe_standing` 现在数 `standing.log` 里 `" START "` 的行数，印成
+    「累计起过 N 次常驻会话」并保持绿色——**崩溃循环每 30 分钟把这个数字推高一次**，
+    因为每一次重启都是一行新的 START。这个函数提供它缺的那一半：
+    起来之后怎么了。
+
+    `short` = 活了不到 `short_s` 秒就退出的会话数，也就是「起来了，然后立刻死了」——
+    那正是 `ok=True` 那条收据看不见的东西。
+    """
+    got = read_exits(path)
+    data = got["data"]
+    runs = [(pid, r) for pid, rs in data.items()
+            if isinstance(rs, list) for r in rs if isinstance(r, dict)]
+    nonzero = [(p, r) for p, r in runs if r.get("code") not in (0, None)]
+    short = [(p, r) for p, r in runs
+             if isinstance(r.get("seconds"), int) and r["seconds"] < short_s]
+    ended = sorted(r.get("ended") or "" for _p, r in runs)
+    # `missing` 必须传下去。第一次拿这个摘要跑真账本时我传错了路径，
+    # 于是它印出 `ok=True sessions=0`——「账本不存在」和「还没有人死过」
+    # 收敛成了同一个健康答案。**这个补丁自己犯了它要修的那个病**，
+    # 正好是条目原文预告的第二层结论（出问题最多的是补丁本身）。
+    return {"ok": got["ok"], "problem": got["problem"],
+            "missing": got.get("missing", False),
+            "sessions": len(data), "runs": len(runs),
+            "nonzero": len(nonzero), "short": len(short),
+            "newest_ended": ended[-1] if ended else None,
+            "nonzero_ids": sorted({p for p, _r in nonzero}),
+            "short_ids": sorted({p for p, _r in short})}
+
+
 def pid_alive(pidnum):
     # pid 0 不是一个进程，它是「我们没问到 pid」。
     #
@@ -340,8 +423,38 @@ def via_task(pid_str, prompt_file):
                     "log": os.path.basename(log_path),
                     "started": stamp, "reaped": None, "via": "task"}
     save_registry(reg)
-    print("%-20s %s task=%s" % (pid_str, "started" if ok else "FAILED", task))
-    return ok
+
+    # S28：`ok = r.returncode == 0` 是**调度器的收据，不是会话的命**。
+    # `schtasks /Run` 在把任务交出去的那一刻就返回 0，所以一个启动后一秒就死的
+    # 会话（撞限额、缺 CLI、提示词读不出来）产生与一个健康会话**逐字面量相同**的
+    # `ok=True`——而 `standing.log` 的 `START ... ok=True` 是舰队关于「研究员被
+    # 拉起来了」的首要记录。等几秒再问一次调度器，让 ok 的意思变成「它在跑」。
+    #
+    # 第三个值是必须的：**「起来了然后没了」既不是成功也不是启动失败**，
+    # 两者该找的人完全不同（一个查会话为什么死，一个查调度器为什么不收）。
+    status = "declined"
+    if ok:
+        time.sleep(LAUNCH_SETTLE_S)
+        try:
+            st = task_state(task)
+        except Exception as exc:                # noqa: BLE001 -- named below
+            status = "state-unknown(%s)" % type(exc).__name__
+        else:
+            low = st.lower()
+            if "running" in low or "正在运行" in st:
+                status = "running"
+            elif st == "unknown":
+                # 查到了任务但没认出状态行——不许当成健康。
+                status = "state-unknown"
+            else:
+                # Ready（跑完了）或 gone（任务已消失）都意味着会话已经不在了，
+                # 而我们几秒前才刚起它。死因去 exits.json 查（read_exits）。
+                status = "died-on-arrival(%s)" % st
+    # 印出来的词是被 grep 的（reflex 拿 "started" 判补员成功），所以只有真的在跑
+    # 才准印 started——死在起跑线上的会话必须让那个 grep 落空。
+    print("%-20s %s task=%s"
+          % (pid_str, "started" if status == "running" else status.upper(), task))
+    return status
 
 
 def task_state(task):

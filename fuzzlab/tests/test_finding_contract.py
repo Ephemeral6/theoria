@@ -112,3 +112,135 @@ def test_the_collision_really_is_fatal_at_runtime():
     with pytest.raises(TypeError, match="engine"):
         finding.violated("probe_frontier", "partition_matches_truth",
                          _World(), "detail", engine={"x": 1})
+
+
+# ---------------------------------------------- every skip declares its cause
+#
+# V-21. `skipped` was one integer covering two questions with opposite answers:
+# "the engine looked and correctly has nothing to say" and "a tool could not
+# compute, so nobody knows". Summed, they cancel — which is how a starved solver
+# spent a release looking like coverage. `cause` is now required by the
+# signature; this is the second lock, because a signature only catches the call
+# that runs, and the reporting lines here are the ones that run rarely.
+
+
+class _World:
+    family = "jumpgraph"
+    seed = 1
+
+
+def _skip_calls(path: pathlib.Path):
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        name = func.attr if isinstance(func, ast.Attribute) else getattr(func, "id", None)
+        if name == "skipped":
+            yield node
+
+
+@pytest.mark.parametrize("path", sorted(PROPS.glob("*.py")), ids=lambda p: p.name)
+def test_every_skip_declares_a_cause(path):
+    from fuzzlab.props import finding
+
+    missing, undeclared = [], []
+    for node in _skip_calls(path):
+        keywords = {k.arg: k.value for k in node.keywords}
+        if "cause" not in keywords:
+            missing.append(node.lineno)
+            continue
+        value = keywords["cause"]
+        # A literal, so the table in `CAUSE_CLASS` can be checked statically.
+        # A computed cause would classify itself at runtime, which is the bucket
+        # nobody reviews.
+        if not isinstance(value, ast.Constant) or not isinstance(value.value, str):
+            undeclared.append((node.lineno, "not a string literal"))
+        elif value.value not in finding.CAUSE_CLASS:
+            undeclared.append((node.lineno, value.value))
+    assert not missing, (
+        "%s: finding.skipped() without a cause at line(s) %s -- a world nobody "
+        "judged has to say why, or the coverage column cannot be audited"
+        % (path.name, missing))
+    assert not undeclared, (
+        "%s: cause not declared in finding.CAUSE_CLASS: %s" % (path.name, undeclared))
+
+
+def test_an_undeclared_cause_is_refused_at_the_call():
+    """The signature's half of the lock, shown failing."""
+    from fuzzlab.props import finding
+
+    with pytest.raises(ValueError, match="undeclared skip cause"):
+        finding.skipped("lp_potential", "three_conditions_hold", _World(),
+                        "reason", cause="whatever_seemed_fine_at_the_time")
+
+
+def test_a_missing_cause_is_a_type_error():
+    from fuzzlab.props import finding
+
+    with pytest.raises(TypeError, match="cause"):
+        finding.skipped("lp_potential", "three_conditions_hold", _World(),
+                        "reason")
+
+
+def test_the_guard_catches_a_cause_that_was_never_classified(tmp_path):
+    """The negative control for the `ast` guard, not only for the signature."""
+    from fuzzlab.props import finding
+
+    original = tmp_path / "props_with_a_new_bucket.py"
+    original.write_text(
+        "from fuzzlab.props import finding\n"
+        "def p(world):\n"
+        "    return [finding.skipped('e', 'i', world, 'r', cause='brand_new')]\n",
+        encoding="utf-8")
+    causes = [k.value.value for node in _skip_calls(original)
+              for k in node.keywords if k.arg == "cause"]
+    assert causes == ["brand_new"]
+    assert "brand_new" not in finding.CAUSE_CLASS
+
+
+def test_every_declared_cause_has_a_class():
+    from fuzzlab.props import finding
+
+    for cause, klass in finding.CAUSE_CLASS.items():
+        assert klass in finding.CAUSE_CLASSES, (cause, klass)
+    assert finding.CAUSE_CLASS["solver_unavailable"] == finding.UNAVAILABLE
+    assert finding.CAUSE_CLASS["no_certificate"] == finding.DECLINED
+
+
+# ------------------------------------------------ failures(): prose == code
+
+def test_failures_counts_an_unexpected_raise():
+    """V-21: the docstring said "violations and unexpected raises" and the body
+    returned violations. The prose was the wider one, which is the direction that
+    misleads. This pins the alignment in the direction the fix went."""
+    from fuzzlab.props import finding
+
+    world = _World()
+    try:
+        raise RuntimeError("nobody wrote a policy for this")
+    except RuntimeError as exc:
+        crash = finding.raised("lp_potential", "three_conditions_hold", world, exc)
+    skip = finding.skipped("lp_potential", "three_conditions_hold", world,
+                           "documented", cause="no_certificate")
+    bad = finding.violated("lp_potential", "three_conditions_hold", world, "no")
+
+    assert finding.failures([crash]) == [crash]
+    assert finding.failures([bad]) == [bad]
+    assert finding.failures([skip]) == [], (
+        "a world nobody judged is not a world the engine got wrong; that is the "
+        "coverage column's question, not this one")
+    assert finding.failures([skip, crash, bad]) == [crash, bad]
+
+
+def test_a_raised_finding_records_which_exception_it_was():
+    from fuzzlab.props import finding
+
+    try:
+        raise ValueError("x")
+    except ValueError as exc:
+        crash = finding.raised("e", "i", _World(), exc)
+    assert crash.cause == "ValueError"
+    # `raised` is deliberately outside the taxonomy: it is the bucket nobody has
+    # classified yet, and giving it a cause_class would imply someone had.
+    assert crash.cause_class == ""

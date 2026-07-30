@@ -1,0 +1,12 @@
+{
+  "agent": "RES-4",
+  "base_commit": "b9a1b6b4",
+  "branch": "agent/s30-clock-sanity-widen",
+  "lane": "infra",
+  "new_findings_on_first_run": 12,
+  "prompt_id": "S30-S30-clock-sanity-widen",
+  "scope_after": 273,
+  "scope_before": 6,
+  "territory": "monitor",
+  "utc": "2026-07-29T10:51:35Z"
+}

@@ -3,7 +3,26 @@
     python monitor/board.py list                  # what is available / claimed
     python monitor/board.py claim <worker-id>     # atomically take the top item
     python monitor/board.py done <id> <worker>    # mark delivered
-    python monitor/board.py release <id> <worker> # give it back (with reason)
+    python monitor/board.py release <id> <worker> <why>   # give it back
+    python monitor/board.py reassign <id> --to <lane|generic> --by <who>
+                                        --why <...>       # unstick it
+    python monitor/board.py reconcile [--fix]     # delivered work that came back
+
+`reassign` is the exit from `released_by`. Handing an item back is recorded so
+it is not re-offered to the same agent 11 seconds later -- but on a lane with
+one owner, "he cannot do it" and "nobody will ever do it" are the same
+sentence, and until this verb existed the only way out was for that owner's
+heartbeat to go stale for 45 minutes. `list` prints an `unreachable` section
+for items in that state, with the exit next to each one.
+
+`reconcile` exists because board state is a set of **tracked files** and every
+verb here is an `os.rename`. A merge from a branch based before a `done`
+restores `items/<id>.md`, git having no way to see that a file in a *different*
+directory means the work is finished — and the item is then handed out again.
+E8-ic3-scale was delivered once and re-claimed four times that way. So `done/`
+is authoritative: `claim` will not offer a delivered id, `sweep` will not put
+one back on the shelf, and `list` prints a RESURRECTED section when it finds
+any.
 
 Why a board: one-shot sessions cost a launch per item and go stale between
 items. A long-lived worker claims an item, delivers it, and claims the next —
@@ -49,12 +68,40 @@ for d in (ITEMS, CLAIMED, DONE):
     os.makedirs(d, exist_ok=True)
 
 
-def heartbeat_age(agent):
-    """距上次心跳的分钟数；从未启动过返回 None。"""
+def heartbeat_evidence(agent):
+    """(距上次心跳的分钟数, 证据来源)；从未启动过返回 `(None, "never-started")`。
+
+    S28：旧写法只看 `ops-status/<编号>.json` 的 **mtime**，而那是一个**被 git
+    跟踪**的文件——任何 merge / reset / autostash 都能把一个死会话的心跳摸活。
+    现场证据：`OPS-R.json` 自报 05:59Z，`heartbeat_age` 返回 12 分钟，
+    reflog 显示 10:19:43Z 有一次 reset 摸新了它。
+
+    而这个误差**只朝一个方向走**：年龄偏小 → 主人算活着 → 赛道继续预留、
+    领地继续上锁、认领不被交回。所以这里改成优先读
+    `ops-status/<编号>.lock`——它未被跟踪且已被 `.gitignore` 忽略
+    （根 `.gitignore` 第 24 行），所以 git 碰不到它，是唯一没被污染的信号。
+    `standing.py` 的 `occupied()` 早就在用锁新鲜度 + 单调 cycle 这一对判据。
+
+    锁不存在时仍然回落到 json 的 mtime，**但来源会说出来**（`"mtime-touchable"`），
+    这样「量到了 3 分钟」和「量到了 3 分钟，但这个数可能是 merge 摸出来的」
+    不再是同一个答案。第三个值在这里不是一个数字，是那个数字的出处。
+    """
+    lock = os.path.join(OPS_STATUS, "%s.lock" % agent)
+    if os.path.exists(lock):
+        return int((time.time() - os.path.getmtime(lock)) / 60), "lock"
     path = os.path.join(OPS_STATUS, "%s.json" % agent)
     if not os.path.exists(path):
-        return None
-    return int((time.time() - os.path.getmtime(path)) / 60)
+        return None, "never-started"
+    return int((time.time() - os.path.getmtime(path)) / 60), "mtime-touchable"
+
+
+def heartbeat_age(agent):
+    """距上次心跳的分钟数；从未启动过返回 None。
+
+    薄封装，保持原有契约（调用方遍布 board / scan / standing）。
+    要知道这个数可不可信，用 `heartbeat_evidence()`。
+    """
+    return heartbeat_evidence(agent)[0]
 
 
 def stale_lanes():
@@ -87,16 +134,31 @@ def meta(path):
     out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": "",
            "spend": "", "generic_ok": "", RELEASED_BY: ""}
     for key in ("priority", "cell", "territory", "lane", "spend", "generic_ok"):
-        m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
+        # S28（顺带抓到的）：`\s*` 跨行，所以一个**空**的 `lane:` 会把下一行的第一个
+        # 非空白 token 吃进来当值——实测 `lane:` 后面跟着标题行时解析出 `"#"`。
+        # 于是一个写坏了的字段静默变成一个**看起来合理**的值，正是本条目的病症：
+        # 「没写」和「写了这个」编码成同一个东西。
+        #
+        # ADV-1/D4：这里原来是 `[^\S\n]*`，它只挡住 `\n`，而 `str.splitlines`
+        # 认作换行的还有 U+000B/000C/0085/2028/2029 —— 那五个字符仍然是「行内
+        # 空白」，于是同一个借下一行的缺陷对它们原样存活。`[ \t]*` 是唯一没有
+        # 这条尾巴的写法：字段值前面合法的东西只有空格和制表符。
+        m = re.search(r"^%s:[ \t]*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
     # To end of line, not `\S+`: this one is a comma-separated list, and the
     # single-token pattern would silently keep only the first releaser --
     # re-offering the item to everyone after them.
-    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, head, re.M)
+    #
+    # ADV-1/D1：这两条是上一版**漏掉**的。六个单 token 的键修好了，紧接着两行
+    # 的 `deps:` 和 `released_by:` 还留着跨行的 `\s*`，而它们的后果比 `lane` 更重：
+    # 一个空的 `deps:` 借来下一行，变成一个**永远不可能被满足**的依赖，条目从此
+    # 不可领，而板上给出的解释（`waits on lane: infra`）指着一件不存在的事。
+    # 空的 `released_by:` 则把 `lane: infra` 解析成两个「交回过此条目的工人」。
+    m = re.search(r"^%s:[ \t]*(.+)$" % RELEASED_BY, head, re.M)
     if m:
         out[RELEASED_BY] = m.group(1).strip()
-    m = re.search(r"^deps:\s*(.+)$", head, re.M)
+    m = re.search(r"^deps:[ \t]*(.+)$", head, re.M)
     if m:
         out["deps"] = [d.strip() for d in m.group(1).split(",")
                        if d.strip() and d.strip().lower() != "none"]
@@ -116,6 +178,71 @@ def item_id(fname):
 
 def done_ids():
     return {f.split(".")[0] for f in os.listdir(DONE)}
+
+
+def delivered_map():
+    """``{id: deliverer}`` for everything in ``done/``.
+
+    ``done_ids()`` already existed and was used for **one** thing: resolving
+    another item's ``deps``. Nothing ever asked whether *this* item was already
+    delivered, which is the gap S34 is about.
+    """
+    out = {}
+    for f in sorted(os.listdir(DONE)):
+        if not f.endswith(".md"):
+            continue
+        parts = f[:-3].split(".")
+        out.setdefault(parts[0], parts[1] if len(parts) >= 2 else "?")
+    return out
+
+
+def resurrected():
+    """Ids that are in ``done/`` **and** back on the shelf or under claim.
+
+    Board state is a set of **tracked files**, and all three of this module's
+    verbs are `os.rename`. Nothing here is wrong on its own. What goes wrong is
+    the interaction with git: a merge from a branch whose base predates the
+    `done` sees "a file the other side has and I do not" and restores
+    `items/<id>.md`. It cannot see "this work is finished" -- that fact lives in
+    a *different* directory, and a three-way merge has no rule relating them.
+
+    Measured on 2026-07-29: `E8-ic3-scale` was delivered by W-1660 at 12:16:28Z
+    and then claimed **four more times** (W-1671 at 15:08, an accidental
+    `--help` at 15:54, W-130 at 15:59), swept back to the shelf after each, and
+    at the time this was written it sat in `items/`, `claimed/` and `done/`
+    simultaneously. `A13-sealed-audit-reads-the-wrong-fields` was in `claimed/`
+    and `done/` at once. Nothing errored, nothing printed a warning, and
+    `list` showed the item as ordinary available work: every one of those
+    workers spent a launch and a context redoing something already on a branch.
+
+    Returns ``{id: {"deliverer": w, "in_items": bool, "claimed_by": [w, ...]}}``.
+
+    ``claimed_by`` is a **list**, not one worker, and that is not tidiness.
+    ``claimed_map()`` is keyed on the id, so with two claim files for one id it
+    keeps whichever ``os.listdir`` returned last -- and `reconcile --fix` would
+    then remove one, report success and return 0 with the other still sitting
+    there. A repair tool whose exit code says "clean" over residue it left is
+    this lane's own disease, and it was found by the tests for this very fix.
+    Two claims on one id is also not the rare case: it is a *more* resurrected
+    board, since each resurrection is another chance for someone to claim.
+    """
+    delivered = delivered_map()
+    shelf = {item_id(f) for f in os.listdir(ITEMS) if f.endswith(".md")}
+    claims = {}
+    for f in sorted(os.listdir(CLAIMED)):
+        if not f.endswith(".md"):
+            continue
+        parts = f[:-3].split(".")
+        if len(parts) >= 2:
+            claims.setdefault(parts[0], []).append(parts[1])
+    out = {}
+    for iid, deliverer in delivered.items():
+        in_items = iid in shelf
+        by = claims.get(iid, [])
+        if in_items or by:
+            out[iid] = {"deliverer": deliverer, "in_items": in_items,
+                        "claimed_by": by}
+    return out
 
 
 def claimed_map():
@@ -145,6 +272,15 @@ def candidates(lane=None):
             continue
         m = meta(os.path.join(ITEMS, f))
         iid = item_id(f)
+        # Already delivered. `ready` was read three lines up and used only to
+        # resolve *other* items' deps -- the same set, never asked about the
+        # item in front of it. An id on the shelf with a `done/` record is not
+        # available work, it is a merge artefact, and offering it costs a whole
+        # session. This is a hard skip and `cmd_claim` prints what it skipped:
+        # a silently withheld item is the trap this board already fell into
+        # once (board-empty-is-misleading).
+        if iid in ready:
+            continue
         blocked = [d for d in m["deps"] if d not in ready]
         if blocked:
             continue
@@ -189,6 +325,157 @@ def candidates(lane=None):
     return out
 
 
+#: 一个从未碰过这块板的工人。用来问「这件活还有没有**任何人**领得到」——
+#: `released_by` 里只会出现真实编号，所以这个名字永远不在其中，它代表的正是
+#: 「最宽松的领取者」。不写进任何文件，只在判据里出现。
+FRESH_WORKER = "W-nobody"
+
+
+def lane_denied(worker, lane):
+    """`--lane` 不是这个工人的（`cmd_claim` 的 LANE-NOT-YOURS 守卫）。"""
+    if not lane or LANE_OWNER.get(lane) in (None, worker):
+        return False
+    return lane not in stale_lanes()
+
+
+def offers(worker, lane=None):
+    """`claim worker [--lane lane]` 真正会尝试的条目，以及它扣下的 id。
+
+    S35：`list` 与 `claim` 原来各自实现「这件活轮不轮得到他」。claim 会跳过
+    `released_by` 里有他的条目（这条是对的，它止住了 S22 十一秒一轮的
+    claim/release 空转），而 `list` 的 reserved 段只遍历 `candidates(lane)`，
+    **从不问 released_by**。于是同一个问题在两条路径上有两个答案：claim 说
+    「不归他」，list 说「等他来领」，两边都不报错。
+
+    现在两条路径都问这一个函数，答案不可能再分叉——这比在 `list` 里补一个
+    同样的 `if` 强，因为补出来的第二份判据只会再分叉一次。
+    """
+    if lane_denied(worker, lane):
+        return [], []
+    rows, withheld = [], []
+    for row in candidates(lane):
+        if worker in released_by(row[3]):
+            withheld.append(row[1])
+        else:
+            rows.append(row)
+    return rows, withheld
+
+
+def reachable_ids():
+    """所有**有人领得到**的 id：把每一种可能的领取者能领到的并起来。
+
+    刻意不重述规则，而是去问真正的谓词——四个赛道主人（带赛道、不带赛道各问
+    一次）加一个从未碰过板的通用工人。将来 `candidates()` 再加一条排除规则，
+    这里自动跟上；重述一遍的写法只会在那一天悄悄失准。
+    """
+    reach = set()
+    for lane, owner in LANE_OWNER.items():
+        for l in (lane, None):
+            reach |= {r[1] for r in offers(owner, l)[0]}
+    reach |= {r[1] for r in offers(FRESH_WORKER)[0]}
+    return reach
+
+
+def unreachable_ids():
+    """就绪、没人认领、依赖已满、领地空着——而没有任何身份领得到的 id。
+
+    减掉的三类各有自己的出口，所以不算在内：已交付的、依赖未满的（等上游）、
+    领地被占的（等邻居交付）。剩下的这一类**没有出口**，这正是它要有自己一段
+    的理由——`board.py reassign` 是给它准备的那个出口。
+    """
+    reach = reachable_ids()
+    busy = territories_busy()
+    ready = done_ids()
+    claimed = set(claimed_map())
+    out = set()
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        iid = item_id(f)
+        if iid in reach or iid in claimed or iid in ready:
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        if [d for d in m["deps"] if d not in ready] or m["territory"] in busy:
+            continue
+        out.add(iid)
+    return out
+
+
+#: `_record_release` 追加进条目正文的那一行。读回来是为了让一件不可达的活
+#: 说得出**是谁交回的、为什么**——理由一直躺在条目里，只是从来没人读。
+RELEASE_NOTE = re.compile(
+    r"^>\s*\*\*(\S+?)\s*于\s*(\S+?)\s*交回\*\*[：:]\s*(.*)$", re.M)
+
+
+def release_notes(path):
+    """`[(worker, utc, 理由第一行)]`，按文件里的先后。
+
+    整读文件，不走 `meta()`：前言在文件头，而交回记录是**追加到文件尾**的，
+    `meta()` 只读前 800 字节，永远读不到它们。
+    """
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return []
+    return [(w, t, (why.strip() or "未写理由")) for w, t, why
+            in RELEASE_NOTE.findall(text)]
+
+
+def withheld_items(shown_ids):
+    """就绪、没人认领、却在 `list` 的任何分区里都不出现的条目 —— 连原因一起。
+
+    S28：`list` 印 available / reserved / blocked / claimed 四段，而领地互斥
+    （`candidates()` 里的 `if m["territory"] in busy: continue`）把条目从**每一段
+    里都抹掉**。于是板读起来是「人人有活干」，而不是「卡住了」。
+    实测（2026-07-29，真板）：`items/` 里 11 件，`list` 一件都不提的有 **8 件**，
+    而它印的是 `available: 1`。
+
+    赛道无主是第二类隐身：`reserved` 那段只遍历 `LANE_OWNER` 的键，
+    所以一条**没有常驻研究员**的赛道上的活，两段都进不去。
+
+    做法是**集合差**而不是逐条枚举原因：先拿到已经印出去的 id，剩下的就是被
+    withheld 的，再去诊断为什么。这样将来 `candidates()` 多加一条排除规则，
+    这段不会跟着漏——只会诊断成 `原因不明`，而那本身就是一句要报的话。
+    """
+    busy = territories_busy()
+    stale = stale_lanes()
+    ready = done_ids()
+    claimed = set(claimed_map())
+    out = []
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        iid = item_id(f)
+        if iid in shown_ids or iid in claimed or iid in ready:
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        if [d for d in m["deps"] if d not in ready]:
+            continue                    # `blocked` 那段已经报过了
+        lane = m.get("lane") or ""
+        owner = LANE_OWNER.get(lane)
+        if m["territory"] in busy:
+            why = "领地 %s 被 %s 占着" % (m["territory"], busy[m["territory"]])
+        elif owner and owner in released_by(m) and lane not in stale:
+            # S35：这一条要排在赛道那一条**前面**。否则它会落进下面那句
+            # 「有主，等其研究员来领」——那正是 reserved 段说过的同一句谎，
+            # 换一段再说一遍。理由取最后一条交回记录：它是现状的那条。
+            notes = [n for n in release_notes(os.path.join(ITEMS, f))
+                     if n[0] == owner]
+            why = "%s 交回过它（%s），而 %s 赛道只有他能领 —— 由构造不可达" % (
+                owner, notes[-1][2] if notes else "理由未记录", lane)
+        elif lane and lane not in LANE_OWNER:
+            why = "赛道 %s 没有常驻研究员" % lane
+        elif (m.get("spend") == "api"
+              and m.get("generic_ok", "").lower() not in ("yes", "true")):
+            why = "花 API 钱，缺监控的 generic_ok 签字"
+        elif lane and lane not in stale:
+            why = "赛道 %s 有主（%s），等其研究员来领" % (lane, LANE_OWNER[lane])
+        else:
+            why = "原因不明 —— 排除规则变了而这段没跟上"
+        out.append((m["priority"], iid, m["territory"], why))
+    return sorted(out)
+
+
 def cmd_list():
     stale = stale_lanes()
     generic = candidates()
@@ -205,17 +492,34 @@ def cmd_list():
     # 而这两件事该派的人完全不同。
     reserved = []
     for lane in sorted(LANE_OWNER):
-        for pri, iid, _f, m in candidates(lane):
+        # S35：`offers()`，不是 `candidates()`。差别就是那个谎：`candidates`
+        # 答的是「这件活属于这条赛道吗」，而这一段印的话是「等其赛道研究员
+        # 来领」——那是 `claim` 才答得了的问题，且它对交回过的条目答「不」。
+        for pri, iid, _f, m in offers(LANE_OWNER[lane], lane)[0]:
             if iid not in generic_ids:
                 reserved.append((pri, iid, lane, LANE_OWNER[lane], m))
     if reserved:
         print("=== reserved（有主，等其赛道研究员来领 %d） ===" % len(reserved))
         for pri, iid, lane, owner, m in sorted(reserved):
-            age = heartbeat_age(owner)
-            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
-                  % (pri, iid, lane, owner,
-                     "未启动" if age is None else "%d分钟前" % age,
-                     m["territory"]))
+            age, source = heartbeat_evidence(owner)
+            # 心跳年龄的**出处**跟年龄一起印。只有锁是 git 碰不到的；
+            # 回落到被跟踪文件的 mtime 时，这个数可能是一次 merge 摸出来的，
+            # 而误差方向恰好是「主人还活着，这件活继续给他留着」。
+            if age is None:
+                hb = "未启动"
+            elif source == "lock":
+                hb = "%d分钟前" % age
+            else:
+                hb = "%d分钟前(mtime，可被 merge 摸新)" % age
+            # S35a（对抗复核抓到）：`cmd_claim` 里的 `HOLD_CAP` 闸在 `offers()`
+            # **之前**就返回，所以这一段（问的是 `offers`）会把「手上已经满了」
+            # 的主人写成「等其研究员来领」——本条目要修的那个分歧，往下一道闸
+            # 又复现了一次。这一类会自己解开（主人交付即松），所以它不是不可达；
+            # 但那句话仍然是错的，所以把是哪一种印出来。
+            cap = "" if held_by(owner) < HOLD_CAP else \
+                "（主人手上已满 %d/%d，交付后才领得到）" % (held_by(owner), HOLD_CAP)
+            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s%s"
+                  % (pri, iid, lane, owner, hb, m["territory"], cap))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -228,11 +532,36 @@ def cmd_list():
         print("=== blocked ===")
         for iid, pend in blocked:
             print("  %-28s waits on %s" % (iid, ",".join(pend)))
+    # 第五段。就绪但在上面每一段里都不出现的条目——不印它们，
+    # 「板上没活」与「活都被挡住了」就是同一个画面。
+    shown = generic_ids | {iid for _p, iid, _l, _o, _m in reserved}
+    shown |= {iid for iid, _pend in blocked}
+    hidden = withheld_items(shown)
+    # 第六段。上面每一段挡住的活都还有出口——依赖会满，领地会放开，主人会来领；
+    # 这一段里的没有。判据是集合差（`unreachable_ids()` 去问真正的谓词），
+    # 不是上面那句诊断文字，所以诊断写错了也不会让一件活从这段里溜出去。
+    unreach = unreachable_ids()
+    stuck = [r for r in hidden if r[1] in unreach]
+    hidden = [r for r in hidden if r[1] not in unreach]
+    if hidden:
+        print("=== territory-blocked (%d) ===" % len(hidden))
+        for pri, iid, territory, why in hidden:
+            print("  p%d  %-28s territory=%-14s %s" % (pri, iid, territory, why))
+    if stuck:
+        print("=== unreachable（无人可领 %d —— 出口在下一行，不是再印一遍） ==="
+              % len(stuck))
+        for pri, iid, territory, why in stuck:
+            print("  p%d  %-28s territory=%-14s %s" % (pri, iid, territory, why))
+            print("      出口：board.py reassign %s --to <赛道|generic> "
+                  "--by <monitor|该赛道主人> --why \"...\"" % iid)
     cm = claimed_map()
     if cm:
         print("=== claimed ===")
         for iid, worker in sorted(cm.items()):
             print("  %-28s by %s" % (iid, worker))
+    # Before `done`, not after. The done list is 116 lines long and this is the
+    # section a reader has to not scroll past.
+    _warn_resurrected()
     if os.listdir(DONE):
         print("=== done (%d) ===" % len(os.listdir(DONE)))
         for f in sorted(os.listdir(DONE)):
@@ -323,30 +652,33 @@ def cmd_claim(worker, lane=None):
     # 于是 `claim W-9999 --lane campaign` 能领走一件在真 API 上打的战役，
     # 退出 0，board.log 记下的那行与一次被批准的花钱认领逐字不可区分
     # （2026-07-29 对抗性普查抓到）。自报一个身份不该等于拥有它。
-    if lane and LANE_OWNER.get(lane) not in (None, worker):
-        if lane not in stale_lanes():
-            print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
-                  % (lane, LANE_OWNER.get(lane)))
-            return 3
+    if lane_denied(worker, lane):
+        print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
+              % (lane, LANE_OWNER.get(lane)))
+        return 3
     if worker.startswith("RES-") and held_by(worker) >= HOLD_CAP:
         print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
               % HOLD_CAP)
         return 3
-    withheld = []
-    for _pri, iid, fname, _m in candidates(lane):
-        if worker in released_by(_m):
-            # You already decided you cannot do this one. Re-offering it costs
-            # a whole session's context to re-derive the same conclusion, and
-            # the log fills with claims and releases while nothing moves.
-            # Anyone else may still take it -- one agent's refusal is about
-            # that agent, not about the item.
-            withheld.append(iid)
-            continue
+    # 扣下的那些：你自己交回过。重发一遍要花一整个会话的上下文去重新得出上一轮
+    # 已经得出的结论，而 board.log 会记满 claim 与 release，什么也没有前进。
+    # 别人仍然可以领——一个 agent 的拒绝是关于那个 agent 的，不是关于这件活的。
+    # **除非那条赛道只有他一个人**：那时这两句话是同一句，见 `unreachable_ids()`。
+    rows, withheld = offers(worker, lane)
+    for _pri, iid, fname, _m in rows:
         src = os.path.join(ITEMS, fname)
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
         try:
             os.rename(src, dst)                # atomic: first one wins
-        except OSError:
+        except FileNotFoundError:
+            # S28：这里原来是裸 `except OSError: continue`。**唯一预期的竞态是
+            # 另一个工人抢先把条目 rename 走了**，那正是 FileNotFoundError；
+            # 其余 OSError 全都被顺手吞掉，然后这个循环走完、印出 BOARD-EMPTY
+            # ——而工人被告知那意味着「收尾退出」。异常被丢弃，`note()` 只在
+            # 成功路径调用，所以一次假的 BOARD-EMPTY 在 board.log 里零痕迹。
+            # 触发条件比看上去常见：监控自身持续在 open 这些文件，
+            # 而 Windows 的 WinError 32（文件被占用）是 OSError 的子类。
+            # 对照组是 `cmd_done` / `cmd_release`——同一个 rename，它们完全不捕获。
             continue
         note("CLAIM %s by %s" % (iid, worker))
         print("---8<--- item %s ---8<---" % iid)
@@ -362,11 +694,89 @@ def cmd_claim(worker, lane=None):
         # (board-empty-is-misleading): "nothing to do" and "nothing I will
         # show you" have to look different, or the next reader debugs the
         # wrong thing.
-        print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
-              % (len(withheld), ", ".join(sorted(withheld)[:6])))
+        #
+        # S35：「别人仍可领」是这句谎的第五份拷贝，而且印在**最该说实话的地方**
+        # ——它是唯一一句读者当场就会照着办的话。实测（2026-07-30T01:50Z，活板）：
+        #   BOARD-EMPTY（1 件被扣下：你自己交回过 —— S22。别人仍可领）
+        # 别人领不了：LANE-NOT-YOURS 把 infra 赛道之外的所有人挡着。
+        stuck = unreachable_ids() & set(withheld)
+        free = sorted(set(withheld) - stuck)
+        if free:
+            print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
+                  % (len(free), ", ".join(free[:6])))
+        if stuck:
+            print("BOARD-STUCK（%d 件被扣下，且**没有别人领得到**（这条赛道只有你）"
+                  " —— %s。出口：board.py reassign <id> --to <赛道|generic> "
+                  "--by <你|monitor> --why \"...\"）"
+                  % (len(stuck), ", ".join(sorted(stuck)[:6])))
     else:
         print("BOARD-EMPTY")
+    _warn_resurrected()
     return 3
+
+
+def _warn_resurrected():
+    """Print delivered ids that are back on the shelf, if any.
+
+    Deliberately printed on the *empty* path as well as by `list`. A worker
+    that gets BOARD-EMPTY while three finished items sit in `items/` is looking
+    at a board that is lying to it in the reassuring direction, and it is the
+    one party with a reason to say so.
+    """
+    res = resurrected()
+    if not res:
+        return
+    print("RESURRECTED %d 件已交付却又回到板上（跑 `board.py reconcile --fix`）："
+          % len(res))
+    for iid, st in sorted(res.items()):
+        where = []
+        if st["in_items"]:
+            where.append("items/")
+        for by in st["claimed_by"]:
+            where.append("claimed/ by %s" % by)
+        print("  %-32s done by %-8s 现在还在 %s"
+              % (iid, st["deliverer"], " + ".join(where)))
+
+
+def cmd_reconcile(fix=False):
+    """Report -- or with ``--fix``, resolve -- ids that are in two places at once.
+
+    `done/` is authoritative. That is not a preference, it is the only choice
+    that is safe in both directions: treating the shelf as authoritative would
+    re-open finished work, while treating `done/` as authoritative can at worst
+    discard a claim on work that is already delivered.
+
+    Default is report-only. A board-repair tool that mutates by default is one
+    nobody runs on a board they care about, and this one has to be runnable
+    after every merge.
+    """
+    res = resurrected()
+    if not res:
+        print("RECONCILE-CLEAN 三个目录没有交集")
+        return 0
+    print("%d 件已交付却仍在板上：" % len(res))
+    removed = 0
+    for iid, st in sorted(res.items()):
+        targets = []
+        if st["in_items"]:
+            targets.append(os.path.join(ITEMS, "%s.md" % iid))
+        for by in st["claimed_by"]:
+            targets.append(os.path.join(CLAIMED, "%s.%s.md" % (iid, by)))
+        for path in targets:
+            rel = os.path.relpath(path, BOARD).replace("\\", "/")
+            if not fix:
+                print("  would remove %-52s (done by %s)" % (rel, st["deliverer"]))
+                continue
+            os.remove(path)
+            removed += 1
+            print("  removed      %-52s (done by %s)" % (rel, st["deliverer"]))
+            note("RECONCILE %s removed %s (already delivered by %s)"
+                 % (iid, rel, st["deliverer"]))
+    if not fix:
+        print("报告模式，什么也没动。加 --fix 才执行。")
+        return 1
+    print("清掉 %d 个残留。done/ 是权威。" % removed)
+    return 0
 
 
 def cmd_done(iid, worker):
@@ -379,7 +789,15 @@ def cmd_done(iid, worker):
     return 0
 
 
-def cmd_release(iid, worker, reason="unstated"):
+def cmd_release(iid, worker, reason=""):
+    # S35a（对抗复核抓到）：这个默认值原来就是 `"unstated"`，而 `main()` 的那道
+    # 闸只挡命令行。**任何一个 import 这个模块的调用者仍然写得出那个词**——
+    # 也就是本条目声称要消灭的那个字符串，仍然由默认参数提供着。闸开在门上，
+    # 门框上还留着一个洞：判据要写在函数里，不是写在它的一个调用点上。
+    if not (reason or "").strip():
+        print("RELEASE-NEEDS-A-REASON %s：交回要带理由，"
+              "下一个人只有这句话可读。" % iid)
+        return 2
     src = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
     if not os.path.exists(src):
         print("not claimed by you")
@@ -390,6 +808,145 @@ def cmd_release(iid, worker, reason="unstated"):
     _record_release(dst, worker, reason)
     note("RELEASE %s by %s (%s)" % (iid, worker, reason))
     return 0
+
+
+def cmd_reassign(iid, to, by, why):
+    """把一件不可达的活交到能做的人手上 —— 不可达的**出口**。
+
+    `released_by` 是刻意的止损：交回过的活不再自动塞回给同一个人，否则 claim
+    与 release 会以十几秒一轮的节奏空转（S22 实测 11 秒，见 `_record_release`）。
+    但它一直没有反面：**没有任何动作能撤销它**。在一条只有一个人能领的赛道上，
+    「这个人做不了」于是等于「这件活从此没有人做」。
+
+    实测（S35，2026-07-29）：`_record_release` 落地于 10:14:11Z，此后被自己
+    赛道主人交回的条目共两件，两件都还卡着——S22 卡了 14.9 小时，E18（verify
+    赛道的 p1，论文 WP1/WP9 的数字）卡了 12.9 小时。它之前也发生过两次
+    （V11、C10），逃掉只是因为那时这个字段还不存在、RES-3 在同一秒里重新领了
+    回去。所以是 2/2，不是巧合。在此之前唯一的出口是**主人的心跳停摆 45 分钟**
+    让赛道解封——那是靠人死掉的出口，不是一个动作。
+
+    改派做三件事：把条目挪进另一条赛道（或 `generic`，交给通用工人）、把新主人
+    从 `released_by` 里划掉、把这次改派连同理由写进条目正文与 board.log。
+    划掉那一下是关键：不划，改派对着扣下守卫是个**报告成功的空操作**——
+    这条赛道自己的病。而它与自动重发的区别正是那两个必填参数：具名，且有理由。
+    """
+    if not why or not why.strip():
+        print("REASSIGN-NEEDS-A-REASON 改派是一次判断，理由要留在条目里。")
+        return 2
+    if to != "generic" and to not in LANE_OWNER:
+        print("REASSIGN-UNKNOWN-TARGET %s；可选：%s 或 generic"
+              % (to, "/".join(sorted(LANE_OWNER))))
+        return 2
+    path = os.path.join(ITEMS, "%s.md" % iid)
+    if not os.path.exists(path):
+        # 认领中的活是别人正在飞的上下文，已交付的活 `done/` 说了算。
+        print("REASSIGN-NOT-ON-THE-SHELF %s 不在 items/（认领中或已交付）。" % iid)
+        return 1
+    # S35a（对抗复核抓到）：上面那个 `exists` **不是**「认领中与已交付一律拒绝」
+    # 这条守卫。它假设认领中/已交付的条目不在 `items/` 里，而这块板**记录在案的
+    # 失败模式恰恰是三个目录同时有它**（`claimed_map()` 上方那段写的 E8-ic3-scale
+    # 同时在 items/、claimed/、done/，A13 在两处）。也就是说这条守卫只在从不出事
+    # 的时候成立，出事时正好失效——本条目自己抓的病的同一个形状：
+    # **守卫问的问题不是它印出来的那句话**。现在直接问那两个真正的集合。
+    if iid in claimed_map():
+        who = claimed_map()[iid]
+        print("REASSIGN-CLAIMED %s 已被 %s 认领（items/ 里还留着一份，"
+              "这块板复活过条目）；改派会把一份改了赛道的拷贝留在 items/，"
+              "而 %s 手上那份说的是另一条。先让认领人交付或 release。"
+              % (iid, who, who))
+        return 5
+    if iid in done_ids():
+        print("REASSIGN-DELIVERED %s 在 done/ 里（items/ 里这份是复活出来的）。"
+              "改派它会往 board.log 写一行对已交付的活的判断，"
+              "并在条目正文里留一条签了名的记录——先把复活的那份收掉。" % iid)
+        return 5
+    m = meta(path)
+    lane = m.get("lane") or ""
+    owner = LANE_OWNER.get(lane)
+    if by != "monitor" and by != owner:
+        # LANE-NOT-YOURS 的镜像。改派在队列之间搬活，无守卫的版本就是一条把
+        # 别人赛道抽干的路——自报 `--lane` 曾经就是那样一个洞。
+        #
+        # **但要照实说清这道闸挡得住什么**（S35a，对抗复核抓到，本条目初版的
+        # 报告把它写成了「否则这是一条把别人赛道抽干的路」，那是过头话）：
+        # `by` 是命令行上**自报的**，`--by monitor` 任何人都打得出来，于是抽干
+        # 别人赛道的那条路仍然通着。这道闸挡的是**手滑**，不是**说谎**——
+        # 和 `claim <worker>` 自报编号是同一档，这块板从来没有身份验证。
+        # 本条目**没有**修好它：修它要给舰队一个真的身份边界，那是另一件活。
+        # 现在做的是三件小事：不再声称它挡得住抽干；`--by monitor` 在 board.log
+        # 里标成自报（`by monitor(self-asserted)`），使它可被回溯审计；并有一条
+        # 测试**把这个绕过写成既成事实**，免得下一个读者把它读成一道安全闸。
+        print("REASSIGN-NOT-YOURS %s 现在归 %s（%s 赛道）；只有它或 monitor 能改派。"
+              % (iid, owner or "无人", lane or "无"))
+        return 3
+    if to == lane and by != "monitor":
+        # 原赛道进、原赛道出、releaser 划掉 = 那个空转循环，只是前面加了个动词。
+        # 监控判「再试一次」是另一回事，而且它会留下一行签了名的记录。
+        print("REASSIGN-SAME-LANE 改派回 %s 等于撤销自己的拒绝；这一步只有 "
+              "monitor 能做。" % lane)
+        return 3
+    text = open(path, encoding="utf-8").read()
+    if to == "generic":
+        text = re.sub(r"^lane:.*\n", "", text, count=1, flags=re.M)
+    elif lane:
+        text = re.sub(r"^lane:.*$", "lane: %s" % to, text, count=1, flags=re.M)
+    else:
+        text = _add_field(text, "lane", to)
+    target = LANE_OWNER.get(to)
+    if target:
+        keep = [w for w in sorted(released_by(m)) if w != target]
+        line = "%s: %s" % (RELEASED_BY, ", ".join(keep))
+        if re.search(r"^%s:" % RELEASED_BY, text, re.M):
+            text = re.sub(r"^%s:.*$" % RELEASED_BY, line, text, count=1,
+                          flags=re.M)
+    text = text.rstrip("\n") + "\n\n> **%s 于 %s 改派给 %s**：%s\n" % (
+        by, utc(), to, why.strip())
+    before = open(path, encoding="utf-8").read()
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+    # S35a（对抗复核抓到）：**这个动词能造出一件新的不可达条目**，而它是为了
+    # 消灭不可达条目才存在的。实测：一件 `spend: api` 且没有 monitor 签
+    # `generic_ok` 的活，`--to generic` 之后退出 0、无任何提示，而它从此
+    # 谁也领不到（花钱守卫只对未带赛道的条目开火，见 `candidates()`）。
+    #
+    # 补的不是「再列一条 spend 的例外」——那正是本条目在 `unreachable_ids()`
+    # 里拒绝的写法（重述规则的第二份判据只会再分叉一次）。补的是**后置条件**：
+    # 写完就去问那个真正的谓词，落进不可达集就整份回滚。将来 `candidates()`
+    # 再加任何一条排除规则，这道闸自动跟上。
+    if iid in unreachable_ids():
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(before)
+        print("REASSIGN-WOULD-STRAND %s 改派到 %s 之后没有任何身份领得到它"
+              "（后置条件不成立，已回滚，条目一字未改）。\n"
+              "  常见成因：`spend: api` 的活改派给 generic —— 花钱守卫要求"
+              "监控在条目里显式写 `generic_ok: yes`。\n"
+              "  先解决那一条，或改派到一条有主的赛道。" % (iid, to))
+        return 4
+    # `monitor` 这个身份没有任何东西验证过（见上面那道闸的注释），所以日志里
+    # 记它是**自报的**。审计一行「by monitor」和一行「by monitor(self-asserted)」
+    # 的差别，就是回头查得清与查不清的差别。
+    note("REASSIGN %s from %s to %s by %s (%s)"
+         % (iid, lane or "unlaned", to,
+            "monitor(self-asserted)" if by == "monitor" else by, why.strip()))
+    # 成功时也要在 stdout 上说一句。舰队里的 agent 读的是 stdout，而这个动词
+    # 原来只往 board.log 写——对调用者而言，成功与静默的失败长得一样。
+    print("REASSIGNED %s：%s → %s（by %s）。理由已写进条目正文与 board.log。"
+          % (iid, lane or "unlaned", to, by))
+    return 0
+
+
+def _add_field(text, key, value):
+    """Insert `key: value` at the end of the front matter (the run of
+    `key: value` lines at the top), so `meta()` still reads it."""
+    lines = text.split("\n")
+    cut = 0
+    for i, l in enumerate(lines):
+        if re.match(r"^\w+:\s", l):
+            cut = i + 1
+        elif l.strip() == "":
+            break
+    lines.insert(cut, "%s: %s" % (key, value))
+    return "\n".join(lines)
 
 
 #: Front-matter key listing everyone who has handed this item back.
@@ -414,7 +971,22 @@ def _record_release(path, worker, reason):
         text = open(path, encoding="utf-8").read()
     except OSError:
         return
-    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, text, re.M)
+    # 本条与 `meta()` 里那两条是同一个缺陷，但**写侧的后果重得多**，
+    # 而 ADV-1 只点了读侧的两条，这一条是顺着第四个出现点找到的：
+    # 跨行的 `\s*` 在一个**空** `released_by:` 上借走下一行，而这里紧接着
+    # 用 `text[:m.start()] + line + text[m.end():]` 把匹配段**改写掉**——
+    # 于是 `lane: infra` 这一行不是被读错，是被**吃掉**。实测：
+    #
+    #   released_by:            ->  released_by: lane: infra, RES-4
+    #   lane: infra                 （`lane` 变成 ''，`released_by` 变成
+    #   deps: none                   {'lane:', 'infra', 'RES-4'}）
+    #
+    # 失败方向：条目丢了赛道，于是赛道守卫不再护着它，一件本该留给某个常驻
+    # 研究员的活变成通用工人可领——活从赛道里静默漏出去。
+    #
+    # `(.*)` 而不是 `(.+)`：空值也要**匹配上**，这样这一行是被整体重写的，
+    # 而不是留着空行再往前插一行第二个 `released_by:`。
+    m = re.search(r"^%s:[ \t]*(.*)$" % RELEASED_BY, text, re.M)
     prior = [w.strip() for w in m.group(1).split(",") if w.strip()] if m else []
     if worker not in prior:
         prior.append(worker)
@@ -427,6 +999,12 @@ def _record_release(path, worker, reason):
         lines = text.split("\n")
         cut = 0
         for i, l in enumerate(lines):
+            # 这里的 `^\w+:\s` 也要求冒号后**有**空白，所以一个空字段（`lane:`）
+            # 不被算作前言。**查过，是不可达的**：下面的 `elif` 只在空行上 break，
+            # 一个不匹配的非空行只是被跳过，于是 `cut` 在三种构造下都仍然落在
+            # 前言之内（`lane:` 居中 cut=4/4、居末 3/4、独一 0/1，`meta()` 三种
+            # 都读得到插入行）。改法写不出一个修复前必红的测试，所以**不改**——
+            # 这一条记在这里，免得下一世重新怀疑一遍。
             if re.match(r"^\w+:\s", l):
                 cut = i + 1
             elif l.strip() == "":
@@ -473,9 +1051,10 @@ STANDING_DEAD_MIN = STALE_MIN * 2
 def standing_verdict(agent, now=None):
     """Is this standing session dead? Returns (dead: bool, why: str).
 
-    Three conditions, and **all three** must hold. Each alone has an innocent
-    reading, which is exactly why the original sweep refused to touch standing
-    sessions at all:
+    Three conditions, and **all three** must hold -- and unlike the first
+    version of this function, all three are now actually implemented. Each
+    alone has an innocent reading, which is exactly why the original sweep
+    refused to touch standing sessions at all:
 
       * heartbeat older than two cycles -- but a session deep in one long task
         legitimately goes quiet for a while;
@@ -501,7 +1080,8 @@ def standing_verdict(agent, now=None):
     if not os.path.exists(hb):
         return False, "no heartbeat file at all -- never started, not died"
     try:
-        age_min = (now - os.path.getmtime(hb)) / 60.0
+        hb_mtime = os.path.getmtime(hb)
+        age_min = (now - hb_mtime) / 60.0
     except OSError as exc:
         return False, "heartbeat unreadable (%s); refusing to guess" % exc
     if age_min < STANDING_DEAD_MIN:
@@ -522,8 +1102,38 @@ def standing_verdict(agent, now=None):
         return False, ("URGENT is only %.0f min old -- not yet one cycle, it "
                        "may simply not have come round" % urgent_age)
 
-    return True, ("heartbeat %.0f min old (>%d), and an URGENT posted %.0f min "
-                  "ago (>%d) is still unread"
+    # The third condition, and the only *positive* evidence in the whole test.
+    # The other two are silences, and a silence is the absence of proof rather
+    # than proof of absence. Traffic on the outbound bus after the heartbeat is
+    # the session demonstrably doing something, so it overrides both.
+    #
+    # It was described in three places -- the commit message, this function's
+    # own docstring, and reflex.py's comment -- and implemented in none. Ten
+    # tests encoded the two-signal behaviour, so nothing could have caught the
+    # divergence: the tests agreed with the code against the documentation.
+    #
+    # It is not academic. At 18:52:20Z a claim was released 48 minutes after
+    # RES-3 wrote to its out.jsonl at 18:04:28Z, and the holder objected on the
+    # spot. This condition would have refused that release.
+    #
+    # Wired as a *refusal only*: it can keep a claim, never free one. That
+    # makes it impossible for this change to cause a wrongful release, which is
+    # the only failure here that costs anything irreversible.
+    out = os.path.join(HERE, "bus", agent, "out.jsonl")
+    try:
+        if os.path.exists(out) and os.path.getmtime(out) > hb_mtime:
+            spoke_min = (now - os.path.getmtime(out)) / 60.0
+            return False, ("bus out.jsonl was written %.0f min ago, after the "
+                           "heartbeat -- the session was demonstrably alive "
+                           "more recently than its own heartbeat says"
+                           % spoke_min)
+    except OSError:
+        # Unreadable is not evidence of death; fall through to the two silences
+        # only if they already convicted, which they have by this point.
+        pass
+
+    return True, ("heartbeat %.0f min old (>%d), an URGENT posted %.0f min ago "
+                  "(>%d) is still unread, and no bus traffic since the heartbeat"
                   % (age_min, STANDING_DEAD_MIN, urgent_age, STANDING_CYCLE_MIN))
 
 
@@ -542,8 +1152,13 @@ def cmd_sweep(dry=False, include_standing=False):
 
     一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
     领地被锁，新工人领不到活。判据保守——只清 W-* 前缀（一次性工人）且其
-    计划任务已不在运行的；App/常驻会话（APP-*/RES-*）一律不动，它们的存活
-    从任务表看不出来。"""
+    计划任务已不在运行的。
+
+    **App/常驻会话（APP-*/RES-*）默认仍然不动**，但 `--include-standing` 下
+    改由 `standing_verdict()` 判定：心跳陈旧 + URGENT 悬而未答 + 心跳之后没有
+    总线流量，三条同时成立才释放。这段话原本写着「一律不动」，而 S21 已经加了
+    那个模式——**文档比代码旧了一轮**，正是本函数所属那一类问题的元层版本，
+    所以在此对齐而不是留着。"""
     import subprocess
     out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
                          capture_output=True)
@@ -572,6 +1187,16 @@ def cmd_sweep(dry=False, include_standing=False):
             continue
         else:
             why = "scheduled task is no longer running"
+        # Sweep is the second way a delivered item gets back onto the shelf,
+        # and the more damaging one, because it looks like housekeeping. The
+        # claim it is releasing is itself a merge artefact -- E8-ic3-scale was
+        # swept back to `items/` three separate times *after* W-1660 delivered
+        # it, and each sweep looked exactly like the honest ones around it.
+        # Freeing an orphaned claim is right; re-offering finished work is not.
+        if iid in done_ids():
+            kept.append((iid, worker, "已交付（done/ 里有记录）——不放回货架，"
+                                      "跑 `board.py reconcile --fix` 清掉这条认领"))
+            continue
         freed.append((iid, worker, why))
         if not dry:
             dst = os.path.join(ITEMS, "%s.md" % iid)
@@ -611,7 +1236,41 @@ def main():
     if a[0] == "done":
         return cmd_done(a[1], a[2])
     if a[0] == "release":
-        return cmd_release(a[1], a[2], " ".join(a[3:]) or "unstated")
+        # S35：原来是 `" ".join(a[3:]) or "unstated"`。「unstated」长得像一个
+        # 理由而不是一个——E18（verify 赛道的 p1）从 2026-07-29T12:37:38Z 起
+        # 带的就是这个词，于是要给它找去处的人手上什么也没有。交回是把活推给
+        # 下一个人，理由是唯一随它一起走的东西。
+        if not " ".join(a[3:]).strip():
+            print("RELEASE-NEEDS-A-REASON 用法：board.py release <id> <worker> "
+                  "<为什么做不了>。下一个人只有这句话可读。")
+            return 2
+        return cmd_release(a[1], a[2], " ".join(a[3:]))
+    if a[0] == "reassign":
+        # board.py reassign <id> --to <lane|generic> --by <who> --why <...>
+        # S35a：`a[1]` 裸着写会让「打错命令」变成一个 IndexError 回溯。
+        # 这个动词是给一个卡住的人用的出口，而回溯读起来像板坏了。
+        if len(a) < 2:
+            print("用法：board.py reassign <id> --to <赛道|generic> "
+                  "--by <who> --why <理由>\n  赛道：%s 或 generic"
+                  % "/".join(sorted(LANE_OWNER)))
+            return 2
+
+        def opt(name, rest=False):
+            if name not in a:
+                return ""
+            i = a.index(name) + 1
+            if not rest:
+                return a[i] if i < len(a) else ""
+            # 到下一个 `--flag` 为止，不是到行尾：未加引号的理由是常态，
+            # 而吞掉后面的 `--to campaign` 会让改派安静地落到 generic 上。
+            words = []
+            while i < len(a) and not a[i].startswith("--"):
+                words.append(a[i])
+                i += 1
+            return " ".join(words)
+        return cmd_reassign(a[1], opt("--to"), opt("--by"), opt("--why", True))
+    if a[0] == "reconcile":
+        return cmd_reconcile(fix="--fix" in a)
     print(__doc__)
     return 1
 

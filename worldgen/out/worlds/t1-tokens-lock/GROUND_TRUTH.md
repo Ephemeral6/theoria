@@ -30,10 +30,12 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+4 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 50 reachable states: holds)_
 * **grid_shape** — every frame is 5 x 9  _(checked on 50 reachable states: holds)_
 * **token_count** — the number of cells showing colour 2 equals the number of tokens not yet collected  _(checked on 50 reachable states: holds)_
-* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(prose only, unverified)_
+* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(checked on 200 transitions: holds)_
 
 ## Solvability
 

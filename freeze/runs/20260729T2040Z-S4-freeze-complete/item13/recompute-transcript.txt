@@ -1,0 +1,127 @@
+==============================================================================
+0. PROVENANCE -- sha256 of the TRACKED blob at HEAD
+==============================================================================
+HEAD = 5822e5e5c4c87e42f834ddca76f3af56eee3e7b6
+  baseline-arms/out/campaign/campaign_ar25.json
+    sha256=2d1d5140cdc3f6639addc98d45ef620b25bc07da8bb735c714bff240df4c183d  bytes=4533  episodes=12
+  baseline-arms/out/campaign/campaign_g50t.json
+    sha256=d83ba976d9c2c79429e009af48c5923d5cd14061a9cff1f6739db9ce7fe2d469  bytes=4537  episodes=12
+  baseline-arms/out/campaign/campaign_sk48.json
+    sha256=6683f5d72e80206b58fbcd384e32067189d49174dd13ffcec9a2dc12e6b57ab2  bytes=4535  episodes=12
+  baseline-arms/out/campaign/campaign_tn36.json
+    sha256=35a8c66fb97432aa0d499d3256a8d2b37ab15e0c878f2cb62cd1b411a85e47ec  bytes=4540  episodes=12
+
+==============================================================================
+1. PROVENANCE FIELDS -- section 5.2's origin correction (:564-568)
+==============================================================================
+  scenario     identical-across-4=True   {'ar25': 'S1 baseline-parity', 'g50t': 'S1 baseline-parity', 'sk48': 'S1 baseline-parity', 'tn36': 'S1 baseline-parity'}
+  started      identical-across-4=True   {'ar25': '2026-07-27T18:19:36Z', 'g50t': '2026-07-27T18:19:36Z', 'sk48': '2026-07-27T18:19:36Z', 'tn36': '2026-07-27T18:19:36Z'}
+  resumed_at   identical-across-4=True   {'ar25': '2026-07-27T18:42:09Z', 'g50t': '2026-07-27T18:42:09Z', 'sk48': '2026-07-27T18:42:09Z', 'tn36': '2026-07-27T18:42:09Z'}
+  status       identical-across-4=True   {'ar25': 'episode_limit_hit', 'g50t': 'episode_limit_hit', 'sk48': 'episode_limit_hit', 'tn36': 'episode_limit_hit'}
+  arm          identical-across-4=True   {'ar25': 'bare_cc', 'g50t': 'bare_cc', 'sk48': 'bare_cc', 'tn36': 'bare_cc'}
+  model        identical-across-4=True   {'ar25': 'claude-haiku-4-5-20251001', 'g50t': 'claude-haiku-4-5-20251001', 'sk48': 'claude-haiku-4-5-20251001', 'tn36': 'claude-haiku-4-5-20251001'}
+  game_id      identical-across-4=False  {'ar25': 'ar25-0c556536', 'g50t': 'g50t-5849a774', 'sk48': 'sk48-d8078629', 'tn36': 'tn36-ef4dde99'}
+  => section 5.2 claims scenario/started/resumed_at/status are byte-identical
+     across all four files. Verified above.
+
+==============================================================================
+2. SECTION 5.2 ENVELOPE TABLE (STATS_RULES.md:588-593)
+==============================================================================
+game     n     mean    claim      sd   claim     cv  claim  verdict
+ar25    12    34.42    34.42   12.06   12.06  0.351  0.351  OK   
+       levels_completed=[0]  outcomes={'api_unusable': 11, 'game_over': 1}
+g50t    12    43.75    43.75   16.27   16.27  0.372  0.372  OK   
+       levels_completed=[0]  outcomes={'api_unusable': 12}
+sk48    12    23.92    23.92    8.45    8.45  0.353  0.353  OK   
+       levels_completed=[0]  outcomes={'api_unusable': 12}
+tn36    12    19.00    19.00    8.03    8.03  0.423  0.423  OK   
+       levels_completed=[0]  outcomes={'api_unusable': 12}
+
+==============================================================================
+3. FINDING ONE -- floor effect on the primary endpoint
+==============================================================================
+levels_completed over all 48 episodes: {0: 48}
+sample variance = 0.0
+rule of three 95% upper bound on p(U3): 3/48 = 0.0625
+coverage of official baseline action count (section 5.2:601-602 claims 2.2%-6.0%):
+  ar25: mean  34.42 of  748 =  4.6%
+  g50t: mean  43.75 of  879 =  5.0%
+  sk48: mean  23.92 of 1070 =  2.2%
+  tn36: mean  19.00 of  317 =  6.0%
+  range = 2.2%-6.0%   claimed 2.2%-6.0%   OK   
+
+==============================================================================
+4. FINDING TWO -- NegBinom(r=10,p) stopping-rule null (STATS_RULES.md:618-622)
+==============================================================================
+m = 10p/(1-p) => p = m/(10+m);  pred sd = sqrt(10p)/(1-p)
+game    obs mean   p_hat   claim  pred sd   claim  obs sd   ratio   claim  verdict
+ar25       34.42   0.775   0.775    12.36   12.36   12.06   0.976   0.976  OK   
+g50t       43.75   0.814   0.814    15.33   15.33   16.27   1.061   1.061  OK   
+sk48       23.92   0.705   0.705     9.01    9.01    8.45   0.938   0.938  OK   
+tn36       19.00   0.655   0.655     7.42    7.42    8.03   1.082   1.082  OK   
+
+mean obs/pred ratio = 1.0143   claimed 1.014   OK   
+section 5.5 reason 2 says '98.6% of the variance explained by the abort rule';
+section 5.2:624 says 'agrees to within 1.4%'.  |1 - 1.0143| = 1.43%
+
+==============================================================================
+5. FINDING THREE -- infrastructure mortality
+==============================================================================
+outcomes over 48 episodes: {'api_unusable': 47, 'game_over': 1}
+infrastructure-terminated = 47/48 = 0.979   claimed 47/48 = 0.979   OK   
+P(single episode survives) = 0.021   claimed 0.021   OK   
+claim layer  n=19: expected dead cells = 19*0.979 = 18.6   claimed 18.6   OK   
+clean layer  n=12: expected dead cells = 12*0.979 = 11.8   claimed 11.7   MISMATCH
+
+==============================================================================
+6. SECTION 5.3 LEAVE-ONE-GAME-OUT (STATS_RULES.md:680-684)
+==============================================================================
+variant          N  pooled cv   claim  mean wcv   claim  max wcv   claim  verdict
+ALL 4           48      0.491   0.491     0.375   0.375    0.423   0.423  OK
+drop ar25       36      0.540   0.540     0.383   0.383    0.423   0.423  OK
+drop g50t       36      0.444   0.444     0.376   0.376    0.423   0.423  OK
+drop sk48       36      0.494   0.494     0.382   0.382    0.423   0.423  OK
+drop tn36       36      0.435   0.435     0.359   0.359    0.372   0.423  MISMATCH
+
+ar25 sensitivity, the direction that matters:
+  pooled cv ALL 4      = 0.4915
+  pooled cv drop ar25  = 0.5403
+  delta = +0.0488  (+9.9% relative)
+  dropping ar25 makes dispersion LARGER -> ar25 is not the driver of dispersion.
+
+ar25's uniqueness in the batch:
+  ar25: {'api_unusable': 11, 'game_over': 1}
+  g50t: {'api_unusable': 12}
+  sk48: {'api_unusable': 12}
+  tn36: {'api_unusable': 12}
+  episodes NOT api_unusable: [('ar25', 'game_over')]
+
+==============================================================================
+7. THE n=1 / n=2 DECISION VARIABLE, WITH AND WITHOUT ar25
+==============================================================================
+Theoria.md:368 -- 'variance small => n=1 defensible, otherwise n=2'.
+Three primary endpoints; the envelope measures none of them. What it does
+measure, tabulated both ways:
+
+  all 4 games (48 ep)
+    U3 (levels_completed>0) achieved   : 0/48   variance=0.0
+    primary endpoints with a variance  : 0 of 3
+    infra mortality                    : 47/48 = 0.979
+    pooled CV(actions_ok)              : 0.491
+    mean NegBinom obs/pred ratio       : 1.014
+    E[cells lost at n=1], claim n=19   : 18.6 of 19
+    VERDICT under Theoria.md:368       : n=2 (variance UNKNOWN, not small)
+
+  excl. ar25 (36 ep)
+    U3 (levels_completed>0) achieved   : 0/36   variance=0.0
+    primary endpoints with a variance  : 0 of 3
+    infra mortality                    : 36/36 = 1.000
+    pooled CV(actions_ok)              : 0.540
+    mean NegBinom obs/pred ratio       : 1.027
+    E[cells lost at n=1], claim n=19   : 19.0 of 19
+    VERDICT under Theoria.md:368       : n=2 (variance UNKNOWN, not small)
+
+  => the verdict does NOT flip on ar25's inclusion. Both subsets give
+     0 of 3 primary endpoints measured, a floor at levels_completed=0,
+     and an infra mortality that leaves n=1 unsurvivable. Dropping ar25
+     moves dispersion the WRONG way for an n=1 defence (up, not down).

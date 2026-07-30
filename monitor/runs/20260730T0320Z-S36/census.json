@@ -1,0 +1,124 @@
+{
+  "utc": "2026-07-30T03:14:42Z",
+  "upstream": "origin/master",
+  "fetch_age_min": null,
+  "branches_at_risk": 10,
+  "orphan_commits": 34,
+  "unreadable_branches": [],
+  "rows": [
+    {
+      "branch": "agent/e3-engines-online",
+      "orphans": 11,
+      "commits": [
+        "2fbef9ee081a9afbd80410a2954d3f3aec7b4e0a",
+        "c7278e5cea32f7267cd6b131e2d6977df255d58a",
+        "680868d8f10552ebec68e851b1bccc71bb1f998e",
+        "c93485e598245ae8e2aa22a1365d43507bdba5a1",
+        "76bb30361d43f8c39ea9928d5f4dffea7316921d",
+        "de5cfb34de2d21738513a3190c52ef72fbac04bb",
+        "bc7ab76e6f0f619b08c874ecd2decfa40ff41388",
+        "00f969739deac42adfecce46c215e161cefaef07",
+        "663e196954041d4e6da2a703cdd748d3ec0ed0d3",
+        "50ded2aa43a261da56a6fec1aed6bb06cdcd1415",
+        "3048a40446fb6e9411560b5be6d6d2b803d85c93"
+      ],
+      "novel_total": 11,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/p12-envelope-finish",
+      "orphans": 10,
+      "commits": [
+        "52df4605710f418a37e3a0f724ff0fcdc51de5ec",
+        "fa462a2ce30bcf5a7ee30724fd295b23e5b185c5",
+        "6b19d38f43a1776f3ba90122a2bf0aff8be32198",
+        "66be4cda110b7639eae878db64bd070465c20eb9",
+        "a7088d173acf9853ad6e8e1f1f9f7139b7fd4eaa",
+        "14c3abf497453762aeea1e8841dced501e9af11f",
+        "46334d39cd283dc74129a30d86c39d1dccaa92af",
+        "210e1ffc2be555f2ad85b362868fb9746d6b51a4",
+        "5dc2cdf8b62020f7229e28432ffa7d75461d361c",
+        "f435d14ec1d92c919d2773f1c3bae54bad1a7c3d"
+      ],
+      "novel_total": 10,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/p24-fleet-skills",
+      "orphans": 3,
+      "commits": [
+        "81560c303518a3d8b8d28d418def2019115853a5",
+        "fe1f93e2bb030a041b093b926f9ffc2060e33f79",
+        "3b193734d2d57626e805d3930bbda6a18671769b"
+      ],
+      "novel_total": 3,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/p24r-rehearsal",
+      "orphans": 3,
+      "commits": [
+        "81560c303518a3d8b8d28d418def2019115853a5",
+        "fe1f93e2bb030a041b093b926f9ffc2060e33f79",
+        "3b193734d2d57626e805d3930bbda6a18671769b"
+      ],
+      "novel_total": 3,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "s35a-backup",
+      "orphans": 2,
+      "commits": [
+        "e7f1ee20e1b389ec857126c3da8a050aa1da4064",
+        "70570294f17a724825103aebbbc63a1d05fefad8"
+      ],
+      "novel_total": 2,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/a2-crosscheck",
+      "orphans": 1,
+      "commits": [
+        "e88fb6499a7ffc91b8c4b8991859a0888e8d05b7"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/p8-theoria-arm",
+      "orphans": 1,
+      "commits": [
+        "4c9847e3edc84d53b2aa8fabad23a685a64703e9"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/v22-wintighten-absent-vs-below",
+      "orphans": 1,
+      "commits": [
+        "ec0f570ae2b910539c821ef47c055c75ca5d70a9"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "agent/v26-handover-leak-ruling",
+      "orphans": 1,
+      "commits": [
+        "a823c7b01b30465a41265ec299af9e27dcc4ff17"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "opsm/m16-engine-red",
+      "orphans": 1,
+      "commits": [
+        "f8188dec1fa140afcbab673e53b27d8cd9c65bda"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    }
+  ]
+}

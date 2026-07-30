@@ -1,0 +1,32 @@
+=== stage [15] dry run, clean tree ===
+[15] ENGINE_MANIFEST.md still describes this tree (freeze item 5)
+  PASS  build_engine_manifest.py --verify: freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+  PASS  the roster is 8 packages (CLAUDE.md's 'six' is the frozen enum, not the roster)
+  PASS  the D-018 enum collision is still disclosed (deadlock_carver->fd_adapter, ic3_pdr->lp_potential)
+  NOTE  freeze item 5: 8/8 engines carry no version string (⛔ 5-b, engine-rig track) -- item 5 is recorded, not cleared
+
+FAIL=0 WARN=1
+
+=== same stage, one pinned hash mutated (must go red, FAIL=1) ===
+[15] ENGINE_MANIFEST.md still describes this tree (freeze item 5)
+  FAIL  ENGINE_MANIFEST.md has drifted from the tree -- regenerate and read the diff
+        DRIFT: freeze/ENGINE_MANIFEST.md no longer describes this tree.
+               1 row(s) disagree:
+          DRIFTED  engine-rig/engines/lp_potential
+                     pinned  tree f29152f2e95b18472d776df6e658d099a0f387a2
+                     at HEAD tree f29152f2e95b18472d776df6e658d099a0f387a1
+               regenerate it and read the diff before freezing.
+  PASS  the roster is 8 packages (CLAUDE.md's 'six' is the frozen enum, not the roster)
+  PASS  the D-018 enum collision is still disclosed (deadlock_carver->fd_adapter, ic3_pdr->lp_potential)
+  NOTE  freeze item 5: 8/8 engines carry no version string (⛔ 5-b, engine-rig track) -- item 5 is recorded, not cleared
+
+FAIL=1 WARN=1
+
+=== restored ===
+[15] ENGINE_MANIFEST.md still describes this tree (freeze item 5)
+  PASS  build_engine_manifest.py --verify: freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+  PASS  the roster is 8 packages (CLAUDE.md's 'six' is the frozen enum, not the roster)
+  PASS  the D-018 enum collision is still disclosed (deadlock_carver->fd_adapter, ic3_pdr->lp_potential)
+  NOTE  freeze item 5: 8/8 engines carry no version string (⛔ 5-b, engine-rig track) -- item 5 is recorded, not cleared
+
+FAIL=0 WARN=1

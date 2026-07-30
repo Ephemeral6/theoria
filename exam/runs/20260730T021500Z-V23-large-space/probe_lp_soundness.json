@@ -1,0 +1,96 @@
+{
+  "certificate": {
+    "claim": "goal unreachable from 00001000000000000000",
+    "conditions": {
+      "goal_break": true,
+      "inv_closed": true,
+      "inv_init": true
+    },
+    "form": "potential_weights",
+    "goal_potentials": {
+      "00000001000011111111": "1"
+    },
+    "goal_states": [
+      "00000001000011111111"
+    ],
+    "holds": true,
+    "initial": "00001000000000000000",
+    "initial_potential": "0",
+    "margin": "1",
+    "max_decrease": "0",
+    "rendering": "potential(s) = sum of w over occupied cells; every legal move leaves it non-increasing, and every goal state has potential > potential(00001000000000000000), so no goal state is reachable from 00001000000000000000",
+    "weights": [
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "1",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "weights_float": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "entitlement": {
+    "admissible": true,
+    "certificate_conditions": {
+      "goal_break": true,
+      "inv_closed": true,
+      "inv_init": true
+    },
+    "certificate_holds": true,
+    "counterexamples": [],
+    "empirical_check": "not run"
+  },
+  "premises": {
+    "certificate_goal_states": [
+      "00000001000011111111"
+    ],
+    "goal_states_match_graph": true,
+    "graph_goal_states": [
+      "00000001000011111111"
+    ],
+    "missing_moves": [],
+    "move_list_complete": true,
+    "moves_raising_potential": [],
+    "sound_over_graph": true
+  },
+  "reachable": true,
+  "real_potential_goal": "1",
+  "real_potential_rising_edges": 10,
+  "real_potential_start": "0",
+  "status": "certified"
+}

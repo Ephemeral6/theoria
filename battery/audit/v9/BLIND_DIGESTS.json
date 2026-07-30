@@ -1,0 +1,19 @@
+{
+  "commit": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
+  "files": {
+    "battery/__init__.py": "20c8e430ededc2143396e553a3c67aac4ec483ef54efdfcb18a31cb162ca0646",
+    "battery/audit/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "battery/audit/v9/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "battery/audit/v9/attack.py": "ec43604490e16e24669463378db3ffcd66a9c9d0d23adb4824f3be2e821626da",
+    "battery/audit/v9/check.py": "3932020f60e79632f1d4916c9fdbec32ecbcd92aa2c2236e1a72e937b78f4202",
+    "battery/metrics/__init__.py": "9d79a4be67fdfa43594a04c547f46d7f3d4995d49f8c0f3bc6d1f6c8ac15ff7c",
+    "battery/metrics/economy.py": "aec5e930a319e6182ecb17e4eafc9c89c87694564906342e606de600d8d2b580",
+    "battery/metrics/epistemic.py": "4f8ac7a8d10b1051481b51aaf6656b4c96ba297043ca34b3c88fcf03a439c7cb",
+    "battery/metrics/exploration.py": "f339f0ecc8a9b1a5ee3f8107c1d0d6298dfdd79cda6dae0f9601b116e81beb5d",
+    "battery/metrics/mechanism.py": "2ed053a98a6785a4dd8bbca3d60342e7be48081ba672b33c385099cb2844aa49",
+    "battery/metrics/planning.py": "a7046e022ee0c5238b2fd2bee9b730a3719123fbd06319f7e3fa65779323f782",
+    "battery/model.py": "4c6e03367859bd9cb074eec8228fbc751d8a003d234c3ff1184aa21ec3c7950b"
+  },
+  "python": "3.13",
+  "ref": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8"
+}

@@ -37,7 +37,8 @@ from .paths import LEDGER_PATH, UPSTREAM_ARC
 from .redact import VAULT, looks_like_credential, read_secret, scrub_outbound
 from .spend_gate import (Reservation, SpendGate, SpendGateError,
                          attach_reservation, default_campaign, default_gate)
-from .variants import Refusal, Variant, VariantRuntime, _Remap
+from .variants import (DEGENERATE_NOTE, Refusal, Variant, VariantRuntime,
+                       _Remap)
 
 COMMAND = re.compile(r"^/api/cmd/(RESET|ACTION([1-9][0-9]?))/?$")
 
@@ -455,7 +456,37 @@ class _Handler(BaseHTTPRequestHandler):
             response=rest,
             http=http,
         )
+        self._note_degeneracy(runtime, game_id)
         self._respond(status if status > 0 else 502, response_body)
+
+    def _note_degeneracy(self, runtime: VariantRuntime, game_id: str) -> None:
+        """Once per session, when `win_tighten` first rewrote a WIN because the
+        game reported no score at all.
+
+        The `degenerate` bit on the `applied` record is the decision (D-032);
+        this is one of the two things that read it. It is written after the
+        `env_step` it refers to, so the incident always points at a record that
+        already exists.
+
+        The once-ness belongs to `VariantRuntime.take_first_degenerate`, not
+        here. An earlier version asked `runtime.degenerate_wins != 1`, which is
+        a read of a shared counter at notify time: with two commands for one
+        game in flight, both rewrites land, both notifiers see 2, both return,
+        and the incident is written **zero** times. Fixing it in this file
+        would have needed the same handshake anyway, and the state it is about
+        lives in the runtime."""
+        first = runtime.take_first_degenerate()
+        if first is None:
+            return
+        with self.state.lock:
+            self.state.incidents += 1
+        self.cfg.run.incident(
+            "variant_degenerate",
+            first.get("note") or DEGENERATE_NOTE,
+            game_id=game_id,
+            variant_id=(self.cfg.variant.variant_id if self.cfg.variant else None),
+            require_score=first.get("require_score"),
+            reason=first.get("reason"))
 
     def _meta(self, method: str, path: str, query: str, body: Any, raw: bytes) -> None:
         """Everything that is not a game command: scorecard open/close, the game

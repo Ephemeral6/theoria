@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "613e478f",
+  "branch": "agent/s29-third-condition",
+  "lane": "infra",
+  "note": "adversarial review of my own S21: docs claimed three conditions, code had two",
+  "prompt_id": "S29-S29-third-condition-and-lock-ignore",
+  "territory": "monitor",
+  "utc": "2026-07-29T10:48:04Z"
+}

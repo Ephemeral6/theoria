@@ -15,6 +15,7 @@ had already cost $2.695 (INC-TA-006). Those fields are counted in
 `Ledger.unknown_fields` so a run can report them; see `proxy/CONTRACT_CHANGES.md`.
 """
 
+import errno
 import hashlib
 import json
 import os
@@ -65,10 +66,140 @@ INCIDENT_KINDS = frozenset({
     # that a budget stop left no trace anyone else could see; a refusal that
     # only appears as a 500 to the arm is that again, one layer down.
     "spend_gate_refused",
+    # A `win_tighten` rewrote a WIN because the game reported no score at all,
+    # so it did not tighten the win condition -- it removed it, at every
+    # requirement value. The variant is still unsolvable and the rewrite is
+    # still the safe direction; what is wrong is that its unsolvability no
+    # longer follows from the construction its `justification` names (D-032).
+    "variant_degenerate",
 })
 
 _LOCKS: Dict[str, threading.Lock] = {}
 _LOCKS_GUARD = threading.Lock()
+
+#: How long a writer waits for the ledger's cross-process lock before refusing.
+#: Same figure the spend pool uses, for the same reason: long enough that an
+#: honest writer never sees it, short enough that a dead holder is noticed.
+LOCK_TIMEOUT_SECONDS = 30.0
+
+# The lock primitive, imported the way `spend_gate.py` imports it. Both are
+# optional at import time and checked at use, so a platform with neither fails
+# closed at the moment of writing rather than silently at import.
+try:                                                        # POSIX
+    import fcntl
+except ImportError:                                         # pragma: no cover
+    fcntl = None                                            # type: ignore[assignment]
+try:                                                        # Windows
+    import msvcrt
+except ImportError:                                         # pragma: no cover
+    msvcrt = None                                           # type: ignore[assignment]
+
+
+class LedgerLockUnavailable(RuntimeError):
+    """The writer could not take the ledger lock, so it did not write.
+
+    Refusing is the whole point. An append that goes ahead without the lock is
+    indistinguishable on disk from one that held it, the file is append-only, so
+    it cannot be taken back, and the damage is exactly what this class exists to
+    prevent: two writers on the same `seq`, one hash chain in two pieces.
+    """
+
+
+class _ChainLock:
+    """Exclusive lock on one ledger file, held across read-tail → append.
+
+    The same primitive, on the same reasoning, as `spend_gate._PoolLock`: a
+    `threading.Lock` covers threads in one interpreter and nothing else, and the
+    writers that actually collide here are separate OS processes -- two pytest
+    sessions on 2026-07-28, and three arms sharing one ledger under item A10.
+    `msvcrt` on Windows, `fcntl` on POSIX; this host has the former.
+
+    The lock lives on a **sidecar** file (`<ledger>.lock`) rather than on the
+    ledger itself, again following `_PoolLock`: the ledger is opened in append
+    mode by writers and read whole by readers, and locking a byte range that two
+    different open modes are touching is a portability problem nobody needs.
+    """
+
+    def __init__(self, path: str, timeout: float = LOCK_TIMEOUT_SECONDS):
+        self.path = path
+        self.timeout = timeout
+        self._fh = None
+
+    def __enter__(self) -> "_ChainLock":
+        if fcntl is None and msvcrt is None:               # pragma: no cover
+            raise LedgerLockUnavailable(
+                "neither fcntl nor msvcrt is importable, so this process cannot "
+                "take a cross-process lock on %s. Without it two writers read "
+                "the same tail and both continue from it, which forks the hash "
+                "chain into a stream whose provenance cannot be published. "
+                "Refusing to append." % self.path)
+        try:
+            os.makedirs(os.path.dirname(os.path.abspath(self.path)), exist_ok=True)
+            # 'a+b' so the file is created if absent and never truncated.
+            self._fh = open(self.path, "a+b")
+            if os.fstat(self._fh.fileno()).st_size == 0:
+                # Windows locks a byte range; give it a byte to lock.
+                self._fh.write(b"L")
+                self._fh.flush()
+            self._fh.seek(0)
+        except OSError as exc:
+            raise LedgerLockUnavailable(
+                "cannot open the ledger lock at %s: %s. An unlockable ledger is "
+                "one two writers can fork; refusing to append."
+                % (self.path, exc))
+
+        deadline = time.time() + self.timeout
+        delay = 0.005
+        while True:
+            try:
+                self._acquire()
+                return self
+            except OSError as exc:
+                if exc.errno not in (errno.EACCES, errno.EAGAIN, errno.EDEADLK):
+                    self._close()
+                    raise LedgerLockUnavailable(
+                        "locking the ledger at %s failed: %s" % (self.path, exc))
+                if time.time() >= deadline:
+                    self._close()
+                    raise LedgerLockUnavailable(
+                        "timed out after %.1fs waiting for the ledger lock at "
+                        "%s. Another writer is holding it, or one died holding "
+                        "it. Refusing to append rather than appending unlocked."
+                        % (self.timeout, self.path))
+                time.sleep(delay)
+                delay = min(delay * 2, 0.25)
+
+    def _acquire(self) -> None:
+        fd = self._fh.fileno()                              # type: ignore[union-attr]
+        if fcntl is not None:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        else:
+            self._fh.seek(0)                                # type: ignore[union-attr]
+            msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)          # type: ignore[union-attr]
+
+    def _release(self) -> None:
+        if self._fh is None:
+            return
+        fd = self._fh.fileno()
+        try:
+            if fcntl is not None:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+            else:
+                self._fh.seek(0)
+                msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)      # type: ignore[union-attr]
+        except OSError:                                     # pragma: no cover
+            pass
+
+    def _close(self) -> None:
+        if self._fh is not None:
+            try:
+                self._fh.close()
+            finally:
+                self._fh = None
+
+    def __exit__(self, *exc) -> None:
+        self._release()
+        self._close()
 
 
 def canonical(obj: Any) -> str:
@@ -104,22 +235,6 @@ def _lock_for(path: str) -> threading.Lock:
         return _LOCKS[key]
 
 
-def _last_seq(path: str) -> int:
-    if not os.path.exists(path):
-        return 0
-    last = 0
-    with open(path, encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                last = max(last, int(json.loads(line).get("seq", 0)))
-            except (ValueError, AttributeError):
-                continue
-    return last
-
-
 def line_hash(line: bytes) -> str:
     """The chain link: sha256 over one line's bytes as written, no terminator.
 
@@ -133,37 +248,70 @@ def line_hash(line: bytes) -> str:
     return sha256(line)
 
 
-def _tail_state(path: str) -> "tuple[int, Optional[str]]":
-    """`(last seq, hash of the last line)` -- what a new writer must resume from.
+def _scan_from(path: str, offset: int, seq: int = 0, prev: Optional[str] = None
+               ) -> "tuple[int, int, Optional[str]]":
+    """Fold the bytes after `offset` into a tail state.
 
-    Read in binary in one pass, because the chain hashes bytes and decoding
-    then re-encoding would be a second chance to disagree with the file.
+    Returns `(offset now, last seq, hash of the last line)`. Reading from an
+    offset rather than from the start is what keeps the fix affordable: the tail
+    has to be re-read inside the lock before *every* append, and rescanning the
+    whole file each time would make a shared campaign ledger quadratic in its own
+    length -- 100k lines re-read 100k times. Folding is exact rather than
+    approximate: `seq` is the maximum over every line seen so far and `prev` the
+    last non-blank line seen so far, so scanning `[0, a)` then `[a, b)` gives
+    precisely what scanning `[0, b)` gives.
+
+    Read in binary in one pass, because the chain hashes bytes and decoding then
+    re-encoding would be a second chance to disagree with the file.
     """
     if not os.path.exists(path):
-        return 0, None
-    last_seq, last_line = 0, None
+        return 0, seq, prev
     with open(path, "rb") as fh:
+        fh.seek(offset)
         for raw in fh:
+            offset += len(raw)
             stripped = raw.rstrip(b"\r\n")
             if not stripped.strip():
                 continue
-            last_line = stripped
+            # An unreadable line still occupies its place in the chain (RED-44:
+            # one bad line must not destroy the whole ledger), so it becomes the
+            # predecessor before its seq is even looked at.
+            prev = line_hash(stripped)
             try:
-                last_seq = max(last_seq,
-                               int(json.loads(stripped.decode("utf-8")).get("seq", 0)))
-            except (ValueError, AttributeError, UnicodeDecodeError):
-                # An unreadable line still occupies its place in the chain
-                # (RED-44: one bad line must not destroy the whole ledger), so
-                # it is kept as the predecessor even though its seq is unknown.
+                seq = max(seq,
+                          int(json.loads(stripped.decode("utf-8")).get("seq", 0)))
+            except (ValueError, TypeError, AttributeError, UnicodeDecodeError):
                 continue
-    return last_seq, (line_hash(last_line) if last_line is not None else None)
+    return offset, seq, prev
+
+
+def _tail_state(path: str) -> "tuple[int, Optional[str]]":
+    """`(last seq, hash of the last line)` -- what a new writer must resume from."""
+    _, seq, prev = _scan_from(path, 0)
+    return seq, prev
 
 
 class Ledger:
-    """One ledger file. Thread-safe; `seq` is assigned under the lock so it is
-    dense and monotonic even with several proxy threads writing."""
+    """One ledger file. Safe against other threads *and other processes*.
 
-    def __init__(self, path: str = LEDGER_PATH):
+    `seq` and `prev` are derived from the file inside a lock that spans the read
+    of the tail and the append that follows it, so they are dense, monotonic and
+    singly-linked no matter how many writers share the path.
+
+    Both halves of that sentence were once false. The counter used to be seeded
+    once in this constructor and guarded by a `threading.Lock` that did not span
+    seed→append, so a writer that opened the file while another was mid-run
+    resumed from a snapshot that was already invalid; both then emitted the same
+    `seq` and the same `prev`, and the chain forked. One instance is on disk:
+    `theoria-arm/runs/pytest-test_the_shell_turns_end_to_en0/ledger.jsonl`, seq
+    137-143 written twice, `verify_chain` BREAK at line 144, and `--emit-head`
+    consequently refusing to publish that stream's provenance. The regression is
+    `tests/test_ledger_concurrency.py`, which forks the chain against the old
+    writer using real OS processes.
+    """
+
+    def __init__(self, path: str = LEDGER_PATH,
+                 lock_timeout: float = LOCK_TIMEOUT_SECONDS):
         self.path = path
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         self._lock = _lock_for(path)
@@ -171,9 +319,40 @@ class Ledger:
         #: two shapes that §3/§4 does not list. A warning on stderr is seen by
         #: whoever is watching at the time; this is seen by the run report.
         #: Empty is the normal state and the interesting one is non-empty.
+        #: Per-file, and now per-file across *processes* too: the tally is this
+        #: object's, so three arms sharing one ledger each keep their own.
         self.unknown_fields: Dict[str, int] = {}
+        #: The sidecar the cross-process lock is taken on. Never written to
+        #: beyond the single byte Windows needs to have a range to lock.
+        self._lock_path = path + ".lock"
+        self._lock_timeout = lock_timeout
+        #: How far into the file this object has already read. A cache, not a
+        #: source of truth: `_reseed_locked` re-derives from disk before every
+        #: append and this only saves it from re-reading bytes it has seen.
+        self._scan_pos = 0
+        self._seq, self._prev = 0, None
         with self._lock:
-            self._seq, self._prev = _tail_state(path)
+            # Seeded here so a reader can ask cheaply, but no write ever uses
+            # this value without re-deriving it under the lock first.
+            self._scan_pos, self._seq, self._prev = _scan_from(path, 0)
+
+    def _reseed_locked(self) -> None:
+        """Bring `seq`/`prev` up to date with the file. Call under both locks.
+
+        This is the fix in one method: whatever this object last believed, the
+        numbers it is about to write are taken from the bytes on disk now, with
+        no other writer able to add to them until the append is done.
+        """
+        size = os.path.getsize(self.path) if os.path.exists(self.path) else 0
+        if size < self._scan_pos:
+            # The file shrank, so it was truncated or replaced under us and the
+            # cached state describes bytes that are no longer there. Re-read it
+            # whole rather than resume from a position into a different file.
+            self._scan_pos, self._seq, self._prev = 0, 0, None
+        if size == self._scan_pos:
+            return
+        self._scan_pos, self._seq, self._prev = _scan_from(
+            self.path, self._scan_pos, self._seq, self._prev)
 
     def _note_unknown(self, event: str, names: List[str], message: str) -> None:
         """Say it out loud, and *never* let saying it stop the write.
@@ -245,22 +424,33 @@ class Ledger:
             for name in unknown:
                 clean[name] = scrub_keyish({name: clean[name]})[name]
         record.update(clean)
+        # Threads first, then processes, always in that order so two writers can
+        # never each hold one of the pair. The critical section spans the read of
+        # the tail *and* the append: a seed taken outside it is a snapshot that
+        # another writer may already have invalidated.
         with self._lock:
-            self._seq += 1
-            record["seq"] = self._seq
-            record["ts"] = utcnow()
-            # The chain link, set under the same lock that assigns `seq` so the
-            # two can never disagree about the order records were written in.
-            # The first record of a file carries `null`: there is nothing
-            # before it, and saying so explicitly distinguishes "start of
-            # chain" from "chain field forgotten".
-            record["prev"] = self._prev
-            line = canonical(record)
-            blob = line.encode("utf-8")
-            with open(self.path, "a", encoding="utf-8", newline="") as fh:
-                fh.write(line)
-                fh.write("\n")
-            self._prev = line_hash(blob)
+            with _ChainLock(self._lock_path, timeout=self._lock_timeout):
+                self._reseed_locked()
+                self._seq += 1
+                record["seq"] = self._seq
+                record["ts"] = utcnow()
+                # The chain link, set under the same lock that assigns `seq` so
+                # the two can never disagree about the order records were
+                # written in. The first record of a file carries `null`: there
+                # is nothing before it, and saying so explicitly distinguishes
+                # "start of chain" from "chain field forgotten".
+                record["prev"] = self._prev
+                line = canonical(record)
+                blob = line.encode("utf-8")
+                with open(self.path, "a", encoding="utf-8", newline="") as fh:
+                    fh.write(line)
+                    fh.write("\n")
+                self._prev = line_hash(blob)
+                # Exactly the bytes this writer added -- computed rather than
+                # re-stat'ed, so anything a writer outside the lock managed to
+                # append still gets scanned next time round instead of being
+                # skipped over.
+                self._scan_pos += len(blob) + 1
         return record
 
     # -- reading -----------------------------------------------------------

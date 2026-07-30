@@ -365,8 +365,59 @@ def run_scheduled(profile: str = "quick", force: bool = False,
         if gate is not None and reservation is not None:
             gate.release(reservation, reason="canary sweep finished")
 
+    # Settle in the SAME unit the reservation was made in, and do not let a
+    # refusal at settlement time destroy the sweep's own bookkeeping.
+    #
+    # Both halves of this were wrong, and the `full` profile's first ever run
+    # (2026-07-30, S22 item 1) is what showed it -- it had been configured,
+    # scheduled and documented as a standing instrument without once executing.
+    #
+    # WRONG UNIT.  `open_spend_gate` reserves `plan["actions"]`; this line used
+    # to charge `run["http_calls"]`.  RESET is a command, not an action
+    # (ACCESS_CHECK.md 6b), so http_calls exceeds actions by exactly the number
+    # of games swept -- 20 > 16 on `full`, 16 > 12 on `quick`.  **Every sweep of
+    # either profile therefore tripped its own reservation**, and the daily one
+    # had been doing so unnoticed.  Which unit is right is not a matter of taste:
+    # S22's other half measured it and put it in README.md item 6 -- ARC's
+    # `total_actions` counts SUCCESSFUL ACTIONS ONLY, failed 400s and retry
+    # amplification do not bill.  So charging http_calls also over-charged the
+    # shared pool by the RESET count on every sweep.
+    #
+    # NO SILENT ZERO.  The old default `run.get("http_calls", 0)` turned an
+    # absent measurement into a free sweep.  There is a ledger line that looks
+    # exactly like that outcome (spend_gate.jsonl seq 12487, a canary-quick
+    # settlement of `actions: 0`), and while its cause is not established, a
+    # default that prices a missing number at zero is not something to keep
+    # while wondering.  A missing count is now an error.
+    settlement_error = None
     if gate is not None and reservation is not None:
-        gate.record(reservation, usd=0.0, actions=int(run.get("http_calls", 0)))
+        if "actions_executed" not in run:
+            raise RuntimeError(
+                "the sweep returned no actions_executed, so there is nothing "
+                "honest to charge the pool -- refusing to settle at zero")
+        try:
+            gate.record(reservation, usd=0.0,
+                        actions=int(run["actions_executed"]))
+            record["gate"] = dict(gate_note, settlement="recorded",
+                                  charged_actions=int(run["actions_executed"]))
+        except Exception as exc:
+            # The actions are ALREADY SPENT by the time this runs -- replay has
+            # returned.  Refusing to write the record does not un-spend them; it
+            # only makes the next invocation repeat the spend, because `due`
+            # reads the state file this function is on its way to updating.
+            # That is precisely what happened on the first `full` run: 16
+            # actions gone, all four games PASS, and the scheduler still
+            # reporting "full: never run".  A standing task in that state
+            # re-spends on every wake-up and can never record progress.
+            # So the refusal is recorded and re-raised AFTER the state is
+            # written, not instead of writing it.
+            record["gate"] = dict(gate_note, settlement="refused",
+                                  error="%s: %s" % (type(exc).__name__, exc),
+                                  charged_actions=None)
+            # Held in a local, never in `record`: the record is JSON-dumped by
+            # `_cmd_run` and an exception object in it would turn a reporting
+            # step into a crash.
+            settlement_error = exc
 
     record["run"] = {k: run[k] for k in
                      ("t", "verdicts", "actions_executed", "http_calls",
@@ -382,6 +433,14 @@ def run_scheduled(profile: str = "quick", force: bool = False,
         record["outcome"] = "incomplete"
 
     _record_outcome(config, state, profile, record)
+
+    # Now that the state file knows this sweep happened, a settlement refusal
+    # may surface.  Ordering is the whole point: `main()` maps SpendGate* to
+    # exit 5, so the operator still sees it, but `due` will no longer claim the
+    # sweep never ran.  The caller reads the detail from
+    # `record["gate"]["settlement"]`.
+    if settlement_error is not None:
+        raise settlement_error
     return record
 
 

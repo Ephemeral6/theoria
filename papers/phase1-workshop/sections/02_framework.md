@@ -59,7 +59,8 @@ row's `status` is the literal string `"candidate"`
 the manual, and why, is written down by the LLM in a `THEORIZE_LOG.md` — one
 entry per proposal, with its evidence and its cost. Those logs are the primary
 evidence for most of what follows, and they were written before the scores
-existed.
+existed (`a0-spike/THEORIZE_LOG.md`, `cold-start-a0/THEORIZE_LOG.md`,
+`cold-start-a2/THEORIZE_LOG.md`, `cold-start-a3/THEORIZE_LOG.md`).
 
 The division has teeth in both directions. `a0-spike/THEORIZE_LOG.md` T-6
 records the adjudicator proposing a conservation law — the box never changes

@@ -374,6 +374,37 @@ a *request* — arc-recon's ledger and baseline-arms' `ledger.jsonl` and
 a *response* is not a touch: `GET /api/games` returns all 25 by construction, and
 scoring that as contact would make the audit incapable of ever coming back clean.
 
+**That number used to be constructed rather than found (A13, 2026-07-29.)** The
+reader extracted `url`, `request_body` and `response_body`; all 560 records of
+`baseline-arms/ledger.jsonl` carry a top-level `game_id` and none of those three,
+so nothing matched, nothing was flagged, and a file that existed and parsed
+returned `clean: True`. "560 calls, sealed ADDRESSED: NONE" was printed over an
+audit that had read nothing, and `claim_set.json` recorded it. Three things
+changed, and the printed table now names the record shapes it read so the
+difference is visible from the outside:
+
+* every record is **classified** first -- `call`, `episode`, `summary` -- and one
+  that matches no shape is `unreadable`, not clean. Not audited is not clean.
+* the criterion lives in one module, [`sealed.py`](sealed.py), used by both this
+  audit and `cascade/verify.py`'s A7. There were three implementations and they
+  had drifted: A7 compared full ids only, so the bare stem `cascade/probe.py`
+  writes into every scorecard's `tags` was invisible to it, and this file could
+  not see it either because it only looked inside `request_body["game_id"]`.
+  The criterion is now full id **or** whole-token stem, over the request body,
+  the URL and the record's other fields alike.
+* a sealed id found in a field neither half classifies counts as a **contact**,
+  not a listing. The response carve-out above is earned by a specific argument
+  about `GET /api/games`; no such argument exists for a field nobody has
+  classified, so that case fails closed.
+
+`arc-recon/verify.sh` now declares its negative sample
+([`test_sealed_audit_negatives.py`](test_sealed_audit_negatives.py)), which
+builds the records that used to walk through this gate -- an episode record
+naming a sealed game, a bare stem in a request body, a misspelled quarantine
+registration -- and requires each one to go red. Nothing there touches a sealed
+game: the records are fabricated in a temp directory from ids read out of
+`piles.json`.
+
 The derivation fails **closed**. An unrecognised or missing `claims` value, or a
 game registered at `mechanics_disclosed` or above that is not quarantined, lands
 in `needs_adjudication` and is excluded from `clean` rather than falling into it.
@@ -557,6 +588,42 @@ that is now checked over the whole ledger rather than asserted.
 **At cut time nothing was contaminated.** The cut was made from catalogue metadata alone —
 ids, titles, tags, action counts. No mechanics were observed, so
 `contamination_register` records all 25 games as `never_audited`.
+
+### The local engine is the one path the ledger cannot see
+
+`assert_playable` guards every API path, and the ledger audit above proves no
+sealed game was ever *requested*. Neither covers the local engine: it makes no
+API call at all, so a local run over all 25 games leaves the audit green while
+every sealed game's **source** sits on disk. Upstream's defaults make that the
+easy mistake, not an exotic one — first run downloads the source for all 25 into
+`environment_files/`, and `make play-local`, `make verify-local` and the swarm
+runner's `--game` all default to every game in the dataset
+(`browser-ops/TERMS.md` §4.2, with URLs).
+
+[`local_engine_guard.py`](local_engine_guard.py) is the fail-closed guard for
+that path, and `ACCESS_CHECK.md` §8b is its reasoning. Positive whitelist,
+default deny, boundary-anchored prefixes, sealed tested before allow:
+
+```bash
+python local_engine_guard.py check -- make play-local             # exit 2 — no documented filter
+python local_engine_guard.py check -- uv run main.py --agent=x    # exit 2 — unfiltered is all 25
+python local_engine_guard.py check -- uv run main.py --agent=x --game=ar25    # exit 0
+python local_engine_guard.py run   -- <argv...>    # vets, then execs only if allowed
+python local_engine_guard.py scan  environment_files   # names-only sweep; opens nothing
+python local_engine_guard.py selftest              # asserts its own claims, offline
+```
+
+An adversarial pass against the first version found **nine working bypasses**;
+each is a named regression test now, and `ACCESS_CHECK.md` §8b.1 records the two
+that changed the rules rather than just the regexes. The sharpest: this file's
+own worked example used to be `make play-local GAME=ar25`, and `GAME=` is a
+spelling **we invented** — no filter argument is documented for that target, and
+make swallows an unreferenced variable in silence, so it would have played all
+25 while looking filtered. It is refused now.
+
+`selftest` and `scan` both run in `verify.sh`. `environment_files/` is
+gitignored, and nothing under it may be read except the four development games —
+downloading is not reading, and that distinction is the whole of the discipline.
 
 ## Ledger
 

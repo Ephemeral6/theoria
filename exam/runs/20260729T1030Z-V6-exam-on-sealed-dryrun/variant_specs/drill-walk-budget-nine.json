@@ -1,0 +1,14 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "unsolvable",
+  "justification": "A counting argument, not a search. The agent starts at (1,1) and the goal is (5,7); one command moves it at most one cell along one axis, so any winning sequence has length at least |5-1| + |7-1| = 10. The variant allows nine commands. Ten is more than nine, so no winning sequence fits, whatever the walls look like.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "limit": 9,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "drill-walk-budget-nine"
+}
