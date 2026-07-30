@@ -130,7 +130,19 @@ def test_list_and_claim_give_the_same_answer(tmp_path, monkeypatch, capsys):
 
     This is the assertion that keeps the fix from rotting. A future exclusion
     added to `candidates()` alone cannot reintroduce the split, because both
-    paths now ask one function."""
+    paths now ask one function.
+
+    S35a (adversarial review, and this is the sharpest of its findings about
+    the tests): the first version of this test compared the reserved section
+    against `board.offers(...)` -- **the same function that printed it**. It
+    was a tautology dressed as an invariant: it could not fail while the
+    section was built from `offers`, and it never called `cmd_claim` at all,
+    so any guard living in `cmd_claim` and not in `offers` was invisible to
+    it. `HOLD_CAP` is exactly such a guard, and it does split the two answers.
+
+    So this now runs the real verb. For every id the reserved section promises
+    to an owner, `cmd_claim(owner, lane)` must actually hand over *something*
+    -- and if it refuses, the refusal has to be printed, not silent."""
     home = _fleet(tmp_path, monkeypatch)
     _handed_back(home, "S22-costly", "RES-4", "needs a spending authority")
     _item(home, "S40-fine", lane="infra", territory="other")
@@ -140,12 +152,55 @@ def test_list_and_claim_give_the_same_answer(tmp_path, monkeypatch, capsys):
 
     board.cmd_list()
     out = capsys.readouterr().out
+    promised = {}
     for line in _section(out, "reserved"):
         iid = line.split()[1]
         lane = [p.split("=")[1] for p in line.split() if p.startswith("lane=")][0]
-        offered = {r[1] for r in board.offers(OWNERS[lane], lane)[0]}
-        assert iid in offered, \
-            "%s is reserved for %s, who cannot claim it" % (iid, OWNERS[lane])
+        promised.setdefault(lane, []).append(iid)
+    assert promised, "fixture produced no reserved rows -- nothing under test"
+    for lane, ids in promised.items():
+        owner = OWNERS[lane]
+        rc = board.cmd_claim(owner, lane)
+        got = capsys.readouterr().out
+        assert rc == 0, \
+            ("reserved promised %s to %s, and `claim` refused with rc=%d:\n%s"
+             % (ids, owner, rc, got))
+        handed = [i for i in ids if i in got]
+        assert handed, \
+            ("`claim %s --lane %s` returned 0 but handed none of the ids the "
+             "reserved section promised (%s):\n%s" % (owner, lane, ids, got))
+
+
+def test_hold_cap_is_not_printed_as_waiting_for_its_researcher(tmp_path,
+                                                               monkeypatch,
+                                                               capsys):
+    """S35a (adversarial review, finding 4). `cmd_claim` refuses with
+    HOLD-CAP-REACHED before it ever calls `offers()`, so the reserved section
+    -- which asks `offers()` -- keeps printing "waiting for its researcher"
+    over work `claim` will refuse. Same shape as the defect this item exists
+    to fix, one guard further down.
+
+    Benign compared to the hand-back case: it clears by itself when the owner
+    delivers, so it is not unreachable and does not belong in that section.
+    But "waiting for them to claim it" is still the wrong sentence, and the
+    line has to say which of the two it is."""
+    home = _fleet(tmp_path, monkeypatch)
+    for n in range(board.HOLD_CAP):
+        _item(home, "H%d-held" % n, lane="infra", territory="t%d" % n)
+        assert board.cmd_claim("RES-4", "infra") == 0
+    _item(home, "S99-next", lane="infra", territory="free")
+    capsys.readouterr()
+
+    assert board.cmd_claim("RES-4", "infra") == 3
+    assert "HOLD-CAP" in capsys.readouterr().out
+
+    board.cmd_list()
+    line = [l for l in _section(capsys.readouterr().out, "reserved")
+            if "S99-next" in l]
+    assert line, "S99-next vanished from the board entirely"
+    assert "手上已满" in line[0], \
+        ("reserved says the owner will come for S99-next, but `claim` answers "
+         "HOLD-CAP-REACHED:\n%s" % line[0])
 
 
 def test_the_unreachable_line_names_the_releaser_and_the_reason(tmp_path,
@@ -401,11 +456,139 @@ def test_the_fleet_loop_does_not_launch_a_session_for_unclaimable_work(
 
     w = standing.work_for("RES-4", "infra")
     assert w["claimable"] == 0, "counted work its own owner can never be handed"
-    assert w["any"] is False, "a session would be launched to claim nothing"
+
+    # S35a (adversarial review, finding 3 -- the most substantive rebuttal of
+    # this item). The first version of this test asserted `w["any"] is False`
+    # here, and the fix delivered exactly that. But `reassign` -- the exit this
+    # same item introduced -- only runs inside an agent's session, and its
+    # guard requires `--by` to be the item's lane owner. So suppressing the
+    # launch suppressed the one non-monitor actor allowed to take the exit,
+    # and the lane went quiet in the direction that raises no alarm.
+    #
+    # The corrected rule: nothing to *claim* is not nothing to *do*. An item
+    # this agent can reassign is real work -- decide where it goes, write the
+    # reason -- so the session is launched, and `exits` says why.
+    assert w["exits"] == 1, "the owner can reassign S22-costly and nobody told it"
+    assert w["any"] is True, \
+        "the only actor allowed to use the exit is never launched to use it"
+
+    # ...and it stops once the exit has been taken. Otherwise this is the
+    # livelock again, one verb further along.
+    assert board.cmd_reassign("S22-costly", "campaign", "RES-4",
+                              "needs a spending authority; CHARTER: RES-1") == 0
+    after = standing.work_for("RES-4", "infra")
+    assert after["exits"] == 0 and after["any"] is False, \
+        "still launching sessions after the exit was taken"
 
     # NEGATIVE CONTROL: the same lane with one item nobody handed back.
     _item(home, "S40-fine", lane="infra", territory="other")
     assert standing.work_for("RES-4", "infra")["claimable"] == 1
+
+
+def test_reassign_refuses_an_item_that_is_claimed_or_delivered_elsewhere(
+        tmp_path, monkeypatch, capsys):
+    """S35a (adversarial review, finding 6). `cmd_reassign`'s docstring and
+    this item's report both said claimed and delivered work is refused. The
+    only check was `os.path.exists(items/<id>.md)` -- which assumes such an
+    item is not on the shelf. **This board's documented failure mode is that
+    it is on the shelf**: E8-ic3-scale sat in `items/`, `claimed/` and `done/`
+    at the same time, A13 in two of them.
+
+    So the guard held only when nothing was wrong, and failed exactly when
+    something was -- the same shape as the defect under repair: the guard was
+    not asking the question it printed."""
+    home = _fleet(tmp_path, monkeypatch)
+
+    # Delivered *and* resurrected onto the shelf.
+    _item(home, "E8-back", lane="infra", territory="engine-rig")
+    (home / "board" / "done" / "E8-back.RES-4.md").write_text("done\n",
+                                                              encoding="utf-8")
+    assert "E8-back" in board.done_ids()
+    capsys.readouterr()
+    assert board.cmd_reassign("E8-back", "campaign", "monitor", "move it") == 5
+    assert "REASSIGN-DELIVERED" in capsys.readouterr().out
+    assert "lane: infra" in (home / "board" / "items" / "E8-back.md").read_text(
+        encoding="utf-8"), "refused, but the lane was rewritten anyway"
+
+    # Claimed *and* still on the shelf.
+    _item(home, "R9-flying", lane="infra", territory="src")
+    (home / "board" / "claimed" / "R9-flying.RES-1.md").write_text(
+        "claimed\n", encoding="utf-8")
+    assert "R9-flying" in board.claimed_map()
+    capsys.readouterr()
+    assert board.cmd_reassign("R9-flying", "paper", "monitor", "move it") == 5
+    out = capsys.readouterr().out
+    assert "REASSIGN-CLAIMED" in out and "RES-1" in out
+    assert "lane: infra" in (home / "board" / "items" / "R9-flying.md").read_text(
+        encoding="utf-8")
+
+
+def test_reassign_refuses_to_manufacture_a_new_unreachable_item(tmp_path,
+                                                               monkeypatch,
+                                                               capsys):
+    """S35a (adversarial review, finding 5). The exit could create the very
+    thing it exists to remove: an item with `spend: api` and no monitor
+    `generic_ok` is skipped by the spending guard for unlaned queries, so
+    `--to generic` left it claimable by nobody -- exit 0, no warning.
+
+    The guard is a **postcondition**, not another restatement of the exclusion
+    rules. Restating them is what `unreachable_ids()` deliberately refuses to
+    do, on the grounds that a second copy of a predicate diverges; a
+    postcondition asks the real predicate after the write and rolls back."""
+    home = _fleet(tmp_path, monkeypatch)
+    path = _item(home, "C1-api", lane="campaign", territory="arc",
+                 spend="api")
+    before = path.read_text(encoding="utf-8")
+    assert "C1-api" not in board.unreachable_ids()
+    capsys.readouterr()
+
+    assert board.cmd_reassign("C1-api", "generic", "monitor",
+                              "let anyone do it") == 4
+    out = capsys.readouterr().out
+    assert "REASSIGN-WOULD-STRAND" in out and "generic_ok" in out
+    assert path.read_text(encoding="utf-8") == before, \
+        "rolled back in name only -- the item on disk changed"
+    assert "C1-api" not in board.unreachable_ids()
+
+    # NEGATIVE CONTROL: the same move onto a lane with a live owner is fine,
+    # so the postcondition is not just refusing everything.
+    assert board.cmd_reassign("C1-api", "verify", "monitor",
+                              "RES-3 can recompute this offline") == 0
+    assert "C1-api" not in board.unreachable_ids()
+
+
+def test_the_by_argument_is_attribution_and_not_authorisation(tmp_path,
+                                                             monkeypatch,
+                                                             capsys):
+    """S35a (adversarial review, finding 2), written down as a fact rather
+    than fixed. `--by` is self-reported, so `--by monitor` moves any item out
+    of any lane; the guard raises the cost of a slip, not of a lie. This item's
+    report claimed the guard closed "a path that drains another lane's queue",
+    and that claim was too strong.
+
+    This test exists so nobody reads the guard as a security boundary. It
+    asserts the bypass **works** -- if a real identity boundary ever lands,
+    this test fails, and that failure is the good news. What is required
+    meanwhile is that the log says the identity was self-asserted."""
+    home = _fleet(tmp_path, monkeypatch)
+    _item(home, "V1-verify-work", lane="verify", territory="engine-rig",
+          priority=1)
+    capsys.readouterr()
+
+    # A stranger, honestly named, is refused.
+    assert board.cmd_reassign("V1-verify-work", "infra", "W-9999",
+                              "I want verify work") == 3
+    assert "REASSIGN-NOT-YOURS" in capsys.readouterr().out
+
+    # The same stranger typing `--by monitor` is not.
+    assert board.cmd_reassign("V1-verify-work", "infra", "monitor",
+                              "I want verify work") == 0
+    body = (home / "board" / "items" / "V1-verify-work.md").read_text(
+        encoding="utf-8")
+    assert "lane: infra" in body, "the bypass closed -- update this test"
+    log = (home / "board" / "board.log").read_text(encoding="utf-8")
+    assert "monitor(self-asserted)" in log, \
+        "an unverified identity recorded as if it had been verified"
 
 
 # ------------------------------------------- the reason the exit needs as input
