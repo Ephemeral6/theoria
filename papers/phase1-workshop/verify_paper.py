@@ -11,16 +11,33 @@ Six checks, each independently reported, exit code 1 if any fails:
                  `sections/*.md`. The header says "do not hand-edit"; this is the
                  test of it.
   B. PATHS       Every path-like token cited in backticks in `sections/*.md`
-                 resolves. Three verdicts, not two:
-                   ok         -- resolves repo-relative, unambiguously
-                   AMBIGUOUS  -- the token's leading directory exists BOTH at the
-                                 repo root and beside PAPER.md, so a reader
-                                 resolving it locally lands somewhere else or
-                                 nowhere. `figures/` is the live instance: the
-                                 paper cites the root pipeline's fig05/06/07
-                                 while sitting next to a local `figures/` holding
-                                 three homonymous plates.
-                   BROKEN     -- resolves nowhere
+                 resolves. Seven verdicts, not two -- "it resolved" was one word
+                 covering several different ways of not resolving for a reader:
+                   ok          -- resolves repo-relative, unambiguously
+                   AMBIGUOUS   -- the token's leading directory exists BOTH at
+                                  the repo root and beside PAPER.md, so a reader
+                                  resolving it locally lands somewhere else or
+                                  nowhere. `figures/` is the live instance: the
+                                  paper cites the root pipeline's fig05/06/07
+                                  while sitting next to a local `figures/`
+                                  holding three homonymous plates. A ruling in
+                                  `ADJUDICATED_AMBIGUITY` turns one into `ruled`;
+                                  a ruling whose ambiguity has gone is STALE.
+                   LOCAL       -- resolves beside PAPER.md and not from the repo
+                                  root, which is the root the paper's own binding
+                                  rule names
+                   MISCASED    -- resolves only because this filesystem ignores
+                                  case; BROKEN on the Linux clone CI and the
+                                  release tarball are read on
+                   UNSHAREABLE -- names a checkout rather than the repository
+                                  (`.worktrees/`, `.git/`, `.claude/`): one
+                                  machine's scratch at one moment
+                   ELIDED      -- `.../MANIFEST.json`, a typographic ellipsis
+                   BROKEN      -- resolves nowhere
+                 The last three, and the stale detector, landed under P20 with no
+                 instance of any of them in the paper. That is deliberate: each
+                 was a way for a citation to be *skipped* rather than judged, and
+                 a hole is cheapest to close while nothing is standing in it.
   C. FIGDATA     The three local figure extractors are byte-deterministic: rerun
                  into a scratch tree and compare against `figures/data/*.json`.
   D. NOSECRET    No `.env` value, and nothing shaped like the ARC key, appears in
@@ -154,12 +171,29 @@ NOT_A_PATH = re.compile(
     r"|^[0-9]+/[0-9]+"                       # 34/38, 252/252, ...
 )
 
-# Directories that legitimately do not exist in a checkout.
+# Directories that legitimately do not exist in a checkout. Each is absent for a
+# reason a reader can act on: `.toolchain/` is rebuilt by the documented Fast
+# Downward build, `figures/.verify/` by rerunning the figure pipeline. A citation
+# into one of them names something the reader can produce.
+#
+# `.worktrees/` used to be on this list and is not, because it fails that test.
+# A worktree path names one machine's scratch checkout of one branch at one
+# moment; no reader can produce it and no reader can follow it. It was also the
+# one prefix all three path checks agreed to ignore -- B skipped it here, F skips
+# anything with a `/`, and E only asks that *a* citation be present -- so
+# `.worktrees/anything/at/all.md` satisfied the binding rule against every check
+# in this file at once. §10.7 already concedes the paper's least resolvable
+# citations are exactly of this kind (the four `SURVEY-*.md`, untracked, in a
+# machine-local worktree, on a branch never pushed). See UNSHAREABLE in
+# `classify`.
 GITIGNORED_BY_DESIGN = (
     ".toolchain/",
     "figures/.verify/",
-    ".worktrees/",
 )
+
+#: Path prefixes that name a checkout rather than the repository. Kept separate
+#: from the list above because the verdict is the opposite one.
+UNSHAREABLE_PREFIXES = (".worktrees/", ".git/", ".claude/")
 
 # Ambiguities that have been looked at and ruled on, each with its adjudication.
 # The rule is `figures/PARITY.md`'s: the paper cites the repository-root figure
@@ -274,16 +308,54 @@ def expand_braces(token: str) -> list[str]:
     return out
 
 
+def exists_exact(base: Path, token: str) -> bool:
+    """`(base / token).exists()`, but case-exact on every filesystem.
+
+    `Path.exists()` asks the filesystem, and this one is NTFS, which does not
+    care about case. So `Engine-Rig/STATUS.md` and `engine-rig/status.md` were
+    both `ok` here and both `BROKEN` on a Linux clone: the gate's verdict
+    depended on the machine it ran on, and it ran on the machine where the
+    answer is always yes. Everything the gate exists to protect -- CI, a fresh
+    clone, the Phase 4 release tarball -- is somewhere else.
+
+    Walking the components against `os.listdir` is the portable form of the
+    question "is this the name the repository actually uses". On Linux it is
+    exactly `exists()` and costs a directory read per component; on Windows it is
+    the check `exists()` cannot make.
+    """
+    cur = base
+    for part in token.strip("/").split("/"):
+        if part in ("", "."):
+            continue
+        try:
+            names = os.listdir(cur)
+        except OSError:
+            return False
+        if part not in names:
+            return False
+        cur = cur / part
+    return cur != base and cur.exists()
+
+
+#: Worst-first. Every verdict `classify` can return has to appear here, or a
+#: brace citation carrying one falls through the loop and comes back `skip` --
+#: which is how a citation stops being checked rather than failing.
+VERDICT_ORDER = ("BROKEN", "MISCASED", "UNSHAREABLE", "LOCAL", "ELIDED",
+                 "AMBIGUOUS", "RULED", "ok")
+
+
 def classify(token: str) -> str:
-    """ok / RULED / AMBIGUOUS / ELIDED / BROKEN / skip, for one cited path token."""
+    """One of `VERDICT_ORDER`, or `skip`, for one cited path token."""
     if NOT_A_PATH.search(token):
         return "skip"
     if "{" in token or "}" in token:
         verdicts = {classify(t) for t in expand_braces(token)}
-        for worst in ("BROKEN", "ELIDED", "AMBIGUOUS", "RULED", "ok"):
+        for worst in VERDICT_ORDER:
             if worst in verdicts:
                 return worst
         return "skip"
+    if any(token.startswith(p) or f"/{p}" in token for p in UNSHAREABLE_PREFIXES):
+        return "UNSHAREABLE"
     if token.startswith(".../") or "/.../" in token:
         # `.../MANIFEST.json` is a typographic elision, not a link. It still
         # breaks the binding rule -- a reader cannot resolve it -- so it is
@@ -292,8 +364,8 @@ def classify(token: str) -> str:
     if any(token.startswith(g) or f"/{g}" in token for g in GITIGNORED_BY_DESIGN):
         return "skip"
 
-    at_root = (ROOT / token).exists()
-    at_local = (HERE / token).exists()
+    at_root = exists_exact(ROOT, token)
+    at_local = exists_exact(HERE, token)
 
     head = token.split("/", 1)[0]
     head_both = (ROOT / head).is_dir() and (HERE / head).is_dir()
@@ -306,12 +378,42 @@ def classify(token: str) -> str:
         # reader resolving relative to PAPER.md lands somewhere else or nowhere.
         if (at_root and at_local) or head_both:
             return "RULED" if token in ADJUDICATED_AMBIGUITY else "AMBIGUOUS"
+        if at_local and not at_root:
+            # Resolves beside PAPER.md and nowhere else. The binding rule the
+            # paper sets itself asks for "the repo-relative path of the artefact
+            # it came from", and this is not one: a reader following it from the
+            # repository root -- which is where the paper says to stand -- lands
+            # nowhere. `ok` said the citation resolved without saying from where,
+            # so the one verdict covered both the rule and its violation.
+            return "LOCAL"
         return "ok"
+
+    if (ROOT / token).exists() or (HERE / token).exists():
+        # Only `exists()` finds it, and `exists()` is case-blind here. The
+        # citation is spelled in a case the repository does not use.
+        return "MISCASED"
     return "BROKEN"
 
 
 def check_paths() -> tuple[bool, list[str]]:
-    """B. Every cited path resolves, and unambiguously."""
+    """B. Every cited path resolves, and unambiguously.
+
+    Three verdicts were added under P20, all of them latent when they landed --
+    the paper has no instance of any of the three, which is the point of adding
+    them before it does:
+
+    * `MISCASED` -- resolved only because NTFS is case-blind. Green here, BROKEN
+      on the Linux clone CI and the release tarball are read on.
+    * `LOCAL` -- resolves beside `PAPER.md` and not from the repository root,
+      which is the root the paper's own binding rule names.
+    * `UNSHAREABLE` -- points into a worktree or a `.git`; nobody but the author
+      can follow it, and until now nothing in this file looked at it.
+
+    And a stale detector for `ADJUDICATED_AMBIGUITY`, which checks E and F have
+    each had for their own ruling tables and this one did not. A ruling is
+    written about a live ambiguity; when the ambiguity goes, the ruling stays
+    behind and silently excuses the *next* token that happens to have that name.
+    """
     notes: list[str] = []
     seen: dict[str, tuple[str, str]] = {}  # token -> (verdict, first section seen in)
     for section in sorted(SECTIONS.glob("*.md")):
@@ -327,13 +429,34 @@ def check_paths() -> tuple[bool, list[str]]:
 
     ok, ruled = of("ok"), of("RULED")
     amb, elided, broken = of("AMBIGUOUS"), of("ELIDED"), of("BROKEN")
+    miscased, local, unshareable = of("MISCASED"), of("LOCAL"), of("UNSHAREABLE")
+
+    # A ruling that no longer excuses anything. Same rule, and the same words,
+    # as check E's and check F's: it is removed, not left sitting there to
+    # excuse whatever next arrives under that name.
+    stale = sorted(set(ADJUDICATED_AMBIGUITY) - set(ruled))
 
     notes.append(f"  {len(seen)} distinct path citations: {len(ok)} ok, "
                  f"{len(ruled)} ambiguous-but-ruled, {len(amb)} ambiguous-unruled, "
-                 f"{len(elided)} elided, {len(broken)} broken")
+                 f"{len(elided)} elided, {len(broken)} broken, "
+                 f"{len(miscased)} miscased, {len(local)} paper-local, "
+                 f"{len(unshareable)} unshareable, {len(stale)} stale rulings")
     for t in broken:
         notes.append(fail(f"  BROKEN    {t}   ({seen[t][1]}) -- resolves from neither the repo "
                           f"root nor beside PAPER.md"))
+    for t in miscased:
+        notes.append(fail(f"  MISCASED  {t}   ({seen[t][1]}) -- resolves only because this "
+                          f"filesystem ignores case. On a Linux clone -- CI, and the release "
+                          f"tarball -- it is BROKEN. Spell it the way the repository does"))
+    for t in unshareable:
+        notes.append(fail(f"  UNSHARE.  {t}   ({seen[t][1]}) -- names a checkout, not the "
+                          f"repository: one machine's worktree at one moment. No reader can "
+                          f"follow it, and B, E and F all used to skip it, so it satisfied "
+                          f"the binding rule against every check at once"))
+    for t in local:
+        notes.append(fail(f"  LOCAL     {t}   ({seen[t][1]}) -- resolves beside PAPER.md and "
+                          f"not from the repo root, which is the root the binding rule names. "
+                          f"Cite papers/phase1-workshop/{t}"))
     for t in elided:
         notes.append(fail(f"  ELIDED    {t}   ({seen[t][1]}) -- an ellipsis is not a path a "
                           f"reader can follow; the binding rule wants the whole thing"))
@@ -343,7 +466,13 @@ def check_paths() -> tuple[bool, list[str]]:
                           f"which one this means"))
     for t in ruled:
         notes.append(f"  ruled     {t} -- {ADJUDICATED_AMBIGUITY[t]}")
-    return not (broken or amb or elided), notes
+    for t in stale:
+        notes.append(fail(
+            f"  STALE     {t} is ruled ambiguous and is not ambiguous any more -- the "
+            f"citation is gone, or the collision behind it is. A ruling that excuses "
+            f"nothing is removed, not left to excuse the next token by that name."))
+    return not (broken or amb or elided or miscased or local
+                or unshareable or stale), notes
 
 
 def check_figdata() -> tuple[bool, list[str]]:
@@ -610,7 +739,14 @@ def check_nosecret() -> tuple[bool, list[str]]:
         except OSError:
             continue
         scanned += 1
-        rel = path.relative_to(ROOT)
+        # `relative_to` raises when ROOT is not an ancestor -- which it always is
+        # in production and was not under a probe that redirected only ROOT. The
+        # finding is worth more than the tidy path: a leak detector that raises
+        # while naming the file it caught has caught nothing anybody will read.
+        try:
+            rel = path.relative_to(ROOT)
+        except ValueError:
+            rel = path
         # A committed .env is the leak itself, whatever is in it.
         if path.name == ".env" or path.name.startswith(".env."):
             if path.name != ".env.example":
@@ -1266,14 +1402,26 @@ def check_bare() -> tuple[bool, list[str]]:
     return not flagged and not stale, notes
 
 
+#: (tag, blurb, fn, reads_sections).
+#:
+#: The last field exists because the six checks are independent and their
+#: verdicts are printed as if they were about one object. They are not: A is the
+#: only check that reads `PAPER.md`, and B, E and F all read `sections/`. When A
+#: fails those two are different documents, so `[PASS] E` is a true statement
+#: about the sections and says nothing about the file a reader is handed. Six
+#: verdicts, one of them FAIL and three of them describing a document nobody will
+#: read, is a report that has to say so -- `caveat()` below is where it does.
 CHECKS = [
-    ("A GENERATED", "PAPER.md == assemble(sections/)", check_generated),
-    ("B PATHS", "every cited path resolves, unambiguously", check_paths),
-    ("C FIGDATA", "figure extractors are byte-deterministic", check_figdata),
-    ("D NOSECRET", "no credential value in any published file", check_nosecret),
-    ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited),
-    ("F BARE", "no citation is an ambiguous bare filename", check_bare),
+    ("A GENERATED", "PAPER.md == assemble(sections/)", check_generated, False),
+    ("B PATHS", "every cited path resolves, unambiguously", check_paths, True),
+    ("C FIGDATA", "figure extractors are byte-deterministic", check_figdata, False),
+    ("D NOSECRET", "no credential value in any published file", check_nosecret, False),
+    ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited, True),
+    ("F BARE", "no citation is an ambiguous bare filename", check_bare, True),
 ]
+
+#: The check whose failure makes the other verdicts describe the wrong document.
+GENERATED_TAG = "A GENERATED"
 
 
 def main() -> int:
@@ -1290,9 +1438,16 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     failures = []
-    for tag, blurb, fn in CHECKS:
+    generated_ok = True
+    for tag, blurb, fn, reads_sections in CHECKS:
         passed, notes = fn()
         print(f"[{'PASS' if passed else 'FAIL'}] {tag} -- {blurb}")
+        if tag == GENERATED_TAG:
+            generated_ok = passed
+        elif reads_sections and not generated_ok:
+            print(f"       ^ about sections/, NOT about PAPER.md: {GENERATED_TAG} "
+                  f"failed, so the two disagree and this verdict describes the "
+                  f"one a reader is not handed.")
         if not args.quiet or not passed:
             for n in notes:
                 print(n)
@@ -1316,6 +1471,14 @@ def main() -> int:
     print()
     if failures:
         print(f"verify_paper: FAIL ({len(failures)}/{len(CHECKS)}) -- {', '.join(failures)}")
+        if not generated_ok:
+            passed_on_sections = [t for t, _, _, r in CHECKS
+                                  if r and t not in failures]
+            if passed_on_sections:
+                print(f"  and {GENERATED_TAG} failing means "
+                      f"{', '.join(passed_on_sections)} passed on sections/ while "
+                      f"PAPER.md holds something else. Rerun assemble.py before "
+                      f"reading any of those greens as being about the paper.")
         return 1
     print(f"verify_paper: PASS ({len(CHECKS)}/{len(CHECKS)})")
     return 0

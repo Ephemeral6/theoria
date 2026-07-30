@@ -204,3 +204,18 @@ def test_the_documented_promise_is_now_executable():
     assert vp.UUID_SHAPED.search(SHAPED)
     assert vp._shaped_in_context(f"api_key: {SHAPED}")
     assert not vp._shaped_in_context(f"item {SHAPED} in a catalogue listing")
+
+
+def test_a_finding_survives_a_root_that_is_not_an_ancestor(tmp_path, monkeypatch):
+    """`relative_to` raises when ROOT is not above the file being named. ROOT is
+    always an ancestor in production, so this is a crash path rather than a
+    verdict path -- and a leak detector that raises while naming what it caught
+    reports nothing. Found by a probe that redirected ROOT alone; kept because
+    the next probe will do the same thing."""
+    here = tmp_path / "paper"
+    here.mkdir()
+    (here / "leak.md").write_text(f"api_key: {SHAPED}", encoding="utf-8")
+    monkeypatch.setattr(vp, "HERE", here)
+    monkeypatch.setattr(vp, "ROOT", tmp_path / "elsewhere")
+    ok, notes = vp.check_nosecret()
+    assert not ok and "leak.md" in "\n".join(notes)
