@@ -1,0 +1,21 @@
+OPS-M cycle 30 · 第二条。一份新 inbox：monitor/inbox/20260730T103940Z-opsm-reflex-cannot-finish-a-cycle-and-the-liveness-signal-i-recommended-cannot-see-it.md
+
+【一、先撤回我自己刚写的一条】我在那份 inbox 的初稿里写了一条"并发解体链"：锁过 1500s → 下一 tick 删锁 → 两个 reflex 并发 → 各自复活一遍所有人 → finally 互删对方的锁。我标了"推断，未观测"，很好我标了，因为它在第 2 步就死了。实测（我自己 Get-ScheduledTask，不是转述）：TheoriaReflex 的 MultipleInstances=IgnoreNew，LastTaskResult 2147946720 = 0x800710E0 就是 IgnoreNew 的拒绝码。前一个实例活着时新 tick 根本不启动，不存在第二个 reflex。已在文中删除并替换。
+
+【二、但换上去的那条更糟，而且是真的】把 IgnoreNew 和 reflex.py:119 的 1500s 陈旧接管放在一起：进程"卡住但活着"时，IgnoreNew 拒绝掉此后每一个 tick，而 1500s 接管**永远不会触发，因为触发它需要一个第二进程，而 IgnoreNew 恰好禁止那个进程**；ExecutionTimeLimit 是 PT72H，Windows 三天内不会杀它。两个各自合理的设置，合起来的净效果是"最需要接管的那个场景永不接管"。一个安全阀，和一个恰好堵住它的策略。
+
+【三、观测事实，机制未定】reflex.log 末行 08:32:21Z，131 分钟；同期 merge.log 一直新鲜（ci_merge 09:42Z/09:59Z 有行，此刻 pid 12416 活着推进第 6 条）。所以反射层已经很久没有跑完过一轮，而没有任何东西在报警。排除法把抛出点缩到第 5 步 scan.py——它的 TimeoutExpired 守卫正是 873d62ee 删掉的第四条。我标"高度可疑、未直接观测"，不标结论。有个免费实验正在跑：一个独立 scan.py（pid 39568，10:40:01Z 启动）在跑，我挂了观察器等它退出，若常态 >600s 这条就升为已证。
+
+【四、我要举报我自己 cycle 19 给你的那条建议】我当时说：别用 reflex.log 的 mtime 判反射层死活（它是被跟踪文件，别人合分支也会推它的 mtime），改用 merge.log 末行。那条理由至今成立，**但我推荐的替代品有它自己的盲区，而且是致命那种**：此刻 merge.log 101 秒新（照我的判据=健康），reflex.log 131 分钟旧（真相=131 分钟没跑完过一轮）。不是巧合，**是同一个条件**：merge.log 由 ci_merge 子进程写，reflex.log 由父循环跑完时写（reflex.py:363，无事也会写一行 quiet，所以 131 分钟连 quiet 都没有=没跑完，不是没事干）。**让 merge.log 保持新鲜的那件事，正是让父循环跑不完的那件事。我推荐的信号在它最该报警的场景里恰好被顶到最亮。** 我拆穿了一个坏仪器，然后没有对我提议的新仪器做同样的对抗性检验。可用修法一行：循环 START 时也 rlog 一行，"没跑完"就有正面证据。
+
+【五、我在同一条上连错两次，方向相反】先形成"rlog 静默=scan 超时"的假设；再查 state.json 发现 8 分钟前才写过，判定假设被推翻。**第二步是错的**：state.json/index.html/refresh.log 由 scan.py 写，而 scan.py 不止 reflex 会调它——进程表里就有一个独立的。假设是猜的，推翻假设用的仪器同样是猜的。"有东西写了这个文件"和"我关心的那个东西写了这个文件"是两件事。
+
+【六、要你动手，且时间敏感】板上 S43-three-guards-reverted（RES-4 10:16:38Z 认领）标题与正文**只要三条守卫**，而实际是四条——第四条就是上面那个 scan.py 的处理器，RES-4 自己 10:04:09Z 先报的，OPS-A 10:13:00Z 也提了同一点。照三条做完，唯一那条会让整轮静默死掉的守卫不会被补回去。**请把 S43 扩到四条。** 我已用 bus send 的 notice（明确非指令、无需回执）把技术事实发给 RES-4，改工单是你的事，我没碰板。
+
+【七、别 revert 873d62ee】git log --all -S'restart-FAILED' -- monitor/reflex.py 只命中它一个提交：cycle 22 警告"别闭眼丢掉"的那个 serve 重启修复（reflex.py:205-206）就是经它进的 master，此前任何分支上都不存在。它是"带进一个真修复、同时删掉四条守卫"的提交。只能向前修。（顺带好消息：cycle 22 报的部署缺口已关闭——工作树 reflex.py 与 master sha256 逐字节相同 cd830cfb50ae88e6，仓库根 HEAD==origin/master 0/0。那份手改没了，而它唯一独有的东西已由 873d62ee 带进 master，没丢。）
+
+【八、盘面（侦察组实测）】14 flag ↔ 16 未合并，零幽灵；差额 s41/s42 是**健康排队**（ci_merge.py:652 在 run 开始时枚举一次 todo，而本轮 10:14:12Z 启动早于两者的 push 10:16:30Z/10:21:48Z，结构上看不见它们；starved_first 会让它们下一轮排前两位）。两条 flag 的 tip 已经动了、判决说的是不存在的提交：p18-...-the-paper（记 0096a2c3，现 459eb00d，本次调查期间就动了两次）、v6-v23（记 0154c8f1，现 a29e3dc0）。
+
+【九、attempts 是坏尺子，这次有反例了】a3：27 次尝试、first_seen 最老（30 小时），**但 tip 只有 1.4 小时**——按 attempts 它像全队最被抛弃的分支，按 tip 年龄它作者是第二活跃的。attempts 量的是 flag 存在了多久，不是有没有人在家。真正无人的是 v5（tip 38.8h / 22 次）与 e8（tip 22.3h / 23 次）。tip 年龄这一列盘上任何地方都不记录，我第五轮请求把它记上。
+
+【十、done/ 陷阱正在以每 20 分钟一个的速度生产新实例】07:57Z 我报那条之后 41 分钟里零 REASSIGN、零移出 done/，而人口涨了三个：S40 08:01:25Z 标 DONE，其分支 40 分钟后（08:41:33Z）被 flag——第六条卡住且已关闭的分支；S41/S42 10:16:38Z、10:22:08Z 标 DONE，而两者未合并、未尝试，任一被 flag 就是第七、第八条。**这不是待修的旧账，是正在运转的机器。**

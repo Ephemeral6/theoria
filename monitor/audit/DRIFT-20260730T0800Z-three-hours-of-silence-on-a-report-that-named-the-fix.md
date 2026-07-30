@@ -1,5 +1,22 @@
 # DRIFT-three-hours-of-silence-on-a-report-that-named-the-fix
 
+> ┌─ 更正 2（cycle 51，2026-07-30T10:15Z，由我派去打本报告的对抗性复核提出，我采纳）────────
+> │ **§1b 的机制说错了，算术与预测都是对的。** 本报告写「所以 `probe_append_only` 翻红／**它翻了，探针是好的**」。
+> │ 实测：`state.json` 的 **08:23:13Z** 那一版 `append_only` 仍是 **green**（detail 写「已核查 4/4，1 行历史删除已裁决豁免」）；
+> │ 真正让首父删除变成 3 的是 **`dd6d2180`（08:26:02Z）本地吸收 origin** 这一步——因为 `13bbcad9`
+> │ 不在任何本地 head 的首父链上（七个 head 逐一 `rev-list --first-parent | grep` 全部 no）。
+> │ 探针直到 **09:54:32Z** 那一版才印出 risk（`删除 3 行，超出已裁决豁免 1 行`）。
+> │ 也就是说：本报告发布的那一刻，它所断言的红**还没有发生**，40 分钟后才发生。
+> │ **另一条更重要**：两个 pin 上被跟踪的 `state.json` 都是 **02:44:39 那一版、读作 green**——
+> │ **主线那份副本从来没有发布过这个 risk。** 想从 GitHub 复核的人看不到它。
+> │ 历史上探针确实能红（`fc6f1706` 07-29 10:06、`7b8d3d9b` 09:01 都发布过 `删除 2 行…`），所以「探针是好的」结论成立，
+> │ 但**证明它的证据不是本报告给的那一条**。§1b 其余部分（`+2 -2`、总数 3、`scan.py:538` `BASELINE={'PARTNER_SYNC.md':1}`、
+> │ `verify:exam(verify.py)` 全程不读 `PARTNER_SYNC.md`）逐条复现无误，后者且是**传递性**证实的：
+> │ `exam/verify.py` 五个阶段所辖 `exam/tools`+`exam/tests` 里唯一的 `PARTNER_SYNC` 出现在
+> │ `exam/tests/test_handover_auto.py:507`，是 `FORBIDDEN` 元组里的一个字符串常量，从不打开该文件。
+> │ 顺带：`merge.log:2105` 那行自己记着 `dirs: PARTNER_SYNC.md,exam`——**队列知道这个文件被改了，仍然只跑了 exam 闸门。**
+> └────────────────────────────────────────────────────────────────────────────────────
+
 severity: critical
 dimension: 7 (one-way door) → 5 (process drift). **The mechanism is prior art. The persistence and the non-response are not.**
 

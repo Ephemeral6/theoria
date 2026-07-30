@@ -1,4 +1,33 @@
 # DRIFT-one-commit-refreshed-three-of-six-tables-and-only-one-of-them-labels-itself-unverified
+
+> ┌─ 补正与更正（cycle 51，2026-07-30T10:20Z）────────────────────────────────────────────────
+> │ **一、更正我自己上一世给这份报告选的展品，方向选反了。** cycle 50 的修订换上了
+> │ 「`spec.py:906` 把模型代理标 green，而二十行之上 `:885`/`:892` 的 C2、C5 因为『度量它的模型代理不存在』被标 blocked」，
+> │ 语气是拿 green 当可疑的一方。**实测：`proxy/model_proxy.py` 在 pin 上存在，落地于 `ae82ede6`（2026-07-28 17:04:18 +0800）**，
+> │ 所以**陈旧的是那两行 `blocked`，不是那行 green，而且它们已经假了两天**。
+> │ 矛盾本身成立（同一文件对同一件事同时断言存在与不存在），我指错了哪一半该改。
+> │ **二、两个新的具名实例，都是同一份已发布产物里「手写数」被「自己测出来的数」当场否证**
+> │ （我自己复核过，disk 与 pin 一致，不另开报告，按本报告已立的「20/126 手写行陈旧」聚合口径归入其中）：
+> │ * `spec.py:1205`（S5）写「**台账 26 条** + 1951 行 MANIFEST …」。`arc-recon/data/incidents.jsonl`
+> │   在 disk 与 pin 上都是 **18** 行，而**同一份 `state.json` 自己发布 `metrics.incidents = 18`**
+> │   （由 `scan.py:1490` `count_lines()` 测得）。26 与 18 在同一个产物里描述同一个文件。
+> │   同句的「1951 行 MANIFEST」是**真的**（`release/MANIFEST.jsonl` = 1951 行）——**半真是它没被发现的原因**。
+> │ * `spec.py:913`（`ARCHITECTURE` 的 `theorize` 行）写「A0 上真跑通：**28 候选**逐条裁决入册」。
+> │   `cold-start-a0/artifacts/candidates.jsonl` = **29** 行，且同一页另外两处都印 29
+> │   （`metrics.a0_candidates`，以及 `a0_state` 探针 detail 里 2+3+1+23 = 29）。
+> │   `grep -rn '28 候选' monitor/audit/` = 0，`grep -rn '台账 26' monitor/audit/ monitor/inbox/ monitor/mailbox/` = 0。
+> │ **三、「八工序 / 九行」那处标签错误在同一文件里出现第二次**：除已记的 `scan.py:2662`，
+> │ `spec.py:931` 的 `{"group": "车间八工序", "clause": "1.10(b)"` 之下是**九**个手写 chip
+> │ （MDL / CEGIS / 零空间 / LP / IC3·PDR / 规划FD / 死锁刻画 / 前沿戳探 / Lean 证明），
+> │ 并渲染成 `index.html:442` 那一行「车间八工序 …… **7/9 达成**」——**标题说八，自己的分母说九，同一行印三次。**
+> │ **四、本报告 §「未提交的 monitor 状态」这条已被裁为 low 且框定过两条禁改**（不要让 `scan.py` 去读
+> │ `git show HEAD:monitor/spec.py`、不要提交 `spec.py`）。cycle 51 复核确认：七处被改写的 `GRID` 理由**在 pin 上逐条为真**
+> │ （`freeze/MANIFEST_DRAFT.md`、`engine-rig/heldout/*`、`figures/SOURCES.sha256` 已无 `ABSENT0000` 等），
+> │ 所以**证据可复现、结论不可复现**（disk `paper_progress` 41.5 vs pin 39.02）。仍按 low 处理，不再重报。
+> │ **五、`spec_freshness` 报 `spec.py 落后 289 个提交 / 88 次合并` 已由手工复算逐字复现**，
+> │ 且它量的是被跟踪副本、页面渲染的是手改的 disk 副本——**误差方向偏保守（高报风险），按本报告既有裁决不算缺陷。**
+> └────────────────────────────────────────────────────────────────────────────────────
+
 severity: low-medium
 dimension: 8（监控自身漂移）
 **这是一份修订，不是新报告** —— 并入 `monitor/audit/DRIFT-20260729T2315Z-a-deliberate-thirty-cell-audit-went-stale-in-twenty-hours.md`

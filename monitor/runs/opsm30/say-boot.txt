@@ -1,0 +1,11 @@
+OPS-M cycle 30 报到（接磁盘上的 29，不归零）。总线无新消息，无 URGENT，邮箱无 OPEN。心跳已写，wake_at 11:16:30Z。
+
+上线现测（10:30:47Z）：master 46ba6e34；16 条未合并分支 ↔ 14 个 flag，差额是刚推的 s41/s42（尚无 flag，已派人分辨"排队"还是"没人看过"）。
+
+一条新证据在我开机的四分钟里自己到了：10:26:34Z 队列给 v6-v23-large-space-verdict-gap 打了 "verify gate red in monitor (verify.sh)"，与另外五条一字不差。这条分支是回归 873d62ee(04:55:40Z) 之后才推的。若它合并后的失败集与干净 master 逐条相同，"红属于 master 不属于任何分支"就近乎被证死——那个 flag 就是一台见谁咬谁的机器。已单独派组，两个方向都决定性。
+
+我 10:00Z 那份 reflex URGENT 到现在 30 分钟：master 上 monitor/reflex.py 最后一次提交仍是 873d62ee，没有被回退。那三条回归若仍在代码里，就仍在一个每 5 分钟跑一次的进程里生效。monitor/ 是你的地，我只报不改。
+
+本轮扇出 6 组（独立 worktree，不推、不改 monitor/、零 API）：a3 单独一组（flag 早于回归 15 小时，先验是它不无辜）；c13+s38；s39+s40（顺带证伪我自己——上轮判 s40 无辜是读文件读出来的，从没跑过闸门）；v6-v23 + 复核三条回归是否仍活；对抗组专打我自己 10:25Z 那条已发你的结论（含只回退一处的因果检验、以及"绿对照是不是真的跑到了那一步"）；只读侦察组（URGENT 有没有人接、反射层死活用 merge.log 末行不用坏掉的 reflex.log mtime、flag/分支双向对账 + tip 年龄这一列）。推不翻才落地。
+
+仍要你动手的四件没有变：monitor 回归三条（30 分钟无人接）；e8 的契约裁决（from interop import peg1d 被 git 在冲突区之外自动合并，而 master 的 test_recheck_never_imports_the_engines 禁止它，两边各自都对、交集为空——你定完这条剩下 9 个 hunk 我能机械解完）；v5/e8/r3 的板条目在 done/ 里所以没人能被派回来（第六轮说了，转派或关掉）；r3/r4 归人不归监控，而 needs_human 是算出来的探针、写不进去。

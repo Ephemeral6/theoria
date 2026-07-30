@@ -1,0 +1,22 @@
+{
+  "label": "a3-merged",
+  "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm30-adv-a3",
+  "utc": "2026-07-30T11:04:24Z",
+  "head": "20a7abab3d4f584805a3a267de8a9f687846413d",
+  "via": "ci_merge.gate_for + ci_merge.sh + gates.gate_env",
+  "territories": {
+    "theoria-arm": {
+      "kind": "verify",
+      "name": "verify.py",
+      "why": "the territory ships its own completion gate; no negative sample declared, so nothing has shown it can go red",
+      "cmd": [
+        "D:\\Miniforge3\\python.exe",
+        "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm30-adv-a3\\theoria-arm\\verify.py"
+      ],
+      "secs": 405.2,
+      "returncode": 0,
+      "verdict": "GREEN",
+      "tail": "[1/3] suite\n   ok    271 tests collected, suite green\n[2/3] one real run -- the whole arm, offline against proxy/mock\n   ok    game g50t-5849a774, budget 6 actions, no key, no network\n[3/3] artefact self-check\n   ok    11 ledger records (7 env_steps), 14 run files, all 17 manifest fields, sealing clean, dev pile only\n\ntheoria-arm: green -- suite, one offline run, artefact fields\n"
+    }
+  }
+}
