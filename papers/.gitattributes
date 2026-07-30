@@ -1,0 +1,10 @@
+# Pin LF for the territory root, for the same reason phase1-workshop already
+# does one directory down.
+#
+# S34 added the first tracked files at this level -- `verify.py`'s negative
+# sample and a `runs/` tree -- and they were outside that file's reach. A gate
+# and the tests that prove it can go red are exactly the files whose bytes
+# must not depend on whose `core.autocrlf` checked them out.
+* text eol=lf
+*.png binary
+*.pdf binary
