@@ -2,14 +2,14 @@
 """监控与 App 会话之间的消息总线 —— 可确认送达、可配对回复、可打断。
 
 监控侧：
-    python monitor/bus.py send RES-1 order "把 A3 战役推进到第二关"
-    python monitor/bus.py send RES-1 urgent "立刻停手，配额要满了"
-    python monitor/bus.py status                # 谁读到哪了、谁欠我回复
+    python -m fleetkit bus send RES-1 order "把 A3 战役推进到第二关"
+    python -m fleetkit bus send RES-1 urgent "立刻停手，配额要满了"
+    python -m fleetkit bus status                # 谁读到哪了、谁欠我回复
 
 会话侧（写进契约，每个循环都跑）：
-    python monitor/bus.py read RES-1            # 取未读；有 urgent 会置顶
-    python monitor/bus.py ack RES-1 7 "已照办：分支 agent/xxx 已 push"
-    python monitor/bus.py say RES-1 "板上这条的前提已被树推翻，建议作废"
+    python -m fleetkit bus read RES-1            # 取未读；有 urgent 会置顶
+    python -m fleetkit bus ack RES-1 7 "已照办：分支 agent/xxx 已 push"
+    python -m fleetkit bus say RES-1 "板上这条的前提已被树推翻，建议作废"
 
 为什么不是原来的 markdown 邮箱：邮箱只能追加，我无法知道它**读没读**，
 也无法把一条回复对上一条指令。总线用三个文件解决：
@@ -141,7 +141,10 @@ def cmd_status(agent=None):
         print("%-6s 已发 %2d · 已读到 #%-2d · 欠回执 %s · 上报 %d 条 · %s%s"
               % (a, len(rows), last, owed or "无", len(outs),
                  ("%d 分钟前露面" % seen) if seen is not None else "从未读取",
-                 "  ⚠URGENT 未取" if os.path.exists(urgent) else ""))
+                 # U+26A0 是 GBK 编不出来的字符，而这行是给 cp936 控制台印的：
+                 # 只要有一个 URGENT 没取，status 就会以 UnicodeEncodeError
+                 # 死在半路——正好死在最需要它说话的时候。
+                 "  URGENT 未取" if os.path.exists(urgent) else ""))
     return 0
 
 

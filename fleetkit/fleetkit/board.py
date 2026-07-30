@@ -1,9 +1,10 @@
 """The work board: agents claim their own work, no per-item dispatch.
 
-    python monitor/board.py list                  # what is available / claimed
-    python monitor/board.py claim <worker-id>     # atomically take the top item
-    python monitor/board.py done <id> <worker>    # mark delivered
-    python monitor/board.py release <id> <worker> # give it back (with reason)
+    python -m fleetkit board list                  # what is available / claimed
+    python -m fleetkit board claim <worker-id>     # atomically take the top item
+    python -m fleetkit board done <id> <worker>    # mark delivered
+    python -m fleetkit board release <id> <worker> # give it back (with reason)
+    python -m fleetkit board sweep [--dry-run]     # free dead workers' claims
 
 Why a board: one-shot sessions cost a launch per item and go stale between
 items. A long-lived worker claims an item, delivers it, and claims the next —
@@ -19,6 +20,22 @@ Item front matter (first lines of each item file):
     cell: A3            (map coordinate — the grid cell it lights up)
     territory: proxy    (the only dir it may write; conflict guard)
     deps: C1-worldgen   (comma-separated ids that must be done first)
+    lane: infra         (optional label; see "lanes are worker-side" below)
+
+## Lanes are a worker-side filter, not an item-side reservation (S42)
+
+`--lane X` narrows what a worker may take to items labelled `lane: X`. It can
+only ever *narrow*: there is no lane a worker can name that lets it take
+something a plain `claim` could not. Every lane-tagged item is therefore listed
+by `list` and claimable by a plain `claim`, exactly like an untagged one.
+
+This is a deliberate reversal of an earlier design in which a lane was owned by
+a named standing agent and its items were withheld from everybody else. That
+design needs a lane→owner map; `FleetConfig.lanes` is a `List[str]` and cannot
+express one, and no such map was ever built. The result was a board on which a
+`lane:` item appeared in no section of `list` and had no exit. Rather than
+grow the config schema for a reservation nobody asked for, the reservation is
+gone. If your fleet needs lane ownership, it needs a lane→owner source first.
 """
 
 import os
@@ -28,7 +45,6 @@ import time
 import locale
 
 _CONSOLE = locale.getpreferredencoding(False) or "utf-8"
-_PREFIX = ""
 
 from fleetkit import config as _config
 
@@ -43,15 +59,14 @@ DONE = os.path.join(BOARD, "done")
 LOG = os.path.join(BOARD, "board.log")
 OPS_STATUS = os.path.join(HERE, "ops-status")
 
-# 赛道的主人。赛道守卫存在的理由是「别让通用工人把某个常驻研究员的队列抽干」——
-# 那个理由只在主人还活着时成立。
-#: Filled from fleet.json at import; empty means "no lane has an owner",
-#: which is the correct behaviour for a fleet that has not declared any.
-LANE_OWNER = {}
-
-# 心跳阈值与判据的唯一出处（scan.py 的 self_driving 探针 import 这两个名字）。
-# **看 mtime，不看 agent 自己写进 json 的 utc**：RES-4 已实测那些时间戳全线漂前，
-# 一个自称的时刻可以把死会话说成活的，而文件被改写的时刻是机器观察到的事实。
+# 心跳阈值与判据的唯一出处。**看 mtime，不看 agent 自己写进 json 的 utc**：
+# RES-4 已实测那些时间戳全线漂前，一个自称的时刻可以把死会话说成活的，
+# 而文件被改写的时刻是机器观察到的事实。
+#
+# Nothing inside this module calls `heartbeat_age` since S42 removed lane
+# ownership. Both names are kept, and said so here rather than left to be
+# rediscovered: the unported launching half (`reflex`, `scan`) decides liveness
+# with exactly these two, and imports them from a board module by these names.
 STALE_MIN = 45
 
 for d in (ITEMS, CLAIMED, DONE):
@@ -66,19 +81,57 @@ def heartbeat_age(agent):
     return int((time.time() - os.path.getmtime(path)) / 60)
 
 
-def stale_lanes():
-    """主人已停摆的赛道——它们的活对通用工人开放。
+def config_root(start=None):
+    """Nearest directory at or above `start` holding `fleet.json`, else None.
 
-    这条规则是 2026-07-29 补的，起因是一次沉默的饿死：板上 21 件全部带赛道，
-    四个赛道主人死了三个，而 `list` 把带赛道的活一律不显示，于是它报
-    「available: (empty)」——三个刚起的通用工人一件也领不到，板却看起来是空的。
-    守卫本身没错，错在它把「主人在忙」和「主人已死」当成了同一件事。"""
-    out = set()
-    for lane, owner in LANE_OWNER.items():
-        age = heartbeat_age(owner)
-        if age is None or age > STALE_MIN:
-            out.add(lane)
-    return out
+    Searched rather than assumed, because the state tree and the repository
+    root are deliberately allowed to be different directories: `FLEET_HOME`
+    points at the tree (`<root>/.fleet` in the acceptance run) while
+    `fleet.json` belongs to the repository. `FLEET_ROOT` overrides the search.
+    """
+    bases = [start] if start else [os.environ.get("FLEET_ROOT"), HERE,
+                                   os.getcwd()]
+    for base in bases:
+        if not base:
+            continue
+        d = os.path.abspath(base)
+        while True:
+            if os.path.exists(os.path.join(d, _config.CONFIG_NAME)):
+                return d
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+    return None
+
+
+def task_prefix(start=None):
+    """The scheduled-task name prefix a live worker runs under.
+
+    This is the value `cmd_sweep` matches process names against, and it is
+    read from `fleet.json` **at the point of use** -- there is deliberately no
+    module-level default. A default here is the trap `KNOWN_TRAPS.md` entry 1
+    describes: a prefix that matches nothing makes every worker read as dead,
+    the board frees claims that are still being worked, and the reflex layer
+    launches replacements on top of live sessions. `config.validate` refuses an
+    empty `task_prefix` for exactly this reason, and until S42 this module
+    never read config at all -- it shipped `_PREFIX = ""` and the validation
+    guarded a copy no code opened.
+
+    Raises `ConfigError` when there is no config to read it from. Not knowing
+    is a third answer and the caller has to handle it; `cmd_sweep` refuses to
+    sweep rather than treating silence as death.
+    """
+    root = config_root(start)
+    if root is None:
+        raise _config.ConfigError(
+            "no %s found at or above %s. Worker liveness is decided by "
+            "matching scheduled-task names against task_prefix, so without it "
+            "this board cannot tell a live worker from a dead one. Run "
+            "`python -m fleetkit init --prefix <YourFleet->` in the repository "
+            "root, or set FLEET_ROOT to the directory holding %s."
+            % (_config.CONFIG_NAME, HERE, _config.CONFIG_NAME))
+    return _config.load(root).task_prefix
 
 
 def utc():
@@ -132,9 +185,15 @@ def territories_busy():
 
 
 def candidates(lane=None):
+    """Claimable items, best first. `lane` narrows; it never widens.
+
+    Passing `lane=X` restricts the result to items labelled `lane: X` -- it is
+    the worker saying what it is willing to take. There is no value of `lane`
+    that adds an item a plain `candidates()` would not return, which is what
+    makes a self-asserted `--lane` harmless.
+    """
     ready = done_ids()
     busy = territories_busy()
-    stale = stale_lanes()
     out = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -150,22 +209,16 @@ def candidates(lane=None):
             continue                        # standing researchers stay in lane
         if lane and not m.get("lane"):
             continue                        # unlaned items are for generic workers
-        # 花真钱的活不随赛道解封一起下放。赛道守卫此前**顺带**挡住了它——
-        # 章程写的是「只有 RES-1 能花 API 钱」，而那条规矩一直是靠 campaign
-        # 赛道有主在执行的。我把赛道解封之后，那层顺带的保护就没了：
-        # 一个一次性工人可以领走一件在真 API 上打的战役（2026-07-29 当场发生）。
-        # 现在要监控在条目里显式写 `generic_ok: yes` 才放行——花钱得是有人拍板，
-        # 不是某道无关的闸门碰巧还没坏。
-        if (not lane and m.get("spend") == "api"
+        # 花真钱的活要监控在条目里显式写 `generic_ok: yes` 才放行——花钱得是
+        # 有人拍板，不是某道无关的闸门碰巧还没坏。
+        #
+        # **这道闸不看 lane**（S42）。它以前写成 `not lane and ...`，也就是说
+        # 工人自己在命令行上说一句 `--lane campaign` 就能绕过去；那是把「工人
+        # 自报的身份」当成了授权。lane 现在只能收窄，所以这里也不能因为工人
+        # 报了个 lane 就放宽。
+        if (m.get("spend") == "api"
                 and m.get("generic_ok", "").lower() not in ("yes", "true")):
             continue
-        if not lane and m.get("lane") and m["lane"] not in stale:
-            continue                        # laned items belong to their standing
-                                            # researcher; a generic worker must
-                                            # not strip a lane bare (monitor,
-                                            # 2026-07-28: the guard was one-sided).
-                                            # 主人停摆超 STALE_MIN 则赛道解封——
-                                            # 守卫护的是活人的队列，不是死人的。
         out.append((m["priority"], iid, f, m))
     try:
         sys.path.insert(0, HERE)
@@ -186,44 +239,46 @@ def candidates(lane=None):
 
 
 def cmd_list():
-    stale = stale_lanes()
-    generic = candidates()
-    generic_ids = {iid for _p, iid, _f, _m in generic}
-    print("=== available (通用工人可领 %d) ===" % len(generic))
-    for pri, iid, _f, m in generic:
+    available = candidates()
+    listed = {iid for _p, iid, _f, _m in available}
+    print("=== available (可领 %d) ===" % len(available))
+    for pri, iid, _f, m in available:
         tag = ("lane:" + m["lane"]) if m.get("lane") else "unlaned"
-        if m.get("lane") in stale:
-            tag += "（主人停摆，已解封）"
         print("  p%d  %-28s cell=%-3s territory=%-14s %s"
               % (pri, iid, m["cell"], m["territory"], tag))
-    # 赛道守卫会把有主的活挡在 candidates() 之外。**它们仍然是活。**
-    # 只印 available 的旧写法让「板上没活」和「活全都有主」长得一模一样，
-    # 而这两件事该派的人完全不同。
-    reserved = []
-    for lane in sorted(LANE_OWNER):
-        for pri, iid, _f, m in candidates(lane):
-            if iid not in generic_ids:
-                reserved.append((pri, iid, lane, LANE_OWNER[lane], m))
-    if reserved:
-        print("=== reserved（有主，等其赛道研究员来领 %d） ===" % len(reserved))
-        for pri, iid, lane, owner, m in sorted(reserved):
-            age = heartbeat_age(owner)
-            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
-                  % (pri, iid, lane, owner,
-                     "未启动" if age is None else "%d分钟前" % age,
-                     m["territory"]))
-    blocked = []
+    # 每一件 items/ 里的活都必须出现在某一段。**不可领没问题，不可领又不出现
+    # 才是问题**：S28 那次板上 11 件、8 件在输出里一个字都没有，看起来就是空板。
+    # 所以这里不再逐条列举「已知的排除理由」，而是反过来数：凡是不在 available
+    # 里的，都必须被这段说出来，说不出理由就印「原因不明」——那是个 bug 报告，
+    # 不是沉默。
+    ready = done_ids()
+    busy = territories_busy()
+    blocked, withheld = [], []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
             continue
+        iid = item_id(f)
+        if iid in listed:
+            continue
         m = meta(os.path.join(ITEMS, f))
-        pend = [d for d in m["deps"] if d not in done_ids()]
+        pend = [d for d in m["deps"] if d not in ready]
         if pend:
-            blocked.append((item_id(f), pend))
+            blocked.append((iid, pend))
+        elif m["territory"] in busy:
+            withheld.append((iid, "territory %s 正被 %s 占着"
+                             % (m["territory"], busy[m["territory"]])))
+        elif m.get("spend") == "api":
+            withheld.append((iid, "spend: api，条目上没有 generic_ok: yes"))
+        else:
+            withheld.append((iid, "原因不明——这是 board 的 bug，请报告"))
     if blocked:
         print("=== blocked ===")
         for iid, pend in blocked:
             print("  %-28s waits on %s" % (iid, ",".join(pend)))
+    if withheld:
+        print("=== withheld（在板上但现在领不走 %d） ===" % len(withheld))
+        for iid, why in withheld:
+            print("  %-28s %s" % (iid, why))
     cm = claimed_map()
     if cm:
         print("=== claimed ===")
@@ -308,18 +363,36 @@ def cmd_sweep(dry=False):
     一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
     领地被锁，新工人领不到活。判据保守——只清 W-* 前缀（一次性工人）且其
     计划任务已不在运行的；App/常驻会话（APP-*/RES-*）一律不动，它们的存活
-    从任务表看不出来。"""
+    从任务表看不出来。
+
+    **不知道 != 死了。** 前缀读不到（没有 fleet.json）就拒绝扫，退出 3。
+    在 S42 之前这里读的是一个从未被赋值的模块变量 `_PREFIX = ""`，于是存活
+    判据恒假、`live` 恒空、每一条 W-* 认领都被判成孤儿——包括正在跑的那些。
+    那正是 KNOWN_TRAPS.md 第 1 条，潜伏在 ship 出那份警告的包自己身上。
+    """
     import subprocess
+    try:
+        prefix = task_prefix()
+    except _config.ConfigError as exc:
+        print("SWEEP-REFUSED 读不到 task_prefix，不扫——分不清死活时释放认领，"
+              "就是把还在跑的工人的活抢走。")
+        print("SWEEP-REFUSED %s" % exc)
+        return 3
     out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
                          capture_output=True)
+    if out.returncode != 0:
+        # 查不到任务表也是「不知道」。以前这里没有分支，一个失败的查询会得到
+        # 空 stdout，跟「一个工人都没在跑」长得一模一样。
+        print("SWEEP-REFUSED schtasks 查询失败（exit %d），不扫。" % out.returncode)
+        return 3
     # schtasks is a Windows console tool and emits the console code page, NOT
     # utf-8. Decoding it as utf-8 is how live workers get reported dead.
     text = out.stdout.decode(_CONSOLE, "replace")
     live = set()
     for line in text.splitlines():
         cols = [c.strip('"') for c in line.split('","')]
-        if len(cols) >= 3 and _PREFIX and _PREFIX in cols[0]:
-            name = cols[0].strip('"').lstrip("\\").replace(_PREFIX, "")
+        if len(cols) >= 3 and prefix in cols[0]:
+            name = cols[0].strip('"').lstrip("\\").replace(prefix, "")
             if cols[2].strip('"') in ("Running", "正在运行"):
                 live.add(name)
     freed = []

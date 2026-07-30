@@ -14,8 +14,23 @@ Three rungs, and the territory is finished only if all three are green:
 Rung 2 is the whole point. A coordination kit that has only ever been exercised
 inside the repository that grew it has not been shown to be repository-agnostic
 at all -- and being repository-agnostic is its entire claim. So the gate builds
-a fresh `git init` somewhere in a tempdir, writes a config for it, and drives
-the real `python -m fleetkit.board` CLI as subprocesses.
+a fresh `git init` somewhere in a tempdir and drives the documented CLI --
+`python -m fleetkit init`, then `python -m fleetkit board ...` -- as
+subprocesses.
+
+## It goes in by the front door (S42)
+
+Until S42 this rung called `config.write_default()` in-process, and rung 3
+checked the `task_prefix` in the file that produced. Both passed for a year of
+runs during which `python -m fleetkit init --prefix ...` -- the first line of
+the README and of `__init__.py` -- died with `No module named
+fleetkit.__main__`, because that module did not exist; and during which
+`board.py` never read `task_prefix` at all, shipping `_PREFIX = ""` instead, so
+its sweep judged every worker dead. A gate that reaches around the entry point
+cannot see the entry point break, and a gate that reads a config value the code
+never opens is checking a copy. So: every command this gate runs is a command a
+document tells a user to type, and rung 3 asks the board itself what prefix it
+would sweep with.
 
 ## The substitution, stated rather than glossed
 
@@ -118,8 +133,22 @@ def rung_fresh_fleet(problems, scratch):
 
     sys.path.insert(0, HERE)
     from fleetkit import config
-    config.write_default(root, task_prefix="GateProbe-",
-                         territories=["src", "docs"])
+
+    # The documented first command, run as documented. Not config.write_default:
+    # that call is how this gate stayed green while `python -m fleetkit init`
+    # raised `No module named fleetkit.__main__` for every user who typed it.
+    r = sh([sys.executable, "-m", "fleetkit", "init", "--prefix", "GateProbe-",
+            "--territories", "src,docs"], cwd=root, env={"PYTHONPATH": HERE})
+    if r.returncode != 0:
+        fail(problems, "the documented entry point `python -m fleetkit init "
+                       "--prefix GateProbe-` failed (exit %d): %s"
+             % (r.returncode, (r.stdout + r.stderr)[-800:]))
+        return None
+    if not os.path.exists(os.path.join(root, config.CONFIG_NAME)):
+        fail(problems, "`python -m fleetkit init` exited 0 and wrote no %s -- "
+                       "exit codes are not artefacts (KNOWN_TRAPS.md)"
+             % config.CONFIG_NAME)
+        return None
 
     home = os.path.join(root, ".fleet")
     items = os.path.join(home, "board", "items")
@@ -131,9 +160,26 @@ def rung_fresh_fleet(problems, scratch):
                      % (terr, iid))
 
     env = {"FLEET_HOME": home, "PYTHONPATH": HERE}
+
+    # `python -m fleetkit board list`, README line 14. Every item on the board
+    # must be named by it: unclaimable is fine, unclaimable and unmentioned is
+    # the S28 incident (11 items, 8 mentioned nowhere, board looked empty).
+    r = sh([sys.executable, "-m", "fleetkit", "board", "list"], cwd=home,
+           env=env)
+    if r.returncode != 0:
+        fail(problems, "`python -m fleetkit board list` failed (exit %d): %s"
+             % (r.returncode, (r.stdout + r.stderr)[-800:]))
+        return None
+    unlisted = [i for i in ("T1-first", "T2-second") if i not in r.stdout]
+    if unlisted:
+        fail(problems, "`board list` names neither section nor reason for %s -- "
+                       "an item nobody can see is an item nobody can rescue"
+             % ", ".join(unlisted))
+        return None
+
     taken = []
     for worker in ("W-1", "W-2"):
-        r = sh([sys.executable, "-m", "fleetkit.board", "claim", worker],
+        r = sh([sys.executable, "-m", "fleetkit", "board", "claim", worker],
                cwd=home, env=env)
         if r.returncode != 0 or "CLAIM" not in r.stdout:
             fail(problems, "%s could not claim anything (exit %d): %s"
@@ -142,14 +188,16 @@ def rung_fresh_fleet(problems, scratch):
         taken.append((r.stdout.splitlines()[0].split()[1], worker))
 
     for iid, worker in taken:
-        r = sh([sys.executable, "-m", "fleetkit.board", "done", iid, worker],
+        r = sh([sys.executable, "-m", "fleetkit", "board", "done", iid, worker],
                cwd=home, env=env)
         if r.returncode != 0:
             fail(problems, "%s could not deliver %s: %s"
                  % (worker, iid, (r.stdout + r.stderr)[-500:]))
             return None
 
-    print("   ok    two workers claimed and delivered %d item(s)" % len(taken))
+    print("   ok    two workers claimed and delivered %d item(s), through "
+          "`python -m fleetkit init` and `python -m fleetkit board`"
+          % len(taken))
     print("   note  the workers are PROCESSES, not language models. Everything "
           "the kit owns ran for real; what is simulated is the judgement "
           "inside a worker, which fleetkit does not supply.")
@@ -173,6 +221,24 @@ def rung_artefacts(problems, fleet):
         fail(problems, "task_prefix is empty -- liveness is decided by matching "
                        "process names against it, so an empty prefix reports "
                        "every worker dead")
+        return
+
+    # Ask the BOARD what it would sweep with, not the file. Until S42 these
+    # were different values: the file said "GateProbe-" and this check passed
+    # while board.py used a module literal `_PREFIX = ""` it never assigned, so
+    # its sweep judged every worker dead and freed live claims. Checking a copy
+    # the code does not read is not checking.
+    r = sh([sys.executable, "-c",
+            "from fleetkit import board; print(board.task_prefix())"],
+           cwd=fleet["home"],
+           env={"FLEET_HOME": fleet["home"], "PYTHONPATH": HERE})
+    seen = (r.stdout or "").strip()
+    if r.returncode != 0 or seen != data["task_prefix"]:
+        fail(problems, "the board would sweep with %r while %s says %r "
+                       "(exit %d) -- a prefix the sweep does not actually use "
+                       "is KNOWN_TRAPS.md entry 1 waiting to happen: %s"
+             % (seen, config.CONFIG_NAME, data["task_prefix"], r.returncode,
+                (r.stdout + r.stderr)[-500:]))
         return
 
     board = os.path.join(fleet["home"], "board")
@@ -205,9 +271,10 @@ def rung_artefacts(problems, fleet):
                 MIN_LOG_LINES, MIN_WORKERS, MIN_ITEMS))
         return
 
-    print("   ok    config carries all %d required keys; %d delivered, 0 still "
-          "claimed; log has %d CLAIM and %d DONE"
-          % (len(REQUIRED_CONFIG), len(done), len(claims), len(dones)))
+    print("   ok    config carries all %d required keys; the board sweeps with "
+          "the prefix the config names (%s); %d delivered, 0 still claimed; "
+          "log has %d CLAIM and %d DONE"
+          % (len(REQUIRED_CONFIG), seen, len(done), len(claims), len(dones)))
 
 
 def unported_note():

@@ -1,0 +1,28 @@
+{
+  "prompt_id": "S42-S42-fleetkit-three-lies",
+  "branch": "agent/s42-fleetkit-three-lies",
+  "base_commit": "7972a075778a367f6260adfa6f0a4691999b4f5b",
+  "utc": "2026-07-30T10:12:32Z",
+  "territory": "fleetkit",
+  "author": "RES-4",
+  "depends_on": {
+    "S40": {
+      "branch": "agent/s40-fleetkit",
+      "commit": "9ca9278a1637ae6f41a3e02fc05637fc2f5ed870",
+      "evidence": "monitor/runs/20260730T0625Z-S40/FINDINGS.md",
+      "note": "S40 is not on master. monitor/tests/test_fleetkit_drift.py was taken from that commit and amended here, so whichever of the two branches lands second must take this copy."
+    }
+  },
+  "files": [
+    "fleetkit/fleetkit/board.py",
+    "fleetkit/fleetkit/__main__.py",
+    "fleetkit/fleetkit/__init__.py",
+    "fleetkit/fleetkit/bus.py",
+    "fleetkit/verify.py",
+    "fleetkit/README.md",
+    "fleetkit/tests/test_sweep_does_not_free_live_claims.py",
+    "fleetkit/tests/test_lane_items_are_reachable.py",
+    "fleetkit/tests/test_documented_entry_point.py",
+    "monitor/tests/test_fleetkit_drift.py"
+  ]
+}

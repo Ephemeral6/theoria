@@ -15,4 +15,7 @@ real outage.
 """
 
 __all__ = ["config", "board", "bus"]
-__version__ = "0.1.0"
+#: Bumped by S42: `python -m fleetkit` now exists (it never did), `cmd_sweep`
+#: reads task_prefix from fleet.json instead of an unassigned `_PREFIX = ""`,
+#: and lane *ownership* -- which no data source could supply -- is gone.
+__version__ = "0.2.0"
