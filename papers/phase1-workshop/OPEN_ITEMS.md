@@ -7,9 +7,27 @@ them. This file is the derived checklist, so that "kept unedited" does not becom
 
 **Provenance of this list.** REVIEW.md was written against a `PAPER.md` of
 75,885 bytes; CITECHECK.md against one of 91,244; and this pass added §6, §8 and
-§9 on top of both. Neither audit has seen the current draft, and neither carries
-a date — only mtimes. **CITECHECK is the later of the two and is the review of
-record; REVIEW is the prior pass.** A third pass is owed and is item A1 below.
+§9 on top of both. Neither of those two audits has seen the current draft.
+
+**Superseded 2026-07-30 (P18), and one sentence of it was wrong.** This
+paragraph used to end "**CITECHECK is the later of the two and is the review of
+record; REVIEW is the prior pass**", ordered by mtime because neither report
+carried a date. `runs/20260730T000000Z-P18-audits-cover-half/delta-old-vs-new.md`
+disproves it in its own words: the two are not successive passes over the same
+text, they audit different byte counts of a paper that grew between them, so
+neither is "the review of record" over the other. The correction is written here
+rather than substituted, because an ordering claim asserted from file mtimes is
+the same defect this file is a list of.
+
+Both are now **retired**: `REVIEW-2026-07-30.md` and `CITECHECK-2026-07-30.md`
+are binding on the whole current text, each stamped with the sha256, line count
+and byte count it audited, and `verify_paper.py`'s **G AUDITSTAMP** goes red if
+a binding stamp stops matching. The third pass this file called item A1 is
+therefore done; what it found is not yet folded into the list below, which is
+**26 reconciliation rows and 13 new REVIEW findings short** — those live in
+`delta-old-vs-new.md` under "The eleven still-open findings, ranked by what they
+cost" and in `REVIEW-2026-07-30.md`'s summary table until a pass with the
+authority to edit `sections/` brings them across.
 
 Verified-fixed items are struck from the list rather than repeated: of REVIEW's
 six `[BLOCKING]` issues, four were closed by commit `080f05d` and confirmed still

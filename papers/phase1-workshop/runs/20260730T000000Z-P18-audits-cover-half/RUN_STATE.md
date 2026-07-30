@@ -171,7 +171,7 @@ Closing it means citing or re-wording paper body text, which `monitor/CHARTER.md
 reserves to RES-2. Handed over rather than applied — the same boundary this run
 already recorded for the referee pass's 13 findings.
 
-### `test_locator_gate.py` — new, 11 cases
+### `test_locator_gate.py` — new, 15 cases
 
 The mechanism shipped with no test; the agent that wrote it died before running
 one. Controls for both shapes that actually occurred (locator points at the wrong
@@ -199,7 +199,9 @@ and by default. "Four lines above" became fifteen when the paragraph above grew,
 while the block it meant never moved — which is why locators here are
 block-relative now.
 
-**Suite: 270 passed, 1 xfailed** (259 + 11).
+**Suite: 274 passed, 1 xfailed** (259 + 15).
+
+(This read "270 passed, 1 xfailed (259 + 11)" and both numbers were wrong in the same direction: `test_locator_gate.py` collects **15**, not 11 -- 14 `def test_`, the last of them (`test_every_shipped_ruling_states_a_true_locator`) parametrised over `ADJUDICATED_UNCITED` and `ADJUDICATED_BARE` -- and the suite is 274. The heading above said 11 too, and so did the PARTNER_SYNC paragraph and the cycle-105 heartbeat. One miscount, published four times, in a run whose subject is audits that no longer match what they audited. The closing line further down this file already said 274; a document disagreeing with itself about its own test count is the cheapest possible instance of the thing this run is about, and it survived because nothing recomputed it.)
 
 ### The §8.4 evidence check, and the gate that does not exist
 

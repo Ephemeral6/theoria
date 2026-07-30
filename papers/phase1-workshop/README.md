@@ -21,8 +21,9 @@ placeholders; figures are data first and styling later.
 | `figures/*.py` | figure **data** extractors, deterministic |
 | `figures/data/*.json` | extracted payloads |
 | `figures/*.txt` | plain-text renderings, for reading before anything is styled |
-| `REVIEW.md` | an adversarial reviewer pass over the draft |
-| `CITECHECK.md` | a mechanical path/number/quote audit of the draft |
+| `REVIEW-2026-07-30.md` | **the live** adversarial reviewer pass — binding on the whole current `PAPER.md` |
+| `CITECHECK-2026-07-30.md` | **the live** mechanical path/number/quote audit — an index over five slice files under `runs/` |
+| `REVIEW.md`, `CITECHECK.md` | **retired.** Both are pinned to a `PAPER.md` of 75,885 bytes, which is 31.9% of the current text; both carry `status: stale` and a `superseded_by` in their own stamp |
 | `runs/` | the run archive for this piece of work |
 
 ## Rebuild
@@ -43,8 +44,14 @@ check a figure rather than trust it.
 ## The rules this draft is held to
 
 1. **Every number points at a file in this tree**, cited by repo-relative path.
-   `CITECHECK.md` is the mechanical test of that rule; its findings are not
-   hidden.
+   `CITECHECK-2026-07-30.md` is the mechanical test of that rule; its findings
+   are not hidden. Each audit report opens with an ```` ```audit-stamp ````
+   block naming the sha256, line count and byte count of what it audited, and
+   `verify_paper.py`'s check **G AUDITSTAMP** goes red when a report calling
+   itself `binding` no longer covers the current text. Two audits sitting in
+   this directory describing themselves in the present tense while pinned to a
+   third of it is what that gate exists to stop, and it is what this table said
+   until 2026-07-30.
 2. **No experiment, no "we show".** Anything not run is a limitation or is
    absent. This paper reports no play, no baseline comparison, and no claim from
    the Phase 3 claim menu.
