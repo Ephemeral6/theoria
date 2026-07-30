@@ -67,6 +67,8 @@ def repo(tmp_path):
     (r / "monitor" / "bus" / "RES-4" / "out.jsonl").write_text("", encoding="utf-8")
     (r / "monitor" / "board.log").write_text("", encoding="utf-8")
     (r / "monitor" / "state.json").write_text("{}\n", encoding="utf-8")
+    (r / "monitor" / "res").mkdir()
+    (r / "monitor" / "res" / "RES-4.md").write_text("contract\n", encoding="utf-8")
     # The guard itself, so the installed hook can find it the way it does in
     # the real tree. Copied rather than imported: the hook shells out to
     # `$(git rev-parse --show-toplevel)/monitor/master_tree_guard.py`, and a
@@ -178,19 +180,57 @@ def test_a_full_normal_cycle_stays_green(repo):
 
 
 # --------------------------------------------------------------------------
-# Tier 3: untracked outside fleet state is AMBER, reported but not a gate.
+# Tier 3: untracked outside fleet state. Reported separately, gates the same.
 # --------------------------------------------------------------------------
 
 
-def test_untracked_scratch_is_amber_not_red(repo):
+def test_untracked_scratch_gates(repo):
+    """The first version made this amber and exit 0, and THIS TEST asserted it
+    -- codifying the implementation's behaviour as the requirement. An
+    adversarial review showed the cost: the S38 incident was "scan.py plus two
+    new files", and new files are untracked, so the gate exempted most of the
+    incident it was built for."""
     (repo / "scratchpad").mkdir()
     (repo / "scratchpad" / "notes.md").write_text("x\n", encoding="utf-8")
 
     result = g.report(str(repo))
 
-    assert result["red"] is False
+    assert result["red"] is True
     assert result["unfiled"] == 1
     assert result["unfiled_paths"][0]["verdict"] == g.VERDICT_UNFILED
+    assert g.main(["-C", str(repo)]) == 2
+
+
+def test_brand_new_files_on_the_shared_tree_gate(repo):
+    """The S38 shape exactly: an edit PLUS two new files. Replayed against the
+    first version -- with S39's own deliverables as the new files -- this
+    scored red=False, miswrites=0, exit 0."""
+    (repo / "monitor" / "scan.py").write_text("# edited\n", encoding="utf-8")
+    (repo / "monitor" / "newguard.py").write_text("# new\n", encoding="utf-8")
+    (repo / "monitor" / "newguard_notes.md").write_text("# new\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is True
+    assert result["miswrites"] == 1, "the edit to a tracked file"
+    assert result["unfiled"] == 2, "the two new files -- untracked, still gating"
+    assert g.main(["-C", str(repo)]) == 2
+
+
+def test_code_dropped_into_a_whitelisted_directory_is_red(repo):
+    """A bare `startswith` whitelist let a whitelisted directory launder source:
+    `monitor/board/helper.py` classified as fleet state and was reported at no
+    tier at all. Found by an adversarial review."""
+    for rel in ("monitor/board/helper.py", "monitor/ci/patcher.py",
+                "monitor/audit/drift_tool.py"):
+        (repo / rel).parent.mkdir(parents=True, exist_ok=True)
+        (repo / rel).write_text("# code\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is True
+    assert result["fleet_state"] == 0
+    assert result["unfiled"] == 3
 
 
 def test_amber_and_red_are_counted_separately(repo):
@@ -258,6 +298,86 @@ def test_a_tracked_log_in_a_subdirectory_is_red(repo):
     assert [e["path"] for e in result["miswrite_paths"]] == ["monitor/engine/run.log"]
 
 
+def test_a_researcher_contract_is_fleet_state_but_a_notes_dir_under_it_is_not(repo):
+    """`monitor/res/` is flat: the contracts are fleet state, subdirs are not.
+
+    The adjudication (FINDINGS.md §1) judged `monitor/res/RES-3-notes/` a real
+    MISWRITE -- per-item working notes written onto the shared tree while the
+    items were worked on branches. A plain `monitor/res/` prefix would excuse
+    it, which is a false negative on an instance from this guard's own sample.
+    """
+    (repo / "monitor" / "res" / "RES-4.md").write_text("retuned\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+    assert result["red"] is False, "a retuned contract is fleet state"
+    assert result["fleet_state"] == 1
+
+    (repo / "monitor" / "res" / "RES-3-notes").mkdir()
+    (repo / "monitor" / "res" / "RES-3-notes" / "V6-recon.md").write_text(
+        "notes\n", encoding="utf-8"
+    )
+
+    result = g.report(str(repo))
+    assert result["unfiled"] == 1
+    assert result["unfiled_paths"][0]["path"] == "monitor/res/RES-3-notes/"
+
+
+def test_a_tracked_source_file_under_a_flat_prefix_is_red(repo):
+    """The same rule where it bites: a `.py` dropped into `monitor/res/x/`."""
+    (repo / "monitor" / "res" / "tools").mkdir()
+    (repo / "monitor" / "res" / "tools" / "helper.py").write_text("# x\n", encoding="utf-8")
+    _git(repo, "add", "monitor/res/tools/helper.py")
+    _git(repo, "commit", "-q", "-m", "track it")
+    (repo / "monitor" / "res" / "tools" / "helper.py").write_text("# edited\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is True
+    assert [e["path"] for e in result["miswrite_paths"]] == ["monitor/res/tools/helper.py"]
+
+
+def test_the_generated_dashboard_is_not_red_for_being_html(repo):
+    """`monitor/index.html` is generated by every scan, and `.html` is a code
+    suffix. Checking suffixes first made it a permanent false red on the live
+    tree; the explicitly named file must win."""
+    (repo / "monitor" / "index.html").write_text("<p>x</p>\n", encoding="utf-8")
+    _git(repo, "add", "monitor/index.html")
+    _git(repo, "commit", "-q", "-m", "dashboard")
+    (repo / "monitor" / "index.html").write_text("<p>y</p>\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is False, "the generated dashboard is fleet state"
+
+
+def test_a_source_html_in_the_same_directory_is_still_red(repo):
+    """...but only the NAMED one. `monitor/app.html` is a source frontend that
+    scan.py never writes, so it must not ride along on its neighbour."""
+    (repo / "monitor" / "app.html").write_text("<p>x</p>\n", encoding="utf-8")
+    _git(repo, "add", "monitor/app.html")
+    _git(repo, "commit", "-q", "-m", "frontend")
+    (repo / "monitor" / "app.html").write_text("<p>edited</p>\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is True
+    assert [e["path"] for e in result["miswrite_paths"]] == ["monitor/app.html"]
+
+
+def test_an_untracked_whitelisted_directory_does_not_swallow_its_contents(repo):
+    """git collapses an untracked directory to one entry; a whitelisted one
+    would then be excused as a unit, hiding any code inside it."""
+    (repo / "monitor" / "ci").mkdir()
+    (repo / "monitor" / "ci" / "merge.log").write_text("ok\n", encoding="utf-8")
+    (repo / "monitor" / "ci" / "patcher.py").write_text("# code\n", encoding="utf-8")
+
+    result = g.report(str(repo))
+
+    assert result["red"] is True
+    assert [e["path"] for e in result["unfiled_paths"]] == ["monitor/ci/patcher.py"]
+    assert result["fleet_state"] == 1, "the log inside it is still fleet state"
+
+
 def test_whitelist_prefixes_all_end_in_a_slash():
     """The boundary anchor is supplied by the trailing slash; assert it exists."""
     for prefix in g.FLEET_STATE_PREFIXES:
@@ -318,7 +438,7 @@ def test_status_parser_handles_a_path_needing_quoting(repo):
 
     result = g.report(str(repo))
 
-    assert result["red"] is False
+    assert result["red"] is True
     assert result["unfiled"] == 1
     assert "permtest" in result["unfiled_paths"][0]["path"]
 
@@ -392,7 +512,7 @@ def test_json_output_escapes_an_unencodable_path(repo, capsys):
     weird = repo / "C\uf03aflattened.txt"
     weird.write_text("x\n", encoding="utf-8")
 
-    assert g.main(["-C", str(repo), "--json"]) == 0
+    assert g.main(["-C", str(repo), "--json"]) == 2
 
     payload = json.loads(capsys.readouterr().out)
     assert payload["unfiled"] == 1
@@ -630,7 +750,9 @@ def test_probe_returns_missing_rather_than_raising(tmp_path, monkeypatch):
     result = scan.probe_master_tree()
 
     assert result["status"] == "missing"
-    assert "GuardError" in result["detail"] or "无法断言" in result["detail"]
+    # NOT `or "无法断言"` -- that string is hard-coded in the only `missing`
+    # template, so the assertion was unconditionally true.
+    assert "GuardError" in result["detail"]
 
 
 def test_probe_writes_nothing_into_the_tree(repo, monkeypatch):
@@ -671,8 +793,16 @@ def test_live_master_tree_is_judgeable():
 
     result = g.report(main)
 
-    assert result["total"] >= 0
+    # NOT `total >= 0` and NOT just the tier partition: both hold for any
+    # classifier, including one sabotaged to return fleet-state for
+    # everything -- verified, it passed. Assert something only a WORKING
+    # classifier satisfies: the live tree is known to carry ~150 dirty paths,
+    # of which the board/heartbeat/bus traffic must be recognised as fleet
+    # state, and the guard must have actually parsed each one.
+    assert result["total"] > 50, "the live shared tree is never this quiet"
+    assert result["fleet_state"] > 50, "board/bus/heartbeat traffic must be recognised"
     assert (
         result["fleet_state"] + result["unfiled"] + result["miswrites"]
         == result["total"]
     ), "every dirty path must land in exactly one tier"
+    assert result["red"] == bool(result["miswrites"] or result["unfiled"])

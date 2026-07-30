@@ -2,24 +2,24 @@
   "prompt_id": "S39-S39-writes-into-the-live-master-tree",
   "branch": "agent/s39-writes-into-the-live-master-tree",
   "base_commit": "2f64e81de8f639b993b32d41739e52d773f65ea5",
-  "utc": "2026-07-30T05:20:00Z",
+  "utc": "2026-07-30T06:10:00Z",
   "agent": "RES-4",
   "lane": "infra",
   "territory": "monitor",
   "files": [
     {
       "path": "monitor/master_tree_guard.py",
-      "sha256": "6e4378d56304fe6d74d072d908c4e7c01ff3413e099062393b1f415c452d37e3",
+      "sha256": "d997563c6453c47cd5aa597caaaf9106baf591239c1e4c6fe510cce8f8f730c7",
       "role": "the gate: three-tier classifier, pre-commit hook, installer"
     },
     {
       "path": "monitor/tests/test_master_tree_guard.py",
-      "sha256": "dc6aab64e73ba0a0481304f080fef5cf5b14557eb1a0b19394ea472dccf64eb4",
-      "role": "requirement 3 controls + probe injection self-test; 42 tests"
+      "sha256": "91e8b56d9eeb21740a32bd7953675c4c6d7ec1d1e8351ed40a2178851d8c5e4b",
+      "role": "requirement 3 controls + probe injection self-test; 49 tests"
     },
     {
       "path": "monitor/scan.py",
-      "sha256": "68fe4011719228cdb56204e9cc51e8336085b0896992aa5e3053d01b1474efc1",
+      "sha256": "7922536152fde09765fb41dd7fabbcdf0acfe88f2d3b39215a2769b6bb4a73f3",
       "role": "probe_master_tree + PROBES registration"
     },
     {
@@ -33,8 +33,9 @@
     }
   ],
   "verification": {
-    "monitor/tests": "439 passed, 2 xfailed",
+    "monitor/tests": "449 passed, 2 xfailed",
     "monitor/verify.py": "GREEN (tests / board states disjoint / real run / artifact fields)",
-    "live_guard_run": "exit 2, 3 miswrites, 8 unfiled, 141 fleet-state of 152 dirty paths"
+    "live_guard_run": "exit 2; 155 dirty = 143 fleet-state + 9 untracked + 3 tracked-source",
+    "adversarial_review": "11 claims, 9 confirmed and fixed, 2 answered in RUN_STATE; all numbers above measured after the last edit"
   }
 }

@@ -1463,25 +1463,32 @@ def probe_master_tree():
         "提交钩子**未装**（`python monitor/master_tree_guard.py install-hook`）"
         "——本探针只观察，拦不住任何一次提交")
 
-    if result["miswrites"]:
-        names = "、".join(e["path"] for e in result["miswrite_paths"][:4])
-        more = "" if result["miswrites"] <= 4 else "等 %d 条" % result["miswrites"]
+    # 三个数是**同一个总数的划分**，不是叠加：total = fleet + unfiled + miswrites。
+    # 初版写成「%d 条脏路径全是舰队活状态，另有 %d 条未跟踪未归档」，把已经算在
+    # total 里的琥珀又加了一遍，于是在实测上说出「153 条全是活状态，另有 9 条」
+    # ——真相是 141/9/3。对抗性复核抓到的。
+    if result["red"]:
+        findings = (result["miswrite_paths"] + result["unfiled_paths"])[:4]
+        names = "、".join(e["path"] for e in findings)
+        n = result["miswrites"] + result["unfiled"]
+        more = "" if n <= 4 else "等 %d 条" % n
         return {"status": "risk",
-                "detail": "master 的共享树上有 **%d 条被跟踪的源文件**未提交：%s%s。"
-                          "它们要么该进分支，要么该提交——留在这里，一次无关的 "
-                          "`git add` 会把它裹走，一次 `git checkout --` 会把它抹掉，"
-                          "两个方向都不报错。（另有 %d 条未跟踪未归档。%s）"
-                          % (result["miswrites"], names, more,
-                             result["unfiled"], hook_note)}
+                "detail": "master 的共享树上有 **%d 条**不属于舰队活状态的脏路径"
+                          "（被跟踪源文件 %d，未跟踪未归档 %d；另 %d 条是正常活状态，"
+                          "共 %d）：%s%s。留在这里，一次 `git add -A` 会把它裹走，"
+                          "一次 `git checkout --` 会把它抹掉，两个方向都不报错——"
+                          "本仓已有一个提交就叫 “On master: autostash”。（%s）"
+                          % (n, result["miswrites"], result["unfiled"],
+                             result["fleet_state"], result["total"],
+                             names, more, hook_note)}
 
     if not hooked:
         return {"status": "partial",
-                "detail": "master 的共享树上没有源码误写（%d 条脏路径全是舰队活状态，"
-                          "另有 %d 条未跟踪未归档）。但%s。"
-                          % (result["total"], result["unfiled"], hook_note)}
+                "detail": "master 的共享树上没有误写：%d 条脏路径全部是舰队活状态。"
+                          "但%s。" % (result["total"], hook_note)}
 
     return {"status": "green",
-            "detail": "master 的共享树干净：%d 条脏路径全是舰队活状态，"
+            "detail": "master 的共享树干净：%d 条脏路径全部是舰队活状态，"
                       "%s。" % (result["total"], hook_note)}
 
 
