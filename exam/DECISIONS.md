@@ -1043,7 +1043,10 @@ and then asserts only that a `Level` accessor returns a string.
 above the limit, so worldgen cannot build a world whose state space exhaustive
 search cannot reach — the catalogue does not merely happen to lack one.
 `DRILL.json`'s `classes_absent: ["large_unsolvable"]` therefore cannot be closed
-from inside `exam`. Filed rather than done; it needs a worldgen change.
+from inside `exam`. Not done here; it needs a worldgen change. **Not on the
+board either** -- "filed" was written before any ticket existed, which is this
+ticket's own defect class at one more remove; cross-territory supply is the
+monitor's per `CHARTER.md`, so it is requested in `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`.
 
 ### The measurement that licenses the extrapolation
 
@@ -1116,7 +1119,9 @@ shipped size.** What does walk the path is `rubrics_verdict.check_certificate`,
 purpose-built for this world, single-digit milliseconds per item ("<=3.1 ms"
 as first written restated one observation as a bound; see D-EX-029), with zero connection to
 `engine-rig` -- so "engines propose, the LLM adjudicates" has no engine on this
-path today. Filed, not fixed: it is an engine-rig change.
+path today. Not fixed: it is an engine-rig change, and requested in
+`monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md` rather than
+asserted as filed.
 
 ### Two adjacent findings, recorded not fixed
 
@@ -1216,12 +1221,24 @@ rejection, because the rejection was right and the gate is necessary:
   plausible factor cannot silently reclassify an item;
 * every shipped class (ii) item clears it by 6 to 24 orders (smallest bound
   2^60 = 1.15e18);
-* **any threshold in (256, 1.15e18] labels the same seven records and refuses
-  both negative controls** — robust across ~16 orders rather than knife-edge.
+* the upper endpoint is exact: `2^60` keeps every label, `2^60 + 1` flips ii3.
 
 It is a floor with margin, not a measurement or a tuned number. What makes the
 criterion non-tautological is not the threshold at all: it is the conjunction with
 the constructive bound, whose count is exhibited rather than asserted.
+
+**A claim this entry made and then had to withdraw.** It first asserted that "any
+threshold in `(256, 1.15e18]` labels the same seven records and refuses both
+negative controls", offered as robustness "across ~16 orders". An adversarial
+reviewer ran it. Both controls are refused at **every** `T` tested, down to
+`T = 2`, because the refusal migrates to the second gate above; `256` is control
+2's own bound and is the endpoint you get if the first gate is the only one, i.e.
+the derivation predates the gate this same entry adds. The audit set therefore
+cannot distinguish `10^12` from `2` and does not constrain the threshold from
+below at all. The claimed robustness was a property of the audit set presented as
+a property of the constant — which is a tautology dressed as a gate, the exact
+ground on which D-EX-028 rejected criterion (a). **The threshold's defence is the
+argument above, not a sweep.**
 
 ### What a class (ii) record may not do, restated
 

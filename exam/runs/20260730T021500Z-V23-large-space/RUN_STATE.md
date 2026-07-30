@@ -118,7 +118,16 @@ manifest embeds **absolute worktree paths** (24 lines of the diff), so it churns
 for whoever rebuilds it from wherever they happen to be working — a determinism
 defect in a tracked generated artefact, filed rather than fixed here.
 
-## Filed, not fixed
+## Recorded, not fixed -- and, it turned out, not filed either
+
+The heading here said "Filed, not fixed" and `monitor/board/items/` contained
+no ticket for any of them. "Filed" implies a ticket exists; none did. That is
+the fourth instance in this one ticket of a claim with nothing behind it, and the
+cheapest to have checked -- one `ls`. Cross-territory supply belongs to the
+monitor per `CHARTER.md`, so the first two are now written up in full and
+requested in
+`monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`,
+which is a real file rather than a word.
 
 * **The sealed drill's class (ii) gap is structural.**
   `GridWorld.reachable(limit=200_000)` (worldgen/core/world.py:259) *raises*
