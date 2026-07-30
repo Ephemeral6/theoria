@@ -247,11 +247,12 @@ as covering all of it.
 
 * **Class (ii), large-space unsolvable, is absent.** Theoria.md:259 splits the
   verdict question into small-space unsolvable (exhaustion works), large-space
-  unsolvable (only invariant reasoning works — "我们的主场") and solvable-but-hard.
-  worldgen's largest world has 2654 reachable states, so nothing in the catalogue
-  can stand in for a space exhaustive search cannot reach. Class (ii) is
-  rehearsed **in procedure only, never in difficulty**. `DRILL.json` records this
-  under `coverage.classes_absent` rather than leaving it to be inferred.
+  unsolvable (the design document's 「我们的主场」; its "only invariant reasoning
+  can answer" is withdrawn by D-EX-028) and solvable-but-hard. worldgen's largest
+  world has 2654 reachable states, so nothing in the catalogue can stand in for a
+  space naive forward enumeration cannot exhaust. Class (ii) is rehearsed **in
+  procedure only, never in difficulty**. `DRILL.json` records this under
+  `coverage.classes_absent` rather than leaving it to be inferred.
 * **Truth-by-construction is validated on ten variants across two worlds**, not
   on the operator library's whole reachable space. "The procedure produced
   correct truth ten times" is not "the procedure cannot produce wrong truth".

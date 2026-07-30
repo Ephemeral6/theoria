@@ -458,9 +458,11 @@ unreachable it reports the goal reachable and the level is unsolvable — both
 demonstrated with a shipped constructor and a shipped operator. Deriving
 credibility from an unsound abstraction replaced "a true statement was called
 false" with "a false statement is called true", and the second one *pays*.
-`search_credible` is `exhaustive_feasible` again; the quotient stays as a
-recorded measurement whose truth entry says in the same breath that it is not a
-search space. D-EX-022, withdrawn by D-EX-027.
+`search_credible` is the enumerability field again — spelled
+`exhaustive_feasible` at the time, and `naive_enumeration_feasible` since
+D-EX-028 withdrew the wider name; the quotient stays as a recorded measurement
+whose truth entry says in the same breath that it is not a search space.
+D-EX-022, withdrawn by D-EX-027.
 
 **The split confusion matrix cannot report a pair.** The three classes partition
 the paper *by answer*, so one denominator is empty in every class cell and the
@@ -586,14 +588,23 @@ holds across `PYTHONHASHSEED` 7 and 99.
     the solvable side the reason half is a witness a search finds, and on the
     unsolvable side it is a certificate. Mirror-image rate rows, 1.4× to 1.8×
     the score.
-27. **The class (ii) name still overstates what a naive enumerator faces.**
-    `lower_bound` (2^60 to 2^120) is a true statement about the raw product
-    space and is the honest account of what a complete search must cover. What
-    is not established is that *no* cheaper complete method exists — this run
-    tried to establish the opposite via the quotient and was wrong (D-EX-027),
-    which leaves the question open rather than settled. Making the class mean
-    what its name says needs switches that gate geometry, and that is a
-    different world family and a different paper.
+27. **Settled by D-EX-028, and settled *against* the class: a cheaper complete
+    method exists, and it is the one the answer key uses.** `lower_bound` (2^60
+    to 2^120) stays true, but only as a statement about the raw product space —
+    what a *naive* complete search must cover. The question left open here, "is
+    there a cheaper complete method?", has been measured and the answer is yes:
+    every shipped class (ii) item is settled by an exhaustive computation over at
+    most 600 nodes in at most 5 ms against bounds of 1.15e18 to 1.33e36, so
+    `exhaustive_feasible: False` was false and is withdrawn for
+    `naive_enumeration_feasible: False`. The quotient's unsoundness is
+    **one-sided** — an over-approximation yields false *solvable*, never false
+    *unsolvable* — so start and goal in different components is a sound
+    unsolvability proof, which is why the item's own key is computed that way.
+    The class therefore measures **method selection under an apparent search
+    barrier**, not "only invariant reasoning can answer". Making the class mean
+    what its name says still needs switches that gate geometry — a different
+    world family and a different paper — but that is now a scoping note rather
+    than an unanswered question.
 28. **The `searcher` probe cannot see a wrong `search_credible`.** Its
     expectation reads `truth["search_credible"]` from the same key the marker
     reads it from, so corrupting that field moves both and the gate stays green.
@@ -1119,3 +1130,123 @@ the tier-1 sheet, jointly a complete classifier (`[OVERTURNED]`, **not
 repaired**); family-scoped level multiplicity (this run); smallest-board (closed
 as a side effect, 2 of 2 → 2 of 4). **No further run on this sheet is worth six
 readers until channel 3 is closed.**
+
+## V6-V23 — class (ii) was finally tested, and its central claim was false
+
+Prompt `V6-V23-large-space-verdict-gap`, worker `RES-3`, branch
+`agent/v6-v23-large-space-verdict-gap`. Run
+`exam/runs/20260730T021500Z-V23-large-space/` — the criterion argument is
+`CRITERION.md` there and is the citable source; the durable form is D-EX-028.
+This is the index entry.
+
+**The withdrawal, which is the result.** `exhaustive_feasible: False` asserted
+that no exhaustive method is feasible on a class (ii) board. That is false, and
+`crux_quotient_settles.json` puts a number on it: **every shipped class (ii)
+item is settled by an exhaustive computation over at most 600 nodes in at most 5
+ms**, against claimed bounds of 1.15e18 to 1.33e36 — ii1 by components of
+`relaxed_edges` on 300 nodes, ii2 by the same pass with the cut cell deleted, ii3
+by a relaxed distance of 199 against a budget of 150, ii4 by the surviving column
+deltas being {0, 0, +1}. Four *different* mechanisms; an earlier draft of the
+probe assumed one pass settled all four and the measurement refuted that for
+three of them. The field is withdrawn and replaced by
+**`naive_enumeration_feasible: False`** — forward enumeration over the full
+(cart, button, latch mask) state, the method class (i) is graded on, cannot
+terminate here. Measured, and narrower. An item whose own answer key is an
+exhaustive walk of a 300-node graph cannot also claim that exhaustive walks are
+infeasible on it. Theoria.md:259's 「我们的主场」 claim — "exhaustion is
+infeasible, only invariant reasoning can answer" — does not survive; what class
+(ii) measures is **method selection under an apparent search barrier**.
+
+**The quotient's unsoundness is one-sided, and D-EX-022's disclaimer is amended
+rather than reversed.** The quotient over-approximates, so it can produce false
+*solvable* and never false *unsolvable*. D-EX-022 read that as grounds to
+distrust the number and was right to withdraw `search_credible` from it; for the
+refutation direction the same fact is the alarm bell that the barrier is apparent
+rather than real, and it is why "start and goal in different components" is a
+sound unsolvability proof and the item's own key is allowed to be computed that
+way. `quotient_note` now carries both halves.
+
+**The criterion is conjunctive, and both halves are measurements.** An item earns
+class (ii) only on (c) a search-free constructive bound of 2^m distinct reachable
+states, premises checked at the point of claim, *and* (b) the reference
+enumerator measured to truncate at the shipped cap. A reachable-state threshold
+alone was rejected: at the time `LARGE_SPACE_THRESHOLD = 10**12` had no entry in
+`DECISIONS.md` at all, and it was being applied to a count the class (ii) path
+never took — a threshold over an asserted quantity. Measured solver
+failure was rejected for a stronger reason than engine-rig's D-024 — on these
+boards the strong solvers **win in milliseconds**, so that criterion is not
+merely inadmissible but false. The controls are executable, not narrated: a
+400-switch board on a 200-cell corridor that truncates at the cap exactly as
+ii1..ii4 do is still refused on its bound of 2^8, pinned by
+`test_a_truncating_board_is_still_refused_without_a_bound` — if truncation alone
+earned the label, a board 30 orders of magnitude smaller than ii1 would ship as
+class (ii) on the strength of a cap we chose ourselves.
+
+**The record was counterfactual, and the scope was wider than the class.**
+`_large_space` hardcoded `"truncated": False` beside `"enumerated": None` — true
+only because no enumeration was ever attempted, and reading as though one had run
+and come back clean. It is now `enumeration_attempted: False` with `truncated`
+null. `_large_space` is called by **seven** items, not four (ii1..ii4 plus the
+three `solvable_hard` ones), so the enumerator check is scoped by the record
+rather than by the class.
+
+**A bound must defend its own premise where it is claimed.** Every guard on class
+(ii) truth fired *after* the record was written: a `comb_open` whose switch list
+repeats one cell 60 times produced 2^60 = 1.15e18 on a board with **359**
+reachable states and `_large_space` stamped it. `build()` did abort before
+returning a paper, so nothing false shipped — but a bound that survives only
+because a distant caller happens to check is not a bound. `subset_lower_bound`
+now refuses it itself, gated on `candidates[:m]` rather than `level.switches` so
+a repeated entry naming a wall is not a false refusal.
+
+**The extrapolation is licensed at the exponent only.** Enumerated to completion
+with nothing fitted: gantry, lattice and the unbudgeted spindle give
+`2k·4^k = 2k·2^m` exactly at every k with m = 2k; orchard gives `(8/3)(2^m − 1)`
+with **m = 2(k−1)**, which is why shipped ii4 reports m=118 and not 120. Sound at
+every rung, loose by 2k or 8/3, verified over 5.77 orders of magnitude — and it
+does **not** cover ii3, whose m=60 comes from `step_limit=150` rather than from
+its 400 switches.
+
+**No shipped engine can walk the invariant path, and the adapter a reader would
+write is silently unsound.** `lp_potential` is a peg-solitaire engine: every
+expressible transition has coefficient sum −1, verified exhaustively at n_pos=5,
+while an A2 cart move has sum 0 or +1, so no role assignment expresses an A2
+transition at any size — the materialised-edge-list obstacle is real but
+secondary. Encoding a comb level and running it anyway returns `certified` at
+every size, **including at corridor 4 where the level is solvable**, with all
+four of the engine's self-checks agreeing because all four read the same wrong
+move list. `ic3_pdr` enumerates up front, `fd_adapter`/`probe_frontier` need
+grounded PDDL and no A2→PDDL compiler exists, `zero_space` re-checks only its own
+sample, `cegis_miner`/`mdl_segmenter` mine candidates and never verdicts. What
+does walk the path is the exam's own `check_certificate`, ≤3.1 ms per item, with
+zero connection to `engine-rig` — so "engines propose, the LLM adjudicates" has
+no engine on this path today. Filed, not fixed: it is an engine-rig change.
+
+Tests: **465 passed, 2 xfailed**. `python exam/verify.py` GREEN. Zero API, zero
+network, zero sealed-pile contact.
+
+### Closed by V6-V23
+
+* ~~**27. The class (ii) name still overstates what a naive enumerator faces.**~~
+  Settled, and against the class: rewritten above as a measured falsehood rather
+  than an open question. D-EX-028.
+
+### Open weaknesses V6-V23 adds
+
+31. **The quotient can exceed the true reachable count, and a shipped item does
+    it.** Class (i) item i4 enumerates to 31 states and reports
+    `positional_states` 55, because `positional_states` ignores `step_limit`
+    while `enumerate_states` honours it. That is a live shipped instance of
+    exactly the unsoundness `quotient_note` warns about, now with a number on it.
+    Recorded, not fixed.
+32. **The sealed drill's class (ii) gap is structural, not incidental.**
+    `GridWorld.reachable(limit=200_000)` (worldgen/core/world.py:259) *raises*
+    above the limit, so worldgen cannot build a world that a naive forward
+    enumeration cannot exhaust — the catalogue does not merely happen to lack
+    one. `DRILL.json`'s `classes_absent: ["large_unsolvable"]` therefore cannot
+    be closed from inside `exam`; it needs a worldgen change.
+33. **No engine can produce a class (ii) certificate, and the natural adapter is
+    unsound in the worst direction.** See the `lp_potential` paragraph above. A
+    silent unsoundness toward "proved unsolvable" is the single worst failure
+    this exam can have, and the next reader to reach for that engine will not
+    find it out by running it. Filed for engine-rig, not fixed here.
