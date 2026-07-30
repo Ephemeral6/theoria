@@ -1,0 +1,13 @@
+{
+  "prompt_id": "P18-audits-cover-half-the-paper",
+  "branch": "agent/p18-audits-cover-half-the-paper",
+  "base_commit": "50e106179323e1af3a2e1b5c82a35fd3d232c552",
+  "utc": "2026-07-30T00:00:00Z",
+  "worker": "W-1690",
+  "baseline_gate": "papers/verify.py green: verify_paper 6/6, 184 tests passed",
+  "paper_at_start": {
+    "sha256": "6b633fcc35ae612f20f4028eb45aaca1b6ed86a24eb1304af555c46228325376",
+    "bytes": 237872,
+    "lines": 3729
+  }
+}
