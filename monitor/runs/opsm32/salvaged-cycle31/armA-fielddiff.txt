@@ -1,0 +1,21 @@
+REPO seen by the module: C:\Users\user\Desktop\theoria\.worktrees\opsm31-s4f-tip
+pool resolves to: 'C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl'
+
+--- leaf fields where committed BUDGET_TABLE.json != fresh build() ---
+[balance]
+  balance/actions_remaining                                  on-disk=18263  fresh=17103
+  balance/actions_spent_on_test_traffic                      on-disk=3855  fresh=5015
+  balance/actions_used                                       on-disk=5737  fresh=6897
+[pool]
+  pool/actions                                               on-disk=5737  fresh=6897
+  pool/actions_test_like                                     on-disk=3855  fresh=5015
+  pool/campaigns                                             on-disk=109  fresh=110
+  pool/kinds/release                                         on-disk=2492  fresh=2755
+  pool/kinds/reserve                                         on-disk=2492  fresh=2755
+  pool/kinds/spend                                           on-disk=7945  fresh=8436
+  pool/kinds/trip                                            on-disk='<absent>'  fresh=1
+  pool/lines                                                 on-disk=12929  fresh=13947
+  pool/max_seq                                               on-disk=12929  fresh=13947
+  pool/sha256                                                on-disk='40135ef5383c6cedd726b82f1f5be39e7c91cd28cea95d3b65a9222d1404fb0f'  fresh='f21aa606f34b9e271e925f7c0f446e08e09cf796d561b79952174ddda6b5ef6f'
+[verdict]
+  verdict/statement                                          on-disk='Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit bot...  fresh='Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit bot...

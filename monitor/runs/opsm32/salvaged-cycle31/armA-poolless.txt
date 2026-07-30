@@ -1,0 +1,10 @@
+REPO: C:\Users\user\Desktop\theoria\.worktrees\opsm31-s4f-tip
+resolve_pool BEFORE patch: 'C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl'
+resolve_pool AFTER  patch: None
+--- now replaying main()'s --verify block (allow_absent_pool=False, as freeze/verify.sh:1158 invokes it) ---
+DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+       sections that moved: balance, pool, projection, verdict
+       `pool`/`balance` moved => THE BALANCE MOVED.
+DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+POOL ABSENT: the pool is gitignored (proxy/.gitignore:3) and this checkout does not have one; every balance figure below is unverifiable here
+RC=1
