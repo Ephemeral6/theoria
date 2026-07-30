@@ -54,8 +54,16 @@ sys.path.insert(0, os.path.join(REPO, "theory-compiler", "src"))
 
 # Directories that are not part of the corpus: nested checkouts, caches, and
 # the generator's own PDDL *fixtures* (hand-written, not compiled from a book).
-SKIP_DIRS = {".worktrees", ".git", "__pycache__", ".pytest_cache", ".toolchain",
-             "node_modules", ".venv"}
+#
+# `worktrees` is listed bare as well as `.worktrees`: the CLAUDE.md convention
+# puts them at `.worktrees/`, but the agent harness also makes checkouts under
+# `.claude/worktrees/`, and matching is by directory *name*.  Missing those made
+# the denominator depend on which checkout you ran from -- 59 DSL files from
+# inside a worktree, 237 from the main checkout, because four nested agent
+# checkouts each carry a full copy of the corpus.  A census whose population
+# changes with the caller's cwd is not a measurement.
+SKIP_DIRS = {".worktrees", "worktrees", ".claude", ".git", "__pycache__",
+             ".pytest_cache", ".toolchain", "node_modules", ".venv"}
 
 # ------------------------------------------------------------------ PDDL reading
 #

@@ -143,6 +143,45 @@ def main(argv=None) -> int:
                     "summary.domains_fast_downward_accepted: committed %r, "
                     "re-run %r (differing FD build?)" % (want, got))
 
+        # --- hard tier 4: the corpus does not depend on the caller's cwd ---
+        # A worktree and the main checkout must yield the same population.  They
+        # did not before the SKIP_DIRS fix: nested agent checkouts under
+        # `.claude/worktrees/` carry full copies of the corpus, so the same
+        # script reported 59 DSL files from a worktree and 237 from the main
+        # checkout.  Pin it, or the denominator silently depends on where you
+        # stood when you ran it.
+        sys.path.insert(0, os.path.join(REPO, "crosscheck", "tools"))
+        import c14_pddl_census as census_mod
+        here = census_mod.dsl_files()
+        main_checkout = None
+        try:
+            common = subprocess.run(["git", "rev-parse", "--path-format=absolute",
+                                     "--git-common-dir"], cwd=REPO,
+                                    capture_output=True, text=True, timeout=30)
+            if common.returncode == 0:
+                main_checkout = os.path.dirname(common.stdout.strip())
+        except Exception:                                     # noqa: BLE001
+            pass
+        if main_checkout and os.path.isdir(main_checkout) and main_checkout != REPO:
+            saved = census_mod.REPO
+            try:
+                census_mod.REPO = main_checkout
+                there = census_mod.dsl_files()
+            finally:
+                census_mod.REPO = saved
+            if sorted(here) != sorted(there):
+                only_there = sorted(set(there) - set(here))[:5]
+                failures.append(
+                    "corpus depends on cwd: %d DSL files from this checkout, %d "
+                    "from the main checkout (e.g. %s)"
+                    % (len(here), len(there), ", ".join(only_there) or "-"))
+        else:
+            skips.append("corpus cwd-independence: only one checkout visible, "
+                         "cross-root comparison not run")
+        if any("worktrees" in rec["dsl"] for rec in committed["files"]):
+            failures.append("a nested checkout leaked into the corpus "
+                            "(a path under */worktrees/* is being counted)")
+
         # --- the claim itself ----------------------------------------------
         # Guard against the census silently measuring nothing: an empty corpus
         # would report 0 good out of 0 owed and read as a green run.
