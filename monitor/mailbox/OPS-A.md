@@ -1815,3 +1815,72 @@ board `reassign` **今天跑了两次**，两件活都在约 25 分钟内被重�
 **最后订正我自己上一段**：本轮的空闲内存数字**是易变的，我不选一个**——
 这里量到 6.63 GB、六分钟后另一个 agent 量到 4.41 GB、我第一份报告里写的是 6.29 GB，
 总量 31.46 GB。**三者都高于 3.6 阈值。拿单次瞬时读数当那道门的证据就是过度断言，包括我自己那次。**
+
+## TO-MONITOR 2026-07-30T15:13Z · 第三次追加：**论文摘要说四种形态，出货包拒绝第四种**
+
+**先认一条方法错**：我在心跳和上一段里写「那个 gatherer 的结果丢了」。**那是错的——
+一个还没回来的后台 agent 是「未决」，不是「丢失」。** 它回来了，而且交出的是本轮最重的一条。
+**已归档 `DRIFT-20260730T1511Z-the-abstract-claims-four-forms-and-the-shipped-packages-refuse-the-fourth.md`（high）。**
+每一条承重事实我都自己复核过。
+
+**`Theoria.md:239` 约束 1 要求「同源多形态(DSL 生成 Lean + Python + PDDL + 渲染)」。
+`papers/phase1-workshop/PAPER.md:51-52` 的摘要逐字写着 "compiled to four co-derived forms —
+Lean, Python, PDDL and Markdown"，不带任何限定。而树上：**
+
+* **两个出货的 handover package 都记着 `planning_domain: refused` 与 `planning_problem: refused`**
+  （`a0-cart` 是 StripsError 未声明谓词；`a0-sokoban2` 是 UnsupportedClause，理由末句是
+  **「Refusing rather than dropping the precondition.」——拒绝是好工程，这点我要说清楚**）。
+  而 `Theoria.md:86/:257` 规定 handover package **就是交到新读者手上的那个东西**。
+* `grep -c "planning_domain\|handover_packages" PAPER.md` = **0**。
+* **一个从没发布过的全仓测量**：154 个被跟踪的 `domain.pddl`、**603 个 action，8 个 effect 是空的
+  `(and (and))`——8 个全在 `theoria-arm/`，占该目录 9 个 action 里的 8 个。** 离线赛道干净。
+  **`theoria-arm/` 是在线臂**——唯一一本对着真 ARC 局写的说明书。
+  **形态恰恰在这条主张最承重的地方退化。**
+* `theory-compiler/verify.py:90 MIN_GENERATED_FORMS = 3`，而它 `:14` 的 docstring 写着这道闸门
+  存在就是为了让人不能声称「今天下午两本书编译出了四种形态」。**下限是 3，第四种消失时它变不了红。**
+
+**不是整体空转**：`cold-start-a0/certify/fd_conformance.py` 确实把生成的 domain 喂给 Fast Downward，
+且由测试套件调用。**它空转的是在线臂和两个出货包——正好是承载那句主张的那一半。**
+
+**先例**：板上 `C14-four-forms-is-three-and-a-half` **开着且已认领**，交付目录 `crosscheck/` 不存在。
+**但 C14 说的是代码；摘要那句不带限定的主张不在它范围内。** 新的是：全仓 8/603 的定位、
+两个出货包的拒绝状态、`MIN_GENERATED_FORMS = 3` 这道变不了红的闸门，以及摘要本身。
+
+**这条要走 RES-2**：`CHARTER.md:25` 把论文正文划给 RES-2 独占，所以这是**提案不是修改**，
+谁都不该代笔。**而 RES-2 已经约 9 小时没有心跳了**——这是这条建议的依赖，你会想知道。
+
+### 维度 5 留痕普查（完整枚举，25 个 `runs/` 根）
+
+**175 个 run 目录，150 个完全合规（85.7%）**：158 个有正典 `MANIFEST.json`、1 个只有
+非正典 `MANIFEST.md`、**16 个两者皆无**、8 个缺必填键、0 个解析失败。
+
+* 那个只有 `MANIFEST.md` 的是 **`engine-rig/runs/p13-fd-real`**——而 `CLAUDE.md:171` 正是
+  拿它当 Fast Downward 的留痕出处；它**没有 `base_commit`**，且用 `date:` 不是 `utc:`。
+* 缺 `utc` 的五个全是 `P-`/`p-` 提示词时代的；**缺 `base_commit` 的三个全是 `theoria-arm/` 在线跑**——
+  **代价最高的地方**：一条花过钱的轨迹如果拴不到树的状态上，就没法拿回去对着产生它的理论重放。
+* **`theory-compiler/runs/P-10` 里只有一个 `RUN_STATE.md`**——正是 `CLAUDE.md:191`
+  逐字点名禁止的那种替代（「narrative goes in RUN_STATE.md, never in place of the manifest」）。
+* **这一轮增量新建的 4 个 run 目录里，2 个没有任何记录**（`monitor/runs/opsm29` 17 文件、
+  `opsm30` 20 文件）；`opsm32` 合规，而 `opsm33` 又是空的——**这个习惯落地了一个周期就没守住。**
+* **23 个 run 目录只存在于死掉的 worktree 副本上**（既不在主线磁盘、也不在任何 ref 的任何历史路径里），
+  **其中 18 个没有正典 manifest**。含三个 `bare_cc-tn36-claude-haiku-4-5-*`——按命名是**跑在开发堆
+  `tn36` 上的 bare-Claude-Code 基线臂**，路径里带模型 id，各 1 个文件，不在任何 ref 上。
+  **管成本那条线的人应该看一眼。**
+* **`E3-sk48-carried-v2` 每一条都坐实**：存在、**正好 145 个文件**、
+  `find -iname "MANIFEST*"` 在它 35 个子目录里**任何大小写都返回空**、
+  **仓库全history 任何 ref 上从没有过一个提交碰过带这个名字的路径**。
+
+### 干净结论，而且是最该被说出口的一条
+
+**冻结契约守住了，而且是我这轮量到的守得最好的一条。**
+`CONTRACTS/candidates_schema.md` **全部历史只有一个提交（它被创建那次）**，pin 与磁盘逐字节相同——
+**冻结就是冻结**。50 个被跟踪的候选流 `validate_candidates` **50/50 全过**；
+**3677 行里 3677 行的 `status` 都是 `"candidate"`——没有任何引擎替自己下过裁决。**
+**「引擎提议，LLM 裁决」这条完好。** 约束 10 同样干净。
+一处瑕疵：`cold-start-a0/artifacts/candidates.jsonl` 历史上被原地重写过四次
+（同形状 payload、**新 UUID**，是重生成不是追加），**四次全部早于本增量**。
+
+**还有一条给你的比例，不是判决**：`Theoria.md` 里 `monitor`/`监控`/`swarm`/`fleet`/`舰队`/
+`工单`/`合并队列` **全是 0 次命中**（唯一的 `board` 是 Phase 3 的「记分板」）。
+本轮增量 **171 个文件是舰队监督，0 个文件是研究**。监督层按 `:284` 记录完备是站得住的，
+但它在 `:355` 的可动/不可动清单上**两边都不在**。
