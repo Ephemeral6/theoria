@@ -1,0 +1,31 @@
+{
+  "board": {
+    "corridor_len": 60,
+    "height": 5,
+    "width": 62
+  },
+  "distinct_switch_cells": 1,
+  "enumeration_cap": 200000,
+  "enumeration_truncated": false,
+  "guard_lane_assertion_refused": true,
+  "guard_threshold_refused": false,
+  "guard_wellformed_refused": true,
+  "large_space_record": {
+    "message": "negctl-dup-switch: the 2^m family is not demonstrated on this board -- the first 60 dips name only 1 distinct cells; duplicates share one latch bit, so 2^60 counts latch masks the level cannot hold. The bound counts each dip in isolation; it is only a bound when the dip sources lie on one switch-free, hazard-free lane, because otherwise walking between two dips latches switches the subset did not choose and the 2^m states are not distinct reachable states.",
+    "raised": true
+  },
+  "large_space_threshold": 1000000000000,
+  "level_id": "negctl-dup-switch",
+  "positional_states": 180,
+  "step_limit": null,
+  "subset_lower_bound": {
+    "message": "negctl-dup-switch: the 2^m family is not demonstrated on this board -- the first 60 dips name only 1 distinct cells; duplicates share one latch bit, so 2^60 counts latch masks the level cannot hold. The bound counts each dip in isolation; it is only a bound when the dip sources lie on one switch-free, hazard-free lane, because otherwise walking between two dips latches switches the subset did not choose and the 2^m states are not distinct reachable states.",
+    "raised": true
+  },
+  "switch_entries": 60,
+  "true_reachable_states": 359,
+  "wellformed_problems": [
+    "the switch list repeats a cell; `switch_index` collapses duplicates to one latch bit, so any count taken over the list is larger than the number of distinct latch states"
+  ],
+  "wellformed_runs_at": "exam/papers/verdict.py:1278 `_self_check(items)` -> :1354 `level.wellformed_problems()`; every `_large_space()` call sits at verdict.py:1010/1030/1055/1081/1212/1241/1267, all above it"
+}

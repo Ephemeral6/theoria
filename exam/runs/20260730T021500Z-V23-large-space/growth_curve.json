@@ -1,0 +1,1274 @@
+{
+  "all_closed_forms_hold": true,
+  "bound_sound_everywhere_measured": true,
+  "bound_under_test": "exam/papers/verdict.py::subset_lower_bound (2**m)",
+  "budget_probe": {
+    "bound_is_sound_at_every_budget": true,
+    "bound_soundness_note": "Every budgeted rung below satisfies measured >= 2^m, so the budget arm of `subset_lower_bound` (m capped by dist + 2m <= step_limit) is sound where it was measured -- which is the only thing this file can say about ii3's 2^60, since no closed form for a budgeted board is established here.",
+    "note": "A step_limit makes the reachable count a function of the budget as well as of k, so the unbudgeted closed form 2*k*4**k is an upper bound on a budgeted board and not its value.  ii3 ships budgeted; ii1, ii2 and ii4 do not.",
+    "scaled": {
+      "how": "step_limit = floor(150*(k-1)/199), the shipped ratio",
+      "rows": [
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 1,
+          "k": 2,
+          "m": 0,
+          "measured_states": 1,
+          "step_limit": 0,
+          "unbudgeted_closed_form": 64
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 1,
+          "k": 3,
+          "m": 0,
+          "measured_states": 4,
+          "step_limit": 1,
+          "unbudgeted_closed_form": 384
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 2,
+          "k": 4,
+          "m": 1,
+          "measured_states": 11,
+          "step_limit": 2,
+          "unbudgeted_closed_form": 2048
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 2,
+          "k": 5,
+          "m": 1,
+          "measured_states": 28,
+          "step_limit": 3,
+          "unbudgeted_closed_form": 10240
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 2,
+          "k": 6,
+          "m": 1,
+          "measured_states": 28,
+          "step_limit": 3,
+          "unbudgeted_closed_form": 49152
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "k": 7,
+          "m": 2,
+          "measured_states": 66,
+          "step_limit": 4,
+          "unbudgeted_closed_form": 229376
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "k": 8,
+          "m": 2,
+          "measured_states": 151,
+          "step_limit": 5,
+          "unbudgeted_closed_form": 1048576
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "k": 9,
+          "m": 2,
+          "measured_states": 329,
+          "step_limit": 6,
+          "unbudgeted_closed_form": 4718592
+        }
+      ]
+    },
+    "sweep_k6": {
+      "how": "corridor_len fixed at 6, step_limit walked 0..60 then None",
+      "rows": [
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 1,
+          "m": 0,
+          "measured_states": 1,
+          "step_limit": 0
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "m": 2,
+          "measured_states": 151,
+          "step_limit": 5
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 16,
+          "m": 4,
+          "measured_states": 4750,
+          "step_limit": 10
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 64,
+          "m": 6,
+          "measured_states": 32064,
+          "step_limit": 15
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": true,
+          "claimed_lower_bound_2_pow_m": 256,
+          "m": 8,
+          "measured_states": 48928,
+          "step_limit": 20
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 1024,
+          "m": 10,
+          "measured_states": 49152,
+          "step_limit": 25
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 30
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 35
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 40
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 45
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 50
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 55
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": 60
+        },
+        {
+          "bound_is_sound": true,
+          "budget_binds": false,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "m": 12,
+          "measured_states": 49152,
+          "step_limit": null
+        }
+      ],
+      "unbudgeted_states": 49152
+    }
+  },
+  "closed_forms_confirmed": {
+    "gantry": "2*k*4**k  ==  2*k*2**m",
+    "lattice": "2*k*4**k  ==  2*k*2**m",
+    "orchard": "(2*4**k - 8)//3  ==  (8*(2**m - 1))//3",
+    "spindle": "2*k*4**k  ==  2*k*2**m"
+  },
+  "enumeration_cap": 1000000000,
+  "enumerator": "exam/grading/rubrics_verdict.py::enumerate_states",
+  "families": [
+    {
+      "bound_is_sound_at_every_k": true,
+      "bound_soundness_failures": [],
+      "closed_form_holds": true,
+      "closed_form_mismatches": [],
+      "constructor": "comb_room(level_id, corridor_len=k, bridge_col=None)",
+      "k_range": [
+        1,
+        9
+      ],
+      "m_closed_form": "2*k",
+      "name": "gantry",
+      "operators": "remap_action LEFT<->RIGHT",
+      "orders_of_magnitude_spanned": 5.771,
+      "positional_closed_form": "3*k",
+      "rows": [
+        {
+          "board": {
+            "height": 8,
+            "width": 3
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "closed_form_m": 2,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 3,
+          "closed_form_states": 8,
+          "dippable_switches": 2,
+          "k": 1,
+          "m": 2,
+          "measured_log10": 0.90309,
+          "measured_states": 8,
+          "positional_states": 3,
+          "ratio_measured_over_bound": 2.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 4
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16,
+          "closed_form_m": 4,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 6,
+          "closed_form_states": 64,
+          "dippable_switches": 4,
+          "k": 2,
+          "m": 4,
+          "measured_log10": 1.80618,
+          "measured_states": 64,
+          "positional_states": 6,
+          "ratio_measured_over_bound": 4.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 5
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 64,
+          "closed_form_m": 6,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 9,
+          "closed_form_states": 384,
+          "dippable_switches": 6,
+          "k": 3,
+          "m": 6,
+          "measured_log10": 2.584331,
+          "measured_states": 384,
+          "positional_states": 9,
+          "ratio_measured_over_bound": 6.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 6
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 256,
+          "closed_form_m": 8,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 12,
+          "closed_form_states": 2048,
+          "dippable_switches": 8,
+          "k": 4,
+          "m": 8,
+          "measured_log10": 3.31133,
+          "measured_states": 2048,
+          "positional_states": 12,
+          "ratio_measured_over_bound": 8.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 7
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 1024,
+          "closed_form_m": 10,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 15,
+          "closed_form_states": 10240,
+          "dippable_switches": 10,
+          "k": 5,
+          "m": 10,
+          "measured_log10": 4.0103,
+          "measured_states": 10240,
+          "positional_states": 15,
+          "ratio_measured_over_bound": 10.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 8
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "closed_form_m": 12,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 18,
+          "closed_form_states": 49152,
+          "dippable_switches": 12,
+          "k": 6,
+          "m": 12,
+          "measured_log10": 4.691541,
+          "measured_states": 49152,
+          "positional_states": 18,
+          "ratio_measured_over_bound": 12.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 9
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16384,
+          "closed_form_m": 14,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 21,
+          "closed_form_states": 229376,
+          "dippable_switches": 14,
+          "k": 7,
+          "m": 14,
+          "measured_log10": 5.360548,
+          "measured_states": 229376,
+          "positional_states": 21,
+          "ratio_measured_over_bound": 14.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 10
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 65536,
+          "closed_form_m": 16,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 24,
+          "closed_form_states": 1048576,
+          "dippable_switches": 16,
+          "k": 8,
+          "m": 16,
+          "measured_log10": 6.0206,
+          "measured_states": 1048576,
+          "positional_states": 24,
+          "ratio_measured_over_bound": 16.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 11
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 262144,
+          "closed_form_m": 18,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 27,
+          "closed_form_states": 4718592,
+          "dippable_switches": 18,
+          "k": 9,
+          "m": 18,
+          "measured_log10": 6.673812,
+          "measured_states": 4718592,
+          "positional_states": 27,
+          "ratio_measured_over_bound": 18.0,
+          "step_limit": null
+        }
+      ],
+      "shipped_as": "ii1",
+      "states_closed_form": "2*k*4**k  ==  2*k*2**m"
+    },
+    {
+      "bound_is_sound_at_every_k": true,
+      "bound_soundness_failures": [],
+      "closed_form_holds": true,
+      "closed_form_mismatches": [],
+      "constructor": "comb_room(level_id, corridor_len=k, bridge_col=2)",
+      "k_range": [
+        2,
+        9
+      ],
+      "m_closed_form": "2*k",
+      "name": "lattice",
+      "operators": "observation_loss on [[4, 2]] (the only bridge)",
+      "orders_of_magnitude_spanned": 4.868,
+      "positional_closed_form": "3*k",
+      "rows": [
+        {
+          "board": {
+            "height": 8,
+            "width": 4
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16,
+          "closed_form_m": 4,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 6,
+          "closed_form_states": 64,
+          "dippable_switches": 4,
+          "k": 2,
+          "m": 4,
+          "measured_log10": 1.80618,
+          "measured_states": 64,
+          "positional_states": 6,
+          "ratio_measured_over_bound": 4.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 5
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 64,
+          "closed_form_m": 6,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 9,
+          "closed_form_states": 384,
+          "dippable_switches": 6,
+          "k": 3,
+          "m": 6,
+          "measured_log10": 2.584331,
+          "measured_states": 384,
+          "positional_states": 9,
+          "ratio_measured_over_bound": 6.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 6
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 256,
+          "closed_form_m": 8,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 12,
+          "closed_form_states": 2048,
+          "dippable_switches": 8,
+          "k": 4,
+          "m": 8,
+          "measured_log10": 3.31133,
+          "measured_states": 2048,
+          "positional_states": 12,
+          "ratio_measured_over_bound": 8.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 7
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 1024,
+          "closed_form_m": 10,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 15,
+          "closed_form_states": 10240,
+          "dippable_switches": 10,
+          "k": 5,
+          "m": 10,
+          "measured_log10": 4.0103,
+          "measured_states": 10240,
+          "positional_states": 15,
+          "ratio_measured_over_bound": 10.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 8
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "closed_form_m": 12,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 18,
+          "closed_form_states": 49152,
+          "dippable_switches": 12,
+          "k": 6,
+          "m": 12,
+          "measured_log10": 4.691541,
+          "measured_states": 49152,
+          "positional_states": 18,
+          "ratio_measured_over_bound": 12.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 9
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16384,
+          "closed_form_m": 14,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 21,
+          "closed_form_states": 229376,
+          "dippable_switches": 14,
+          "k": 7,
+          "m": 14,
+          "measured_log10": 5.360548,
+          "measured_states": 229376,
+          "positional_states": 21,
+          "ratio_measured_over_bound": 14.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 10
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 65536,
+          "closed_form_m": 16,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 24,
+          "closed_form_states": 1048576,
+          "dippable_switches": 16,
+          "k": 8,
+          "m": 16,
+          "measured_log10": 6.0206,
+          "measured_states": 1048576,
+          "positional_states": 24,
+          "ratio_measured_over_bound": 16.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 8,
+            "width": 11
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 262144,
+          "closed_form_m": 18,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 27,
+          "closed_form_states": 4718592,
+          "dippable_switches": 18,
+          "k": 9,
+          "m": 18,
+          "measured_log10": 6.673812,
+          "measured_states": 4718592,
+          "positional_states": 27,
+          "ratio_measured_over_bound": 18.0,
+          "step_limit": null
+        }
+      ],
+      "shipped_as": "ii2",
+      "states_closed_form": "2*k*4**k  ==  2*k*2**m"
+    },
+    {
+      "bound_is_sound_at_every_k": true,
+      "bound_soundness_failures": [],
+      "closed_form_holds": true,
+      "closed_form_mismatches": [],
+      "constructor": "comb_open(level_id, corridor_len=k, start_col=1, goal_col=k)",
+      "k_range": [
+        1,
+        9
+      ],
+      "m_closed_form": "2*k",
+      "name": "spindle",
+      "operators": "none (the shipped step_limit is NOT applied; see budget_probe)",
+      "orders_of_magnitude_spanned": 5.771,
+      "positional_closed_form": "3*k",
+      "rows": [
+        {
+          "board": {
+            "height": 5,
+            "width": 3
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "closed_form_m": 2,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 3,
+          "closed_form_states": 8,
+          "dippable_switches": 2,
+          "k": 1,
+          "m": 2,
+          "measured_log10": 0.90309,
+          "measured_states": 8,
+          "positional_states": 3,
+          "ratio_measured_over_bound": 2.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 4
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16,
+          "closed_form_m": 4,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 6,
+          "closed_form_states": 64,
+          "dippable_switches": 4,
+          "k": 2,
+          "m": 4,
+          "measured_log10": 1.80618,
+          "measured_states": 64,
+          "positional_states": 6,
+          "ratio_measured_over_bound": 4.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 5
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 64,
+          "closed_form_m": 6,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 9,
+          "closed_form_states": 384,
+          "dippable_switches": 6,
+          "k": 3,
+          "m": 6,
+          "measured_log10": 2.584331,
+          "measured_states": 384,
+          "positional_states": 9,
+          "ratio_measured_over_bound": 6.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 6
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 256,
+          "closed_form_m": 8,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 12,
+          "closed_form_states": 2048,
+          "dippable_switches": 8,
+          "k": 4,
+          "m": 8,
+          "measured_log10": 3.31133,
+          "measured_states": 2048,
+          "positional_states": 12,
+          "ratio_measured_over_bound": 8.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 7
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 1024,
+          "closed_form_m": 10,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 15,
+          "closed_form_states": 10240,
+          "dippable_switches": 10,
+          "k": 5,
+          "m": 10,
+          "measured_log10": 4.0103,
+          "measured_states": 10240,
+          "positional_states": 15,
+          "ratio_measured_over_bound": 10.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 8
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "closed_form_m": 12,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 18,
+          "closed_form_states": 49152,
+          "dippable_switches": 12,
+          "k": 6,
+          "m": 12,
+          "measured_log10": 4.691541,
+          "measured_states": 49152,
+          "positional_states": 18,
+          "ratio_measured_over_bound": 12.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 9
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16384,
+          "closed_form_m": 14,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 21,
+          "closed_form_states": 229376,
+          "dippable_switches": 14,
+          "k": 7,
+          "m": 14,
+          "measured_log10": 5.360548,
+          "measured_states": 229376,
+          "positional_states": 21,
+          "ratio_measured_over_bound": 14.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 10
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 65536,
+          "closed_form_m": 16,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 24,
+          "closed_form_states": 1048576,
+          "dippable_switches": 16,
+          "k": 8,
+          "m": 16,
+          "measured_log10": 6.0206,
+          "measured_states": 1048576,
+          "positional_states": 24,
+          "ratio_measured_over_bound": 16.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 11
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 262144,
+          "closed_form_m": 18,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 27,
+          "closed_form_states": 4718592,
+          "dippable_switches": 18,
+          "k": 9,
+          "m": 18,
+          "measured_log10": 6.673812,
+          "measured_states": 4718592,
+          "positional_states": 27,
+          "ratio_measured_over_bound": 18.0,
+          "step_limit": null
+        }
+      ],
+      "shipped_as": "ii3 (geometry only -- ii3 also carries step_limit=150)",
+      "states_closed_form": "2*k*4**k  ==  2*k*2**m"
+    },
+    {
+      "bound_is_sound_at_every_k": true,
+      "bound_soundness_failures": [],
+      "closed_form_holds": true,
+      "closed_form_mismatches": [],
+      "constructor": "comb_open(level_id, corridor_len=k, start_col=2, goal_col=1)",
+      "k_range": [
+        2,
+        11
+      ],
+      "m_closed_form": "2*(k-1)",
+      "name": "orchard",
+      "operators": "forbid_action LEFT",
+      "orders_of_magnitude_spanned": 5.543,
+      "positional_closed_form": "3*(k-1)",
+      "rows": [
+        {
+          "board": {
+            "height": 5,
+            "width": 4
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4,
+          "closed_form_m": 2,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 3,
+          "closed_form_states": 8,
+          "dippable_switches": 2,
+          "k": 2,
+          "m": 2,
+          "measured_log10": 0.90309,
+          "measured_states": 8,
+          "positional_states": 3,
+          "ratio_measured_over_bound": 2.0,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 5
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16,
+          "closed_form_m": 4,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 6,
+          "closed_form_states": 40,
+          "dippable_switches": 4,
+          "k": 3,
+          "m": 4,
+          "measured_log10": 1.60206,
+          "measured_states": 40,
+          "positional_states": 6,
+          "ratio_measured_over_bound": 2.5,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 6
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 64,
+          "closed_form_m": 6,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 9,
+          "closed_form_states": 168,
+          "dippable_switches": 6,
+          "k": 4,
+          "m": 6,
+          "measured_log10": 2.225309,
+          "measured_states": 168,
+          "positional_states": 9,
+          "ratio_measured_over_bound": 2.625,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 7
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 256,
+          "closed_form_m": 8,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 12,
+          "closed_form_states": 680,
+          "dippable_switches": 8,
+          "k": 5,
+          "m": 8,
+          "measured_log10": 2.832509,
+          "measured_states": 680,
+          "positional_states": 12,
+          "ratio_measured_over_bound": 2.65625,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 8
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 1024,
+          "closed_form_m": 10,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 15,
+          "closed_form_states": 2728,
+          "dippable_switches": 10,
+          "k": 6,
+          "m": 10,
+          "measured_log10": 3.435844,
+          "measured_states": 2728,
+          "positional_states": 15,
+          "ratio_measured_over_bound": 2.664062,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 9
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 4096,
+          "closed_form_m": 12,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 18,
+          "closed_form_states": 10920,
+          "dippable_switches": 12,
+          "k": 7,
+          "m": 12,
+          "measured_log10": 4.038223,
+          "measured_states": 10920,
+          "positional_states": 18,
+          "ratio_measured_over_bound": 2.666016,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 10
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 16384,
+          "closed_form_m": 14,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 21,
+          "closed_form_states": 43688,
+          "dippable_switches": 14,
+          "k": 8,
+          "m": 14,
+          "measured_log10": 4.640362,
+          "measured_states": 43688,
+          "positional_states": 21,
+          "ratio_measured_over_bound": 2.666504,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 11
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 65536,
+          "closed_form_m": 16,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 24,
+          "closed_form_states": 174760,
+          "dippable_switches": 16,
+          "k": 9,
+          "m": 16,
+          "measured_log10": 5.242442,
+          "measured_states": 174760,
+          "positional_states": 24,
+          "ratio_measured_over_bound": 2.666626,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 12
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 262144,
+          "closed_form_m": 18,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 27,
+          "closed_form_states": 699048,
+          "dippable_switches": 18,
+          "k": 10,
+          "m": 18,
+          "measured_log10": 5.844507,
+          "measured_states": 699048,
+          "positional_states": 27,
+          "ratio_measured_over_bound": 2.666656,
+          "step_limit": null
+        },
+        {
+          "board": {
+            "height": 5,
+            "width": 13
+          },
+          "bound_is_sound": true,
+          "claimed_lower_bound_2_pow_m": 1048576,
+          "closed_form_m": 20,
+          "closed_form_m_matches": true,
+          "closed_form_matches": true,
+          "closed_form_positional_matches": true,
+          "closed_form_positional_states": 30,
+          "closed_form_states": 2796200,
+          "dippable_switches": 20,
+          "k": 11,
+          "m": 20,
+          "measured_log10": 6.446568,
+          "measured_states": 2796200,
+          "positional_states": 30,
+          "ratio_measured_over_bound": 2.666664,
+          "step_limit": null
+        }
+      ],
+      "shipped_as": "ii4",
+      "states_closed_form": "(2*4**k - 8)//3  ==  (8*(2**m - 1))//3"
+    }
+  ],
+  "kmax_requested": 9,
+  "marker_cap_for_reference": 200000,
+  "schema": "verdict.large_space.growth_curve/1",
+  "shipped_items": [
+    {
+      "claimed_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+      "claimed_lower_bound_log10": 36.123599,
+      "dippable_switches": 120,
+      "family": "gantry",
+      "item": "ii1",
+      "k_corridor_len": 60,
+      "large_space_threshold": 1000000000000,
+      "m": 120,
+      "over_threshold": true,
+      "positional_states": 180,
+      "step_limit": null
+    },
+    {
+      "claimed_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+      "claimed_lower_bound_log10": 36.123599,
+      "dippable_switches": 120,
+      "family": "lattice",
+      "item": "ii2",
+      "k_corridor_len": 60,
+      "large_space_threshold": 1000000000000,
+      "m": 120,
+      "over_threshold": true,
+      "positional_states": 180,
+      "step_limit": null
+    },
+    {
+      "claimed_lower_bound_2_pow_m": 1152921504606846976,
+      "claimed_lower_bound_log10": 18.0618,
+      "dippable_switches": 400,
+      "family": "spindle",
+      "item": "ii3",
+      "k_corridor_len": 200,
+      "large_space_threshold": 1000000000000,
+      "m": 60,
+      "over_threshold": true,
+      "positional_states": 600,
+      "step_limit": 150
+    },
+    {
+      "claimed_lower_bound_2_pow_m": 332306998946228968225951765070086144,
+      "claimed_lower_bound_log10": 35.521539,
+      "dippable_switches": 118,
+      "family": "orchard",
+      "item": "ii4",
+      "k_corridor_len": 60,
+      "large_space_threshold": 1000000000000,
+      "m": 118,
+      "over_threshold": true,
+      "positional_states": 177,
+      "step_limit": null
+    }
+  ],
+  "source_module": "exam/papers/verdict.py",
+  "stable_fields": "every key except `timings_seconds`; `stable_sha256` is sha256 over canonical() of this document with `timings_seconds` and `stable_sha256` removed",
+  "stable_sha256": "1dabe7988a06599633990fae43f43cbfad963dfdcdc63f95edf5003530493538",
+  "timings_seconds": {
+    "budget_probe": {
+      "scaled.2": 0.0,
+      "scaled.3": 0.0,
+      "scaled.4": 0.0,
+      "scaled.5": 0.0,
+      "scaled.6": 0.0,
+      "scaled.7": 0.0,
+      "scaled.8": 0.0,
+      "scaled.9": 0.001,
+      "sweep_k6.0": 0.0,
+      "sweep_k6.10": 0.011,
+      "sweep_k6.15": 0.09,
+      "sweep_k6.20": 0.17,
+      "sweep_k6.25": 0.175,
+      "sweep_k6.30": 0.161,
+      "sweep_k6.35": 0.173,
+      "sweep_k6.40": 0.165,
+      "sweep_k6.45": 0.168,
+      "sweep_k6.5": 0.0,
+      "sweep_k6.50": 0.183,
+      "sweep_k6.55": 0.172,
+      "sweep_k6.60": 0.173,
+      "sweep_k6.None": 0.168
+    },
+    "gantry": {
+      "1": 0.0,
+      "1.quotient": 0.0,
+      "2": 0.0,
+      "2.quotient": 0.0,
+      "3": 0.001,
+      "3.quotient": 0.0,
+      "4": 0.006,
+      "4.quotient": 0.0,
+      "5": 0.031,
+      "5.quotient": 0.0,
+      "6": 0.163,
+      "6.quotient": 0.0,
+      "7": 0.98,
+      "7.quotient": 0.0,
+      "8": 5.671,
+      "8.quotient": 0.0,
+      "9": 27.759,
+      "9.quotient": 0.0
+    },
+    "lattice": {
+      "2": 0.0,
+      "2.quotient": 0.0,
+      "3": 0.001,
+      "3.quotient": 0.0,
+      "4": 0.006,
+      "4.quotient": 0.0,
+      "5": 0.033,
+      "5.quotient": 0.0,
+      "6": 0.17,
+      "6.quotient": 0.0,
+      "7": 1.017,
+      "7.quotient": 0.0,
+      "8": 5.788,
+      "8.quotient": 0.0,
+      "9": 28.029,
+      "9.quotient": 0.0
+    },
+    "orchard": {
+      "10": 2.322,
+      "10.quotient": 0.0,
+      "11": 13.484,
+      "11.quotient": 0.0,
+      "2": 0.0,
+      "2.quotient": 0.0,
+      "3": 0.0,
+      "3.quotient": 0.0,
+      "4": 0.0,
+      "4.quotient": 0.0,
+      "5": 0.002,
+      "5.quotient": 0.0,
+      "6": 0.006,
+      "6.quotient": 0.0,
+      "7": 0.028,
+      "7.quotient": 0.0,
+      "8": 0.119,
+      "8.quotient": 0.0,
+      "9": 0.501,
+      "9.quotient": 0.0
+    },
+    "spindle": {
+      "1": 0.0,
+      "1.quotient": 0.0,
+      "2": 0.0,
+      "2.quotient": 0.0,
+      "3": 0.001,
+      "3.quotient": 0.0,
+      "4": 0.006,
+      "4.quotient": 0.0,
+      "5": 0.03,
+      "5.quotient": 0.0,
+      "6": 0.173,
+      "6.quotient": 0.0,
+      "7": 0.909,
+      "7.quotient": 0.0,
+      "8": 5.051,
+      "8.quotient": 0.0,
+      "9": 28.116,
+      "9.quotient": 0.0
+    },
+    "total_seconds": 122.247
+  },
+  "unstable_fields": [
+    "timings_seconds"
+  ],
+  "verified_orders_of_magnitude": 5.771,
+  "what": "Parametric growth curve for the comb families behind the class (ii) items of exam/papers/verdict.py.  Each rung is enumerated to completion and matched against a closed form stated in advance; nothing is fitted.",
+  "what_this_does_not_license": [
+    "It does not enumerate the shipped boards.  The largest measured state count is about 4.7e6; ii1/ii2 claim 2^120 = 1.3e36 and ii4 claims 2^118 = 3.3e35, so roughly 29 orders of magnitude separate the last rung from the shipped bound and no count crosses it.",
+    "It does not cover ii3.  ii3 ships with step_limit=150 and its m=60 is set by that budget, not by its 400 switches; the closed form here is measured on the unbudgeted spindle geometry.  See budget_probe: a binding budget puts the true count far below 2*k*4^k, so the unbudgeted form must not be read onto ii3.",
+    "It says nothing about `subset_lower_bound` on boards outside these four families.  The lane premise it asserts (D-EX-021) is a property of the comb geometry; a different board can defeat it, which is what the AssertionError inside the function is for.",
+    "It does not make enumeration infeasible as a matter of proof.  The measured curve is a statement about the reachable set's size, and `positional_states` -- 3k, tiny -- shows a solver that quotients by the latch mask faces nothing of the sort.  The quotient is not a sound abstraction here (D-EX-022), but the large-space claim is about naive enumeration and only that."
+  ],
+  "what_this_licenses": "The exponent, not the shipped number.  Over 5.77 orders of magnitude of measured state count the exact reachable set equals 2*k*2^m (gantry, lattice, spindle) or (8/3)*(2^m - 1) (orchard) at every single k with no fitting, so `subset_lower_bound`'s 2^m is confirmed to be a genuine lower bound on these families and a loose one -- the truth exceeds it by a factor of 2k, which grows. Extrapolation to the shipped k is licensed by the closed form's exactness at every measured k, not by the measurement reaching the shipped k, which it never can."
+}

@@ -1,0 +1,307 @@
+{
+  "deterministic": {
+    "cap": 200000,
+    "items": [
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i1",
+        "level_id": "atrium",
+        "positional_states": 24,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 24,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "variant_id": "a2var-i1-atrium-nodown"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i2",
+        "level_id": "updraft",
+        "positional_states": 7,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 7,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "variant_id": "a2var-i2-updraft-noup"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 0,
+        "hazards": [
+          [
+            3,
+            5
+          ]
+        ],
+        "hit_cap": false,
+        "item": "i3",
+        "level_id": "cistern",
+        "positional_states": 20,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 20,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "variant_id": "a2var-i3-cistern-cut"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i4",
+        "level_id": "atrium",
+        "positional_states": 55,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 31,
+        "step_limit": 7,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "variant_id": "a2var-i4-atrium-budget"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i5",
+        "level_id": "quarry",
+        "positional_states": 14,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 14,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "variant_id": "a2var-i5-quarry-swap"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "large_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 120,
+        "hazards": [],
+        "hit_cap": true,
+        "item": "ii1",
+        "level_id": "gantry",
+        "positional_states": 180,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+        "subset_lower_bound_m": 120,
+        "switches": 120,
+        "truncated": true,
+        "variant_id": "a2var-ii1-gantry-sealed"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "large_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 120,
+        "hazards": [
+          [
+            4,
+            2
+          ]
+        ],
+        "hit_cap": true,
+        "item": "ii2",
+        "level_id": "lattice",
+        "positional_states": 180,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+        "subset_lower_bound_m": 120,
+        "switches": 120,
+        "truncated": true,
+        "variant_id": "a2var-ii2-lattice-bridge"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "large_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "dippable_switches": 400,
+        "hazards": [],
+        "hit_cap": true,
+        "item": "ii3",
+        "level_id": "spindle",
+        "positional_states": 600,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": 150,
+        "subset_lower_bound_2_pow_m": 1152921504606846976,
+        "subset_lower_bound_m": 60,
+        "switches": 400,
+        "truncated": true,
+        "variant_id": "a2var-ii3-spindle-budget"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "large_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "RIGHT"
+        ],
+        "dippable_switches": 118,
+        "hazards": [],
+        "hit_cap": true,
+        "item": "ii4",
+        "level_id": "orchard",
+        "positional_states": 177,
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 332306998946228968225951765070086144,
+        "subset_lower_bound_m": 118,
+        "switches": 120,
+        "truncated": true,
+        "variant_id": "a2var-ii4-orchard-noleft"
+      }
+    ],
+    "large_space_threshold": 1000000000000,
+    "note": "`_large_space()` (verdict.py:767) writes exhaustive_feasible=False, enumerated=null, truncated=false onto every class (ii) record without calling enumerate_states. This file is that call, made at the shipped cap on the shipped levels. `truncated` here is measured; in the shipped record it is a constant."
+  },
+  "deterministic_sha256": "f70fdb809bd0ba0d48e853c55a4b2942a7361f6d3c202a19a3c334637ca1816f",
+  "timings_nondeterministic": {
+    "i1": {
+      "enumerate_states_seconds": 0.0,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.0
+    },
+    "i2": {
+      "enumerate_states_seconds": 0.0,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.0
+    },
+    "i3": {
+      "enumerate_states_seconds": 0.0,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.0
+    },
+    "i4": {
+      "enumerate_states_seconds": 0.0,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.0
+    },
+    "i5": {
+      "enumerate_states_seconds": 0.0,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.0
+    },
+    "ii1": {
+      "enumerate_states_seconds": 0.809,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.002
+    },
+    "ii2": {
+      "enumerate_states_seconds": 0.848,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.002
+    },
+    "ii3": {
+      "enumerate_states_seconds": 0.521,
+      "positional_states_seconds": 0.001,
+      "subset_lower_bound_seconds": 0.005
+    },
+    "ii4": {
+      "enumerate_states_seconds": 0.832,
+      "positional_states_seconds": 0.0,
+      "subset_lower_bound_seconds": 0.001
+    }
+  }
+}
