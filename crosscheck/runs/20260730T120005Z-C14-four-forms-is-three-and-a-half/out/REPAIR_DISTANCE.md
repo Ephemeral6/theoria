@@ -88,15 +88,48 @@ emits structurally correct PDDL for a third of the corpus and then invalidates i
 with an eight-identifier vocabulary bug, and for the other two thirds it has no
 event model to emit. Write both numbers.
 
-**For the theory-compiler track.** The 94 naming-only actions are the cheap third.
-If the emit-side and declare-side vocabularies are reconciled — 3 predicate names
-— and the 5 variables are added to their `:parameters`, those 94 actions become
-candidates for GOOD in one change, subject to re-running this census to confirm.
-That is an estimate of *reachability*, not a promise: this territory has not
-attempted the fix and will not, because `theory-compiler/` is the other track's
-and not one byte of it may be modified from here. The 152 empty-effect actions are
-a different and much larger problem, and the 3 refused files may not be reachable
-in STRIPS at all.
+**For the theory-compiler track.** The 94 naming-only actions are the shallow
+third — but see the correction below before costing the repair. This territory has
+not attempted the fix and will not: `theory-compiler/` is the other track's and not
+one byte of it may be modified from here. The 152 empty-effect actions are a
+different and much larger problem, and the 3 refused files may not be reachable in
+STRIPS at all. Full diagnosis and an ordered fix proposal: `ROOT_CAUSE.md`.
+
+---
+
+## CORRECTION — "one change" was wrong, and the way it is wrong matters
+
+An earlier revision of this document said the 94 naming-only actions "become
+candidates for GOOD in one change". **That is false.** A subsequent read of the
+generator found a fifth defect that none of the census's four criteria can see:
+
+`gen_pddl.py:300-307` makes a `:parameters` entry out of *every* `NameRef`
+argument, including the direction constants `up`/`down`/`left`/`right`, typing them
+`object` because they are not declared object types. **No object of type `object`
+is ever declared in the generated problem, so the parameter cannot bind and the
+action disappears at grounding.** Measured against the track's own `strips.ground`,
+with only the predicate-name defect patched:
+
+```
+with the ?up / ?down parameter:      0 ground actions
+without it:                        144 ground actions
+```
+
+So reconciling the eight identifiers makes the domain *parse* and leaves it
+grounding to **zero actions**. The repair distance for those 94 is at minimum two
+independent changes, not one.
+
+**The general lesson is more important than the correction.** The census's bar —
+non-empty precondition, non-empty effect, no undeclared variable, no undeclared
+predicate — is a test of well-formedness and non-vacuity. It is **too lenient, not
+too strict**: an action can satisfy all four and still ground to nothing, still
+carry an inverted precondition (`GuardPredicate.negated` is never read by this
+backend), or still let a teleport land anywhere (declared landmarks become free
+cell parameters). `0 of 303` is therefore a **ceiling on correctness, not a floor
+on brokenness** — the true number of *usable* actions cannot be higher than 0 and
+the defect list cannot be shorter than four classes. Nothing in this document's
+headline weakens; the estimate of what a fix costs was too optimistic, and is
+corrected upward.
 
 **Do not report "94 nearly work" as progress.** Nearly-valid PDDL is invalid PDDL;
 a planner rejects the file. The number today is 0.

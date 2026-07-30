@@ -102,6 +102,28 @@ invalid PDDL; the planner rejects the file. The count today is 0. But a reader
 told only "0 of 303" will conclude something false about *why*, and the fix
 estimate that follows from it will be wrong by an order of magnitude.
 
+**Nor is "shallow" the same as "cheap".** Reconciling the eight identifiers is
+*not* sufficient to make those 94 work. A fifth defect, invisible to all four of
+the census's criteria, kills them anyway: `gen_pddl` makes a `:parameters` entry
+out of every direction constant, typed `object`, and no object of that type is
+ever declared — so the parameter cannot bind. Measured with only the naming defect
+patched, against the track's own grounder: **0 ground actions with the direction
+parameter, 144 without it.** The naming fix alone buys a domain that parses and
+grounds to nothing.
+
+### The bar is too lenient, not too strict
+
+This is the single most important methodological caveat in this document. The four
+criteria test well-formedness and non-vacuity. An action can satisfy all four and
+still be dead or wrong: it can ground to zero actions (above); it can carry an
+**inverted** precondition, because `GuardPredicate.negated` is never read by this
+backend while the other three honour it; and a declared landmark becomes a free
+cell parameter, so a teleport may land anywhere.
+
+So **`0 of 303` is a ceiling on correctness, not a floor on brokenness.** A future
+census that fixes the four classes and reports a positive number has not thereby
+shown the form works. Full diagnosis: `runs/…/out/ROOT_CAUSE.md`.
+
 ## 4. The handover packages ship no planning form at all
 
 Both published packages, extension by extension:
