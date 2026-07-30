@@ -34,17 +34,32 @@ class _R:
 
 
 @pytest.fixture
-def isolated_ci(tmp_path, monkeypatch):
-    """Point CI_DIR and the memo at tmp_path. These write real files."""
+def flag_sandbox(tmp_path, monkeypatch):
+    """Redirect `flag()`'s real file writes into tmp_path, and nothing more.
+
+    Deliberately touches **no symbol this item added**. The counter tests below
+    are about `flag()`, which has existed all along, so their red on an
+    unpatched master has to be a behavioural red -- an inherited `attempts` --
+    and not an AttributeError from a fixture reaching for `BASE_MEMO`. The first
+    draft of this file used one shared fixture and every test on master errored
+    at fixture setup, which proves the symbol is new and nothing whatever about
+    the behaviour. That is the weak evidence this whole item is about.
+    """
     monkeypatch.setattr(ci_merge, "CI_DIR", str(tmp_path))
-    monkeypatch.setattr(ci_merge, "BASE_MEMO", str(tmp_path / "base_gates.json"))
     monkeypatch.setattr(ci_merge, "flag_path",
                         lambda b: str(tmp_path / ("F-%s.md" % b.replace("/", "_"))))
     lines = []
     monkeypatch.setattr(ci_merge, "log_line", lines.append)
     monkeypatch.setattr(ci_merge, "branch_tip", lambda b: "BASE0000")
-    monkeypatch.setattr(ci_merge.gates, "gate_env", lambda wt: {})
     return lines
+
+
+@pytest.fixture
+def isolated_ci(tmp_path, monkeypatch, flag_sandbox):
+    """`flag_sandbox` plus the base-probe machinery this item introduced."""
+    monkeypatch.setattr(ci_merge, "BASE_MEMO", str(tmp_path / "base_gates.json"))
+    monkeypatch.setattr(ci_merge.gates, "gate_env", lambda wt: {})
+    return flag_sandbox
 
 
 ROW = {"kind": "verify", "cmd": ["pytest"], "name": "verify.sh"}
@@ -214,7 +229,7 @@ class _Clock:
         return "2026-07-30T00:00:%02dZ" % t
 
 
-def test_a_different_failure_does_not_inherit_the_old_counter(isolated_ci,
+def test_a_different_failure_does_not_inherit_the_old_counter(flag_sandbox,
                                                               monkeypatch,
                                                               tmp_path):
     """`a3-campaign-devpile` wore `NEEDS-HUMAN: 28 attempts since 07-29T04:14`
@@ -241,10 +256,10 @@ def test_a_different_failure_does_not_inherit_the_old_counter(isolated_ci,
         "claims a duration that never happened" % fresh["first_seen"])
 
 
-def test_the_same_failure_still_reaches_needs_human(isolated_ci, tmp_path):
+def test_the_same_failure_still_reaches_needs_human(flag_sandbox, tmp_path):
     """NEGATIVE CONTROL: resetting on a changed reason must not defeat the
     escalation. Three attempts at one reason still has to summon a human."""
-    lines = isolated_ci
+    lines = flag_sandbox
     b = "origin/agent/stuck"
     for _ in range(3):
         ci_merge.flag(b, "tests red in monitor", "d")
