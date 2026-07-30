@@ -1,0 +1,40 @@
+{
+  "prompt_id": "S39-S39-writes-into-the-live-master-tree",
+  "branch": "agent/s39-writes-into-the-live-master-tree",
+  "base_commit": "2f64e81de8f639b993b32d41739e52d773f65ea5",
+  "utc": "2026-07-30T05:20:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "files": [
+    {
+      "path": "monitor/master_tree_guard.py",
+      "sha256": "6e4378d56304fe6d74d072d908c4e7c01ff3413e099062393b1f415c452d37e3",
+      "role": "the gate: three-tier classifier, pre-commit hook, installer"
+    },
+    {
+      "path": "monitor/tests/test_master_tree_guard.py",
+      "sha256": "dc6aab64e73ba0a0481304f080fef5cf5b14557eb1a0b19394ea472dccf64eb4",
+      "role": "requirement 3 controls + probe injection self-test; 42 tests"
+    },
+    {
+      "path": "monitor/scan.py",
+      "sha256": "68fe4011719228cdb56204e9cc51e8336085b0896992aa5e3053d01b1474efc1",
+      "role": "probe_master_tree + PROBES registration"
+    },
+    {
+      "path": "monitor/runs/20260730T0440Z-S39/FINDINGS.md",
+      "sha256": "f64114a57ef8fb5e673eda184bc0713e3e50165a0eac502dce848a058515c729",
+      "role": "requirement 1 adjudication + requirement 4 census"
+    },
+    {
+      "path": "monitor/runs/20260730T0440Z-S39/master-tree-status-raw.txt",
+      "role": "requirement 1 raw capture, 2026-07-30T04:40Z, unprocessed"
+    }
+  ],
+  "verification": {
+    "monitor/tests": "439 passed, 2 xfailed",
+    "monitor/verify.py": "GREEN (tests / board states disjoint / real run / artifact fields)",
+    "live_guard_run": "exit 2, 3 miswrites, 8 unfiled, 141 fleet-state of 152 dirty paths"
+  }
+}
