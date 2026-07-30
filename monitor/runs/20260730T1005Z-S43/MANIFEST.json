@@ -1,0 +1,27 @@
+{
+  "prompt_id": "S43-S43-three-guards-reverted",
+  "branch": "agent/s43-three-guards-reverted",
+  "base_commit": "cc7e414e",
+  "utc": "2026-07-30T13:05:00Z",
+  "agent": "RES-4",
+  "cycle": 62,
+  "lane": "infra",
+  "territory": "monitor",
+  "subject_commits": {
+    "installed_the_guards": "1585dd04",
+    "deleted_the_guards": "873d62ee",
+    "restored_merge_events_by_merge_resolution": "7c1dd89b",
+    "commits_landed_on_the_resulting_red": 72
+  },
+  "files": [
+    "monitor/reflex.py",
+    "monitor/ci_merge.py",
+    "monitor/tests/test_s43_guards_deleted_in_place.py",
+    "monitor/tests/test_s43_base_red_is_not_the_branchs_fault.py",
+    "monitor/runs/20260730T1005Z-S43/PATCH_PLAN.md",
+    "monitor/runs/20260730T1005Z-S43/FINDINGS-why-72-commits-landed-red.md",
+    "monitor/runs/20260730T1005Z-S43/ADVERSARIAL.md",
+    "monitor/runs/20260730T1005Z-S43/RUN_STATE.md"
+  ],
+  "notes": "873d62ee deliberately NOT reverted: it carries two genuine fixes of its own (the refill threshold and the dashboard restart), both of which had zero tests until this run."
+}

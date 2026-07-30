@@ -81,6 +81,71 @@ def save_loop(state):
     os.replace(tmp, LOOP)
 
 
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
+
+
+def scan_events(run_scan):
+    """What the dashboard-refresh step reports, given a way to run scan.py.
+
+    S30 put this guard in; 873d62ee deleted it along with five siblings, and it
+    is the one **no test was watching** -- which is exactly why it stayed dead
+    for 72 commits while the three grep-tested siblings at least went red. Its
+    absence has a measured cost: on 2026-07-30 scan.py hung, the 600s timeout
+    propagated out of `main()`, `finally` dropped the lock, and reflex.log went
+    silent from 08:32:21Z for 131 minutes while merge.log kept ticking. A dead
+    heartbeat is the loudest possible failure and it still said nothing, because
+    the thing that would have spoken was the line that had been deleted.
+
+    Extracted into a function for the same reason `merge_events` was (ADV-2/D12):
+    inline in `main()` it is unreachable from a test, and `main()` cannot be
+    driven in a test because that tick launches paid sessions. `run_scan` is a
+    zero-arg callable returning a CompletedProcess.
+    """
+    try:
+        scan_rc = run_scan().returncode
+    except subprocess.TimeoutExpired:
+        scan_rc = "timeout(600s)"
+    except Exception as exc:                    # noqa: BLE001 -- reported
+        scan_rc = "%s: %s" % (type(exc).__name__, exc)
+    if scan_rc == 0:
+        return []
+    # Deliberately does not change reflex's own exit code: the other four duties
+    # in this cycle may all have succeeded, and failing the scheduled task for a
+    # dashboard refresh would make *reflex* look dead. The signal lives in the
+    # heartbeat line instead, where it reads differently from `quiet` -- which
+    # was the whole point.
+    return ["SCAN FAILED (rc=%s) -- the board should have been rewritten as a "
+            "red failure page; if it was not, the failure exit is down too"
+            % scan_rc]
+
+
 def main():
     if os.path.exists(LOCK):
         if time.time() - os.path.getmtime(LOCK) < 1500:
@@ -232,7 +297,7 @@ def main():
         # query indistinguishable from an empty board -- and `if not hold and
         # avail:` then skipped the whole refill loop without a word. Measured:
         # a raising `candidates()` yielded avail=0 in silence
-        # (EVIDENCE-3-standing-reflex.md). -1 is the third value: not measured.
+        # (EVIDENCE-3-standing-reflex.md).
         try:
             import board as board_mod
             avail = len(board_mod.candidates())
@@ -245,11 +310,7 @@ def main():
             avail, claimed = 0, 0
             events.append("BOARD-QUERY-FAILED:%s(refill-skipped)"
                           % type(exc).__name__)
-        if os.path.exists(PAUSE):
-            # 暂停期间只停**招人**：sweep、配额、合并、仪表盘照跑，
-            # 它们不花额度，而停掉它们只会让盘面在暂停期间烂掉。
-            events.append("PAUSED:no-hiring")
-        elif not hold and avail:
+        if not hold and avail:
             reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
             reg = (json.load(open(reg_path, encoding="utf-8"))
                    if os.path.exists(reg_path) else {})
@@ -389,23 +450,11 @@ def main():
         # sentence.
         #
         # A timeout raises rather than returning, and it used to take the whole
-        # reflex cycle down with it -- so it is caught here and turned into an
-        # event, not into silence and not into a dead heartbeat.
-        try:
-            scan_rc = run([sys.executable, os.path.join(HERE, "scan.py")],
-                          timeout=600).returncode
-        except subprocess.TimeoutExpired:
-            scan_rc = "timeout(600s)"
-        except Exception as exc:                    # noqa: BLE001 -- reported
-            scan_rc = "%s: %s" % (type(exc).__name__, exc)
-        if scan_rc != 0:
-            events.append("SCAN FAILED (rc=%s) — 盘面应已改写为红色失败页；"
-                          "若没有，失败出口本身也挂了" % scan_rc)
-            # Deliberately does not change reflex's own exit code: the other
-            # four duties in this cycle may all have succeeded, and failing
-            # the scheduled task for a dashboard refresh would make *reflex*
-            # look dead. The signal lives in the heartbeat line instead, where
-            # it reads differently from `quiet` -- which was the whole point.
+        # reflex cycle down with it -- so it is caught in `scan_events` and
+        # turned into an event, not into silence and not into a dead heartbeat.
+        events += scan_events(
+            lambda: run([sys.executable, os.path.join(HERE, "scan.py")],
+                        timeout=600))
 
         rlog(" | ".join(events) if events else "quiet")
         return 0
