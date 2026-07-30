@@ -63,12 +63,33 @@
   "reconciliation": {
     "file": "delta-old-vs-new.md",
     "purpose": "work item 2 -- per-finding reconciliation of the three stale audits against the paper as it is now",
-    "state": "stub -- header establishes the four pinned states and the section renumbering, then the table has one row reading '(filled in below as verification proceeds)'. Being written.",
+    "state": "complete -- 447 lines, 47321 bytes, 139 findings each resolved to a verdict and an anchor in the current PAPER.md or an explicit 'no longer present'. Zero rows are 'unverifiable'.",
     "sources": [
       "CITECHECK.md",
       "REVIEW.md",
       "runs/20260728T173000Z-P12-paper-multi-review/review-d-adversarial.md"
-    ]
+    ],
+    "verdicts": {
+      "fixed": 96,
+      "partly-fixed": 8,
+      "still-open": 11,
+      "moved": 7,
+      "superseded": 3,
+      "adjudicated": 3,
+      "withdrawn": 2,
+      "not-a-defect": 9,
+      "unverifiable": 0,
+      "total": 139,
+      "open_in_some_form": 26
+    },
+    "per_source_totals": {
+      "CITECHECK.md": 66,
+      "REVIEW.md": 54,
+      "review-d-adversarial.md": 19
+    },
+    "stub_header_was_wrong": "The stub's own header asserted HEAD 50e10617 (actually 0096a2c3) and that 'there is no 91244-byte state in the history of the file'. There is: commit 080f05da, PAPER.md at 1534 lines / 91244 bytes / sha256 112058bf8d63a34ef42468270466d4beadd7d3d96062465fff7ee7bf1af3c5f6 -- re-measured independently by RES-3 out of git rather than taken from the sub-audit. It is the same commit OPEN_ITEMS.md credits with closing four of REVIEW's six blocking issues, so the assertion was not only false but false about the most load-bearing revision in the range. Withdrawn, and the full blob history is given in its place.",
+    "two_source_audits_had_wrong_arithmetic": "The 2 'withdrawn' rows are findings that were wrong when written, not findings later repaired. The headline diff was re-run: 52 changed lines / 7 hunks / 791 vs 789 / 28 weight-table lines. CITECHECK's '70 diff lines' reproduces under no reading of the diff; REVIEW's 'only 14 of them are the weight table' confused table entries with lines. Both audits' substantive points stand and are fixed; the current paper gets the arithmetic right at L1378-1379.",
+    "the_rule_was_weakened_not_only_satisfied": "CITECHECK tested that every citation is repo-relative. verify_paper.py's gate F now tests that every citation is unambiguous. Those are different rules: A-7/8/9/17 are unambiguous bare filenames, so the gate reports green over findings that remain true. A green gate is evidence about the rule the gate implements, not about the rule the audit tested."
   },
   "stub_census": "Three of this run's deliverables were stubs that read as finished: citecheck A (Pass A only, B/C/D counted but never enumerated), citecheck C (summary table, then 'report in progress'), and delta-old-vs-new (header, then an empty table). All three are recorded here rather than only in prose, because the defect P18 was commissioned to fix is a coverage claim nobody could check, and it turned up three times inside P18's own output.",
   "completeness_check": "'complete' above is a checked property, not an inference from file size -- which is the distinction this whole run is about. Each slice marked complete was verified to carry all four pass sections (A/B/C/D), a limits section, and enumerated table rows: A 73 rows, B 57, D1 73, D2 65. B calls its limits section 'What this audit could NOT check' and D1/D2 call theirs 'What I could NOT check, and why'; the heading differs, the section is present in all four. No slice marked complete contains a 'report in progress', 'filled in below', TODO or TBD marker. The two stubs were caught by exactly this check."
