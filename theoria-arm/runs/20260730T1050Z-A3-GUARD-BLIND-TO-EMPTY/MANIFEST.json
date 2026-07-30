@@ -1,0 +1,56 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "c7d3b3c560247e9855cad26ad5af63466a871130",
+  "utc": "2026-07-30T10:50:00Z",
+  "agent": "RES-1",
+  "cycle": 49,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "对抗复核在我自己披露过一个缺口的那个迁移守卫里找到了第二个、更大的缺口：flatten() 对空容器不产生叶子，于是值为 {} 或 [] 的键对 added/removed/changed 三者同时不可见 —— 包括凭空发明一个顶层键。用修好的 flatten 把七份迁移重比了一遍：迁移本身干净，虚的是守卫的判词。兄弟脚本 migrate_files_in_clone.py 有同类失明（集合比较，对顺序与重复失明），同样是守卫虚、结果实。",
+  "leg": "offline -- 不花钱、不碰真 API",
+  "inputs": [
+    "对抗复核 subagent（迁移正当性视角）的报告：flatten 空容器缺口 + migrate_files_in_clone 集合失明 + 两个 sha256 已离开被跟踪树",
+    "runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/migrate_cost_shape.py 的 docstring『Known limitation of this guard』段（我自己披露的那个缺口）",
+    "53e6ea0b^ / 53e6ea0b 的清单字节（before 取自 git，不是重跑）",
+    "46612a9c^ / 46612a9c 的 leg01 清单（files[] 的 before/after）"
+  ],
+  "measured": {
+    "instrument": "runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/recheck_with_a_fixed_flatten.py",
+    "shipped_guard_blind_to": [
+      "空 dict -> 空 list（JSON 类型改变）",
+      "值为空容器的键被删除",
+      "凭空发明一个值为空 dict 的顶层键"
+    ],
+    "seven_migrations_rechecked_with_fixed_flatten": {
+      "added": "七份全部恰好三个 S29 键",
+      "removed": "七份全部为空",
+      "changed": "七份全部为空（且 changed 判据已加 type() 严格性，把我原先披露的 0 == 0.0 缺口一并关上）",
+      "verdict": "迁移干净；虚的是守卫的判词，不是迁移"
+    },
+    "files_guard_rechecked_as_a_list": {
+      "before_count": 16,
+      "after_count": 14,
+      "dropped": ["candidates.jsonl", "trace.jsonl"],
+      "survivor_relative_order_preserved": true,
+      "after_has_no_duplicates": true
+    },
+    "exit_code": 0
+  },
+  "recovered_into_the_tracked_tree": {
+    "why": "46612a9c 只在 migration_files.json 里记了被移除的路径、没记摘要，于是这两个 sha256 在 HEAD 的被跟踪树里 git grep 零命中，只活在一个被取代的 blob 里。CLAUDE.md 说 Phase 4 释出清单发布的是被跟踪文件，被取代的 blob 不是。",
+    "source": "46612a9c^:theoria-arm/runs/20260729T004020Z-leg01/MANIFEST.json",
+    "candidates.jsonl": "e5c2226a52bf71b094b1643310693fcae29e3e04874f60feff35392182c22180",
+    "trace.jsonl": "f6a373fee6a4e13503a83dcfc50921ecb4130c0eaa3bf45630b3ff0c74a55539"
+  },
+  "correction_to_an_earlier_claim": {
+    "claim": "上一 leg 的 RUN_STATE 把丢掉 files[].sha256 说成『被排除产物的 sha256 不再被带下去』",
+    "why_it_understated": "backfill.build() 的 files[].sha256 是从磁盘现算的，而 check 8 逐字节比对 —— 所以它在 theoria-arm 内部是一个活的漂移探测器。迁移之后这两件产物在整个仓库里不再有任何漂移探测器。代价不是『一个哈希没被带下去』，是『两件产物离开了唯一覆盖过它们的完整性检查』。它们是 gitignored 的本地产物，所以这在当前读法下可接受 —— 但那是一个判断，不是『无损』。"
+  },
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "recheck_with_a_fixed_flatten.py"},
+    {"path": "recheck_report.json"}
+  ]
+}

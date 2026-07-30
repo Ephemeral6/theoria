@@ -1,0 +1,107 @@
+{
+  "blindness_demo": {
+    "empty dict -> empty list": {
+      "fixed_guard_sees_it": true,
+      "shipped_guard_sees_nothing": true
+    },
+    "key deleted outright": {
+      "fixed_guard_sees_it": true,
+      "shipped_guard_sees_nothing": true
+    },
+    "whole top-level key invented": {
+      "fixed_guard_sees_it": true,
+      "shipped_guard_sees_nothing": true
+    }
+  },
+  "files_guard": {
+    "after_count": 14,
+    "after_has_no_duplicates": true,
+    "before_count": 16,
+    "dropped": [
+      "candidates.jsonl",
+      "trace.jsonl"
+    ],
+    "survivor_relative_order_preserved": true
+  },
+  "flatten": "fixed: empty containers are leaves, paths are tuples",
+  "migration_commit": "53e6ea0b",
+  "runs": [
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260728T012311Z-g50t-first-contact-salvage"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260728T012311Z-g50t-first-contact-salvage2"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260728T014402Z-g50t-first-contact-salvage"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260728T015354Z-g50t-first-contact-salvage"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260729T004020Z-leg01"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "20260729T004020Z-leg01-salvage"
+    },
+    {
+      "added": {
+        "cost.from_price_table.missing_usage_keys": null,
+        "cost.from_price_table.unmeasured_calls": 0,
+        "cost.from_price_table.unpriced_usage_keys": null
+      },
+      "changed": {},
+      "diff_is_exactly_the_three_s29_keys": true,
+      "removed": {},
+      "slug": "preflight-20260728T012031Z"
+    }
+  ]
+}

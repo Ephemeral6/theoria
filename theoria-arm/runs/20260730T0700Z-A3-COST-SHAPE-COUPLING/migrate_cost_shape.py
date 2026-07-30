@@ -17,6 +17,19 @@ it*. So this is not that, and the difference is mechanical rather than a promise
   this is how you can tell the two apart afterwards;
 * `--check` is the default. Writing requires `--write`.
 
+**A SECOND, LARGER GAP WAS FOUND AFTERWARDS. Read
+`runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/` before reusing this script.**
+`flatten` emits no leaf for an *empty* container, so a key whose value is `{}`
+or `[]` is invisible to `added`, `removed` and `changed` alike -- it can be
+deleted, invented, or flipped between container types and this guard reports
+"nothing changed". Every one of the seven manifests carries
+`cost.from_price_table.per_model = {}`, inside the block being rewritten. That
+run rechecks all seven with a fixed `flatten` against `53e6ea0b^`'s bytes: the
+**migration is clean**, but this guard's verdict never established that, and
+the docstring's "nothing else, anywhere in the manifest" below is false as
+written. Keep reading it as "nothing else *among the leaves this guard can
+see*".
+
 **Known limitation of this guard, found by attacking it after it had already
 run.** `diff_leaves` compares Python values, and Python does not distinguish
 some values that `json.dumps` renders differently: `0 == 0.0` and `True == 1`
