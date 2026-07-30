@@ -339,3 +339,60 @@ length filing against other people's work. They were in it because cycles 33 and
   checks. Same shape as D2 one level out: the territory gate is now the
   complete one and the release path points past it. `release/` is not this
   territory's, so it is recorded here rather than patched.
+
+---
+
+## Correction, appended 2026-07-30T03:15Z by P22 — the merge.log line anchors
+
+Appended rather than edited: the record is provenance, and what was wrong with
+it is itself the finding.
+
+This document cites `monitor/ci/merge.log` seven times by line number —
+`:1838`, `:1856`, `:1872`, `:1875`, `:1894`, `:1938`, `:1948`. **All seven are
+correct.** `merge.log` is append-only (the committed blob is a byte-exact prefix
+of the working tree's, checked), so each of those lines holds exactly the entry
+this document says it holds.
+
+**And five of the seven are out of range in the commit this document shipped
+in.** `merge.log` had 1862 lines in `99e874c4` and still does in every ancestor
+of this branch; `:1872`, `:1875`, `:1894`, `:1938` and `:1948` are all past that
+end. They were read from the repository root's working tree, which was further
+ahead, and committed beside a checkout of the file that was not. Every reader who
+is not standing in that working directory — CI, a fresh clone, the Phase 4
+release tarball — gets a citation pointing past the end of the file.
+
+So the honest form of every one of these citations is a **timestamp**, which
+append-only guarantees and a line number does not:
+
+| was | is |
+|---|---|
+| `merge.log:1838` | `2026-07-29T11:12:21Z` — `MERGED p15-capability-column`, `NO GATE, MERGED UNCHECKED` |
+| `merge.log:1856` | `2026-07-29T15:02:51Z` — `MERGED p16-uncited-number-gate`, first `test_*.py` in this territory |
+| `merge.log:1872` | `2026-07-29T15:55:51Z` — `MERGED s32-close-gate-gap`, `verify:papers(verify.py)` from here on |
+| `merge.log:1875` | `2026-07-29T16:01:59Z` — `CLEARED-BY-OPS-M s29 / s30 / w1661` |
+| `merge.log:1894` | `2026-07-29T18:02:35Z` — `MERGED p17-machine-checked-ruling` |
+| `merge.log:1938` | `2026-07-29T20:57:33Z` — `MERGED p18-certificate-verb-ruling` |
+| `merge.log:1948` | `2026-07-29T21:15:02Z` — `MERGED p19-content-anchors` |
+
+**None of the substance changes.** The claim those citations support — that
+`pytest:papers` ran once ever and `test_bare_gate.py`'s 20 tests had never been
+run by CI — is carried by the entries, not by their offsets, and every entry is
+where this document said it was.
+
+**Two further things this correction is the evidence for.**
+
+*P21's range check found two of the five, not five.* Only `:1872` and `:1875` are
+written as `` `merge.log:1872` ``; the other three are written as bare
+`` `:1894` `` inside a list, with no filename in the backticks. A citation with
+no file to resolve is read by no check in this repository — check B needs a `/`,
+check F needs a basename with an artefact suffix, and P21's anchor check hangs
+off both. That is a third citation form, and it is invisible.
+
+*A line number into a growing file is wrong the moment it is committed.* This is
+the same defect check F's docstring already lists one level down — "the candidate
+set is the working tree, not the commit" — and P21 declined to gate the run
+records for it, with the count recorded (80 tracked `.md` outside `sections/`,
+1025 anchors, 3 out of range under the form the check can see). The fleet-wide
+version — every territory writes `runs/`, and any of them can cite a growing log
+— is a proposal for the monitor rather than a papers-lane change, and is filed as
+one.
