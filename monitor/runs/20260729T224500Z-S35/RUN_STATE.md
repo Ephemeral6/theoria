@@ -119,13 +119,30 @@ python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 上一世把 push 压住等对抗复核，中途会话结束。接手后重跑了三件，因为
 「上一世说绿」不是证据：
 
-| 检查 | 结果 |
-|---|---|
-| `pytest monitor/tests/`（分支上） | **380 passed, 2 xfailed** |
-| `pytest monitor/tests/test_board_unreachable.py --collect-only` | **17 个**（报告原写 16，已改） |
-| 把分支往 `master`（3b2a5873）试合，再在**合出来的树上**跑全套 | 自动合并干净；**380 passed, 2 xfailed** |
+| 检查 | 基线 | 结果 |
+|---|---|---|
+| `pytest monitor/tests/` | 分支自己 | **380 passed, 2 xfailed** |
+| `pytest … test_board_unreachable.py --collect-only` | 分支自己 | **17 个**（报告原写 16，已改） |
+| 试合 + 在**合出来的树上**跑全套 | 本地 `master` = 3b2a5873 | 干净；380 passed, 2 xfailed |
+| 试合 + 在**合出来的树上**跑全套 | **`origin/master` = 415556f8** | 干净；**381 passed, 2 xfailed** |
 
-第三行是分开的一次检查而不是重复：本仓库已经有过「两边各自绿、合起来红」
+第三、四行是分开的检查而不是重复：本仓库已经有过「两边各自绿、合起来红」
 （`E19-merge-clean-but-broken` 就是那件），而合并是 `ci_merge` 自动做的，
 没有人会在那一刻看着。试合用 `.worktrees/_res4_mergetest` 的游离 HEAD，
 `--no-commit --no-ff`，跑完 `merge --abort`，不碰 master。
+
+**第四行是先做完第三行才发现要做的，值得单独写下来。**
+`git rev-list --count master..origin/master` = **16**：这块盘上的 `master`
+落后远端 16 个提交，而 `ci_merge` 第 450 行取的是
+`git branch -r --list origin/agent/*`、第 454 行拿 `origin/master` 判祖先——
+**它从头到尾不看本地 `master`，也不看没推上去的分支**。
+所以「往本地 master 试合是绿的」这句话，对真正会发生的那次合并没有效力；
+多出来的那 1 个通过数就是那 16 个提交带来的测试，它一直在远端而这块盘上没有。
+两条后果，一条对本条目、一条更大：
+
+* 对本条目：**验收数字必须带基线**。「381 passed」在合出来的树上是对的，
+  在分支上是错的；本报告初稿把它写成后者，是同一个数字贴错了标签。
+* 更大的那条正是 `S36-s36-orphan-commits-one-disk` 的前提，而**本分支自己就是样本**：
+  在 push 之前，它对 `ci_merge` 不是红、是**不存在**。上一世死在对抗复核与 push
+  之间，S28 的两个提交就是这样留在盘上的；这一世走到同一个位置。
+  所以本条目的交付顺序是**先 push 再 done**，中间不留可以死在里面的空隙。

@@ -29,7 +29,9 @@
     "e18_stuck_since": "2026-07-29T12:37:38Z",
     "tests_new_file": 17,
     "suite_on_branch": "380 passed, 2 xfailed",
-    "suite_on_trial_merge_into_3b2a5873": "380 passed, 2 xfailed"
+    "suite_on_trial_merge_into_3b2a5873": "380 passed, 2 xfailed (local master, NOT the base ci_merge uses)",
+    "suite_on_trial_merge_into_origin_master_415556f8": "381 passed, 2 xfailed (the base ci_merge actually uses)",
+    "local_master_behind_origin_master": 16
   },
   "prior_art": {
     "e18_sample_first_reported_by": "W-252",
