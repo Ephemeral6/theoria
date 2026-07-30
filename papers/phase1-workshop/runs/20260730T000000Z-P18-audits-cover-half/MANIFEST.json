@@ -14,14 +14,14 @@
   "citation_slices": [
     {
       "slice": "A",
-      "range": "Abstract-§3",
+      "range": "Abstract-\u00a73",
       "paper_lines": "1-908",
       "file": "citecheck-A-abstract-to-s3.md",
       "state": "stub -- Pass A only; Passes B/C/D counted but never enumerated. Being rewritten."
     },
     {
       "slice": "B",
-      "range": "§4-§6",
+      "range": "\u00a74-\u00a76",
       "paper_lines": "909-1668",
       "file": "citecheck-B-s4-to-s6.md",
       "state": "complete",
@@ -31,14 +31,14 @@
     },
     {
       "slice": "C",
-      "range": "§7-§8",
+      "range": "\u00a77-\u00a78",
       "paper_lines": "1669-2520",
       "file": "citecheck-C-s7-to-s8.md",
       "state": "stub -- summary table only, ends at 'report in progress'. Being rewritten."
     },
     {
       "slice": "D1",
-      "range": "§9-§10",
+      "range": "\u00a79-\u00a710",
       "file": "citecheck-D1-s9-to-s10.md",
       "state": "complete",
       "sha256": "ff9066e1b03155dc412acbb8a03702bfb3e058a87ba08bb978e9dffb8ace80ef",
@@ -47,7 +47,7 @@
     },
     {
       "slice": "D2",
-      "range": "§11-§12",
+      "range": "\u00a711-\u00a712",
       "file": "citecheck-D2-s11-to-s12.md",
       "state": "complete",
       "sha256": "225be86e1544944ba82478bb5039602b5c93417511c668d5feb3488eb2462e48",
@@ -55,5 +55,16 @@
       "lines": 706
     }
   ],
-  "slice_state_note": "A and C are recorded here as stubs on purpose. Both carry a full summary table of per-pass counts with no pass sections behind it, which is the same defect class this run was commissioned to fix -- a count nobody can check. Recording the state in the manifest rather than only in prose means the successor CITECHECK cannot be stamped while a slice is still a stub."
+  "slice_state_note": "A and C are recorded here as stubs on purpose. Both carry a full summary table of per-pass counts with no pass sections behind it, which is the same defect class this run was commissioned to fix -- a count nobody can check. Recording the state in the manifest rather than only in prose means the successor CITECHECK cannot be stamped while a slice is still a stub.",
+  "reconciliation": {
+    "file": "delta-old-vs-new.md",
+    "purpose": "work item 2 -- per-finding reconciliation of the three stale audits against the paper as it is now",
+    "state": "stub -- header establishes the four pinned states and the section renumbering, then the table has one row reading '(filled in below as verification proceeds)'. Being written.",
+    "sources": [
+      "CITECHECK.md",
+      "REVIEW.md",
+      "runs/20260728T173000Z-P12-paper-multi-review/review-d-adversarial.md"
+    ]
+  },
+  "stub_census": "Three of this run's deliverables were stubs that read as finished: citecheck A (Pass A only, B/C/D counted but never enumerated), citecheck C (summary table, then 'report in progress'), and delta-old-vs-new (header, then an empty table). All three are recorded here rather than only in prose, because the defect P18 was commissioned to fix is a coverage claim nobody could check, and it turned up three times inside P18's own output."
 }
