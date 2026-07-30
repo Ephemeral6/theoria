@@ -39,6 +39,67 @@ from harness.modelcall import call_field
 
 from proxy.ledger import read_ledger
 
+#: Every field this archive copies out of `proxy.cost.price_run()`, named here
+#: instead of being whatever that dict happens to hold on the day it runs.
+#:
+#: `costs()` used to embed the return value verbatim. `proxy/cost.py` is another
+#: territory's file, its return shape was never declared a contract, and the
+#: consequence was measured: commit `71b882c8` added three keys to it and
+#: thereby changed the bytes of **every** already-archived manifest that
+#: re-derives through `build()` -- 7 of 7 -- so `verify_provenance` check 8 went
+#: red for a whole territory fourteen hours after the branch it blocked was
+#: written. An archive whose bytes depend on an undeclared foreign shape is not
+#: an archive; it is a cache of someone else's refactor.
+#:
+#: The projection is the fix, but the *contents* of this tuple are a separate
+#: judgement and the harder one. Freezing it at the five keys the old manifests
+#: carry would have restored byte-stability without touching a single archived
+#: file -- and would have been wrong. `usd_total` is a **lower bound**
+#: (`proxy/cost.py:186`), and the last three keys here are the only channels
+#: that say why it is short. `figures/fig02_bill_shape.py:503` prints that total
+#: as "table recomputes ...", so dropping them would let this project's own bill
+#: figure present a floor as a total -- which is the exact defect S29 fixed one
+#: layer down. The three are adopted, and the seven manifests written before
+#: they existed were migrated in a recorded pass
+#: (`runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/`).
+#:
+#: Adding a key here is therefore a deliberate act with a price: the manifests
+#: on disk were written without it and must be migrated, in the open, with the
+#: diff shown. That price is the point. It is what keeps the shape of this
+#: archive a decision somebody made rather than a side effect of somebody
+#: else's commit. `tests/test_cost_shape.py` fails the moment `price_run`
+#: reports a key this tuple does not list, so the decision is forced at the
+#: moment of the change instead of surfacing as a red gate half a day later.
+ARCHIVE_COST_FIELDS = (
+    "model_calls",
+    "per_model",
+    "pricing",
+    "unpriced_models",
+    "usd_total",
+    "missing_usage_keys",
+    "unmeasured_calls",
+    "unpriced_usage_keys",
+)
+
+
+def _declared_cost(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """`raw` projected onto `ARCHIVE_COST_FIELDS`.
+
+    A key `price_run` did not return is left out rather than filled in with a
+    null: this archive records what the conversion said, and inventing a field
+    it never produced would be the same class of lie as the `or 0` that S29
+    removed from the layer below. Conversely a key it returns that this arm has
+    not declared is dropped -- silently here, loudly in
+    `tests/test_cost_shape.py`, which is where a shape change should be
+    argued out.
+
+    The failure dict (`{"error": ...}`) is passed through untouched: it has none
+    of these fields, and projecting it would erase the only thing it says.
+    """
+    if "error" in raw:
+        return raw
+    return {key: raw[key] for key in ARCHIVE_COST_FIELDS if key in raw}
+
 
 def reconcile(records: List[Dict[str, Any]], scorecard: Optional[Dict[str, Any]]
               ) -> Dict[str, Any]:
@@ -114,7 +175,7 @@ def costs(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         from proxy.cost import DEFAULT_TABLE, PriceTable, price_run   # noqa: PLC0415
         table = PriceTable.load(DEFAULT_TABLE)
         table_ref = table.reference()
-        table_cost = price_run(calls, table)
+        table_cost = _declared_cost(price_run(calls, table))
         for record in calls:
             line = table.cost(record.get("model", "?"), record.get("usage") or {})
             for key in (line.get("unpriced_usage_keys") or []):

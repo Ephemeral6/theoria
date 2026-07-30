@@ -40,13 +40,16 @@
   },
   "cli_reported_usd": 0.0,
   "from_price_table": {
+   "missing_usage_keys": null,
    "model_calls": 0,
    "per_model": {},
    "pricing": {
     "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
     "table": "pricing_v1"
    },
+   "unmeasured_calls": 0,
    "unpriced_models": null,
+   "unpriced_usage_keys": null,
    "usd_total": 0.0
   },
   "model_calls": 0,
