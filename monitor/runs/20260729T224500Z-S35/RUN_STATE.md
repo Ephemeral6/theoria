@@ -62,6 +62,20 @@ W-252 的建议 3（E18 还叠着 `engine-rig` 领地被 E8 认领占着）也�
 四处，每处都配一个**修复前必红**的测试（`monitor/tests/test_board_unreachable.py`，**17 个**
 ——本报告先前写 16，是数错了，以 `pytest --collect-only` 为准）。
 
+**17 个里修复前必红的是 15 个，不是 17 个**（见 §7 的实测；本报告与 PARTNER_SYNC
+初稿都把它写成「每一个」，那句话是错的）。剩下两个修复前就是绿的，各有各的理由，
+两个都留着，但**都不构成本条目抓到 bug 的证据**：
+
+* `test_a_territory_blocked_item_is_not_called_unreachable` —— 它的 docstring 自己
+  写明是「negative control on the word」，即防止修复过宽把有出口的活也叫成不可达。
+  这类对照按定义修复前后都必须绿。但要照实说清它**修复前是空过的**：旧代码根本
+  没有 `unreachable` 段，所以「S37 不在该段里」这句断言在旧代码上恒真——
+  它防的是将来的回归，不是现在的 bug。
+* `test_every_shelf_item_appears_in_some_section` —— 「盘上每件活都要在某一段里
+  出现」的不变式。旧代码也满足它（那两件当时是被 reserved 段盖住的），所以它同样
+  测不出本条目的病；它的作用是钉住新加的段不会把一件活从所有段里漏掉。
+  **这一个先前没有被声明成对照**，是本次实测才发现它属于这一类。
+
 1. **两个答案变一个**（根因）。新增 `offers(worker, lane)`：`claim` 真正会尝试的
    条目 + 它扣下的 id。`cmd_claim` 与 `cmd_list` 的 reserved 段现在都走它。
    旧写法里 reserved 段遍历 `candidates(lane)`，答的是「这件活属于这条赛道吗」，
@@ -104,8 +118,8 @@ E18 带的就是这个词）。交回是把活推给下一个人，理由是唯�
 ## 5. 验收
 
 ```
-python -m pytest monitor/tests/                                  # 380 passed, 2 xfailed
-python -m pytest monitor/tests/test_board_unreachable.py -q      # 17 个
+python -m pytest monitor/tests/                                  # 380 passed, 2 xfailed（分支基线）
+python -m pytest monitor/tests/test_board_unreachable.py -q      # 17 个，其中 15 个修复前必红（见 §7）
 python monitor/runs/20260729T224500Z-S35/probe_unreachable.py <monitor>   # 量
 python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 ```
@@ -146,3 +160,29 @@ python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
   在 push 之前，它对 `ci_merge` 不是红、是**不存在**。上一世死在对抗复核与 push
   之间，S28 的两个提交就是这样留在盘上的；这一世走到同一个位置。
   所以本条目的交付顺序是**先 push 再 done**，中间不留可以死在里面的空隙。
+
+## 7. 阴性对照的实测（要求 4，改用跑而不是读）
+
+报告先前写「逐条验过」，那是**推着读**旧代码得出的（一条一条对着
+`git show origin/master:monitor/board.py` 论证它会红）。这一轮改成**跑**：
+
+```bash
+git -C .worktrees/_res4_mergetest reset --hard origin/master   # 只有修复前的代码
+cp <branch>/monitor/tests/test_board_unreachable.py .worktrees/_res4_mergetest/monitor/tests/
+cd .worktrees/_res4_mergetest && python -m pytest monitor/tests/test_board_unreachable.py
+# → 15 failed, 2 passed in 0.70s
+```
+
+**结果与报告的说法不一致，以实测为准：15 红，2 绿。**
+绿的那两个用集合差点出来（全部用例名减去 FAILED 名单），不靠肉眼看输出：
+
+```
+test_a_territory_blocked_item_is_not_called_unreachable   ← 自称的 negative control，修复前空过
+test_every_shelf_item_appears_in_some_section             ← 先前没被声明成对照
+```
+
+两个都留下，理由写在 §3。**这一步值得作为方法记下来**：本条目自己抓的病，
+就是「两条代码路径对同一个问题给两个答案」；而「必红」这件事上，
+推理与运行也是两条路径，它们这次也给了两个答案，差 2。
+论证一个测试会红，和让它在旧代码上真的红一次，不是同一件事——
+后者便宜（0.7 秒），而前者是我先做的那个。
