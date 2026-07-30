@@ -1,0 +1,52 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "7ee25bab",
+  "utc": "2026-07-30T11:30:00Z",
+  "agent": "RES-1",
+  "cycle": 49,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "上一 leg 我加的 check 10 是装饰性的：把它改成结构上不可能失败（for row in [] ），整套测试仍 272 passed。它的两条『守卫』测试一条把 check 10 的函数体抄了一遍对着副本断言、另一条只断言检查名字出现在 run().rows 里。改成调用真 run() 并读 check 10 自己的判词，两个突变现在都被抓。",
+  "leg": "offline -- 不花钱、不碰真 API",
+  "inputs": [
+    "对抗复核 subagent（机器无关性 / check 10 视角）的报告 §CLAIM 2：M-X 突变 270 passed、两条测试都不执行 check 10、archive_material 跳过 23/35",
+    "runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/RUN_STATE.md §四 —— 我自己在同一 leg 里点过这个缺陷类的名"
+  ],
+  "measured": {
+    "mutation_M_X": {
+      "what": "check 10 的 `for row in survey:` 改成 `for row in []:`，检查结构上不可能失败",
+      "old_test_suite": "272 passed —— 无人察觉",
+      "new_test": "红：check 10 passed a dangling reference"
+    },
+    "mutation_M_Y": {
+      "what": "`explained = backfill._ignored_paths(...)` 改成 `set()`，规则不再解释任何东西",
+      "old_test_suite": "未覆盖",
+      "new_test": "红：被 .gitignore 规则点名的缺席文件被误报成悬空"
+    },
+    "vacuum_caught_during_authoring": "新测试第一次跑就是真空的：临时 run 不是 archive material，于是 verify_provenance 每道检查都跳过它，check 10 那一行恒绿。抓到它的是顺手加的 test_check_ten_is_not_skipped_into_silence。『测试调用了真代码』不等于『测试断言了什么』。",
+    "armversion_scan_seconds": 136.0
+  },
+  "changed": [
+    "theoria-arm/tests/test_files_in_clone.py -- test_check_ten_catches_a_dangling_reference 重写为调用 verify_provenance.run() 并读 check 10 自己的判词；新增 test_check_ten_is_not_skipped_into_silence 与 _archive_material_run() helper"
+  ],
+  "deliberate_stub": {
+    "what": "monkeypatch armversion.scan -> {}",
+    "why": "check 8 调它，而它要遍历一个挂着 266 个工作树的仓库的全部引用：实测 136 秒。三次 run() 就是七分钟进套件，而没人跑的套件正是这个文件要避免的失败模式。桩掉的是无关的另一道检查，不是被测的这道；check 8 的判词全程未被读取。"
+  },
+  "tests": {
+    "command": "cd theoria-arm && python -m pytest -q",
+    "before": 272,
+    "after": 273,
+    "result": "273 collected, suite green"
+  },
+  "not_done_carried_forward": [
+    "check 10 的名字自称 every file a manifest lists，实际只看 archive_material 的 12/35 个目录，33 条列出路径从不被检查。要么改名要么扩覆盖。",
+    "check 10 的判据是 os.path.exists 而非『在克隆里』：present-but-untracked 在这里过、在克隆里悬空 —— 这道为终结两机不一致而写的检查自己是机器相关的。",
+    "_files_the_clone_carries() 仍以 os.walk 起手只做减法，未跟踪且未被规则匹配的文件照样进 files[]。实测：往 leg01 扔一个 scratch_notes.txt 就能让 check 8 在别人机器上变红。『答案不再取决于工作树』写大了，正解是 git ls-files。"
+  ],
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"}
+  ]
+}

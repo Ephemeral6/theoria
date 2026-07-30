@@ -257,6 +257,33 @@ def test_a_tracked_gitignore_still_counts_after_that_tightening(repo):
 
 
 # ------------------------------------------------------ check 10, and its bite
+#: The name check 10 registers itself under. Written out here rather than
+#: imported for `test_desk_sealing.py`'s stated reason: a test that reads its
+#: expectation out of the code under test asserts that the code equals itself.
+CHECK_TEN = ("every file a manifest lists is in the clone or excluded by the "
+             "repository's own rules")
+
+
+def _archive_material_run(run_dir):
+    """The minimum that makes `backfill.classify` call a directory archive
+    material -- which is the minimum that makes any check in
+    `verify_provenance` look at it.
+
+    A ledger with a `run_start` naming a **non-loopback** upstream. Without a
+    ledger the directory classifies as `process_record`; with a `127.0.0.1`
+    upstream it classifies as `mock`. Both are skipped by every check, so a
+    fixture in either state makes its test assert nothing.
+    """
+    from proxy.ledger import LEDGER_VERSION             # noqa: PLC0415
+
+    (run_dir / "ledger.jsonl").write_text(
+        json.dumps({"v": LEDGER_VERSION, "event": "run_start",
+                    "run_id": "r-fixture", "arm": "theoria",
+                    "ts": "2026-07-30T00:00:00Z",
+                    "env_upstream": "https://three.arcprize.org"}) + "\n",
+        encoding="utf-8")
+
+
 def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     """A manifest listing a file that is neither present nor excluded.
 
@@ -266,38 +293,89 @@ def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     check 8 passes all three. Check 10 is what notices -- but only if it really
     distinguishes "absent and explained" from "absent and dangling", which is
     what this asserts in both directions.
+
+    **Rewritten after an adversarial pass killed the first version.** That one
+    built a local `dangling_for()` that reimplemented check 10's body inline --
+    `absent = [...]`, `explained = backfill._ignored_paths(...)`, the set
+    difference -- and asserted against the copy. It imported
+    `verify_provenance` and then never called it. Measured consequence:
+    replacing check 10's `for row in survey:` with `for row in []:`, so that
+    the check is structurally incapable of failing, left the whole suite at
+    272 passed.
+
+    That is exactly the defect I had named two sections earlier in the same
+    leg's run record -- a test that reads its expectation out of the code under
+    test asserts that the code equals itself -- committed in the very change
+    that named it. So this calls `run()` and reads the check's own verdict.
     """
-    from armtools import verify_provenance               # noqa: PLC0415
+    from armtools import armversion, verify_provenance   # noqa: PLC0415
+
+    # Check 8 calls `armversion.scan()`, which walks every ref in a repository
+    # that currently carries 266 worktrees: 136 seconds, measured. Three
+    # `run()` calls would put seven minutes into the suite, and a suite nobody
+    # runs is the failure mode this file exists to avoid. Stubbed here -- an
+    # unrelated check, not the one under test. Check 8's own verdict goes
+    # unread below; only check 10's row is asserted on.
+    monkeypatch.setattr(armversion, "scan", lambda *a, **k: {})
 
     root = tmp_path / "repo"
-    run_dir = root / "runs" / "somerun"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
     run_dir.mkdir(parents=True)
     _git(["init", "-q"], str(root))
     _write_gitignore(root, "runs/*/trace.jsonl\n")
     (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
+    _archive_material_run(run_dir)
 
-    def listed(*paths):
-        return {"files": [{"path": p, "sha256": "x"} for p in paths]}
+    def verdict(*paths):
+        """Check 10's own row, from a real `run()` over this tree."""
+        (run_dir / "MANIFEST.json").write_text(
+            json.dumps({"files": [{"path": p, "sha256": "x"} for p in paths]}),
+            encoding="utf-8")
+        rows = [r for r in verify_provenance.run(str(runs_root)).rows
+                if r["check"] == CHECK_TEN]
+        assert len(rows) == 1, "check 10 did not run at all: %r" % rows
+        return rows[0]
 
-    def dangling_for(manifest):
-        (run_dir / "MANIFEST.json").write_text(json.dumps(manifest),
-                                               encoding="utf-8")
-        out = []
-        entries = [(e.get("path") if isinstance(e, dict) else e)
-                   for e in manifest.get("files") or []]
-        absent = [p for p in entries
-                  if not os.path.exists(os.path.join(str(run_dir), p))]
-        explained = backfill._ignored_paths(str(run_dir), absent)
-        for path in sorted(set(absent) - explained):
-            out.append(path)
-        return out
+    # present -> green
+    assert verdict("certify.json")["ok"] is True
+    # absent but named by a .gitignore rule that says why -> green
+    assert verdict("certify.json", "trace.jsonl")["ok"] is True
 
-    # present -> fine
-    assert dangling_for(listed("certify.json")) == []
-    # absent but named by a .gitignore rule that says why -> fine
-    assert dangling_for(listed("certify.json", "trace.jsonl")) == []
-    # absent and unexplained -> caught
-    assert dangling_for(listed("certify.json", "gone.json")) == ["gone.json"]
+    # absent and unexplained -> RED, and the path is named in the detail so a
+    # reader is told which one rather than only that something is wrong.
+    red = verdict("certify.json", "gone.json")
+    assert red["ok"] is False, "check 10 passed a dangling reference"
+    assert "gone.json" in red["detail"]
+    assert "certify.json" not in red["detail"], (
+        "the detail blames a path that is present")
+
+
+def test_check_ten_is_not_skipped_into_silence(tmp_path):
+    """The run has to be archive material, or check 10 never looks at it.
+
+    Every check in `verify_provenance` skips rows where `archive_material` is
+    false, and 23 of the 35 directories under `runs/` are such rows -- 33 listed
+    paths that check 10 never examines. That is the file's design and not this
+    check's defect, but it is also how a green here can mean "nothing was
+    looked at". The test above would keep passing if `survey` stopped
+    classifying its temp run as archive material, so this pins that it is one.
+    """
+    from armtools import backfill as bf                  # noqa: PLC0415
+
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "MANIFEST.json").write_text("{}", encoding="utf-8")
+    _archive_material_run(run_dir)
+
+    rows = bf.survey(str(runs_root))
+    assert [r["slug"] for r in rows] == ["somerun"]
+    assert rows[0]["archive_material"] is True, (
+        "the fixture the check-10 test relies on is skipped by every check")
 
 
 def test_check_ten_is_actually_wired_into_the_run(tmp_path):
