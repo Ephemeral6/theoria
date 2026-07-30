@@ -214,8 +214,12 @@ def _measure_a2_coefficient_sums():
     So a transition's coefficient sum is 0 or +1 whatever the board's width;
     widening the comb adds coordinates and states but no new *kind* of
     transition, and the kind is what fixes the sum.  The sweep over corridor
-    lengths 2..5 below is the empirical half of that claim: 4x the latch bits,
-    identical sums and identical kinds.  `atrium` is A2's own 9x9 board and is
+    lengths 2..5 below is the empirical half of that claim: the latch bits go
+    4 -> 6 -> 8 -> 10, identical sums and identical kinds.  (This read "4x
+    the latch bits" until round six measured it: 4 to 10 is 2.5x, and the
+    only 4x in sight is the *shipped* board's 40, which is the thing that
+    was never enumerated.  A ratio nobody recomputed, next to the number it
+    was a ratio of.)  `atrium` is A2's own 9x9 board and is
     here for coverage -- it is the only level in the family carrying a button, a
     door and a teleport, so without it three of `Level.step`'s six branches
     would go unmeasured.  The union of branches is asserted against
@@ -506,7 +510,7 @@ def probe_d():
                 "enumerated -- 40 latch bits, ~4.4e13 states, which is the "
                 "impossibility this ticket is about; the step from these "
                 "levels to every size is the monotonicity argument above, "
-                "supported by the corridor-length sweep (4x the latch bits, "
+                "supported by the corridor-length sweep (latch bits 4 to 10, "
                 "identical sums and kinds), not by a sweep of the shipped size."
                 % (", ".join("`%s`" % i for i in a2["level_ids"]),
                    A2_STATE_BOUND, a2["sums"])),

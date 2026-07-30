@@ -620,6 +620,21 @@ report is the failure mode this ticket exists for, and because two of them sharp
   once and wrote up above. Not done here because it changes a committed artefact's
   contents rather than a description of them, and this session's remit was the
   descriptions.
+
+  **Done after all, in `e4b25676` — this bullet is the description that then
+  lagged.** The probe was widened to all seven and criterion (b) holds on all
+  seven; `deterministic.coverage` now reports `criterion_b_records_probed: 7`,
+  `_holding: 7`, `_failures: []`, and keeps `superseded_coverage` naming the old
+  four-of-seven state. The three `solvable_hard` records iii6/iii7/iii8 each
+  truncate at the cap with no solution inside it — and that last conjunct is
+  load-bearing for exactly those three *because they are solvable*: a plan found
+  inside the cap would have meant the naive method works there and the record's
+  refusal was unfounded. Round six confirmed the conjunct is genuinely
+  independent (`enumerate_states` has no early return on a solution) and that the
+  probe filters on `verdict.build()` with the test's own predicate rather than a
+  hardcoded list. Round six also caught that this bullet, `CRITERION.md`'s map
+  row and its ruling section all still said "four" afterwards — three descriptions
+  left behind by one fix, which is the same shape as the finding they describe.
 * **F5-10 and F5-12** were resolved by other hands this round. `0154c8f1` added the
   `<=3.1 ms` entry to `exam/DECISIONS.md` so the decision record no longer holds the
   withdrawn position; and the 1,034-rung sweep, absent from both the map and the
@@ -752,3 +767,100 @@ left changed by the reproduction sweep. `probe_lp_interface.*`,
 `exam/papers/verdict.py`, `exam/DECISIONS.md` and `CRITERION.md` were edited by
 other sessions in the same round and are cited here by symbol or key name, never by
 line number, for the reason this section keeps having to record.
+
+## Round six — six findings, and the one that mattered was in this document
+
+`adversarial/round6-findings.md`. Round six audited *the round-five fixes*, which
+is the right target in a ticket where round three's corrections were wrong, round
+four's fix became round five's CRITICAL, and round four withdrew a finding that
+was correct.
+
+**F6-1 (HIGH), fixed.** `CRITERION.md` described the A2 measurement as **five**
+levels, **51,164** transitions, **12,791** states. The shipped artefact emits
+**nine**, **51,880**, **12,970**. The stale figures are exactly the sums over the
+first five rows of `a2_levels` — the artefact's state before `9cf779a3` added four
+geometries. The paragraph carrying them was written in `824b9fb4`, a **later**
+commit, so this is not lag: it described the world as it had been, after it had
+changed. `RUN_STATE.md` had the right numbers throughout, so two documents of one
+run disagreed about a measurement neither produced. Corrected in place, with the
+correction stated rather than silently overwritten.
+
+**F6-2 (MED-HIGH), fixed.** `a2_thin_coverage` — round five's weakest fix, and the
+one I asked round six to attack hardest — is *correct*, but `CRITERION.md` never
+mentioned it and stated unqualified the two claims it exists to qualify. The
+artefact qualified its own numbers and the prose describing the artefact did not.
+The qualification is now in the document beside the numbers.
+
+**F6-4 (MED-HIGH), fixed.** `e4b25676` widened the criterion-(b) probe to all
+seven records, and **three descriptions of it stayed at four**: the map row, the
+ruling section, and this file's own F5-14 bullet, which still read "Left open on
+purpose … Not done here". One fix, three descriptions left behind — the same shape
+as the finding they describe.
+
+**F6-3 (MED), fixed.** `D_verdict.how` said the corridor sweep gives "4x the latch
+bits"; the same file's `a2_levels` shows 4 → 6 → 8 → 10, i.e. **2.5×**. The only
+4× in sight is the *shipped* board's 40 bits, which is the thing that was never
+enumerated. A ratio nobody recomputed, printed next to the numbers it was a ratio
+of. Fixed in the generator and regenerated; the structural diff is the `how`
+string and the wall-clock fields, nothing else.
+
+**F6-5 (MED), reverted — my correction was the error.** I had conceded that "only
+the *label* `n_pos=5` was wrong". `potential.py` does `n = int(graph["n_pos"])`
+and builds each row as `[0.0] * (2 * n)`, so `n_pos` **is** the LP row width and
+the original wording was right. Three files still carrying it (`exam/DECISIONS.md`,
+`exam/STATUS.md`, `invariant_path_probe.md`) are correct and must not be brought
+into line. This is the third correction on one sentence, and the second in the
+wrong direction.
+
+**F6-6 (LOW), reason corrected, decision kept.** `e4b25676`'s message argued the
+`coverage` block had to sit **inside** the stable hash or "F5-14 could recur — a
+row silently dropped — without the hash noticing". `items` has been inside the
+hash since the artefact's first version, so both named failure modes move it
+either way; round six demonstrated this by recomputing over `deterministic` minus
+`coverage`. The decision stands on a different footing — an aggregate should be
+pinned with the rows it aggregates, and `criterion_b_records_expected` is a
+constant living nowhere else in the hashed subset. Recorded here because **the
+commit message is published and cannot be edited**: the argument in it is not the
+argument that supports it.
+
+### What round six could not break
+
+Seven load-bearing claims held, and this is a result rather than an absence of
+one. `a2_thin_coverage`'s content matches the code exactly and both its factual
+claims are true; it is **stronger than I credited it**, because `bits >= 0` holds
+identically given the loop's own assertions, so no sample size could produce the
+−1 that would matter — the thin coverage cannot touch the conclusion, and the
+monotonicity hedge is a property of the code, not a hand-wave. The probe does call
+`V.build()` with the test's exact predicate, with no hardcoded list surviving.
+`no_solution_inside_cap` is genuinely independent — `enumerate_states` has no early
+return on a solution, demonstrated with a solvable board that returns
+`truncated=True` *and* a solution — and iii6/7/8's witnesses are 416 long against a
+200,000 cap. Every key present in the old i1-i5/ii1-ii4 rows has an identical
+value (the rows gained 8 keys, so "byte-identical **rows**" was loose; "byte-identical
+**numbers**" is exact — recorded because I wrote the loose form). `deterministic_sha256`
+reproduced byte-identically on re-run. **F5-13 was correctly left standing**: all
+seven shipped records still carry `enumeration_attempted: false` / `truncated:
+null`, so I did not under-close it. And the manifest's 25 entries were
+independently recomputed at 0 mismatches — which matters because the previous
+round's 0-mismatch report was *self*-verified.
+
+### The manifest is now stamped by a script, not by hand (cycle 106)
+
+The session that dispositioned round six died before committing, and what it
+left behind included one omission of exactly the kind round five had already
+found once: `adversarial/round6-findings.md` was written, tracked, and **not in
+`MANIFEST.json`**. Round five's version of this was six stale hashes; both have
+the same cause, which is that the manifest was maintained by hand across six
+rounds while the directory kept moving.
+
+So the hand maintenance is retired. `restamp_manifest.py` regenerates the
+`files` block from the directory's own bytes and carries the two exclusions in
+code rather than in prose — `__pycache__` and `BASELINE-cycle94.md`, both of
+which the manifest's `note` already named. `--check` exits non-zero and prints
+`UNLISTED` / `ABSENT` / `STALE` per path, so the next round asks the question in
+one command instead of recomputing 26 hashes by hand and trusting the count.
+
+Metadata keys are read from the existing manifest and written back unchanged:
+the script re-stamps, it does not author. That boundary matters — `note`,
+`base_commit` and `prompt_id` are claims a human made and a script has no
+standing to regenerate them.

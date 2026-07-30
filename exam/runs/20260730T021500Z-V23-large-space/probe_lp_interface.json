@@ -48,70 +48,70 @@
     },
     {
       "edges": 4608,
-      "enumerate_s": 0.0031,
+      "enumerate_s": 0.0032,
       "geometries": 18,
       "n_pos": 11,
       "states": 2048
     },
     {
       "edges": 10240,
-      "enumerate_s": 0.0068,
+      "enumerate_s": 0.0102,
       "geometries": 20,
       "n_pos": 12,
       "states": 4096
     },
     {
       "edges": 22528,
-      "enumerate_s": 0.015,
+      "enumerate_s": 0.0167,
       "geometries": 22,
       "n_pos": 13,
       "states": 8192
     },
     {
       "edges": 49152,
-      "enumerate_s": 0.0317,
+      "enumerate_s": 0.0319,
       "geometries": 24,
       "n_pos": 14,
       "states": 16384
     },
     {
       "edges": 106496,
-      "enumerate_s": 0.069,
+      "enumerate_s": 0.0741,
       "geometries": 26,
       "n_pos": 15,
       "states": 32768
     },
     {
       "edges": 229376,
-      "enumerate_s": 0.1669,
+      "enumerate_s": 0.1787,
       "geometries": 28,
       "n_pos": 16,
       "states": 65536
     },
     {
       "edges": 491520,
-      "enumerate_s": 0.3251,
+      "enumerate_s": 0.4425,
       "geometries": 30,
       "n_pos": 17,
       "states": 131072
     },
     {
       "edges": 1048576,
-      "enumerate_s": 0.6977,
+      "enumerate_s": 0.9887,
       "geometries": 32,
       "n_pos": 18,
       "states": 262144
     },
     {
       "edges": 2228224,
-      "enumerate_s": 1.5674,
+      "enumerate_s": 2.168,
       "geometries": 34,
       "n_pos": 19,
       "states": 524288
     },
     {
       "edges": 4718592,
-      "enumerate_s": 3.3085,
+      "enumerate_s": 3.6989,
       "geometries": 36,
       "n_pos": 20,
       "states": 1048576
@@ -132,19 +132,19 @@
     {
       "geometries": 20,
       "n_pos": 12,
-      "solve_s": 0.0011,
+      "solve_s": 0.0013,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 46,
       "n_pos": 25,
-      "solve_s": 0.0032,
+      "solve_s": 0.0042,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 96,
       "n_pos": 50,
-      "solve_s": 0.0039,
+      "solve_s": 0.0038,
       "status": "no_linear_pagoda"
     },
     {
@@ -156,19 +156,19 @@
     {
       "geometries": 496,
       "n_pos": 250,
-      "solve_s": 0.0405,
+      "solve_s": 0.0456,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 996,
       "n_pos": 500,
-      "solve_s": 0.1684,
+      "solve_s": 0.1797,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 1996,
       "n_pos": 1000,
-      "solve_s": 0.6419,
+      "solve_s": 0.6056,
       "status": "no_linear_pagoda"
     }
   ],
@@ -491,7 +491,7 @@
     },
     "a2_transitions_enumerated": 51880,
     "expressible": false,
-    "how": "every reachable (cart, pressed, latched) transition of `lp-iface-comb2`, `lp-iface-comb3`, `lp-iface-comb4`, `lp-iface-comb5`, `atrium`, `updraft`, `cistern`, `quarry`, `meander` was enumerated under a 200000-state bound that raises rather than truncating, and each transition's occupancy-vector delta was summed. The cart's one-hot contributes 0 whether it moves or is blocked; latch bits and `pressed` are monotone and at most one turns on per transition (both checked in the loop, not assumed), so the sum is the number of bits that turned on. Measured sums [0, 1], none of them -1, against lp_potential's invariant -1. The shipped comb_open(.., 20, ..) was NOT enumerated -- 40 latch bits, ~4.4e13 states, which is the impossibility this ticket is about; the step from these levels to every size is the monotonicity argument above, supported by the corridor-length sweep (4x the latch bits, identical sums and kinds), not by a sweep of the shipped size.",
+    "how": "every reachable (cart, pressed, latched) transition of `lp-iface-comb2`, `lp-iface-comb3`, `lp-iface-comb4`, `lp-iface-comb5`, `atrium`, `updraft`, `cistern`, `quarry`, `meander` was enumerated under a 200000-state bound that raises rather than truncating, and each transition's occupancy-vector delta was summed. The cart's one-hot contributes 0 whether it moves or is blocked; latch bits and `pressed` are monotone and at most one turns on per transition (both checked in the loop, not assumed), so the sum is the number of bits that turned on. Measured sums [0, 1], none of them -1, against lp_potential's invariant -1. The shipped comb_open(.., 20, ..) was NOT enumerated -- 40 latch bits, ~4.4e13 states, which is the impossibility this ticket is about; the step from these levels to every size is the monotonicity argument above, supported by the corridor-length sweep (latch bits 4 to 10, identical sums and kinds), not by a sweep of the shipped size.",
     "lp_move_coefficient_sum": -1
   },
   "E_comb": [
@@ -546,11 +546,11 @@
       "edges": 68,
       "n_pos": 10,
       "reachable_states": 40,
-      "solve_s": 0.0044,
+      "solve_s": 0.0043,
       "status": "certified"
     },
     {
-      "build_s": 0.0006,
+      "build_s": 0.0008,
       "certificate": {
         "claim": "goal unreachable from 000100000000000",
         "conditions": {
@@ -610,11 +610,11 @@
       "edges": 292,
       "n_pos": 15,
       "reachable_states": 168,
-      "solve_s": 0.0016,
+      "solve_s": 0.0022,
       "status": "certified"
     },
     {
-      "build_s": 0.0029,
+      "build_s": 0.0039,
       "certificate": {
         "claim": "goal unreachable from 00001000000000000000",
         "conditions": {
@@ -684,11 +684,11 @@
       "edges": 1188,
       "n_pos": 20,
       "reachable_states": 680,
-      "solve_s": 0.0035,
+      "solve_s": 0.0042,
       "status": "certified"
     },
     {
-      "build_s": 0.0289,
+      "build_s": 0.03,
       "certificate": {
         "claim": "goal unreachable from 0000010000000000000000000",
         "conditions": {
@@ -768,11 +768,11 @@
       "edges": 4772,
       "n_pos": 25,
       "reachable_states": 2728,
-      "solve_s": 0.0089,
+      "solve_s": 0.0075,
       "status": "certified"
     },
     {
-      "build_s": 0.0696,
+      "build_s": 0.0717,
       "certificate": {
         "claim": "goal unreachable from 000000100000000000000000000000",
         "conditions": {
@@ -862,11 +862,11 @@
       "edges": 19108,
       "n_pos": 30,
       "reachable_states": 10920,
-      "solve_s": 0.0342,
+      "solve_s": 0.0317,
       "status": "certified"
     },
     {
-      "build_s": 0.3744,
+      "build_s": 0.3762,
       "certificate": {
         "claim": "goal unreachable from 00000001000000000000000000000000000",
         "conditions": {
@@ -966,11 +966,11 @@
       "edges": 76452,
       "n_pos": 35,
       "reachable_states": 43688,
-      "solve_s": 0.1399,
+      "solve_s": 0.1416,
       "status": "certified"
     },
     {
-      "build_s": 1.7385,
+      "build_s": 1.7921,
       "certificate": {
         "claim": "goal unreachable from 0000000010000000000000000000000000000000",
         "conditions": {
@@ -1080,11 +1080,11 @@
       "edges": 305828,
       "n_pos": 40,
       "reachable_states": 174760,
-      "solve_s": 0.6134,
+      "solve_s": 0.6383,
       "status": "certified"
     },
     {
-      "build_s": 9.1319,
+      "build_s": 9.789,
       "certificate": {
         "claim": "goal unreachable from 000000000100000000000000000000000000000000000",
         "conditions": {
@@ -1204,11 +1204,11 @@
       "edges": 1223332,
       "n_pos": 45,
       "reachable_states": 699048,
-      "solve_s": 2.7902,
+      "solve_s": 2.967,
       "status": "certified"
     },
     {
-      "build_s": 38.4215,
+      "build_s": 41.3215,
       "certificate": {
         "claim": "goal unreachable from 00000000001000000000000000000000000000000000000000",
         "conditions": {
@@ -1338,7 +1338,7 @@
       "edges": 4893348,
       "n_pos": 50,
       "reachable_states": 2796200,
-      "solve_s": 11.592,
+      "solve_s": 13.9128,
       "status": "certified"
     }
   ],

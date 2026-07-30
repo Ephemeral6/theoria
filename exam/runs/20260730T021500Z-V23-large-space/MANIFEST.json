@@ -5,11 +5,11 @@
  "files": [
   {
    "path": "CRITERION.md",
-   "sha256": "ce246beac0d51e848a023eb79fc39e1c024a10b5af4d695714c2fd555d5ee8dc"
+   "sha256": "250321050656c9982929bf846bcd82c6d3d58f954d698eae9c15298f4835693d"
   },
   {
    "path": "RUN_STATE.md",
-   "sha256": "8ee58868296a6148015730f266e63ad8c23ad3bcaad9fce9df6a2715dc17b5d4"
+   "sha256": "6acc1acf70b29cdc95a27c91ff11f9dbd76d90ab18966b558300b56bd82ce753"
   },
   {
    "path": "adversarial/attack_barbell.json",
@@ -34,6 +34,10 @@
   {
    "path": "adversarial/round5-findings.md",
    "sha256": "592deff13b044718ec1c76996b1d990139881fb899ca220cd14c937763c341c7"
+  },
+  {
+   "path": "adversarial/round6-findings.md",
+   "sha256": "75d002a4ffa4303b205b63d3170e1665e9d265fdf8f0755907818570f3558119"
   },
   {
    "path": "crux_quotient_settles.json",
@@ -81,11 +85,11 @@
   },
   {
    "path": "probe_lp_interface.json",
-   "sha256": "fc13461568220c150ba5760cdbf6768a0952d2db792e5db64bde048ed04c76e1"
+   "sha256": "4abd034c7ad20597f0ae9e08637aab18096cf370a76b4d5e2fadba754b922847"
   },
   {
    "path": "probe_lp_interface.py",
-   "sha256": "dc6cf7b20b9514d363877dcbaa6abedb72e137b298b751412372ae71d5baec86"
+   "sha256": "3eeb0aac98fee21769ca0b4086bdc62275ec870ceefd9348068eaac618d26fb0"
   },
   {
    "path": "probe_lp_soundness.json",

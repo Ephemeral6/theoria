@@ -74,7 +74,8 @@ emits it: no file anywhere in this run directory contains the figure, and the on
 record of the sweep is one paragraph of `RUN_STATE.md`. So it is now in the
 exception list above, which is where a prose-only number belongs — and that is the
 correction, not a row. Round five also found the criterion-(b) map row overstated
-(it covers four of seven records; the row now says so), which is the fourth
+(it covered four of seven records; `e4b25676` then widened the probe to all seven
+rather than annotating the map, and it holds on all seven), which is the fourth
 widening of a completeness claim in this document and the second in the map.
 
 ## The four candidate criteria, ranked
@@ -224,7 +225,7 @@ the derivation and names the test that checks its premise.
 So the honest form is: (c) measured at the point of claim; (b) derived there and
 measured elsewhere — by `test_class_ii_levels_actually_truncate_the_enumerator`,
 which asserts `len(items) == 7` and runs the enumerator at the shipped cap against
-all seven, and by `enumeration_probe.json` for four of them. That is a real check
+all seven, and by `enumeration_probe.json` for all seven. That is a real check
 and it is not the same thing as "recorded as a measurement". This is the
 criterion-vs-code gap in its surviving form: the earlier record was
 *counterfactual* (`"truncated": False`) and is now *honest* (`null` beside
@@ -493,8 +494,23 @@ exhaustive loop is in probe D over the LP row width `n`, which is `n = 5` in the
 committed generator: three nested `range(n)` loops over `(src, over, dst)`, `5^3` =
 125 role assignments, every one of which lands on the same coefficient sum, −1.
 Round four
-conflated two different `n`s and withdrew a true claim; only the *label* "n_pos=5"
-was wrong. Neither round would have had to read the generator if the artefact had
+conflated two different `n`s and withdrew a true claim.
+
+*Corrected in round six:* the clause that stood here — "only the *label* `n_pos=5`
+was wrong" — is itself wrong, and it is the third correction on this one sentence.
+`n_pos` is **not** merely a label for the row width; it *is* the row width.
+`potential.py` does `n = int(graph["n_pos"])` and builds every move row as
+`[0.0] * (2 * n)`, indexing it by `move.src`/`move.over`/`move.dst`. So "all role
+assignments at `n_pos=5`" was accurate as written, and the three files still
+carrying that wording — `exam/DECISIONS.md`, `exam/STATUS.md` and
+`invariant_path_probe.md` — are **correct and must not be "fixed"**. What was
+wrong was only my reason for conceding it: I read `n_pos` as belonging to probes B
+and E alone, because those are where it varies, and did not check that probe D's
+`n` reaches the LP through the same key. A round that corrects a correct thing
+costs twice — once in the edit, once in the three files a later reader would have
+been told to bring into line.
+
+Neither round would have had to read the generator if the artefact had
 carried the loop's own parameters, so it now does: `D_role_assignments` is
 `{"n": 5, "assignments": 125}`, beside the `D_coefficient_sums` of `[-1.0]` that
 loop produces.
@@ -508,17 +524,44 @@ first replacement measured it by enumerating the *shipped* 20-corridor comb — 
 latch bits, ~4.4e13 states — an enumeration that cannot terminate, over a board of
 exactly the size this ticket's thesis says cannot be enumerated, and the artefact
 was left carrying the literals' values from a run that never happened. The second
-replacement is the one that shipped: the A2 side is enumerated over five small
+replacement is the one that shipped: the A2 side is enumerated over nine small
 levels chosen to cover every branch of `Level.step`, under a bound that raises
 rather than truncating. `D_verdict` now records it as measurements —
 `a2_coefficient_sum_by_kind` and `a2_transitions_by_kind` (a plain move and a
 blocked transition sum to 0, a latching move and a button press to +1),
 `a2_coefficient_sums_measured` of `[0, 1]` over `a2_transitions_enumerated` =
-51,164 transitions across `a2_states_enumerated` = 12,791 states,
+51,880 transitions across `a2_states_enumerated` = 12,970 states,
 `a2_step_branches_covered` listing all six branches, `a2_enumeration_bound` =
 200,000, and `a2_shipped_level_enumerated: false` — the last field being the honest
 part: the shipped size was *not* enumerated, and the step from these levels to
-every size is the monotonicity argument, not a sweep. Against `lp_potential`'s
+every size is the monotonicity argument, not a sweep.
+
+*Corrected in round six.* This paragraph read **five** levels, **51,164**
+transitions and **12,791** states. Those are exactly the sums over the first five
+rows of `a2_levels` — the artefact's state before `9cf779a3` added `updraft`,
+`cistern`, `quarry` and `meander`. The paragraph carrying them was written in
+`824b9fb4`, which is a *later* commit than the one that moved the artefact, so
+this is not lag: it described the world as it had been, after it had changed, and
+`RUN_STATE.md` carried the right numbers the whole time. Two documents of the same
+run disagreed about a measurement neither of them produced.
+
+**And two of the sums above are thinner than this sentence reads.**
+`D_verdict.a2_thin_coverage` records what the branch counts actually were: the
+portal branch was taken **once** in 51,880 transitions and the button branch
+once, doors twice each. The guard that makes a per-kind sum meaningful — every
+transition of a kind must agree, or the sum is an average wearing a constant's
+clothes — **cannot fire at n = 1**, because a single observation has nothing to
+disagree with. So "a button press to +1" is a single measurement, not a confirmed
+constant, and `a2_step_branches_covered` "listing all six branches" is true of the
+list and weak as evidence. It is not closable by measurement here: `atrium` is the
+only level in the shipped family carrying a button, a door or a portal, and adding
+four fresh geometries moved the rare branches not at all. What carries the general
+claim is monotonicity, which is a property of the code (`step` never returns
+`False` for `pressed`; `_latched_at` is `|=`) rather than of this sample — and
+`bits >= 0` holds identically given the loop's own assertions, so no sample size
+could have produced the −1 that would matter. The conclusion is untouched by the
+thinness; the *evidence for the intermediate constants* is what is thin, and this
+paragraph previously stated them unqualified while the artefact qualified them. Against `lp_potential`'s
 invariant −1 — which `engine-rig`'s own `potential.py` independently confirms, one
 LP row per `Move` built as `row[move.dst] += 1.0`, `row[move.src] -= 1.0`,
 `row[move.over] -= 1.0` — no measured A2 sum matches, so the conclusion stands and
