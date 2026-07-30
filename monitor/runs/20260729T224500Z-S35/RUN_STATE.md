@@ -11,7 +11,7 @@ RES-4，infra 赛道，零 API 花费，零封存堆接触。分支 `agent/s35-r
 | 时刻 | shelf | reachable | UNREACHABLE | 其中印在 `reserved` 段里的 |
 |---|---|---|---|---|
 | 2026-07-30T01:03Z（`measure-before.json`，修复前） | 11 | 1 | **10** | **2** |
-| 2026-07-30T01:57Z（`measure-after-live.txt`，同一块活板） | 11 | 2 | 9 | 1 |
+| 2026-07-30T01:45Z（`measure-after-live.txt`，同一块活板） | 11 | 2 | 9 | 1 |
 
 印在 `reserved` 段里的那两件，就是本条目说的那一类：
 
