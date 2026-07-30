@@ -1,0 +1,71 @@
+{
+  "prompt_id": "P-P21-line-anchor-range",
+  "branch": "agent/p-p21-line-anchor-range",
+  "base_commit": "0da14b27",
+  "base_note": "branched off agent/s-p20-nosecret-noop rather than origin/master on purpose: both items edit papers/phase1-workshop/verify_paper.py, and this repository's merge log is mostly HELD-on-conflict. Stacking costs nothing if P20 merges first and avoids a conflict in the same file if it does not.",
+  "utc": "2026-07-30T02:55:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "delivered",
+  "summary": "P19 measured the paper's line-anchored citations and ruled: wire the range check (free today, 22/22 INRANGE), do not build the content-anchor gate (12 of 12 reds false). The first half was adopted and never wired. verify_paper.py's PATH_TOKEN and CITE_TOKEN both match the :722-724 tail and both drop it -- the tail exists so a line-anchored citation is matched at all, and then nothing looks at the number.",
+  "findings": [
+    {
+      "id": "P21-1",
+      "was": "PATH_TOKEN and CITE_TOKEN both matched the :722-724 tail and both discarded it; the path was resolved and the number was read by nothing",
+      "now": "the anchor is captured in an optional named group and checked against the file's line count by anchor_overruns()"
+    },
+    {
+      "id": "P21-2",
+      "was": "a range check wired into check B alone would cover 8 of the paper's 22 line anchors: 14 are bare filenames and B skips a token with no '/' by design",
+      "now": "the other half runs in scan_bare, where F has already resolved the name to exactly one candidate; with several candidates it is not range-checked, because picking one would invent a verdict"
+    },
+    {
+      "id": "P21-3",
+      "was": "'0 out of range' and 'no anchors seen' printed the same green",
+      "now": "both summary lines say how many anchors were read"
+    }
+  ],
+  "measurement": {
+    "sections_anchors": 22,
+    "sections_in_range": 22,
+    "sections_out_of_range": 0,
+    "sections_with_path": 8,
+    "sections_bare_filename": 14,
+    "runs_and_other_md_scanned": 80,
+    "runs_anchors": 1025,
+    "runs_in_range": 916,
+    "runs_out_of_range": 3,
+    "runs_nofile": 62,
+    "runs_ambiguous_basename": 44,
+    "scan_boundary_decision": "run records are NOT gated: 109 findings on arrival is the condition P19 refused for the content-anchor gate. Declined with the count recorded rather than the reason left implicit.",
+    "the_three_out_of_range": "two are RES-2's own, in papers/runs/20260729T224939Z-S34/RUN_STATE.md, citing monitor/ci/merge.log:1872 and :1875. Against the repo root's working tree today merge.log has 2043 lines and :1872 is exactly the MERGED s32-close-gate-gap entry the claim describes; against the commit S34 shipped it has 1862 lines and the same citation is out of range. An anchor into an append-only log is correct for its author and out of range in the tree the release manifest publishes. The third is README.md:68 in P11's findings, where the file has 59 lines.",
+    "tests_before": 171,
+    "tests_after": 184
+  },
+  "verification": {
+    "gate": "verify_paper: PASS (6/6); papers: green, 184 passed",
+    "mutations": [
+      "`engine-rig/STATUS.md:99999` planted in a live section -> [FAIL] B, 'has 428 lines, so line 99999 is not in it'",
+      "`Theoria.md:99999` planted in a live section -> [FAIL] F, 'resolves to Theoria.md, which has 427 lines' -- the half check B cannot see"
+    ],
+    "not_closed": "P18's :148 for a line at :149 is in range and wrong; no range check can see it. P19 measured the content-anchor gate that could and ruled against shipping it. test_the_gate_does_not_claim_the_anchors_are_correct pins the gate's wording so 'in range' cannot be read as 'correct'. The number of content-wrong anchors remains unmeasured."
+  },
+  "closed_utc": "2026-07-30T03:05:00Z",
+  "code_commit": "b72bc5cc",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "b28bb431916c970814d1c497bba07aa4d6e1b7b6a3dc392b0e3f9c2b1f035cc6"
+    },
+    {
+      "path": "papers/phase1-workshop/test_anchor_range.py",
+      "sha256": "7bf3ce90c92998c6efd31e6d777df591b643ebc4c8546b083122fba5feab1c38"
+    },
+    {
+      "path": "papers/runs/20260730T025500Z-P21/RUN_STATE.md",
+      "sha256": "828198168da669b87a4721e99261075c19d8710f2b0f7779518efb0a7316db5e"
+    }
+  ],
+  "files_note": "sha256 of the COMMITTED blob (git show HEAD:<path>), not the bytes on disk -- papers/.gitattributes pins LF and this machine checks out CRLF."
+}
