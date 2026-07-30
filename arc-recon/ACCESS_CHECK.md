@@ -15,7 +15,7 @@ measurement where the docs contradict it — both are recorded when they disagre
 | 5 | Is `level` a response field | **answered** — yes | precheck |
 | 6 | Rate limits and quota | **closed for the question Phase 1 asked** (the campaign fits: 432 rpm of 600, §6d) — with two named residuals: no 429 has ever been observed, and the backoff curve is unmeasured | official docs + `browser-ops/TERMS.md` + baseline-arms + this track's probe + the §6d budget |
 | 7 | Canary replay | **standing** — built, baselined, and now on a daily schedule | [`canary.py`](canary.py), [`canary_schedule.py`](canary_schedule.py), [`data/canary.json`](data/canary.json) |
-| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check |
+| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not. **Permitted ≠ safe**: the cache upstream fills holds all 25 games' source, so §8b is the fail-closed guard over it | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check + [`local_engine_guard.py`](local_engine_guard.py) |
 
 ---
 
@@ -535,6 +535,17 @@ the absence of a statement; the statement exists and is permissive.
 **One line: caching ARC data locally for our own analysis is permitted, and no
 permission needs to be sought for it.**
 
+**And one line immediately after it, because that sentence is about permission
+and says nothing about contents: the cache is permitted; what upstream puts in
+it is not.** First run downloads *the game source* for all 25 games, and both
+`make play-local` and the swarm runner's `--game` default to every game in the
+dataset (`browser-ops/TERMS.md` §4.2). By INC-BA-001's own yardstick source
+ranks a notch *worse* than trajectories — it hands over the finished answer to
+the mechanics rather than an example of it. So the licensing conclusion above is
+correct and must not be read as a green light to enable local mode: **permission
+is not containment**, and the containment half is [§8b](#8b--the-containment-half-permitted-is-not-safe), which is
+executable rather than advisory.
+
 **2. Our own measurements are explicitly publishable; ARC's content is not.**
 The decisive document is not the site terms at all — it is the *ARC Prize
 Verified Official Testing Policy* (`arcprize.org/policy`), which §8 could not
@@ -583,9 +594,117 @@ document, and that document turned out to *grant* the thing this repository
 actually needs to publish. Both are kept: the caution was correct given what §8
 had read, and it was more caution than the full record requires.
 
----
+### 8b · The containment half — "permitted" is not "safe"
 
-## What this ticket did not do
+§8a settled the *licensing* question and settled it correctly. This subsection
+exists because the finding it came from had two directions and only one of them
+had a box to be filed in: item 8's title is "licensing", so the sealed-pile half
+had nowhere to go and, for a while, went nowhere. **A finding cut along a
+document's section headings loses the half that does not match a heading.**
+
+What upstream does by default, quoted in `browser-ops/TERMS.md` §4.2 with URLs:
+
+| documented behaviour | what it means for the cut |
+|---|---|
+| first run will "download the game source", cached in `environment_files/` | all 25 games' **source** lands on disk, 21 of them sealed |
+| `make list-games` — "Print every game id available" | enumerates all 25; takes no filter |
+| `make play-local` — "Runs your agent against every game in the dataset" | plays all 25 |
+| `make verify-local` — "30-second smoke test on two games" | the docs do not say which two |
+| swarm `--game` — "If not specified, the agent plays all available games" | silence means all 25 |
+
+So the first thing done on the strength of "permitted, no permission needed"
+pulls every sealed game's source down and, by default, plays every one of them.
+That is not a licensing risk; it is the whole confirmation set, and it is not
+recoverable. Note also that **none of it produces an API call**: a local run
+never enters `data/recon_ledger.jsonl`, so `contamination.py`'s audit — which
+audits every call we have ever made — stays green through the entire event. The
+existing instruments are structurally blind here, which is why the guard had to
+be new code rather than another assertion in an existing one.
+
+**The rule.** Any path that pulls `environment_files/`, or invokes
+`make list-games` / `make play-local` / `make verify-local` / the swarm runner,
+must first filter to the four development-pile games named in
+`data/piles.json`. **An unfiltered invocation is refused, with an error, in
+code** — not warned about in a document.
+
+**The guard.** [`local_engine_guard.py`](local_engine_guard.py), tested by
+[`test_local_engine_guard.py`](test_local_engine_guard.py) and wired into
+`verify.sh`. It is a positive whitelist that defaults to deny, in the shape
+`baseline-arms/SCHEMA_PATH_A.md` §3 settled on and for the reason it gives: a
+negative list meets an unforeseen path shape and fails *open*, and failing open
+here cannot be undone.
+
+```bash
+python local_engine_guard.py check -- make play-local                    # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x           # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x --game=ar25   # exit 0
+python local_engine_guard.py run   -- <argv...>   # vets, then execs only if allowed
+python local_engine_guard.py scan  environment_files/   # names-only sweep of a cache
+```
+
+Five refusals, one permission:
+
+1. `deny_default_all` — a game-playing or game-pulling command with no `--game`
+   selector. Silence is the dangerous case upstream, so it is the refused case here.
+2. `deny_sealed` — any of the 21 named anywhere on the line, by full id or by
+   4-character prefix, case-insensitively, tested *before* the allow branch so a
+   line naming both piles reads as sealed.
+3. `deny_unknown` — a selector token that is not exactly a development-pile id
+   or its exact prefix. Upstream treats the value as an ID *prefix*, so
+   `--game=s` would widen to `sk48` **and** five sealed games; only the two
+   exact forms pass. A flag carrying an *empty* value is refused here too:
+   with last-wins semantics `--game=ar25 --game=` is no filter at all, wearing
+   the costume of a filtered run.
+4. `deny_unfiltered` — `make play-local`, `make list-games` and
+   `make verify-local`. **No filter argument is documented for any of them** —
+   `--game` is documented only for the swarm runner (see the correction below).
+5. Refuse-everything if `data/piles.json` is absent, malformed, or no longer
+   hashes to the value `CLAUDE.md` pins. A guard that cannot read the cut does
+   not know what it is guarding.
+
+Three properties worth stating because they are what the tests are about. The
+prefix match is **boundary-anchored on both sides**, so `blobs/9ar25f0e/` does
+not read as `ar25` — the exact failure `SCHEMA_PATH_A.md` §3.1 found the hard
+way. Each shell **segment is judged alone** (split on `&&`, `||`, `;`, `|`, `&`,
+newline, `#`) and the most severe verdict wins, because one dev-pile token must
+not license the other statements sharing the line. And `scan` **opens nothing**:
+it is a sieve over file *and directory* names, and there is a test that fails if
+any file under the swept directory is opened. Downloading is not reading; a
+guard that quoted the file it was refusing would be the leak.
+
+#### 8b.1 · What an adversarial pass found, and the one correction that matters
+
+The first version of this guard was attacked by a reviewer briefed to break it,
+and it found **nine working bypasses**. Each is now a named regression test in
+`test_local_engine_guard.py`. The sealed-name matcher held — every hole was in
+the *reach* of the trigger list, in argv flattening, or in Python truthiness.
+Two are worth writing down here rather than only in the tests:
+
+**`make play-local GAME=ar25` was this document's own worked example, and it was
+wrong.** `GAME=` is a spelling *we invented*. The only evidence we hold —
+`browser-ops/TERMS.md` §4.2, quoting the docs with URLs — documents `--game` for
+the **swarm runner** and documents `make play-local` as "Runs your agent against
+every game in the dataset" **with no argument at all**. GNU make accepts an
+unreferenced variable override in silence, so if the Makefile does not consume
+`GAME`, that command plays all 25 while looking filtered, and **looking filtered
+is worse than looking dangerous**: it is the form somebody copies. The same
+reasoning that refuses `verify-local` for an unnamed pair condemns `play-local`
+for an unverified variable, so `play-local` moved into the refused set. It can
+come back out when the Makefile is in the tree and shown to honour a named
+variable — not before.
+
+**`assert_local_pull_allowed` failed open on a generator.** `if not game_ids` is
+false for any generator object, so `(g for g in cfg if want(g))` — the
+bracket-less twin of a safe list comprehension — skipped the "name your four
+games" refusal, returned an empty allowlist, and left the caller pulling
+unfiltered. Nothing at the call site looked wrong. It now materialises the
+sequence before testing it.
+
+The generalisable lesson: the design attention had gone to the sealed-name
+matcher, and that is the part that held. The failures were all in the plumbing
+around it.
+
+
 
 * **The cookie fix ~~is not applied~~ is applied, with the re-measurement
   attached** — see §6c. INC-007 recorded it as deferred and gave reasons; those
