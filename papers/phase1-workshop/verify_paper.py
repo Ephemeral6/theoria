@@ -776,6 +776,91 @@ def _assignment_hits(text: str) -> list[str]:
     return out
 
 
+#: How long to wait for the one `git check-ignore` call before giving up on it.
+#: Expiring is a git failure like any other and widens the scan rather than
+#: narrowing it, so a slow filesystem costs a slow run, never a quiet one.
+GITIGNORE_TIMEOUT = 60
+
+
+def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
+    """Which of `paths` git would refuse to publish -- in **one** batched call.
+
+    This is the scope of check D, and it is a claim about publication, not about
+    tidiness. `CLAUDE.md` grounds this whole check in the Phase 4 release
+    manifest publishing every *tracked* file; a gitignored path is not in that
+    manifest and never will be, so scanning it can only produce findings nobody
+    can act on. It produced exactly that: `.pytest_cache/v/cache/nodeids` is
+    pytest's own record of this gate's negative-control test *names*, which spell
+    out deliberately fake credentials, so check D went red on its own fixtures
+    and stayed red on every machine where anyone had ever run the suite -- the
+    cache regenerates, so there was no fixing it in the tree. Twice over, this
+    file records why that ending is fatal: a gate that is permanently red is a
+    gate somebody switches off, and a leak detector that cries wolf at its own
+    test names is one nobody believes on the day it is right.
+
+    Three things this deliberately is not:
+
+    * **not a path allowlist.** `.pytest_cache` is nowhere in this function. The
+      rule is "git will not publish this", and a named exemption would be a
+      declared place to hide a key from all three scans -- the same hole the
+      negative-control suite refused to open for its own filename.
+    * **not a narrowing of *untracked*.** Untracked-but-not-ignored files stay in
+      scope. `git check-ignore` consults the index, so a tracked file is never
+      reported here even when a pattern matches it; and an untracked file that
+      nothing ignores is one `git add` away from the manifest, which is precisely
+      the moment this check exists for.
+    * **not trusted to fail closed.** Every failure mode -- no git, no
+      repository (a release tarball has no `.git`), a non-{0,1} exit, a timeout,
+      or output this function cannot map back onto its own input -- returns an
+      empty set and a reason. The caller then scans everything and says so. A
+      check that silently shrinks its own scope is the defect one rung down from
+      the one this fixes.
+
+    Returns `(ignored, unavailable)`; `unavailable` is None when the answer can
+    be trusted, otherwise a short phrase naming why it cannot.
+    """
+    if not paths:
+        return set(), None
+    git = shutil.which("git")
+    if git is None:
+        return set(), "git is not on PATH"
+    # Relative to HERE and NUL-delimited: `-z --stdin` echoes back the pathnames
+    # verbatim, so the reply maps onto the request by string identity. One call,
+    # not one per file -- there are hundreds under here once figures and runs are
+    # counted, and a per-file subprocess is a check nobody waits for.
+    index: dict[str, Path] = {}
+    for p in paths:
+        try:
+            index[p.relative_to(HERE).as_posix()] = p
+        except ValueError:
+            continue
+    if not index:
+        return set(), None
+    payload = b"\0".join(k.encode("utf-8") for k in index) + b"\0"
+    try:
+        r = subprocess.run([git, "check-ignore", "-z", "--stdin"],
+                           input=payload, cwd=str(HERE),
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                           timeout=GITIGNORE_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        return set(), f"git check-ignore did not finish in {GITIGNORE_TIMEOUT}s"
+    except OSError as exc:
+        return set(), f"git check-ignore could not be run ({type(exc).__name__})"
+    # 0 = some path is ignored, 1 = none is. Anything else is an error, and 128
+    # is the ordinary one: not a git repository, which is what an unpacked
+    # release tarball looks like.
+    if r.returncode not in (0, 1):
+        return set(), f"git check-ignore exited {r.returncode} (no usable ignore list)"
+    ignored = {index[name] for name in r.stdout.decode("utf-8", "replace").split("\0")
+               if name in index}
+    if r.returncode == 0 and r.stdout and not ignored:
+        # git answered, and none of the answer is recognisable as something that
+        # was asked. Rather than conclude "nothing is ignored" from a reply this
+        # function failed to read, widen.
+        return set(), "git check-ignore output did not match the paths submitted"
+    return ignored, None
+
+
 def check_nosecret() -> tuple[bool, list[str]]:
     """D. No credential value anywhere under this directory.
 
@@ -805,6 +890,13 @@ def check_nosecret() -> tuple[bool, list[str]]:
     it is the only one of the three that recognises *this* key with no false
     positives at all. It is now reported as what it is: a bonus available on the
     author's machine, not the floor.
+
+    **Scope: what git would publish.** The walk skips `__pycache__` and anything
+    git ignores (`_gitignored`), and the note states both counts, because a check
+    that quietly narrows its own scope has the defect one rung below the one it
+    fixed. Untracked-but-not-ignored files are in scope on purpose -- they are one
+    `git add` from the manifest. When the ignore list cannot be obtained the scan
+    widens to everything and the note says so.
     """
     notes: list[str] = []
     env = ROOT / ".env"
@@ -816,16 +908,17 @@ def check_nosecret() -> tuple[bool, list[str]]:
                 if len(value) >= MIN_SECRET_LEN:
                     secrets.append(value)
 
+    candidates = [p for p in sorted(HERE.rglob("*"))
+                  if p.is_file() and "__pycache__" not in p.parts]
+    ignored, unavailable = _gitignored(candidates)
+    if unavailable:
+        notes.append(f"  ignore-filtering unavailable ({unavailable}): scan WIDENED "
+                     f"to every file under this directory, gitignored or not")
+
     hits: list[str] = []
     scanned = 0
-    for path in sorted(HERE.rglob("*")):
-        if not path.is_file() or "__pycache__" in path.parts:
-            continue
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        scanned += 1
+    skipped = 0
+    for path in candidates:
         # `relative_to` raises when ROOT is not an ancestor -- which it always is
         # in production and was not under a probe that redirected only ROOT. The
         # finding is worth more than the tidy path: a leak detector that raises
@@ -834,10 +927,26 @@ def check_nosecret() -> tuple[bool, list[str]]:
             rel = path.relative_to(ROOT)
         except ValueError:
             rel = path
-        # A committed .env is the leak itself, whatever is in it.
+        # A .env here is the leak itself, whatever is in it -- and this one
+        # mechanism runs *before* the ignore filter, on every file. Root
+        # `.gitignore` ignores `.env` and `.env.*` by design, so filtering this
+        # by publication status would have quietly retired the tripwire: drop a
+        # real `.env` into this directory and the gate would have gone green on
+        # the one filename it is named after. Skipping a gitignored file is a
+        # judgement about *publication*; a credential file sitting in the
+        # publication directory is a finding about the *machine*, and those are
+        # not the same claim. Widening here can only add findings.
         if path.name == ".env" or path.name.startswith(".env."):
             if path.name != ".env.example":
                 hits.append(f"  a .env file is published at {rel}")
+        if path in ignored:
+            skipped += 1
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        scanned += 1
         for value in secrets:
             if value in text:
                 # Never print the value.
@@ -858,7 +967,8 @@ def check_nosecret() -> tuple[bool, list[str]]:
     # The note states which mechanisms ran, and says so out loud when the
     # exact-value scan did not. "Nothing to leak" was the old sentence and it
     # asserted a check that had not executed.
-    notes.append(f"  {scanned} published file(s) scanned: no credential-named "
+    notes.append(f"  {scanned} published file(s) scanned, {skipped} skipped as "
+                 f"gitignored (git will not publish them): no credential-named "
                  f"assignment, no key-shaped token in a credential context")
     notes.append(f"  {len(secrets)} .env value(s) also compared byte-for-byte: absent"
                  if secrets

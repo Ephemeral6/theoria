@@ -24,6 +24,9 @@ Run:  python -m pytest papers/phase1-workshop/test_nosecret_gate.py
 
 from __future__ import annotations
 
+import re
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -63,6 +66,52 @@ def run_d(tmp_path, monkeypatch, files: dict[str, str], env: str | None = None):
         p.write_text(body, encoding="utf-8")
     if env is not None:
         (tmp_path / ".env").write_text(env, encoding="utf-8")
+    monkeypatch.setattr(vp, "HERE", here)
+    monkeypatch.setattr(vp, "ROOT", tmp_path)
+    return vp.check_nosecret()
+
+
+#: Real git, or the scope cases cannot run at all. They build their own
+#: repository in `tmp_path` rather than leaning on the live `.pytest_cache`:
+#: that directory is the bug's exhibit, but a suite that needs it is a suite
+#: that only passes on the second run, and on the machine that ran it.
+GIT = shutil.which("git")
+needs_git = pytest.mark.skipif(GIT is None, reason="git is not on PATH")
+
+
+def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
+                  gitignore: str = "", track: tuple[str, ...] = ()):
+    """`check_nosecret()` over a synthetic tree inside a **real** repository.
+
+    `tmp_path` is both the repo root and `ROOT`; `tmp_path/paper` is `HERE`,
+    exactly as in `run_d`. Names in `track` are staged, which is all "tracked"
+    means to `git check-ignore` -- it consults the index, and that is the
+    guarantee that keeps a tracked file in scope however many patterns match it.
+
+    Global and system git config are pointed at files that do not exist, so that
+    whoever runs this suite cannot change its verdict from their own
+    `core.excludesFile`. A scope test whose answer depends on the reader's
+    dotfiles is not a test.
+    """
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "no-global-config"))
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", str(tmp_path / "no-system-config"))
+    here = tmp_path / "paper"
+    here.mkdir()
+    (tmp_path / ".gitignore").write_text(gitignore, encoding="utf-8")
+    for name, body in files.items():
+        p = here / name
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(body, encoding="utf-8")
+
+    def git(*args):
+        r = subprocess.run([GIT, *args], cwd=str(tmp_path),
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        assert r.returncode == 0, "git %s: %s" % (
+            " ".join(args), r.stdout.decode("utf-8", "replace"))
+
+    git("init", "-q")
+    for name in track:
+        git("add", "-f", "--", "paper/" + name)
     monkeypatch.setattr(vp, "HERE", here)
     monkeypatch.setattr(vp, "ROOT", tmp_path)
     return vp.check_nosecret()
@@ -185,6 +234,152 @@ def test_a_shaped_token_is_not_printed_either(tmp_path, monkeypatch):
 def test_these_are_not_caught(tmp_path, monkeypatch, body, why):
     ok, notes = run_d(tmp_path, monkeypatch, {"doc.md": body})
     assert ok, "false positive on %s: %s" % (why, notes)
+
+
+# ------------------------------------------------- what is in scope at all
+#
+# The check's own word for what it reads is "published file(s)", and
+# `CLAUDE.md` grounds it in a release manifest that publishes every *tracked*
+# file. So the scan is over what git would publish. It was not: it read
+# `.pytest_cache/v/cache/nodeids` -- pytest's record of the node ids of the tests
+# *above*, which spell out every deliberately fake credential in this file -- and
+# reported those as leaks. Red on its own negative control, on every machine
+# where anyone had run the suite, and un-fixably, because the cache regenerates.
+# Two checks in `verify_paper.py` already say what that ends in: a gate that is
+# permanently red is a gate somebody switches off. This is the gate between the
+# ARC key and the release manifest.
+
+@needs_git
+def test_a_gitignored_file_is_not_reported(tmp_path, monkeypatch):
+    """The item, in one test. A gitignored path is not in the manifest and never
+    will be, so a finding in it is one nobody can act on."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"cache/nodeids": f"ARC_API_KEY={SHAPED}"},
+                              gitignore="cache/\n")
+    assert ok, "a gitignored file was still reported: %s" % notes
+
+
+@needs_git
+def test_an_untracked_unignored_file_is_still_reported(tmp_path, monkeypatch):
+    """The hole the fix must not open, and the reason the filter is on *ignored*
+    rather than on *untracked*. Nothing ignores this file, so it is one `git add`
+    from the manifest -- which is exactly the moment check D exists for."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"fresh.md": f"ARC_API_KEY={SHAPED}"},
+                              gitignore="cache/\n")
+    assert not ok and "fresh.md" in "\n".join(notes), (
+        "an untracked-but-publishable file fell out of scope: %s" % notes)
+
+
+@needs_git
+def test_a_tracked_file_is_still_reported(tmp_path, monkeypatch):
+    """Unchanged, and the case the whole check is named for."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"section.md": f"ARC_API_KEY={SHAPED}"},
+                              track=("section.md",))
+    assert not ok and "section.md" in "\n".join(notes)
+
+
+@needs_git
+def test_a_tracked_file_is_reported_even_when_a_pattern_matches_it(
+        tmp_path, monkeypatch):
+    """`git add -f` beats `.gitignore`, and then the file *is* published. The
+    filter has to agree with git about that, and it does by letting
+    `check-ignore` consult the index rather than matching patterns itself: an
+    ignore rule is not a promise about a path already in the index. Matching
+    `.gitignore` by hand would have skipped this one."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"cache/forced.md": f"ARC_API_KEY={SHAPED}"},
+                              gitignore="cache/\n", track=("cache/forced.md",))
+    assert not ok and "forced.md" in "\n".join(notes), (
+        "a force-added file is published and was not scanned: %s" % notes)
+
+
+@needs_git
+def test_the_green_note_says_how_many_it_skipped(tmp_path, monkeypatch):
+    """Both counts, in the sentence a reader audits. A check that narrows its own
+    scope silently is the defect one rung down from the one this item fixed --
+    and "0 skipped" is the reading that distinguishes a clean tree from a scan
+    that quietly stopped looking."""
+    ok, notes = run_d_in_repo(
+        tmp_path, monkeypatch,
+        {"a.md": "x", "b.md": "y", "cache/c.md": "z", "cache/d.md": "w"},
+        gitignore="cache/\n")
+    blob = "\n".join(notes)
+    assert ok, blob
+    assert "2 published file(s) scanned" in blob, blob
+    assert "2 skipped as gitignored" in blob, blob
+
+
+@needs_git
+def test_the_rule_is_ignore_status_not_a_forgiven_name(tmp_path, monkeypatch):
+    """No path allowlist and no per-file exception. Put a credential in a
+    directory called `.pytest_cache` in a repository that does not ignore it and
+    it is still a finding: the rule is "git will not publish this", not a list of
+    names. An exemption keyed on the name would be a documented place to hide the
+    next key from all three scans -- which is the same hole this suite refused to
+    open for its own filename, and why its fixtures are assembled at runtime."""
+    ok, notes = run_d_in_repo(
+        tmp_path, monkeypatch,
+        {".pytest_cache/v/cache/nodeids": f"ARC_API_KEY={SHAPED}"})
+    assert not ok and "nodeids" in "\n".join(notes), (
+        "a name-based exemption, not an ignore-based one: %s" % notes)
+
+
+@needs_git
+def test_a_gitignored_dotenv_here_is_still_the_leak(tmp_path, monkeypatch):
+    """The hole the ignore filter would otherwise have opened, and the sharpest
+    one: root `.gitignore` ignores `.env` and `.env.*` by design, so filtering
+    every mechanism by publication status would have retired the tripwire on the
+    one filename this check is named after -- drop a real `.env` in here and the
+    gate goes green. So the filename mechanism runs before the filter, on every
+    file. Skipping a gitignored path is a judgement about publication; a
+    credential file sitting in the publication directory is a finding about the
+    machine, and those are different claims."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch, {".env": "ARC_API_KEY="},
+                              gitignore=".env\n.env.*\n!.env.example\n")
+    assert not ok and ".env" in "\n".join(notes), (
+        "a gitignored .env in the publish directory went unreported: %s" % notes)
+
+
+@needs_git
+def test_a_gitignored_dotenv_example_is_still_allowed(tmp_path, monkeypatch):
+    """The documented way to publish a variable *name* stays allowed on both
+    sides of the filter."""
+    ok, _ = run_d_in_repo(tmp_path, monkeypatch, {".env.example": "ARC_API_KEY="},
+                          gitignore=".env\n.env.*\n!.env.example\n")
+    assert ok
+
+
+def test_ignore_filtering_unavailable_widens_the_scan(tmp_path, monkeypatch):
+    """No `.git` anywhere above the tree -- which is what an unpacked release
+    tarball is, the one tree where being wrong about scope matters most. It is
+    also the shape of every other failure mode (no git on PATH, a timeout, an
+    unreadable reply): each one has to mean "scan everything", never "skip
+    everything". A git failure that shrinks coverage is a silent hole with an
+    external trigger."""
+    monkeypatch.setenv("GIT_CEILING_DIRECTORIES", tmp_path.as_posix())
+    ok, notes = run_d(tmp_path, monkeypatch,
+                      {"cache/nodeids": f"ARC_API_KEY={SHAPED}"})
+    blob = "\n".join(notes)
+    assert not ok, "a git failure silently shrank the scan: %s" % blob
+    assert "WIDENED" in blob, (
+        "the scan widened without saying so, which is the same audit problem "
+        "read from the other side: %s" % blob)
+
+
+def test_the_live_tree_reports_both_counts():
+    """Positive control for the scope claim, beside the one for the verdict. The
+    conditional half is the real exhibit: if the cache is on disk and nothing was
+    skipped, the filter is not running on the tree it was written for."""
+    ok, notes = vp.check_nosecret()
+    blob = "\n".join(notes)
+    assert ok, blob
+    assert "published file(s) scanned" in blob and "skipped as gitignored" in blob
+    if (vp.HERE / ".pytest_cache").is_dir():
+        m = re.search(r"(\d+) skipped as gitignored", blob)
+        assert m and int(m.group(1)) > 0, (
+            "the pytest cache is on disk and the scan skipped nothing: %s" % blob)
 
 
 def test_the_live_tree_is_green():
