@@ -22,9 +22,9 @@ tautology dressed as a gate.
 direction and only if it is actually run. It is circular as evidence *about the
 level* — we chose the enumerator, and a weaker enumerator would "prove" more
 levels large. It is not circular as evidence about *parity with class (i)*:
-`_small_space` defines `exhaustive_feasible: True` by exactly this enumerator
-terminating under exactly this cap, so the same enumerator failing to terminate
-is the honest complement of the claim class (i) already makes. That is the only
+`_small_space` defines `naive_enumeration_feasible: True` by exactly this
+enumerator terminating under exactly this cap, so the same enumerator failing to
+terminate is the honest complement of the claim class (i) already makes. That is the only
 use it is put to here.
 
 **(c) a search-free constructive lower bound on distinct reachable states.**
@@ -55,8 +55,8 @@ An item is class (ii) when **both** hold, and both are recorded as measurements:
    latch bits (D-EX-028, this run). A bound whose premises are checked three
    call frames later is not a bound; see below.
 2. **(b)** the reference enumerator, the one whose termination *defines*
-   `exhaustive_feasible: True` for class (i), measured to truncate at the shipped
-   cap on this level. Measured, not assumed.
+   `naive_enumeration_feasible: True` for class (i), measured to truncate at the
+   shipped cap on this level. Measured, not assumed.
 
 Condition 2 was previously not merely unmeasured but **counterfactually
 recorded**: `_large_space` hardcoded `"truncated": False`, which is literally
