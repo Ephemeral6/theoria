@@ -87,8 +87,18 @@ five states — which is the defect `COVERAGE.md` found in the pair being retire
 Each of the five carries all four enumerated pass sections **and** a
 "what this audit could NOT check" section — verified here by reading the heading
 structure of all five, not inferred from file size. No slice carries an
-in-progress marker; the two mentions of "report in progress" in the directory are
-retrospective references by one slice to an earlier stub state of another.
+in-progress marker, and that claim survives; the census beside it did not, and is
+corrected here. `grep -rn "report in progress"` over the run directory returns
+**four** hits in three files, not two: `citecheck-A-abstract-to-s3.md:806`, which
+is the only one inside a slice and the only one that is "by one slice" —
+`CLOSING-PLAN.md:42` and two inside `MANIFEST.json` are not slices at all. The
+sentence also omitted the directory's other marker entirely: `[bib: TODO]` at
+`citecheck-D2-s11-to-s12.md:89`, which appears only inside "Zero `[bib: TODO]`
+markers remain in the slice", i.e. as the name of the thing being reported absent.
+Neither hit marks unfinished work, so the load-bearing half stands — but a
+miscounted census inside a stamp that is binding on a coverage claim is the same
+defect this document exists to catch, and `MANIFEST.json`'s `completeness_check`
+is now the more precise of the two records on this point.
 
 ---
 
@@ -183,19 +193,13 @@ is the one fifth of this stamp resting on a single author.
 
 ## Known defects in the surrounding run record, not fixed here
 
-Recorded because a binding stamp should not quietly inherit them. All three are
-findings of `row-sample-audit.md` §*Findings outside the sample*:
+Recorded because a binding stamp should not quietly inherit them. Both are
+findings 2 and 3 of `row-sample-audit.md` §*Findings outside the sample*:
 
-1. **`runs/…/MANIFEST.json`'s `completeness_check` row count uses two different
-   counting rules.** "A 73 rows, B 57, D1 73, D2 65" — the rule *pipe-lines minus
-   separator lines* reproduces B/D1/D2 exactly and gives A **66**, not 73. No
-   single mechanical rule yields all four. **This index therefore does not cite
-   those row counts as its evidence of completeness**; it uses the line-range
-   contiguity check and the heading-structure check above, both recomputed here.
-2. **`MANIFEST.json`'s `slice_state_note` and `stub_census` are stale about slice
+1. **`MANIFEST.json`'s `slice_state_note` and `stub_census` are stale about slice
    A**, describing it as a stub while its own `citation_slices` entry reads
    `complete`. Harmless to a reader of the whole file, misleading to a grep.
-3. **Slice B's closing paragraph is stale about slice A** ("ends after Pass A, 77
+2. **Slice B's closing paragraph is stale about slice A** ("ends after Pass A, 77
    lines") — true when B was written, false now (A is 810 lines with all four
    passes). Superseded by this paragraph rather than edited, per the
    append-only-once-published convention.
@@ -204,6 +208,39 @@ Three line anchors inside the slices are off by one or two (slice A's
 `omnibus_manual` docstring, slice D1's `_(**unverified** — %s)_` emission and
 `Law.as_json` guard); the sampler confirms every one opens on the right content
 within two lines. None is load-bearing.
+
+**Struck from this list, and the error was this index's own: the `MANIFEST.json`
+row-count defect — the sampler's finding 1 — was closed before this index
+existed.** Checked in git rather than taken on trust. `completeness_check`
+asserted "A 73 rows, B 57, D1 73, D2 65" as the checked property behind `state:
+complete` through commit `cedb099a`; commit `f3edfacc` removed that assertion,
+added the `row_counts_were_wrong: "CORRECTED. …"` field in which the retired
+string survives only as a historical citation, and made `completeness_check` end
+*"The row counts are now emitted by count_rows.py under the stated rule rather
+than asserted."* The commit that added this index, `c100e7ce`, is two commits
+later and shipped over that already-corrected manifest. The first version of this
+section therefore reported as open a defect its own run had closed, and quoted the
+fixed manifest's historical citation as though it were the live claim.
+
+It also understated the defect and denied a fix that is committed beside it.
+**Two of the four asserted numbers were wrong, not one.** A's 73 was the raw
+pipe-line count *including* the 7 GFM separator rows (66 + 7 = 73), and **D2's 65
+was off by one** — D2's true count is 66; the missed row is an indented table row
+at `citecheck-D2-s11-to-s12.md:550`, which `^|` does not match but "stripped form
+starts with `|`" does. Only B (57) and D1 (73) reproduced. And **one mechanical
+rule does yield all of them**: `runs/…/count_rows.py` implements it — a row is a
+line whose stripped form starts with `|`, excluding fenced code blocks and GFM
+separator lines, header rows counted — and gives **A 66, B 57, C 70, D1 73,
+D2 66 = 332**, the total `citation_axis_coverage` states, or 59 / 50 / 62 / 64 /
+58 = 293 excluding headers. `python count_rows.py --check` exits **0** with
+"ok -- every manifest row count reproduces under the stated rule", run here, not
+read. So "no single mechanical rule yields all four" was true of the four numbers
+as `cedb099a` asserted them, and is false of the run record as it stands.
+
+This changes nothing about the stamp, which is the point of saying it out loud:
+this index still does not cite row counts as its evidence of completeness — it
+uses the line-range contiguity check and the heading-structure check above, both
+recomputed here. What is removed is an overstated defect, not a support.
 
 ---
 
