@@ -12,6 +12,10 @@
    "sha256": "2cae07be7dfc463f6b2bc5cdfb16e466bd40789a683f28f6c82475e6bb53b6a3"
   },
   {
+   "path": "_survey_stale_kinds.py",
+   "sha256": "7807ee5a1f61c0b1cbe111f080d79c21d66720b770ce2f380f1d089a19dbfafc"
+  },
+  {
    "path": "adversarial/attack_barbell.json",
    "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
   },
@@ -77,7 +81,7 @@
   },
   {
    "path": "handover/V2-V25-prep-the-negative-control-is-not-what-it-looks-like.md",
-   "sha256": "d5ed86d3ff02c8f46fd08e6232754ba10cb6aacb503c873b3518e74f86a897a2"
+   "sha256": "c09d1eb20d2d2a1fe1a0fffa4002dc484acf9ac0c6e51a036f16176d4db2fcf9"
   },
   {
    "path": "handover/V27-prep-artefact-scan.md",
