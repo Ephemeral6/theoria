@@ -1,15 +1,29 @@
 """V23: can `lp_potential` walk the class (ii) path?
 
-Five probes, all offline, all under a second each except where noted:
+Five probes, all offline, no network, no API:
 
   A  what `solve()` actually reads off `graph`, established by deletion
   B  cost of materialising a peg1d graph as a function of n_pos (MEASURED)
   C  `solve()` on a geometry-only graph at large n_pos -- is the LP itself
      the bottleneck, or is the graph? (MEASURED)
   D  can an A2 comb transition be written as an `lp_potential` Move at all?
-     (algebraic, checked by exhaustive role assignment)
+     (both sides enumerated: lp's over all role assignments, A2's over the
+     reachable transitions of small levels chosen to cover every branch of
+     `Level.step`)
   E  the smallest honest end-to-end: a comb level encoded as a state graph,
      handed to `solve()`.
+
+**Not** "all under a second each" -- that line stood here while B, C and E were
+measuring exactly the cost of not being.  A and D are sub-second; B, C and E are
+the measurements, and their own cost is recorded next to their results
+(`B_materialisation[].enumerate_s`, `C_lp_only[].solve_s`,
+`E_comb[].build_s` / `.solve_s`).  E's last rung dominates the run: it builds a
+multi-million-state graph, which takes tens of seconds on its own.  Read those
+fields rather than this docstring -- they are measured, this sentence is not.
+
+Those timing fields also make the artefact **not byte-reproducible**: rerunning
+reproduces every structural number but not the wall-clock ones.  Nothing else in
+the JSON varies between runs.
 
 Run:  python exam/runs/20260730T021500Z-V23-large-space/probe_lp_interface.py
 """
@@ -28,25 +42,67 @@ for path in (REPO, os.path.join(REPO, "engine-rig")):
 
 from engines.lp_potential import potential as lp          # noqa: E402
 from interop import peg1d                                  # noqa: E402
+from exam.papers import verdict as V                       # noqa: E402
+from exam.grading import rubrics_verdict as RV             # noqa: E402
 
 OUT = {}
 
+#: Every branch `rubrics_verdict.Level.step` can take.  The A2 measurement below
+#: refuses to report unless the levels it enumerated between them exercised all
+#: six: a coefficient sum measured over three branches of six is a measurement
+#: of something narrower than "an A2 transition", and would be recorded as
+#: though it were the whole thing.
+STEP_BRANCHES = ("wall_or_edge", "button", "door_closed", "door_open",
+                 "portal", "floor")
+
+#: Hard cap on the A2 enumeration below.  `rubrics_verdict` already fixes a
+#: number for "past here, do not enumerate a state space", so reuse it rather
+#: than inventing a second one.  Hitting it RAISES; it never truncates.  The
+#: previous version of this probe had no bound at all and could not terminate.
+A2_STATE_BOUND = RV.MAX_ENUMERATION
 
 
-def _measure_a2_coefficient_sums():
-    """Enumerate A2's own transitions and sum each occupancy-vector delta.
+def _branch_of(level, cart, pressed, action):
+    """Which branch of `Level.step` this command takes -- label cross-checked.
 
-    The vector has one coordinate per cell for the cart (one-hot), one per switch
-    for its latch bit, and one for `pressed`. A command moves the cart c -> c'
-    (-1 then +1, so 0), or leaves it where it was (0); on top of that a latch bit
-    or the button bit may turn on, each +1 and never back down. So the coefficient
-    sum of a transition is exactly the number of bits that turned on, and the
-    question "is it ever -1" is answered by enumeration rather than by argument.
+    Reading the branch off the level's own fields is a second implementation of
+    `step`'s case order, and second implementations drift: `rubrics_verdict`
+    documents `_neighbours` drifting from `step` in exactly this way, and the
+    drift produced accepted-but-false certificates.  So the label is only used
+    after the outcome it predicts has been checked against what `step` actually
+    returned, and a disagreement raises rather than being recorded.
     """
-    from exam.papers import verdict as V
-    from exam.grading import rubrics_verdict as RV
+    dr, dc = RV.DELTA[action]
+    target = (cart[0] + dr, cart[1] + dc)
+    nxt, npressed = level.step(cart, pressed, action)
+    if not level.in_bounds(target) or level.is_wall(target):
+        branch, expect = "wall_or_edge", (cart, pressed)
+    elif level.button is not None and target == level.button:
+        branch, expect = "button", (cart, True)
+    elif level.door is not None and target == level.door:
+        branch, expect = (("door_open", (target, pressed)) if pressed
+                          else ("door_closed", (cart, pressed)))
+    elif level.portal is not None and target == level.portal:
+        branch, expect = "portal", (level.portal_dest or target, pressed)
+    else:
+        branch, expect = "floor", (target, pressed)
+    if (nxt, npressed) != expect:
+        raise AssertionError(
+            "branch label %r for %s from %s (pressed=%s) predicts %s but "
+            "Level.step returned %s -- the label is a second implementation "
+            "and it has drifted" % (branch, action, cart, pressed, expect,
+                                    (nxt, npressed)))
+    return branch, nxt, npressed
 
-    doc = V.comb_open("lp-iface-a2", 20, 1, 20)
+
+def _enumerate_a2_level(doc):
+    """Every reachable transition of one A2 level, with its coefficient sum.
+
+    The occupancy vector has one coordinate per cell for the cart (one-hot), one
+    per switch for its latch bit, and one for `pressed`.  A transition's
+    coefficient sum is therefore (bits that turned on) - (bits that turned off),
+    and both halves are read off the states rather than argued.
+    """
     level = RV.Level(doc)
 
     def latch(cart, mask):
@@ -59,23 +115,46 @@ def _measure_a2_coefficient_sums():
     queue = [start]
     sums = set()
     by_kind = {}
+    branches = {}
     transitions = 0
     while queue:
         cart, pressed, mask = queue.pop()
         for command in level.commands():
-            nxt, npressed = level.step(cart, pressed, level.world_action(command))
+            branch, nxt, npressed = _branch_of(
+                level, cart, pressed, level.world_action(command))
             nmask = latch(nxt, mask)
             transitions += 1
-            bits = bin(nmask ^ mask).count("1") + (1 if npressed and not pressed else 0)
-            sums.add(bits)
+            branches[branch] = branches.get(branch, 0) + 1
+
             moved = nxt != cart
             latched_now = nmask != mask
+            pressed_now = bool(npressed) and not pressed
+            # No coordinate ever falls except the cart's own -1, and that is
+            # repaid by the +1 at the cell it enters.  Both halves are checked
+            # here rather than assumed: `mask & ~nmask` is any latch bit that
+            # went off, and `pressed and not npressed` is the button going off.
+            if mask & ~nmask or (pressed and not npressed):
+                raise AssertionError(
+                    "a monotone bit turned OFF in %s: %s -> %s"
+                    % (doc["level_id"], (cart, pressed, mask),
+                       (nxt, npressed, nmask)))
+            if latched_now and pressed_now:
+                raise AssertionError(
+                    "a latch bit and the button turned on in the same "
+                    "transition of %s; the two are supposed to be mutually "
+                    "exclusive because the button branch leaves the cart "
+                    "where it was" % doc["level_id"])
+            bits = bin(nmask ^ mask).count("1") + (1 if pressed_now else 0)
+            sums.add(bits)
+
             if latched_now:
                 kind = "latching move"
+            elif pressed_now:
+                kind = "button press"
             elif moved:
                 kind = "plain move"
             else:
-                kind = "blocked or self"
+                kind = "blocked"
             # Every transition of a kind must agree, or "the" sum for that kind
             # is not a well-defined number and this probe is measuring an average.
             if kind in by_kind and by_kind[kind] != bits:
@@ -83,13 +162,95 @@ def _measure_a2_coefficient_sums():
                     "A2 %s transitions disagree on their coefficient sum: "
                     "%d and %d" % (kind, by_kind[kind], bits))
             by_kind[kind] = bits
+
             state = (nxt, npressed, nmask)
             if state not in seen and nxt not in level.lost_cells:
                 seen.add(state)
+                if len(seen) > A2_STATE_BOUND:
+                    raise AssertionError(
+                        "%s exceeded the %d-state enumeration bound; this "
+                        "probe refuses to report a partial sweep as a "
+                        "measurement" % (doc["level_id"], A2_STATE_BOUND))
                 queue.append(state)
+    return {"level_id": doc["level_id"], "latch_bits": len(level.switch_index),
+            "states": len(seen), "transitions": transitions,
+            "sums": sorted(sums), "by_kind": dict(by_kind),
+            "branches": sorted(branches)}
+
+
+def _measure_a2_coefficient_sums():
+    """Enumerate A2's own transitions and sum each occupancy-vector delta.
+
+    Why *small* levels, and why they suffice -- stated so it can be attacked:
+
+    * The cart's coordinate is one-hot, so a move contributes -1 at the cell it
+      leaves and +1 at the cell it enters: 0.  A blocked command contributes
+      nothing.  Neither figure depends on how many switches the board has.
+    * Latch bits and `pressed` are monotone -- `|=` and `True`, never cleared --
+      so no coordinate ever goes down except that cart -1, which is repaid in
+      the same transition.  Checked in the loop above, not assumed.
+    * At most one of them can turn on per transition: a latch bit turns on only
+      for the cell the cart *lands* on, and the button branch leaves the cart
+      where it was, so the two are mutually exclusive.  Also checked, not
+      assumed.
+
+    So a transition's coefficient sum is 0 or +1 whatever the board's width;
+    widening the comb adds coordinates and states but no new *kind* of
+    transition, and the kind is what fixes the sum.  The sweep over corridor
+    lengths 2..5 below is the empirical half of that claim: 4x the latch bits,
+    identical sums and identical kinds.  `atrium` is A2's own 9x9 board and is
+    here for coverage -- it is the only level in the family carrying a button, a
+    door and a teleport, so without it three of `Level.step`'s six branches
+    would go unmeasured.  The union of branches is asserted against
+    `STEP_BRANCHES`, so this stays true if the level set is edited.
+
+    What this does **not** do is enumerate the shipped `comb_open(..., 20, ...)`.
+    That board carries 40 latch bits and ~4.4e13 states; enumerating it is
+    precisely the thing this whole ticket exists to say cannot be done, and the
+    previous version of this function tried to, with an unbounded `while queue`,
+    and could not terminate (aborted at 45 s with seen=7547299, frontier=191).
+    `a2_shipped_level_enumerated` is False in the record for that reason, and
+    the general claim rests on the three bullets above, which are argument
+    checked by assertion -- not on a sweep of the shipped size.
+    """
+    docs = [V.comb_open("lp-iface-comb%d" % n, n, 1, n) for n in (2, 3, 4, 5)]
+    docs.append(V.a2_echo())
+
+    per_level = [_enumerate_a2_level(doc) for doc in docs]
+
+    sums = set()
+    by_kind = {}
+    branches = set()
+    transitions = 0
+    states = 0
+    for row in per_level:
+        sums.update(row["sums"])
+        branches.update(row["branches"])
+        transitions += row["transitions"]
+        states += row["states"]
+        for kind, value in row["by_kind"].items():
+            if kind in by_kind and by_kind[kind] != value:
+                raise AssertionError(
+                    "levels disagree on the coefficient sum of an A2 %s: "
+                    "%d and %d" % (kind, by_kind[kind], value))
+            by_kind[kind] = value
+
+    missing = [b for b in STEP_BRANCHES if b not in branches]
+    if missing:
+        raise AssertionError(
+            "the enumerated levels never took these branches of Level.step: "
+            "%s -- the measurement would be narrower than the claim it is "
+            "about to support" % (missing,))
+    extra = sorted(branches.difference(STEP_BRANCHES))
+    if extra:
+        raise AssertionError(
+            "Level.step took a branch this probe does not know about: %s"
+            % (extra,))
+
     return {"sums": sorted(sums), "by_kind": by_kind,
-            "transitions": transitions, "states": len(seen),
-            "level_id": doc["level_id"]}
+            "branches": sorted(branches), "transitions": transitions,
+            "states": states, "per_level": per_level,
+            "level_ids": [row["level_id"] for row in per_level]}
 
 def banner(text):
     print("\n" + "=" * 72)
@@ -201,6 +362,7 @@ def probe_d():
     # whatever the three indices are (including collisions).
     sums = set()
     n = 5
+    assignments = 0
     for src in range(n):
         for over in range(n):
             for dst in range(n):
@@ -209,41 +371,64 @@ def probe_d():
                 row[src] -= 1.0
                 row[over] -= 1.0
                 sums.add(sum(row))
+                assignments += 1
     print("  coefficient-sum over all %d role assignments (n=%d): %s"
-          % (n ** 3, n, sorted(sums)))
+          % (assignments, n, sorted(sums)))
     OUT["D_coefficient_sums"] = sorted(sums)
+    # The loop's width and its trip count, recorded rather than left for a reader
+    # to recover from the source.  Round four withdrew the exhaustiveness claim
+    # because "the figure 5 appears nowhere"; it was in the generator all along,
+    # and round five withdrew the withdrawal.  Neither round would have had to
+    # guess if the artefact had carried the two numbers, so now it does.
+    OUT["D_role_assignments"] = {"n": n, "assignments": assignments}
 
-    # An A2 command changes the occupancy vector by: cart leaves c, cart enters
-    # c'; and if c' is an unlatched switch, that latch bit turns on.  Coefficient
-    # sums 0 (plain move) or +1 (move that latches).  Neither is -1.
-    #
-    # Those two numbers used to be written here as the literals `% 0` and `% 1`,
-    # printed in the format of a measurement and recorded in `D_verdict` as
-    # though derived.  They are correct -- but the half of the incompatibility
-    # that actually bites was the asserted half, while only the lp side (125 role
-    # assignments, every sum -1) was computed.  Now enumerated off a real A2
-    # level, so the record measures both sides of the claim it makes.
+    # The A2 side.  These numbers were once literals -- `% 0` and `% 1` written
+    # into a print in the format of a measurement, and copied into `D_verdict` as
+    # though derived.  The replacement enumerated a 20-wide comb and could not
+    # terminate, so the artefact kept the literals' values from a run that never
+    # happened.  Now: small levels, an explicit bound that raises, and every
+    # number below comes back from the enumeration.
     a2 = _measure_a2_coefficient_sums()
+    for row in a2["per_level"]:
+        print("  %-16s latch bits=%2d  states=%6d  transitions=%7d  sums=%s"
+              % (row["level_id"], row["latch_bits"], row["states"],
+                 row["transitions"], row["sums"]))
     for label, value in sorted(a2["by_kind"].items()):
         print("  A2 %-18s: coefficient sum = %+d" % (label, value))
+    print("  Level.step branches covered: %s" % (a2["branches"],))
     print("  lp_potential Move    : coefficient sum = -1, always")
     print("  => no assignment of (src, over, dst) expresses an A2 transition.")
     OUT["D_verdict"] = {
         "lp_move_coefficient_sum": -1,
         "a2_plain_move": a2["by_kind"]["plain move"],
         "a2_latching_move": a2["by_kind"]["latching move"],
+        "a2_blocked": a2["by_kind"]["blocked"],
+        "a2_button_press": a2["by_kind"]["button press"],
         "a2_coefficient_sums_measured": a2["sums"],
         "a2_transitions_enumerated": a2["transitions"],
-        "a2_level_id": a2["level_id"],
+        "a2_states_enumerated": a2["states"],
+        "a2_enumeration_bound": A2_STATE_BOUND,
+        "a2_step_branches_covered": a2["branches"],
+        "a2_levels": a2["per_level"],
+        "a2_level_ids": a2["level_ids"],
+        "a2_shipped_level_enumerated": False,
         "expressible": False,
-        "how": ("every reachable (cart, pressed, latched) transition of "
-                "`%s` was enumerated and its occupancy-vector delta summed; "
-                "the cart's own one-hot contributes 0 whether it moves or is "
-                "blocked, so the sum is the number of bits that turned on. "
+        "how": ("every reachable (cart, pressed, latched) transition of %s was "
+                "enumerated under a %d-state bound that raises rather than "
+                "truncating, and each transition's occupancy-vector delta was "
+                "summed. The cart's one-hot contributes 0 whether it moves or "
+                "is blocked; latch bits and `pressed` are monotone and at most "
+                "one turns on per transition (both checked in the loop, not "
+                "assumed), so the sum is the number of bits that turned on. "
                 "Measured sums %s, none of them -1, against lp_potential's "
-                "invariant -1 -- so the two move algebras do not meet at any "
-                "size, not merely at shipped sizes."
-                % (a2["level_id"], a2["sums"])),
+                "invariant -1. The shipped comb_open(.., 20, ..) was NOT "
+                "enumerated -- 40 latch bits, ~4.4e13 states, which is the "
+                "impossibility this ticket is about; the step from these "
+                "levels to every size is the monotonicity argument above, "
+                "supported by the corridor-length sweep (4x the latch bits, "
+                "identical sums and kinds), not by a sweep of the shipped size."
+                % (", ".join("`%s`" % i for i in a2["level_ids"]),
+                   A2_STATE_BOUND, a2["sums"])),
     }
 
 

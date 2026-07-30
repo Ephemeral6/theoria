@@ -27,7 +27,7 @@
     },
     {
       "edges": 384,
-      "enumerate_s": 0.0005,
+      "enumerate_s": 0.0003,
       "geometries": 12,
       "n_pos": 8,
       "states": 256
@@ -41,14 +41,14 @@
     },
     {
       "edges": 2048,
-      "enumerate_s": 0.0013,
+      "enumerate_s": 0.0014,
       "geometries": 16,
       "n_pos": 10,
       "states": 1024
     },
     {
       "edges": 4608,
-      "enumerate_s": 0.003,
+      "enumerate_s": 0.0031,
       "geometries": 18,
       "n_pos": 11,
       "states": 2048
@@ -62,56 +62,56 @@
     },
     {
       "edges": 22528,
-      "enumerate_s": 0.0143,
+      "enumerate_s": 0.0145,
       "geometries": 22,
       "n_pos": 13,
       "states": 8192
     },
     {
       "edges": 49152,
-      "enumerate_s": 0.0317,
+      "enumerate_s": 0.0324,
       "geometries": 24,
       "n_pos": 14,
       "states": 16384
     },
     {
       "edges": 106496,
-      "enumerate_s": 0.0674,
+      "enumerate_s": 0.0718,
       "geometries": 26,
       "n_pos": 15,
       "states": 32768
     },
     {
       "edges": 229376,
-      "enumerate_s": 0.1562,
+      "enumerate_s": 0.1601,
       "geometries": 28,
       "n_pos": 16,
       "states": 65536
     },
     {
       "edges": 491520,
-      "enumerate_s": 0.3126,
+      "enumerate_s": 0.3304,
       "geometries": 30,
       "n_pos": 17,
       "states": 131072
     },
     {
       "edges": 1048576,
-      "enumerate_s": 0.6742,
+      "enumerate_s": 0.7138,
       "geometries": 32,
       "n_pos": 18,
       "states": 262144
     },
     {
       "edges": 2228224,
-      "enumerate_s": 1.4395,
+      "enumerate_s": 1.6207,
       "geometries": 34,
       "n_pos": 19,
       "states": 524288
     },
     {
       "edges": 4718592,
-      "enumerate_s": 3.341,
+      "enumerate_s": 3.2836,
       "geometries": 36,
       "n_pos": 20,
       "states": 1048576
@@ -126,64 +126,195 @@
     {
       "geometries": 8,
       "n_pos": 6,
-      "solve_s": 0.0015,
+      "solve_s": 0.0014,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 20,
       "n_pos": 12,
-      "solve_s": 0.0019,
+      "solve_s": 0.0011,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 46,
       "n_pos": 25,
-      "solve_s": 0.0015,
+      "solve_s": 0.0039,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 96,
       "n_pos": 50,
-      "solve_s": 0.0027,
+      "solve_s": 0.0041,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 196,
       "n_pos": 100,
-      "solve_s": 0.0086,
+      "solve_s": 0.012,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 496,
       "n_pos": 250,
-      "solve_s": 0.0383,
+      "solve_s": 0.0431,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 996,
       "n_pos": 500,
-      "solve_s": 0.1593,
+      "solve_s": 0.1738,
       "status": "no_linear_pagoda"
     },
     {
       "geometries": 1996,
       "n_pos": 1000,
-      "solve_s": 0.6096,
+      "solve_s": 0.6091,
       "status": "no_linear_pagoda"
     }
   ],
   "D_coefficient_sums": [
     -1.0
   ],
+  "D_role_assignments": {
+    "assignments": 125,
+    "n": 5
+  },
   "D_verdict": {
+    "a2_blocked": 0,
+    "a2_button_press": 1,
+    "a2_coefficient_sums_measured": [
+      0,
+      1
+    ],
+    "a2_enumeration_bound": 200000,
     "a2_latching_move": 1,
+    "a2_level_ids": [
+      "lp-iface-comb2",
+      "lp-iface-comb3",
+      "lp-iface-comb4",
+      "lp-iface-comb5",
+      "atrium"
+    ],
+    "a2_levels": [
+      {
+        "branches": [
+          "floor",
+          "wall_or_edge"
+        ],
+        "by_kind": {
+          "blocked": 0,
+          "latching move": 1,
+          "plain move": 0
+        },
+        "latch_bits": 4,
+        "level_id": "lp-iface-comb2",
+        "states": 64,
+        "sums": [
+          0,
+          1
+        ],
+        "transitions": 256
+      },
+      {
+        "branches": [
+          "floor",
+          "wall_or_edge"
+        ],
+        "by_kind": {
+          "blocked": 0,
+          "latching move": 1,
+          "plain move": 0
+        },
+        "latch_bits": 6,
+        "level_id": "lp-iface-comb3",
+        "states": 384,
+        "sums": [
+          0,
+          1
+        ],
+        "transitions": 1536
+      },
+      {
+        "branches": [
+          "floor",
+          "wall_or_edge"
+        ],
+        "by_kind": {
+          "blocked": 0,
+          "latching move": 1,
+          "plain move": 0
+        },
+        "latch_bits": 8,
+        "level_id": "lp-iface-comb4",
+        "states": 2048,
+        "sums": [
+          0,
+          1
+        ],
+        "transitions": 8192
+      },
+      {
+        "branches": [
+          "floor",
+          "wall_or_edge"
+        ],
+        "by_kind": {
+          "blocked": 0,
+          "latching move": 1,
+          "plain move": 0
+        },
+        "latch_bits": 10,
+        "level_id": "lp-iface-comb5",
+        "states": 10240,
+        "sums": [
+          0,
+          1
+        ],
+        "transitions": 40960
+      },
+      {
+        "branches": [
+          "button",
+          "door_closed",
+          "door_open",
+          "floor",
+          "portal",
+          "wall_or_edge"
+        ],
+        "by_kind": {
+          "blocked": 0,
+          "button press": 1,
+          "plain move": 0
+        },
+        "latch_bits": 0,
+        "level_id": "atrium",
+        "states": 55,
+        "sums": [
+          0,
+          1
+        ],
+        "transitions": 220
+      }
+    ],
     "a2_plain_move": 0,
+    "a2_shipped_level_enumerated": false,
+    "a2_states_enumerated": 12791,
+    "a2_step_branches_covered": [
+      "button",
+      "door_closed",
+      "door_open",
+      "floor",
+      "portal",
+      "wall_or_edge"
+    ],
+    "a2_transitions_enumerated": 51164,
     "expressible": false,
+    "how": "every reachable (cart, pressed, latched) transition of `lp-iface-comb2`, `lp-iface-comb3`, `lp-iface-comb4`, `lp-iface-comb5`, `atrium` was enumerated under a 200000-state bound that raises rather than truncating, and each transition's occupancy-vector delta was summed. The cart's one-hot contributes 0 whether it moves or is blocked; latch bits and `pressed` are monotone and at most one turns on per transition (both checked in the loop, not assumed), so the sum is the number of bits that turned on. Measured sums [0, 1], none of them -1, against lp_potential's invariant -1. The shipped comb_open(.., 20, ..) was NOT enumerated -- 40 latch bits, ~4.4e13 states, which is the impossibility this ticket is about; the step from these levels to every size is the monotonicity argument above, supported by the corridor-length sweep (4x the latch bits, identical sums and kinds), not by a sweep of the shipped size.",
     "lp_move_coefficient_sum": -1
   },
   "E_comb": [
     {
-      "build_s": 0.0002,
+      "build_s": 0.0001,
       "certificate": {
         "claim": "goal unreachable from 0010000000",
         "conditions": {
@@ -233,11 +364,11 @@
       "edges": 68,
       "n_pos": 10,
       "reachable_states": 40,
-      "solve_s": 0.0346,
+      "solve_s": 0.0056,
       "status": "certified"
     },
     {
-      "build_s": 0.0007,
+      "build_s": 0.0008,
       "certificate": {
         "claim": "goal unreachable from 000100000000000",
         "conditions": {
@@ -301,7 +432,7 @@
       "status": "certified"
     },
     {
-      "build_s": 0.0029,
+      "build_s": 0.0037,
       "certificate": {
         "claim": "goal unreachable from 00001000000000000000",
         "conditions": {
@@ -371,11 +502,11 @@
       "edges": 1188,
       "n_pos": 20,
       "reachable_states": 680,
-      "solve_s": 0.0034,
+      "solve_s": 0.0032,
       "status": "certified"
     },
     {
-      "build_s": 0.0126,
+      "build_s": 0.0148,
       "certificate": {
         "claim": "goal unreachable from 0000010000000000000000000",
         "conditions": {
@@ -455,11 +586,11 @@
       "edges": 4772,
       "n_pos": 25,
       "reachable_states": 2728,
-      "solve_s": 0.0092,
+      "solve_s": 0.0098,
       "status": "certified"
     },
     {
-      "build_s": 0.0883,
+      "build_s": 0.0696,
       "certificate": {
         "claim": "goal unreachable from 000000100000000000000000000000",
         "conditions": {
@@ -549,11 +680,11 @@
       "edges": 19108,
       "n_pos": 30,
       "reachable_states": 10920,
-      "solve_s": 0.0337,
+      "solve_s": 0.0297,
       "status": "certified"
     },
     {
-      "build_s": 0.356,
+      "build_s": 0.2989,
       "certificate": {
         "claim": "goal unreachable from 00000001000000000000000000000000000",
         "conditions": {
@@ -653,11 +784,11 @@
       "edges": 76452,
       "n_pos": 35,
       "reachable_states": 43688,
-      "solve_s": 0.1364,
+      "solve_s": 0.1459,
       "status": "certified"
     },
     {
-      "build_s": 1.7616,
+      "build_s": 1.5875,
       "certificate": {
         "claim": "goal unreachable from 0000000010000000000000000000000000000000",
         "conditions": {
@@ -767,11 +898,11 @@
       "edges": 305828,
       "n_pos": 40,
       "reachable_states": 174760,
-      "solve_s": 0.6103,
+      "solve_s": 0.5541,
       "status": "certified"
     },
     {
-      "build_s": 9.036,
+      "build_s": 8.1466,
       "certificate": {
         "claim": "goal unreachable from 000000000100000000000000000000000000000000000",
         "conditions": {
@@ -891,11 +1022,11 @@
       "edges": 1223332,
       "n_pos": 45,
       "reachable_states": 699048,
-      "solve_s": 2.6963,
+      "solve_s": 2.4598,
       "status": "certified"
     },
     {
-      "build_s": 37.4827,
+      "build_s": 34.3576,
       "certificate": {
         "claim": "goal unreachable from 00000000001000000000000000000000000000000000000000",
         "conditions": {
@@ -1025,7 +1156,7 @@
       "edges": 4893348,
       "n_pos": 50,
       "reachable_states": 2796200,
-      "solve_s": 11.5355,
+      "solve_s": 11.8891,
       "status": "certified"
     }
   ],
