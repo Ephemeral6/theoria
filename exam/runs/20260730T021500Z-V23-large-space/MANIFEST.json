@@ -9,7 +9,7 @@
   },
   {
    "path": "RUN_STATE.md",
-   "sha256": "ea13b0eb230b3ce0c70f8c1f50cab435df57a71fababa5853828706c7b84d33c"
+   "sha256": "2cae07be7dfc463f6b2bc5cdfb16e466bd40789a683f28f6c82475e6bb53b6a3"
   },
   {
    "path": "adversarial/attack_barbell.json",
@@ -126,6 +126,10 @@
   {
    "path": "repro_duplicate_switch.py",
    "sha256": "2bdf22b99892db380506c39954b2f489f8940a41f39180424972417725cc3c0a"
+  },
+  {
+   "path": "verify_round5_against_index.py",
+   "sha256": "a2101d99a86c5bd162464c6e237370efff7b62e8c7427a953b4222789d98bd96"
   }
  ],
  "note": "Hashes are over the bytes published at the commit that carries this manifest, and must be re-stamped in any commit that touches a listed file. They pin what was published; they are NOT a reproducibility check, and for four files they cannot be one. growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned internally by growth_curve.json's `stable_sha256` and enumeration_probe.json's `deterministic_sha256` over their deterministic fields -- both of those reproduce; the whole-file sha here moves per run. crux_quotient_settles.json and probe_answer_key.json have no such internal hash and their `timing_seconds` / `MEASURED.*_seconds` fields move per run too; probe_lp_interface.json says so in its own generator's docstring (B, C and E record their own cost). enumeration_sweep.json is time- and memory-budget driven and reproduces nothing numeric. Re-verified 2026-07-30 after round five: 17 of the then 23 entries matched and 6 did not, every one of the 6 because a later commit (722b6e8e, b43427f0, 9cf779a3, 08820583, 0154c8f1) moved the file without re-stamping the manifest. BASELINE-cycle94.md is tracked in this directory but deliberately unlisted: it is a different concurrent session's cycle log, not an artefact of this run. __pycache__ is excluded: byte-unstable and not an artefact. Two helper scripts in this directory are also unlisted and the reason is different: `restamp_manifest.py` regenerates this file, so listing it would make the manifest a hash of its own generator, and `_survey_manifests.py` measures all 13 run manifests rather than producing anything this run claims. Both exclusions live in that script's `EXCLUDED_NAMES` and are asserted by `exam/tests/test_run_manifest_v23.py`, so the escape hatch is a stated list rather than a silent one. Hashes are over the bytes git publishes, not the working copy: cycle 106 found those two things had diverged for two files and the stamper now refuses a CRLF working copy.",

@@ -923,3 +923,59 @@ rest are runs' own artefacts moving after their stamp, which is the defect.
 Both belong to `V2-V25-verify-does-not-check-what-is-committed`, whose subject
 is the same sentence one level up — a check that runs, goes green, and is not
 measuring what its name claims.
+
+### The claim that round five survives is now a measurement, not an argument
+
+The section above argues that hashing the working copy "could only ever hide
+mismatches, never invent them", and concludes round five's six findings survive.
+That is a valid argument and it was not a measurement, which is the exact
+failure mode this ticket has now produced four times. So it was measured.
+
+`verify_round5_against_index.py` checks a manifest against the blobs in its own
+commit's tree — no working copy participates at any point — and splits a
+mismatch two ways: **stale** (neither the blob nor its all-CRLF form matches, so
+the artefact really moved) versus **eol-only** (the all-CRLF form matches, so the
+content was correct and the stamp was taken from a Windows working copy). The
+two call for opposite fixes, which is why the distinction is in the tool rather
+than in the prose.
+
+| commit | entries | matched | stale | eol-only |
+|---|---|---|---|---|
+| `b43427f0` round five's audit point | 23 | 17 | **6** | 0 |
+| `9cf779a3` | 23 | 17 | 6 | 0 |
+| `824b9fb4` | 23 | 17 | 6 | 0 |
+| `a29e3dc0` round five's fixes land | 25 | 23 | 0 | **2** |
+| `e4b25676` | 25 | 23 | 0 | 2 |
+| `1e083de2` "26 entries, 0 mismatches" | 26 | 24 | 1 | 1 |
+| `0a9e5865` cycle 107's fix | 26 | **26** | 0 | 0 |
+| `34f0cc42` | 31 | 31 | 0 | 0 |
+
+Three things fall out, and two of them are worse than what was claimed.
+
+**Round five reproduces exactly.** 17 matched, 6 mismatched, and all six are
+*stale* rather than eol-only — real content drift, in the same six files it
+named. Its numbers were right about the repository and not merely about a
+checkout, which is more than the argument was entitled to conclude.
+
+**The defect outlived its own fix by three commits.** At `a29e3dc0` and
+`e4b25676` the manifest was believed re-stamped and clean, and it was clean *in
+content* — 0 stale — while two entries were still hashes of a Windows working
+copy. Two commits shipped with a manifest whose author had just verified it. The
+audit that verified it used the method that cannot see this, so the audit and
+the defect were the same blind spot pointing at each other.
+
+**`0a9e5865` is the first commit in this run's history at which the manifest
+matches the bytes git publishes.** Twelve commits touched this directory before
+it. The run has been carrying a wrong provenance record since its second commit.
+
+One entry is labelled honestly rather than confidently: at `1e083de2`
+`RUN_STATE.md` is `stale` by the tool's rule, meaning neither the blob nor its
+all-CRLF form matches. The likely cause is a file written in two passes by tools
+that disagree about line endings — round six edited the body while the new
+section was appended with LF — leaving mixed endings on disk that no uniform
+conversion reproduces. That is a reconstruction and it is **not proven**: the
+disk bytes of that moment are gone, and an attempt to rebuild them from the two
+neighbouring blobs failed because the body changed as well as the tail. It is
+recorded as unproven rather than dropped, because a manifest entry matching no
+form of its own file is the more alarming reading and should not be quietly
+replaced by the comfortable one.
