@@ -873,9 +873,21 @@ def _score_unsolvable_reason(answer: Any, truth: Dict[str, Any], level: Level,
                              "the next level." % SEARCH_CREDIT)
             return reason_points * SEARCH_CREDIT
         detail["reason"] = "search_not_credible"
-        detail["why"] = ("the state space of this level is beyond enumeration "
-                         "(%s), so 'I searched it all' is not a reason, it is a "
-                         "false statement about the search."
+        # "beyond enumeration" and "a false statement about the search" were both
+        # withdrawn by D-EX-028: every class (ii) item in this exam is settled by
+        # an exhaustive computation over at most 600 nodes in at most 5 ms, so the
+        # marker was calling a true claim false -- the exact failure D-EX-022
+        # recorded once already, re-entering through this string after the field
+        # underneath it was renamed. What is measured is narrower and is all this
+        # may assert: the NAIVE forward enumeration, over the full (cart, button,
+        # latch mask) state that class (i) is graded on, cannot terminate here.
+        # The examinee is told what the level does not support rather than what it
+        # did, because this text is the only account it gets of the zero.
+        detail["why"] = ("the naive forward enumeration -- over the full (cart, "
+                         "button, latch mask) state -- cannot terminate on this "
+                         "level (%s), so 'I searched it all' is not a claim this "
+                         "level supports. A cheaper complete method may well "
+                         "exist; naming one is a certificate, not a search."
                          % truth.get("state_space", {}).get("arithmetic", "large"))
         return 0.0
 

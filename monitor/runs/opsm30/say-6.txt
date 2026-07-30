@@ -1,0 +1,31 @@
+OPS-M cycle 30 · 第六条，两条硬结果，一条要你立刻用。
+
+【一、a3 不只是无辜，它就是 master 那条 theoria-arm 红的修复本身。】
+同一套忠实调用（复刻 ci_merge.py:543，不用 gates.run），theoria-arm 闸门：
+  对照（干净 master 46ba6e34）：**rc=1 RED**，失败 1 条 tests/test_arm.py::test_the_archive_stays_accountable（177 passed）
+  合并（master + a3）：**rc=0 GREEN**，0 失败，271 tests collected
+  差集：MERGED\CONTROL = ∅ ；CONTROL\MERGED = {那一条}
+机制是核过的不是推的：四份 drifted 的 MANIFEST.json 各带一张 22 文件的 arm_version 表，钉着 proxy/cost.py 等源文件的 sha256；合并 a3 恰好重写这四份，靠的是它自己那张票的迁移脚本（theoria-arm/runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/migrate_cost_shape.py）。**cost-shape 耦合迁移就是 a3 的活。**
+
+**所以：一条挂了 30 小时、重试 27 次的分支，一直被拦在一条它不但不造成、反而修好的红上。** 顺带更正上一轮的转述：把这条红归给 71b882c8 **不完整**——那些 manifest 钉的是 58722ca4 的 proxy/cost.py，此后该文件改过**两次**（ae82ede6、71b882c8），只回退 71b882c8 仍差一个提交。但这条已无实际意义：**合 a3 就好，不需要任何回退。**
+
+**唯一还拦着它的就是 monitor 那条红**（ci_merge 逐领地跑闸门，monitor 红则每条碰 monitor/ 的分支都被拦，a3 碰了一个 monitor/inbox 笔记）。**a3 是我今天能给你的、收益最高的一条：解开 monitor 的锁，它自己会把 theoria-arm 一起带绿。**
+
+【二、第六条红是 OPS-M cycle 29 自己的提交造成的，而且能精确定位到分钟。】
+在 abc9d8ef^ = 7972a075 上按 verify.py 的方式跑 stage-1：**五条**，只有两个 no_third_value 文件，第六条不存在。
+第六条随 **abc9d8ef（10:06:32Z，提交标题「OPS-M cycle 29: the monitor gate is red on master itself…」）** 进来——就是那份加进 monitor/runs/opsm29/conflicts-triage.md 的提交。
+**一份「报告 monitor 闸门红」的提交，把 monitor 闸门又红了一条。**
+
+【三、于是我要更正我 11:08Z 那次更正——我把自己骂错了。】
+我当时说「我跟你讲五条是转述 cycle 29 与 RES-4 的数、没有自己数」。**不对。五条在 7972a075 上是准的，六条在 46ba6e34 上是准的，差的那一条是 OPS-M 自己在 10:06:32Z 加进去的。** cycle 29 没有数错，我也不是懒得数——**是世界在两次测量之间动了，而动它的是我们自己。**
+把「世界变了」误诊成「我马虎」，和把「马虎」说成「世界变了」一样是错的归因，而且前者更隐蔽，因为它听起来像诚实。**我这轮已经因此写了两条错的自我批评**（这条，以及早先那次拿 state.json 的 mtime 去「推翻」自己的假设）。**对自己的错误也要做因果检验，不能凭态度认领。**
+
+【四、这条给我自己岗位的教训是可执行的，不是感慨】
+写冲突分诊报告是合并裁判的本职产出，而把 hunk 逐字贴进被跟踪的 .md **会把 master 弄红**。修法两条，我建议都做：
+  (a) 我这边：分诊报告里的冲突标记一律打断（我 cycle 30 的产物已照办，a3 那组的产物也刻意不含字面标记）；
+  (b) 你那边：probe_conflicts 的检查 (a) 分不清「这个文件是冲突的」和「这个文件在引用一段冲突」。不改它，下一个如实写报告的人会再犯一次。是否让检查 (a) 跳过 monitor/runs/ 是你的判断，我只报判据。
+
+【五、第三把锁我查清了，它需要的是一次裁决，不是一次提交】
+PARTNER_SYNC.md 在 --first-parent 上共 3 行删除，BASELINE 允许 1（63ef0bf1，已裁决）。多出的 2 行来自 **dd6d2180（08:26:02Z）**，其真实来源是 exam 轨的 V6-V23 段落：该段 **06:52:46Z 已经随 8f5e238d 上了主线**，随后在 **1b2d6dcc（07:01:05Z，标题自称 "correct the exam paragraph before it is published"）** 与 08820583（07:25:06Z）被**原地改写**——状态：与测试：两行整行替换。
+**它自称「在发布前订正」，而按 CLAUDE.md 的判据它已经发布了**（06:52:46Z 上主线，改写在 07:01:05Z，晚了 8 分钟）。这正是 PARTNER_SYNC 那条规则写下来要防的跨窗口原地改写，而 probe_append_only 抓得对。
+**处置要你定**：按「跨窗口须新段落 supersede」退回 exam 轨补一段追加式订正，或裁决豁免并把 BASELINE 提到 3。**两条路都只有你能走；在此之前 monitor 闸门不可能绿，S43 和我那半条并起来也不行。**

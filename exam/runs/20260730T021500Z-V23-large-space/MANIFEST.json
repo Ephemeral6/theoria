@@ -1,0 +1,103 @@
+{
+  "agent": "RES-3",
+  "base_commit": "415556f8",
+  "branch": "agent/v6-v23-large-space-verdict-gap",
+  "files": [
+    {
+      "path": "CRITERION.md",
+      "sha256": "5c46ab1c98b43db56236e6cb31be5872958be5967d8b02e9866cb1e66c97fe85"
+    },
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "27fefe3ea2290af934bbc29ffb3829b54e17a522d0c1999aaac9549240cdb23e"
+    },
+    {
+      "path": "adversarial/attack_barbell.json",
+      "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
+    },
+    {
+      "path": "adversarial/attack_barbell.py",
+      "sha256": "b73d3c7df38920a771d022ad9ed17ad185c841293ab1fa0da4662ef1013370be"
+    },
+    {
+      "path": "adversarial/attack_straddle.json",
+      "sha256": "47b2d7732fb6ed9f2059fa996c2e53a57808c543b947c3b8376b88acfda2ef50"
+    },
+    {
+      "path": "adversarial/attack_straddle.py",
+      "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
+    },
+    {
+      "path": "crux_quotient_settles.json",
+      "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
+    },
+    {
+      "path": "crux_quotient_settles.py",
+      "sha256": "3320d616a28cea895d9b382de6f684b0c05008a4ee027050653e8121ff907eec"
+    },
+    {
+      "path": "enumeration_probe.json",
+      "sha256": "64d3b5cf56177b8cab2a3298cdf3ab505ee15a029b9fa0180b7d5f8c4cec6ad6"
+    },
+    {
+      "path": "enumeration_probe.py",
+      "sha256": "c5dd9011f361be3bc44b700c5d0421897073df64b28fd46182d1c185cb8f429b"
+    },
+    {
+      "path": "enumeration_sweep.json",
+      "sha256": "a8bd823b95f24ffa107f541fcedb72d3be12b37949596796ca42a29062129ae9"
+    },
+    {
+      "path": "enumeration_sweep.py",
+      "sha256": "68fd4659f0b6b08cb7d7afe4d9dde06453484b062915e1dfc3101243c5720a00"
+    },
+    {
+      "path": "growth_curve.json",
+      "sha256": "c5567722e25b7e69a454b93a7ca8c800b7237c5386fa2093ae6b476f957e2b0b"
+    },
+    {
+      "path": "growth_curve.py",
+      "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
+    },
+    {
+      "path": "invariant_path_probe.md",
+      "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
+    },
+    {
+      "path": "probe_answer_key.json",
+      "sha256": "62822c7251c94b7bcdea09d81832b03d3d8d093879eddae40e2525cb088566e4"
+    },
+    {
+      "path": "probe_answer_key.py",
+      "sha256": "577dbcec748b0af81a283536dfea330123d18748774cae3b1957eed543697743"
+    },
+    {
+      "path": "probe_lp_interface.json",
+      "sha256": "dfaad64570f480aeaac69b91c82497f1fd008859c4ddf7fe78e869b4b81e3ba8"
+    },
+    {
+      "path": "probe_lp_interface.py",
+      "sha256": "4c67db44db8a46bcea62fc0b063d4cd74d96c09c8391fbfc21c8b13b8572e7f1"
+    },
+    {
+      "path": "probe_lp_soundness.json",
+      "sha256": "721703674502b7570db62c93d1aa42cae564dc0c403cd4c34aaf0d4c76a87ebd"
+    },
+    {
+      "path": "probe_lp_soundness.py",
+      "sha256": "fc8247abbddb79cc921112be481057ce82467b79f66336c4b584c381a6a2e74e"
+    },
+    {
+      "path": "repro_duplicate_switch.json",
+      "sha256": "ecc8e2b9d1b1a3679175cc731a11382814465c676816538171524db5051c250c"
+    },
+    {
+      "path": "repro_duplicate_switch.py",
+      "sha256": "6e900ca5012c3eecf37abc0773e5b983375e2003393b4a588c54d524d60d9c45"
+    }
+  ],
+  "note": "growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned by their own internal stable_sha256 over the deterministic fields; the whole-file sha here moves per run. __pycache__ is excluded: byte-unstable and not an artefact.",
+  "prompt_id": "V6-V23-large-space-verdict-gap",
+  "territory": "exam",
+  "utc": "2026-07-30T02:15:00Z"
+}

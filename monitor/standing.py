@@ -372,7 +372,22 @@ def exits_for(agent, lane):
     return out
 
 
+PAUSE = os.path.join(HERE, "FLEET_PAUSE")
+
+
+def paused():
+    """舰队被显式暂停了吗。
+
+    一个**文件**而不是一个开关变量：暂停必须能被任何一方看见——
+    我、reflex、下一个读日志的人、以及页面。写在代码里的常量做不到这件事。
+    """
+    return os.path.exists(PAUSE)
+
+
 def sweep(dry=False, only=None):
+    if paused():
+        log("PAUSED — monitor/FLEET_PAUSE 存在，本跳不起任何会话")
+        return []
     state = load_state()
     live = running_tasks()
     held = quota_held()

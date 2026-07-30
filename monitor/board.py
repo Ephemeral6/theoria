@@ -1228,6 +1228,17 @@ def main():
     if not a or a[0] == "list":
         cmd_list(); return 0
     if a[0] == "claim":
+        # 位置解析把**任何**第二个词当成工人号，于是 `board.py claim --help`
+        # 让 `--help` 成了工人名，并当场领走一件 p1。2026-07-30 发生了两次
+        # （V23、C14），两次都是 RES-3 想看用法。第二次那条在板上被扣了
+        # 12.9 小时——因为交回者会被扣下守卫挡住，而那条赛道只有他一个人。
+        #
+        # 一个以 `-` 开头的词不可能是工人号。认出它，印用法，别领活。
+        if len(a) < 2 or a[1].startswith("-"):
+            print("用法：board.py claim <工人号> [--lane <赛道>]\n"
+                  "  工人号形如 W-1700 / RES-3 / OPS-M；**不是选项**。\n"
+                  "  想看板上有什么：board.py list")
+            return 2
         lane = a[3] if len(a) > 3 and a[2] == "--lane" else None
         return cmd_claim(a[1], lane)
     if a[0] == "sweep":

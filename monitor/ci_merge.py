@@ -89,6 +89,107 @@ def gate_for(worktree, directory):
     return gates.gate_for(worktree, directory)
 
 
+BASE_MEMO = os.path.join(CI_DIR, "base_gates.json")
+
+
+def base_verdict(wt, directory, row, base_sha):
+    """Is this territory's gate red on `origin/master` **alone**?
+
+    Returns 0 (base green), non-zero (base red), or None (could not tell).
+
+    S43. `unmerged_branches()` only ever enumerates `origin/agent/*`, so a commit
+    made directly on master is gated by nothing -- there is no code path in this
+    file that runs a gate against an unmerged `origin/master`. On 2026-07-30
+    `873d62ee` went straight onto master and turned `monitor`'s suite red; the
+    gate noticed 9m47s later and, having no notion of a base verdict, wrote the
+    red down against the next branch that happened to touch `monitor/`. Nine
+    branches were held that way, one of them for 6h41m, and one accumulated a
+    `NEEDS-HUMAN: 28 attempts` badge for three unrelated failures. Every held
+    branch's failure set was byte-identical to master's, with zero novel
+    failures -- so the instrument was firing correctly and blaming the wrong
+    party every single time.
+
+    `should_hold` already argues (at length) that a gate verdict is a statement
+    about the *merged* tree and therefore depends on `origin/master` as much as
+    on the branch. It applies that only to retry scheduling. This applies it to
+    attribution, which is where it changes who gets blamed.
+
+    Cost on the green path is exactly zero: nothing calls this until a gate has
+    already gone red. On the red path it is one extra gate run per
+    `(master sha, territory)`, memoised -- so nine branches tripping over the
+    same red master pay for it once between them, where today they each pay in
+    full to re-derive the identical verdict.
+    """
+    key = "%s/%s" % (base_sha, directory)
+    try:
+        memo = json.load(open(BASE_MEMO, encoding="utf-8"))
+    except Exception:
+        memo = {}
+    if key in memo:
+        return memo[key]
+
+    # The worktree currently holds the merged tree. We are on our way to
+    # refusing this branch either way, so resetting it to the base costs
+    # nothing that is still needed.
+    if sh(["git", "checkout", "--force", base_sha], cwd=wt).returncode != 0:
+        return None
+    # Untracked leftovers from the gate run we just did would otherwise be read
+    # as part of the base. `-fdq` and not `-fdxq`: ignored files are the
+    # toolchain, not the branch's doing.
+    sh(["git", "clean", "-fdq"], cwd=wt)
+
+    r = sh(row["cmd"], cwd=os.path.join(wt, directory), timeout=1800,
+           extra_env=gates.gate_env(wt))
+    rc = r.returncode
+
+    # **Never fall back to "the base is green."** Returning 0 on a failed probe
+    # silently restores branch-blaming, which is the bug this exists to end;
+    # None makes the caller say "could not tell" instead of picking a side.
+    memo[key] = rc
+    try:
+        os.makedirs(CI_DIR, exist_ok=True)
+        # Written to the real CI_DIR, never into `wt` -- the dirty-worktree
+        # check below would otherwise report this memo as a gate dirtying the
+        # tree it was gating.
+        tmp = BASE_MEMO + ".tmp"
+        json.dump(memo, open(tmp, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1, sort_keys=True)
+        os.replace(tmp, BASE_MEMO)
+    except Exception:
+        pass            # the verdict is still good for this run
+    return rc
+
+
+def blame_the_base(branch, wt, directory, row, reason, detail, tip):
+    """Decide whether `reason` belongs to the branch or to master, and say so.
+
+    Returns True when master was named instead of the branch. The branch is
+    still refused either way -- merging into a red master is not made safe by
+    knowing whose fault it is -- but the branch's `attempts` counter does not
+    inflate, and the log names the thing that is actually broken.
+    """
+    base_sha = branch_tip("origin/master")
+    rc = base_verdict(wt, directory, row, base_sha)
+    if rc is None:
+        flag(branch, "%s (could not determine whether origin/master is already "
+                     "red here -- base probe failed)" % reason, detail, tip=tip)
+        return False
+    if rc == 0:
+        return False                    # the base is clean: the branch owns it
+    # The prefix must stay `FLAG`: `reflex.merge_events` scrapes this log with a
+    # literal `startswith("MERGED")` / `startswith("FLAG")`, so a line beginning
+    # `ALARM` or `MASTER-RED` would be written here and never reach reflex.log
+    # or the dashboard -- invisible in exactly the way the bug was.
+    flag("origin/master",
+         "BASE RED in %s (%s): origin/master fails this gate on its own"
+         % (directory, row.get("name") or row["kind"]), detail,
+         tip=base_sha)
+    log_line("FLAG origin/master: BASE RED in %s -- %s adds no new failure and "
+             "is NOT at fault; every branch touching %s is blocked by master"
+             % (directory, branch, directory))
+    return True
+
+
 def sh(args, cwd=ROOT, timeout=1800, extra_env=None):
     # 子进程的 stdout 在这里是管道，Windows 上 Python 于是按 cp936 编码，
     # 闸门只要打印一个非 GBK 字符就死于 UnicodeEncodeError——而 ci_merge
@@ -354,6 +455,15 @@ def flag(branch, reason, detail, tip=None):
     os.makedirs(CI_DIR, exist_ok=True)
     prev = last_attempt(branch)
     stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    # S43: the carry-forward did not compare `reason`, so a branch that failed
+    # three unrelated ways in a row accumulated one counter across all of them.
+    # `a3-campaign-devpile` wore `NEEDS-HUMAN: 28 attempts since 07-29T04:14`
+    # built out of "tests red in theoria-arm", then "verify gate red in
+    # theoria-arm", then "verify gate red in monitor" -- and that badge, which
+    # reads as "chronically broken branch", is why it was written off. A new
+    # failure is news; it must not inherit the sentence passed on an old one.
+    if prev.get("reason") and prev.get("reason") != reason:
+        prev = {}
     first_seen = prev.get("first_seen") or stamp
     try:
         attempts = int(prev.get("attempts", "0")) + 1
@@ -543,8 +653,10 @@ def try_merge(branch):
             r = sh(cmd, cwd=os.path.join(wt, d), timeout=1800,
                    extra_env=gates.gate_env(wt))
             if row["kind"] == "verify" and r.returncode != 0:
-                flag(branch, "verify gate red in %s (%s)" % (d, row["name"]),
-                     r.stdout + r.stderr, tip=tip)
+                reason = "verify gate red in %s (%s)" % (d, row["name"])
+                if not blame_the_base(branch, wt, d, row, reason,
+                                      r.stdout + r.stderr, tip):
+                    flag(branch, reason, r.stdout + r.stderr, tip=tip)
                 return False
             if r.returncode == NO_TESTS_COLLECTED:
                 # The directory holds test_*.py and pytest still found nothing
@@ -558,8 +670,10 @@ def try_merge(branch):
                      r.stdout + r.stderr, tip=tip)
                 return False
             if r.returncode != 0:
-                flag(branch, "tests red in %s" % d,
-                     (r.stdout + r.stderr), tip=tip)
+                reason = "tests red in %s" % d
+                if not blame_the_base(branch, wt, d, row, reason,
+                                      r.stdout + r.stderr, tip):
+                    flag(branch, reason, (r.stdout + r.stderr), tip=tip)
                 return False
             ran.append(gates.describe(row, d))
 

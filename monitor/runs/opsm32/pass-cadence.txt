@@ -1,0 +1,52 @@
+Interval between successive queue attempts, per branch
+(span = its own first->last attempt, so a cleared flag is not charged
+ for the time after it stopped being a candidate)
+
+branch                                        att   span     min/att  flag
+----------------------------------------------------------------------------
+a3-campaign-devpile                             29    1947m     69.5  live
+e8-ic3-scale                                    24    1881m     81.8  live
+v5-battery-freeze                               23    1858m     84.5  live
+r3-release-classifier-defaults                  20    1025m     54.0  live
+r4-ruling-path                                  19     996m     55.4  live
+s11-sealed-halfguard                            17    1409m     88.1  cleared
+s4-freeze                                       13     748m     62.3  live
+v21-leakage-gate-token-level                    11     369m     36.9  cleared
+s4-e23-tiers                                     7     472m     78.6  live
+p18-audits-cover-half-onmaster                   7     400m     66.7  live
+s38-append-only-probe-branch-blind               7     400m     66.6  live
+s39-writes-into-the-live-master-tree             7     401m     66.8  live
+v25-leakage-loo-and-multiplicity                 6     148m     29.6  cleared
+c13-certificate-bridge-two-halves                6     388m     77.5  live
+v20-figures-pipeline-red                         4     246m     82.1  cleared
+opsm-c26-never-tried-branches-tie-at-zero        4     223m     74.3  cleared
+p18-audits-cover-half-the-paper                  3     350m    174.8  live
+----------------------------------------------------------------------------
+currently-flagged branches: min 54.0  max 174.8  mean 78.2 min/attempt  (n=12)
+all branches incl. cleared: min 29.6  max 174.8  mean 73.5 min/attempt  (n=17)
+
+OBSERVED pass cadence, for the one pass watched end to end:
+  ci_merge pid 2220 started 11:19:10Z, gone between 12:14:05Z and 12:14:36Z
+  = 55m. Its 15 log lines cover 15 DISTINCT branches -- every branch in the
+  candidate snapshot taken at pass start. The two unmerged branches with no
+  line in that pass are both explained without a kill:
+    p18-audits-cover-half-the-paper: tip pushed 11:51:31Z, AFTER the snapshot
+      (it had been merged into master at 11:09:04Z, so it was not a candidate)
+    c14-four-forms-is-three-and-a-half: first flagged 12:34:02Z, i.e. next pass
+  So the pass ran out of candidates, not out of time; 55m is well inside
+  reflex.py:346's timeout=3600. Restart: reflex 42104 died ~12:24:1xZ, the
+  next instance started 12:27:01Z, its ci_merge 12:28:49Z
+  => pass-to-pass cadence ~= 55m + ~14m = ~69m.
+
+CONCLUSION: ~69m predicted cadence sits inside the band the counters imply
+independently over 32 hours. The queue has attempted every flagged branch
+about once an hour, continuously, the whole time.
+=> Cycle 31's SPIRAL claim is REFUTED, and so is my own statement that the
+   attempt counters 'are not measuring branch stubbornness'. They are.
+   Broken: reflex's END-OF-CYCLE LOG LINE (and scan.py's completion).
+   Not broken: the merge queue. For two cycles I had the alarm pointed at
+   the wrong component, in the direction that made it sound worse.
+
+STILL STANDS, independent of all of the above, and it is the real blocker:
+master's own monitor gate is RED, so every branch touching monitor/ is
+flagged for a red it did not cause -- including the branches that repair it.
