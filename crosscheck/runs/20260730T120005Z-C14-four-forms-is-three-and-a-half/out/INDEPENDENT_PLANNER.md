@@ -1,5 +1,11 @@
 # C14 deliverable (2) — what a planner that never heard of `gen_pddl` says
 
+> **Scope.** Everything here concerns `theory_compiler.generators.gen_pddl`. The
+> repository's *other* PDDL backend, `cold-start-a0/compile/gen_pddl_a0.py`, was
+> fed to the same Fast Downward build and **accepted, rc 0** — see
+> `../../../FOUR_FORMS_TRUTH.md` §0. "FD rejects almost everything" is true of this
+> generator, not of the repository.
+
 The producer saying its output is fine does not count. Every domain the generator
 produced was fed to **Fast Downward 24.06+'s own translator** (`python -m translate`,
 build at `cold-start-a0/.toolchain/downward/builds/release/bin`, machine-local and
@@ -25,9 +31,18 @@ Cross-tabulating FD's verdict against the census's per-action verdict:
 | **accepted** (rc 0), 7 domains | 21 | **21/21 are `empty-precondition` + `empty-effect`** — every single one |
 | rejected (rc 31 / crash), 27 domains | 264 | 152 `empty-effect`; 49 `undeclared-variable`; 37 `undeclared-predicate`; 17 both-empty; 8 var+pred; 1 mixed |
 
-Fast Downward's acceptance is **anti-correlated with meaning**. The seven accepted
-domains are the `theoria-arm` live-handbook snapshots, and they parse cleanly for
-exactly one reason: they assert nothing. Domain `047-theory` in full — three actions,
+**Those 7 are 7 byte-identical copies of one domain** (a single sha256): the
+`theoria-arm` `rev04`–`rev09` snapshots plus `books/theory.dsl`, the lineage
+`DENOMINATOR.md` calls "one book counted nine times". Stated honestly, FD accepted
+**1 distinct domain out of the 18 distinct domains** in the corpus. The "7 of 34"
+framing inflates the numerator the same way the raw 303 inflates the denominator,
+and this document should not do to FD's number what it criticises elsewhere.
+
+The second blind reader — the `pddl` 0.4.8 PDDL-3.1 parser — accepted **0 of 34**.
+
+Fast Downward's acceptance is **anti-correlated with meaning**. The accepted
+domain is a `theoria-arm` live-handbook snapshot, and it parses cleanly for
+exactly one reason: it asserts nothing. Domain `047-theory` in full — three actions,
 each of them vacuous:
 
 ```pddl
@@ -86,18 +101,26 @@ Got: ?dest
 
 Four problems do not merely get rejected, they **crash FD's translator** with an
 unhandled `TypeError: unhashable type: 'list'` in
-`translate/pddl_parser/parsing_functions.py:843`. The input that causes it is the
-generated goal:
+`translate/pddl_parser/parsing_functions.py:843`. The input that causes it is a
+generated goal of the form `(= (and) X)` — **not always `(= (and) 1)`**:
 
-```pddl
-  (:goal
-    (= (and) 1)
-  )
-```
+Across the 34 generated problems, **7** carry a goal of this shape, in three
+variants:
 
-The generator emitted an equality between the logical connective `and` and the
-integer `1`. FD's `check_predicate_and_terms_existence` then tries to hash the
-parsed list `(and)` as a term name and dies.
+| goal | problems | crashes FD? |
+|---|---|---|
+| `(= (and) 1)` | 2 — `053-peg4_theory`, `055-peg_theory` | yes |
+| `(= (and) exit_cell)` | 3 — `029-theory`, `032-theory`, `034-theory` | 2 of 3 |
+| `(= (and) target)` | 2 — `000-theory`, `058-sokoban2_x5_theory` | no |
+
+The generator emitted an equality between the logical connective `and` and a term.
+FD's `check_predicate_and_terms_existence` then tries to hash the parsed list
+`(and)` as a term name and dies.
+
+Only 4 of the 7 reach the crash; the other three fail domain parsing first and
+never get to the goal. **Do not read "4 crashes" as "4 affected problems"** — the
+crash count understates the defect by three, and it would grow if the domain half
+were repaired without the problem half.
 
 This is why the census measures the **problem half** separately: a domain can be
 flawless and still ship a problem with no goal, and a planning form whose goal is
