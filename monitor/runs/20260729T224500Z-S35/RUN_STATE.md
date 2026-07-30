@@ -260,3 +260,34 @@ origin/master = 5439d07f  Merge remote-tracking branch 'origin/agent/s35-reserve
 本分支因此对 `PARTNER_SYNC.md` 只有增加、没有删除，探针在分支上也绿——
 拿到同一个结果，而没有碰任何已发布的东西。压历史那个版本备份在本地
 `s35a-backup`，未推送，留作这段记录的物证。
+
+## 9. 出口真的被按了一次（要求 3 的收尾）
+
+条目原文写着：**只把它印出来还不算结掉——今天它已经被印了四次。**
+所以本节记的是那一次真实的改派，在**活板**上，2026-07-30T03:12:02Z：
+
+```
+unreachable before: ['E18-survey-numbers-reproducible', 'S22-access-check-close']
+REASSIGN S22-access-check-close from infra to campaign by RES-4 (...)
+unreachable after:  ['E18-survey-numbers-reproducible']
+```
+
+* 条目正文里现在有两条签名记录：2026-07-29T10:36:56Z 的交回，和这次的改派与理由。
+* `board.log` 有对应的一行。
+* `offers("RES-1", "campaign")` 现在**真的**把它交出来（实测 `['S22-access-check-close']`）
+  ——出口的判据不是「印出来了」，是「那个能做的人领得到了」。
+* `released_by: RES-4` **保留**着，这是对的：划掉只划**新主人**，而 RES-1 不在里面。
+  我仍然领不到它，这正是那次交回的意思，它没有被这个动词偷偷撤销。
+
+**一处必须写清楚的操作细节**：活板所在的工作树上 `monitor/board.py` 还是旧的
+（本地 `master` 落后 `origin/master`，而活板目录带着未提交的状态文件、
+没法直接 fast-forward——别人已经就这件事写过一份 inbox）。所以这次改派是
+**用分支上修好的 `board.py`、把路径显式指向活板目录**跑的，一次性脚本，
+动作与 `board.py reassign` 逐字相同。这不是绕过评审：代码已经在
+`origin/master`（5439d07f）上了，缺的只是活板那份拷贝的更新。
+记在这里是因为**「代码已合入」与「舰队跑的是它」是两件事**，
+而这块板上分开这两件事的次数已经够多了。
+
+E18 仍在集合里，且**仍然不该由我动**（verify 赛道，守卫要求该赛道主人或 monitor）。
+提案在 `monitor/inbox/20260730T0210Z-RES-4-e18-needs-a-reassignment-decision.md`。
+不可达集从 2 件降到 1 件，剩下那 1 件是一次**别人的**裁决，不是一个缺陷。
