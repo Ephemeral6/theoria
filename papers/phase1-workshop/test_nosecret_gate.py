@@ -24,6 +24,7 @@ Run:  python -m pytest papers/phase1-workshop/test_nosecret_gate.py
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -52,12 +53,23 @@ WEAK = "hunter2" + "hunter2hunter2"               # not the ARC key at all
 EXACT = "aQ2mfhal" + "q0293mfhSK"                 # only the .env scan sees this
 
 
-def run_d(tmp_path, monkeypatch, files: dict[str, str], env: str | None = None):
+def run_d(tmp_path, monkeypatch, files: dict[str, str], env: str | None = None,
+          min_scanned: int = 1):
     """`check_nosecret()` over a synthetic published tree.
 
     `HERE` and `ROOT` are module globals resolved at import, so they are
     redirected rather than the real tree copied -- the same technique the
-    delegator's suite uses, and it keeps every case in a `tmp_path`."""
+    delegator's suite uses, and it keeps every case in a `tmp_path`.
+
+    `MIN_SCANNED` is redirected too, and for the same reason: it is a floor on a
+    real paper directory (40, against 165 tracked files), and every tree here is
+    two or three files by design -- a case that wants to isolate one matcher
+    should not have to fabricate forty documents to get past the floor. The floor
+    itself is exercised at its real value in
+    `test_a_collapsed_scan_is_a_broken_check_not_a_clean_tree`, which passes
+    `min_scanned=vp.MIN_SCANNED`; leaving it out of *these* cases is the same
+    trade `HERE` makes, not an exemption from it."""
+    monkeypatch.setattr(vp, "MIN_SCANNED", min_scanned)
     here = tmp_path / "paper"
     here.mkdir()
     for name, body in files.items():
@@ -80,7 +92,10 @@ needs_git = pytest.mark.skipif(GIT is None, reason="git is not on PATH")
 
 
 def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
-                  gitignore: str = "", track: tuple[str, ...] = ()):
+                  gitignore: str = "", track: tuple[str, ...] = (),
+                  global_config: str | None = None,
+                  local_exclude: str | None = None,
+                  min_scanned: int = 1):
     """`check_nosecret()` over a synthetic tree inside a **real** repository.
 
     `tmp_path` is both the repo root and `ROOT`; `tmp_path/paper` is `HERE`,
@@ -91,10 +106,17 @@ def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
     Global and system git config are pointed at files that do not exist, so that
     whoever runs this suite cannot change its verdict from their own
     `core.excludesFile`. A scope test whose answer depends on the reader's
-    dotfiles is not a test.
+    dotfiles is not a test. `global_config` overrides that with a real config
+    file, which is how the pinning inside `_git_env()` gets tested rather than
+    merely mirrored: the *test* hands git a hostile global config and the
+    *implementation* has to be the thing that refuses it.
+
+    `local_exclude` writes `$GIT_DIR/info/exclude`, the ignore surface no
+    environment variable can switch off.
     """
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "no-global-config"))
     monkeypatch.setenv("GIT_CONFIG_SYSTEM", str(tmp_path / "no-system-config"))
+    monkeypatch.setattr(vp, "MIN_SCANNED", min_scanned)
     here = tmp_path / "paper"
     here.mkdir()
     (tmp_path / ".gitignore").write_text(gitignore, encoding="utf-8")
@@ -112,6 +134,14 @@ def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
     git("init", "-q")
     for name in track:
         git("add", "-f", "--", "paper/" + name)
+    if local_exclude is not None:
+        info = tmp_path / ".git" / "info"
+        info.mkdir(parents=True, exist_ok=True)
+        (info / "exclude").write_text(local_exclude, encoding="utf-8")
+    if global_config is not None:
+        cfg = tmp_path / "hostile-global-config"
+        cfg.write_text(global_config, encoding="utf-8")
+        monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(cfg))
     monkeypatch.setattr(vp, "HERE", here)
     monkeypatch.setattr(vp, "ROOT", tmp_path)
     return vp.check_nosecret()
@@ -252,11 +282,20 @@ def test_these_are_not_caught(tmp_path, monkeypatch, body, why):
 @needs_git
 def test_a_gitignored_file_is_not_reported(tmp_path, monkeypatch):
     """The item, in one test. A gitignored path is not in the manifest and never
-    will be, so a finding in it is one nobody can act on."""
+    will be, so a finding in it is one nobody can act on.
+
+    `section.md` is here so that the tree is a paper directory with a cache in it
+    rather than a cache on its own: with only the ignored file present the scan
+    scans nothing, and `MIN_SCANNED` is entitled to red that. Both behaviours are
+    wanted, and they are separated so that one cannot pass by masking the other.
+    """
     ok, notes = run_d_in_repo(tmp_path, monkeypatch,
-                              {"cache/nodeids": f"ARC_API_KEY={SHAPED}"},
+                              {"cache/nodeids": f"ARC_API_KEY={SHAPED}",
+                               "section.md": "nothing to see"},
                               gitignore="cache/\n")
     assert ok, "a gitignored file was still reported: %s" % notes
+    assert "1 published file(s) scanned, 1 skipped as gitignored under cache/" \
+        in "\n".join(notes), notes
 
 
 @needs_git
@@ -366,6 +405,139 @@ def test_ignore_filtering_unavailable_widens_the_scan(tmp_path, monkeypatch):
     assert "WIDENED" in blob, (
         "the scan widened without saying so, which is the same audit problem "
         "read from the other side: %s" % blob)
+
+
+# ------------------------------------------------- the floor under the scope
+#
+# Narrowing the scan re-opened the hole the rewrite closed. The original defect
+# was not "the matcher was weak" -- it was a green issued over an empty loop:
+# "the secret list came back empty, the loop iterated zero times, and the check
+# returned True". An ignore filter is a second road to the same place. Point
+# `HERE` at the wrong directory, run against a tree that never unpacked, or write
+# one ignore rule that swallows the paper, and the walk collapses while the line
+# on screen still reads `[PASS] D NOSECRET`.
+
+def test_the_floor_is_a_floor_and_not_a_gesture():
+    """0 or 1 would catch only a *totally* empty walk. The failure being guarded
+    is a collapsed one -- a handful of files where there should be 165 -- and a
+    threshold of 1 passes that happily."""
+    assert vp.MIN_SCANNED > 1
+
+
+def test_a_collapsed_scan_is_a_broken_check_not_a_clean_tree(tmp_path, monkeypatch):
+    """The floor at its real value, on a tree with nothing wrong in it. Three
+    clean files is not a clean paper, it is a scan that did not happen, and the
+    two must not print the same verdict."""
+    ok, notes = run_d(tmp_path, monkeypatch,
+                      {"a.md": "x", "b.md": "y", "c.md": "z"},
+                      min_scanned=vp.MIN_SCANNED)
+    assert not ok, "3 files scanned and the gate went green: %s" % notes
+
+
+def test_the_collapsed_scan_message_does_not_read_as_a_leak(tmp_path, monkeypatch):
+    """Whoever reads this line at 3am must not file an incident. "0 files
+    scanned" is not evidence about the tree in either direction, and reporting a
+    broken instrument as a finding is the mirror image of the defect this check
+    was rewritten to remove."""
+    ok, notes = run_d(tmp_path, monkeypatch, {"a.md": "x"},
+                      min_scanned=vp.MIN_SCANNED)
+    blob = "\n".join(notes)
+    assert not ok
+    assert "BROKEN CHECK" in blob, blob
+    assert "not a leak" in blob, blob
+    assert "the scan did not happen" in blob, blob
+
+
+def test_the_floor_does_not_swallow_a_real_finding(tmp_path, monkeypatch):
+    """A truncated tree that also leaks reports both. The floor is an extra
+    finding, not a replacement verdict -- a broken scope is no reason to drop the
+    one thing the scan did manage to see."""
+    ok, notes = run_d(tmp_path, monkeypatch,
+                      {"leak.md": f"ARC_API_KEY={SHAPED}"},
+                      min_scanned=vp.MIN_SCANNED)
+    blob = "\n".join(notes)
+    assert not ok
+    assert "leak.md" in blob, blob
+    assert "BROKEN CHECK" in blob, blob
+
+
+@needs_git
+def test_an_ignore_rule_that_swallows_the_tree_hits_the_floor(tmp_path, monkeypatch):
+    """The route the ignore filter itself opened, end to end: one `.gitignore`
+    line, every file legitimately out of scope, and without the floor a green
+    reading "0 published file(s) scanned"."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"a.md": "x", "b.md": "y"},
+                              gitignore="*\n", min_scanned=vp.MIN_SCANNED)
+    blob = "\n".join(notes)
+    assert not ok, blob
+    assert "BROKEN CHECK" in blob and "0 file(s) were scanned" in blob, blob
+
+
+# ------------------------------------------- whose ignore rules this obeys
+
+@needs_git
+def test_a_global_excludesfile_cannot_hide_a_leak(tmp_path, monkeypatch):
+    """`core.excludesFile` in somebody's `~/.gitconfig` is an ignore rule this
+    check would otherwise obey -- one line in a file that is not in the
+    repository, not in review, and not on the next machine, and a leaking file
+    leaves the scan. `_git_env()` pins global and system config out of the way, so
+    only the repository's own rules and index decide. Until this test the suite
+    pinned them and production did not, which meant the suite was proving
+    something about a configuration nobody ran."""
+    (tmp_path / "hostile-excludes").write_text("fresh.md\n", encoding="utf-8")
+    ok, notes = run_d_in_repo(
+        tmp_path, monkeypatch, {"fresh.md": f"ARC_API_KEY={SHAPED}"},
+        global_config="[core]\n\texcludesFile = %s\n" % (
+            (tmp_path / "hostile-excludes").as_posix()))
+    assert not ok and "fresh.md" in "\n".join(notes), (
+        "a global core.excludesFile removed a file from the scan: %s" % notes)
+
+
+@needs_git
+def test_the_hostile_global_config_would_otherwise_have_worked(tmp_path, monkeypatch):
+    """Control for the test above, which would pass just as happily if
+    `core.excludesFile` had never been honoured by anything. Here the same config
+    is handed to git with nothing pinning it, and git does ignore the file -- so
+    the pinning in `_git_env()` is the only reason the scan still sees it."""
+    (tmp_path / "excludes").write_text("fresh.md\n", encoding="utf-8")
+    (tmp_path / "cfg").write_text(
+        "[core]\n\texcludesFile = %s\n" % (tmp_path / "excludes").as_posix(),
+        encoding="utf-8")
+    (tmp_path / "fresh.md").write_text("x", encoding="utf-8")
+    subprocess.run([GIT, "init", "-q"], cwd=str(tmp_path), check=True)
+    r = subprocess.run([GIT, "check-ignore", "-v", "fresh.md"],
+                       cwd=str(tmp_path), stdout=subprocess.PIPE,
+                       stderr=subprocess.STDOUT, text=True,
+                       env={**os.environ,
+                            "GIT_CONFIG_GLOBAL": str(tmp_path / "cfg"),
+                            "GIT_CONFIG_SYSTEM": str(tmp_path / "nosuch")})
+    assert r.returncode == 0 and "excludes" in r.stdout, (
+        "this git does not honour core.excludesFile, so the pinning test above "
+        "proves nothing: %s" % r.stdout)
+
+
+@needs_git
+def test_a_local_exclude_with_rules_is_announced(tmp_path, monkeypatch):
+    """`$GIT_DIR/info/exclude` is the half that cannot be closed: it is not
+    config, so no variable disables it, and it is untracked, so nothing in a
+    review shows it. Announced with a count, not failed on -- these patterns are
+    ordinary, and this repository's own ten are editor and harness state."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch, {"a.md": "x"},
+                              local_exclude="# a comment\n\nbuild/\n*.tmp\n")
+    blob = "\n".join(notes)
+    assert ok, blob
+    assert "info/exclude carries 2 pattern line(s)" in blob, blob
+
+
+@needs_git
+def test_a_stock_local_exclude_is_not_announced(tmp_path, monkeypatch):
+    """Git writes a comments-only `info/exclude` into every repository it
+    creates. Announcing that would put a scope caveat on every clone in
+    existence, and a caveat that is always printed is one nobody reads."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch, {"a.md": "x"},
+                              local_exclude="# nothing but comments\n#*.[oa]\n\n")
+    assert ok and "info/exclude" not in "\n".join(notes)
 
 
 def test_the_live_tree_reports_both_counts():

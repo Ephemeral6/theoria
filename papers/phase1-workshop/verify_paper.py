@@ -782,6 +782,98 @@ def _assignment_hits(text: str) -> list[str]:
 GITIGNORE_TIMEOUT = 60
 
 
+#: The floor on files actually content-scanned. Below this, check D reports a
+#: broken check rather than a clean tree.
+#:
+#: This exists because narrowing the scan re-opened the exact hole the rewrite
+#: closed. The docstring below records the original defect as "the secret list
+#: came back empty, the loop iterated zero times, and the check returned True" --
+#: a green earned by examining nothing. An ignore filter is a second way in: get
+#: `HERE` wrong, run against a tree that never unpacked, or hand git an ignore
+#: rule that swallows the directory, and the walk collapses to a handful of files
+#: while the note still reads `[PASS] D NOSECRET`.
+#:
+#: 40, and the number is chosen from the inventory rather than picked round.
+#: `git ls-files papers/phase1-workshop` is 165 files, of which 117 are under
+#: `runs/` -- run records accumulate and may be pruned, so they cannot hold up a
+#: floor. The 48 that remain are structural: 13 `sections/`, 13 `figures/`, and
+#: the top-level machinery (`PAPER.md`, this file, `audit_stamp.py`, the review
+#: and citation reports, the suites). 40 sits just under that 48, so pruning a
+#: few structural files does not red the gate, and four times above the largest
+#: tree any test in the suite builds. A collapsed walk lands at 0-3; it never
+#: lands at 40. `MIN_SECTIONS` above is the same device one directory in: a walk
+#: over nothing satisfies every loop written above it, so "there was nothing to
+#: check" must never be printed the way "everything checked out" is.
+MIN_SCANNED = 40
+
+
+#: Git config files pinned out of the way for every call this check makes.
+#: `core.excludesFile` in a developer's `~/.gitconfig` is an ignore rule this
+#: check would otherwise obey: one line there and a leaking file drops out of
+#: scope on that machine only, invisibly. The negative-control suite already
+#: pins these so a reader's dotfiles cannot change its verdict; production
+#: deserves the same guarantee, and until now the tests were proving something
+#: about a configuration production did not run in. The paths are deliberately
+#: absent from disk -- git 2.32+ reads a missing `GIT_CONFIG_GLOBAL` as empty.
+#: On git older than that the variables are ignored and this buys nothing; it
+#: never costs anything, and repository-level `.gitignore` is unaffected, which
+#: is the config that is *supposed* to be authoritative here.
+def _git_env() -> dict[str, str]:
+    env = dict(os.environ)
+    env["GIT_CONFIG_GLOBAL"] = str(HERE / ".check-d-no-global-git-config")
+    env["GIT_CONFIG_SYSTEM"] = str(HERE / ".check-d-no-system-git-config")
+    env["GIT_CONFIG_NOSYSTEM"] = "1"   # the pre-2.32 spelling of half of it
+    return env
+
+
+#: A pattern line: not blank, not a comment. The stock `info/exclude` git writes
+#: into every new repository is nothing but comments, so counting raw lines would
+#: announce a live exclusion on every clone in existence and the note would mean
+#: nothing. What is worth announcing is somebody having added a rule.
+_EXCLUDE_PATTERN = re.compile(r"^\s*(?!#)\S")
+
+
+def _local_exclude_note() -> str | None:
+    """`$GIT_COMMON_DIR/info/exclude`, announced rather than obeyed or refused.
+
+    This is the half of the ignore-config hole that cannot be closed: unlike
+    `core.excludesFile` it is not config, so no environment variable disables it.
+    A single untracked line here silences the content scans for a path on this
+    clone alone -- it is per-repository, it is not in the tree, and nothing in a
+    review would show it. So the note says it is there and how many rules it
+    holds. Not a failure: these patterns are ordinary and this repository's own
+    eleven are editor and harness state. A reader who sees a surprising count has
+    the one place to look, which is all this can honestly offer."""
+    git = shutil.which("git")
+    if git is None:
+        return None
+    try:
+        r = subprocess.run([git, "--no-optional-locks", "rev-parse",
+                            "--git-common-dir"],
+                           cwd=str(HERE), env=_git_env(), text=True,
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                           timeout=GITIGNORE_TIMEOUT)
+    except (subprocess.TimeoutExpired, OSError):
+        return None
+    if r.returncode != 0 or not r.stdout.strip():
+        return None
+    common = Path(r.stdout.strip())
+    if not common.is_absolute():
+        common = HERE / common
+    exclude = common / "info" / "exclude"
+    try:
+        body = exclude.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    n = sum(1 for line in body.splitlines() if _EXCLUDE_PATTERN.match(line))
+    if not n:
+        return None
+    return (f"  note: $GIT_COMMON_DIR/info/exclude carries {n} pattern line(s). "
+            f"It is untracked and per-clone, no config setting disables it, and "
+            f"anything it ignores drops out of the counts below on this machine "
+            f"only -- announced, not failed on")
+
+
 def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
     """Which of `paths` git would refuse to publish -- in **one** batched call.
 
@@ -815,6 +907,12 @@ def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
       empty set and a reason. The caller then scans everything and says so. A
       check that silently shrinks its own scope is the defect one rung down from
       the one this fixes.
+    * **not the reader's `.gitconfig`.** `_git_env()` pins global and system
+      config out of the way, so a `core.excludesFile` in somebody's home
+      directory cannot quietly remove a file from this scan. Only the
+      repository's own `.gitignore` and index decide, plus
+      `$GIT_COMMON_DIR/info/exclude`, which no setting can disable and which
+      `_local_exclude_note()` therefore announces instead.
 
     Returns `(ignored, unavailable)`; `unavailable` is None when the answer can
     be trusted, otherwise a short phrase naming why it cannot.
@@ -838,8 +936,12 @@ def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
         return set(), None
     payload = b"\0".join(k.encode("utf-8") for k in index) + b"\0"
     try:
-        r = subprocess.run([git, "check-ignore", "-z", "--stdin"],
-                           input=payload, cwd=str(HERE),
+        # `--no-optional-locks` so a read-only check never writes a refreshed
+        # index; the in-memory index is still consulted, which is what keeps a
+        # force-added file in scope.
+        r = subprocess.run([git, "--no-optional-locks",
+                            "check-ignore", "-z", "--stdin"],
+                           input=payload, cwd=str(HERE), env=_git_env(),
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                            timeout=GITIGNORE_TIMEOUT)
     except subprocess.TimeoutExpired:
@@ -892,11 +994,15 @@ def check_nosecret() -> tuple[bool, list[str]]:
     author's machine, not the floor.
 
     **Scope: what git would publish.** The walk skips `__pycache__` and anything
-    git ignores (`_gitignored`), and the note states both counts, because a check
-    that quietly narrows its own scope has the defect one rung below the one it
-    fixed. Untracked-but-not-ignored files are in scope on purpose -- they are one
+    git ignores (`_gitignored`), and the note states both counts and the
+    directories the skipped files came from, because a check that quietly narrows
+    its own scope has the defect one rung below the one it fixed.
+    Untracked-but-not-ignored files are in scope on purpose -- they are one
     `git add` from the manifest. When the ignore list cannot be obtained the scan
-    widens to everything and the note says so.
+    widens to everything and the note says so. `MIN_SCANNED` is the floor under
+    all of it: a scan that collapses reports a broken check, never a clean tree,
+    because "returned True having examined nothing" is the original defect and an
+    ignore filter is a second route to it.
     """
     notes: list[str] = []
     env = ROOT / ".env"
@@ -914,10 +1020,18 @@ def check_nosecret() -> tuple[bool, list[str]]:
     if unavailable:
         notes.append(f"  ignore-filtering unavailable ({unavailable}): scan WIDENED "
                      f"to every file under this directory, gitignored or not")
+    else:
+        # Only worth announcing when the filter is actually in play: a widened
+        # scan obeyed no ignore rule, so there is nothing for `info/exclude` to
+        # have hidden.
+        local = _local_exclude_note()
+        if local:
+            notes.append(local)
 
     hits: list[str] = []
     scanned = 0
     skipped = 0
+    skipped_under: dict[str, None] = {}   # insertion-ordered set, for the note
     for path in candidates:
         # `relative_to` raises when ROOT is not an ancestor -- which it always is
         # in production and was not under a probe that redirected only ROOT. The
@@ -941,6 +1055,15 @@ def check_nosecret() -> tuple[bool, list[str]]:
                 hits.append(f"  a .env file is published at {rel}")
         if path in ignored:
             skipped += 1
+            # Where the skipping happened, not just how much of it. A count alone
+            # cannot distinguish "the caches were skipped" from "a directory of
+            # the paper was", and the second is a scope regression a reader has to
+            # be able to see in the note.
+            try:
+                parts = path.relative_to(HERE).parts
+            except ValueError:
+                parts = path.parts
+            skipped_under[parts[0] + "/" if len(parts) > 1 else parts[0]] = None
             continue
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
@@ -960,6 +1083,22 @@ def check_nosecret() -> tuple[bool, list[str]]:
                             f"credential word")
                 break
 
+    # The floor, and it is reported as a hit so that a collapsed walk can never
+    # end in a green -- not even a green carrying a small number nobody read. The
+    # message names itself a broken check, because "0 files scanned" is not
+    # evidence about the tree and must not be filed as though it were: the
+    # original defect here was a clean verdict issued over an empty loop, and
+    # somebody reading this line as a leak report would be making the mirror-image
+    # mistake. Placed after the content scan so that a real finding in a truncated
+    # tree is still reported alongside it, rather than replaced by it.
+    if scanned < MIN_SCANNED:
+        hits.append(f"  BROKEN CHECK, not a leak: only {scanned} file(s) were "
+                    f"scanned under {HERE.name}/ and this check is meaningless "
+                    f"below {MIN_SCANNED} (`MIN_SCANNED`). Nothing here is a "
+                    f"finding about the tree -- the scan did not happen. Look at "
+                    f"whether the directory is the right one, whether it unpacked, "
+                    f"and at the {skipped} file(s) skipped as gitignored")
+
     if hits:
         notes.extend(fail(h) for h in dict.fromkeys(hits))
         return False, notes
@@ -967,9 +1106,11 @@ def check_nosecret() -> tuple[bool, list[str]]:
     # The note states which mechanisms ran, and says so out loud when the
     # exact-value scan did not. "Nothing to leak" was the old sentence and it
     # asserted a check that had not executed.
+    where = (" under " + ", ".join(skipped_under)) if skipped_under else ""
     notes.append(f"  {scanned} published file(s) scanned, {skipped} skipped as "
-                 f"gitignored (git will not publish them): no credential-named "
-                 f"assignment, no key-shaped token in a credential context")
+                 f"gitignored{where} (git will not publish them): no "
+                 f"credential-named assignment, no key-shaped token in a "
+                 f"credential context")
     notes.append(f"  {len(secrets)} .env value(s) also compared byte-for-byte: absent"
                  if secrets
                  else "  exact-value scan SKIPPED: no .env in this tree (gitignored, "
