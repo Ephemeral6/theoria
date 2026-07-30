@@ -2,9 +2,10 @@
 branch: origin/agent/v20-figures-pipeline-red
 reason: merge conflict
 tip: 24b631f4d3b75823198eb91cdaeba37cb9c3a010
+base: 0760379f7ea1f8d4f3a75cbc8f33120202221977
 first_seen: 2026-07-29T14:49:19Z
-last_seen: 2026-07-29T14:49:19Z
-attempts: 1
+last_seen: 2026-07-29T18:55:40Z
+attempts: 4
 
 ```
 Auto-merging PARTNER_SYNC.md

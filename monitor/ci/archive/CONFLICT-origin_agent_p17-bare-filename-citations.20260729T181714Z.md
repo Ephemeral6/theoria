@@ -1,12 +1,16 @@
-# CONFLICT-origin_agent_s30-clock-sanity-widen.md
-branch: origin/agent/s30-clock-sanity-widen
+# CONFLICT-origin_agent_p17-bare-filename-citations.md
+branch: origin/agent/p17-bare-filename-citations
 reason: push rejected (race?)
-tip: 9d854c427d3f3d5e530fe8fe49d9f60c179b7135
-first_seen: 2026-07-29T14:48:45Z
-last_seen: 2026-07-29T14:48:45Z
-attempts: 1
+tip: 78c76bdfed4b183cee462ac0f59699418c1eefe4
+base: 7a71b5abf264b5616bce151ef0f1a62ccd8f58e3
+first_seen: 2026-07-29T15:31:08Z
+last_seen: 2026-07-29T17:37:55Z
+attempts: 2
 
 ```
+--- cause lines (lifted out of the transcript) ---
+error: failed to push some refs to 'https://github.com/Ephemeral6/theoria.git'
+--- tail of the transcript ---
 To https://github.com/Ephemeral6/theoria.git
  ! [rejected]          HEAD -> master (non-fast-forward)
 error: failed to push some refs to 'https://github.com/Ephemeral6/theoria.git'
