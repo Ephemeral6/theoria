@@ -990,10 +990,44 @@ def _rule_file_is_in_the_repository(run_dir: str, source: str) -> bool:
     it in a clone, which is precisely the machine-dependence this code was
     written to remove, reintroduced by the mechanism meant to remove it.
 
-    So a rule only counts when the file stating it is tracked. `.gitignore` is;
-    `.git/info/exclude` is not, and cannot be. Anything unresolvable is treated
-    as not-in-the-repository, which fails towards *listing* the artefact -- loud
-    drift rather than a quiet subtraction.
+    So a rule only counts when the file stating it is **committed**. `.gitignore`
+    is; `.git/info/exclude` is not, and cannot be. Anything unresolvable is
+    treated as not-in-the-repository, which fails towards *listing* the artefact
+    -- loud drift rather than a quiet subtraction.
+
+    **`HEAD`, not the index, and this asked `git ls-files` until it was
+    measured.** The index says a `git add`-ed `.gitignore` is the repository's,
+    while no clone carries it -- and here that direction is not the safe one: a
+    rule counting means a missing artefact is *explained*, so a staged-only rule
+    file turns a genuinely dangling path green. Reproduced end to end in a
+    scratch repository built to this repository's own `git commit <paths>`
+    convention: manifest lists `trace.jsonl`, no `trace.jsonl` exists, the only
+    thing saying why is a `.gitignore` that was added and never committed, and
+    check 10 passed. A reader with the clone gets no `.gitignore` at all, so no
+    `git check-ignore` they could run explains anything.
+
+    Measured cost of the change in this repository: **none**. All 17 tracked
+    `.gitignore` files are byte-identical across worktree, index and HEAD, and an
+    A/B of `verify_provenance.run()` with only this predicate swapped produced
+    byte-identical detail strings for all ten checks at two different commits.
+    It is `paths_the_clone_ships`'s correction applied one function over.
+
+    `git check-ignore -v` reports `source` relative to the repository root even
+    when run from a nested run directory (verified against a nested fixture), so
+    `HEAD:<source>` addresses the right file. The absolute-path guard above still
+    catches `core.excludesFile` and the per-user global ignore; `.git/info/exclude`
+    reports a *relative* source and so is rejected here instead -- it fails
+    `HEAD:` exactly as it failed `--error-unmatch`.
+
+    **Still open, and this fix does not close it: the rule *bodies* come from the
+    working tree.** This decides *which file* may speak; `_ignored_paths` still
+    runs `git check-ignore`, which reads the `.gitignore` on the disk. So an
+    uncommitted local edit to a committed `.gitignore` moves the verdict --
+    demonstrated by an adversarial pass on 2026-07-30: with the rule added
+    locally and not committed, a dangling path reads as explained. Closing it
+    means materialising `HEAD`'s ignore files somewhere and asking git from
+    there, which is a bigger change than this one and is recorded rather than
+    smuggled in.
     """
     if not source or os.path.isabs(source):
         return False
@@ -1002,14 +1036,14 @@ def _rule_file_is_in_the_repository(run_dir: str, source: str) -> bool:
         return _RULE_FILE_CACHE[key]
     try:
         proc = subprocess.run(
-            ["git", "ls-files", "--error-unmatch", "-z", "--", source],
+            ["git", "cat-file", "-e", "HEAD:%s" % source],
             cwd=_repo_top(run_dir) or run_dir,
             capture_output=True, check=False)
-        tracked = proc.returncode == 0
+        shipped = proc.returncode == 0
     except OSError:
-        tracked = False
-    _RULE_FILE_CACHE[key] = tracked
-    return tracked
+        shipped = False
+    _RULE_FILE_CACHE[key] = shipped
+    return shipped
 
 
 def _repo_top(run_dir: str) -> Optional[str]:

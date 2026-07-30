@@ -44,16 +44,21 @@ def _git(args, cwd):
 
 
 def _write_gitignore(root, body):
-    """Write `.gitignore` **and track it**.
+    """Write `.gitignore` **and commit it**.
 
-    Tracking is not fixture hygiene, it is the property under test: a rule only
-    counts when the file stating it is one a clone would carry, so an untracked
-    `.gitignore` is correctly ignored by `_ignored_paths`. Leaving it untracked
-    here made four tests fail in a way that looked like a regression and was
-    actually the tightening working.
+    Committing is not fixture hygiene, it is the property under test: a rule only
+    counts when the file stating it is one a clone would carry, so a `.gitignore`
+    no commit contains is correctly ignored by `_ignored_paths`. Leaving it
+    untracked here made four tests fail in a way that looked like a regression
+    and was actually the tightening working.
+
+    It said `git add` until 2026-07-30, and that was the same defect one function
+    over: staging is not shipping. Five tests were passing on a `.gitignore` that
+    no clone would have had -- including, at the sharp end,
+    `test_check_ten_catches_a_dangling_reference`, whose green half rested on it.
     """
     (root / ".gitignore").write_text(body, encoding="utf-8")
-    _git(["add", "-f", ".gitignore"], str(root))
+    _commit(root, ".gitignore")
 
 
 @pytest.fixture
@@ -246,12 +251,68 @@ def test_a_machine_local_exclude_does_not_count(repo):
     assert "local_only.json" in backfill._files_the_clone_carries(str(run_dir))
 
 
-def test_a_tracked_gitignore_still_counts_after_that_tightening(repo):
+def test_a_committed_gitignore_still_counts_after_that_tightening(repo):
     """Positive control for the test above, and it is essential: a
     `_rule_file_is_in_the_repository` that returned `False` unconditionally would
-    satisfy that test while switching the whole traversal back to a raw walk."""
+    satisfy that test while switching the whole traversal back to a raw walk.
+
+    Named `_a_tracked_` until 2026-07-30, and it asserted `git add` was enough --
+    so it pinned the defect below rather than the property. See
+    `test_a_staged_gitignore_does_not_explain_anything`.
+    """
     root, run_dir = repo
-    _git(["add", "-f", ".gitignore"], str(root))
+    _commit(root, ".gitignore")
+    assert backfill._ignored_paths(str(run_dir), ["trace.jsonl"]) \
+        == {"trace.jsonl"}
+
+
+def test_a_staged_gitignore_does_not_explain_anything(tmp_path):
+    """Staging is not shipping, and here that direction is the unsafe one.
+
+    `paths_the_clone_ships` was moved from the index to `HEAD` because a
+    `git add`-ed path reads as shipped while no clone carries it.
+    `_rule_file_is_in_the_repository` had the identical defect one function over,
+    and it matters more there: a rule counting means a missing artefact is
+    *explained*, so a staged-only `.gitignore` turns a genuinely dangling path
+    green. A reader with the clone has no `.gitignore` at all, so no
+    `git check-ignore` they could run explains anything.
+
+    Built to this repository's own convention -- `git commit <paths>`, which is
+    exactly the operation that leaves a staged file out of the commit.
+    """
+    root = tmp_path / "repo"
+    run_dir = root / "runs" / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json")
+
+    (root / ".gitignore").write_text("runs/*/trace.jsonl\n", encoding="utf-8")
+    _git(["add", "-f", ".gitignore"], str(root))          # staged, never committed
+
+    # Precondition, or this test would pass for the wrong reason: git itself
+    # says the path is ignored, and the index says the rule file is there.
+    raw = subprocess.run(["git", "check-ignore", "-z", "--stdin"],
+                         input=b"trace.jsonl", cwd=str(run_dir),
+                         capture_output=True, check=False)
+    assert b"trace.jsonl" in raw.stdout
+    assert _git(["ls-files", "--error-unmatch", ".gitignore"],
+                str(root)).returncode == 0
+
+    assert backfill._ignored_paths(str(run_dir), ["trace.jsonl"]) == set(), (
+        "a .gitignore no commit contains explained a missing artefact")
+
+    # ...and committing that same file makes it count, or the tightening is
+    # just "no rule ever counts".
+    #
+    # The cache has to be dropped by hand here, and the reason is worth knowing
+    # rather than working around silently: `_RULE_FILE_CACHE` is keyed on
+    # `(run_dir, source)` and its docstring's licence is that whether a rule file
+    # is in the repository does not change inside one process. That holds for one
+    # `verify_provenance.run()`; it does not hold for a test that commits between
+    # two calls, which is exactly what this second half is.
+    backfill._RULE_FILE_CACHE.clear()
+    _commit(root, ".gitignore")
     assert backfill._ignored_paths(str(run_dir), ["trace.jsonl"]) \
         == {"trace.jsonl"}
 
