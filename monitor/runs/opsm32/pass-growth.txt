@@ -1,0 +1,73 @@
+Every ci_merge pass today, segmented on branch-repeat or >12m gap.
+'gate work' = first log line to last log line; ci_merge also spends
+~5-6 min before its first line (fetch + candidate snapshot).
+
+ start     end       gate work  branches  min/branch
+----------------------------------------------------------
+ 00:05:19  00:17:24       12m        11       1.2
+ 00:32:25  00:48:11       16m        10       1.8
+ 01:04:50  01:05:08        0m         2       0.3
+ 01:17:16  01:25:26        8m         7       1.4
+ 02:30:39  02:30:39        0m         1       0.0
+ 02:45:01  03:08:12       23m        10       2.6
+ 03:26:05  03:31:07        5m         2       5.0
+ 03:47:41  03:48:50        1m         4       0.4
+ 04:03:14  04:10:58        8m         5       1.9
+ 04:29:32  04:38:27        9m         2       8.9
+ 05:00:10  05:16:28       16m         6       3.3
+ 05:32:08  05:53:13       21m        12       1.9
+ 06:52:35  07:26:09       34m        14       2.6
+ 07:46:01  08:19:32       34m        14       2.6
+ 08:41:33  09:19:37       38m        14       2.9
+ 09:42:45  09:42:45        0m         1       0.0
+ 10:26:34  11:09:04       42m        13       3.5
+ 11:25:26  12:14:21       49m        15       3.5
+ 12:34:02  12:42:07        8m         3       4.0
+----------------------------------------------------------
+
+THE TREND: 23m/10 branches -> 34m/14 -> 38m/14 -> 42m/13 -> 49m/15.
+Roughly 3.3-4.0 minutes of gate work per flagged branch, and the flag
+count only grows while the monitor gate stays red.
+
+TWO OBSERVED PASS ENDINGS, and they are different endings:
+  * pass 10:14:12Z-11:14:32Z: last log line 11:09:04Z, process died
+    11:14:32Z = start + EXACTLY 3600s (cycle 30 watched it). 13 branches
+    logged out of ~15-16 candidates => KILLED, tail starved.
+  * pass 11:19:10Z-~12:14:2xZ: last log line 12:14:21Z, process gone
+    between 12:14:05Z and 12:14:36Z = start + ~55m, i.e. ~4.5 MINUTES
+    SHORT of the timeout, with all 15 snapshot candidates logged
+    => EXITED ON ITS OWN.
+
+So neither of my two published readings was right:
+  cycle 31's 'every pass is killed mid-pass, flags never clear' -- no:
+    one pass completed 25 minutes ago, and the attempt counters show
+    every flagged branch has been attempted about hourly for 32 hours.
+  this cycle's first draft, 'the queue is fine, only the liveness signal
+    is broken' -- too reassuring: the 10:14 pass WAS killed, and the
+    margin between pass duration and timeout is now ~4 minutes.
+
+THE CORRECT READING: the queue is MARGINAL. Pass duration has grown to
+approximately equal reflex.py:346's timeout=3600, so whether the tail of
+the candidate list is served at all now depends on machine load. Every
+branch that stays flagged adds ~3.3-4.0 min to the pass and pushes the
+tail closer to permanent starvation. (.worktrees/ still holds cycle 26's
+opsm26-starved-{base,s38,s39,v6} worktrees -- starvation was already the
+suspected shape then; this is the measurement it lacked.)
+
+FALSIFIABLE PREDICTION for the pass now running (ci_merge pid 2592,
+started 12:28:49Z, first log line 12:34:02Z, 3 branches by 12:42:07Z):
+  candidates are now 17 (c14 newly flagged, p18-the-paper pushed again
+  at 11:51:31Z after its 11:09:04Z merge). At ~4 min/branch that is ~68m
+  of gate work plus ~5m of startup against a 60m timeout.
+  => I predict this pass is KILLED at 13:28:49Z (+-30s) with roughly
+     13-14 of 17 branches logged, the last 3-4 never reached, and NO
+     new line in monitor/reflex.log.
+  If instead it logs all 17 and exits before 13:28:49Z, the 'marginal'
+  reading is wrong and pass duration is not load-dominated -- in which
+  case say so, because that is the third correction in this thread.
+
+CONSEQUENCE THAT IS NOT ABOUT THE QUEUE AT ALL: ruling the innocent
+branches in is now load-bearing, not tidy-mindedness. Nine of the 17
+candidates are flagged for master's OWN red monitor gate. Clearing them
+removes ~30-36 min of gate work per pass and takes the queue back off
+the boundary. The deadlock and the starvation have the same fix.

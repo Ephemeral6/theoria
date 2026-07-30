@@ -23,3 +23,8 @@ monitor/refresh.log
 # 别的时刻的存活情况，而它长得跟当下的一模一样。
 monitor/ops-status/*.lock
 monitor/standing_state.json
+# The local ARC engine caches every game's SOURCE here on first run, sealed pile
+# included. Never committed: the Phase 4 manifest publishes everything tracked,
+# and this is ARC's content, not ours. See CLAUDE.md's pile-cut section and
+# arc-recon/local_engine_guard.py, which refuses any unfiltered pull.
+environment_files/

@@ -29,8 +29,9 @@
           "arithmetic": "forward enumeration in command space terminated at 55 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 55,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 55,
+          "naive_enumeration_feasible": true,
           "positional_states": 55,
           "truncated": false
         },
@@ -88,16 +89,18 @@
           "variant_id": "a2var-iii6-lattice-safe"
         },
         "state_space": {
-          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of dist + 2m commands; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
+          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of 299 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
           "cap": 200000,
           "dippable_switches": 120,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "naive_enumeration_feasible": false,
           "positional_states": 298,
-          "quotient_note": "298 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "298 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -551,16 +554,18 @@
           "variant_id": "a2var-ii3-spindle-budget"
         },
         "state_space": {
-          "arithmetic": "400 switches are dippable out-and-back from the corridor; the step budget (150) affords the first 60 of them at a cost of dist + 2m commands; each of the 2^60 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^60 = 1152921504606846976 states.",
+          "arithmetic": "400 switches are dippable out-and-back from the corridor; the step budget (150) affords the first 60 of them at a cost of 149 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^60 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^60 = 1152921504606846976 states.",
           "cap": 200000,
           "dippable_switches": 400,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^60 = 1152921504606846976 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1152921504606846976,
           "m": 60,
+          "naive_enumeration_feasible": false,
           "positional_states": 600,
-          "quotient_note": "600 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "600 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -600,8 +605,9 @@
           "arithmetic": "forward enumeration in command space terminated at 55 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 55,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 55,
+          "naive_enumeration_feasible": true,
           "positional_states": 55,
           "truncated": false
         },
@@ -659,16 +665,18 @@
           "variant_id": "a2var-ii4-orchard-noleft"
         },
         "state_space": {
-          "arithmetic": "118 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 118 of them at a cost of dist + 2m commands; each of the 2^118 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^118 = 332306998946228968225951765070086144 states.",
+          "arithmetic": "118 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 118 of them at a cost of 294 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^118 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^118 = 332306998946228968225951765070086144 states.",
           "cap": 200000,
           "dippable_switches": 118,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^118 = 332306998946228968225951765070086144 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 332306998946228968225951765070086144,
           "m": 118,
+          "naive_enumeration_feasible": false,
           "positional_states": 177,
-          "quotient_note": "177 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "177 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -708,8 +716,9 @@
           "arithmetic": "forward enumeration in command space terminated at 20 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 20,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 20,
+          "naive_enumeration_feasible": true,
           "positional_states": 20,
           "truncated": false
         },
@@ -752,8 +761,9 @@
           "arithmetic": "forward enumeration in command space terminated at 14 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 14,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 14,
+          "naive_enumeration_feasible": true,
           "positional_states": 14,
           "truncated": false
         },
@@ -795,8 +805,9 @@
           "arithmetic": "forward enumeration in command space terminated at 24 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 24,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 24,
+          "naive_enumeration_feasible": true,
           "positional_states": 24,
           "truncated": false
         },
@@ -839,8 +850,9 @@
           "arithmetic": "forward enumeration in command space terminated at 99 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 99,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 99,
+          "naive_enumeration_feasible": true,
           "positional_states": 99,
           "truncated": false
         },
@@ -981,8 +993,9 @@
           "arithmetic": "forward enumeration in command space terminated at 7 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 7,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 7,
+          "naive_enumeration_feasible": true,
           "positional_states": 7,
           "truncated": false
         },
@@ -1021,16 +1034,18 @@
           "variant_id": "a2var-iii7-lattice-roomy"
         },
         "state_space": {
-          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (456) affords the first 120 of them at a cost of dist + 2m commands; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
+          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (456) affords the first 120 of them at a cost of 299 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
           "cap": 200000,
           "dippable_switches": 120,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "naive_enumeration_feasible": false,
           "positional_states": 301,
-          "quotient_note": "301 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "301 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -1485,16 +1500,18 @@
           "variant_id": "a2var-ii1-gantry-sealed"
         },
         "state_space": {
-          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of dist + 2m commands; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
+          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of 299 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
           "cap": 200000,
           "dippable_switches": 120,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "naive_enumeration_feasible": false,
           "positional_states": 180,
-          "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -1532,16 +1549,18 @@
           "variant_id": "a2var-iii8-lattice-swap"
         },
         "state_space": {
-          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of dist + 2m commands; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
+          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of 299 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
           "cap": 200000,
           "dippable_switches": 120,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "naive_enumeration_feasible": false,
           "positional_states": 301,
-          "quotient_note": "301 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "301 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -1995,16 +2014,18 @@
           "variant_id": "a2var-ii2-lattice-bridge"
         },
         "state_space": {
-          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of dist + 2m commands; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
+          "arithmetic": "120 switches are dippable out-and-back from the corridor; the step budget (unbounded) affords the first 120 of them at a cost of 299 commands -- walk to the nearer end of their span, sweep to the far end, 2 per dip; each of the 2^120 subsets ends at the same cell with a different latch mask, so the reachable set has at least 2^120 = 1329227995784915872903807060280344576 states.",
           "cap": 200000,
           "dippable_switches": 120,
           "enumerated": null,
-          "exhaustive_feasible": false,
+          "enumeration_attempted": false,
+          "enumeration_refused_because": "the construction exhibits 2^120 = 1329227995784915872903807060280344576 distinct reachable states, past the cap of 200000, so a forward enumeration under this cap cannot terminate. Derived from the bound rather than timed, because a timeout would not carry the claim (engine-rig D-024) and because running it on every build costs seconds for a result the bound already fixes. The enumerator is nonetheless run against every class (ii) level in the suite, by `test_class_ii_levels_actually_truncate_the_enumerator`, so the derivation's premise is checked rather than trusted.",
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "naive_enumeration_feasible": false,
           "positional_states": 180,
-          "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a complete search must cover.",
-          "truncated": false
+          "quotient_note": "180 reachable (cart, button) states. This is a measurement, not a search space: the quotient is NOT a sound abstraction of this level. It ignores `step_limit` entirely, and it carries no latch state, so on a require_all_switches board it can report the goal reachable when the level is unsolvable. `lower_bound` remains the honest statement of what a *naive* complete search must cover. D-EX-028 amends what that unsoundness licenses: it is one-sided. An over-approximation yields false `solvable`, never false `unsolvable`, so a goal in a different component IS a sound unsolvability proof -- which is why this item's own answer key is allowed to be computed that way, and why the search barrier here is apparent rather than real.",
+          "truncated": null
         },
         "weights": {
           "justification": 0.5,
@@ -2044,8 +2065,9 @@
           "arithmetic": "forward enumeration in command space terminated at 49 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 49,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 49,
+          "naive_enumeration_feasible": true,
           "positional_states": 49,
           "truncated": false
         },
@@ -2106,8 +2128,9 @@
           "arithmetic": "forward enumeration in command space terminated at 31 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 31,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 31,
+          "naive_enumeration_feasible": true,
           "positional_states": 55,
           "truncated": false
         },
@@ -2149,8 +2172,9 @@
           "arithmetic": "forward enumeration in command space terminated at 55 states, under the cap of 200000",
           "cap": 200000,
           "enumerated": 55,
-          "exhaustive_feasible": true,
+          "enumeration_attempted": true,
           "lower_bound": 55,
+          "naive_enumeration_feasible": true,
           "positional_states": 55,
           "truncated": false
         },
@@ -2185,7 +2209,7 @@
   ],
   "notes": {
     "classes": {
-      "large_unsolvable": "enumeration out of reach; only invariant reasoning answers",
+      "large_unsolvable": "naive enumeration out of reach; the item is scored on selecting a method that is not naive enumeration",
       "small_unsolvable": "exhaustive search feasible; the question is the reason, not the verdict",
       "solvable_hard": "the false-positive trap"
     },
@@ -2242,6 +2266,6 @@
   },
   "paper_id": "p15-verdict-a2",
   "question_type": "verdict",
-  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+  "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
   "schema": "exam/v0.1"
 }

@@ -26,11 +26,18 @@ ROOT = os.path.dirname(HERE)
 LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
+PAUSE = os.path.join(HERE, "FLEET_PAUSE")
 MAX_DEATHS = 3
 WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
                     # now (memory admission, 45s stagger, orphan sweep, quota
                     # gate), so worker supply no longer waits for a human.
-MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
+# 补员的内存门槛。8 这个总量数是机器崩过一次之后拍的，而那次崩溃的原因是
+# **并发数**（约二十个会话同时起），不是总量。`standing.py` 已改成
+# 「余量 + 每会话开销」，这里跟上——两处判据对同一件事给不同答案时，
+# reflex 整夜记 `worker-hold:low-memory(7.5GB)` 而补员一次也没触发过。
+HEADROOM_GB = 3.0        # 不动用的余量
+PER_SESSION_GB = 0.6     # 单个会话的保守估计（实测 0.42–0.52）
+MIN_FREE_GB = HEADROOM_GB + PER_SESSION_GB
 
 
 def rlog(msg):
@@ -72,6 +79,71 @@ def save_loop(state):
     json.dump(state, open(tmp, "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
     os.replace(tmp, LOOP)
+
+
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
+
+
+def scan_events(run_scan):
+    """What the dashboard-refresh step reports, given a way to run scan.py.
+
+    S30 put this guard in; 873d62ee deleted it along with five siblings, and it
+    is the one **no test was watching** -- which is exactly why it stayed dead
+    for 72 commits while the three grep-tested siblings at least went red. Its
+    absence has a measured cost: on 2026-07-30 scan.py hung, the 600s timeout
+    propagated out of `main()`, `finally` dropped the lock, and reflex.log went
+    silent from 08:32:21Z for 131 minutes while merge.log kept ticking. A dead
+    heartbeat is the loudest possible failure and it still said nothing, because
+    the thing that would have spoken was the line that had been deleted.
+
+    Extracted into a function for the same reason `merge_events` was (ADV-2/D12):
+    inline in `main()` it is unreachable from a test, and `main()` cannot be
+    driven in a test because that tick launches paid sessions. `run_scan` is a
+    zero-arg callable returning a CompletedProcess.
+    """
+    try:
+        scan_rc = run_scan().returncode
+    except subprocess.TimeoutExpired:
+        scan_rc = "timeout(600s)"
+    except Exception as exc:                    # noqa: BLE001 -- reported
+        scan_rc = "%s: %s" % (type(exc).__name__, exc)
+    if scan_rc == 0:
+        return []
+    # Deliberately does not change reflex's own exit code: the other four duties
+    # in this cycle may all have succeeded, and failing the scheduled task for a
+    # dashboard refresh would make *reflex* look dead. The signal lives in the
+    # heartbeat line instead, where it reads differently from `quiet` -- which
+    # was the whole point.
+    return ["SCAN FAILED (rc=%s) -- the board should have been rewritten as a "
+            "red failure page; if it was not, the failure exit is down too"
+            % scan_rc]
 
 
 def main():
@@ -148,10 +220,28 @@ def main():
         except Exception:
             dead = True
         if dead:
-            subprocess.Popen(["cmd", "/c", "start", "/min", "",
-                              os.path.join(HERE, "serve.cmd")],
-                             creationflags=0x00000008 | 0x01000000)
-            events.append("serve:restarted")
+            # 两个毛病叠在一起，让页面死了很久而日志一直说「已重启」：
+            # 经 `cmd /c start` 起服务在本机根本不生效（实测端口始终关着），
+            # 而且**无论成没成都追加 `serve:restarted`**——重启成功与失败
+            # 写出同一行。这条自动机制因此隐形失效，而它存在的理由正是
+            # 「页面死了没人发现」。起完等三秒再探一次端口。
+            try:
+                subprocess.Popen([sys.executable, "-m", "http.server",
+                                  "8787", "--bind", "127.0.0.1"],
+                                 cwd=HERE,
+                                 stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL,
+                                 creationflags=0x00000008 | 0x01000000)
+            except Exception as exc:
+                events.append("serve:spawn-FAILED:%s" % type(exc).__name__)
+            else:
+                time.sleep(3)
+                probe = socket.socket()
+                probe.settimeout(2)
+                up = probe.connect_ex(("127.0.0.1", 8787)) == 0
+                probe.close()
+                events.append("serve:restarted" if up
+                              else "serve:restart-FAILED(port still shut)")
 
         # 1. reap
         reap = run([sys.executable, os.path.join(HERE, "dispatch.py"), "--reap"])
@@ -207,7 +297,7 @@ def main():
         # query indistinguishable from an empty board -- and `if not hold and
         # avail:` then skipped the whole refill loop without a word. Measured:
         # a raising `candidates()` yielded avail=0 in silence
-        # (EVIDENCE-3-standing-reflex.md). -1 is the third value: not measured.
+        # (EVIDENCE-3-standing-reflex.md).
         try:
             import board as board_mod
             avail = len(board_mod.candidates())
@@ -360,23 +450,11 @@ def main():
         # sentence.
         #
         # A timeout raises rather than returning, and it used to take the whole
-        # reflex cycle down with it -- so it is caught here and turned into an
-        # event, not into silence and not into a dead heartbeat.
-        try:
-            scan_rc = run([sys.executable, os.path.join(HERE, "scan.py")],
-                          timeout=600).returncode
-        except subprocess.TimeoutExpired:
-            scan_rc = "timeout(600s)"
-        except Exception as exc:                    # noqa: BLE001 -- reported
-            scan_rc = "%s: %s" % (type(exc).__name__, exc)
-        if scan_rc != 0:
-            events.append("SCAN FAILED (rc=%s) — 盘面应已改写为红色失败页；"
-                          "若没有，失败出口本身也挂了" % scan_rc)
-            # Deliberately does not change reflex's own exit code: the other
-            # four duties in this cycle may all have succeeded, and failing
-            # the scheduled task for a dashboard refresh would make *reflex*
-            # look dead. The signal lives in the heartbeat line instead, where
-            # it reads differently from `quiet` -- which was the whole point.
+        # reflex cycle down with it -- so it is caught in `scan_events` and
+        # turned into an event, not into silence and not into a dead heartbeat.
+        events += scan_events(
+            lambda: run([sys.executable, os.path.join(HERE, "scan.py")],
+                        timeout=600))
 
         rlog(" | ".join(events) if events else "quiet")
         return 0

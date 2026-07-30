@@ -9,13 +9,13 @@ measurement where the docs contradict it — both are recorded when they disagre
 | # | Item | Status | Settled by |
 |---|---|---|---|
 | 1 | RESET semantics — full reset or level reset, hidden random source | **answered** | precheck, 4 games |
-| 2 | Cross-session residue | **closed** — none, across four sessions; the question is now standing surveillance, not an open item | precheck ×2 + canary ×2 |
+| 2 | Cross-session residue | **closed** — none, across four sessions; and as of 2026-07-30 none at **full** coverage either (two `full` sweeps, 20/20 frames each, S22 item 1) | precheck ×2 + canary ×2 + `full` ×2 |
 | 3 | Scorecard semantics — one card per game, in-card aggregation | **answered, with two traps** | baseline-arms measurement + official docs |
 | 4 | Does one action return several frames | **answered** — yes, up to 113; and **adjudicated**: the batch is a render burst, not a tick → [`CASCADE_RULING.md`](CASCADE_RULING.md) | precheck + P-20 per-frame probe ([`cascade/`](cascade/)) + baseline-arms shards |
 | 5 | Is `level` a response field | **answered** — yes | precheck |
 | 6 | Rate limits and quota | **closed for the question Phase 1 asked** (the campaign fits: 432 rpm of 600, §6d) — with two named residuals: no 429 has ever been observed, and the backoff curve is unmeasured | official docs + `browser-ops/TERMS.md` + baseline-arms + this track's probe + the §6d budget |
 | 7 | Canary replay | **standing** — built, baselined, and now on a daily schedule | [`canary.py`](canary.py), [`canary_schedule.py`](canary_schedule.py), [`data/canary.json`](data/canary.json) |
-| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check |
+| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not. **Permitted ≠ safe**: the cache upstream fills holds all 25 games' source, so §8b is the fail-closed guard over it | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check + [`local_engine_guard.py`](local_engine_guard.py) |
 
 ---
 
@@ -94,6 +94,67 @@ implies:
   it is an owner decision and deliberately not an agent's (§"What S2 did not
   do") — but until someone does, item 2 is closed on **six agreeing replays**,
   which is the honest basis, and not on a standing instrument.
+
+### S22 item (1): the `full` sweep, run twice, and the bug its first run found
+
+**2026-07-30, RES-1.** S22 asked for the residue question to be answered at
+**full** coverage rather than by sampling — the `quick` profile is what the three
+qualifications above are about. The `full` profile (mode `complete`: every game,
+every stored step, 16 actions) **had never once executed**. It was configured,
+scheduled, budgeted and documented as a standing instrument, and `due` reported
+`full: DUE (never run)`.
+
+**The measurement.** Two full sweeps, 2026-07-30T03:41:27Z and T03:48:48Z, both
+compared against expectations sealed **2026-07-28 in a different session**:
+
+| | ar25 | g50t | sk48 | tn36 | total |
+|---|---|---|---|---|---|
+| frames agreed | 6/6 | 3/3 | 6/6 | 5/5 | **20/20** |
+| actions | 5 | 2 | 5 | 4 | 16 |
+
+Both PASS on every frame, twice. **No cross-session residue at full coverage** —
+including tn36's four accepted no-ops, which the daily `quick` profile reduces to
+a single RESET hash (the second qualification above). That bullet is now covered
+by a real measurement rather than by an argument.
+
+The first qualification still stands unchanged: the stored sequences are 6/3/6/5
+steps deep and the precheck went 9, so residue first appearing on step 7 remains
+outside every one of these instruments. Depth is not what `full` buys — breadth is.
+
+**What the first run found, which is why it took two.** The sweep spent its 16
+actions, compared all 20 frames, returned PASS on all four games — and then
+tripped its own spend reservation and **lost its own bookkeeping**:
+
+* `canary_schedule.py` reserved `plan["actions"]` (16) and settled
+  `run["http_calls"]` (20). RESET is a command, not an action (item 6b below),
+  so http_calls exceeds actions by exactly the number of games swept. **Both
+  profiles tripped on every run**: 20 > 16 on `full`, 16 > 12 on `quick`.
+* Charging requests against an action budget is not merely a unit mismatch, it is
+  contradicted by our own measurement: [`README.md`](README.md) item 6 records
+  that ARC's `total_actions` counts **successful actions only**. So the shared
+  pool was over-charged by the RESET count on every sweep — `spend_gate.jsonl`
+  seq 12998 charged 16 actions' worth of work as 20.
+* The trip was raised at settlement, **after** the sweep succeeded but **before**
+  the state file was written. So 16 actions were spent, every frame agreed, and
+  `due` still answered `full: never run`. An invocation in that state re-spends
+  and re-loses, forever.
+
+**This loop was latent, not active, and the distinction is the finding.**
+`schtasks` still shows no installed task, so nothing had been repeating — the
+third qualification above ("the schedule is not installed") is what kept the
+cost at zero. Installing it is the owner decision that has not been taken, and
+the whole purpose of `canary_schedule.py install` is that someone eventually
+takes it. **Before installation is the only cheap time to find this.**
+
+Fixed in `canary_schedule.py`: settlement charges `actions_executed`, a missing
+count raises instead of silently settling at zero (there is a canary settlement
+of `actions: 0` on the ledger at seq 12487 whose cause is *not* established), and
+a refusal is recorded and re-raised **after** the state is persisted — because the
+actions are already spent by then, and refusing to write the record does not
+un-spend them. Exit 5 on refusal is unchanged, so the refusal is still loud.
+Four tests added, each demonstrated red against the reverted fix; the pre-existing
+fixture pinned `http_calls` to `0`, the single value at which the two units are
+indistinguishable, which is why 42 green tests never saw this.
 
 One more, about the precheck half of the evidence: ar25's `run_a` (18:10:26 →
 18:35:03) and `run_b` (18:12:14 → 18:14:59) **overlapped in wall clock** —
@@ -535,6 +596,17 @@ the absence of a statement; the statement exists and is permissive.
 **One line: caching ARC data locally for our own analysis is permitted, and no
 permission needs to be sought for it.**
 
+**And one line immediately after it, because that sentence is about permission
+and says nothing about contents: the cache is permitted; what upstream puts in
+it is not.** First run downloads *the game source* for all 25 games, and both
+`make play-local` and the swarm runner's `--game` default to every game in the
+dataset (`browser-ops/TERMS.md` §4.2). By INC-BA-001's own yardstick source
+ranks a notch *worse* than trajectories — it hands over the finished answer to
+the mechanics rather than an example of it. So the licensing conclusion above is
+correct and must not be read as a green light to enable local mode: **permission
+is not containment**, and the containment half is [§8b](#8b--the-containment-half-permitted-is-not-safe), which is
+executable rather than advisory.
+
 **2. Our own measurements are explicitly publishable; ARC's content is not.**
 The decisive document is not the site terms at all — it is the *ARC Prize
 Verified Official Testing Policy* (`arcprize.org/policy`), which §8 could not
@@ -583,9 +655,117 @@ document, and that document turned out to *grant* the thing this repository
 actually needs to publish. Both are kept: the caution was correct given what §8
 had read, and it was more caution than the full record requires.
 
----
+### 8b · The containment half — "permitted" is not "safe"
 
-## What this ticket did not do
+§8a settled the *licensing* question and settled it correctly. This subsection
+exists because the finding it came from had two directions and only one of them
+had a box to be filed in: item 8's title is "licensing", so the sealed-pile half
+had nowhere to go and, for a while, went nowhere. **A finding cut along a
+document's section headings loses the half that does not match a heading.**
+
+What upstream does by default, quoted in `browser-ops/TERMS.md` §4.2 with URLs:
+
+| documented behaviour | what it means for the cut |
+|---|---|
+| first run will "download the game source", cached in `environment_files/` | all 25 games' **source** lands on disk, 21 of them sealed |
+| `make list-games` — "Print every game id available" | enumerates all 25; takes no filter |
+| `make play-local` — "Runs your agent against every game in the dataset" | plays all 25 |
+| `make verify-local` — "30-second smoke test on two games" | the docs do not say which two |
+| swarm `--game` — "If not specified, the agent plays all available games" | silence means all 25 |
+
+So the first thing done on the strength of "permitted, no permission needed"
+pulls every sealed game's source down and, by default, plays every one of them.
+That is not a licensing risk; it is the whole confirmation set, and it is not
+recoverable. Note also that **none of it produces an API call**: a local run
+never enters `data/recon_ledger.jsonl`, so `contamination.py`'s audit — which
+audits every call we have ever made — stays green through the entire event. The
+existing instruments are structurally blind here, which is why the guard had to
+be new code rather than another assertion in an existing one.
+
+**The rule.** Any path that pulls `environment_files/`, or invokes
+`make list-games` / `make play-local` / `make verify-local` / the swarm runner,
+must first filter to the four development-pile games named in
+`data/piles.json`. **An unfiltered invocation is refused, with an error, in
+code** — not warned about in a document.
+
+**The guard.** [`local_engine_guard.py`](local_engine_guard.py), tested by
+[`test_local_engine_guard.py`](test_local_engine_guard.py) and wired into
+`verify.sh`. It is a positive whitelist that defaults to deny, in the shape
+`baseline-arms/SCHEMA_PATH_A.md` §3 settled on and for the reason it gives: a
+negative list meets an unforeseen path shape and fails *open*, and failing open
+here cannot be undone.
+
+```bash
+python local_engine_guard.py check -- make play-local                    # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x           # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x --game=ar25   # exit 0
+python local_engine_guard.py run   -- <argv...>   # vets, then execs only if allowed
+python local_engine_guard.py scan  environment_files/   # names-only sweep of a cache
+```
+
+Five refusals, one permission:
+
+1. `deny_default_all` — a game-playing or game-pulling command with no `--game`
+   selector. Silence is the dangerous case upstream, so it is the refused case here.
+2. `deny_sealed` — any of the 21 named anywhere on the line, by full id or by
+   4-character prefix, case-insensitively, tested *before* the allow branch so a
+   line naming both piles reads as sealed.
+3. `deny_unknown` — a selector token that is not exactly a development-pile id
+   or its exact prefix. Upstream treats the value as an ID *prefix*, so
+   `--game=s` would widen to `sk48` **and** five sealed games; only the two
+   exact forms pass. A flag carrying an *empty* value is refused here too:
+   with last-wins semantics `--game=ar25 --game=` is no filter at all, wearing
+   the costume of a filtered run.
+4. `deny_unfiltered` — `make play-local`, `make list-games` and
+   `make verify-local`. **No filter argument is documented for any of them** —
+   `--game` is documented only for the swarm runner (see the correction below).
+5. Refuse-everything if `data/piles.json` is absent, malformed, or no longer
+   hashes to the value `CLAUDE.md` pins. A guard that cannot read the cut does
+   not know what it is guarding.
+
+Three properties worth stating because they are what the tests are about. The
+prefix match is **boundary-anchored on both sides**, so `blobs/9ar25f0e/` does
+not read as `ar25` — the exact failure `SCHEMA_PATH_A.md` §3.1 found the hard
+way. Each shell **segment is judged alone** (split on `&&`, `||`, `;`, `|`, `&`,
+newline, `#`) and the most severe verdict wins, because one dev-pile token must
+not license the other statements sharing the line. And `scan` **opens nothing**:
+it is a sieve over file *and directory* names, and there is a test that fails if
+any file under the swept directory is opened. Downloading is not reading; a
+guard that quoted the file it was refusing would be the leak.
+
+#### 8b.1 · What an adversarial pass found, and the one correction that matters
+
+The first version of this guard was attacked by a reviewer briefed to break it,
+and it found **nine working bypasses**. Each is now a named regression test in
+`test_local_engine_guard.py`. The sealed-name matcher held — every hole was in
+the *reach* of the trigger list, in argv flattening, or in Python truthiness.
+Two are worth writing down here rather than only in the tests:
+
+**`make play-local GAME=ar25` was this document's own worked example, and it was
+wrong.** `GAME=` is a spelling *we invented*. The only evidence we hold —
+`browser-ops/TERMS.md` §4.2, quoting the docs with URLs — documents `--game` for
+the **swarm runner** and documents `make play-local` as "Runs your agent against
+every game in the dataset" **with no argument at all**. GNU make accepts an
+unreferenced variable override in silence, so if the Makefile does not consume
+`GAME`, that command plays all 25 while looking filtered, and **looking filtered
+is worse than looking dangerous**: it is the form somebody copies. The same
+reasoning that refuses `verify-local` for an unnamed pair condemns `play-local`
+for an unverified variable, so `play-local` moved into the refused set. It can
+come back out when the Makefile is in the tree and shown to honour a named
+variable — not before.
+
+**`assert_local_pull_allowed` failed open on a generator.** `if not game_ids` is
+false for any generator object, so `(g for g in cfg if want(g))` — the
+bracket-less twin of a safe list comprehension — skipped the "name your four
+games" refusal, returned an empty allowlist, and left the caller pulling
+unfiltered. Nothing at the call site looked wrong. It now materialises the
+sequence before testing it.
+
+The generalisable lesson: the design attention had gone to the sealed-name
+matcher, and that is the part that held. The failures were all in the plumbing
+around it.
+
+
 
 * **The cookie fix ~~is not applied~~ is applied, with the re-measurement
   attached** — see §6c. INC-007 recorded it as deferred and gave reasons; those

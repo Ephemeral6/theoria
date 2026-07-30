@@ -48,6 +48,20 @@ def crashing_board(monkeypatch):
 
 
 @pytest.fixture
+def no_lane_gate(monkeypatch):
+    """Take lane ownership out of the picture for the `work_for` cases.
+
+    S35 made `work_for` ask `offers(agent, lane)` instead of
+    `candidates(lane)`, and `offers` starts with the LANE-NOT-YOURS guard --
+    which consults the **live** `ops-status/` locks. Without this fixture these
+    tests would pass or fail depending on whether RES-4 happened to be
+    heartbeating while they ran, and the thing under test here is the third
+    value, not lane gating (which has its own tests)."""
+    monkeypatch.setattr(board_mod, "LANE_OWNER", {})
+    return {}
+
+
+@pytest.fixture
 def quiet_log(monkeypatch):
     """Capture standing.log lines instead of writing the live log file."""
     lines = []
@@ -60,7 +74,7 @@ def quiet_log(monkeypatch):
 # --------------------------------------------------------------------------
 
 def test_crashed_board_query_is_not_reported_as_an_empty_board(
-        crashing_board, quiet_log, monkeypatch):
+        crashing_board, no_lane_gate, quiet_log, monkeypatch):
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
 
@@ -74,7 +88,7 @@ def test_crashed_board_query_is_not_reported_as_an_empty_board(
 
 
 def test_the_discarded_exception_is_now_on_the_record(
-        crashing_board, quiet_log, monkeypatch):
+        crashing_board, no_lane_gate, quiet_log, monkeypatch):
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
 
@@ -84,7 +98,8 @@ def test_the_discarded_exception_is_now_on_the_record(
     assert any("_Boom" in l for l in quiet_log), "the exception type must survive"
 
 
-def test_a_genuinely_empty_board_still_reads_as_zero(quiet_log, monkeypatch):
+def test_a_genuinely_empty_board_still_reads_as_zero(no_lane_gate, quiet_log,
+                                                     monkeypatch):
     """NEGATIVE CONTROL. The fix adds a third value; it must not relabel the
     second one. An empty board is a measurement, and it must still be 0."""
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
@@ -98,12 +113,18 @@ def test_a_genuinely_empty_board_still_reads_as_zero(quiet_log, monkeypatch):
     assert quiet_log == [], "a healthy empty board must log nothing at all"
 
 
-def test_a_board_with_work_still_reads_as_work(quiet_log, monkeypatch):
+def test_a_board_with_work_still_reads_as_work(no_lane_gate, quiet_log,
+                                               monkeypatch):
     """NEGATIVE CONTROL for the other direction."""
     monkeypatch.setattr(standing, "unread_count", lambda a: 0)
     monkeypatch.setattr(standing.os, "listdir", lambda p: [])
+    # Real rows, not `["a", "b"]`. The old fake got away with the wrong shape
+    # because `len()` does not look inside; S35 made the caller read the item's
+    # front matter, and a fake that lies about the shape stops standing in for
+    # the thing it fakes.
     monkeypatch.setattr(standing.board_mod, "candidates",
-                        lambda lane=None: ["a", "b"])
+                        lambda lane=None: [(1, "A1-x", "A1-x.md", {}),
+                                           (2, "B2-y", "B2-y.md", {})])
 
     w = standing.work_for("RES-9", "infra")
 
@@ -118,7 +139,11 @@ def test_the_unknown_sentinel_has_its_own_skip_reason():
     failed to read."""
     src = open(os.path.join(HERE, "standing.py"), encoding="utf-8").read()
     i = src.index('why = "BOARD-QUERY-FAILED')
-    j = src.index('why = "no work (unread=0 held=0 claimable=0)"')
+    # S35a: matching the whole sentence pinned the *wording* of a neighbouring
+    # branch, so adding `exits=` to it turned this ordering assertion into a
+    # ValueError -- a test about branch order failing for a reason that has
+    # nothing to do with branch order. Match the branch, not the prose.
+    j = src.index('why = "no work (')
     assert i < j, "the unknown branch must be tested before the 'no work' branch"
 
 
@@ -135,19 +160,21 @@ def test_the_skip_reason_survives_a_cp936_console():
 # --------------------------------------------------------------------------
 
 def _merge_events(returncode, stdout="", stderr=""):
-    """Replay reflex's ci_merge step against a synthetic result."""
+    """Ask **reflex's own** ci_merge step what it reports for a child result.
+
+    ADV-2/D12: this helper used to be a re-implementation of those eight lines,
+    so the two tests below never called `reflex` at all and passed against the
+    pre-fix `reflex.py` verbatim -- the fix's only real coverage was a source grep
+    for the string `"merge:EXIT-"`. A test that owns a copy of the code under test
+    cannot fail when that code changes. `reflex.merge_events` was extracted from
+    the loop for exactly this reason; only the synthetic child result is built
+    here now.
+    """
     class R:
         pass
     r = R()
     r.returncode, r.stdout, r.stderr = returncode, stdout, stderr
-    events = []
-    merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-    flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-    events += merged + flagged
-    if r.returncode != 0:
-        first = ((r.stderr or "").strip().splitlines() or [""])[0]
-        events.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
-    return events
+    return reflex.merge_events(r)
 
 
 def test_a_crashed_merger_no_longer_reads_as_a_clean_no_op():
@@ -168,6 +195,41 @@ def test_a_successful_merge_is_unchanged():
     """NEGATIVE CONTROL: the happy path's events must be exactly as before."""
     assert _merge_events(0, stdout="MERGED agent/foo\nFLAG agent/bar\n") == [
         "MERGED agent/foo", "FLAG agent/bar"]
+
+
+def test_the_ci_merge_step_is_not_reimplemented_anywhere(monkeypatch):
+    """The guard that keeps ADV-2/D12 from coming back.
+
+    The two tests above are honest about what they cover only as long as they
+    call the shipped code. Their pre-fix red is an `AttributeError` -- the fix
+    was an *extraction*, so there is no pre-fix symbol to behave differently, and
+    this is deliberately **not** claimed as a behavioural negative control. What
+    makes them meaningful is that the logic now exists in exactly one place; so
+    that is what gets pinned here.
+
+    Driving `reflex.main()` end to end would be the real behavioural test, and it
+    is refused on purpose: that tick launches paid sessions.
+    """
+    # Assembled rather than written out: the first draft of this test put the
+    # literal in its own assertion message, so the file matched itself and the
+    # check went red on nothing. A source scan that trips over its own text is
+    # the false-red twin of this item's disease -- worth one line to avoid.
+    needle = 'startswith("' + 'MERGED")'
+
+    src = open(os.path.join(HERE, "reflex.py"), encoding="utf-8").read()
+    loop = src[src.index("def main("):]
+    assert "merge_events(r)" in loop, (
+        "the loop no longer calls merge_events -- the inline copy is back")
+    assert needle not in loop, (
+        "the ci_merge scrape was re-inlined into the loop; the function and the "
+        "loop can now disagree, which is the shape D12 caught")
+    assert src.count(needle) == 1, (
+        "the scrape appears %d times in reflex.py; it must exist once, in "
+        "merge_events" % src.count(needle))
+
+    this_file = open(os.path.abspath(__file__), encoding="utf-8").read()
+    assert needle not in this_file, (
+        "the test file has its own copy of the code under test again")
 
 
 def test_the_real_ci_merge_has_no_deliberate_nonzero_exit():

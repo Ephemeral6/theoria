@@ -1391,6 +1391,34 @@ def probe_accounts():
                        "　→ 只有一个账号可用，撞限仍会整队停机。")}
 
 
+def probe_orphan_commits():
+    """有没有已完成的工作只存在于这一块磁盘上（S36）。
+
+    `ci_merge` 枚举 `origin/agent/*`、拿 `origin/master` 判祖先
+    （`ci_merge.py:450`/`:454`），所以**一条没推上去的分支对它不是红，是不存在**
+    ——不是合并失败，是从来没进候选集合。此前舰队没有任何一处显示这件事：
+    心跳的 note 是自报的散文，探针不读它，而板上那件活可能已经记成 done。
+    Phase 4 的释出清单发布的是 master 上被跟踪的文件，所以没推上去的工作
+    在释出时等于没做过。
+
+    判据与三个值都在 `orphan_commits.py` 里（那里有完整推导）。这里只把它接进页面。
+    `note` 是刻意的第四档：全部裁决完但工作仍只有一份拷贝——不是绿，
+    也不该和「没人看过」长得一样。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import orphan_commits
+        st = orphan_commits.status()
+    except Exception as exc:                    # noqa: BLE001
+        # 探针自己崩了**不是**绿。这条规则本仓库已经写过三遍
+        # （crash-is-not-a-finding / 第三个值 / BOARD-QUERY-FAILED）。
+        return {"status": "missing",
+                "detail": "孤立提交普查跑不起来（%s: %s）；本轮无法断言"
+                          "这块盘上没有只此一份的工作。"
+                          % (type(exc).__name__, exc)}
+    return {"status": st["status"], "detail": st["detail"]}
+
+
 PROBES = {
     "accounts": probe_accounts,
     "standing": probe_standing,
@@ -1408,6 +1436,7 @@ PROBES = {
     "merge_queue": _merge_queue_probe,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
+    "orphan_commits": probe_orphan_commits,
     "ops_duty": probe_ops_duty,
     "conflict_scan": probe_conflicts,
     "provenance_scan": probe_provenance,

@@ -1,0 +1,90 @@
+{
+  "prompt_id": "opsm-cycle32",
+  "branch": "master",
+  "base_commit": "cc7e414eb3bfde3325a50f9ce0e8dc896bda2b84",
+  "utc": "2026-07-30T12:40:00Z",
+  "role": "OPS-M (merge referee)",
+  "note": "cycle 32. salvaged-cycle31/ was written by cycle 31's subagents into the gitignored .worktrees/opsm31-out/ and is copied here byte-for-byte because cycle 31 hit the context wall before publishing it; the sha256s are of the copies, which are identical to the originals.",
+  "files": [
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/MEASUREMENTS.txt",
+      "sha256": "015d3ad5347955682e92f382f09f9b5a058d7f64b89ebb04ee493bb5045ead60"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/OPSM31_NOTES.md",
+      "sha256": "bcd54f8c880c678e80b056c038112a668ca0730069883bc9d8a44313833c77f1"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/a3-ctl.theoria.txt",
+      "sha256": "f9a627863ebc5abf8be30dff3779f2d118222509879891e31641b4ceab908198"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/armA-bbt-verify.txt",
+      "sha256": "2e1ae9dc77a59675071664c2aa2e8aa429bbf6de085c904cb01ea926ac4f360f"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/armA-fielddiff.txt",
+      "sha256": "fbbdafa8c6d33fadc795ad5f7ddcdbd0ea88962b56e84449d2cb60f271116fae"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/armA-poolless.txt",
+      "sha256": "2d02cd8633093392d12faf8b1f3ed72cf4a8fe4d8b1b543069d5a66f29fb1175"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/branch-diff-namestatus.txt",
+      "sha256": "89a02fdc28fef4a3a9b8b1b0a78c6f6c569090dc181dd92436ff6947d7e86df7"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/bt_poolabsent.out.txt",
+      "sha256": "7dd978d8c1cbb8c5d72b306be320ac20280c2563c37c31e71f080e11865add48"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/bt_relocated.out.txt",
+      "sha256": "bfd6b7bec35366312c2df5a74902c05a67675e0e2ae0acd1b73a2a4283f8fc50"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/ctl.gate.txt",
+      "sha256": "4d481bf5fccfd81bf9573a8b6f6e3cb2f85937af60c1c1f1d09d79e290bcd98c"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/main-bbt-verify.txt",
+      "sha256": "7dc4374eb1c2992a60958aad2d194158d83d7133dce78bed40e802ebc01ed2e8"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/prediction-check.log",
+      "sha256": "376e9282b3ddea0de5953350771017296134fbab2c9ad61c45778ad4260ba340"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/reflex-diag.md",
+      "sha256": "f7fc4cb367e0bc407faa2367e4cc7ef948266357efdeb4043d5695aef090e496"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/resolve_pool_probe.txt",
+      "sha256": "efcbe8d4e0fae9bb6006cfca5cbeb7ba5adedc17c884eeac18b6013831d3df2f"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/s41-mrg.gate.txt",
+      "sha256": "bf68bdcc93f2d84f98e507be17bcfd6d488a746543ada1e13090f6d1e7b2ac16"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/s4e-mrg.txt",
+      "sha256": "69c6203d161605ec14ab89651d8625d8f988a82f3440d69045fe9a06299dde03"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/s4e-tip.txt",
+      "sha256": "8f4899fefb1d1a713758530743eb517e646ffdbd72412cd7eb86fa2e75c514f8"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/s4f-mrg.txt",
+      "sha256": "e234a0ee1a924d52f1c2535bcbd061ca646aee8ad2c5960aed0d0a44db91e4e0"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/s4f-tip.txt",
+      "sha256": "ed86e3c3337e0f9bf67915d06d37dca07cb36438bdf8ef7883bae1312f1c2d2b"
+    },
+    {
+      "path": "monitor/runs/opsm32/salvaged-cycle31/verdictY-cycle30.json",
+      "sha256": "1239ae30fe079996713cead7ce56ff782859d1bbc3b846bf5b6b844e023d00c7"
+    }
+  ]
+}

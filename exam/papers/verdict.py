@@ -85,6 +85,22 @@ REPO_ROOT = os.path.dirname(HERE)
 
 #: A class (ii) item whose demonstrated bound is under this is not a class (ii)
 #: item, it is a class (i) item with a big board.  `build()` refuses to ship one.
+#:
+#: Where the number comes from, because D-EX-028 rejected "a threshold" as a
+#: standalone criterion on the grounds that this constant "arrived without an
+#: argument" -- and then shipped it as the only gate `_large_space` applies, which
+#: left the document rejecting the criterion it ships (D-EX-029).
+#:
+#: It is not a tuned number and nothing about it is empirical. The requirement is
+#: only `> MAX_ENUMERATION`: past the cap, the naive enumerator provably cannot
+#: terminate, which is the whole and only claim the class makes. 10^12 is that
+#: with about seven orders of headroom, so raising the cap by any plausible factor
+#: does not silently reclassify an item -- and `_large_space` now asserts the
+#: ordering rather than trusting it. Measured margins: every shipped class (ii)
+#: item clears this by 6 to 24 orders (smallest bound 2^60 = 1.15e18), and any
+#: threshold in (256, 1.15e18] labels the same seven records and refuses both
+#: negative controls, so the choice is robust across ~16 orders rather than
+#: knife-edge. The constant is a floor with margin, not a measurement.
 LARGE_SPACE_THRESHOLD = 10 ** 12
 
 #: A board is "small" if a human can hold it; the split is what `memoriser` is
@@ -376,6 +392,45 @@ def waypoint_plan(level: Level) -> Optional[List[str]]:
     return plan
 
 
+def _sweep_cost(reach: Dict[Tuple[int, int], Any],
+                sources: List[Tuple[int, int]],
+                ndips: int) -> Optional[int]:
+    """The true minimal command count to dip `ndips` switches from `sources`.
+
+    `None` when the sources are not collinear, because then there is no sweep and
+    no cost this function can honestly return.
+
+    The sources sit on one row or one column (the lane guard in
+    `subset_lower_bound` enforces it, and this returns `None` when they do not, so
+    the two agree). On a line, the cheapest walk covering every point is: go to
+    whichever END of the span is nearer the start, then sweep straight to the
+    other end. Every source is passed on the way, so each dip costs its 2
+    out-and-back commands and nothing else.
+
+    This is the cost the bound's premise needs and `dist(c_m) + 2m` is not: that
+    formula is the special case where the start is outside the span, so the nearer
+    end IS c_1 and the sweep to c_m is the walk to c_m. When the start is interior
+    the formula omits the backtrack entirely.
+    """
+    if not sources:
+        return 0
+    rows = {r for r, _ in sources}
+    cols = {c for _, c in sources}
+    if len(rows) == 1:
+        row = next(iter(rows))
+        span = max(cols) - min(cols)
+        ends = ((row, min(cols)), (row, max(cols)))
+    elif len(cols) == 1:
+        col = next(iter(cols))
+        span = max(rows) - min(rows)
+        ends = ((min(rows), col), (max(rows), col))
+    else:
+        return None
+    if any(end not in reach for end in ends):
+        return None
+    return min(len(reach[end]) for end in ends) + span + 2 * ndips
+
+
 def subset_lower_bound(level: Level) -> Dict[str, Any]:
     """A demonstrated lower bound on the reachable state count: 2^m.
 
@@ -384,9 +439,16 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
       * a switch `s` is *dippable* from corridor cell `c` when one available
         command moves the cart c -> s and another moves it back s -> c;
       * take the dippable switches in order of their corridor cell's distance
-        from the start; visiting the first m of them costs at most
-        dist(c_m) + 2m commands, because the corridor cells lie along one path
-        and each dip is out-and-back;
+        from the start; visiting the first m of them costs the *sweep* -- walk to
+        whichever end of their span is nearer the start, then sweep straight to
+        the far end, 2 commands per dip, since the sources lie on one lane and
+        each dip is out-and-back (`_sweep_cost`);
+      * `dist(c_m) + 2m` is that cost only when the start lies OUTSIDE the span,
+        which is true of every shipped item and was assumed of all boards until
+        D-EX-029. With an interior start the m nearest sources straddle it and
+        the walk to c_m never touches the ones behind; the shorthand omits the
+        backtrack, and the published justification then describes a walk the
+        budget cannot buy;
       * for every one of the 2^m subsets, dipping into exactly that subset and
         stopping at c_m leaves the cart in the same place with a different latch
         mask.  Distinct masks are distinct states.
@@ -402,6 +464,7 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
         if switch in level.lost_cells or not level.passable(switch):
             continue
         best: Optional[int] = None
+        best_source: Optional[Tuple[int, int]] = None
         for command in level.commands():
             action = level.world_action(command)
             dr, dc = DELTA[action]
@@ -420,16 +483,38 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
             if returned != source:
                 continue
             distance = len(reach[source])
-            best = distance if best is None else min(best, distance)
+            if best is None or distance < best:
+                best, best_source = distance, source
         if best is not None:
-            candidates.append((best, switch))
-    candidates.sort(key=lambda pair: (pair[0], pair[1]))
+            candidates.append((best, switch, best_source))
+    candidates.sort(key=lambda triple: (triple[0], triple[1]))
 
+    # `dist(c_m) + 2m` is the docstring's cost, and it is only the true cost when
+    # the walk to c_m passes through every earlier source -- i.e. when the sources
+    # run away from the start in ONE direction, which is what every shipped item
+    # has (`start_col=1`, the corridor end). With an interior start the m nearest
+    # sources straddle it, no single walk to c_m touches the ones behind, and the
+    # real cost is a there-and-back sweep. Measured on a board built from the
+    # shipped `comb_open` plus two shipped operators: 758 of a claimed 2^10 masks
+    # reachable, 28,188 of 2^15 -- every guard below passing, `_large_space`
+    # accepting, and the published `arithmetic` describing a walk that costs 137
+    # commands against a budget of 99. The number stayed a true lower bound by
+    # luck; the *justification* was false, on the class graded on justification.
+    # So the budget test is the sweep: reach the nearer end of the span, sweep to
+    # the far end, 2 commands per dip. One-sided selections are unaffected --
+    # `min(ends) + span` collapses to `dist(c_m)` -- which is why no shipped m
+    # moves. `_sweep_cost` returns None when the sources are not collinear, and
+    # that is a refusal rather than a fallback, because a non-collinear set has no
+    # sweep and the lane guard below is what explains it. D-EX-029.
     m = 0
-    for index, (distance, _switch) in enumerate(candidates, start=1):
-        cost = distance + 2 * index
+    picked: List[Tuple[int, int]] = []
+    for index, (_distance, _switch, source) in enumerate(candidates, start=1):
+        cost = _sweep_cost(reach, picked + [source], index)
+        if cost is None:
+            break
         if level.step_limit is not None and cost > level.step_limit:
             break
+        picked.append(source)
         m = index
 
     # The premise the construction rests on, checked rather than assumed.
@@ -445,8 +530,29 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
     # shipped operator -- produced 2^60 against a true 29,791, and `_large_space`
     # stamped `exhaustive_feasible: False` on it. Repro in this run's
     # `verify_checker_claims.py`. D-EX-021.
-    sources = [_dip_source(level, reach, switch) for _d, switch in candidates[:m]]
+    #
+    # The second premise, and it is a different one: the m dips must move m
+    # *independent* latch bits. `Level.switch_index` (rubrics_verdict.py) is
+    # keyed on the cell, so two entries naming the same cell share one bit and
+    # the 2^m family counts masks the level cannot hold. Measured: a `comb_open`
+    # whose `switches` list repeats one cell 60 times yielded 2^60 = 1.15e18
+    # against a true 359 reachable states, and neither the lane premise nor
+    # `LARGE_SPACE_THRESHOLD` refused it -- only `Level.wellformed_problems()`
+    # did, from `_self_check` at the very end of `build()`, long after
+    # `_large_space` had written the false record. A bound must defend its own
+    # premise where it is claimed, not rely on a check three call frames away.
+    # Gated on `candidates[:m]` rather than on `level.switches`, because a
+    # duplicate that never enters the prefix never enters the bound: a repeated
+    # entry naming a wall is skipped above and the bound over the real alcoves
+    # stays sound. Repro in this run's `repro_duplicate_switch.py`. D-EX-028.
+    chosen = [switch for _d, switch, _s in candidates[:m]]
+    sources = [_dip_source(level, reach, switch) for switch in chosen]
     problems = _lane_problems(level, [s for s in sources if s is not None])
+    if m and len(set(chosen)) != m:
+        problems.append(
+            "the first %d dips name only %d distinct cells; duplicates share "
+            "one latch bit, so 2^%d counts latch masks the level cannot hold"
+            % (m, len(set(chosen)), m))
     if m and (len(sources) != m or problems):
         raise AssertionError(
             "%s: the 2^m family is not demonstrated on this board -- %s. The "
@@ -459,14 +565,20 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
         "m": m,
         "dippable_switches": len(candidates),
         "lower_bound": 2 ** m,
+        # The cost clause names the sweep and its measured value, not the
+        # `dist + 2m` shorthand. That shorthand is the sweep only when the start
+        # lies outside the span of the sources, and when it does not, a record
+        # published with it describes a walk the budget cannot buy (D-EX-029).
         "arithmetic": (
             "%d switches are dippable out-and-back from the corridor; the step "
-            "budget (%s) affords the first %d of them at a cost of dist + 2m "
-            "commands; each of the 2^%d subsets ends at the same cell with a "
+            "budget (%s) affords the first %d of them at a cost of %s commands "
+            "-- walk to the nearer end of their span, sweep to the far end, 2 "
+            "per dip; each of the 2^%d subsets ends at the same cell with a "
             "different latch mask, so the reachable set has at least 2^%d = %d "
             "states." % (len(candidates),
                          "unbounded" if level.step_limit is None
-                         else str(level.step_limit), m, m, m, 2 ** m)),
+                         else str(level.step_limit), m,
+                         str(_sweep_cost(reach, picked, m)), m, m, 2 ** m)),
     }
 
 
@@ -696,7 +808,7 @@ def _make_item(key: str, level_doc: Dict[str, Any], klass: str, claim: str,
     # exactly when a forward enumeration of the level's own state space finishes,
     # which `_small_space` establishes by running one and `_large_space` refuses
     # by demonstrating a 2^m lower bound.
-    search_credible = bool(state_space["exhaustive_feasible"])
+    search_credible = bool(state_space["naive_enumeration_feasible"])
     truth: Dict[str, Any] = {
         "claim": claim,
         "class": klass,
@@ -753,7 +865,14 @@ def _small_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "%s did not finish enumerating under the cap of %d; it is not a "
             "small-space item" % (level_doc["level_id"], MAX_ENUMERATION))
     return {
-        "exhaustive_feasible": True,
+        # Renamed from `exhaustive_feasible`: the claim this field can carry is
+        # about the *naive* method -- forward enumeration over the full
+        # (cart, button, latch mask) state -- and not about exhaustive search in
+        # general. On the class (ii) side the old name was flatly false; see
+        # `_large_space` and D-EX-028. Renamed on both sides so the two records
+        # keep saying the same thing about the same method.
+        "naive_enumeration_feasible": True,
+        "enumeration_attempted": True,
         "enumerated": result["states"],
         "cap": result["cap"],
         "truncated": False,
@@ -772,12 +891,52 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "a class (ii) item; enumeration is not out of reach and the question "
             "does not test what it claims to"
             % (level_doc["level_id"], bound["lower_bound"], LARGE_SPACE_THRESHOLD))
+    # The refusal message below says the bound is "past the cap", and until
+    # D-EX-029 nothing checked that. It held only because two unrelated constants
+    # happen to be ordered `MAX_ENUMERATION (200_000) < LARGE_SPACE_THRESHOLD
+    # (10^12)`: raise the cap above the threshold and the record still published
+    # "past the cap of ...", which is then a false sentence about the arithmetic
+    # printed beside it. Checked rather than inherited from the ordering, because
+    # the ordering is not stated anywhere as a requirement and either constant can
+    # be moved by someone who never reads this function.
+    if bound["lower_bound"] <= MAX_ENUMERATION:
+        raise AssertionError(
+            "%s: the bound 2^%d = %d does not exceed the enumeration cap of %d, "
+            "so 'a forward enumeration under this cap cannot terminate' is not "
+            "something this record may claim. LARGE_SPACE_THRESHOLD (%d) and "
+            "MAX_ENUMERATION must stay ordered, or this class means nothing."
+            % (level_doc["level_id"], bound["m"], bound["lower_bound"],
+               MAX_ENUMERATION, LARGE_SPACE_THRESHOLD))
     quotient = positional_states(Level(level_doc))
     return {
-        "exhaustive_feasible": False,
+        # NOT `exhaustive_feasible`. The old name claimed no exhaustive method
+        # is feasible here, and that is false: every shipped class (ii) item is
+        # settled by an exhaustive computation over at most 600 nodes in at most
+        # 5 ms, against these bounds of 1e18-1e36. What is true is the narrower
+        # statement -- the *naive* method, forward enumeration over the full
+        # (cart, button, latch mask) state, which is the method class (i) is
+        # graded on, cannot terminate here. D-EX-028.
+        "naive_enumeration_feasible": False,
+        # The previous record said `"truncated": False` next to
+        # `"enumerated": None`, which is literally true only because no
+        # enumeration was ever attempted and reads exactly like one that ran and
+        # came back clean. `truncated` is null when nothing was run, and the
+        # flag below says so outright rather than leaving it to be inferred.
+        "enumeration_attempted": False,
         "enumerated": None,
+        "truncated": None,
         "cap": MAX_ENUMERATION,
-        "truncated": False,
+        "enumeration_refused_because": (
+            "the construction exhibits 2^%d = %d distinct reachable states, "
+            "past the cap of %d, so a forward enumeration under this cap cannot "
+            "terminate. Derived from the bound rather than timed, because a "
+            "timeout would not carry the claim (engine-rig D-024) and because "
+            "running it on every build costs seconds for a result the bound "
+            "already fixes. The enumerator is nonetheless run against every "
+            "class (ii) level in the suite, by "
+            "`test_class_ii_levels_actually_truncate_the_enumerator`, so the "
+            "derivation's premise is checked rather than trusted."
+            % (bound["m"], bound["lower_bound"], MAX_ENUMERATION)),
         "lower_bound": bound["lower_bound"],
         "m": bound["m"],
         "dippable_switches": bound["dippable_switches"],
@@ -792,7 +951,13 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "level. It ignores `step_limit` entirely, and it carries no latch "
             "state, so on a require_all_switches board it can report the goal "
             "reachable when the level is unsolvable. `lower_bound` remains the "
-            "honest statement of what a complete search must cover."
+            "honest statement of what a *naive* complete search must cover. "
+            "D-EX-028 amends what that unsoundness licenses: it is one-sided. "
+            "An over-approximation yields false `solvable`, never false "
+            "`unsolvable`, so a goal in a different component IS a sound "
+            "unsolvability proof -- which is why this item's own answer key is "
+            "allowed to be computed that way, and why the search barrier here "
+            "is apparent rather than real."
             % quotient),
     }
 
@@ -1289,8 +1454,14 @@ def build() -> Paper:
             "classes": {
                 "small_unsolvable": "exhaustive search feasible; the question "
                                     "is the reason, not the verdict",
-                "large_unsolvable": "enumeration out of reach; only invariant "
-                                    "reasoning answers",
+                # Was "enumeration out of reach; only invariant reasoning
+                # answers". The second clause is withdrawn: it is a universal
+                # over all methods that no experiment can establish, and it is
+                # false as stated, since these boards are settled by an
+                # exhaustive walk of a 300-node relaxed graph. D-EX-028.
+                "large_unsolvable": "naive enumeration out of reach; the item "
+                                    "is scored on selecting a method that is "
+                                    "not naive enumeration",
                 "solvable_hard": "the false-positive trap",
             },
             "large_space_threshold": LARGE_SPACE_THRESHOLD,
