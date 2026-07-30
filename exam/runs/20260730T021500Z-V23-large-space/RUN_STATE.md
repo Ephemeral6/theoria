@@ -113,7 +113,7 @@ Two proper controls now exist, and the second is the more valuable:
 
 ## State
 
-`exam` suite **465 passed, 2 xfailed**; baseline before this run was 456/2.
+`exam` suite **476 passed, 2 xfailed** at cycle 108; baseline before this run was 456/2. (This read 465/2, which was true when written and was left behind by three later rounds adding tests -- the same staleness the document is about, in the document's own state line.)
 `python exam/verify.py` **GREEN**, including its two-build determinism check
 under PYTHONHASHSEED 7 vs 99. Artefacts regenerated with
 `python -m exam.tools.build_papers` — never hand-edited.
@@ -281,7 +281,7 @@ path is broken is not a control.
 
 ### State after the fixes
 
-`exam` **465 passed, 2 xfailed**; `python exam/verify.py` **GREEN**, including the
+`exam` **476 passed, 2 xfailed** at cycle 108; `python exam/verify.py` **GREEN**, including the
 two-build determinism check. Artefacts regenerated through
 `python -m exam.tools.build_papers` — the `arithmetic` string is embedded in the
 shipped truth keys, so the rename of a cost clause is an artefact change, not a
@@ -979,3 +979,126 @@ neighbouring blobs failed because the body changed as well as the tail. It is
 recorded as unproven rather than dropped, because a manifest entry matching no
 form of its own file is the more alarming reading and should not be quietly
 replaced by the comfortable one.
+
+## Round seven — two of my own sentences refuted, and one number vindicated
+
+An adversarial reviewer was sent at the two manifest commits with instructions to
+refute rather than confirm. It held the census, the six-finding survival and the
+absence of false reds, and it broke two claims and found four defects in the
+instrument. Everything below was re-measured here before being written down.
+
+### `git diff` does see it. That sentence was wrong three times over.
+
+The commit title, the commit body and `restamp_manifest.py`'s tracked docstring
+all asserted that nothing could see a CRLF working copy under an LF pin. **`git
+diff` prints `warning: in the working copy of '<path>', CRLF will be replaced by
+LF the next time Git touches it`, naming the file, whatever `core.autocrlf` is
+set to**, and `git ls-files --eol` reports `i/lf w/crlf` outright. The warning
+was in this session's own terminal output at the moment the claim was written,
+and went unread.
+
+What survives is narrower and still worth guarding: `git diff`'s **stdout** is
+empty, so anything reading the diff for content sees an unchanged file, and a
+`git add` silences even the warning by refreshing the stat cache — after which
+`git reset --hard` will not repair the file and only `git checkout --force --
+<path>` will. "A tool nobody runs did not warn me" is a different and much
+weaker statement than "no tool can see this", and the second is what got
+published.
+
+### "737 and 769 bytes longer" — half right, and the wrong half is the interesting one
+
+The reviewer found that `RUN_STATE.md`'s stamp at `1e083de2` matches neither the
+blob nor its all-CRLF form, that the blob has **866** newlines rather than 769,
+and concluded that 769 "corresponds to nothing in the repository". The first two
+are correct and the conclusion is not. 769 is a measurement: it is
+`56991 − 56222`, the disk-minus-blob byte delta recorded earlier this cycle. With
+866 newlines in the blob, that arithmetic is only satisfiable one way —
+**769 of the 866 line endings on disk were CRLF and 97 were LF.**
+
+So the mixed-ending reconstruction this file earlier recorded as *unproven* is
+now proven, by counting rather than by rebuilding: no uniform conversion can
+reproduce that stamp because the file was never uniformly anything. `CRITERION.md`
+by contrast is 737 of 737 — uniformly CRLF, which is why it classifies cleanly.
+The sentence as published invites the reader to assume both files were uniform,
+and that is the defect in it.
+
+The reviewer's operational point stands untouched and matters more than the
+number: **a CRLF guard would not have caught the `RUN_STATE.md` case**, because
+by `1e083de2` that entry was also plainly stale — the file had been edited after
+stamping. Appending an LF-only line and re-running `--check` reproduces it: the
+guard stays silent, `--check` says `STALE`. One of the two motivating instances
+is outside the reach of the fix built for it, and the commit did not say so.
+
+### Four instrument defects, all four closed
+
+**The stamper walked the disk.** Any `.orig`, `.rej`, editor backup or
+intermediate output present in the directory at stamping time was written into
+the provenance record, pinning a file the repository does not contain. It asks
+git now, which also makes the stamper and its coverage test share one definition
+of "what is in this run"; before, one walked the disk and the other walked the
+index. Controlled: an untracked scratch file leaves the entry count at 34.
+
+**The guard aborted `--check`.** It raised, so the first CRLF file suppressed the
+`UNLISTED`/`ABSENT`/`STALE` report for all 33 other paths — the audit that mode
+exists to produce — and exited 1, the same code as "stale", so a caller could not
+tell a stale manifest from a crashed checker. It now reports a line and exits 2.
+Controlled: CRLF-ify a tracked file, `--check` prints `UNPUBLISHABLE …` and
+returns 2; restore, and it returns 0.
+
+**The index is not the commit.** Every check here validated the index, and
+`CLAUDE.md` requires pathspec-limited commits ("commit only your own track's
+paths"). Stage an edited artefact with its re-stamped manifest, commit only the
+manifest, and every index-based check stays green while the published commit
+pins bytes it does not contain. `test_the_manifest_at_head_pins_the_blobs_at_head`
+checks `HEAD` against `HEAD` — after the fact, which is the only time it can be
+seen, and why it is a separate test rather than a stricter version of another.
+
+**The exclusion list was a pre-cut hole**, closed earlier this cycle by its own
+pin test. Worth recording that the reviewer demonstrated it end to end: a
+tracked, committed file named `_manifest_check.py` passed every test and
+`--check` while appearing in no manifest.
+
+### Three things it could not break, and one count that was generous
+
+The census reproduces to the digit on an independently written script — 36 stale,
+8 of 13 manifests, 0 unresolved, 50 uncovered — with 0 entries resolving under
+both path conventions, so the dual-convention resolver masks nothing today.
+Round five's six all reproduce against the index with the 17/6 count intact. No
+false red survived a fresh clone under `core.autocrlf=true`, a run from another
+cwd, or a run from outside the repository; all 347 tracked files under `exam/`
+report `i/lf w/lf`.
+
+The generous count: **"50 tracked files in no manifest" is 47 plus 3.** The three
+are this run's own documented exclusions. The 50 is what the census emits and
+the 47 is what it means, and the published sentence did not separate them.
+
+One correction to the reviewer, since it inherits the ambiguity it is about:
+`round5-findings.md` records its base as tip `08820583`, where the numbers are
+18 matched / 5 mismatched — the 17/6 it reports first holds at `b43427f0`. The
+audit ran at a later tip than the document it is filed under.
+
+### Striking a comment rewrote every artefact in the territory, which is V2-V25's point demonstrated
+
+The withdrawn "in at most 5 ms" survived in five places after round five declared
+it "the last of four copies": this file's §V6-V23 section, `exam/README.md`'s
+class (ii) bullet, `exam/grading/rubrics_verdict.py`'s `search_not_credible`
+comment, and `exam/DECISIONS.md`'s own `exhaustive_feasible: False` section — the
+durable record the strike was supposed to live in. All struck.
+
+Striking the one in `rubrics_verdict.py` moved **36 lines across 14 tracked
+artefacts**. `rubric_digest` is computed over the marking modules' *source text*,
+so a comment is load-bearing: the digest went `7a1cfd1a…` → `f01dbeb2…`, and
+every `sheet_sha256`, `key_sha256` and `cheater_brief_sha256` moved with it. No
+question, answer or score changed; four papers were rebuilt because a sentence
+next to the grading string stopped being false.
+
+Two things follow. The artefacts are regenerated and committed here, because
+leaving them would put the tree in exactly the state
+`V2-V25-verify-does-not-check-what-is-committed` exists about — committed
+artefacts that this code did not produce, under a gate that stays green either
+way. And `build_manifest.json`'s twelve absolute paths now read
+`.worktrees/v6-v23-large-space`, which is V27's defect and is not fixed here:
+whoever rebuilds next will swap them again. That churn is the reason V27 exists
+and this commit is one more instance of it.
+
+`python exam/verify.py` GREEN; tree clean after the rebuild.

@@ -4,9 +4,19 @@ Round six shipped `adversarial/round6-findings.md` tracked and unlisted, and the
 round that stamped the manifest hashed two files whose working copies carried
 CRLF while every blob under `exam/` is LF.  Both are the same defect one level
 apart: the manifest said something about the directory that was not true of the
-directory, and no check could tell.  `git diff` cannot see the second one --
-check-in normalisation makes a CRLF working copy equal to its LF blob again --
-so it has to be asserted directly.
+directory, and no check in this repository was looking.
+
+This file first said `git diff` "cannot see" the second one.  Round seven
+refuted that: `git diff` prints `warning: in the working copy of '<path>', CRLF
+will be replaced by LF the next time Git touches it`, naming the file, whatever
+`core.autocrlf` is set to, and `git ls-files --eol` reports `i/lf w/crlf`
+outright.  What is true is that `git diff`'s *stdout* is empty, so the file
+looks unchanged to anything reading content, and a `git add` silences even the
+warning by refreshing the stat cache -- at which point `git reset --hard` will
+not repair the file either, only `git checkout --force -- <path>` will.  The
+correction is kept beside the claim rather than replacing it, because "no tool
+can see this" was a stronger statement than the evidence, and the evidence was
+in the author's own terminal at the time.
 """
 import hashlib
 import importlib.util
@@ -99,6 +109,42 @@ def test_manifest_hashes_match_the_published_bytes():
         if hashlib.sha256(disk).hexdigest() != e["sha256"]:
             bad.append((e["path"], "stale stamp"))
     assert bad == [], "manifest does not pin what git publishes: %s" % bad
+
+
+def test_the_manifest_at_head_pins_the_blobs_at_head():
+    """The published commit has to be self-consistent, not just the index.
+
+    Round seven's demonstration: stage an edited artefact and its re-stamped
+    manifest, then commit with a pathspec -- which `CLAUDE.md` requires as house
+    style, "commit only your own track's paths" -- and the manifest lands
+    without the artefact it was re-stamped for.  Every index-based check stays
+    green and the commit a clone receives pins bytes it does not contain.  Only
+    a check against `HEAD` sees it, and only after the fact, which is why this
+    is a separate test rather than a stricter version of the one above.
+    """
+    raw = subprocess.run(["git", "show", "HEAD:%s/MANIFEST.json" % RUN_REL],
+                         cwd=REPO, capture_output=True)
+    if raw.returncode != 0:
+        pytest.skip("no manifest at HEAD yet")
+    entries = json.loads(raw.stdout.decode("utf-8"))["files"]
+    rels = ["HEAD:%s/%s" % (RUN_REL, e["path"]) for e in entries]
+    query = "".join(r + "\n" for r in rels)
+    proc = subprocess.run(["git", "cat-file", "--batch"], cwd=REPO,
+                          input=query.encode(), capture_output=True, check=True)
+    out, pos, bad = proc.stdout, 0, []
+    for e in entries:
+        nl = out.index(b"\n", pos)
+        header = out[pos:nl].decode()
+        if header.endswith(("missing", "ambiguous")):
+            bad.append((e["path"], "not in the commit"))
+            pos = nl + 1
+            continue
+        size = int(header.split()[2])
+        data = out[nl + 1:nl + 1 + size]
+        pos = nl + 1 + size + 1
+        if hashlib.sha256(data).hexdigest() != e["sha256"]:
+            bad.append((e["path"], "HEAD's manifest does not pin HEAD's bytes"))
+    assert bad == [], "the published commit is not self-consistent: %s" % bad
 
 
 def test_nothing_under_exam_carries_crlf_in_the_working_copy():

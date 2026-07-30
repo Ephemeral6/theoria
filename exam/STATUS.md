@@ -609,7 +609,20 @@ holds across `PYTHONHASHSEED` 7 and 99.
     > 600 nodes against 1.15e18 needs no stopwatch beside it. Nothing here or
     > downstream gates on a timing. Same strike applied at
     > `exam/papers/verdict.py`'s `naive_enumeration_feasible` comment and in the
-    > V23 run's `CRITERION.md`; this was the last of four copies.
+    > V23 run's `CRITERION.md`.
+    >
+    > **Correction (V23 round 7, cycle 108): "this was the last of four copies"
+    > was false when it was written.** Four copies survived it -- this file's
+    > own §V6-V23 section further down, `exam/README.md`'s class (ii) bullet,
+    > `exam/grading/rubrics_verdict.py`'s `search_not_credible` comment -- which
+    > is tracked source sitting beside the string an examinee is graded by --
+    > and, worst, `exam/DECISIONS.md`'s own `exhaustive_feasible: False` section,
+    > the durable record the strike is supposed to be recorded in. Four
+    > survivors, not zero; the count was wrong in both directions. All four are
+    > struck now. The claim cost one `grep`, and a sentence
+    > asserting that a sweep is complete is exactly the kind this run exists to
+    > distrust: it appeared inside the correction for the previous instance of
+    > the same defect.
 
     The class therefore measures **method selection under an apparent search
     barrier**, not "only invariant reasoning can answer". Making the class mean
@@ -1153,8 +1166,8 @@ This is the index entry.
 **The withdrawal, which is the result.** `exhaustive_feasible: False` asserted
 that no exhaustive method is feasible on a class (ii) board. That is false, and
 `crux_quotient_settles.json` puts a number on it: **every shipped class (ii)
-item is settled by an exhaustive computation over at most 600 nodes in at most 5
-ms**, against claimed bounds of 1.15e18 to 1.33e36 — ii1 by components of
+item is settled by an exhaustive computation over at most 600 nodes**, against
+claimed bounds of 1.15e18 to 1.33e36 — ii1 by components of
 `relaxed_edges` on 300 nodes, ii2 by the same pass with the cut cell deleted, ii3
 by a relaxed distance of 199 against a budget of 150, ii4 by the surviving column
 deltas being {0, 0, +1}. Four *different* mechanisms; an earlier draft of the

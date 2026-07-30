@@ -613,7 +613,7 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588"
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
     },
     "handover": {
       "calibrated": true,
@@ -880,7 +880,7 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588"
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
     },
     "heldout": {
       "calibrated": true,
@@ -1605,7 +1605,7 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588"
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
     },
     "verdict": {
       "calibrated": true,
@@ -2197,7 +2197,7 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588"
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
     }
   },
   "pre_registered": {
@@ -2266,7 +2266,7 @@
       "why": "ground truth must be accepted in full"
     }
   },
-  "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+  "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
   "structural_expectations": {
     "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
     "null_all_unanswered": "every item of a null submission is `unanswered`",

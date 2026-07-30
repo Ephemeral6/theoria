@@ -875,7 +875,7 @@ def _score_unsolvable_reason(answer: Any, truth: Dict[str, Any], level: Level,
         detail["reason"] = "search_not_credible"
         # "beyond enumeration" and "a false statement about the search" were both
         # withdrawn by D-EX-028: every class (ii) item in this exam is settled by
-        # an exhaustive computation over at most 600 nodes in at most 5 ms, so the
+        # an exhaustive computation over at most 600 nodes, so the
         # marker was calling a true claim false -- the exact failure D-EX-022
         # recorded once already, re-entering through this string after the field
         # underneath it was renamed. What is measured is narrower and is all this

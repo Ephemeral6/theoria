@@ -28,6 +28,7 @@ Usage:  python restamp_manifest.py [--check]
 import hashlib
 import json
 import os
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -51,9 +52,15 @@ def _assert_published_bytes(rel, data):
     a tool wrote CRLF after checkout, which is not something git undoes in the
     working tree.  Round six's manifest was stamped over two such files, so its
     hashes did not match the bytes at the commit carrying them, which is exactly
-    what the manifest's own `note` says they are.  Nothing could see it: `git
-    diff` is empty for these files, because check-in normalisation makes them
-    equal again on the way into the index.
+    what the manifest's own `note` says they are.
+
+    An earlier version of this docstring said "nothing could see it", and round
+    seven refuted that: `git diff` prints `warning: in the working copy of
+    '<path>', CRLF will be replaced by LF the next time Git touches it`, naming
+    the file, regardless of `core.autocrlf`, and `git ls-files --eol` reports
+    `i/lf w/crlf` outright.  What is true is narrower and still worth guarding:
+    `git diff`'s *stdout* is empty, so a diff read for content shows nothing,
+    and after a `git add` refreshes the stat cache even the warning stops.
 
     Hashing the disk bytes is only correct while the two coincide, so the
     coincidence is asserted rather than assumed."""
@@ -65,14 +72,27 @@ def _assert_published_bytes(rel, data):
 
 
 def artefacts():
+    """Tracked files only, asked of git rather than of the disk.
+
+    This walked the directory until round seven, which showed that any `.orig`,
+    `.rej`, editor backup or intermediate output sitting in the run directory at
+    stamping time was written straight into the provenance record -- the
+    manifest would then pin a file the repository does not contain.  Asking git
+    also makes the stamper and its coverage test agree on one definition of
+    "what is in this run"; before, one walked the disk and the other walked the
+    index.
+    """
+    repo = subprocess.run(["git", "rev-parse", "--show-toplevel"], cwd=HERE,
+                          capture_output=True, text=True, check=True).stdout.strip()
+    rel_dir = os.path.relpath(HERE, repo).replace(os.sep, "/")
+    listing = subprocess.run(["git", "ls-files", rel_dir], cwd=repo,
+                             capture_output=True, text=True, check=True).stdout
     out = []
-    for root, dirs, files in os.walk(HERE):
-        dirs[:] = sorted(d for d in dirs if d not in EXCLUDED_DIRS)
-        for fn in sorted(files):
-            rel = os.path.relpath(os.path.join(root, fn), HERE).replace(os.sep, "/")
-            if rel in EXCLUDED_NAMES or os.path.basename(rel) in EXCLUDED_DIRS:
-                continue
-            out.append(rel)
+    for path in (p for p in listing.splitlines() if p.strip()):
+        rel = path[len(rel_dir) + 1:]
+        if rel in EXCLUDED_NAMES or rel.split("/")[0] in EXCLUDED_DIRS:
+            continue
+        out.append(rel)
     return sorted(out)
 
 
@@ -87,8 +107,22 @@ def stamp():
 
 def main():
     m = json.load(open(MANIFEST, encoding="utf-8"))
-    fresh = stamp()
-    if "--check" in sys.argv:
+    checking = "--check" in sys.argv
+    try:
+        fresh = stamp()
+    except WorkingCopyIsNotPublished as exc:
+        if not checking:
+            raise
+        # Round seven: raising here aborted --check at the first offending file,
+        # so one CRLF file suppressed the UNLISTED/ABSENT/STALE report for every
+        # other path -- the audit this mode exists to produce.  And exit 1 was
+        # the same code as "stale", so a caller could not tell a stale manifest
+        # from a crashed checker.  Reported as a line, and exit 2.
+        print("UNPUBLISHABLE  %s" % exc)
+        print("MANIFEST NOT CHECKED (a working copy differs from what git "
+              "publishes; normalise it and re-run)")
+        return 2
+    if checking:
         old = {e["path"]: e["sha256"] for e in m.get("files", [])}
         new = {e["path"]: e["sha256"] for e in fresh}
         bad = False

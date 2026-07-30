@@ -982,7 +982,7 @@ it would be false.
 
 The field asserted that no exhaustive method is feasible on the board. Every
 shipped class (ii) item is settled by an exhaustive computation over at most 600
-nodes in at most 5 ms, against bounds of 1.15e18 to 1.33e36
+nodes, against bounds of 1.15e18 to 1.33e36
 (`crux_quotient_settles.json`): ii1 by components of `relaxed_edges` on 300
 nodes; ii2 by the same pass with the cut cell deleted; ii3 by a relaxed distance
 of 199 against a budget of 150; ii4 by observing the surviving column deltas are
