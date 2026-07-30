@@ -1,0 +1,291 @@
+{
+  "agrees_with_e11": true,
+  "caliber": "e11_caliber",
+  "caliber_descriptions": {
+    "e11_caliber": "fuzzlab/props/cegis_miner.py::_mine as at ed592a6 -- no track= argument, so transitions_from_segmentation mines seg.tracks[0]. The caliber the E11 prose was measured at.",
+    "today_caliber": "fuzzlab.props.cegis_miner._mine as of this commit, called directly -- V-13 (eb61aa98) added _mover_track, so it mines the world's mover. What the engine does now."
+  },
+  "caveats": [
+    "TWO CALIBERS, AND WHICH ONE TO QUOTE. The corpus is whatever `fuzzlab/props/cegis_miner.py::_mine` mines, and that function changed after E11 measured: V-13 (`eb61aa98`) added `_mover_track`, so `_mine` now selects the world's mover instead of taking `transitions_from_segmentation`'s `seg.tracks[0]` default -- the fix for the very defect (F-1) E11 filed. Every count is therefore emitted at both calibers. **Quote `e11_caliber` when citing the 2026-07-29 cross-check, quote `today_caliber` when stating what the engine does now, and never quote one as the other.** `value` and `agrees_with_e11` are the E11 caliber, so the comparison against the prose stays like-for-like; the top-level `today_caliber` block is the same question asked of today's path.",
+    "THE CALIBER CHANGE MOVES THE HEADLINE, AND THAT IS A FINDING. Mining the mover instead of `tracks[0]` leaves the corpus size untouched -- 193 judged, the same 7 unminable seeds, 4277 evidence rows at both calibers, so `_mover_track` costs no world its judgement -- but changes what is mined out of them: ground rules 932 -> 1043, lifted rules 149 -> 232, tautological-guard lifted rules 104 -> 155, underivable-`applicable` lifted rules 131 -> 208. The *ratios* barely move (69.8% -> 66.8% and 87.9% -> 89.7%) because the defect is structural in `lift` and has nothing to do with which object was mined; the absolute counts move a lot because a mover yields `push_*` rules that a rock does not, and `lift` only ever groups move-shaped rules. So the F-2 finding is not an artefact of F-1: it survives the F-1 repair, half again as large. The F-1 numbers themselves mostly collapse, since F-1 is the thing V-13 fixed -- 72 F-1 worlds -> 8, 1209 rows -> 110 -- and the residual 8 are exactly the 8 worlds where `_mover_track` returns `None` and `_mine` falls back to `tracks[0]` (verified: seeds 56, 92, 106, 158, 159, 161, 178, 200, identical sets). `ground.applicable_equals_support` stays n/n at both calibers (932/932, 1043/1043), so the half of P1 that held still holds.",
+    "PREDICATE for 104/149, and whether it is the prose's. The prose writes the guard as a JSON list, `[\"act==?dir\"]`, which is the exact-list reading: `Rule.as_json()[\"guard\"] == [\"act==?dir\"]`. That is what is counted and it gives 104 at the E11 caliber. The containment reading -- a guard that merely has an `act==?dir` conjunct somewhere -- gives 149/149, so the two readings are far apart and the choice matters. The exact-list reading is the one that yields the prose's number. The `?dir`-vs-any-variable ambiguity is not live: `miner.DIR_VAR` is the only variable `lift` ever substitutes, so `act==?<anything else>` cannot occur -- verified by the containment count matching the count of guards carrying any `act==?` atom.",
+    "PREDICATE for 131/149. The partial does not state this number; its source is `ADVERSARIAL-cegis.md:224`, \"lifted rules whose published `applicable` != the guard's firing set : 131 / 149\", claimed there to be reading-independent. Recomputed at the E11 caliber: under the engine's own evaluator all 149 are underivable (the guard either fires on nothing or raises); under the `?dir`-bound reading 131 are. The reading-independent count -- underivable under BOTH -- is 131, matching. So `derivable_from_guard` in the JSONL is True when EITHER reading reproduces `applicable`. All 18 derivable ones are derivable only under the bound reading, and they split two ways: 16 carry the bare `[\"act==?dir\"]` and are derivable only because their members happen to cover every transition in their world, so the tautological guard lands on the right set by accident; the other 2 carry `[\"act==?dir\", \"free(strip(?dir))\"]`, where the surviving `free` conjunct does the separating -- the same accident of the evidence that keeps Fixture A clean.",
+    "`cegis.track0_worlds` AND `cegis.track0_motionless` ARE DIFFERENT PREDICATES THAT BOTH GAVE 72. The registry probes the first out of the string \"track0 NOT mover\"; the second is the count of worlds whose whole rule set is `effect: none` and whose mover moved. This module computes each the way its own registry entry describes it, rather than re-pointing both at whichever number happened to match -- which is the E18 defect one level down. `cegis.track0_worlds` compares `seg.tracks[0]`'s per-frame masks against the generator's own mover cells; the frames are rendered *from* those anchors, so it is the frames' upstream and not a re-derivation from pixels. It is a property of the **segmentation**, not of the mining, and it measures 72 at BOTH calibers -- while `cegis.track0_motionless`'s denominator collapses 72 -> 8. That divergence is the proof the separation was needed: one 72 is stable under V-13 and the other is not, so re-pointing both at the same recomputed number would have published a figure that is wrong for one of them.",
+    "THE 1209 IS ONE MEASUREMENT, NOT TWO. At the E11 caliber: non-`noop` generator events in the 72 F-1 worlds = 1209; whole-frame changes = 1209; `move:`-labelled events alone = 1204 (the 5 remainder are `teleport`). The partial called 1209 a corroboration by two independent oracles; `ADVERSARIAL-cegis.md` §6.2 showed the two share the premise under dispute. The recomputation reproduces the equality and inherits the criticism: the number is right and the headline it carried (\"1209 rows are false\") was retracted -- 72/72 of those worlds' mined objects are provably motionless, so `effect: none` is true of them.",
+    "P3 SCOPE IS WIDER THAN E11's, and that is a strengthening. E11 swept depth 3 on Fixture A + 25 worlds and depth 2 on 60. This sweeps all judged worlds and all ground rules at each rule's own `frontier_max_size`, at both calibers: 0 omissions either way. Lifted frontiers are excluded because a `?dir` literal has no firing set to compare against -- the same reason `props/cegis_miner.py` keeps `frontier_is_complete_to_size` on `result.rules`. Guards minimal but *deeper* than a rule's own bound are P4/F-3, not P3: E11's 125-omission figure for that is NOT recomputed here.",
+    "FIXTURE A IS NOT IN THIS CORPUS. The partial reports Fixture A separately (1 world, 49 transitions, 9 ground, 1 lifted) and every ratio in this module is a gridworld-1..200 ratio, which is how the partial states them.",
+    "2a1c30d CANNOT MOVE ANY OF THESE. It touched `fd_adapter`, `lp_potential`, `probe_frontier`, `zero_space` and `mdl_segmenter`. Only `mdl_segmenter` is on this path, and the change there adds a `SegmentationError` raise on an assignment cell costing >= IMPOSSIBLE -- it does not fire anywhere in seeds 1-200 at either caliber (any raise would abort this run). `engine-rig/engines/cegis_miner/` and `fuzzlab/worlds/gridworld.py` have no commits between ed592a6 and HEAD, so the engine and the worlds are the ones E11 saw; the only thing that moved under these numbers is `_mine`, which is the caliber split above. The 29.2% figure the E18 ticket says 2a1c30d invalidated is another engine's number and is not in scope here.",
+    "STILL PROSE-ONLY, NOT RECOMPUTED: `cegis.lifted_bad` (91), `cegis.lifted_bad_rows` (342), `cegis.battery_green` (162) and `cegis.battery_green_superset` (188). They were not in this work order's table. Every other `cegis.*` registry key is re-pointable from this file: each count row carries the `registry_key` it answers.",
+    "MECHANISM NOT RE-LITIGATED. Whether `act==?dir` is vacuous, and what that does to P1, was settled on the source by `ADVERSARIAL-cegis.md` §3 (the partial's mechanism sentence -- \"a tautology\" -- is wrong about the code: the engine's evaluator makes it always FALSE; both readings still falsify P1). This module counts; it does not re-argue that."
+  ],
+  "counts": {
+    "cegis.applicable_not_derivable": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": "131 / 149",
+      "e11_prose": "131 / 149",
+      "readings": {
+        "e11_caliber": {
+          "underivable_dir_bound": 131,
+          "underivable_engine_evaluator": 149,
+          "underivable_under_both": 131
+        },
+        "today_caliber": {
+          "underivable_dir_bound": 208,
+          "underivable_engine_evaluator": 232,
+          "underivable_under_both": 208
+        }
+      },
+      "registry_key": "cegis.applicable_not_derivable",
+      "today_caliber": "208 / 232",
+      "what": "lifted rules whose `applicable` is not reproduced by evaluating their own published guard, under either reading"
+    },
+    "cegis.frontier_missing_within": {
+      "agrees": true,
+      "calibers_agree": true,
+      "e11_caliber": 0,
+      "e11_prose": 0,
+      "registry_key": "cegis.frontier_missing_within",
+      "sweep": {
+        "e11_caliber": {
+          "rules_skipped_truncated": 0,
+          "rules_swept": 932,
+          "worlds_swept": 193
+        },
+        "today_caliber": {
+          "rules_skipped_truncated": 0,
+          "rules_swept": 1043,
+          "worlds_swept": 193
+        }
+      },
+      "today_caliber": 0,
+      "what": "minimal-by-inclusion guards absent from a ground rule's frontier within that rule's own frontier_max_size"
+    },
+    "cegis.ground": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": 932,
+      "e11_prose": 932,
+      "registry_key": "cegis.ground",
+      "today_caliber": 1043,
+      "what": "published ground rules"
+    },
+    "cegis.lifted": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": 149,
+      "e11_prose": 149,
+      "registry_key": "cegis.lifted",
+      "today_caliber": 232,
+      "what": "published lifted rules"
+    },
+    "cegis.lifted_tautological": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": "104 / 149",
+      "e11_prose": "104 / 149",
+      "readings": {
+        "e11_caliber": {
+          "guard_contains_an_act_eq_dir_literal": 149,
+          "guard_is_exactly_act_eq_dir": 104
+        },
+        "today_caliber": {
+          "guard_contains_an_act_eq_dir_literal": 232,
+          "guard_is_exactly_act_eq_dir": 155
+        }
+      },
+      "registry_key": "cegis.lifted_tautological",
+      "today_caliber": "155 / 232",
+      "what": "lifted rules whose published guard is exactly [\"act==?dir\"]"
+    },
+    "cegis.track0_motionless": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": "72 / 72",
+      "e11_prose": "72 / 72",
+      "registry_key": "cegis.track0_motionless",
+      "today_caliber": "8 / 8",
+      "what": "F-1 worlds (all-`none` rule set, mover did move) whose mined object occupies an identical cell set in every frame"
+    },
+    "cegis.track0_rows": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": 1209,
+      "e11_prose": 1209,
+      "readings": {
+        "e11_caliber": {
+          "generator_events_move_only": 1204,
+          "generator_events_not_noop": 1209,
+          "transitions_in_f1_worlds": 1595,
+          "whole_frame_changed": 1209
+        },
+        "today_caliber": {
+          "generator_events_move_only": 110,
+          "generator_events_not_noop": 110,
+          "transitions_in_f1_worlds": 165,
+          "whole_frame_changed": 110
+        }
+      },
+      "registry_key": "cegis.track0_rows",
+      "today_caliber": 110,
+      "what": "the retracted headline count of allegedly-false published rows"
+    },
+    "cegis.track0_worlds": {
+      "agrees": true,
+      "calibers_agree": true,
+      "e11_caliber": 72,
+      "e11_prose": 72,
+      "judged": {
+        "e11_caliber": 193,
+        "today_caliber": 193
+      },
+      "registry_key": "cegis.track0_worlds",
+      "today_caliber": 72,
+      "what": "worlds where seg.tracks[0] is not the generator's mover -- the registry's own predicate, not the F-1 world count that matched it"
+    },
+    "cegis.transitions": {
+      "agrees": true,
+      "calibers_agree": true,
+      "e11_caliber": 4277,
+      "e11_prose": 4277,
+      "registry_key": "cegis.transitions",
+      "today_caliber": 4277,
+      "what": "evidence rows"
+    },
+    "cegis.worlds": {
+      "agrees": true,
+      "calibers_agree": true,
+      "e11_caliber": 193,
+      "e11_prose": 193,
+      "registry_key": "cegis.worlds",
+      "today_caliber": 193,
+      "what": "seeds 1-200, minable"
+    },
+    "corpus.worlds_unminable": {
+      "agrees": true,
+      "calibers_agree": true,
+      "e11_caliber": 7,
+      "e11_prose": 7,
+      "registry_key": null,
+      "seeds": {
+        "e11_caliber": [
+          31,
+          43,
+          68,
+          73,
+          131,
+          148,
+          153
+        ],
+        "today_caliber": [
+          31,
+          43,
+          68,
+          73,
+          131,
+          148,
+          153
+        ]
+      },
+      "today_caliber": 7,
+      "what": "neither segmentation operator narrates the world as move/none"
+    },
+    "ground.applicable_equals_support": {
+      "agrees": true,
+      "calibers_agree": false,
+      "e11_caliber": "932 / 932",
+      "e11_prose": "932 / 932",
+      "registry_key": null,
+      "today_caliber": "1043 / 1043",
+      "what": "ground rules whose applicable set is exactly their support (the P1 check that held)"
+    }
+  },
+  "e11_prose": {
+    "denominator": 149,
+    "numerator": 104,
+    "pct": 69.8
+  },
+  "inputs": [
+    {
+      "path": "engine-rig/engines/cegis_miner/__init__.py",
+      "sha256": "96db3a7e28f51216a456cde75555d56a747dfbc9259028add4d596bdcdc86d30"
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/atoms.py",
+      "sha256": "429d1548e673fb37284b46ac7e4949e21287bdfda9104850e20f9c5b79deba70"
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/miner.py",
+      "sha256": "60835f2383525f8112ae3ecf7c5e84ee695db0af2a61694453c569a4d61c2438"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/__init__.py",
+      "sha256": "5f90cf0186655797f472d7c455eaa550ac7c22a477ec1b3a7193854a16a0212e"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/segmenter.py",
+      "sha256": "8de890e35c08c71760e3e4864404fdc295238b4f3c3b4cf53ca6952ad9d23e26"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/ADVERSARIAL-cegis.md",
+      "sha256": "8fd7864d53fb8e6cc124f19fc27fe0240b6cd5eefa262d4300b2ac8a5bc66b04"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/CROSSCHECK.md",
+      "sha256": "b44bf5be121be910be7ee3516e944ce9e2810d41f9d3c1e9c6a3d078c48391b4"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/cegis_miner-via-bruteforce.md",
+      "sha256": "d7c55bf224e9802b32503668b35a318c87f32e6de265f8e1dc8c7817ebb471e6"
+    },
+    {
+      "path": "fuzzlab/oracles/motion.py",
+      "sha256": "afaaa00e23b5e343f496512dc1a99fe976beb86fd9dd9b29198168a7623fa343"
+    },
+    {
+      "path": "fuzzlab/props/cegis_miner.py",
+      "sha256": "5cac168717f3515a6b22685630bd1b5fcc1c11ace1f2627c752800402fd70739"
+    },
+    {
+      "path": "fuzzlab/worlds/common.py",
+      "sha256": "ec57a8039fe21810c734cdd7e72d99c10617c2ae360757429cecee44d8d233b0"
+    },
+    {
+      "path": "fuzzlab/worlds/gridworld.py",
+      "sha256": "ce7d9f0bb478f01ae3673dbf478e41425aff399d8c210fc637642253c4010d82"
+    }
+  ],
+  "key": "cegis.lifted_tautological",
+  "method": "gridworld.generate(seed) for seed in 1..200, mined twice. e11_caliber: props._mine as at ed592a6, reproduced as _e11_mine -- split_by_color=False then True on ValueError, no track= argument, so seg.tracks[0]. today_caliber: fuzzlab.props.cegis_miner._mine called directly, which selects the mover via _mover_track (V-13, eb61aa98). Lifted rules are read off result.lifted and their guards off Rule.as_json()['guard']. Guard firing sets are recomputed from atoms.evaluate row by row, never from atom_masks, under two readings: the engine's evaluator as written, and ?dir bound to each row's own action. The P3 sweep rebuilds its own bitmasks from atoms.evaluate and enumerates the full vocabulary. Mover ground truth comes from the generator's own anchors, which the frames are rendered from. Nothing here consults rule.coverage, guards_are_mutually_exclusive, explains_every_transition, or any fuzzlab invariant.",
+  "module": "tools.survey_numbers.cegis_lift_guard",
+  "question": "Of the lifted rules cegis_miner publishes over gridworld seeds 1-200, how many carry the guard [\"act==?dir\"]?",
+  "today_caliber": {
+    "counts_that_differ_from_e11_caliber": [
+      "cegis.applicable_not_derivable",
+      "cegis.ground",
+      "cegis.lifted",
+      "cegis.lifted_tautological",
+      "cegis.track0_motionless",
+      "cegis.track0_rows",
+      "ground.applicable_equals_support"
+    ],
+    "counts_that_hold_at_both_calibers": [
+      "cegis.frontier_missing_within",
+      "cegis.track0_worlds",
+      "cegis.transitions",
+      "cegis.worlds",
+      "corpus.worlds_unminable"
+    ],
+    "note": "What a reader running today's engine gets. Not comparable to the 2026-07-29 prose: V-13 (eb61aa98) re-cut the corpus by mining the mover instead of seg.tracks[0].",
+    "value": {
+      "denominator": 232,
+      "numerator": 155,
+      "pct": 66.81
+    }
+  },
+  "value": {
+    "denominator": 149,
+    "numerator": 104,
+    "pct": 69.8
+  }
+}

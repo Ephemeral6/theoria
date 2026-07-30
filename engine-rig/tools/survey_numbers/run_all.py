@@ -30,8 +30,11 @@ from . import _common
 
 PACKAGE = "tools.survey_numbers"
 
-# Modules that are plumbing, not a number.
-SKIP = {"_common", "run_all"}
+# Modules that are plumbing, not a number.  Anything not listed here is
+# expected to expose `compute()`, and `tests/test_survey_numbers.py` enforces
+# it -- so a new helper module must be added here deliberately rather than
+# discovered as a mystery failure.
+SKIP = {"_common", "run_all", "unscripted", "registry_link"}
 
 
 def discover() -> list[str]:
@@ -129,7 +132,12 @@ def main(argv=None) -> int:
               + ("" if agrees is not False
                  else f"   (E11 prose: {fmt(res.get('e11_prose'))})"))
 
-    if args.check:
+    # Only a *full* sweep can say a count file is orphaned.  Under `--only` the
+    # run is deliberately partial, so every sibling's file looks unproduced and
+    # the driver used to report the whole directory STALE -- turning the
+    # per-module acceptance command into a guaranteed red.  Concurrent agents
+    # share one `--out` directory, which is exactly when `--only` is used.
+    if args.check and not args.only:
         stale = sorted(
             p.name for p in out.glob("*.json")
             if p.stem not in results and p.name != "SUMMARY.json"
