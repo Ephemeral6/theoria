@@ -55,7 +55,18 @@ Three consequences for the convergence sprint:
 
 ## Certificate format — `lp_potential/pagoda_certificate@1`
 
-`certificates/pagoda_<n>_<initial>_to_<goals>.json`. Weights are exact integers
+**The spec is `/CONTRACTS/pagoda_certificate_v0.1.md`** (C13). This section is
+the tour; that file is the contract, and where the two disagree the contract and
+the code win over this page.
+
+`certificates/pagoda_<n>_<initial>_to_<goals>.json`, rebuilt from the engine by
+
+```bash
+cd engine-rig && python -m interop.export_certificates --check   # bytes still agree?
+cd engine-rig && python -m interop.export_certificates           # rewrite them
+```
+
+Until C13 no script in the tree produced these files. Weights are exact integers
 (rationals scaled by the LCM of denominators; the constraints are homogeneous so
 this preserves validity, and the exact rationals are kept alongside).
 
@@ -104,17 +115,43 @@ goal that no longer breaks the invariant.
 
 What it does not cover is the producer's *premise*. The move witnesses `verify()`
 iterates are the document's own list, and `verify()` never sees the rule set, so
-a document that quietly omits an inconvenient move instance returns `[]` — and
-`checked_over: "all move instances on the full state space"` is an assertion in
-that same document, re-derived by nobody. A clean run entitles you to "the stated
-obligations are discharged over the stated moves", not "the invariant is closed
-under the rules". `recheck/verify.py` is the checker without the gap: it grounds
-the move relation from the declared rules and refuses an `obligations` key
-outright.
+a document that quietly omits an inconvenient move instance returns `[]`, and the
+`checked_over` line beside it is an assertion in that same document, re-derived
+by nobody. A clean run entitles you to "the stated obligations are discharged
+over the stated moves", not "the invariant is closed under the rules".
+
+**So do not import `verify()` to decide whether a certificate is good. Import the
+reader.**
+
+```python
+from interop import pagoda_reader
+document = pagoda_reader.load("certificates/pagoda_5_11011_to_01000.json")
+assert pagoda_reader.check(document) == []      # or the list says why not
+```
+
+```bash
+cd engine-rig && python interop/pagoda_reader.py interop/certificates/pagoda_4_1110_to_0100.json
+```
+
+`pagoda_reader.py` grounds the move relation from the geometry instead of reading
+it, never opens `obligations` / `verified` / `conclusion`, and imports nothing
+from this rig — copy the one file anywhere and it runs. It is what the contract
+means by "the consumer re-derives the relation itself", and D-036 is why. The
+forgery that separates the two is in `tests/test_pagoda_reader.py`: a document
+whose invariant is broken and whose two inconvenient witnesses were deleted
+passes `verify()` and fails the reader.
+
+`recheck/verify.py` is the other checker without the gap — it grounds the move
+relation from a declared rule set and refuses an `obligations` key outright, so
+it will not load an exchange document at all (exit 2, by design). It checks the
+*weights*, transcribed into `recheck/cases/`; `pagoda_reader.py` checks the
+*document*.
 
 ## Modules
 
 | File | Role |
 |---|---|
 | `peg1d.py` | 1D peg solitaire state graphs for any board size and goal. `fixtures/peg4.py` is frozen (M1 acceptance, byte-tested), so the parameter grows here; a test asserts the two agree on the 4-cell board. |
-| `certificate_export.py` | `build` / `verify` / `write` for the certificate document |
+| `certificate_export.py` | `build` / `verify` / `write` for the certificate document. `verify` is the producer's arithmetic re-check, not an acceptance test — see *Importing*. |
+| `pagoda_reader.py` | The reference reader. Stdlib only, grounds the move relation, reads none of the producer's verdict fields. `python interop/pagoda_reader.py <cert.json>` — exit 0 accept, 1 refuse, 2 misuse. |
+| `export_certificates.py` | Rebuilds `certificates/*.json` from the engine. `--check` compares against the committed bytes. |
