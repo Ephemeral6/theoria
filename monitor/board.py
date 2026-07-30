@@ -687,8 +687,21 @@ def cmd_claim(worker, lane=None):
         # (board-empty-is-misleading): "nothing to do" and "nothing I will
         # show you" have to look different, or the next reader debugs the
         # wrong thing.
-        print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
-              % (len(withheld), ", ".join(sorted(withheld)[:6])))
+        #
+        # S35：「别人仍可领」是这句谎的第五份拷贝，而且印在**最该说实话的地方**
+        # ——它是唯一一句读者当场就会照着办的话。实测（2026-07-30T01:50Z，活板）：
+        #   BOARD-EMPTY（1 件被扣下：你自己交回过 —— S22。别人仍可领）
+        # 别人领不了：LANE-NOT-YOURS 把 infra 赛道之外的所有人挡着。
+        stuck = unreachable_ids() & set(withheld)
+        free = sorted(set(withheld) - stuck)
+        if free:
+            print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
+                  % (len(free), ", ".join(free[:6])))
+        if stuck:
+            print("BOARD-STUCK（%d 件被扣下，且**没有别人领得到**（这条赛道只有你）"
+                  " —— %s。出口：board.py reassign <id> --to <赛道|generic> "
+                  "--by <你|monitor> --why \"...\"）"
+                  % (len(stuck), ", ".join(sorted(stuck)[:6])))
     else:
         print("BOARD-EMPTY")
     _warn_resurrected()

@@ -347,6 +347,40 @@ def test_the_unreachable_section_empties_after_the_exit_is_used(tmp_path,
     assert any("S22-costly" in l for l in _section(out, "reserved"))
 
 
+def test_board_empty_does_not_tell_the_refuser_that_others_can_take_it(
+        tmp_path, monkeypatch, capsys):
+    """Found by running the fixed board against the live one, 01:50Z:
+
+        BOARD-EMPTY（1 件被扣下：你自己交回过 —— S22-access-check-close。别人仍可领）
+
+    Nobody else can: LANE-NOT-YOURS holds everyone outside infra off it. This
+    is the same sentence as the reserved section, in the place where it does
+    the most damage -- it is the one line a reader acts on immediately, and it
+    tells them to stop worrying about the item.
+
+    The claim is true for an *unlaned* item, which is why the sentence exists;
+    the negative control below keeps it for that case."""
+    home = _fleet(tmp_path, monkeypatch)
+    _handed_back(home, "S22-costly", "RES-4", "needs a spending authority")
+    capsys.readouterr()
+
+    assert board.cmd_claim("RES-4", "infra") == 3
+    out = capsys.readouterr().out
+    assert "别人仍可领" not in out, "it told the refuser someone else would do it"
+    assert "reassign" in out, "no exit offered where the reader is looking"
+
+    # NEGATIVE CONTROL: an unlaned item really can go to anyone else, and the
+    # sentence has to survive for that case -- the fix is a distinction, not a
+    # deletion.
+    _item(home, "W1-generic", lane=None, territory="docs")
+    assert board.cmd_claim("W-1") == 0
+    assert board.cmd_release("W1-generic", "W-1", "not for me") == 0
+    capsys.readouterr()
+
+    assert board.cmd_claim("W-1") == 3
+    assert "别人仍可领" in capsys.readouterr().out
+
+
 # ------------------------------------ the disagreement that was billed in money
 
 def test_the_fleet_loop_does_not_launch_a_session_for_unclaimable_work(
