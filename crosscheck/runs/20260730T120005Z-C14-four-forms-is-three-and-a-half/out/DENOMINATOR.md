@@ -52,7 +52,7 @@ times**: 9 files, 4 distinct hashes, 29 actions collapsing to 13 distinct.
 | compiled files only (refusals folded out — the flattering slice) | 34 | 285 | **0** |
 | dedup + compiled only | 26 | 230 | **0** |
 | theory-compiler/ contribution alone | 11 | 36 | **0** |
-| **narrowest defensible** (one latest file per distinct world) | 10 | **115** | **0** |
+| **narrowest defensible**: canonical, deduped by generated-domain bytes | 10 | **133** | **0** |
 | domains Fast Downward accepted | 7 | 21 | **0** |
 | FD-accepted **and** goal `stated` | 0 | 0 | **0** |
 | best single file in the repo | 1 | — | **0** |
