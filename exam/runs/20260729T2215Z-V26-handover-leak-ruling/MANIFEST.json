@@ -4,15 +4,18 @@
       "exam/runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md",
       "exam/runs/20260729T2215Z-V26-handover-leak-ruling/RUN_STATE.md"
     ],
-    "reviewers": 2,
+    "reviewers": 3,
+    "rounds": 2,
     "verdicts": {
-      "found_in_v26_own_work": "a vacuous assertion (report.get('metadata_hits', 0) == 0 -- no such key) and a stale module docstring; both fixed",
-      "r2_ruling": "the filed sentence was too strong AND its premise was false -- readers disagreed but none scored wrong, which is exculpatory; ruling rewritten as annul-as-instrument, see RULING.md",
-      "repair_is_clean": "REFUTED then adjudicated -- 'Box on the outer ring' predicts 10/10 at p_fire 0.022222 and the repair sharpened it from 0.035714, but it is a sound law (its truth tracks whether the target is on the ring), not a leak; residual recorded and filed, see RULING.md"
-    }
+      "round1_r2_ruling": "the filed sentence was too strong AND its premise was false -- readers disagreed but none scored wrong, which is exculpatory; ruling rewritten as annul-as-instrument",
+      "round1_repair_is_clean": "REFUTED then adjudicated -- 'Box on the outer ring' was sharper than the leak being repaired, but it is a sound law, not a leak",
+      "round2_six_claims_refuted": "B1 the familywise rate FELL 0.135385->0.106281 and was already over ALPHA, stated as a rise; B2 'the rule was published before the run' is false -- it landed 1-2 days after, and it was the ruling's only aggravating factor; B3 the 'structurally unclosable residual' was closable by swapping rather than appending a flume item, and had been written down expressly to stop anyone re-searching; B4 two more vacuous assertions survived three lines above the one V26 replaced, plus one vacuous replacement; B5 STATUS.md still carried the sentence the ruling calls false; B6 the remedy was prose-only and RESULTS.json was byte-identical; B7 the manifest hashed itself. All fixed in this commit.",
+      "round2_strongest_attack": "that r2's only pre-registered discriminator was fully contaminated and the grounds against voiding were circular or self-cancelling. Verdict kept as annulment; grounds 1-3 conceded or narrowed, ground 4 stands, and the reviewer's remedy adopted -- the disposition now lives in RESULTS.json and is enforced by a test."
+    },
+    "why_two_rounds": "round 1 ran mid-drafting and round 2 against the finished ruling before delivery. Their findings did not overlap, which is the argument for running the second one at all."
   },
   "author": "RES-3",
-  "base_commit": "d7a51bb5cc20b4de0099bbf8fb5c66df5f4088c6",
+  "base_commit": "7856ff2bd3894dd2d9bcbae47fcb42388df70dd7",
   "based_on": {
     "branch": "agent/v25-leakage-loo-and-multiplicity",
     "why": "the leak is only visible to V25's pooled private-marker cut, which is not on master yet; from master the repair could not be verified because nothing would detect what it repairs"
@@ -27,7 +30,7 @@
   "files": [
     {
       "path": "exam/STATUS.md",
-      "sha256": "dac481b6c49cd0b4d16032b39fb22cf3574af4d42ec8fe33ae2ca48715db2bce"
+      "sha256": "886c661c280d6c54b9881af73227476bb3b6ed6dd2bbf4881ade86783543749e"
     },
     {
       "path": "exam/leakage.py",
@@ -35,35 +38,39 @@
     },
     {
       "path": "exam/papers/handover_auto.py",
-      "sha256": "ca8d774088b56977b2ec0a0390eb97d9e49d3e201d0d0249ac2cd6f7f266f3ed"
+      "sha256": "043fbd93052ce88765e70d492712957ed8395300cde4162252e72d7d2b4c4aa2"
     },
     {
       "path": "exam/runs/20260728T202101Z-V11-handover-auto/VOIDED.md",
       "sha256": "d1549f031e4f78cde5bca7e50222889871d8cb788c7ed005b012c0e3d7e9d38a"
     },
     {
-      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.md",
-      "sha256": "e2d236b8cfefb55b66cd7921ae01dd069f4bc8a010372aeea4bc27486ef2942c"
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.json",
+      "sha256": "23353e6d509d7eed4be7e5eae24fa7f226555079e8cc4f47786e9c6c837e5128"
     },
     {
-      "path": "exam/runs/20260729T2215Z-V26-handover-leak-ruling/MANIFEST.json",
-      "sha256": "a2c63e56b7a85c0f301385eb890b4c75a8aadf210faa72b16cf9dc292f194e8c"
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.md",
+      "sha256": "976e71b8801d4b3b488e9a5694f025621d372caffdd7af66ad015dfaa1afda98"
     },
     {
       "path": "exam/runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md",
-      "sha256": "72c95404161213271908a96d2557a1d42e69232d439566d89e30c2851b64ed23"
+      "sha256": "362ae610bc73d1468ad9a679405566e269f2cce0c7f6adfc3262753ed4b1761c"
     },
     {
       "path": "exam/runs/20260729T2215Z-V26-handover-leak-ruling/RUN_STATE.md",
-      "sha256": "002d68f77e8dbabc6dafc852b9c922d8c4605074ab5022ea36e294afb72674db"
+      "sha256": "c38d4d184366ccce2c3aba4b7553cadc740252df34fd91a62ccf2729304e92e8"
     },
     {
       "path": "exam/runs/20260729T2215Z-V26-handover-leak-ruling/write_manifest.py",
-      "sha256": "c6661b1c01f1cd030e3a5dd2e265196701575dd12ce609d5a3adaeb0e4e99781"
+      "sha256": "c7dce5f2aa4490b44edc3e970937c2cc9f2ac1a5605fe5acd1dd4a8725f50562"
     },
     {
       "path": "exam/tests/test_handover_auto.py",
-      "sha256": "b98b009824f29852003d4bc3e3bd73a42c45c0ccaf77e0e949d4f31bd85166d7"
+      "sha256": "b3383975cb72960fca996019ddcc7b0019f0c0d6e1b633d45eff98def02102a4"
+    },
+    {
+      "path": "exam/tests/test_run_dispositions_are_machine_readable.py",
+      "sha256": "07404ceeafc1b8e5069efae9f7fe5c39e9e600168fbac4a02eb2deae3faa671f"
     }
   ],
   "lane": "verify",
@@ -74,7 +81,8 @@
   "verification": {
     "exam_verify_py": "GREEN",
     "leak_gate_on_repaired_paper": "clean under every derived label set",
-    "pytest_exam_tests": "385 passed, 2 xfailed"
+    "new_assertions_mutation_tested": "5 mutants, all confirmed red: revert the flume swap; move flume's target off the ring; add a third warren item; stub _plan_length so a dead ring-Box item reports solvable; drop tags from METADATA_FIELDS. Also: deleting the annulment key turns test_run_dispositions_are_machine_readable red.",
+    "pytest_exam_tests": "456 passed, 2 xfailed"
   },
   "what": "repaired the level-multiplicity leak in v11-handover-a0 and ruled on the -r2 run that sat the leaking sheet"
 }

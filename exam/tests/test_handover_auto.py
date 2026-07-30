@@ -82,8 +82,19 @@ def test_the_sheet_is_clean_under_the_full_leak_check():
     """
     report = leakage.check_paper(PAPER, SHEET, key_doc=KEY,
                                  answer_of=HA.answer_labels(PAPER, KEY))
-    assert report["probe_hits"] == 0
-    assert report["structural_hits"] == 0
+    # `report["probe_hits"]` and `report["structural_hits"]` are *literal zeros*
+    # in `check_paper`'s return dict (leakage.py, the `report = {...}` at the end):
+    # both checks `raise` on a hit, so reaching this line already means neither
+    # fired, and `assert report["probe_hits"] == 0` cannot fail on any paper ever
+    # written. A second adversarial pass over V26 found these two surviving three
+    # lines above the `metadata_hits` assertion V26 had just replaced for being
+    # vacuous in exactly this way -- the defect fixed once and left standing twice
+    # in the same test. What is assertable is that the probe check had something
+    # to look for, which is a real computed number.
+    assert report["probes_declared"] > 0, (
+        "no item declares a leak probe, so the probe check scanned for nothing "
+        "and its silence is not evidence")
+    assert report["sheet_bytes"] > 0, "the probe check was handed an empty sheet"
     # The metadata half is asserted as "the check ran and could have spoken",
     # not as a count. V25's draft of this test asserted
     # `report.get("metadata_hits", 0) == 0`, and an adversarial review of V26
@@ -100,7 +111,16 @@ def test_the_sheet_is_clean_under_the_full_leak_check():
         "the `solvable` label set was not derived, so the metadata check never "
         "looked at the family that carried V25's leak: %s"
         % report["label_sets_checked"])
-    assert "tags" in report["metadata_fields_checked"]
+    # NOT `assert "tags" in report["metadata_fields_checked"]`: that field is
+    # `list(METADATA_FIELDS)`, a module constant, so the assertion restates a
+    # literal and says nothing about whether `tags` was scanned *on the family
+    # that leaked*. The multiplicity report is per label set and per field, so
+    # ask it directly.
+    cuts = report["metadata_multiplicity"]["solvable"]["cuts"]
+    assert any(cut.startswith("tags:") for cut in cuts), (
+        "no `tags` cut was tried under the `solvable` label set, so the field "
+        "V25's leak travelled on went unscanned on the family it travelled in: %s"
+        % cuts)
     # V25 measured that 6 of 10 shipped (paper, label set) groups cannot fire at
     # all, so green is not evidence unless the group could have gone red. This
     # pins that at least one group under `solvable` -- the label set the leak
@@ -184,33 +204,49 @@ def test_a_box_on_the_outer_ring_is_dead_for_a_reason_and_not_by_accident():
                 if on_ring(spec, b) and tuple(b) != tuple(spec.target)
                 and any(H._plan_length(spec, p, b) for p in free if p != b)]
 
-    # The invariant that keeps the family honest.
-    for level, _player, box in HA._OPTIMAL_CASES:
+    # The invariant that keeps the family honest. It is conditional on the
+    # target, because the target is the whole reason the law holds: a ring-Box
+    # item must be dead when its board's target is off the ring, and is *allowed*
+    # to be solvable when the target is on it.
+    ring_items = [(lv, p, b) for lv, p, b in HA._OPTIMAL_CASES
+                  if on_ring(HA.LEVEL_OF[lv], b)]
+    for level, player, box in ring_items:
         spec = HA.LEVEL_OF[level]
-        if not on_ring(spec, box):
+        length = H._plan_length(spec, player, box)
+        if on_ring(spec, spec.target):
+            assert solvable_ring_boxes(spec), (
+                "%s's target %s is on the ring, so ring Boxes must be pushable to "
+                "it; if none is, the law has no positive control on this board"
+                % (level, spec.target))
             continue
-        assert H._plan_length(spec, _player, box) is None, (
-            "%s %s/%s has its Box on the ring and is solvable, which is fine in "
-            "itself -- but check the ring cut's purity before assuming so"
-            % (level, _player, box))
-        assert not on_ring(spec, spec.target), (
-            "%s contributes a ring-Box item while its own target %s is on the "
-            "ring, so ring-implies-dead is pure here but not derivable -- that "
-            "item now rewards a Sokoban reflex rather than a deduction"
-            % (level, spec.target))
+        assert length is None, (
+            "%s %s/%s has its Box on the ring and its target %s off the ring, yet "
+            "it is solvable in %s -- a Box on an edge can only be pushed along "
+            "that edge, so either the law is false or the geometry changed"
+            % (level, player, box, spec.target, length))
         assert not solvable_ring_boxes(spec), (
             "%s has a dead ring-Box item and also solvable ring Boxes, so the "
             "rule the item leans on is unsound on this very board: %s"
             % (level, solvable_ring_boxes(spec)))
 
-    # Positive control: the law must also *fail to forbid* the solvable case, or
-    # it is not a law, just a description of how these boards were authored.
-    flume = HA.LEVEL_OF["flume"]
-    assert on_ring(flume, flume.target), "flume's target moved off the ring"
-    assert solvable_ring_boxes(flume), (
-        "flume's target is on the ring, so some ring Box must be pushable to it; "
-        "if this fails, ring-implies-dead is not a law of this world and every "
-        "argument built on it above is void")
+    # Positive control, and it must live *on the sheet* rather than only in this
+    # test. An adversarial review of V26 found that the ruling had recorded the
+    # residual -- that a reader with a plain "edge Box is dead" reflex scores the
+    # same as one who checks the target -- as a structural constraint of this
+    # board set, and that this was simply false: `flume`'s target is on the ring,
+    # so `flume` admits 110 solvable ring Boxes, and swapping one in falsifies the
+    # reflex without disturbing multiplicity. The earlier version of this test
+    # asserted `length is None` for *every* ring-Box item unconditionally, which
+    # would have forbidden the repair -- a test institutionalising the very
+    # residual its own docstring documented. Hence: at least one item where the
+    # reflex is wrong.
+    reflex_counterexamples = [
+        (lv, p, b) for lv, p, b in ring_items
+        if H._plan_length(HA.LEVEL_OF[lv], p, b) is not None]
+    assert reflex_counterexamples, (
+        "every ring-Box item on this sheet is dead, so 'edge Box implies dead' "
+        "scores perfectly and the sheet cannot tell that reflex apart from the "
+        "sound rule it imitates; ring-Box items present: %s" % ring_items)
 
 
 def test_every_family_of_1_11_is_on_the_sheet():

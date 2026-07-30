@@ -30,7 +30,13 @@ TRACKED = [
     "exam/leakage.py",
     "exam/STATUS.md",
     "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.md",
+    # The annulment is carried here, not only in RESULTS.md. A second
+    # adversarial pass measured that the prose-only remedy left this file
+    # byte-identical, so every automated reader still saw an unmarked run.
+    "exam/runs/20260728T202540Z-V11-handover-auto-r2/RESULTS.json",
     "exam/runs/20260728T202101Z-V11-handover-auto/VOIDED.md",
+    # The gate that stops the next remedy from being prose-only.
+    "exam/tests/test_run_dispositions_are_machine_readable.py",
 ]
 
 #: Paths cited in the `adversarial` block. Checked, not trusted.
@@ -69,6 +75,13 @@ def main():
         for name in sorted(names):
             if name.endswith(".pyc") or "__pycache__" in root:
                 continue
+            # Not MANIFEST.json itself. Hashing the file being written records
+            # the *previous* content, so the entry is stale the moment it is
+            # saved and can never verify -- a hash presented as a check that is
+            # guaranteed to fail. Found by an adversarial review of V26: 9 of 10
+            # entries verified and the tenth was this one.
+            if root == HERE and name == "MANIFEST.json":
+                continue
             path = os.path.join(root, name)
             rel = os.path.relpath(path, REPO).replace(os.sep, "/")
             files.append({"path": rel, "sha256": sha256(path)})
@@ -94,27 +107,52 @@ def main():
         "cost": {"api_calls": 0, "usd": 0.0, "network": False,
                  "sealed_pile_contact": False},
         "verification": {
-            "pytest_exam_tests": "385 passed, 2 xfailed",
+            "pytest_exam_tests": "456 passed, 2 xfailed",
             "exam_verify_py": "GREEN",
             "leak_gate_on_repaired_paper": "clean under every derived label set",
+            "new_assertions_mutation_tested": (
+                "5 mutants, all confirmed red: revert the flume swap; move "
+                "flume's target off the ring; add a third warren item; stub "
+                "_plan_length so a dead ring-Box item reports solvable; drop "
+                "tags from METADATA_FIELDS. Also: deleting the annulment key "
+                "turns test_run_dispositions_are_machine_readable red."),
         },
         "adversarial": {
-            "reviewers": 2,
+            "rounds": 2,
+            "reviewers": 3,
+            "why_two_rounds": (
+                "round 1 ran mid-drafting and round 2 against the finished "
+                "ruling before delivery. Their findings did not overlap, which "
+                "is the argument for running the second one at all."),
             "verdicts": {
-                "r2_ruling": "the filed sentence was too strong AND its premise "
-                             "was false -- readers disagreed but none scored "
-                             "wrong, which is exculpatory; ruling rewritten as "
-                             "annul-as-instrument, see RULING.md",
-                "repair_is_clean": "REFUTED then adjudicated -- 'Box on the outer "
-                                   "ring' predicts 10/10 at p_fire 0.022222 and "
-                                   "the repair sharpened it from 0.035714, but it "
-                                   "is a sound law (its truth tracks whether the "
-                                   "target is on the ring), not a leak; residual "
-                                   "recorded and filed, see RULING.md",
-                "found_in_v26_own_work": "a vacuous assertion "
-                                         "(report.get('metadata_hits', 0) == 0 -- "
-                                         "no such key) and a stale module "
-                                         "docstring; both fixed",
+                "round1_r2_ruling": "the filed sentence was too strong AND its "
+                                    "premise was false -- readers disagreed but "
+                                    "none scored wrong, which is exculpatory; "
+                                    "ruling rewritten as annul-as-instrument",
+                "round1_repair_is_clean": "REFUTED then adjudicated -- 'Box on "
+                                          "the outer ring' was sharper than the "
+                                          "leak being repaired, but it is a sound "
+                                          "law, not a leak",
+                "round2_six_claims_refuted": (
+                    "B1 the familywise rate FELL 0.135385->0.106281 and was "
+                    "already over ALPHA, stated as a rise; B2 'the rule was "
+                    "published before the run' is false -- it landed 1-2 days "
+                    "after, and it was the ruling's only aggravating factor; "
+                    "B3 the 'structurally unclosable residual' was closable by "
+                    "swapping rather than appending a flume item, and had been "
+                    "written down expressly to stop anyone re-searching; B4 two "
+                    "more vacuous assertions survived three lines above the one "
+                    "V26 replaced, plus one vacuous replacement; B5 STATUS.md "
+                    "still carried the sentence the ruling calls false; B6 the "
+                    "remedy was prose-only and RESULTS.json was byte-identical; "
+                    "B7 the manifest hashed itself. All fixed in this commit."),
+                "round2_strongest_attack": (
+                    "that r2's only pre-registered discriminator was fully "
+                    "contaminated and the grounds against voiding were circular "
+                    "or self-cancelling. Verdict kept as annulment; grounds 1-3 "
+                    "conceded or narrowed, ground 4 stands, and the reviewer's "
+                    "remedy adopted -- the disposition now lives in RESULTS.json "
+                    "and is enforced by a test."),
             },
             "record": CITED,
         },

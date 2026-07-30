@@ -325,11 +325,21 @@ those marks carry no information about reasoning and **no number here may be cit
 as evidence about the dead boards.**
 
 **The 36 shortest-plan integers are not annulled** (six solvable items x six
-readers, unanimous: 24, 25, 14, 16, 22, 21). No channel on this sheet carries
-plan-length information.
+readers, unanimous: 24, 25, 14, 16, 22, 21). The annulled channel says only
+`not none`, which narrows `action` from five options to four and says nothing
+whatever about `plan_len`, so it cannot account for these.
+
+*(An earlier draft said "No channel on this sheet carries plan-length
+information." That is a universal negative over all channels, and what was
+actually done is a census of the channels **found** -- five of them. It is
+withdrawn and replaced by the claim that is derivable: the channel ruled on
+here carries none.)*
 
 This run is **not** voided, and the ruling says why -- including why the sentence
 V25 filed for it ("cannot distinguish reasoning from tag-reading") is too strong,
-and why the reader disagreements on `v11-opt-03`/`-06`/`-08` are evidence that the
-readers *did* reason. Full ruling, with the five-channel census:
+and why the reader disagreements on `v11-opt-03`/`-06`/`-08` refute V25's premise
+-- the readers disagreed but *none was wrong*, all six scoring 58.0/58.0 under a
+set-valued marker. (A later pass narrowed this: the splits show the readers were
+not reading one stored value off the sheet, but they do **not** establish
+independent search, and the ruling no longer claims they do.) Full ruling, with the five-channel census:
 `exam/runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md`.

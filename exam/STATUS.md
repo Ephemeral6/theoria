@@ -405,12 +405,14 @@ for another spelling.
     than it did.** V26 closed the level-multiplicity channel by giving `stile`
     and `cairn` a second item each, which leaves the group with no single-holder
     `level:` token — so the pooled private-marker cut has nothing to pool and is
-    **inert on this family**, and the `solvable` label set's familywise rate rose
-    to 0.106281, above `ALPHA`, so a token that did fire would be stamped
-    `weak_evidence`. The channel is shut and the detector that found it went
-    quiet in the same move. What guards it now is the property test
+    **inert on this family**. What guards the channel now is the property test
     `test_level_multiplicity_is_uniform`, not the gate's green — and that is the
-    general shape to expect from leak repairs on a small sheet.
+    general shape to expect from leak repairs on a small sheet. *(The first
+    version of this entry added that the familywise rate "rose to 0.106281, above
+    `ALPHA`". Measured, it **fell**: 0.135385 pre-repair against 0.106281 after,
+    and it was already over `ALPHA = 0.05` beforehand — the pre-repair finding
+    carries `weak_evidence: true` in its own record. The repair did not blunt the
+    detector on that axis; only the inertness claim survives.)*
 
 
 ## V5-verdict-three-types — the verdict paper was audited, and the marker was wrong
@@ -880,6 +882,32 @@ reading the tag distribution. Its `by_family.optimal_action` delta is 0.0 and
 `conclusive` is false, so no paper claim rests on it, but the honesty section owes
 this a line.
 
+> **Corrected by V26 — the second half of that sentence is false, and it was left
+> standing here after the ruling that overturned it.** The readers disagreed;
+> **none was wrong**. All six scored 58.0/58.0, 31 correct, 0 wrong, 0 abstained
+> (`RESULTS.json`, `per_item`: 2.0/2.0 on all eight `optimal_action` items for all
+> six). Marking is set-valued, so every split fell inside the true optimal set and
+> cost nothing, and `per_item` — which is what "disagreeing" was inferred from —
+> cannot answer questions about agreement at all; only `answers/` can. The splits
+> show the readers were not reading one stored value off the sheet. They do *not*
+> establish independent search: under independent tie-breaking, P(exactly 2 of the
+> 5 two-element items unanimous) ≈ 0.009, so the pattern is mild evidence for
+> **correlated** searchers. The disposition of `-r2` is annulment on the
+> `optimal_action` family, recorded machine-readably in its own `RESULTS.json`
+> under `annulment`, and argued in
+> `runs/20260729T2215Z-V26-handover-leak-ruling/RULING.md`.
+
+> **Superseded by V26: the paper *is* repaired, and the names below are stale.**
+> `BALANCED_EXTRA_CASES` no longer exists — the two states were applied directly to
+> `_OPTIMAL_CASES`, and `flume`'s second item was additionally swapped for
+> `((0, 7), (7, 1))` to falsify the "Box on the outer ring implies dead" reflex the
+> repair would otherwise have sharpened. `test_the_sheet_carries_exactly_one_known_leak_and_no_other`
+> no longer exists either; the pin was deleted, as the paragraph below instructs,
+> and replaced by `test_level_multiplicity_is_uniform` plus
+> `test_a_box_on_the_outer_ring_is_dead_for_a_reason_and_not_by_accident`. The
+> paragraph is kept unedited because it records why V25 declined to repair, which
+> was the right call at the time.
+
 **The paper is not repaired here.** The repair is found and verified — a second
 solvable state on each of `stile` and `cairn` (both 6-row boards, longest solution
 11 actions; `('stile', (5,0), (2,4))` and `('cairn', (3,5), (4,1))`, after which
@@ -1053,21 +1081,36 @@ on `flume`, whose target is on it. Pinned by
 asserts the conditional invariant rather than the purity — the dangerous edit is
 the rule staying pure while ceasing to be derivable.
 
-**Two defects found in V26's own work and fixed in it.** The test certifying the
+**Five defects found in V26's own work and fixed in it — the count went from two
+to five on a second pass, and the pattern is the point.** The test certifying the
 repair asserted `report.get("metadata_hits", 0) == 0` against a key `check_paper`
-does not have — vacuous, and it passed on leaky papers; and the repair adds the
-sheet's two easiest items (`plan_len` 11, one push) to a sheet whose recorded
-failure is saturation. 11 is the exhaustively-searched ceiling on those two
-6-row boards, so the trade is forced; future hard items belong on
-`warren`/`flume`/`kiln`.
+does not have — vacuous, and it passed on leaky papers. Fixing that one did not
+fix the two identical ones **three lines above it**: `probe_hits` and
+`structural_hits` are literal `0` constants in `check_paper`'s return dict and it
+*raises* on a hit, so those assertions could not fail either. One of the
+replacements was itself vacuous (`"tags" in report["metadata_fields_checked"]`
+restates a module constant). `write_manifest.py` hashed `MANIFEST.json` into
+itself, so its self-entry could never verify. And the repair adds the sheet's two
+easiest items (`plan_len` 11, one push) to a sheet whose recorded failure is
+saturation — 11 is the exhaustively-searched ceiling on those two 6-row boards, so
+that trade is forced; future hard items belong on `warren`/`flume`/`kiln`.
+**Fixing one instance of "a check that cannot fail" does not fix the ones next to
+it, and the satisfaction of having fixed one is what stops you looking.** Every
+new assertion in the commit was mutation-tested to red before being trusted.
 
-**Filed, not fixed.** This sheet cannot separate a reader who checks the target
-from one who reflexively calls every edge-Box dead — both score 10 of 10. Closing
-it needs a *solvable* ring-Box item; there is none on `stile` or `cairn` (every
-`(player, box)` pair searched, zero), and only `flume` admits one, which would
-break the level-uniformity invariant that closes the multiplicity channel. **The
-two invariants cannot both be strengthened on this board set** — a structural
-constraint, recorded so it is not re-searched.
+**Closed on the second pass, after being filed as unclosable.** The first version
+of this entry said the sheet cannot separate a reader who checks the target from
+one who reflexively calls every edge-Box dead, and recorded that as a structural
+constraint of the board set "so it is not re-searched". A second adversarial pass
+refuted it, and that is the worst of the errors here precisely because it was
+written down to stop anyone looking again. The constraint binds only on *adding*
+an item: `flume`'s target is on the ring, so it admits **110** solvable ring-Box
+states, and the longest — `((0, 7), (7, 1))`, 17 moves — **replaces** `flume`'s
+second item rather than joining it. Multiplicity stays uniform at 2 per level, the
+direction spread is unchanged, and the reflex now scores 2 of 3 and is wrong on
+this sheet. What remains is narrower: `stile` and `cairn` still contribute only
+dead ring-Box items, so the two boards that pose the `none` question cannot
+themselves falsify the reflex.
 
 **Channel census on this sheet: five, of which one still stands.** `dead` in
 `tags` (voided); `PREREGISTRATION.json` persisted into the readers' own run dir

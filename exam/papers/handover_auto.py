@@ -230,11 +230,33 @@ _VOCABULARY: Tuple[Tuple[str, str, str], ...] = (
 #: `stile` (6x7) and `cairn` (6x6) are the two smallest boards, and before the
 #: repair they were also the only dead ones, so "smallest board => dead" was 2 of
 #: 2.  Each now carries one dead and one solvable state, so that rule is 2 of 4.
+#:
+#: **The `flume` ring-Box entry is deliberate and is the third channel closed
+#: here.** With the two dead boards both authored at `start_box=(0, 5)`, "the Box
+#: is on the outermost ring" predicted `solvable` 10 of 10 -- *sharper* than the
+#: multiplicity leak this repair exists to close.  It is a sound law rather than a
+#: leak (a Box on an edge can only be pushed along that edge, so a target off the
+#: ring is unreachable), but a sheet on which it is never falsified cannot tell a
+#: reader who checks the target from one with a plain Sokoban reflex: both score
+#: 10 of 10.  `flume` is the one level whose target is itself on the ring, at
+#: `(7, 5)`, so it admits solvable ring Boxes -- 110 of them.  Swapping its second
+#: item for the longest, `((0, 7), (7, 1))` at 17 moves, makes the reflex wrong on
+#: this sheet while leaving multiplicity uniform.  *Swapped rather than appended*:
+#: appending would have forced a third item on every level, and `stile` admits no
+#: solvable state whose Box is anywhere but `(2, 4)`, so its third item could only
+#: have been a player-shifted near-duplicate.  V26's RULING.md first recorded this
+#: residual as structurally unclosable; that was wrong, and the swap is the fix.
+#:
+#: The two appended `stile`/`cairn` states are the sheet's easiest at 11 moves and
+#: one push, against 14 to 25 and 2 to 5 pushes elsewhere, which costs a sheet
+#: whose recorded failure is saturation.  11 is the exhaustive ceiling on both
+#: boards -- they are 6-row boards and do not reach 14 -- so the trade is forced.
+#: Future hard items belong on `warren`/`flume`/`kiln`.
 _OPTIMAL_CASES: Tuple[Tuple[str, Tuple[int, int], Tuple[int, int]], ...] = (
     ("warren", (6, 7), (2, 6)),
     ("warren", (0, 0), (4, 6)),
     ("flume", (3, 1), (5, 5)),
-    ("flume", (0, 0), (3, 3)),
+    ("flume", (0, 7), (7, 1)),          # solvable in 17 with the Box on the ring
     ("kiln", (0, 5), (3, 1)),
     ("kiln", (6, 6), (1, 3)),
     ("stile", (2, 0), (0, 5)),          # dead: column parity, the manual settles it
