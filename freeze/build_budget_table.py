@@ -550,9 +550,16 @@ CITED_LINES = [
     #
     # Take the FIRST hit in each case: each is the §5.5 ruling / §5.7 arithmetic
     # statement, and the later hits are the block quotes that restate it.
-    ("freeze/STATS_RULES.md", 953, "⟨n⟩ = 2"),
-    ("freeze/STATS_RULES.md", 956, "0.78"),
-    ("freeze/STATS_RULES.md", 1046, "0.513"),
+    # Re-anchored again 2026-07-30 (RES-1, S4-E1-HOLES): §1.4 inserted ~420
+    # lines into §1, moving all three.  953/956/1046 -> 1369/1372/1462, via the
+    # one-liner above.  Logged because it is the second re-anchor in two days
+    # and that IS the finding: absolute line numbers into a prose file that gets
+    # edited every cycle will drift every cycle.  The right fix is to anchor by
+    # section, not by line; registered rather than done here, because changing
+    # the anchor scheme is a change to what this gate MEANS, not a re-anchor.
+    ("freeze/STATS_RULES.md", 1369, "⟨n⟩ = 2"),
+    ("freeze/STATS_RULES.md", 1372, "0.78"),
+    ("freeze/STATS_RULES.md", 1462, "0.513"),
 ]
 
 #: Files and sections the Markdown cites that are being written by other hands.

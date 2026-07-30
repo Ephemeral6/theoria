@@ -1,9 +1,9 @@
 {
   "balance": {
     "action_ceiling": 24000,
-    "actions_remaining": 18695,
-    "actions_spent_on_test_traffic": 3423,
-    "actions_used": 5305,
+    "actions_remaining": 18290,
+    "actions_spent_on_test_traffic": 3828,
+    "actions_used": 5710,
     "ceiling_usd": 214.9,
     "gate_blind_spot_usd": 67.4098,
     "gate_visible_headroom_usd": 178.7577,
@@ -93,17 +93,17 @@
         "state": "ok"
       },
       {
-        "cite": "freeze/STATS_RULES.md:953",
+        "cite": "freeze/STATS_RULES.md:1369",
         "expect": "⟨n⟩ = 2",
         "state": "ok"
       },
       {
-        "cite": "freeze/STATS_RULES.md:956",
+        "cite": "freeze/STATS_RULES.md:1372",
         "expect": "0.78",
         "state": "ok"
       },
       {
-        "cite": "freeze/STATS_RULES.md:1046",
+        "cite": "freeze/STATS_RULES.md:1462",
         "expect": "0.513",
         "state": "ok"
       }
@@ -140,7 +140,7 @@
   "format": "theoria/freeze-budget-table/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "663f3190be4a834567721b702de9baf3e66d4efb",
+    "commit": "fde0f2aafd6ec6a4b257fcb19d2a64318e3e53e8",
     "dirty": true
   },
   "policy": {
@@ -154,8 +154,8 @@
   },
   "pool": {
     "abspath_is_main_checkout": true,
-    "actions": 5305,
-    "actions_test_like": 3423,
+    "actions": 5710,
+    "actions_test_like": 3828,
     "by_campaign_nonzero": {
       "phase3-unit-price-recheck": {
         "actions": 33,
@@ -224,16 +224,16 @@
     },
     "campaigns": 109,
     "kinds": {
-      "release": 2347,
-      "reserve": 2347,
-      "spend": 7471
+      "release": 2489,
+      "reserve": 2489,
+      "spend": 7918
     },
-    "lines": 12165,
-    "max_seq": 12165,
+    "lines": 12896,
+    "max_seq": 12896,
     "path": "proxy/var/spend_gate.jsonl",
     "present": true,
     "price_corrections": [],
-    "sha256": "d5a47fef57bb04824ef1be8000ae5f1997bf7f3da55c0b78ce0c97c73ecb2552",
+    "sha256": "15ce4814617570d95ffe41fd448ade1af57928ecef1fa45af661961f37d79b84",
     "unpriced": [
       {
         "actions": 0,
@@ -695,6 +695,6 @@
   "verdict": {
     "fitting_scenarios": [],
     "sealed_table_fits": false,
-    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18695 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18290 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
   }
 }

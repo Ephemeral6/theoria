@@ -50,6 +50,33 @@
       "negative_target_when_implemented": "exam's `memoriser` examinee: the endpoint must refuse to judge it 成立",
       "negative_target_exists": true,
       "note": "Supersedes and tightens 9.12, which pinned `bluffer` alone -- and `bluffer` is already killed by the specificity floor, so it was the control that did not need to be run. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.2."
+    },
+    "9.17": {
+      "subject": "⟨R⟩（每格重跑上限）未定死、且不在封印范围内",
+      "state": "unimplemented",
+      "why": "§1.4 的不可结论出口触发在 d 上，而 d 是「⟨R⟩ 次重跑之后仍无有效 episode」的局数。⟨R⟩ 在 §9.7 记为 needs_human、建议 3、至今未定；且 n_feasibility.py 的 FLOORS_DIGEST 只封 FLOORS/POWER/N_RULED，⟨R⟩ 不在其中。按出数模型 P(该格进 d)=q^{n(1+R)}：q=0.5719 时 R=3 给 0.011、R=0 给 0.327，即一个未封的人选数字能把 E[d] 从 0.22 格推到 6.2 格——从「这个出口几乎不触发」推到「它总是触发」。第二条同源通道：重跑要花钱，§5.7.2 记着 ar25 三格就是为了 $3-4 没重跑，于是预算上限直接换算成裁决（预算压紧→重跑停→格进 d→不成立软化为不可结论）。",
+      "clears_when": "⟨R⟩ 在任何封存局开跑前落盘为一个整数，并纳入 n_feasibility.py 的摘要封印（与 FLOORS/POWER/N_RULED 同一个 digest），使改动它必然让闸门变红。另需一条记录证明 ⟨R⟩ 次重跑是被真正尝试过的，而不是因预算耗尽被放弃——incident ledger 现在只记作废，不记未尝试的重跑。",
+      "negative_target_when_implemented": "一个把 ⟨R⟩ 改掉而未更新封印的副本：闸门必须拒绝",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）按对抗性复核结果登记；论证见 STATS_RULES.md §1.4.2 第 2 点。这一条是 §1.4 自称「不引入任何新旋钮」时漏掉的那个旋钮。"
+    },
+    "9.18": {
+      "subject": "`api_unusable` 是臂可以自己制造的，而 d 收它",
+      "state": "unimplemented",
+      "why": "§1.4.3 把 d 建立在「harness 判定的、与结果量无关的成因」上，并点名 api_unusable。但 D-016 之后它的判据是对臂自己发出的动作连续 10 次非 200 响应（baseline-arms/harness/bare_cc.py:455-475, CONSECUTIVE_FAILURE_ABORT=10）：臂连发十个会被拒绝的动作就把 api_unusable 写进自己的 summary——harness 写下那个字符串，动作是臂选的。同一份代码在隔壁情形已承认这个区别：failure_grind 被刻意不记作 api_unusable，理由逐字是「那是关于臂的结果」（bare_cc.py:64-67）。于是 §1.4.3 排除 8-turn 那一支的理由（臂可以自己停手，那是一个杠杆）对它自己也成立。后果：臂可以零成本把 不成立 抬成 不可结论（§1.4.2 第 4 点）。",
+      "clears_when": "二择一，且在任何封存局开跑前落盘：(a) api_unusable 的判据改成臂无关的（例如要求同期存在独立的服务端健康信号），或 (b) 把「连续失败」那一支从 d 的成因里排除，d 只收 model_error / harness_error / no_reset_window 一类真正由 harness 侧产生的结局。任一方案都须附一个阴性对照：一个故意连发坏动作的假臂，其被杀的格不得进入 d。",
+      "negative_target_when_implemented": "一个故意连发 10 个被拒动作的假臂：它的格不得计入 d",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）按对抗性复核结果登记，并经独立复读 bare_cc.py 确认。"
+    },
+    "9.19": {
+      "subject": "d 不可计算：「这一格出数了」在树上没有定义",
+      "state": "unimplemented",
+      "why": "§1.4 的三值裁决要 d，而 d 要求先能判「该局是否取得过一次有效尝试」。这与 §9.14 卡在同一处：U3 达成率本身没有任何计算代码，所以「有效尝试」也没有。§5.7.5 已写明「这一格出数了」在树上没有定义。规则可以先落盘（先定序、后定 m 的次序），但开跑前必须有实现，否则 d 会在看到结果之后被人工裁定，而 d 恰好选择三个结局中的哪一个。",
+      "clears_when": "与 §9.14 同一处清除：U3 单局达成判据成为代码，并同时给出「该局是否取得有效尝试」的判定，二者都以 harness outcome 与 Lean 产物为输入、不含任何人工裁量。",
+      "negative_target_when_implemented": "一局有 episode 但无任何 Lean 产物：必须判为「有尝试、未达成」，不得判为进 d",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）登记；§1.4.3 散文里写了「这是开跑前置条件」却没进表，本条把它补进表。"
     }
   }
 }

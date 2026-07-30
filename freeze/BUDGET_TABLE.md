@@ -56,11 +56,11 @@
 |---|---|---|
 | 池上限 | $214.90 | `proxy/spend_policy.json:4` |
 | 动作上限 | 24,000 | `proxy/spend_policy.json:5` |
-| 闸门可见已花 | **$36.1423** | `proxy/var/spend_gate.jsonl` seq 1–12165（12165 行，sha256 `d5a47fef57bb…`）|
+| 闸门可见已花 | **$36.1423** | `proxy/var/spend_gate.jsonl` seq 1–12896（12896 行，sha256 `15ce48146175…`）|
 | 闸门可见余额 | $178.7577 | 上两行相减 |
 | 其中未计价占位 | $4.0000（1 笔）| 见 C1 |
-| 动作已用 | 5,305 / 24,000 | 同上 |
-| 其中测试/离线流量 | 3,423（64.5%）| 见 C6 |
+| 动作已用 | 5,710 / 24,000 | 同上 |
+| 其中测试/离线流量 | 3,828（67.0%）| 见 C6 |
 | 已追踪账本 · `bare_cc` 轨道 | **$94.7829**（2764 次调用 / 95 run / 16 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
 | 已追踪账本 · Theoria 臂 | **$8.3559**（7 次调用 / 3 run）| `theoria-arm/runs/**/ledger.jsonl` |
 | 仅在池里、无追踪账本 | $0.4133 + $4.0000 占位 | 见 C1 / C3 |
@@ -188,7 +188,7 @@ q = 47/48 = 0.979167，**争用条件下的实测值**（`STATS_RULES.md` §5.2 
 
 ### G9 · 裁决
 
-> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18695 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
+> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18290 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
 
 装得下的情景：**一个都没有**
 

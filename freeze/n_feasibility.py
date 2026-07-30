@@ -60,6 +60,19 @@ import json
 import math
 import sys
 
+# Same fix as residuals.py:54 and launch_gate.py -- and it was the last of the
+# three still missing it.  This file prints ⟨n⟩ / ⟨X⟩ in its summary, and a GBK
+# console has no U+27E8, so `python freeze/n_feasibility.py --verify` run BY HAND
+# died with UnicodeEncodeError before printing its verdict.  Inside verify.sh it
+# never showed, because verify.sh:753 exports PYTHONIOENCODING=utf-8 -- so the
+# breakage was invisible to the gate and visible only to a human following this
+# file's own reproduce instructions.  That is the worse direction of the two.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 #: 树上两份**已跟踪**的测量。q 只能取自这里，且每一份都带它测的是什么。
 #: 键名进闸门的哈希，所以增删一份测量必须是一次显式改动。
 MEASUREMENTS = {
@@ -111,6 +124,15 @@ FLOORS = {
 #: 现在的做法：地板集的摘要**写死在这里**，且 `verify()` 的每个数都**从 `FLOORS`
 #: 推**，不再有第二处 14。改地板 ⇒ 摘要不符 ⇒ 红。
 FLOORS_DIGEST = "2c84a913533a3e79"
+
+#: claim 层的**建议**地板，从 `FLOORS` 取，不再有第二处 14（2026-07-30，RES-1，
+#: S4-E1-HOLES）。上面那句「`verify()` 的每个数都从 `FLOORS` 推，不再有第二处 14」
+#: 此前是**不实**的：`compute()` 与 `verify()` 各有两处把 14 写死（本轮之前的
+#: :201/:203/:254/:257）。摘要封印挡住了「悄悄把 14 改成 10 还全绿」那条老路，
+#: 但挡不住这条：人合法地重定 ⟨X⟩ 并同步更新摘要之后，这四处仍按 14 计算，
+#: 而标签写着「claim floor」。那是同一种错误换了一层——标签说的和数不是一回事。
+CLAIM_FLOOR = FLOORS["claim-14/19"][0]
+
 
 #: 裁定值（`STATS_RULES.md` §5.5）。本文不改它。
 N_RULED = 2
@@ -198,9 +220,9 @@ def compute():
             "expected_live_of_19_at_n_ruled": round(
                 CLAIM_CELLS * cell_yield(N_RULED, qhi), 4),
             "power_claim_floor_at_n_ruled_using_cp_upper": round(
-                power_at(N_RULED, qhi, 14, CLAIM_CELLS), 6),
+                power_at(N_RULED, qhi, CLAIM_FLOOR, CLAIM_CELLS), 6),
             "clears_at_cp_upper": bool(
-                power_at(N_RULED, qhi, 14, CLAIM_CELLS) >= POWER),
+                power_at(N_RULED, qhi, CLAIM_FLOOR, CLAIM_CELLS) >= POWER),
         })
     thresholds = []
     for label, (k, cells) in sorted(FLOORS.items()):
@@ -251,10 +273,10 @@ def verify():
                        for k in ("hits", "episodes")])
     q_pes = cp_upper(*[MEASUREMENTS["A7-postfix-with-degraded"][k]
                        for k in ("hits", "episodes")])
-    if power_at(N_RULED, q_opt, 14, CLAIM_CELLS) < POWER:
+    if power_at(N_RULED, q_opt, CLAIM_FLOOR, CLAIM_CELLS) < POWER:
         fails.append("A7-postfix 的 CP 上端 %.4f 下 n=2 已过不了 0.80 —— "
                      "「⟨n⟩=2 够用」这句话失效，重写 §5.7" % q_opt)
-    if power_at(N_RULED, q_pes, 14, CLAIM_CELLS) >= POWER:
+    if power_at(N_RULED, q_pes, CLAIM_FLOOR, CLAIM_CELLS) >= POWER:
         fails.append("A7-postfix-with-degraded 的 CP 上端 %.4f 下 n=2 已过门槛 —— "
                      "ar25 重跑不再是决定项，重写 §5.7 与 §9.11" % q_pes)
     return fails

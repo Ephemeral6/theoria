@@ -1682,6 +1682,100 @@
       "severity": "launch_blocker",
       "state": "open",
       "statement": "主终点标量（判决半的 BA）分不出背诵与理解：memoriser 的 pooled 对是灵敏度 1.000 / 特异度 1.000，与真值逐位相同（`exam/DECISIONS.md:371-374`），而它在 4/4 道大空间题上全部弃权，故 BA = 1.000；`oracle` 与 `cheater-v4` 在按类拆分表的每一格都相同、只差总分（`exam/STATUS.md:53-56`），而 §2.2 恰恰把总分降级为探索性。这不是措辞可被钻，是措辞被正确执行反而给出错误结论。"
+    },
+    {
+      "clears_when": "grep -q '缺格' freeze/STATS_RULES.md 的 §7 作废小节（§7 明确接纳「状态空间过大」这一非 harness-outcome 成因并给它自己的 ledger 义务），或 §1.2.1 改指一个真正装得下它的条款。",
+      "code": "1.4-g7ptr",
+      "declared_at": "freeze/STATS_RULES.md §1.2.1 / §1.4.4",
+      "kind": "write_document",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/STATS_RULES.md"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "freeze",
+        "who": "RES-1",
+        "why": "freeze 领地，本条由 S4-E1-HOLES 发现"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md"
+      ],
+      "severity": "freeze_blocker",
+      "state": "open",
+      "statement": "§1.2.1 写「跑不动的局按 §7（作废与重跑）计为缺格」，而 §7 的作废判据是对 harness outcome 的当且仅当，且明令「判据里不得出现任何结果量」。状态空间过大是产物的属性、不是 harness outcome，按 §7 自己的 iff 它不作废，而且重跑也改不了状态空间大小。后果不只是指针错：缺格因此没有继承 §7 的 incident ledger 纪律（§7 要求每次作废在重跑之前写进 INCIDENTS.md），于是缺格局数是一个无审计轨的量——而 S4-E1-HOLES 之后它已进入 §1.4.2 第 2 行，承重了。"
+    },
+    {
+      "clears_when": "⟨R⟩ 在任何封存局开跑前落盘为整数并纳入 n_feasibility.py 的摘要封印；另需一条能区分「重跑跑过了」与「重跑被放弃了」的记录（incident ledger 现在只记作废，不记未尝试的重跑）。",
+      "code": "LB-9.17",
+      "declared_at": "freeze/STATS_RULES.md §1.4.2",
+      "kind": "human_decision",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/launch_blockers.json"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "freeze",
+        "who": "人（⟨R⟩ 是 needs_human）+ RES-1 接线封印",
+        "why": "⟨R⟩ 的取值是人的决定；把它纳入摘要封印是 freeze 领地的代码活"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md",
+        "freeze/launch_blockers.json"
+      ],
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "⟨R⟩（每格重跑上限）未定死且不在 FLOORS_DIGEST 的封印内，而 §1.4 的不可结论出口触发在 d 上、d 定义为 ⟨R⟩ 次重跑之后仍无有效 episode 的局数。P(该格进 d)=q^{n(1+R)}：q=0.5719 时 R=3 给 0.011、R=0 给 0.327，一个未封的人选数字能把 E[d] 从 0.22 格推到 6.2 格。同源第二通道：重跑要花钱，§5.7.2 记着 ar25 三格为了 $3-4 没重跑，于是预算上限直接换算成裁决。",
+      "launch_blocker_row": "9.17"
+    },
+    {
+      "clears_when": "二择一并在开跑前落盘：(a) api_unusable 判据改成臂无关的，或 (b) 把「连续失败」那一支从 d 的成因里排除。任一方案附阴性对照：一个故意连发 10 个被拒动作的假臂，其格不得进入 d。",
+      "code": "LB-9.18",
+      "declared_at": "freeze/STATS_RULES.md §1.4.3",
+      "kind": "fix_code",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/launch_blockers.json"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "baseline-arms",
+        "who": "baseline-arms 轨道（改判据）或 W-* build lane",
+        "why": "harness 判据属 baseline-arms 领地；不花 API 钱"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md",
+        "freeze/launch_blockers.json"
+      ],
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "`api_unusable` 是臂可以自己制造的，而 §1.4.3 让 d 收它。D-016 之后的判据是对臂自己发出的动作连续 10 次非 200 响应（baseline-arms/harness/bare_cc.py:455-475）：harness 写下那个字符串，动作是臂选的。同一份代码在隔壁情形已承认这个区别——failure_grind 被刻意不记作 api_unusable，理由逐字是「那是关于臂的结果」（bare_cc.py:64-67）。后果：臂可零成本把 不成立 抬成 不可结论。",
+      "launch_blocker_row": "9.18"
+    },
+    {
+      "clears_when": "与 §9.14 同一处清除：U3 单局达成判据成为代码，并同时给出「该局是否取得有效尝试」的判定，二者都以 harness outcome 与 Lean 产物为输入、不含人工裁量。",
+      "code": "LB-9.19",
+      "declared_at": "freeze/STATS_RULES.md §1.4.3",
+      "kind": "fix_code",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/launch_blockers.json"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "freeze",
+        "who": "与 §9.14 同一批（U3 达成率的计算代码）",
+        "why": "d 与 U3 达成率卡在同一处缺失，应同批实现"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md",
+        "freeze/launch_blockers.json"
+      ],
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "d 不可计算：「该局是否取得过一次有效尝试」在树上没有定义，与 §9.14（U3 达成率本身没有任何计算代码）卡在同一处。规则可先落盘，但开跑前必须有实现，否则 d 会在看到结果之后被人工裁定——而 d 恰好选择三个结局中的哪一个。",
+      "launch_blocker_row": "9.19"
     }
   ]
 }

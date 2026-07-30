@@ -1191,6 +1191,17 @@ SCOPED = [
     ("E1/tier",  "E1", "the clean-tier replication", "hard",
      ("S1", r"clean层12|干净层n=12"), ("C1", r"clean层12"),
      "§1.2 requires every confirmatory statistic twice, weaker of the two wins"),
+    ("E1/cleanline", "E1", "the clean-tier PASS LINE symbol ⟨X_clean⟩", "hard",
+     ("S1", r"⟨X_clean⟩"), ("C1", r"⟨X_clean⟩"),
+     "one symbol cannot carry two pass lines: claim 14/19 = 0.7368 vs clean "
+     "10/12 = 0.8333.  Without ⟨X_clean⟩ the 成立版 can only say 两层一致 -- an "
+     "UNDEFINED predicate, judged after seeing the numbers, on the 主骨 endpoint"),
+    ("E1/conj", "E1", "that 以弱者为准 is a conjunction, not a judgement call", "hard",
+     ("S1", r"⟨X_obs⟩≥⟨X⟩且⟨X_clean,obs⟩≥⟨X_clean⟩"),
+     ("C1", r"⟨X_obs⟩≥⟨X⟩且⟨X_clean,obs⟩≥⟨X_clean⟩"),
+     "「分歧时以弱者为准」has exactly one arithmetic meaning on a two-tier "
+     "single-sample proportion, and until it was written as a conjunction the "
+     "clean-tier verdict was a post-hoc judgement"),
     ("E1/nontriv", "E1", "what 非平凡 (criterion c) actually requires", "hard",
      ("S1", r"两个可表示状态|每个目标态都被排除"),
      ("C1", r"两个可表示状态|每个目标态都被排除"),
@@ -1245,9 +1256,28 @@ SCOPED = [
      "§4.1.0 mandates a verbatim inconclusive text and forbids using either "
      "outcome version; CLAIMS_TEXT.md has no third block and its mechanical "
      "procedure has two branches"),
+    # */inconc above is WHOLE-FILE scoped, so C2's and C4's blocks satisfy it
+    # and it is structurally incapable of noticing that C1 has none -- the same
+    # defect §2.2.1 diagnosed for stage [8] ("它检测出现的 21, 从不检测缺席的 19").
+    # C1's exit is NOT §4.1.0's dropped-pair cap: U3 drops no pairs.  It is the
+    # pivotality arithmetic of §1.4, so it needs its own probe.
+    ("E1/inconc", "E1", "C1's own inconclusive exit (§1.4 pivotality)", "hard",
+     ("S1", r"a\+d\+g<过线"), ("C1", r"⟨X_obs⟩<⟨X⟩≤⟨X_obs\+d\+g⟩"),
+     "C1 is 主骨 and had NO inconclusive block; the stated reason (单样本比率, "
+     "没有剔除) is a non-sequitur AND reverses RECONCILE.md's H-4, which ruled "
+     "「另设第二道闸（G7 的 U3 版）……U3 判不可结论」and marked it 已按此裁定.  "
+     "Without it, infrastructure death publishes verbatim as 「未能稳定证得动，"
+     "是本工作的主结论」-- at the pessimistic q the yield probability is 0.3739, "
+     "so P(printing C1 不成立) ≥ 0.626 even for a flawless arm"),
+    ("E1/dfixed", "E1", "that d never leaves any denominator", "hard",
+     ("S1", r"分母不动，d不从任何地方被减去"),
+     ("C1", r"U3的分母恒为19/12，没有例外"),
+     "an inconclusive exit keyed on a COUNT is one edit away from becoming an "
+     "exclusion RATE, which would reopen the 分母减免 channel §1.2.1 just closed "
+     "(8/19 published as 8/14)"),
 ]
 
-NEGATION_COUNT = [None] * 5   # kept in step with NEGATIONS below
+NEGATION_COUNT = [None] * 10   # kept in step with NEGATIONS below
 
 
 def audit(claims, stats):
@@ -1317,6 +1347,17 @@ def audit(claims, stats):
         (r"不采用弃权计错|弃权不计错", "弃权计错 is negated"),
         (r"不设不可结论版|没有不可结论版", "the mandatory inconclusive block is negated"),
         (r"不是全局合计|聚合口径=逐局平均", "the micro-average aggregation is negated"),
+        (r"硬下限(即|就是|也是|可作为)过线|按硬下限公布|以硬下限为过线",
+         "§1.3's ruling that 硬下限 is NOT a pass line is negated"),
+        (r"clean层不设过线|两层不必同时过线|clean层无需过线",
+         "the two-tier conjunction on endpoint 1 is negated"),
+        (r"C1不设不可结论版|C1无不可结论版|U3不判不可结论",
+         "§1.4's pivotality exit for endpoint 1 is negated"),
+        (r"d从分母中(减去|剔除)|未取得有效尝试的局(不进|不留在)分母",
+         "§1.4.2's fixed denominator is negated -- d would become an exclusion rate"),
+        (r"(budget_exhausted|超预算|game_over).{0,12}计入d|有效结局计入d",
+         "§1.4.3's exclusion of 有效结局 from d is negated -- post-D-016 EVERY "
+         "episode ends budget_exhausted, so this makes C1 permanently inconclusive"),
     ]
     for pat, what in NEGATIONS:
         for label, body in (("STATS_RULES.md", NS), ("CLAIMS_TEXT.md", NC)):
@@ -1367,7 +1408,55 @@ def audit(claims, stats):
                              "being 非零 with no test, no α and no direction -- the same "
                              "file rules two sections later that 「更高」是一个检验，"
                              "不是一个形容词"))
-    # Bespoke 3: the cross-reference for endpoint 2's paired test.
+    # Bespoke 3: the hard floor may not travel without its disqualifier.
+    # §1.3 ruled 硬下限 is NOT a pass line -- it is the lower endpoint of the
+    # interval the human picks ⟨X⟩ / ⟨X_clean⟩ from.  Both halves of that ruling
+    # have to be present wherever the NUMBER is, and this is why IDENT is still
+    # allowed to hard-require 硬下限10/硬下限7: the number now has a job.  Say
+    # only "it is the lower bound" and it reads as a backup pass line again; say
+    # only "it has no role after selection" and someone deletes it, leaving ⟨X⟩
+    # with no lower bound at all -- ⟨X⟩ = 1 would satisfy every clause.
+    for label, body in (("STATS_RULES.md", NS), ("CLAIMS_TEXT.md", NC)):
+        if "硬下限" not in body:
+            continue
+        missing = [w for w in (r"取值下界", r"开跑前是下界，开跑后是零")
+                   if not re.search(w, body)]
+        if missing:
+            failed.add("E1/hardrole")
+            msgs.append(("FAIL", "E1 %s prints 硬下限 without %s -- §1.3 ruled the "
+                                 "hard floor is the lower endpoint of the selection "
+                                 "interval and nothing after selection; a number that "
+                                 "travels without BOTH halves of that ruling is a "
+                                 "backup pass line again"
+                                 % (label, " and ".join(repr(m) for m in missing))))
+
+    # Bespoke 4: step 7 must treat 不可结论 exactly like 不成立 for the 主骨.
+    # Step 7 is the file's own "most important clause": a backbone endpoint that
+    # fails forces the title and abstract to be rewritten and forbids promoting
+    # C2/C3/C5.  It was written with ONE trigger word (不成立).  C4 has had an
+    # inconclusive block for some time and C1 now has one, so a backbone ruled
+    # 不可结论 fired NOTHING: no rewrite duty, and since the kit never states
+    # what the title was, the affirmative framing simply survives while the
+    # backbone went unmeasured.  That is the 事后换主张 step 7 exists to forbid,
+    # entering through the one door it did not watch.
+    step7 = re.search(r"^7\..*?(?=^\d\.|^\*\*第 ?7 ?条|\Z)", claims, re.M | re.S)
+    if not step7:
+        failed.add("*/step7")
+        msgs.append(("FAIL", "the mechanical procedure has no step 7 -- the clause "
+                             "this file calls 本文最重要的一条 is gone"))
+    # Blockquote lines are stripped first: a rule stated only in an explanatory
+    # aside is not an operative rule.  Without this the probe passed on the
+    # 为什么这半条必须补上 quote alone, with the operative clause deleted.
+    elif "不可结论" not in norm("\n".join(
+            l for l in step7.group(0).split("\n") if not l.lstrip().startswith(">"))):
+        failed.add("*/step7")
+        msgs.append(("FAIL", "step 7 forces a title/abstract rewrite when a 主骨 "
+                             "endpoint is 不成立 but says nothing about 不可结论 -- "
+                             "both C1 and C4 have an inconclusive exit, so the "
+                             "backbone can go unmeasured with no rewrite duty and "
+                             "C2 becomes the de facto headline"))
+
+    # Bespoke 5: the cross-reference for endpoint 2's paired test.
     s2 = scopes.get("S2") or ""
     if re.search(r"跨局做配对检验（§3）", norm(s2)):
         msgs.append(("NOTE", "E2 STATS_RULES.md §2.2 sends the reader to §3 for the paired "
@@ -1420,7 +1509,7 @@ soft = sum(1 for lvl, _ in base_msgs if lvl == "soft")
 # runs: the probe table, the six scope locations, three bespoke checks and the
 # negation guard.  The earlier wording said "27 probes" while executing ~38
 # things, which flattered the coverage of a green.
-_checks = len(IDENT) + len(SCOPED) + 6 + 3 + len(NEGATION_COUNT)
+_checks = len(IDENT) + len(SCOPED) + 6 + 5 + len(NEGATION_COUNT)
 print("NOTE one-endpoint-one-wording: %d hard divergence(s), %d soft, over %d checks "
       "-- a green means each pinned rule is STATED in both files, NOT that the two "
       "files agree (see WHAT IT CANNOT DO in this stage's header, and "
