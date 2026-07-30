@@ -172,7 +172,9 @@ this shape — every clause below is backed by an artefact in §1–§5:
 > handover packages therefore ship no planning form at all (3 dsl / 6 json /
 > 4 lean / 15 md / 4 py, zero pddl), which the packages' own cover pages disclose.
 
-**§2.1 needs a stronger repair than a count.** It currently claims co-derivation
+**§2.1 needs a stronger repair than a count.**
+(`papers/phase1-workshop/sections/02_framework.md:20-23`; the sentence wraps, so
+grep it as two fragments.) It currently claims co-derivation
 makes disagreement *visible*: *"a disagreement between forms is a bug that can be
 seen rather than a drift that cannot."* An empty form cannot disagree with
 anything. The visibility mechanism the paper claims is not degraded on the fourth
@@ -184,6 +186,38 @@ it cannot be fixed by adding a caveat elsewhere.
 renders the literal label `"four forms"`, present as visible text in both
 `figures/paper/light/figure1_concept_timeline.svg` and the dark variant. No prose
 edit reaches it; the generator must change and the SVGs be regenerated.
+
+### Every site that asserts the claim unqualified
+
+`PAPER.md` is assembled from `sections/*.md` — **edit the section file; `PAPER.md`
+is generated.** Both are listed because both are tracked and both must end up
+consistent. Line numbers as of `cc7e414e`.
+
+| file | line | why it overstates |
+|---|---|---|
+| `papers/phase1-workshop/sections/00_abstract.md` | 47–51 | **the worst site.** Abstract, unqualified, names PDDL as a delivered co-derived form |
+| `papers/phase1-workshop/PAPER.md` | 49–53 | same sentence, assembled |
+| `papers/phase1-workshop/sections/01_intro.md` | 269–273 | numbered **contribution 1** enumerates PDDL with no caveat |
+| `papers/phase1-workshop/PAPER.md` | 421–425 | same, assembled |
+| `papers/phase1-workshop/sections/02_framework.md` | 20–23 | **the load-bearing one** — claims co-derivation makes disagreement visible (see above) |
+| `papers/phase1-workshop/PAPER.md` | 511–513 | same, assembled |
+| `papers/phase1-workshop/sections/03_a0.md` | 20–22 | places "four co-derived forms" inside a list of *verified* results (pixels, axiom list, SAT plan), lending the PDDL form credibility it lacks |
+| `papers/phase1-workshop/PAPER.md` | 647–649 | same, assembled |
+| `papers/phase1-workshop/sections/11_limitations.md` | 210–211 | design statement in *Limitations* that does not note the fourth form is empty — **the best place to insert the correction** |
+| `figures/fig06_concept_timeline.py` | 166 | renders the literal label into Figure 1 (see below) |
+
+Already appropriately hedged, and worth citing *in* the correction rather than
+changing: `sections/05_a2.md:325-333` (D-A2-006, the PDDL backend cannot ground a
+teleport), `sections/06_a3_transfer.md:206-208` (the backend returns a confident
+UNSAT for a correct manual — unsoundness, not incompleteness), and
+`sections/10_adjudication.md:238-244` (a validated plan is legal under the shared
+grounding, not under the PDDL as written).
+
+Outside the paper, the same unqualified claim sits in `CLAUDE.md:4-6` — the first
+paragraph every agent reads — and in `Theoria.md:139` and `Theoria.md:239`, where
+mandatory constraint 1 justifies itself with *"证明者、执行器、规划器、人，读的是同一本书"*
+("prover, executor, planner and human read the same book"). That justification is
+precisely what fails: the planner reads an empty book.
 
 ### Do not write "three of four forms are verified"
 
