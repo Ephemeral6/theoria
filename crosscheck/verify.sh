@@ -17,7 +17,14 @@ python -m crosscheck.tools.c14_verify || rc=1
 echo
 echo "== territory discipline: crosscheck/ writes only =="
 # The other track's tree is off limits by CLAUDE.md; a diff touching it is a red.
-strays=$(git diff --name-only HEAD -- . ':(exclude)crosscheck' ':(exclude)PARTNER_SYNC.md' 2>/dev/null)
+# Three exceptions, and only three: the board item's own territory (crosscheck/),
+# this worker's own appended paragraph in PARTNER_SYNC.md, and monitor/inbox/ --
+# the one path under monitor/ every worker is standing-authorised to write.
+# Anything else under monitor/ is still a red.
+strays=$(git diff --name-only HEAD -- . \
+           ':(exclude)crosscheck' \
+           ':(exclude)PARTNER_SYNC.md' \
+           ':(exclude)monitor/inbox' 2>/dev/null)
 if [ -n "$strays" ]; then
   echo "RED  this branch modifies files outside crosscheck/:"
   echo "$strays" | sed 's/^/     /'
