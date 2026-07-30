@@ -551,6 +551,13 @@ def c1_section(text):
     m = re.search(r"^## C1 [·・].*?(?=^## C[0-9]|\Z)", text, re.M | re.S)
     return m.group(0) if m else None
 
+# The outcome versions C1 is allowed to publish.  This is a CLOSED set and all
+# three are REQUIRED: §1.4 makes the inconclusive version mandatory for this
+# endpoint, and 成立版/不成立版 have been mandatory since the kit was drafted.
+# Anything else is an unaudited fourth outcome.
+LEGIT_OUTCOMES = ("成立版", "不成立版", "不可结论版")
+
+
 def verbatim_blocks(text):
     """Every '（逐字）' quote block inside C1, keyed by its heading.
 
@@ -561,14 +568,24 @@ def verbatim_blocks(text):
     sets the precedent that a claim may publish a third outcome
     (`结局三 · B-2`) -- a third outcome under C1 carrying a different
     acceptance criterion must be audited, not ignored.
+
+    The trailing `([^\\n]*)$` is load-bearing.  This pattern used to end at
+    `（逐字）[ \\t]*$`, and CLAIMS_TEXT.md's 不可结论版 heading carries a suffix
+    ("—— 与上面两版同级，`STATS_RULES.md` §1.4 强制"), so the `$` anchor did not
+    match and that ENTIRE block was silently skipped: none of the per-block
+    audits below ever ran on it, and any block could opt out of this stage by
+    appending prose to its own heading.  Demonstrated GREEN on 2026-07-30 --
+    normalising the heading to a bare `### 不可结论版（逐字）` turned this stage
+    red, which is the wrong way round for a check.  The suffix is now captured
+    and discarded, so the key is the outcome name whatever follows it.
     """
     sec = c1_section(text)
     if sec is None:
         return None
     out = {}
-    for m in re.finditer(r"^### ([^\n]*?（逐字）)[ \t]*$(.*?)(?=^###|\Z)", sec, re.M | re.S):
+    for m in re.finditer(r"^### ([^\n]*?（逐字）)([^\n]*)$(.*?)(?=^###|\Z)", sec, re.M | re.S):
         out[m.group(1).strip().replace("（逐字）", "")] = "\n".join(
-            l for l in m.group(2).split("\n") if l.lstrip().startswith(">"))
+            l for l in m.group(3).split("\n") if l.lstrip().startswith(">"))
     return out
 
 def audit(text, label):
@@ -577,7 +594,7 @@ def audit(text, label):
     blocks = verbatim_blocks(text)
     if blocks is None:
         return ["%s: C1's section could not be located -- the audit has no subject" % label]
-    for name in ("成立版", "不成立版"):
+    for name in LEGIT_OUTCOMES:
         if name not in blocks:
             bad.append("%s: C1 has no %s（逐字）block" % (label, name))
     for name, block in blocks.items():
@@ -598,10 +615,14 @@ def audit(text, label):
             bad.append("%s: C1 %s delegates its own acceptance criterion elsewhere "
                        "(%s…%s) -- a verbatim claim must state the rule, not cite it"
                        % (label, name, pointer[0], pointer[1]))
-    extra = [n for n in blocks if n not in ("成立版", "不成立版")]
+    # 不可结论版 is a LEGITIMATE outcome here, not an intruder -- §1.4 mandates
+    # it.  What is refused is a FOURTH one: an outcome nobody named, carrying an
+    # acceptance criterion nobody audited.  The three named ones are audited by
+    # the loop above, which is the point of the heading-suffix fix.
+    extra = [n for n in blocks if n not in LEGIT_OUTCOMES]
     if extra:
         bad.append("%s: C1 carries an unaudited extra verbatim outcome %s -- "
-                   "a third outcome may not smuggle a different criterion"
+                   "a fourth outcome may not smuggle a different criterion"
                    % (label, sorted(extra)))
     hold = blocks.get("成立版", "")
     for a in ALLOWED + REFUSED:
@@ -614,7 +635,9 @@ live = audit(claims, "CLAIMS_TEXT.md")
 for b in live:
     print("FAIL " + b)
 if not live:
-    print("PASS C1's two verbatim blocks state the G1 whitelist, not the empty axiom set")
+    print("PASS C1's three verbatim blocks (%s) are each audited, and the "
+          "criterion they state is the G1 whitelist, not the empty axiom set"
+          % "/".join(LEGIT_OUTCOMES))
 
 # 3 -- the other copy of the same rule.  Scoped to the whitelist TABLE, not to
 #      §1.2 at large: the surrounding prose argues about these axioms and names
@@ -720,6 +743,27 @@ elif not audit(mutant, "mutant"):
           "-- this stage is testing nothing")
 else:
     print("PASS negative control fires: restoring 空公理集 in C1 turns this stage red")
+
+# 6 -- negative control for the heading-suffix fix.  Control 5 mutates 成立版,
+#      whose heading is a bare `### 成立版（逐字）`, so it passed both before and
+#      after that fix and proves nothing about it.  This one mutates the block
+#      whose heading DOES carry a suffix (不可结论版).  Under the old
+#      `（逐字）[ \t]*$` anchor that block was invisible to this stage and this
+#      control was GREEN; it must now be red, which is the whole claim of the
+#      fix -- the third block is really being read.
+anchor = "> **故本终点按 `STATS_RULES.md` §1.4 判为不可结论。**"
+mutant6 = claims.replace(anchor, anchor + "\n> 判据是公理集为空。")
+if mutant6 == claims:
+    print("FAIL negative control 6 could not be built: the 不可结论版 block's closing "
+          "sentence is not where this stage expects it -- the suffixed heading may "
+          "again be hiding the whole block from this stage")
+elif not any("不可结论版" in b for b in audit(mutant6, "mutant6")):
+    print("FAIL negative control 6 did not fire: planting 空公理集 inside C1's "
+          "不可结论版（逐字）block still passes -- a block whose heading carries a "
+          "suffix is being skipped, which is the defect this stage just fixed")
+else:
+    print("PASS negative control 6 fires: C1's 不可结论版 block is audited despite the "
+          "trailing prose on its heading (planting 公理集为空 in it turns this stage red)")
 PY
 )"
 while IFS= read -r line; do
@@ -1025,7 +1069,15 @@ echo
 #    15b goes red on its own after any spend, with no edit anywhere.
 #  * Neither half checks that the numbers are RIGHT, only that they still
 #    recompute.  A citation that has drifted is caught (15b prints CITATION
-#    DRIFT); a citation that was wrong when it was written is not.
+#    DRIFT); a citation that was wrong when it was written is not.  That gap is
+#    not hypothetical: two of the three STATS_RULES.md anchors were wrong from
+#    the commit that added them and 15b stayed red unread for a day (see
+#    build_budget_table.py's CITED_LINES comment).  Which is why those three
+#    moved to CITED_IN_SECTION on 2026-07-30 -- section-anchored citations
+#    survive a prose edit, so they are still being read next cycle instead of
+#    being re-anchored blind.  The 14 remaining line anchors point at machine
+#    files (spend_policy.json, BUDGET_REPORT.md) that do not get re-flowed every
+#    cycle, so line anchoring is still the right scheme for them.
 #  * Cost: ~20 s.  Three `build_engine_manifest.py` runs (~5.5 s each: the
 #    check, plus two for the control) and one `build_budget_table.py` run
 #    (~8 s).  Both are read-only in --verify mode; neither writes to the tree.
@@ -1048,6 +1100,14 @@ echo
 #      is not fixed by regenerating.
 # 1 and 2 clear by `python freeze/build_budget_table.py`; 3 needs the two line
 # numbers in CITED_LINES corrected first, or it comes straight back.
+#
+# UPDATE 2026-07-30 (RES-1, S4-E1-HOLES second round): cause 3 recurred twice
+# more (-> :953/:956/:1046, -> :1369/:1372/:1462, -> :1437/:1440/:1530), i.e.
+# once per session that edited §1.  Those three anchors are now section-anchored
+# and cause 3 is retired for them.  Causes 1 and 2 stand unchanged: the pool
+# still grows with every proxied call, so a red here after a spend is still the
+# gate working, and still clears by regenerating.  15b now also carries a second
+# control (`--self-test`) for the section scheme's scoping.
 # ============================================================================
 echo "[15] the other two generated artefacts still describe their sources"
 
@@ -1131,6 +1191,22 @@ else
   note "negative control not run: the relocated copy does not reproduce 15b's own verdict, so a red from it would prove nothing about the real budget table"
 fi
 rm -rf "$bt_tmp"
+
+# Second negative control for 15b, for the OTHER half of the citation check.
+# The control above mutates the balance; it says nothing about the citations,
+# and as of 2026-07-30 three of them are anchored by SECTION rather than by line
+# (build_budget_table.py's CITED_IN_SECTION).  A section-scoped check has a
+# cheap wrong implementation -- grep the whole file -- that passes every
+# positive case, so the scoping is demonstrated, not asserted.  --self-test
+# also re-evaluates the three live anchors, because controls proving the
+# mechanism works say nothing about whether the anchors point anywhere.
+bt_st="$(python "$HERE/build_budget_table.py" --self-test 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "citation section-anchoring: $(printf '%s\n' "$bt_st" | grep -c '^PASS') controls and live anchors pass (a needle in a NEIGHBOURING section is drift, a renamed heading is missing-section)"
+else
+  bad "citation section-anchoring is not scoped to the cited section, or a live anchor has drifted"
+  printf '%s\n' "$bt_st" | sed 's/^/        /'
+fi
 echo
 
 # ============================================================================

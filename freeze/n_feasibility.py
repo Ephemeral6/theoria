@@ -58,6 +58,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import sys
 
 # Same fix as residuals.py:54 and launch_gate.py -- and it was the last of the
@@ -132,6 +133,41 @@ FLOORS_DIGEST = "2c84a913533a3e79"
 #: 但挡不住这条：人合法地重定 ⟨X⟩ 并同步更新摘要之后，这四处仍按 14 计算，
 #: 而标签写着「claim floor」。那是同一种错误换了一层——标签说的和数不是一回事。
 CLAIM_FLOOR = FLOORS["claim-14/19"][0]
+
+
+def check_floor_labels():
+    """Every `FLOORS` key states its own numbers; assert it is telling the truth.
+
+    Second round of adversarial review, 2026-07-30. Deriving the four call
+    sites from `FLOORS` removed the second copy of 14 from the *arithmetic*
+    and left one in the *label*: `FLOORS["claim-14/19"]`. The legal edit for a
+    human who re-picks ⟨X⟩ = 12 within §1.3's interval is to change the tuple
+    and reseal the digest -- and doing exactly that (`(12, CLAIM_CELLS)` plus a
+    new digest) leaves `--verify` at exit 0 while the printed threshold table
+    carries a row **labelled `claim-14/19` holding k = 12**.
+
+    That is the same defect this constant was introduced to remove, relocated
+    from four call sites into one dict key: the label says one thing and the
+    number is another. The digest cannot catch it, because reselaing is the
+    legitimate half of the act.
+
+    So the key is parsed and checked rather than trusted. A re-pick now has to
+    rename the key too, which is the point: the name is published (it is the
+    row label in §5.7.2's table), and a published name that disagrees with the
+    number under it is how a reader gets misled without anybody lying.
+    """
+    bad = []
+    for name, (k, n) in FLOORS.items():
+        digits = re.findall(r"\d+", name)
+        if len(digits) != 2:
+            bad.append("%s: a floor key must state exactly two numbers "
+                       "(floor and cells); found %d" % (name, len(digits)))
+            continue
+        label_k, label_n = int(digits[0]), int(digits[1])
+        if (label_k, label_n) != (k, n):
+            bad.append("%s: the label says %d/%d, the value is %d/%d"
+                       % (name, label_k, label_n, k, n))
+    return bad
 
 
 #: 裁定值（`STATS_RULES.md` §5.5）。本文不改它。
@@ -251,6 +287,9 @@ def verify():
             "地板是预注册值，改它是 incident，不是编辑："
             "改完请同时改 STATS_RULES.md §1.2、CLAIMS_TEXT.md C1 与本文封印。"
             % (floors_digest(), FLOORS_DIGEST))
+
+    # 标签不得与它自己声明的数字不符（第二轮对抗性复核，2026-07-30）。
+    fails.extend(check_floor_labels())
 
     # 每个数都从 FLOORS 推，不再有第二处 14。
     for label, (k, cells) in sorted(FLOORS.items()):

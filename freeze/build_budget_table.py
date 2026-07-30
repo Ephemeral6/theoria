@@ -557,9 +557,42 @@ CITED_LINES = [
     # edited every cycle will drift every cycle.  The right fix is to anchor by
     # section, not by line; registered rather than done here, because changing
     # the anchor scheme is a change to what this gate MEANS, not a re-anchor.
-    ("freeze/STATS_RULES.md", 1369, "⟨n⟩ = 2"),
-    ("freeze/STATS_RULES.md", 1372, "0.78"),
-    ("freeze/STATS_RULES.md", 1462, "0.513"),
+    #
+    # DONE 2026-07-30, second adversarial round (RES-1, same item): the three
+    # STATS_RULES.md anchors have moved to CITED_IN_SECTION below.  What decided
+    # it was not the third drift (1369/1372/1462 -> 1437/1440/1530, a further
+    # +68 from §1.4.2's own corrections) but the sentence six lines up in this
+    # very comment: "two of these three were never valid ... --verify has been
+    # red since the moment these landed, and nobody saw it".  A re-anchor is
+    # done by running a one-liner and pasting three integers, which is a motion
+    # that cannot tell a real citation from a coincidence -- and it has already
+    # produced two anchors that pointed at the wrong lines.  Keeping the scheme
+    # meant scheduling that motion once per edit of the most-edited file in the
+    # kit, so the check's expected steady state was red-and-re-anchored, i.e.
+    # unread.  See section_body() for what is and is not now being asserted.
+]
+
+#: Citations anchored by SECTION rather than by line number.  Each entry asserts
+#: `needle` appears somewhere in the body of `heading` -- from that heading to
+#: the next one of the same or higher level.
+#:
+#: WHAT THIS ASSERTS, precisely, because it is not what CITED_LINES asserts:
+#: that the quoted number is still inside the section the table cites it from.
+#: It does NOT pin which line, so moving a number within its own section is no
+#: longer drift.  That is deliberate and it is not a loosening of anything a
+#: reader can use: the Markdown cites §5.5 and §5.7.1 by section, a reader
+#: follows the section, and "line 1440" was never in the published table.
+#: It IS tighter in the way that matters -- it survives an edit to the prose, so
+#: it is still being checked next cycle instead of having been re-anchored blind.
+#:
+#: WHAT IT CANNOT DO: if a section is renamed or deleted, this reports
+#: `missing-section`, not the number's absence, and the operator has to decide
+#: which happened.  And a number that moves from §5.5 to §5.7 while both
+#: sections still exist is caught only if it leaves §5.5 entirely.
+CITED_IN_SECTION = [
+    ("freeze/STATS_RULES.md", "### 5.5 裁定", "⟨n⟩ = 2"),
+    ("freeze/STATS_RULES.md", "### 5.5 裁定", "0.78"),
+    ("freeze/STATS_RULES.md", "#### 5.7.1 判据：功效，不是期望", "0.513"),
 ]
 
 #: Files and sections the Markdown cites that are being written by other hands.
@@ -568,6 +601,28 @@ CITED_SECTIONS = [
     ("freeze/STATS_RULES.md", "§5.7"),
     ("freeze/n_feasibility.py", None),
 ]
+
+
+def section_body(text, heading):
+    """The lines under `heading`, up to the next heading of the same or higher level.
+
+    Returns None if the heading is not present, so a renamed section is
+    distinguishable from a number that left it.
+    """
+    level = len(heading) - len(heading.lstrip("#"))
+    lines = text.split("\n")
+    start = None
+    for i, line in enumerate(lines):
+        if line.strip() == heading:
+            start = i
+            break
+    if start is None:
+        return None
+    for j in range(start + 1, len(lines)):
+        m = re.match(r"^(#{1,6}) ", lines[j])
+        if m and len(m.group(1)) <= level:
+            return "\n".join(lines[start:j])
+    return "\n".join(lines[start:])
 
 
 def check_citations():
@@ -580,6 +635,19 @@ def check_citations():
             state = "ok" if (lineno <= len(lines) and needle in lines[lineno - 1]) \
                 else "drifted"
         line_results.append({"cite": "%s:%d" % (rel, lineno),
+                             "expect": needle, "state": state})
+    for rel, heading, needle in CITED_IN_SECTION:
+        path = os.path.join(REPO, rel.replace("/", os.sep))
+        if not os.path.exists(path):
+            state = "missing-file"
+        else:
+            body = section_body(
+                open(path, encoding="utf-8", errors="replace").read(), heading)
+            if body is None:
+                state = "missing-section"
+            else:
+                state = "ok" if needle in body else "drifted"
+        line_results.append({"cite": "%s %s" % (rel, heading.lstrip("# ")),
                              "expect": needle, "state": state})
     section_results = []
     for rel, section in CITED_SECTIONS:
@@ -895,8 +963,8 @@ def render(data):
     cits = data["citations"]
     out.append("### G8 · 引用存活检查")
     out.append("")
-    out.append("逐行引用 %d 条：**%d 条对上**，漂移 %s。"
-               % (len(cits["lines"]),
+    out.append("引用 %d 条（%d 条锚在行号、%d 条锚在小节）：**%d 条对上**，漂移 %s。"
+               % (len(cits["lines"]), len(CITED_LINES), len(CITED_IN_SECTION),
                   sum(1 for r in cits["lines"] if r["state"] == "ok"),
                   "无" if not cits["drifted"] else "、".join(
                       "`%s`" % c for c in cits["drifted"])))
@@ -974,6 +1042,68 @@ def pool_digest(data):
     }
 
 
+def self_test():
+    """Negative controls for CITED_IN_SECTION's scoping.
+
+    The line-anchored half of this check needs no control: a wrong integer is
+    self-evidently wrong.  The section-anchored half does, because the cheap
+    wrong implementation -- `needle in whole_file` -- passes the positive case
+    on every entry in CITED_IN_SECTION and would be indistinguishable from a
+    correct one without control 3 below.  That would have been a real loosening
+    of the gate, not a re-anchoring, so it is demonstrated rather than asserted.
+
+    Also checked: that every CITED_IN_SECTION entry is live against the real
+    tree right now.  A control proving the mechanism works says nothing about
+    whether the anchors currently point anywhere.
+    """
+    fixture = "\n".join([
+        "# top",
+        "### 5.5 ruling",
+        "> n = 2",
+        "prose",
+        "#### 5.5.1 sub",
+        "still inside 5.5",
+        "### 5.6 next",
+        "0.513 lives here, in a DIFFERENT section",
+        "## 6 other",
+    ])
+    checks = [
+        ("needle in the cited section is found",
+         "n = 2" in (section_body(fixture, "### 5.5 ruling") or ""), True),
+        ("a deeper subsection counts as inside",
+         "still inside 5.5" in (section_body(fixture, "### 5.5 ruling") or ""), True),
+        ("CONTROL: a needle in the NEXT section is drift, not a pass",
+         "0.513" in (section_body(fixture, "### 5.5 ruling") or ""), False),
+        ("CONTROL: a same-level heading ends the body",
+         "0.513 lives here, in a DIFFERENT section"
+         in (section_body(fixture, "### 5.6 next") or ""), True),
+        ("CONTROL: a higher-level heading ends the body",
+         "other" in (section_body(fixture, "### 5.6 next") or ""), False),
+        ("CONTROL: a renamed heading is missing-section, not a silent pass",
+         section_body(fixture, "### 5.5 renamed") is None, True),
+    ]
+    rc = 0
+    for label, got, want in checks:
+        if got is want:
+            print("PASS %s" % label)
+        else:
+            print("FAIL %s (got %r, want %r)" % (label, got, want))
+            rc = 1
+
+    live = [r for r in check_citations()["lines"] if " " in r["cite"]]
+    if len(live) != len(CITED_IN_SECTION):
+        print("FAIL section-anchored citations not all evaluated: %d of %d"
+              % (len(live), len(CITED_IN_SECTION)))
+        rc = 1
+    for r in live:
+        if r["state"] == "ok":
+            print("PASS live anchor holds: %s -> %s" % (r["cite"], r["expect"]))
+        else:
+            print("FAIL live anchor %s (%s): %s" % (r["state"], r["cite"], r["expect"]))
+            rc = 1
+    return rc
+
+
 def main():
     # The block is CJK and carries U+2212; a GBK console would raise on it and
     # turn a reporting step into a crash.
@@ -993,7 +1123,13 @@ def main():
     parser.add_argument("--emit-pool-digest", action="store_true",
                         help="write freeze/POOL_DIGEST.json, the tracked "
                              "redacted stand-in for the untracked pool")
+    parser.add_argument("--self-test", action="store_true",
+                        help="run the negative controls for the section-anchored "
+                             "citation scheme (CITED_IN_SECTION) and exit")
     args = parser.parse_args()
+
+    if args.self_test:
+        return self_test()
 
     data = build()
     text = json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
