@@ -163,3 +163,42 @@ aggregate at least three distinct causes across the day」。
   （则 check 10 要认两种约定），还是**一份不合规的 manifest**（则修 E14）。
   放宽过滤器会同时拉进 23 个 `process_record` run，代价要先量。
 * 其余（H2 / M5 / M6 / M7 / M8 / L9–L13）未动，顺序不变。
+
+---
+
+## 追加：cycle 51 的处置（2026-07-30T14:10Z，本节只追加，上文不改）
+
+* **H3 —— 上一世的修法自己有一格落差，本轮补掉。** `git ls-files` 读**索引**，
+  而 `git add` 过、从未提交的路径在索引里读成「已装运」，可没有任何克隆有它。
+  本仓库的约定恰恰是 `git commit <paths>`（CLAUDE.md 禁止根目录 `git add -A`），
+  那正是把暂存路径留在提交之外的操作。改成 `git ls-tree -r HEAD`。
+* **H3 的第二格：manifest 自己也得从提交里读。** 改完判据之后，check 10 仍然是
+  「问 git 哪些路径被本提交装运，再从**磁盘**上读那份清单」——manifest 提交过一次、
+  之后本地编辑过，这台机器校验的是本地那份，克隆校验的是另一份文档。
+  新增 `backfill.blob_the_clone_ships`（`git show HEAD:<path>`）。
+  **半个修复读起来像整个，这比没修更糟。**
+* **H4 —— 已修，且那个裁决在本轮做了：认两种约定。** 过滤器从 `archive_material`
+  换成「本提交装运了这份 MANIFEST.json 吗」，作用域 12 runs/107 paths → 35 runs/161 paths。
+  E14 的 23 条仓库根相对路径判为**第二种合法约定**（理由：它们全部在本提交里装运着，
+  是一致的写法而不是坏掉的 manifest），但**一份 manifest 不得混用两种**——
+  混用会把「这条路径解析得到」变成「这条路径在某处解析得到」，那是搜索不是性质。
+  这条裁决是 arm 级设计决定，不是冻结契约的改动，但影响别的臂怎么写 manifest，
+  已另投 inbox 说明。
+* **顺带修掉一条按构造成立的错误**：根相对 manifest 的未解析路径此前是拿着
+  `theoria-arm/...` 从 **run 目录**问 `git check-ignore` 的，即在问
+  `<run>/theoria-arm/...`——一条没人写过、也没有任何规则匹配的路径。
+  于是根相对 manifest 里每条未装运路径都**无法被解释**，是一条没有可行修复的红。
+  `anchor = top if by_root else run_dir`。
+* **一条我写大了又收回的说法**：我一度在注释里写「把约定固定到每份 manifest 一种，
+  堵住了 run 相对 manifest 借仓库根同名文件蒙混」。逐路径重算后**这是假的**——
+  只要有任一路径按 run 相对解析成功，混用分支早就拦下了它；run_rel 为空时按根相对读
+  本来就是唯一合理读法。新旧行为完全相同。注释已改成它实际做的事。
+* **新发现（未修，隔一个函数的同源缺陷）**：`_rule_file_is_in_the_repository`
+  仍问 `git ls-files`。暂存但从未提交的 `.gitignore` 会被算作「仓库自己的规则」，
+  从而**解释掉一条本该红的缺失路径**——这个方向不安全（不是倾向于列出，是倾向于放行）。
+  没在本轮一并改：它同时喂 `build()`，会动到 check 8 的逐字节可复现性，
+  值得单独一个提交 + 单独一次对抗复核。血量测量已派出。
+* **验证**：`tests/test_files_in_clone.py` 19 passed；五条变异逐条施加并跑对应测试，
+  **全部咬住**（`runs/20260730T1400Z-A3-H3-SCOPE/mutate.py`）；
+  `python -m armtools.verify_provenance` 10 绿。
+* 其余（H1/D1 / H2 / M5 / M6 / M7 / M8 / L9–L13）未动，顺序不变。**H1/D1 的前置现在成立了。**

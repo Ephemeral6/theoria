@@ -260,8 +260,36 @@ def test_a_tracked_gitignore_still_counts_after_that_tightening(repo):
 #: The name check 10 registers itself under. Written out here rather than
 #: imported for `test_desk_sealing.py`'s stated reason: a test that reads its
 #: expectation out of the code under test asserts that the code equals itself.
-CHECK_TEN = ("every file a manifest lists is in the clone or excluded by the "
-             "repository's own rules")
+CHECK_TEN = ("every file a shipped manifest lists is shipped too or excluded "
+             "by the repository's own rules")
+
+
+def _commit(root, *rel_paths):
+    """`git add` **and commit** -- staging is not shipping.
+
+    Check 10 asks `git ls-tree HEAD`, so a fixture that only stages its
+    artefacts describes a state no clone is ever in, and every test built on one
+    would assert the opposite of the property. Identity is passed on the command
+    line rather than configured: a headless machine may have no `user.email`,
+    and a commit that silently fails to happen is the one failure mode these
+    fixtures cannot survive -- so the result is asserted, not hoped for.
+
+    **Pathspec on the `commit`, not just on the `add`.** Without it this commits
+    the whole index, which would sweep up the deliberately-staged-never-committed
+    file that `test_check_ten_asks_the_commit_not_the_disk` sets up -- silently
+    turning the one assertion that distinguishes the index from the commit into
+    a tautology. `--allow-empty` because a fixture may commit the same manifest
+    twice on purpose (measured: git accepts both together and still restricts
+    the commit to the pathspec).
+    """
+    if rel_paths:
+        add = _git(["add", "-f", "--"] + list(rel_paths), str(root))
+        assert add.returncode == 0, add.stderr
+    done = _git(["-c", "user.email=fixture@example.invalid",
+                 "-c", "user.name=fixture",
+                 "commit", "-q", "--allow-empty", "-m", "fixture", "--"]
+                + list(rel_paths), str(root))
+    assert done.returncode == 0, done.stderr
 
 
 def _archive_material_run(run_dir):
@@ -325,18 +353,24 @@ def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     _git(["init", "-q"], str(root))
     _write_gitignore(root, "runs/*/trace.jsonl\n")
     (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
-    # Tracked, not merely written. Check 10 asks the index rather than the disk
-    # (see `test_check_ten_asks_the_index_not_the_disk`), so an untracked file
-    # here would be correctly reported as dangling and the green half of this
-    # test would prove nothing about explanation.
-    _git(["add", "-f", "runs/somerun/certify.json"], str(root))
+    # Committed, not merely written or staged. Check 10 asks the commit rather
+    # than the disk (see `test_check_ten_asks_the_commit_not_the_disk`), so an
+    # untracked file here would be correctly reported as dangling and the green
+    # half of this test would prove nothing about explanation.
     _archive_material_run(run_dir)
+    _commit(root, "runs/somerun/certify.json")
 
     def verdict(*paths):
-        """Check 10's own row, from a real `run()` over this tree."""
+        """Check 10's own row, from a real `run()` over this tree.
+
+        The manifest is **committed** each time: check 10 reads it out of
+        `HEAD`, so writing it to the disk alone would leave every call reading
+        whatever the previous one committed.
+        """
         (run_dir / "MANIFEST.json").write_text(
             json.dumps({"files": [{"path": p, "sha256": "x"} for p in paths]}),
             encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
         rows = [r for r in verify_provenance.run(str(runs_root)).rows
                 if r["check"] == CHECK_TEN]
         assert len(rows) == 1, "check 10 did not run at all: %r" % rows
@@ -369,8 +403,8 @@ def _check_ten_row(runs_root, monkeypatch):
     return rows[0]
 
 
-def test_check_ten_asks_the_index_not_the_disk(tmp_path, monkeypatch):
-    """The repair for H3, in both directions.
+def test_check_ten_asks_the_commit_not_the_disk(tmp_path, monkeypatch):
+    """The repair for H3, in all three directions.
 
     Check 10 was written to end a defect -- "the same commit gets two answers on
     two machines" -- and its first predicate was `os.path.exists`, which has that
@@ -379,13 +413,19 @@ def test_check_ten_asks_the_index_not_the_disk(tmp_path, monkeypatch):
     machine-dependent by the same mechanism, one file away from the code it was
     policing.
 
-    Both halves matter, and the second is the one a lazy fix loses:
+    Three cases, and each one killed a version of the fix:
 
-    * present but untracked -> RED. It is not in the clone.
-    * tracked but deleted from this working tree -> GREEN. It **is** in the
+    * present but committed nowhere -> RED. It is not in the clone.
+    * committed but deleted from this working tree -> GREEN. It **is** in the
       clone; the disk being short of it is this machine's business. A fix that
-      demanded both tracked *and* present would keep the machine-dependence and
-      merely add a condition.
+      demanded both committed *and* present would keep the machine-dependence
+      and merely add a condition.
+    * `git add`-ed and never committed -> RED, and this is the one the second
+      version got wrong. It asked the **index**, where a staged path reads as
+      shipped while no clone has a copy. That is not a theoretical gap here:
+      this repository's convention is `git commit <paths>` rather than
+      `commit -a` (CLAUDE.md forbids `git add -A` at the root), which is exactly
+      the operation that leaves staged paths out of the commit.
     """
     root = tmp_path / "repo"
     runs_root = root / "runs"
@@ -395,18 +435,24 @@ def test_check_ten_asks_the_index_not_the_disk(tmp_path, monkeypatch):
     _archive_material_run(run_dir)
     (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
     (run_dir / "stray.json").write_text("{}\n", encoding="utf-8")
-    _git(["add", "-f", "runs/somerun/kept.json"], str(root))
+    (run_dir / "staged.json").write_text("{}\n", encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json")
+    _git(["add", "-f", "runs/somerun/staged.json"], str(root))
 
     def verdict(*paths):
         (run_dir / "MANIFEST.json").write_text(
             json.dumps({"files": [{"path": p} for p in paths]}),
             encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
         return _check_ten_row(runs_root, monkeypatch)
 
-    # Precondition, or the test below proves nothing: both files are on the disk,
-    # so `os.path.exists` -- the predicate this replaces -- would pass both.
+    # Precondition, or the assertions below prove nothing: all three files are on
+    # the disk, so `os.path.exists` -- the predicate this replaces -- passes all
+    # three, and `staged.json` is in the index, so `git ls-files` passes it too.
     assert (run_dir / "kept.json").exists()
     assert (run_dir / "stray.json").exists()
+    assert _git(["ls-files", "--error-unmatch", "runs/somerun/staged.json"],
+                str(root)).returncode == 0
 
     assert verdict("kept.json")["ok"] is True
 
@@ -416,11 +462,16 @@ def test_check_ten_asks_the_index_not_the_disk(tmp_path, monkeypatch):
     assert "stray.json" in red["detail"]
     assert "kept.json" not in red["detail"]
 
-    # ...and the other direction. Delete the tracked one: a clone still has it.
+    red = verdict("kept.json", "staged.json")
+    assert red["ok"] is False, ("a staged-never-committed file read as shipped; "
+                                "the index is not the clone")
+    assert "staged.json" in red["detail"]
+
+    # ...and the other direction. Delete the committed one: a clone still has it.
     os.remove(str(run_dir / "kept.json"))
     assert verdict("kept.json")["ok"] is True, (
-        "a tracked artefact missing from this working tree was called dangling; "
-        "the clone is the reference, not the disk")
+        "a committed artefact missing from this working tree was called "
+        "dangling; the clone is the reference, not the disk")
 
 
 def test_check_ten_rejects_a_path_that_is_not_of_this_run(tmp_path, monkeypatch):
@@ -440,20 +491,20 @@ def test_check_ten_rejects_a_path_that_is_not_of_this_run(tmp_path, monkeypatch)
     _git(["init", "-q"], str(root))
     _archive_material_run(run_dir)
     (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
-    _git(["add", "-f", "runs/somerun/kept.json"], str(root))
     outside = root / "outside.json"
     outside.write_text("{}\n", encoding="utf-8")
-    _git(["add", "-f", "outside.json"], str(root))
+    _commit(root, "runs/somerun/kept.json", "outside.json")
 
     def verdict(*paths):
         (run_dir / "MANIFEST.json").write_text(
             json.dumps({"files": [{"path": p} for p in paths]}),
             encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
         return _check_ten_row(runs_root, monkeypatch)
 
     escape = "../../outside.json"       # run_dir is `<root>/runs/somerun`
-    # Precondition: it exists *and* is tracked, so neither the old predicate nor
-    # a naive tracked-set lookup against the repository root would object.
+    # Precondition: it exists *and* is committed, so neither the old predicate
+    # nor a naive shipped-set lookup against the repository root would object.
     assert os.path.exists(os.path.join(str(run_dir), escape))
     red = verdict("kept.json", escape)
     assert red["ok"] is False, "a path climbing out of the run directory passed"
@@ -498,15 +549,28 @@ def test_check_ten_has_no_answer_rather_than_a_green_when_git_cannot_be_asked(
         "the detail blames a path when the truth is that git could not be asked")
 
 
-def test_check_ten_is_not_skipped_into_silence(tmp_path):
-    """The run has to be archive material, or check 10 never looks at it.
+def test_check_ten_scope_is_the_shipped_manifest_not_archive_material(
+        tmp_path, monkeypatch):
+    """What check 10 looks at, in both directions -- this is H4's repair.
 
-    Every check in `verify_provenance` skips rows where `archive_material` is
-    false, and 23 of the 35 directories under `runs/` are such rows -- 33 listed
-    paths that check 10 never examines. That is the file's design and not this
-    check's defect, but it is also how a green here can mean "nothing was
-    looked at". The test above would keep passing if `survey` stopped
-    classifying its temp run as archive material, so this pins that it is one.
+    Every *other* check in `verify_provenance` skips rows where
+    `archive_material` is false, and check 10 inherited that filter, which made
+    its name a lie: `20260729T080000Z-E14-crash-is-not-a-finding` has 23 listed
+    paths that resolve nowhere relative to its run directory and was green
+    because it has no ledger, so `classify` calls it a `process_record` and every
+    check skips it. Measured at the changeover: 12 runs and 107 paths examined
+    before, 35 runs and 161 after.
+
+    So the filter is now "does this commit ship the manifest", and both halves
+    need pinning, because the obvious way to widen the scope loses the second:
+
+    * a `process_record` run -- no ledger, skipped by every other check -- **is**
+      examined. A reader with only the clone can see its manifest, so its
+      dangling paths are as real as any.
+    * a run whose `MANIFEST.json` is not committed is **not** examined. That is
+      what lets this check ask `HEAD` without calling every work-in-progress
+      artefact dangling: the reader with only the clone cannot see that run
+      either.
     """
     from armtools import backfill as bf                  # noqa: PLC0415
 
@@ -516,13 +580,134 @@ def test_check_ten_is_not_skipped_into_silence(tmp_path):
     run_dir.mkdir(parents=True)
     _git(["init", "-q"], str(root))
     (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
-    (run_dir / "MANIFEST.json").write_text("{}", encoding="utf-8")
-    _archive_material_run(run_dir)
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "gone.json"}]}), encoding="utf-8")
+    # No ledger on purpose: this is the state every other check skips.
+    _commit(root, "runs/somerun/certify.json")
 
     rows = bf.survey(str(runs_root))
     assert [r["slug"] for r in rows] == ["somerun"]
-    assert rows[0]["archive_material"] is True, (
-        "the fixture the check-10 test relies on is skipped by every check")
+    assert rows[0]["archive_material"] is False, (
+        "precondition: this fixture must be the kind of run the old filter "
+        "dropped, or the assertion below proves nothing")
+
+    # Manifest not committed yet -> invisible, and the dangling path unreported.
+    invisible = _check_ten_row(runs_root, monkeypatch)
+    assert invisible["ok"] is True, invisible["detail"]
+    assert "gone.json" not in invisible["detail"]
+    assert "0 manifests" in invisible["detail"], (
+        "the detail must say it looked at nothing, or a green here reads as "
+        "coverage: %r" % invisible["detail"])
+
+    # ...and the moment the manifest is shipped, the same run is in scope.
+    _commit(root, "runs/somerun/MANIFEST.json")
+    seen = _check_ten_row(runs_root, monkeypatch)
+    assert seen["ok"] is False, (
+        "a run with no ledger was skipped, which is how E14's 23 unresolvable "
+        "paths stayed green")
+    assert "gone.json" in seen["detail"]
+
+
+def test_check_ten_reads_the_manifest_out_of_the_commit(tmp_path, monkeypatch):
+    """Half a repair reads as a whole one.
+
+    Asking git which paths this commit ships and then reading the *list* of them
+    off the disk leaves the working tree deciding half the verdict: a manifest
+    committed once and edited since is checked in its local form, while a clone
+    checks a different document -- the same defect H3 was opened for, at the one
+    input the first repair did not cover.
+
+    Both directions, because a fix that simply refused to read the disk at all
+    would pass the first assertion and be useless:
+
+    * a local edit adding a dangling path does **not** turn the check red;
+    * a dangling path that is genuinely in the committed manifest does.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "kept.json"}]}), encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json", "runs/somerun/MANIFEST.json")
+    assert _check_ten_row(runs_root, monkeypatch)["ok"] is True
+
+    # Edited, not committed. No clone sees this, so no verdict may turn on it.
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "kept.json"}, {"path": "gone.json"}]}),
+        encoding="utf-8")
+    row = _check_ten_row(runs_root, monkeypatch)
+    assert row["ok"] is True, (
+        "an uncommitted local edit to a manifest decided the verdict: %r"
+        % row["detail"])
+
+    # Commit that same edit and it counts, or the check is reading nothing.
+    _commit(root, "runs/somerun/MANIFEST.json")
+    row = _check_ten_row(runs_root, monkeypatch)
+    assert row["ok"] is False and "gone.json" in row["detail"], row["detail"]
+
+
+def test_check_ten_holds_one_path_convention_per_manifest(tmp_path, monkeypatch):
+    """A manifest's `files[]` are read under one convention, chosen once.
+
+    Two conventions exist in this archive and both are real: `build()` writes
+    run-relative paths, and E14's manifest writes repository-root-relative ones
+    (`theoria-arm/runs/.../REPORT.md`, `a0-spike/pipeline/adapt.py`). Accepting
+    both is therefore right; accepting both *within one manifest* is not, because
+    then a wrong path passes by happening to match at the other root.
+
+    The convention also decides **where the ignore rules are asked from**, and
+    that is the half a reader would not think to test. `_ignored_paths` runs `git
+    check-ignore` from the directory it is handed, so a root-relative path asked
+    about from inside the run directory is a question about
+    `<run>/theoria-arm/...` -- a path nobody wrote, matching no rule. Every
+    unresolved path in a root-relative manifest was unexplainable by
+    construction, which is a red with no available repair.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    (root / "elsewhere").mkdir()
+    (root / "elsewhere" / "report.md").write_text("#\n", encoding="utf-8")
+    # A rule at the root, naming an artefact the repository deliberately does not
+    # ship. Written root-relative, because that is the convention of the manifest
+    # that will list it.
+    _write_gitignore(root, "elsewhere/*.bin\n")
+    (root / "elsewhere" / "big.bin").write_text("x\n", encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json", "elsewhere/report.md", ".gitignore")
+
+    def verdict(*paths):
+        (run_dir / "MANIFEST.json").write_text(
+            json.dumps({"files": [{"path": p} for p in paths]}),
+            encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
+        return _check_ten_row(runs_root, monkeypatch)
+
+    # An all-root-relative manifest: E14's shape, and accepted.
+    assert verdict("elsewhere/report.md")["ok"] is True
+
+    # ...and its unshipped path is explainable, because the rule is asked from
+    # the root the path is written against. Anchored at the run directory this
+    # is red, and no edit to any `.gitignore` could have made it green.
+    row = verdict("elsewhere/report.md", "elsewhere/big.bin")
+    assert row["ok"] is True, (
+        "a root-relative manifest's excluded artefact could not be explained: "
+        "the ignore rules were asked from the wrong directory (%r)"
+        % row["detail"])
+
+    # Mixing is its own fault, and is named as such rather than folded into
+    # "dangling", because the two call for different repairs.
+    red = verdict("kept.json", "elsewhere/report.md")
+    assert red["ok"] is False
+    assert "mixes two path conventions" in red["detail"]
+    assert "elsewhere/report.md" in red["detail"]
 
 
 def test_check_ten_is_actually_wired_into_the_run(tmp_path):
@@ -535,6 +720,5 @@ def test_check_ten_is_actually_wired_into_the_run(tmp_path):
     from armtools import verify_provenance               # noqa: PLC0415
 
     names = [r["check"] for r in verify_provenance.run().rows]
-    assert ("every file a manifest lists is in the clone or excluded by the "
-            "repository's own rules") in names
+    assert CHECK_TEN in names
     assert len(names) == len(set(names)), names

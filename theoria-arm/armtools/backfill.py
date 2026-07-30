@@ -1026,39 +1026,52 @@ def _repo_top(run_dir: str) -> Optional[str]:
     return top
 
 
-def paths_the_clone_ships(run_dir: str) -> Optional[set]:
-    """Every path the repository tracks under `run_dir`, relative to it.
+def paths_the_clone_ships(any_dir_in_repo: str) -> Optional[set]:
+    """Every path a clone of this commit would carry, relative to the repo root.
 
-    `git ls-files` reads the **index**, so it answers "what does this repository
-    carry here" without consulting the working tree's contents at all. That is
-    the property `os.path.exists` cannot have and check 10 needs: a file that
-    was committed and then deleted locally is still listed (a clone has it), and
-    a file sitting in the directory that nobody ever added is not listed (a
-    clone does not). Two machines on the same commit therefore get the same
-    answer, which is the whole point -- the stray `.DS_Store` that lands in a
-    run directory can no longer change a verdict.
+    `git ls-tree -r HEAD`, and the working tree is not consulted at all. That is
+    the property `os.path.exists` cannot have and check 10 needs: a file
+    committed and then deleted locally is still listed (a clone has it), and a
+    file sitting in a run directory that nobody committed is not (a clone does
+    not). Two machines on the same commit get the same answer, which is the whole
+    point -- a stray `.DS_Store` landing in a run directory can no longer move a
+    verdict.
 
-    What this is **not**: a claim about the published commit. The index includes
-    a staged-but-uncommitted addition, so an author who has `git add`-ed this
-    run's artefacts passes before committing them. That is deliberate -- the
-    alternative (`git ls-tree HEAD`) would make every new run red until its
-    commit exists, and the verifier is meant to be runnable while the work is
-    being done. The dependence that remains is on a declared, reviewable state
-    (the index) rather than on whatever else happens to be on the disk.
+    **`HEAD`, not `git ls-files`**, and the first version of this got it wrong.
+    `ls-files` reads the index, so a path `git add`-ed and never committed reads
+    back as shipped while no clone has a copy: a false green, and not a
+    theoretical one here, because this repository's convention is
+    `git commit <paths>` rather than `commit -a` (CLAUDE.md forbids
+    `git add -A` at the root), which is exactly the operation that leaves staged
+    paths out of the commit. `baseline-arms/harness/cost_artefacts.py` reached
+    this conclusion first, for this reason, and is pinned by
+    `baseline-arms/tests/test_cost_artefacts.py`; an adversarial pass over that
+    module found the hole. Two arms answering the same question two ways would
+    have been a defect in itself.
 
-    `None`, not `set()`, when git cannot answer -- no git binary, or a directory
-    that is not inside a repository. The empty set would say "this repository
-    tracks nothing here", which a caller cannot distinguish from a true answer
-    and which would render as "every listed path is dangling": a red the
-    verifier cannot substantiate. `None` is the third value, and the caller has
-    to say so out loud rather than fold it into either verdict.
+    The cost of `HEAD` -- that a run's artefacts are not shipped until the commit
+    exists, so a verifier run mid-work would call them dangling -- is paid by the
+    **caller's scope**, not here: check 10 only examines runs whose own
+    `MANIFEST.json` this commit ships. A run in flight is invisible to it, which
+    is correct rather than merely convenient, since a reader with only the clone
+    cannot see that run either. (The rejected alternative, index-based, bought
+    the same convenience by weakening the answer for every published run.)
+
+    `None`, not `set()`, when git cannot answer -- no git binary, not a
+    repository, or a repository with no commit yet. The empty set would say "this
+    commit ships nothing", which a caller cannot distinguish from a true answer
+    and which renders as "every listed path is dangling": a red the verifier
+    cannot substantiate. `None` is the third value, and the caller has to say so
+    out loud rather than fold it into either verdict.
 
     Deliberately **not** memoised: `_RULE_FILE_CACHE` can be, because whether a
     rule file is tracked does not change inside one process, but a caller may
-    stage files between two calls in a test.
+    commit between two calls in a test.
     """
+    top = _repo_top(any_dir_in_repo)
     try:
-        proc = subprocess.run(["git", "ls-files", "-z"], cwd=run_dir,
+        proc = subprocess.run(["git", "ls-tree", "-r", "--name-only", "-z",
+                               "HEAD"], cwd=top or any_dir_in_repo,
                               capture_output=True, check=False)
     except OSError:
         return None
@@ -1066,6 +1079,33 @@ def paths_the_clone_ships(run_dir: str) -> Optional[set]:
         return None
     return {p.replace(os.sep, "/")
             for p in proc.stdout.decode("utf-8", "replace").split("\0") if p}
+
+
+def blob_the_clone_ships(any_dir_in_repo: str,
+                         repo_rel_path: str) -> Optional[bytes]:
+    """The bytes of `repo_rel_path` as this commit ships them, or `None`.
+
+    The companion to `paths_the_clone_ships`, and the reason it exists is worth
+    stating. Knowing *that* this commit ships a manifest, and then reading that
+    manifest off the disk, still lets the working tree decide the answer: a
+    manifest committed once and edited since gives one verdict here and another
+    in a clone, which is the defect check 10 exists to remove -- reintroduced in
+    the same function, at the one input the earlier repair did not cover.
+
+    `git show HEAD:<path>` rather than `open()`. `None` for every reason there is
+    -- no git, not a repository, no commit, no such path in it -- because the
+    caller has already established shipped-ness through
+    `paths_the_clone_ships`, and a `None` after that means git changed its mind
+    mid-run, which is not something to paper over with a default.
+    """
+    top = _repo_top(any_dir_in_repo)
+    try:
+        proc = subprocess.run(["git", "show", "HEAD:%s" % repo_rel_path],
+                              cwd=top or any_dir_in_repo,
+                              capture_output=True, check=False)
+    except OSError:
+        return None
+    return proc.stdout if proc.returncode == 0 else None
 
 
 def path_is_inside_the_run(rel_path: str) -> bool:

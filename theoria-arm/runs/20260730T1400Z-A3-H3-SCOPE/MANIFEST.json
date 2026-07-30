@@ -1,0 +1,31 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "62f80236",
+  "utc": "2026-07-30T14:00:00Z",
+  "agent": "RES-1",
+  "cycle": 51,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "把上一世死在半路的 H3/H4 改造做完。上一世改了实现没改测试，套件停在 272 passed / 5 failed。本轮三处实质修正：(1) 判据从索引改成提交（git ls-tree HEAD）；(2) manifest 本身也从提交里读（blob_the_clone_ships），此前『问 git 哪些路径被装运、再从磁盘上读那份清单』把一半判词留给了工作树；(3) 根相对 manifest 的 .gitignore 规则改从仓库根问起，此前从 run 目录问，等于问了一条没人写过的路径，于是根相对 manifest 的每一条未装运路径都是『按构造无法解释』。",
+  "leg": "offline -- 零 API、零花费、封存堆零接触",
+  "changed": [
+    "armtools/backfill.py: paths_the_clone_ships 改为 git ls-tree -r HEAD（索引会把 `git add` 过但从未提交的路径读成已装运，而本仓库的约定正是 `git commit <paths>`，那恰恰是把暂存路径留在提交之外的操作）；新增 blob_the_clone_ships(any_dir_in_repo, repo_rel_path) -> Optional[bytes]",
+    "armtools/verify_provenance.py: check 10 的作用域从 archive_material 换成『本提交装运了这份 MANIFEST.json』（12 runs/107 paths -> 35 runs/161 paths）；manifest 从 HEAD 读；每份 manifest 只用一种路径约定，混用单列一条红；忽略规则的提问目录随约定走",
+    "tests/test_files_in_clone.py: 5 条 check 10 测试重写为提交式 fixture（_commit 带 pathspec，否则会把 staged-never-committed 那条 fixture 一并提交、把唯一区分索引与提交的断言变成同义反复）；新增 3 条测试"
+  ],
+  "measured": {
+    "check_10_scope_before": "12 runs, 107 listed paths",
+    "check_10_scope_after": "35 runs, 161 listed paths",
+    "suite_before_this_cycle": "272 passed, 5 failed",
+    "mutations_applied": 5,
+    "mutations_that_bit": 5
+  },
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "measure_scope.py"},
+    {"path": "scope.json"},
+    {"path": "mutate.py"}
+  ]
+}
