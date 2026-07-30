@@ -115,7 +115,12 @@ def test_nothing_under_exam_carries_crlf_in_the_working_copy():
             continue
         if b"\r\n" in open(path, "rb").read():
             crlf.append(rel)
-    assert crlf == [], "CRLF in the working copy under exam/: %s" % crlf
+    assert crlf == [], (
+        "CRLF in the working copy under exam/: %s\n"
+        "git will publish LF for these, so anything that hashes the disk is "
+        "hashing bytes the repository does not contain. Fix in place:\n"
+        "  python -c \"import sys;p=sys.argv[1];b=open(p,'rb').read();"
+        "open(p,'wb').write(b.replace(b'\\r\\n',b'\\n'))\" <path>" % crlf)
 
 
 def test_the_stamper_refuses_a_working_copy_that_is_not_the_published_bytes():

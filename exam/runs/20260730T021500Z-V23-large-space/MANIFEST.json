@@ -72,6 +72,26 @@
    "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
   },
   {
+   "path": "handover/README.md",
+   "sha256": "4ca1408c7b9c00d47e779fc5eac61a027f5a2c88540092601bea668431861805"
+  },
+  {
+   "path": "handover/V2-V25-prep-the-negative-control-is-not-what-it-looks-like.md",
+   "sha256": "d5ed86d3ff02c8f46fd08e6232754ba10cb6aacb503c873b3518e74f86a897a2"
+  },
+  {
+   "path": "handover/V27-prep-artefact-scan.md",
+   "sha256": "7442912c52a9af2deb026c9906c4d4098563f7a5ade62365c2eddf533e4a3cbc"
+  },
+  {
+   "path": "handover/V28-ready-to-supply-calibration-shares-input.md",
+   "sha256": "4d0d45f78028b5acfb53cab4012f6a29ece1533692b6863418dfa79612755c21"
+  },
+  {
+   "path": "handover/V6-V23-recon-and-two-lenses.md",
+   "sha256": "6b094a713f6a7def4c6131d66a1f53c0a34e9c50828c3b7f40535809f6ace4fc"
+  },
+  {
    "path": "invariant_path_probe.md",
    "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
   },
