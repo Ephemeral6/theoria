@@ -241,3 +241,36 @@ check 10 不要求「文件必须在」：仓库**故意不发布**的产物仍�
 同样照录（本 leg 未动，性质是「改结论文字」而不是改代码）：`STATUS.md:56` 与
 `GAPS.md:20` 仍在用 `key_injected: true` / 「arm keyless」当作臂不持有密钥的证据，
 而 F1 说这个标志立不住这个结论。
+
+## 七 自己攻自己的守卫（本节是交付之后补的，因为它改变了我该怎么描述那两趟迁移）
+
+两趟迁移都靠守卫说「diff 恰好是声明范围内的那些」。**那句话有多硬？**
+我回头攻了 `migrate_cost_shape.py` 的 `diff_leaves`，找到一个真的缺口：
+
+**它比的是 Python 值，而 Python 分不开 `json.dumps` 渲染得不一样的某些值**——
+`0 == 0.0` 为真、`True == 1` 为真。所以一次把整数 `0` 变成浮点 `0.0` 的重导，
+会真的改掉盘上的字节，而这个守卫会报告「什么都没变」，
+`diff_is_exactly_the_three_s29_keys` 仍然是 `true`。
+**一个只能透过一种表示看东西的检查，对另一种表示不是仪器**——
+这正是本 leg 从头到尾在讲的那句话，而它在我自己的工具里又出现了一次。
+
+**这次没有咬到，而且是量出来的不是假设的。** 两趟迁移的**真实字节 diff**：
+
+```
+git diff 53e6ea0b^ 53e6ea0b -- 'theoria-arm/runs/*/MANIFEST.json'
+      7 +   "unpriced_usage_keys": null,
+      7 +   "unmeasured_calls": 0,
+      7 +   "missing_usage_keys": null,
+```
+
+**21 行新增，每份三行，零删除、零修改。** leg01 那趟同样逐行核过：
+只删掉两个 `files[]` 条目（`candidates.jsonl` 与 `trace.jsonl` 各带 `path` + `sha256`），
+别的一行没动。
+
+**顺带独立确认了我写在 `backfill.py` 注释里的一句话**：那两个被移除的 `sha256`
+**留在 git 历史里**——上面那条 `git diff` 的输出里就印着它们
+（`e5c2226a…` 与 `f6a373fe…`）。那句话原来是个断言，现在是个可复核的事实。
+
+已把这个限制写进 `migrate_cost_shape.py` 的 docstring：
+**重用这个脚本的人不许把干净的判词读成字节级保证**，
+要字节级就直接拿 `render()` 的输出比文件。

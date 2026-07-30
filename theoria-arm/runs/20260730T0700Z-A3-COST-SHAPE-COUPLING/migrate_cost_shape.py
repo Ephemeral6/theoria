@@ -17,6 +17,21 @@ it*. So this is not that, and the difference is mechanical rather than a promise
   this is how you can tell the two apart afterwards;
 * `--check` is the default. Writing requires `--write`.
 
+**Known limitation of this guard, found by attacking it after it had already
+run.** `diff_leaves` compares Python values, and Python does not distinguish
+some values that `json.dumps` renders differently: `0 == 0.0` and `True == 1`
+are both true. So a re-derivation that turned an integer `0` into a float `0.0`
+somewhere would change the bytes on disk while this guard reported "nothing
+changed", and the `diff_is_exactly_the_three_s29_keys` verdict would still be
+`true`. **It did not happen here, and that is measured rather than assumed** --
+the committed diff for all seven manifests is exactly 21 added lines, three per
+file, with zero removals and zero modifications (`git diff 53e6ea0b^ 53e6ea0b --
+'theoria-arm/runs/*/MANIFEST.json'`). But anyone reusing this script must not
+read a clean verdict as a byte-level guarantee: compare `render()`'s output
+against the file directly for that. The lesson is the one this whole leg is
+about -- a check that can only see through one representation is not an
+instrument for the other.
+
 Run from `theoria-arm/`:
 
     python runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/migrate_cost_shape.py
