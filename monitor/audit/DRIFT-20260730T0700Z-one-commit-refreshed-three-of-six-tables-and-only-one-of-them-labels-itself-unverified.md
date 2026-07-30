@@ -115,3 +115,105 @@ baseline document` 正是为「有产物但不对」准备的。所以字面 `mi
   加 `E2/P2` 与五个 PAPER_PLAN pct，没动 `C3` 与 `V1`。
   **本条的整改工单必须写成「追加到在飞的那次编辑上」，不能写成「去改 spec.py」，否则会撞车。**
   我没有碰这个文件：以上引用全部来自 `git blame` / `sed -n` / `git show`，只读。
+
+
+---
+
+# 附录 · 同一轮 dimension-8 扫描的另外三条候选，复核后只剩两句话
+
+我对 `spec.py` 派了两个方向的对抗性复核。第一份的结论已写在上面。第二份打的是另外三条候选，
+结果是**两条被我自己的 lineage 之前的裁决打死，一条降到 low 并与另一条合并**。照记，包括对我不利的部分。
+
+### A. 「发布的头条数字来自未提交的工作副本」——降到 **low**，且框架是错的
+
+事实对：pin 的 `spec.py` 算出 `paper_progress` = **39.02**，磁盘那份算出 **41.49**，
+而磁盘的 `monitor/state.json` 写着 **41.5**，其 `generated_at_utc = 06:47:29Z`，
+比 `spec.py` 的 mtime `04:55:24Z` 晚 1 小时 52 分——**这个数确实是工作副本的**。
+
+**但两条反对意见各自都足以推翻这个框架：**
+
+1. **我引 `spec.py:670-671` 定它的罪，引错了。** 那是 F-20 的 `action` 字段，
+   讲的是「**一件交付**只有进了 master 才计分」——管的是**被测量的对象**（分支上还没合并的 done），
+   不是**测量仪器自己的提交状态**。而且那次未提交的编辑，它每一条替换 note 的理由**恰恰就是「已进 master」**：
+   `"freeze/MANIFEST_DRAFT.md 已在 master"`（S4 15→45）、`"held_out 已进 engine-rig"`（E2 92→95）、
+   `"三态不变量已在 master"`（C2 80→90）、`"master 可见"`（V2/V3）。
+   **拿 F-20 去定这次编辑的罪是范畴错误——那次编辑正是 F-20 在被执行。**
+2. **这个分歧从来没有一次进过 master：14 次比对，14 次一致。** 用**每个 commit 自己的** `spec.py`
+   重算，对比**同一个 commit 自己的** `state.json`，覆盖最近 14 次 `state.json` 提交、三个头条时代
+   （39.0×3、38.6×4、50.0×7）——**零不匹配**。pin 上 `git show 304ad651:monitor/state.json`
+   是 `39.0`，与 pin 的 `spec.py` 的 39.02 对得上。**41.5 只存在于这一台机器的工作树里。**
+
+而且这个工作流是**设计**不是偏差：`scan.py` 按构造 `import spec`，两天里 `spec.py` 提交了 13 次、
+`state.json` 14 次，**每一次两次提交之间的扫描都必然读工作树**。
+
+`probe_spec_freshness` 也不是「按构造瞎」：`scan.py:675-700` 的 docstring 自陈其目的是
+「手写判断 vs 主线漂移速度」——它就是为**手写值相对主线变陈旧**造的，不是为未提交编辑造的。
+而且**它的误差方向是保守的**：现在 `state.json` 里它喊 `risk, "spec.py 落后 270 个提交 / 84 次合并"`，
+而那些值两小时前刚被重新推导过。**它多报风险，那是安全的方向。**
+
+**真正剩下的残渣，一句话，而且是一把从未走火的上膛的枪**：
+`state.json` 与 `spec.py` 是**各自独立提交**的——最近 14 次 `state.json` 提交里有 3 次
+（`23cee0e0`、`7a71b5ab`、`e70df5aa`）没有同时动 `spec.py`。此刻 `spec.py` 脏在 41.49、
+`state.json` 脏在 41.5。**如果下一次提交只带走 `state.json` 而不带 `spec.py`，
+master 上就会有一个它自己的 `spec.py` 复现不出来的头条数字，而没有任何东西会发现**：
+`paper_progress` 不在 `monitor/verify.py:79-82` 的 `REQUIRED_STATE_FIELDS` 里，
+`_fields()` 只查字段**存在**，`grep paper_progress monitor/tests/` **零命中**。
+
+**最小修法**：不是加断言（`assert paper_progress == sum(w*pct)` 是同义反复），
+而是一个**提交时的耦合检查**——若 `monitor/state.json` 已暂存而 `monitor/spec.py` 脏且未暂存，就拒绝。约十行。
+
+> **⚠️ 明显的那个修法有害，不要做。** 诱人的写法是「让 `scan.py` 从
+> `git show HEAD:monitor/spec.py` 读，这样看板永远反映 master」。**不行**：
+> (i) 它会让看板在**审计正在发生的那个窗口里**结构性地无法显示任何在飞的订正；
+> (ii) 它会打断 `monitor/verify.py:44-48` ——那里刻意用 `scan.build(out_dir=mkdtemp)` 校验**工作树**，
+> 是 S13 自己写下的警告；(iii) 在 detached 检出上监控将完全无法渲染。
+> **也不要「顺手把 spec.py 提交了」**：那是活树改动，违反 `AUDITOR.md` 的红线，而且会毁掉证据本身。
+
+### B. 「两个探针不可能变红」——**驳回**，其中一半是我自己 lineage 早已裁定为正常的
+
+* `probe_a0_state`：`monitor/audit/DRIFT-20260728T1611Z-a1-probe-can-only-ever-say-partial.md:11`
+  对全部 15 个 `probe_*` 做过 `ast` 普查并**点名裁定**：
+  「`probe_a0_state` / `provenance` / `dispatch_board` / `inbox` 是 green+partial 的**盘点型**探针，**属正常**」。
+  从未被推翻。**先例本身就足以杀死这一半。**
+* `probe_determinism_state`：**候选说它只有两个状态字面量，这是事实错误。它有三个。**
+  `scan.py:219-220` 是 `if not verdicts: return {"status": "blocked", …}`，
+  而 `spec.STATUS_SCORE` 里 `blocked = 0.15` 是**全表最狠的分**（低于 `risk` 0.25）。
+  所以「即使是彻底失败也不会红」正好说反了：**最彻底的失败（文件整个不见）拿到的是系统能给的最低分。**
+  沙箱实测：`precheck.json` 缺失 → `blocked`；`results` 为空 → `blocked`。
+* 而 `probe_a1_state` 那次修复是**限定范围**的：板上条目 `S26-phase1-gate-must-decide` 要的是
+  「任何 `probe_*` 里**算了量却不用于 `status`** 的」，而 `probe_a0_state` 的量
+  （`done == len(have)`）是**用了**的，它从来不在 S26 的网里。
+
+**唯一剩下、且看起来没归过档的残渣，是一条真正的「不可能变红」，而且修法只有一行：**
+`_VERDICT_RANK`（`scan.py:2576`）= `{"risk":0,"missing":1,"amber":2,"partial":3,"green":4}`
+——**没有 `blocked` 这一项**，于是 `.get("blocked", 9)` = 9，把「跑不起来」排得**比 green 还好**。
+沙箱实测：对带 `probe_scope: "partial"` 的 `p1-a0`，一个 `blocked` 裁决会被判成**升级企图而遭拒**，
+手写的 `green` 以 1.0 分留下；对 `p1-determinism`（无 `probe_scope`）`blocked` 会被采纳，
+但覆盖日志把它标成「probe upgraded」。**今天是潜伏的**（`probe_a0_state` 不会发 `blocked`），
+但任何一个部分范围条目、其探针报告「我跑不起来」，都会渲染成 green。
+
+> **⚠️ 加 `blocked` 进 `_VERDICT_RANK` 时必须排 0 或 1（与 `missing` 并列）。
+> 排到 `partial` 之上会让「检查跑不起来」**升级**一个手写的 `partial`——把一个空结果变成健康的证据。
+> 那是上一轮那条会永久关掉配额熔断器的建议的同一个失败类。**
+> 另外**不要**把 `probe_a0_state` 的 0/10 改成 `risk`/`missing`：它已被裁定为正常，
+> 而且往下动会移动一个 `Theoria.md:305` 全绿闸门所依赖的 Phase-1 条目。
+
+### C. 「`_offline_done` 授权战役全速而不可能变红」——**驳回，而且这是同一个错误在本 lineage 的第四次**
+
+`DRIFT-20260729T2315Z:59` 已经查明：`_offline_done()` 注册在 `PROBES`，但 `spec.PHASES` 里
+五处 `"probe":` 绑定**不含 `offline_done`**——它从不进 `_reconcile`、不产生 `verdict_override`、
+不改变任何条目状态；`:61`「**这不是舰队级裁决，是渲染**」。
+而那份报告自己的对抗性复核 `:93` 写着：「**这是本周期第三次**…**这个错误在本 lineage 已经形成惯性**」。
+我这一轮又派了一个 subagent 把它当成新发现交回来——**第四次**。
+它唯一新的元素 `E2 92→95` 也不是 `_offline_done` 的第二个缺陷，
+而是上面 A 条那个机制的**第二个展品**。
+
+> **⚠️ 不要给 `_offline_done` 加 `risk` 分支或任何执行后果。**
+> `DRIFT-20260729T2315Z:84-85` 已裁：「**它今天没有牙是对的**：一个建立在无人核对的手写 `pct` 上的
+> 舰队级裁决，比一段渲染文字危险得多。**要装牙，先给 `pct` 装探针，顺序不能反。**」
+
+### 本附录对我自己的结论
+
+三条候选，**两条死在我自己 lineage 已经写下的裁决上**（一条是第四次），一条降到 low 并入 A。
+我这一轮的 dimension-8 扇出交回 11 条候选，最后只值 1 份报告加这一段附录——
+**扇出提高的是覆盖，不是命中率；命中率是复核提高的。**
