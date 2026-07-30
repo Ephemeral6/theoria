@@ -922,8 +922,14 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
     return {
         # NOT `exhaustive_feasible`. The old name claimed no exhaustive method
         # is feasible here, and that is false: every shipped class (ii) item is
-        # settled by an exhaustive computation over at most 600 nodes in at most
-        # 5 ms, against these bounds of 1e18-1e36. What is true is the narrower
+        # settled by an exhaustive computation over at most 600 nodes, against
+        # these bounds of 1e18-1e36. The node count is the load-bearing half and
+        # it is structural. "In at most 5 ms" stood here too and is struck: four
+        # reruns of the crux script put ii3's maximum at 0.0048 / 0.0049 / 0.0047
+        # / 0.0050 s against a committed 0.0047, and round five measured 0.0051 --
+        # so the figure is exceeded on rerun on this machine, never mind another
+        # one. Nothing here or downstream gates on a timing, and 600 nodes
+        # against 1e18 does not need one. What is true is the narrower
         # statement -- the *naive* method, forward enumeration over the full
         # (cart, button, latch mask) state, which is the method class (i) is
         # graded on, cannot terminate here. D-EX-028.

@@ -594,12 +594,23 @@ holds across `PYTHONHASHSEED` 7 and 99.
     what a *naive* complete search must cover. The question left open here, "is
     there a cheaper complete method?", has been measured and the answer is yes:
     every shipped class (ii) item is settled by an exhaustive computation over at
-    most 600 nodes in at most 5 ms against bounds of 1.15e18 to 1.33e36, so
+    most 600 nodes against bounds of 1.15e18 to 1.33e36, so
     `exhaustive_feasible: False` was false and is withdrawn for
     `naive_enumeration_feasible: False`. The quotient's unsoundness is
     **one-sided** — an over-approximation yields false *solvable*, never false
     *unsolvable* — so start and goal in different components is a sound
     unsolvability proof, which is why the item's own key is computed that way.
+
+    > **V23 round 5, F5-11: "in at most 5 ms" is struck from the sentence
+    > above.** It was measured once and does not survive rerun — four reruns of
+    > `crux_quotient_settles.py` put ii3's maximum at 0.0048 / 0.0049 / 0.0047 /
+    > 0.0050 s against a committed 0.0047, and round five's own rerun gave
+    > 0.0051. The 600-node figure is the load-bearing half, it is structural, and
+    > 600 nodes against 1.15e18 needs no stopwatch beside it. Nothing here or
+    > downstream gates on a timing. Same strike applied at
+    > `exam/papers/verdict.py`'s `naive_enumeration_feasible` comment and in the
+    > V23 run's `CRITERION.md`; this was the last of four copies.
+
     The class therefore measures **method selection under an apparent search
     barrier**, not "only invariant reasoning can answer". Making the class mean
     what its name says still needs switches that gate geometry — a different
@@ -1175,7 +1186,23 @@ alone was rejected: at the time `LARGE_SPACE_THRESHOLD = 10**12` had no entry in
 never took — a threshold over an asserted quantity. Measured solver
 failure was rejected for a stronger reason than engine-rig's D-024 — on these
 boards the strong solvers **win in milliseconds**, so that criterion is not
-merely inadmissible but false. The controls are executable, not narrated: a
+merely inadmissible but false.
+
+> **V23 round 5: "win in milliseconds" is argued, not measured, and it is
+> load-bearing.** No solver was ever run on a class (ii) level. No artefact in
+> the V23 run directory emits a solver time on one — the only occurrence of the
+> word in any of them is a sentence of prose in `growth_curve.json` about what a
+> quotienting solver *would* see, and the run's own work item 3 establishes that
+> no shipped engine can even construct the input. The sentence was set in bold as
+> an observation, and it carries the whole weight of calling criterion (d) "not
+> merely inadmissible but **false**" — inadmissible is argued and stands;
+> **false** is an empirical claim resting on a measurement nobody took. Read it
+> as: the boards are small enough (`positional_states` is 3k) that a solver
+> quotienting the latch space should settle them cheaply. That is an inference
+> from the structure, and it is a good one; it is not a stopwatch. Labelled here
+> and in the V23 run's `CRITERION.md`; those are the only two copies.
+
+The controls are executable, not narrated: a
 400-switch board on a 200-cell corridor that truncates at the cap exactly as
 ii1..ii4 do is still refused on its bound of 2^8, pinned by
 `test_a_truncating_board_is_still_refused_without_a_bound` — if truncation alone

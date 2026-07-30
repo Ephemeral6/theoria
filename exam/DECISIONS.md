@@ -1321,3 +1321,39 @@ no gate reads one.
 
 D-EX-028's closing survey and D-EX-029's correction subsection are superseded on
 this point by this entry.
+
+### Correction to D-EX-030's own second subsection: the reruns exceed 3.1 ms
+
+The subsection above was written before the reruns existed, and it is now wrong in
+the one direction that matters — it says "3.1 ms bounds all four" and then treats
+3.1 ms as the sourced, recheckable figure, with "single-digit milliseconds" as the
+weaker fallback for a change of machine. The reruns invert that. Four fresh
+processes replicating `probe_answer_key.py`'s measurement order gave ii3 at
+**0.00348, 0.00360, 0.00369 and 0.00364 s**, and a regeneration of
+`probe_answer_key.json` in the V23 worktree recorded **0.00313**. Every one of the
+five exceeds 3.1 ms, on the same machine — not a different one. The earlier
+prose-only 3.66 ms was not an outlier; it was the first sight of the real spread.
+
+So the honest statement is the fallback, and there is no longer a stronger one
+behind it. **What survives is "single-digit milliseconds".** 3.1 ms remains a true
+maximum over the four rows `probe_answer_key.json` happens to have committed, and
+that is all it is: a property of one recorded run, not a bound on the check. It
+must not be quoted as a bound, which is what the subsection above does.
+
+Two things worth keeping from how this went wrong. First, the subsection was
+written to correct a withdrawal that was itself wrong on the count — D-EX-029 had
+called four committed samples "one wall-clock observation" — and in correcting the
+count it inherited the claim, restating a maximum over four rows as a bound without
+asking whether the check reproduces near it. Being right about the arithmetic is not
+being right about the claim. Second, the evidence-precedence note in that subsection
+is exactly the reasoning that let 3.1 ms stand: artefact-over-prose was invoked to
+rank the four committed rows above a prose 3.66 ms, and the rule really does not
+license discarding a counter-observation — the subsection says so and then does it
+anyway, by keeping the figure the counter-observation refutes. Writing down the
+right rule is not applying it.
+
+`≤3.1 ms` was struck from all four files that carried it in the same cycle as this
+entry: `exam/papers/verdict.py`'s `naive_enumeration_feasible` comment, two places
+in this file, `exam/STATUS.md` entry 27, and the V23 run's `CRITERION.md` headline.
+The 600-node figure carries that argument on its own and is structural. No gate in
+this territory reads a timing, and none should be added.
