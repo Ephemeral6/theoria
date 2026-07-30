@@ -82,7 +82,14 @@ def main() -> int:
         record = V._large_space(doc)
         out["large_space_record"] = {
             "raised": False,
-            "exhaustive_feasible": record["exhaustive_feasible"],
+            # Was `record["exhaustive_feasible"]`, renamed by D-EX-028 in the very
+            # commit that shipped this file. It survived because the new guard
+            # makes `_large_space` raise, so this branch never runs -- meaning the
+            # ONLY path that reports the defect this control exists to catch (the
+            # guard regressing and an inflated record being written) died with a
+            # KeyError instead. A control whose failure path is broken is not a
+            # control.
+            "naive_enumeration_feasible": record["naive_enumeration_feasible"],
             "lower_bound": record["lower_bound"],
             "m": record["m"],
             "dippable_switches": record["dippable_switches"],

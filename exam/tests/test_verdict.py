@@ -22,8 +22,10 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from collections import deque
+from unittest import mock
 from typing import Any, Dict, Sequence
 
 import pytest
@@ -822,12 +824,21 @@ def test_search_exhaustion_is_partial_on_small_and_worthless_on_large(paper):
     """A search claim is paid where it could be true and refused where it cannot.
 
     D-EX-022 briefly rewrote this test on the argument that the class (ii)
-    boards are searchable after all, via their `(cart, button)` quotient. They
-    are not: the quotient ignores `step_limit` and carries no latch state, so it
-    reports a `require_all_switches` level solvable when it is unsolvable. The
-    original assertion is restored, and the ordering it depends on -- a
-    certificate always beats a search -- is now asserted alongside it, since
-    that part of the rewrite was worth keeping. D-EX-027.
+    boards are searchable after all, via their `(cart, button)` quotient. The
+    original assertion is restored (D-EX-027), but it does *not* rest on the
+    quotient being useless: D-EX-028 measured that the quotient settles every
+    shipped class (ii) item, and its unsoundness is one-sided -- an
+    over-approximation yields false `solvable`, never false `unsolvable`, so a
+    goal in a different component is a sound unsolvability proof, and the key
+    itself is computed that way.
+
+    What the refusal rests on is narrower and is the only thing this test
+    asserts: `reason: "exhaustive_search"` claims the *naive* method, forward
+    enumeration over the full (cart, button, latch mask) state, and that method
+    cannot terminate on a class (ii) board -- so the claim is a false statement
+    about what the examinee did, whatever cheaper complete method exists. The
+    ordering the test also pins -- a certificate always beats a search -- was
+    the part of D-EX-022's rewrite worth keeping. D-EX-027, amended by D-EX-028.
     """
     small = next(i for i in paper.items if i.truth["class"] == "small_unsolvable")
     large = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
@@ -1076,6 +1087,104 @@ def test_a_duplicate_outside_the_bounded_prefix_still_yields_a_bound():
     noisy = V.subset_lower_bound(level)
     assert noisy["m"] == clean["m"]
     assert noisy["lower_bound"] == clean["lower_bound"]
+
+
+def _straddle_board(corridor=24, start_col=12, step_limit=25):
+    """`comb_open` plus two shipped operators, with the start INSIDE the span of
+    the dip sources. Every shipped item starts at the corridor end instead."""
+    haz = ([[1, c] for c in range(2, corridor + 1, 2)]
+           + [[3, c] for c in range(2, corridor + 1, 2)])
+    return V.variant_of(V.comb_open("straddle", corridor, start_col, 1),
+                        "straddle", lost_cells=haz, step_limit=step_limit)
+
+
+def test_an_interior_start_does_not_buy_the_straight_line_cost():
+    """The third premise, and the one two guards did not cover (D-EX-029).
+
+    `dist(c_m) + 2m` is the true cost of the walk only when the start lies
+    *outside* the span of the dip sources -- true of every shipped item
+    (`start_col=1`) and assumed of all boards. With an interior start the m
+    nearest sources straddle it, no single walk to c_m touches the ones behind,
+    and the shorthand omits the backtrack.
+
+    Measured before the fix, on this board: m=10, a published 2^10, and **758** of
+    those 1024 latch masks actually reachable -- with `wellformed_problems()`
+    empty, the lane guard passing, the duplicate guard passing, `_large_space`
+    accepting, and the published `arithmetic` describing a walk costing 137
+    commands against a budget of 99. The number stayed a true lower bound; the
+    justification did not, on the class graded on justification.
+
+    So this pins the discrimination rather than the number: the sweep affords 8,
+    the shorthand would have claimed 10, and the two must not agree here.
+    """
+    level = RV.Level(_straddle_board())
+    bound = V.subset_lower_bound(level)
+    assert bound["m"] == 8, "the sweep affords 8 dips on this board"
+
+    # What the withdrawn shorthand would have allowed, computed the way the old
+    # loop did. If this ever equals the sweep's m, the board has stopped
+    # straddling and the test has stopped testing anything.
+    reach = V.position_paths(level, level.start)
+    dists = sorted(len(reach[s]) for s in
+                   (V._dip_source(level, reach, sw) for sw in level.switches)
+                   if s is not None and s in reach)
+    shorthand = 0
+    for index, distance in enumerate(dists, start=1):
+        if distance + 2 * index > level.step_limit:
+            break
+        shorthand = index
+    assert shorthand > bound["m"], (
+        "this board must be one where the shorthand over-charges the budget "
+        "less than the real sweep does, or it is not the regression board")
+
+
+def test_the_straddle_board_is_refused_rather_than_shipped():
+    """The same shape at the scale that used to clear the threshold.
+
+    Before D-EX-029 this board reached m=40, `lower_bound` 2^40 = 1.0995e12 --
+    over `LARGE_SPACE_THRESHOLD` -- so `_large_space` accepted it and wrote a
+    class (ii) record whose justification described a walk the budget could not
+    buy. It must now fall under the threshold and be refused.
+    """
+    doc = _straddle_board(corridor=60, start_col=30, step_limit=99)
+    bound = V.subset_lower_bound(RV.Level(doc))
+    assert bound["m"] == 29
+    assert bound["lower_bound"] < V.LARGE_SPACE_THRESHOLD
+    with pytest.raises(AssertionError, match="under the"):
+        V._large_space(doc)
+
+
+def test_the_published_arithmetic_names_a_cost_the_budget_affords():
+    """The `arithmetic` string is published in the shipped truth key, so a false
+    cost clause in it is a false claim in an artefact, not a stale comment. It
+    used to read "at a cost of dist + 2m commands" -- a formula, unevaluated, and
+    the wrong one. It now carries the measured sweep, which must fit the budget.
+    """
+    doc = V.variant_of(V.comb_open("spindle-cost", 200, 1, 200),
+                       "spindle-cost", step_limit=150)
+    bound = V.subset_lower_bound(RV.Level(doc))
+    assert "dist + 2m" not in bound["arithmetic"]
+    assert "sweep to the far end" in bound["arithmetic"]
+    match = re.search(r"at a cost of (\d+) commands", bound["arithmetic"])
+    assert match, "the cost clause must publish a number, not a formula"
+    assert int(match.group(1)) <= 150, "and the budget must afford it"
+
+
+def test_a_bound_under_the_enumeration_cap_may_not_claim_the_cap():
+    """`enumeration_refused_because` asserts the bound is "past the cap", and
+    nothing checked it: it held only because `MAX_ENUMERATION` (200,000) happens
+    to sit below `LARGE_SPACE_THRESHOLD` (10^12). Neither constant's docstring
+    stated the ordering as a requirement, so raising the cap above the threshold
+    left the record still publishing "past the cap of ..." -- a false sentence
+    about the arithmetic printed directly beside it.
+    """
+    doc = V.variant_of(V.comb_open("spindle-cap", 200, 1, 200),
+                       "spindle-cap", step_limit=150)
+    assert V._large_space(doc)["naive_enumeration_feasible"] is False
+
+    with mock.patch.object(V, "MAX_ENUMERATION", 10 ** 40):
+        with pytest.raises(AssertionError, match="does not exceed the enumeration cap"):
+            V._large_space(doc)
 
 
 def test_the_subset_bound_refuses_a_board_it_does_not_fit():

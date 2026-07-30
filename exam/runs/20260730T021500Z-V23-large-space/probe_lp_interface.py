@@ -32,6 +32,65 @@ from interop import peg1d                                  # noqa: E402
 OUT = {}
 
 
+
+def _measure_a2_coefficient_sums():
+    """Enumerate A2's own transitions and sum each occupancy-vector delta.
+
+    The vector has one coordinate per cell for the cart (one-hot), one per switch
+    for its latch bit, and one for `pressed`. A command moves the cart c -> c'
+    (-1 then +1, so 0), or leaves it where it was (0); on top of that a latch bit
+    or the button bit may turn on, each +1 and never back down. So the coefficient
+    sum of a transition is exactly the number of bits that turned on, and the
+    question "is it ever -1" is answered by enumeration rather than by argument.
+    """
+    from exam.papers import verdict as V
+    from exam.grading import rubrics_verdict as RV
+
+    doc = V.comb_open("lp-iface-a2", 20, 1, 20)
+    level = RV.Level(doc)
+
+    def latch(cart, mask):
+        if cart in level.switch_index:
+            return mask | (1 << level.switch_index[cart])
+        return mask
+
+    start = (level.start, False, latch(level.start, 0))
+    seen = {start}
+    queue = [start]
+    sums = set()
+    by_kind = {}
+    transitions = 0
+    while queue:
+        cart, pressed, mask = queue.pop()
+        for command in level.commands():
+            nxt, npressed = level.step(cart, pressed, level.world_action(command))
+            nmask = latch(nxt, mask)
+            transitions += 1
+            bits = bin(nmask ^ mask).count("1") + (1 if npressed and not pressed else 0)
+            sums.add(bits)
+            moved = nxt != cart
+            latched_now = nmask != mask
+            if latched_now:
+                kind = "latching move"
+            elif moved:
+                kind = "plain move"
+            else:
+                kind = "blocked or self"
+            # Every transition of a kind must agree, or "the" sum for that kind
+            # is not a well-defined number and this probe is measuring an average.
+            if kind in by_kind and by_kind[kind] != bits:
+                raise AssertionError(
+                    "A2 %s transitions disagree on their coefficient sum: "
+                    "%d and %d" % (kind, by_kind[kind], bits))
+            by_kind[kind] = bits
+            state = (nxt, npressed, nmask)
+            if state not in seen and nxt not in level.lost_cells:
+                seen.add(state)
+                queue.append(state)
+    return {"sums": sorted(sums), "by_kind": by_kind,
+            "transitions": transitions, "states": len(seen),
+            "level_id": doc["level_id"]}
+
 def banner(text):
     print("\n" + "=" * 72)
     print(text)
@@ -157,16 +216,34 @@ def probe_d():
     # An A2 command changes the occupancy vector by: cart leaves c, cart enters
     # c'; and if c' is an unlatched switch, that latch bit turns on.  Coefficient
     # sums 0 (plain move) or +1 (move that latches).  Neither is -1.
-    print("  A2 plain cart move   : coefficient sum = %d" % 0)
-    print("  A2 latching move     : coefficient sum = %d" % 1)
-    print("  A2 blocked move/self : coefficient sum = %d" % 0)
+    #
+    # Those two numbers used to be written here as the literals `% 0` and `% 1`,
+    # printed in the format of a measurement and recorded in `D_verdict` as
+    # though derived.  They are correct -- but the half of the incompatibility
+    # that actually bites was the asserted half, while only the lp side (125 role
+    # assignments, every sum -1) was computed.  Now enumerated off a real A2
+    # level, so the record measures both sides of the claim it makes.
+    a2 = _measure_a2_coefficient_sums()
+    for label, value in sorted(a2["by_kind"].items()):
+        print("  A2 %-18s: coefficient sum = %+d" % (label, value))
     print("  lp_potential Move    : coefficient sum = -1, always")
     print("  => no assignment of (src, over, dst) expresses an A2 transition.")
     OUT["D_verdict"] = {
         "lp_move_coefficient_sum": -1,
-        "a2_plain_move": 0,
-        "a2_latching_move": 1,
+        "a2_plain_move": a2["by_kind"]["plain move"],
+        "a2_latching_move": a2["by_kind"]["latching move"],
+        "a2_coefficient_sums_measured": a2["sums"],
+        "a2_transitions_enumerated": a2["transitions"],
+        "a2_level_id": a2["level_id"],
         "expressible": False,
+        "how": ("every reachable (cart, pressed, latched) transition of "
+                "`%s` was enumerated and its occupancy-vector delta summed; "
+                "the cart's own one-hot contributes 0 whether it moves or is "
+                "blocked, so the sum is the number of bits that turned on. "
+                "Measured sums %s, none of them -1, against lp_potential's "
+                "invariant -1 -- so the two move algebras do not meet at any "
+                "size, not merely at shipped sizes."
+                % (a2["level_id"], a2["sums"])),
     }
 
 

@@ -970,8 +970,9 @@ it would be false.
 2. **The reference enumerator, measured to truncate.** Circular as evidence
    about the level — we chose the enumerator — but not circular as the
    complement of the claim class (i) already makes, since `_small_space` defines
-   `exhaustive_feasible: True` by exactly this enumerator terminating under
-   exactly this cap. Its only admissible use is that parity, and it must be run.
+   `naive_enumeration_feasible: True` by exactly this enumerator terminating
+   under exactly this cap. Its only admissible use is that parity, and it must
+   be run.
    It previously was not merely unmeasured but counterfactually recorded:
    `_large_space` hardcoded `"truncated": False`, true only because no
    enumeration was ever attempted, and reading as though one had run and come
@@ -1005,6 +1006,13 @@ it is the one the artefacts support. It is also the more useful one: it is
 falsifiable by a single counterexample examinee, whereas a universal over all
 methods is not establishable by any experiment.
 
+This **supersedes D-EX-027's closing line on the field name** — "`search_credible`
+is `state_space["exhaustive_feasible"]` again, which is what it always was", in
+D-EX-027 above — in the name and not in the substance: credibility is still not
+derived from the quotient, but the field `verdict.py:720` reads is now
+`state_space["naive_enumeration_feasible"]`, and `exhaustive_feasible` exists
+nowhere in the code.
+
 ### A bound must defend its own premise where it is claimed
 
 Every guard on class (ii) truth fired *after* the record was written.
@@ -1035,7 +1043,10 @@ and then asserts only that a `Level` accessor returns a string.
 above the limit, so worldgen cannot build a world whose state space exhaustive
 search cannot reach — the catalogue does not merely happen to lack one.
 `DRILL.json`'s `classes_absent: ["large_unsolvable"]` therefore cannot be closed
-from inside `exam`. Filed rather than done; it needs a worldgen change.
+from inside `exam`. Not done here; it needs a worldgen change. **Not on the
+board either** -- "filed" was written before any ticket existed, which is this
+ticket's own defect class at one more remove; cross-territory supply is the
+monitor's per `CHARTER.md`, so it is requested in `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`.
 
 ### The measurement that licenses the extrapolation
 
@@ -1105,9 +1116,12 @@ compiler exists anywhere in the repo; `zero_space` re-checks only against the
 sample it was handed; `cegis_miner` and `mdl_segmenter` mine candidates, never
 verdicts. **No shipped engine can find a certificate for a class (ii) level at
 shipped size.** What does walk the path is `rubrics_verdict.check_certificate`,
-purpose-built for this world, <=3.1 ms per item, with zero connection to
+purpose-built for this world, single-digit milliseconds per item ("<=3.1 ms"
+as first written restated one observation as a bound; see D-EX-029), with zero connection to
 `engine-rig` -- so "engines propose, the LLM adjudicates" has no engine on this
-path today. Filed, not fixed: it is an engine-rig change.
+path today. Not fixed: it is an engine-rig change, and requested in
+`monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md` rather than
+asserted as filed.
 
 ### Two adjacent findings, recorded not fixed
 
@@ -1122,3 +1136,122 @@ path today. Filed, not fixed: it is an engine-rig change.
   verdict.py:720 would be graded and calibrated consistently wrong. Already
   noted at `exam/STATUS.md:597-598`; repeated here because the rename passes
   through that line.
+
+## D-EX-029 — the premise was checked in two directions out of three, and the document rejected the criterion it ships
+
+V6-V23, second and third rounds, after three adversarial reviewers on D-EX-028.
+Measurements in the same run directory,
+`runs/20260730T021500Z-V23-large-space/`.
+
+This entry exists because it was cited before it was written. `verdict.py`,
+`test_verdict.py`, `CRITERION.md` and `RUN_STATE.md` referred to "D-EX-029" in ten
+places while no such entry existed — a citation pointing at nothing, which is the
+same defect class this ticket has now produced three times. Caught by asking the
+mechanical question of a citation rather than a number: *can I open what this
+points at?*
+
+### The bound's premise held in two directions and nobody checked the third
+
+`subset_lower_bound` costs the walk at `dist(c_m) + 2m`. That is the true cost
+only when the start lies **outside** the span of the dip sources. Every shipped
+item has `start_col=1`, a corridor end, so it was true of everything ever tried
+and was assumed of all boards.
+
+With an *interior* start the m nearest sources straddle it: no single walk to c_m
+touches the ones behind it, and the real cost is a there-and-back sweep. Built
+from one shipped constructor and two shipped operators — `comb_open` with hazards
+on both switch rows and an interior `start_col` — a board on which
+`wellformed_problems()` is empty, both existing guards pass, `subset_lower_bound`
+returns m=40 and `lower_bound` 2^40 over the threshold, `_large_space` **accepts
+it and writes the class (ii) record**, the enumerator truncates so that half
+passes too — and the walk the published `arithmetic` describes costs 137 commands
+against a budget of 99, so it does not exist.
+
+Measured at three sizes: 758 of a claimed 2^10 latch masks actually reachable,
+28,188 of 2^15, and 32 of 32 only where the start sits at a corridor end.
+
+**The number survived every attack; the justification did not.** 2^m remains a
+true lower bound on total reachable states — it is loose by roughly 2k, and that
+slack absorbs the whole over-count — so every check whose predicate was
+`lower_bound <= measured_states` returned clean: 347 rows across this run's two
+adversarial probes, plus a reviewer's independent 1,034 rungs. What shipped false
+was the *reason printed beside the number*, on the class that is graded on its
+reason. **A check on the bound cannot see that**, and this is the general lesson:
+an adversarial probe inherits whatever gap sits between its predicate and the
+claim it defends, so "the attack found nothing" is only as strong as its
+predicate — which is therefore a thing to state and audit, not to assume.
+
+Fixed at the selection rather than by refusing: m is now the largest prefix whose
+**sweep cost** fits the budget (`_sweep_cost` — reach the nearer end of the span,
+sweep to the far end, 2 per dip). Verified both directions:
+
+* the falsified boards now claim exactly what they realise (32/32, 256/256,
+  2048/2048), and the straddle board drops to m=29, under threshold, refused;
+* **all seven shipped records are unchanged** — m = 60, 118, 120, 120, 120, 120,
+  120, every bound identical to the byte, because `min(ends) + span` collapses to
+  `dist(c_m)` exactly when the start is outside the span.
+
+The published `arithmetic` now names the sweep and prints its measured value
+(spindle: 149 commands against its budget of 150) instead of the `dist + 2m`
+shorthand that was the false clause.
+
+### The refusal message was true only by a coincidence of two constants
+
+`enumeration_refused_because` asserts the bound is "past the cap", and nothing
+checked it. It held because `MAX_ENUMERATION` (200,000) happens to sit below
+`LARGE_SPACE_THRESHOLD` (10^12). Raise the cap above the threshold and the record
+still published "past the cap of ...", a false sentence about the arithmetic
+printed beside it. `_large_space` now asserts the ordering. Mutation-tested:
+disabling the assertion DID NOT RAISE.
+
+### D-EX-028 rejected a bare threshold and then shipped one as its only gate
+
+This is the substantive amendment. D-EX-028 rejects "a reachable-state count over
+a threshold" as a standalone criterion **on the grounds that the constant arrived
+without an argument** — while in code that same constant, applied to a computed
+bound, *is* the whole of what `_large_space` gates on. The document was rejecting
+the criterion it ships.
+
+Resolved by supplying the missing argument rather than by softening the
+rejection, because the rejection was right and the gate is necessary:
+
+* the requirement is only `> MAX_ENUMERATION`. Past the cap the naive enumerator
+  provably cannot terminate, and that is the entire claim the class makes;
+* 10^12 is that with about seven orders of headroom, so raising the cap by any
+  plausible factor cannot silently reclassify an item;
+* every shipped class (ii) item clears it by 6 to 24 orders (smallest bound
+  2^60 = 1.15e18);
+* the upper endpoint is exact: `2^60` keeps every label, `2^60 + 1` flips ii3.
+
+It is a floor with margin, not a measurement or a tuned number. What makes the
+criterion non-tautological is not the threshold at all: it is the conjunction with
+the constructive bound, whose count is exhibited rather than asserted.
+
+**A claim this entry made and then had to withdraw.** It first asserted that "any
+threshold in `(256, 1.15e18]` labels the same seven records and refuses both
+negative controls", offered as robustness "across ~16 orders". An adversarial
+reviewer ran it. Both controls are refused at **every** `T` tested, down to
+`T = 2`, because the refusal migrates to the second gate above; `256` is control
+2's own bound and is the endpoint you get if the first gate is the only one, i.e.
+the derivation predates the gate this same entry adds. The audit set therefore
+cannot distinguish `10^12` from `2` and does not constrain the threshold from
+below at all. The claimed robustness was a property of the audit set presented as
+a property of the constant — which is a tautology dressed as a gate, the exact
+ground on which D-EX-028 rejected criterion (a). **The threshold's defence is the
+argument above, not a sweep.**
+
+### What a class (ii) record may not do, restated
+
+Truncation alone must never earn the label. The second negative control is the
+point: a 400-switch board that truncates *exactly as ii1..ii4 do* is still
+refused, because its bound is only 2^8. Without the conjunction, a board thirty
+orders of magnitude smaller than ii1 would ship as class (ii) on the strength of
+a cap we chose ourselves.
+
+### Correction to this entry's own neighbourhood
+
+D-EX-028's closing survey states `check_certificate` runs at "<=3.1 ms per item".
+That restates one wall-clock observation as a bound, and a timing is not a bound —
+reruns give 3.06 ms and 3.66 ms, and those are prose observations with no
+committed artefact either. The defensible claim is the order of magnitude. Every
+timing in this ticket is machine-dependent and nothing gates on one.
