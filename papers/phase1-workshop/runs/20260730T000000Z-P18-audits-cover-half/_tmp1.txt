@@ -1,0 +1,143 @@
+repair_report keys: ['certify_cheap', 'certify_lean', 'certify_lean_latch', 'compiled', 'evidence', 'green', 'manual', 'plan', 'region', 'scored_against_the_world', 'stale_certificate']
+stale_certificate: {
+ "died": true,
+ "file": "theory\\generated_repaired_stale\\theory.lean",
+ "first_error": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+ "lean": {
+  "available": true,
+  "axiom_reports": [
+   {
+    "axioms": [
+     "sorryAx"
+    ],
+    "name": "unsolvable"
+   }
+  ],
+  "errors": [
+   "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+   "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+   "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+   "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+   "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:767:76: error: unsolved goals"
+  ],
+  "green": false,
+  "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+  "returncode": 1,
+  "sorries": []
+ },
+ "reading": "the exhibit's invariant is no longer closed under the manual's step; the pagoda is broken by exactly the rule the probe added, and Lean says so",
+ "region_size": 21
+
+=== probe P-01 {
+ "action": "DOWN",
+ "id": "P-01",
+ "manual_agreed": false,
+ "manual_predicted_mover": [
+  6,
+  4
+ ],
+ "mover_after": [
+  7,
+  6
+ ],
+ "mover_cell": [
+  6,
+  4
+ ],
+ "navigation_steps": 2,
+ "note": "this is the probe the localisation asked for; the holed manual's prediction is one of the three hypotheses and it is on the record before the action is taken",
+ "observation": "jumps to (7,6)",
+ "predictions": {
+  "holed_manual__nothing_happens": "stays",
+  "missing_rule__one_step_down": "steps to (7,4)",
+  "missing_rule__teleport_to_7_6": "jumps to (7,6)"
+ },
+ "question": "M7 located the divergence here: at (6,4), DOWN.  What does the world actually do?",
+ "refuted": [
+  "holed_manual__nothing_happens",
+  "missing_rule__one_step_down"
+ ],
+ "status": "refuted",
+ "surviving": [
+  "missing_rule__teleport_to_7_6"
+ ],
+ "tier": "executable"
+}
+=== probe P-03 {
+ "frontier": [
+  [
+   "act==DOWN",
+   "tcolor(DOWN)==3"
+  ],
+  [
+   "act==DOWN",
+   "at(6,4)"
+  ]
+ ],
+ "id": "P-03",
+ "note": "`probe_frontier` ranks a separating experiment at 1.0 bits but classifies it hypothetical: it needs either a second colour-3 cell or a Cart on (6,4) with something else below, and this level has exactly one Portal, so neither configuration is reachable.  The two guards are extensionally identical here.  Decided on description length and carried into theory_repaired.dsl as an openly pending theorem — see THEORIZE_LOG R-05.",
+ "question": "is the jump triggered by the colour below the Cart (tcolor(DOWN)==3) or by the Cart's being on (6,4)?",
+ "source": "artifacts/engines_report.json probes[0]",
+ "status": "not_separable_in_this_world",
+ "tier": "hypothetical"
+}
+probe_report other keys: {'confirmed': 0, 'executable': 4, 'not_separable': 1, 'ordering_constraint': 'the Portal is one-way, so every left-room probe had to run before P-01; an irreversible world constrains experiment order, not just experiment design', 'probed_trace': 'artifacts\\probed_trace.jsonl', 'probes_designed': 5, 'refuted': 4, 'run': 4, 'trace_frames_after': 196, 'trace_frames_before': 184}
+probes.jsonl n= 5
+  id P-02.1 keys ['action', 'id', 'manual_agreed', 'manual_predicted_mover', 'mover_after', 'mover_cell', 'navigation_steps', 'note', 'observation', 'predictions', 'question', 'refuted', 'status', 'surviving', 'tier']
+  id P-02.2 keys ['action', 'id', 'manual_agreed', 'manual_predicted_mover', 'mover_after', 'mover_cell', 'navigation_steps', 'note', 'observation', 'predictions', 'question', 'refuted', 'status', 'surviving', 'tier']
+  id P-02.3 keys ['action', 'id', 'manual_agreed', 'manual_predicted_mover', 'mover_after', 'mover_cell', 'navigation_steps', 'note', 'observation', 'predictions', 'question', 'refuted', 'status', 'surviving', 'tier']
+  id P-01 keys ['action', 'id', 'manual_agreed', 'manual_predicted_mover', 'mover_after', 'mover_cell', 'navigation_steps', 'note', 'observation', 'predictions', 'question', 'refuted', 'status', 'surviving', 'tier']
+  id P-03 keys ['frontier', 'id', 'note', 'question', 'source', 'status', 'tier']
+=== jsonl P-01 {
+ "action": "DOWN",
+ "id": "P-01",
+ "manual_agreed": false,
+ "manual_predicted_mover": [
+  6,
+  4
+ ],
+ "mover_after": [
+  7,
+  6
+ ],
+ "mover_cell": [
+  6,
+  4
+ ],
+ "navigation_steps": 2,
+ "note": "this is the probe the localisation asked for; the holed manual's prediction is one of the three hypotheses and it is on the record before the action is taken",
+ "observation": "jumps to (7,6)",
+ "predictions": {
+  "holed_manual__nothing_happens": "stays",
+  "missing_rule__one_step_down": "steps to (7,4)",
+  "missing_rule__teleport_to_7_6": "jumps to (7,6)"
+ },
+ "question": "M7 located the divergence here: at (6,4), DOWN.  What does the world actually do?",
+ "refuted": [
+  "holed_manual__nothing_happens",
+  "missing_rule__one_step_down"
+ ],
+ "status": "refuted",
+ "surviving": [
+  "missing_rule__teleport_to_7_6"
+ ],
+ "tier": "executable"
+}
+=== jsonl P-03 {
+ "frontier": [
+  [
+   "act==DOWN",
+   "tcolor(DOWN)==3"
+  ],
+  [
+   "act==DOWN",
+   "at(6,4)"
+  ]
+ ],
+ "id": "P-03",
+ "note": "`probe_frontier` ranks a separating experiment at 1.0 bits but classifies it hypothetical: it needs either a second colour-3 cell or a Cart on (6,4) with something else below, and this level has exactly one Portal, so neither configuration is reachable.  The two guards are extensionally identical here.  Decided on description length and carried into theory_repaired.dsl as an openly pending theorem — see THEORIZE_LOG R-05.",
+ "question": "is the jump triggered by the colour below the Cart (tcolor(DOWN)==3) or by the Cart's being on (6,4)?",
+ "source": "artifacts/engines_report.json probes[0]",
+ "status": "not_separable_in_this_world",
+ "tier": "hypothetical"
+}

@@ -5,7 +5,14 @@ which has since moved. A report cannot fail a build. This is the executable half
 of the same rule, and it is meant to be run before every push that touches
 `papers/phase1-workshop/`.
 
-Six checks, each independently reported, exit code 1 if any fails:
+That first paragraph was written on day one and was true on day one. By
+2026-07-30 "which has since moved" had grown from a caveat into the finding:
+both standing audits pinned the *same* first draft, 1318 lines / 75,885 bytes,
+while `PAPER.md` had reached 3,729 lines / 237,872 bytes -- so §7 through §12
+had been audited by nobody, and this file reported PASS (6/6) throughout.
+Check G exists so that the sentence cannot go quietly false again.
+
+Seven checks, each independently reported, exit code 1 if any fails:
 
   A. GENERATED   `PAPER.md` is byte-identical to `assemble.py`'s output from
                  `sections/*.md`. The header says "do not hand-edit"; this is the
@@ -126,6 +133,21 @@ Six checks, each independently reported, exit code 1 if any fails:
                      findings -- pressure toward exactly the section-wide
                      ruling the BROAD guard now limits.
 
+  G AUDITSTAMP  Every audit report in this directory carries a machine-readable
+                 stamp naming the sha256, line count and byte count of what it
+                 audited, and that stamp is true: `binding` reports must pin the
+                 target's current state, `stale` ones must name their successor,
+                 and a stamp whose numbers disagree with the blob its own sha
+                 names is refused. Full rationale, the two-value `status`
+                 vocabulary, and the gaps left open are in `audit_stamp.py`.
+
+                 The gap worth knowing before relying on it: this makes
+                 staleness *loud*, not *illegal*. Editing the paper turns G red,
+                 and a worker may clear it by marking the audit stale rather
+                 than by re-auditing. Requiring a binding audit at all times was
+                 considered and rejected -- it freezes a live draft, and a gate
+                 that blocks ordinary work gets switched off.
+
 Run:  python papers/phase1-workshop/verify_paper.py
       python papers/phase1-workshop/verify_paper.py --quiet   (verdict lines only)
       python papers/phase1-workshop/verify_paper.py --explain-uncited  (E, verbose)
@@ -143,6 +165,8 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+import audit_stamp
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
@@ -1505,6 +1529,8 @@ CHECKS = [
     ("D NOSECRET", "no credential value in any published file", check_nosecret, False),
     ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited, True),
     ("F BARE", "no citation is an ambiguous bare filename", check_bare, True),
+    ("G AUDITSTAMP", "every audit report pins what it audited, correctly",
+     audit_stamp.check, False),
 ]
 
 #: The check whose failure makes the other verdicts describe the wrong document.
@@ -1549,8 +1575,20 @@ def main() -> int:
               f"block.")
         print("  E proves no block is *entirely* uncited. It does not check that "
               "any given number")
-        print("  came from the artefact beside it -- CITECHECK.md is the audit "
-              "that does that.")
+        # Resolved through the stamp rather than named, because this sentence
+        # spent weeks pointing at an audit that covered a third of the paper.
+        # A pointer that cannot go stale is worth more than a shorter line.
+        binding = audit_stamp.binding_audits("CITECHECK")
+        if binding:
+            print(f"  came from the artefact beside it -- {', '.join(binding)} "
+                  f"is the audit that does that,")
+            print("  and it is stamped as binding on PAPER.md as it stands.")
+        else:
+            print("  came from the artefact beside it. NO citation audit "
+                  "currently binds this text:")
+            print("  every CITECHECK report here is stamped stale. Nothing "
+                  "has checked the numbers")
+            print("  against their artefacts at this revision -- see check G.")
         print("  Widest blocks (quantities behind how many citations):")
         for n, cites, name, lineno in worst:
             print(f"    {n:>3} quantities / {cites} citation(s)   {name}:{lineno}")
