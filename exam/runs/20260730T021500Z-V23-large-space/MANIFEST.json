@@ -1,111 +1,111 @@
 {
-  "agent": "RES-3",
-  "base_commit": "415556f8",
-  "branch": "agent/v6-v23-large-space-verdict-gap",
-  "files": [
-    {
-      "path": "CRITERION.md",
-      "sha256": "fdd49e2fbf7437582b3d6512066949a8c252df1889be09818e62b98ce6b0dfa1"
-    },
-    {
-      "path": "RUN_STATE.md",
-      "sha256": "8ee58868296a6148015730f266e63ad8c23ad3bcaad9fce9df6a2715dc17b5d4"
-    },
-    {
-      "path": "adversarial/attack_barbell.json",
-      "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
-    },
-    {
-      "path": "adversarial/attack_barbell.py",
-      "sha256": "b73d3c7df38920a771d022ad9ed17ad185c841293ab1fa0da4662ef1013370be"
-    },
-    {
-      "path": "adversarial/attack_straddle.json",
-      "sha256": "47b2d7732fb6ed9f2059fa996c2e53a57808c543b947c3b8376b88acfda2ef50"
-    },
-    {
-      "path": "adversarial/attack_straddle.py",
-      "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
-    },
-    {
-      "path": "adversarial/review-round3.md",
-      "sha256": "effc9cd88c3128f20c5e2d734b816d918aa6feebe671261056c615ee6aa4834a"
-    },
-    {
-      "path": "adversarial/round5-findings.md",
-      "sha256": "592deff13b044718ec1c76996b1d990139881fb899ca220cd14c937763c341c7"
-    },
-    {
-      "path": "crux_quotient_settles.json",
-      "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
-    },
-    {
-      "path": "crux_quotient_settles.py",
-      "sha256": "3320d616a28cea895d9b382de6f684b0c05008a4ee027050653e8121ff907eec"
-    },
-    {
-      "path": "enumeration_probe.json",
-      "sha256": "d01cc78b463cd035aa6ddddcdbf0b1c646ccd3560c273866e85f0dcaf19692dc"
-    },
-    {
-      "path": "enumeration_probe.py",
-      "sha256": "e6169a39a03c028a56d73dc4f31df9382551ae9cef474820ea8454db82009273"
-    },
-    {
-      "path": "enumeration_sweep.json",
-      "sha256": "a8bd823b95f24ffa107f541fcedb72d3be12b37949596796ca42a29062129ae9"
-    },
-    {
-      "path": "enumeration_sweep.py",
-      "sha256": "68fd4659f0b6b08cb7d7afe4d9dde06453484b062915e1dfc3101243c5720a00"
-    },
-    {
-      "path": "growth_curve.json",
-      "sha256": "c5567722e25b7e69a454b93a7ca8c800b7237c5386fa2093ae6b476f957e2b0b"
-    },
-    {
-      "path": "growth_curve.py",
-      "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
-    },
-    {
-      "path": "invariant_path_probe.md",
-      "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
-    },
-    {
-      "path": "probe_answer_key.json",
-      "sha256": "89be31d7e7dcdd4b9e7452ff4c67f3cea392f18e9dca165980c804a20366c8a7"
-    },
-    {
-      "path": "probe_answer_key.py",
-      "sha256": "577dbcec748b0af81a283536dfea330123d18748774cae3b1957eed543697743"
-    },
-    {
-      "path": "probe_lp_interface.json",
-      "sha256": "fc13461568220c150ba5760cdbf6768a0952d2db792e5db64bde048ed04c76e1"
-    },
-    {
-      "path": "probe_lp_interface.py",
-      "sha256": "dc6cf7b20b9514d363877dcbaa6abedb72e137b298b751412372ae71d5baec86"
-    },
-    {
-      "path": "probe_lp_soundness.json",
-      "sha256": "721703674502b7570db62c93d1aa42cae564dc0c403cd4c34aaf0d4c76a87ebd"
-    },
-    {
-      "path": "probe_lp_soundness.py",
-      "sha256": "fc8247abbddb79cc921112be481057ce82467b79f66336c4b584c381a6a2e74e"
-    },
-    {
-      "path": "repro_duplicate_switch.json",
-      "sha256": "1143f4b79c7b180b4cb50838c79b8bb1d40dea01544a4b78c9b1c5e765bd6660"
-    },
-    {
-      "path": "repro_duplicate_switch.py",
-      "sha256": "2bdf22b99892db380506c39954b2f489f8940a41f39180424972417725cc3c0a"
-    }
-  ],
-  "note": "Hashes are over the bytes published at the commit that carries this manifest, and must be re-stamped in any commit that touches a listed file. They pin what was published; they are NOT a reproducibility check, and for four files they cannot be one. growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned internally by growth_curve.json's `stable_sha256` and enumeration_probe.json's `deterministic_sha256` over their deterministic fields -- both of those reproduce; the whole-file sha here moves per run. crux_quotient_settles.json and probe_answer_key.json have no such internal hash and their `timing_seconds` / `MEASURED.*_seconds` fields move per run too; probe_lp_interface.json says so in its own generator's docstring (B, C and E record their own cost). enumeration_sweep.json is time- and memory-budget driven and reproduces nothing numeric. Re-verified 2026-07-30 after round five: 17 of the then 23 entries matched and 6 did not, every one of the 6 because a later commit (722b6e8e, b43427f0, 9cf779a3, 08820583, 0154c8f1) moved the file without re-stamping the manifest. BASELINE-cycle94.md is tracked in this directory but deliberately unlisted: it is a different concurrent session's cycle log, not an artefact of this run. __pycache__ is excluded: byte-unstable and not an artefact.",
-  "prompt_id": "V6-V23-large-space-verdict-gap",
-  "territory": "exam",
-  "utc": "2026-07-30T02:15:00Z"
+ "agent": "RES-3",
+ "base_commit": "415556f8",
+ "branch": "agent/v6-v23-large-space-verdict-gap",
+ "files": [
+  {
+   "path": "CRITERION.md",
+   "sha256": "ce246beac0d51e848a023eb79fc39e1c024a10b5af4d695714c2fd555d5ee8dc"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "8ee58868296a6148015730f266e63ad8c23ad3bcaad9fce9df6a2715dc17b5d4"
+  },
+  {
+   "path": "adversarial/attack_barbell.json",
+   "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
+  },
+  {
+   "path": "adversarial/attack_barbell.py",
+   "sha256": "b73d3c7df38920a771d022ad9ed17ad185c841293ab1fa0da4662ef1013370be"
+  },
+  {
+   "path": "adversarial/attack_straddle.json",
+   "sha256": "47b2d7732fb6ed9f2059fa996c2e53a57808c543b947c3b8376b88acfda2ef50"
+  },
+  {
+   "path": "adversarial/attack_straddle.py",
+   "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
+  },
+  {
+   "path": "adversarial/review-round3.md",
+   "sha256": "effc9cd88c3128f20c5e2d734b816d918aa6feebe671261056c615ee6aa4834a"
+  },
+  {
+   "path": "adversarial/round5-findings.md",
+   "sha256": "592deff13b044718ec1c76996b1d990139881fb899ca220cd14c937763c341c7"
+  },
+  {
+   "path": "crux_quotient_settles.json",
+   "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
+  },
+  {
+   "path": "crux_quotient_settles.py",
+   "sha256": "3320d616a28cea895d9b382de6f684b0c05008a4ee027050653e8121ff907eec"
+  },
+  {
+   "path": "enumeration_probe.json",
+   "sha256": "25ab00c683150b21bc8c3ad25ed9188ca3e34f6a41299fea0e52812aa1fe51ca"
+  },
+  {
+   "path": "enumeration_probe.py",
+   "sha256": "435c6561707697f76cedcfa5aec69ac7675d3f3c5b561516202ca0f60a6c669c"
+  },
+  {
+   "path": "enumeration_sweep.json",
+   "sha256": "a8bd823b95f24ffa107f541fcedb72d3be12b37949596796ca42a29062129ae9"
+  },
+  {
+   "path": "enumeration_sweep.py",
+   "sha256": "68fd4659f0b6b08cb7d7afe4d9dde06453484b062915e1dfc3101243c5720a00"
+  },
+  {
+   "path": "growth_curve.json",
+   "sha256": "c5567722e25b7e69a454b93a7ca8c800b7237c5386fa2093ae6b476f957e2b0b"
+  },
+  {
+   "path": "growth_curve.py",
+   "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
+  },
+  {
+   "path": "invariant_path_probe.md",
+   "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
+  },
+  {
+   "path": "probe_answer_key.json",
+   "sha256": "89be31d7e7dcdd4b9e7452ff4c67f3cea392f18e9dca165980c804a20366c8a7"
+  },
+  {
+   "path": "probe_answer_key.py",
+   "sha256": "577dbcec748b0af81a283536dfea330123d18748774cae3b1957eed543697743"
+  },
+  {
+   "path": "probe_lp_interface.json",
+   "sha256": "fc13461568220c150ba5760cdbf6768a0952d2db792e5db64bde048ed04c76e1"
+  },
+  {
+   "path": "probe_lp_interface.py",
+   "sha256": "dc6cf7b20b9514d363877dcbaa6abedb72e137b298b751412372ae71d5baec86"
+  },
+  {
+   "path": "probe_lp_soundness.json",
+   "sha256": "721703674502b7570db62c93d1aa42cae564dc0c403cd4c34aaf0d4c76a87ebd"
+  },
+  {
+   "path": "probe_lp_soundness.py",
+   "sha256": "fc8247abbddb79cc921112be481057ce82467b79f66336c4b584c381a6a2e74e"
+  },
+  {
+   "path": "repro_duplicate_switch.json",
+   "sha256": "1143f4b79c7b180b4cb50838c79b8bb1d40dea01544a4b78c9b1c5e765bd6660"
+  },
+  {
+   "path": "repro_duplicate_switch.py",
+   "sha256": "2bdf22b99892db380506c39954b2f489f8940a41f39180424972417725cc3c0a"
+  }
+ ],
+ "note": "Hashes are over the bytes published at the commit that carries this manifest, and must be re-stamped in any commit that touches a listed file. They pin what was published; they are NOT a reproducibility check, and for four files they cannot be one. growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned internally by growth_curve.json's `stable_sha256` and enumeration_probe.json's `deterministic_sha256` over their deterministic fields -- both of those reproduce; the whole-file sha here moves per run. crux_quotient_settles.json and probe_answer_key.json have no such internal hash and their `timing_seconds` / `MEASURED.*_seconds` fields move per run too; probe_lp_interface.json says so in its own generator's docstring (B, C and E record their own cost). enumeration_sweep.json is time- and memory-budget driven and reproduces nothing numeric. Re-verified 2026-07-30 after round five: 17 of the then 23 entries matched and 6 did not, every one of the 6 because a later commit (722b6e8e, b43427f0, 9cf779a3, 08820583, 0154c8f1) moved the file without re-stamping the manifest. BASELINE-cycle94.md is tracked in this directory but deliberately unlisted: it is a different concurrent session's cycle log, not an artefact of this run. __pycache__ is excluded: byte-unstable and not an artefact.",
+ "prompt_id": "V6-V23-large-space-verdict-gap",
+ "territory": "exam",
+ "utc": "2026-07-30T02:15:00Z"
 }
