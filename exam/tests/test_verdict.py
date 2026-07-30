@@ -22,8 +22,10 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from collections import deque
+from unittest import mock
 from typing import Any, Dict, Sequence
 
 import pytest
@@ -350,7 +352,7 @@ def test_class_i_is_actually_small_and_actually_unsolvable(paper):
         assert not capped, item.item_id
         assert not solvable, "%s is claimed unsolvable and is not" % item.item_id
         assert states < 5000, item.item_id
-        assert item.truth["state_space"]["exhaustive_feasible"] is True
+        assert item.truth["state_space"]["naive_enumeration_feasible"] is True
         assert item.truth["search_credible"] is True
 
 
@@ -359,7 +361,7 @@ def test_class_ii_bound_is_recorded_and_enormous(paper):
     assert len(items) >= 4
     for item in items:
         space = item.truth["state_space"]
-        assert space["exhaustive_feasible"] is False
+        assert space["naive_enumeration_feasible"] is False
         assert space["enumerated"] is None
         assert space["lower_bound"] > V.LARGE_SPACE_THRESHOLD
         assert space["lower_bound"] > 10 ** 12
@@ -374,6 +376,180 @@ def test_class_ii_bound_is_recorded_and_enormous(paper):
         assert item.truth["search_credible"] is False
         assert space["positional_states"] < 10 ** 4
         assert "NOT a sound abstraction" in space["quotient_note"]
+        # The record must not be readable as an enumeration that ran and came
+        # back clean. It used to say `"truncated": False` beside
+        # `"enumerated": None`. D-EX-028.
+        assert space["enumeration_attempted"] is False
+        assert space["truncated"] is None
+
+
+def test_class_ii_levels_actually_truncate_the_enumerator(paper):
+    """The premise `_large_space` derives its refusal from, measured.
+
+    `_large_space` does not time an enumeration -- a timeout would not carry the
+    claim (engine-rig D-024) and running one on every build costs seconds for a
+    result the constructive bound already fixes. So it *derives* "a forward
+    enumeration under this cap cannot terminate" from 2^m exceeding the cap.
+    That derivation has a premise -- that the bound is sound on this level --
+    and this test checks it against the enumerator itself rather than trusting
+    it. Without this, the honest-looking record would rest on exactly the kind
+    of unmeasured assertion the field rename was about. D-EX-028.
+
+    Scoped by the *record*, not by the class. `_large_space` is called by seven
+    items, not the four class (ii) ones -- the three `solvable_hard` items carry
+    the same claim, and scoping this test to `large_unsolvable` would have left
+    three unmeasured records behind exactly the check written to catch them.
+    Measured: all seven truncate, none finds a solution inside the cap, ~5 s.
+    """
+    items = [i for i in paper.items
+             if i.truth["state_space"]["naive_enumeration_feasible"] is False]
+    assert len(items) == 7, "expected 4 class (ii) + 3 solvable_hard"
+    assert {i.truth["class"] for i in items} == {"large_unsolvable",
+                                                 "solvable_hard"}
+    for item in items:
+        level = RV.Level(json.loads(item.truth["level_blob"]))
+        result = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+        assert result["truncated"] is True, (
+            "%s: the enumerator terminated under the cap, so the record's "
+            "refusal to enumerate is unfounded and its lower bound is wrong"
+            % item.item_id)
+        assert result["states"] >= RV.MAX_ENUMERATION
+        # It must run out of room, not run into the answer. A solvable_hard
+        # item whose plan turned up inside the cap would mean the naive method
+        # does work here, which is the opposite of what the record claims.
+        assert result["solution"] is None, item.item_id
+        # And the counterweight, so the two numbers stay on the record together:
+        # what the naive method cannot finish, a quotient walk settles at once.
+        assert item.truth["state_space"]["positional_states"] < 10 ** 4
+
+
+@pytest.mark.parametrize("family,build_level,states_of,m_of", [
+    # Constructor AND operator, because the operator is part of the family:
+    # orchard's forbidden LEFT is exactly what takes m from 2k to 2(k-1).
+    # measured == closed form, at every k, with nothing fitted.
+    ("gantry",
+     lambda k: V.variant_of(V.comb_room("gantry", k, None), "gantry",
+                            remap={"LEFT": "RIGHT", "RIGHT": "LEFT"}),
+     lambda k: 2 * k * 4 ** k, lambda k: 2 * k),
+    ("lattice",
+     lambda k: V.variant_of(V.comb_room("lattice", k, 2), "lattice",
+                            lost_cells=[[4, 2]]),
+     lambda k: 2 * k * 4 ** k, lambda k: 2 * k),
+    ("spindle",  # unbudgeted: ii3 ships a step_limit, which binds instead of k
+     lambda k: V.comb_open("spindle", k, 1, k),
+     lambda k: 2 * k * 4 ** k, lambda k: 2 * k),
+    ("orchard",
+     lambda k: V.variant_of(V.comb_open("orchard", k, 2, 1), "orchard",
+                            forbidden=["LEFT"]),
+     lambda k: (2 * 4 ** k - 8) // 3, lambda k: 2 * (k - 1)),
+])
+def test_the_comb_families_grow_exactly_as_the_bound_extrapolates(
+        family, build_level, states_of, m_of):
+    """The measurement that licenses extrapolating 2^m to the shipped k=60.
+
+    The shipped bound is arithmetic, never a count: no class (ii) board has ever
+    had its states enumerated, and none ever can -- the affordable ceiling on
+    this hardware is ~5e6 states against ii1's 2^120 = 1.33e36, and the
+    enumerator costs ~473 bytes per state, so 10^12 alone would want ~473 TB.
+    What *is* affordable is enumerating the same families at small k and
+    checking the growth law they follow.
+
+    Enumerated to completion, `measured == 2k*4^k` for the three comb_room-shaped
+    families and `(2*4^k - 8)/3` for orchard, exactly, at every k, with no
+    fitting. So 2^m is a true lower bound and a loose one -- by a factor of 2k,
+    growing, or 8/3, constant. Extrapolation to k=60 is licensed by the closed
+    form being exact wherever it can be checked, not by any count reaching k=60,
+    and this test is the check.
+
+    k stops at 6 because that is where the largest family still fits under the
+    shipped cap: gantry at k=7 is 229,376 states, past MAX_ENUMERATION. Running
+    the ladder to k=9 costs ~128 s and adds one order of magnitude; k<=6 costs
+    ~3 s. D-EX-028.
+
+    orchard's m is 2(k-1), not 2k: with LEFT forbidden the two column-1 alcoves
+    sit behind the start and are not dippable. That is why shipped ii4 reports
+    m=118 rather than 120, and getting it wrong is what makes the ratio look
+    like it drifts rather than converging to 8/3.
+    """
+    kmin = 2 if family in ("lattice", "orchard") else 1
+    ratios = []
+    for k in range(kmin, 7):
+        level = RV.Level(build_level(k))
+        bound = V.subset_lower_bound(level)
+        assert bound["m"] == m_of(k), "%s k=%d" % (family, k)
+
+        result = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+        assert not result["truncated"], (
+            "%s k=%d hit the cap; the ladder must stay under it" % (family, k))
+        assert result["states"] == states_of(k), (
+            "%s k=%d: measured %d, closed form %d"
+            % (family, k, result["states"], states_of(k)))
+        # The bound is sound at every rung, which is the property that matters.
+        assert result["states"] >= bound["lower_bound"]
+        ratios.append(result["states"] / bound["lower_bound"])
+
+    if family == "orchard":
+        # (8/3)(2^m - 1) / 2^m, converging to 8/3 from below.
+        assert ratios[-1] == pytest.approx(8 / 3, abs=0.01)
+        assert all(a < b for a, b in zip(ratios, ratios[1:]))
+    else:
+        # 2k*2^m / 2^m == 2k exactly: the looseness grows without bound.
+        assert ratios == [float(2 * k) for k in range(kmin, 7)]
+
+
+def test_a_board_that_looks_large_but_enumerates_is_not_class_ii():
+    """The negative control: big by every surface measure, and enumerable.
+
+    A classifier tried only on true positives has not been tried. This board is
+    the widest in the file -- 400 switches on a 200-cell corridor, more of both
+    than any shipped class (ii) item -- and a tight step budget means the whole
+    reachable set is 6,480 states, enumerated to completion in 0.01 s. It must
+    not be classed as class (ii), and the reason it is refused must be the
+    constructive bound rather than anything about its size. D-EX-028.
+    """
+    doc = V.variant_of(V.comb_open("negctl-looks-large", 200, 1, 200),
+                       "negctl-looks-large", step_limit=10)
+    level = RV.Level(doc)
+    assert len(level.switches) == 400
+    assert len(level.switches) > 120, "must out-switch every shipped class (ii)"
+
+    result = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+    assert result["truncated"] is False
+    assert result["states"] == 6480
+
+    bound = V.subset_lower_bound(level)
+    assert bound["dippable_switches"] == 400, "it really does look large"
+    assert bound["m"] == 4, "the budget, not the switch count, sets m"
+    assert bound["lower_bound"] == 16
+    assert result["states"] >= bound["lower_bound"]
+
+    with pytest.raises(AssertionError, match="under the"):
+        V._large_space(doc)
+
+
+def test_a_truncating_board_is_still_refused_without_a_bound():
+    """The criterion is a conjunction, and this is the half that proves it.
+
+    Criterion (b) -- our own enumerator failing to finish -- is not sufficient
+    on its own, and this board shows why it must not be: at a budget of 20 the
+    reachable set passes the 200,000 cap and the enumerator truncates, exactly
+    as it does on ii1..ii4, yet the constructive bound is only 2^8 = 256 and the
+    item is refused. If truncation alone earned the label, a board 30 orders of
+    magnitude smaller than ii1 would ship as class (ii) on the strength of a cap
+    we chose ourselves. D-EX-028.
+    """
+    doc = V.variant_of(V.comb_open("negctl-truncates", 200, 1, 200),
+                       "negctl-truncates", step_limit=20)
+    level = RV.Level(doc)
+
+    result = RV.enumerate_states(level, cap=RV.MAX_ENUMERATION)
+    assert result["truncated"] is True, "this board must truncate, like ii1..ii4"
+
+    bound = V.subset_lower_bound(level)
+    assert bound["lower_bound"] == 2 ** 8
+    assert bound["lower_bound"] < V.LARGE_SPACE_THRESHOLD
+    with pytest.raises(AssertionError, match="under the"):
+        V._large_space(doc)
 
 
 def test_class_ii_bound_is_constructive_not_asserted(paper):
@@ -648,12 +824,21 @@ def test_search_exhaustion_is_partial_on_small_and_worthless_on_large(paper):
     """A search claim is paid where it could be true and refused where it cannot.
 
     D-EX-022 briefly rewrote this test on the argument that the class (ii)
-    boards are searchable after all, via their `(cart, button)` quotient. They
-    are not: the quotient ignores `step_limit` and carries no latch state, so it
-    reports a `require_all_switches` level solvable when it is unsolvable. The
-    original assertion is restored, and the ordering it depends on -- a
-    certificate always beats a search -- is now asserted alongside it, since
-    that part of the rewrite was worth keeping. D-EX-027.
+    boards are searchable after all, via their `(cart, button)` quotient. The
+    original assertion is restored (D-EX-027), but it does *not* rest on the
+    quotient being useless: D-EX-028 measured that the quotient settles every
+    shipped class (ii) item, and its unsoundness is one-sided -- an
+    over-approximation yields false `solvable`, never false `unsolvable`, so a
+    goal in a different component is a sound unsolvability proof, and the key
+    itself is computed that way.
+
+    What the refusal rests on is narrower and is the only thing this test
+    asserts: `reason: "exhaustive_search"` claims the *naive* method, forward
+    enumeration over the full (cart, button, latch mask) state, and that method
+    cannot terminate on a class (ii) board -- so the claim is a false statement
+    about what the examinee did, whatever cheaper complete method exists. The
+    ordering the test also pins -- a certificate always beats a search -- was
+    the part of D-EX-022's rewrite worth keeping. D-EX-027, amended by D-EX-028.
     """
     small = next(i for i in paper.items if i.truth["class"] == "small_unsolvable")
     large = next(i for i in paper.items if i.truth["class"] == "large_unsolvable")
@@ -690,7 +875,7 @@ def test_the_quotient_is_recorded_and_is_not_a_search_space(paper):
     for item in paper.items:
         space = item.truth["state_space"]
         assert isinstance(space["positional_states"], int)
-        if not space["exhaustive_feasible"]:
+        if not space["naive_enumeration_feasible"]:
             assert "NOT a sound abstraction" in space["quotient_note"]
             assert item.truth["search_credible"] is False
 
@@ -733,7 +918,7 @@ def test_every_solvable_item_says_where_its_witness_came_from(paper):
     assert constructed == {"lattice"}
     for item in solvable:
         if item.truth["witness_source"] == "construction":
-            assert item.truth["state_space"]["exhaustive_feasible"] is False
+            assert item.truth["state_space"]["naive_enumeration_feasible"] is False
 
 
 # ------------------------------------------------------------------------
@@ -861,6 +1046,147 @@ def test_a_duplicated_switch_is_refused_by_the_builder():
     assert any("repeats a cell" in p for p in level.wellformed_problems())
 
 
+def test_the_bound_itself_refuses_a_duplicated_switch():
+    """The test above asserts what `wellformed_problems` says, not what the
+    bound does -- and its own docstring names the consequence it does not check.
+
+    Measured before the fix, on a shipped constructor: `comb_open` with its
+    switch list replaced by 60 copies of one cell gave `m=60` and a lower bound
+    of 2^60 = 1.15e18 on a board with **359** reachable states, an overstatement
+    of 3.2e15. Neither the lane premise nor `LARGE_SPACE_THRESHOLD` refused it.
+    The only guard that did was `wellformed_problems`, reached from
+    `_self_check` at the end of `build()` -- after all seven `_large_space`
+    calls had already written their records. A bound that survives only because
+    a caller three frames away happens to check is not a bound. D-EX-028.
+    """
+    doc = V.comb_open("regression-dup-bound", 60, 1, 60)
+    doc["switches"] = [[1, 1] for _ in range(60)]
+    level = RV.Level(doc)
+    # The premise that fails is distinctness of latch bits, not the lane.
+    assert len(level.switch_index) == 1 and len(level.switches) == 60
+    with pytest.raises(AssertionError, match="distinct cells"):
+        V.subset_lower_bound(level)
+    with pytest.raises(AssertionError, match="distinct cells"):
+        V._large_space(doc)
+
+
+def test_a_duplicate_outside_the_bounded_prefix_still_yields_a_bound():
+    """The guard is gated on `candidates[:m]`, and this is why.
+
+    A repeated entry naming an impassable cell never becomes a dip candidate,
+    so it never enters the 2^m family and the bound over the real alcoves stays
+    sound. A coarser guard keyed on `level.switches` would refuse this board,
+    which would be a false refusal: the arithmetic it rejects is correct.
+    """
+    doc = V.comb_open("regression-dup-offprefix", 20, 1, 20)
+    clean = V.subset_lower_bound(RV.Level(doc))
+    doc["switches"] = list(doc["switches"]) + [[0, 0], [0, 0]]
+    level = RV.Level(doc)
+    assert len(level.switch_index) < len(level.switches)
+    assert not level.passable((0, 0)), "the added entries must be off-board wall"
+    noisy = V.subset_lower_bound(level)
+    assert noisy["m"] == clean["m"]
+    assert noisy["lower_bound"] == clean["lower_bound"]
+
+
+def _straddle_board(corridor=24, start_col=12, step_limit=25):
+    """`comb_open` plus two shipped operators, with the start INSIDE the span of
+    the dip sources. Every shipped item starts at the corridor end instead."""
+    haz = ([[1, c] for c in range(2, corridor + 1, 2)]
+           + [[3, c] for c in range(2, corridor + 1, 2)])
+    return V.variant_of(V.comb_open("straddle", corridor, start_col, 1),
+                        "straddle", lost_cells=haz, step_limit=step_limit)
+
+
+def test_an_interior_start_does_not_buy_the_straight_line_cost():
+    """The third premise, and the one two guards did not cover (D-EX-029).
+
+    `dist(c_m) + 2m` is the true cost of the walk only when the start lies
+    *outside* the span of the dip sources -- true of every shipped item
+    (`start_col=1`) and assumed of all boards. With an interior start the m
+    nearest sources straddle it, no single walk to c_m touches the ones behind,
+    and the shorthand omits the backtrack.
+
+    Measured before the fix, on this board: m=10, a published 2^10, and **758** of
+    those 1024 latch masks actually reachable -- with `wellformed_problems()`
+    empty, the lane guard passing, the duplicate guard passing, `_large_space`
+    accepting, and the published `arithmetic` describing a walk costing 137
+    commands against a budget of 99. The number stayed a true lower bound; the
+    justification did not, on the class graded on justification.
+
+    So this pins the discrimination rather than the number: the sweep affords 8,
+    the shorthand would have claimed 10, and the two must not agree here.
+    """
+    level = RV.Level(_straddle_board())
+    bound = V.subset_lower_bound(level)
+    assert bound["m"] == 8, "the sweep affords 8 dips on this board"
+
+    # What the withdrawn shorthand would have allowed, computed the way the old
+    # loop did. If this ever equals the sweep's m, the board has stopped
+    # straddling and the test has stopped testing anything.
+    reach = V.position_paths(level, level.start)
+    dists = sorted(len(reach[s]) for s in
+                   (V._dip_source(level, reach, sw) for sw in level.switches)
+                   if s is not None and s in reach)
+    shorthand = 0
+    for index, distance in enumerate(dists, start=1):
+        if distance + 2 * index > level.step_limit:
+            break
+        shorthand = index
+    assert shorthand > bound["m"], (
+        "this board must be one where the shorthand over-charges the budget "
+        "less than the real sweep does, or it is not the regression board")
+
+
+def test_the_straddle_board_is_refused_rather_than_shipped():
+    """The same shape at the scale that used to clear the threshold.
+
+    Before D-EX-029 this board reached m=40, `lower_bound` 2^40 = 1.0995e12 --
+    over `LARGE_SPACE_THRESHOLD` -- so `_large_space` accepted it and wrote a
+    class (ii) record whose justification described a walk the budget could not
+    buy. It must now fall under the threshold and be refused.
+    """
+    doc = _straddle_board(corridor=60, start_col=30, step_limit=99)
+    bound = V.subset_lower_bound(RV.Level(doc))
+    assert bound["m"] == 29
+    assert bound["lower_bound"] < V.LARGE_SPACE_THRESHOLD
+    with pytest.raises(AssertionError, match="under the"):
+        V._large_space(doc)
+
+
+def test_the_published_arithmetic_names_a_cost_the_budget_affords():
+    """The `arithmetic` string is published in the shipped truth key, so a false
+    cost clause in it is a false claim in an artefact, not a stale comment. It
+    used to read "at a cost of dist + 2m commands" -- a formula, unevaluated, and
+    the wrong one. It now carries the measured sweep, which must fit the budget.
+    """
+    doc = V.variant_of(V.comb_open("spindle-cost", 200, 1, 200),
+                       "spindle-cost", step_limit=150)
+    bound = V.subset_lower_bound(RV.Level(doc))
+    assert "dist + 2m" not in bound["arithmetic"]
+    assert "sweep to the far end" in bound["arithmetic"]
+    match = re.search(r"at a cost of (\d+) commands", bound["arithmetic"])
+    assert match, "the cost clause must publish a number, not a formula"
+    assert int(match.group(1)) <= 150, "and the budget must afford it"
+
+
+def test_a_bound_under_the_enumeration_cap_may_not_claim_the_cap():
+    """`enumeration_refused_because` asserts the bound is "past the cap", and
+    nothing checked it: it held only because `MAX_ENUMERATION` (200,000) happens
+    to sit below `LARGE_SPACE_THRESHOLD` (10^12). Neither constant's docstring
+    stated the ordering as a requirement, so raising the cap above the threshold
+    left the record still publishing "past the cap of ..." -- a false sentence
+    about the arithmetic printed directly beside it.
+    """
+    doc = V.variant_of(V.comb_open("spindle-cap", 200, 1, 200),
+                       "spindle-cap", step_limit=150)
+    assert V._large_space(doc)["naive_enumeration_feasible"] is False
+
+    with mock.patch.object(V, "MAX_ENUMERATION", 10 ** 40):
+        with pytest.raises(AssertionError, match="does not exceed the enumeration cap"):
+            V._large_space(doc)
+
+
 def test_the_subset_bound_refuses_a_board_it_does_not_fit():
     """`subset_lower_bound` was unsound off the strict comb, and said nothing.
 
@@ -900,7 +1226,7 @@ def test_the_shipped_class_ii_levels_still_pass_the_lane_precondition(paper):
     """The precondition must refuse the falsifiers and accept the paper."""
     for item in paper.items:
         space = item.truth["state_space"]
-        if space["exhaustive_feasible"]:
+        if space["naive_enumeration_feasible"]:
             continue
         bound = V.subset_lower_bound(RV.Level(json.loads(item.truth["level_blob"])))
         assert bound["lower_bound"] == space["lower_bound"]

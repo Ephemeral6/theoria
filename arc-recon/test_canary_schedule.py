@@ -58,15 +58,75 @@ def sandbox(tmp_path, monkeypatch):
     return tmp_path
 
 
-def fake_replay(verdicts, calls=None):
-    """A stand-in for canary.replay that records how it was called."""
+def fake_replay(verdicts, calls=None, http_calls=None, drop_actions=False):
+    """A stand-in for canary.replay that records how it was called.
+
+    `http_calls` defaults to actions + one per game, which is what the real
+    sweep produces: RESET is a command rather than an action (ACCESS_CHECK.md
+    6b) but it is still a request.  It used to be hardcoded to 0 here, and that
+    is exactly why 42 green tests could not see the settlement bug S22 found on
+    the live `full` sweep -- 0 is the single value at which charging http_calls
+    and charging actions are indistinguishable.  A fixture that pins the one
+    number under test to its harmless value tests the harness, not the code.
+
+    `drop_actions` omits `actions_executed` entirely, for the case where the
+    sweep reports no count at all.
+    """
     def _replay(games=None, client=None, note="", plan=None, tags=None):
         if calls is not None:
             calls.append({"plan": plan, "note": note, "tags": tags})
-        return {"t": sched._now(), "verdicts": dict(verdicts),
-                "actions_executed": sum((plan or {}).values()),
-                "http_calls": 0, "card_id": "card-test", "plan": plan or {}}
+        actions = sum((plan or {}).values())
+        run = {"t": sched._now(), "verdicts": dict(verdicts),
+               "actions_executed": actions,
+               "http_calls": (actions + len(plan or {})
+                              if http_calls is None else http_calls),
+               "card_id": "card-test", "plan": plan or {}}
+        if drop_actions:
+            del run["actions_executed"]
+        return run
     return _replay
+
+
+class FakeGate:
+    """A spend gate that records what it was asked to charge.
+
+    `refuse_record` makes settlement raise the way the real gate does when a
+    charge exceeds its reservation -- the name matters, because `main()`
+    dispatches on `SpendGate*`.
+    """
+
+    def __init__(self, refuse_record=False):
+        self.charges = []
+        self.released = []
+        self.refuse_record = refuse_record
+
+    class Tripped(RuntimeError):
+        pass
+
+    Tripped.__name__ = "SpendGateTripped"
+
+    def reserve(self, campaign, usd_cap=0.0, action_cap=0):
+        self.reserved = {"campaign": campaign, "action_cap": action_cap}
+        return type("Res", (), {"reservation_id": "res-test"})()
+
+    def release(self, reservation, reason=""):
+        self.released.append(reason)
+
+    def record(self, reservation, usd=0.0, actions=0):
+        self.charges.append(actions)
+        if self.refuse_record:
+            raise FakeGate.Tripped(
+                "reservation res-test is over its action cap: %d > %d"
+                % (actions, self.reserved["action_cap"]))
+
+
+def with_gate(monkeypatch, gate):
+    """Put `gate` on the spending path, keeping the real reservation size."""
+    def _open(campaign, actions):
+        res = gate.reserve(campaign, usd_cap=0.0, action_cap=int(actions))
+        return gate, res, {"spend_gate": "reserved", "reservation": "res-test"}
+    monkeypatch.setattr(sched, "open_spend_gate", _open)
+    return gate
 
 
 # -- which steps can actually catch a forgery -------------------------------
@@ -431,3 +491,82 @@ def test_an_explicit_env_path_is_never_second_guessed(tmp_path):
     missing = tmp_path / "nowhere.env"
     with pytest.raises(RuntimeError):
         client.load_api_key(str(missing))
+
+
+# -- settlement: the unit charged, and what survives a refusal --------------
+#
+# All four came out of S22 item (1), the first ever run of the `full` profile
+# (2026-07-30).  It had been configured, scheduled and documented as a standing
+# instrument without once executing, and it tripped its own reservation on the
+# first try.
+
+def test_the_pool_is_charged_actions_not_http_calls(sandbox, monkeypatch):
+    """RESET is a request but not a billable action, so the two differ.
+
+    `README.md` item 6: ARC's `total_actions` counts successful actions only --
+    failed 400s and retry amplification do not bill.  Charging http_calls both
+    over-charges the shared pool and exceeds a reservation that was made in
+    actions, which is what tripped the live sweep.
+    """
+    gate = with_gate(monkeypatch, FakeGate())
+    monkeypatch.setattr(canary, "replay",
+                        fake_replay({"ar25-0c556536": "PASS"}))
+    record = sched.run_scheduled("quick", force=True)
+    planned = record["plan"]["actions"]
+    assert gate.charges == [planned], (
+        "settled %r against a reservation of %d actions" % (gate.charges, planned))
+    assert gate.charges[0] < record["run"]["http_calls"], (
+        "the fixture must make the two units differ, or this test cannot fail")
+    assert record["gate"]["settlement"] == "recorded"
+    assert record["gate"]["charged_actions"] == planned
+
+
+def test_a_settlement_refusal_does_not_erase_the_sweep_from_the_schedule(
+        sandbox, monkeypatch):
+    """The actions are already spent; losing the record makes the next run respend.
+
+    This is the failure the live `full` sweep actually produced: 16 actions
+    gone, all four games PASS, and `due` still answering "never run".  A
+    scheduled task in that state re-spends on every wake-up forever.
+    """
+    gate = with_gate(monkeypatch, FakeGate(refuse_record=True))
+    monkeypatch.setattr(canary, "replay",
+                        fake_replay({"ar25-0c556536": "PASS"}))
+
+    with pytest.raises(FakeGate.Tripped):
+        sched.run_scheduled("quick", force=True)
+
+    # The refusal must still surface -- but only AFTER the state is on disk.
+    state = sched.load_state()
+    entry = state.get("profiles", {}).get("quick", {})
+    assert entry.get("last_attempt"), (
+        "the sweep spent actions and left no trace in the schedule state, so "
+        "`due` will call it 'never run' and it will be spent again")
+    assert entry.get("last_outcome") == "pass"
+    assert sched.due("quick")["due"] is False, (
+        "a sweep that just ran is still reported as due")
+
+
+def test_a_sweep_reporting_no_action_count_is_not_settled_at_zero(
+        sandbox, monkeypatch):
+    """A missing measurement must not be priced as a free sweep.
+
+    The old code read `run.get("http_calls", 0)`, so an absent count charged
+    nothing.  `spend_gate.jsonl` seq 12487 is a canary settlement of
+    `actions: 0`; its cause is not established, but a default that prices a
+    missing number at zero is not worth keeping while wondering.
+    """
+    gate = with_gate(monkeypatch, FakeGate())
+    monkeypatch.setattr(canary, "replay",
+                        fake_replay({"ar25-0c556536": "PASS"}, drop_actions=True))
+    with pytest.raises(RuntimeError, match="nothing honest to charge"):
+        sched.run_scheduled("quick", force=True)
+    assert gate.charges == [], "charged the pool despite having no count"
+
+
+def test_the_cli_still_reports_a_settlement_refusal_as_exit_5(sandbox, monkeypatch):
+    """Recording the sweep must not make the refusal quiet."""
+    with_gate(monkeypatch, FakeGate(refuse_record=True))
+    monkeypatch.setattr(canary, "replay",
+                        fake_replay({"ar25-0c556536": "PASS"}))
+    assert sched.main(["run", "--profile", "quick", "--force"]) == 5

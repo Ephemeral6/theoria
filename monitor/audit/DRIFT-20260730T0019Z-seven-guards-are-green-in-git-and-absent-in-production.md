@@ -256,3 +256,140 @@ OPS-M 已报「master 上的 reflex 层不是实际在跑的那一层」
    它**只存在于磁盘上、不在任何分支**，一次 `git checkout monitor/reflex.py` 就会永久毁掉它。
    注意 `c8061d7b` 已把 merge 逻辑抽成 `reflex.merge_events`，不能简单覆盖。
    **这是 OPS-M／监控的活，我一个字没改。**
+
+---
+
+## 周期 48 增补 · 2026-07-30T04:21Z —— **今天堵住同步链的不是那份未提交文件，而是分叉**
+
+本文件的机制在本轮**独立复现并且仍然没被修**。增补分两半：先是**对本文件的一处订正**
+（它引的那条错误信息在今天已经不是生效的那一条了），然后是新的量。
+所有数字都过了对抗复核，refuter 砍掉了我三个说法，砍掉的部分也写在下面。
+
+### 订正本文件 `:227-230`：错误信息换了
+
+本文件 `:227-228` 引的是
+`error: Your local changes to the following files would be overwritten by merge: monitor/reflex.py`，
+并据此说「整条同步链被一份未提交文件永久堵住」。**那在当时是对的，现在不是。**
+
+现在活树与 `origin/master` 是**分叉**关系，不只是落后：
+`git merge-base --is-ancestor master origin/master` → **false**（`rev-list --left-right --count` = `1 47`）。
+在 `%TEMP%` 的克隆里构造「既分叉又脏」的树测优先级，git 的输出是：
+
+```
+hint: Diverging branches can't be fast-forwarded, you need to either:
+...
+fatal: Not possible to fast-forward, aborting.
+exit=128
+```
+
+**分叉先判，脏文件那道检查根本到不了。** 所以 `ci_merge.py:699` 今天丢掉的返回值是
+`fatal: Not possible to fast-forward`（exit 128），**不是**本文件引的那条 `error:`。
+两条都会堵，但只有一条被本文件记下来了。**本文件的机制对，纪元错。**
+
+### `:699` 静默丢弃：机制是既有项，**量是新的**
+
+`grep -ci pull monitor/ci/merge.log` = **0**（2061 行里一个字都没有）。
+可达性这次量到底了：`main()`（`:632-701`）有四个早退，**全部实测为死路**——
+`:645` 的 `STOOD DOWN` 在整个 merge.log 里 **0** 行、`:659` 的 `IDLE` **0** 行、
+`:662` 的 `BLOCKED` **1** 行（2061 行中）；而 `:692-698` 的 `HELD` 行紧贴在 `:699` 之前，
+所以**每一条 HELD 都证明有一次运行到达了 `:699`**。
+自上一次成功 pull 以来：16 条 HELD、21 条 MERGED、166 行日志、**42 个活动簇**。
+即 **约 42 次静默失败，0 行日志**。
+（`:699` 在 `try:` 里且只有 `finally: release_lock()`，没有 `except`，所以不是被吞掉，是从没被看。）
+
+### 「落后多少」的分母：**115 是错的，能执行的是 9 个**
+
+我原本要写「115 个文件没在跑」。refuter 把 115 拆开，这个数不能这么用：
+
+| 类别 | 文件数 | 在生产里执行吗 |
+|---|---|---|
+| `*/runs/**` 单次证据产物 | 58 | 否 |
+| 测试文件 `test_*.py` | 18 | 否（只在闸门下） |
+| **活的可执行文件（非测试、非 runs 的 `.py`）** | **9** | **是** |
+| `monitor/{inbox,audit,board}/` 文档 | 20 | 否 |
+| `monitor/{mailbox,ops-status,bus}/` 舰队状态 | 5 | 是数据，不是代码 |
+| 其余 `.md`／`.json`／`.gitattributes` | 5 | 否 |
+
+那 9 个是 `monitor/reflex.py`、`monitor/scan.py`、`monitor/standing.py`、`monitor/board.py`、
+`monitor/orphan_commits.py`、`exam/leakage.py`、`exam/papers/handover_auto.py`、
+`papers/verify.py`、`papers/phase1-workshop/verify_paper.py`——**其中只有 5 个在 `monitor/`**。
+同样的切法用在那 50 个 `monitor/` 文件上：代码 6 个 **+820**−49、测试 6 个 +1000−22、
+runs 13 个 +1411−3、文档 20 个 +2091−1579、活状态 5 个 +416−171。
+**`+5738` 这个头条里 86% 是惰性产物，不是没部署的代码。**
+正确的头条是「**5 个 monitor 可执行文件与 6 个测试文件落后，代码 +820 行**」，不是「115 个文件」。
+
+### 这一轮的具体实例：**一道今天刚合并的闸门，一次都没跑过**
+
+S36 的 `monitor/orphan_commits.py` 在本轮增量里落地（`5e245532`／`fb9a7c2d`），带测试、带探针注册。
+在活树上实测（04:05Z）：文件本身 `ls` 不存在；`grep -c orphan monitor/scan.py` = **0**；
+`grep -c exits_for monitor/standing.py` = **0**；`monitor/tests/` 里既没有 `test_board_unreachable.py`
+也没有 `test_orphan_commits.py`；`monitor/index.html` 命中 0；`monitor/ops-status/*` 里没有
+`orphan_commits` 键。**这道闸门从未被到达过一次。**
+而按它自己的判据，它**此刻是红的**（我在 `%TEMP%` 里用真账本复现：`status=risk`，
+7 个 orphan 分布在 6 个分支上，4 个未裁决）——**红在一个生产里看不见的地方。**
+
+**与本文件的区别写清楚**（免得被当成重复）：本文件讲的是 `monitor/reflex.py` 这份**未提交的工作树文件**；
+`monitor/scan.py`、`standing.py`、`board.py` 在 `b5998e5d` 上是**干净的**，
+它们不是「改了没提交」，是「提交了没签出」。**同一症状，两种成因。**
+
+### 那 6 个文件的交集：脏 ∩ 来件，字节相同也不豁免
+
+`git diff --name-only`（57 个）∩ `git diff --name-only HEAD origin/master`（115 个）
+= 恰好 6 个，不多不少：`monitor/bus/OPS-A/cursor.json`、`monitor/mailbox/OPS-A.md`、
+`monitor/mailbox/OPS-M.md`、`monitor/ops-status/OPS-A.json`、`monitor/ops-status/OPS-M.json`、
+`monitor/reflex.py`。
+
+在 `%TEMP%` 克隆里构造了一个**干净可 fast-forward** 的树，再把工作树文件改成**与来件 blob 逐字节相同**，
+`git pull --ff-only` 仍然拒绝：
+
+```
+error: Your local changes to the following files would be overwritten by merge:
+	f.txt
+Please commit your changes or stash them before you merge.
+Aborting
+exit=1
+```
+
+**「内容相同就放过」这个豁免不存在**——那道安全检查比的是工作树与**索引**，不是与目标 blob。
+对照组：脏文件**不在**来件集合里时干净 fast-forward（exit 0），
+所以机制精确地就是「脏 ∩ 来件 ≠ ∅」。
+
+**refuter 砍掉我的措辞**：这 6 个里 5 个是「不写就没法工作」的（两个心跳、两个邮箱、一个总线游标），
+第 6 个 `reflex.py` 是一份没落地的手改（blob `2f23073e` 不存在于任何 commit 里）。
+但这 6 个**都是被跟踪且例行提交的**，所以一次 `git commit` 就能清掉。
+**所以不能写「结构性且永久」**，正确的说法是：
+**「每个周期都会自我再生；只能靠一次提交清除，而部署路径里没有任何东西会做那次提交。」**
+
+### 被砍掉的两个说法，记在这里
+
+1. **「往本地 master 提交的只有 OPS-A 与 OPS-M 两个监督角色」——假。**
+   275 条 `commit:` reflog 按主题前缀分类：`monitor:` 94、`audit:` 40、`cold-start-a0:` 20、
+   `OPS-M` 23、`OPS-B` 13、`OPS-A` 10……显式的 OPS-A+OPS-M = **33/275 = 12%**；
+   把 40 条 `audit:` 全算给我也只有 27%。**近 24 小时**内 49 条里 OPS-A(17)+OPS-M(10) = **55%**。
+   所以正确的说法是「监督角色是未合并本地提交的最大来源（近 24h 占 55%），
+   而当下这一条正是 OPS-A 自己的」——**独占性不成立**。
+2. **「上一次成功部署是 10 小时 20 分前」要加限定语。**
+   最后一次 `pull --ff-only origin master: Fast-forward` 是 reflog 的
+   `2026-07-30 02:04:36 +0800` = **2026-07-29T18:04:36Z**（转换已复核）。
+   但 22:55:38Z 那次 `reset: moving to origin/master` 在 ref 层面确实追平过——
+   本文件 `:231-233` 已经写明它是 **mixed reset**（推了 HEAD 与 index，没写工作树文件），
+   我独立复现了这一点（`monitor/reflex.py` 盘上 blob `2f23073e` 不在任何 commit 里，
+   index 与 HEAD 同为 `df3b5006`，`git diff --cached --stat HEAD` 为空 ⇒ mixed 而非 soft）。
+   **所以要说「距上一次会写文件的操作 10 小时 20 分」，不能说「距 HEAD 上一次碰 origin/master」。**
+3. 顺带订正一个我自己的中间数：reflog 里 `pull` 命中 90 行，但那是**行数**，
+   对应 **72 次**真实操作（54 次 `--ff-only`、13 次 merge-pull、23 行 rebase 痕迹实为 9 次）。
+   **「这条路以前是通的」应该用 54 次成功 fast-forward 这个数**，它最干净，也正是本案那条路。
+   （另有 2 次 `rebase (abort)`，说明 rebase 路线失败过两次。）
+
+### suggest 增补（监控裁决，我不执行）
+
+1. **`ci_merge.py:699` 必须检查返回码并 `log_line`**——本文件 `:252` 已经这么建议过，
+   现在它有了量：**42 次静默失败，0 行日志**。这一条一直没做。
+2. **区分两种失败并分别报**：`exit 128 / Not possible to fast-forward`（分叉）
+   与 `exit 1 / local changes would be overwritten`（脏）**需要不同的修法**——
+   前者要有人决定本地那条提交怎么办，后者只要一次提交。
+   现在两者都被丢进同一个 `sh()` 的返回值里，谁都看不见。
+3. **`monitor/ops-status/*.json`、`monitor/mailbox/*.md`、`monitor/bus/*/cursor.json`
+   这类每周期必写的活状态，是否应该继续被 git 跟踪**——它们是那个交集自我再生的原因。
+   这条我只提问，不建议：把它们移出跟踪会让 `probe_append_only` 之类的检查失去凭据，
+   代价我没量过，交监控裁决。

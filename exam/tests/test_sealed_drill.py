@@ -357,8 +357,8 @@ def test_the_drill_declares_the_class_it_cannot_rehearse(run):
     """Class (ii) of Theoria.md:259 is absent, and must be said so out loud.
 
     worldgen's largest world has 2654 reachable states, so nothing in the
-    catalogue can stand in for a space exhaustive search cannot reach. A
-    rehearsal that quietly omitted it would read as covering all three.
+    catalogue can stand in for a space naive forward enumeration cannot exhaust.
+    A rehearsal that quietly omitted it would read as covering all three.
     """
     payload, _ = run
     assert payload["coverage"]["classes_absent"] == ["large_unsolvable"]
@@ -516,3 +516,56 @@ def test_a_bogus_cut_set_cannot_buy_the_reason_half(run):
                      target, out)
     assert score.detail["reason"] == "invalid_certificate"
     assert score.awarded == target.points * 0.5
+
+
+def test_no_drill_item_claims_search_credit_without_a_measurement(run):
+    """`search_credible` must be read off a `state_space` record, not asserted.
+
+    It was the literal `True` with no `state_space` key at all. Two things fell
+    out of that, and the second is why this test exists rather than a comment.
+
+    `rubrics_verdict`'s marker reads
+    `truth.get("state_space", {}).get("arithmetic", "large")`, so the absent
+    record printed the word "large" at the examinee as its explanation. And the
+    drill is the instrument D-EX-028 asks to be pointed at a world naive
+    enumeration cannot exhaust, in order to close
+    `classes_absent: ["large_unsolvable"]`. On the day the catalogue gains one,
+    an asserted `True` pays search credit for a search that cannot run and
+    nothing goes red -- missing treated as pass, in the one field that run spent
+    itself making honest.
+
+    `solve()` raises `OracleTruncated` instead of returning a truncated result,
+    so an item existing at all is the proof the enumeration terminated. This
+    pins that the record says so in a count.
+    """
+    _, out_dir = run
+    with open(os.path.join(out_dir, "truth.json"), encoding="utf-8") as fh:
+        key = json.load(fh)
+
+    holders = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            if "search_credible" in node:
+                holders.append(node)
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(key)
+    assert holders, "no truth record carries search_credible -- test is blind"
+
+    for record in holders:
+        space = record.get("state_space")
+        assert isinstance(space, dict), (
+            "search_credible with no state_space record: the marker would "
+            "default `arithmetic` to the word 'large' and say it to the examinee")
+        assert isinstance(space.get("enumerated"), int), (
+            "state_space must carry the node count it was derived from")
+        assert space.get("truncated") is False
+        assert space.get("enumeration_attempted") is True
+        assert record["search_credible"] is space["naive_enumeration_feasible"], (
+            "the two must be the same fact, or the marker and the gate can "
+            "disagree while both read green")
