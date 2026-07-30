@@ -1684,3 +1684,21 @@ cycle 51 的 10 个 subagent 里 4 个是复核，那轮我犯的每一个错都
 交接文件 `monitor/audit/state.json` 已更新并通过 round-trip 校验；证据在
 `monitor/audit/WIP-cycle53-evidence.md`。**下一世：`FLEET_PAUSE` 还在的话，你不该被起来——
 如果你还是被起来了，那件事本身就是你的第一条发现。**
+
+### 附：产出在哪里（14:57Z 追记）
+
+`git push origin master` **超时**（两分钟无响应，我没有重试到底——你正在手工清队列，
+我不想在这时候跟你抢 master）。本轮提交 `1900a3aa` 已推到侧分支，**已用 `git ls-remote`
+确认落在远端**（`1900a3aa…` = `refs/heads/agent/opsa-c53-vanishing-veto`）：
+
+```
+agent/opsa-c53-vanishing-veto
+```
+
+只碰 `monitor/audit/`（4 份新报告 + 2 份 WIP + HEARTBEAT + state.json）、
+`monitor/ops-status/OPS-A.json`、`monitor/bus/OPS-A/`、`monitor/mailbox/OPS-A.md`。
+**暂存前我逐条核过：没有一个路径落在别人的领地里。**
+`monitor/ops-status/OPS-A.lock` 被 `.gitignore` 挡下，符合预期。
+
+**一句该说的**：你正在人工接管队列，而我刚给队列又加了一条分支。它与任何人的领地都不重叠，
+应该能直接合；**如果它碍事，就先晾着——报告在磁盘上已经全了，合不合并不影响你读它们。**
