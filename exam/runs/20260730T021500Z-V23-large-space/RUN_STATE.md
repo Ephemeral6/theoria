@@ -334,3 +334,54 @@ than defended:
   confirms it independently) but the artefact does not measure the half that makes
   it bite. The same shape as the standing audit finding about a hand-written first
   ledger entry.
+
+## Third session: the corrections landed, and one of them was itself the defect
+
+The list above was written as *findings*. It is now also a record of work done, so
+this section closes each one rather than leaving a reader to diff two documents.
+
+Applied to `CRITERION.md` in `fd362f02`:
+
+* the provenance paragraph naming three of eight artefacts, replaced by a
+  section-to-artefact map covering all of them;
+* every `verdict.py` line anchor, **switched to symbol names rather than
+  re-numbered**. Re-numbering resets the clock and nothing more: the anchors had
+  rotted ~58 lines against the base commit and ~107 once this round's code fixes
+  landed, and P21/P22's standing finding is that an anchor into a file its own
+  commit edits will rot again. The three anchors into files this work does not
+  touch were verified line-by-line and kept: `Theoria.md:259`,
+  `engine-rig/DECISIONS.md:780-781` (narrowed from `779-781` to D-024's actual
+  sentence), `worldgen/core/world.py:259`;
+* `{0,0,+1}` → `[0, 1]`, matching what `crux_quotient_settles.json` computes;
+* `~6e36` → `~4e36`, which is what carrying the measured ×4.0 to corridor 60
+  actually gives, with the measured part and the extrapolated part now separated;
+* criterion (a) amended with D-EX-029, since the document rejected a bare
+  threshold and then shipped that constant as its only gate;
+* the two adversarial probes and `enumeration_sweep.json`, previously cited by
+  neither document, now cited with what came back — zero unsound rows — and with
+  why that was not reassurance.
+
+Then, in `ee9befa0`, a correction to the correction. `fd362f02` replaced "~128 s"
+(a number matching nothing) with `growth_curve.json`'s recorded `total_seconds:
+122.247`, and in the same passage cited the rerun's 153.24 s, "2.6 s"/2.918 s,
+3.06/3.66 ms and 758-of-1024 as though they were equally sourced. **They are not.
+Every one of those exists only in this file's prose, with no committed artefact.**
+Under this repo's own precedence rule — JSON artefacts beat prose reports — they
+are the weakest evidence in the document, not the fix to it.
+
+That is the third distinct appearance of one shape in this ticket: a claim whose
+justification is weaker than the claim. First `exhaustive_feasible: False`, whose
+own answer key was a 600-node walk. Then the adversarial probes, whose predicate
+tested the bound while the record's justification was about reachable latch masks.
+Now a provenance correction sourced from prose. The reruns are kept and labelled
+rather than deleted, because what they establish is a ~25% spread — no single
+wall-clock figure is a property of the artefact — and swapping 128 for 122.247
+while still calling it "the cost" would have repeated the original error with a
+better-sourced number.
+
+Worth stating plainly for whoever picks this up: **the defect class survives being
+named.** It was named in this file, in a DECISIONS entry, and in two commit
+messages, and it still recurred in the commit that was fixing it. What caught it
+was not vigilance but a mechanical question asked of each number — "which
+committed file emits this, and can I open it?" — which is the only form of the
+check that does not depend on remembering to be careful.
