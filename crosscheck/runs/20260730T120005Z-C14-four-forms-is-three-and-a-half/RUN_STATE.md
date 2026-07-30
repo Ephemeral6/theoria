@@ -27,8 +27,10 @@ the same answer from two different base commits" is itself evidence.
 
 ## The number
 
-**Of the 303 actions the DSL expresses, 0 compile to well-formed, semantically
-non-empty PDDL.** Per-action list: `out/census.md` (303 rows, 0 GOOD, 18 REFUSED).
+**Of the 303 actions the DSL expresses, 0 compile — via
+`theory_compiler.generators.gen_pddl` — to well-formed, semantically non-empty
+PDDL.** Per-action list: `out/census.md` (303 rows, 0 GOOD, 18 REFUSED). That scope
+qualifier was added late and is load-bearing; see "Things I got wrong".
 
 ## How it was attacked
 
@@ -55,6 +57,26 @@ pass over my own conclusions document.
 
 ## Things I got wrong, and fixed
 
+**The headline was scoped wrong, and this is the one that mattered.** The delivered
+document first said the four-forms claim was *false*, on the strength of 0 of 303.
+The repository has a **second PDDL backend** — `cold-start-a0/compile/gen_pddl_a0.py`
+— with 25 committed domains, 263 actions, **263 of them GOOD under this census's own
+classifier**, accepted rc 0 by the same Fast Downward build, and it is the generator
+behind every planning number in the paper. I verified all of that first-hand before
+changing a word, because a reviewer's claim is not evidence either.
+
+Had it shipped as written, an author would have retracted a claim that is defensible
+for the arms the paper reports planning results on. The corrected finding is narrower
+and still serious, and is in `FOUR_FORMS_TRUTH.md` §0 and `out/TWO_BACKENDS.md`.
+
+**Why the measurement could not see it.** The census's population is *every `.dsl`,
+as `gen_pddl`'s own front end sees it* — a corpus defined by **input** files. Backend
+B leaves no trace there, because it is a different **output** path over the same
+inputs. And the instrument had **no positive control**: it was never shown a
+known-good domain and asked to score it GOOD. B is exactly that control, and it was
+found by an adversarial review of the finished document, not by the measurement.
+Both holes are now closed in the gate.
+
 **I over-claimed the repair distance.** I wrote that the 94 naming-only actions
 "become candidates for GOOD in one change". False: `gen_pddl` also makes a
 `:parameters` entry out of every direction constant, typed `object`, and no object
@@ -70,6 +92,24 @@ satisfy all four criteria and still ground to nothing, or carry an inverted
 precondition (`GuardPredicate.negated` is never read by this backend while the
 other three honour it), or let a teleport land anywhere. `0 of 303` is a **ceiling
 on correctness, not a floor on brokenness**.
+
+**Three more, all caught by the same adversarial pass, all verified before changing:**
+
+* "94 naming-only actions, structurally correct" → **37 of 285 (13 %)**. The 57
+  wrongly folded in carry an unbound `?dest`; declaring it yields a *valid* action
+  that teleports the cart anywhere, and the `shove-*` siblings move the cart instead
+  of the block. For those 57 the real defect is the missing event model.
+* "across both live-arm domains: 11 actions" → **9** (3 + 6).
+* "only rises when you stop requiring an effect" → **six** relaxations raise it
+  without touching the effect criterion.
+* `D-TC-031` misattributed: lines 575-578 sit inside **D-TC-030** (heading 555);
+  D-TC-031 is at 597 and is the decision that books the `gen_pddl` shortfall.
+
+**Both repair estimates erred in the same direction** — each made the generator look
+closer to working than it is. That is not two slips; it is one biased method, taking
+a defect *label* as a proxy for how broken an action is when the label only records
+which validity rule was tripped. Recorded because errors that land consistently on
+one side are a method problem, not luck.
 
 **I nearly published a citation I had not checked properly.** A `sed` truncated at
 400 characters made `PARTNER_SYNC.md:923` look like it did not contain the quote I
@@ -93,9 +133,13 @@ report all 34 domains changed on a clean clone while nothing was wrong.
 
 ## Gaps left open, honestly
 
+* **One PDDL backend was measured, not "the PDDL form".** The other one works.
 * **Only the PDDL form was measured.** Nothing here supports or refuses any claim
   about Lean, Python or Markdown. The deliverable explicitly forbids the natural
   repair "three of four forms are verified" for exactly this reason.
+* **The two backends were never cross-checked against each other**, by this item or
+  by anything else in the repository. They emit incompatible encodings of the same
+  manual and no test compares them. Worth its own item; not attempted here.
 * **The census under-counts slightly.** Two `exam/handover_bundles` manuals with 5
   real rules are rejected by `parse_theory` for a missing `semantics:` section, so
   a wider reading of "expressible" gives 313 rather than 303. Left at 303 because
