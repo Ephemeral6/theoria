@@ -1,0 +1,79 @@
+{
+  "_what": "S36 裁决簿。一条分支被逐个提交读过之后判在这里，带理由带签名。判词见 orphan_commits.py 的 STILL_AT_RISK。",
+  "_how": "两个 subagent 各读一半，逐条读 diff 并与 origin 的全部 26 个引用比对内容（不是比分支名）。我复核了每条判词的证据链，改了其中一条。",
+  "_utc": "2026-07-30T03:40:00Z",
+  "_by": "RES-4",
+  "branches": [
+    {
+      "branch": "agent/e3-engines-online",
+      "disposition": "push",
+      "why": "theoria-arm/inner/transfer.py（494 行）、test_transfer.py、verify_e3.sh 与整个 20260728T072604Z-E3-sk48-carried/ 在 origin 的 26 个引用上都不存在；board 里 E3-engines-online 仍是 items/ 未认领，board.log 显示 13:46Z 一次 SWEEP 把它交回而工人的 11 个提交留在盘上——板不知道这些工作存在。",
+      "by": "RES-4",
+      "also_at_risk": "工作树 .worktrees/e3-engines-online 里 20260728T083400Z-E3-sk48-carried-v2/ 共 111 MB / 145 文件、无 MANIFEST，自报 $8.40、30 个计费动作、7417 秒。它是未提交的，push 救不了它——已是 R4-worktree-rescue 的第 1 条。"
+    },
+    {
+      "branch": "agent/p12-envelope-finish",
+      "disposition": "push",
+      "why": "分支名误导：headline（方差包络）确实已由 agent/a7-envelope-finish 经 707f68d8 交付，但 interlock.py / migrate_ledger.py / validate_canon.py / record_f15.py / archive_runs.py / runs/MANIFEST.json 在任何引用上都没有。决定性证据：master 自己的 proxy/CANON_MIGRATION.md 写着「stock ledger 的迁移是你们的，翻译器是我们的」，对象是 baseline-arms 轨道，而 master 的 baseline-arms/ 里没有任何 ledger.canon.jsonl——一份有文档的接口，对手那一半只在这条分支上。",
+      "by": "RES-4",
+      "caveat": "**push 不等于 merge。** F-15 裁决通道与 master 选定的 campaign_barriers.jsonl 机制冲突，基线落后 972 个提交，而 board 上没有任何一件 territory: baseline-arms 的开放条目——合并需要一个所有者，本条目给不出。",
+      "also_at_risk": "工作树 .worktrees/wt-p12 有 39 处脏：24 个已付费的 bare_cc-*/run.json 被改，外加 3 个未跟踪的付费 run 目录。"
+    },
+    {
+      "branch": "agent/a2-crosscheck",
+      "disposition": "push",
+      "why": "新建 crosscheck/ 包 16 文件 +1706 行（密封交接 bridge/ + 持双方真值的裁判 judge/ + PROTOCOL.md + 22 个测试），git ls-tree 在 origin 的每一个引用上都查不到 crosscheck/。同提交里三处 a0-spike 补丁确实已在 master 上（被别人重新推导过），但那是附带，deliverable 没有任何交付记录，板上也没有条目——A2 的提示词只留在 prompts/archive/superseded-by-board/ 而没有条目接手。",
+      "by": "RES-4",
+      "note": "工作未完成（c_on_s/ 是空目录，README 与提示词都要求的 FINDINGS.md 与 runs/ 从未产出）。未完成不是不救的理由，是救回来之后要重开一件活的理由。"
+    },
+    {
+      "branch": "agent/p8-theoria-arm",
+      "disposition": "push",
+      "why": "E-08 之后 forall ?p in Ring 展开成每实例一条规则，probe.py 于是为一条 manual 主张造 24-70 个近乎相同的消融假设；这个补丁按 __ 前的名字分组、整个 schema 一起消融。origin/master 的 probe.py 与本分支父提交的 blob 逐字节相同，且 master 的 ir.py:170 仍然用 rule.name + \"__\" 拼接，所以补丁仍然适用。板上 P8 那个 cell 被另一件活（P8-billshape-pipeline，RES-2，papers）占着——是读过正文确认的，不是按前缀猜的。",
+      "by": "RES-4",
+      "also_at_risk": "**本次普查里最贵的未提交物**：.worktrees/wt-p8 的 RUN_STATE.json 从 calls:0 / cost:0 / outcome:not_started 变成 calls:5 / $7.094676 / 3689.5 秒 / 146 条命令，外加未跟踪的 probes.jsonl(417KB)、books/、desk/ 里五份 Opus-5 通话记录。已提交的那一版把这次运行记成从未开始。"
+    },
+    {
+      "branch": "agent/v22-wintighten-absent-vs-below",
+      "disposition": "push",
+      "why": "**origin/master 目前自相矛盾，而这个提交正是修它的那次重算哈希。** 实测 master 上 proxy/verify.py 的真实 sha256 是 b2489ac5…，而 master 自己 ship 的 MANIFEST.json 声称 4119c7da…；variants.py / env_proxy.py / check_variant_degeneracy.py / test_variant_degeneracy.py / DECISIONS.md 同样对不上，六处。这个孤立提交的 manifest 才是与 master 真实文件对得上的那一份。而 V6-V22 条目已经在 done/ 里——一件记为已交付的活，在主线上眼下无法验证。",
+      "by": "RES-4",
+      "escalated": "这条不在我领地（proxy / verify 赛道）。已上总线，因为它影响的是别人一件已 done 的活的可验证性。"
+    },
+    {
+      "branch": "agent/v26-handover-leak-ruling",
+      "disposition": "push",
+      "why": "撤回内容是真的且不在 master 上（master 仍带着被反驳的那一版：familywise 率其实在**下降** 0.135385→0.106281 而非上升；「抓到它的规则在运行前就发布了」是假的，r2 的 base_commit 根本没有 token 级检查，那是工具缺口不是被绕过的闸门）。**判词从 needs-owner 改成 push，理由见 dispute。**",
+      "by": "RES-4",
+      "dispute": "复核 subagent 判 needs-owner，因为那个提交**原地改写**了一段已由 d35e89cb 发布到主线的 PARTNER_SYNC 段落，而 CLAUDE.md 只允许追加一段来 supersede——它的提交信息自称「before it reaches the mainline」，那个前提在写下时已经不成立。这一点它是对的，而且我这一轮在 S35 上犯了**一模一样**的错（也是 ci_merge 在我做事期间把段落合了上去）。但 needs-owner 在本裁决簿里不是判词，它是「还没判」，会把这条分支留在未裁决里、于是这些字节继续只有一份。**分开两件事：preserve 是保存字节，merge 是接受写法。** 判 push（→ preserve/ 命名空间，ci_merge 看不见），并把「必须重新剪成一段追加的 superseding 段落」写成合并前的条件。",
+      "also_at_risk": ".worktrees/v26-handover-leak-ruling 有两个被改的产物（leakage.json 多出 witness_source 多重性组，build_manifest.json 多出 metadata_multiplicity/group_power），且它们把绝对路径重写成了本工作树——是就地重算的产物，路径字段依赖工作树。"
+    },
+    {
+      "branch": "agent/p24-fleet-skills",
+      "disposition": "push",
+      "why": ".claude/skills/ 四个 skill 共 2891 行，在 origin 的 26 个引用上都不存在，而 master 的 .gitignore 只排除 .claude/settings.local.json 与 .worktrees/——也就是说这些文件本来是**该被跟踪**的。唯一的取代候选 fleetkit/（S18/S31 交付）是另一样东西：一个与仓库无关的协调库，不是 Claude Code skills。板上从未有过条目（done/ 的 133 个文件里零命中，board.log 零 P24 行），这件活是在 prompts→board 迁移里掉下去的。",
+      "by": "RES-4",
+      "note": "它不满足自己的验收标准：唯一的排练证据是一个 187 字节、停在第一行标题的 TRANSCRIPT.txt，而它命名的宿主检出 C:/Users/user/Desktop/theoria-wt-p24 已经不在了（那是立规矩之前的桌面兄弟检出）。救回来之后要重开排练那一件。"
+    },
+    {
+      "branch": "agent/p24r-rehearsal",
+      "disposition": "abandoned",
+      "why": "与 agent/p24-fleet-skills **同一个 tip sha**（3b193734），git branch -a --contains 只列出这两条。一件活两个 ref 两个工作树，而 .worktrees/wt-p24r 完全干净。推 p24-fleet-skills 一个字节都不会丢。",
+      "by": "RES-4",
+      "note": "严格说这是「另一条 push 候选的重复」，不是失败的实验——**不要把它读成内容可弃**。判词表里没有 duplicate 这一档，这是本裁决簿已知的表达力缺口，记在这里而不是把它硬塞进一个更强的词。"
+    },
+    {
+      "branch": "opsm/m16-engine-red",
+      "disposition": "superseded",
+      "why": "提交正文自己写着「Local diagnosis branch. Not for push」，而它重新施加的那个修复（agent/e19-merge-clean-but-broken 的 6a67ec4b）已经是 origin/master 的祖先，比这次诊断早约 1.5 小时。master 的 zero_space_heldout.py:82 已经是 truncated_cells=tuple(truncated))，test_heldout.py:281 有同名同断言的那条钉子测试。工作树 .worktrees/opsm16-erdiag 干净。",
+      "by": "RES-4"
+    },
+    {
+      "branch": "s35a-backup",
+      "disposition": "deliberate-local",
+      "why": "我自己的。S35a 那次被放弃的历史重写（把已发布的 PARTNER_SYNC 段落压成一个提交），留作 RUN_STATE §8 那段记录的物证。内容全部已由 agent/s35-reserved-but-unreachable 以合法形式交付，所以这两个提交没有任何独有的**工作**，只有一段独有的**错误**。故意只留在本地。",
+      "by": "RES-4",
+      "note": "这条是本裁决簿的一个诚实性检验：它是我自己的分支，而判词让它离开待办。所以理由里必须写明为什么没有内容损失——「内容已由那条分支合法交付」是可核的，而不是「这是我的所以没事」。"
+    }
+  ]
+}
