@@ -45,9 +45,22 @@ verify 赛道解封，于是 E18 对通用工人开放，从不可达变成 avai
   是 reconcile 整文件删除 `E8-ic3-scale`）。**没有出口**这件事是代码级的事实，
   不是没人想到。已经有 5 份 inbox 报告点过同一个形状。
 
+**归属，写清楚**：本条目要求 5 让我去核 E18 是不是第二个样本，而 E18 这一例
+**不是我先看见的**。`monitor/inbox/20260729T161200Z-W-252-e18-has-s22-shape-nobody-can-claim-it.md`
+（2026-07-29T16:12Z，比本分支的第一次测量早 9 小时）已经点名 E18、给出
+`board.py:337-344` 与 `board.py:166` 两道闸、并说「`cmd_list` 仍把它印在 reserved 下——
+一个永远不会被服务的队列位置」。W-251 那份（同日 1600Z）点的是 S22。
+本条目在此之上加的是三样，且只有这三样：**数字**（不可达集用求并集的判据量出来，
+10/11 与 2 件印在 reserved 里，而不是举两个例子）、**代码**（W-252 的建议 1 与 2
+落成 `offers()`、`unreachable` 段与 `release` 拒收空理由——它明写「monitor 不是我的领地，
+只提不动」）、以及**出口**（`reassign`，五份报告里没有一份提到出口这件事）。
+W-252 的建议 3（E18 还叠着 `engine-rig` 领地被 E8 认领占着）也已独立复核为真：
+改派解开赛道死锁之后 E18 仍要等那边落地，所以改派 E18 是必要不充分。
+
 ## 3. 修了什么（要求 2、3）
 
-四处，每处都配一个**修复前必红**的测试（`monitor/tests/test_board_unreachable.py`，16 个）。
+四处，每处都配一个**修复前必红**的测试（`monitor/tests/test_board_unreachable.py`，**17 个**
+——本报告先前写 16，是数错了，以 `pytest --collect-only` 为准）。
 
 1. **两个答案变一个**（根因）。新增 `offers(worker, lane)`：`claim` 真正会尝试的
    条目 + 它扣下的 id。`cmd_claim` 与 `cmd_list` 的 reserved 段现在都走它。
@@ -91,8 +104,8 @@ E18 带的就是这个词）。交回是把活推给下一个人，理由是唯�
 ## 5. 验收
 
 ```
-python -m pytest monitor/tests/                # 全绿
-python -m pytest monitor/tests/test_board_unreachable.py -q      # 16 个
+python -m pytest monitor/tests/                                  # 380 passed, 2 xfailed
+python -m pytest monitor/tests/test_board_unreachable.py -q      # 17 个
 python monitor/runs/20260729T224500Z-S35/probe_unreachable.py <monitor>   # 量
 python monitor/runs/20260729T224500Z-S35/after_list.py <monitor>          # 看
 ```
