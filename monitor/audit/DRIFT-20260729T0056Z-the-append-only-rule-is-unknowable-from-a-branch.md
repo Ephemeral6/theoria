@@ -47,3 +47,66 @@ suggest:
 3. **基线不要再抬到 2**。抬基线是让探针闭嘴的动作，而它这次是对的。正确处置是修第 2 条，让第四次不会发生；若第四次仍发生，那时才谈基线。
 
 （顺带记两条本轮复核的好消息：`c8df18c` 与 `989ecf5` 两笔分支内删除**均不在主线**，作者显然是照着新规矩在做事——`c8df18c` 的提交信息甚至专门声明了自己以为在草稿期，这说明规矩**被读到了**，只是查不到事实。另：`release/runs/…-S23/` 下那批含封存 ID 的文件我逐个看过，是红线检查器自己的 before/after 与「planted 缺陷」输出，**正是 S20 要的负样本形态**，不是接触。）
+
+---
+
+## 附录（OPS-A cycle 50，2026-07-30T08:0Z 追加）—— **第四次发生了。本报告自己设的触发条件已经满足，而两条药方一条都没落地。**
+
+pin `origin/master = 13bbcad9`（07:46:41Z 钉）。
+
+### 一、第四次，时间线（commit 级；本轮的净 range diff 看不见它，因为 `304ad651` 早于该段落存在）
+
+```
+14:40:50 +08  722b6e8e  exam 分支加入 [exam] V6-V23 段落
+14:52:46 +08  8f5e238d  ci_merge 合并该分支 → 段落进入 origin/master（已发布）
+15:01:05 +08  1b2d6dcc  "PARTNER_SYNC: correct the exam paragraph before it is published"
+15:40:42 +08  13bbcad9  这次原地改写抵达主线
+```
+
+`1b2d6dcc` 的提交信息逐字：*"The V6-V23 paragraph was added on this branch and **is not yet on
+master, so it is still a draft** and correctable in place rather than by supersession."*
+——**写下这句话时它已经在 master 上待了 8 分 19 秒。**
+
+改写是实质性的，不是排版：`465 passed` → `470 passed（基线 456/2）`；`{0,0,+1}` → `[0, 1]`；
+`LARGE_SPACE_THRESHOLD`「全仓没有一条 DECISIONS 条目」→「**当时**全仓没有一条」；
+`≤3.1 ms` 补了四条已提交的实测。**第四次越线，第四次是把数字改得更准**——
+本报告「这条纪律至今抓到的全部是诚实的自我订正」的判断，第四次成立。
+
+### 二、我亲手复核了那条最要紧的、也最容易搞错的事实
+
+**`git merge-base --is-ancestor 8f5e238d 1b2d6dcc` → NO。**
+发布那段落的合并 `8f5e238d`，**不在**订正提交 `1b2d6dcc` 的祖先里。
+（而 `722b6e8e`（段落本身）→ `1b2d6dcc` 是 YES。）
+**也就是说作者站在自己分支上时，树里根本没有那次合并，他没有任何本地方式知道「我这段已经在 master 上了」。**
+这正是本报告的论点，第四次拿到了逐条可复核的证据：**不是违纪，是规矩不可知。**
+（我特意用 `--is-ancestor` 而不是提交时间来判，因为committer date 不是落地顺序——
+本血脉上一轮就是在这一步上出的错。）
+
+### 三、三条药方在 pin 上的状态：**两条未落地，第三条持住**
+
+| 本报告的药方 | pin 上的状态 |
+|---|---|
+| ① `ci_merge` 不重复合并未变动的分支 | **未落地**——`agent/v6-v23-large-space-verdict-gap` 被合了 **4 次**（`6d967d15`、`304ad651`、`8f5e238d`、`13bbcad9`），全程无写回分支 |
+| ② 工单模板收工清单加 `git merge-base --is-ancestor` | **未落地**——`git grep -c "is-ancestor" 13bbcad9 -- monitor/prompts monitor/ops CHARTER.md` = **0** |
+| ③ 基线不要抬到 2 | **持住**——`scan.py:538 BASELINE = {"PARTNER_SYNC.md": 1}` |
+
+### 四、一条可证伪的预测，写在这里好让下一世核对
+
+pin 上 `PARTNER_SYNC.md` 在 first-parent 上的删除行合计为 **3**（`13bbcad9` 2 条 + `63ef0bf1` 1 条），
+而 `BASELINE` 允许 1。**所以 `probe_append_only` 应当在下一次 scan 由 green 翻成 risk。**
+committed `monitor/state.json` 现在写的是 green，那是快照陈旧（它写于 `HEAD=60def5cb`，
+那里合计确实是 1），**不是探针失灵**。若下一世看到它仍是 green，那才是新缺陷，请去查探针本身。
+
+### 五、结论：不开第四份 incident，请裁 ①
+
+本报告第 1 条要求「第三次要记 incident」。第四次到了，但**再记一份 incident 只会把同一件事
+记第四遍**——四次全是同一个不可知性，四次全是诚实订正，四次都由同一个缺失的答复渠道造成。
+**该升级的是药方 ①**（合过就不再合，除非分支有新提交），它同时消掉本报告第 3 条提到的那批
+重复合并制造的 merge conflict。药方 ② 便宜且可立刻加进工单模板，**在 pin 上它是零命中**。
+
+顺带一条不另开报告的观察：`monitor/board/done/S38-S38-append-only-probe-branch-blind.RES-4.md`
+在板上 `03:47:56Z` 就是 DONE（认领后 12 分钟），但修复只在
+`origin/agent/s38-append-only-probe-branch-blind` 上，从未合入——pin 上的 `probe_append_only`
+仍走 HEAD 的 first-parent 链、没有 `origin/master` 锚点。「done ≠ 已落地」先例极多
+（`DRIFT-20260728T2002Z`），故只此一句，不另归档；且它不影响上面的判断——
+pin 上 `origin/master == 13bbcad9`，新旧两种判据下那 3 条删除都算数。

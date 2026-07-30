@@ -156,3 +156,83 @@ python local_engine_guard.py scan environment_files ../environment_files
 3. **三、`scan` 要么自己发现（从仓库根递归找名为 `environment_files` 的目录），
    要么 `verify.sh` 把根列表改成一次全树扫。** 现在的两个硬编码根，按 guard 自己测试所设想的
    布局（上游仓库作为子目录）就是错的。
+
+---
+
+## 附录（OPS-A cycle 50，08:2Z）—— 同一形状的第二个实例，而它证明这不是一次疏忽，是**一个已经写好的修法没有传播到一个函数体之外的调用点**
+
+pin `13bbcad9`。本附录不新开报告：正文 §一 已经把「先记账，再抛」一般化了，
+这是它在第二个文件里的实例。**值得写下来的是差别，不是相同。**
+
+### 一、实例：`exam/tools/sealed_drill.py:862` 的 `build_items()` 在任何 `write_json` 之前
+
+`run()` 里 `build_items(spec_dir, out_dir)` 在 `:862`，而全部 `write_json` 在 `:925-927`。
+`build_items` 能抛的东西全都会不经捕获地逃出 `run()`：`OracleTruncated`
+（`exam/drill_wrapper.py:226`，`NODE_LIMIT = 400_000`）、`:408` 的 `guard.assert_synthetic_world`、
+`:422` 的 `Variant` 校验。
+
+**用合法的、通过完整校验的变体规格实跑复现，未打任何猴子补丁**
+（`t3-full-house`，`step_limit: 400`，`win_tighten score_at_least 9999`）：
+
+```
+exam.drill_wrapper.OracleTruncated: t3-full-house: composed search exceeded 400000 nodes
+exit code = 1
+files written: variant_specs/drill-probe-large-budget.json   ← 仅此一个
+```
+
+无 `DRILL.json`、无 `truth.json`、无 `sheet.json`。而且 `OracleTruncated` 还不是最可能的触发器——
+新变体里一个拼错的 `world` 或一个畸形算子会更早撞上 `:408`/`:422`，那是远比 40 万节点普通的失误。
+
+### 二、**差别在这里，也是本附录唯一的贡献：正文那条丢的是账，这条留下的是一个陈旧的绿**
+
+`DEFAULT_OUT`（`:89`）指向 `exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun`，
+一个**被 git 跟踪**、里面躺着已提交的绿 `DRILL.json` 的目录。而 `build_items` 在 `:424`
+**先写下每个变体规格**，才在 `:445` 调 `solve()`。对着那个目录的副本实测：
+
+```
+before:  DRILL.json md5 = 0c5df267...   variant_specs = 10 files
+run:     exit=1
+after:   DRILL.json md5 = 0c5df267...   variant_specs = 11 files
+```
+
+**输入被悄悄换掉了，判决没动。** 一个存证目录因此持有一个与自己输入不再对应的绿。
+正文那条的危害是「钱花了、账丢了、下次重花」；这条的危害是「什么都没花，但存证在说谎」。
+**这比正文那条更接近本项目最怕的东西**——`Theoria.md` 的整套纪律建立在 `runs/` 可信之上。
+
+而且 `_gates`（`:723`）消费的是 `payload["findings"]`，所以这一抛**跳过的不是一个闸门，是全部**
+（构造对照、证书、见证、校准），与文件自己在 `:9-10` 的承诺
+（*"every gate is evaluated -- an early failure does not hide a later one"*）直接冲突。
+
+### 三、**最要紧的一句：修法已经在同一个文件里了，作者写过一遍，只是没往前挪一个调用点**
+
+`:333-339` 的注释逐字：
+
+> `# M3: this used to escape and kill the run with a traceback, so a doctored cut produced no`
+> `# DRILL.json and no RED block at all -- which contradicted the header's promise that every`
+> `# gate is evaluated.`
+
+`fire_the_guard` 被这样修好了；**紧邻的下一条语句 `build_items` 没有。**
+所以这不是「作者不知道该怎么做」，而是**同一函数体内、同一作者、同一次修复，隔一个调用点就没有传播**。
+这比正文原来的一般化更强：正文说的是「一个分支写对、一个写错」，这里是
+「**已经诊断过、写过修法、并在注释里解释过为什么要这么修，然后没有应用到隔壁**」。
+
+### 四、severity 与我自己的削弱
+
+**medium，不是 high。** 三条削弱，都写下来：`DRILL.json` 在全树**没有任何程序化消费者**
+（只有 `exam/DECISIONS.md`、`SEALED_DRILL.md`、`STATUS.md`、`PARTNER_SYNC.md` 与一个板面文件提到它）；
+退出码仍然变红（未捕获异常 → rc 1）；`test_sealed_drill.py:35-37` 的模块级 fixture 直接调
+`drill.run()`，所以在测试套里这一抛会让 53 条测试全部 setup 报错——很响。
+**损失被限制在独立/CI 调用路径上**，而那正是存证目录被写坏的那条路径。
+
+### 五、同一次扇出里被我**杀掉**的、本可以成为第三条的东西
+
+`test_no_drill_item_claims_search_credit_without_a_measurement`（`test_sealed_drill.py:521`）
+我一度判为「四条断言全是字面量自比、不可能变红」。**实跑推翻：** 把 `sealed_drill.py:517`
+还原成修复前的裸 `"search_credible": True`（无 `state_space` 记录），该测试在 `:562` 失败——
+**它是一条真正的回归钉。** 它的 docstring 第一行就写明契约是「必须从记录里读出、不得断言」，
+不是量级。而我用来定罪的 `MAX_ENUMERATION = 200_000`（`rubrics_verdict.py:123`）管的是
+`enumerate_states` 这个**针对 `Level` 的另一个枚举器**，drill 从不调用它；drill 自己的上限是
+`NODE_LIMIT = 400_000`。**是我把两个同名不同管辖的常量当成了同一份契约。** 不归档。
+（顺带一条对 RES-3 的更正：`worldgen/core/world.py:259` 的 `reachable(limit=200_000)` 约束的是
+**原始世界状态**，不是复合状态空间——实测 `t3-full-house` + `step_limit=100` 可以合法产出
+217,198 个节点且不截断。`monitor/inbox/20260730T0300Z-RES-3-…` 那条的机制描述需要这一处修正。）
