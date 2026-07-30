@@ -1,0 +1,29 @@
+{
+  "utc": "2026-07-30T03:28:41Z",
+  "upstream": "origin/master",
+  "fetch_age_min": null,
+  "branches_at_risk": 2,
+  "orphan_commits": 3,
+  "unreadable_branches": [],
+  "rows": [
+    {
+      "branch": "s35a-backup",
+      "orphans": 2,
+      "commits": [
+        "e7f1ee20e1b389ec857126c3da8a050aa1da4064",
+        "70570294f17a724825103aebbbc63a1d05fefad8"
+      ],
+      "novel_total": 2,
+      "on_a_remote": 0
+    },
+    {
+      "branch": "opsm/m16-engine-red",
+      "orphans": 1,
+      "commits": [
+        "f8188dec1fa140afcbab673e53b27d8cd9c65bda"
+      ],
+      "novel_total": 1,
+      "on_a_remote": 0
+    }
+  ]
+}

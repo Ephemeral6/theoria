@@ -319,18 +319,57 @@ def work_for(agent, lane):
     而 `sweep` 为 -1 留了单独一条 skip 理由。这是刻意的——
     把「测不到」算成「有活」会让一个板坏掉的夜里每一跳都起一个花钱的会话，
     而那个会话读的是同一块坏板；算成「没活」就是这个 bug 本身。
-    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。"""
+    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。
+
+    S35：问的是 `offers(agent, lane)`，不是 `candidates(lane)`。差别不是措辞——
+    `candidates` 答「这件活属于这条赛道吗」，而这里要的答案是「**这个编号**领得到
+    几件」，两者在一件被它自己交回过的活上正好相反。旧写法把这种活算作 1，
+    于是每隔 `MIN_RELAUNCH_MIN` 就为它起一个真会话，那个会话跑
+    `board.py claim <agent> --lane <lane>` 拿到 BOARD-EMPTY 再退出。
+    实测这样卡着的有两件（S22 14.9 小时、E18 12.9 小时），
+    也就是说这个分歧是**按会话计费**的。"""
     unread = unread_count(agent)
     held = sum(1 for f in os.listdir(board_mod.CLAIMED)
                if f.endswith(".%s.md" % agent))
     try:
-        claimable = len(board_mod.candidates(lane))
+        claimable = len(board_mod.offers(agent, lane)[0])
+        exits = len(exits_for(agent, lane))
     except Exception as exc:                    # noqa: BLE001 -- reported below
         claimable = CLAIMABLE_UNKNOWN
+        exits = 0
         log("BOARD-QUERY-FAILED lane=%s agent=%s %s: %s"
             % (lane, agent, type(exc).__name__, exc))
     return {"unread": unread, "held": held, "claimable": claimable,
-            "any": bool(unread or held or claimable > 0)}
+            "exits": exits,
+            "any": bool(unread or held or claimable > 0 or exits)}
+
+
+def exits_for(agent, lane):
+    """这个编号**够得着的出口**：它有权改派的不可达条目。
+
+    S35a（对抗复核抓到，这是本条目最实质的一个反驳）。上面那处改动本身是对的
+    ——不再为一件主人永远领不到的活按会话计费——但它把**唯一能用那个出口的会话**
+    一起掐掉了：`reassign` 只在一个 agent 的会话里跑得起来，而 `cmd_reassign`
+    的守卫要求 `--by` 是该条目当前赛道的主人（或 monitor）。于是原来的写法是
+    「板上有活，起会话」，改完是「领不到，不起会话」，而那件活的出口恰恰要
+    那个不起的会话去按。整条赛道就此安静下来，且**安静是没有告警的那一侧**。
+
+    所以第三个来源：可领 0 件、但有 1 件我改派得动，仍然算有活。它是一件
+    **真活**——判断该派给谁、写下理由——只是它的动词不是 claim。
+    """
+    if lane is None:
+        return []
+    stuck = board_mod.unreachable_ids()
+    out = []
+    for iid in sorted(stuck):
+        path = os.path.join(board_mod.ITEMS, "%s.md" % iid)
+        if not os.path.exists(path):
+            continue
+        m = board_mod.meta(path)
+        # `cmd_reassign` 的守卫：本条目当前赛道的主人才改派得动它。
+        if board_mod.LANE_OWNER.get(m.get("lane") or "") == agent:
+            out.append(iid)
+    return out
 
 
 def sweep(dry=False, only=None):
@@ -366,7 +405,7 @@ def sweep(dry=False, only=None):
             # 一句关于板的断言，而板恰恰是刚才没读成的那个东西。
             why = "BOARD-QUERY-FAILED: claimable unknown, not claiming it is zero"
         elif not w["any"]:
-            why = "no work (unread=0 held=0 claimable=0)"
+            why = "no work (unread=0 held=0 claimable=0 exits=0)"
         else:
             last = state.get(agent, {}).get("last_launch_epoch", 0)
             mins = (time.time() - last) / 60.0
@@ -374,14 +413,16 @@ def sweep(dry=False, only=None):
                 why = "relaunched %.0f min ago (< %d)" % (mins, MIN_RELAUNCH_MIN)
 
         if why:
-            log("skip %s: %s [unread=%d held=%d claimable=%d hb=%s]"
+            log("skip %s: %s [unread=%d held=%d claimable=%d exits=%d hb=%s]"
                 % (agent, why, w["unread"], w["held"], w["claimable"],
+                   w.get("exits", 0),
                    "never" if age is None else "%dmin" % age))
             continue
 
         if dry:
-            log("WOULD START %s (lane=%s) [unread=%d held=%d claimable=%d]"
-                % (agent, lane, w["unread"], w["held"], w["claimable"]))
+            log("WOULD START %s (lane=%s) [unread=%d held=%d claimable=%d exits=%d]"
+                % (agent, lane, w["unread"], w["held"], w["claimable"],
+                   w.get("exits", 0)))
             started.append(agent)
             continue
 
@@ -395,11 +436,15 @@ def sweep(dry=False, only=None):
         state.setdefault(agent, {})["last_launch_epoch"] = time.time()
         state[agent]["last_launch_utc"] = time.strftime(
             "%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        state[agent]["reason"] = ("unread=%d held=%d claimable=%d"
-                                  % (w["unread"], w["held"], w["claimable"]))
+        # exits 要出现在**理由**里。一个只因为「有个出口要按」而起的会话，
+        # 记成 claimable=0 会被下一个读日志的人当成误启动。
+        state[agent]["reason"] = ("unread=%d held=%d claimable=%d exits=%d"
+                                  % (w["unread"], w["held"], w["claimable"],
+                                     w.get("exits", 0)))
         save_state(state)
-        log("START %s (lane=%s) ok=%s [unread=%d held=%d claimable=%d]"
-            % (agent, lane, ok, w["unread"], w["held"], w["claimable"]))
+        log("START %s (lane=%s) ok=%s [unread=%d held=%d claimable=%d exits=%d]"
+            % (agent, lane, ok, w["unread"], w["held"], w["claimable"],
+               w.get("exits", 0)))
         # ADV-2/D13：**上一版把三件事挂在同一个谓词上，这是一次真的回归，
         # 而且是本次修复自己引入的。** `n_standing`（上限记账）和 45 秒错峰
         # 一起被移进了 `if ok == "running":`，于是任何一个**读状态失败**

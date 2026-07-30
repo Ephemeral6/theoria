@@ -3,8 +3,17 @@
     python monitor/board.py list                  # what is available / claimed
     python monitor/board.py claim <worker-id>     # atomically take the top item
     python monitor/board.py done <id> <worker>    # mark delivered
-    python monitor/board.py release <id> <worker> # give it back (with reason)
+    python monitor/board.py release <id> <worker> <why>   # give it back
+    python monitor/board.py reassign <id> --to <lane|generic> --by <who>
+                                        --why <...>       # unstick it
     python monitor/board.py reconcile [--fix]     # delivered work that came back
+
+`reassign` is the exit from `released_by`. Handing an item back is recorded so
+it is not re-offered to the same agent 11 seconds later -- but on a lane with
+one owner, "he cannot do it" and "nobody will ever do it" are the same
+sentence, and until this verb existed the only way out was for that owner's
+heartbeat to go stale for 45 minutes. `list` prints an `unreachable` section
+for items in that state, with the exit next to each one.
 
 `reconcile` exists because board state is a set of **tracked files** and every
 verb here is an `os.rename`. A merge from a branch based before a `done`
@@ -316,6 +325,102 @@ def candidates(lane=None):
     return out
 
 
+#: 一个从未碰过这块板的工人。用来问「这件活还有没有**任何人**领得到」——
+#: `released_by` 里只会出现真实编号，所以这个名字永远不在其中，它代表的正是
+#: 「最宽松的领取者」。不写进任何文件，只在判据里出现。
+FRESH_WORKER = "W-nobody"
+
+
+def lane_denied(worker, lane):
+    """`--lane` 不是这个工人的（`cmd_claim` 的 LANE-NOT-YOURS 守卫）。"""
+    if not lane or LANE_OWNER.get(lane) in (None, worker):
+        return False
+    return lane not in stale_lanes()
+
+
+def offers(worker, lane=None):
+    """`claim worker [--lane lane]` 真正会尝试的条目，以及它扣下的 id。
+
+    S35：`list` 与 `claim` 原来各自实现「这件活轮不轮得到他」。claim 会跳过
+    `released_by` 里有他的条目（这条是对的，它止住了 S22 十一秒一轮的
+    claim/release 空转），而 `list` 的 reserved 段只遍历 `candidates(lane)`，
+    **从不问 released_by**。于是同一个问题在两条路径上有两个答案：claim 说
+    「不归他」，list 说「等他来领」，两边都不报错。
+
+    现在两条路径都问这一个函数，答案不可能再分叉——这比在 `list` 里补一个
+    同样的 `if` 强，因为补出来的第二份判据只会再分叉一次。
+    """
+    if lane_denied(worker, lane):
+        return [], []
+    rows, withheld = [], []
+    for row in candidates(lane):
+        if worker in released_by(row[3]):
+            withheld.append(row[1])
+        else:
+            rows.append(row)
+    return rows, withheld
+
+
+def reachable_ids():
+    """所有**有人领得到**的 id：把每一种可能的领取者能领到的并起来。
+
+    刻意不重述规则，而是去问真正的谓词——四个赛道主人（带赛道、不带赛道各问
+    一次）加一个从未碰过板的通用工人。将来 `candidates()` 再加一条排除规则，
+    这里自动跟上；重述一遍的写法只会在那一天悄悄失准。
+    """
+    reach = set()
+    for lane, owner in LANE_OWNER.items():
+        for l in (lane, None):
+            reach |= {r[1] for r in offers(owner, l)[0]}
+    reach |= {r[1] for r in offers(FRESH_WORKER)[0]}
+    return reach
+
+
+def unreachable_ids():
+    """就绪、没人认领、依赖已满、领地空着——而没有任何身份领得到的 id。
+
+    减掉的三类各有自己的出口，所以不算在内：已交付的、依赖未满的（等上游）、
+    领地被占的（等邻居交付）。剩下的这一类**没有出口**，这正是它要有自己一段
+    的理由——`board.py reassign` 是给它准备的那个出口。
+    """
+    reach = reachable_ids()
+    busy = territories_busy()
+    ready = done_ids()
+    claimed = set(claimed_map())
+    out = set()
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        iid = item_id(f)
+        if iid in reach or iid in claimed or iid in ready:
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        if [d for d in m["deps"] if d not in ready] or m["territory"] in busy:
+            continue
+        out.add(iid)
+    return out
+
+
+#: `_record_release` 追加进条目正文的那一行。读回来是为了让一件不可达的活
+#: 说得出**是谁交回的、为什么**——理由一直躺在条目里，只是从来没人读。
+RELEASE_NOTE = re.compile(
+    r"^>\s*\*\*(\S+?)\s*于\s*(\S+?)\s*交回\*\*[：:]\s*(.*)$", re.M)
+
+
+def release_notes(path):
+    """`[(worker, utc, 理由第一行)]`，按文件里的先后。
+
+    整读文件，不走 `meta()`：前言在文件头，而交回记录是**追加到文件尾**的，
+    `meta()` 只读前 800 字节，永远读不到它们。
+    """
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return []
+    return [(w, t, (why.strip() or "未写理由")) for w, t, why
+            in RELEASE_NOTE.findall(text)]
+
+
 def withheld_items(shown_ids):
     """就绪、没人认领、却在 `list` 的任何分区里都不出现的条目 —— 连原因一起。
 
@@ -347,8 +452,17 @@ def withheld_items(shown_ids):
         if [d for d in m["deps"] if d not in ready]:
             continue                    # `blocked` 那段已经报过了
         lane = m.get("lane") or ""
+        owner = LANE_OWNER.get(lane)
         if m["territory"] in busy:
             why = "领地 %s 被 %s 占着" % (m["territory"], busy[m["territory"]])
+        elif owner and owner in released_by(m) and lane not in stale:
+            # S35：这一条要排在赛道那一条**前面**。否则它会落进下面那句
+            # 「有主，等其研究员来领」——那正是 reserved 段说过的同一句谎，
+            # 换一段再说一遍。理由取最后一条交回记录：它是现状的那条。
+            notes = [n for n in release_notes(os.path.join(ITEMS, f))
+                     if n[0] == owner]
+            why = "%s 交回过它（%s），而 %s 赛道只有他能领 —— 由构造不可达" % (
+                owner, notes[-1][2] if notes else "理由未记录", lane)
         elif lane and lane not in LANE_OWNER:
             why = "赛道 %s 没有常驻研究员" % lane
         elif (m.get("spend") == "api"
@@ -378,7 +492,10 @@ def cmd_list():
     # 而这两件事该派的人完全不同。
     reserved = []
     for lane in sorted(LANE_OWNER):
-        for pri, iid, _f, m in candidates(lane):
+        # S35：`offers()`，不是 `candidates()`。差别就是那个谎：`candidates`
+        # 答的是「这件活属于这条赛道吗」，而这一段印的话是「等其赛道研究员
+        # 来领」——那是 `claim` 才答得了的问题，且它对交回过的条目答「不」。
+        for pri, iid, _f, m in offers(LANE_OWNER[lane], lane)[0]:
             if iid not in generic_ids:
                 reserved.append((pri, iid, lane, LANE_OWNER[lane], m))
     if reserved:
@@ -394,8 +511,15 @@ def cmd_list():
                 hb = "%d分钟前" % age
             else:
                 hb = "%d分钟前(mtime，可被 merge 摸新)" % age
-            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s"
-                  % (pri, iid, lane, owner, hb, m["territory"]))
+            # S35a（对抗复核抓到）：`cmd_claim` 里的 `HOLD_CAP` 闸在 `offers()`
+            # **之前**就返回，所以这一段（问的是 `offers`）会把「手上已经满了」
+            # 的主人写成「等其研究员来领」——本条目要修的那个分歧，往下一道闸
+            # 又复现了一次。这一类会自己解开（主人交付即松），所以它不是不可达；
+            # 但那句话仍然是错的，所以把是哪一种印出来。
+            cap = "" if held_by(owner) < HOLD_CAP else \
+                "（主人手上已满 %d/%d，交付后才领得到）" % (held_by(owner), HOLD_CAP)
+            print("  p%d  %-28s lane=%-8s owner=%s(%s) territory=%s%s"
+                  % (pri, iid, lane, owner, hb, m["territory"], cap))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -413,10 +537,23 @@ def cmd_list():
     shown = generic_ids | {iid for _p, iid, _l, _o, _m in reserved}
     shown |= {iid for iid, _pend in blocked}
     hidden = withheld_items(shown)
+    # 第六段。上面每一段挡住的活都还有出口——依赖会满，领地会放开，主人会来领；
+    # 这一段里的没有。判据是集合差（`unreachable_ids()` 去问真正的谓词），
+    # 不是上面那句诊断文字，所以诊断写错了也不会让一件活从这段里溜出去。
+    unreach = unreachable_ids()
+    stuck = [r for r in hidden if r[1] in unreach]
+    hidden = [r for r in hidden if r[1] not in unreach]
     if hidden:
         print("=== territory-blocked (%d) ===" % len(hidden))
         for pri, iid, territory, why in hidden:
             print("  p%d  %-28s territory=%-14s %s" % (pri, iid, territory, why))
+    if stuck:
+        print("=== unreachable（无人可领 %d —— 出口在下一行，不是再印一遍） ==="
+              % len(stuck))
+        for pri, iid, territory, why in stuck:
+            print("  p%d  %-28s territory=%-14s %s" % (pri, iid, territory, why))
+            print("      出口：board.py reassign %s --to <赛道|generic> "
+                  "--by <monitor|该赛道主人> --why \"...\"" % iid)
     cm = claimed_map()
     if cm:
         print("=== claimed ===")
@@ -515,25 +652,20 @@ def cmd_claim(worker, lane=None):
     # 于是 `claim W-9999 --lane campaign` 能领走一件在真 API 上打的战役，
     # 退出 0，board.log 记下的那行与一次被批准的花钱认领逐字不可区分
     # （2026-07-29 对抗性普查抓到）。自报一个身份不该等于拥有它。
-    if lane and LANE_OWNER.get(lane) not in (None, worker):
-        if lane not in stale_lanes():
-            print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
-                  % (lane, LANE_OWNER.get(lane)))
-            return 3
+    if lane_denied(worker, lane):
+        print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
+              % (lane, LANE_OWNER.get(lane)))
+        return 3
     if worker.startswith("RES-") and held_by(worker) >= HOLD_CAP:
         print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
               % HOLD_CAP)
         return 3
-    withheld = []
-    for _pri, iid, fname, _m in candidates(lane):
-        if worker in released_by(_m):
-            # You already decided you cannot do this one. Re-offering it costs
-            # a whole session's context to re-derive the same conclusion, and
-            # the log fills with claims and releases while nothing moves.
-            # Anyone else may still take it -- one agent's refusal is about
-            # that agent, not about the item.
-            withheld.append(iid)
-            continue
+    # 扣下的那些：你自己交回过。重发一遍要花一整个会话的上下文去重新得出上一轮
+    # 已经得出的结论，而 board.log 会记满 claim 与 release，什么也没有前进。
+    # 别人仍然可以领——一个 agent 的拒绝是关于那个 agent 的，不是关于这件活的。
+    # **除非那条赛道只有他一个人**：那时这两句话是同一句，见 `unreachable_ids()`。
+    rows, withheld = offers(worker, lane)
+    for _pri, iid, fname, _m in rows:
         src = os.path.join(ITEMS, fname)
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
         try:
@@ -562,8 +694,21 @@ def cmd_claim(worker, lane=None):
         # (board-empty-is-misleading): "nothing to do" and "nothing I will
         # show you" have to look different, or the next reader debugs the
         # wrong thing.
-        print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
-              % (len(withheld), ", ".join(sorted(withheld)[:6])))
+        #
+        # S35：「别人仍可领」是这句谎的第五份拷贝，而且印在**最该说实话的地方**
+        # ——它是唯一一句读者当场就会照着办的话。实测（2026-07-30T01:50Z，活板）：
+        #   BOARD-EMPTY（1 件被扣下：你自己交回过 —— S22。别人仍可领）
+        # 别人领不了：LANE-NOT-YOURS 把 infra 赛道之外的所有人挡着。
+        stuck = unreachable_ids() & set(withheld)
+        free = sorted(set(withheld) - stuck)
+        if free:
+            print("BOARD-EMPTY（%d 件被扣下：你自己交回过 —— %s。别人仍可领）"
+                  % (len(free), ", ".join(free[:6])))
+        if stuck:
+            print("BOARD-STUCK（%d 件被扣下，且**没有别人领得到**（这条赛道只有你）"
+                  " —— %s。出口：board.py reassign <id> --to <赛道|generic> "
+                  "--by <你|monitor> --why \"...\"）"
+                  % (len(stuck), ", ".join(sorted(stuck)[:6])))
     else:
         print("BOARD-EMPTY")
     _warn_resurrected()
@@ -644,7 +789,15 @@ def cmd_done(iid, worker):
     return 0
 
 
-def cmd_release(iid, worker, reason="unstated"):
+def cmd_release(iid, worker, reason=""):
+    # S35a（对抗复核抓到）：这个默认值原来就是 `"unstated"`，而 `main()` 的那道
+    # 闸只挡命令行。**任何一个 import 这个模块的调用者仍然写得出那个词**——
+    # 也就是本条目声称要消灭的那个字符串，仍然由默认参数提供着。闸开在门上，
+    # 门框上还留着一个洞：判据要写在函数里，不是写在它的一个调用点上。
+    if not (reason or "").strip():
+        print("RELEASE-NEEDS-A-REASON %s：交回要带理由，"
+              "下一个人只有这句话可读。" % iid)
+        return 2
     src = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
     if not os.path.exists(src):
         print("not claimed by you")
@@ -655,6 +808,145 @@ def cmd_release(iid, worker, reason="unstated"):
     _record_release(dst, worker, reason)
     note("RELEASE %s by %s (%s)" % (iid, worker, reason))
     return 0
+
+
+def cmd_reassign(iid, to, by, why):
+    """把一件不可达的活交到能做的人手上 —— 不可达的**出口**。
+
+    `released_by` 是刻意的止损：交回过的活不再自动塞回给同一个人，否则 claim
+    与 release 会以十几秒一轮的节奏空转（S22 实测 11 秒，见 `_record_release`）。
+    但它一直没有反面：**没有任何动作能撤销它**。在一条只有一个人能领的赛道上，
+    「这个人做不了」于是等于「这件活从此没有人做」。
+
+    实测（S35，2026-07-29）：`_record_release` 落地于 10:14:11Z，此后被自己
+    赛道主人交回的条目共两件，两件都还卡着——S22 卡了 14.9 小时，E18（verify
+    赛道的 p1，论文 WP1/WP9 的数字）卡了 12.9 小时。它之前也发生过两次
+    （V11、C10），逃掉只是因为那时这个字段还不存在、RES-3 在同一秒里重新领了
+    回去。所以是 2/2，不是巧合。在此之前唯一的出口是**主人的心跳停摆 45 分钟**
+    让赛道解封——那是靠人死掉的出口，不是一个动作。
+
+    改派做三件事：把条目挪进另一条赛道（或 `generic`，交给通用工人）、把新主人
+    从 `released_by` 里划掉、把这次改派连同理由写进条目正文与 board.log。
+    划掉那一下是关键：不划，改派对着扣下守卫是个**报告成功的空操作**——
+    这条赛道自己的病。而它与自动重发的区别正是那两个必填参数：具名，且有理由。
+    """
+    if not why or not why.strip():
+        print("REASSIGN-NEEDS-A-REASON 改派是一次判断，理由要留在条目里。")
+        return 2
+    if to != "generic" and to not in LANE_OWNER:
+        print("REASSIGN-UNKNOWN-TARGET %s；可选：%s 或 generic"
+              % (to, "/".join(sorted(LANE_OWNER))))
+        return 2
+    path = os.path.join(ITEMS, "%s.md" % iid)
+    if not os.path.exists(path):
+        # 认领中的活是别人正在飞的上下文，已交付的活 `done/` 说了算。
+        print("REASSIGN-NOT-ON-THE-SHELF %s 不在 items/（认领中或已交付）。" % iid)
+        return 1
+    # S35a（对抗复核抓到）：上面那个 `exists` **不是**「认领中与已交付一律拒绝」
+    # 这条守卫。它假设认领中/已交付的条目不在 `items/` 里，而这块板**记录在案的
+    # 失败模式恰恰是三个目录同时有它**（`claimed_map()` 上方那段写的 E8-ic3-scale
+    # 同时在 items/、claimed/、done/，A13 在两处）。也就是说这条守卫只在从不出事
+    # 的时候成立，出事时正好失效——本条目自己抓的病的同一个形状：
+    # **守卫问的问题不是它印出来的那句话**。现在直接问那两个真正的集合。
+    if iid in claimed_map():
+        who = claimed_map()[iid]
+        print("REASSIGN-CLAIMED %s 已被 %s 认领（items/ 里还留着一份，"
+              "这块板复活过条目）；改派会把一份改了赛道的拷贝留在 items/，"
+              "而 %s 手上那份说的是另一条。先让认领人交付或 release。"
+              % (iid, who, who))
+        return 5
+    if iid in done_ids():
+        print("REASSIGN-DELIVERED %s 在 done/ 里（items/ 里这份是复活出来的）。"
+              "改派它会往 board.log 写一行对已交付的活的判断，"
+              "并在条目正文里留一条签了名的记录——先把复活的那份收掉。" % iid)
+        return 5
+    m = meta(path)
+    lane = m.get("lane") or ""
+    owner = LANE_OWNER.get(lane)
+    if by != "monitor" and by != owner:
+        # LANE-NOT-YOURS 的镜像。改派在队列之间搬活，无守卫的版本就是一条把
+        # 别人赛道抽干的路——自报 `--lane` 曾经就是那样一个洞。
+        #
+        # **但要照实说清这道闸挡得住什么**（S35a，对抗复核抓到，本条目初版的
+        # 报告把它写成了「否则这是一条把别人赛道抽干的路」，那是过头话）：
+        # `by` 是命令行上**自报的**，`--by monitor` 任何人都打得出来，于是抽干
+        # 别人赛道的那条路仍然通着。这道闸挡的是**手滑**，不是**说谎**——
+        # 和 `claim <worker>` 自报编号是同一档，这块板从来没有身份验证。
+        # 本条目**没有**修好它：修它要给舰队一个真的身份边界，那是另一件活。
+        # 现在做的是三件小事：不再声称它挡得住抽干；`--by monitor` 在 board.log
+        # 里标成自报（`by monitor(self-asserted)`），使它可被回溯审计；并有一条
+        # 测试**把这个绕过写成既成事实**，免得下一个读者把它读成一道安全闸。
+        print("REASSIGN-NOT-YOURS %s 现在归 %s（%s 赛道）；只有它或 monitor 能改派。"
+              % (iid, owner or "无人", lane or "无"))
+        return 3
+    if to == lane and by != "monitor":
+        # 原赛道进、原赛道出、releaser 划掉 = 那个空转循环，只是前面加了个动词。
+        # 监控判「再试一次」是另一回事，而且它会留下一行签了名的记录。
+        print("REASSIGN-SAME-LANE 改派回 %s 等于撤销自己的拒绝；这一步只有 "
+              "monitor 能做。" % lane)
+        return 3
+    text = open(path, encoding="utf-8").read()
+    if to == "generic":
+        text = re.sub(r"^lane:.*\n", "", text, count=1, flags=re.M)
+    elif lane:
+        text = re.sub(r"^lane:.*$", "lane: %s" % to, text, count=1, flags=re.M)
+    else:
+        text = _add_field(text, "lane", to)
+    target = LANE_OWNER.get(to)
+    if target:
+        keep = [w for w in sorted(released_by(m)) if w != target]
+        line = "%s: %s" % (RELEASED_BY, ", ".join(keep))
+        if re.search(r"^%s:" % RELEASED_BY, text, re.M):
+            text = re.sub(r"^%s:.*$" % RELEASED_BY, line, text, count=1,
+                          flags=re.M)
+    text = text.rstrip("\n") + "\n\n> **%s 于 %s 改派给 %s**：%s\n" % (
+        by, utc(), to, why.strip())
+    before = open(path, encoding="utf-8").read()
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+    # S35a（对抗复核抓到）：**这个动词能造出一件新的不可达条目**，而它是为了
+    # 消灭不可达条目才存在的。实测：一件 `spend: api` 且没有 monitor 签
+    # `generic_ok` 的活，`--to generic` 之后退出 0、无任何提示，而它从此
+    # 谁也领不到（花钱守卫只对未带赛道的条目开火，见 `candidates()`）。
+    #
+    # 补的不是「再列一条 spend 的例外」——那正是本条目在 `unreachable_ids()`
+    # 里拒绝的写法（重述规则的第二份判据只会再分叉一次）。补的是**后置条件**：
+    # 写完就去问那个真正的谓词，落进不可达集就整份回滚。将来 `candidates()`
+    # 再加任何一条排除规则，这道闸自动跟上。
+    if iid in unreachable_ids():
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(before)
+        print("REASSIGN-WOULD-STRAND %s 改派到 %s 之后没有任何身份领得到它"
+              "（后置条件不成立，已回滚，条目一字未改）。\n"
+              "  常见成因：`spend: api` 的活改派给 generic —— 花钱守卫要求"
+              "监控在条目里显式写 `generic_ok: yes`。\n"
+              "  先解决那一条，或改派到一条有主的赛道。" % (iid, to))
+        return 4
+    # `monitor` 这个身份没有任何东西验证过（见上面那道闸的注释），所以日志里
+    # 记它是**自报的**。审计一行「by monitor」和一行「by monitor(self-asserted)」
+    # 的差别，就是回头查得清与查不清的差别。
+    note("REASSIGN %s from %s to %s by %s (%s)"
+         % (iid, lane or "unlaned", to,
+            "monitor(self-asserted)" if by == "monitor" else by, why.strip()))
+    # 成功时也要在 stdout 上说一句。舰队里的 agent 读的是 stdout，而这个动词
+    # 原来只往 board.log 写——对调用者而言，成功与静默的失败长得一样。
+    print("REASSIGNED %s：%s → %s（by %s）。理由已写进条目正文与 board.log。"
+          % (iid, lane or "unlaned", to, by))
+    return 0
+
+
+def _add_field(text, key, value):
+    """Insert `key: value` at the end of the front matter (the run of
+    `key: value` lines at the top), so `meta()` still reads it."""
+    lines = text.split("\n")
+    cut = 0
+    for i, l in enumerate(lines):
+        if re.match(r"^\w+:\s", l):
+            cut = i + 1
+        elif l.strip() == "":
+            break
+    lines.insert(cut, "%s: %s" % (key, value))
+    return "\n".join(lines)
 
 
 #: Front-matter key listing everyone who has handed this item back.
@@ -944,7 +1236,39 @@ def main():
     if a[0] == "done":
         return cmd_done(a[1], a[2])
     if a[0] == "release":
-        return cmd_release(a[1], a[2], " ".join(a[3:]) or "unstated")
+        # S35：原来是 `" ".join(a[3:]) or "unstated"`。「unstated」长得像一个
+        # 理由而不是一个——E18（verify 赛道的 p1）从 2026-07-29T12:37:38Z 起
+        # 带的就是这个词，于是要给它找去处的人手上什么也没有。交回是把活推给
+        # 下一个人，理由是唯一随它一起走的东西。
+        if not " ".join(a[3:]).strip():
+            print("RELEASE-NEEDS-A-REASON 用法：board.py release <id> <worker> "
+                  "<为什么做不了>。下一个人只有这句话可读。")
+            return 2
+        return cmd_release(a[1], a[2], " ".join(a[3:]))
+    if a[0] == "reassign":
+        # board.py reassign <id> --to <lane|generic> --by <who> --why <...>
+        # S35a：`a[1]` 裸着写会让「打错命令」变成一个 IndexError 回溯。
+        # 这个动词是给一个卡住的人用的出口，而回溯读起来像板坏了。
+        if len(a) < 2:
+            print("用法：board.py reassign <id> --to <赛道|generic> "
+                  "--by <who> --why <理由>\n  赛道：%s 或 generic"
+                  % "/".join(sorted(LANE_OWNER)))
+            return 2
+
+        def opt(name, rest=False):
+            if name not in a:
+                return ""
+            i = a.index(name) + 1
+            if not rest:
+                return a[i] if i < len(a) else ""
+            # 到下一个 `--flag` 为止，不是到行尾：未加引号的理由是常态，
+            # 而吞掉后面的 `--to campaign` 会让改派安静地落到 generic 上。
+            words = []
+            while i < len(a) and not a[i].startswith("--"):
+                words.append(a[i])
+                i += 1
+            return " ".join(words)
+        return cmd_reassign(a[1], opt("--to"), opt("--by"), opt("--why", True))
     if a[0] == "reconcile":
         return cmd_reconcile(fix="--fix" in a)
     print(__doc__)

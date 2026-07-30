@@ -1,0 +1,84 @@
+{
+  "denominators": {
+    "distinct_field_token_five": [
+      105,
+      116
+    ],
+    "distinct_field_token_four": [
+      97,
+      106
+    ],
+    "scan_slots_five_papers": [
+      228,
+      247
+    ],
+    "scan_slots_four_shipped": [
+      219,
+      230
+    ]
+  },
+  "fixtures": [
+    {
+      "as_expected": true,
+      "carriers": [
+        "q07"
+      ],
+      "fixture": "M5 (real leak, one carrier)",
+      "p_fire": 0.083333,
+      "pooled_fired": true,
+      "token_level_findings": []
+    },
+    {
+      "as_expected": true,
+      "carriers": [],
+      "fixture": "M5_ID (identifier family)",
+      "p_fire": null,
+      "pooled_fired": false,
+      "token_level_findings": []
+    },
+    {
+      "as_expected": true,
+      "carriers": [],
+      "fixture": "M5_EVADE (leak + decoy on every item)",
+      "p_fire": null,
+      "pooled_fired": false,
+      "token_level_findings": []
+    }
+  ],
+  "guard_cost": {
+    "scored_k1": 228,
+    "would_fire": 0
+  },
+  "papers": [
+    {
+      "detail": null,
+      "paper_id": "p15-adaptation-a0",
+      "question_type": "adaptation",
+      "verdict": "GREEN"
+    },
+    {
+      "detail": null,
+      "paper_id": "p15-handover-a0",
+      "question_type": "handover",
+      "verdict": "GREEN"
+    },
+    {
+      "detail": null,
+      "paper_id": "p15-heldout-a0",
+      "question_type": "heldout",
+      "verdict": "GREEN"
+    },
+    {
+      "detail": null,
+      "paper_id": "p15-verdict-a2",
+      "question_type": "verdict",
+      "verdict": "GREEN"
+    },
+    {
+      "detail": "v11-handover-a0 leaks its own answers: [{'check': 'metadata', 'label_source': 'solvable', 'field': 'tags', 'token': '<private-marker>', 'predicts': 1.0, 'majority_floor': 0.75, 'n': 8, 'carried_by': 2, 'with_token': {'false': 2}, 'without_token': {'true': 6}, 'carrier_ids': ['v11-opt-01', 'v11-opt-04'], 'p_fire': 0.035714, 'p_fire_familywise_in_field': 0.135385, 'cuts_tried_in_field': 4, 'weak_evidence': True, 'cuts_tried_in_label_set': 4, 'p_fire_familywise_in_label_set': 0.135385}]",
+      "paper_id": "v11-handover-a0",
+      "question_type": "handover_auto",
+      "verdict": "RED"
+    }
+  ]
+}

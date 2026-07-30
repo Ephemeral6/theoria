@@ -1,0 +1,30 @@
+{
+  "prompt_id": "S22-access-check-close",
+  "branch": "agent/s22-residue-fullsweep",
+  "base_commit": "3b2a5873d615f54b25b0e6b1ccd8e4365a851484",
+  "utc": "2026-07-30T03:45:00Z",
+  "agent": "RES-1",
+  "lane": "campaign",
+  "territory": "arc-recon",
+  "what": "S22 第 (1) 项：全量跨会话残留。canary_schedule.py 的 full profile（mode=complete，每局每一个已存步），此前从未跑过。两趟，20/20 帧全对，两次都对。第一趟抓到结算 bug 并修好，第二趟在真闸门上验证修复。",
+  "spends_actions": true,
+  "actions_spent": 32,
+  "sweeps": [
+    {"utc": "2026-07-30T03:41:27Z", "actions": 16, "http_calls": 20, "frames_agreed": "20/20", "verdict": "PASS x4", "settlement": "TRIPPED (20 > 16); schedule state lost"},
+    {"utc": "2026-07-30T03:48:48Z", "actions": 16, "http_calls": 20, "frames_agreed": "20/20", "verdict": "PASS x4", "settlement": "recorded, charged_actions=16, exit 0"}
+  ],
+  "compared_against": "expectations sealed 2026-07-28 in a different session",
+  "pile": "development pile only (4 games); sealed pile zero contact -- canary imports assert_playable/SealedGameError from precheck",
+  "budget_note": "认领单写「动作预算 ≤12」，而 12 恰是 quick profile 的预算，quick 正是本项要升级掉的抽样计划。全量 = full profile = 16 动作/趟，跑两趟（认领单要求跨会话两遍）。单趟超出 4 个动作，裁量与理由记在 RUN_STATE.md §2。剩余预算 17,855/24,000。",
+  "dry_run_first": "python canary_schedule.py run --profile full --dry-run -> 16 actions, 4 RESET checks, 11/11 discriminating",
+  "bug_found_and_fixed": {
+    "where": "arc-recon/canary_schedule.py",
+    "what": "预留用动作数（plan.actions）而结算用 HTTP 请求数（run.http_calls）；RESET 是命令不是动作，故 http = actions + 局数，两个 profile 每次运行都跳闸（full 20>16、quick 16>12）。跳闸抛在 replay 成功之后、状态落盘之前，于是钱花了而 due 仍答 never run —— 排期任务会每次重花且永不记进度。",
+    "why_that_unit": "README.md item 6（S22 第 (2) 项）实测：ARC total_actions 只数成功动作，失败 400 与重试放大不计费。故按 http_calls 记账还多扣了共享池（seq 12998 把 16 记成 20）。",
+    "latent_not_active": "schtasks 无已安装任务，故循环从未真的重复；安装是 owner 决定且未做。安装之前是发现它唯一便宜的时刻。",
+    "fix": ["结算改用 actions_executed", "缺数抛错而非默认 0", "拒付记录并在状态落盘之后再抛（退出码 5 不变）"]
+  },
+  "tests": "arc-recon/test_canary_schedule.py 46 passed（新增 4 条，各自撤掉对应修复后验过会红）；原 fake_replay 把 http_calls 钉死为 0 —— 正是两种记账无法区分的唯一取值 —— 已改为真实形状",
+  "registered_unfixed": 5,
+  "api_contact": "development pile only, 32 actions, 40 HTTP calls"
+}

@@ -1,0 +1,119 @@
+{
+  "prompt_id": "S-P20-nosecret-noop",
+  "branch": "agent/s-p20-nosecret-noop",
+  "base_commit": "45307105",
+  "merge_base_commit": "415556f8",
+  "code_commit": "bb554dcd",
+  "utc": "2026-07-30T01:45:00Z",
+  "closed_utc": "2026-07-30T02:52:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "delivered",
+  "summary": "Six silent-pass holes in papers/phase1-workshop/verify_paper.py, found by an adversarial audit under S34 and filed as this item. Headline: check D NOSECRET builds its secret list from a gitignored .env and so iterates zero times in every worktree ci_merge checks out -- the check standing between the ARC key and the Phase 4 release manifest is a no-op everywhere it matters. All six closed; five of the six were latent, with no instance in the paper.",
+  "key_shape_note": "The ARC key is a canonical UUID: length 36, dashes at 8/13/18/23, parses as uuid.UUID. Established by reading .env through arc-recon/client.py and printing PROPERTIES ONLY (length, charset predicates, dash positions) -- the value was never printed, written, or committed. The shape is recorded here because check D's docstring already promises 'nothing shaped like the ARC key' and a shape detector cannot be written without it; a 36-char UUID shape discloses no part of a 128-bit value, and the 4467 UUID-shaped tokens across 140 tracked files are why shape alone cannot be the trigger.",
+  "findings": [
+    {
+      "id": "D",
+      "check": "D NOSECRET",
+      "latent": false,
+      "was": "the secret list was built from ROOT/.env only; .env is gitignored, so on any fresh checkout the list is empty, the comparison loop iterates zero times, and the check returns True with the note 'no .env present to check against (nothing to leak)'",
+      "now": "two mechanisms that need no untracked file -- a credential-named assignment carrying a substantial opaque value (shape-independent, so it catches the next key too), and a key-shaped token within 40 characters of a credential word. The exact-value scan is kept and prints 'exact-value scan SKIPPED' rather than a green when .env is absent.",
+      "residual_gap": "a bare key-shaped token with no credential word nearby is not flagged; flagging it would red the gate on arrival -- two such tokens are already in this directory, both a library URL in P7's search traces"
+    },
+    {
+      "id": "B1",
+      "check": "B PATHS",
+      "latent": true,
+      "was": "(ROOT / token).exists() on NTFS is case-blind, so Engine-Rig/STATUS.md was ok here and BROKEN on a Linux clone -- the verdict depended on the machine, and the machine it ran on always says yes",
+      "now": "exists_exact() walks the components against os.listdir; verdict MISCASED"
+    },
+    {
+      "id": "B2",
+      "check": "B PATHS",
+      "latent": true,
+      "was": "a path resolving only beside PAPER.md was reported ok, though the paper's own binding rule names the repository root",
+      "now": "verdict LOCAL, and the finding names the repo-relative replacement"
+    },
+    {
+      "id": "B3",
+      "check": "B PATHS",
+      "latent": true,
+      "was": ".worktrees/ sat on the gitignored-by-design exemption list, and it is the one prefix B, E and F all skip -- so .worktrees/anything/at/all.md satisfied the binding rule against every check in the file at once",
+      "now": "verdict UNSHAREABLE for .worktrees/, .git/ and .claude/; .toolchain/ and figures/.verify/ stay exempt because a reader can rebuild those from documented commands"
+    },
+    {
+      "id": "B4",
+      "check": "B PATHS",
+      "latent": true,
+      "was": "ADJUDICATED_AMBIGUITY had no stale detector, unlike check E's and check F's ruling tables; a ruling outlives its ambiguity and then excuses the next token by that name",
+      "now": "stale rulings are reported and fail the check; all 10 live entries still match"
+    },
+    {
+      "id": "A",
+      "check": "A GENERATED / E UNCITED",
+      "latent": true,
+      "was": "sections/ emptied gave PASS (6/6) -- expected collapses to the banner alone, and every other check passes by having nothing to iterate over; check E printed '-1 body sections' on a PASS line",
+      "now": "MIN_SECTIONS floor carried by check A, the same device and reasoning as MIN_PAPERS in papers/verify.py one directory up; E counts body_sections(), which cannot go negative"
+    },
+    {
+      "id": "C",
+      "check": "C FIGDATA",
+      "latent": false,
+      "was": "the extractor ran in place and the comparison read the same file back, so an extractor producing nothing at all was reported as 'reran in place'; separately, scripts and payloads were counted independently and printed side by side, so an orphan payload passed",
+      "now": "payloads are unlinked before the rerun and restored from memory in the finally; orphan payloads fail"
+    },
+    {
+      "id": "COHERENCE",
+      "check": "main()",
+      "latent": true,
+      "was": "six independent verdicts printed as if they were about one document; A alone reads PAPER.md while B, E and F read sections/, so [PASS] E could describe text a reader will never be handed",
+      "now": "each sections-reading verdict carries a caveat line when A fails, and the summary names them"
+    },
+    {
+      "id": "INCIDENTAL",
+      "check": "D NOSECRET",
+      "latent": true,
+      "was": "path.relative_to(ROOT) raises when ROOT is not an ancestor -- a crash path rather than a verdict path, but a leak detector that raises while naming what it caught reports nothing",
+      "now": "falls back to the absolute path, with a test; found by a probe, not by the item"
+    }
+  ],
+  "measurement": {
+    "tests_before": 141,
+    "tests_after": 171,
+    "new_test_files": [
+      "papers/phase1-workshop/test_paths_gate.py (15)",
+      "papers/phase1-workshop/test_gate_floor.py (14)"
+    ],
+    "gate": "verify_paper: PASS (6/6), exit 0",
+    "delegator": "papers: green -- 1 paper(s), each gated by its own check, and the checks' own suite run",
+    "live_tree_instances_of_the_new_verdicts": "0 miscased, 0 paper-local, 0 unshareable, 0 stale rulings -- asserted by a test, not only claimed here"
+  },
+  "verification": {
+    "method": "nine mutations planted in the live tree, the real gate run over each, tree restored and git status checked clean afterwards",
+    "mutations": [
+      "`Engine-Rig/STATUS.md` cited -> [FAIL] B MISCASED",
+      "`.worktrees/p20-nosecret/papers/SURVEY-A.md` cited -> [FAIL] B UNSHAREABLE",
+      "`sections/00_abstract.md` cited -> [FAIL] B LOCAL, replacement path named",
+      "a ruling added for a token nobody cites -> [FAIL] B STALE",
+      "sections/ emptied -> [FAIL] A, and the caveat printed on B and E",
+      "fig1_concept_timeline.py gutted to raise SystemExit(0) -> [FAIL] C was not regenerated",
+      "an orphan fig99_orphan.json -> [FAIL] C no extractor",
+      "ARC_API_KEY=<uuid> planted with .env present -> [FAIL] D, both mechanisms",
+      "api_key: <uuid> planted with NO .env, CI's configuration -> [FAIL] D -- the item, closed"
+    ]
+  },
+  "files": [
+    {"path": "papers/phase1-workshop/verify_paper.py",
+     "sha256": "3f535c7fc35874f50e5212735dbc3bf86f7bb5641d4b1307cb939531f30a6b32"},
+    {"path": "papers/phase1-workshop/test_paths_gate.py",
+     "sha256": "b2e2d09c0418b3b451f2f111c45e90a0dbf07d5018a813205c0866093341958d"},
+    {"path": "papers/phase1-workshop/test_gate_floor.py",
+     "sha256": "b4ab3f414dfcbbf83ddf4dc2c63e687e16dd93da0bb978bcabaa4a7e2c79a26a"},
+    {"path": "papers/phase1-workshop/test_nosecret_gate.py",
+     "sha256": "9b5d918bec93578e7275194f41d1e19d16abca00987d718f313dfcb4fbdfdf94"},
+    {"path": "papers/runs/20260730T014500Z-P20/RUN_STATE.md",
+     "sha256": "5fa87660414e0fc3565fb053edf6905521497395f0227256d2e1b9ef585b7f7b"}
+  ],
+  "files_note": "every sha256 is of the COMMITTED blob (git show <commit>:<path>), not the byte string on disk -- papers/.gitattributes pins LF, so the two differ on this machine and only the blob is what anybody else receives."
+}
