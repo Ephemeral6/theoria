@@ -134,15 +134,43 @@ def test_positional_report_sees_a_clustered_paper():
 # board. Checks 1-3 all passed it.
 
 def _labelled(points_by_label, n_each=5):
+    """Ids are `q-NN`, deliberately carrying no trace of the label.
+
+    They used to read `solvable-0` / `unsolvable-0`, and V21 adding `item_id` to
+    the checked fields turned both tests below red -- correctly. These two are
+    about `points`; an answer key printed into the id as well would have masked
+    whatever `points` was doing. That the leak was sitting in exam's own fixtures,
+    unnoticed until the field was checked, is the argument for checking it.
+    """
     items, labels = [], {}
     for label, points in points_by_label.items():
         for i in range(n_each):
-            iid = "%s-%d" % (label, i)
+            iid = "q-%02d" % len(items)
             items.append(Item(iid, "r-test", points, {"kind": "verdict",
                                                       "q": "board %d" % i},
                               {"claim": label}, ("probe-%s" % label,)))
             labels[iid] = label
     return _paper(items=items), labels
+
+
+def test_the_old_labelled_fixture_was_itself_an_item_id_leak():
+    """Kept as evidence, because a fixture repaired in silence teaches nothing.
+
+    The ids the two tests above used until V21 spelled out the answer. Whole-value
+    bucketing could never have seen it -- every id is distinct, so every bucket is
+    a singleton -- and it took the token check to find it.
+    """
+    items, labels = [], {}
+    for label in ("solvable", "unsolvable"):
+        for i in range(5):
+            iid = "%s-%d" % (label, i)
+            items.append(Item(iid, "r-test", 2.0, {"kind": "verdict",
+                                                   "q": "board %d" % i},
+                              {"claim": label}, ("probe-%s" % label,)))
+            labels[iid] = label
+    hits = [h for h in leakage.metadata_hits(_paper(items=items), labels)
+            if h["field"] == "item_id"]
+    assert {h["token"] for h in hits} == {"solvable", "unsolvable"}
 
 
 def test_a_point_value_that_encodes_the_answer_is_a_leak():

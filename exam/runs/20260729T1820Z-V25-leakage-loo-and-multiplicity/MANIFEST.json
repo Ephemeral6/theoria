@@ -1,0 +1,161 @@
+{
+  "adversarial": {
+    "note": "the refutation of this item's own central ruling arrived with a counterexample carrying a real leak, which is the difference between a review and a re-read",
+    "reviewers": 3,
+    "verdicts": {
+      "fast_exact_count": "1170339 configurations across three implementations, zero disagreements; three real defects found and fixed -- see RUN_STATE.md section '打快速计数器的那个'",
+      "reader_visibility": "group_power was dead code and clean papers published no multiplicity at all -- both fixed",
+      "single_holder_theorem": "REFUTED -- accepted and reworked"
+    }
+  },
+  "base_commit": "1f378483b9179f25dfb33662f0a412cbbd1e6826",
+  "branch": "agent/v25-leakage-loo-and-multiplicity",
+  "files": [
+    {
+      "path": "exam/STATUS.md",
+      "sha256": "5897cf1e03540383a506b713b2be4706b06f8eeda8c3053062434887208078c2"
+    },
+    {
+      "path": "exam/artifacts/leakage.json",
+      "sha256": "1fe2f330e965b3d4b0fad838961bc6dbb7d8c43a42da464fc986001b4d07846b"
+    },
+    {
+      "path": "exam/leakage.py",
+      "sha256": "fdf9e0711c9ad38fa3b4737c4b7c8e5e0a356c8ec94bb1638a8dc39b811b9dc2"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/RUN_STATE.md",
+      "sha256": "399b17180b4d3fe3a700dcc662b49c5c7621fb2cc61167438a5a6f9b83b27f66"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/SYNC_PARAGRAPH.md",
+      "sha256": "d8959d9c46c10cae91cf030bb0b4124eb14b7ecbb3110c06d9f0d5bf64ab3a86"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b1_token_census.py",
+      "sha256": "669db321464c5ece4aa7f9f7087e06bfa43ef26d8c2a7ddac4ea1df5eab5c69f"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b2_three_rules_on_fixtures.py",
+      "sha256": "8228da85f07ed8fd7246a417a413124a3347b8feac9350c64a2355af6297a731"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b3_crosscheck_exact_vs_permutation.py",
+      "sha256": "4f38e7bf2c37b7907982d73862d951703ccc159a8d4d29b151a5d10853b22e64"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b4_fast_count_vs_oracle.py",
+      "sha256": "8007dc978badc34ee55df8242474e97470242d1d6d1d7fbd74fe0a1905dada85"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b5_pooled_private_cut.py",
+      "sha256": "4136d8df7a15a339af366e671eaadac68565f23440e4eb6d9621a6cc28368994"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/c1_mutation_v25.py",
+      "sha256": "4a060d0625a3b957df8ab34ab43846eda8a23359086ac811175c104420b89e7d"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/fast_count_check.json",
+      "sha256": "0a39b90e6b8a2e7bc6b91ab7646288acf3c31fd3408781caea30b23f50723f10"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/pooled_private_cut.json",
+      "sha256": "97f95c406b9d7fe5ab7d6507473692fdc6e2548f684b583f3fe78a9822cf8f6d"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/token_census.json",
+      "sha256": "51d082269af3b3eaae0f9c5de93f9a9a6471ba116f98e6448e7e8560c62c180e"
+    },
+    {
+      "path": "exam/runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/write_manifest.py",
+      "sha256": "4a4a2036f2845441f79d7193fbcefcf0d57627c214e0433b1983b70539cfc955"
+    },
+    {
+      "path": "exam/tests/test_handover_auto.py",
+      "sha256": "676b8dd69637641fdcba762764ab0fb826a4f79dbe87083c463075d83bbac788"
+    },
+    {
+      "path": "exam/tests/test_leakage_multiplicity.py",
+      "sha256": "58a1e337c4a5f2d47f7503fe0c0becc772dbc8a656b0118b62ef9f80f61dec32"
+    },
+    {
+      "path": "exam/tests/test_leakage_tokens.py",
+      "sha256": "84494ceffc967feaa11418049c183b5256b8984d1922a1e4d814fb0d84e35481"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V2-V25-leakage-loo-and-multiplicity",
+  "python": "3.13.13",
+  "result": {
+    "exact_count_cost": {
+      "bruteforce_seconds": {
+        "12_classes_n120": null,
+        "6_classes_n80": 0.46,
+        "8_classes_n80": 14.67
+      },
+      "differential_configurations": 2130,
+      "mismatches": 0,
+      "pruned_seconds": {
+        "20_classes_n200": 0.0
+      }
+    },
+    "groups_that_cannot_fire": {
+      "cause": "the statistic is two-class-shaped: ceiling is 2*largest/n, about 2/m for m balanced answer classes, so below the 0.90 tolerance once m >= 3",
+      "consequence": "two of the four shipped papers were green under a check that could not have reported anything",
+      "count": [
+        6,
+        10
+      ],
+      "includes": [
+        "p15-heldout-a0/event",
+        "p15-heldout-a0/level_name",
+        "p15-handover-a0/rule",
+        "p15-verdict-a2/class"
+      ]
+    },
+    "multiplicity_correction": {
+      "exact_vs_v21_sampled": {
+        "exact": 0.1034,
+        "v21_sampled": 0.117
+      },
+      "scopes_published": [
+        "in_field",
+        "in_label_set"
+      ],
+      "status": "exact, published, not applied",
+      "why_not_applied": "at n=6 with three cuts tried the family-wise rate is 0.187, so alpha 0.05 silences a leak V21 planted on purpose and a human sees by eye; firing means 'a human adjudicates', so a false alarm costs one look and a miss costs a published paper"
+    },
+    "papers": {
+      "p15-adaptation-a0": "GREEN",
+      "p15-handover-a0": "GREEN",
+      "p15-heldout-a0": "GREEN",
+      "p15-verdict-a2": "GREEN",
+      "v11-handover-a0": "RED (pinned, not repaired)"
+    },
+    "single_holder_ruling": {
+      "after_adversarial_review": "closable by one pooled cut over the field's private markers; the impossibility proof only covers per-token rules",
+      "coverage_four_shipped_distinct": [
+        97,
+        106
+      ],
+      "first_pass": "not closable (withdrawn)",
+      "found_immediately": "a real leak in v11-handover-a0: level-name uniqueness predicts `solvable` 8/8 at p_fire 0.0357",
+      "known_evasion": "a decoy private marker on every item pushes the cut to k=n; the rule that survives it is measured in b5 and not shipped",
+      "withdrawn_numbers": {
+        "219_of_230": "scan slots over four",
+        "237_of_261": "scan slots over five papers",
+        "cry_wolf_cost": 0
+      }
+    }
+  },
+  "run_id": "20260729T1820Z-V25-leakage-loo-and-multiplicity",
+  "tests": "pytest exam/tests -q (381 passed, 2 xfailed); python exam/verify.py (GREEN); b4_fast_count_vs_oracle.py (2130 differential configurations, 0 mismatches); b5_pooled_private_cut.py (3/3 fixtures as expected)",
+  "utc": "2026-07-29T22:10:22Z",
+  "worktree_dirty": true
+}
