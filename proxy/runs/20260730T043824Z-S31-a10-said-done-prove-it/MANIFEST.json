@@ -1,0 +1,11 @@
+{
+  "prompt_id": "S31-a10-said-done-prove-it",
+  "branch": "agent/s31-a10-said-done-prove-it",
+  "base_commit": "12a48ecc1297fd42f8f31fc362cf7ef15176f9bf",
+  "utc": "2026-07-30T04:38:24Z",
+  "worker": "W-1702",
+  "territory": "proxy",
+  "cell": "S3",
+  "goal": "Adjudicate which of three cases A10 is (not done / done-not-merged / artefact-gitignored-by-design); establish whether the real-arm write path works; land the S29 reconciliation ruling; add a negative sample that proves reconciliation can go red on an amount mismatch.",
+  "status": "in-progress"
+}
