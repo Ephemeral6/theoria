@@ -17,7 +17,11 @@
       "range": "Abstract-\u00a73",
       "paper_lines": "1-908",
       "file": "citecheck-A-abstract-to-s3.md",
-      "state": "stub -- Pass A only; Passes B/C/D counted but never enumerated. Being rewritten."
+      "state": "complete",
+      "sha256": "ce23f2a53ee52cedf9f662364f2d6b547eed25b5b0ff113a793f13602e141454",
+      "bytes": 70908,
+      "lines": 810,
+      "counts_corrected_vs_stub": "Pass A's four counts (69/62/7/0) confirmed. Pass B findings 8 -> 12, claims checked ~95 -> ~125; Pass C 9 -> 8; Pass D 14/4 -> 25/5. One of the stub's three load-bearing findings WITHDRAWN: the 38-metric five-family split verifies field for field in capability_spectrum.json (38 cards; epistemic 14 / economy 7 / mechanism 6 / exploration 6 / planning 5)."
     },
     {
       "slice": "B",
