@@ -430,7 +430,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "f1068f7b4d78a72a5a2538bb9de65ce9248bed0e447987ef7f7dd29b26a04b35",
+          "sha256": "4c1b3fd726e9a080462bca2e449f364c3aa5d2c62571f70816832da30fbde974",
           "tracked": true
         },
         {
@@ -455,7 +455,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
-          "sha256": "12a0cd8bba680bfce20be992f8fd0502ce43549db3a0f814db9b07cd6611fa46",
+          "sha256": "0a5654be0258f2f0de40d72f96ff39b66a3f10dffcd59a6872f8207720f8514a",
           "tracked": true
         }
       ],
@@ -561,7 +561,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "f1068f7b4d78a72a5a2538bb9de65ce9248bed0e447987ef7f7dd29b26a04b35",
+          "sha256": "4c1b3fd726e9a080462bca2e449f364c3aa5d2c62571f70816832da30fbde974",
           "tracked": true
         },
         {
@@ -631,8 +631,8 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "fde0f2aafd6ec6a4b257fcb19d2a64318e3e53e8",
-    "dirty": true
+    "commit": "af448eb4b871e761a14397e60117d8be2b556276",
+    "dirty": false
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
