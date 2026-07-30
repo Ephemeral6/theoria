@@ -95,6 +95,7 @@ def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
                   gitignore: str = "", track: tuple[str, ...] = (),
                   global_config: str | None = None,
                   local_exclude: str | None = None,
+                  hostile_env: dict[str, str] | None = None,
                   min_scanned: int = 1):
     """`check_nosecret()` over a synthetic tree inside a **real** repository.
 
@@ -113,6 +114,13 @@ def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
 
     `local_exclude` writes `$GIT_DIR/info/exclude`, the ignore surface no
     environment variable can switch off.
+
+    `hostile_env` is applied **after** the repository is built, and that ordering
+    is load-bearing rather than tidy. Setting `GIT_INDEX_FILE` before `git add`
+    writes the index to the attacker's path, so the file is never staged, so the
+    test fails for the wrong reason and would go on failing after the hole was
+    closed. Attacks go in here, not in the test body: the hostile condition has to
+    apply to the code under test and to nothing else.
     """
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "no-global-config"))
     monkeypatch.setenv("GIT_CONFIG_SYSTEM", str(tmp_path / "no-system-config"))
@@ -142,6 +150,8 @@ def run_d_in_repo(tmp_path, monkeypatch, files: dict[str, str],
         cfg = tmp_path / "hostile-global-config"
         cfg.write_text(global_config, encoding="utf-8")
         monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(cfg))
+    for k, v in (hostile_env or {}).items():
+        monkeypatch.setenv(k, v)
     monkeypatch.setattr(vp, "HERE", here)
     monkeypatch.setattr(vp, "ROOT", tmp_path)
     return vp.check_nosecret()
@@ -294,8 +304,8 @@ def test_a_gitignored_file_is_not_reported(tmp_path, monkeypatch):
                                "section.md": "nothing to see"},
                               gitignore="cache/\n")
     assert ok, "a gitignored file was still reported: %s" % notes
-    assert "1 published file(s) scanned, 1 skipped as gitignored under cache/" \
-        in "\n".join(notes), notes
+    assert "all 2 file(s) under this directory accounted for = 1 scanned + " \
+        "1 skipped as gitignored under cache/" in "\n".join(notes), notes
 
 
 @needs_git
@@ -475,16 +485,69 @@ def test_an_ignore_rule_that_swallows_the_tree_hits_the_floor(tmp_path, monkeypa
 
 
 # ------------------------------------------- whose ignore rules this obeys
+#
+# Every case below builds the hostile condition rather than a proxy for it, and
+# each attack that git honours has a control proving git honours it -- otherwise a
+# green here would be indistinguishable from a git that never implemented the
+# lever. All three were live against `4f28ce37` and were found by a refuter, not
+# by the author.
+
+def _raw_check_ignore(tmp_path, name, env_extra):
+    """`git check-ignore` with nothing pinned: the attack as the attacker runs it.
+
+    The controls need this. `test_..._cannot_hide_...` above each control would
+    pass just as happily against a git that had never honoured the lever being
+    defended against, and a defence with no demonstrated attack is a comment."""
+    r = subprocess.run([GIT, "check-ignore", "-v", "--", name],
+                       cwd=str(tmp_path), stdout=subprocess.PIPE,
+                       stderr=subprocess.STDOUT, text=True,
+                       env={**os.environ, **env_extra})
+    return r.returncode, r.stdout
+
+
+@needs_git
+def test_a_hostile_git_index_file_cannot_hide_a_tracked_file(tmp_path, monkeypatch):
+    """`GIT_INDEX_FILE` at a nonexistent path makes git read an *empty* index, and
+    an empty index makes a tracked file matching `*.txt` report as ignored. That
+    is the whole defence of narrowing this scan -- "a tracked file is never
+    skipped, because check-ignore consults the index" -- defeated from the process
+    environment, which is true of `.gitignore` patterns and false of `os.environ`.
+    Not exotic either: `git commit --only`, `git stash`, `git rebase`,
+    `git filter-branch` and any hook running over a temporary index export it, and
+    this gate is meant to run before every push."""
+    ok, notes = run_d_in_repo(
+        tmp_path, monkeypatch, {"leak.txt": f"ARC_API_KEY={SHAPED}"},
+        gitignore="*.txt\n", track=("leak.txt",),
+        hostile_env={"GIT_INDEX_FILE": str(tmp_path / "nonexistent-index")})
+    assert not ok and "leak.txt" in "\n".join(notes), (
+        "GIT_INDEX_FILE emptied the index and a tracked leak fell out of the "
+        "scan: %s" % notes)
+
+
+@needs_git
+def test_the_hostile_git_index_file_would_otherwise_have_worked(tmp_path):
+    """Control for the attack above."""
+    (tmp_path / ".gitignore").write_text("*.txt\n", encoding="utf-8")
+    (tmp_path / "leak.txt").write_text("x", encoding="utf-8")
+    subprocess.run([GIT, "init", "-q"], cwd=str(tmp_path), check=True)
+    subprocess.run([GIT, "add", "-f", "--", ".gitignore", "leak.txt"],
+                   cwd=str(tmp_path), check=True, stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL)
+    rc_honest, _ = _raw_check_ignore(tmp_path, "leak.txt", {})
+    rc_attack, out = _raw_check_ignore(
+        tmp_path, "leak.txt", {"GIT_INDEX_FILE": str(tmp_path / "nonexistent")})
+    assert rc_honest == 1, "the index is not being consulted at all: %s" % out
+    assert rc_attack == 0, (
+        "GIT_INDEX_FILE does not empty the index on this git, so the test above "
+        "proves nothing: %s" % out)
+
 
 @needs_git
 def test_a_global_excludesfile_cannot_hide_a_leak(tmp_path, monkeypatch):
     """`core.excludesFile` in somebody's `~/.gitconfig` is an ignore rule this
     check would otherwise obey -- one line in a file that is not in the
     repository, not in review, and not on the next machine, and a leaking file
-    leaves the scan. `_git_env()` pins global and system config out of the way, so
-    only the repository's own rules and index decide. Until this test the suite
-    pinned them and production did not, which meant the suite was proving
-    something about a configuration nobody ran."""
+    leaves the scan."""
     (tmp_path / "hostile-excludes").write_text("fresh.md\n", encoding="utf-8")
     ok, notes = run_d_in_repo(
         tmp_path, monkeypatch, {"fresh.md": f"ARC_API_KEY={SHAPED}"},
@@ -495,26 +558,212 @@ def test_a_global_excludesfile_cannot_hide_a_leak(tmp_path, monkeypatch):
 
 
 @needs_git
-def test_the_hostile_global_config_would_otherwise_have_worked(tmp_path, monkeypatch):
+def test_the_hostile_global_config_would_otherwise_have_worked(tmp_path):
     """Control for the test above, which would pass just as happily if
-    `core.excludesFile` had never been honoured by anything. Here the same config
-    is handed to git with nothing pinning it, and git does ignore the file -- so
-    the pinning in `_git_env()` is the only reason the scan still sees it."""
+    `core.excludesFile` had never been honoured by anything."""
     (tmp_path / "excludes").write_text("fresh.md\n", encoding="utf-8")
     (tmp_path / "cfg").write_text(
         "[core]\n\texcludesFile = %s\n" % (tmp_path / "excludes").as_posix(),
         encoding="utf-8")
     (tmp_path / "fresh.md").write_text("x", encoding="utf-8")
     subprocess.run([GIT, "init", "-q"], cwd=str(tmp_path), check=True)
-    r = subprocess.run([GIT, "check-ignore", "-v", "fresh.md"],
-                       cwd=str(tmp_path), stdout=subprocess.PIPE,
-                       stderr=subprocess.STDOUT, text=True,
-                       env={**os.environ,
-                            "GIT_CONFIG_GLOBAL": str(tmp_path / "cfg"),
-                            "GIT_CONFIG_SYSTEM": str(tmp_path / "nosuch")})
-    assert r.returncode == 0 and "excludes" in r.stdout, (
+    rc, out = _raw_check_ignore(tmp_path, "fresh.md", {
+        "GIT_CONFIG_GLOBAL": str(tmp_path / "cfg"),
+        "GIT_CONFIG_SYSTEM": str(tmp_path / "nosuch")})
+    assert rc == 0 and "excludes" in out, (
         "this git does not honour core.excludesFile, so the pinning test above "
-        "proves nothing: %s" % r.stdout)
+        "proves nothing: %s" % out)
+
+
+@needs_git
+def test_planting_a_file_at_the_pinned_config_path_does_not_revive_excludesfile(
+        tmp_path, monkeypatch):
+    """The refuter's second attack, run at full strength. The first pin was
+    `HERE / ".check-d-no-global-git-config"` -- absent by convention, on no ignore
+    list, inside the directory being audited. Creating it with a `[core]
+    excludesFile` line brought the lever back and hid a planted credential behind
+    a green gate. "Pinned at an absent path" is a claim about the future.
+
+    Here the test is *handed* the pinned path and creates it deliberately, which
+    is stronger than the refuter's version: even an attacker who knows the path
+    gains nothing, because `-c core.excludesFile=` on the command line outranks
+    every config file. The absent path is now the second mechanism, not the
+    load-bearing one."""
+    (tmp_path / "hostile-excludes").write_text("fresh.md\n", encoding="utf-8")
+    vp._ABSENT_GIT_CONFIG.write_text(
+        "[core]\n\texcludesFile = %s\n" % (tmp_path / "hostile-excludes").as_posix(),
+        encoding="utf-8")
+    try:
+        ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                                  {"fresh.md": f"ARC_API_KEY={SHAPED}"})
+        assert not ok and "fresh.md" in "\n".join(notes), (
+            "a file planted at the pinned config path revived core.excludesFile: "
+            "%s" % notes)
+    finally:
+        vp._ABSENT_GIT_CONFIG.unlink(missing_ok=True)
+
+
+def test_the_pinned_config_path_is_outside_the_audited_tree():
+    """Where the first version went wrong, pinned as a property rather than as a
+    string. Unpredictable, so it cannot be pre-created; outside `HERE` and `ROOT`,
+    so nothing the check audits can reach it."""
+    p = vp._ABSENT_GIT_CONFIG
+    assert not p.exists()
+    for anchor in (vp.HERE, vp.ROOT):
+        with pytest.raises(ValueError):
+            p.resolve().relative_to(anchor.resolve())
+
+
+def test_the_git_environment_is_an_allowlist_not_a_denylist():
+    """Completeness is the claim, and it does not rest on the author having
+    enumerated git's variables. Every `GIT_*` in the caller's environment is
+    deleted unless it is on a two-entry keep-list, so a variable nobody here has
+    heard of -- or one added by a future git -- is gone by default. Both keepers
+    can only *widen* the scan: they stop git finding the repository, which makes
+    the ignore list unavailable, which scans everything and says so."""
+    hostile = {
+        "GIT_INDEX_FILE": "x", "GIT_DIR": "x", "GIT_WORK_TREE": "x",
+        "GIT_COMMON_DIR": "x", "GIT_OBJECT_DIRECTORY": "x",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES": "x", "GIT_CONFIG": "x",
+        "GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "core.excludesFile",
+        "GIT_CONFIG_VALUE_0": "x", "GIT_LITERAL_PATHSPECS": "1",
+        "GIT_NOGLOB_PATHSPECS": "1", "GIT_ICASE_PATHSPECS": "1",
+        "GIT_NAMESPACE": "x", "GIT_TRACE": "1",
+        "GIT_SOME_VARIABLE_INVENTED_IN_A_FUTURE_RELEASE": "x",
+    }
+    env = dict(os.environ)
+    env.update(hostile)
+    saved, os.environ = os.environ, env
+    try:
+        got = vp._git_env()
+    finally:
+        os.environ = saved
+    for name in hostile:
+        assert name not in got, "%s survived into the git environment" % name
+    assert got["GIT_CONFIG_NOSYSTEM"] == "1"
+    assert vp.GIT_ENV_KEEP == {"GIT_CEILING_DIRECTORIES",
+                               "GIT_DISCOVERY_ACROSS_FILESYSTEM"}
+
+
+@needs_git
+def test_the_xdg_default_ignore_file_cannot_hide_a_leak(tmp_path, monkeypatch):
+    """A hole neither the refuter nor the two earlier patches named. Git's
+    *default* for `core.excludesFile` is `$XDG_CONFIG_HOME/git/ignore`, falling
+    back to `~/.config/git/ignore`. That is a built-in default, not a setting, so
+    pinning `GIT_CONFIG_GLOBAL` never disabled it: a line in that file removed
+    files from this scan on any machine that had one, with no config anywhere to
+    show for it. `-c core.excludesFile=` is what closes it, and closing it is the
+    reason the pin is a command-line override rather than an absent path."""
+    xdg = tmp_path / "xdg"
+    (xdg / "git").mkdir(parents=True)
+    (xdg / "git" / "ignore").write_text("fresh.md\n", encoding="utf-8")
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"fresh.md": f"ARC_API_KEY={SHAPED}"},
+                              hostile_env={"XDG_CONFIG_HOME": str(xdg)})
+    assert not ok and "fresh.md" in "\n".join(notes), (
+        "git's default excludes file hid a leak: %s" % notes)
+
+
+@needs_git
+def test_the_xdg_default_ignore_file_would_otherwise_have_worked(tmp_path):
+    """Control. Note the pinned global config and `GIT_CONFIG_NOSYSTEM` in the
+    hostile environment: this file is obeyed *despite* both, which is exactly why
+    the earlier patch's config pinning was not enough."""
+    xdg = tmp_path / "xdg"
+    (xdg / "git").mkdir(parents=True)
+    (xdg / "git" / "ignore").write_text("fresh.md\n", encoding="utf-8")
+    (tmp_path / "fresh.md").write_text("x", encoding="utf-8")
+    subprocess.run([GIT, "init", "-q"], cwd=str(tmp_path), check=True)
+    rc, out = _raw_check_ignore(tmp_path, "fresh.md", {
+        "XDG_CONFIG_HOME": str(xdg),
+        "GIT_CONFIG_GLOBAL": str(tmp_path / "absent"),
+        "GIT_CONFIG_SYSTEM": str(tmp_path / "absent"),
+        "GIT_CONFIG_NOSYSTEM": "1"})
+    assert rc == 0 and "ignore" in out, (
+        "this git does not honour the XDG default excludes file, so the test "
+        "above proves nothing: %s" % out)
+
+
+# --------------------------------------- no name-based exemption, and no file
+# --------------------------------------- missing from the arithmetic
+#
+# `if p.is_file() and "__pycache__" not in p.parts` was a path allowlist eight
+# lines from the docstring forbidding one, and worse than the gitignored skip on
+# both axes used to justify that skip: the files are publishable, and they were in
+# neither printed number. 181 files existed, 165 were scanned, 5 were reported
+# skipped, and 11 vanished.
+
+@needs_git
+def test_a_tracked_pycache_file_is_still_scanned(tmp_path, monkeypatch):
+    """Force-added bytecode is tracked, so `git ls-files` publishes it and
+    `git check-ignore` agrees it is not ignored. The old rule dropped it anyway,
+    silently, on the strength of its directory name."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"__pycache__/leak.txt": f"ARC_API_KEY={SHAPED}"},
+                              gitignore="__pycache__/\n",
+                              track=("__pycache__/leak.txt",))
+    assert not ok and "leak.txt" in "\n".join(notes), (
+        "a tracked, publishable __pycache__ file was exempt: %s" % notes)
+
+
+@needs_git
+def test_a_tracked_pycache_dotenv_is_still_the_leak(tmp_path, monkeypatch):
+    """The name-based skip removed the file from `candidates` outright, so it
+    bypassed the `.env` filename tripwire too -- the one mechanism deliberately
+    placed above the ignore filter to survive exactly this kind of narrowing."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"__pycache__/.env": "ARC_API_KEY="},
+                              gitignore="__pycache__/\n",
+                              track=("__pycache__/.env",))
+    assert not ok and ".env" in "\n".join(notes)
+
+
+@needs_git
+def test_an_ignored_pycache_file_is_skipped_and_counted(tmp_path, monkeypatch):
+    """The ordinary case still ends up out of scope -- but through the general
+    rule, and inside the arithmetic rather than beside it."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"__pycache__/x.pyc": f"ARC_API_KEY={SHAPED}",
+                               "section.md": "clean"},
+                              gitignore="__pycache__/\n")
+    blob = "\n".join(notes)
+    assert ok, blob
+    assert "1 skipped as gitignored under __pycache__/" in blob, blob
+
+
+def test_the_note_accounts_for_every_file_on_the_live_tree():
+    """The arithmetic, checked against the disk rather than against itself. Two
+    numbers that do not close are how a scope hole hides in plain sight on a green
+    line, and the previous note printed 165 + 5 against 181 files."""
+    on_disk = sum(1 for p in vp.HERE.rglob("*") if p.is_file())
+    ok, notes = vp.check_nosecret()
+    blob = "\n".join(notes)
+    assert ok, blob
+    m = re.search(r"all (\d+) file\(s\) under this directory accounted for = "
+                  r"(\d+) scanned \+ (\d+) skipped", blob)
+    assert m, blob
+    total, scanned, skipped = (int(g) for g in m.groups())
+    assert total == on_disk, "%d in the note, %d on disk" % (total, on_disk)
+    unreadable = re.search(r"(\d+) UNREADABLE", blob)
+    assert scanned + skipped + (int(unreadable.group(1)) if unreadable else 0) \
+        == total, blob
+
+
+@needs_git
+def test_a_skipped_top_level_file_is_not_labelled_with_its_own_name(
+        tmp_path, monkeypatch):
+    """`skipped_under` labelled a file directly under `HERE` with its own
+    filename, so the note could read "skipped as gitignored under leak.txt" -- a
+    filename presented as a directory, in the one line a reader consults to see
+    whether the scope moved."""
+    ok, notes = run_d_in_repo(tmp_path, monkeypatch,
+                              {"leak.txt": f"ARC_API_KEY={SHAPED}",
+                               "section.md": "clean"},
+                              gitignore="leak.txt\n")
+    blob = "\n".join(notes)
+    assert ok, blob
+    assert "1 skipped as gitignored under ./" in blob, blob
+    assert "under leak.txt" not in blob, blob
 
 
 @needs_git

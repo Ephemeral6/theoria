@@ -807,21 +807,94 @@ GITIGNORE_TIMEOUT = 60
 MIN_SCANNED = 40
 
 
-#: Git config files pinned out of the way for every call this check makes.
-#: `core.excludesFile` in a developer's `~/.gitconfig` is an ignore rule this
-#: check would otherwise obey: one line there and a leaking file drops out of
-#: scope on that machine only, invisibly. The negative-control suite already
-#: pins these so a reader's dotfiles cannot change its verdict; production
-#: deserves the same guarantee, and until now the tests were proving something
-#: about a configuration production did not run in. The paths are deliberately
-#: absent from disk -- git 2.32+ reads a missing `GIT_CONFIG_GLOBAL` as empty.
-#: On git older than that the variables are ignored and this buys nothing; it
-#: never costs anything, and repository-level `.gitignore` is unaffected, which
-#: is the config that is *supposed* to be authoritative here.
+#: An absent config path, outside the audited tree and unguessable.
+#:
+#: The first version of this pin was `HERE / ".check-d-no-global-git-config"` --
+#: absent by convention, on no ignore list, inside the very directory the check
+#: audits. A refuter created that file with a `[core] excludesFile` line in it and
+#: `core.excludesFile` was live again, hiding a planted credential behind a green
+#: gate. "Pinned at an absent path" is a claim about the future, and the one
+#: directory it was staked on is the one directory guaranteed to be writable by
+#: whatever is being audited.
+#:
+#: So: the system temp directory, a name carrying this process's pid and eight
+#: random bytes, computed once per interpreter and never created. Nothing can
+#: pre-create a path it cannot predict. This is the *second* of two independent
+#: mechanisms, not the load-bearing one -- `GIT_CONFIG_PIN` below does not depend
+#: on any path being absent, and closes the same hole even if this one is somehow
+#: made present.
+_ABSENT_GIT_CONFIG = Path(tempfile.gettempdir()) / (
+    "check-d-absent-git-config-%d-%s" % (os.getpid(), os.urandom(8).hex()))
+
+
+#: Command-line config that outranks every config file, so it needs no absent
+#: path to work. `-c` beats system, global, XDG and repository config alike, and
+#: (verified against git 2.54) it also beats `GIT_CONFIG_COUNT`/`KEY_n`/`VALUE_n`
+#: injection.
+#:
+#: `core.excludesFile=` (empty) is the load-bearing one, and it closes a hole
+#: neither the refuter nor the first patch named: git's *default* for
+#: `core.excludesFile` is `$XDG_CONFIG_HOME/git/ignore`, falling back to
+#: `~/.config/git/ignore`. That is a built-in default, not a config-file setting,
+#: so pinning `GIT_CONFIG_GLOBAL` never disabled it -- a line in
+#: `~/.config/git/ignore` silently removed files from this scan on any machine
+#: that had one, with no config anywhere to show for it. Verified: with global
+#: config pinned and `GIT_CONFIG_NOSYSTEM=1` set, that file is still obeyed; with
+#: `-c core.excludesFile=` it is not.
+#:
+#: `core.excludesFile` is the only ignore lever config has. Repository
+#: `.gitignore` and `$GIT_DIR/info/exclude` are files, not config, and the first
+#: is the authority this check is *supposed* to obey.
+GIT_CONFIG_PIN = ("-c", "core.excludesFile=")
+
+
+#: Environment variables kept when calling git. Everything else named `GIT_*` is
+#: deleted.
+#:
+#: A denylist here was the defect: `_git_env()` copied `os.environ` wholesale and
+#: pinned the three variables the author had thought of, so `GIT_INDEX_FILE`
+#: pointed at a nonexistent path made git read an empty index -- and the empty
+#: index made a **tracked, committed** file matching `*.txt` and holding a
+#: 36-character credential report as ignored, skipped, and green. The entire
+#: defence of narrowing the scan is "a tracked file is never skipped, because
+#: check-ignore consults the index"; that is true of `.gitignore` patterns and
+#: false of the process environment. Nor is it exotic: `git commit --only`,
+#: `git stash`, `git rebase`, `git filter-branch` and any hook running over a
+#: temporary index all export `GIT_INDEX_FILE`, and this file's header asks to be
+#: run before every push.
+#:
+#: The list below is an **allowlist**, which is why it is complete: it does not
+#: rest on having enumerated git's variables correctly, only on git's convention
+#: that they are all named `GIT_*`. A variable this author has never heard of, or
+#: one added in a future git, is deleted by default. `GIT_CONFIG_COUNT` and its
+#: `GIT_CONFIG_KEY_n`/`VALUE_n` companions go with them, as do `GIT_DIR`,
+#: `GIT_WORK_TREE`, `GIT_COMMON_DIR`, `GIT_OBJECT_DIRECTORY`, the `*_PATHSPECS`
+#: family and the `GIT_TRACE*` family, none of which are enumerated here because
+#: none of them need to be.
+#:
+#: Two are kept deliberately, both because they can only ever *widen* the scan:
+#: `GIT_CEILING_DIRECTORIES` and `GIT_DISCOVERY_ACROSS_FILESYSTEM` can stop git
+#: finding the repository, which makes the ignore list unavailable, which scans
+#: everything and says so. Removing them would buy nothing and would take away
+#: the honest way to exercise the release-tarball path.
+GIT_ENV_KEEP = frozenset({
+    "GIT_CEILING_DIRECTORIES",          # can only prevent discovery -> widens
+    "GIT_DISCOVERY_ACROSS_FILESYSTEM",  # likewise
+})
+
+
 def _git_env() -> dict[str, str]:
-    env = dict(os.environ)
-    env["GIT_CONFIG_GLOBAL"] = str(HERE / ".check-d-no-global-git-config")
-    env["GIT_CONFIG_SYSTEM"] = str(HERE / ".check-d-no-system-git-config")
+    """The environment every git call in this check runs under.
+
+    `HOME`/`USERPROFILE`/`XDG_CONFIG_HOME` are left alone on purpose. They are
+    not git variables, stripping them changes how git resolves a dozen unrelated
+    things, and the only ignore surface they reach -- `~/.config/git/ignore` via
+    the `core.excludesFile` default -- is already disabled by `GIT_CONFIG_PIN`.
+    """
+    env = {k: v for k, v in os.environ.items()
+           if not k.startswith("GIT_") or k in GIT_ENV_KEEP}
+    env["GIT_CONFIG_GLOBAL"] = str(_ABSENT_GIT_CONFIG)
+    env["GIT_CONFIG_SYSTEM"] = str(_ABSENT_GIT_CONFIG)
     env["GIT_CONFIG_NOSYSTEM"] = "1"   # the pre-2.32 spelling of half of it
     return env
 
@@ -841,15 +914,17 @@ def _local_exclude_note() -> str | None:
     A single untracked line here silences the content scans for a path on this
     clone alone -- it is per-repository, it is not in the tree, and nothing in a
     review would show it. So the note says it is there and how many rules it
-    holds. Not a failure: these patterns are ordinary and this repository's own
-    eleven are editor and harness state. A reader who sees a surprising count has
+    holds. Not a failure: these patterns are ordinary, and this repository's own
+    are editor and harness state. (No count in this sentence: the first draft said
+    "eleven" where the file held ten and the gate printed ten, which is a poor
+    look in a docstring about counting.) A reader who sees a surprising number has
     the one place to look, which is all this can honestly offer."""
     git = shutil.which("git")
     if git is None:
         return None
     try:
-        r = subprocess.run([git, "--no-optional-locks", "rev-parse",
-                            "--git-common-dir"],
+        r = subprocess.run([git, "--no-optional-locks", *GIT_CONFIG_PIN,
+                            "rev-parse", "--git-common-dir"],
                            cwd=str(HERE), env=_git_env(), text=True,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                            timeout=GITIGNORE_TIMEOUT)
@@ -907,12 +982,14 @@ def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
       empty set and a reason. The caller then scans everything and says so. A
       check that silently shrinks its own scope is the defect one rung down from
       the one this fixes.
-    * **not the reader's `.gitconfig`.** `_git_env()` pins global and system
-      config out of the way, so a `core.excludesFile` in somebody's home
-      directory cannot quietly remove a file from this scan. Only the
-      repository's own `.gitignore` and index decide, plus
-      `$GIT_COMMON_DIR/info/exclude`, which no setting can disable and which
-      `_local_exclude_note()` therefore announces instead.
+    * **not the reader's `.gitconfig`, and not the caller's environment.**
+      `GIT_CONFIG_PIN` puts `core.excludesFile=` on the command line, above every
+      config file and above git's own `~/.config/git/ignore` default; `_git_env()`
+      deletes every `GIT_*` variable that is not on a two-entry keep-list, so
+      neither `GIT_INDEX_FILE` nor anything else can redirect the index, the work
+      tree or the ignore list. Only the repository's own `.gitignore` and index
+      decide, plus `$GIT_COMMON_DIR/info/exclude`, which no setting can disable
+      and which `_local_exclude_note()` therefore announces instead.
 
     Returns `(ignored, unavailable)`; `unavailable` is None when the answer can
     be trusted, otherwise a short phrase naming why it cannot.
@@ -939,7 +1016,7 @@ def _gitignored(paths: list[Path]) -> tuple[set[Path], str | None]:
         # `--no-optional-locks` so a read-only check never writes a refreshed
         # index; the in-memory index is still consulted, which is what keeps a
         # force-added file in scope.
-        r = subprocess.run([git, "--no-optional-locks",
+        r = subprocess.run([git, "--no-optional-locks", *GIT_CONFIG_PIN,
                             "check-ignore", "-z", "--stdin"],
                            input=payload, cwd=str(HERE), env=_git_env(),
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -993,10 +1070,20 @@ def check_nosecret() -> tuple[bool, list[str]]:
     positives at all. It is now reported as what it is: a bonus available on the
     author's machine, not the floor.
 
-    **Scope: what git would publish.** The walk skips `__pycache__` and anything
-    git ignores (`_gitignored`), and the note states both counts and the
-    directories the skipped files came from, because a check that quietly narrows
-    its own scope has the defect one rung below the one it fixed.
+    **Scope: what git would publish, and nothing dropped off the books.** Every
+    file under this directory lands in exactly one of three buckets -- scanned,
+    skipped as gitignored, or unreadable -- and every non-zero bucket is printed,
+    with the directories the skipped files came from. There is no name-based
+    exemption. `__pycache__` used to be one, and it was the worst kind: eleven
+    files on the live tree dropped by `"__pycache__" not in p.parts`, reported in
+    no number, while `git check-ignore` says git does *not* consider a tracked one
+    ignored -- so `release/enumerate.py`'s `git ls-files` would have put a tracked
+    `__pycache__/leak.txt` straight into `MANIFEST.jsonl` past a green gate, and a
+    tracked `__pycache__/.env` past the filename tripwire too. `_gitignored`'s own
+    docstring forbids exactly that eight lines above where the caller did it.
+    Bytecode is skipped now only because git ignores it, which is the general rule
+    doing the work, and it is counted when it is.
+
     Untracked-but-not-ignored files are in scope on purpose -- they are one
     `git add` from the manifest. When the ignore list cannot be obtained the scan
     widens to everything and the note says so. `MIN_SCANNED` is the floor under
@@ -1014,8 +1101,9 @@ def check_nosecret() -> tuple[bool, list[str]]:
                 if len(value) >= MIN_SECRET_LEN:
                     secrets.append(value)
 
-    candidates = [p for p in sorted(HERE.rglob("*"))
-                  if p.is_file() and "__pycache__" not in p.parts]
+    # Every file, with no name-based exemption: what is dropped is dropped by
+    # `_gitignored` and counted where it is dropped.
+    candidates = [p for p in sorted(HERE.rglob("*")) if p.is_file()]
     ignored, unavailable = _gitignored(candidates)
     if unavailable:
         notes.append(f"  ignore-filtering unavailable ({unavailable}): scan WIDENED "
@@ -1031,6 +1119,7 @@ def check_nosecret() -> tuple[bool, list[str]]:
     hits: list[str] = []
     scanned = 0
     skipped = 0
+    unreadable: list[str] = []
     skipped_under: dict[str, None] = {}   # insertion-ordered set, for the note
     for path in candidates:
         # `relative_to` raises when ROOT is not an ancestor -- which it always is
@@ -1058,16 +1147,28 @@ def check_nosecret() -> tuple[bool, list[str]]:
             # Where the skipping happened, not just how much of it. A count alone
             # cannot distinguish "the caches were skipped" from "a directory of
             # the paper was", and the second is a scope regression a reader has to
-            # be able to see in the note.
+            # be able to see in the note. The *containing directory*, not the first
+            # path component: with `__pycache__` no longer exempt the skipped set
+            # spans several of them, and a first-component label reads
+            # "skipped under figures/" when what was skipped is
+            # `figures/__pycache__/`. A file directly under HERE is labelled `./`,
+            # because the first draft labelled it with its own filename and the
+            # note could read "skipped as gitignored under leak_global.txt".
             try:
-                parts = path.relative_to(HERE).parts
+                parent = path.relative_to(HERE).parent
             except ValueError:
-                parts = path.parts
-            skipped_under[parts[0] + "/" if len(parts) > 1 else parts[0]] = None
+                parent = path.parent
+            skipped_under[("." if parent == Path(".") else parent.as_posix())
+                          + "/"] = None
             continue
         try:
             text = path.read_text(encoding="utf-8", errors="replace")
         except OSError:
+            # Neither scanned nor skipped-as-gitignored, and before this it was in
+            # no bucket and no number at all: 165 + 5 printed against 181 files on
+            # disk. An unreadable file in a credential audit is a gap in the audit
+            # and gets its own line.
+            unreadable.append(str(rel))
             continue
         scanned += 1
         for value in secrets:
@@ -1106,11 +1207,22 @@ def check_nosecret() -> tuple[bool, list[str]]:
     # The note states which mechanisms ran, and says so out loud when the
     # exact-value scan did not. "Nothing to leak" was the old sentence and it
     # asserted a check that had not executed.
-    where = (" under " + ", ".join(skipped_under)) if skipped_under else ""
-    notes.append(f"  {scanned} published file(s) scanned, {skipped} skipped as "
-                 f"gitignored{where} (git will not publish them): no "
-                 f"credential-named assignment, no key-shaped token in a "
-                 f"credential context")
+    #
+    # The three buckets partition `candidates`, the arithmetic is printed so a
+    # reader can check that they do, and every non-zero one is named. The previous
+    # note printed two numbers that did not add up to the tree -- 165 scanned plus
+    # 5 skipped against 181 files -- with eleven dropped by a name-based exemption
+    # and the remainder by an `except OSError: continue` above the counter. Numbers
+    # that do not close are how a scope hole hides in plain sight on a green line.
+    where = (" under " + ", ".join(sorted(skipped_under))) if skipped_under else ""
+    buckets = [f"{scanned} scanned", f"{skipped} skipped as gitignored{where}"]
+    if unreadable:
+        buckets.append(f"{len(unreadable)} UNREADABLE and therefore not scanned "
+                       f"({', '.join(sorted(unreadable))})")
+    notes.append(f"  {scanned} published file(s) scanned: no credential-named "
+                 f"assignment, no key-shaped token in a credential context")
+    notes.append(f"  all {len(candidates)} file(s) under this directory accounted "
+                 f"for = " + " + ".join(buckets))
     notes.append(f"  {len(secrets)} .env value(s) also compared byte-for-byte: absent"
                  if secrets
                  else "  exact-value scan SKIPPED: no .env in this tree (gitignored, "
