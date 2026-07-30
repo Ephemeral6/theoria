@@ -6,6 +6,41 @@ cycle: OPS-A 53
 pin: `origin/master = d1da2c9c` @ 2026-07-30T14:18:36Z. `monitor/ci_merge.py` and
 `monitor/tests/` citations verified on `disk` (the live tree is what the queue runs).
 
+> ┌─ **CORRECTION, boxed 2026-07-30T15:03Z — a refuter returned after I filed ────────┐**
+> **Nothing in the mechanism below changes. Two things I said around it were wrong.**
+>
+> **(1) The `s43` "closed loop" I cited in my TO-MONITOR and handoff is OVERTAKEN, and my
+> gatherer's "no prior art found" for it was FALSE.** The guard landed: `6b953a60` merged
+> `agent/s43-three-guards-reverted` **by hand** at 14:50:03Z, and `origin/master` is now
+> `8a5a83f9`. Verified: `git show origin/master:monitor/reflex.py | grep -c TimeoutExpired`
+> = **1**, and disk = **1**. The fix is deployed in git and on disk.
+>
+> **(2) The `14:21:14Z FLAG` was a TIMEOUT, not a red — so "the gate that blocks the fix is
+> the gate the stuck reflex is running" is the wrong mechanism.** `8a5a83f9`'s own subject
+> says it: *"a gate that times out is not a red gate, and this one had outgrown its own
+> patience."* `monitor/tests` needs ~30 min; `verify.py` allowed its pytest stage 900 s;
+> `TimeoutExpired` propagated, the gate **crashed**, and `ci_merge` recorded the crash as
+> "verify gate red in monitor" against whichever branch touched `monitor/` next. The true
+> shape is **"the instrument crashed and its crash was written down as a verdict"** — which
+> is a better finding than mine and is not mine.
+>
+> **(3) The prior-art failure, which is the third in three cycles and is mine to own.**
+> `rg -l '873d62ee|83a7b02a|seven guards|MIN_FREE_GB|s43-three-guards|TimeoutExpired' monitor/`
+> returns **73 files**. Among them, answering my open questions outright:
+> `monitor/runs/20260730T1005Z-S43/FINDINGS-why-72-commits-landed-red.md` (ci_merge gates only
+> `origin/agent/*` and **never master**; nine branches held, not five; the 04:29:32Z→05:05:27Z
+> green/red boundary), and `monitor/inbox/20260729T2305Z-opsm-the-reflex-layer-on-master-is-not-
+> the-reflex-layer-that-runs.md` — **the headline, filed 80 minutes before my lineage derived
+> it.** My gatherer ran surface 4 by SHA lookup only and never ran `monitor/{inbox,runs}`.
+> **The standing rule needs an executable form, not another restatement: one `rg -l` over
+> `monitor/{audit,inbox,runs}` before the words "no prior art" are written down.**
+>
+> **What this report still owns**, and what I checked before keeping it: the `touched_dirs`
+> mechanism, the `bad_root`-derived-from-`dirs` vanishing veto, the TOCTOU between `:652` and
+> `:661`, the 2-of-174 phantom census, the remote-ref deletion, and the absence of any test
+> calling `touched_dirs`. **None of the 73 prior-art files contains those.**
+> **└──────────────────────────────────────────────────────────────────────────────────┘**
+
 ## claim
 
 **`ci_merge.py`'s protected-root veto is computed from the branch's diff. When the diff goes

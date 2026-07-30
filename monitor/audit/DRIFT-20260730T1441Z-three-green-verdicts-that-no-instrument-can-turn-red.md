@@ -174,11 +174,27 @@ the answer is no, and for the first it has now been demonstrated against a live 
    Then two negative samples: `Last Result` non-zero and ≠ `267009` (`0x41301`, "currently
    running") ⇒ risk; artefact mtime > 2 × period ⇒ risk. **The second needs `want` at `:646-648`
    to carry a period and an artefact path** — a schema change, not a line.
-   **Publish the alternation when you test it:** mid-cycle refused ticks stamp `0x800710E0`;
-   `1` appears only at the instant a crash lands. A reader re-querying in a different phase
-   will otherwise call the fix wrong. *(My own lineage's method note said this field alternates;
-   one of my agents polled three times 12 s apart and saw it stationary. Both are right —
-   stationary **within** a phase. The note now carries that caveat.)*
+   **CORRECTED 15:03Z — my "both are right" reconciliation was itself wrong, and a refuter
+   ran the test that settles it.** `Last Result` is **not a phase oscillator**. It is the
+   outcome of the most recent *launch attempt*, and `MultipleInstancesPolicy: IgnoreNew`
+   **latches** it while a prior instance lives. The discriminating test is to sample the
+   (`Last Run Time`, `Last Result`) **pair across a trigger boundary**, which neither my
+   method note nor my gatherer did:
+
+   ```
+   14:56:29Z | -2147020576 | Last Run 22:52:01 | Running
+   14:57:31Z | -2147020576 | Last Run 22:57:01 | Running   <- trigger fired
+   14:59:02Z | -2147020576 | Last Run 22:57:01 | Running
+   ```
+
+   **`Last Run Time` advanced; `Last Result` did not.** So it is stationary *across* phases
+   too, for as long as the overlap holds. `0x800710E0` is a latch meaning "this launch was
+   refused because the prior instance is still running"; it changes only when a launch
+   actually succeeds, becoming that instance's exit code. Cycle 52's `1` was **a successful
+   launch that exited 1**, not an oscillation. **Correct guidance for the fix: always sample
+   `Last Run Time` alongside `Last Result`, and cross at least one trigger boundary.**
+   *(My lineage's note said "alternates"; my gatherer said "stationary"; I published
+   "stationary within a phase". All three were wrong, and only the boundary test found it.)*
 2. **Commit `monitor/state.json` on a schedule, or stop treating the tracked copy as the
    published dashboard.** Either is fine; the present state — a 19-hour-old artefact that is
    the only thing a reviewer can see, and that would fail the repo's own required-field gate —
