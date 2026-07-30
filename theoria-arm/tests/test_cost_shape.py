@@ -198,6 +198,31 @@ def test_a_measured_zero_is_still_reported_as_a_price():
     assert block["model_calls"] == 1
 
 
+def test_one_of_the_three_adopted_keys_is_redundant_and_which_one():
+    """Pinned because the honest version of the claim is more useful than the
+    tidy one.
+
+    `unpriced_usage_keys` is *not* new information: it equals the
+    `usage_keys_the_table_cannot_price` that `costs()` already computes itself by
+    calling `table.cost()` a second time. `unmeasured_calls` and
+    `missing_usage_keys` have no such sibling. So if a future reader trims the
+    declaration, this test tells them which key they can drop without losing
+    anything and which two they cannot -- rather than leaving them with a comment
+    asserting all three are load-bearing, which is false.
+    """
+    report = costs([_call({"input_tokens": 100, "output_tokens": 200,
+                           "mystery_tokens": 7})])
+
+    assert report["from_price_table"]["unpriced_usage_keys"] == ["mystery_tokens"]
+    assert report["usage_keys_the_table_cannot_price"] == ["mystery_tokens"]
+    assert (report["from_price_table"]["unpriced_usage_keys"]
+            == report["usage_keys_the_table_cannot_price"])
+
+    # ...and the two that have no sibling really have none.
+    assert "unmeasured_calls" not in report
+    assert "missing_usage_keys" not in report
+
+
 def test_a_priced_call_reaches_the_manifest_as_a_number():
     """Positive control for the two tests above: they both assert on runs whose
     total is 0.0, so a `costs()` that always reported zero would satisfy them."""

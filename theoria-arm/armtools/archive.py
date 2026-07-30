@@ -55,12 +55,27 @@ from proxy.ledger import read_ledger
 #: judgement and the harder one. Freezing it at the five keys the old manifests
 #: carry would have restored byte-stability without touching a single archived
 #: file -- and would have been wrong. `usd_total` is a **lower bound**
-#: (`proxy/cost.py:186`), and the last three keys here are the only channels
-#: that say why it is short. `figures/fig02_bill_shape.py:503` prints that total
-#: as "table recomputes ...", so dropping them would let this project's own bill
-#: figure present a floor as a total -- which is the exact defect S29 fixed one
-#: layer down. The three are adopted, and the seven manifests written before
-#: they existed were migrated in a recorded pass
+#: (`proxy/cost.py:186`), and `unmeasured_calls` / `missing_usage_keys` are the
+#: only channels in this manifest that say why it is short.
+#: `figures/fig02_bill_shape.py:503` prints that total as "table recomputes
+#: ...", so dropping them would let this project's own bill figure present a
+#: floor as a total -- the exact defect S29 fixed one layer down, re-introduced
+#: one layer up to keep a gate green.
+#:
+#: `unpriced_usage_keys` is the odd one out and saying so is more useful than a
+#: tidy claim that all three are load-bearing: it is **redundant**, exactly equal
+#: to the `usage_keys_the_table_cannot_price` this function already computes for
+#: itself by calling `table.cost()` a second time (measured -- and `price_run`'s
+#: own docstring says this arm was the only reader that ever saw it). It is
+#: adopted anyway, for one reason: it arrives in the same diff as the other two,
+#: so it costs no additional migration, and a `from_price_table` that is a
+#: faithful copy of what the conversion reported is easier to reason about than
+#: one carrying a silent, undocumented subtraction. If it is ever dropped, the
+#: information survives in the sibling field -- which is not true of the other
+#: two, and that asymmetry is the whole point of writing this down.
+#:
+#: The keys are adopted, and the seven manifests written before they existed were
+#: migrated in a recorded pass
 #: (`runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/`).
 #:
 #: Adding a key here is therefore a deliberate act with a price: the manifests
