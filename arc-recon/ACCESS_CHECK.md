@@ -9,7 +9,7 @@ measurement where the docs contradict it — both are recorded when they disagre
 | # | Item | Status | Settled by |
 |---|---|---|---|
 | 1 | RESET semantics — full reset or level reset, hidden random source | **answered** | precheck, 4 games |
-| 2 | Cross-session residue | **closed** — none, across four sessions; the question is now standing surveillance, not an open item | precheck ×2 + canary ×2 |
+| 2 | Cross-session residue | **closed** — none, across four sessions; and as of 2026-07-30 none at **full** coverage either (two `full` sweeps, 20/20 frames each, S22 item 1) | precheck ×2 + canary ×2 + `full` ×2 |
 | 3 | Scorecard semantics — one card per game, in-card aggregation | **answered, with two traps** | baseline-arms measurement + official docs |
 | 4 | Does one action return several frames | **answered** — yes, up to 113; and **adjudicated**: the batch is a render burst, not a tick → [`CASCADE_RULING.md`](CASCADE_RULING.md) | precheck + P-20 per-frame probe ([`cascade/`](cascade/)) + baseline-arms shards |
 | 5 | Is `level` a response field | **answered** — yes | precheck |
@@ -94,6 +94,67 @@ implies:
   it is an owner decision and deliberately not an agent's (§"What S2 did not
   do") — but until someone does, item 2 is closed on **six agreeing replays**,
   which is the honest basis, and not on a standing instrument.
+
+### S22 item (1): the `full` sweep, run twice, and the bug its first run found
+
+**2026-07-30, RES-1.** S22 asked for the residue question to be answered at
+**full** coverage rather than by sampling — the `quick` profile is what the three
+qualifications above are about. The `full` profile (mode `complete`: every game,
+every stored step, 16 actions) **had never once executed**. It was configured,
+scheduled, budgeted and documented as a standing instrument, and `due` reported
+`full: DUE (never run)`.
+
+**The measurement.** Two full sweeps, 2026-07-30T03:41:27Z and T03:48:48Z, both
+compared against expectations sealed **2026-07-28 in a different session**:
+
+| | ar25 | g50t | sk48 | tn36 | total |
+|---|---|---|---|---|---|
+| frames agreed | 6/6 | 3/3 | 6/6 | 5/5 | **20/20** |
+| actions | 5 | 2 | 5 | 4 | 16 |
+
+Both PASS on every frame, twice. **No cross-session residue at full coverage** —
+including tn36's four accepted no-ops, which the daily `quick` profile reduces to
+a single RESET hash (the second qualification above). That bullet is now covered
+by a real measurement rather than by an argument.
+
+The first qualification still stands unchanged: the stored sequences are 6/3/6/5
+steps deep and the precheck went 9, so residue first appearing on step 7 remains
+outside every one of these instruments. Depth is not what `full` buys — breadth is.
+
+**What the first run found, which is why it took two.** The sweep spent its 16
+actions, compared all 20 frames, returned PASS on all four games — and then
+tripped its own spend reservation and **lost its own bookkeeping**:
+
+* `canary_schedule.py` reserved `plan["actions"]` (16) and settled
+  `run["http_calls"]` (20). RESET is a command, not an action (item 6b below),
+  so http_calls exceeds actions by exactly the number of games swept. **Both
+  profiles tripped on every run**: 20 > 16 on `full`, 16 > 12 on `quick`.
+* Charging requests against an action budget is not merely a unit mismatch, it is
+  contradicted by our own measurement: [`README.md`](README.md) item 6 records
+  that ARC's `total_actions` counts **successful actions only**. So the shared
+  pool was over-charged by the RESET count on every sweep — `spend_gate.jsonl`
+  seq 12998 charged 16 actions' worth of work as 20.
+* The trip was raised at settlement, **after** the sweep succeeded but **before**
+  the state file was written. So 16 actions were spent, every frame agreed, and
+  `due` still answered `full: never run`. An invocation in that state re-spends
+  and re-loses, forever.
+
+**This loop was latent, not active, and the distinction is the finding.**
+`schtasks` still shows no installed task, so nothing had been repeating — the
+third qualification above ("the schedule is not installed") is what kept the
+cost at zero. Installing it is the owner decision that has not been taken, and
+the whole purpose of `canary_schedule.py install` is that someone eventually
+takes it. **Before installation is the only cheap time to find this.**
+
+Fixed in `canary_schedule.py`: settlement charges `actions_executed`, a missing
+count raises instead of silently settling at zero (there is a canary settlement
+of `actions: 0` on the ledger at seq 12487 whose cause is *not* established), and
+a refusal is recorded and re-raised **after** the state is persisted — because the
+actions are already spent by then, and refusing to write the record does not
+un-spend them. Exit 5 on refusal is unchanged, so the refusal is still loud.
+Four tests added, each demonstrated red against the reverted fix; the pre-existing
+fixture pinned `http_calls` to `0`, the single value at which the two units are
+indistinguishable, which is why 42 green tests never saw this.
 
 One more, about the precheck half of the evidence: ar25's `run_a` (18:10:26 →
 18:35:03) and `run_b` (18:12:14 → 18:14:59) **overlapped in wall clock** —
