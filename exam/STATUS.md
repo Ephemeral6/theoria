@@ -1220,7 +1220,8 @@ grounded PDDL and no A2→PDDL compiler exists, `zero_space` re-checks only its 
 sample, `cegis_miner`/`mdl_segmenter` mine candidates and never verdicts. What
 does walk the path is the exam's own `check_certificate`, ≤3.1 ms per item, with
 zero connection to `engine-rig` — so "engines propose, the LLM adjudicates" has
-no engine on this path today. Filed, not fixed: it is an engine-rig change.
+no engine on this path today. Not fixed: it is an engine-rig change, requested
+in `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`.
 
 Tests: **465 passed, 2 xfailed**. `python exam/verify.py` GREEN. Zero API, zero
 network, zero sealed-pile contact.
