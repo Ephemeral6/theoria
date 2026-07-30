@@ -1255,3 +1255,58 @@ That restates one wall-clock observation as a bound, and a timing is not a bound
 reruns give 3.06 ms and 3.66 ms, and those are prose observations with no
 committed artefact either. The defensible claim is the order of magnitude. Every
 timing in this ticket is machine-dependent and nothing gates on one.
+
+## D-EX-031 — a tracked generated artefact may not record where its builder stood
+
+**Ruling.** No file under `exam/artifacts/` may contain a path outside the
+repository, the building user's name, a temporary directory, or a `.worktrees/`
+segment. Paths recorded in generated artefacts are **repo-relative with forward
+slashes**, so the value is identical on every checkout and on both platforms.
+Enforced by `exam/tools/check_artefact_locations.py`, wired into
+`exam/verify.py` as the `artefact_locations` stage and pinned by
+`exam/tests/test_artefact_locations.py`.
+
+**What was wrong.** `build_manifest.json` recorded twelve absolute paths — four
+papers × `sheet_path` / `key_path` / `cheater_brief_path` — naming whichever
+worktree last ran `build_papers`. `write_json` returns an absolute path and
+`os.path.join(ARTIFACTS, ...)` builds one, and neither was relativised.
+
+**Why it is a ruling and not a tidy-up.** Three costs, and the third is the one
+that binds. Every delivery in this territory carried twelve lines of pseudo-diff
+whose two sides mean the same thing — a merge-conflict generator between `exam`
+and `exam`. `CLAUDE.md` states determinism as a requirement rather than a
+preference, and "same build, same bytes" was false for this file. And
+`exam/tools/archive_run.py` folds `build_manifest.json` into the manifest it
+writes for every archived run, so the leak propagates into the provenance canon
+and from there into a Phase 4 release manifest that publishes every tracked
+file; to an outside reader `.worktrees/v5-verdict-three-types/…` is noise and a
+disclosure of local directory structure at once.
+
+**What this does not say.** The determinism stage was **not** falsely green.
+It compares two in-process builds' sheet digests (`module_for(t).build().sheet(digest())`)
+and never reads `build_manifest.json` — `grep -n build_manifest exam/verify.py`
+was empty before this change. So the graded sheets were always
+location-independent, and the honest statement is that a dimension went
+unmeasured, not that a gate lied. The draft of this ticket said the stronger
+thing and was corrected by its own author ten minutes later; the stronger thing
+would have been worse than the defect.
+
+**Scope, measured rather than assumed.** All 41 tracked files under
+`exam/artifacts/` were scanned for Windows and POSIX absolute paths, usernames,
+temp directories and worktree segments: every hit was in `build_manifest.json`
+and in those twelve values. The other 40 files are clean. So this is a
+single-file repair plus a gate, not a sweep — and the gate exists because the
+next artefact to grow an absolute path should not need a person to notice it.
+
+**Seen red before it was believed.** `exam/runs/20260730T1640Z-V27-manifest-absolute-paths/GATE-SEEN-RED.md`
+records the stage failing on the pre-fix `build_manifest.json` at `8a5a83f9`,
+with four independent patterns firing on that one file and no other file
+matching any of them.
+
+**One correction inside the fix.** The scanner's first version searched raw file
+bytes and reported seven findings in four exam papers, all false: JSON escapes a
+newline as backslash-n, so prose containing `asked:` before a line break holds
+`asked:\n` on disk, which matches both a drive-letter and a backslash-separator
+pattern. It decodes JSON and searches the values a reader would see. A location
+scanner that fires on ordinary prose gets switched off within a day, so that is
+pinned by a test too.

@@ -1,0 +1,19 @@
+{
+ "agent": "RES-3",
+ "base_commit": "8a5a83f923a28454cebbf3b9669389bf72a8b6dc",
+ "branch": "agent/v27-manifest-absolute-paths",
+ "files": [
+  {
+   "path": "GATE-SEEN-RED.md",
+   "sha256": "4b7436e02cf059090d563f9f788c1a50ed5ee94538a0ede5ba786f876dac89f1"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "d08db1eb52bf2842805efe445b6fd9d484ef3cbd2788b30f8feb801ee42a83da"
+  }
+ ],
+ "note": "Hashes are over the bytes git publishes, not the working copy -- V6-V23 cycle 107/108 found those two can differ silently under an eol=lf pin and that git diff's stdout cannot show it. Stamped by stamp_manifest.py, never by hand.",
+ "prompt_id": "V27-V27-manifest-absolute-paths",
+ "territory": "exam",
+ "utc": "2026-07-30T16:40:00Z"
+}
