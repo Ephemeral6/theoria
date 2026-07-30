@@ -254,9 +254,9 @@
       }
     ],
     "large_space_threshold": 1000000000000,
-    "note": "`_large_space()` (verdict.py:767) writes exhaustive_feasible=False, enumerated=null, truncated=false onto every class (ii) record without calling enumerate_states. This file is that call, made at the shipped cap on the shipped levels. `truncated` here is measured; in the shipped record it is a constant."
+    "note": "`exam/papers/verdict.py`'s `_large_space()` writes naive_enumeration_feasible=false, enumeration_attempted=false, enumerated=null and truncated=null onto every class (ii) record without calling enumerate_states. This file is that call, made at the shipped cap on the shipped levels, so `truncated` here is measured where in the shipped record it is a constant. Anchored by symbol: this note first read `verdict.py:767`, which was `def _large_space` exactly at base commit 415556f8 and is 130 lines off by 824b9fb4, and it named `exhaustive_feasible=False` and `truncated=false` -- the two fields D-EX-028 renamed and nulled in this same run. So for several commits this artefact contradicted the rename its own run shipped, while being row 1 of CRITERION.md's provenance map."
   },
-  "deterministic_sha256": "f70fdb809bd0ba0d48e853c55a4b2942a7361f6d3c202a19a3c334637ca1816f",
+  "deterministic_sha256": "8e024bc433b36957ad3d235630fe9905d32d8f71320e1b43c31c3ac8894432fe",
   "timings_nondeterministic": {
     "i1": {
       "enumerate_states_seconds": 0.0,
@@ -284,24 +284,24 @@
       "subset_lower_bound_seconds": 0.0
     },
     "ii1": {
-      "enumerate_states_seconds": 0.809,
+      "enumerate_states_seconds": 0.959,
       "positional_states_seconds": 0.0,
-      "subset_lower_bound_seconds": 0.002
+      "subset_lower_bound_seconds": 0.003
     },
     "ii2": {
-      "enumerate_states_seconds": 0.848,
+      "enumerate_states_seconds": 0.951,
       "positional_states_seconds": 0.0,
       "subset_lower_bound_seconds": 0.002
     },
     "ii3": {
-      "enumerate_states_seconds": 0.521,
+      "enumerate_states_seconds": 0.556,
       "positional_states_seconds": 0.001,
       "subset_lower_bound_seconds": 0.005
     },
     "ii4": {
-      "enumerate_states_seconds": 0.832,
+      "enumerate_states_seconds": 1.055,
       "positional_states_seconds": 0.0,
-      "subset_lower_bound_seconds": 0.001
+      "subset_lower_bound_seconds": 0.002
     }
   }
 }

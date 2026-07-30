@@ -5,11 +5,11 @@
   "files": [
     {
       "path": "CRITERION.md",
-      "sha256": "5c46ab1c98b43db56236e6cb31be5872958be5967d8b02e9866cb1e66c97fe85"
+      "sha256": "fdd49e2fbf7437582b3d6512066949a8c252df1889be09818e62b98ce6b0dfa1"
     },
     {
       "path": "RUN_STATE.md",
-      "sha256": "27fefe3ea2290af934bbc29ffb3829b54e17a522d0c1999aaac9549240cdb23e"
+      "sha256": "8ee58868296a6148015730f266e63ad8c23ad3bcaad9fce9df6a2715dc17b5d4"
     },
     {
       "path": "adversarial/attack_barbell.json",
@@ -28,6 +28,14 @@
       "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
     },
     {
+      "path": "adversarial/review-round3.md",
+      "sha256": "effc9cd88c3128f20c5e2d734b816d918aa6feebe671261056c615ee6aa4834a"
+    },
+    {
+      "path": "adversarial/round5-findings.md",
+      "sha256": "592deff13b044718ec1c76996b1d990139881fb899ca220cd14c937763c341c7"
+    },
+    {
       "path": "crux_quotient_settles.json",
       "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
     },
@@ -37,11 +45,11 @@
     },
     {
       "path": "enumeration_probe.json",
-      "sha256": "64d3b5cf56177b8cab2a3298cdf3ab505ee15a029b9fa0180b7d5f8c4cec6ad6"
+      "sha256": "d01cc78b463cd035aa6ddddcdbf0b1c646ccd3560c273866e85f0dcaf19692dc"
     },
     {
       "path": "enumeration_probe.py",
-      "sha256": "c5dd9011f361be3bc44b700c5d0421897073df64b28fd46182d1c185cb8f429b"
+      "sha256": "e6169a39a03c028a56d73dc4f31df9382551ae9cef474820ea8454db82009273"
     },
     {
       "path": "enumeration_sweep.json",
@@ -65,7 +73,7 @@
     },
     {
       "path": "probe_answer_key.json",
-      "sha256": "62822c7251c94b7bcdea09d81832b03d3d8d093879eddae40e2525cb088566e4"
+      "sha256": "89be31d7e7dcdd4b9e7452ff4c67f3cea392f18e9dca165980c804a20366c8a7"
     },
     {
       "path": "probe_answer_key.py",
@@ -73,11 +81,11 @@
     },
     {
       "path": "probe_lp_interface.json",
-      "sha256": "dfaad64570f480aeaac69b91c82497f1fd008859c4ddf7fe78e869b4b81e3ba8"
+      "sha256": "fc13461568220c150ba5760cdbf6768a0952d2db792e5db64bde048ed04c76e1"
     },
     {
       "path": "probe_lp_interface.py",
-      "sha256": "4c67db44db8a46bcea62fc0b063d4cd74d96c09c8391fbfc21c8b13b8572e7f1"
+      "sha256": "dc6cf7b20b9514d363877dcbaa6abedb72e137b298b751412372ae71d5baec86"
     },
     {
       "path": "probe_lp_soundness.json",
@@ -89,14 +97,14 @@
     },
     {
       "path": "repro_duplicate_switch.json",
-      "sha256": "ecc8e2b9d1b1a3679175cc731a11382814465c676816538171524db5051c250c"
+      "sha256": "1143f4b79c7b180b4cb50838c79b8bb1d40dea01544a4b78c9b1c5e765bd6660"
     },
     {
       "path": "repro_duplicate_switch.py",
-      "sha256": "6e900ca5012c3eecf37abc0773e5b983375e2003393b4a588c54d524d60d9c45"
+      "sha256": "2bdf22b99892db380506c39954b2f489f8940a41f39180424972417725cc3c0a"
     }
   ],
-  "note": "growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned by their own internal stable_sha256 over the deterministic fields; the whole-file sha here moves per run. __pycache__ is excluded: byte-unstable and not an artefact.",
+  "note": "Hashes are over the bytes published at the commit that carries this manifest, and must be re-stamped in any commit that touches a listed file. They pin what was published; they are NOT a reproducibility check, and for four files they cannot be one. growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned internally by growth_curve.json's `stable_sha256` and enumeration_probe.json's `deterministic_sha256` over their deterministic fields -- both of those reproduce; the whole-file sha here moves per run. crux_quotient_settles.json and probe_answer_key.json have no such internal hash and their `timing_seconds` / `MEASURED.*_seconds` fields move per run too; probe_lp_interface.json says so in its own generator's docstring (B, C and E record their own cost). enumeration_sweep.json is time- and memory-budget driven and reproduces nothing numeric. Re-verified 2026-07-30 after round five: 17 of the then 23 entries matched and 6 did not, every one of the 6 because a later commit (722b6e8e, b43427f0, 9cf779a3, 08820583, 0154c8f1) moved the file without re-stamping the manifest. BASELINE-cycle94.md is tracked in this directory but deliberately unlisted: it is a different concurrent session's cycle log, not an artefact of this run. __pycache__ is excluded: byte-unstable and not an artefact.",
   "prompt_id": "V6-V23-large-space-verdict-gap",
   "territory": "exam",
   "utc": "2026-07-30T02:15:00Z"

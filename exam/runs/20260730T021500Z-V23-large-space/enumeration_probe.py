@@ -1,10 +1,15 @@
 """Take the measurement `_large_space()` never takes.
 
-`exam/papers/verdict.py:_large_space()` stamps every class (ii) truth record
-with `"exhaustive_feasible": False, "enumerated": null, "truncated": false`
-*without ever calling `enumerate_states`*.  `truncated: false` is therefore
-true only in the sense that no enumeration was attempted -- it reads as though
-one ran and came back clean.  `_small_space()`, by contrast, actually runs
+`exam/papers/verdict.py`'s `_large_space()` stamps every class (ii) truth record
+with `"naive_enumeration_feasible": False, "enumeration_attempted": False,
+"enumerated": null, "truncated": null` *without ever calling
+`enumerate_states`*.  It used to write `"exhaustive_feasible": False` beside
+`"truncated": false`, and both were wrong in the same way: the field claimed no
+exhaustive method is feasible, which a 600-node pass refutes, and `truncated:
+false` was true only in the sense that no enumeration was attempted while
+reading exactly like one that ran and came back clean.  D-EX-028 renamed the
+first and nulled the second, and a separate `enumeration_attempted` flag now says
+outright that nothing ran.  `_small_space()`, by contrast, actually runs
 `enumerate_states(level, cap=MAX_ENUMERATION)` and raises if it truncated.
 
 This script runs the enumeration `_large_space` skips, on the *same levels*
@@ -151,11 +156,19 @@ def main():
         "cap": MAX_ENUMERATION,
         "large_space_threshold": V.LARGE_SPACE_THRESHOLD,
         "note": (
-            "`_large_space()` (verdict.py:767) writes exhaustive_feasible=False, "
-            "enumerated=null, truncated=false onto every class (ii) record "
+            "`exam/papers/verdict.py`'s `_large_space()` writes "
+            "naive_enumeration_feasible=false, enumeration_attempted=false, "
+            "enumerated=null and truncated=null onto every class (ii) record "
             "without calling enumerate_states. This file is that call, made at "
-            "the shipped cap on the shipped levels. `truncated` here is "
-            "measured; in the shipped record it is a constant."),
+            "the shipped cap on the shipped levels, so `truncated` here is "
+            "measured where in the shipped record it is a constant. "
+            "Anchored by symbol: this note first read `verdict.py:767`, which was "
+            "`def _large_space` exactly at base commit 415556f8 and is 130 lines "
+            "off by 824b9fb4, and it named `exhaustive_feasible=False` and "
+            "`truncated=false` -- the two fields D-EX-028 renamed and nulled in "
+            "this same run. So for several commits this artefact contradicted the "
+            "rename its own run shipped, while being row 1 of CRITERION.md's "
+            "provenance map."),
         "items": rows,
     }
     blob = json.dumps(deterministic, sort_keys=True, separators=(",", ":"))

@@ -16,7 +16,8 @@ unmeasured.**
 
 `exhaustive_feasible: False` asserted that no exhaustive method is feasible on
 these boards. Every shipped class (ii) item is settled by an exhaustive
-computation over at most 600 nodes in at most 5 ms, against claimed bounds of
+computation over **at most 600 nodes** — single-digit milliseconds on this
+machine — against claimed bounds of
 1.15e18 to 1.33e36 (`crux_quotient_settles.json`). So the field is withdrawn and
 replaced by `naive_enumeration_feasible: False`, which is true, measured, and
 narrower: forward enumeration over the full (cart, button, latch mask) state —
@@ -68,7 +69,14 @@ universal over all methods is not establishable by any experiment.
 * **k=1..9 costs ~128 s, not the 2.3 s my own prior notes recorded** (2.6 s is
   k≤6). The shipped ladder stops at 6 — and k=6 turns out to be principled, not
   merely cheap: gantry at k=7 is 229,376 states, past the shipped cap, so 6 is
-  the largest rung enumerable to completion under `MAX_ENUMERATION` at all.
+  the largest rung at which **all four** families complete under
+  `MAX_ENUMERATION`. (This said "the largest rung enumerable to completion under
+  `MAX_ENUMERATION` at all", which the artefact beside it refutes:
+  `growth_curve.json`'s orchard family, whose m is 2(k−1), measures 10,920 states
+  at k=7, 43,688 at k=8 and 174,760 at k=9 — all under 200,000 — and only passes
+  the cap at k=10 with 699,048. gantry, lattice and spindle all reach 229,376 at
+  k=7. "At all" overstated it by three rungs; the all-four form is what the
+  ladder actually needs. Corrected in the fourth session below.)
 * **orchard's m is 2(k−1), not 2k.** With LEFT forbidden the two column-1
   alcoves sit behind the start and are not dippable. This is why shipped ii4
   reports m=118 rather than 120, and mistaking it makes the ratio look like
@@ -127,7 +135,14 @@ cheapest to have checked -- one `ls`. Cross-territory supply belongs to the
 monitor per `CHARTER.md`, so the first two are now written up in full and
 requested in
 `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`,
-which is a real file rather than a word.
+which is a real file rather than a word — tracked, and reachable at commit
+`98091f99` on this branch (`git log --all --oneline -- <path>`). When round five
+of the adversarial pass checked, that was not yet true: the file existed only as
+an untracked working-tree file in the main worktree and was in no commit on any
+ref, so between this paragraph being written and `98091f99` landing, the sentence
+was an instance of exactly the defect it is about. `98091f99` is the commit whose
+own finding is that 94 of the fleet's 229 `monitor/inbox/` proposals were in no
+commit while documents cited them as filed.
 
 * **The sealed drill's class (ii) gap is structural.**
   `GridWorld.reachable(limit=200_000)` (worldgen/core/world.py:259) *raises*
@@ -139,11 +154,22 @@ which is a real file rather than a word.
   states but reports `positional_states` 55, because the quotient ignores
   `step_limit`. A live shipped instance of the unsoundness `quotient_note`
   already warns about, now with a number.
-* **The calibration gate cannot catch a wrong `search_credible`**: the marker
-  (`rubrics_verdict.py:869`) and the gate (`calibration.py:318`) read the same
-  key, so a wrong derivation would be graded and calibrated consistently wrong.
-  Already at `exam/STATUS.md:597-598`; repeated because the rename passes
-  through that line.
+* **The `searcher` probe cannot catch a wrong `search_credible`**: the marker
+  (`exam/grading/rubrics_verdict.py:869`) and the probe's expectation
+  (`exam/grading/calibration.py:318`) read the same key, so a wrong derivation
+  would be graded and calibrated consistently wrong. Already `exam/STATUS.md`
+  **item 28**, "The `searcher` probe cannot see a wrong `search_credible`";
+  repeated here because the rename passes through it.
+
+  (Two corrections, both from round five. This bullet was headed "The
+  calibration gate", which names a different `exam/STATUS.md` item — "The
+  calibration gate sees two of eleven marking outcomes", a separate finding
+  about marking coverage. And it cited `exam/STATUS.md:597-598`, correct at base
+  `415556f8` and rotted by this run's own edit to that file: inserting the new
+  item 27 pushed item 28 down to lines 608-615, and 597-598 now fall inside item
+  27's text. Anchored by item number instead, since a line anchor into a file
+  this run edits is P21/P22's standing finding. The two source anchors were
+  re-checked line-by-line today and both hold.)
 
 ## The second session: what the adversarial pass changed (RES-3, 2026-07-30)
 
@@ -199,15 +225,43 @@ shorthand that was the false clause.
   checked it: it held because `MAX_ENUMERATION` (200,000) happens to sit below
   `LARGE_SPACE_THRESHOLD` (10^12). Raise the cap above the threshold and the record
   still published "past the cap of ...", a false sentence about the arithmetic
-  printed beside it. `_large_space` now asserts the ordering.
+  printed beside it. `_large_space` now asserts, **per item**, that that item's
+  bound exceeds `MAX_ENUMERATION`.
+
+  (This said "`_large_space` now asserts the ordering", and that claims more than
+  the guard — the same defect as summarising a check by what you wanted it to do.
+  Read today, `_large_space` applies exactly two gates, both functions of one
+  item's `lower_bound` and neither a comparison between the two constants:
+  `lower_bound < LARGE_SPACE_THRESHOLD` raises, then `lower_bound <=
+  MAX_ENUMERATION` raises. Its own comment says why an ordering check was
+  rejected — "the ordering is not stated anywhere as a requirement and either
+  constant can be moved by someone who never reads this function". The code is
+  right and three copies of the prose were wrong; see the fourth session below.)
 * **`LARGE_SPACE_THRESHOLD` had no argument, and D-EX-028 rejects the criterion it
   ships.** The decision rejects "a threshold" as a standalone criterion precisely
   because the constant "arrived without an argument" — while in code that threshold
   over a computed bound *is* the whole gate. It now carries its derivation: the
-  requirement is only `> MAX_ENUMERATION`, 10^12 is that with seven orders of
-  headroom, every shipped item clears it by 6 to 24 orders, and any threshold in
-  (256, 1.15e18] labels the same seven records and refuses both negative controls
-  — robust across ~16 orders, a floor with margin rather than a measurement.
+  requirement is only `> MAX_ENUMERATION`, 10^12 is that with roughly seven orders
+  of headroom over the cap of 200,000, and every shipped item clears 10^12 by 6 to
+  24 orders (bounds 1.15e18 to 1.33e36) — a floor with margin rather than a
+  measurement.
+
+  (This bullet also said "any threshold in (256, 1.15e18] labels the same seven
+  records and refuses both negative controls — robust across ~16 orders".
+  **Withdrawn.** Re-measured today by patching `LARGE_SPACE_THRESHOLD` and calling
+  `V.build()` and `V._large_space` directly: the same **seven** records are
+  labelled at every T from **1** through **2^60 = 1152921504606846976**
+  inclusive, and at 2^60 + 1 `build()` raises on spindle — so the upper endpoint
+  is exact, but the interval runs down to 1, not 256. The reason is that the
+  controls are not held out by the threshold at all: control 2's bound is 2^8 =
+  256, so for every T ≤ 256 it is refused by the **second** gate
+  (`lower_bound <= MAX_ENUMERATION`), and at T = 2 both controls are refused by
+  that gate. 256 is control 2's own bound — the lower endpoint you get only if
+  you assume gate 1 is the only refusal. The audit set therefore cannot
+  distinguish 10^12 from T = 1 and does not constrain the constant from below,
+  which makes "robust across ~16 orders" a property of the audit set stated as a
+  property of the constant. `CRITERION.md` and D-EX-029 withdrew this in
+  `08820583`; the sentence stood here until the fourth session below.)
 * **The grader printed the withdrawn claim at examinees.** `rubrics_verdict.py`
   told every examinee scoring zero on a search reason that "the state space of this
   level is beyond enumeration ... it is a false statement about the search" — the
@@ -394,3 +448,307 @@ messages, and it still recurred in the commit that was fixing it. What caught it
 was not vigilance but a mechanical question asked of each number — "which
 committed file emits this, and can I open it?" — which is the only form of the
 check that does not depend on remembering to be careful.
+
+## Fourth session: round five, and the corrections that had landed in one document only
+
+Round five's report is `adversarial/round5-findings.md` (F5-1 … F5-14), written
+against tip `08820583`. Its finding about round four is that the *analysis* held
+under reproduction and the *landing* did not: three corrections were applied to
+`CRITERION.md` and nowhere else, so the withdrawn sentence was still shipping in
+`exam/papers/verdict.py`, in `exam/DECISIONS.md`, and in this file. This section
+closes the findings whose fix is in this file or in one of this run's artefacts.
+Everything below was re-derived here; no number is carried over from the report.
+
+### The two withdrawn sentences that were still standing in this file
+
+* **F5-1 — the threshold interval.** The paragraph above at "`LARGE_SPACE_THRESHOLD`
+  had no argument" still asserted "(256, 1.15e18] … robust across ~16 orders",
+  withdrawn in `08820583`. Corrected in place, with the old wording quoted, and
+  re-measured rather than copied: T from 1 to 2^60 inclusive all label the same
+  seven records, 2^60 + 1 raises on spindle, and the controls are held out by the
+  cap gate rather than by the threshold. The code half was fixed in `0154c8f1` —
+  `LARGE_SPACE_THRESHOLD`'s comment now says "no sweep over this audit set defends
+  the constant … these cases cannot distinguish 10^12 from 2 and do not constrain
+  the number from below at all".
+* **F5-2 — "`_large_space` now asserts the ordering."** Corrected in place, with
+  the old sentence quoted. Read today, the guard applies two gates, both over one
+  item's `lower_bound`, and neither compares the constants. `0154c8f1` fixed the
+  copy in `verdict.py`, whose comment now says outright "`_large_space` does not
+  assert the ordering: its second gate asserts a property of each *bound*
+  instead". Three copies of one wrong summary, in three files, from one round-three
+  sentence.
+* **F5-8 — "the largest rung enumerable under `MAX_ENUMERATION` at all"**, in the
+  parallel-work list above. Refuted by the artefact cited in the same sentence and
+  corrected in place: `growth_curve.json`'s orchard family measures 10,920 /
+  43,688 / 174,760 states at k = 7 / 8 / 9, all under 200,000. The claim the
+  ladder needs — largest rung at which all four families complete — is true.
+* **F5-11 — "in at most 5 ms"** in the headline. The ≤600-node half is structural
+  and reproduces to the byte; the millisecond half does not, so the headline now
+  carries the node count and calls the timing machine-dependent. Measured:
+  `crux_quotient_settles.py` re-run three times here gives ii3 a maximum of
+  0.0049 / 0.0049 / 0.0048 s against the committed 0.0047, and round five's run
+  on this same machine gave 0.0051 — over the claimed bound. The claim is 4% from
+  false and has already been false once. The same sentence still ships in
+  `exam/papers/verdict.py`, `exam/STATUS.md` (twice) and `exam/DECISIONS.md`;
+  those are not this file's to edit and are recorded here as still open.
+
+### The rotted anchors round three and four did not reach
+
+* **F5-5 — nine `verdict.py` line anchors published in an artefact, not a
+  comment.** `repro_duplicate_switch.json`'s `wellformed_runs_at` field, and the
+  same strings in `repro_duplicate_switch.py`'s docstring and body, pinned
+  `_self_check` at 1278, `wellformed_problems()` at 1354 and seven `_large_space`
+  call sites at 1010/1030/1055/1081/1212/1241/1267. Every one had rotted by 176 to
+  182 lines. (The measurement, not a new anchor: `_self_check(items)` is called at
+  1454, defined at 1520 and calls `wellformed_problems()` at 1536, and the seven
+  call sites are at 1186/1206/1231/1257/1388/1417/1443 — as of this paragraph, and
+  quoted here only so the size of the rot is checkable.) Both file and artefact now
+  anchor by symbol
+  — `build()` calls `_self_check(items)` as its last step, `_self_check` is the
+  module's only caller of `Level.wellformed_problems()`, and all seven
+  `_large_space(lvl)` calls are argument expressions of `_make_item(...)` earlier
+  in `build()`. Deliberately *not* re-pinned to today's numbers: `verdict.py` grew
+  another 13 lines during this session alone, which moved round five's own
+  observed numbers before its report was a day old.
+* **F5-6 — a fourth rotted anchor, `exam/STATUS.md:597-598`.** Correct at base
+  `415556f8`; rotted 11 lines when this run inserted the new item 27 above it, so
+  597-598 now fall inside item 27's own text. Replaced by "item 28". Its bullet
+  heading was also wrong — it named "the calibration gate", which is a different
+  `exam/STATUS.md` item — and is now the `searcher` probe, which is what item 28
+  is called. Both source anchors were re-checked and hold:
+  `exam/grading/rubrics_verdict.py:869` and `exam/grading/calibration.py:318` both
+  read `search_credible`.
+
+* **Two more rotted anchors, found in the same artefacts after the F5-5 fix** — one
+  of them in the note written to fix F5-5, which is worth recording as such.
+
+  First: the F5-5 note said the nine anchors "had all rotted by 176 to 182 lines",
+  and a reader made it 242 for one of the nine by comparing 1278 against today's
+  `def _self_check`. Settled against the commits rather than argued: at base
+  `415556f8`, line 1278 is `_self_check(items)` — the **call** — and `def
+  _self_check` is at 1338, never anchored. So all nine were correct at the base
+  commit; eight were off by 58 and the ninth (`wellformed_problems()`) by 64 at
+  `1486875e`, the commit that shipped the artefact; and they are off by 176 and 182
+  at `824b9fb4`. The range was right and ambiguous, which for an anchor is the same
+  problem. The note now names which symbol each number pointed at, and pins each
+  rot figure to a commit, because `verdict.py` moved again at `0154c8f1` after the
+  anchors were replaced.
+
+  Second: **`enumeration_probe.json`'s `deterministic.note` was two renames and one
+  anchor out of date**, and it is row 1 of `CRITERION.md`'s provenance map. It read
+  "`_large_space()` (verdict.py:767) writes exhaustive_feasible=False,
+  enumerated=null, truncated=false onto every class (ii) record". `verdict.py:767`
+  was `def _large_space` exactly at base `415556f8` and is 130 lines off at
+  `824b9fb4`; `exhaustive_feasible` is the field this whole run renamed to
+  `naive_enumeration_feasible`; and `truncated` is `null`, not `false` — the change
+  D-EX-028 made specifically so a record could not read as an enumeration that ran
+  and came back clean. So the document's central rename was contradicted by the
+  first artefact its own map points at. Round five quoted rows out of this file and
+  never read its note. Corrected in the generator and regenerated: of 230 leaves, 8
+  moved — the note, the `deterministic_sha256` it feeds, and 6 wall-clock timings.
+  All 219 measured values are unchanged.
+
+### F5-7 — stale, and it stopped being true between the finding and the fix
+
+Round five found the file this document cites as proof that "filed" is no longer
+just a word to be untracked and in no commit on any ref. It is now committed:
+`git log --all --oneline -- monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`
+returns `98091f99`. The citation now names that commit, so the claim is checkable
+from the citation itself rather than from an `ls` on whichever worktree the reader
+happens to hold — which was the actual defect, since the file *did* exist, just
+not anywhere a reader of this branch could see it. `98091f99`'s own finding is
+that 94 of the fleet's 229 `monitor/inbox/` proposals were in no commit.
+
+### F5-3 and F5-4, closed by another hand — recorded so the record does not disagree
+
+Both are about `probe_lp_interface`, which this session did not own. Recorded
+because the findings list further up this file still describes the old artefact
+and would otherwise read as a description of the current one.
+
+* The A2 measurement that could not terminate was replaced in `b43427f0`, and in
+  `9cf779a3` the four keys the round-three finding quotes — `a2_plain_move`,
+  `a2_latching_move`, `a2_blocked`, `a2_button_press` — were removed as
+  misleading: they held coefficient *sums*, so `a2_plain_move: 0` read as "no
+  plain move was seen". **Where those names appear above, they are quotations of
+  what was found wrong and are left as written.** The current artefact publishes
+  `a2_coefficient_sum_by_kind` (`{blocked: 0, button press: 1, latching move: 1,
+  plain move: 0}`), `a2_transitions_by_kind` (`{blocked: 12166, button press: 1,
+  latching move: 11376, plain move: 28337}`), `a2_transitions_by_branch`,
+  `a2_transitions_enumerated: 51880` over `a2_states_enumerated: 12970`, and
+  `a2_thin_coverage`, which names the four branches and one kind observed fewer
+  than three times. Cited by key name, not by line: that file regenerates.
+* F5-4 refuted a true claim of round four's. The exhaustive loop over role
+  assignments really is at n = 5, giving 5^3 = 125 assignments, and round four
+  withdrew that as unsourced. It was sourced — in the committed generator. The
+  artefact now says it too: `D_role_assignments: {"n": 5, "assignments": 125}`,
+  beside `D_coefficient_sums: [-1.0]`, added in `b43427f0` and absent from the
+  artefact at `1486875e`, `722b6e8e` and `08820583`. So "the figure 5 appears
+  nowhere" was true of the JSON round four was reading and false of the run, which
+  is the distinction that turned a true claim into a withdrawn one.
+
+### Round five's remaining findings — fixed in `CRITERION.md`, independently reproduced here
+
+Not this file's to fix, and all of them were landed in `CRITERION.md` by another
+session in the same round. Reproduced here anyway, because a finding accepted on
+report is the failure mode this ticket exists for, and because two of them sharpen.
+
+* **F5-9 — "`edges/states = 1.7500` … at every rung".** Recomputed from
+  `probe_lp_interface.json`'s `E_comb` (the artefact stores `reachable_states` and
+  `edges`; the ratio is derived, not a field). Nine rungs, corridor 2 to 10:
+  1.7000000, 1.7380952, 1.7470588, 1.7492669, 1.7498168, 1.7499542, 1.7499886,
+  1.7499971, 1.7499993. That is 1.7500 to four decimal places at **4 of 9** rungs
+  and exactly 1.7500 at **none**. The ratio the corridor-60 arithmetic actually
+  uses, 4,893,348 / 2,796,200, is the last rung alone. The convergence is real and
+  the phrase "at every rung" is not.
+* **F5-13 — "both are recorded as measurements".** Confirmed against `V.build()`
+  run here: the seven records with `naive_enumeration_feasible: False` carry
+  m = 120, 60, 118, 120, 120, 120, 120, and all seven carry
+  `enumeration_attempted: False` and `truncated: None`. Criterion (b) is therefore
+  *not* in the record and not in the builder — `_large_space`'s two gates are both
+  over `lower_bound` — it is in the test and in `enumeration_probe.json`. The
+  record is honest; the sentence describing it claims more than the record holds.
+* **F5-14 — the criterion-(b) row covers four of seven.**
+  `enumeration_probe.json`'s `deterministic.items` has nine rows, i1-i5 and
+  ii1-ii4; the four ii rows all carry `truncated: true`, `hit_cap: true`,
+  `states_visited: 200000`, `builder: "_large_space"`. The three `solvable_hard`
+  records that also carry `naive_enumeration_feasible: False` — the seven-not-four
+  point this file makes above — are absent, so their (b) evidence is the test only.
+  `CRITERION.md`'s map row now says so. **Left open on purpose:** the better fix is
+  to widen `enumeration_probe.py` to all seven records rather than to annotate the
+  map, since the same three records are the ones a check scoped to
+  `large_unsolvable` would have missed — which is the mistake this run already made
+  once and wrote up above. Not done here because it changes a committed artefact's
+  contents rather than a description of them, and this session's remit was the
+  descriptions.
+* **F5-10 and F5-12** were resolved by other hands this round. `0154c8f1` added the
+  `<=3.1 ms` entry to `exam/DECISIONS.md` so the decision record no longer holds the
+  withdrawn position; and the 1,034-rung sweep, absent from both the map and the
+  exception list, is now in `CRITERION.md`'s exception list beside the other
+  prose-only figures. One datum this session can add to the first: regenerating
+  `probe_answer_key.json` here gives `check_certificate_seconds` of 0.00313 —
+  **above 3.1 ms**. So 3.1 ms bounds the four committed samples, as that entry
+  says, and does not bound a re-run of the generator that produced them. That is a
+  narrower claim than the entry makes and is the reason this file's own headline
+  stopped carrying a millisecond figure.
+
+### The artefact reproduction table
+
+Every generator in this directory was re-run and its output diffed leaf-by-leaf
+against the committed file, then the committed file was restored. This is the
+check that found the CRITICAL last round, so it is run as a matter of course now
+rather than when something looks wrong.
+
+| generator | reproduces byte-for-byte | what differs, and how much |
+|---|---|---|
+| `crux_quotient_settles.py` | **no** | 7 of 93 leaves, every one under `timing_seconds`. ii1 `compute_lower_bound` 0.0021→0.0025, ii2 0.0019→0.0024, ii3 0.0047→0.0048, ii4 0.0012→0.0017. No structural field moves. |
+| `probe_answer_key.py` | **no** | 16 leaves, every one a `MEASURED.*_seconds`. `check_certificate_seconds` 0.00306→0.00313 and 0.00149→0.00156; the other two (1e-05, 0.00075) unchanged. |
+| `enumeration_probe.py` | **no** | 7 leaves, all under `timings_nondeterministic`. `deterministic_sha256` reproduced. (Then deliberately changed: the note fix above moves `deterministic.note` and therefore the hash over it, 8 leaves of 230, 219 measured values untouched.) |
+| `growth_curve.py` | **no** | 34 leaves, all under `timings_seconds`; `total_seconds` 122.247→143.786. `stable_sha256` `1dabe798…` reproduces. |
+| `enumeration_sweep.py` | **no** | 30 leaves. Timings, RSS and every extrapolation move: rung 0 `states_per_second` 250784.8→205394.3, `power_law_fit.implied_years` 229.51→332.32 (+45%), `linear_in_states.implied_years` 0.472→0.594. |
+| `repro_duplicate_switch.py` | **yes** | 20 of 21 leaves identical; the 21st is `wellformed_runs_at`, rewritten in this session for F5-5. |
+| `probe_lp_soundness.py` | **yes** | byte-identical. |
+| `probe_lp_interface.py` | not re-run here | owned by another session this round and regenerated in `9cf779a3`; its own docstring declares the artefact non-byte-reproducible because B, C and E record wall-clock costs. |
+
+Three things worth naming out of that table rather than leaving in it.
+
+1. **Two artefacts carry an internal hash over their deterministic fields and both
+   reproduce it** — `growth_curve.json`'s `stable_sha256` and
+   `enumeration_probe.json`'s `deterministic_sha256`. That is the right shape:
+   the file is not byte-stable, and it says exactly which subset is, and that
+   subset is checkable in one line. `crux_quotient_settles.json` and
+   `probe_answer_key.json` have no such field and are the two whose timing churn
+   is load-bearing elsewhere, which is where it would be worth adding.
+2. **`crux_quotient_settles.json` reproduced byte-for-byte on the first re-run and
+   then differed on each of three consecutive re-runs taken after a 1.5 GB memory
+   sweep on the same machine.** All seven differing leaves are timings. The
+   artefact is not byte-reproducible; it merely looked it while the machine was
+   idle. Anyone auditing this by one re-run can get either answer.
+3. **`enumeration_sweep.json`'s non-reproduction is not the rung count.** The
+   findings list above records "3 rungs against 4"; re-run here it produced 4 rungs
+   at the same four targets — 200,000 / 1,000,000 / 3,000,000 / 10,000,000 — so
+   that particular symptom did not recur. What does not reproduce is every derived
+   number, and `implied_years` moving 229.51 → 332.32 on one re-run is a stronger
+   statement of the same point than a missing rung: the file is machine-dependent
+   in its conclusions, not just in its coverage. No audited claim rests on it.
+
+### `MANIFEST.json`
+
+Required fields present and unchanged: `prompt_id`, `branch`, `base_commit`
+(`415556f8`), `utc`. Of the 23 `files[].sha256` entries, **17 matched the file on
+disk and 6 did not** — `CRITERION.md`, `RUN_STATE.md`, `probe_answer_key.json`,
+`probe_lp_interface.json`, `probe_lp_interface.py` and
+`repro_duplicate_switch.py`. Every one of the six has a commit later than the
+manifest's own last commit (`1486875e`): the artefacts moved in `722b6e8e`,
+`b43427f0` and `9cf779a3`, the documents in `08820583` and after. So the
+manifest was not wrong when written; it was never re-stamped, which for a
+provenance file is the same defect one step removed.
+
+All 23 recomputed, and two tracked files the manifest never listed are now listed:
+`adversarial/review-round3.md` and `adversarial/round5-findings.md`, both cited as
+evidence by this document. 25 entries, all matching. The one tracked file in this
+directory still deliberately unlisted is `BASELINE-cycle94.md`, which belongs to a
+different concurrent session's cycle log and is not an artefact of this run; the
+manifest's `note` says so rather than leaving it as a silent omission.
+
+The `note` also now states what the field is *for*, because that was the confusion
+underneath the six mismatches: a whole-file sha pins the bytes that were published,
+which is worth having even for a file that cannot regenerate. It is not a
+reproducibility check, and reading it as one turns the reproduction table above into
+five false alarms. What it does require is re-stamping in every commit that touches
+a listed file. Two artefacts here avoid the problem with an internal hash over
+their declared stable subset; the manifest cannot, so it is stamped last.
+
+**Known limitation, stated rather than hidden:** `CRITERION.md`,
+`probe_lp_interface.json` and `probe_lp_interface.py` are being edited by other
+sessions in this same round, so their entries were true when written and may be
+stale by the time this lands. That is the same failure as the six above, one round
+later, and the only real fix is a stamp step in the commit path rather than a
+person remembering.
+
+### What in this file is still not verifiable from any artefact
+
+Asked for explicitly, and larger than round five's list, because a claim can be
+unsourced without being wrong.
+
+* **The wall-clock reruns**, all of them: 153.24 s and 143.786 s for the growth
+  ladder, 2.918 s for k≤6, 3.66 and 3.13 ms for `check_certificate` (3.06 is in the
+  artefact; these two are not), and 0.0048-0.0051 s for ii3's
+  `compute_lower_bound`. Every one exists only in prose in this file or in an
+  adversarial report.
+  They are kept because what they jointly establish — a spread of roughly 25% on
+  one machine — is exactly the claim that no single wall-clock figure is a property
+  of an artefact. But not one of them is in a committed `.json`.
+* **"758 of 1024", "28,188 of 2^15", "32 of 32"** in the D-EX-029 paragraph, and
+  the m = 10 / m = 40 the prose reports where a reconstruction of the removed loop
+  gives m = 11 / m = 44. Labelled UNVERIFIABLE in `08820583` and still are: the
+  loop that produced them is not committed.
+* **"137 commands against a budget of 99"** for the straddle board, same paragraph,
+  same status — no artefact emits it.
+* **"465 passed, 2 xfailed" and the 456/2 baseline**, and the `verify.py` GREEN
+  claims. Reproducible by running the suite, but nothing in this directory records
+  them, and the count has since moved to 470/2 in `08820583`'s message. A run
+  document that states a test count should emit it.
+* **"24 absolute worktree paths" in `build_manifest.json`**, and "most of the churn
+  is not mine" — a diff observation, not an artefact.
+* **`0.01 s` for the 6,480-state control** in "what the review would have caught".
+  It comes from `exam/tests/test_verdict.py`'s docstring, which is prose in a
+  tracked file rather than a measurement; the assertions beside it (`6480`,
+  `m == 4`, `lower_bound == 16`) are real.
+* **"2654 states (t3-full-house)"** for the worldgen catalogue ceiling is in
+  `DRILL.json`'s `classes_absent_because` — sourced, but in an artefact this
+  branch deliberately does not regenerate, so it is sourced to a file that no
+  longer matches its own generator. Named in "One thing deliberately NOT
+  regenerated" above; repeated here because it belongs on this list too.
+* **The `~4e36` / `~6e36` corridor-60 edge count** rests on carrying a measured
+  ×4.0 scaling 50 rungs past the last measured one. The multiplicands are in
+  `probe_lp_interface.json`'s `E_comb`; the extrapolation is not measured and is
+  labelled as such in `CRITERION.md`.
+
+### State
+
+`repro_duplicate_switch.json` regenerated from its edited generator; the only leaf
+that moved is the one this session rewrote. No other artefact in this directory was
+left changed by the reproduction sweep. `probe_lp_interface.*`,
+`exam/papers/verdict.py`, `exam/DECISIONS.md` and `CRITERION.md` were edited by
+other sessions in the same round and are cited here by symbol or key name, never by
+line number, for the reason this section keeps having to record.
