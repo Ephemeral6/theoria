@@ -43,14 +43,26 @@ def _git(args, cwd):
                           text=True, check=False)
 
 
+def _write_gitignore(root, body):
+    """Write `.gitignore` **and track it**.
+
+    Tracking is not fixture hygiene, it is the property under test: a rule only
+    counts when the file stating it is one a clone would carry, so an untracked
+    `.gitignore` is correctly ignored by `_ignored_paths`. Leaving it untracked
+    here made four tests fail in a way that looked like a regression and was
+    actually the tightening working.
+    """
+    (root / ".gitignore").write_text(body, encoding="utf-8")
+    _git(["add", "-f", ".gitignore"], str(root))
+
+
 @pytest.fixture
 def repo(tmp_path):
     """A real git repository, because the thing under test asks git."""
     root = tmp_path / "repo"
     (root / "runs" / "somerun").mkdir(parents=True)
     _git(["init", "-q"], str(root))
-    (root / ".gitignore").write_text(
-        "runs/*/trace.jsonl\nruns/somerun/huge.jsonl\n", encoding="utf-8")
+    _write_gitignore(root, "runs/*/trace.jsonl\nruns/somerun/huge.jsonl\n")
     run_dir = root / "runs" / "somerun"
     for name in ("MANIFEST.json", "ledger.jsonl", "certify.json",
                  "trace.jsonl", "huge.jsonl"):
@@ -116,9 +128,8 @@ def test_the_rules_come_from_gitignore_and_not_from_a_copy_of_it(repo):
     something new."""
     root, run_dir = repo
     assert "certify.json" in backfill._files_the_clone_carries(str(run_dir))
-    (root / ".gitignore").write_text(
-        "runs/*/trace.jsonl\nruns/somerun/huge.jsonl\nruns/*/certify.json\n",
-        encoding="utf-8")
+    _write_gitignore(
+        root, "runs/*/trace.jsonl\nruns/somerun/huge.jsonl\nruns/*/certify.json\n")
     assert "certify.json" not in backfill._files_the_clone_carries(str(run_dir))
 
 
@@ -177,6 +188,74 @@ def test_git_missing_from_the_machine_entirely_also_lists_the_file(monkeypatch,
     assert backfill._ignored_paths(str(tmp_path), ["a.json", "b.json"]) == set()
 
 
+def test_a_tracked_file_is_listed_even_if_a_rule_matches_its_name(repo):
+    """`--no-index` is not the hardening it looks like, and this pins why.
+
+    `git check-ignore` reports a path as *not* ignored once it is in the index,
+    because `.gitignore` has no power over a tracked path. That asymmetry is the
+    behaviour this code wants -- the question is "does the repository ship this
+    file", and a tracked file matching an ignore pattern is shipped. Measured on
+    a scratch repository: a tracked `kept.json` against a `kept.json` rule gives
+    rc=1 from plain `check-ignore` and rc=0 from `check-ignore --no-index`. So
+    adding the flag would silently drop such a file from the archive's list, and
+    would make check 10 accept a *tracked* file that had gone missing from the
+    working tree as "explained by a rule".
+
+    (`monitor/audit/DRIFT-20260730T0704Z-a-gitignore-rule-that-was-already-false-when-it-merged.md`
+    is an independent audit of the same asymmetry, from the other direction: a
+    rule that landed after the path it names was already tracked, and has been
+    inert since.)
+    """
+    root, run_dir = repo
+    _write_gitignore(
+        root, "runs/*/trace.jsonl\nruns/somerun/huge.jsonl\nruns/*/certify.json\n")
+    _git(["add", "-f", "runs/somerun/certify.json"], str(root))
+
+    assert backfill._ignored_paths(str(run_dir), ["certify.json"]) == set()
+    assert "certify.json" in backfill._files_the_clone_carries(str(run_dir))
+
+
+def test_a_machine_local_exclude_does_not_count(repo):
+    """`.git/info/exclude` is not in a clone, so it may not decide this.
+
+    The hole this closes was in the first version of the fix, which is worth
+    recording: `git check-ignore` honours `.git/info/exclude`,
+    `core.excludesFile` and the per-user global ignore file, none of which a
+    clone carries. An artefact excluded only by one of those would be dropped
+    from `files[]` on this machine and listed in a clone -- exactly the
+    machine-dependence the traversal change exists to remove, reintroduced by
+    the mechanism meant to remove it. A rule counts only if the file stating it
+    is tracked.
+    """
+    root, run_dir = repo
+    (run_dir / "local_only.json").write_text("{}\n", encoding="utf-8")
+    exclude = root / ".git" / "info"
+    exclude.mkdir(parents=True, exist_ok=True)
+    (exclude / "exclude").write_text("runs/somerun/local_only.json\n",
+                                     encoding="utf-8")
+
+    # git agrees it is ignored...
+    raw = subprocess.run(["git", "check-ignore", "-z", "--stdin"],
+                         input=b"local_only.json", cwd=str(run_dir),
+                         capture_output=True, check=False)
+    assert b"local_only.json" in raw.stdout, (
+        "precondition: git must consider it ignored, or this test proves nothing")
+
+    # ...and this arm does not, because no clone would.
+    assert backfill._ignored_paths(str(run_dir), ["local_only.json"]) == set()
+    assert "local_only.json" in backfill._files_the_clone_carries(str(run_dir))
+
+
+def test_a_tracked_gitignore_still_counts_after_that_tightening(repo):
+    """Positive control for the test above, and it is essential: a
+    `_rule_file_is_in_the_repository` that returned `False` unconditionally would
+    satisfy that test while switching the whole traversal back to a raw walk."""
+    root, run_dir = repo
+    _git(["add", "-f", ".gitignore"], str(root))
+    assert backfill._ignored_paths(str(run_dir), ["trace.jsonl"]) \
+        == {"trace.jsonl"}
+
+
 # ------------------------------------------------------ check 10, and its bite
 def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     """A manifest listing a file that is neither present nor excluded.
@@ -194,7 +273,7 @@ def test_check_ten_catches_a_dangling_reference(tmp_path, monkeypatch):
     run_dir = root / "runs" / "somerun"
     run_dir.mkdir(parents=True)
     _git(["init", "-q"], str(root))
-    (root / ".gitignore").write_text("runs/*/trace.jsonl\n", encoding="utf-8")
+    _write_gitignore(root, "runs/*/trace.jsonl\n")
     (run_dir / "certify.json").write_text("{}\n", encoding="utf-8")
 
     def listed(*paths):

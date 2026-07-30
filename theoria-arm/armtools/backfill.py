@@ -63,6 +63,11 @@ FIXTURE_GLOBS = ("pytest-*", "dryrun-*", "smoke*")
 
 BACKFILL_PROMPT_ID = "S8-provenance-backfill"
 
+#: Memoise the two git questions `_ignored_paths` asks per rule file, so a run
+#: directory with many artefacts does not fork a process per entry.
+_RULE_FILE_CACHE: Dict[tuple, bool] = {}
+_REPO_TOP_CACHE: Dict[str, Optional[str]] = {}
+
 
 # ------------------------------------------------------------------ evidence
 def _unix(ts: Optional[str]) -> Optional[int]:
@@ -925,6 +930,22 @@ def _ignored_paths(run_dir: str, rel_paths: List[str]) -> set:
     *towards* listing a file, which shows up as drift, rather than towards
     silently dropping one.
 
+    No `--no-index`, on purpose, and this is a trap worth naming because the
+    flag reads like a hardening. `git check-ignore` reports a path as *not*
+    ignored once it is in the index, because `.gitignore` has no power over a
+    tracked path. Measured on a scratch repository: a tracked `kept.json`
+    against a `kept.json` rule gives rc=1 plain and rc=0 with `--no-index`.
+    That asymmetry is the behaviour this function wants -- the question here is
+    "does this repository ship the file", and a tracked file matching an ignore
+    pattern *is* shipped, so it belongs in `files[]`. Adding the flag would
+    answer a different question, silently drop such a file from the archive's
+    list, and make check 10 accept a *tracked* file that had gone missing from
+    the working tree as "explained by a rule".
+    `tests/test_files_in_clone.py::test_a_tracked_file_is_listed_even_if_a_rule_matches_its_name`
+    fails if it is added. (`monitor/audit/DRIFT-20260730T0704Z-a-gitignore-rule-that-was-already-false-when-it-merged.md`
+    audits the same asymmetry from the other side: a rule that landed after the
+    path it names was already tracked, inert ever since.)
+
     `-z` and bytes, not newlines and `text=True`. The first draft of this used
     `input="\\n".join(...)` with `text=True` and was wrong on the platform it
     runs on: Python translates `\\n` to `os.linesep` on write, so on Windows git
@@ -938,13 +959,71 @@ def _ignored_paths(run_dir: str, rel_paths: List[str]) -> set:
         return set()
     try:
         proc = subprocess.run(
-            ["git", "check-ignore", "-z", "--stdin"],
+            ["git", "check-ignore", "-v", "-z", "--stdin"],
             input=b"\0".join(p.encode("utf-8") for p in rel_paths),
             cwd=run_dir, capture_output=True, check=False)
     except OSError:
         return set()
-    return {p.replace(os.sep, "/")
-            for p in proc.stdout.decode("utf-8", "replace").split("\0") if p}
+
+    # `-v -z` emits four NUL-terminated fields per match: source, line number,
+    # pattern, pathname.
+    fields = proc.stdout.decode("utf-8", "replace").split("\0")
+    out = set()
+    for i in range(0, len(fields) - 3, 4):
+        source, _line, _pattern, pathname = fields[i:i + 4]
+        if not pathname:
+            continue
+        if _rule_file_is_in_the_repository(run_dir, source):
+            out.add(pathname.replace(os.sep, "/"))
+    return out
+
+
+def _rule_file_is_in_the_repository(run_dir: str, source: str) -> bool:
+    """Is the file that supplied this ignore rule one a clone would also have?
+
+    This is the difference between "excluded by the repository" and "excluded on
+    this machine", and without it the whole exercise is circular. `git
+    check-ignore` honours three sources a clone does *not* carry:
+    `.git/info/exclude`, `core.excludesFile`, and any per-user global ignore
+    file. Measured: with `local_only.json` in `.git/info/exclude`, plain
+    `check-ignore` reports it ignored -- so `build()` would drop it here and keep
+    it in a clone, which is precisely the machine-dependence this code was
+    written to remove, reintroduced by the mechanism meant to remove it.
+
+    So a rule only counts when the file stating it is tracked. `.gitignore` is;
+    `.git/info/exclude` is not, and cannot be. Anything unresolvable is treated
+    as not-in-the-repository, which fails towards *listing* the artefact -- loud
+    drift rather than a quiet subtraction.
+    """
+    if not source or os.path.isabs(source):
+        return False
+    key = (run_dir, source)
+    if key in _RULE_FILE_CACHE:
+        return _RULE_FILE_CACHE[key]
+    try:
+        proc = subprocess.run(
+            ["git", "ls-files", "--error-unmatch", "-z", "--", source],
+            cwd=_repo_top(run_dir) or run_dir,
+            capture_output=True, check=False)
+        tracked = proc.returncode == 0
+    except OSError:
+        tracked = False
+    _RULE_FILE_CACHE[key] = tracked
+    return tracked
+
+
+def _repo_top(run_dir: str) -> Optional[str]:
+    if run_dir in _REPO_TOP_CACHE:
+        return _REPO_TOP_CACHE[run_dir]
+    try:
+        proc = subprocess.run(["git", "rev-parse", "--show-toplevel"],
+                              cwd=run_dir, capture_output=True, text=True,
+                              check=False)
+        top = proc.stdout.strip() if proc.returncode == 0 else None
+    except OSError:
+        top = None
+    _REPO_TOP_CACHE[run_dir] = top
+    return top
 
 
 def _files_the_clone_carries(run_dir: str) -> List[str]:
