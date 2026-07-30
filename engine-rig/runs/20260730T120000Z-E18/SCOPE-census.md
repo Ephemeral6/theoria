@@ -27,24 +27,48 @@ unconfirmed *in `ENGINE_TABLE.md`*, not unconfirmed *in the paper*.
 That does not shrink this ticket. The registry is what the paper draws from, the
 four are published there under the same authority as the two that are quoted,
 and the ticket's rule is written about the registry's contents, not about
-today's citation graph. But it changes which finding is urgent, and the urgent
-one is below.
+today's citation graph. But it changes which finding is urgent, and the next
+section is that finding — including the part of it this census originally got
+wrong.
 
-## The number that is unregistered *and* unscripted, in the load-bearing sentence
+## The number that is unregistered and unscripted — corrected
+
+**This section overstated its finding when first written on 2026-07-30, and the
+overstatement is corrected here rather than deleted, because it propagated into
+`tools/survey_numbers/lp_incomplete.py`'s docstrings and into a
+`citation_is_wrong: true` field before an adversarial review caught it.**
 
 > `sections/10_adjudication.md:289` = `PAPER.md:3023` — "638 are still infeasible
 > at **bounds of 100, 10⁴ and 10⁶**"
 
-Cited to `engine-rig/ENGINE_TABLE.md`. The strings `10⁴`, `10⁶` and `bound = 100`
-**do not occur in `ENGINE_TABLE.md`**; the registry's only bound key is
-`lp.weight_bound = 10`. The real source is the E11 partial at
-`partials/lp_potential-via-exhaustive.md:275-277`. So the paper's strongest
-sentence about the 639 cites a file that does not contain the number, which is
-backed by a file that contains no script.
+**What was claimed:** that this is cited to `engine-rig/ENGINE_TABLE.md`, which
+contains none of those strings, so the paper's strongest sentence about the 639
+cites a file that does not contain it.
 
-`papers/phase1-workshop/verify_paper.py`'s check E does not catch this, and says
-so itself at `:63-67` and `:73-75`: it proves no quantitative block is *entirely*
-uncited, and "any real path satisfies the block".
+**Why that is wrong.** The parenthetical belongs to the *item heading* —
+"**`lp_potential`'s 29.2 % incompleteness rate** (`engine-rig/ENGINE_TABLE.md`;
+not quoted anywhere in this paper)" — and `ENGINE_TABLE.md` publishes exactly
+that, verbatim, as `lp.incomplete = 639 / 2189 = 29.2 %`. §10.5 uses the same
+heading-plus-artefact form for every entry (compare "…in
+`engine-rig/runs/p13-fd-real/dividend.json`"). The bound sentence carries no
+citation of its own; it attributes itself in prose, to "A reviewer rebuilt the
+LP independently and re-derived it". `ENGINE_TABLE.md` also carries the 638 and
+the 1 and `bound = 10`. Reading a heading's artefact reference as a citation for
+every sentence under it is a misreading of the convention, and it is the kind of
+misreading that gets made by someone looking for a defect.
+
+**What is actually true, and still worth recording.** `ENGINE_TABLE.md` has **no
+registry key** for the bound triple — the only bound key is
+`lp.weight_bound = 10`. So before E18 those three numbers sat in the paper with
+no registry entry and no script behind them, sourced from
+`partials/lp_potential-via-exhaustive.md:275-277`. **Unregistered, not
+miscited.** That is a smaller finding than the one first written, and it is the
+one the recomputation was worth doing for.
+
+One thing the first version got right and that survives: `verify_paper.py`'s
+check E would not have caught a bad citation here, and says so itself at
+`:63-67` and `:73-75` — it proves no quantitative block is *entirely* uncited,
+and "any real path satisfies the block".
 
 One more trap in the same sentence: the paper writes "of **639 silences**", using
 `lp.incomplete`'s numerator against a **different denominator** — silences, not
