@@ -87,3 +87,33 @@ Do not open V2-V25 by re-stamping all 36. Rule on the 26 outside-the-run entries
 first: a manifest that pins shared sources is guaranteed to go stale, so either
 those entries carry the commit they were read at, or they do not belong in a
 run manifest at all. That is a design call, and it is most of the number.
+
+## The cause is in a tracked shared tool, not in per-run scratch scripts
+
+Four runs wrote their own stamper — `20260729T020000Z-V5/seal_manifest.py`,
+`20260729T1130Z-V21/write_manifest.py`, `20260729T1820Z-V25/write_manifest.py`,
+`20260729T2215Z-V26/write_manifest.py` — and all four hash
+`open(path, "rb").read()`, the working copy. That is a copy-paste lineage and it
+explains the six eol-only stamps exactly: three of those four runs are where
+they are.
+
+The one that matters is not in a run directory. **`exam/tools/archive_run.py`'s
+`_digest_tree` does the same thing**, walking a tree and hashing each file's disk
+bytes into the manifest it builds for every archived run. That is the
+territory's shared, tracked archiving tool, so the defect is institutional
+rather than four sessions making the same slip — and V27 already records that
+`archive_run.py` folds `build_manifest.json` into what it writes, which the
+Phase 4 release manifest then publishes.
+
+Two consequences worth separating:
+
+* On a machine where nothing wrote CRLF after checkout, disk and index coincide
+  and the tool is correct. It fails **only** on the checkouts where it matters,
+  which is why it has survived.
+* The fix is one function and it is not "normalise before hashing" — that would
+  silently paper over a genuinely modified working copy. It is to hash the
+  bytes git will publish, and to say so when the two differ.
+
+None of this was changed under V6-V23: `archive_run.py` is measured here, not
+touched. Fixing it is V2-V25's step 1 by another name — a check that runs, goes
+green, and is not measuring what its name claims.
