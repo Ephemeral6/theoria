@@ -42,7 +42,13 @@
       "range": "§7-§8",
       "paper_lines": "1669-2520",
       "file": "citecheck-C-s7-to-s8.md",
-      "state": "stub -- summary table only, ends at 'report in progress'. Being rewritten."
+      "state": "complete",
+      "sha256": "f75e5289982122f063af9cb882bfd18ff77ffcc7f41635f1435c581767fd002e",
+      "bytes": 69933,
+      "lines": 784,
+      "rows": 70,
+      "data_rows": 62,
+      "counts_corrected_vs_stub": "Pass A's five counts were all correct and are confirmed (56 citations: 53 as written, 1 under a section-implied base, 2 after brace expansion, 0 broken). The other three were all wrong: Pass B findings 6 -> 10, Pass C 7 -> 11, Pass D 21 checked / 4 inexact -> 31 / 6. The stub's '~185 claims checked' is not reproducible from any enumeration; the rewrite's ~150 is the sum of its itemised rows."
     },
     {
       "slice": "D1",
@@ -67,7 +73,7 @@
       "data_rows": 58
     }
   ],
-  "slice_state_note": "SUPERSEDED as of 2026-07-30 cycle 94. This field previously read 'A and C are recorded here as stubs on purpose'. A is no longer a stub -- it was rewritten to 810 lines with all four passes enumerated (32cc229e). C is still the one open stub. The original point stands and is why the field is corrected rather than deleted: both stubs carried a full summary table of per-pass counts with no pass sections behind them, which is the defect this run was commissioned to fix -- a count nobody can check. Recording stub state in the manifest rather than only in prose is what stops the successor CITECHECK being stamped over a stub.",
+  "slice_state_note": "All five slices are now complete; there is no stub left in this run. This field previously read 'A and C are recorded here as stubs on purpose', and before that the run carried three stubs that read as finished. The original point is why the field is corrected rather than deleted: each stub carried a full summary table of per-pass counts with no pass sections behind it, which is the defect this run was commissioned to fix -- a count nobody can check. Recording stub state in the manifest rather than only in prose is what stopped the successor CITECHECK being stamped over one.",
   "reconciliation": {
     "file": "delta-old-vs-new.md",
     "purpose": "work item 2 -- per-finding reconciliation of the three stale audits against the paper as it is now",
@@ -103,5 +109,6 @@
   "completeness_check": "'complete' above is a checked property, not an inference from file size -- which is the distinction this whole run is about. Each slice marked complete was verified to carry all four pass sections (A/B/C/D), a limits section, and enumerated table rows. B calls its limits section 'What this audit could NOT check' and D1/D2 call theirs 'What I could NOT check, and why'; the heading differs, the section is present in all four. No slice marked complete contains a 'report in progress', 'filled in below', TODO or TBD marker. The two stubs were caught by exactly this check. The row counts are now emitted by count_rows.py under the stated rule rather than asserted.",
   "row_counting_rule": "count_rows.py is the executable form of this count; run it, do not trust the numbers beside it. RULE: a row is a line whose stripped form starts with '|', excluding lines inside ``` fences (those are examples of table syntax, not rows of this audit) and excluding GFM separator lines '|---|---|' (punctuation). Header rows ARE counted -- a choice, not a discovery: it is the rule under which two of the four original numbers reproduce, so it changes the fewest recorded figures. data_rows (header excluded, one per table) is recorded alongside for the other convention. The point is that the convention is written down, not which won.",
   "row_counts_were_wrong": "CORRECTED. The previous completeness_check asserted 'A 73 rows, B 57, D1 73, D2 65' as the checked property behind 'complete'. Re-derived: THREE different counting rules produced those four numbers. Under the single stated rule the true counts are A 66, B 57, D1 73, D2 66 -- B and D1 reproduce exactly, D2 was off by one, and A's 73 was the raw count of every pipe-prefixed line INCLUDING separator rows (A has 7 tables, and 66 + 7 = 73). An independent sampler drew 31 rows across the four slices weighted toward load-bearing and confirmed-correct ones and found 31 of 31 hold, 0 wrong, 0 unverifiable, with no cross-slice disagreement -- so the rows are sound and this was bookkeeping. But it sat in the artefact that establishes 'complete', which is this run's own defect class one level up: a count nobody could re-derive.",
-  "stale_prose_about_slice_A": "citecheck-B's closing paragraph still says slice A 'ends after Pass A (77 lines)'. That was true when B was written and is now false -- A is 810 lines with all four passes. Not edited: B is an audit record, and rewriting the evidence to match the present is the move this territory has receipts against. Recorded here instead, which is where a reader checking A's state actually looks."
+  "stale_prose_about_slice_A": "citecheck-B's closing paragraph still says slice A 'ends after Pass A (77 lines)'. That was true when B was written and is now false -- A is 810 lines with all four passes. Not edited: B is an audit record, and rewriting the evidence to match the present is the move this territory has receipts against. Recorded here instead, which is where a reader checking A's state actually looks.",
+  "citation_axis_coverage": "COMPLETE as of 2026-07-30 cycle 94. Five slices cover PAPER.md L1-3729 with no gap: A 1-908, B 909-1668, C 1669-2520, D1 2521-..., D2 ...-3729. 332 enumerated rows total (66+57+70+73+66), each carrying a PAPER.md line, a section-file line, the artefact cited, and the value actually found there. Row counts emitted by count_rows.py, not asserted."
 }
