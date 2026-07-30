@@ -1,9 +1,9 @@
 {
   "balance": {
     "action_ceiling": 24000,
-    "actions_remaining": 18263,
-    "actions_spent_on_test_traffic": 3855,
-    "actions_used": 5737,
+    "actions_remaining": 18219,
+    "actions_spent_on_test_traffic": 3899,
+    "actions_used": 5781,
     "ceiling_usd": 214.9,
     "gate_blind_spot_usd": 67.4098,
     "gate_visible_headroom_usd": 178.7577,
@@ -139,8 +139,8 @@
   },
   "format": "theoria/freeze-budget-table/1",
   "generated_from": {
-    "branch": "agent/s4-freeze",
-    "commit": "0e946e52f9e16f4a5870ce1bba7a94777abe8b1d",
+    "branch": "agent/s4-e23-tiers",
+    "commit": "f47b6b30ca70f1f1a47e3ef894e0bfbb8e8dcc3e",
     "dirty": true
   },
   "policy": {
@@ -154,8 +154,8 @@
   },
   "pool": {
     "abspath_is_main_checkout": true,
-    "actions": 5737,
-    "actions_test_like": 3855,
+    "actions": 5781,
+    "actions_test_like": 3899,
     "by_campaign_nonzero": {
       "phase3-unit-price-recheck": {
         "actions": 33,
@@ -224,16 +224,16 @@
     },
     "campaigns": 109,
     "kinds": {
-      "release": 2492,
-      "reserve": 2492,
-      "spend": 7945
+      "release": 2503,
+      "reserve": 2503,
+      "spend": 7989
     },
-    "lines": 12929,
-    "max_seq": 12929,
+    "lines": 12995,
+    "max_seq": 12995,
     "path": "proxy/var/spend_gate.jsonl",
     "present": true,
     "price_corrections": [],
-    "sha256": "40135ef5383c6cedd726b82f1f5be39e7c91cd28cea95d3b65a9222d1404fb0f",
+    "sha256": "ab26738d345b45e8c3c6eef89dcaa1a24e879f9bed82492fc92116cc32e15b22",
     "unpriced": [
       {
         "actions": 0,
@@ -695,6 +695,6 @@
   "verdict": {
     "fitting_scenarios": [],
     "sealed_table_fits": false,
-    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18263 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18219 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
   }
 }

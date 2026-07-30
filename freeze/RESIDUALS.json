@@ -1801,6 +1801,56 @@
       "state": "open",
       "statement": "g（缺格局数）不可计算、可被臂拧，而它是「不成立」的唯一否决键——三样一起才使它承重，而它一条闸门都没有。§1.4.2 的 A 行是通往「C1 不成立」的唯一一扇门，g 在 A 行里，于是抬高 g 就能否决不成立：a=0、d=0、g=19 让一个什么都没证出来的臂合规地公布「我们不主张 C1 成立，也不主张 C1 不成立」。(1) 不可计算——§1.2.1 的「状态空间太大」在树上没有可执行判据，与 LB-9.19 记 d 的那条同型；(2) 可被臂拧——§1.4.4 自己逐字写着「原理上可查、但检查开销超预算」这个残余情形是臂能拧的，因为可不变量的元数与论域是臂选的；(3) 不对称——d 有 §9.17/9.18/9.19 三条闸门，g 有零条，即带三条闸门的量只能买到不可结论，零闸门的量能否决不成立。§1.4.4 原来那句「进 A 行是保守方向」只在『不可结论不是作者想要的结局』时成立，而 §1.4.8 已在同一文件里承认它是。",
       "launch_blocker_row": "9.20"
+    },
+    {
+      "clears_when": "`thin` 与「臂无关的不可评」有可执行的切分，开跑前落盘并纳入封印；或 MIN_TURNS_FOR_SHAPE 这一支被排除出 §4.4.3 第 1 行的 ⟨v_clean⟩ 折减。在此之前取保守分支（thin 不进折减）。",
+      "code": "LB-9.21",
+      "declared_at": "freeze/STATS_RULES.md §4.4.4",
+      "kind": "fix_code",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/launch_blockers.json"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "freeze",
+        "who": "RES-1（与 §9.20 同一批：同一缺陷类，应同批清除）",
+        "why": "freeze 领地；判据是本地计算，不花 API 钱"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md",
+        "freeze/launch_blockers.json"
+      ],
+      "same_defect_as": "LB-9.20",
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "配对终点的剔除数是臂能自己抬高的，而抬高它能把「不成立」换成「不可结论」。§4.4.3 第 1 行按 ⟨v_clean⟩ 判「clean 层在结构上不可能显著 → 不可结论」，而剔除成因之一是 §3.2 的 thin：E2 在 turns < 8 时返回 thin、该对作废，而回合数完全是臂的选择。于是压短回合即可压低 ⟨v_clean⟩，把第 4 行的不成立换成第 1 行的不可结论。这是 §9.18 与 §9.20 之后的同类第三例——凡「没能测到」能软化一个不利裁决的地方，都必须先问那个「没能」是不是臂说了算的。",
+      "launch_blocker_row": "9.21"
+    },
+    {
+      "clears_when": "§4.1.0 的两式统一成一式（散文的 > n/3 与终点二那句的 ⌈n/3⌉ 二择一），并由 freeze/tier_conj.py --verify 守着；统一后 VERDICT_FLIPPING_N 应为空元组。",
+      "code": "LB-9.22",
+      "declared_at": "freeze/STATS_RULES.md §4.4.2",
+      "kind": "human_decision",
+      "landing": {
+        "exists_at_head": true,
+        "path": "freeze/launch_blockers.json"
+      },
+      "owner": {
+        "doc_says": null,
+        "territory": "freeze",
+        "who": "需要人拍：两式的严格程度不同，选哪一个是 §4.1.0 的裁量，不是 §4.4 能顺手定的",
+        "why": "§4.1.0 是 G7 自 S4 移植的条款，改它的严格程度属契约面"
+      },
+      "paths": [
+        "freeze/STATS_RULES.md",
+        "freeze/launch_blockers.json",
+        "freeze/tier_conj.py"
+      ],
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "§4.1.0 的剔除上限有两个不等价的边界：散文写「剔除对数 > 全部对数的 1/3」，给终点二那句写「门槛按 ⌈⟨m_clean⟩/3⌉ 现算」。两式只在对数是 3 的倍数时分歧（3、6、9、12、15、18），所以它躲过了所有以 19 为例的检查。其中 n = 9 会翻转 §4.4.3 第 1 行的裁决（0.03125 > 0.0167 判不可结论 vs 0.015625 ≤ 0.0167 可走到成立），而 ⟨m⟩ = 16 → ⟨m_clean⟩ = 9 是取得到的——它看起来不存在只因 §2.2.1 的散文表只列了六个 ⟨m⟩。于是在 ⟨m⟩ = 16 上选哪个边界等于选 C4 发不发得出来。",
+      "launch_blocker_row": "9.22"
     }
   ]
 }

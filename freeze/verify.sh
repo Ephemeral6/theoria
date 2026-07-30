@@ -1278,6 +1278,36 @@ SCOPED = [
      "「分歧时以弱者为准」has exactly one arithmetic meaning on a two-tier "
      "single-sample proportion, and until it was written as a conjunction the "
      "clean-tier verdict was a post-hoc judgement"),
+    ("E2/conj", "E2", "that 以弱者为准 is an executable rule, not 两层一致", "hard",
+     ("S2", r"§4\.4\.3"), ("C4", r"§4\.4\.3"),
+     "C4 是主骨.  Until 2026-07-30 its 成立版 ended in 「两层一致」-- the SAME "
+     "undefined predicate that S4-E1-HOLES removed from C1, judged after seeing "
+     "both numbers.  §4.4.3 is where the six-row ruling lives, and both files "
+     "must point AT it rather than restate it: §1.4.5 and §1.4.2 once stated one "
+     "verdict rule in two places and gave opposite answers on the same numbers"),
+    ("E3/conj", "E3", "that 以弱者为准 is an executable rule, not 两层一致", "hard",
+     ("S3", r"§4\.4\.3"), ("C2", r"§4\.4\.3"),
+     "same defect as E2/conj, on the other paired endpoint.  E3 is the one that "
+     "CAN carry the conjunction (§4.1.0's drop cap already guarantees "
+     "⟨v_clean⟩ ≥ 8, so min two-sided p = 0.0078 ≤ 0.0167) -- which is exactly "
+     "why leaving 两层一致 in place here was cheap to fix and worth checking"),
+    ("*/family", "*", "that Holm's family is ALWAYS the three primary endpoints", "hard",
+     ("*", r"family(仍)?恒为三个主终点"), ("*", r"family恒为三个主终点"),
+     "an endpoint ruled inconclusive must not shrink the family to two -- that "
+     "buys the survivors an easier threshold with a voided endpoint.  §4.4.3's "
+     "row 1 creates a NEW way to reach inconclusive, so this invariant now has a "
+     "second caller and needs a probe.  Guarded POSITIVELY on purpose: the first "
+     "draft guarded it as a negation (`family缩成两个`) and fired on the two "
+     "places that state the invariant CORRECTLY, since both phrase it as 「不…"
+     "缩成两个」.  A negation regex that cannot tell 不 X from X is worse than a "
+     "presence probe, because it trains people to reword correct prose"),
+    ("*/vsym", "*", "the evaluable-pair symbol is ⟨v⟩, not the taken ⟨k⟩", "hard",
+     ("S4", r"⟨v_clean⟩"), ("C2", r"可评的⟨v⟩对"),
+     "⟨k⟩ is already Theoria.md:357's dev-pile U3 exit count (k ∈ {1,2,3,4}, "
+     "PENDING_FIVE §4.4, needs_human) and RECONCILE.md:454 ruled that assignment "
+     "authoritative.  Theoria.md is frozen upstream and owns the symbol, so the "
+     "evaluable-pair count is the one that renames.  A filler who sees ⟨k⟩ in "
+     "C4's 成立版 has no way to know which of the two quantities is wanted"),
     ("E1/nontriv", "E1", "what 非平凡 (criterion c) actually requires", "hard",
      ("S1", r"两个可表示状态|每个目标态都被排除"),
      ("C1", r"两个可表示状态|每个目标态都被排除"),
@@ -1363,6 +1393,10 @@ def audit(claims, stats):
         "S1": section(stats,  r"^## 1\. 主终点一", r"^## 2\."),
         "S2": section(stats,  r"^## 2\. 主终点二", r"^## 3\."),
         "S3": section(stats,  r"^## 3\. 主终点三", r"^## 4\."),
+        # S4 = §4 (检验/方向/多重比较/两层合成).  Added 2026-07-30 with §4.4:
+        # the two-tier ruling for the paired endpoints lives in ONE place there,
+        # so a probe for it needs a scope that is not §1/§2/§3.
+        "S4": section(stats,  r"^## 4\. 检验", r"^## 5\."),
         "C1": section(claims, r"^## C1 [·・]",     r"^## C2 [·・]"),
         "C2": section(claims, r"^## C2 [·・]",     r"^## C3 [·・]"),
         "C4": section(claims, r"^## C4 [·・]",     r"^## C5 [·・]"),
@@ -1431,6 +1465,25 @@ def audit(claims, stats):
          "§1.4's pivotality exit for endpoint 1 is negated"),
         (r"d从分母中(减去|剔除)|未取得有效尝试的局(不进|不留在)分母",
          "§1.4.2's fixed denominator is negated -- d would become an exclusion rate"),
+        # NOTE the shape of this one, and why it is not the bare phrase.
+        # 「两层一致」itself appears LEGITIMATELY in three correction notes that
+        # predate this stage (STATS_RULES §1.2 twice, CLAIMS_TEXT C1 once): they
+        # record the predicate S4-E1-HOLES removed, and a retracted rule is part
+        # of the pre-registration.  The first draft of this guard matched the bare
+        # phrase and turned the tree red on that history -- demonstrated, not
+        # theorised.  The precedent for what to do is in this kit already
+        # (§4.1.0's correction box, cycle 39): change the wording, do NOT add a
+        # quote exemption, because the exemption is the next loophole.  Here the
+        # wording that needed changing was the GUARD's, since the prose it fired
+        # on was correct.  So it matches the phrase used AS A RULE.
+        (r"两层一致(即|则|就|等于|便)",
+         "「两层一致」is being used as a rule again -- this is the undefined "
+         "predicate §4.4.3 replaced on both paired endpoints, and the one "
+         "S4-E1-HOLES already removed from C1.  It reads as a criterion and is "
+         "judged after seeing both numbers"),
+        (r"配对终点(只看|仅看)claim层|clean层(仅作|只作)描述性",
+         "§4.4.3's row 1 is negated -- falling back to claim-tier-only is exactly "
+         "the path that makes 以弱者为准 vacuous on a paired endpoint"),
         (r"(budget_exhausted|超预算|game_over).{0,12}计入d|有效结局计入d",
          "§1.4.3's exclusion of 有效结局 from d is negated -- post-D-016 EVERY "
          "episode ends budget_exhausted, so this makes C1 permanently inconclusive"),
@@ -1559,6 +1612,22 @@ NEG = [
      "(灵敏度 + 特异度)/2", "(灵敏度 + 特异度)/3"),
     ("E1/unit", "the U3 denominator in C1's 成立版",
      "⟨X_obs/19⟩", "⟨X_obs/21⟩"),
+    # --- controls for the four probes added with §4.4 (2026-07-30, S4-E23-TIERS)
+    # The first two share one mutation on purpose: both paired endpoints point at
+    # the SAME §4.4.3, which is the whole design (one rule, one home), so there
+    # is no mutation that reaches one pointer without the other.  Two entries
+    # rather than one because each asserts its own probe is live -- a single
+    # entry would leave the other probe unproven.
+    ("E2/conj", "C4's pointer at the two-tier ruling",
+     "§4.4.3", "§4.4.9"),
+    ("E3/conj", "C2's pointer at the two-tier ruling (same mutation, other probe)",
+     "§4.4.3", "§4.4.9"),
+    # This one restores the exact defect it guards: ⟨k⟩ back in the slot a filler
+    # has to fill, where it collides with Theoria.md:357's dev-pile exit count.
+    ("*/vsym", "the evaluable-pair symbol in C2's 成立版, back to the taken ⟨k⟩",
+     "可评的 ⟨v⟩ 对", "可评的 ⟨k⟩ 对"),
+    ("*/family", "the Holm family size invariant in C1",
+     "family 恒为三个主终点", "family 恒为两个主终点"),
 ]
 for pid, what, old, new in NEG:
     if pid in base_failed:
@@ -1604,6 +1673,59 @@ while IFS= read -r line; do
 done <<EOF
 $ep_out
 EOF
+echo
+
+# ============================================================================
+# [17] §4.4's two-tier ruling for the PAIRED endpoints, and its arithmetic
+# ----------------------------------------------------------------------------
+# WHAT IT CHECKS.  `tier_conj.py --verify` is the executable form of §4.4: the
+# worst-case power table in §4.4.2, the six-row verdict table in §4.4.3, and the
+# §4.1.0 boundary claim registered in §9.22.  Three things, all of which were
+# prose only until 2026-07-30.
+#
+# WHY IT IS A STAGE AND NOT JUST A SCRIPT.  Because of what happened to the
+# other generator in this kit: build_budget_table.py's CITED_LINES comment
+# records that two of its three anchors "were never valid ... --verify has been
+# red since the moment these landed, and nobody saw it, because this generator
+# is not called from verify.sh".  A checker that nothing calls is a checker that
+# is red and unread.  §4.4's table earned this the same day it was written: the
+# first draft had two hand-computed p values wrong (0.0078 as 0.0039, 0.0039 as
+# 0.0020) and a registered claim that was false at n=9, and --verify is what
+# found all three.  Neither error changed a verdict, which is what makes them
+# the worst kind: nothing downstream would ever have surfaced them.
+#
+# WHAT IT CANNOT DO.  It does not check that §4.4.3 is the RIGHT rule -- only
+# that the rule as written is a total function with no dead rows, and that the
+# numbers printed in the prose are the numbers the arithmetic gives.  Whether
+# 「以弱者为准」ought to mean this conjunction is a human call; §4.4.1 argues it,
+# and an argument is not something a gate can hold.
+# ============================================================================
+echo "[17] §4.4 two-tier ruling for the paired endpoints (E2/E3) recomputes"
+tc_out="$(python "$HERE/tier_conj.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "tier_conj.py --verify: §4.4.2's power table, §4.4.3's verdict table and §9.22's boundary claim all match the arithmetic"
+else
+  bad "§4.4's prose and its arithmetic have diverged -- read the FAIL lines"
+  printf '%s\n' "$tc_out" | sed 's/^/        /'
+fi
+
+# Negative control: break the prose copy of the table and require a red.  This
+# mutates DOC_TABLE (the transcription of what STATS_RULES.md prints), not the
+# arithmetic -- so it tests the half that can actually rot, which is the human
+# half.  Relocated copy, same shape as 15a/15b.
+tc_tmp="$(mktemp -d)"
+sed -e 's|^    "终点三":            (4, 8, 0.0078, True),$|    "终点三":            (4, 8, 0.0039, True),|' \
+    "$HERE/tier_conj.py" > "$tc_tmp/tier_conj.py"
+if ! cmp -s "$HERE/tier_conj.py" "$tc_tmp/tier_conj.py"; then
+  if python "$tc_tmp/tier_conj.py" --verify >/dev/null 2>&1; then
+    bad "negative control did not fire: restoring the original mis-computed 0.0039 in the prose table stayed green -- stage [17] is comparing nothing"
+  else
+    ok "negative control fires: putting the first draft's wrong p (0.0078 -> 0.0039) back into the prose table turns this stage red"
+  fi
+else
+  bad "negative control could not be built: the 终点三 row is not where stage [17] expects it in tier_conj.py"
+fi
+rm -rf "$tc_tmp"
 echo
 
 # ------------------------------------------------------------------ verdict
