@@ -1,0 +1,86 @@
+{
+ "calls": [
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 5,
+   "beat": "theorize",
+   "call_idx": 0,
+   "elapsed_ms": 587049,
+   "label": "round1",
+   "output_tokens": 47235,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 1.487855,
+   "usd_cumulative": 1.487855,
+   "usd_per_action_marginal": 0.297571
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 1,
+   "elapsed_ms": 650691,
+   "label": "round1",
+   "output_tokens": 53106,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 1.662984,
+   "usd_cumulative": 3.150839,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 9,
+   "actions_since_last_call": 4,
+   "beat": "theorize",
+   "call_idx": 2,
+   "elapsed_ms": 891485,
+   "label": "round1",
+   "output_tokens": 72821,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 2.86115,
+   "usd_cumulative": 6.011989,
+   "usd_per_action_marginal": 0.715287
+  },
+  {
+   "actions_at_call": 9,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 3,
+   "elapsed_ms": 732454,
+   "label": "round2",
+   "output_tokens": 61227,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 1.914378,
+   "usd_cumulative": 7.926367,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 13,
+   "actions_since_last_call": 4,
+   "beat": "theorize",
+   "call_idx": 4,
+   "elapsed_ms": 604437,
+   "label": "round1",
+   "output_tokens": 49485,
+   "step_idx": 14,
+   "turn": 10,
+   "usd": 1.630485,
+   "usd_cumulative": 9.556852,
+   "usd_per_action_marginal": 0.407621
+  }
+ ],
+ "reading": "`actions_at_call` counts BILLED actions; `commands_sent` counts HTTP requests, and the two differ by this API's 400-wave retry envelope. A curve against one is not a curve against the other.",
+ "totals": {
+  "actions_billed": 13,
+  "commands_sent": 99,
+  "desk_calls": 5,
+  "elapsed_s": 3964.4,
+  "http_amplification": 7.615,
+  "transitions_observed": 13,
+  "usd": 9.556852,
+  "usd_per_billed_action": 0.735142,
+  "usd_per_transition": 0.735142
+ }
+}

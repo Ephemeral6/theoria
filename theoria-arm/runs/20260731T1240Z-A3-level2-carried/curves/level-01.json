@@ -1,0 +1,94 @@
+{
+ "columns": [
+  "level",
+  "turn",
+  "campaign_turn_in_leg",
+  "step_idx",
+  "http_commands",
+  "actions_taken",
+  "theorize_rounds",
+  "model_calls",
+  "usd",
+  "usd_cumulative_in_level",
+  "usd_cumulative_in_leg",
+  "surprise_total",
+  "surprise_replay_mismatch",
+  "surprise_render_mismatch",
+  "surprise_proof_failure",
+  "surprise_probe_refutation",
+  "surprise_execution_mismatch",
+  "surprise_search_timeout",
+  "surprise_heuristic_miss"
+ ],
+ "first_turn": 0,
+ "last_turn": 0,
+ "level": 1,
+ "run_id": "r-a80a4383312d408d",
+ "schema": "theoria-arm/curves v1",
+ "slug": "20260731T1240Z-A3-level2-carried",
+ "surprise_total": [
+  0,
+  1
+ ],
+ "surprises": {
+  "execution_mismatch": [
+   0,
+   0
+  ],
+  "heuristic_miss": [
+   0,
+   0
+  ],
+  "probe_refutation": [
+   0,
+   0
+  ],
+  "proof_failure": [
+   0,
+   0
+  ],
+  "render_mismatch": [
+   0,
+   0
+  ],
+  "replay_mismatch": [
+   0,
+   1
+  ],
+  "search_timeout": [
+   0,
+   0
+  ]
+ },
+ "theorize_rounds": [
+  0,
+  0
+ ],
+ "totals": {
+  "http_commands": 60,
+  "surprises": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 1,
+   "search_timeout": 0
+  },
+  "theorize_rounds": 0,
+  "turns": 2,
+  "usd": 0.0
+ },
+ "turns": [
+  0,
+  0
+ ],
+ "usd": [
+  0.0,
+  0.0
+ ],
+ "usd_cumulative": [
+  0.0,
+  0.0
+ ]
+}

@@ -1,0 +1,470 @@
+{
+ "actions": {
+  "actions_not_readable_as_a_key_id": [],
+  "detail": "2 of the manual's 2 declared actions are offered by this game, so its rules can fire and a replay result is evidence about them.",
+  "game_offers": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "manual_action_ids": [
+   2,
+   5
+  ],
+  "manual_declares": [
+   [
+    "key",
+    2
+   ],
+   [
+    "key",
+    5
+   ]
+  ],
+  "reason": null,
+  "shared": [
+   2,
+   5
+  ],
+  "testable": true
+ },
+ "actions_spent_so_far": 5,
+ "carried_theory_is_testable_on_this_game": true,
+ "certify": {
+  "cheap_green": false,
+  "proof_layer_available": false,
+  "replay": {
+   "detail": "1/5 transitions replay exactly",
+   "matched": 1,
+   "ok": false,
+   "transitions": 5
+  },
+  "replay_first_divergence": {
+   "arc_action": "ACTION2",
+   "cells": [
+    {
+     "cell": [
+      63,
+      63
+     ],
+     "manual_says": 9,
+     "world_says": 1
+    }
+   ],
+   "cells_wrong": 1,
+   "kind": "frame_mismatch",
+   "t": 1
+  },
+  "responsibility": {
+   "cells_unexplained": 0,
+   "detail": "every pixel of frame 0 belongs to the board or to an object",
+   "ok": true,
+   "total_cells": 4096
+  },
+  "unambiguous": {
+   "actions": 2,
+   "cap_reached": false,
+   "detail": "no (state, action) among 6 x 2 admitted two rules, and all 12 pairs were adjudicated -- no call to `step` raised",
+   "n_clashes": 0,
+   "ok": true,
+   "pairs_checked": 12,
+   "pairs_nominal": 12,
+   "replay_truncated_by_crash": false,
+   "sample_cap": 400,
+   "scope": "sampled",
+   "states": 6,
+   "states_reconstructed": 6,
+   "step_crashes": {
+    "by_phase": {},
+    "by_type": {},
+    "count": 0,
+    "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+    "sample_cap": 8,
+    "samples": [],
+    "site": "certify._ambiguity: step(state, action)"
+   }
+  }
+ },
+ "compiled": {
+  "errors": {
+   "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+  },
+  "forms": [
+   "markdown",
+   "python"
+  ],
+  "lean_state_estimate": null,
+  "ok": true,
+  "parsed": true
+ },
+ "desk_calls_after_carry": 5,
+ "final_declared_names": {
+  "event": [],
+  "invariant": [
+   "board_cells",
+   "dark_instances",
+   "glyph9_instances",
+   "spent_instances",
+   "vacated_instances"
+  ],
+  "landmark": [
+   "spawn_probe"
+  ],
+  "object": [
+   "Dark",
+   "Glyph9",
+   "Spent",
+   "Vacated"
+  ],
+  "rule": [
+   "key2_body_arrives",
+   "key2_body_leaves",
+   "key5_body_clears",
+   "key5_body_respawns",
+   "key5_slot1_dims",
+   "key5_slot1_lights",
+   "key5_slot2_centre_darkens",
+   "key5_slot2_centre_resets",
+   "key5_slot2_ring_resets",
+   "key5_slot2_row1_lights",
+   "key5_slot2_row2_left_lights",
+   "key5_slot2_row2_right_lights",
+   "key5_slot2_row3_lights",
+   "key5_underline1_dims",
+   "key5_underline1_lights",
+   "key5_underline2_dims",
+   "key5_underline2_lights",
+   "meter_burn_key2_next",
+   "meter_burn_key2_rightmost",
+   "meter_burn_key4_next"
+  ],
+  "theorem": [
+   "dynamic_census",
+   "off_board_cell_terms_evaluate_false_and_that_is_load_bearing",
+   "only_visited_cells_have_instances",
+   "the_action_map_after_thirteen_transitions",
+   "the_dark_gamble_paid_and_the_arithmetic_that_predicted_it_is_a_tool",
+   "the_east_key_is_the_blocking_question_and_spawn_is_the_cell_that_answers_it",
+   "the_four_refutations_were_one_refutation_and_here_is_the_atom_that_answers_it",
+   "the_goal_section_is_absent_on_purpose",
+   "the_hole_is_an_aperture_and_only_the_ring_needs_floor",
+   "the_instance_counts_are_build_relative_not_world_facts",
+   "the_knob_is_the_only_thing_within_reach_and_i_do_not_know_how_it_is_pressed",
+   "the_maze_is_a_six_pixel_lattice",
+   "the_meter_is_a_budget_of_about_one_hundred_and_twenty_eight_commands",
+   "the_meter_is_command_parity_and_the_frame_cannot_carry_it",
+   "the_one_command_that_settles_two_questions",
+   "the_one_key2_rule_i_am_still_not_allowed_to_write",
+   "the_panel_is_a_two_phase_indicator_and_i_still_do_not_know_what_it_indicates",
+   "the_socket_is_a_keyhole_and_names_the_winning_position",
+   "the_socket_is_unreachable_until_the_comb_opens",
+   "the_world_is_not_markov_in_the_drawn_frame",
+   "two_actions_have_never_been_pressed_and_one_of_them_may_be_a_click",
+   "what_i_predict_before_i_see_it",
+   "what_the_engines_gave_me"
+  ]
+ },
+ "model_calls_so_far": 0,
+ "prediction": {
+  "D0": 70,
+  "K": 3,
+  "available": false,
+  "background": 0,
+  "declared_colours": [
+   1,
+   5,
+   9
+  ],
+  "declared_colours_present_in_frame_0": [
+   1,
+   5,
+   9
+  ],
+  "dynamic_cells": 73,
+  "formula": "unexplained(frame_0) = D0 - K",
+  "objects_declared": 3,
+  "predicted_unexplained": null,
+  "withheld_because": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing."
+ },
+ "prediction_scored": {
+  "detail": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing.",
+  "formula": "unexplained(frame_0) = D0 - K",
+  "observed": 0,
+  "predicted": null,
+  "verdict": "withheld"
+ },
+ "provenance": {
+  "books_carried": {
+   "carried": {
+    "playbook.dsl": {
+     "chars": 2903,
+     "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+    },
+    "theory.dsl": {
+     "chars": 23168,
+     "sha256": "15060f5a34120ae2b3a95a454677d0b8e96d8f2927ee5458978b28938e4df359"
+    }
+   },
+   "empty": false,
+   "seed_from": "runs/20260728T025503Z-g50t-e08-fixed/books",
+   "skipped": []
+  },
+  "carried": {
+   "playbook.dsl": {
+    "bytes": 2903,
+    "lines": 40,
+    "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+   },
+   "theory.dsl": {
+    "bytes": 23243,
+    "lines": 139,
+    "sha256": "bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f",
+    "sha256_before_stripping": "15060f5a34120ae2b3a95a454677d0b8e96d8f2927ee5458978b28938e4df359"
+   }
+  },
+  "declared_name_count": 37,
+  "declared_names": {
+   "event": [
+    "moved"
+   ],
+   "invariant": [
+    "board_static_this_build",
+    "five_count_this_build",
+    "nine_count_this_build",
+    "one_count_this_build"
+   ],
+   "landmark": [
+    "gate_center",
+    "knob_center",
+    "socket_center",
+    "spawn_center"
+   ],
+   "object": [
+    "Glyph9",
+    "Spent",
+    "Vacated"
+   ],
+   "rule": [
+    "key2_body_arrives",
+    "key2_body_leaves",
+    "key5_body_clears",
+    "key5_body_respawns"
+   ],
+   "theorem": [
+    "dynamic_census",
+    "key5_is_respawn_and_i_have_written_it_as_respawn",
+    "nested_cell_terms_parse",
+    "only_visited_cells_have_instances",
+    "replay_accumulates_so_the_meter_pins_the_score",
+    "the_action_map_is_weaker_than_i_claimed",
+    "the_goal_section_is_absent_on_purpose",
+    "the_instance_counts_are_build_relative_not_world_facts",
+    "the_knob_is_the_only_thing_the_body_can_touch_and_i_do_not_know_how_it_is_pressed",
+    "the_maze_is_a_six_pixel_lattice_and_i_have_read_all_of_it",
+    "the_meter_is_a_hidden_parity_and_no_guard_can_separate_it",
+    "the_meter_may_be_counting_frames_rather_than_commands",
+    "the_meter_rules_i_withdrew",
+    "the_one_key2_rule_i_am_still_not_allowed_to_write",
+    "the_panel_debt_i_am_choosing_to_carry",
+    "the_panel_is_two_tokens_and_one_is_already_spent",
+    "the_prediction_i_made_last_round_was_met_exactly",
+    "the_socket_is_unreachable_until_the_comb_opens",
+    "three_cells_no_object_can_ever_own",
+    "two_actions_have_never_been_pressed",
+    "what_the_engines_gave_me"
+   ]
+  },
+  "landmarks_stripped": [
+   "spawn_center",
+   "socket_center",
+   "gate_center",
+   "knob_center"
+  ],
+  "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+  "not_carried": {
+   "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+  },
+  "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\20260728T025503Z-g50t-e08-fixed\\books",
+  "source_game_id": "g50t-5849a774",
+  "source_run": "20260728T025503Z-g50t-e08-fixed"
+ },
+ "replay_means": "the manual's rules can fire on this game, so a replay result is evidence about them",
+ "retention": {
+  "by_kind": {
+   "event": {
+    "added": [],
+    "carried": 1,
+    "dropped": [
+     "moved"
+    ],
+    "kept": []
+   },
+   "invariant": {
+    "added": [
+     "board_cells",
+     "dark_instances",
+     "glyph9_instances",
+     "spent_instances",
+     "vacated_instances"
+    ],
+    "carried": 4,
+    "dropped": [
+     "board_static_this_build",
+     "five_count_this_build",
+     "nine_count_this_build",
+     "one_count_this_build"
+    ],
+    "kept": []
+   },
+   "landmark": {
+    "added": [
+     "spawn_probe"
+    ],
+    "carried": 4,
+    "dropped": [
+     "gate_center",
+     "knob_center",
+     "socket_center",
+     "spawn_center"
+    ],
+    "kept": []
+   },
+   "object": {
+    "added": [
+     "Dark"
+    ],
+    "carried": 3,
+    "dropped": [],
+    "kept": [
+     "Glyph9",
+     "Spent",
+     "Vacated"
+    ]
+   },
+   "rule": {
+    "added": [
+     "key5_slot1_dims",
+     "key5_slot1_lights",
+     "key5_slot2_centre_darkens",
+     "key5_slot2_centre_resets",
+     "key5_slot2_ring_resets",
+     "key5_slot2_row1_lights",
+     "key5_slot2_row2_left_lights",
+     "key5_slot2_row2_right_lights",
+     "key5_slot2_row3_lights",
+     "key5_underline1_dims",
+     "key5_underline1_lights",
+     "key5_underline2_dims",
+     "key5_underline2_lights",
+     "meter_burn_key2_next",
+     "meter_burn_key2_rightmost",
+     "meter_burn_key4_next"
+    ],
+    "carried": 4,
+    "dropped": [],
+    "kept": [
+     "key2_body_arrives",
+     "key2_body_leaves",
+     "key5_body_clears",
+     "key5_body_respawns"
+    ]
+   },
+   "theorem": {
+    "added": [
+     "off_board_cell_terms_evaluate_false_and_that_is_load_bearing",
+     "the_action_map_after_thirteen_transitions",
+     "the_dark_gamble_paid_and_the_arithmetic_that_predicted_it_is_a_tool",
+     "the_east_key_is_the_blocking_question_and_spawn_is_the_cell_that_answers_it",
+     "the_four_refutations_were_one_refutation_and_here_is_the_atom_that_answers_it",
+     "the_hole_is_an_aperture_and_only_the_ring_needs_floor",
+     "the_knob_is_the_only_thing_within_reach_and_i_do_not_know_how_it_is_pressed",
+     "the_maze_is_a_six_pixel_lattice",
+     "the_meter_is_a_budget_of_about_one_hundred_and_twenty_eight_commands",
+     "the_meter_is_command_parity_and_the_frame_cannot_carry_it",
+     "the_one_command_that_settles_two_questions",
+     "the_panel_is_a_two_phase_indicator_and_i_still_do_not_know_what_it_indicates",
+     "the_socket_is_a_keyhole_and_names_the_winning_position",
+     "the_world_is_not_markov_in_the_drawn_frame",
+     "two_actions_have_never_been_pressed_and_one_of_them_may_be_a_click",
+     "what_i_predict_before_i_see_it"
+    ],
+    "carried": 21,
+    "dropped": [
+     "key5_is_respawn_and_i_have_written_it_as_respawn",
+     "nested_cell_terms_parse",
+     "replay_accumulates_so_the_meter_pins_the_score",
+     "the_action_map_is_weaker_than_i_claimed",
+     "the_knob_is_the_only_thing_the_body_can_touch_and_i_do_not_know_how_it_is_pressed",
+     "the_maze_is_a_six_pixel_lattice_and_i_have_read_all_of_it",
+     "the_meter_is_a_hidden_parity_and_no_guard_can_separate_it",
+     "the_meter_may_be_counting_frames_rather_than_commands",
+     "the_meter_rules_i_withdrew",
+     "the_panel_debt_i_am_choosing_to_carry",
+     "the_panel_is_two_tokens_and_one_is_already_spent",
+     "the_prediction_i_made_last_round_was_met_exactly",
+     "three_cells_no_object_can_ever_own",
+     "two_actions_have_never_been_pressed"
+    ],
+    "kept": [
+     "dynamic_census",
+     "only_visited_cells_have_instances",
+     "the_goal_section_is_absent_on_purpose",
+     "the_instance_counts_are_build_relative_not_world_facts",
+     "the_one_key2_rule_i_am_still_not_allowed_to_write",
+     "the_socket_is_unreachable_until_the_comb_opens",
+     "what_the_engines_gave_me"
+    ]
+   }
+  },
+  "names_added_on_the_new_game": 39,
+  "names_carried": 37,
+  "names_dropped": 23,
+  "names_kept": 14,
+  "retention_rate": 0.3784,
+  "scope": "names only. A kept name may have a completely rewritten body; the snapshot diffs are the record of that."
+ },
+ "stage": "cold",
+ "world": {
+  "actions_used": [
+   "ACTION1",
+   "ACTION2",
+   "ACTION3",
+   "ACTION4",
+   "ACTION5",
+   "RESET"
+  ],
+  "background": 0,
+  "cascade_lengths": [
+   1,
+   7,
+   9
+  ],
+  "cells_needing_an_owner": 70,
+  "colours_seen": [
+   0,
+   1,
+   2,
+   5,
+   8,
+   9
+  ],
+  "constant_cells": 4023,
+  "distinct_states": 4,
+  "dynamic_box": [
+   0,
+   0,
+   63,
+   63
+  ],
+  "dynamic_cells": 73,
+  "max_frames_in_one_command": 9,
+  "shape": [
+   64,
+   64
+  ],
+  "states": 6,
+  "steps": 6
+ }
+}

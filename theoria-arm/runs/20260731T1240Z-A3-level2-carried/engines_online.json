@@ -1,0 +1,28 @@
+{
+ "candidate_rows": 369,
+ "dispatch_errors": 0,
+ "dispatches": 2,
+ "per_engine": {
+  "cegis_miner": {
+   "delivered": 2,
+   "dispatches": 2,
+   "errored": 0,
+   "refused_with_reason": 2,
+   "skipped": 0
+  },
+  "mdl_segmenter": {
+   "delivered": 2,
+   "dispatches": 2,
+   "errored": 0,
+   "refused_with_reason": 0,
+   "skipped": 0
+  },
+  "zero_space": {
+   "delivered": 2,
+   "dispatches": 2,
+   "errored": 0,
+   "refused_with_reason": 0,
+   "skipped": 0
+  }
+ }
+}

@@ -1,0 +1,431 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 60,
+  "sha256": "aa56f54766d274dc661b5c77ac3a1e5beb695e42d3132336b7e9bf8fa62555a1"
+ },
+ "base_commit": null,
+ "branch": null,
+ "classification": {
+  "archive_material": true,
+  "kind": "experiment",
+  "why": "a live run that reached its own end"
+ },
+ "constraint_8": {
+  "bootstrap_calls_allowed": 0,
+  "bootstrap_note": "the first theorize of a run answers no surprise because no manual exists yet for the world to contradict; it is counted as the one permitted bootstrap call and every later call must be covered by a surprise.",
+  "calls_at_forbidden_beats": {},
+  "calls_beyond_bootstrap": 0,
+  "calls_by_beat": {},
+  "calls_not_covered_by_a_surprise": 0,
+  "holds": true,
+  "model_calls": 0,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
+  "surprises": 1,
+  "surprises_by_kind": {
+   "replay_mismatch": 1
+  },
+  "surprises_licensing_a_call": 1,
+  "surprises_retired": 0
+ },
+ "cost": {
+  "cache_ttl_diagnosis": {
+   "cache_creation_1h_tokens": 0,
+   "cache_creation_5m_tokens": 0,
+   "table": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "verdict": "no 1-hour cache writes in this run, so the flat 1.25x multiplier is the right one and this is not a source of disagreement"
+  },
+  "cli_reported_usd": 0.0,
+  "from_price_table": {
+   "missing_usage_keys": null,
+   "model_calls": 0,
+   "per_model": {},
+   "pricing": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "unmeasured_calls": 0,
+   "unpriced_models": null,
+   "unpriced_usage_keys": null,
+   "usd_total": 0.0
+  },
+  "model_calls": 0,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "usage_keys_the_table_cannot_price": null,
+  "usage_total": {},
+  "verdict": "nothing to compare: the CLI reported no cost (an offline or cached run)"
+ },
+ "elapsed_s": 322.7,
+ "files": [
+  {
+   "path": "CARRIED.json",
+   "sha256": "d0ca8b82bff97cca7e35f1b59b36f4ddb8c370afae022f7688554b6a8e0b6e4f"
+  },
+  {
+   "path": "RUN_STATE.json",
+   "sha256": "9fbb112b0e8589911f0efcd7a1cf13ad8de82bf3ab40b7024ed777c8847355f3"
+  },
+  {
+   "path": "bill_shape.json",
+   "sha256": "4aba99ae23415dd5754dbb9ad4a566cd4bed4c7c233a53d5941d97db89043dbd"
+  },
+  {
+   "path": "books/CARRIED.json",
+   "sha256": "ec6983f49a9492c2939202edca0326cf0f38dd40db432761626aa6525299c9be"
+  },
+  {
+   "path": "books/generated/theory.md",
+   "sha256": "6265a4790879450bd0ca181e8593b4eee4ffb021cf8cdb178ac8d644459a97ba"
+  },
+  {
+   "path": "books/generated/theory.py",
+   "sha256": "ebbdc3f4e3d63d646d502ad561eb77bbb6abdb402fc5f4c832fd029727e96012"
+  },
+  {
+   "path": "books/playbook.dsl",
+   "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+  },
+  {
+   "path": "books/problem.json",
+   "sha256": "4aefbd53c52815b3ce6e8e8d0a571decf00fc145203ac6039c48f5c443ba82ae"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/playbook.dsl",
+   "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/theory.dsl",
+   "sha256": "bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/playbook.dsl",
+   "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/problem.json",
+   "sha256": "4aefbd53c52815b3ce6e8e8d0a571decf00fc145203ac6039c48f5c443ba82ae"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/theory.dsl",
+   "sha256": "bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/playbook.dsl",
+   "sha256": "860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/problem.json",
+   "sha256": "4aefbd53c52815b3ce6e8e8d0a571decf00fc145203ac6039c48f5c443ba82ae"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/theory.dsl",
+   "sha256": "bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f"
+  },
+  {
+   "path": "books/theory.dsl",
+   "sha256": "bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f"
+  },
+  {
+   "path": "candidates.jsonl",
+   "sha256": "afd60c726dc772264c7c94176a4483f2e2783d1a4401308f982038c8b8a18610"
+  },
+  {
+   "path": "certify.json",
+   "sha256": "d6bf0f735fa404dadd2a29def6b52b524158f0255ae9a60a1ea8e350b1a3a493"
+  },
+  {
+   "path": "commit.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "curves.json",
+   "sha256": "72b9234a05e8c57e4e2a266e46550ecb336c66b8433114cf167a94590c7ab11d"
+  },
+  {
+   "path": "curves/level-01.json",
+   "sha256": "2f5b2bba084f92da9d37db923e4ff3ac7f9ba4171bdf09c0eaaa9e8b49302e53"
+  },
+  {
+   "path": "desk_failures.json",
+   "sha256": "f75bb17fc964c7d401148a5ad6583a49edc951dbb7062879ca6c5253f30e3e51"
+  },
+  {
+   "path": "desk_log.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "engines_online.json",
+   "sha256": "3721b5a874bb4d6503210edd881dcbcdcd677b0c42ea899e2878641cfb3775a2"
+  },
+  {
+   "path": "engines_online.jsonl",
+   "sha256": "5d87957089a891d22a9472c84b540fc600036cbba22870059a82f18bd54dcc6a"
+  },
+  {
+   "path": "env_proxy.log",
+   "sha256": "900aeffc053618ef1f4629aa0ddc785930cc39767f5f0b9627d198ec93ed84ef"
+  },
+  {
+   "path": "ledger.jsonl",
+   "sha256": "9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5"
+  },
+  {
+   "path": "ledger.jsonl.lock",
+   "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+  },
+  {
+   "path": "levels.jsonl",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "plan.json",
+   "sha256": "89015a76a86ef031936a748001df3ba487fc7339fbdc72f0084c38444d3ef327"
+  },
+  {
+   "path": "probes.jsonl",
+   "sha256": "cfb5125dbc330b2118c5ce450d6dc8ebbc0ef3c43aafe3674fc8331b236032f2"
+  },
+  {
+   "path": "run.json",
+   "sha256": "94b913319e603f9541f6d868114116e71c8c15874d6438ed3c345dab71afec66"
+  },
+  {
+   "path": "surprises.jsonl",
+   "sha256": "24a5e0ed68fb0248aca8761fcb6d6bfbca496efe830397ef3c84d39bb461d7ee"
+  },
+  {
+   "path": "theorize.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "transfer.json",
+   "sha256": "118172ccf95e69c9c6c5fbfcb48da6906a5d1049db2fa2372d92cbaa912716d4"
+  },
+  {
+   "path": "turns.json",
+   "sha256": "c0dbe9544a05a2b68d78b8e135cd6f0e63340e8b3510c4718bccedc15f229d65"
+  }
+ ],
+ "game_id": "g50t-5849a774",
+ "guard": {
+  "allow_only": null,
+  "cut_version": "v1",
+  "n_dev": 4,
+  "n_sealed": 21,
+  "piles_path": "arc-recon/data/piles.json",
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "unknown_policy": "deny"
+ },
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 127,
+  "records_this_run": 127
+ },
+ "note_at_run_start": null,
+ "outcome": "spend_gate_tripped",
+ "parent_run": {
+  "card_id": "cbd4fedc-347a-4ae0-87bd-f41700f55294",
+  "parent_run_id_from_scorecard_opaque": "r-a80a4383312d408d",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": "A3-campaign-level2"
+ },
+ "prompt_id": "A3-campaign-level2",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "aa56f54766d274dc661b5c77ac3a1e5beb695e42d3132336b7e9bf8fa62555a1",
+   "commits": [],
+   "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
+   "verdict": "no_match",
+   "window": {
+    "first_commit_after": null,
+    "last_commit_before": {
+     "arm_sha256": "1f1143cf8633eaee7474f3013f1801cfec79cc4d59e0f7b836c7d1d75abc8c9e",
+     "commit": "2d12b966aa88f6473e46d2c48e2624c45acabcfc",
+     "files": 54,
+     "unix": 1785500485
+    },
+    "note": "the run happened between these two commits; its arm_version matches neither, so its sources were uncommitted edits somewhere inside that window"
+   }
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit",
+    "why": "the arm_version this run recorded (aa56f54766d2, 60 files) is reconstructed by no commit reachable from any ref: the run executed against uncommitted working-tree edits. The commits it fell between are given under `arm_version_lookup.window`; the exact sources are not recoverable from git."
+   },
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
+  "mode": "backfill",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
+ "quota": {
+  "agree": true,
+  "billed_actions_from_ledger": 5,
+  "billed_actions_from_scorecard": [
+   5
+  ],
+  "env_steps": 60,
+  "model_calls": 0,
+  "resets": 1
+ },
+ "reconciliation": {
+  "env_steps": 60,
+  "env_steps_ok": 6,
+  "http_amplification": 12.0,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 5
+ },
+ "run_id": "r-a80a4383312d408d",
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "cbd4fedc-347a-4ae0-87bd-f41700f55294",
+   "environments": [
+    {
+     "actions": 5,
+     "completed": false,
+     "id": "g50t-5849a774",
+     "level_count": 7,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 5,
+       "completed": false,
+       "guid": "30be5721-565d-4b0f-aeca-c7a97e576619",
+       "level_actions": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        78,
+        175,
+        179,
+        230,
+        96,
+        54,
+        67
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "prompt_id": "A3-campaign-level2",
+    "run_id": "r-a80a4383312d408d"
+   },
+   "score": 0.0,
+   "tags": [
+    "level2",
+    "carried",
+    "W-1800",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 5,
+     "id": "keyboard",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 7,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 5,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 7,
+   "total_levels_completed": 0
+  }
+ ],
+ "sealing": {
+  "by_kind": {
+   "credential_in_body": 62
+  },
+  "bypass_attempts": 0,
+  "credential_in_body": 62,
+  "cut_integrity": true,
+  "game_ids_anywhere_in_the_records": [
+   "g50t-5849a774"
+  ],
+  "guard_blocks": 0,
+  "incidents": 62,
+  "redacted_markers": 0,
+  "sealed_game_ids_found": [],
+  "sealed_pile_requests": 0,
+  "sealed_pile_untouched": true
+ },
+ "slug": "20260731T1240Z-A3-level2-carried",
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
+ },
+ "utc": "2026-07-31T12:23:14.756Z"
+}

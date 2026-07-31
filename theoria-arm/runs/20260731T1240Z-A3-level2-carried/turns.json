@@ -1,0 +1,21 @@
+[
+ {
+  "actions_spent": 5,
+  "beat": "observe",
+  "detail": "opening sweep over [1, 2, 3, 4, 5]",
+  "turn": 0
+ },
+ {
+  "actions_spent": 5,
+  "beat": "transfer",
+  "detail": "carried manual from 20260728T025503Z-g50t-e08-fixed certified cold on g50t-5849a774",
+  "prediction": {
+   "detail": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing.",
+   "formula": "unexplained(frame_0) = D0 - K",
+   "observed": 0,
+   "predicted": null,
+   "verdict": "withheld"
+  },
+  "turn": 0
+ }
+]
