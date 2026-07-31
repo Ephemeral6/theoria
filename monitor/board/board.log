@@ -455,3 +455,9 @@
 2026-07-31T09:07:47Z DONE C1-P23-fourth-form-unqualified by CLEANUP
 2026-07-31T09:08:20Z CLAIM E3-engines-online by CLEANUP
 2026-07-31T09:08:21Z DONE E3-engines-online by CLEANUP
+2026-07-31T10:36:38Z CLAIM A16-A16-launch-gate-wired by W-1800
+2026-07-31T10:36:39Z CLAIM S31-a10-said-done-prove-it by W-1800
+2026-07-31T10:36:39Z CLAIM S32-dual-agent-is-one-agent by W-1800
+2026-07-31T10:36:39Z CLAIM S44-monitor-suite-outgrew-its-gate by W-1800
+2026-07-31T10:36:39Z CLAIM V2-V25-verify-does-not-check-what-is-committed by W-1800
+2026-07-31T10:36:39Z CLAIM V26-fuzzlab-readme-points-at-the-smoke-run by W-1800
