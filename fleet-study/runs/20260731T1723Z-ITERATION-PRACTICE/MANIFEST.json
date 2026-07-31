@@ -1,0 +1,54 @@
+{
+  "prompt_id": "P12-iteration-practice",
+  "branch": "p12/iteration-practice",
+  "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
+  "utc": "2026-07-31T17:23:00Z",
+  "territory": "fleet-study",
+  "goal": "Survey how comparable projects run their improvement loops; convert it into a concrete Phase 3 iteration protocol; diagnose which failure class the g50t level-1 theory is stuck in.",
+  "method": "WebSearch/WebFetch over 13 systems (reading depth disclosed in the document head), plus a read-only recomputation over theoria-arm/runs/*/surprises.jsonl. Offline; no API calls against the game environment; no spend.",
+  "inputs": [
+    "Theoria.md:202,208,229,336,340-349,351,353,355,356,357,368,371,373",
+    "theoria-arm/inner/probe.py:1-23",
+    "theoria-arm/runs/20260731T1240Z-A3-level2-carried/{RUN_STATE.json,surprises.jsonl}",
+    "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/{RUN_STATE.json,surprises.jsonl}",
+    "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/{RUN_STATE.json,surprises.jsonl}",
+    "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/surprises.jsonl"
+  ],
+  "headline": {
+    "probes_pooled": 47,
+    "frontier_width_min": 2,
+    "frontier_width_max": 2,
+    "observed_in_candidate_set": 0,
+    "probe_yield": 0.0,
+    "failure_class": "戳探设计差 (Theoria.md:348), fix at 前沿分裂准则"
+  },
+  "reproduce": {
+    "cmd": "python fleet-study/runs/20260731T1723Z-ITERATION-PRACTICE/probe_yield.py theoria-arm/runs",
+    "expect": "byte-identical to probe_yield.json"
+  },
+  "files": [
+    {
+      "path": "fleet-study/ITERATION_PROTOCOL.md",
+      "sha256": "66444766a0d994040a5cccaa31c579de72ea31dd7fb2539d5203dcb4abb14c30",
+      "bytes": 41492
+    },
+    {
+      "path": "fleet-study/runs/20260731T1723Z-ITERATION-PRACTICE/RUN_STATE.md",
+      "sha256": "d75fafdb12ce3b2996b16841a13b829d1eee376bfaa7880a0bb51dc9f09fb714",
+      "bytes": 3783
+    },
+    {
+      "path": "fleet-study/runs/20260731T1723Z-ITERATION-PRACTICE/probe_yield.py",
+      "sha256": "762f901b868cf8c218e2df08c725934b2192f28865ef8c65fa896abcb366020e",
+      "bytes": 3670
+    },
+    {
+      "path": "fleet-study/runs/20260731T1723Z-ITERATION-PRACTICE/probe_yield.json",
+      "sha256": "5f5187f7c5353fb4e621f1aed5dde471d77f2661f061e2158841193e021e7c03",
+      "bytes": 1824
+    }
+  ],
+  "sealed_pile": "no sealed-pile game id appears in any file of this run; only development-pile ids g50t-5849a774 and sk48-d8078629",
+  "credentials": "none; no .env read, no key value anywhere",
+  "files_note": "sha256 over LF bytes; fleet-study/.gitattributes pins LF and this host has core.autocrlf=true, so the manifest generator refuses to hash a file containing CRLF."
+}

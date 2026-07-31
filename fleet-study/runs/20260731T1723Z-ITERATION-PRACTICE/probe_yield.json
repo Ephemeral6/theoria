@@ -1,0 +1,104 @@
+{
+ "legs": [
+  {
+   "by_kind": {
+    "replay_mismatch": 1
+   },
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "probe_yield": null,
+   "probe_yield_hits": 0,
+   "probes": 0,
+   "surprises_total": 1,
+   "unhandled": 1
+  },
+  {
+   "by_kind": {
+    "probe_refutation": 8,
+    "replay_mismatch": 4
+   },
+   "candidates_per_probe": {
+    "max": 22,
+    "min": 9
+   },
+   "frontier_width": {
+    "max": 2,
+    "min": 2
+   },
+   "hypothesis_families": {
+    "ablation_count": 23,
+    "named": [
+     "inert",
+     "manual"
+    ]
+   },
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "probe_yield": 0.0,
+   "probe_yield_hits": 0,
+   "probes": 8,
+   "surprises_total": 12,
+   "unhandled": 1
+  },
+  {
+   "by_kind": {
+    "probe_refutation": 28,
+    "replay_mismatch": 1
+   },
+   "candidates_per_probe": {
+    "max": 24,
+    "min": 16
+   },
+   "frontier_width": {
+    "max": 2,
+    "min": 2
+   },
+   "hypothesis_families": {
+    "ablation_count": 22,
+    "named": [
+     "inert",
+     "manual"
+    ]
+   },
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "probe_yield": 0.0,
+   "probe_yield_hits": 0,
+   "probes": 28,
+   "surprises_total": 29,
+   "unhandled": 4
+  },
+  {
+   "by_kind": {
+    "probe_refutation": 11,
+    "replay_mismatch": 9
+   },
+   "candidates_per_probe": {
+    "max": 10,
+    "min": 9
+   },
+   "frontier_width": {
+    "max": 2,
+    "min": 2
+   },
+   "hypothesis_families": {
+    "ablation_count": 10,
+    "named": [
+     "inert",
+     "manual"
+    ]
+   },
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "probe_yield": 0.0,
+   "probe_yield_hits": 0,
+   "probes": 11,
+   "surprises_total": 20,
+   "unhandled": 3
+  }
+ ],
+ "pooled": {
+  "frontier_width_max": 2,
+  "frontier_width_min": 2,
+  "probe_yield": 0.0,
+  "probe_yield_hits": 0,
+  "probes": 47
+ },
+ "source": "theoria-arm/runs/<leg>/surprises.jsonl"
+}
