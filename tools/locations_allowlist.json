@@ -333,6 +333,12 @@
    "reason": "write-once provenance record"
   },
   {
+   "dir": "engine-rig/runs/20260730T120000Z-E18",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once run record; landed 2026-07-31 by the cleanup campaign local-branch merges, after this allowlist was generated"
+  },
+  {
    "dir": "engine-rig/runs/p13-fd-real",
    "dated": "2026-07-31",
    "files": 9,
@@ -385,6 +391,18 @@
    "dated": "2026-07-31",
    "files": 2,
    "reason": "write-once provenance record"
+  },
+  {
+   "dir": "figures/runs/20260729T172327Z-V23-figures-sources-absent",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once run record; landed 2026-07-31 by the cleanup campaign local-branch merges, after this allowlist was generated"
+  },
+  {
+   "dir": "figures/runs/20260730T160327Z-V23-figures-sources-absent",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once run record; landed 2026-07-31 by the cleanup campaign local-branch merges, after this allowlist was generated"
   },
   {
    "dir": "fleet-study/runs/20260728T233850Z-S17",

@@ -1518,6 +1518,8 @@ bare_cc,g50t-5849a774,claude-haiku-4-5-20251001,bare_cc-g50t-claude-haiku-4-5-20
 bare_cc,g50t-5849a774,claude-haiku-4-5-20251001,bare_cc-g50t-claude-haiku-4-5-20251001-d706111e,30,0.031539,1.067500,1.000000,1.000000,false,,,no-battery-run,,no-battery-run,,no-battery-run,,
 theoria,g50t-5849a774,claude-opus-5,20260728T015354Z-g50t-first-contact,6,3.626608,3.626608,0.857143,0.574043,,stopped_for_archive,,no-battery-run,,no-battery-run,,no-battery-run,,
 theoria,g50t-5849a774,claude-opus-5,20260728T015354Z-g50t-first-contact,7,2.691050,6.317658,1.000000,1.000000,,stopped_for_archive,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,g50t-5849a774,claude-opus-5,20260728T025503Z-g50t-e08-fixed,6,2.913446,2.913446,0.600000,0.410652,,,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,g50t-5849a774,claude-opus-5,20260728T025503Z-g50t-e08-fixed,10,4.181230,7.094676,1.000000,1.000000,,,,no-battery-run,,no-battery-run,,no-battery-run,,
 bare_cc,g50t-5849a774,claude-opus-5,bare_cc-g50t-claude-opus-5-6a39afc2,1,0.111983,0.111983,0.033333,0.032543,false,,,no-battery-run,,no-battery-run,,no-battery-run,,
 bare_cc,g50t-5849a774,claude-opus-5,bare_cc-g50t-claude-opus-5-6a39afc2,2,0.112060,0.224043,0.066667,0.065109,false,,,no-battery-run,,no-battery-run,,no-battery-run,,
 bare_cc,g50t-5849a774,claude-opus-5,bare_cc-g50t-claude-opus-5-6a39afc2,3,0.112561,0.336604,0.100000,0.097820,false,,,no-battery-run,,no-battery-run,,no-battery-run,,
@@ -2163,6 +2165,13 @@ bare_cc,sk48-d8078629,claude-haiku-4-5-20251001,bare_cc-sk48-claude-haiku-4-5-20
 bare_cc,sk48-d8078629,claude-haiku-4-5-20251001,bare_cc-sk48-claude-haiku-4-5-20251001-e24d9150,33,0.029046,1.006000,0.942857,0.955619,false,,0.246263468,ok,0.914285714,ok,0.330141419,ok,35,true
 bare_cc,sk48-d8078629,claude-haiku-4-5-20251001,bare_cc-sk48-claude-haiku-4-5-20251001-e24d9150,34,0.025500,1.031500,0.971429,0.979842,false,,0.246263468,ok,0.914285714,ok,0.330141419,ok,35,true
 bare_cc,sk48-d8078629,claude-haiku-4-5-20251001,bare_cc-sk48-claude-haiku-4-5-20251001-e24d9150,35,0.021221,1.052721,1.000000,1.000000,true,,0.246263468,ok,0.914285714,ok,0.330141419,ok,35,true
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,6,2.976678,2.976678,0.200000,0.354161,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,10,2.463457,5.440135,0.333333,0.647260,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,14,2.964733,8.404868,0.466667,1.000000,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,18,0.000000,8.404868,0.600000,1.000000,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,22,0.000000,8.404868,0.733333,1.000000,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,26,0.000000,8.404868,0.866667,1.000000,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
+theoria,sk48-d8078629,claude-opus-5,20260728T083400Z-E3-sk48-carried-v2,30,0.000000,8.404868,1.000000,1.000000,,budget_exhausted,,no-battery-run,,no-battery-run,,no-battery-run,,
 bare_cc,sk48-d8078629,claude-opus-5,bare_cc-sk48-claude-opus-5-42705d3c,1,0.096861,0.096861,0.050000,0.061998,true,budget_exhausted,0.250771602,ok,0.900000000,ok,0.424337659,ok,20,true
 bare_cc,sk48-d8078629,claude-opus-5,bare_cc-sk48-claude-opus-5-42705d3c,2,0.071757,0.168618,0.100000,0.107927,false,budget_exhausted,0.250771602,ok,0.900000000,ok,0.424337659,ok,20,true
 bare_cc,sk48-d8078629,claude-opus-5,bare_cc-sk48-claude-opus-5-42705d3c,3,0.074167,0.242785,0.150000,0.155399,true,budget_exhausted,0.250771602,ok,0.900000000,ok,0.424337659,ok,20,true

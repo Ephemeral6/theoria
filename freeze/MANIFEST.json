@@ -7,19 +7,19 @@
       "note": "No `__version__` and no tag in the `theoria-arm` namespace, so the only handle is the commit. The ablation arm's loop is a separate implementation that the thirteen do not name and Theoria.md:376 makes mandatory; hashed here rather than left to be noticed later.",
       "paths": [
         {
-          "files": 11,
+          "files": 12,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/inner",
-          "sha256": "35d91ad8c7edab8b53a18f84d1e82241ad756f8474eab476c3cdc0387831a2d0",
+          "sha256": "656f8bade2e8bca0636044ac50bd6a355e8c78311a352994804a793c88ac8aa9",
           "tracked": true
         },
         {
-          "files": 7,
+          "files": 8,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/harness",
-          "sha256": "e9adbd87d4c282da061755565ea6bfa1e0e98f529701d585facdaf25976b4f6e",
+          "sha256": "1689712a65bc849aa7f74b5c263c13435f2e4fdcf5bb3b52d0c4aa614bffe972",
           "tracked": true
         },
         {
@@ -31,11 +31,11 @@
           "tracked": true
         },
         {
-          "files": 8,
+          "files": 9,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/armtools",
-          "sha256": "89b81fec05557f76040a30148c101c43df172c8d6abbd9c3376c10aeeb41bdcb",
+          "sha256": "06481b49837df0e9dec76b046735f12af9b5868ab7aac665785c95d0c37885b6",
           "tracked": true
         },
         {
@@ -84,7 +84,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "CONTRACTS/dsl_grammar_v0.3.md",
-          "sha256": "1254c3f900aa1b9491e44fc7f74dcdd7ec3291accb4d6823802cbf136e367877",
+          "sha256": "1f82e9cde38d41ee71c6aefa6b69da60b5f8f1636f9971c79fb7643017d4e2be",
           "tracked": true
         },
         {
@@ -117,7 +117,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theory-compiler/src/theory_compiler/generators",
-          "sha256": "7f0496937dad618fab41286cf2ae6e9872b08def86934cc3b48f1a093521f2f6",
+          "sha256": "f82681dbc3d3bb6d19287b25c67154d0ed6b87f40c699e5d70114f3b5f8c4a0a",
           "tracked": true
         },
         {
@@ -166,7 +166,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/harness/bare_cc.py",
-          "sha256": "f1432f849cff44d9a3d3de2c646f61491a22d67289f40b097c0064137217a6fb",
+          "sha256": "f33082a15a66830d818ea8ff2089a6f956f41968bafc80a3d7d73fa92c7b2180",
           "tracked": true
         }
       ],
@@ -240,7 +240,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/probe.py",
-          "sha256": "ff865c048534dace302888907d065399ab66537862489d7861eee19471fdd5cf",
+          "sha256": "9ef9421b8d9b648932e9a64e3fd7793958bc6bbf633463dca4a3c1f87485955d",
           "tracked": true
         },
         {
@@ -296,9 +296,7 @@
       "status": "blocked"
     },
     {
-      "absent": [
-        "battery/BATTERY_V1.md"
-      ],
+      "absent": [],
       "n": 8,
       "name": "指标电池 v1",
       "note": "`battery/BATTERY_V1.md` is the artefact that claims to *be* this item and **it is not on master** -- it lives on the unmerged branch `agent/v5-battery-freeze` with a parked merge conflict. Four version strings disagree (`METRICS.md:1` v1, `run_battery.py:290` v2, `__init__.py:8` 0.1.0, `PREDICTIONS.md` v2.1); the ruling on that branch is 'freeze the SHA, not the label', which this manifest follows by construction. Two independent gaps remain open: 0 of 38 metrics passed discrimination, and **U3 achievement rate -- a primary endpoint -- has no prediction and no battery id** (`PREDICTIONS.md:585`, corroborated at `battery/runs/…V18…/ENDPOINTS.md:15`, which calls it unfalsifiable).",
@@ -328,11 +326,11 @@
           "tracked": true
         },
         {
-          "files": 30,
+          "files": 31,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "battery/audit",
-          "sha256": "e48605057b3ac12c1893ee88dd605f026e386a2e468c5d59bb9c5b9424a78038",
+          "sha256": "e38234ca4c060a40028917611481f821573b8f8f62558cbf31b8f6d548966f5b",
           "tracked": true
         },
         {
@@ -352,12 +350,12 @@
           "tracked": true
         },
         {
-          "files": 0,
-          "hashed_from": null,
-          "kind": "absent",
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
           "path": "battery/BATTERY_V1.md",
-          "sha256": null,
-          "tracked": false
+          "sha256": "81ef7964eb844a522209e075d9d4654a3cb7b9afea5268c1665d3ca293d90793",
+          "tracked": true
         }
       ],
       "status": "blocked"
@@ -480,7 +478,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/cost.py",
-          "sha256": "d2d5878d508a360d04a2ccd1c35a64f341ad42982a6d269fac72a628e1692fe8",
+          "sha256": "30c51f867629a1c871ba66ced67d7ae94885f8de07df121f821a5652395eafaa",
           "tracked": true
         },
         {
@@ -488,7 +486,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/harness/budget.py",
-          "sha256": "171a38934cae1ce325a03c79e90a114551f632acaf835a201548190a29f62904",
+          "sha256": "39d8825ba0a496f8698dd98ae36df7841462dd55a13c1a0c190b7d6dd57692a3",
           "tracked": true
         },
         {
@@ -496,7 +494,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/BUDGET_REPORT.md",
-          "sha256": "5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236",
+          "sha256": "806aa490817292fe83c66cf061a615b841bd514730bcd73c2bd885eb4df46217",
           "tracked": true
         },
         {
@@ -521,7 +519,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/STATUS.md",
-          "sha256": "c84bb9e07cf887f60aebd58e7e6aa04d078485a0dea9bb26339faa571fa77feb",
+          "sha256": "5ddb6f1d32036e6acbce983763d40f94d2725f39694acd710fa9d02350a65791",
           "tracked": true
         },
         {
@@ -529,7 +527,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/DECISIONS.md",
-          "sha256": "ae2b7189625e90d18051a204878ad63fd11440960619ffff04c9756899969621",
+          "sha256": "849ec37d2f45a16684a5aa80fe6fc7c2c121de8a6492f2c08fec0eba73fb6eef",
           "tracked": true
         },
         {
@@ -537,7 +535,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/out/campaign_cells.jsonl",
-          "sha256": "ebe6396e3cd3a1960b4d86bb7a71eb90da7b3d030504ed9f23f9adc43fecc54a",
+          "sha256": "4cdafafb7858e65e1ba3a7d89950d8e92fcdfacc6d39e8cc1a58df64fb2d1e57",
           "tracked": true
         },
         {
@@ -630,15 +628,14 @@
   ],
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
-    "branch": "agent/s4-e23-tiers",
-    "commit": "3948031447f7406012483ad649e2534a28b974ff",
-    "dirty": false
+    "branch": "master",
+    "commit": "45cd6ebd0426f94c19b1fb4a109c2eac46aa5322",
+    "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
     "absent_paths": [
-      "arc-recon/data/campaign_freeze.json",
-      "battery/BATTERY_V1.md"
+      "arc-recon/data/campaign_freeze.json"
     ],
     "blocked": 5,
     "freeze_ready": false,

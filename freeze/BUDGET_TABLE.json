@@ -1,22 +1,22 @@
 {
   "balance": {
     "action_ceiling": 24000,
-    "actions_remaining": 18219,
-    "actions_spent_on_test_traffic": 3899,
-    "actions_used": 5781,
+    "actions_remaining": 16575,
+    "actions_spent_on_test_traffic": 5543,
+    "actions_used": 7425,
     "ceiling_usd": 214.9,
-    "gate_blind_spot_usd": 67.4098,
+    "gate_blind_spot_usd": 86.3357,
     "gate_visible_headroom_usd": 178.7577,
     "gate_visible_usd": 36.1423,
     "pool_only_measured_usd": 0.4133,
     "pool_only_placeholder_usd": 4.0,
-    "pricing_v1_vs_self_reported_theoria_pct": -8.39,
-    "programme_measured_usd": 103.5521,
-    "programme_nominal_usd": 107.5521,
-    "remaining_measured_usd": 111.3479,
-    "remaining_nominal_usd": 107.3479,
-    "tracked_bare_cc_usd": 94.7829,
-    "tracked_theoria_usd": 8.3559
+    "pricing_v1_vs_self_reported_theoria_pct": -3.07,
+    "programme_measured_usd": 122.478,
+    "programme_nominal_usd": 126.478,
+    "remaining_measured_usd": 92.422,
+    "remaining_nominal_usd": 88.422,
+    "tracked_bare_cc_usd": 97.8161,
+    "tracked_theoria_usd": 24.2486
   },
   "citations": {
     "absent": [],
@@ -58,22 +58,22 @@
         "state": "ok"
       },
       {
-        "cite": "baseline-arms/BUDGET_REPORT.md:688",
+        "cite": "baseline-arms/BUDGET_REPORT.md:746",
         "expect": "0.0435",
         "state": "ok"
       },
       {
-        "cite": "baseline-arms/BUDGET_REPORT.md:689",
+        "cite": "baseline-arms/BUDGET_REPORT.md:747",
         "expect": "0.1460",
         "state": "ok"
       },
       {
-        "cite": "baseline-arms/BUDGET_REPORT.md:690",
+        "cite": "baseline-arms/BUDGET_REPORT.md:748",
         "expect": "0.1793",
         "state": "ok"
       },
       {
-        "cite": "baseline-arms/BUDGET_REPORT.md:836",
+        "cite": "baseline-arms/BUDGET_REPORT.md:894",
         "expect": "15–20%",
         "state": "ok"
       },
@@ -83,7 +83,7 @@
         "state": "ok"
       },
       {
-        "cite": "monitor/board/claimed/A3-campaign-devpile.RES-1.md:54",
+        "cite": "monitor/board/done/A3-campaign-devpile.RES-1.md:54",
         "expect": "B = $60",
         "state": "ok"
       },
@@ -139,8 +139,8 @@
   },
   "format": "theoria/freeze-budget-table/1",
   "generated_from": {
-    "branch": "agent/s4-e23-tiers",
-    "commit": "f47b6b30ca70f1f1a47e3ef894e0bfbb8e8dcc3e",
+    "branch": "master",
+    "commit": "45cd6ebd0426f94c19b1fb4a109c2eac46aa5322",
     "dirty": true
   },
   "policy": {
@@ -153,9 +153,9 @@
     "usd_ceiling": 214.9
   },
   "pool": {
-    "abspath_is_main_checkout": true,
-    "actions": 5781,
-    "actions_test_like": 3899,
+    "abspath_is_main_checkout": false,
+    "actions": 7425,
+    "actions_test_like": 5543,
     "by_campaign_nonzero": {
       "phase3-unit-price-recheck": {
         "actions": 33,
@@ -222,18 +222,19 @@
         "usd": 0.0
       }
     },
-    "campaigns": 109,
+    "campaigns": 111,
     "kinds": {
-      "release": 2503,
-      "reserve": 2503,
-      "spend": 7989
+      "release": 2903,
+      "reserve": 2903,
+      "spend": 8882,
+      "trip": 1
     },
-    "lines": 12995,
-    "max_seq": 12995,
+    "lines": 14689,
+    "max_seq": 14689,
     "path": "proxy/var/spend_gate.jsonl",
     "present": true,
     "price_corrections": [],
-    "sha256": "ab26738d345b45e8c3c6eef89dcaa1a24e879f9bed82492fc92116cc32e15b22",
+    "sha256": "55df95cdfaab2121f0d57359002f8900c4508fbcd8f711d97b838ec610b272bb",
     "unpriced": [
       {
         "actions": 0,
@@ -470,14 +471,14 @@
   },
   "source": "Theoria.md:368 冻结清单第 12 项「预算表」; Theoria.md:377 ⟨$/局硬顶、总局数、止损⟩",
   "tracked_bare_cc": {
-    "calls": 2764,
+    "calls": 2851,
     "cross_file_duplicate_keys": 0,
     "files": {
       "baseline-arms/ledger.jsonl": {
-        "calls": 274,
-        "unpriceable_calls": 165,
-        "usd_pricing_v1": 5.6246,
-        "usd_self_reported": 12.6606
+        "calls": 321,
+        "unpriceable_calls": 212,
+        "usd_pricing_v1": 7.8957,
+        "usd_self_reported": 14.3394
       },
       "baseline-arms/out/shards/ledger.a7-g50t.jsonl": {
         "calls": 90,
@@ -512,37 +513,37 @@
       "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl": {
         "calls": 30,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 2.2425,
+        "usd_pricing_v1": 3.3651,
         "usd_self_reported": 3.4411
       },
       "baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl": {
         "calls": 30,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 2.3383,
+        "usd_pricing_v1": 3.519,
         "usd_self_reported": 3.6043
       },
       "baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl": {
         "calls": 10,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 0.7384,
+        "usd_pricing_v1": 1.1067,
         "usd_self_reported": 1.1307
       },
       "baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl": {
         "calls": 33,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 2.9644,
+        "usd_pricing_v1": 3.9146,
         "usd_self_reported": 3.9982
       },
       "baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl": {
         "calls": 33,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 2.8741,
+        "usd_pricing_v1": 3.8177,
         "usd_self_reported": 4.1174
       },
       "baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl": {
         "calls": 36,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 2.4223,
+        "usd_pricing_v1": 3.4531,
         "usd_self_reported": 3.5416
       },
       "baseline-arms/out/shards/ledger.ar25.jsonl": {
@@ -568,21 +569,27 @@
         "unpriceable_calls": 370,
         "usd_pricing_v1": null,
         "usd_self_reported": 8.7695
+      },
+      "baseline-arms/out/shards/ledger.transport-ab.jsonl": {
+        "calls": 40,
+        "unpriceable_calls": 40,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 1.3544
       }
     },
-    "runs": 95,
-    "unpriceable_calls": 2483,
-    "usd_pricing_v1": 19.2045,
-    "usd_self_reported": 94.7829
+    "runs": 99,
+    "unpriceable_calls": 2570,
+    "usd_pricing_v1": 27.0719,
+    "usd_self_reported": 97.8161
   },
   "tracked_theoria": {
-    "calls": 7,
+    "calls": 45,
     "cross_file_duplicate_keys": 0,
     "files": {
       "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl": {
         "calls": 1,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 1.2184,
+        "usd_pricing_v1": 1.2962,
         "usd_self_reported": 1.3077
       },
       "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl": {
@@ -600,7 +607,7 @@
       "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl": {
         "calls": 1,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 0.641,
+        "usd_pricing_v1": 0.7189,
         "usd_self_reported": 0.7305
       },
       "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl": {
@@ -618,8 +625,32 @@
       "theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl": {
         "calls": 5,
         "unpriceable_calls": 0,
-        "usd_pricing_v1": 5.7953,
+        "usd_pricing_v1": 6.2321,
         "usd_self_reported": 6.3177
+      },
+      "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/ledger.jsonl": {
+        "calls": 5,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 7.0062,
+        "usd_self_reported": 7.0947
+      },
+      "theoria-arm/runs/20260728T072604Z-E3-sk48-carried-salvage/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl": {
+        "calls": 30,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 8.2499,
+        "usd_self_reported": 8.4049
       },
       "theoria-arm/runs/20260728T235841Z-leg01/ledger.jsonl": {
         "calls": 0,
@@ -634,6 +665,42 @@
         "usd_self_reported": 0.0
       },
       "theoria-arm/runs/20260728T235843Z-leg01/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260729T0030Z-a3-desk-live-proof/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/ledger.jsonl": {
+        "calls": 3,
+        "unpriceable_calls": 3,
+        "usd_pricing_v1": null,
+        "usd_self_reported": 0.3932
+      },
+      "theoria-arm/runs/20260729T004020Z-leg01-salvage/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260729T004020Z-leg01/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260729T105653Z-leg01/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/20260729T105729Z-leg01/ledger.jsonl": {
         "calls": 0,
         "unpriceable_calls": 0,
         "usd_pricing_v1": 0.0,
@@ -656,17 +723,23 @@
         "unpriceable_calls": 0,
         "usd_pricing_v1": 0.0,
         "usd_self_reported": 0.0
+      },
+      "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl": {
+        "calls": 0,
+        "unpriceable_calls": 0,
+        "usd_pricing_v1": 0.0,
+        "usd_self_reported": 0.0
       }
     },
-    "runs": 3,
-    "unpriceable_calls": 0,
-    "usd_pricing_v1": 7.6547,
-    "usd_self_reported": 8.3559
+    "runs": 6,
+    "unpriceable_calls": 3,
+    "usd_pricing_v1": 23.5033,
+    "usd_self_reported": 24.2486
   },
   "unit_prices": [
     {
       "cells": 9,
-      "cite": "baseline-arms/BUDGET_REPORT.md:688",
+      "cite": "baseline-arms/BUDGET_REPORT.md:746",
       "http_per_action": 1.97,
       "success_rate": 0.906,
       "tier": "claude-haiku-4-5-20251001",
@@ -675,7 +748,7 @@
     },
     {
       "cells": 3,
-      "cite": "baseline-arms/BUDGET_REPORT.md:689",
+      "cite": "baseline-arms/BUDGET_REPORT.md:747",
       "http_per_action": 3.11,
       "success_rate": 0.8,
       "tier": "claude-opus-5",
@@ -684,7 +757,7 @@
     },
     {
       "cells": 3,
-      "cite": "baseline-arms/BUDGET_REPORT.md:690",
+      "cite": "baseline-arms/BUDGET_REPORT.md:748",
       "http_per_action": 4.46,
       "success_rate": 0.722,
       "tier": "claude-sonnet-5",
@@ -695,6 +768,6 @@
   "verdict": {
     "fitting_scenarios": [],
     "sealed_table_fits": false,
-    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18219 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
+    "statement": "Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($92.42) and the remaining action headroom (16575 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations."
   }
 }

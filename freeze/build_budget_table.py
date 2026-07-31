@@ -431,18 +431,21 @@ UNIT_PRICES = [
     {"tier": "claude-haiku-4-5-20251001", "usd_per_success_action": 0.0435,
      "usd_per_model_call": 0.0392, "http_per_action": 1.97,
      "success_rate": 0.906, "cells": 9,
-     "cite": "baseline-arms/BUDGET_REPORT.md:688"},
+     "cite": "baseline-arms/BUDGET_REPORT.md:746"},
     {"tier": "claude-opus-5", "usd_per_success_action": 0.1460,
      "usd_per_model_call": 0.1168, "http_per_action": 3.11,
      "success_rate": 0.800, "cells": 3,
-     "cite": "baseline-arms/BUDGET_REPORT.md:689"},
+     "cite": "baseline-arms/BUDGET_REPORT.md:747"},
     {"tier": "claude-sonnet-5", "usd_per_success_action": 0.1793,
      "usd_per_model_call": 0.1143, "http_per_action": 4.46,
      "success_rate": 0.722, "cells": 3,
-     "cite": "baseline-arms/BUDGET_REPORT.md:690"},
+     "cite": "baseline-arms/BUDGET_REPORT.md:748"},
 ]
 
-#: `BUDGET_REPORT.md:836` — "按 §3.5 +15–20% 留余量", because the newest measured
+#: `BUDGET_REPORT.md:894` — "按 §3.5 +15–20% 留余量", because the newest measured
+#: (line 836 until 2026-07-31: the P12 append-only union added its round
+#: sections above, and the board close moved the A3 claim file to done/ —
+#: both anchors re-checked against the needles, not just renumbered.)
 #: cell is 16% above the ten-cell mean the unit prices use and §14.3 rules the
 #: rise a version-level change in the `claude -p` wrapper that will not fall
 #: back.  18% is the midpoint of the interval the report states; it is a stated
@@ -527,12 +530,12 @@ CITED_LINES = [
     ("baseline-arms/BUDGET_REPORT.md", 119, "3014"),
     ("baseline-arms/BUDGET_REPORT.md", 121, "17135"),
     ("baseline-arms/BUDGET_REPORT.md", 420, "$50.00"),
-    ("baseline-arms/BUDGET_REPORT.md", 688, "0.0435"),
-    ("baseline-arms/BUDGET_REPORT.md", 689, "0.1460"),
-    ("baseline-arms/BUDGET_REPORT.md", 690, "0.1793"),
-    ("baseline-arms/BUDGET_REPORT.md", 836, "15–20%"),
+    ("baseline-arms/BUDGET_REPORT.md", 746, "0.0435"),
+    ("baseline-arms/BUDGET_REPORT.md", 747, "0.1460"),
+    ("baseline-arms/BUDGET_REPORT.md", 748, "0.1793"),
+    ("baseline-arms/BUDGET_REPORT.md", 894, "15–20%"),
     ("baseline-arms/runs/20260728T103135Z-a7/THEORIA_ARM_COST.md", 52, "1.0935"),
-    ("monitor/board/claimed/A3-campaign-devpile.RES-1.md", 54, "B = $60"),
+    ("monitor/board/done/A3-campaign-devpile.RES-1.md", 54, "B = $60"),
     ("freeze/STATS_RULES.md", 26, "bare_cc"),
     # Re-anchored 2026-07-29 (RES-1, E-WORDING).  Two of these three were never
     # valid: `git show d4fb6d72:freeze/STATS_RULES.md | sed -n 777p` (the commit

@@ -56,19 +56,19 @@
 |---|---|---|
 | 池上限 | $214.90 | `proxy/spend_policy.json:4` |
 | 动作上限 | 24,000 | `proxy/spend_policy.json:5` |
-| 闸门可见已花 | **$36.1423** | `proxy/var/spend_gate.jsonl` seq 1–12995（12995 行，sha256 `ab26738d345b…`）|
+| 闸门可见已花 | **$36.1423** | `proxy/var/spend_gate.jsonl` seq 1–14689（14689 行，sha256 `55df95cdfaab…`）|
 | 闸门可见余额 | $178.7577 | 上两行相减 |
 | 其中未计价占位 | $4.0000（1 笔）| 见 C1 |
-| 动作已用 | 5,781 / 24,000 | 同上 |
-| 其中测试/离线流量 | 3,899（67.4%）| 见 C6 |
-| 已追踪账本 · `bare_cc` 轨道 | **$94.7829**（2764 次调用 / 95 run / 16 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
-| 已追踪账本 · Theoria 臂 | **$8.3559**（7 次调用 / 3 run）| `theoria-arm/runs/**/ledger.jsonl` |
+| 动作已用 | 7,425 / 24,000 | 同上 |
+| 其中测试/离线流量 | 5,543（74.7%）| 见 C6 |
+| 已追踪账本 · `bare_cc` 轨道 | **$97.8161**（2851 次调用 / 99 run / 17 文件）| `baseline-arms/ledger.jsonl` + `out/shards/ledger.*.jsonl` |
+| 已追踪账本 · Theoria 臂 | **$24.2486**（45 次调用 / 6 run）| `theoria-arm/runs/**/ledger.jsonl` |
 | 仅在池里、无追踪账本 | $0.4133 + $4.0000 占位 | 见 C1 / C3 |
-| **全项目已花（实测）** | **$103.5521** | 上四行之并，每一元只计一次 |
-| **全项目已花（含占位）** | $107.5521 | 同上 + 占位 |
-| **真实余额（实测口径）** | **$111.3479** | 上限 − 实测 |
-| **闸门盲区** | **$67.4098** | 实测已花 − 闸门可见已花 |
-| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-8.39%** | 见 C4 |
+| **全项目已花（实测）** | **$122.4780** | 上四行之并，每一元只计一次 |
+| **全项目已花（含占位）** | $126.4780 | 同上 + 占位 |
+| **真实余额（实测口径）** | **$92.4220** | 上限 − 实测 |
+| **闸门盲区** | **$86.3357** | 实测已花 − 闸门可见已花 |
+| `pricing_v1` 对 Theoria 臂重算 vs 实际账单 | **-3.07%** | 见 C4 |
 
 ### G2 · 已追踪账本逐文件（自报 `total_cost_usd`）
 
@@ -76,41 +76,53 @@
 
 | 文件 | 自报 $ | `pricing_v1` 重算 $ | 调用 | 其中无法计价 |
 |---|---|---|---|---|
-| `baseline-arms/ledger.jsonl` | 12.6606 | 5.6246 | 274 | 165 |
+| `baseline-arms/ledger.jsonl` | 14.3394 | 7.8957 | 321 | 212 |
 | `baseline-arms/out/shards/ledger.a7-g50t.jsonl` | 3.3420 | ⛔ 全部无法计价 | 90 | 90 |
 | `baseline-arms/out/shards/ledger.a7-sk48.jsonl` | 4.0475 | ⛔ 全部无法计价 | 90 | 90 |
 | `baseline-arms/out/shards/ledger.a7-tn36.jsonl` | 3.1468 | ⛔ 全部无法计价 | 89 | 89 |
 | `baseline-arms/out/shards/ledger.a7recheck.jsonl` | 1.3595 | ⛔ 全部无法计价 | 30 | 30 |
 | `baseline-arms/out/shards/ledger.a7smoke.jsonl` | 0.0000 | ⛔ 全部无法计价 | 3 | 3 |
-| `baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl` | 3.4411 | 2.2425 | 30 | — |
-| `baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl` | 3.6043 | 2.3383 | 30 | — |
-| `baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl` | 1.1307 | 0.7384 | 10 | — |
-| `baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl` | 3.9982 | 2.9644 | 33 | — |
-| `baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl` | 4.1174 | 2.8741 | 33 | — |
-| `baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl` | 3.5416 | 2.4223 | 36 | — |
+| `baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl` | 3.4411 | 3.3651 | 30 | — |
+| `baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl` | 3.6043 | 3.5190 | 30 | — |
+| `baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl` | 1.1307 | 1.1067 | 10 | — |
+| `baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl` | 3.9982 | 3.9146 | 33 | — |
+| `baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl` | 4.1174 | 3.8177 | 33 | — |
+| `baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl` | 3.5416 | 3.4531 | 36 | — |
 | `baseline-arms/out/shards/ledger.ar25.jsonl` | 12.1119 | ⛔ 全部无法计价 | 556 | 556 |
 | `baseline-arms/out/shards/ledger.g50t.jsonl` | 17.1182 | ⛔ 全部无法计价 | 667 | 667 |
 | `baseline-arms/out/shards/ledger.sk48.jsonl` | 12.3936 | ⛔ 全部无法计价 | 423 | 423 |
 | `baseline-arms/out/shards/ledger.tn36.jsonl` | 8.7695 | ⛔ 全部无法计价 | 370 | 370 |
-| `theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl` | 1.3077 | 1.2184 | 1 | — |
+| `baseline-arms/out/shards/ledger.transport-ab.jsonl` | 1.3544 | ⛔ 全部无法计价 | 40 | 40 |
+| `theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl` | 1.3077 | 1.2962 | 1 | — |
 | `theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
-| `theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl` | 0.7305 | 0.6410 | 1 | — |
+| `theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl` | 0.7305 | 0.7189 | 1 | — |
 | `theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
-| `theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl` | 6.3177 | 5.7953 | 5 | — |
+| `theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl` | 6.3177 | 6.2321 | 5 | — |
+| `theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/ledger.jsonl` | 7.0947 | 7.0062 | 5 | — |
+| `theoria-arm/runs/20260728T072604Z-E3-sk48-carried-salvage/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl` | 8.4049 | 8.2499 | 30 | — |
 | `theoria-arm/runs/20260728T235841Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260728T235842Z-leg02/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/20260728T235843Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260729T0030Z-a3-desk-live-proof/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/ledger.jsonl` | 0.3932 | ⛔ 全部无法计价 | 3 | 3 |
+| `theoria-arm/runs/20260729T004020Z-leg01-salvage/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260729T004020Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260729T105653Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| `theoria-arm/runs/20260729T105729Z-leg01/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/a3-gate-mock/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
 | `theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
-| **合计** | **103.1388** | 26.8592（仅可计价的 288 笔）| **2771** | **2483（89.6%）** |
+| `theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl` | 0.0000 | 0.0000 | 0 | — |
+| **合计** | **122.0647** | 50.5752（仅可计价的 323 笔）| **2896** | **2573（88.8%）** |
 
 跨文件重复记录键：**0**（0 = 无双计）。
-**两列不可相减当差额**：自报一列是全部 2771 笔，`pricing_v1` 一列只是可计价的 288 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
+**两列不可相减当差额**：自报一列是全部 2896 笔，`pricing_v1` 一列只是可计价的 323 笔。唯一可比的一对是 Theoria 臂那 7 笔（G1 末行、C4）。
 
-### G3 · 池内有钱的战役（$0 的 104 个战役省略）
+### G3 · 池内有钱的战役（$0 的 106 个战役省略）
 
 | 战役 | $ | 其中占位 $ | 动作 |
 |---|---|---|---|
@@ -188,7 +200,7 @@ q = 47/48 = 0.979167，**争用条件下的实测值**（`STATS_RULES.md` §5.2 
 
 ### G9 · 裁决
 
-> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($111.35) and the remaining action headroom (18219 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
+> Of 12 enumerated scenarios for the sealed main table (19 claim games x 3 arms), 0 fit both the remaining measured balance ($92.42) and the remaining action headroom (16575 requests). At the only measured episode death rate (q=47/48) a nominal n=2 table yields 0.78 live cells of 19, so a projection over nominal cells is not a projection over observations.
 
 装得下的情景：**一个都没有**
 

@@ -750,44 +750,44 @@
         {
           "format": "pdf",
           "path": "figures/paper/light/figure6_bill_shape.pdf",
-          "sha256": "1b6d526ebe3d826de8a75d9bfd09173a2770fb6d764474cf405a664669b06e0f",
+          "sha256": "65b50a8111e8937c56b9d44a57b0a0f17e4d85701cef24acae8094ecbf711104",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/paper/light/figure6_bill_shape.png",
-          "sha256": "ea6f83664ea9f5c1adb32fde01c77919d8fae8d07feb245a43a4bf0e924a70ae",
+          "sha256": "e9b2c8efe420c27eaabdb930d9518fb4941c0144c847b07d64cee1f401015a16",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/paper/light/figure6_bill_shape.svg",
-          "sha256": "507c40b0dc5723573372708c724e01c5ee0d7e58df4af985d65bee004493f764",
+          "sha256": "e6379e160a04aa95585333fde9f9bc7e42c611f93a27129c1221fda9aa1cf7ae",
           "theme": "light"
         },
         {
           "format": "pdf",
           "path": "figures/paper/dark/figure6_bill_shape.pdf",
-          "sha256": "7c7910f5c9422407fa5e6ccedb6da8aba1037ddb0c84e17584edd53a65f8efee",
+          "sha256": "6f4fb75c66fd51b5543aded64f9bfaefee61a492939b249c657a336494345b15",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/paper/dark/figure6_bill_shape.png",
-          "sha256": "d5c9f17583cae992f4866f0c29beb37a3776ef67e12f2a462d32848be0c2f0e9",
+          "sha256": "591ec6e3dbd7a6a428d1d075c160a029b778fbb622fa1a7b7e9afc1cfee745f9",
           "theme": "dark"
         },
         {
           "format": "svg",
           "path": "figures/paper/dark/figure6_bill_shape.svg",
-          "sha256": "2adc3a9771f45ab3dcde0013efc2f689bcfb68379c00e3ed2eee71f6cb66823d",
+          "sha256": "e1095beb509f0dea9c7cc8b9fab0ec06ca5d9b1e2d8f0e29e59b709afc348363",
           "theme": "dark"
         }
       ],
       "cite": "Figure 6",
       "csv": {
         "path": "figures/csv/fig02_bill_shape.csv",
-        "sha256": "0783012ed8238cc46a1453bd11c7b13364945ad1e73ffb1f7b8b275b83312646"
+        "sha256": "450dceee74a44d5a3f6700b86ba971cd74bdeed1b4d746fa545f8eaab9a6f6fd"
       },
       "generator": "figures/fig02_bill_shape.py",
       "missing_sources": [],
@@ -800,6 +800,8 @@
             "20260728T012311Z-g50t-first-contact-aborted",
             "20260728T014402Z-g50t-first-contact-aborted",
             "20260728T015354Z-g50t-first-contact",
+            "20260728T025503Z-g50t-e08-fixed",
+            "20260728T083400Z-E3-sk48-carried-v2",
             "20260729T105729Z-leg01",
             "preflight-20260728T012057Z"
           ],
@@ -833,25 +835,25 @@
         {
           "format": "svg",
           "path": "figures/out/light/fig02_bill_shape.svg",
-          "sha256": "507c40b0dc5723573372708c724e01c5ee0d7e58df4af985d65bee004493f764",
+          "sha256": "e6379e160a04aa95585333fde9f9bc7e42c611f93a27129c1221fda9aa1cf7ae",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/out/light/fig02_bill_shape.png",
-          "sha256": "5dd4fe979184b08d6405feb844d477c97066c5d23831a92df685a0c177ff2cd6",
+          "sha256": "74b3f0d407017d9eec395aacd55eaa38885ee29d40fc46d0d898db1c33214f0d",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/out/dark/fig02_bill_shape.svg",
-          "sha256": "2adc3a9771f45ab3dcde0013efc2f689bcfb68379c00e3ed2eee71f6cb66823d",
+          "sha256": "e1095beb509f0dea9c7cc8b9fab0ec06ca5d9b1e2d8f0e29e59b709afc348363",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/out/dark/fig02_bill_shape.png",
-          "sha256": "7841466b2136afb1caee4ac99f1038d6b0bc49a6e8dca1f107a0dcee42cda176",
+          "sha256": "11933861c15ef520adb6822823a79149298fa154ff6d89929af65abc4d2c985a",
           "theme": "dark"
         }
       ],
@@ -876,42 +878,42 @@
         {
           "path": "baseline-arms/out/pilot_ar25-0c556536.json",
           "present": true,
-          "sha256": "810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+          "sha256": "e131df71040d620431fc400a9adaf0a56f789273da4a34e3d5568f642e68e69b",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
         {
           "path": "baseline-arms/out/pilot_g50t-5849a774.json",
           "present": true,
-          "sha256": "079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8",
+          "sha256": "8b0eccdd5469e92ab5691b39c910eb33b6eec0cf31fd4eb2b5c7f69d85049528",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
         {
           "path": "baseline-arms/out/pilot_g50t_sonnet_rerun.json",
           "present": true,
-          "sha256": "45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30",
+          "sha256": "7ab527441d1d41c5ac73df3c12b7d5854e230c579745949e63f08cf7d61a587e",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
         {
           "path": "baseline-arms/out/pilot_sk48-d8078629.json",
           "present": true,
-          "sha256": "e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+          "sha256": "ef4ee535c42255535e34e83f203e6bc2edeaf8f6777f6ed9cececbac261d787f",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
         {
           "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
           "present": true,
-          "sha256": "3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf",
+          "sha256": "e1e7765b5f8b47f84a962c17afef31e4cfa896ae1b38d5291b4d765595efc110",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
         {
           "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
           "present": true,
-          "sha256": "130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e",
+          "sha256": "07efca60b84ebaf1c0696288004134ba11e9608c868cc34689d7fd6a2ec35bdb",
           "tracked": true,
           "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
         },
@@ -1087,6 +1089,34 @@
           "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json",
           "present": true,
           "sha256": "481e94ae45cc50cbe64078b08732332f5a4b5437dc81dab14a568a65c55f9cd2",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/MANIFEST.json",
+          "present": true,
+          "sha256": "9a1e2fef2265fdfeff97b64cc45f8345f825f6c53c7b2e8ec8f9b2ff38580f63",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/cost_curve.json",
+          "present": true,
+          "sha256": "ce5d372290189ce71091431ab8d337fd9ad45a082dcbbe7fa5f8b89cac36611d",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/MANIFEST.json",
+          "present": true,
+          "sha256": "ce7cb8f7467aaf0416955ff1e2b30d2e6fd43ece468a888d0835451ac88b5f32",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/cost_curve.json",
+          "present": true,
+          "sha256": "dd84a5ab7bdd962343c3a499206ac71bfe66a2ef8e4f04f675e3501d9612d8aa",
           "tracked": true,
           "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
         },

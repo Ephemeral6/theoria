@@ -1,0 +1,1205 @@
+{
+ "frontload_input": {
+  "all_turns": {
+   "frontload_index_25": 0.573985308,
+   "head_turns": 6.75,
+   "head_usd": 4.82427075,
+   "status": "ok",
+   "turns": 27,
+   "usd_total": 8.404868
+  },
+  "billed_calls": 30,
+  "billed_turns_only": {
+   "frontload_index_25": 0.573985308,
+   "head_turns": 1.75,
+   "head_usd": 4.82427075,
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+   "status": "insufficient-data",
+   "turns": 7,
+   "usd_total": 8.404868
+  },
+  "frontload_k": 0.25,
+  "min_turns_for_shape": 8,
+  "run_id": "r-2c194a9cfb5e491a",
+  "slug": "20260728T083400Z-E3-sk48-carried-v2",
+  "turn_costs": [
+   0,
+   0,
+   2.976678,
+   0,
+   0,
+   0,
+   2.463457,
+   0,
+   0,
+   0,
+   2.964733,
+   0,
+   0,
+   0,
+   0.0,
+   0,
+   0,
+   0,
+   0.0,
+   0,
+   0,
+   0,
+   0.0,
+   0,
+   0,
+   0,
+   0.0
+  ],
+  "turn_costs_billed_only": [
+   2.976678,
+   2.463457,
+   2.964733,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "usd_total": 8.404868
+ },
+ "game_id": "sk48-d8078629",
+ "join": {
+  "billed_calls_outside_their_own_turn_window": [],
+  "checks": [
+   {
+    "check": "theorize invocations per step index <= MAX_THEORIZE_PER_TURN",
+    "constant_source": "inner.loop.MAX_THEORIZE_PER_TURN",
+    "max_theorize_per_turn": 2,
+    "ok": true,
+    "violations": {}
+   },
+   {
+    "check": "step_idx never decreases across billed calls",
+    "ok": true
+   },
+   {
+    "check": "every billed theorize invocation was claimed by a turn",
+    "ok": true,
+    "unclaimed": []
+   },
+   {
+    "check": "step_idx == actions_before + resets (run failed no action, so the identity is closed-form)",
+    "offenders": [],
+    "ok": true,
+    "resets": 1
+   },
+   {
+    "check": "every billed call falls inside the window its turn's ARC commands define -- the index join and the clock join agree",
+    "offenders": [],
+    "ok": true
+   },
+   {
+    "check": "actions_before recomputed from the ledger matches the value the turn recorded",
+    "offenders": [],
+    "ok": true
+   }
+  ],
+  "join_confidence": "exact",
+  "key": "theorize-invocation segmentation (label 'round1' restarts inside every theorize.run()) allocated to turns in order; cross-checked by step_idx == actions_before + resets + actions_failed_so_far",
+  "spine": "turns.json",
+  "surprise_join": "wall-clock containment in the turn's window; a surprise's own step_idx is a frame ordinal and cannot address a turn",
+  "surprises_within_1s_of_a_turn_boundary": 22
+ },
+ "provenance": {
+  "run_dir": "20260728T083400Z-E3-sk48-carried-v2",
+  "sources": {
+   "RUN_STATE.json": {
+    "present": true,
+    "sha256": "f4a6310bccb337a4166a92748e942142339c4ec3574ba07d9c6c48159bb2ff53"
+   },
+   "cost_curve.json": {
+    "present": true,
+    "sha256": "dd84a5ab7bdd962343c3a499206ac71bfe66a2ef8e4f04f675e3501d9612d8aa"
+   },
+   "desk_log.json": {
+    "present": true,
+    "sha256": "c7f783e0f4e2d02508d539bcff81d51703d5189ab620d48afc4c0a8c0e7f75fa"
+   },
+   "ledger.jsonl": {
+    "present": true,
+    "sha256": "4dd50dd2f4c82821bfb0eff427fc257a3cd171e03d1d91c245647e1ed63fb81d"
+   },
+   "run.json": {
+    "present": true,
+    "sha256": "cce7027ea657afb0640b5388362dcfc2690b09e87e504b90a41eae06c09120e3"
+   },
+   "surprises.jsonl": {
+    "present": true,
+    "sha256": "3b71d65384c6fa94cdde8635390b02d7171da480750caeccd953993fcc1d0e63"
+   },
+   "theorize.json": {
+    "present": true,
+    "sha256": "fb9696cbeb8ec64175805bdf736838ad18744129a6abe2a833bdab490d6cca63"
+   },
+   "turns.json": {
+    "present": true,
+    "sha256": "0ff7a6edb990ea12a162bfe02b6e76838dee53fe46630ff22fe5b5a7350883bc"
+   }
+  }
+ },
+ "reconciliation": {
+  "actions": {
+   "budget_actions_ok": 30,
+   "reconciles": true,
+   "sum_over_turns": 30
+  },
+  "model_calls": {
+   "in_ledger": 30,
+   "reconciles": true,
+   "sum_over_turns": 30
+  },
+  "surprises": {
+   "by_kind_in_surprises_jsonl": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 23,
+    "proof_failure": 0,
+    "render_mismatch": 1,
+    "replay_mismatch": 15,
+    "search_timeout": 0
+   },
+   "by_kind_over_turns": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 23,
+    "proof_failure": 0,
+    "render_mismatch": 1,
+    "replay_mismatch": 15,
+    "search_timeout": 0
+   },
+   "in_surprises_jsonl": 39,
+   "reconciles": true,
+   "sum_over_turns": 39
+  },
+  "usd": {
+   "delta_vs_desk": 0.0,
+   "reconciles": true,
+   "reported_by_the_desk": 8.404868,
+   "sum_over_model_call_records": 8.404868,
+   "sum_over_turns": 8.404868
+  }
+ },
+ "rows": [
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 0,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": null,
+   "http_commands": 0,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": null,
+   "http_commands": 63,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": 0.0
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    0,
+    1
+   ],
+   "elapsed_s": 620.9,
+   "http_commands": 8,
+   "model_calls": 2,
+   "step_idx": 6,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 4
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 1,
+    "replay_mismatch": 3,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "surprise_total": 4,
+   "theorize_rounds": 2,
+   "turn": 1,
+   "turn_source": "turns.json",
+   "usd": 2.976678,
+   "usd_cumulative": 2.976678,
+   "usd_share": 0.354161184,
+   "wall_clock_s": 621.052
+  },
+  {
+   "actions_before": 6,
+   "actions_before_recorded": 6,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 1825.9,
+   "http_commands": 14,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 2,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 2.976678,
+   "usd_share": 0.0,
+   "wall_clock_s": 1825.91
+  },
+  {
+   "actions_before": 7,
+   "actions_before_recorded": 7,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 1884.1,
+   "http_commands": 14,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    5
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 3,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 2.976678,
+   "usd_share": 0.0,
+   "wall_clock_s": 1884.121
+  },
+  {
+   "actions_before": 8,
+   "actions_before_recorded": 8,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 1942.2,
+   "http_commands": 2,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    6
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 4,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 2.976678,
+   "usd_share": 0.0,
+   "wall_clock_s": 1942.237
+  },
+  {
+   "actions_before": 9,
+   "actions_before_recorded": 9,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    2,
+    3
+   ],
+   "elapsed_s": 1945.1,
+   "http_commands": 1,
+   "model_calls": 2,
+   "step_idx": 10,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    7,
+    8,
+    9
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 5,
+   "turn_source": "turns.json",
+   "usd": 2.463457,
+   "usd_cumulative": 5.440135,
+   "usd_share": 0.293098833,
+   "wall_clock_s": 2344.516
+  },
+  {
+   "actions_before": 10,
+   "actions_before_recorded": 10,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 3227.3,
+   "http_commands": 22,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    10
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 6,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 5.440135,
+   "usd_share": 0.0,
+   "wall_clock_s": 3227.251
+  },
+  {
+   "actions_before": 11,
+   "actions_before_recorded": 11,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 3335.1,
+   "http_commands": 5,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    11
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 7,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 5.440135,
+   "usd_share": 0.0,
+   "wall_clock_s": 3335.085
+  },
+  {
+   "actions_before": 12,
+   "actions_before_recorded": 12,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 3346.2,
+   "http_commands": 25,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    12
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 8,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 5.440135,
+   "usd_share": 0.0,
+   "wall_clock_s": 3346.15
+  },
+  {
+   "actions_before": 13,
+   "actions_before_recorded": 13,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    4,
+    5
+   ],
+   "elapsed_s": 3469.6,
+   "http_commands": 6,
+   "model_calls": 2,
+   "step_idx": 14,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    13,
+    14,
+    15
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 9,
+   "turn_source": "turns.json",
+   "usd": 2.964733,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.352739984,
+   "wall_clock_s": 3888.096
+  },
+  {
+   "actions_before": 14,
+   "actions_before_recorded": 14,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 4946.5,
+   "http_commands": 9,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    16
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 10,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 4946.539
+  },
+  {
+   "actions_before": 15,
+   "actions_before_recorded": 15,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 4973.8,
+   "http_commands": 6,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    17
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 11,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 4973.781
+  },
+  {
+   "actions_before": 16,
+   "actions_before_recorded": 16,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 4987.2,
+   "http_commands": 4,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    18
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 12,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 4987.225
+  },
+  {
+   "actions_before": 17,
+   "actions_before_recorded": 17,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "elapsed_s": 4994.1,
+   "http_commands": 2,
+   "model_calls": 6,
+   "step_idx": 18,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    19,
+    20,
+    21
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 13,
+   "turn_source": "turns.json",
+   "usd": 0.0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 5434.683
+  },
+  {
+   "actions_before": 18,
+   "actions_before_recorded": 18,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 5466.2,
+   "http_commands": 5,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    22
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 14,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 5466.195
+  },
+  {
+   "actions_before": 19,
+   "actions_before_recorded": 19,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 5476.7,
+   "http_commands": 3,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    23
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 15,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 5476.65
+  },
+  {
+   "actions_before": 20,
+   "actions_before_recorded": 20,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 5481.9,
+   "http_commands": 16,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    24
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 16,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 5481.883
+  },
+  {
+   "actions_before": 21,
+   "actions_before_recorded": 21,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+   ],
+   "elapsed_s": 5550.8,
+   "http_commands": 1,
+   "model_calls": 6,
+   "step_idx": 22,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    25,
+    26,
+    27
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 17,
+   "turn_source": "turns.json",
+   "usd": 0.0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6004.685
+  },
+  {
+   "actions_before": 22,
+   "actions_before_recorded": 22,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6038.7,
+   "http_commands": 1,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    28
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 18,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6038.714
+  },
+  {
+   "actions_before": 23,
+   "actions_before_recorded": 23,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6040.4,
+   "http_commands": 2,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    29
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 19,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6040.347
+  },
+  {
+   "actions_before": 24,
+   "actions_before_recorded": 24,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6043.0,
+   "http_commands": 5,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    30
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 20,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6042.982
+  },
+  {
+   "actions_before": 25,
+   "actions_before_recorded": 25,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+   ],
+   "elapsed_s": 6052.5,
+   "http_commands": 5,
+   "model_calls": 6,
+   "step_idx": 26,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    31,
+    32,
+    33
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 21,
+   "turn_source": "turns.json",
+   "usd": 0.0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6518.087
+  },
+  {
+   "actions_before": 26,
+   "actions_before_recorded": 26,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6571.7,
+   "http_commands": 17,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    34
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 22,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6571.646
+  },
+  {
+   "actions_before": 27,
+   "actions_before_recorded": 27,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6650.7,
+   "http_commands": 4,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    35
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 23,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6650.646
+  },
+  {
+   "actions_before": 28,
+   "actions_before_recorded": 28,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": 6658.2,
+   "http_commands": 8,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 1
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    36
+   ],
+   "surprise_total": 1,
+   "theorize_rounds": 0,
+   "turn": 24,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 6658.154
+  },
+  {
+   "actions_before": 29,
+   "actions_before_recorded": 29,
+   "actions_taken": 1,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ],
+   "elapsed_s": 6682.4,
+   "http_commands": 4,
+   "model_calls": 6,
+   "step_idx": 30,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 3
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 1,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    37,
+    38,
+    39
+   ],
+   "surprise_total": 3,
+   "theorize_rounds": 2,
+   "turn": 25,
+   "turn_source": "turns.json",
+   "usd": 0.0,
+   "usd_cumulative": 8.404868,
+   "usd_share": 0.0,
+   "wall_clock_s": 7176.669
+  }
+ ],
+ "run_id": "r-2c194a9cfb5e491a",
+ "schema": "theoria-arm/turn_series v1",
+ "slug": "20260728T083400Z-E3-sk48-carried-v2",
+ "totals": {
+  "actions": 30,
+  "billed_turns": 7,
+  "model_calls": 30,
+  "surprises": 39,
+  "turns": 27,
+  "usd": 8.404868
+ }
+}

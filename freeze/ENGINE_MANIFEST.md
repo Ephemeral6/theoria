@@ -1,4 +1,4 @@
-<!-- generated-from: 5822e5e5c4c87e42f834ddca76f3af56eee3e7b6 -->
+<!-- generated-from: 45cd6ebd0426f94c19b1fb4a109c2eac46aa5322 -->
 # ENGINE_MANIFEST —— 冻结清单第 5 项：引擎清单与版本
 
 **生成物。不要手改。** 由 `python freeze/build_engine_manifest.py` 写出；`--verify` 从 git 重算每一个哈希并逐行报漂移。
@@ -28,10 +28,13 @@
 
 **八个包，零个版本串，2/8 的里程碑标签仍与 HEAD 字节相同。**
 
-扫描范围与结果，逐字：`git grep -E '__version__|SCHEMA_VERSION|ENGINE_VERSION|VERSION\s*=|version\s*=' HEAD -- 'engine-rig/*.py' 'engine-rig/*.toml' 'engine-rig/*.cfg'`，覆盖 **175** 个受版本管理的文件，命中 **2** 行：
+扫描范围与结果，逐字：`git grep -E '__version__|SCHEMA_VERSION|ENGINE_VERSION|VERSION\s*=|version\s*=' HEAD -- 'engine-rig/*.py' 'engine-rig/*.toml' 'engine-rig/*.cfg'`，覆盖 **217** 个受版本管理的文件，命中 **5** 行：
 
 * `engine-rig/bench/toolchain.py:59:_VERSION = re.compile(r"^(Fast Downward .+)$", re.M)`
 * `engine-rig/bench/toolchain.py:130:        version = _VERSION.search(text)`
+* `engine-rig/tools/survey_numbers/lp_incomplete.py:1640:            "numpy": numpy.__version__,`
+* `engine-rig/tools/survey_numbers/lp_incomplete.py:1641:            "scipy": scipy.__version__,`
+* `engine-rig/tools/survey_numbers/lp_incomplete.py:1721:            % (scipy.__version__, numpy.__version__, *sys.version_info[:3]),`
 
 命中的两行都是 Fast Downward 自己的版本管道，**不是任何引擎的版本**。`engine-rig/` 里没有 `pyproject.toml`。所以：
 
@@ -126,9 +129,11 @@ engine-rig/engines/ic3_pdr/__init__.py:52  PRODUCER = "ic3_pdr"
 * **tree sha1**：`f29152f2e95b18472d776df6e658d099a0f387a1`
 * **版本串**：⛔ 无。里程碑 `engine-rig-m5-lp` 的树 **不等于** HEAD。
 * **专属测试文件**：`engine-rig/tests/test_lp_potential.py` — `^def test_` **26** 条
-* **另有 5 个测试文件引用它**（不计入上面的条数——它们是别的引擎的测试，把这个引擎当输入用）：
+* **另有 7 个测试文件引用它**（不计入上面的条数——它们是别的引擎的测试，把这个引擎当输入用）：
   * `engine-rig/tests/test_heldout.py`（该文件自身 17 条）
   * `engine-rig/tests/test_interop.py`（该文件自身 13 条）
+  * `engine-rig/tests/test_lp_incomplete_predicates.py`（该文件自身 15 条）
+  * `engine-rig/tests/test_pagoda_reader.py`（该文件自身 25 条）
   * `engine-rig/tests/test_recheck.py`（该文件自身 47 条）
   * `engine-rig/tests/test_solver_status_bit.py`（该文件自身 15 条）
   * `engine-rig/tests/test_tool_failure_is_not_truth.py`（该文件自身 26 条）
@@ -190,6 +195,11 @@ engine-rig/engines/ic3_pdr/__init__.py:52  PRODUCER = "ic3_pdr"
 * **tree sha1**：`ea6ee43f4a2c29a4bdd59980a1f5febe939b908a`
 * **版本串**：⛔ 无。里程碑 `engine-rig-m9-deadlock-ic3-probe` 的树 **等于** HEAD。
 * **专属测试文件**：`engine-rig/tests/test_ic3_pdr.py` — `^def test_` **16** 条
+* **另有 4 个测试文件引用它**（不计入上面的条数——它们是别的引擎的测试，把这个引擎当输入用）：
+  * `engine-rig/tests/test_ic3bounds_emit.py`（该文件自身 22 条）
+  * `engine-rig/tests/test_ic3bounds_harness.py`（该文件自身 25 条）
+  * `engine-rig/tests/test_ic3bounds_reencode.py`（该文件自身 32 条）
+  * `engine-rig/tests/test_ic3bounds_worldgen.py`（该文件自身 23 条）
 * **常设保留**：**边界未测，整条。** 提交流里 **1** 张证书，在 **1** 个 16 状态 fixture 的 **1** 个配置（`peg4` `0111`）上。没有状态空间阶梯、没有谓词数阶梯、没有超时、没有失败形态普查。**fuzz 电池里根本没有它的性质模块**——`fuzzlab/props/` 覆盖六个引擎而它不在其中，战役里 **0** 行属于它，所以 60 世界战役、64 个变异体、111 字段发布审计一条都碰不到它。**论文可以说 LP 的缺口在 `0111` 上被覆盖，不可以说它被覆盖。**未结工单：`monitor/board/items/E8-ic3-scale.md`——「只有一个点，画不出线」。
 
 ## 4. 提交候选流普查 —— 撞名的解法**没有写下来**
@@ -249,7 +259,7 @@ engine-rig/engines/ic3_pdr/__init__.py:52  PRODUCER = "ic3_pdr"
 |---|---|---|
 | `engine-rig/ENGINE_TABLE.md` | `66eea5e10dd08e4f7b5c6919525f8aa77cef0e54` | **名册与边界的现有权威**，`python -m tools.engine_table` 生成（`--check` 只核不写），由 `engine-rig/tests/test_engine_table.py`（9 条）盯住每个数字仍由其探针支撑；180 条事实带逐条来源表。它有八行、有「它解决什么」、有 fixture、有复核方式、有永不留空的边界列。**它没有：模块路径、哈希、版本串、测试条数、枚举标签、工具链身份。**所以钉住它是必要而不充分的——它是本条的「清单」那一半，不是「与版本」那一半。 |
 | `engine-rig/STATUS.md` | `cc0e43359aa813bde8d189e9206dfb13f7eeb44c` | 里程碑表（**九个**标签，不是八个）与测试套件计数。两处计数互相矛盾且都已过期，见 fd_adapter 的保留第 3 条。 |
-| `engine-rig/DECISIONS.md` | `cc0472764690d4c82e6543eb92c4f5e3937577f6` | D-018（枚举撞名）、D-014（pagoda 不完备用测试断言）、D-025（产物钉在 stub）、D-024（退出码不是证明）、D-008（不主张锐度）的落点。 |
+| `engine-rig/DECISIONS.md` | `07ee795a05a674030661277abe6b3aa4c4054012` | D-018（枚举撞名）、D-014（pagoda 不完备用测试断言）、D-025（产物钉在 stub）、D-024（退出码不是证明）、D-008（不主张锐度）的落点。 |
 | `engine-rig/common/candidates.py` | `38113dbd617ed058119f74587db6c626d9487567` | **冻结枚举 `ENGINES` 的唯一定义**（`:27-34`，恰好六个名字）与 `KINDS`。 |
 | `engine-rig/artifacts/candidates.jsonl` | `43f80fbaa2c81c3e4548df7b43f6371126c90373` | 提交的候选流，确定性模式（D-015），44 行，本清单第 4 节对它做普查。 |
 | `engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md` | `3b64bde6f5519806b1cc5ac105142e105e4422ec` | 外部工具链溯源：URL / 版本 / 大小 / sha256 / 构建命令 / 工具版本。 |
@@ -277,7 +287,7 @@ engine-rig/engines/ic3_pdr/__init__.py:52  PRODUCER = "ic3_pdr"
 
 <!-- ENGINE-HASHES:BEGIN -->
 ```
-blob cc0472764690d4c82e6543eb92c4f5e3937577f6  engine-rig/DECISIONS.md
+blob 07ee795a05a674030661277abe6b3aa4c4054012  engine-rig/DECISIONS.md
 blob 66eea5e10dd08e4f7b5c6919525f8aa77cef0e54  engine-rig/ENGINE_TABLE.md
 blob cc0e43359aa813bde8d189e9206dfb13f7eeb44c  engine-rig/STATUS.md
 blob 43f80fbaa2c81c3e4548df7b43f6371126c90373  engine-rig/artifacts/candidates.jsonl
