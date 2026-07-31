@@ -1,0 +1,367 @@
+{
+  "arm": "theoria",
+  "arm_version": {
+    "files": 63,
+    "sha256": "235df5c482e3db4cbcdfafdc3af5bb0e1801155d0043403548d0f12a1dd9471b"
+  },
+  "env_proxy": {
+    "arm": "theoria",
+    "card_ids": [
+      "card-388e93367b1217bc"
+    ],
+    "commands": 4,
+    "denials": 0,
+    "guard": {
+      "allow_only": null,
+      "cut_version": "v1",
+      "n_dev": 4,
+      "n_sealed": 21,
+      "piles_path": "arc-recon/data/piles.json",
+      "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+      "unknown_policy": "deny"
+    },
+    "guids": {
+      "ar25-0c556536": "guid-09e195e7e6c9c124"
+    },
+    "incidents": 0,
+    "key_injected": true,
+    "meta_calls": 2,
+    "run_id": "r-4b794b43f42346bf",
+    "upstream": "http://127.0.0.1:55971",
+    "variant": null
+  },
+  "game_id": "ar25-0c556536",
+  "ledger": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\audit-smoke\\ledger.jsonl",
+  "run_id": "r-4b794b43f42346bf",
+  "slug": "audit-smoke",
+  "spend": {
+    "action_cap": 92,
+    "actions_charged": 0,
+    "campaign": "theoria-arm:A3-campaign-devpile:ar25-0c556536:audit-smoke",
+    "caps": {
+      "action_cap": 92,
+      "arithmetic": {
+        "action_cap": 92,
+        "action_cap_hard_bound": 6000,
+        "action_cap_planned": 92,
+        "actions_budget": 3,
+        "arm_attempts_capped_by_commands_ceiling": false,
+        "commands_ceiling": 2000,
+        "cost_ceiling_usd": null,
+        "env_max_attempts": 3,
+        "env_outbound_per_arm_command_measured": 1.0031,
+        "fixed_commands": 3,
+        "fixed_outbound": 36,
+        "http_per_command": 1.75,
+        "http_per_command_is_validated": false,
+        "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+        "http_per_command_retired_from_sizing": true,
+        "model_call_ceiling_usd": 4.0,
+        "outbound_per_action": 9.3,
+        "outbound_per_action_is_validated": true,
+        "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556.",
+        "outbound_tail_safety": 2.0,
+        "retry_safety": 1.5,
+        "ttl_seconds": 11700.0,
+        "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+        "usd_cap": 4.0,
+        "wall_clock_s": 10800.0
+      },
+      "ttl_seconds": 11700.0,
+      "usd_cap": 4.0
+    },
+    "model_call_ceiling_usd": 4.0,
+    "model_calls_charged": 0,
+    "pool": {
+      "action_ceiling": 24000,
+      "gate_version": "1.0",
+      "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+      "ledger_path": "proxy/var/spend_gate.jsonl",
+      "policy_path": "proxy/spend_policy.json",
+      "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+      "pool": "theoria-shared-2026-07",
+      "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+      "usd_ceiling": 214.9
+    },
+    "released": false,
+    "renewals": 0,
+    "reservation_id": "res-e16a39dd80344091",
+    "tripped": null,
+    "unpriced_calls": 0,
+    "usd_cap": 4.0,
+    "usd_charged": 0.0
+  },
+  "summary": {
+    "action_counts": {
+      "1": 1,
+      "2": 1,
+      "3": 1
+    },
+    "bill": {
+      "actions_billed": 3,
+      "commands_sent": 4,
+      "desk_calls": 0,
+      "elapsed_s": 2.0,
+      "http_amplification": 1.333,
+      "transitions_observed": 3,
+      "usd": 0.0,
+      "usd_per_billed_action": 0.0,
+      "usd_per_transition": 0.0
+    },
+    "budget": {
+      "actions_failed": 0,
+      "actions_left": 0,
+      "actions_ok": 3,
+      "attempt_amplification": 1.333,
+      "ceiling_actions": 3,
+      "ceiling_commands": 2000,
+      "commands_sent": 4,
+      "http_amplification": 1.333,
+      "http_amplification_is_really_attempts": true,
+      "http_amplification_note": "arm-level attempts per successful ACTION, including attempts that never reached the network. The arm cannot compute the transport ratio: only the proxy ledger knows which attempts were forwarded (`http.forwarded`). Divide that count by `actions_ok` for the real one.",
+      "probe_actions": 0,
+      "reserve_for_probes": 0,
+      "resets": 1
+    },
+    "carried_books": null,
+    "certify_rounds": 0,
+    "desk": {
+      "beats": [],
+      "calls": 0,
+      "calls_missing_from_ledger": 0,
+      "cli_cost_usd": 0.0,
+      "cost_ceiling_usd": null,
+      "ledger_failures": [],
+      "model": "claude-opus-5",
+      "spend_gate": {
+        "action_cap": 92,
+        "actions_charged": 0,
+        "campaign": "theoria-arm:A3-campaign-devpile:ar25-0c556536:audit-smoke",
+        "caps": {
+          "action_cap": 92,
+          "arithmetic": {
+            "action_cap": 92,
+            "action_cap_hard_bound": 6000,
+            "action_cap_planned": 92,
+            "actions_budget": 3,
+            "arm_attempts_capped_by_commands_ceiling": false,
+            "commands_ceiling": 2000,
+            "cost_ceiling_usd": null,
+            "env_max_attempts": 3,
+            "env_outbound_per_arm_command_measured": 1.0031,
+            "fixed_commands": 3,
+            "fixed_outbound": 36,
+            "http_per_command": 1.75,
+            "http_per_command_is_validated": false,
+            "http_per_command_provenance": "arc-recon/data/incidents.jsonl:16 (INC-011) side_by_side, bare_cc arm, ar25, cookies=True, 35 http / 20 executed commands. Different arm, different transport, different denominator from the one plan_caps uses.",
+            "http_per_command_retired_from_sizing": true,
+            "model_call_ceiling_usd": 4.0,
+            "outbound_per_action": 9.3,
+            "outbound_per_action_is_validated": true,
+            "outbound_per_action_provenance": "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four live legs in runs/ whose env_upstream is three.arcprize.org (20260728T012311Z, 20260728T014402Z, 20260728T015354Z, 20260729T004020Z-leg01). Numerator is the sum of http.attempts over env_step records with http.forwarded=true; denominator is env_step records with an ACTION name and status 200. Cross-checked against proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556.",
+            "outbound_tail_safety": 2.0,
+            "retry_safety": 1.5,
+            "ttl_seconds": 11700.0,
+            "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+            "usd_cap": 4.0,
+            "wall_clock_s": 10800.0
+          },
+          "ttl_seconds": 11700.0,
+          "usd_cap": 4.0
+        },
+        "model_call_ceiling_usd": 4.0,
+        "model_calls_charged": 0,
+        "pool": {
+          "action_ceiling": 24000,
+          "gate_version": "1.0",
+          "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+          "ledger_path": "proxy/var/spend_gate.jsonl",
+          "policy_path": "proxy/spend_policy.json",
+          "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+          "pool": "theoria-shared-2026-07",
+          "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+          "usd_ceiling": 214.9
+        },
+        "released": false,
+        "renewals": 0,
+        "reservation_id": "res-e16a39dd80344091",
+        "tripped": null,
+        "unpriced_calls": 0,
+        "usd_cap": 4.0,
+        "usd_charged": 0.0
+      },
+      "unpriced_calls": 0,
+      "usage_total": {}
+    },
+    "desk_failures": [],
+    "elapsed_s": 2.0,
+    "engine_dispatches": 0,
+    "engines_online": {
+      "candidate_rows": 0,
+      "dispatch_errors": 0,
+      "dispatches": 0,
+      "per_engine": {
+        "cegis_miner": {
+          "delivered": 0,
+          "dispatches": 0,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        },
+        "mdl_segmenter": {
+          "delivered": 0,
+          "dispatches": 0,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        },
+        "zero_space": {
+          "delivered": 0,
+          "dispatches": 0,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "game_id": "ar25-0c556536",
+    "levels": {
+      "boundaries": 0,
+      "events": [],
+      "finished": false,
+      "level": 1,
+      "levels_completed": 0,
+      "reset_probes": [],
+      "starts": [
+        0
+      ]
+    },
+    "levels_completed": 0,
+    "model_calls": 0,
+    "outcome": "budget_exhausted",
+    "run_id": "r-4b794b43f42346bf",
+    "score": null,
+    "scorecard": {
+      "card_id": "card-388e93367b1217bc",
+      "environments": [
+        {
+          "actions": 3,
+          "completed": false,
+          "id": "ar25-0c556536",
+          "level_count": 3,
+          "levels_completed": 0,
+          "resets": 0,
+          "runs": [
+            {
+              "actions": 3,
+              "completed": false,
+              "guid": "guid-09e195e7e6c9c124",
+              "level_actions": [
+                0,
+                0,
+                0
+              ],
+              "level_baseline_actions": [
+                8,
+                8,
+                8
+              ],
+              "level_scores": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "levels_completed": 0,
+              "resets": 0,
+              "score": 0.0,
+              "state": "NOT_FINISHED"
+            }
+          ],
+          "score": 0.0
+        }
+      ],
+      "opaque": {
+        "opaque": {
+          "prompt_id": "P-8",
+          "run_id": "r-4b794b43f42346bf"
+        },
+        "tags": [
+          "theoria",
+          "p8",
+          "first-contact"
+        ]
+      },
+      "score": 0.0,
+      "tags": [
+        "theoria",
+        "p8",
+        "first-contact"
+      ],
+      "tags_scores": [],
+      "total_actions": 3,
+      "total_environments": 1,
+      "total_environments_completed": 0,
+      "total_levels": 3,
+      "total_levels_completed": 0
+    },
+    "steps": 4,
+    "stopped_because": "budget: action ceiling reached: 3/3 successful actions (0 held in the probe reserve)",
+    "surprises": {
+      "by_family": {
+        "computational": 0,
+        "empirical": 0
+      },
+      "by_kind": {
+        "execution_mismatch": 0,
+        "heuristic_miss": 0,
+        "probe_refutation": 0,
+        "proof_failure": 0,
+        "render_mismatch": 0,
+        "replay_mismatch": 0,
+        "search_timeout": 0
+      },
+      "total": 0,
+      "unhandled": 0
+    },
+    "theorize_rounds": 0,
+    "transfer": null,
+    "turns": 0,
+    "win_levels": null,
+    "world": {
+      "actions_used": [
+        "ACTION1",
+        "ACTION2",
+        "ACTION3",
+        "RESET"
+      ],
+      "background": 1,
+      "cascade_lengths": [
+        1
+      ],
+      "cells_needing_an_owner": 2,
+      "colours_seen": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "constant_cells": 62,
+      "distinct_states": 2,
+      "dynamic_box": [
+        0,
+        0,
+        3,
+        2
+      ],
+      "dynamic_cells": 2,
+      "max_frames_in_one_command": 1,
+      "shape": [
+        8,
+        8
+      ],
+      "states": 4,
+      "steps": 4
+    }
+  }
+}

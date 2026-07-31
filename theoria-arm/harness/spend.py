@@ -255,14 +255,18 @@ MODEL_CALL_TIMEOUT_S = 1800
 #: That is exactly why the archive test re-derives instead of re-reading: a
 #: constant sized from measurements goes stale when measurements arrive.
 OBSERVED_USD_PER_SECOND = {
-    "claude-opus-5": 0.0030474,
+    # 2026-07-31, second growth: re-measured at $0.0042222/s over the four
+    # live carried legs. Sizing reads the archive, so only the archive
+    # growing may move this -- and it may only move up.
+    "claude-opus-5": 0.0042223,
     "claude-haiku-4-5": 0.0006376,
 }
 
 #: The worst single settled call per model, the other half of the sizing rule.
 #: Same runs and same script as `OBSERVED_USD_PER_SECOND`.
 OBSERVED_WORST_CALL_USD = {
-    "claude-opus-5": 1.742637,      # E3 sk48-carried-v2, 642 721 ms
+    "claude-opus-5": 2.861150,      # 20260731T1430Z-A3-level2-carried-r3
+                                    # (was 1.742637, E3 sk48-carried-v2)
     "claude-haiku-4-5": 0.146292,
 }
 
@@ -330,13 +334,15 @@ MODEL_CALL_CEILINGS_USD = {
     # stated formulas.  The ceiling grows with the record; it never
     # shrinks.  (Both the campaign and the E3 port derived 7.00
     # independently before this merge joined them.)
-    "claude-opus-5":   7.00,       # max(1800 x 0.0030474, 4 x 1.742637) = 6.97
+    # 2026-07-31, second growth: the four live carried legs pushed the
+    # worst opus call to $2.8611 and the rate to $0.0042222/s.
+    "claude-opus-5":  12.00,       # max(1800 x 0.0042222, 4 x 2.861100) = 11.44
     "claude-haiku-4-5": 1.25,      # max(1800 x 0.0006376, 4 x 0.146292) = 1.15
     # not measured here: opus-5 x output-price ratio x 1.25 throughput margin
-    "claude-opus-4-8": 7.00,       # same list price as opus-5, same family
-    "claude-fable-5": 17.50,       # output $50/M -> 7.00 x 2.0 x 1.25
-    "claude-mythos-5": 17.50,
-    "claude-sonnet-5": 5.25,       # output $15/M -> 7.00 x 0.6 x 1.25
+    "claude-opus-4-8": 12.00,      # same list price as opus-5, same family
+    "claude-fable-5": 30.00,       # output $50/M -> 12.00 x 2.0 x 1.25
+    "claude-mythos-5": 30.00,
+    "claude-sonnet-5": 9.00,       # output $15/M -> 12.00 x 0.6 x 1.25
 }
 
 
