@@ -1,0 +1,13 @@
+# Same rule proxy/.gitattributes already carries, and for the same reason:
+# a run manifest publishes sha256 over delivered bytes, so core.autocrlf must
+# not be able to change them. This landed after `canary.py freeze-audit --json
+# > file` produced a CRLF artefact on Windows (Python's text-mode stdout
+# translates on the way out) whose committed blob then hashed differently from
+# the working copy the manifest was built against -- a manifest that cannot be
+# reproduced from a fresh checkout is a manifest you have to take on trust.
+* text=auto eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.sh text eol=lf

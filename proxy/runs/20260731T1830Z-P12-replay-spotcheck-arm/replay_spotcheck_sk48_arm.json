@@ -1,0 +1,28 @@
+{
+  "detail": "1 session(s) with a failure-free opening; agreement needs at least two",
+  "game_id": "sk48-d8078629",
+  "policy": {
+    "compactable_shapes": [
+      "game-not-found"
+    ],
+    "refusals": "compacted",
+    "refusals_compacted": {
+      "r-b85a42dd9a894853": {
+        "game-not-found": 155
+      }
+    }
+  },
+  "session_origin": {
+    "r-b85a42dd9a894853": "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl"
+  },
+  "sessions": [
+    "r-b85a42dd9a894853"
+  ],
+  "sources": {
+    "canon": [
+      "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl"
+    ],
+    "recon": null
+  },
+  "verdict": "INSUFFICIENT"
+}

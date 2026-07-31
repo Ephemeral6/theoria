@@ -1,0 +1,115 @@
+{
+  "comparisons": [
+    {
+      "action": "RESET",
+      "agree": true,
+      "frame_hash": "sha256:801726dc499f3f52f79a7a69f2720fcd308dbe625cbf9eb760442f71c298fba7",
+      "position": 0,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION1",
+      "agree": true,
+      "frame_hash": "sha256:801726dc499f3f52f79a7a69f2720fcd308dbe625cbf9eb760442f71c298fba7",
+      "position": 1,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+      "position": 2,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION3",
+      "agree": true,
+      "frame_hash": "sha256:0752f8b0c82bd16302700744e621d0b692c3719dd0964adbcfe74f8e6fdc9cd4",
+      "position": 3,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION4",
+      "agree": true,
+      "frame_hash": "sha256:5cc8add00a5dcfbcb2d4c171652b36cb9a572d7decadbccc533d06d378981257",
+      "position": 4,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION5",
+      "agree": true,
+      "frame_hash": "sha256:dd5deaacbac46e31e5b548f587cab2a91f4b73da110aa1319cb5b7c17905a250",
+      "position": 5,
+      "sessions": 3
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:0e18852dfd37730b226db2b5adf32a7943bd9d8f782c4f0854fa11d63cdc2e96",
+      "position": 6,
+      "sessions": 2
+    },
+    {
+      "action": "ACTION5",
+      "agree": true,
+      "frame_hash": "sha256:ad8834a308ea0cbd4a4d9ad863ca7a0155325bbed3c04ba1719c6850bbd58b31",
+      "position": 7,
+      "sessions": 2
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:567b48a337c3e409568b17a8f0b14eaa649d9bfbf2c6a199e2a4ce3a6bbb7cad",
+      "position": 8,
+      "sessions": 2
+    },
+    {
+      "action": "ACTION5",
+      "agree": true,
+      "frame_hash": "sha256:f61f2ff0f1b0b6890fd765b3b099caeede9895512fe5e5a5585dca73ab6b0ae3",
+      "position": 9,
+      "sessions": 2
+    }
+  ],
+  "disagreements": [],
+  "game_id": "g50t-5849a774",
+  "n_sessions": 3,
+  "pairwise_comparisons": 22,
+  "policy": {
+    "compactable_shapes": [
+      "game-not-found"
+    ],
+    "refusals": "compacted",
+    "refusals_compacted": {
+      "r-41e482ba348b4a3a": {
+        "game-not-found": 200
+      },
+      "r-70fa98dd8f4d4506": {
+        "game-not-found": 85
+      },
+      "r-a80a4383312d408d": {
+        "game-not-found": 54
+      }
+    }
+  },
+  "session_origin": {
+    "r-41e482ba348b4a3a": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl",
+    "r-70fa98dd8f4d4506": "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+    "r-a80a4383312d408d": "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl"
+  },
+  "sessions": [
+    "r-41e482ba348b4a3a",
+    "r-70fa98dd8f4d4506",
+    "r-a80a4383312d408d"
+  ],
+  "sources": {
+    "canon": [
+      "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl",
+      "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+      "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl"
+    ],
+    "recon": null
+  },
+  "steps_compared": 10,
+  "verdict": "PASS"
+}

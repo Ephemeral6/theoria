@@ -36,10 +36,18 @@ def observed(*hashes):
 
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
-    """Point every writer at a temp directory; nothing here touches data/."""
+    """Point every writer at a temp directory; nothing here touches data/.
+
+    FREEZE_LOG_PATH was missing from this list from the day it was added to
+    `canary.py` until 2026-07-31, so every run of this suite appended six
+    freeze events to the tracked append-only log. `conftest.py` now enforces
+    the sentence above instead of asserting it.
+    """
     monkeypatch.setattr(canary, "CANARY_PATH", str(tmp_path / "canary.json"))
     monkeypatch.setattr(canary, "RUNS_PATH", str(tmp_path / "runs.jsonl"))
     monkeypatch.setattr(canary, "FREEZE_PATH", str(tmp_path / "freeze.json"))
+    monkeypatch.setattr(canary, "FREEZE_LOG_PATH",
+                        str(tmp_path / "freeze_log.jsonl"))
     monkeypatch.setattr(canary, "INCIDENTS_PATH", str(tmp_path / "incidents.jsonl"))
     return tmp_path
 

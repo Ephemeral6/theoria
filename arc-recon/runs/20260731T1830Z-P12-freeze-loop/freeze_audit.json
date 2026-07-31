@@ -1,0 +1,49 @@
+{
+  "detail": "6 freeze entries in the log name incident ids that were never filed in incidents.jsonl. The drift path files the incident first, so these did not come from drift -- they are exercise artefacts. They are not evidence that campaigns should be frozen, and they are not evidence that they should not be.",
+  "last_state_bearing_event": {
+    "event": "frozen",
+    "games": [
+      "sk48-d8078629"
+    ],
+    "incident": "INC-999",
+    "reason": "second",
+    "t": "2026-07-31T15:40:16Z"
+  },
+  "log_events": 7,
+  "log_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-proxy-freeze\\arc-recon\\data\\campaign_freeze_log.jsonl",
+  "state_frozen": false,
+  "state_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-proxy-freeze\\arc-recon\\data\\campaign_freeze.json",
+  "unadjudicable_freeze_entries": [
+    {
+      "incident": "INC-TEST",
+      "reason": "test freeze",
+      "t": "2026-07-31T15:40:08Z"
+    },
+    {
+      "incident": "INC-TEST",
+      "reason": "test freeze",
+      "t": "2026-07-31T15:40:08Z"
+    },
+    {
+      "incident": "INC-999",
+      "reason": "test drift",
+      "t": "2026-07-31T15:40:16Z"
+    },
+    {
+      "incident": "INC-999",
+      "reason": "test drift",
+      "t": "2026-07-31T15:40:16Z"
+    },
+    {
+      "incident": "INC-998",
+      "reason": "first",
+      "t": "2026-07-31T15:40:16Z"
+    },
+    {
+      "incident": "INC-999",
+      "reason": "second",
+      "t": "2026-07-31T15:40:16Z"
+    }
+  ],
+  "verdict": "UNADJUDICABLE_LOG"
+}

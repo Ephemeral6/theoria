@@ -25,6 +25,13 @@ WHAT MAKES THIS A CHECK RATHER THAN A RITUAL
     `python canary.py check-freeze` (exit 1 = frozen) or by reading the JSON, and
     the gate works across sessions and across tracks -- which is precisely what
     INC-BA-003 showed a per-process counter cannot do.
+  * **The state file is audited against the log that cannot be rewritten.**
+    `campaign_freeze.json` is overwritten in place, so on its own it can be
+    thawed by `rm` followed by `init-freeze`. `freeze-audit` compares it to
+    `campaign_freeze_log.jsonl`, `init-freeze` refuses when the log's last
+    state-bearing event is a filed freeze, and clearing has a command of its
+    own (`clear-freeze --reason --by`) that files an incident and refuses to
+    restore `checked_utc`. An owner decision is not an observation.
   * **A step that could not run is not a step that agreed.** Missing hashes are
     counted as `unusable`, never as agreement (INC-003), and a replay that could
     not complete its sequence is `INCOMPLETE`, which is neither PASS nor drift.
@@ -166,6 +173,120 @@ def _log_freeze_event(event: str, entry: Dict[str, Any]) -> None:
     _append_jsonl(FREEZE_LOG_PATH, {"t": _now(), "event": event, **entry})
 
 
+#: Log events that assert what the state file should say. `green-while-frozen`
+#: is deliberately absent: it records that a sweep passed *and changed nothing*,
+#: so it must not be able to answer "what does the state file owe us".
+STATE_BEARING_EVENTS = ("frozen", "green", "cleared", "initialized")
+
+
+def freeze_log_events() -> List[Dict[str, Any]]:
+    """Every line of the append-only log, in order. Read-only."""
+    out: List[Dict[str, Any]] = []
+    if not os.path.exists(FREEZE_LOG_PATH):
+        return out
+    with open(FREEZE_LOG_PATH, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if line:
+                out.append(json.loads(line))
+    return out
+
+
+def last_state_bearing_event() -> Optional[Dict[str, Any]]:
+    for entry in reversed(freeze_log_events()):
+        if entry.get("event") in STATE_BEARING_EVENTS:
+            return entry
+    return None
+
+
+def incident_ids() -> set:
+    ids = set()
+    if os.path.exists(INCIDENTS_PATH):
+        for line in open(INCIDENTS_PATH, encoding="utf-8"):
+            line = line.strip()
+            if line:
+                ids.add(str(json.loads(line).get("id", "")))
+    return ids
+
+
+def freeze_audit() -> Dict[str, Any]:
+    """Does the overwritable state file still agree with the append-only log?
+
+    The state file is the gate everybody reads and the only file in the loop
+    that can be *rewritten*; the log beside it is the only one that cannot.
+    So the log is the check on the file, and this is the check being run.
+
+    The hole it closes is concrete and was found in this repository's own
+    data. `init_freeze_from_runs` refuses to overwrite an existing state file
+    -- but it does not refuse to *create* one, so deleting the file and
+    re-initialising rebuilds it from `canary_runs.jsonl` with no memory of any
+    freeze written since that run. A freeze is then thawed by `rm` plus one
+    offline command, which is exactly the self-healing shape `refresh_freeze`
+    documents and forbids for green sweeps.
+
+    Three verdicts:
+
+    * `OK` -- the state file agrees with the log's last state-bearing event.
+    * `DIVERGED` -- the log's last state-bearing event is a freeze whose
+      incident really was filed, and the state file does not say frozen. An
+      adjudicable freeze went missing; that is an incident, not a nit.
+    * `UNADJUDICABLE_LOG` -- the log contains `frozen` entries naming incident
+      ids absent from `incidents.jsonl`. The drift path files the incident
+      *before* it freezes (`replay`), so a freeze with no incident was never
+      a real freeze: it is an exercise or a hand-written line. Reported, never
+      silently swallowed, and it does not by itself mean the state is wrong.
+
+    The rule that makes `UNADJUDICABLE_LOG` safe rather than an escape hatch:
+    the incident file is append-only too, so the way to make a fake freeze
+    look real is to file a real incident -- at which point it is real.
+    """
+    events = freeze_log_events()
+    state = freeze_state()
+    known = incident_ids()
+    unadjudicable = [
+        {"t": e.get("t"), "incident": e.get("incident"),
+         "reason": e.get("reason")}
+        for e in events
+        if e.get("event") == "frozen" and e.get("incident") not in known
+    ]
+    last = last_state_bearing_event()
+    report: Dict[str, Any] = {
+        "state_path": FREEZE_PATH,
+        "log_path": FREEZE_LOG_PATH,
+        "state_frozen": bool(state.get("frozen")),
+        "log_events": len(events),
+        "last_state_bearing_event": last,
+        "unadjudicable_freeze_entries": unadjudicable,
+    }
+    if (last and last.get("event") == "frozen"
+            and last.get("incident") in known
+            and not state.get("frozen")):
+        report["verdict"] = "DIVERGED"
+        report["detail"] = (
+            "the append-only log's last state-bearing event is a freeze "
+            "(%s, incident %s, filed in incidents.jsonl) but %s does not say "
+            "frozen. The state file is the only rewritable half of this loop; "
+            "when it contradicts the log, the log wins. Adjudicate the drift "
+            "and clear it with `canary.py clear-freeze --reason ...`, which "
+            "records the clearing where nothing can rewrite it."
+            % (last.get("t"), last.get("incident"), FREEZE_PATH))
+    elif unadjudicable:
+        report["verdict"] = "UNADJUDICABLE_LOG"
+        report["detail"] = (
+            "%d freeze entr%s in the log name incident ids that were never "
+            "filed in incidents.jsonl. The drift path files the incident "
+            "first, so these did not come from drift -- they are exercise "
+            "artefacts. They are not evidence that campaigns should be "
+            "frozen, and they are not evidence that they should not be."
+            % (len(unadjudicable), "y" if len(unadjudicable) == 1 else "ies"))
+    else:
+        report["verdict"] = "OK"
+        report["detail"] = ("the state file agrees with the append-only log"
+                            if last else
+                            "no state-bearing event has been logged yet")
+    return report
+
+
 def freeze_campaigns(incident_id: str, games: List[str], reason: str,
                      detail: Dict[str, Any]) -> None:
     """Write the cross-track, cross-session campaign gate.
@@ -260,6 +381,19 @@ def init_freeze_from_runs() -> Dict[str, Any]:
         raise RuntimeError("%s already exists; the live paths own it now "
                            "(replay --write-freeze refreshes, drift freezes)"
                            % FREEZE_PATH)
+    # Refusing to overwrite is not enough on its own: `rm` turns this command
+    # into a thaw. The log cannot be rewritten, so ask it first.
+    logged = last_state_bearing_event()
+    if (logged and logged.get("event") == "frozen"
+            and logged.get("incident") in incident_ids()):
+        raise RuntimeError(
+            "refusing to initialise: %s is absent but the append-only log's "
+            "last state-bearing event is a freeze (%s, incident %s, filed in "
+            "incidents.jsonl). Initialising from canary_runs.jsonl would "
+            "rebuild the file with no memory of that freeze -- a thaw by `rm` "
+            "plus one offline command. Clear it deliberately instead: "
+            "`canary.py clear-freeze --reason ... --by ...`."
+            % (FREEZE_PATH, logged.get("t"), logged.get("incident")))
     last = None
     if os.path.exists(RUNS_PATH):
         for line in open(RUNS_PATH, encoding="utf-8"):
@@ -307,7 +441,13 @@ def freeze_state() -> Dict[str, Any]:
 
 
 def assert_campaigns_unfrozen() -> None:
-    """The gate other tracks call before spending anything on a campaign."""
+    """The gate other tracks call before spending anything on a campaign.
+
+    Reads the state file *and* audits it against the append-only log. A
+    `DIVERGED` audit refuses: the state file is the rewritable half, so when
+    the two disagree the file has lost information the log still has, and a
+    gate that has lost information has not said proceed.
+    """
     state = freeze_state()
     if state.get("frozen"):
         raise CampaignFrozen(
@@ -315,6 +455,105 @@ def assert_campaigns_unfrozen() -> None:
             % (state.get("since"), state.get("incident"),
                ", ".join(state.get("games") or []), state.get("reason"))
         )
+    audit = freeze_audit()
+    if audit["verdict"] == "DIVERGED":
+        raise CampaignFrozen("campaign-freeze audit DIVERGED: %s"
+                             % audit["detail"])
+
+
+def clear_freeze(reason: str, by: str,
+                 adjudication: Optional[str] = None) -> Dict[str, Any]:
+    """The owner decision the frozen file's `how_to_clear` names, executable.
+
+    Until now `how_to_clear` said "clearing is an owner decision recorded as
+    an incident, not a housekeeping step" and offered no way to do it, so the
+    only available clearing was hand-editing the tracked JSON -- which records
+    nothing, needs no reason, and is indistinguishable from vandalism in a
+    diff. This is the command, and it is deliberately more expensive than an
+    edit:
+
+    * **A reason is required and is stored verbatim.** Both in the state file
+      and in the append-only log, where it cannot later be softened.
+    * **An owner is required.** `by` names who decided; "the tooling decided"
+      is not an available answer.
+    * **`--adjudication` must name an incident that exists.** Citing an
+      adjudication that was never filed is the one shortcut worth blocking by
+      hand: the point of the ritual is that somebody wrote down what they
+      concluded about the drift.
+    * **Clearing files its own incident**, so the clearing is as visible in
+      `incidents.jsonl` as the drift that caused it.
+    * **`checked_utc` is not restored.** An owner clearing a freeze has
+      adjudicated a past observation; they have not observed the environment.
+      Only an all-PASS sweep (`replay --write-freeze`) may stamp
+      `checked_utc`, and until one runs the file says so out loud.
+
+    Works when the state file is missing but the log asserts a filed freeze --
+    otherwise deleting the file would still be the cheapest way out.
+    """
+    if not (reason or "").strip():
+        raise RuntimeError("clearing a campaign freeze requires a reason")
+    if not (by or "").strip():
+        raise RuntimeError("clearing a campaign freeze requires --by (who "
+                           "decided); the tooling does not decide")
+    known = incident_ids()
+    if adjudication and adjudication not in known:
+        raise RuntimeError(
+            "--adjudication %s is not in %s. Clearing cites an adjudication "
+            "that was written down; file the incident first."
+            % (adjudication, INCIDENTS_PATH))
+
+    state = freeze_state()
+    logged = last_state_bearing_event()
+    from_log = (logged and logged.get("event") == "frozen"
+                and logged.get("incident") in known
+                and not state.get("frozen"))
+    if not state.get("frozen") and not from_log:
+        raise RuntimeError(
+            "campaigns are not frozen (%s says frozen=%s and the log's last "
+            "state-bearing event is %s); nothing to clear."
+            % (FREEZE_PATH, bool(state.get("frozen")),
+               (logged or {}).get("event", "none")))
+
+    cleared = ({k: state.get(k) for k in
+                ("since", "incident", "games", "reason")}
+               if state.get("frozen") else
+               {"since": logged.get("t"), "incident": logged.get("incident"),
+                "games": logged.get("games"), "reason": logged.get("reason"),
+                "_note": "reconstructed from the append-only log; the state "
+                         "file was absent or already unfrozen when cleared"})
+    incident_id = file_incident({
+        "title": "Campaign freeze cleared by owner decision (%s)"
+                 % (cleared.get("incident") or "unrecorded"),
+        "severity": "informational",
+        "detail": reason,
+        "games": sorted(cleared.get("games") or []),
+        "cleared_freeze": cleared,
+        "adjudication": adjudication,
+        "cleared_by": by,
+        "filed_by": "arc-recon/canary.py clear-freeze",
+    })
+    history = list(state.get("history", []))
+    history.append(cleared)
+    new_state = {
+        "frozen": False,
+        "checked_utc": None,
+        "cleared": {"t": _now(), "by": by, "reason": reason,
+                    "adjudication": adjudication,
+                    "clearing_incident": incident_id,
+                    "cleared_freeze": cleared},
+        "note": ("Cleared by an owner decision, not by a canary sweep: "
+                 "checked_utc is null because no replay has vouched for the "
+                 "environment since the freeze. Run `canary.py replay "
+                 "--write-freeze` (SPENDS ACTIONS) to restore it. History is "
+                 "in campaign_freeze_log.jsonl. Never delete this file."),
+        "history": history,
+    }
+    _write_json(FREEZE_PATH, new_state)
+    _log_freeze_event("cleared", {"by": by, "reason": reason,
+                                  "adjudication": adjudication,
+                                  "clearing_incident": incident_id,
+                                  "cleared_freeze": cleared})
+    return new_state
 
 
 # -- seeding ----------------------------------------------------------------
@@ -782,6 +1021,37 @@ def _cmd_check_freeze(args) -> int:
         print("  %s" % exc)
         return 1
     print("  campaigns are not frozen")
+    audit = freeze_audit()
+    if audit["verdict"] != "OK":
+        print("  NOTE: freeze audit %s -- %s"
+              % (audit["verdict"], audit["detail"]))
+    return 0
+
+
+def _cmd_freeze_audit(args) -> int:
+    audit = freeze_audit()
+    if args.json:
+        print(json.dumps(audit, indent=2, sort_keys=True, ensure_ascii=False))
+    else:
+        print("  verdict: %s" % audit["verdict"])
+        print("  %s" % audit["detail"])
+        print("  state frozen=%s, %d log event(s)"
+              % (audit["state_frozen"], audit["log_events"]))
+        for entry in audit["unadjudicable_freeze_entries"]:
+            print("    unadjudicable freeze entry: %s incident=%s reason=%s"
+                  % (entry["t"], entry["incident"], entry["reason"]))
+    return {"OK": 0, "DIVERGED": 1, "UNADJUDICABLE_LOG": 2}[audit["verdict"]]
+
+
+def _cmd_clear_freeze(args) -> int:
+    state = clear_freeze(args.reason, args.by, args.adjudication)
+    print("  %s cleared by %s: %s"
+          % (FREEZE_PATH, args.by, args.reason))
+    print("  clearing incident %s filed in %s"
+          % (state["cleared"]["clearing_incident"], INCIDENTS_PATH))
+    print("  checked_utc is null: an owner decision is not an observation. "
+          "Run `canary.py replay --write-freeze` to restore it (SPENDS "
+          "ACTIONS).")
     return 0
 
 
@@ -825,8 +1095,32 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("init-freeze",
                    help="offline: create data/campaign_freeze.json from the "
                         "last recorded replay in canary_runs.jsonl (no API "
-                        "call; refuses if the file already exists)"
+                        "call; refuses if the file already exists, or if the "
+                        "append-only log's last event is a filed freeze)"
                    ).set_defaults(func=_cmd_init_freeze)
+
+    audit = sub.add_parser(
+        "freeze-audit",
+        help="offline: does the rewritable state file still agree with the "
+             "append-only log? exit 0 OK / 1 DIVERGED / 2 UNADJUDICABLE_LOG")
+    audit.add_argument("--json", action="store_true")
+    audit.set_defaults(func=_cmd_freeze_audit)
+
+    clear = sub.add_parser(
+        "clear-freeze",
+        help="offline: the owner decision how_to_clear names. Requires a "
+             "reason and an owner, files its own incident, and does NOT "
+             "restore checked_utc")
+    clear.add_argument("--reason", required=True,
+                       help="what was adjudicated, stored verbatim in the "
+                            "state file and the append-only log")
+    clear.add_argument("--by", required=True,
+                       help="who decided; the tooling does not decide")
+    clear.add_argument("--adjudication", default=None, metavar="INC-0NN",
+                       help="an incident id that already exists in "
+                            "incidents.jsonl; citing one that does not is "
+                            "refused")
+    clear.set_defaults(func=_cmd_clear_freeze)
 
     reb = sub.add_parser("rebaseline",
                          help="deliberately replace expectations (SPENDS ACTIONS)")
@@ -845,6 +1139,11 @@ def main(argv: List[str]) -> int:
         return 2
     except BudgetExceeded as exc:
         print("  BUDGET: %s" % exc)
+        return 3
+    except RuntimeError as exc:
+        # clear-freeze and init-freeze refuse by raising; a refusal is an exit
+        # code and a sentence, not a traceback the caller has to parse.
+        print("  REFUSED: %s" % exc)
         return 3
 
 

@@ -1,0 +1,44 @@
+{
+  "_seed_note": "no randomness: freeze-audit is a deterministic read.",
+  "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
+  "branch": "p12/proxy-freeze",
+  "cost": {
+    "_note": "offline. No canary sweep was run; clear-freeze and freeze-audit never touch the network.",
+    "api_calls": 0,
+    "model_calls": 0,
+    "usd": 0.0
+  },
+  "files": [
+    {
+      "path": "freeze_audit.json",
+      "sha256": "sha256:5243cdffccb3071541f1bbfdedd581d5749d6a45e90f8d8ad9f42c8d5effd1a7"
+    },
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "sha256:d690259333b43aa7d4513d40b465b1b359087b0039f8ef37194cb4ecb5bcba69"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "arc-recon/data/campaign_freeze.json",
+      "read_only": true,
+      "sha256": "sha256:b6cf2ac5c449f326786573f145e5e9c1b1d9812dd56ce5f4aeddf17a27a53ccf"
+    },
+    {
+      "path": "arc-recon/data/campaign_freeze_log.jsonl",
+      "read_only": true,
+      "sha256": "sha256:216ce7a6414b0a4ba299bff0fc0c699e1f881e9e5cb8710ec00e2153d53ac302"
+    },
+    {
+      "path": "arc-recon/data/incidents.jsonl",
+      "read_only": true,
+      "sha256": "sha256:ce7b90f5c212e23f9aa3721d8f36012638723cfb0cd435b2af22c597619d4d52"
+    }
+  ],
+  "pile_discipline": {
+    "_note": "no game was played. Development-pile ids appear only as data inside the freeze log; no sealed-pile id appears in any file of this run."
+  },
+  "prompt": "Phase 1 acceptance gaps: campaign_freeze wiring",
+  "prompt_id": "P-12",
+  "utc": "2026-07-31T18:30:00Z"
+}

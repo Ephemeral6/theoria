@@ -311,7 +311,11 @@ def test_a_session_is_truncated_at_a_step_idx_hole():
     steps = _session(["h0", "h1", "h2", "h6", "h7"])
     steps[3]["step_idx"] = 6
     steps[4]["step_idx"] = 7
-    assert [s["frame_hash"] for s in clean_prefix(steps)] == ["h0", "h1", "h2"]
+    # clean_prefix returns (prefix, refusals_compacted) since the
+    # --compact-refusals flag landed; the contiguity rule it pins is unchanged.
+    prefix, compacted = clean_prefix(steps)
+    assert [s["frame_hash"] for s in prefix] == ["h0", "h1", "h2"]
+    assert compacted == {}
 
 
 def test_a_hole_would_otherwise_read_as_a_disagreement():
