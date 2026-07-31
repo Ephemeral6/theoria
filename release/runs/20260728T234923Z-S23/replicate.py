@@ -26,6 +26,42 @@ Nothing here touches the network, the API, or `arc-recon/data/`. Every planted
 artefact lives under a `tempfile.mkdtemp()` that is deleted on the way out, and
 the sealed game ids used are read from the cut rather than written down --
 naming a sealed id in order to keep it out is not contact with it.
+
+## This script does not write into `before/` or `after/`
+
+It did, and that is a defect with a history. `verify.sh` runs it on every green
+run, so the archive that exists to record what the old code did was rewritten by
+the new code every time anybody verified anything -- an in-place mutation of a
+write-once record, which has already corrupted this record twice. An archive
+that is rewritten by the check that reads it cannot disagree with the check, and
+a comparison that cannot fail is not a comparison.
+
+So: this run's output goes to `current/` (untracked, beside the archive), and is
+then **compared** against `before/` and `after/`. Nothing under `before/` or
+`after/` is opened for writing except under `--adopt`, which is a deliberate
+human act -- `verify.sh` never passes it.
+
+## The two sides are not the same kind of claim
+
+`before/` is the output of `BASE_REF`'s code, and `BASE_REF` is a commit hash.
+Its content is a function of a frozen input, so it is strictly reproducible and
+a mismatch is **red**.
+
+`after/` is the output of *the working tree on the day this run was archived*.
+The working tree has moved since -- `1050b001` (A13, 2026-07-29) changed the
+sealed audit's line from "N calls" to "N records (N episode)", so today's replay
+disagrees with the archive for a reason that has nothing to do with what the
+archive claims. Making that red would be the same mistake as pinning `BASE_REF`
+to `master`: a gate permanently red about the calendar. The durable claim on
+this side is the **verdict** -- the fixed code exits non-zero where the old code
+exited 0 -- and that is asserted directly. A content difference is reported as a
+note, and the archive stays as first written. `e184942e` had to restore these
+two files by hand after a rerun overwrote them; this is the fix that commit said
+was queued.
+
+`check_redlines.full_tree.txt` is a note on both sides: it counts tracked files,
+and archiving the count adds tracked files, so it disagrees with its archived
+copy by construction. It is produced only under `--full-tree`.
 """
 
 from __future__ import annotations
@@ -35,6 +71,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -301,6 +338,86 @@ def scenario_full_tree(captures: list) -> list[str]:
     return summary
 
 
+#: Where this run's output goes. Untracked (see the .gitignore beside it), so
+#: running the gate never dirties the tree, and readable, so a failed comparison
+#: leaves both sides on disk to diff.
+CURRENT = "current"
+
+#: Compared, but a difference is a note rather than a failure -- the capture
+#: reports a tracked-file count and archiving it changes that count.
+DATED_MEASUREMENTS = ("check_redlines.full_tree.txt",)
+
+#: The side whose content is a function of a frozen commit, and therefore the
+#: only side a difference can be red about. See the module docstring.
+STRICT_SIDE = "before"
+
+
+#: The one line in these captures that counts a live, append-only file.
+#:
+#: `contamination.main()` audits `baseline-arms/ledger.jsonl` and
+#: `probe_log.jsonl`, which other sessions append to. Comparing those counts
+#: literally would make the archive disagree with itself for a reason that is
+#: not about the code -- the archive drifted from 1955 to 1956 while this fix
+#: was being written -- and a comparison that fails for reasons nobody can act
+#: on gets switched off. The counts stay in the file, where a reader sees them;
+#: they are masked only when deciding whether two captures agree.
+_VOLATILE_COUNT = re.compile(r"^(\s*ledger audit:.*)$", re.M)
+_DIGITS = re.compile(r"\d[\d,]*")
+
+
+def _norm(text: str) -> str:
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+
+
+def _comparable(text: str) -> str:
+    return _VOLATILE_COUNT.sub(
+        lambda m: _DIGITS.sub("<N>", m.group(1)), _norm(text))
+
+
+def write_current(captures: list[tuple[str, str]]) -> None:
+    for rel, body in captures:
+        path = os.path.join(HERE, CURRENT, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(body)
+
+
+def compare_with_archive(captures: list[tuple[str, str]]) -> tuple[list, list]:
+    """-> (differences, notes). Reads the archive; never writes it."""
+    differences, notes = [], []
+    for rel, body in captures:
+        side = rel.replace("\\", "/").split("/")[0]
+        soft = (os.path.basename(rel) in DATED_MEASUREMENTS
+                or side != STRICT_SIDE)
+        archived = os.path.join(HERE, rel)
+        if not os.path.exists(archived):
+            (notes if soft else differences).append(
+                (rel.replace("\\", "/"), "no archived copy to compare against"))
+            continue
+        with open(archived, encoding="utf-8") as fh:
+            want = _comparable(fh.read())
+        if _comparable(body) != want:
+            (notes if soft else differences).append(
+                (rel.replace("\\", "/"), "this run's output differs from the archived copy"))
+    return differences, notes
+
+
+def adopt(captures: list[tuple[str, str]]) -> None:
+    """The ONLY path that writes into `before/` or `after/`.
+
+    Reached solely by an explicit `--adopt` on the command line. It exists
+    because an archive nobody can legitimately update is an archive somebody
+    edits by hand, which is worse. `verify.sh` does not pass it, and the verdict
+    assertions below run first, so an archive can only be replaced by a run that
+    still demonstrates what the archive claims.
+    """
+    for rel, body in captures:
+        path = os.path.join(HERE, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(body)
+
+
 def main() -> int:
     captures: list[tuple[str, str]] = []
     lines = []
@@ -329,35 +446,60 @@ def main() -> int:
     verdicts = dict(
         (part.rsplit(":", 1)[0].strip(), part.rsplit(" ", 1)[1]) for part in lines
     )
-    # The point of the archive, asserted rather than left for a reader to notice
-    # -- and asserted BEFORE anything is written. Writing first meant that a run
-    # which no longer demonstrates the claim would overwrite `before/*.txt` with
-    # after-content on its way to reporting the failure: the check destroying the
-    # evidence it exists to protect. Unexpected output goes to `unexpected/`, so
-    # it is still there to read and the archive is still there to compare it to.
+    # This run's output always lands in `current/`, whatever the verdict, so a
+    # failure leaves both sides on disk to diff. `current/` is untracked; the
+    # archive is not written here at all.
+    write_current(captures)
+    here_rel = os.path.relpath(HERE, REPO_ROOT).replace(os.sep, "/")
+    print(f"\nwrote this run's output to {here_rel}/{CURRENT}/")
+
+    # The point of the archive, asserted rather than left for a reader to notice.
     bad = [k for k, v in verdicts.items() if k.endswith("before") and v != "0"]
     if not bad:
         bad = [k for k, v in verdicts.items() if k.endswith("after") and v == "0"]
     if bad:
-        for rel, body in captures:
-            path = os.path.join(HERE, "unexpected", rel)
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(body)
         print(f"\nUNEXPECTED: {bad} -- the archived diff no longer demonstrates what it "
-              f"claims. The archive under {os.path.relpath(HERE, REPO_ROOT)} was NOT "
-              "overwritten; this run's output is in unexpected/ beside it.")
+              f"claims. The archive under {here_rel} was NOT touched; compare it "
+              f"against {CURRENT}/.")
         print(f"If this is the post-merge run, S23_BASE_REF is {BASE_REF} and the fix is "
               "presumably in it; that ref is meant to be the pre-fix commit.")
         return 1
 
-    for rel, body in captures:
-        path = os.path.join(HERE, rel)
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(body)
-    print(f"\nwrote before/ and after/ under {os.path.relpath(HERE, REPO_ROOT)}")
-    print("\nBefore: both checks reported CLEAN on inputs they could not read.")
+    # The comparison the old code could not make, because it was the thing
+    # overwriting the answer.
+    differences, notes = compare_with_archive(captures)
+    for rel, why in notes:
+        print(f"  note: {rel}: {why}. Not red: this side is a dated measurement "
+              f"or the working tree's output on the day it was archived, and the "
+              f"claim it carries is the verdict, which held. The archive was not "
+              f"touched; {CURRENT}/ holds today's.")
+    if "--adopt" in sys.argv:
+        # Checked before the mismatch gate, not after: adopting only when the
+        # archive already matches would be a no-op. The verdict assertions above
+        # have already run, so this can only replace an archive with a run that
+        # still demonstrates what the archive claims.
+        adopt(captures)
+        print(f"\n--adopt: replaced before/ and after/ under {here_rel} "
+              f"({len(differences)} file(s) differed). This is a deliberate act; "
+              "verify.sh never passes it.")
+        return 0
+    if differences:
+        print("\nARCHIVE MISMATCH -- the replay no longer reproduces what is on disk:")
+        for rel, why in differences:
+            print(f"  {rel}: {why}")
+        print(f"\nThe archive under {here_rel} was NOT rewritten. Diff it against "
+              f"{CURRENT}/ and decide: either the replay regressed, or the archive is "
+              "genuinely out of date and a human adopts the new one with "
+              "`replicate.py --adopt`. A check does not get to settle that by "
+              "overwriting the record it is checking -- doing exactly that is how "
+              "this archive was corrupted twice.")
+        return 1
+
+    strict = sum(1 for rel, _ in captures
+                 if rel.replace("\\", "/").split("/")[0] == STRICT_SIDE)
+    print(f"\narchive reproduces: {strict} strict capture(s) match {STRICT_SIDE}/, "
+          f"{len(notes)} note(s), 0 file(s) rewritten")
+    print("Before: both checks reported CLEAN on inputs they could not read.")
     print("After:  both report the failure and exit non-zero.")
     return 0
 
