@@ -21,28 +21,59 @@ once a manual exists. The hypotheses are:
 An action on which every hypothesis agrees has entropy zero and buys nothing;
 `probe_frontier` says so and the arm does not spend an action on it.
 
-**The other end of that sentence, added after the 2026-07-31 legs.** An action
-on which every hypothesis is *wrong* also buys nothing, and the arm had no way
-to say so. Across the four live legs of 2026-07-31 every single resolved probe
-came back `survived: []` -- 28/28 on `20260731T1430Z-...-r3`, 16/16 on
-`20260731T1500Z-...-l1`. The world's answer matched no hypothesis at all: not
-the manual, not any ablation of it, not even `inert` ("nothing happens"). A
-posterior over an empty set is not a posterior, so the *realised* information
-gain of each of those probes was zero bits, while the design report went on
-advertising 0.54--1.0 expected bits.
+**The other end of that sentence, and what it cost.** An action on which every
+hypothesis is *wrong* also buys nothing, and until the 2026-07-31 legs the arm
+had no way to say so. Those four legs designed 56 probes and completed 52, and
+the record is unambiguous about all three ways an action was wasted:
 
-That gap is now measured rather than inferred. `entropy_bits` in the design is
-**disagreement among the hypotheses**; `information_gain_bits` in the result is
-**what the answer actually eliminated**, and `frontier_vacuous` names the case
-where the frontier did not contain the world. The two numbers travel together
-so nobody can read the first as the second again.
+* **The answer was outside the frontier, 47 times in 52.** Every resolved probe
+  on two of the legs came back `survived: []` -- 28/28 on
+  `20260731T1430Z-...-r3`, 16/16 on `20260731T1500Z-...-l1`. The world's answer
+  matched no hypothesis at all: not the manual, not any ablation of it, not
+  even `inert` ("nothing happens"). A posterior over an empty set is not a
+  posterior, so the *realised* information gain of each of those probes was
+  zero bits, while the design report went on advertising 0.54--1.0 expected
+  bits.
+* **The same question was bought twice, 18 times in 56.** A greedy argmax over
+  a frontier that never changes returns the same argmax forever: r3 ran P-25
+  and P-27 as byte-identical designs, and P-26 and P-28 likewise.
+* **The frontier never shrank once.** Not a single monotone drop in hypothesis
+  count across any leg, because the frontier is rebuilt by ablation from the
+  current manual on every turn and a refutation is thrown away the moment it is
+  written down.
+
+The first two are now *measured* rather than inferred, and the measurement is
+what the loop refuses on. `entropy_bits` in the design is **disagreement among
+the hypotheses**; `information_gain_bits` in the result is **what the answer
+actually eliminated**; `frontier_vacuous` names the case where the frontier did
+not contain the world; and `fingerprint` names an experiment by its action and
+by what every hypothesis predicted, so a repeat is recognisable on sight. The
+two bit-counts travel together in every result row so nobody can read the first
+as the second again, and `inner/loop.py` spends no action on a probe whose
+streak, fingerprint or budget says the answer is already in hand.
+
+**The third is what `ProbeEconomy` is for, and it is default off.** Refusing to
+re-ask a question is free; *changing the frontier* is a framework change, so it
+ships behind a switch a round can turn on (`THEORIA_PROBE_ECONOMY=1`) and
+measure against a leg that left it off. Enabled, the economy carries a probe's
+refutations forward within a **generation** -- a generation being the
+hypothesis-id set itself, so theorize, and only theorize, re-opens the
+questions -- and hands `design` the frontier that is actually still standing
+rather than the whole ablation set again. It also refuses a frontier that has
+collapsed to one hypothesis, which only becomes reachable once the frontier can
+shrink at all, and carries a bits floor whose default of 0.0 is a deliberate
+no-op (every one of the 56 measured probes scored 0.5436--1.0000 bits, so no
+floor would have cut one the streak and fingerprint rules do not already cut).
+
+`enabled=False` is the default and reproduces the pre-economy frontier exactly.
 """
 
 import hashlib
 import json
 import math
 import os
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, List, Optional, Sequence, Set, Tuple
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
@@ -71,6 +102,18 @@ def fingerprint(action: Any, predictions: Dict[str, str]) -> str:
     two experiments. The pre-state is *in* the fingerprint implicitly -- every
     prediction is computed from it -- so a genuinely new state gives a new
     fingerprint even on the same action.
+
+    **Feed it the whole ablation set, not a filtered frontier.** That implicit
+    pre-state only survives if the hypothesis set is held fixed: shrink the set
+    and the same action from the same state hashes differently, so an
+    experiment already run reads as a new one. With `ProbeEconomy` carrying
+    refutations forward that is exactly what happens, and replaying the four
+    legs through the merged policy measures the cost -- 9 repeats caught
+    instead of 15, three more actions spent re-asking. `ProbeLog.record_design`
+    therefore takes the identity set separately from the set being scored, and
+    `inner/loop.py` passes the unfiltered predictions here while scoring
+    survivorship on the live frontier. The identity of an experiment must not
+    depend on how much of the theory the arm has already ruled out.
     """
     payload = json.dumps({"action": action,
                           "predictions": dict(sorted(predictions.items()))},
@@ -103,6 +146,228 @@ def information_gain_bits(predictions: Dict[str, str], observed: str
     if survivors == 0:
         return 0.0, True
     return round(math.log2(total / survivors), 6), False
+
+
+@dataclass(frozen=True)
+class ProbeEconomyConfig:
+    """The switch. Every default here is the pre-economy behaviour.
+
+    `enabled=False` makes `ProbeEconomy` a pass-through: `filter_hypotheses`
+    returns its argument and `gate` always allows. A round turns exactly this
+    on by flipping `enabled`, and nothing else in the arm moves.
+
+    **What is deliberately not a knob here.** Two of the four rules the
+    2026-07-31 measurement asked for -- "stop after N answers that landed off
+    the frontier" and "do not buy the same experiment twice" -- are *not*
+    configured from this dataclass, because they are not implemented here.
+    They are unconditional refusals in `inner/loop.py`, counted off the
+    measurement `ProbeLog` already writes into every result row
+    (`frontier_vacuous` / `vacuous_streak`, and `fingerprint` / `repeat_of`).
+    Refusing to re-ask a question the record shows was already asked needs no
+    permission and no A/B leg; changing the frontier the arm reasons over does,
+    which is what this switch is for.
+    """
+
+    #: The master switch. False == pre-economy frontier, hypothesis for
+    #: hypothesis.
+    enabled: bool = False
+
+    #: Carry refutations forward, so the frontier can shrink. Measured need:
+    #: zero monotone drops in 56 probes.
+    carry_refutations: bool = True
+
+    #: Refuse a probe splitting fewer than this many bits. Default 0.0, which
+    #: is a deliberate no-op: every one of the 56 measured probes scored
+    #: 0.5436--1.0000 bits, so no floor would have cut a probe the streak and
+    #: fingerprint rules do not already cut. The knob exists because the next
+    #: game may differ; it is set where the measurement leaves it, not where it
+    #: would look busy.
+    min_bits: float = 0.0
+
+    @classmethod
+    def from_env(cls, env: Optional[Dict[str, str]] = None
+                 ) -> "ProbeEconomyConfig":
+        """`THEORIA_PROBE_ECONOMY=1` turns it on; absent or 0 leaves it off.
+
+        Anything unrecognised is off. A misspelt switch must not silently
+        enable a framework change that a round is trying to measure.
+        """
+        env = os.environ if env is None else env
+        raw = str(env.get("THEORIA_PROBE_ECONOMY", "")).strip().lower()
+        on = raw in ("1", "true", "yes", "on")
+        if not on:
+            return cls()
+        kwargs: Dict[str, Any] = {"enabled": True}
+        for name, cast in (("PROBE_MIN_BITS", float),):
+            value = env.get("THEORIA_" + name)
+            if value not in (None, ""):
+                try:
+                    kwargs[name.lower().replace("probe_", "", 1)] = cast(value)
+                except ValueError:
+                    pass
+        return cls(**kwargs)
+
+
+@dataclass
+class ProbeEconomy:
+    """Frontier bookkeeping across probes, and the refusal that follows from it.
+
+    Stateful on purpose. The defect the measurement found is precisely that the
+    old path was stateless: every turn rebuilt the same frontier from the same
+    manual, re-derived the same argmax, and spent an action re-answering a
+    question already answered. `inner/loop.py` refuses the re-answering; this
+    class is the other half -- it makes the frontier itself move, so the next
+    argmax is a genuinely different question rather than the same one refused.
+    """
+
+    config: ProbeEconomyConfig = field(default_factory=ProbeEconomyConfig)
+
+    #: Hypothesis ids a completed probe has already refuted, this generation.
+    retired: Set[str] = field(default_factory=set)
+    #: Probes fired since this generation opened. Reported, not capped -- the
+    #: cap is `loop.MAX_PROBES_BETWEEN_THEORIZE`, and one cap is enough.
+    fired_this_generation: int = 0
+    generation: int = 0
+    _generation_key: Optional[frozenset] = None
+    #: Every allow/refuse, with its reason. The audit trail is the evidence.
+    decisions: List[Dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self.config.enabled)
+
+    # -- generations -------------------------------------------------------
+    def note_frontier(self, hypothesis_ids: Sequence[str]) -> bool:
+        """Register the frontier the manual currently implies.
+
+        A change in the hypothesis-id set means theorize rewrote the manual, so
+        the retirements are void: they were refutations of an older theory, and
+        the questions are new questions. Returns True if this opened a new
+        generation.
+
+        Bookkeeping runs whether or not the economy is enabled, so a leg that
+        left the change off still records how many generations its manual went
+        through and how many probes each one bought. Only `filter_hypotheses`
+        and `gate` are gated on `enabled`; counting is never a behaviour
+        change.
+        """
+        key = frozenset(hypothesis_ids)
+        if key == self._generation_key:
+            return False
+        self._generation_key = key
+        self.generation += 1
+        self.retired = set()
+        self.fired_this_generation = 0
+        return True
+
+    # -- the frontier itself ----------------------------------------------
+    def filter_hypotheses(self, hypotheses: Sequence[Any]) -> List[Any]:
+        """Drop what earlier probes in this generation already refuted.
+
+        `manual` is never dropped. It is the thing under test, and a frontier
+        without it cannot report `manual_survived` -- which is the signal that
+        drives theorize. When the manual is refuted the answer is a new manual,
+        not a frontier that has quietly stopped mentioning it.
+        """
+        if not self.enabled or not self.config.carry_refutations:
+            return list(hypotheses)
+        kept = [h for h in hypotheses
+                if h.id == "manual" or h.id not in self.retired]
+        return kept or list(hypotheses)
+
+    # -- the gate ----------------------------------------------------------
+    def gate(self, design_report: Dict[str, Any], *, n_frontier: int
+             ) -> Tuple[bool, str]:
+        """Allow this probe, or refuse it with a reason fit for `probes.jsonl`.
+
+        Only the two refusals that belong to the *frontier* live here. The
+        vacuous-streak stop and the repeat stop are `inner/loop.py`'s, computed
+        off the record `ProbeLog` writes, and they apply whether or not this
+        switch is on -- see `ProbeEconomyConfig`.
+
+        Disabled: always allow, so the caller's own `entropy > 0` check plus
+        the loop's unconditional refusals are the whole floor.
+        """
+        if not self.enabled:
+            return True, ""
+        cfg = self.config
+        best = (design_report or {}).get("best") or {}
+        bits = float(best.get("entropy_bits") or 0.0)
+
+        # Only reachable once refutations are carried: the ablation frontier
+        # is rebuilt whole every turn, so it can never collapse on its own.
+        if n_frontier <= 1:
+            return False, ("the frontier has collapsed to %d hypothesis: there "
+                           "is nothing left to split" % n_frontier)
+
+        if cfg.min_bits > 0.0 and bits < cfg.min_bits:
+            return False, ("splits only %.4f bits, floor is %.4f"
+                           % (bits, cfg.min_bits))
+
+        return True, ""
+
+    # -- results feed back -------------------------------------------------
+    def record_fired(self) -> None:
+        """One more action spent against the current frontier."""
+        self.fired_this_generation += 1
+
+    def observe(self, result: Dict[str, Any]) -> Dict[str, Any]:
+        """Fold a probe result back into the frontier. Returns what it learnt.
+
+        Vacuity is *read*, not recomputed. `ProbeLog.record_result` already
+        decided it -- `information_gain_bits` returns 0.0 bits and
+        `frontier_vacuous=True` for an empty posterior, and that is the number
+        the result row carries and the loop counts its streak on. Recomputing
+        `not survived` here would be a second opinion on one fact, and the two
+        could drift. The fallback exists for rows written before that field did
+        (the 2026-07-31 legs on disk), where an empty `survived` is the same
+        statement in the older vocabulary.
+
+        Like `note_frontier`, this runs whether or not the change is enabled.
+        `filter_hypotheses` is the only place `retired` can alter behaviour, and
+        it *is* gated -- so a leg that left the economy off still records in
+        `probe_economy.json` exactly which hypotheses the change would have
+        dropped, which is the counterfactual an A/B round wants to read.
+        """
+        survived = list(result.get("survived") or [])
+        refuted = list(result.get("refuted") or [])
+        off_frontier = (bool(result["frontier_vacuous"])
+                        if "frontier_vacuous" in result else not survived)
+        if not off_frontier and self.config.carry_refutations:
+            # Only a probe that landed ON the frontier teaches anything about
+            # which hypothesis is wrong. When nothing survived, the partition
+            # itself was wrong, and "everyone is refuted" is a statement about
+            # the frontier, not about its members.
+            self.retired.update(i for i in refuted if i != "manual")
+        return {"off_frontier": off_frontier,
+                "n_survived": len(survived),
+                "n_refuted": len(refuted),
+                "retired_total": len(self.retired)}
+
+    def note_decision(self, **fields: Any) -> None:
+        self.decisions.append(dict(fields))
+
+    def as_json(self) -> Dict[str, Any]:
+        allowed = sum(1 for d in self.decisions if d.get("allowed"))
+        refused = len(self.decisions) - allowed
+        reasons: Dict[str, int] = {}
+        for d in self.decisions:
+            if not d.get("allowed"):
+                key = str(d.get("reason", ""))[:60]
+                reasons[key] = reasons.get(key, 0) + 1
+        return {
+            "enabled": self.enabled,
+            "config": {
+                "carry_refutations": self.config.carry_refutations,
+                "min_bits": self.config.min_bits,
+            },
+            "generations": self.generation,
+            "fired_this_generation": self.fired_this_generation,
+            "probes_allowed": allowed,
+            "probes_refused": refused,
+            "refusal_reasons": dict(sorted(reasons.items())),
+            "retired_hypotheses": sorted(self.retired),
+        }
 
 
 def build_hypotheses(namespace: Dict[str, Any]):
@@ -167,11 +432,36 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
            costs: Optional[Dict[Any, float]] = None,
            out_path: Optional[str] = None,
            transitions: Optional[Sequence[int]] = None,
-           coverage: Optional[str] = None) -> Dict[str, Any]:
-    """Rank the available actions by bits-per-action. Zero model calls."""
+           coverage: Optional[str] = None,
+           economy: Optional[ProbeEconomy] = None) -> Dict[str, Any]:
+    """Rank the available actions by bits-per-action. Zero model calls.
+
+    With `economy` disabled or absent this is the original function: the full
+    ablation frontier goes to the engine and the report says nothing new. With
+    it enabled, hypotheses this generation's earlier probes already refuted are
+    dropped before the engine sees them, so the frontier the report describes is
+    the frontier that is actually still standing.
+    """
     from engines import probe_frontier                # noqa: PLC0415
 
-    hypotheses = build_hypotheses(namespace)
+    full = build_hypotheses(namespace)
+    hypotheses = list(full)
+    economy_report: Optional[Dict[str, Any]] = None
+    if economy is not None:
+        # Generation bookkeeping runs either way; only the filtering and the
+        # extra report block are gated, so a disabled economy leaves the report
+        # byte-identical to one built without an economy at all.
+        economy.note_frontier([h.id for h in full])
+        if economy.enabled:
+            hypotheses = economy.filter_hypotheses(full)
+            economy_report = {
+                "generation": economy.generation,
+                "n_before": len(full),
+                "n_after": len(hypotheses),
+                "carried_refutations": sorted(economy.retired),
+                "fired_this_generation": economy.fired_this_generation,
+            }
+
     best, ranked = probe_frontier.run(
         hypotheses, state, list(actions),
         costs=costs or {a: 1.0 for a in actions},
@@ -179,7 +469,7 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
         coverage=coverage or "0/0",
         out_path=out_path)
 
-    return {
+    report = {
         "n_hypotheses": len(hypotheses),
         "hypotheses": [{"id": h.id, "description": h.description}
                        for h in hypotheses],
@@ -192,6 +482,9 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
                     "action %s splits %d hypotheses into %d classes for %.1f bits"
                     % (best.action, len(hypotheses), best.n_classes, best.entropy)),
     }
+    if economy_report is not None:
+        report["economy"] = economy_report
+    return report
 
 
 class ProbeLog:
@@ -219,15 +512,37 @@ class ProbeLog:
 
     def record_design(self, *, action: Any, design_report: Dict[str, Any],
                       predictions: Dict[str, str], step_idx: int,
-                      rationale: str = "") -> str:
+                      rationale: str = "",
+                      identity: Optional[Dict[str, str]] = None) -> str:
+        """`predictions` is what gets scored; `identity` is what names it.
+
+        They differ only when `ProbeEconomy` has retired part of the frontier:
+        then `predictions` is the live frontier (so `survived` and
+        `information_gain_bits` are about hypotheses still standing) while
+        `identity` is the full ablation set (so the fingerprint still means
+        "this action, from this state, under this manual"). Absent, identity is
+        the predictions -- which is the pre-economy call, unchanged.
+
+        When they differ the row grows a `fingerprint_over` field naming the ids
+        the hash was taken over, because a row that cannot explain its own
+        fingerprint is not evidence. When they agree the field is omitted, so
+        every row this arm has already written keeps its shape.
+        """
         self.n += 1
         probe_id = "P-%02d" % self.n
-        mark = fingerprint(action, predictions)
+        named_by = predictions if identity is None else identity
+        mark = fingerprint(action, named_by)
         row = {"probe_id": probe_id, "phase": "design", "step_idx": step_idx,
                "action": action, "rationale": rationale,
                "fingerprint": mark,
                "repeat_of": self.asked.get(mark),
                "predictions": predictions, "design": design_report}
+        if set(named_by) != set(predictions):
+            # The row must be able to explain its own fingerprint. When the two
+            # sets agree the hash is recomputable from `predictions` and this
+            # field would be noise, so it is written only when they do not --
+            # which also keeps every row the arm has ever written unchanged.
+            row["fingerprint_over"] = sorted(named_by)
         self.asked.setdefault(mark, probe_id)
         self.open[probe_id] = row
         self._write(row)

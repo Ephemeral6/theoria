@@ -1,0 +1,214 @@
+{
+  "prompt_id": "A-probe-economics",
+  "branch": "ep/probe-econ",
+  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "utc": "2026-08-01T00:00:00Z",
+  "territory": "theoria-arm",
+  "lane": "framework-change",
+  "classification": {
+    "kind": "framework-change-preparation",
+    "archive_material": true,
+    "why": "candidate change A for the next Phase-3 round: measured offline, implemented behind a default-off switch, not yet run live"
+  },
+  "what": "Probe economics. Measured information gain per probe across the four live legs of 2026-07-31: 56 probes designed, 52 completed, and the hypothesis frontier never shrank once -- zero monotone drops in any leg. 47 of the 52 completed probes landed OFF the frontier (survived == []), meaning the observation matched no hypothesis at all, so the 0.5436-1.0000 bits priced at design time were never realisable. 18 of the 56 designs repeated an experiment already run byte for byte. The existing gate (entropy_bits > 0) said no zero times in four legs. Implemented ProbeEconomy: carry refutations forward so the frontier can shrink, suppress repeat experiments, retire the probe class after 3 consecutive off-frontier results, cap firings per frontier generation. Default off.",
+  "measurement": {
+    "probes_designed": 56,
+    "probes_completed": 52,
+    "frontier_monotone_drops": 0,
+    "off_frontier_results": 47,
+    "off_frontier_rate_of_completed": 0.9038,
+    "repeat_experiments": 18,
+    "repeat_rate_of_designed": 0.3214,
+    "predicted_bits_min": 0.5435644432,
+    "predicted_bits_median": 0.8812908992,
+    "predicted_bits_max": 1.0,
+    "realised_frontier_shrink_bits": 0.0,
+    "source_legs": [
+      "theoria-arm/runs/20260731T1240Z-A3-level2-carried",
+      "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2",
+      "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3",
+      "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1"
+    ]
+  },
+  "switch": {
+    "default": "off -- ProbeEconomyConfig().enabled is False and reproduces 2026-07-31 behaviour",
+    "env": "THEORIA_PROBE_ECONOMY=1 (positive whitelist; anything unrecognised stays off)",
+    "explicit": "TheoriaArm(..., probe_economy=ProbeEconomyConfig(enabled=True)) -- beats the environment",
+    "overrides": [
+      "THEORIA_PROBE_OFF_FRONTIER_STOP",
+      "THEORIA_PROBE_MAX_PER_GENERATION",
+      "THEORIA_PROBE_MIN_BITS"
+    ],
+    "artefact": "every leg writes probe_economy.json whether or not the change is on"
+  },
+  "mock_campaign": {
+    "budget_actions": 40,
+    "off": {
+      "probes_fired": 40,
+      "probes_refused": 0,
+      "off_frontier_probes": 40,
+      "theorize_rounds": 40,
+      "surprises_total": 40,
+      "surprises_by_kind": {
+        "replay_mismatch": 0,
+        "render_mismatch": 0,
+        "proof_failure": 0,
+        "probe_refutation": 40,
+        "execution_mismatch": 0,
+        "search_timeout": 0,
+        "heuristic_miss": 0
+      }
+    },
+    "on": {
+      "probes_fired": 5,
+      "probes_refused": 6,
+      "explorations_after_no_split": 29,
+      "off_frontier_probes": 3,
+      "theorize_rounds": 8,
+      "surprises_total": 8,
+      "surprises_by_kind": {
+        "replay_mismatch": 5,
+        "render_mismatch": 0,
+        "proof_failure": 0,
+        "probe_refutation": 3,
+        "execution_mismatch": 0,
+        "search_timeout": 0,
+        "heuristic_miss": 0
+      }
+    }
+  },
+  "gate_replay_on_the_real_legs": {
+    "note": "a counterfactual for the gate, not for the run: a real leg would have diverged after the first refusal",
+    "off_fired_refused": [
+      56,
+      0
+    ],
+    "on_fired_refused": [
+      22,
+      34
+    ]
+  },
+  "changed": [
+    "theoria-arm/inner/probe.py -- ProbeEconomyConfig, ProbeEconomy, design(economy=...)",
+    "theoria-arm/inner/loop.py -- constructor arg, the gate before _send, the result fed back, probe_economy.json",
+    "theoria-arm/tests/test_probe_economy.py -- new, 29 tests",
+    "theoria-arm/runs/20260801T0000Z-A-probe-economics/ -- this directory"
+  ],
+  "tests": {
+    "new": "tests/test_probe_economy.py -- 29 passed",
+    "negative_controls": "every refusal rule has a test that watches it say no (repeat suppression, off-frontier stop, per-generation cap, collapsed frontier, bits floor) and a paired test that watches it stay silent with the change off",
+    "suite": "python -m pytest -q -- see RESULTS below",
+    "verify": "python verify.py",
+    "rule_bite_pin": "test_every_rule_that_is_on_is_a_rule_that_bites pins which rule refuses on the real-leg replay: off_frontier_stop 19, repeat 12, cap 3, min_bits 0 -- so a rule that is on but dead goes red"
+  },
+  "known_failure_not_caused_by_this_change": {
+    "test": "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive",
+    "detail": "claude-opus-5: recorded rate $0.0030474/s is below the worst rate in the archive, $0.0042222/s",
+    "proof": "reproduced with this branch's tracked changes stashed; the test reads runs/*/desk_log.json and harness/spend.py, neither of which this change touches. It is archive drift from today's live legs and belongs to whoever owns the spend constants."
+  },
+  "determinism": "measure_legs.py and mock_campaign.py were each run twice; all six generated artefacts hashed identically both times",
+  "sealed_pile_contact": "none -- no sealed game id appears in any file in this directory or in any changed source file",
+  "spend": "none -- no ARC action, no model call, no network, no spend_gate reservation",
+  "did_not_do": [
+    "did not implement change B or C -- the round's discipline is one change at a time",
+    "did not edit engine-rig/engines/probe_frontier -- another territory; the frontier is filtered on the theoria-arm side before the engine sees it",
+    "did not run anything live",
+    "did not push, merge, or touch master",
+    "did not set a non-zero min_bits default -- no probe in the measurement would have been cut by one, and a knob defaulted to look busy is not a measurement"
+  ],
+  "files": [
+    {
+      "path": "COMPARISON.json",
+      "sha256": "0d6a802a95ab9ca6c8d0658f889536fc70dab3749bf61db78131badd37d45408",
+      "bytes": 2408
+    },
+    {
+      "path": "MEASUREMENT.json",
+      "sha256": "0144b7edf89a4ce9d9333828412b28b0250e84888c2f910fcb69e7c0fcccd410",
+      "bytes": 3267
+    },
+    {
+      "path": "README.md",
+      "sha256": "2f73e0228ad10def2e45b3be29cb86c899fd9c7758e1797cc50a2a9cdb06d0a1",
+      "bytes": 14121
+    },
+    {
+      "path": "campaign_off.json",
+      "sha256": "aa1a81400c266581f40cd20ba0f5c7f68bfc726902ec62b9eef99e879476434e",
+      "bytes": 896
+    },
+    {
+      "path": "campaign_on.json",
+      "sha256": "28456d45647258ed43a1bd082592e7812c37bb9568aeae338a33d371cca7525b",
+      "bytes": 1030
+    },
+    {
+      "path": "leg_off/probes.jsonl",
+      "sha256": "cbf0afe5e8e826451a9198bd8f64f6918f200fcd48f4fdabfb4226eb8c6fce97",
+      "bytes": 103950
+    },
+    {
+      "path": "leg_on/probes.jsonl",
+      "sha256": "bdbf6cdc09c3ca6f4db32ae7dbfddd2fa7e6bf03c91a0448821985054bc301e4",
+      "bytes": 65983
+    },
+    {
+      "path": "measure_legs.py",
+      "sha256": "3c5bb1139a3ee3f4d2d3d37cbf22fb92ccd892ea42182d7cba7472b199a03927",
+      "bytes": 7005
+    },
+    {
+      "path": "mock_campaign.py",
+      "sha256": "e44d1d8849767bec950c7c9bb02fe7dd9b5ce1f29639f78fbc225e3f82b9d721",
+      "bytes": 13388
+    }
+  ],
+  "superseded_by_merge": {
+    "merged_into_master": "2026-08-01, as a --no-ff merge of ep/probe-econ. p12/arm-diag attacked the same defect from the measurement side and landed on master first, so the merge kept one implementation of each overlapping mechanism. Every field above is left as this branch wrote it; this block says which of them the merged code no longer honours. See README.md section 6.",
+    "rules_that_moved": {
+      "carry_refutations": "unchanged on ProbeEconomy -- the half only this branch had",
+      "min_bits": "unchanged on ProbeEconomy, still a 0.0 no-op by default",
+      "suppress_repeats": "removed as a knob; inner/loop.py refuses repeats unconditionally on probe.fingerprint(action, predictions), not on the (action, partition) signature this branch used",
+      "off_frontier_stop": "removed as a knob; inner/loop.py refuses on ProbeLog.vacuous_streak >= MAX_VACUOUS_PROBES_IN_A_ROW, counted off information_gain_bits",
+      "max_per_generation": "removed as a knob; loop.MAX_PROBES_BETWEEN_THEORIZE is the one cap"
+    },
+    "switch_overrides_after_merge": [
+      "THEORIA_PROBE_MIN_BITS"
+    ],
+    "gate_replay_after_merge": {
+      "off_fired_refused": [
+        56,
+        0
+      ],
+      "on_fired_refused": [
+        22,
+        34
+      ],
+      "note": "the totals above survive the merge; the attribution moves -- vacuous streak 19, repeat 15, cap 0, min_bits 0, where this branch measured off_frontier_stop 19, repeat 12, cap 3"
+    },
+    "tests_after_merge": {
+      "file": "tests/test_probe_economy.py -- 28 tests (this branch shipped 29; 11 removed, 10 added)",
+      "rule_bite_pin": "test_every_rule_that_is_on_is_a_rule_that_bites is gone; test_which_rule_refuses_is_pinned_and_does_not_move_with_the_switch replaces it and additionally asserts the two loop rules count identically with the economy on and off",
+      "renamed_or_replaced": {
+        "test_the_new_policy_refuses_most_of_the_fifty_six": "-> test_the_merged_policy_refuses_thirty_four_of_the_fifty_six (same claim, exact number)",
+        "test_every_rule_that_is_on_is_a_rule_that_bites": "-> test_which_rule_refuses_is_pinned_and_does_not_move_with_the_switch (same pin, plus the assertion that the two loop rules count identically with the economy on and off)",
+        "test_the_same_action_against_a_different_frontier_is_a_different_experiment": "-> test_the_fingerprint_does_not_move_when_the_frontier_shrinks. The conclusion is deliberately inverted: this branch argued a shrunken frontier makes a new experiment; the merged answer is that under determinism the same action from the same state cannot buy a second answer, so identity is the unfiltered prediction set",
+        "test_a_retired_survivor_cannot_reset_the_off_frontier_streak": "-> test_observe_reads_the_measured_vacuity_rather_than_recounting_it, which pins the same hazard at its source rather than at its consequence"
+      },
+      "redundant_at_the_surviving_implementation": {
+        "test_repeat_suppression_says_no": "tests/test_probe_economics.py::test_the_log_recognises_r3_p27_as_a_repeat_of_p25",
+        "test_the_off_frontier_streak_retires_the_probe_class": "tests/test_probe_economics.py::test_r3_would_have_stopped_probing_after_three_not_twenty_eight",
+        "test_an_on_frontier_result_resets_the_streak": "tests/test_probe_economics.py::test_vacuous_streak_counts_up_and_is_broken_by_a_survivor",
+        "test_the_per_generation_cap_says_no": "tests/test_probe_guard_in_the_loop.py::test_the_probe_run_between_two_adjudications_is_capped"
+      },
+      "knob_no_longer_exists": [
+        "test_repeat_suppression_can_be_turned_off_on_its_own",
+        "test_off_frontier_stop_zero_disables_that_rule_alone",
+        "test_theorize_reopens_probing_by_changing_the_frontier -- its generation half survives as test_a_new_generation_forgets_the_retirements"
+      ],
+      "added_by_the_merge": "tests/test_probe_economy.py gains 10, and tests/test_probe_guard_in_the_loop.py gains 8 that drive both halves through TheoriaArm._probe_or_explore together -- the only place their interaction is visible. Suite: 490 before the merge, 526 after."
+    },
+    "defect_the_merge_found": "carry_refutations shrinks the frontier, and the fingerprint is computed from what every hypothesis predicted -- so the same action from the same state hashed differently once the theory narrowed, and repeats stopped being recognised (15 caught -> 9 on the four-leg replay, three more actions spent). inner/loop.py now fingerprints the unfiltered prediction set and scores survivorship on the live frontier, via ProbeLog.record_design(identity=...).",
+    "reproducibility": "measure_legs.py still reproduces section 1 against any checkout. mock_campaign.py does NOT run against the merged inner/probe.py (it calls ProbeEconomy.record_fired(design); the merged signature takes no argument) and is left byte-identical on purpose: it is the artefact that produced campaign_off.json, campaign_on.json and COMPARISON.json under this branch's four-rule API. Reproduce section 3 at this manifest's base_commit with ep/probe-econ applied."
+  }
+}

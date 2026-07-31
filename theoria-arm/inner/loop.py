@@ -197,7 +197,8 @@ class TheoriaArm:
                  seed_books: Optional[str] = None,
                  carry_source_game: Optional[str] = None,
                  tags: Optional[List[str]] = None,
-                 prompt_id: str = "P-8"):
+                 prompt_id: str = "P-8",
+                 probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None):
         self.game_id = game_id
         self.offline = offline
         self.run = run
@@ -226,6 +227,13 @@ class TheoriaArm:
         self.levels = LevelLog()
         self.register = Register()
         self.probes = probe_beat.ProbeLog(os.path.join(self.dir, "probes.jsonl"))
+        #: Framework change A, default off. An explicit config beats the
+        #: environment, so a test can pin the behaviour it means to test and a
+        #: round can turn the change on for a whole campaign with one variable.
+        #: With neither, `from_env` returns `enabled=False` -- 2026-07-31.
+        self.probe_economy = probe_beat.ProbeEconomy(
+            config=(probe_economy if probe_economy is not None
+                    else probe_beat.ProbeEconomyConfig.from_env()))
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
         self.tags = list(tags or ["theoria", "p8", "first-contact"])
         self.prompt_id = prompt_id
@@ -1062,7 +1070,16 @@ class TheoriaArm:
 
         design = None
         chosen: Optional[int] = None
+        #: The live frontier's predictions: what `survived` is measured over.
         predictions: Dict[str, str] = {}
+        #: The whole ablation set's predictions: what names the experiment.
+        #: Equal to `predictions` unless the economy has retired something.
+        identity: Dict[str, str] = {}
+        #: Set by whichever rule says no; `None` means the probe is bought.
+        refusal: Optional[str] = None
+        #: A probe was designed and cleared the entropy floor, so there is a
+        #: real allow/refuse decision to write into the economy's audit.
+        designed = False
 
         if namespace is not None:
             # This level's trajectory, not the run's: `_roll_forward` replays
@@ -1086,32 +1103,71 @@ class TheoriaArm:
                     out_path=self.candidates_path,
                     transitions=list(range(self.levels.start,
                                            len(self.store.steps))),
-                    coverage="%d/%d" % (level_steps, level_steps))
+                    coverage="%d/%d" % (level_steps, level_steps),
+                    economy=self.probe_economy)
             except Exception as exc:                   # noqa: BLE001
                 design = {"error": "%s: %s" % (type(exc).__name__, exc)}
             best = (design or {}).get("best")
             if best and best.get("entropy_bits", 0) > 0:
-                chosen = int(best["action"][1])
-                for hypothesis in probe_beat.build_hypotheses(namespace):
-                    try:
-                        predictions[hypothesis.id] = hypothesis.predict(
-                            state, ("key", chosen))
-                    except Exception:                  # noqa: BLE001
-                        predictions[hypothesis.id] = "error"
+                designed = True
+                # -- the frontier's own refusals, from `ProbeEconomy` --------
+                #
+                # These sit *after* the entropy floor and *before* the action
+                # is sent, which is the only place a refusal can save anything:
+                # the design is free, the action is not. They are the two that
+                # depend on the frontier having moved (collapse, and a bits
+                # floor a round may set), so they are the two that ride the
+                # `enabled` switch. Disabled, `gate` always allows.
+                allowed, why_not = self.probe_economy.gate(
+                    design, n_frontier=int(design.get("n_hypotheses") or 0))
+                if allowed:
+                    chosen = int(best["action"][1])
+                    # Predict over the whole ablation set once, then keep the
+                    # live frontier's half.
+                    #
+                    # `predictions` must be over the frontier the design
+                    # actually partitioned, not the unfiltered one: otherwise a
+                    # hypothesis this generation already retired could turn up
+                    # in `survived`, and an off-frontier result would look like
+                    # an on-frontier one -- which resets the vacuous streak
+                    # below.
+                    #
+                    # `identity` must be over the whole set, for the mirror-
+                    # image reason: the fingerprint's job is to say "this
+                    # action, from this state", and it does that by hashing
+                    # what every hypothesis predicted. Hash a shrinking
+                    # frontier and the same experiment gets a new name every
+                    # time the theory narrows. Disabled, the two are the same
+                    # dict and this is the original line.
+                    hypotheses = probe_beat.build_hypotheses(namespace)
+                    for hypothesis in hypotheses:
+                        try:
+                            identity[hypothesis.id] = hypothesis.predict(
+                                state, ("key", chosen))
+                        except Exception:              # noqa: BLE001
+                            identity[hypothesis.id] = "error"
+                    predictions = {
+                        h.id: identity[h.id]
+                        for h in self.probe_economy.filter_hypotheses(hypotheses)
+                        if h.id in identity}
+                else:
+                    refusal = why_not
 
         # -- the three reasons a designed probe is not worth its action ------
         #
-        # Each of these was paid for in the record on 2026-07-31. All three end
-        # the same way -- record the refusal as a finding, then explore -- and
-        # the exploration is the point: it takes the LEAST-TRIED legal action,
+        # Each of these was paid for in the record on 2026-07-31, and each is
+        # read straight off what `ProbeLog` writes down -- the vacuous streak
+        # and the fingerprint are measurements, not policy, so refusing on them
+        # needs no switch and applies to every leg. All three end the same way
+        # -- record the refusal as a finding, then explore -- and the
+        # exploration is the point: it takes the LEAST-TRIED legal action,
         # which is precisely what breaks the standing pattern. `...-l1` spent
         # its last fourteen actions alternating ACTION4/ACTION3 and revisiting
         # states it had already been in, because the frontier kept nominating
         # the same two actions and nothing in the loop noticed.
-        refusal: Optional[str] = None
         if chosen is not None:
             streak = self.probes.vacuous_streak
-            repeat_of = self.probes.already_asked(chosen, predictions)
+            repeat_of = self.probes.already_asked(chosen, identity)
             if streak >= MAX_VACUOUS_PROBES_IN_A_ROW:
                 refusal = (
                     "%d probes in a row came back with an empty posterior: "
@@ -1138,6 +1194,16 @@ class TheoriaArm:
             if refusal is not None:
                 chosen = None
 
+        if designed:
+            # One audit row per designed probe, carrying whichever half of the
+            # policy decided it. Written after both halves have spoken so the
+            # trail never says "allowed" about an action that was not sent.
+            self.probe_economy.note_decision(
+                allowed=refusal is None, reason=refusal or "",
+                step_idx=len(self.store.steps),
+                action=(design.get("best") or {}).get("action"),
+                bits=(design.get("best") or {}).get("entropy_bits"))
+
         if chosen is None:
             # Nothing splits anything, or nothing worth an action does. Say so,
             # then explore honestly.
@@ -1160,12 +1226,17 @@ class TheoriaArm:
         self._probes_since_theorize += 1
         probe_id = self.probes.record_design(
             action=chosen, design_report=design, predictions=predictions,
-            step_idx=len(self.store.steps),
+            step_idx=len(self.store.steps), identity=identity,
             rationale="highest bits per action among %s" % legal)
+        self.probe_economy.record_fired()
         status, envelope, frames = self._send(chosen, probe=True, note=probe_id)
         observed = grid_hash(frames[-1]) if frames else "none"
         result = self.probes.record_result(probe_id, observed=observed,
                                            status=status, n_frames=len(frames))
+        # The half the old path was missing: the answer goes back into the
+        # frontier. Without this the next turn rebuilds the same hypotheses,
+        # re-derives the same argmax, and spends an action asking again.
+        learnt = self.probe_economy.observe(result)
         record["probe"] = {"kind": "probe", "probe_id": probe_id,
                            "action": chosen,
                            "manual_survived": result["manual_survived"],
@@ -1173,6 +1244,8 @@ class TheoriaArm:
                                result["information_gain_bits"],
                            "frontier_vacuous": result["frontier_vacuous"],
                            "refuted": result["refuted"]}
+        if self.probe_economy.enabled:
+            record["probe"]["economy"] = learnt
         if not result["manual_survived"]:
             # What the desk is given about a refutation, and what it is not.
             #
@@ -1396,6 +1469,12 @@ class TheoriaArm:
         _dump(os.path.join(out, "desk_log.json"), self.desk.log)
         _dump(os.path.join(out, "desk_failures.json"), self.desk_failures)
         _dump(os.path.join(out, "engines_online.json"), self._engines_online())
+        # Written whether or not the change is on. A leg that ran with the old
+        # behaviour still says so on disk, which is what makes an A/B round
+        # readable six weeks later without consulting the dispatch prompt.
+        _dump(os.path.join(out, "probe_economy.json"),
+              dict(self.probe_economy.as_json(),
+                   decisions=self.probe_economy.decisions))
         if self.carried:
             _dump(os.path.join(out, "transfer.json"), self.transfer_summary())
         self._write_run_state()

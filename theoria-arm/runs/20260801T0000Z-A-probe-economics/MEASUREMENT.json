@@ -1,0 +1,138 @@
+{
+  "legs": [
+    {
+      "distinct_experiments": 1,
+      "frontier_monotone_drops": 0,
+      "frontier_sizes": [
+        6
+      ],
+      "leg": "20260731T1240Z-A3-level2-carried",
+      "off_frontier_results": 0,
+      "probes_completed": 0,
+      "probes_designed": 1,
+      "probes_unrunnable": 0,
+      "repeat_experiments": 0,
+      "surprises_by_kind": {
+        "replay_mismatch": 1
+      }
+    },
+    {
+      "distinct_experiments": 5,
+      "frontier_monotone_drops": 0,
+      "frontier_sizes": [
+        9,
+        9,
+        9,
+        9,
+        22,
+        22,
+        22,
+        22,
+        22
+      ],
+      "leg": "20260731T1310Z-A3-level2-carried-r2",
+      "off_frontier_results": 8,
+      "probes_completed": 8,
+      "probes_designed": 9,
+      "probes_unrunnable": 0,
+      "repeat_experiments": 4,
+      "surprises_by_kind": {
+        "probe_refutation": 8,
+        "replay_mismatch": 4
+      }
+    },
+    {
+      "distinct_experiments": 24,
+      "frontier_monotone_drops": 0,
+      "frontier_sizes": [
+        16,
+        16,
+        16,
+        16,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        22,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24,
+        24
+      ],
+      "leg": "20260731T1430Z-A3-level2-carried-r3",
+      "off_frontier_results": 28,
+      "probes_completed": 28,
+      "probes_designed": 29,
+      "probes_unrunnable": 0,
+      "repeat_experiments": 5,
+      "surprises_by_kind": {
+        "probe_refutation": 28,
+        "replay_mismatch": 1
+      }
+    },
+    {
+      "distinct_experiments": 8,
+      "frontier_monotone_drops": 0,
+      "frontier_sizes": [
+        9,
+        9,
+        9,
+        9,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "leg": "20260731T1500Z-A3-sk48-carried-l1",
+      "off_frontier_results": 11,
+      "probes_completed": 16,
+      "probes_designed": 17,
+      "probes_unrunnable": 0,
+      "repeat_experiments": 9,
+      "surprises_by_kind": {
+        "probe_refutation": 11,
+        "replay_mismatch": 9
+      }
+    }
+  ],
+  "source": "theoria-arm/runs/<leg>/probes.jsonl + surprises.jsonl",
+  "totals": {
+    "frontier_monotone_drops": 0,
+    "off_frontier_rate_of_completed": 0.9038,
+    "off_frontier_results": 47,
+    "predicted_bits_max": 1.0,
+    "predicted_bits_median": 0.8812908992,
+    "predicted_bits_min": 0.5435644432,
+    "probes_completed": 52,
+    "probes_designed": 56,
+    "realised_frontier_shrink_bits": 0.0,
+    "repeat_experiments": 18,
+    "repeat_rate_of_designed": 0.3214
+  },
+  "verdict": "56 probes designed across four legs and the frontier never shrank once -- 0 monotone drops. 47 of 52 completed probes landed off the frontier entirely (no hypothesis predicted the observation), and 18 of 56 designs repeated an experiment already run. The 0.54-1.00 bits priced at design time were never realised, because the frontier is rebuilt by ablation from the current manual every turn and a refutation is discarded the moment it is written down."
+}
