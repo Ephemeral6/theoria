@@ -1899,3 +1899,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`python monitor/scan.py` exit 0，逐字 `[2026-07-31 23:54:12] monitor/index.html written — Phase 1: 8/16 green`；`monitor` 套件 525 passed / 2 xfailed，exit 0，176s（<183s 闸门）。零 API、$0.00、零封存堆接触、无凭据值。
 阻塞：none（本件是裁决与记录，不修代码；`proxy/`、`theoria-arm/`、`verify-lab/` 全程只读）。
 下一步：Phase 1 剩余 8 个 partial 里可动的最短三条：p1-replay-audit（对 S31 起的真在线账本抽检 2 局）、p1-scorer（冻结打分器本体接入 → P-9）、模型代理到 (a) 的六条清单（第 1 条为所有者动作，见 S32 段）。
+
+## [battery] 2026-07-31T17:31Z B18-live-arm-economy
+状态：活臂 6 条 leg 作为独立臂标签（`theoria` / `theoria-arm-live`，不并入 a0 标签）全族重算；新增经济族两轴伴生产物 `artifacts_live/live_economy.json` 与 `verify.py` 第 8 级；`artifacts_live/live_arm_readings.json` 开工时已陈旧（sk48 harvest 后落盘）已重算。冻结基线与七份冻结读数一字节未动，`freeze.check()` 为空。
+测试：`cd battery && python -m pytest -q` → 430 passed（开工基线为 2 failed）；`python -m battery.verify` → green（8/8，开工基线为 RED）。
+阻塞：none（本领地）。跨领地通报一件：`theoria-arm` 的 `curves.json` 在 r2/r3 上各少算一次计费调用与最后一个回合（−1.630485 / −1.678809 USD），`bill_shape.json` 与 proxy 账本分文不差；已投 `monitor/inbox/20260731T1731Z-battery-to-theoria-arm-curves-shortfall.md`，battery 只报告不拦。
+下一步：C2 的三件证据里只有逐回合成本曲线三条腿都有，前载指数 E2 与收敛点 E3 全臂只有 r3 一条读数（0.2557 / 1.0，而 0.250 正是平摊基线，1.0 是最坏值），且四条 carried leg 全部 `spend_gate_tripped`、通关 0 层——E3 量到的是预算闸门不是理论收敛；要得出 C2 结论需要能跑到「被理解切断」且 ≥ 8 决策回合的 leg。

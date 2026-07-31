@@ -46,7 +46,7 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 9.556852,
           "20260731T1430Z-A3-level2-carried-r3": 13.439862,
-          "20260731T1500Z-A3-sk48-carried-l1": 9.175606
+          "20260731T1500Z-A3-sk48-carried-l1": 12.251719
         }
       },
       "E2": {
@@ -80,7 +80,7 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.367445724,
           "20260731T1430Z-A3-level2-carried-r3": 2.5884e-05,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.004424855
+          "20260731T1500Z-A3-sk48-carried-l1": 0.006481176
         }
       },
       "E5": {
@@ -92,7 +92,7 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.682632286,
           "20260731T1430Z-A3-level2-carried-r3": 0.395290059,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.509755889
+          "20260731T1500Z-A3-sk48-carried-l1": 0.556896318
         }
       },
       "E6": {
@@ -118,22 +118,22 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.180047219,
           "20260731T1430Z-A3-level2-carried-r3": 0.001128362,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.026564791
+          "20260731T1500Z-A3-sk48-carried-l1": 0.017845169
         }
       }
     },
     "epistemic": {
       "K1": {
         "by_status": {
-          "insufficient-data": 1,
           "not-applicable": 2,
-          "ok": 3
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.2,
           "20260731T1310Z-A3-level2-carried-r2": 0.692307692,
-          "20260731T1430Z-A3-level2-carried-r3": 1.0
+          "20260731T1430Z-A3-level2-carried-r3": 1.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.411764706
         }
       },
       "K10": {
@@ -146,7 +146,7 @@
           "20260731T1240Z-A3-level2-carried": 6.0,
           "20260731T1310Z-A3-level2-carried-r2": 7.0,
           "20260731T1430Z-A3-level2-carried-r3": 12.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 20.0
+          "20260731T1500Z-A3-sk48-carried-l1": 29.0
         }
       },
       "K11": {
@@ -159,7 +159,7 @@
           "20260731T1240Z-A3-level2-carried": 3.0,
           "20260731T1310Z-A3-level2-carried-r2": 11.0,
           "20260731T1430Z-A3-level2-carried-r3": 17.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 14.0
+          "20260731T1500Z-A3-sk48-carried-l1": 19.0
         }
       },
       "K12": {
@@ -207,7 +207,7 @@
           "20260731T1240Z-A3-level2-carried": 25.0,
           "20260731T1310Z-A3-level2-carried-r2": 28.0,
           "20260731T1430Z-A3-level2-carried-r3": 37.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 40.0
+          "20260731T1500Z-A3-sk48-carried-l1": 41.0
         }
       },
       "K4": {
@@ -246,7 +246,7 @@
           "20260731T1240Z-A3-level2-carried": 24.0,
           "20260731T1310Z-A3-level2-carried-r2": 19.25,
           "20260731T1430Z-A3-level2-carried-r3": 21.75,
-          "20260731T1500Z-A3-sk48-carried-l1": 12.5
+          "20260731T1500Z-A3-sk48-carried-l1": 12.833333333
         }
       },
       "K7": {
@@ -272,7 +272,7 @@
           "20260731T1240Z-A3-level2-carried": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.888888889,
           "20260731T1430Z-A3-level2-carried-r3": 0.965517241,
-          "20260731T1500Z-A3-sk48-carried-l1": 1.0
+          "20260731T1500Z-A3-sk48-carried-l1": 0.941176471
         }
       },
       "K9": {
@@ -285,7 +285,7 @@
           "20260731T1240Z-A3-level2-carried": 24.0,
           "20260731T1310Z-A3-level2-carried-r2": 34.0,
           "20260731T1430Z-A3-level2-carried-r3": 40.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 51.0
+          "20260731T1500Z-A3-sk48-carried-l1": 65.0
         }
       }
     },
@@ -301,7 +301,7 @@
           "20260731T1240Z-A3-level2-carried": 0.166666667,
           "20260731T1310Z-A3-level2-carried-r2": 0.214285714,
           "20260731T1430Z-A3-level2-carried-r3": 0.088235294,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.222222222
+          "20260731T1500Z-A3-sk48-carried-l1": 0.227272727
         }
       },
       "X2": {
@@ -315,7 +315,7 @@
           "20260731T1240Z-A3-level2-carried": 1.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.928571429,
           "20260731T1430Z-A3-level2-carried-r3": 0.970588235,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.833333333
+          "20260731T1500Z-A3-sk48-carried-l1": 0.818181818
         }
       },
       "X3": {
@@ -328,7 +328,7 @@
           "20260729T004020Z-leg01": 0.0,
           "20260731T1310Z-A3-level2-carried-r2": 0.333333333,
           "20260731T1430Z-A3-level2-carried-r3": 0.125,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.5
+          "20260731T1500Z-A3-sk48-carried-l1": 0.4
         }
       },
       "X4": {
@@ -342,7 +342,7 @@
           "20260731T1240Z-A3-level2-carried": 0.166666667,
           "20260731T1310Z-A3-level2-carried-r2": 0.071428571,
           "20260731T1430Z-A3-level2-carried-r3": 0.029411765,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.055555556
+          "20260731T1500Z-A3-sk48-carried-l1": 0.045454545
         }
       },
       "X5": {
@@ -356,7 +356,7 @@
           "20260731T1240Z-A3-level2-carried": 5.0,
           "20260731T1310Z-A3-level2-carried-r2": 11.0,
           "20260731T1430Z-A3-level2-carried-r3": 31.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 14.0
+          "20260731T1500Z-A3-sk48-carried-l1": 17.0
         }
       },
       "X6": {
@@ -428,7 +428,7 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 2.8,
           "20260731T1430Z-A3-level2-carried-r3": 4.25,
-          "20260731T1500Z-A3-sk48-carried-l1": 2.571428571
+          "20260731T1500Z-A3-sk48-carried-l1": 2.444444444
         }
       },
       "P2": {
@@ -440,7 +440,7 @@
         "measured": {
           "20260731T1310Z-A3-level2-carried-r2": 0.5,
           "20260731T1430Z-A3-level2-carried-r3": 0.0,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.416666667
+          "20260731T1500Z-A3-sk48-carried-l1": 0.35
         }
       },
       "P3": {
@@ -475,7 +475,7 @@
           "20260731T1240Z-A3-level2-carried": 0.9,
           "20260731T1310Z-A3-level2-carried-r2": 0.858585859,
           "20260731T1430Z-A3-level2-carried-r3": 0.854700855,
-          "20260731T1500Z-A3-sk48-carried-l1": 0.866666667
+          "20260731T1500Z-A3-sk48-carried-l1": 0.875706215
         }
       }
     }
@@ -530,11 +530,14 @@
       "turns.json": "sha256:74018a8760a20606358437dc87c197e278396aecf4c73bdf1ea31bc5cb27ebce"
     },
     "20260731T1500Z-A3-sk48-carried-l1": {
-      "books/playbook.dsl": "sha256:257514da96311feae20955ef03e20d8c320a1de1cdcf43d16afb22b0604031d1",
-      "books/theory.dsl": "sha256:3760181f8a67c2c6dcb61e5d275ff06abc10c37f917b98082754ad7c4ff6bb4e",
-      "ledger.jsonl": "sha256:748f57abfadfab2d8a2d3728059031378f06488d671cdf73a2a30a1d85a68b8e",
-      "probes.jsonl": "sha256:c417448b458b138a99fa574235eddc4aa7ded8990b7872fcb0ce3def3b6b4fbb",
-      "surprises.jsonl": "sha256:59598728eac172ebb4947d458fa5f0c19ee6f68ca53c19d32177cf4370bba233"
+      "books/playbook.dsl": "sha256:746e1406a1bf7917b6d43c60c7a934e9f6c95dfd9284af79bb7ac4f74720228f",
+      "books/theory.dsl": "sha256:7e51ce0aeb056fa8ed2aa249dbb465ed55810b34dc122fd7c2a8e206143f6d49",
+      "certify.json": "sha256:d8d0859e1a571e8c490d97a33f22072ec6e91feb12fa9717631302cd25c31bc1",
+      "curves.json": "sha256:b3cc75bad0f5f4a393cba53f3a1c6cb0b1ae3086c954191d4f233edb4eca3c73",
+      "ledger.jsonl": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e",
+      "probes.jsonl": "sha256:0b0654cd8895ba0d0d0a73b8c9a5db8bd08fa8adbfcbe870567e8e47960bbed7",
+      "surprises.jsonl": "sha256:097210d25c551274e3ab8ecad3867b4e9a4e4adca8527b5246a7579475b43bb4",
+      "turns.json": "sha256:b2bc67473ad09f6f40e9acebfa8a5f89b1665b73cd93ecf04bad2b725fa4f5b9"
     }
   },
   "measured_by_family": {
@@ -577,7 +580,7 @@
     ]
   },
   "n_games": 2,
-  "n_measured_cells": 115,
+  "n_measured_cells": 116,
   "n_runs": 6,
   "piles": [
     "dev"
@@ -1941,16 +1944,16 @@
     "20260731T1500Z-A3-sk48-carried-l1": {
       "arm": "theoria",
       "campaign": "theoria-arm:A3-campaign-devpile",
-      "failed_steps": 117,
+      "failed_steps": 155,
       "game_id": "sk48-d8078629",
       "intent": "solve",
       "metrics": {
         "E1": {
           "status": "ok",
           "support": {
-            "calls": 7
+            "calls": 9
           },
-          "value": 9.175606
+          "value": 12.251719
         },
         "E2": {
           "reason": "fewer than 8 turns; a short run is trivially front-loaded",
@@ -1965,26 +1968,26 @@
         "E4": {
           "status": "ok",
           "support": {
-            "r2_linear": 0.730757,
-            "r2_quadratic": 0.735182,
-            "turns": 7
+            "r2_linear": 0.840407,
+            "r2_quadratic": 0.846888,
+            "turns": 9
           },
-          "value": 0.004424855
+          "value": 0.006481176
         },
         "E5": {
           "status": "ok",
           "support": {
-            "actions": 18,
-            "total_usd": 9.175606
+            "actions": 22,
+            "total_usd": 12.251719
           },
-          "value": 0.509755889
+          "value": 0.556896318
         },
         "E6": {
           "status": "ok",
           "support": {
-            "http_calls": 135,
+            "http_calls": 177,
             "on_failed_steps": 1.0,
-            "steps": 135
+            "steps": 177
           },
           "value": 1.0
         },
@@ -1992,25 +1995,28 @@
           "status": "ok",
           "support": {
             "first_chars": 77616,
-            "last_chars": 86711,
-            "r2_linear": 0.691547,
-            "r2_quadratic": 0.718111,
-            "turns": 7
+            "last_chars": 89820,
+            "r2_linear": 0.830136,
+            "r2_quadratic": 0.847982,
+            "turns": 9
           },
-          "value": 0.026564791
+          "value": 0.017845169
         },
         "K1": {
-          "reason": "no replay score recorded for this run",
-          "status": "insufficient-data",
-          "value": null
+          "status": "ok",
+          "support": {
+            "agree": 7,
+            "pairs": 17
+          },
+          "value": 0.411764706
         },
         "K10": {
           "status": "ok",
-          "value": 20.0
+          "value": 29.0
         },
         "K11": {
           "status": "ok",
-          "value": 14.0
+          "value": 19.0
         },
         "K12": {
           "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
@@ -2027,7 +2033,7 @@
           "support": {
             "best": 22,
             "concepts": 6,
-            "mean": 12.5,
+            "mean": 12.833333,
             "worst_concept": "Rail"
           },
           "value": 8.0
@@ -2039,14 +2045,14 @@
         },
         "K3": {
           "status": "ok",
-          "value": 40.0
+          "value": 41.0
         },
         "K4": {
           "status": "ok",
           "support": {
             "annotated": 8,
             "min_witnesses": 1,
-            "unannotated": 40
+            "unannotated": 41
           },
           "value": 1.0
         },
@@ -2061,7 +2067,7 @@
             "concepts": 6,
             "worst": 8
           },
-          "value": 12.5
+          "value": 12.833333333
         },
         "K7": {
           "status": "ok",
@@ -2073,14 +2079,14 @@
         "K8": {
           "status": "ok",
           "support": {
-            "designed": 12,
-            "executable": 12
+            "designed": 17,
+            "executable": 16
           },
-          "value": 1.0
+          "value": 0.941176471
         },
         "K9": {
           "status": "ok",
-          "value": 51.0
+          "value": 65.0
         },
         "M1": {
           "reason": "no ground truth is available for this run",
@@ -2115,25 +2121,25 @@
         "P1": {
           "status": "ok",
           "support": {
-            "actions": 18,
-            "calls": 7
+            "actions": 22,
+            "calls": 9
           },
-          "value": 2.571428571
+          "value": 2.444444444
         },
         "P2": {
           "status": "ok",
           "support": {
             "basis": "proportional",
-            "first_rate": 2.333333,
-            "second_rate": 2.75
+            "first_rate": 2.25,
+            "second_rate": 2.6
           },
-          "value": 0.416666667
+          "value": 0.35
         },
         "P3": {
           "status": "ok",
           "support": {
-            "undos": 4,
-            "windows": 16
+            "undos": 5,
+            "windows": 20
           },
           "value": 0.25
         },
@@ -2145,88 +2151,88 @@
         "P5": {
           "status": "ok",
           "support": {
-            "failed": 117,
-            "steps": 135
+            "failed": 155,
+            "steps": 177
           },
-          "value": 0.866666667
+          "value": 0.875706215
         },
         "X1": {
           "status": "ok",
           "support": {
-            "distinct": 14,
-            "observed": 18
+            "distinct": 17,
+            "observed": 22
           },
-          "value": 0.222222222
+          "value": 0.227272727
         },
         "X2": {
           "status": "ok",
           "support": {
-            "novel": 15,
-            "transitions": 18
+            "novel": 18,
+            "transitions": 22
           },
-          "value": 0.833333333
+          "value": 0.818181818
         },
         "X3": {
           "status": "ok",
           "support": {
             "first_quarter": 1.0,
-            "last_quarter": 0.5,
-            "transitions": 18
+            "last_quarter": 0.6,
+            "transitions": 22
           },
-          "value": 0.5
+          "value": 0.4
         },
         "X4": {
           "status": "ok",
           "support": {
             "longest_streak": 1,
-            "observed": 18
+            "observed": 22
           },
-          "value": 0.055555556
+          "value": 0.045454545
         },
         "X5": {
           "status": "ok",
-          "value": 14.0
+          "value": 17.0
         },
         "X6": {
           "status": "ok",
           "support": {
             "changed": 0,
-            "windows": 117
+            "windows": 155
           },
           "value": 0.0
         }
       },
       "model": "claude-opus-5",
-      "model_calls": 7,
+      "model_calls": 9,
       "notes": {
         "books": "books/theory.dsl + books/playbook.dsl",
         "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1",
         "carried_books": true,
-        "certify_records": null,
+        "certify_records": 9,
         "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
-        "env_steps": 135,
-        "ledger_complete": false,
-        "ledger_cost_usd": 9.175606,
+        "env_steps": 177,
+        "ledger_complete": true,
+        "ledger_cost_usd": 12.251719,
         "ledger_run_id": "r-b85a42dd9a894853",
-        "levels_completed": null,
-        "model_calls": 7,
-        "outcome": null,
+        "levels_completed": 0,
+        "model_calls": 9,
+        "outcome": "spend_gate_tripped",
         "slug": "20260731T1500Z-A3-sk48-carried-l1",
         "surprises": {
-          "probe_refutation": 8,
-          "replay_mismatch": 7
+          "probe_refutation": 11,
+          "replay_mismatch": 9
         },
         "turn_join": {
-          "join_confidence": null,
-          "joined_calls": 0,
-          "ledger_calls": 7,
-          "source": "unjoined: no turn_series.json and no curves.json"
+          "join_confidence": "ambiguous-reconstructed",
+          "joined_calls": 9,
+          "ledger_calls": 9,
+          "source": "curves.json"
         }
       },
       "pile": "dev",
       "source": "theoria-arm-live",
-      "steps": 135,
-      "turns": 7
+      "steps": 177,
+      "turns": 4
     }
   },
   "runs_root": "theoria-arm/runs",
