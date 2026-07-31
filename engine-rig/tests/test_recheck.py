@@ -605,13 +605,22 @@ def test_the_generator_is_byte_stable():
 def test_recheck_never_imports_the_engines():
     """The independence claim, enforced rather than asserted.
 
-    `interop` is on the forbidden list as of E6.  The pagoda kind is rechecked
+    `interop` went on the forbidden list with E6.  The pagoda kind is rechecked
     against certificates `interop/certificate_export.py` wrote, and that module
-    imports `engines.lp_potential.potential` -- so importing anything from
-    `interop` would reach the engine one hop further out and the independence
-    would be gone at exactly the point it is being claimed.  `anchors.py`
-    *reads* files under `interop/certificates/`, which is the same thing it does
-    to `cold-start-a2/` and is not an import.
+    imports `engines.lp_potential.potential` -- so importing it would reach the
+    engine one hop further out and the independence would be gone at exactly
+    the point it is being claimed.  `anchors.py` *reads* files under
+    `interop/certificates/`, which is the same thing it does to
+    `cold-start-a2/` and is not an import.
+
+    One exemption, from E8: `from interop import peg1d` in `verify_all.py`.
+    peg1d is the anchor the peg gradient is checked against -- the same
+    geometry transcribed by someone else, for lp_potential, before the gradient
+    existed -- and an anchor has to come from outside the package.  The
+    exemption is exactly as wide as the two facts it rests on, both asserted
+    below rather than trusted: `interop/__init__.py` stays empty (so importing
+    peg1d cannot drag in `certificate_export` as a package side effect), and
+    peg1d itself imports nothing outside the standard library.
 
     The scan is also asserted to have covered the modules the pagoda work
     touched: a filter that silently stopped matching would otherwise leave this
@@ -620,6 +629,7 @@ def test_recheck_never_imports_the_engines():
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     package = os.path.join(here, "recheck")
     forbidden = ("engines", "tools.", "interop")
+    allowed = {"from interop import peg1d"}
     offenders = []
     scanned = []
     for name in sorted(os.listdir(package)):
@@ -630,12 +640,31 @@ def test_recheck_never_imports_the_engines():
             text = handle.read()
         for line in text.splitlines():
             stripped = line.strip()
+            if stripped in allowed:
+                continue
             if stripped.startswith(("import ", "from ")) and any(
                     token in stripped for token in forbidden):
                 offenders.append("%s: %s" % (name, stripped))
     assert not offenders, offenders
     assert {"anchors.py", "build_cases.py", "certificate.py", "forgeries.py",
             "verify.py", "verify_all.py"} <= set(scanned), scanned
+
+    # The two facts the peg1d exemption rests on.
+    interop = os.path.join(here, "interop")
+    with open(os.path.join(interop, "__init__.py"), "r", encoding="utf-8") as handle:
+        assert handle.read().strip() == "", (
+            "interop/__init__.py is no longer empty: importing peg1d now runs "
+            "package code, and the peg1d exemption above no longer holds")
+    with open(os.path.join(interop, "peg1d.py"), "r", encoding="utf-8") as handle:
+        peg1d_imports = [line.strip() for line in handle.read().splitlines()
+                        if line.strip().startswith(("import ", "from "))]
+    stdlib_only = ("import collections", "from collections import",
+                   "import typing", "from typing import")
+    bad = [line for line in peg1d_imports
+           if not line.startswith(stdlib_only)]
+    assert not bad, (
+        "interop/peg1d.py grew imports beyond the standard library; the "
+        "peg1d exemption above no longer holds: %s" % bad)
 
 
 def test_the_whole_verify_script_is_green():
