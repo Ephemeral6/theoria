@@ -1,0 +1,17 @@
+{
+  "_note": "taken from the main checkout on the 2026-07-31 census machine. proxy/var/ is gitignored (proxy/.gitignore:3), so this file does not exist in this worktree or in a fresh clone -- census.json therefore reports model_proxy_fixture.present=false and this snapshot is the record of what was there. The tracked, reproducible form of the same evidence is proxy/tests/test_e2e.py.",
+  "arms": [
+    "mock_arm"
+  ],
+  "gitignored": true,
+  "model_calls": 32,
+  "models": [
+    "mock-model-1"
+  ],
+  "present": true,
+  "records_total": 113,
+  "status_counts": {
+    "200": 32
+  },
+  "succeeded": 32
+}
