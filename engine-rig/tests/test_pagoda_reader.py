@@ -38,10 +38,27 @@ REPO = os.path.dirname(RIG)
 CERT_DIR = os.path.join(RIG, "interop", "certificates")
 READER = os.path.join(RIG, "interop", "pagoda_reader.py")
 
+# The certificate directory is shared with other engines' certificates
+# (e8 added ic3_* documents). This reader speaks one schema; committed
+# documents in other schemas are covered by the refusal test below.
 COMMITTED = sorted(
     os.path.join(CERT_DIR, name)
-    for name in os.listdir(CERT_DIR) if name.endswith(".json")
+    for name in os.listdir(CERT_DIR)
+    if name.endswith(".json") and os.path.basename(name).startswith("pagoda_")
 )
+
+FOREIGN_SCHEMA = sorted(
+    os.path.join(CERT_DIR, name)
+    for name in os.listdir(CERT_DIR)
+    if name.endswith(".json") and not os.path.basename(name).startswith("pagoda_")
+)
+
+
+def test_a_foreign_schema_certificate_is_refused_not_misread():
+    for path in FOREIGN_SCHEMA:
+        problems = pagoda_reader.check(pagoda_reader.load(path))
+        assert problems, os.path.basename(path)
+        assert any("schema is" in p for p in problems), problems
 
 
 @pytest.fixture(scope="module")
