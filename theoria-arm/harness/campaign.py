@@ -65,6 +65,8 @@ records nothing. Only what is on disk exists.
 
 import json
 import os
+import subprocess
+import sys
 import time
 from typing import Any, Dict, List, Optional
 
@@ -112,6 +114,20 @@ LEG_COST_CEILING_USD = (LEG_USD_CAP
 #: Legs in a row that may make no progress before the campaign gives up.
 ZERO_PROGRESS_LIMIT = 3
 
+#: The executable half of `freeze/STATS_RULES.md` §9 -- 开跑前置条件 ·
+#: 未实现不得开跑. `freeze/launch_gate.py` decides; this module only obeys.
+#: Invoked as a subprocess rather than imported because `freeze/` is another
+#: territory: a subprocess keeps the coupling at the documented CLI contract
+#: (`--json`, exit 0/1/2) instead of at `freeze`'s internal function names, and
+#: it is the exact command the item names.
+LAUNCH_GATE = os.path.join(REPO, "freeze", "launch_gate.py")
+
+#: How long the gate may take. Its own per-blocker checks are capped at 300s
+#: each by `freeze/launch_gate.py:TIMEOUT`, so this is deliberately generous;
+#: a timeout here is a refusal, not a pass, so erring long costs nothing but
+#: waiting.
+LAUNCH_GATE_TIMEOUT = 1800
+
 #: The development pile, and nothing else, ever. `arc-recon/data/piles.json` is
 #: the authority; this list is checked against it at startup rather than
 #: trusted, because a typo here would be a sealed-pile contact and that is an
@@ -141,6 +157,172 @@ class GameStopped(CampaignStopped):
     """
 
 
+def _piles() -> Dict[str, Any]:
+    """`arc-recon/data/piles.json`, read fresh.
+
+    One reader for both guards below, so "is this sealed?" can only ever have
+    one answer in this module. Deliberately not cached: the cut is small, the
+    read is once per campaign, and a cache is a place for a stale answer to
+    live.
+    """
+    path = os.path.join(REPO, "arc-recon", "data", "piles.json")
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def sealed_among(game_ids) -> List[str]:
+    """Which of these ids the cut calls sealed, in the order given.
+
+    Asked of `piles.json`, never of a list copied into this file. `DEV_PILE`
+    exists as a convenience and a typo in it is a bug; a typo in a *sealed*
+    list would be an incident, so no sealed list is written down here at all.
+    """
+    sealed = set(_piles()["sealed_pile"])
+    return [g for g in game_ids if g in sealed]
+
+
+def assert_launch_cleared(game_ids, *, gate_cmd=None) -> Optional[Dict[str, Any]]:
+    """`freeze/STATS_RULES.md` §9's 开跑前置条件, executed rather than recited.
+
+    Returns the gate's verdict document when a launch is permitted, and raises
+    `CampaignStopped` when it is not. Returns `None` -- without invoking the
+    gate at all -- when nothing in `game_ids` is sealed.
+
+    ## Why this call exists here
+
+    `freeze/launch_gate.py` was written, self-tested 12/12, and read by nobody
+    who could stop anything: `freeze/verify.sh` reports its verdict as a NOTE,
+    and `verify.sh` is not a path that spends. So §9's 未实现不得开跑 was three
+    rows of prose with no executor -- the same failure the gate itself was
+    built to end, one level up. This is the wire.
+
+    ## The gate guards the sealed pile only
+
+    The development pile's four games are the A3 campaign that is running now,
+    and §9 is about the *sealed confirmation*, not about development. So the
+    gate is not merely ignored for a dev-pile roster -- it is never invoked,
+    which is the difference between "the campaign passed the gate" and "the
+    gate was not this campaign's business". Judged by `piles.json` (via
+    `sealed_among`), because a copied roster is the one way this decision could
+    be made wrong by a typo.
+
+    ## Fail closed, in every direction
+
+    Exit 1 (blockers outstanding) and exit 2 (the gate could not evaluate
+    itself) both refuse, and so does an exit 0 whose JSON does not actually say
+    `may_launch`, an unparseable document, a missing `freeze/launch_gate.py`,
+    and a timeout. `launch_gate.py`'s own docstring makes the rule -- "1 and 2
+    are both no ... never so a caller can treat 2 as a pass" -- and a caller
+    that only tested exit 1 would satisfy the letter of it while treating every
+    other way of not-saying-yes as a yes.
+
+    ## Ordering, and why the gate runs before `assert_dev_pile`
+
+    `assert_dev_pile` refuses every sealed id outright, so if it ran first the
+    gate below would be unreachable and therefore untested -- a wire that
+    cannot fire is the thing this item exists to stop. Running the gate first
+    loses nothing, because the refusal it raises *names the sealed games that
+    triggered it*: both facts reach the reader in one message. And if the gate
+    ever goes clear, `assert_dev_pile` still refuses -- this module is the
+    development-pile campaign and a sealed roster is not its business either
+    way. Two independent refusals for the same input is the intended shape.
+
+    `gate_cmd` is a test seam, in the same spirit as `Campaign(spend_gate=...)`
+    and `harness/run.py --pool`: the real `launch_gate.py --json` has no flags
+    for pointing at a scratch registry, so the only way to observe this wire
+    saying *yes* is to hand it a command that drives the real
+    `launch_gate.gate()` against synthetic inputs. Nothing in normal operation
+    passes it, and it is a keyword argument rather than an environment
+    variable on purpose -- an env var that flips a money gate is a bypass that
+    any parent process could set.
+    """
+    sealed = sealed_among(game_ids)
+    if not sealed:
+        return None
+
+    cmd = list(gate_cmd) if gate_cmd else [sys.executable, LAUNCH_GATE, "--json"]
+    detail: Dict[str, Any] = {"game_ids": sealed, "cmd": cmd}
+    try:
+        # `encoding=` explicitly, never bare `text=True`. The gate reconfigures
+        # its own stdout to UTF-8 (`launch_gate.py:83`) precisely because §9 is
+        # Chinese prose carrying ⟨…⟩ placeholders -- and `text=True` decodes
+        # with the *locale* codec, which on a CJK-locale Windows box is GBK.
+        # That raised UnicodeDecodeError inside subprocess's reader thread and
+        # handed this function an empty stdout: a gate whose refusal was
+        # unreadable, for the same reason the gate itself had to be fixed. It
+        # would still have refused (unparseable JSON fails closed), but it
+        # would have refused with the wrong reason on every sealed launch.
+        proc = subprocess.run(cmd, cwd=REPO, capture_output=True,
+                              encoding="utf-8", errors="replace",
+                              timeout=LAUNCH_GATE_TIMEOUT)
+    except Exception as exc:                            # noqa: BLE001
+        raise CampaignStopped(
+            _refusal(sealed, "freeze/launch_gate.py could not be run (%s: %s), "
+                             "so no launch blocker can be shown cleared"
+                             % (type(exc).__name__, exc)),
+            dict(detail, gate_error="%s: %s" % (type(exc).__name__, exc)))
+
+    detail["exit_code"] = proc.returncode
+    try:
+        doc = json.loads(proc.stdout)
+    except ValueError:
+        doc = None
+    if not isinstance(doc, dict):
+        # Includes valid JSON that is not an object at all -- `null`, a list, a
+        # bare `0`. `json.loads` accepts every one of those, and each would
+        # then reach `doc.get` as an AttributeError rather than as a refusal.
+        raise CampaignStopped(
+            _refusal(sealed, "freeze/launch_gate.py exited %s and did not emit "
+                             "a readable JSON object; a gate whose verdict "
+                             "cannot be read has not said yes"
+                             % proc.returncode),
+            dict(detail, stdout=(proc.stdout or "")[-2000:],
+                 stderr=(proc.stderr or "")[-2000:]))
+
+    detail["verdict"] = doc.get("verdict")
+    outstanding = [b for b in (doc.get("blockers") or [])
+                   if not b.get("cleared")]
+    detail["outstanding"] = [{"row": b.get("row"), "subject": b.get("subject"),
+                              "detail": b.get("detail")}
+                             for b in outstanding]
+
+    if proc.returncode == 0 and doc.get("may_launch") is True:
+        return doc
+
+    if proc.returncode == 2 or doc.get("verdict") == "error":
+        raise CampaignStopped(
+            _refusal(sealed, "freeze/launch_gate.py could not evaluate itself "
+                             "(exit %s): %s. A gate that cannot grade itself "
+                             "is not a pass"
+                             % (proc.returncode, doc.get("error"))),
+            dict(detail, gate_error=doc.get("error")))
+
+    if not outstanding:
+        # Exit non-zero, or exit 0 without `may_launch: true`, and yet no row
+        # is marked outstanding. Whatever that is, it is not clearance, and
+        # inventing a reason for it would be worse than saying so.
+        raise CampaignStopped(
+            _refusal(sealed, "freeze/launch_gate.py exited %s with "
+                             "may_launch=%r and named no outstanding row -- "
+                             "the gate and its exit code disagree, and "
+                             "disagreement is not clearance"
+                             % (proc.returncode, doc.get("may_launch"))),
+            detail)
+
+    lines = ", ".join("§%s" % (b.get("row") or "?") for b in outstanding)
+    raise CampaignStopped(
+        _refusal(sealed, "freeze/STATS_RULES.md §9 has %d launch blocker(s) "
+                         "outstanding: %s. 未实现不得开跑."
+                         % (len(outstanding), lines)),
+        detail)
+
+
+def _refusal(sealed: List[str], because: str) -> str:
+    """One shape for every launch refusal: what was asked, then why not."""
+    return ("launch refused for sealed-pile game(s) %s -- %s"
+            % (", ".join(sealed), because))
+
+
 def assert_dev_pile(game_ids) -> None:
     """Refuse to play anything the cut did not put in the development pile.
 
@@ -148,9 +330,7 @@ def assert_dev_pile(game_ids) -> None:
     this file could be edited by the same hand that edited the caller, and the
     sealed pile's guarantee is worth more than one round trip to disk.
     """
-    path = os.path.join(REPO, "arc-recon", "data", "piles.json")
-    with open(path, encoding="utf-8") as fh:
-        piles = json.load(fh)
+    piles = _piles()
     allowed = set(piles["dev_pile"])
     sealed = set(piles["sealed_pile"])
     for game_id in game_ids:
@@ -241,6 +421,12 @@ class Campaign:
         # `harness/run.py --pool` was added to prevent. A campaign is the one
         # caller that most needs a dry run and was the one that could not have
         # one.
+        # Two guards, in this order, both of them hard refusals before any
+        # money moves. `assert_launch_cleared` is a no-op for a development
+        # roster and is the §9 gate for a sealed one; `assert_dev_pile` is the
+        # pile cut itself and refuses a sealed roster regardless. See
+        # `assert_launch_cleared` for why the gate is first.
+        assert_launch_cleared(games)
         assert_dev_pile(games)
         self.prompt_id = prompt_id
         self.games = list(games)
@@ -436,11 +622,32 @@ class Campaign:
         # the reduction over it fails, and the failure is a fact about the
         # archive step rather than about the leg.
         series_error = None
+        curves_error = None
+        leg_dir = os.path.join(ARM, "runs", slug)
         try:
             from armtools.archive import write_turn_series    # noqa: PLC0415
-            write_turn_series(os.path.join(ARM, "runs", slug))
+            series = write_turn_series(leg_dir)
         except Exception as exc:                       # noqa: BLE001
             series_error = "%s: %s" % (type(exc).__name__, exc)
+            series = None
+
+        # The same reduction, cut at the level boundaries -- C3's claim is
+        # level-to-level, so the figure needs the curves segmented rather than
+        # averaged across a boundary. `write_curves` reduces the series it was
+        # just handed; it does not re-read the ledger to recompute anything,
+        # and it raises rather than writing a curve that fails to account for
+        # every environment command.
+        #
+        # Non-fatal for the same reason `write_turn_series` is: a leg that
+        # played and was paid for is worth recording even when a reduction
+        # over it fails. `CurveGap` in particular is a fact about the join
+        # this leg produced, and it is recorded on the leg where a reader will
+        # meet it rather than thrown away.
+        try:
+            from armtools.curves import write_curves          # noqa: PLC0415
+            write_curves(leg_dir, doc=series)
+        except Exception as exc:                       # noqa: BLE001
+            curves_error = "%s: %s" % (type(exc).__name__, exc)
 
         usd, accounting = _leg_cost(summary)
         leg = {
@@ -453,14 +660,16 @@ class Campaign:
             "usd": usd,
             "cost_accounting": accounting,
             "turn_series_error": series_error,
+            "curves_error": curves_error,
             "levels": summary.get("levels"),
             "surprises": summary.get("surprises"),
             "theorize_rounds": summary.get("theorize_rounds"),
             "outcome": summary.get("outcome"),
             "stopped_because": summary.get("stopped_because"),
             "actions_ok": (summary.get("budget") or {}).get("actions_ok"),
-            "run_dir": os.path.join(ARM, "runs", slug),
-            "books_dir": os.path.join(ARM, "runs", slug, "books"),
+            "run_dir": leg_dir,
+            "books_dir": os.path.join(leg_dir, "books"),
+            "curves_path": os.path.join(leg_dir, "curves.json"),
             "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
         self.spent_usd += usd

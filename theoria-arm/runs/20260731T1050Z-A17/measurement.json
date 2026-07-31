@@ -1,0 +1,299 @@
+{
+ "bite": [
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "matched",
+   "slug": "20260728T014402Z-g50t-first-contact-salvage"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "matched",
+   "slug": "20260728T015354Z-g50t-first-contact-salvage"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "ambiguous",
+   "slug": "20260728T025503Z-g50t-e08-fixed"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "matched",
+   "slug": "20260728T072604Z-E3-sk48-carried"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "ambiguous",
+   "slug": "20260728T072604Z-E3-sk48-carried-salvage"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "ambiguous",
+   "slug": "20260728T083400Z-E3-sk48-carried-v2"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "ambiguous",
+   "slug": "20260729T004020Z-leg01"
+  },
+  {
+   "bytes_change_when_one_tagged_commit_is_added": true,
+   "matches_disk_today": true,
+   "recorded_verdict": "matched",
+   "slug": "preflight-20260728T074237Z"
+  }
+ ],
+ "today": {
+  "chosen_set_agrees_with_all_on_every_manifest": true,
+  "head_only_agrees_with_all_on_every_manifest": true,
+  "rows": [
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "20260728T012311Z-g50t-first-contact-aborted"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "20260728T012311Z-g50t-first-contact-salvage"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "20260728T012311Z-g50t-first-contact-salvage2"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "20260728T014402Z-g50t-first-contact-aborted"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "20260728T014402Z-g50t-first-contact-salvage"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "20260728T015354Z-g50t-first-contact"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "20260728T015354Z-g50t-first-contact-salvage"
+   },
+   {
+    "--all": "ambiguous/380",
+    "HEAD": "ambiguous/380",
+    "branches+remotes+HEAD": "ambiguous/380",
+    "slug": "20260728T025503Z-g50t-e08-fixed"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "20260728T072604Z-E3-sk48-carried"
+   },
+   {
+    "--all": "ambiguous/5",
+    "HEAD": "ambiguous/5",
+    "branches+remotes+HEAD": "ambiguous/5",
+    "slug": "20260728T072604Z-E3-sk48-carried-salvage"
+   },
+   {
+    "--all": "ambiguous/2",
+    "HEAD": "ambiguous/2",
+    "branches+remotes+HEAD": "ambiguous/2",
+    "slug": "20260728T083400Z-E3-sk48-carried-v2"
+   },
+   {
+    "--all": "ambiguous/4",
+    "HEAD": "ambiguous/4",
+    "branches+remotes+HEAD": "ambiguous/4",
+    "slug": "20260729T004020Z-leg01"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "20260729T004020Z-leg01-salvage"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "20260729T105729Z-leg01"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "preflight-20260728T012031Z"
+   },
+   {
+    "--all": "no_match/0",
+    "HEAD": "no_match/0",
+    "branches+remotes+HEAD": "no_match/0",
+    "slug": "preflight-20260728T012057Z"
+   },
+   {
+    "--all": "matched/1",
+    "HEAD": "matched/1",
+    "branches+remotes+HEAD": "matched/1",
+    "slug": "preflight-20260728T074237Z"
+   }
+  ],
+  "shape": {
+   "--all": {
+    "commits_carrying_the_arm": 1291,
+    "commits_scanned": 1425,
+    "distinct_arm_subtrees": 103,
+    "distinct_arm_versions": 68
+   },
+   "HEAD": {
+    "commits_carrying_the_arm": 1261,
+    "commits_scanned": 1394,
+    "distinct_arm_subtrees": 96,
+    "distinct_arm_versions": 66
+   },
+   "branches+remotes+HEAD": {
+    "commits_carrying_the_arm": 1285,
+    "commits_scanned": 1418,
+    "distinct_arm_subtrees": 99,
+    "distinct_arm_versions": 68
+   }
+  }
+ },
+ "triggers": {
+  "T1_constructible": true,
+  "T2_constructible": true,
+  "T3_constructible": true,
+  "T4_unchanged": true,
+  "fixture": {
+   "base": "13c42c0de2a83e485cec262611a6eb1399ff2380",
+   "duplicate": "0b7babf1cfd642ca5171ae7d2dde2fd882f55e55",
+   "mainline": "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e",
+   "unique": "1aae1c2fa75c1d3724ba3f137519147b93aa7f99"
+  },
+  "rows": [
+   {
+    "--all": {
+     "commits": [],
+     "verdict": "no_match"
+    },
+    "HEAD": {
+     "commits": [],
+     "verdict": "no_match"
+    },
+    "note": "the off-mainline commit is unreachable from every ref",
+    "trigger": "T1 before: no ref holds the unique arm state"
+   },
+   {
+    "--all": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "HEAD": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "note": "only `mainline` carries this arm state",
+    "trigger": "T2 before: no ref holds the duplicate"
+   },
+   {
+    "--all": {
+     "commits": [
+      "1aae1c2fa75c1d3724ba3f137519147b93aa7f99"
+     ],
+     "verdict": "matched"
+    },
+    "HEAD": {
+     "commits": [],
+     "verdict": "no_match"
+    },
+    "note": "one tag, created by anyone, for any reason",
+    "trigger": "T1 after: an annotated tag on the unique commit"
+   },
+   {
+    "--all": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e",
+      "0b7babf1cfd642ca5171ae7d2dde2fd882f55e55"
+     ],
+     "verdict": "ambiguous"
+    },
+    "HEAD": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "note": "the tagged commit's arm .py files equal mainline's",
+    "trigger": "T2 after: an annotated tag on the duplicate commit"
+   },
+   {
+    "--all": {
+     "commits": [
+      "1aae1c2fa75c1d3724ba3f137519147b93aa7f99"
+     ],
+     "verdict": "matched"
+    },
+    "HEAD": {
+     "commits": [],
+     "verdict": "no_match"
+    },
+    "note": "same commit, no tag involved",
+    "trigger": "T3: a plain branch instead of a tag"
+   },
+   {
+    "--all": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "HEAD": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "note": "mainline's own arm state, reachable from HEAD",
+    "trigger": "T4 before (reverse control)"
+   },
+   {
+    "--all": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "HEAD": {
+     "commits": [
+      "ca0de185c161ecbe4a0e2c8e1a3892b5bbeec83e"
+     ],
+     "verdict": "matched"
+    },
+    "note": "the tag adds no commit to the reachable set",
+    "trigger": "T4 after: a tag on a commit HEAD already reaches"
+   }
+  ]
+ }
+}
