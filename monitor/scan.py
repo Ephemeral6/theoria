@@ -46,7 +46,23 @@ else:
 
 GAME_ID = re.compile(r"\b[a-z0-9]{4}-[0-9a-f]{8}\b")
 SKIP_DIRS = {".git", "__pycache__", ".toolchain", ".lake", "node_modules",
-             ".pytest_cache", ".egg-info", "out"}
+             ".pytest_cache", ".egg-info", "out",
+             # **`.worktrees` 不在这里，代价是 37 GB。**
+             #
+             # 2026-07-30 实测：`probe_credential_hygiene` 的 `os.walk(ROOT)` 要遍历
+             # **1,629,026 个文件、合计 37.2 GB**，并且把**每一个都整份读进内存**——
+             # 因为舰队攒了 331 棵工作树，每棵都是一份完整的仓库副本，里面还各带着
+             # 几十上百 MB 的 candidates.jsonl。
+             #
+             # 一个探针，五个症状：scan.build 挂住 → 仪表盘从 11:49 起再没更新过 →
+             # 闸门的 real-run 段挂住 → `test_a_real_scan_can_run_without_touching_
+             # the_workspace` 卡在 34% → 闸门 900 秒超时 → **九条已交付分支被记成红**。
+             # 我先前把这一串归因成「机器负载」，那是错的：负载只是让它更明显。
+             #
+             # 工作树是主树的副本，它们的内容在主树里已经被扫过；而真正的规矩
+             # （CLAUDE.md）说的是「密钥不得进入任何**被跟踪的**文件」，
+             # 那件事在主树上就能判完。
+             ".worktrees"}
 
 
 # ---------------------------------------------------------------- helpers
@@ -152,8 +168,23 @@ def probe_credential_hygiene():
             if os.path.abspath(path) == os.path.abspath(env):
                 continue
             try:
-                if key in open(path, encoding="utf-8", errors="ignore").read():
-                    leaks.append(os.path.relpath(path, ROOT).replace("\\", "/"))
+                # 分块读，不整份读进内存。主树里有 17.9 MB 的 candidates.jsonl，
+                # 而 `.read()` 会把它整个变成一个字符串；1.6 万个这样的文件
+                # 就是这个探针挂住的另一半原因。
+                # 块之间留 len(key)-1 的重叠，免得密钥恰好跨在块边界上被漏掉——
+                # **一个会漏报的泄漏检查比没有检查更坏**，它会让人以为查过了。
+                overlap = max(0, len(key) - 1)
+                with open(path, encoding="utf-8", errors="ignore") as fh:
+                    tail = ""
+                    while True:
+                        chunk = fh.read(1 << 20)
+                        if not chunk:
+                            break
+                        if key in tail + chunk:
+                            leaks.append(os.path.relpath(path, ROOT)
+                                         .replace("\\", "/"))
+                            break
+                        tail = chunk[-overlap:] if overlap else ""
             except Exception:
                 continue
     if leaks:
