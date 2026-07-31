@@ -236,6 +236,35 @@ def test_nothing_is_written_when_the_accounting_has_a_hole(tmp_path):
     assert not os.path.exists(os.path.join(run_dir, "curves"))
 
 
+def test_an_empty_leg_is_refused_rather_than_written_as_zeros(tmp_path):
+    """`0 == 0` passes the equality, and that is the trap.
+
+    A leg that never took a turn would otherwise produce a syntactically
+    perfect `curves.json` whose every series is empty and whose every total is
+    zero -- and zero in a cost curve reads as "this leg was cheap", not as
+    "this leg did not happen". `theoria-arm/verify.py` opens with this exact
+    rule, citing `figures/verify.sh` printing "ok" when both of its builds
+    produced nothing at all.
+    """
+    run_dir = _leg(tmp_path, [], env_steps=0)
+    with pytest.raises(curves.CurveGap) as caught:
+        curves.curves(run_dir)
+    assert "never played" in str(caught.value)
+    with pytest.raises(curves.CurveGap):
+        curves.write_curves(run_dir)
+    assert not os.path.exists(os.path.join(run_dir, "curves.json"))
+
+
+def test_a_join_that_lost_every_row_is_refused_by_the_same_floor(tmp_path):
+    """The other cause of zero rows, and the dangerous one: the ledger has
+    commands and the series has none. Same refusal, and the message names both
+    numbers so the reader can tell which case they are in."""
+    run_dir = _leg(tmp_path, [], env_steps=17)
+    with pytest.raises(curves.CurveGap) as caught:
+        curves.curves(run_dir)
+    assert "17" in str(caught.value)
+
+
 def test_the_self_check_is_reported_as_well_as_enforced(tmp_path):
     """The reader of a good file should be able to see the check ran, not
     infer it from the absence of an exception."""

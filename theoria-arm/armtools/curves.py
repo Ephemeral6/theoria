@@ -256,6 +256,7 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
             "surprises": sum(int(r["surprise_total"] or 0) for r in flat),
         },
         "self_check": {
+            "turns": len(flat),
             "http_commands_over_the_curves": accounted,
             "env_step_records_in_the_ledger": ledger_env_steps,
             "accounts_for_every_env_step": accounted == ledger_env_steps,
@@ -264,6 +265,10 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
                     "allowed to account for fewer commands than were issued. "
                     "That difference is a hole in the accounting, and it is "
                     "invisible in the plot: the curve just looks shorter."),
+            "floor": ("zero turns is refused outright. 0 == 0 satisfies the "
+                      "equality above, so an empty leg would otherwise write a "
+                      "file of zeros that reads exactly like a leg that was "
+                      "cheap."),
         },
         "reading": (
             "Three curves per level: `theorize_rounds` (expected to fall "
@@ -274,6 +279,21 @@ def curves(run_dir: str, *, doc: Optional[Dict[str, Any]] = None
             "and is deliberately not recomputed here: a second implementation "
             "of a Phase 4 primary endpoint is a second definition of it."),
     }
+    if not flat:
+        # An empty result is not a pass. The equality below is satisfied by
+        # `0 == 0`, so without this floor a leg that never took a turn writes a
+        # syntactically perfect `curves.json` full of zeros -- and zeros in a
+        # cost curve read as "this leg was cheap", not as "this leg did not
+        # happen". `theoria-arm/verify.py` opens with the same rule and the
+        # same example (`figures/verify.sh` printed "ok" when both of its
+        # builds produced nothing, because two empty trees are byte-identical).
+        raise CurveGap(
+            "no turns to reduce in %s: the series carries %d row(s) and the "
+            "ledger records %d env_step(s). If both are zero the leg never "
+            "played and has no curve to write; if the ledger has commands and "
+            "the series has no rows, the join lost every one of them. Either "
+            "way a file of zeros would be read as a cheap leg."
+            % (run_dir, len(rows), ledger_env_steps))
     if accounted != ledger_env_steps:
         raise CurveGap(
             "the curves account for %d environment command(s) but the ledger "
