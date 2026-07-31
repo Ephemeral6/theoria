@@ -39,6 +39,10 @@ from exam.model import (ARTIFACTS, canonical, read_json, sha256,    # noqa: E402
                         sha256_text, write_json)
 
 RUNS_DIR = os.path.join(HERE, "runs")
+#: The work order this territory was built under. A later ticket in the same
+#: territory is a different work order, so it is an argument
+#: (`--prompt-id`) with this as the default -- a manifest that names the wrong
+#: prompt traces an artefact back to work that did not produce it.
 PROMPT_ID = "P-15"
 
 #: Every deterministic construction in the exam is enumerative or pinned to this
@@ -55,7 +59,22 @@ def _git(*args: str) -> Optional[str]:
     return out.stdout.strip() if out.returncode == 0 else None
 
 
-def _digest_tree(root: str) -> Dict[str, str]:
+def _utc_from_run_id(run_id: str) -> Optional[str]:
+    """`20260801T0000Z-EP-...` -> `2026-08-01T00:00:00Z`, or `None`.
+
+    Derived, never measured: this module refuses to read a clock, and a run id
+    that does not open with a stamp gets an honest `None` rather than an
+    invented time.
+    """
+    import re
+    m = re.match(r"^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})?Z", run_id)
+    if not m:
+        return None
+    y, mo, d, hh, mm, ss = m.groups()
+    return "%s-%s-%sT%s:%s:%sZ" % (y, mo, d, hh, mm, ss or "00")
+
+
+def _digest_tree(root: str, skip: tuple = ()) -> Dict[str, str]:
     """path relative to `exam/` -> sha256 of its bytes."""
     out: Dict[str, str] = {}
     if not os.path.isdir(root):
@@ -63,6 +82,8 @@ def _digest_tree(root: str) -> Dict[str, str]:
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = sorted(d for d in dirnames if d != "__pycache__")
         for name in sorted(filenames):
+            if name in skip:
+                continue
             path = os.path.join(dirpath, name)
             with open(path, "rb") as fh:
                 import hashlib
@@ -71,7 +92,7 @@ def _digest_tree(root: str) -> Dict[str, str]:
     return out
 
 
-def build_manifest(run_id: str) -> Dict[str, Any]:
+def build_manifest(run_id: str, prompt_id: str = PROMPT_ID) -> Dict[str, Any]:
     summary_path = os.path.join(ARTIFACTS, "exam_summary.json")
     calib_path = os.path.join(ARTIFACTS, "calibration.json")
     build_path = os.path.join(ARTIFACTS, "build_manifest.json")
@@ -88,7 +109,7 @@ def build_manifest(run_id: str) -> Dict[str, Any]:
 
     return {
         "run_id": run_id,
-        "prompt_id": PROMPT_ID,
+        "prompt_id": prompt_id,
         "seed": SEED,
         "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
         "base_commit": _git("rev-parse", "HEAD"),
@@ -110,6 +131,18 @@ def build_manifest(run_id: str) -> Dict[str, Any]:
                          for qt, r in sorted(calibration.get("per_type", {}).items())},
         },
         "marked": summary.get("marked", []),
+        # `CLAUDE.md` requires `utc` on every run manifest, and this file has
+        # always refused to read a clock -- for a good reason, stated above.
+        # Both hold at once: the run id *is* the UTC stamp, so the field is
+        # derived from it rather than measured. A run id that is not a stamp
+        # gets `None` and the omission is visible instead of invented.
+        "utc": _utc_from_run_id(run_id),
+        # The run's own directory, not only `artifacts/`. Without this a run
+        # archive digests everything except the documents that describe it, so
+        # a RUN_STATE.md could be rewritten after the fact with nothing to
+        # notice. MANIFEST.json cannot hash itself and is excluded.
+        "run_files": _digest_tree(os.path.join(RUNS_DIR, run_id),
+                                  skip=("MANIFEST.json",)),
         "artifact_digests": _digest_tree(ARTIFACTS),
         "note": ("Answer keys are digested here, never copied. An archive that "
                  "ships the keys beside the sheets rebuilds the leak the exam "
@@ -117,8 +150,8 @@ def build_manifest(run_id: str) -> Dict[str, Any]:
     }
 
 
-def archive(run_id: str) -> str:
-    manifest = build_manifest(run_id)
+def archive(run_id: str, prompt_id: str = PROMPT_ID) -> str:
+    manifest = build_manifest(run_id, prompt_id)
     path = os.path.join(RUNS_DIR, run_id, "MANIFEST.json")
     write_json(path, manifest)
     return path
@@ -126,10 +159,16 @@ def archive(run_id: str) -> str:
 
 def main(argv: Optional[List[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
+    prompt_id = PROMPT_ID
+    if "--prompt-id" in argv:
+        i = argv.index("--prompt-id")
+        prompt_id = argv[i + 1]
+        del argv[i:i + 2]
     if not argv:
-        print("usage: python -m exam.tools.archive_run <run_id>")
+        print("usage: python -m exam.tools.archive_run <run_id> "
+              "[--prompt-id <id>]")
         return 2
-    path = archive(argv[0])
+    path = archive(argv[0], prompt_id)
     manifest = read_json(path)
     print("exam -- archived run %s (prompt %s, seed %d)"
           % (manifest["run_id"], manifest["prompt_id"], manifest["seed"]))
