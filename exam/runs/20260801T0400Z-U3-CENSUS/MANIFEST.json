@@ -33,7 +33,7 @@
  "files": [
   {
    "path": "exam/u3_census.py",
-   "sha256": "f0cfbb13a9c950e5d3856d0dc1a2d4aad64a16af422cbd6693a9c0bc0166cf5d"
+   "sha256": "c87e673dcddf9a659401e7cf5523a52aef9693b1985294491a9f11da731a15cf"
   },
   {
    "path": "exam/tests/test_u3_census.py",
@@ -41,11 +41,11 @@
   },
   {
    "path": "exam/runs/20260801T0400Z-U3-CENSUS/census.json",
-   "sha256": "07ce567f8bc90d59123df8b1460695e491c8d815942c7987e0dde385282d0428"
+   "sha256": "5b5b2515460e82dab2c16f058a517dc0a8968018007e1e9f9b7f27457f2233a5"
   },
   {
    "path": "exam/runs/20260801T0400Z-U3-CENSUS/census.md",
-   "sha256": "ad084bea96caed1ff676d16e08624bd76008a3fb6944129c406efdef051e30b2"
+   "sha256": "105c71a0052af46f02c4873a1fa7f342f4a3d51c4b74ee5a107bacee4ab0a7cc"
   },
   {
    "path": "exam/runs/20260801T0400Z-U3-CENSUS/RUN_STATE.md",

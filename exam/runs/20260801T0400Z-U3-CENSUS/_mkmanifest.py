@@ -61,6 +61,10 @@ man = {
                "sha256": hashlib.sha256(f.read_bytes()).hexdigest()}
               for f in files],
 }
-(RD / "MANIFEST.json").write_text(json.dumps(man, indent=1, ensure_ascii=False) + "\n",
-                                  encoding="utf-8")
+# LF explicitly. `exam/.gitattributes` pins `* text eol=lf`, so git stores LF;
+# Python's text mode on Windows writes CRLF, and a sha256 taken over that
+# working copy would fail to reproduce after a fresh checkout — the hashes
+# below would be wrong about the very files they certify.
+with open(RD / "MANIFEST.json", "w", encoding="utf-8", newline="\n") as fh:
+    fh.write(json.dumps(man, indent=1, ensure_ascii=False) + "\n")
 print("wrote", RD / "MANIFEST.json")

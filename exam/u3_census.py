@@ -531,6 +531,12 @@ def to_markdown(result: Dict[str, Any]) -> str:
 
 # --------------------------------------------------------------------- CLI
 
+def _write_lf(path: Path, text: str) -> None:
+    """Write with LF endings whatever the platform thinks it wants."""
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(
         description="Census every Lean book on disk and adjudicate each "
@@ -550,12 +556,16 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     result = census(args.root, probe=args.probe, lean_bin=args.lean)
 
+    # newline="\n" is load-bearing, not style.  `exam/.gitattributes` pins
+    # `* text eol=lf`, so git stores LF; Python's text mode on Windows would
+    # write CRLF, and a MANIFEST sha256 taken over the working copy would then
+    # fail to reproduce after a fresh checkout on any machine.  Determinism is
+    # a requirement here (CLAUDE.md), and this is where it would have leaked.
     if args.json_out:
-        args.json_out.write_text(json.dumps(result, indent=1, sort_keys=True,
-                                            ensure_ascii=False) + "\n",
-                                 encoding="utf-8")
+        _write_lf(args.json_out, json.dumps(result, indent=1, sort_keys=True,
+                                            ensure_ascii=False) + "\n")
     if args.md_out:
-        args.md_out.write_text(to_markdown(result), encoding="utf-8")
+        _write_lf(args.md_out, to_markdown(result))
 
     s = result["summary"]
     print("%d / %d books attained U3 (census denominator, NOT STATS_RULES "
