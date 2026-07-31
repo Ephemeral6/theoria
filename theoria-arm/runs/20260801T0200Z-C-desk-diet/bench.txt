@@ -1,0 +1,20 @@
+desk-diet bench -- 8 rounds, offline, scripted desk
+rates fitted from 63 archived claude-opus-5 desk calls in 8 legs:
+  2.3371 chars/token (IQR 1.9906-2.5777) from 31 within-leg pairs, +3601 fixed tokens/call
+  $10.56/Mtok cache-creation, $25.13/Mtok output, r2=0.99998
+all arms ended with the same manual: True (54143 chars, sha aa45319ecf5fedd0)
+
+  arm       calls   prompt_ch    reply_ch   est_in$  est_out$   est_$   vs full
+  full          8      461982      362761     2.391     3.900   6.291  baseline
+  evidence      8      452326      362761     2.347     3.900   6.247     -0.7%
+  patch         8      475318       27126     2.451     0.292   2.743    -56.4%
+  diet          8      465662       27126     2.408     0.292   2.699    -57.1%
+
+prompt composition (chars over the whole campaign):
+  arm        boilerplate    evidence       books    feedback
+  full             93624       28004      340354           0
+  evidence         93624       18348      340354           0
+  patch           106960       28004      340354           0
+  diet            106960       18348      340354           0
+
+NOTE: the output-side saving is CONDITIONAL. The output-side figure is what happens IF a live desk answers the patch contract with a patch. This bench cannot establish that it will; it establishes the input-side saving, that the patch path reproduces the manual byte for byte, and the size of the prize.

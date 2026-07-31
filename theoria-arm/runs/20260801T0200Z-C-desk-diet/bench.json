@@ -1,0 +1,257 @@
+{
+ "all_arms_agree_on_the_manual": true,
+ "arms": [
+  {
+   "arm": "full",
+   "by_kind_chars": {
+    "boilerplate": 93624,
+    "books": 340354,
+    "evidence": 28004,
+    "feedback": 0
+   },
+   "diet": {
+    "evidence_delta": false,
+    "mode": "full",
+    "theory_patch": false
+   },
+   "est_input_tokens": 226484,
+   "est_input_usd": 2.3909,
+   "est_output_tokens": 155221,
+   "est_output_usd": 3.9,
+   "est_total_usd": 6.2909,
+   "model_calls": 8,
+   "per_call_prompt_chars": [
+    47017,
+    50088,
+    53163,
+    56236,
+    59309,
+    62382,
+    65455,
+    68332
+   ],
+   "per_call_reply_chars": [
+    35916,
+    38610,
+    41304,
+    43998,
+    46692,
+    49386,
+    52080,
+    54775
+   ],
+   "priced": true,
+   "prompt_chars": 461982,
+   "prompt_chars_vs_full": 0,
+   "reply_chars": 362761,
+   "reply_chars_vs_full": 0
+  },
+  {
+   "arm": "evidence",
+   "by_kind_chars": {
+    "boilerplate": 93624,
+    "books": 340354,
+    "evidence": 18348,
+    "feedback": 0
+   },
+   "diet": {
+    "evidence_delta": true,
+    "mode": "evidence",
+    "theory_patch": false
+   },
+   "est_input_tokens": 222352,
+   "est_input_usd": 2.3473,
+   "est_output_tokens": 155221,
+   "est_output_usd": 3.9,
+   "est_saving_pct": 0.69,
+   "est_total_usd": 6.2472,
+   "est_total_usd_vs_full": -0.0437,
+   "model_calls": 8,
+   "per_call_prompt_chars": [
+    47017,
+    49519,
+    52314,
+    55109,
+    57902,
+    60695,
+    63488,
+    66282
+   ],
+   "per_call_reply_chars": [
+    35916,
+    38610,
+    41304,
+    43998,
+    46692,
+    49386,
+    52080,
+    54775
+   ],
+   "priced": true,
+   "prompt_chars": 452326,
+   "prompt_chars_vs_full": -9656,
+   "reply_chars": 362761,
+   "reply_chars_vs_full": 0
+  },
+  {
+   "arm": "patch",
+   "by_kind_chars": {
+    "boilerplate": 106960,
+    "books": 340354,
+    "evidence": 28004,
+    "feedback": 0
+   },
+   "diet": {
+    "evidence_delta": false,
+    "mode": "patch",
+    "theory_patch": true
+   },
+   "est_input_tokens": 232190,
+   "est_input_usd": 2.4511,
+   "est_output_tokens": 11607,
+   "est_output_usd": 0.2916,
+   "est_saving_pct": 56.4,
+   "est_total_usd": 2.7428,
+   "est_total_usd_vs_full": -3.5481,
+   "model_calls": 8,
+   "per_call_prompt_chars": [
+    48684,
+    51755,
+    54830,
+    57903,
+    60976,
+    64049,
+    67122,
+    69999
+   ],
+   "per_call_reply_chars": [
+    3206,
+    3258,
+    3311,
+    3364,
+    3417,
+    3470,
+    3523,
+    3577
+   ],
+   "priced": true,
+   "prompt_chars": 475318,
+   "prompt_chars_vs_full": 13336,
+   "reply_chars": 27126,
+   "reply_chars_vs_full": -335635
+  },
+  {
+   "arm": "diet",
+   "by_kind_chars": {
+    "boilerplate": 106960,
+    "books": 340354,
+    "evidence": 18348,
+    "feedback": 0
+   },
+   "diet": {
+    "evidence_delta": true,
+    "mode": "diet",
+    "theory_patch": true
+   },
+   "est_input_tokens": 228058,
+   "est_input_usd": 2.4075,
+   "est_output_tokens": 11607,
+   "est_output_usd": 0.2916,
+   "est_saving_pct": 57.1,
+   "est_total_usd": 2.6991,
+   "est_total_usd_vs_full": -3.5918,
+   "model_calls": 8,
+   "per_call_prompt_chars": [
+    48684,
+    51186,
+    53981,
+    56776,
+    59569,
+    62362,
+    65155,
+    67949
+   ],
+   "per_call_reply_chars": [
+    3206,
+    3258,
+    3311,
+    3364,
+    3417,
+    3470,
+    3523,
+    3577
+   ],
+   "priced": true,
+   "prompt_chars": 465662,
+   "prompt_chars_vs_full": 3680,
+   "reply_chars": 27126,
+   "reply_chars_vs_full": -335635
+  }
+ ],
+ "conditional_note": "The output-side figure is what happens IF a live desk answers the patch contract with a patch. This bench cannot establish that it will; it establishes the input-side saving, that the patch path reproduces the manual byte for byte, and the size of the prize.",
+ "final_theory_chars": 54143,
+ "final_theory_sha_prefix": "aa45319ecf5fedd0",
+ "fixture": {
+  "calibrated_from": "runs/20260731T1430Z-A3-level2-carried-r3, census section `manual`: 32958 chars at call 1, +2613/call over its seven later calls",
+  "manual_start_chars": 32958,
+  "round_growth_chars": 2613
+ },
+ "output_saving_is_conditional": true,
+ "rates": {
+  "legs_used_for_token_fit": [
+   "20260728T015354Z-g50t-first-contact",
+   "20260728T025503Z-g50t-e08-fixed",
+   "20260728T083400Z-E3-sk48-carried-v2",
+   "20260731T1310Z-A3-level2-carried-r2",
+   "20260731T1430Z-A3-level2-carried-r3",
+   "20260731T1500Z-A3-sk48-carried-l1"
+  ],
+  "legs_with_desk_transcripts": 8,
+  "model": "claude-opus-5",
+  "models_in_archive": {
+   "claude-haiku-4-5-20251001": 3,
+   "claude-opus-5": 63
+  },
+  "price_fit": {
+   "n": 63,
+   "ok": true,
+   "r2": 0.999980592294803,
+   "usd_per_mtok_cache_creation": 10.556565078664553,
+   "usd_per_mtok_output": 25.125279155963224
+  },
+  "priced_calls": 63,
+  "token_fit": {
+   "chars_per_token": 2.3370631514408338,
+   "chars_per_token_iqr": [
+    1.99055829228243,
+    2.5777439024390243
+   ],
+   "fixed_tokens_by_leg": {
+    "20260728T015354Z-g50t-first-contact": 3987,
+    "20260728T025503Z-g50t-e08-fixed": 3885,
+    "20260728T083400Z-E3-sk48-carried-v2": 3728,
+    "20260731T1310Z-A3-level2-carried-r2": 2997,
+    "20260731T1430Z-A3-level2-carried-r3": 3474,
+    "20260731T1500Z-A3-sk48-carried-l1": 2915
+   },
+   "fixed_tokens_per_call": 3600.929641896768,
+   "iqr_tokens_per_char": [
+    0.38793613246599645,
+    0.5023716230150547
+   ],
+   "legs": [
+    "20260728T015354Z-g50t-first-contact",
+    "20260728T025503Z-g50t-e08-fixed",
+    "20260728T083400Z-E3-sk48-carried-v2",
+    "20260731T1310Z-A3-level2-carried-r2",
+    "20260731T1430Z-A3-level2-carried-r3",
+    "20260731T1500Z-A3-sk48-carried-l1"
+   ],
+   "ok": true,
+   "pairs": 31,
+   "slope_tokens_per_char": 0.4278874532694956
+  },
+  "usable": true
+ },
+ "rounds": 8
+}

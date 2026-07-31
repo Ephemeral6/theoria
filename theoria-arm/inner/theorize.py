@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from world import adapt
 from world.frames import FrameStore, describe_diff, render_window
 
+from . import deskdiet
 from .grammar_card import CARD
 
 #: How many extra calls the desk gets to repair a manual that will not compile.
@@ -45,9 +46,24 @@ class TheorizeResult(dict):
 
 
 # ------------------------------------------------------------------ evidence
+#: How many *new* command rows the delta brief renders before it elides.  Only
+#: consulted when `evidence_delta` is on; the full brief keeps `max_steps`.
+DELTA_MAX_NEW_STEPS = 40
+
+
 def evidence_brief(store: FrameStore, engines: Dict[str, Any],
-                   candidates_path: str, *, max_steps: int = 30) -> str:
-    """Everything the desk is allowed to see, rendered once."""
+                   candidates_path: str, *, max_steps: int = 30,
+                   diet: Optional["deskdiet.DeskDiet"] = None) -> str:
+    """Everything the desk is allowed to see, rendered once.
+
+    With no `diet`, or a diet with `evidence_delta` off, this returns exactly
+    the text it has always returned -- the two delta branches below are the only
+    additions and both are behind that flag.  `tests/test_desk_diet.py` compares
+    the two paths byte for byte on the same store rather than trusting the
+    reading.
+    """
+    delta = bool(diet is not None and diet.evidence_delta)
+    state = diet.state if diet is not None else {}
     summary = store.summary()
     window = engines.get("window") or {}
     box = window.get("box")
@@ -86,13 +102,17 @@ def evidence_brief(store: FrameStore, engines: Dict[str, Any],
     lines.append("")
     grids = store.grids
     labelled = [s for s in store.steps if s.grid is not None]
-    for t, step in enumerate(labelled[:max_steps]):
-        before = grids[t - 1] if t > 0 else None
-        lines.append("- t%-3d %-9s frames=%-3d state=%-12s %s"
-                     % (t, step.action, step.n_frames, step.state,
-                        describe_diff(before, step.grid)))
-    if len(labelled) > max_steps:
-        lines.append("- ... %d more" % (len(labelled) - max_steps))
+    if delta:
+        rows, _note = deskdiet.command_lines(
+            store, since=int(state.get("labelled_shown", 0)),
+            max_new=DELTA_MAX_NEW_STEPS, render_line=_command_row)
+        lines.extend(rows)
+    else:
+        for t, step in enumerate(labelled[:max_steps]):
+            before = grids[t - 1] if t > 0 else None
+            lines.append(_command_row(t, step, grids[t - 1] if t > 0 else None))
+        if len(labelled) > max_steps:
+            lines.append("- ... %d more" % (len(labelled) - max_steps))
     lines.append("")
 
     lines.append("## What the engines proposed")
@@ -101,14 +121,40 @@ def evidence_brief(store: FrameStore, engines: Dict[str, Any],
                  "accept it, and an engine cannot name anything -- `obj0` is "
                  "the best it can do.")
     lines.append("")
+    stripped = adapt.strip_internals(engines)
+    if delta:
+        shown, note = deskdiet.engine_delta(stripped, state.get("engines"))
+        if not note["first_call"]:
+            lines.append("Only the reports that CHANGED since the previous call "
+                         "are printed. Unchanged, and still standing exactly as "
+                         "you last read them: %s. Reported by no engine this "
+                         "sweep: %s."
+                         % (", ".join(note["unchanged"]) or "none",
+                            ", ".join(note["gone"]) or "none"))
+            lines.append("")
+    else:
+        shown = stripped
     lines.append("```json")
-    lines.append(json.dumps(adapt.strip_internals(engines), indent=1,
+    lines.append(json.dumps(shown, indent=1,
                             sort_keys=True, default=str)[:14000])
     lines.append("```")
     lines.append("")
     lines.append("The full proposal stream is %d rows in `candidates.jsonl`."
                  % _count_lines(candidates_path))
     return "\n".join(lines)
+
+
+def _command_row(t: int, step: Any, before: Any) -> str:
+    """One row of the command table.
+
+    Lifted out of the loop verbatim so the full brief and the delta brief
+    cannot drift into rendering the same step two different ways -- which would
+    make a before/after comparison of the two modes measure the formatting
+    rather than the diet.
+    """
+    return ("- t%-3d %-9s frames=%-3d state=%-12s %s"
+            % (t, step.action, step.n_frames, step.state,
+               describe_diff(before, step.grid)))
 
 
 def _count_lines(path: str) -> int:
@@ -204,9 +250,18 @@ instead).
 def build_prompt(store: FrameStore, engines: Dict[str, Any], books,
                  candidates_path: str, surprises: List[Any],
                  compile_errors: Optional[Dict[str, Any]] = None,
-                 certify_report: Optional[Dict[str, Any]] = None) -> str:
+                 certify_report: Optional[Dict[str, Any]] = None,
+                 diet: Optional["deskdiet.DeskDiet"] = None,
+                 allow_patch: bool = True) -> str:
+    """The prompt, and the only place the diet can change what the desk sees.
+
+    `allow_patch` is the caller's veto: the beat turns it off on the final
+    repair attempt so a desk that cannot produce a usable patch is asked for the
+    whole book rather than being sent round the loop until the budget runs out.
+    A diet with `theory_patch` off ignores it.
+    """
     parts = [PREAMBLE, "", CARD, "",
-             evidence_brief(store, engines, candidates_path)]
+             evidence_brief(store, engines, candidates_path, diet=diet)]
 
     theory = books.theory.strip()
     if theory:
@@ -250,6 +305,13 @@ def build_prompt(store: FrameStore, engines: Dict[str, Any], books,
                   "```"]
 
     parts += ["", OUTPUT_CONTRACT]
+    # The patch contract goes last, and only when there is something to patch.
+    # A cold desk writes its first manual whole -- there is no anchor to quote
+    # against an empty book, and asking for one would spend a repair round
+    # learning that.
+    if (diet is not None and diet.theory_patch and allow_patch
+            and books.theory.strip()):
+        parts += ["", deskdiet.PATCH_CONTRACT]
     return "\n".join(parts)
 
 
@@ -292,9 +354,18 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
         certify_report: Optional[Dict[str, Any]] = None,
         objects_hint: Optional[List[Dict[str, Any]]] = None,
         step_idx: Optional[int] = None,
-        engines: Optional[Dict[str, Any]] = None) -> TheorizeResult:
-    """One theorize beat: dispatch, adjudicate, recompile."""
+        engines: Optional[Dict[str, Any]] = None,
+        diet: Optional["deskdiet.DeskDiet"] = None) -> TheorizeResult:
+    """One theorize beat: dispatch, adjudicate, recompile.
+
+    `diet` defaults to `DeskDiet()`, which is `full` -- every knob off and the
+    prompt byte-identical to the one this arm has always sent.  See
+    `inner/deskdiet.py` for what the knobs do and the measurement that chose
+    them.
+    """
+    diet = diet if diet is not None else deskdiet.full()
     result = TheorizeResult(calls=0, rounds=[], log=[], compiled=None)
+    result["diet"] = diet.as_json()
 
     # 1. dispatch. Zero model calls; deterministic given the same frames.
     if engines is None:
@@ -305,10 +376,36 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
     result["snapshot_before"] = before
 
     compile_errors: Optional[Dict[str, Any]] = None
-    prompt = build_prompt(store, engines, books, candidates_path,
-                          surprises or [], None, certify_report)
+    patch_refusal: Optional[deskdiet.PatchRefused] = None
+    census: List[Dict[str, Any]] = []
+    result["prompt_census"] = census
 
     for attempt in range(REPAIR_ROUNDS + 1):
+        # The last repair attempt always asks for the whole book. A desk that
+        # has failed to produce an applicable patch twice is not going to on the
+        # third try, and the round is worth more than the tokens.
+        allow_patch = diet.theory_patch and attempt < REPAIR_ROUNDS
+        if patch_refusal is not None:
+            # Built here, not where the refusal was raised, because what the
+            # desk should do next depends on whether it is still being offered
+            # the patch contract. Telling it to "send a corrected patch" on the
+            # very attempt that withdrew the contract would buy a refusal with a
+            # paid call.
+            compile_errors = {
+                "patch_refused": patch_refusal.reason,
+                "detail": patch_refusal.detail,
+                "note": ("the manual is UNCHANGED. Send a corrected patch, or "
+                         "the whole THEORY block."
+                         if allow_patch else
+                         "the manual is UNCHANGED, and the patch contract is "
+                         "withdrawn for this attempt: send the whole THEORY "
+                         "block."),
+            }
+            patch_refusal = None
+        prompt = build_prompt(store, engines, books, candidates_path,
+                              surprises or [], compile_errors, certify_report,
+                              diet=diet, allow_patch=allow_patch)
+        census.append(_census(prompt, attempt + 1, allow_patch))
         reply = desk.call(prompt, beat="theorize", step_idx=step_idx,
                           label="round%d" % (attempt + 1))
         result["calls"] += 1
@@ -317,22 +414,45 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
                                        "blocks": parsed["blocks_found"],
                                        "log_entries": len(parsed["log"])}
 
-        if not parsed["theory"]:
+        theory_text = parsed["theory"]
+
+        # 2a. the patch path. Only when the diet asked for one, the desk did not
+        # override with a whole book, and there is a manual to anchor against.
+        if not theory_text and allow_patch and books.theory.strip():
+            try:
+                ops = deskdiet.parse_patch(reply)
+                if ops is None:
+                    raise deskdiet.PatchRefused(
+                        "the reply carried neither a === THEORY === block nor a "
+                        "=== THEORY-PATCH === block; send one of them",
+                        {"blocks": parsed["blocks_found"]})
+                theory_text, patch_report = deskdiet.apply_patch(books.theory, ops)
+                round_entry["patch"] = patch_report
+            except deskdiet.PatchRefused as exc:
+                round_entry["patch_refused"] = exc.reason
+                round_entry["patch_detail"] = exc.detail
+                result["rounds"].append(round_entry)
+                patch_refusal = exc
+                continue
+
+        if not theory_text:
             round_entry["error"] = "no THEORY block in the reply"
             result["rounds"].append(round_entry)
             compile_errors = {"reply": "the reply carried no === THEORY === "
                                        "block; emit all three blocks"}
-            prompt = build_prompt(store, engines, books, candidates_path,
-                                  surprises or [], compile_errors, certify_report)
             continue
 
-        books.write(theory=parsed["theory"],
+        books.write(theory=theory_text,
                     playbook=parsed["playbook"] or "# nothing defensible yet\n")
         result["log"] = parsed["log"]
 
-        # The level instance is computed, never written by the desk.
-        objects = objects_hint or _objects_from_theory(parsed["theory"])
-        landmarks = _landmarks_from_theory(parsed["theory"])
+        # The level instance is computed, never written by the desk. Read off
+        # `theory_text`, not `parsed["theory"]` -- under the patch contract the
+        # second is empty and the manual that matters is the patched one, so
+        # reading the reply here would locate zero objects and hand certify an
+        # empty level while the compile stayed green.
+        objects = objects_hint or _objects_from_theory(theory_text)
+        landmarks = _landmarks_from_theory(theory_text)
         try:
             from .books import problem_from_frames                # noqa: PLC0415
             books.write_problem(problem_from_frames(store, objects,
@@ -352,12 +472,41 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
         if compiled.get("ok"):
             break
         compile_errors = compiled.get("errors")
-        prompt = build_prompt(store, engines, books, candidates_path,
-                              surprises or [], compile_errors, certify_report)
+
+    # The delta baseline advances once per BEAT, not once per attempt: a repair
+    # call is the same question asked again, and diffing it against the attempt
+    # that just failed would show the desk an empty evidence section on the call
+    # where it most needs the evidence.
+    if diet.evidence_delta:
+        diet.state["labelled_shown"] = sum(
+            1 for s in store.steps if s.grid is not None)
+        diet.state["engines"] = result["engines"]
 
     result["snapshot_after"] = books.snapshot("after-theorize")
     result["ok"] = bool((result.get("_compiled") or {}).get("ok"))
     return result
+
+
+def _census(prompt: str, attempt: int, patch_asked: bool) -> Dict[str, Any]:
+    """Record what this prompt was made of, on every call, live.
+
+    The forensic pass that motivated the diet had to reconstruct this from
+    archived transcripts.  Recording it as the call goes out means the next
+    person asking "where did the money go" reads a number instead of writing a
+    parser -- and it is the measurement this change is judged by, so it is not
+    optional instrumentation.  A census that raises must not cost a desk call,
+    so the failure is recorded rather than propagated.
+    """
+    entry: Dict[str, Any] = {"attempt": attempt, "chars": len(prompt),
+                             "patch_contract": bool(patch_asked)}
+    try:
+        from armtools import prompt_census                      # noqa: PLC0415
+        report = prompt_census.census(prompt)
+        entry["by_kind"] = {k: v["chars"] for k, v in report["by_kind"].items()}
+        entry["sections"] = {s["section"]: s["chars"] for s in report["sections"]}
+    except Exception as exc:                                    # noqa: BLE001
+        entry["census_error"] = "%s: %s" % (type(exc).__name__, exc)
+    return entry
 
 
 OBJECT_DECL = re.compile(r"^\s*object\s+(\w+)\s*\{([^}]*)\}", re.M)

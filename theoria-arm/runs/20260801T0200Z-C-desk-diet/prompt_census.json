@@ -1,0 +1,3718 @@
+{
+ "legs": [
+  {
+   "calls": 0,
+   "fit": {
+    "intercept": null,
+    "n": 0,
+    "ok": false,
+    "r2": null,
+    "reason": "need >=2 calls of differing length",
+    "slope": null
+   },
+   "per_call": [],
+   "reason": "no desk/ transcripts in this leg",
+   "run": "20260731T1240Z-A3-level2-carried",
+   "totals": null
+  },
+  {
+   "calls": 5,
+   "fit": {
+    "chars_per_token": 0.5330087269774461,
+    "intercept_tokens": -87278.85742966586,
+    "n": 5,
+    "ok": true,
+    "r2": 0.2323194849856387,
+    "slope_tokens_per_char": 1.8761418892158486
+   },
+   "per_call": [
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.19559113547481366
+      },
+      "books": {
+       "chars": 26222,
+       "share": 0.4382458134171207
+      },
+      "evidence": {
+       "chars": 19690,
+       "share": 0.3290771133469265
+      },
+      "feedback": {
+       "chars": 2219,
+       "share": 0.03708593776113915
+      }
+     },
+     "cache_creation_input_tokens": 28599,
+     "cache_read_input_tokens": 0,
+     "call": 1,
+     "chars_in": 59834,
+     "cost_usd": 1.487855,
+     "output_tokens": 47235,
+     "repeat_vs_previous": {
+      "first_call": true,
+      "prefix_chars": 0,
+      "prefix_share": 0.0,
+      "repeated_chars": 0,
+      "repeated_share": 0.0,
+      "sections": {}
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.04697997793896447
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.13398736504328643
+      },
+      {
+       "chars": 482,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.008055620550188856
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.07176521710064512
+      },
+      {
+       "chars": 673,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.011247785539993983
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.23800849015609854
+      },
+      {
+       "chars": 23280,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.38907644483069825
+      },
+      {
+       "chars": 2942,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.049169368586422436
+      },
+      {
+       "chars": 346,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.005782665374201959
+      },
+      {
+       "chars": 1873,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.03130327238693719
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.014623792492562756
+      }
+     ],
+     "transcript": "call-001-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.17572599777771103
+      },
+      "books": {
+       "chars": 32986,
+       "share": 0.4953001591639389
+      },
+      "evidence": {
+       "chars": 19690,
+       "share": 0.2956545241598847
+      },
+      "feedback": {
+       "chars": 2219,
+       "share": 0.03331931889846542
+      }
+     },
+     "cache_creation_input_tokens": 31223,
+     "cache_read_input_tokens": 0,
+     "call": 2,
+     "chars_in": 66598,
+     "cost_usd": 1.662984,
+     "output_tokens": 53106,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 30573,
+      "prefix_share": 0.4590678398750713,
+      "repeated_chars": 33612,
+      "repeated_share": 0.5046998408360611,
+      "sections": {
+       "certify": {
+        "chars": 1873,
+        "common_prefix": 1873,
+        "identical": true,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 673,
+        "common_prefix": 673,
+        "identical": true,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4294,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14241,
+        "common_prefix": 14241,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 29044,
+        "common_prefix": 55,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 482,
+        "common_prefix": 482,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 3942,
+        "common_prefix": 103,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 346,
+        "common_prefix": 346,
+        "identical": true,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.04220847472897084
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.12037899036007087
+      },
+      {
+       "chars": 482,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.007237454578215562
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.06447641070302411
+      },
+      {
+       "chars": 673,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.010105408570827952
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.21383525030781705
+      },
+      {
+       "chars": 29044,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4361091924682423
+      },
+      {
+       "chars": 3942,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.05919096669569657
+      },
+      {
+       "chars": 346,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.005195351211748101
+      },
+      {
+       "chars": 1873,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.028123967686717318
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.01313853268866933
+      }
+     ],
+     "transcript": "call-002-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15293840906417847
+      },
+      "books": {
+       "chars": 39647,
+       "share": 0.5181192091059971
+      },
+      "evidence": {
+       "chars": 20140,
+       "share": 0.2631957240496073
+      },
+      "feedback": {
+       "chars": 5031,
+       "share": 0.0657466577802172
+      }
+     },
+     "cache_creation_input_tokens": 99629,
+     "cache_read_input_tokens": 35564,
+     "call": 3,
+     "chars_in": 76521,
+     "cost_usd": 2.86115,
+     "output_tokens": 72821,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.14440480391003777,
+      "repeated_chars": 13576,
+      "repeated_share": 0.17741535003463102,
+      "sections": {
+       "certify": {
+        "chars": 1873,
+        "common_prefix": 1873,
+        "identical": true,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1121,
+        "common_prefix": 673,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4285,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14241,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 35311,
+        "common_prefix": 55,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 484,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 4336,
+        "common_prefix": 126,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 3158,
+        "common_prefix": 346,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03673501391774807
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10476862560604279
+      },
+      {
+       "chars": 484,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.0063250610943401155
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.05611531475019929
+      },
+      {
+       "chars": 1121,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.014649573319742292
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.1861057748853256
+      },
+      {
+       "chars": 35311,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.46145502541785915
+      },
+      {
+       "chars": 4336,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.056664183688137894
+      },
+      {
+       "chars": 3158,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.04126971680976464
+      },
+      {
+       "chars": 1873,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.024476940970452554
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011434769540387605
+      }
+     ],
+     "transcript": "call-003-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.1521015830105794
+      },
+      "books": {
+       "chars": 39647,
+       "share": 0.5152842400769411
+      },
+      "evidence": {
+       "chars": 20140,
+       "share": 0.2617556081204024
+      },
+      "feedback": {
+       "chars": 5452,
+       "share": 0.07085856879207715
+      }
+     },
+     "cache_creation_input_tokens": 35707,
+     "cache_read_input_tokens": 0,
+     "call": 4,
+     "chars_in": 76942,
+     "cost_usd": 1.9143780000000001,
+     "output_tokens": 61227,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 75646,
+      "prefix_share": 0.9831561435886772,
+      "repeated_chars": 74648,
+      "repeated_share": 0.9701853344077357,
+      "sections": {
+       "certify": {
+        "chars": 1872,
+        "common_prefix": 1872,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1121,
+        "common_prefix": 1121,
+        "identical": true,
+        "was_absent": false
+       },
+       "compile_errors": {
+        "chars": 422,
+        "common_prefix": 0,
+        "identical": false,
+        "was_absent": true
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4294,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14241,
+        "common_prefix": 14241,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 35311,
+        "common_prefix": 35311,
+        "identical": true,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 484,
+        "common_prefix": 484,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 4336,
+        "common_prefix": 4336,
+        "identical": true,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 3158,
+        "common_prefix": 3158,
+        "identical": true,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.036534012632892306
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10419536793948689
+      },
+      {
+       "chars": 484,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.0062904525486730265
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.05580827116529334
+      },
+      {
+       "chars": 1121,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.014569415923682775
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18508746848275323
+      },
+      {
+       "chars": 35311,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.45893010319461414
+      },
+      {
+       "chars": 4336,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.05635413688232695
+      },
+      {
+       "chars": 3158,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.041043903199812846
+      },
+      {
+       "chars": 1872,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.024330014816355175
+      },
+      {
+       "chars": 422,
+       "kind": "feedback",
+       "section": "compile_errors",
+       "share": 0.005484650775909127
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011372202438200203
+      }
+     ],
+     "transcript": "call-004-theorize-round2.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15351015268377144
+      },
+      "books": {
+       "chars": 36744,
+       "share": 0.48197701873130805
+      },
+      "evidence": {
+       "chars": 20390,
+       "share": 0.26745894328138936
+      },
+      "feedback": {
+       "chars": 7399,
+       "share": 0.09705388530353114
+      }
+     },
+     "cache_creation_input_tokens": 36600,
+     "cache_read_input_tokens": 0,
+     "call": 5,
+     "chars_in": 76236,
+     "cost_usd": 1.630485,
+     "output_tokens": 49485,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.14494464557426937,
+      "repeated_chars": 11703,
+      "repeated_share": 0.15351015268377144,
+      "sections": {
+       "certify": {
+        "chars": 1683,
+        "common_prefix": 468,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1369,
+        "common_prefix": 1121,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4283,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 32386,
+        "common_prefix": 68,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 4358,
+        "common_prefix": 102,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 5716,
+        "common_prefix": 60,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03687234377459468
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.1051602917256939
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006361823810273361
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.056325095755286214
+      },
+      {
+       "chars": 1369,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.01795739545621491
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18681462825961487
+      },
+      {
+       "chars": 32386,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.42481242457631563
+      },
+      {
+       "chars": 4358,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.05716459415499239
+      },
+      {
+       "chars": 5716,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.0749777008237578
+      },
+      {
+       "chars": 1683,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.022076184479773334
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011477517183482869
+      }
+     ],
+     "transcript": "call-005-theorize-round1.md"
+    }
+   ],
+   "run": "20260731T1310Z-A3-level2-carried-r2",
+   "totals": {
+    "by_kind_chars": {
+     "boilerplate": 58515,
+     "books": 175246,
+     "evidence": 100050,
+     "feedback": 22320
+    },
+    "by_kind_share": {
+     "boilerplate": 0.16430751605448557,
+     "books": 0.49208296946909985,
+     "evidence": 0.2809359477271004,
+     "feedback": 0.06267356674931415
+    },
+    "cache_read_total_tokens": 35564,
+    "calls": 5,
+    "chars_in": 356131,
+    "cost_per_call_usd": 1.91137,
+    "cost_usd": 9.556852,
+    "est_prefix_tokens": 240745,
+    "est_repeated_tokens": 250538,
+    "est_tokens_by_kind": {
+     "boilerplate": 109782,
+     "books": 328786,
+     "evidence": 187708,
+     "feedback": 41875
+    },
+    "prefix_chars": 128319,
+    "prefix_share": 0.36031404174306647,
+    "repeated_chars": 133539,
+    "repeated_share": 0.37497156945056737
+   }
+  },
+  {
+   "calls": 8,
+   "fit": {
+    "chars_per_token": 2.308023233075933,
+    "intercept_tokens": 2975.849583416988,
+    "n": 8,
+    "ok": true,
+    "r2": 0.9970445333875427,
+    "slope_tokens_per_char": 0.43327120180990847
+   },
+   "per_call": [
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15684934260785655
+      },
+      "books": {
+       "chars": 37263,
+       "share": 0.4994169916770536
+      },
+      "evidence": {
+       "chars": 19690,
+       "share": 0.26389503169688927
+      },
+      "feedback": {
+       "chars": 5957,
+       "share": 0.07983863401820059
+      }
+     },
+     "cache_creation_input_tokens": 35406,
+     "cache_read_input_tokens": 0,
+     "call": 1,
+     "chars_in": 74613,
+     "cost_usd": 1.554791,
+     "output_tokens": 46967,
+     "repeat_vs_previous": {
+      "first_call": true,
+      "prefix_chars": 0,
+      "prefix_share": 0.0,
+      "repeated_chars": 0,
+      "repeated_share": 0.0,
+      "sections": {}
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03767439990350207
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10744776379451303
+      },
+      {
+       "chars": 482,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006460000268049803
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.05755029284441049
+      },
+      {
+       "chars": 673,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.009019875892940909
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.19086486269148809
+      },
+      {
+       "chars": 32958,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.44171927144063367
+      },
+      {
+       "chars": 4305,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.057697720236419926
+      },
+      {
+       "chars": 2127,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.028507096618551726
+      },
+      {
+       "chars": 3830,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.05133153739964885
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011727178909841448
+      }
+     ],
+     "transcript": "call-001-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15183320791925062
+      },
+      "books": {
+       "chars": 39155,
+       "share": 0.5079919043047303
+      },
+      "evidence": {
+       "chars": 20140,
+       "share": 0.26129375437868135
+      },
+      "feedback": {
+       "chars": 6080,
+       "share": 0.07888113339733777
+      }
+     },
+     "cache_creation_input_tokens": 36244,
+     "cache_read_input_tokens": 0,
+     "call": 2,
+     "chars_in": 77078,
+     "cost_usd": 1.8813019999999998,
+     "output_tokens": 59673,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.14336127040141156,
+      "repeated_chars": 11703,
+      "repeated_share": 0.15183320791925062,
+      "sections": {
+       "certify": {
+        "chars": 1680,
+        "common_prefix": 468,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1121,
+        "common_prefix": 673,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4285,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14241,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 34387,
+        "common_prefix": 68,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 484,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 4768,
+        "common_prefix": 105,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 4400,
+        "common_prefix": 60,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.036469550325644154
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.1040115207971146
+      },
+      {
+       "chars": 484,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.0062793533822880715
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.055709800461869796
+      },
+      {
+       "chars": 1121,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.014543708970134149
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18476089156438932
+      },
+      {
+       "chars": 34387,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.446132489166818
+      },
+      {
+       "chars": 4768,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.061859415137912245
+      },
+      {
+       "chars": 4400,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.05708503074807338
+      },
+      {
+       "chars": 1680,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.021796102649264383
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011352136796491866
+      }
+     ],
+     "transcript": "call-002-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.1457573077929033
+      },
+      "books": {
+       "chars": 40599,
+       "share": 0.5056482046555654
+      },
+      "evidence": {
+       "chars": 20590,
+       "share": 0.25644219152831577
+      },
+      "feedback": {
+       "chars": 7399,
+       "share": 0.09215229602321555
+      }
+     },
+     "cache_creation_input_tokens": 38041,
+     "cache_read_input_tokens": 0,
+     "call": 3,
+     "chars_in": 80291,
+     "cost_usd": 1.569824,
+     "output_tokens": 46440,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.1376243912767309,
+      "repeated_chars": 11703,
+      "repeated_share": 0.1457573077929033,
+      "sections": {
+       "certify": {
+        "chars": 1683,
+        "common_prefix": 533,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1569,
+        "common_prefix": 1121,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4283,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 34584,
+        "common_prefix": 68,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 6015,
+        "common_prefix": 118,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 5716,
+        "common_prefix": 148,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03501015057727516
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.09984929817787797
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006040527580924387
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.05348046480925633
+      },
+      {
+       "chars": 1569,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.019541418091691472
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.17737978104644356
+      },
+      {
+       "chars": 34584,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.43073320795605985
+      },
+      {
+       "chars": 6015,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07491499669950555
+      },
+      {
+       "chars": 5716,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.07119104258260577
+      },
+      {
+       "chars": 1683,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.02096125344060978
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.010897859037750184
+      }
+     ],
+     "transcript": "call-003-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.13475267133382463
+      },
+      "books": {
+       "chars": 46704,
+       "share": 0.5377671333824613
+      },
+      "evidence": {
+       "chars": 21038,
+       "share": 0.24223931466470155
+      },
+      "feedback": {
+       "chars": 7403,
+       "share": 0.08524088061901253
+      }
+     },
+     "cache_creation_input_tokens": 40511,
+     "cache_read_input_tokens": 0,
+     "call": 4,
+     "chars_in": 86848,
+     "cost_usd": 1.6656859999999998,
+     "output_tokens": 49213,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.12723378776713337,
+      "repeated_chars": 11703,
+      "repeated_share": 0.13475267133382463,
+      "sections": {
+       "certify": {
+        "chars": 1687,
+        "common_prefix": 533,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2017,
+        "common_prefix": 1569,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4281,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 238,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 38343,
+        "common_prefix": 69,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 8361,
+        "common_prefix": 126,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 5716,
+        "common_prefix": 147,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03236689388356669
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.09231070375829034
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.005584469417833456
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.04944270449521002
+      },
+      {
+       "chars": 2017,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.023224484156226972
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.1639876565954311
+      },
+      {
+       "chars": 38343,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.441495486366986
+      },
+      {
+       "chars": 8361,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.09627164701547532
+      },
+      {
+       "chars": 5716,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.06581613854089904
+      },
+      {
+       "chars": 1687,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.019424742078113486
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.010075073691967576
+      }
+     ],
+     "transcript": "call-004-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.12620238968209463
+      },
+      "books": {
+       "chars": 52140,
+       "share": 0.5622654531337619
+      },
+      "evidence": {
+       "chars": 21486,
+       "share": 0.23169995255143855
+      },
+      "feedback": {
+       "chars": 7403,
+       "share": 0.079832204632705
+      }
+     },
+     "cache_creation_input_tokens": 42662,
+     "cache_read_input_tokens": 0,
+     "call": 5,
+     "chars_in": 92732,
+     "cost_usd": 1.68914,
+     "output_tokens": 49233,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.1191605918129664,
+      "repeated_chars": 11703,
+      "repeated_share": 0.12620238968209463,
+      "sections": {
+       "certify": {
+        "chars": 1687,
+        "common_prefix": 534,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2465,
+        "common_prefix": 2017,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4279,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 44057,
+        "common_prefix": 69,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 8083,
+        "common_prefix": 105,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 5716,
+        "common_prefix": 147,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.030313160505542856
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.08645343570719924
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.005230125523012552
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.04630548246559979
+      },
+      {
+       "chars": 2465,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.026581978173661733
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.15358236638916448
+      },
+      {
+       "chars": 44057,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4751002890048743
+      },
+      {
+       "chars": 8083,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.08716516412888754
+      },
+      {
+       "chars": 5716,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.061639994823793294
+      },
+      {
+       "chars": 1687,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.018192209808911702
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.009435793469352543
+      }
+     ],
+     "transcript": "call-005-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.12373521108890792
+      },
+      "books": {
+       "chars": 53102,
+       "share": 0.5614446876222497
+      },
+      "evidence": {
+       "chars": 21934,
+       "share": 0.2319070426406995
+      },
+      "feedback": {
+       "chars": 7842,
+       "share": 0.08291305864814286
+      }
+     },
+     "cache_creation_input_tokens": 43937,
+     "cache_read_input_tokens": 0,
+     "call": 6,
+     "chars_in": 94581,
+     "cost_usd": 1.9071440000000002,
+     "output_tokens": 57396,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11049,
+      "prefix_share": 0.11682050306086846,
+      "repeated_chars": 11703,
+      "repeated_share": 0.12373521108890792,
+      "sections": {
+       "certify": {
+        "chars": 1690,
+        "common_prefix": 533,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2913,
+        "common_prefix": 2465,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4277,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 238,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 46093,
+        "common_prefix": 68,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 221,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 7009,
+        "common_prefix": 117,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 6152,
+        "common_prefix": 147,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.029720556982903542
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.08476332455778644
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.0051278798067265095
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.04540023894862605
+      },
+      {
+       "chars": 2913,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.030798997684524376
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.15057992620082258
+      },
+      {
+       "chars": 46093,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4873388947040103
+      },
+      {
+       "chars": 7009,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07410579291823939
+      },
+      {
+       "chars": 6152,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.06504477643501337
+      },
+      {
+       "chars": 1690,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.017868282213129486
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.00925132954821793
+      }
+     ],
+     "transcript": "call-006-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.11725278028253681
+      },
+      "books": {
+       "chars": 57883,
+       "share": 0.5799318705540527
+      },
+      "evidence": {
+       "chars": 22382,
+       "share": 0.22424606752830378
+      },
+      "feedback": {
+       "chars": 7842,
+       "share": 0.07856928163510671
+      }
+     },
+     "cache_creation_input_tokens": 46403,
+     "cache_read_input_tokens": 0,
+     "call": 7,
+     "chars_in": 99810,
+     "cost_usd": 1.4931659999999998,
+     "output_tokens": 39782,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.11071034966436229,
+      "repeated_chars": 11703,
+      "repeated_share": 0.11725278028253681,
+      "sections": {
+       "certify": {
+        "chars": 1690,
+        "common_prefix": 534,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 3361,
+        "common_prefix": 2913,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4275,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 238,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 50242,
+        "common_prefix": 69,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 7641,
+        "common_prefix": 114,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 6152,
+        "common_prefix": 147,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.02816351067027352
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.0803226129646328
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.004859232541829476
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.04302174130848612
+      },
+      {
+       "chars": 3361,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.03367398056306983
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.14269111311491833
+      },
+      {
+       "chars": 50242,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.5033764151888588
+      },
+      {
+       "chars": 7641,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07655545536519387
+      },
+      {
+       "chars": 6152,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.061637110509968944
+      },
+      {
+       "chars": 1690,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.01693217112513776
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.008766656647630497
+      }
+     ],
+     "transcript": "call-007-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.11515073992443325
+      },
+      "books": {
+       "chars": 59692,
+       "share": 0.5873346977329975
+      },
+      "evidence": {
+       "chars": 22395,
+       "share": 0.22035382556675062
+      },
+      "feedback": {
+       "chars": 7842,
+       "share": 0.07716073677581864
+      }
+     },
+     "cache_creation_input_tokens": 47179,
+     "cache_read_input_tokens": 0,
+     "call": 8,
+     "chars_in": 101632,
+     "cost_usd": 1.6788090000000002,
+     "output_tokens": 46877,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11050,
+      "prefix_share": 0.10872559823677581,
+      "repeated_chars": 11703,
+      "repeated_share": 0.11515073992443325,
+      "sections": {
+       "certify": {
+        "chars": 1690,
+        "common_prefix": 534,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 3374,
+        "common_prefix": 3361,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 4294,
+        "common_prefix": 4273,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 51253,
+        "common_prefix": 68,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 485,
+        "common_prefix": 222,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 8439,
+        "common_prefix": 115,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 6152,
+        "common_prefix": 148,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.02765861146095718
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.07888263539042821
+      },
+      {
+       "chars": 485,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.004772119017632242
+      },
+      {
+       "chars": 4294,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.042250472292191435
+      },
+      {
+       "chars": 3374,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.033198205289672544
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.1401330289672544
+      },
+      {
+       "chars": 51253,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.5042998268261965
+      },
+      {
+       "chars": 8439,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.083034870906801
+      },
+      {
+       "chars": 6152,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.06053211586901763
+      },
+      {
+       "chars": 1690,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.016628620906801006
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.008609493073047859
+      }
+     ],
+     "transcript": "call-008-theorize-round1.md"
+    }
+   ],
+   "run": "20260731T1430Z-A3-level2-carried-r3",
+   "totals": {
+    "by_kind_chars": {
+     "boilerplate": 93624,
+     "books": 386538,
+     "evidence": 169655,
+     "feedback": 57768
+    },
+    "by_kind_share": {
+     "boilerplate": 0.13231484556625706,
+     "books": 0.5462778323452306,
+     "evidence": 0.23976624716465159,
+     "feedback": 0.08164107492386073
+    },
+    "cache_read_total_tokens": 0,
+    "calls": 8,
+    "chars_in": 707585,
+    "cost_per_call_usd": 1.679983,
+    "cost_usd": 13.439862,
+    "est_prefix_tokens": 33513,
+    "est_repeated_tokens": 35494,
+    "est_tokens_by_kind": {
+     "boilerplate": 40565,
+     "books": 167476,
+     "evidence": 73507,
+     "feedback": 25029
+    },
+    "prefix_chars": 77349,
+    "prefix_share": 0.10931407534077178,
+    "repeated_chars": 81921,
+    "repeated_share": 0.11577548987047492
+   }
+  },
+  {
+   "calls": 9,
+   "fit": {
+    "chars_per_token": 2.288523408208523,
+    "intercept_tokens": 2180.049126519909,
+    "n": 9,
+    "ok": true,
+    "r2": 0.9941723698881151,
+    "slope_tokens_per_char": 0.4369629763948139
+   },
+   "per_call": [
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15078076685219544
+      },
+      "books": {
+       "chars": 41801,
+       "share": 0.5385616367759225
+      },
+      "evidence": {
+       "chars": 17889,
+       "share": 0.2304808286951144
+      },
+      "feedback": {
+       "chars": 6223,
+       "share": 0.08017676767676768
+      }
+     },
+     "cache_creation_input_tokens": 35950,
+     "cache_read_input_tokens": 0,
+     "call": 1,
+     "chars_in": 77616,
+     "cost_usd": 1.20151,
+     "output_tokens": 32595,
+     "repeat_vs_previous": {
+      "first_call": true,
+      "prefix_chars": 0,
+      "prefix_share": 0.0,
+      "repeated_chars": 0,
+      "repeated_share": 0.0,
+      "sections": {}
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.036216759431045145
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10329055864770151
+      },
+      {
+       "chars": 500,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006441970727685014
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.025239641311069882
+      },
+      {
+       "chars": 1189,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.015319006390434962
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18348021026592456
+      },
+      {
+       "chars": 36547,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4708694083694084
+      },
+      {
+       "chars": 5254,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.06769222840651412
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.02906617192331478
+      },
+      {
+       "chars": 3967,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.0511105957534529
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011273448773448774
+      }
+     ],
+     "transcript": "call-001-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15555673707016868
+      },
+      "books": {
+       "chars": 39418,
+       "share": 0.523945608974785
+      },
+      "evidence": {
+       "chars": 17889,
+       "share": 0.23778129278375182
+      },
+      "feedback": {
+       "chars": 6223,
+       "share": 0.08271636117129451
+      }
+     },
+     "cache_creation_input_tokens": 34833,
+     "cache_read_input_tokens": 0,
+     "call": 2,
+     "chars_in": 75233,
+     "cost_usd": 1.368456,
+     "output_tokens": 39754,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 28767,
+      "prefix_share": 0.38237209735089656,
+      "repeated_chars": 35815,
+      "repeated_share": 0.476054391025215,
+      "sections": {
+       "certify": {
+        "chars": 3967,
+        "common_prefix": 3967,
+        "identical": true,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 1189,
+        "common_prefix": 1189,
+        "identical": true,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1959,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14241,
+        "common_prefix": 14241,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 34390,
+        "common_prefix": 50,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 500,
+        "common_prefix": 500,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 5028,
+        "common_prefix": 54,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 2256,
+        "common_prefix": 2256,
+        "identical": true,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03736392274666702
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10656227985059748
+      },
+      {
+       "chars": 500,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006646019698802387
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.026039105179907752
+      },
+      {
+       "chars": 1189,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.015804234843752075
+      },
+      {
+       "chars": 14241,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18929193306128958
+      },
+      {
+       "chars": 34390,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4571132348836282
+      },
+      {
+       "chars": 5028,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.0668323740911568
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.02998684088099637
+      },
+      {
+       "chars": 3967,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.05272952029029814
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011630534472904177
+      }
+     ],
+     "transcript": "call-002-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.1463222515347395
+      },
+      "books": {
+       "chars": 41801,
+       "share": 0.5226366261987222
+      },
+      "evidence": {
+       "chars": 18762,
+       "share": 0.23458071291931834
+      },
+      "feedback": {
+       "chars": 7715,
+       "share": 0.09646040934721996
+      }
+     },
+     "cache_creation_input_tokens": 37138,
+     "cache_read_input_tokens": 0,
+     "call": 3,
+     "chars_in": 79981,
+     "cost_usd": 1.630981,
+     "output_tokens": 49257,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11045,
+      "prefix_share": 0.13809529763318787,
+      "repeated_chars": 15670,
+      "repeated_share": 0.1959215313636989,
+      "sections": {
+       "certify": {
+        "chars": 3967,
+        "common_prefix": 3967,
+        "identical": true,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2059,
+        "common_prefix": 1189,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1893,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 36356,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 502,
+        "common_prefix": 217,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 5445,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 3748,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03514584713869544
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10023630612270414
+      },
+      {
+       "chars": 502,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006276490666533302
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.02449331716282617
+      },
+      {
+       "chars": 2059,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.025743614108350733
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.17806729098160815
+      },
+      {
+       "chars": 36356,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4545579575149098
+      },
+      {
+       "chars": 5445,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.0680786686838124
+      },
+      {
+       "chars": 3748,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.04686112951826059
+      },
+      {
+       "chars": 3967,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.049599279828959376
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.010940098273339919
+      }
+     ],
+     "transcript": "call-003-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.15027543433876497
+      },
+      "books": {
+       "chars": 41186,
+       "share": 0.528859611952181
+      },
+      "evidence": {
+       "chars": 18762,
+       "share": 0.2409183712777842
+      },
+      "feedback": {
+       "chars": 6226,
+       "share": 0.07994658243126983
+      }
+     },
+     "cache_creation_input_tokens": 36489,
+     "cache_read_input_tokens": 0,
+     "call": 4,
+     "chars_in": 77877,
+     "cost_usd": 1.2194720000000001,
+     "output_tokens": 33078,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 29639,
+      "prefix_share": 0.3805873364407977,
+      "repeated_chars": 30465,
+      "repeated_share": 0.39119380561654915,
+      "sections": {
+       "certify": {
+        "chars": 3970,
+        "common_prefix": 2819,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2059,
+        "common_prefix": 2059,
+        "identical": true,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1959,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 14242,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 35842,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 502,
+        "common_prefix": 502,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 5344,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 2256,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.036095381178011476
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.10294438666101673
+      },
+      {
+       "chars": 502,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006446062380420407
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.025155052197696367
+      },
+      {
+       "chars": 2059,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.026439128369094855
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.18287812833057257
+      },
+      {
+       "chars": 35842,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.46023858135264584
+      },
+      {
+       "chars": 5344,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.06862103059953517
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.028968758426749876
+      },
+      {
+       "chars": 3970,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.050977824004519945
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.011235666499736764
+      }
+     ],
+     "transcript": "call-004-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.13766615692271497
+      },
+      "books": {
+       "chars": 44986,
+       "share": 0.529184801788025
+      },
+      "evidence": {
+       "chars": 19632,
+       "share": 0.23093753676038112
+      },
+      "feedback": {
+       "chars": 8689,
+       "share": 0.10221150452887895
+      }
+     },
+     "cache_creation_input_tokens": 39508,
+     "cache_read_input_tokens": 0,
+     "call": 5,
+     "chars_in": 85010,
+     "cost_usd": 1.5395870000000003,
+     "output_tokens": 44573,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11045,
+      "prefix_share": 0.12992589107163863,
+      "repeated_chars": 15673,
+      "repeated_share": 0.1843665451123397,
+      "sections": {
+       "certify": {
+        "chars": 3970,
+        "common_prefix": 3970,
+        "identical": true,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2929,
+        "common_prefix": 2059,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1892,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 237,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 39773,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 502,
+        "common_prefix": 217,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 5213,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 4719,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.033066698035525234
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.0943065521703329
+      },
+      {
+       "chars": 502,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.005905187624985296
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.0230443477237972
+      },
+      {
+       "chars": 2929,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.03445477002705564
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.16753323138454299
+      },
+      {
+       "chars": 39773,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4678626043994824
+      },
+      {
+       "chars": 5213,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.061322197388542526
+      },
+      {
+       "chars": 4719,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.05551111633925421
+      },
+      {
+       "chars": 3970,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.04670038818962475
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.01029290671685684
+      }
+     ],
+     "transcript": "call-005-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.14377856405720182
+      },
+      "books": {
+       "chars": 43833,
+       "share": 0.538515406162465
+      },
+      "evidence": {
+       "chars": 19632,
+       "share": 0.24119121332743623
+      },
+      "feedback": {
+       "chars": 6228,
+       "share": 0.07651481645289694
+      }
+     },
+     "cache_creation_input_tokens": 37936,
+     "cache_read_input_tokens": 0,
+     "call": 6,
+     "chars_in": 81396,
+     "cost_usd": 1.227827,
+     "output_tokens": 32779,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 30509,
+      "prefix_share": 0.3748218585679886,
+      "repeated_chars": 31335,
+      "repeated_share": 0.38496977738463806,
+      "sections": {
+       "certify": {
+        "chars": 3972,
+        "common_prefix": 2819,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2929,
+        "common_prefix": 2929,
+        "identical": true,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1959,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 14242,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 38090,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 502,
+        "common_prefix": 502,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 5743,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 2256,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.034534866578210234
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.0984937834783036
+      },
+      {
+       "chars": 502,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.006167379232394713
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.024067521745540322
+      },
+      {
+       "chars": 2929,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.035984569266303015
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.17497174308319818
+      },
+      {
+       "chars": 38090,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4679591134699494
+      },
+      {
+       "chars": 5743,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07055629269251561
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.027716349697773847
+      },
+      {
+       "chars": 3972,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.0487984667551231
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.010749914000687994
+      }
+     ],
+     "transcript": "call-006-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.13496557530186482
+      },
+      "books": {
+       "chars": 48732,
+       "share": 0.5620048206109951
+      },
+      "evidence": {
+       "chars": 19632,
+       "share": 0.2264072609011544
+      },
+      "feedback": {
+       "chars": 6644,
+       "share": 0.07662234318598563
+      }
+     },
+     "cache_creation_input_tokens": 39818,
+     "cache_read_input_tokens": 0,
+     "call": 7,
+     "chars_in": 86711,
+     "cost_usd": 0.9877729999999999,
+     "output_tokens": 22368,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 30509,
+      "prefix_share": 0.35184693983462306,
+      "repeated_chars": 33591,
+      "repeated_share": 0.3873902965021739,
+      "sections": {
+       "certify": {
+        "chars": 3971,
+        "common_prefix": 3971,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 2929,
+        "common_prefix": 2929,
+        "identical": true,
+        "was_absent": false
+       },
+       "compile_errors": {
+        "chars": 417,
+        "common_prefix": 0,
+        "identical": false,
+        "was_absent": true
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1959,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 14242,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 42212,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 502,
+        "common_prefix": 502,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 6520,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 2256,
+        "common_prefix": 2256,
+        "identical": true,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03241803231423925
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.09245655107195165
+      },
+      {
+       "chars": 502,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.005789346219049486
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.022592289328920205
+      },
+      {
+       "chars": 2929,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.033778874652581566
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.16424675070060316
+      },
+      {
+       "chars": 42212,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4868125151364879
+      },
+      {
+       "chars": 6520,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07519230547450727
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.026017460299154662
+      },
+      {
+       "chars": 3971,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.045795804453875516
+      },
+      {
+       "chars": 417,
+       "kind": "feedback",
+       "section": "compile_errors",
+       "share": 0.00480907843295545
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.010090991915673905
+      }
+     ],
+     "transcript": "call-007-theorize-round2.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.1278178243774574
+      },
+      "books": {
+       "chars": 49827,
+       "share": 0.5442005242463958
+      },
+      "evidence": {
+       "chars": 20518,
+       "share": 0.2240934906072521
+      },
+      "feedback": {
+       "chars": 9512,
+       "share": 0.10388816076889472
+      }
+     },
+     "cache_creation_input_tokens": 42254,
+     "cache_read_input_tokens": 0,
+     "call": 8,
+     "chars_in": 91560,
+     "cost_usd": 1.6367500000000001,
+     "output_tokens": 47265,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 11045,
+      "prefix_share": 0.12063128003494976,
+      "repeated_chars": 11703,
+      "repeated_share": 0.1278178243774574,
+      "sections": {
+       "certify": {
+        "chars": 3972,
+        "common_prefix": 3971,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 3813,
+        "common_prefix": 2929,
+        "identical": false,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1890,
+        "identical": false,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 238,
+        "identical": false,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 43425,
+        "common_prefix": 50,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 504,
+        "common_prefix": 217,
+        "identical": false,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 6402,
+        "common_prefix": 54,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 5540,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.030701179554390563
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.08756006989951944
+      },
+      {
+       "chars": 504,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.005504587155963303
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.021395806028833553
+      },
+      {
+       "chars": 3813,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.04164482306684142
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.1555482743556138
+      },
+      {
+       "chars": 43425,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.4742791612057667
+      },
+      {
+       "chars": 6402,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.0699213630406291
+      },
+      {
+       "chars": 5540,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.06050677151594583
+      },
+      {
+       "chars": 3972,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.04338138925294888
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.0095565749235474
+      }
+     ],
+     "transcript": "call-008-theorize-round1.md"
+    },
+    {
+     "by_kind": {
+      "boilerplate": {
+       "chars": 11703,
+       "share": 0.1302939211756847
+      },
+      "books": {
+       "chars": 51371,
+       "share": 0.5719327543976842
+      },
+      "evidence": {
+       "chars": 20518,
+       "share": 0.22843464707192163
+      },
+      "feedback": {
+       "chars": 6228,
+       "share": 0.06933867735470942
+      }
+     },
+     "cache_creation_input_tokens": 41321,
+     "cache_read_input_tokens": 0,
+     "call": 9,
+     "chars_in": 89820,
+     "cost_usd": 1.439363,
+     "output_tokens": 39779,
+     "repeat_vs_previous": {
+      "first_call": false,
+      "prefix_chars": 31395,
+      "prefix_share": 0.3495323981295925,
+      "repeated_chars": 32221,
+      "repeated_share": 0.35872856824760635,
+      "sections": {
+       "certify": {
+        "chars": 3972,
+        "common_prefix": 2819,
+        "identical": false,
+        "was_absent": false
+       },
+       "command_diffs": {
+        "chars": 3813,
+        "common_prefix": 3813,
+        "identical": true,
+        "was_absent": false
+       },
+       "current_frame": {
+        "chars": 1959,
+        "common_prefix": 1959,
+        "identical": true,
+        "was_absent": false
+       },
+       "engine_proposals": {
+        "chars": 14242,
+        "common_prefix": 14242,
+        "identical": true,
+        "was_absent": false
+       },
+       "grammar_card": {
+        "chars": 8017,
+        "common_prefix": 8017,
+        "identical": true,
+        "was_absent": false
+       },
+       "manual": {
+        "chars": 44204,
+        "common_prefix": 49,
+        "identical": false,
+        "was_absent": false
+       },
+       "obs_summary": {
+        "chars": 504,
+        "common_prefix": 504,
+        "identical": true,
+        "was_absent": false
+       },
+       "output_contract": {
+        "chars": 875,
+        "common_prefix": 875,
+        "identical": true,
+        "was_absent": false
+       },
+       "playbook": {
+        "chars": 7167,
+        "common_prefix": 53,
+        "identical": false,
+        "was_absent": false
+       },
+       "preamble": {
+        "chars": 2811,
+        "common_prefix": 2811,
+        "identical": true,
+        "was_absent": false
+       },
+       "surprises": {
+        "chars": 2256,
+        "common_prefix": 2256,
+        "identical": false,
+        "was_absent": false
+       }
+      }
+     },
+     "sections": [
+      {
+       "chars": 2811,
+       "kind": "boilerplate",
+       "section": "preamble",
+       "share": 0.03129592518370074
+      },
+      {
+       "chars": 8017,
+       "kind": "boilerplate",
+       "section": "grammar_card",
+       "share": 0.08925629035849476
+      },
+      {
+       "chars": 504,
+       "kind": "evidence",
+       "section": "obs_summary",
+       "share": 0.0056112224448897794
+      },
+      {
+       "chars": 1959,
+       "kind": "evidence",
+       "section": "current_frame",
+       "share": 0.021810287241148963
+      },
+      {
+       "chars": 3813,
+       "kind": "evidence",
+       "section": "command_diffs",
+       "share": 0.042451569806279225
+      },
+      {
+       "chars": 14242,
+       "kind": "evidence",
+       "section": "engine_proposals",
+       "share": 0.15856156757960366
+      },
+      {
+       "chars": 44204,
+       "kind": "books",
+       "section": "manual",
+       "share": 0.49213983522600757
+      },
+      {
+       "chars": 7167,
+       "kind": "books",
+       "section": "playbook",
+       "share": 0.07979291917167669
+      },
+      {
+       "chars": 2256,
+       "kind": "feedback",
+       "section": "surprises",
+       "share": 0.02511690046760187
+      },
+      {
+       "chars": 3972,
+       "kind": "feedback",
+       "section": "certify",
+       "share": 0.04422177688710755
+      },
+      {
+       "chars": 875,
+       "kind": "boilerplate",
+       "section": "output_contract",
+       "share": 0.0097417056334892
+      }
+     ],
+     "transcript": "call-009-theorize-round1.md"
+    }
+   ],
+   "run": "20260731T1500Z-A3-sk48-carried-l1",
+   "totals": {
+    "by_kind_chars": {
+     "boilerplate": 105327,
+     "books": 402955,
+     "evidence": 173234,
+     "feedback": 63688
+    },
+    "by_kind_share": {
+     "boilerplate": 0.14133982104229179,
+     "books": 0.5407311286573878,
+     "evidence": 0.2324652041588612,
+     "feedback": 0.08546384614145926
+    },
+    "cache_read_total_tokens": 0,
+    "calls": 9,
+    "chars_in": 745204,
+    "cost_per_call_usd": 1.361302,
+    "cost_usd": 12.251719,
+    "est_prefix_tokens": 80381,
+    "est_repeated_tokens": 90221,
+    "est_tokens_by_kind": {
+     "boilerplate": 46024,
+     "books": 176076,
+     "evidence": 75697,
+     "feedback": 27829
+    },
+    "prefix_chars": 183954,
+    "prefix_share": 0.24685052683560474,
+    "repeated_chars": 206473,
+    "repeated_share": 0.2770690978577678
+   }
+  }
+ ],
+ "legs_with_desk": 3
+}

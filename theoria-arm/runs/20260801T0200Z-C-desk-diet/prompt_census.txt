@@ -1,0 +1,97 @@
+=== 20260731T1310Z-A3-level2-carried-r2  (5 desk calls) ===
+  fit: 0.5330 chars/token, +-87279 fixed tokens, r2=0.2323
+  cost $9.56 over 5 calls ($1.91/call); cache_read total 35564 tokens
+  composition (chars, all calls):
+    boilerplate      58515   16.4%
+    evidence        100050   28.1%
+    books           175246   49.2%
+    feedback         22320    6.3%
+  verbatim-identical to previous call: 133539 chars (37.5%)
+  shared prefix with previous call:    128319 chars (36.0%)
+  per call:
+    call  chars_in  cc_tokens  cr_tokens   $  repeat%  prefix%
+       1     59834      28599          0   1.49     0.0     0.0
+       2     66598      31223          0   1.66    50.5    45.9
+       3     76521      99629      35564   2.86    17.7    14.4
+       4     76942      35707          0   1.91    97.0    98.3
+       5     76236      36600          0   1.63    15.4    14.5
+  per-section chars, first call -> last call:
+    preamble              2811 ->     2811   (+0)
+    grammar_card          8017 ->     8017   (+0)
+    obs_summary            482 ->      485   (+3)
+    current_frame         4294 ->     4294   (+0)
+    command_diffs          673 ->     1369   (+696)
+    engine_proposals     14241 ->    14242   (+1)
+    manual               23280 ->    32386   (+9106)
+    playbook              2942 ->     4358   (+1416)
+    surprises              346 ->     5716   (+5370)
+    certify               1873 ->     1683   (-190)
+    output_contract        875 ->      875   (+0)
+
+=== 20260731T1430Z-A3-level2-carried-r3  (8 desk calls) ===
+  fit: 2.3080 chars/token, +2976 fixed tokens, r2=0.9970
+  cost $13.44 over 8 calls ($1.68/call); cache_read total 0 tokens
+  composition (chars, all calls):
+    boilerplate      93624   13.2%
+    evidence        169655   24.0%
+    books           386538   54.6%
+    feedback         57768    8.2%
+  verbatim-identical to previous call: 81921 chars (11.6%)
+  shared prefix with previous call:    77349 chars (10.9%)
+  per call:
+    call  chars_in  cc_tokens  cr_tokens   $  repeat%  prefix%
+       1     74613      35406          0   1.55     0.0     0.0
+       2     77078      36244          0   1.88    15.2    14.3
+       3     80291      38041          0   1.57    14.6    13.8
+       4     86848      40511          0   1.67    13.5    12.7
+       5     92732      42662          0   1.69    12.6    11.9
+       6     94581      43937          0   1.91    12.4    11.7
+       7     99810      46403          0   1.49    11.7    11.1
+       8    101632      47179          0   1.68    11.5    10.9
+  per-section chars, first call -> last call:
+    preamble              2811 ->     2811   (+0)
+    grammar_card          8017 ->     8017   (+0)
+    obs_summary            482 ->      485   (+3)
+    current_frame         4294 ->     4294   (+0)
+    command_diffs          673 ->     3374   (+2701)
+    engine_proposals     14241 ->    14242   (+1)
+    manual               32958 ->    51253   (+18295)
+    playbook              4305 ->     8439   (+4134)
+    surprises             2127 ->     6152   (+4025)
+    certify               3830 ->     1690   (-2140)
+    output_contract        875 ->      875   (+0)
+
+=== 20260731T1500Z-A3-sk48-carried-l1  (9 desk calls) ===
+  fit: 2.2885 chars/token, +2180 fixed tokens, r2=0.9942
+  cost $12.25 over 9 calls ($1.36/call); cache_read total 0 tokens
+  composition (chars, all calls):
+    boilerplate     105327   14.1%
+    evidence        173234   23.2%
+    books           402955   54.1%
+    feedback         63688    8.5%
+  verbatim-identical to previous call: 206473 chars (27.7%)
+  shared prefix with previous call:    183954 chars (24.7%)
+  per call:
+    call  chars_in  cc_tokens  cr_tokens   $  repeat%  prefix%
+       1     77616      35950          0   1.20     0.0     0.0
+       2     75233      34833          0   1.37    47.6    38.2
+       3     79981      37138          0   1.63    19.6    13.8
+       4     77877      36489          0   1.22    39.1    38.1
+       5     85010      39508          0   1.54    18.4    13.0
+       6     81396      37936          0   1.23    38.5    37.5
+       7     86711      39818          0   0.99    38.7    35.2
+       8     91560      42254          0   1.64    12.8    12.1
+       9     89820      41321          0   1.44    35.9    35.0
+  per-section chars, first call -> last call:
+    preamble              2811 ->     2811   (+0)
+    grammar_card          8017 ->     8017   (+0)
+    obs_summary            500 ->      504   (+4)
+    current_frame         1959 ->     1959   (+0)
+    command_diffs         1189 ->     3813   (+2624)
+    engine_proposals     14241 ->    14242   (+1)
+    manual               36547 ->    44204   (+7657)
+    playbook              5254 ->     7167   (+1913)
+    surprises             2256 ->     2256   (+0)
+    certify               3967 ->     3972   (+5)
+    output_contract        875 ->      875   (+0)
+
