@@ -1,0 +1,39 @@
+{
+ "base_commit": "663e196954041d4e6da2a703cdd748d3ec0ed0d3",
+ "branch": "agent/e3-engines-online",
+ "file_sha256": {
+  "BUDGET_PLAN.json": "749a85891489ef693233b9f4995a1a598bb2f308fa6bb73b291886302fcbeaf8",
+  "PARTNER_SYNC_DRAFT.md": "b5d34b70d2afb056645a3bea944e1df1315b1e04c2743b1120a6a890d70d4aa7"
+ },
+ "files": [
+  "BUDGET_PLAN.json",
+  "PARTNER_SYNC_DRAFT.md"
+ ],
+ "game": "sk48-d8078629",
+ "pile": "development (already registered trajectories_reviewed in arc-recon/data/contamination_log.jsonl; this run adds no new contamination event)",
+ "prompt_id": "E3-engines-online",
+ "runs": [
+  {
+   "outcome": "PASS -- 64x64, colours {0,1,2,3,4,5,6,8,9,14}, 8 levels, available_actions [1,2,3,4,6,7], RESET 200 after 5 attempts, no `score` field in the response",
+   "slug": "preflight-20260728T074237Z",
+   "what": "live pre-flight on sk48; 0 billed actions"
+  },
+  {
+   "outcome": "ABORTED at 9 billed actions and $2.695 -- stopped deliberately once INC-TA-006 showed every desk call was dying in the ledger write after payment. Salvaged, scorecard closed, artefacts kept intact.",
+   "slug": "20260728T072604Z-E3-sk48-carried",
+   "what": "first live carried run"
+  },
+  {
+   "outcome": "see its own MANIFEST.json",
+   "slug": "20260728T083400Z-E3-sk48-carried-v2",
+   "what": "successor run, with the ledger, landmark and dispatch fixes"
+  }
+ ],
+ "sealed_pile_contact": 0,
+ "spend_gate": "absent -- proxy/spend_gate.py does not exist on this commit (S3 not landed); recorded, never treated as a pass",
+ "spend_gate_superseded": "The line above is what was true on 2026-07-28 and it is kept as the record of that day. It is no longer true of the code: `proxy/spend_gate.py` and `theoria-arm/harness/spend.py` landed with A3-campaign-devpile, every desk call now brackets itself with a reservation on the shared pool, and `ModelDesk.binding()` RAISES `NoSpendBinding` rather than permitting an ungated call. So a run made today could not reproduce the condition this field describes. Annotated rather than rewritten (2026-07-31, the E3 port onto master): the two runs governed by this plan really did spend $8.40-ish outside the pool's sight, and editing the sentence away would delete the only place that says so.",
+ "tn36_excluded_because": "precheck.json records available_actions [6]; ACTION6 is the click family filtered by D-P8-012, so this arm would have had no legal action and stopped before its first turn",
+ "utc": "2026-07-28T08:40:27Z",
+ "what_this_directory_is": "the item's planning and budget record. The live runs are separate directories and carry their own manifests; this one exists because the arithmetic that had to happen BEFORE any money was spent is an artefact in its own right, and burying it inside a run that had not started yet would have made it unfindable.",
+ "worker": "W-1521"
+}

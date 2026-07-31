@@ -215,3 +215,110 @@ Recorded here rather than in `GAPS.md` alone because it is a measurement
 hazard for **Phase 2**: a battery that re-prices every arm's history from one
 ledger will read this arm's cache-read column as a genuine zero unless it knows
 why it is zero.
+
+## INC-TA-006 · An upstream schema change ate a paid desk call, silently — severity: high
+
+**2026-07-28, E3, run `20260728T072604Z-E3-sk48-carried`. Cost: $2.695 and one
+discarded reply. Stopped before it became $15.**
+
+The first live desk call of E3 returned. `desk.calls` said 1 and
+`cli_cost_usd` said 2.694961 — the provider had been paid. But `desk_log.json`
+was `[]`, no transcript existed, and the run's ledger contained **zero
+`model_call` records**. The arm's own `except Exception` in
+`_theorize_and_certify` caught the raise, recorded "the desk failed", and went
+back for more evidence — so the run would have kept paying $2.70 per call and
+producing nothing until the cost ceiling stopped it.
+
+**Root cause.** Reproduced offline in a single run:
+
+> `model_call` is one of the two shapes and its field set is closed
+> (LEDGER_FORMAT.md §4): `'beat'`, `'label'`, `'proxied'`, `'proxy_gap'`,
+> `'transport'` are not defined.
+
+P-8 wrote those five fields straight onto the `model_call` record — `beat` so
+that constraint 8 would be checkable from the ledger rather than asserted in
+prose, `proxied`/`transport` so no reader could mistake this arm's CLI traffic
+for proxied traffic. `LEDGER_FORMAT.md` §4 **closed that field set after P-8
+landed**. This arm imports `proxy/` as a library from the repo root (by design:
+the ledger it writes is produced by the frozen writer), so the change arrived on
+a commit this track never touched and was never announced to it.
+
+**Why the tests did not catch it.** P-8's suite has tests for the record's
+shape, for constraint 8, and for `LEDGER_FORMAT.md` §1–§3 — and every one of
+them passed, because they check hand-built dictionaries. Nothing offline ever
+asked the real `proxy.ledger.RunLedger` to accept what `ModelDesk` actually
+sends it. The gap was not a missing assertion; it was a missing *subject*.
+
+**Why the pin did not catch it.** `_bootstrap.upstream_pin()` hashes
+`proxy/ledger.py` and its neighbours into every run manifest, precisely so that
+a silent upstream change cannot silently change these results. It worked: the
+hashes are in P-8's manifests and would have differed from E3's. But **nothing
+compares them between runs.** A pin that is written and never diffed does not
+prevent an incident; it documents one, afterwards, for someone who already knows
+to look.
+
+**Fixes, all tested.**
+
+1. The five fields moved into `request`, which is caller-owned on the canonical
+   record and already carried `beat`, `label` and `transport`. Nothing is lost
+   and no event is invented: `EVENTS` in `proxy/ledger.py` is closed to seven
+   names, none of which fits a model call's metadata, and adding one would mean
+   editing another track's directory. `beat` therefore stays on the ledger, one
+   level deeper, and constraint 8 stays checkable from the file.
+   `armtools/archive.py` reads both depths so P-8-era ledgers still report their
+   beats rather than `unknown`.
+2. **A paid reply is never discarded by a bookkeeping failure.** The arm's log
+   entry and the transcript are written *before* the ledger; the ledger write is
+   wrapped; a refusal lands in `desk.ledger_failures` and in
+   `summary()["calls_missing_from_ledger"]`. An incomplete ledger that says
+   exactly where it is incomplete beats a call that was paid for and thrown away.
+3. `test_a_desk_call_is_actually_accepted_by_the_frozen_writer` drives
+   `ModelDesk` into a real `RunLedger` with only the CLI stubbed out. It fails
+   against the pre-fix code with the exact production error.
+
+**Standing recommendation, not acted on here because it is not this track's
+territory:** something should diff `upstream_pin` between consecutive runs of an
+arm and say so when it moves. Every track that imports `proxy/` has this
+exposure and none of them would find out any sooner than this one did.
+
+---
+
+## INC-TA-007 · One game's level geometry crossed into another's level file — severity: medium
+
+**2026-07-28, E3, same run. No cost; caught by adversarial review of the run's
+own artefacts before any conclusion was published.**
+
+`inner/transfer.NEVER_CARRIED` excludes `problem.json` when books are carried
+between games, with the stated reason that carrying it "would import the
+previous game's board and make the transfer claim unfalsifiable."
+
+Seven of g50t's landmark coordinates reached sk48's computed `problem.json`
+anyway, verbatim: `start_cell (10,16)`, `gate_cell (40,16)`, `goal_cell
+(52,46)`, `corridor_cell (52,16)`, `button_cell (10,40)`, `hud_slot_a (1,1)`,
+`hud_slot_b (1,5)`. The route is `theorize._landmarks_from_theory`, which reads
+them out of `# arc-cell: (r, c)` comments **inside the manual** — and the manual
+is exactly what does travel. The generated predictor's guards then read them.
+
+The exclusion was drawn around a filename when the thing to exclude was a *kind
+of content*. A landmark's coordinates are level data by this arm's own
+domain/problem split (`inner/books.py`: the manual is the domain, the level is
+computed from the frames); the DSL has nowhere to write a coordinate, which is
+why the desk puts them in a comment, and a comment travels with the file.
+
+**Fix.** `transfer.strip_level_data` removes the hints on carry — on carry, not
+on write, so the source run's books are untouched and the stripping shows up as
+a diff in the `rev01-carried` snapshot. The stripped names are listed in the
+provenance with the reason, and both hashes of `theory.dsl` are recorded so the
+modification cannot be invisible to anyone checking what was carried. A landmark
+whose hint is gone still declares itself and lands at the origin under
+`landmarks_defaulted`, which is the pre-existing, visible failure mode for a
+coordinate the level cannot supply.
+
+The successor run `20260728T083400Z-E3-sk48-carried-v2` stripped all seven.
+
+**What this cost, and it is not nothing.** In the aborted run, "the carried
+manual compiled against sk48's level" was reported as a transfer result. It was
+close to guaranteed: the domain text was byte-identical to the one that already
+compiled on g50t, and the one problem-side failure mode — an unplaced landmark —
+was precluded by precisely these leaked coordinates. The compile was true and
+almost uninformative, and the leak is why.

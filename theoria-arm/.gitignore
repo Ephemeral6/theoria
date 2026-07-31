@@ -11,8 +11,10 @@ runs/smoke*/
 # eleven runs when it held nine. `armtools.verify_provenance` now fails if a
 # fixture reappears under `runs/`; this line is only about not committing them.
 .pytest-runs/
-runs_live.log
-.live_slug
+# Globbed, not literal: E3 ran two live legs side by side and the second wrote
+# `runs_live-2.log` / `.live_slug-2`, neither of which the literal names caught.
+runs_live*.log
+.live_slug*
 __pycache__/
 *.pyc
 

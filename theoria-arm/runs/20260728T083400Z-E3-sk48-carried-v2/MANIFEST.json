@@ -1,0 +1,881 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 28,
+  "sha256": "60b5557c399f09d81776d84d1e4875ab4d5d239aa65909a087e8846f458605b0"
+ },
+ "base_commit": null,
+ "branch": null,
+ "classification": {
+  "archive_material": true,
+  "kind": "experiment",
+  "why": "a live run that reached its own end"
+ },
+ "constraint_8": {
+  "bootstrap_calls_allowed": 1,
+  "bootstrap_note": "the first theorize of a run answers no surprise because no manual exists yet for the world to contradict; it is counted as the one permitted bootstrap call and every later call must be covered by a surprise.",
+  "calls_at_forbidden_beats": {},
+  "calls_beyond_bootstrap": 29,
+  "calls_by_beat": {
+   "theorize": 30
+  },
+  "calls_not_covered_by_a_surprise": 0,
+  "holds": true,
+  "model_calls": 30,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
+  "surprises": 39,
+  "surprises_by_kind": {
+   "probe_refutation": 23,
+   "render_mismatch": 1,
+   "replay_mismatch": 15
+  },
+  "surprises_licensing_a_call": 39,
+  "surprises_retired": 0
+ },
+ "cost": {
+  "cache_ttl_diagnosis": {
+   "cache_creation_1h_tokens": 200030,
+   "cache_creation_5m_tokens": 0,
+   "table": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "under_billed_usd": 0.750113,
+   "verdict": "200030 of this run's cache-creation tokens were 1-hour writes. `proxy/cost.py` priced them at the 5-minute multiplier because it reads the flat usage key and not the nested `cache_creation` object, so the table under-states this run by about $0.7501. The multiplier it needs is already in pricing_v1.json (`cache_creation_input_tokens_1h`); what is missing is the read."
+  },
+  "cli_reported_usd": 8.404868,
+  "delta_usd": -0.154958,
+  "from_price_table": {
+   "missing_usage_keys": null,
+   "model_calls": 30,
+   "per_model": {
+    "claude-opus-5": {
+     "calls": 30,
+     "usd": 8.24991
+    }
+   },
+   "pricing": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "unmeasured_calls": 0,
+   "unpriced_models": null,
+   "unpriced_usage_keys": null,
+   "usd_total": 8.24991
+  },
+  "model_calls": 30,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "relative_delta": -0.0184,
+  "usage_keys_the_table_cannot_price": null,
+  "usage_total": {
+   "cache_creation_input_tokens": 200030,
+   "cache_read_input_tokens": 0,
+   "input_tokens": 12,
+   "output_tokens": 249982
+  },
+  "verdict": "the price table and the provider's own arithmetic agree to within 2%: pricing_v1.json is validated against a real bill for the first time"
+ },
+ "elapsed_s": 7417.8,
+ "files": [
+  {
+   "path": "CARRIED.json",
+   "sha256": "7d47c83998d4f87a8ead70cdfbe32f87cfc281198d8fef7034006b66b9f02873"
+  },
+  {
+   "path": "RUN_STATE.json",
+   "sha256": "f4a6310bccb337a4166a92748e942142339c4ec3574ba07d9c6c48159bb2ff53"
+  },
+  {
+   "path": "bill_shape.json",
+   "sha256": "d269b060e9c84a8fef87960f343fd61ce291cfefdb658c33202498183fad2b5a"
+  },
+  {
+   "path": "books/generated/domain.pddl",
+   "sha256": "0804993bc1e41227e90b3a62cb7f2fb8992b9f8204c7295f9f1c597ee47f823e"
+  },
+  {
+   "path": "books/generated/problem.pddl",
+   "sha256": "c7059b783dbd14a4f8569536ccd4466c0f9596494f36df58c09ea6523c4c32d2"
+  },
+  {
+   "path": "books/generated/theory.md",
+   "sha256": "60efa93dd96e6ff99a252786f2e57adc05890081ce38ba5b059cfd61b419ea70"
+  },
+  {
+   "path": "books/generated/theory.py",
+   "sha256": "1e37dc5c4783e0a2c65e12cec0afb02bdc0b394e8128f1cf9b21de58808dc91e"
+  },
+  {
+   "path": "books/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/playbook.dsl",
+   "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/theory.dsl",
+   "sha256": "106431f377af67789c79ad89c5f748a1e2813e733e2daaeee079f15923a841d9"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/playbook.dsl",
+   "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/problem.json",
+   "sha256": "d7a391239cdcd92b778058cb023ba9c293b0b231ca8dc5dc72df17e64ae8c459"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/theory.dsl",
+   "sha256": "106431f377af67789c79ad89c5f748a1e2813e733e2daaeee079f15923a841d9"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/playbook.dsl",
+   "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/problem.json",
+   "sha256": "d7a391239cdcd92b778058cb023ba9c293b0b231ca8dc5dc72df17e64ae8c459"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/theory.dsl",
+   "sha256": "106431f377af67789c79ad89c5f748a1e2813e733e2daaeee079f15923a841d9"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/playbook.dsl",
+   "sha256": "f6b1ace21af125f5552f4f949c979d7b6d15d2ed927b841d93c320de4299f58a"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/problem.json",
+   "sha256": "9e03569f0344373e5d5d8ad1503ce6b54b6d195e82b800688b9dbc14c1c0d59c"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/theory.dsl",
+   "sha256": "a6c0b60d3a5d00a945e3b5e7a17aab02932cd15a7036789c95afd8379a66e203"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/playbook.dsl",
+   "sha256": "f6b1ace21af125f5552f4f949c979d7b6d15d2ed927b841d93c320de4299f58a"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/problem.json",
+   "sha256": "9e03569f0344373e5d5d8ad1503ce6b54b6d195e82b800688b9dbc14c1c0d59c"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/theory.dsl",
+   "sha256": "a6c0b60d3a5d00a945e3b5e7a17aab02932cd15a7036789c95afd8379a66e203"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/playbook.dsl",
+   "sha256": "8dfff8322ff088551ea027ce473b2e1844841c70418c599895bce9914a457f3d"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/problem.json",
+   "sha256": "b218276604e342b5f7f82e20af66412538d1322a10d23932c726d134a97bedb9"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/theory.dsl",
+   "sha256": "2a6562f44654462ca6779a47627940ceb3824cafad272d1c55eeac090c664ab8"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/playbook.dsl",
+   "sha256": "8dfff8322ff088551ea027ce473b2e1844841c70418c599895bce9914a457f3d"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/problem.json",
+   "sha256": "b218276604e342b5f7f82e20af66412538d1322a10d23932c726d134a97bedb9"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/theory.dsl",
+   "sha256": "2a6562f44654462ca6779a47627940ceb3824cafad272d1c55eeac090c664ab8"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/playbook.dsl",
+   "sha256": "4068b17d7c411dab3762fda8919b9002490e9e487dc054f3a0c27b1f0236c15f"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/problem.json",
+   "sha256": "a98cd372139b57d31dee763666ff736379ca3862b788a90d73bb4902c64de5de"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/theory.dsl",
+   "sha256": "073e69b18b02b888f66940712f88c0317e86d7ad71aa17b9c0003418e5f96b4a"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/playbook.dsl",
+   "sha256": "4068b17d7c411dab3762fda8919b9002490e9e487dc054f3a0c27b1f0236c15f"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/problem.json",
+   "sha256": "a98cd372139b57d31dee763666ff736379ca3862b788a90d73bb4902c64de5de"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/theory.dsl",
+   "sha256": "073e69b18b02b888f66940712f88c0317e86d7ad71aa17b9c0003418e5f96b4a"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/playbook.dsl",
+   "sha256": "29c8d56808343c5e6a501ef84105babe6fa8087c03a279268ec3e41c3b42f20e"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/problem.json",
+   "sha256": "a98cd372139b57d31dee763666ff736379ca3862b788a90d73bb4902c64de5de"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/theory.dsl",
+   "sha256": "c88cd242a9c40e9e24a0dd49c6a7160e20a96ee27fc56150ebba9bebb4a0a27b"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/playbook.dsl",
+   "sha256": "29c8d56808343c5e6a501ef84105babe6fa8087c03a279268ec3e41c3b42f20e"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/problem.json",
+   "sha256": "a98cd372139b57d31dee763666ff736379ca3862b788a90d73bb4902c64de5de"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/theory.dsl",
+   "sha256": "c88cd242a9c40e9e24a0dd49c6a7160e20a96ee27fc56150ebba9bebb4a0a27b"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/playbook.dsl",
+   "sha256": "6bf11788e2faf208075fd3d577b32262f3524d68cb9f75e0e548958fb9f80831"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/theory.dsl",
+   "sha256": "6f2e3bd740fee01535c4537ce17a88bd495a37adf2283938a87d2e14794cedab"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/playbook.dsl",
+   "sha256": "6bf11788e2faf208075fd3d577b32262f3524d68cb9f75e0e548958fb9f80831"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/theory.dsl",
+   "sha256": "6f2e3bd740fee01535c4537ce17a88bd495a37adf2283938a87d2e14794cedab"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev18-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev18-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev18-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev19-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev19-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev19-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev20-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev20-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev20-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev21-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev21-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev21-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev22-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev22-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev22-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev23-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev23-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev23-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev24-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev24-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev24-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev25-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev25-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev25-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev26-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev26-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev26-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev27-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev27-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev27-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev28-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev28-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev28-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev29-before-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev29-before-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev29-before-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/snapshots/rev30-after-theorize/playbook.dsl",
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  {
+   "path": "books/snapshots/rev30-after-theorize/problem.json",
+   "sha256": "a989032ed11bacb755ee20c5d647249a958b28c11dc14d84370b0682cf2bee3e"
+  },
+  {
+   "path": "books/snapshots/rev30-after-theorize/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "books/theory.dsl",
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  },
+  {
+   "path": "candidates.jsonl",
+   "sha256": "931d4b90585113fa015d3d2765608dbb7d7a623512934e3bdd652d036f581077"
+  },
+  {
+   "path": "certify.json",
+   "sha256": "81ba1634a44ddec3d7cb1b17ad8694f61049d39b316f47ce34dba74580eecbb6"
+  },
+  {
+   "path": "commit.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "desk/call-001-theorize-round1.md",
+   "sha256": "49eb2b72f959b32cddf8d11051588407187df583d398f9d10c659cf659f8efd8"
+  },
+  {
+   "path": "desk/call-002-theorize-round1.md",
+   "sha256": "1935f56b1f74794d2640314090ded2ccd3eefe6f0dd0da6495b2ed4437791304"
+  },
+  {
+   "path": "desk/call-003-theorize-round1.md",
+   "sha256": "ce1759f61a42ad9119833a4956a43c040d48fe0b82ff96a5e6d8b9e89827d047"
+  },
+  {
+   "path": "desk/call-004-theorize-round1.md",
+   "sha256": "2ce751eb423ca2a58e1f8f98f452b7a1fe95323231909331e57c4d4092f7d511"
+  },
+  {
+   "path": "desk/call-005-theorize-round1.md",
+   "sha256": "c7b01896afdb3b94f14e71839c72f4e7bf1e7afd8b44848f19a9cf596950bfd0"
+  },
+  {
+   "path": "desk/call-006-theorize-round1.md",
+   "sha256": "6342e9d8ac589584e90fb45b67af5ec26714fbd4124fc07100d0d9e72688e263"
+  },
+  {
+   "path": "desk/call-007-theorize-round1.md",
+   "sha256": "7c93dac5c9698c5a6cee88daf40fe0fc0c5078d20eb095fd3136baea1d57fe56"
+  },
+  {
+   "path": "desk/call-008-theorize-round2.md",
+   "sha256": "269704b95f408fce6b8ba3bffb2abcf23b57ec77f62b4a1cb9ce576d5b76806f"
+  },
+  {
+   "path": "desk/call-009-theorize-round3.md",
+   "sha256": "33810daf485eb0af2232fb3041deb8ed2e12290678614bcee323c2f9298f2cae"
+  },
+  {
+   "path": "desk/call-010-theorize-round1.md",
+   "sha256": "34db98f929f68eaeb1edb9959d745882e14ec031f39302abd6c6a0461eb62a8b"
+  },
+  {
+   "path": "desk/call-011-theorize-round2.md",
+   "sha256": "5c53c9796bab2eb98d988b9bed974dc9026ae9855a40b1b38a2a1d772f7738e4"
+  },
+  {
+   "path": "desk/call-012-theorize-round3.md",
+   "sha256": "896a6d7bc1b7218fc7ae9f987e1e4823064ce4fb9b7f56693e6f3c3eaf75ea22"
+  },
+  {
+   "path": "desk/call-013-theorize-round1.md",
+   "sha256": "d505abd831d1e17d9f2847da83c6838df950cd884157cd1d19a66b2fa2c89bf7"
+  },
+  {
+   "path": "desk/call-014-theorize-round2.md",
+   "sha256": "d8ec849adfadd0bcb195f5929c3df758ef8d6a0a942e52118b9370b6d656cad1"
+  },
+  {
+   "path": "desk/call-015-theorize-round3.md",
+   "sha256": "c37bec1a20f3125ab28698608dd29de2e2608b7fb9c537f50247b375a2d10db6"
+  },
+  {
+   "path": "desk/call-016-theorize-round1.md",
+   "sha256": "583da64d0785a411e7170404140cd5f310848f81cbe2318c3122b5be868d5d87"
+  },
+  {
+   "path": "desk/call-017-theorize-round2.md",
+   "sha256": "4ad1ba81839f21e206ddccf9598292eed7ad10c618f24b2db94de7bf3c0325ac"
+  },
+  {
+   "path": "desk/call-018-theorize-round3.md",
+   "sha256": "94fb9d5f844a1c8e9d1d524414e12c7326ed8b680fd95eebd48e07ea3f95e757"
+  },
+  {
+   "path": "desk/call-019-theorize-round1.md",
+   "sha256": "f3629f7da54ab0f2f595d2fa60dc0352dd2391b2c3a292e7b7f44bdafc1ee7db"
+  },
+  {
+   "path": "desk/call-020-theorize-round2.md",
+   "sha256": "6088edb20539465677e08411b9c0f3c2f834d341b88f18105aa95916a3e18e02"
+  },
+  {
+   "path": "desk/call-021-theorize-round3.md",
+   "sha256": "810c3feaf4e23d3c3e650b595c2320afa810bb265a7bba4ef79d12425902f23e"
+  },
+  {
+   "path": "desk/call-022-theorize-round1.md",
+   "sha256": "97be25f362423bc798115d6599479f00ce59b8dc5796de74bee456193d8cdfbe"
+  },
+  {
+   "path": "desk/call-023-theorize-round2.md",
+   "sha256": "c90d5e222e85e47a0b8dd3ecae2932c60f9ffb1680f0d000b4be696e8931c68b"
+  },
+  {
+   "path": "desk/call-024-theorize-round3.md",
+   "sha256": "559dff5a622d852b7adf6a046a0aa8bb936b8707b368ab7a98dbd96c5ee94bda"
+  },
+  {
+   "path": "desk/call-025-theorize-round1.md",
+   "sha256": "81948c7973ca069020685b9bc9b2d64c7217aa0125b168da2fa99a0f4c056be3"
+  },
+  {
+   "path": "desk/call-026-theorize-round2.md",
+   "sha256": "c4b1ce66a26a5cf77df9f51ed34f8e300185ede2c51af802596d10264c2c2869"
+  },
+  {
+   "path": "desk/call-027-theorize-round3.md",
+   "sha256": "fc8fd79d801b6faab130b130b440aa20d299f870072add629e608671214cdb48"
+  },
+  {
+   "path": "desk/call-028-theorize-round1.md",
+   "sha256": "8af36db96fe809b7e32fc931c62280c500c9051b7df63f81fc598035de25c91e"
+  },
+  {
+   "path": "desk/call-029-theorize-round2.md",
+   "sha256": "e7e6e6afe26b2e88df5bcb60acea84a46a7e4b53d464470a885db7b067087cf7"
+  },
+  {
+   "path": "desk/call-030-theorize-round3.md",
+   "sha256": "a38219d1d2382f5ad3630982f6f1fec5fb7fef2aa2ca4f94c6b4ad95478f63e8"
+  },
+  {
+   "path": "desk_failures.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "desk_log.json",
+   "sha256": "c7f783e0f4e2d02508d539bcff81d51703d5189ab620d48afc4c0a8c0e7f75fa"
+  },
+  {
+   "path": "engines_online.json",
+   "sha256": "0369ba0129b50ae635e998aedfa8673755679b3058d9e6ba08459fcf114b1567"
+  },
+  {
+   "path": "engines_online.jsonl",
+   "sha256": "d1cdafe568aa393bbb94931a5b67e8cc11468a14db166fbd2a9f4fc3ab1c07ee"
+  },
+  {
+   "path": "ledger.jsonl",
+   "sha256": "4dd50dd2f4c82821bfb0eff427fc257a3cd171e03d1d91c245647e1ed63fb81d"
+  },
+  {
+   "path": "plan.json",
+   "sha256": "48b577c0efb1287259f8febd8294e65343ccf798d0e4fe50b87edb6bca67af45"
+  },
+  {
+   "path": "probes.jsonl",
+   "sha256": "36f103cafce083fa5570f20cd34101c33a4e5aafba64c6f4f51b16351561af7c"
+  },
+  {
+   "path": "run.json",
+   "sha256": "cce7027ea657afb0640b5388362dcfc2690b09e87e504b90a41eae06c09120e3"
+  },
+  {
+   "path": "surprises.jsonl",
+   "sha256": "3b71d65384c6fa94cdde8635390b02d7171da480750caeccd953993fcc1d0e63"
+  },
+  {
+   "path": "theorize.json",
+   "sha256": "fb9696cbeb8ec64175805bdf736838ad18744129a6abe2a833bdab490d6cca63"
+  },
+  {
+   "path": "transfer.json",
+   "sha256": "07879444ab675d9e42a1c5d84c1bdb49486b6956dff45c0e6a4d894cc0d922ea"
+  },
+  {
+   "path": "turns.json",
+   "sha256": "0ff7a6edb990ea12a162bfe02b6e76838dee53fe46630ff22fe5b5a7350883bc"
+  }
+ ],
+ "game_id": "sk48-d8078629",
+ "guard": {
+  "allow_only": null,
+  "cut_version": "v1",
+  "n_dev": 4,
+  "n_sealed": 21,
+  "piles_path": "arc-recon/data/piles.json",
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "unknown_policy": "deny"
+ },
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 595,
+  "records_this_run": 595
+ },
+ "note_at_run_start": null,
+ "outcome": "budget_exhausted",
+ "parent_run": {
+  "card_id": "cf572892-0713-4ccf-9b75-73edd831c7df",
+  "parent_run_id_from_scorecard_opaque": "r-2c194a9cfb5e491a",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": "E3-engines-online"
+ },
+ "prompt_id": "E3-engines-online",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "60b5557c399f09d81776d84d1e4875ab4d5d239aa65909a087e8846f458605b0",
+   "commits": [
+    "c93485e598245ae8e2aa22a1365d43507bdba5a1",
+    "76bb30361d43f8c39ea9928d5f4dffea7316921d"
+   ],
+   "detail": "2 commits carry this arm_version -- the arm's .py files are byte-identical at each, and `arm_version` covers `.py` only, so commits differing in a prompt, a log or a fixture are indistinguishable here. The earliest is the one the sources first appeared in; disambiguate the rest by time.",
+   "earliest_commit": "c93485e598245ae8e2aa22a1365d43507bdba5a1",
+   "relation_to_the_run": {
+    "claim": "this run's arm sources were byte-identical to the tree held by this commit. The commit was created 91 s after the run started, so it is not 'the commit the run ran from' -- it is the commit whose tree the run's files match.",
+    "commit_committed_unix": 1785227134,
+    "commit_minus_run_start_s": 91,
+    "run_started_unix": 1785227043
+   },
+   "verdict": "ambiguous"
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "base_commit": "armtools.armversion: several commits share this arm_version; all are named",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit (single value)",
+    "why": "2 commits have identical arm .py files, so the recorded hash does not single one out"
+   },
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
+  "mode": "backfill",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
+ "quota": {
+  "agree": true,
+  "billed_actions_from_ledger": 30,
+  "billed_actions_from_scorecard": [
+   30
+  ],
+  "env_steps": 252,
+  "model_calls": 30,
+  "resets": 1
+ },
+ "reconciliation": {
+  "env_steps": 252,
+  "env_steps_ok": 31,
+  "http_amplification": 8.4,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 30
+ },
+ "run_id": "r-2c194a9cfb5e491a",
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "cf572892-0713-4ccf-9b75-73edd831c7df",
+   "environments": [
+    {
+     "actions": 30,
+     "completed": false,
+     "id": "sk48-d8078629",
+     "level_count": 8,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 30,
+       "completed": false,
+       "guid": "484bcde1-cdfa-4db1-b1bf-da98f6419b62",
+       "level_actions": [
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "prompt_id": "E3-engines-online",
+    "run_id": "r-2c194a9cfb5e491a"
+   },
+   "score": 0.0,
+   "tags": [
+    "theoria",
+    "e3",
+    "second-game",
+    "carried-books",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 30,
+     "id": "keyboard_click",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 8,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 30,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 8,
+   "total_levels_completed": 0
+  }
+ ],
+ "sealing": {
+  "by_kind": {
+   "credential_in_body": 281
+  },
+  "bypass_attempts": 0,
+  "credential_in_body": 281,
+  "cut_integrity": true,
+  "game_ids_anywhere_in_the_records": [
+   "sk48-d8078629"
+  ],
+  "guard_blocks": 0,
+  "incidents": 281,
+  "redacted_markers": 0,
+  "sealed_game_ids_found": [],
+  "sealed_pile_requests": 0,
+  "sealed_pile_untouched": true
+ },
+ "slug": "20260728T083400Z-E3-sk48-carried-v2",
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
+ },
+ "utc": "2026-07-28T08:24:03.871Z"
+}

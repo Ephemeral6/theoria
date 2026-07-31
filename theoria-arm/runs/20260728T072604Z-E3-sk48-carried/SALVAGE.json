@@ -1,0 +1,101 @@
+{
+ "card_ids": [
+  "0a6ec1d9-99f5-40b2-8611-174de575a624"
+ ],
+ "env_steps": 92,
+ "env_steps_ok": 10,
+ "records": 186,
+ "run_end_present": false,
+ "scorecard_on_close": {
+  "card_id": "0a6ec1d9-99f5-40b2-8611-174de575a624",
+  "environments": [
+   {
+    "actions": 9,
+    "completed": false,
+    "id": "sk48-d8078629",
+    "level_count": 8,
+    "levels_completed": 0,
+    "resets": 0,
+    "runs": [
+     {
+      "actions": 9,
+      "completed": false,
+      "guid": "81aa1cea-5055-414b-a72a-1384e3ae8c96",
+      "level_actions": [
+       9,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "level_baseline_actions": [
+       61,
+       177,
+       101,
+       103,
+       230,
+       181,
+       125,
+       92
+      ],
+      "level_scores": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "levels_completed": 0,
+      "resets": 0,
+      "score": 0.0,
+      "state": "NOT_FINISHED"
+     }
+    ],
+    "score": 0.0
+   }
+  ],
+  "opaque": {
+   "prompt_id": "E3-engines-online",
+   "run_id": "r-e404e571d5724de2"
+  },
+  "score": 0.0,
+  "tags": [
+   "theoria",
+   "e3",
+   "second-game",
+   "carried-books",
+   "agent"
+  ],
+  "tags_scores": [
+   {
+    "actions": 9,
+    "id": "keyboard_click",
+    "levels_completed": 0,
+    "number_of_environments": 1,
+    "number_of_levels": 8,
+    "score": 0.0
+   }
+  ],
+  "total_actions": 9,
+  "total_environments": 1,
+  "total_environments_completed": 0,
+  "total_levels": 8,
+  "total_levels_completed": 0
+ },
+ "slug": "20260728T072604Z-E3-sk48-carried",
+ "successful_actions": 9,
+ "trace": {
+  "cascade_lengths": [
+   1,
+   2
+  ],
+  "path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried\\trace.jsonl",
+  "states": 10
+ }
+}

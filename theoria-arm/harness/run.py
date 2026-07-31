@@ -358,12 +358,42 @@ def main(argv=None) -> int:
     ap.add_argument("--model", default="claude-opus-5")
     ap.add_argument("--cost-ceiling", type=float, default=20.0)
     ap.add_argument("--wall-clock", type=float, default=3 * 3600)
+    ap.add_argument("--runs-root", default=None, metavar="DIR",
+                    help="write the run here instead of into `runs/`. `runs/` "
+                         "is the ARCHIVE and is tracked, so a smoke or a gate "
+                         "run that lands there is indistinguishable by "
+                         "directory listing from an experiment that cost "
+                         "money -- and `armtools.verify_provenance` refuses a "
+                         "fixture found under it. Pass "
+                         "`harness.run.FIXTURE_RUNS_DIR` (.pytest-runs/) for a "
+                         "throwaway.")
     ap.add_argument("--pool", default=None,
                     help="draw on a SCRATCH spend pool at this path instead of "
                          "the shared one. For offline proofs only: fictional "
                          "dollars must not land in proxy/var/spend_gate.jsonl. "
                          "The pool actually used is printed and recorded in "
                          "run_start, so a run against a scratch pool says so.")
+    # `--seed-books`, not `--carry-books`: `TheoriaArm` takes `seed_books=` and
+    # `Books(seed_from=...)` is what actually copies the pair, so one name for
+    # one carry. The E3 spelling stays as an alias because it is written into
+    # the archived run records that this flag produced.
+    ap.add_argument("--seed-books", "--carry-books", dest="seed_books",
+                    default=None, metavar="BOOKS_DIR",
+                    help="seed the two books from a finished run's `books/` "
+                         "directory instead of starting from nothing. Only "
+                         "theory.dsl and playbook.dsl travel; problem.json is "
+                         "the level instance and is recomputed from THIS "
+                         "game's frames, and the pair is hashed into "
+                         "CARRIED.json.")
+    ap.add_argument("--carry-source-game", default=None,
+                    help="the game id the carried books were written for; "
+                         "recorded in CARRIED.json and transfer.json")
+    ap.add_argument("--tags", default=None,
+                    help="comma-separated scorecard tags")
+    ap.add_argument("--prompt-id", default="P-8",
+                    help="written into the scorecard's opaque block and into "
+                         "every manifest, so a run can be traced to the item "
+                         "that asked for it")
     args = ap.parse_args(argv)
 
     from inner.loop import TheoriaArm                 # noqa: PLC0415
@@ -392,7 +422,12 @@ def main(argv=None) -> int:
                           model=args.model,
                           cost_ceiling_usd=args.cost_ceiling,
                           wall_clock_s=args.wall_clock,
-                          offline=args.mock and not args.desk)
+                          offline=args.mock and not args.desk,
+                          seed_books=args.seed_books,
+                          carry_source_game=args.carry_source_game,
+                          tags=([t.strip() for t in args.tags.split(",")]
+                                if args.tags else None),
+                          prompt_id=args.prompt_id)
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}
@@ -403,10 +438,11 @@ def main(argv=None) -> int:
         with MockArc(api_key=DEFAULT_KEY, games=[args.game]) as arc:
             summary = play(args.game, slug, factory, env_upstream=arc.base_url,
                            env_key=DEFAULT_KEY, require_key=False,
-                           caps=caps, spend_gate=gate, expect_pool=expect_pool)
+                           caps=caps, spend_gate=gate, expect_pool=expect_pool,
+                           runs_root=args.runs_root)
     else:
         summary = play(args.game, slug, factory, caps=caps, spend_gate=gate,
-                       expect_pool=expect_pool)
+                       expect_pool=expect_pool, runs_root=args.runs_root)
 
     print(canonical({k: v for k, v in summary.items() if k != "frames"}))
     return 0
