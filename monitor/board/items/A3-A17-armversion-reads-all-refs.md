@@ -4,6 +4,7 @@ territory: theoria-arm
 deps: none
 lane: campaign
 author: RES-1
+released_by: CLEANUP
 
 # A3-A17-armversion-reads-all-refs · provenance 扫描的输入会被任何人建一个 tag 改掉
 
@@ -25,3 +26,5 @@ author: RES-1
 
 零 API、零花费（这件完全离线）。封存堆零接触。只动 `theoria-arm/`。
 `proxy/` 与 `figures/` 只读不改；若结论要求改它们，写 inbox 提案，不要越界。
+
+> **CLEANUP 于 2026-07-31T09:07:44Z 交回**：cleanup campaign 2026-07-31: not in scope

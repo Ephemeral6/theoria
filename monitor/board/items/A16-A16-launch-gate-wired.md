@@ -4,6 +4,7 @@ territory: theoria-arm
 deps: none
 lane: campaign
 author: RES-1
+released_by: CLEANUP
 
 # A16-A16-launch-gate-wired · 把 launch_gate 接进真正会花钱的路径
 
@@ -32,3 +33,5 @@ freeze/verify.sh 只把它的裁决当 NOTE 报，而 verify.sh 不是开跑路�
 以及 freeze/STATS_RULES.md §9「开跑前置条件的可执行半边」。
 服务论文的哪个槽位：Phase 4 封存确证的预注册可信度——「我们预先声明了三条开跑前置条件」
 这句话，在没有任何代码执行它之前，读者没有理由相信；本条目是把它变成可核查的那一步。
+
+> **CLEANUP 于 2026-07-31T09:07:44Z 交回**：cleanup campaign 2026-07-31: not in scope

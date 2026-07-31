@@ -1,6 +1,7 @@
 priority: 1
 cell: S3
 territory: proxy
+released_by: CLEANUP
 
 # S31-a10-said-done-prove-it · A10 记着已交付，而共享账本里仍然没有真臂记录
 
@@ -28,3 +29,5 @@ territory: proxy
 
 服务论文 WP2、WP3（图 2 的账单形状全靠这本账）。
 若需真跑，**只准最小额**并在 inbox 报数。零封存堆接触。
+
+> **CLEANUP 于 2026-07-31T09:06:00Z 交回**：cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched

@@ -419,3 +419,39 @@
 2026-07-30T16:12:02Z SWEEP V23-figures-sources-absent released (worker W-1682: scheduled task is no longer running)
 2026-07-30T16:12:02Z SWEEP V25-worldgen-unchecked-is-not-holding released (worker W-1681: scheduled task is no longer running)
 2026-07-30T16:12:02Z SWEEP V26-fuzzlab-readme-points-at-the-smoke-run released (worker W-1710: scheduled task is no longer running)
+2026-07-31T09:05:58Z CLAIM E18-survey-numbers-reproducible by CLEANUP
+2026-07-31T09:05:59Z DONE E18-survey-numbers-reproducible by CLEANUP
+2026-07-31T09:05:59Z CLAIM S31-a10-said-done-prove-it by CLEANUP
+2026-07-31T09:06:00Z RELEASE S31-a10-said-done-prove-it by CLEANUP (cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched)
+2026-07-31T09:06:00Z CLAIM S32-dual-agent-is-one-agent by CLEANUP
+2026-07-31T09:06:01Z RELEASE S32-dual-agent-is-one-agent by CLEANUP (cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched)
+2026-07-31T09:06:01Z CLAIM S44-monitor-suite-outgrew-its-gate by CLEANUP
+2026-07-31T09:06:02Z RELEASE S44-monitor-suite-outgrew-its-gate by CLEANUP (cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched)
+2026-07-31T09:06:02Z CLAIM V23-figures-sources-absent by CLEANUP
+2026-07-31T09:06:03Z DONE V23-figures-sources-absent by CLEANUP
+2026-07-31T09:06:03Z CLAIM V25-worldgen-unchecked-is-not-holding by CLEANUP
+2026-07-31T09:06:04Z DONE V25-worldgen-unchecked-is-not-holding by CLEANUP
+2026-07-31T09:06:04Z CLAIM S44-S44-reflex-heartbeat-unwatched by CLEANUP
+2026-07-31T09:06:05Z RELEASE S44-S44-reflex-heartbeat-unwatched by CLEANUP (cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched)
+2026-07-31T09:06:05Z CLAIM V26-fuzzlab-readme-points-at-the-smoke-run by CLEANUP
+2026-07-31T09:06:06Z RELEASE V26-fuzzlab-readme-points-at-the-smoke-run by CLEANUP (cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched)
+2026-07-31T09:06:51Z REASSIGN C1-P23-fourth-form-unqualified from paper to generic by monitor(self-asserted) (cleanup campaign 2026-07-31 delivered this item (paper dates c2884017 / e3 merge 78947c30 / salvage commits b8a7d6bc..31de4964); unsticking idle lanes to record the close)
+2026-07-31T09:06:52Z REASSIGN E3-engines-online from campaign to generic by monitor(self-asserted) (cleanup campaign 2026-07-31 delivered this item (paper dates c2884017 / e3 merge 78947c30 / salvage commits b8a7d6bc..31de4964); unsticking idle lanes to record the close)
+2026-07-31T09:06:52Z REASSIGN R4-worktree-rescue from unlaned to generic by monitor(self-asserted) (cleanup campaign 2026-07-31 delivered this item (paper dates c2884017 / e3 merge 78947c30 / salvage commits b8a7d6bc..31de4964); unsticking idle lanes to record the close)
+2026-07-31T09:07:43Z DONE A3-campaign-devpile by RES-1
+2026-07-31T09:07:43Z DONE P18-audits-cover-half-the-paper by RES-3
+2026-07-31T09:07:43Z DONE V27-V27-manifest-absolute-paths by RES-3
+2026-07-31T09:07:43Z CLAIM A16-A16-launch-gate-wired by CLEANUP
+2026-07-31T09:07:44Z RELEASE A16-A16-launch-gate-wired by CLEANUP (cleanup campaign 2026-07-31: not in scope)
+2026-07-31T09:07:44Z CLAIM A3-A17-armversion-reads-all-refs by CLEANUP
+2026-07-31T09:07:44Z RELEASE A3-A17-armversion-reads-all-refs by CLEANUP (cleanup campaign 2026-07-31: not in scope)
+2026-07-31T09:07:44Z CLAIM A8-campaign-ledger-pipeline by CLEANUP
+2026-07-31T09:07:45Z RELEASE A8-campaign-ledger-pipeline by CLEANUP (cleanup campaign 2026-07-31: not in scope)
+2026-07-31T09:07:45Z CLAIM R4-worktree-rescue by CLEANUP
+2026-07-31T09:07:45Z DONE R4-worktree-rescue by CLEANUP
+2026-07-31T09:07:45Z CLAIM V2-V25-verify-does-not-check-what-is-committed by CLEANUP
+2026-07-31T09:07:46Z RELEASE V2-V25-verify-does-not-check-what-is-committed by CLEANUP (cleanup campaign 2026-07-31: not in scope)
+2026-07-31T09:07:46Z CLAIM C1-P23-fourth-form-unqualified by CLEANUP
+2026-07-31T09:07:47Z DONE C1-P23-fourth-form-unqualified by CLEANUP
+2026-07-31T09:08:20Z CLAIM E3-engines-online by CLEANUP
+2026-07-31T09:08:21Z DONE E3-engines-online by CLEANUP

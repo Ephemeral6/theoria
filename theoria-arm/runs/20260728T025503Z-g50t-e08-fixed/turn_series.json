@@ -1,0 +1,324 @@
+{
+ "frontload_input": {
+  "all_turns": {
+   "frontload_index_25": 0.0,
+   "head_turns": 0.75,
+   "head_usd": 0.0,
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+   "status": "insufficient-data",
+   "turns": 3,
+   "usd_total": 7.094676
+  },
+  "billed_calls": 5,
+  "billed_turns_only": {
+   "frontload_index_25": 0.205326219,
+   "head_turns": 0.5,
+   "head_usd": 1.456723,
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+   "status": "insufficient-data",
+   "turns": 2,
+   "usd_total": 7.094676
+  },
+  "frontload_k": 0.25,
+  "min_turns_for_shape": 8,
+  "run_id": null,
+  "slug": "20260728T025503Z-g50t-e08-fixed",
+  "turn_costs": [
+   0,
+   2.913446,
+   4.18123
+  ],
+  "turn_costs_billed_only": [
+   2.913446,
+   4.18123
+  ],
+  "usd_total": 7.094676
+ },
+ "game_id": null,
+ "join": {
+  "billed_calls_outside_their_own_turn_window": [],
+  "checks": [
+   {
+    "check": "theorize invocations per step index <= MAX_THEORIZE_PER_TURN",
+    "constant_source": "inner.loop.MAX_THEORIZE_PER_TURN",
+    "max_theorize_per_turn": 2,
+    "ok": true,
+    "violations": {}
+   },
+   {
+    "check": "step_idx never decreases across billed calls",
+    "ok": true
+   },
+   {
+    "budget": {
+     "actions_failed": 0,
+     "actions_left": 89,
+     "actions_ok": 13,
+     "ceiling_actions": 102,
+     "ceiling_commands": 3000,
+     "commands_sent": 146,
+     "http_amplification": 11.231,
+     "probe_actions": 4,
+     "reserve_for_probes": 0,
+     "resets": 1
+    },
+    "check": "len(store.steps) == resets + actions_ok + actions_failed",
+    "last_billed_step_idx": 10,
+    "ok": true,
+    "store_steps_after_the_last_billed_turn": 4,
+    "store_steps_at_end": 14
+   },
+   {
+    "actions_failed": 0,
+    "check": "actions_before can be inferred as step_idx - resets (requires actions_failed == 0)",
+    "ok": true,
+    "reason": null
+   },
+   {
+    "check": "the step-index progression admits exactly one turn decomposition",
+    "gaps": [
+     {
+      "between_step_idx": [
+       6,
+       10
+      ],
+      "readings": "one turn committing 4 actions, or up to 3 turn(s) whose theorize the evidence gate skipped",
+      "store_steps_between": 4
+     },
+     {
+      "after_the_last_billed_turn": true,
+      "readings": "the run may have taken up to 3 further turn(s) that spent no model call and are therefore invisible in the cost curve",
+      "store_steps_after": 4
+     }
+    ],
+    "ok": false
+   },
+   {
+    "check": "every billed call falls inside the window its turn's ARC commands define -- the index join and the clock join agree",
+    "offenders": [],
+    "ok": true
+   },
+   {
+    "check": "actions_before recomputed from the ledger matches the value the turn recorded",
+    "offenders": [],
+    "ok": true
+   }
+  ],
+  "join_confidence": "ambiguous-reconstructed",
+  "key": "theorize-invocation segmentation (label 'round1' restarts inside every theorize.run()) allocated to turns in order; cross-checked by step_idx == actions_before + resets + actions_failed_so_far",
+  "spine": "reconstructed from ledger step_idx (turns.json absent)",
+  "surprise_join": "wall-clock containment in the turn's window; a surprise's own step_idx is a frame ordinal and cannot address a turn",
+  "surprises_within_1s_of_a_turn_boundary": 0
+ },
+ "provenance": {
+  "run_dir": "20260728T025503Z-g50t-e08-fixed",
+  "sources": {
+   "RUN_STATE.json": {
+    "present": true,
+    "sha256": "2c9b297d1dd3d2cb676df1f701a8a5c7cc9a09c843ef0f83654ba1981ecca332"
+   },
+   "cost_curve.json": {
+    "present": true,
+    "sha256": "ce5d372290189ce71091431ab8d337fd9ad45a082dcbbe7fa5f8b89cac36611d"
+   },
+   "desk_log.json": {
+    "present": true,
+    "sha256": "bd60124456d0c69a3f35ff53fdba7b22e736dd8558d59db8d05caebc2f3946a7"
+   },
+   "ledger.jsonl": {
+    "present": true,
+    "sha256": "08f9c2b9d1c06c4cc623614d6e0809d3dd6ec755c90ea4e87dcc78c7bbcb2543"
+   },
+   "run.json": {
+    "present": false,
+    "sha256": null
+   },
+   "surprises.jsonl": {
+    "present": true,
+    "sha256": "70bf45023da4af7fcec90f36ce007510d71c12eca19153a1b9c90b8715ef11eb"
+   },
+   "theorize.json": {
+    "present": false,
+    "sha256": null
+   },
+   "turns.json": {
+    "present": false,
+    "sha256": null
+   }
+  }
+ },
+ "reconciliation": {
+  "actions": {
+   "budget_actions_ok": 13,
+   "reconciles": true,
+   "sum_over_turns": 13
+  },
+  "model_calls": {
+   "in_ledger": 5,
+   "reconciles": true,
+   "sum_over_turns": 5
+  },
+  "surprises": {
+   "by_kind_in_surprises_jsonl": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 3,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 4,
+    "search_timeout": 0
+   },
+   "by_kind_over_turns": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 3,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 4,
+    "search_timeout": 0
+   },
+   "in_surprises_jsonl": 7,
+   "reconciles": true,
+   "sum_over_turns": 7
+  },
+  "usd": {
+   "delta_vs_desk": 0.0,
+   "reconciles": true,
+   "reported_by_the_desk": 7.094676,
+   "sum_over_model_call_records": 7.094676,
+   "sum_over_turns": 7.094676
+  }
+ },
+ "rows": [
+  {
+   "actions_before": 0,
+   "actions_before_recorded": 0,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "elapsed_s": null,
+   "http_commands": 41,
+   "model_calls": 0,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "reconstructed (opening sweep)",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 4,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    0,
+    1
+   ],
+   "elapsed_s": null,
+   "http_commands": 66,
+   "model_calls": 2,
+   "step_idx": 6,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 2
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    1,
+    2
+   ],
+   "surprise_total": 2,
+   "theorize_rounds": 2,
+   "turn": 1,
+   "turn_source": "reconstructed (step_idx grouping)",
+   "usd": 2.913446,
+   "usd_cumulative": 2.913446,
+   "usd_share": 0.410652439,
+   "wall_clock_s": 165.847
+  },
+  {
+   "actions_before": 9,
+   "actions_before_recorded": 9,
+   "actions_taken": 4,
+   "beats": [
+    "theorize"
+   ],
+   "call_idx": [
+    2,
+    3,
+    4
+   ],
+   "elapsed_s": null,
+   "http_commands": 39,
+   "model_calls": 3,
+   "step_idx": 10,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 5
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 3,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "surprise_total": 5,
+   "theorize_rounds": 2,
+   "turn": 2,
+   "turn_source": "reconstructed (step_idx grouping)",
+   "usd": 4.18123,
+   "usd_cumulative": 7.094676,
+   "usd_share": 0.589347561,
+   "wall_clock_s": 1791.008
+  }
+ ],
+ "run_id": null,
+ "schema": "theoria-arm/turn_series v1",
+ "slug": "20260728T025503Z-g50t-e08-fixed",
+ "totals": {
+  "actions": 13,
+  "billed_turns": 2,
+  "model_calls": 5,
+  "surprises": 7,
+  "turns": 3,
+  "usd": 7.094676
+ }
+}

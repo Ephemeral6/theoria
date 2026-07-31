@@ -214,6 +214,10 @@
    "sha256": "be182fd6f3f98401a4ebae265bcc1901a084a3df2487dbf008af5f5a958ad700"
   },
   {
+   "path": "cost_curve.json",
+   "sha256": "ce5d372290189ce71091431ab8d337fd9ad45a082dcbbe7fa5f8b89cac36611d"
+  },
+  {
    "path": "desk/call-001-theorize-round1.md",
    "sha256": "f7b9b4d73e14c4d76b3f2e965a2a71959d9c53e19f1a2ef66beb3b9487b8785c"
   },
@@ -248,6 +252,10 @@
   {
    "path": "surprises.jsonl",
    "sha256": "70bf45023da4af7fcec90f36ce007510d71c12eca19153a1b9c90b8715ef11eb"
+  },
+  {
+   "path": "turn_series.json",
+   "sha256": "bdad33cc1dcccb3d9a195442f4f1844f7f8095c2cf6a6a962289076066f31d99"
   }
  ],
  "game_id": "g50t-5849a774",

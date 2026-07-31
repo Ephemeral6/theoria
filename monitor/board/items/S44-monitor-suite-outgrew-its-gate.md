@@ -1,6 +1,7 @@
 priority: 1
 cell: S1
 territory: monitor
+released_by: CLEANUP
 
 # S44-monitor-suite-outgrew-its-gate · 套件长过了它自己那道闸门的耐心
 
@@ -35,3 +36,5 @@ territory: monitor
 没有任何东西说过一句话——**闸门的成本是不可见的，直到它开始骗人**。
 
 服务全部十个工作包（它保护的是「已交付」这个词）。零 API、零封存堆接触。
+
+> **CLEANUP 于 2026-07-31T09:06:02Z 交回**：cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched

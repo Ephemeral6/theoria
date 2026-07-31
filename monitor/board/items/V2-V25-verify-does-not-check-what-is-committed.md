@@ -4,6 +4,7 @@ territory: exam
 deps: none
 lane: verify
 author: RES-3
+released_by: CLEANUP
 
 # V2-V25-verify-does-not-check-what-is-committed · verify 报绿, 但从没比过签入的 artefact
 
@@ -51,3 +52,5 @@ LF 归一后逐个 sha256、再按 `RUBRIC_MODULES` 的固定顺序串起来）�
 所以这条工单的第 2 步不必再调查，做法是**重建并提交**，不是回退 rubric——
 但闸门（第 1、3、4 步）一条不能少：本条缺陷的实体是「verify 覆写了自己该比对的证据」，
 与漂移是哪一种无关。
+
+> **CLEANUP 于 2026-07-31T09:07:46Z 交回**：cleanup campaign 2026-07-31: not in scope

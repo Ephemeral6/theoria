@@ -1,6 +1,7 @@
 priority: 1
 cell: S1
 territory: verify-lab
+released_by: CLEANUP
 
 # S32-dual-agent-is-one-agent · 「双代理」这条主张，证据指向单代理
 
@@ -31,3 +32,5 @@ territory: verify-lab
 **硬红线**：查证过程不许把任何真实凭据写进任何文件；模型代理那段涉及
 `ANTHROPIC_API_KEY` 的记录，**只报形状与计数，不报值**。
 零 API 计费、零封存堆接触。服务论文 WP2。
+
+> **CLEANUP 于 2026-07-31T09:06:01Z 交回**：cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched

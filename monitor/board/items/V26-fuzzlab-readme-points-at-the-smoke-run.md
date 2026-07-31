@@ -1,6 +1,7 @@
 priority: 2
 cell: E1
 territory: fuzzlab
+released_by: CLEANUP
 
 # V26-fuzzlab-readme-points-at-the-smoke-run · README 指的那份产物是 60 世界的烟测
 
@@ -25,3 +26,5 @@ territory: fuzzlab
 若其中有指向 fuzzlab 产物的，一并核对并在 inbox 报给 V23 的持有者。
 
 服务论文 WP1。零 API、零封存堆接触。
+
+> **CLEANUP 于 2026-07-31T09:06:06Z 交回**：cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched

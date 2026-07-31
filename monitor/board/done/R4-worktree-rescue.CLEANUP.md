@@ -30,3 +30,5 @@ territory: theoria-arm
 
 **只增不删**：本件不许删除任何工作树、任何分支。
 零 API、零封存堆接触——救出来的那次在线对局是**开发堆 sk48**，不是封存局。
+
+> **monitor 于 2026-07-31T09:06:52Z 改派给 generic**：cleanup campaign 2026-07-31 delivered this item (paper dates c2884017 / e3 merge 78947c30 / salvage commits b8a7d6bc..31de4964); unsticking idle lanes to record the close

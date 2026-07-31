@@ -4,6 +4,7 @@ territory: monitor
 deps: none
 lane: infra
 author: RES-4
+released_by: CLEANUP
 
 # S44-S44-reflex-heartbeat-unwatched · nothing watches reflex.log freshness, so a tick that dies before rlog is invisible for up to 72 hours
 
@@ -11,7 +12,8 @@ S43 的对抗性复核顺手挖到的，比 S43 本身更值钱。
 
 ## 事实
 
-grep -rn reflex.log monitor/*.py 只命中 eflex.py 自己。**没有任何探针盯着 reflex.log 的新鲜度。**
+grep -rn reflex.log monitor/*.py 只命中 
+eflex.py 自己。**没有任何探针盯着 reflex.log 的新鲜度。**
 而 probe_standing（scan.py:1220-1230）**恰恰**为 standing.log 做了这件事——同一个机器上，同一类日志，一个有人看，一个没有。
 
 probe_scheduled_tasks（scan.py:644-672）只检查任务是否已注册／已禁用，**从不看上次运行时间、也不看上次结果**。
@@ -33,3 +35,5 @@ S43 把那条超时捕获装回去了，所以这个**具体的**触发原因没
 ## 服务论文哪个槽位
 
 「这台机器可不可信」。S43 证明了一套被交付的保护可以消失并在 72 次合并中保持消失；这一条管的是更下面一层——**连『机器还在跑吗』这个问题，都有一个 72 小时宽的窗口没有答案。**
+
+> **CLEANUP 于 2026-07-31T09:06:05Z 交回**：cleanup campaign 2026-07-31: not in this campaign's scope; returned untouched
