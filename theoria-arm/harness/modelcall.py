@@ -87,6 +87,7 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
+from proxy.guard import SealedPileGuard
 from proxy.redact import VAULT
 
 #: The CLI is started here, outside the repository, for baseline-arms' D-009
@@ -199,6 +200,30 @@ class AnonymityBreach(RuntimeError):
     """
 
 
+class SealedPileBreach(AnonymityBreach):
+    """A prompt named a game from the **sealed pile**.
+
+    A subclass rather than a sibling, and that is load-bearing: `inner/loop.py`
+    re-raises `AnonymityBreach` instead of recording it as a desk failure the
+    loop can learn from, and it belongs to another agent. Subclassing gets the
+    stricter case the same fatal handling without editing that file, and
+    `tests/test_arm.py` pins that the breach is not swallowed.
+
+    Why it needs its own name at all: the two are different incidents. An
+    ordinary `AnonymityBreach` says a run is inadmissible under the anonymity
+    rule and the run can be repeated with a game-free slug. This one says a
+    **sealed game was named in model context**, which is contamination of the
+    exam set -- `piles.json` rule 3, the same class of event as INC-BA-001 --
+    and no repetition un-teaches it. The two must be distinguishable in the
+    ledger and in a traceback.
+
+    The scan is the proxy's own, `SealedPileGuard.game_ids_in_text`, so a stem
+    is matched as a *token* against the register rather than as a substring:
+    `sk48` inside `task48` is not a game id, and a guard that refuses ordinary
+    English is a guard somebody turns off.
+    """
+
+
 class CostCeilingReached(RuntimeError):
     """Not an error in the run. The run's end when nothing else stopped it."""
 
@@ -239,7 +264,9 @@ class ModelDesk:
                  timeout: int = 1800,
                  spend: Optional[SpendBinding] = None,
                  transcript_dir: Optional[str] = None,
-                 forbid_in_prompt: Sequence[str] = ()):
+                 forbid_in_prompt: Sequence[str] = (),
+                 pile_guard: Optional[SealedPileGuard] = None,
+                 screen_dev_pile: bool = True):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model
         self.pricing_ref = pricing_ref
@@ -282,6 +309,35 @@ class ModelDesk:
         #: a leaked id is not something to discover in the transcript after
         #: paying for the call.
         self.forbid_in_prompt = tuple(s for s in forbid_in_prompt if s)
+
+        #: The pile cut, on the model path.
+        #:
+        #: `forbid_in_prompt` above is set by `inner/loop.py` to the game this
+        #: run is playing and its stem -- **that game only**. So the hard rule
+        #: was enforced for one id out of twenty-five, and the twenty-one that
+        #: matter most were the ones not checked: naming a sealed game to the
+        #: model is not merely a leak, it teaches the model about a game the
+        #: exam has not run yet, which is the contamination `piles.json` rule 3
+        #: calls an incident. The channels that put an id in a prompt by
+        #: accident (an engine traceback carrying a path, a Lean diagnostic, a
+        #: compile error) do not care which pile the id belongs to.
+        #:
+        #: Loaded at runtime from `arc-recon/data/piles.json` and never
+        #: hard-coded: writing twenty-one sealed identifiers into this arm's
+        #: source would put the exam set in a tracked file, and a copy of a cut
+        #: is a second cut that can disagree with the first. The guard verifies
+        #: the file against a digest it does not control, so a widened cut
+        #: fails closed here as it does at the proxy.
+        #:
+        #: Fail-closed by construction: if the cut is unreadable this raises at
+        #: desk construction and no call is made.
+        self.pile_guard = pile_guard if pile_guard is not None else SealedPileGuard()
+        #: Whether a *development*-pile id is refused too. It is, by default:
+        #: `Theoria.md:353`'s 硬规 is about every game id, not only the sealed
+        #: ones, and the four dev stems are as token-bounded as the rest. It is
+        #: a flag so that a caller which deliberately shows the desk a dev id
+        #: -- there is no such caller today -- has to say so.
+        self.screen_dev_pile = screen_dev_pile
 
         self.calls = 0
         self.cli_cost_usd = 0.0
@@ -402,9 +458,25 @@ class ModelDesk:
                 "spent $%.4f of a $%.2f ceiling over %d calls"
                 % (self.cli_cost_usd, self.cost_ceiling_usd, self.calls))
 
-        # Before the gate and before the subprocess: a prompt carrying the game
+        # Before the gate and before the subprocess: a prompt carrying a game
         # id must not be sent, and finding out afterwards costs both the money
         # and the run's admissibility as evidence.
+        #
+        # The pile screen runs **first** of the two. Both can fire on the same
+        # prompt -- `inner/loop.py` puts every sealed id and stem on the
+        # substring list as well -- and whichever runs first decides which
+        # exception the caller sees. The screen is the one that can tell a
+        # sealed game from the game being played, and that distinction is the
+        # difference between "this run is inadmissible" and "the exam set has
+        # been contaminated". The substring list stays behind it as a belt: it
+        # is blunter -- a bare `in`, so a four-character stem also matches
+        # inside an ordinary word -- but that bluntness catches an id welded
+        # into a longer token, which a token-bounded scan deliberately does
+        # not. No stem is named here: a comment that quotes one puts a sealed
+        # identifier in a tracked file for the sake of an example, and the
+        # example works without it.
+        self._screen_the_pile(prompt, beat=beat, label=label)
+
         leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})
         if leaked:
             raise AnonymityBreach(
@@ -581,6 +653,91 @@ class ModelDesk:
                    len(envelope.get("permission_denials") or []),
                    (stderr or "")[:200]))
         return text
+
+    # -- the pile, on the model path ---------------------------------------
+    def _screen_the_pile(self, prompt: str, *, beat: str, label: str) -> None:
+        """Refuse a prompt that names any game in the cut. Records, then raises.
+
+        Three outcomes, and the middle one is the reason this is not a single
+        `if`:
+
+        * **sealed** id or bare stem -> `SealedPileBreach`. Twenty-one games,
+          read out of `piles.json` at construction.
+        * **development** id or stem -> `AnonymityBreach`, when
+          `screen_dev_pile` is on. Same hard rule, lesser incident: the run is
+          inadmissible but no exam was contaminated.
+        * **unknown** -> allowed through, deliberately. `_GAME_ID`'s shape is
+          two-to-six alphanumerics, a hyphen and eight hex digits, and ordinary
+          prompt text hits that by accident -- `run-20260731` is a match, and
+          so is any `<word>-<8 hex>` fragment of a hash or a branch name.
+          Refusing those would make the desk unusable and would teach the next
+          reader to disable this check, while catching nothing: the sealed set
+          is a fixed enumeration, so an id that is not in the register is not a
+          sealed game. The proxy's request path can afford `unknown_policy =
+          deny` because a request names one game deliberately; a 20,000-character
+          prompt is not that.
+
+        The incident is written **before** the raise. An incident recorded only
+        by the exception's traceback is an incident that exists in a terminal
+        somebody has already closed, and `sealed_pile_in_prompt` is exactly the
+        kind of event the ledger is for. `incident` is reached defensively --
+        the desk is constructed against a `RunLedger` in every real path, but
+        the gate tests hand it a stub, and losing the record must not turn a
+        refusal into a crash on a missing attribute.
+        """
+        found = self.pile_guard.game_ids_in_text(prompt)
+        if not found:
+            return
+        sealed = [g for g in found if self.pile_guard.classify(g) == "sealed"]
+        dev = [g for g in found if self.pile_guard.classify(g) == "dev"]
+
+        if not sealed and not (dev and self.screen_dev_pile):
+            return
+
+        names = sorted(set(sealed if sealed else dev))
+        rule = "sealed_pile_in_prompt" if sealed else "game_id_in_prompt"
+        detail = (
+            "the prompt names %s, %s. Theoria.md:353 硬规:游戏 ID 永不进模型上下文,"
+            "全程匿名化. Not sent, not charged."
+            % (", ".join(repr(n) for n in names),
+               ("which is in the sealed pile of %d (cut %s) -- naming it to a "
+                "model teaches the model a game the exam has not run yet, "
+                "which is contamination under piles.json rule 3 and is not "
+                "undone by repeating the run"
+                % (len(self.pile_guard.sealed), self.pile_guard.cut_version))
+               if sealed else
+               "which is a development-pile game id"))
+
+        self._record_incident(rule, detail, names, beat=beat, label=label)
+
+        hint = (" The usual source is not a hand-written id: an engine "
+                "traceback, a Lean diagnostic or a compile error carries an "
+                "absolute path, and a run directory whose slug embeds a game "
+                "stem reaches the prompt through evidence_brief or a surprise "
+                "payload. Give the run a game-free slug rather than deleting "
+                "the evidence.")
+        raise (SealedPileBreach if sealed else AnonymityBreach)(detail + hint)
+
+    def _record_incident(self, rule: str, detail: str, names: List[str],
+                         **fields: Any) -> None:
+        recorder = getattr(self.run, "incident", None)
+        if not callable(recorder):
+            return
+        try:
+            recorder(
+                # `sealed_pile_in_prompt` is already in `proxy/canon.py`'s open
+                # set of incident kinds -- it was written for this event and
+                # nothing had ever raised it. `anonymity_breach` is not in that
+                # set, so the dev-pile case is recorded under the kind that is
+                # (`sealed_pile_in_prompt`) with `rule` telling the two apart;
+                # inventing a kind would be edited into another track's file.
+                "sealed_pile_in_prompt", detail,
+                rule=rule, game_ids=list(names),
+                cut_sha256=self.pile_guard.piles_sha256, **fields)
+        except Exception:                                   # noqa: BLE001
+            # The refusal is the point; a ledger that would not take the record
+            # must not convert it into a sent prompt.
+            pass
 
     # -- plumbing ----------------------------------------------------------
     def _invoke(self, prompt: str, model: str):

@@ -1830,3 +1830,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：记录性条目，无代码。所引数字逐笔从 baseline-arms/STATUS.md、BUDGET_REPORT.md §0/§2/§12/§13/§14、runs/20260729T100000Z-a14/RECONCILIATION.md 复核；piles 两个摘要均已在盘上复算（内容摘要口径复现 `3feca53e…`，字面哈希 `d3140eff…`）。
 阻塞：none。既裁药方 ①（ci_merge 不重复合并未变动分支）与 ②（收工清单加 git merge-base --is-ancestor）仍未落地，归监控，不在本战役范围。
 下一步：battery 可见化与发布卫生根修落地后终验、清理 356 个 worktree、出健康报告。
+
+## [cleanup] 2026-07-31T08:33:08Z CLEANUP-seal-arm-side
+状态：臂侧封印根修落地（分支 cleanup/seal）。Theoria.md 第一阶段的封印是个合取，第二项（绕过代理的出口必须失败）一直成立，第一项（臂进程摸不到环境凭据）此前**是假的**——`Run.__init__` 构造 `EnvProxyConfig`，其第二条语句就是 `read_secret("ARC_API_KEY")`，凭据整个 run 常驻臂解释器，与内环、引擎、全部面向模型的代码同处一进程。现改为进程边界：`python -m proxy.env_proxy` 由 `theoria-arm/harness/proxy_process.py` 起为**子进程**，父进程只拿 `http://127.0.0.1:<port>`，`.env` 由子进程自己读，父进程既不传也不读。同时补上模型路径的封存堆筛查：`ModelDesk` 自己从 `arc-recon/data/piles.json` 载入切分（**不硬编码**，21 个封存 id 写进受版本管理的文件本身就是把考卷放进仓库），用 proxy 自己的 `game_ids_in_text` 做**词边界**匹配，`SealedPileBreach` 继承 `AnonymityBreach` 以保持内环的致命处置不变。本段并**照录一次跨领地改动**：`proxy/env_proxy.py`（standalone CLI：`--port-file` 握手、`--campaign`/`--reservation-id` 附着已有额度、`--api-key-env`、`POST /__proxy/shutdown`）与 `proxy/guard.py`（`game_ids_in_text`）两处均为**纯增量**，进程内 `EnvProxy` 类与 `proxy/runner.py` 一字未动，proxy 全套 414 绿。凭据永远只作为**变量名**传递，绝不做命令行参数——Windows 上进程命令行是全机可读的。
+测试：theoria-arm 327 collected（master 289，+38），326 passed / 1 failed；proxy 从 `proxy/` 跑 414 passed 0 failed；`theoria-arm/verify.py` 三级梯 [2/3]「一次离线真跑，无 key 无网络」与 [3/3] 产物自检均绿。唯一的红是 `test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive`（claude-opus-5 上限 $6.00 < 规则推出的 $6.9033），**在 master 上逐字复现**，属钱门那条线的既存红，不属本次改动。
+阻塞：none（对本次交付而言）。上面那条既存红未修，归钱门线；`baseline-arms` 的同类缺口按工单只登记不改码，见其 STATUS.md GAP-5。
+下一步：`baseline-arms/harness/arc_client.py` 在 M5 线上续跑前需真修（接代理指向、去掉自读 key，复用臂无关的 `EnvProxyProcess`），在那之前 BUDGET_REPORT §9 的停跑条件是唯一管制。
