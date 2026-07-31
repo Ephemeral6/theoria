@@ -4,16 +4,17 @@
       "excluded": 1,
       "fetch": 1,
       "migration": 1,
-      "run": 24
+      "run": 27
     },
     "by_outcome": {
-      "api_unusable": 5,
+      "api_unusable": 7,
       "budget_exhausted": 7,
       "model_error": 5,
+      "no_reset_window": 1,
       "no_summary": 7
     },
-    "dead_runs": 10,
-    "total": 27
+    "dead_runs": 13,
+    "total": 30
   },
   "entries": [
     {
@@ -285,9 +286,39 @@
       "outcome": "api_unusable",
       "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json",
       "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.6620339999999998,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": 1.0167754999999998,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": 0.0,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "no_reset_window",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f/run.json",
+      "prompt_id": "P-12"
     }
   ],
-  "entries_sha256": "sha256:4033db3f12083974327b4a8b69f86abef131b028d049e14bc8309c5832c9f0f5",
+  "entries_sha256": "sha256:4ce600ab08829952d586dc0af64830208259a147395d54ab9166b76f2191efa0",
   "files": [
     "runs/s1-full-run-not-archived/run.json",
     "runs/fetch-schema-traces-path-a/run.json",
@@ -315,12 +346,15 @@
     "runs/bare_cc-sk48-claude-sonnet-5-9022a076/run.json",
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8/run.json",
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b/run.json",
-    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json"
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f/run.json"
   ],
-  "generated_at": "2026-07-28T03:06:54Z",
+  "generated_at": "2026-07-28T03:33:33Z",
   "prompt_id": "P-12",
   "provenance": {
-    "base_commit": "5dc2cdf8b62020f7229e28432ffa7d75461d361c",
+    "base_commit": "f435d14ec1d92c919d2773f1c3bae54bad1a7c3d",
     "branch": "agent/p12-envelope-finish",
     "tree_dirty": true,
     "worktree": "C:\\Users\\user\\Desktop\\theoria-wt-p12"
@@ -328,8 +362,8 @@
   "schema": "baseline-arms/runs/v1",
   "seed_policy": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
   "totals": {
-    "actions_failed": 98,
-    "actions_ok": 153,
-    "cost_usd": 12.3702
+    "actions_failed": 118,
+    "actions_ok": 180,
+    "cost_usd": 14.049
   }
 }

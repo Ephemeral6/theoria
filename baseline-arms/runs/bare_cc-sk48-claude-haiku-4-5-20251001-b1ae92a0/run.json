@@ -3,16 +3,16 @@
   "campaign": "unattributed",
   "evidence": [
     {
-      "bytes": 5217897,
+      "bytes": 5641570,
       "path": "baseline-arms/ledger.jsonl",
-      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71",
       "stability": "append_only",
       "tracked": true
     },
     {
-      "bytes": 1186858,
+      "bytes": 1384442,
       "path": "baseline-arms/probe_log.jsonl",
-      "sha256": "sha256:76314f041adc5a742520af25315629c8150f3ae0ecfa7cd271eeeae602bcd03b",
+      "sha256": "sha256:77302bf3804a602f9c2ea83dcd6a38b4d018c3207337199521540b5881594bc6",
       "stability": "append_only",
       "tracked": true
     }

@@ -1,29 +1,29 @@
 {
   "campaign": "f16-ledger-canon",
   "counts": {
-    "env_step": 286,
-    "model_call": 274,
+    "env_step": 335,
+    "model_call": 321,
     "unknown": 0
   },
   "evidence": [
     {
-      "bytes": 6596,
+      "bytes": 6854,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/report.json",
-      "sha256": "sha256:c6df6457a479b2c0d8189c4846ca001661a2d07a7e26e11b781fe5ea7b68d7b3",
+      "sha256": "sha256:fd02348753d81ed872ebdd6d6d3f54a399b9017d77180528ba71b2d84ec642f4",
       "stability": "fixed",
       "tracked": true
     },
     {
-      "bytes": 4614023,
+      "bytes": 5087005,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
-      "sha256": "sha256:db1e8b8c3fc78873f7098d111765282fd50a8d617962b865d20a71f90fe4a58b",
+      "sha256": "sha256:ae765beff4d8941f6411010c6e2be047036df61c8c0985d6dc04d52be94a84a9",
       "stability": "fixed",
       "tracked": true
     },
     {
-      "bytes": 45677,
+      "bytes": 53792,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
-      "sha256": "sha256:a19752287435c1ae99082454900698abeed650d955aadbdbdba22e6b22e31679",
+      "sha256": "sha256:920901af9208ebe5dd67dbf78ca610c293663d00938163d6bafafd4e49b1771f",
       "stability": "fixed",
       "tracked": true
     }
@@ -32,15 +32,15 @@
   "id": "migration-ledger-v0-to-v1.0",
   "joins": {
     "probe_log": {
-      "bytes": 1183013,
+      "bytes": 1383911,
       "path": "baseline-arms/probe_log.jsonl",
-      "sha256": "sha256:82771b4560ae99522be6308842a65eddf98b2e5544ec878846d403818d892a29"
+      "sha256": "sha256:394b7cf371d820df0bcb3ace4dc2a42153f31bf10a302ae6bc621c39635aac00"
     },
     "run_summaries": [
       {
-        "bytes": 2191,
+        "bytes": 6203,
         "path": "baseline-arms/out/campaign_cells.jsonl",
-        "sha256": "sha256:6722537a1fe8e62e801cacf34a8b5a5b8416da67a14a6d91137c622f8621aa17"
+        "sha256": "sha256:f320014da003bb4e4f7bc1fca5e8fae5209cb9da6dd835170fcfba8d1d835d68"
       },
       {
         "bytes": 2273,
@@ -79,27 +79,27 @@
   "outcome": "complete",
   "produced": [
     {
-      "bytes": 4614023,
+      "bytes": 5087005,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
-      "records": 560,
-      "sha256": "sha256:db1e8b8c3fc78873f7098d111765282fd50a8d617962b865d20a71f90fe4a58b"
+      "records": 656,
+      "sha256": "sha256:ae765beff4d8941f6411010c6e2be047036df61c8c0985d6dc04d52be94a84a9"
     },
     {
-      "bytes": 45677,
+      "bytes": 53792,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
-      "records": 274,
-      "sha256": "sha256:a19752287435c1ae99082454900698abeed650d955aadbdbdba22e6b22e31679"
+      "records": 321,
+      "sha256": "sha256:920901af9208ebe5dd67dbf78ca610c293663d00938163d6bafafd4e49b1771f"
     }
   ],
   "prompt_id": "P-12",
-  "records": 560,
+  "records": 656,
   "seed": null,
   "seed_note": "a migration has no seed; it is a pure function of its inputs. `source` pins the ledger it read and `joins` pins the probe log and run summaries it joined against -- all three, because the output is a function of all three and an earlier version of this note claimed the first one pinned the whole thing",
   "source": {
-    "bytes": 5217897,
+    "bytes": 5641570,
     "path": "baseline-arms/ledger.jsonl",
-    "records": 560,
-    "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b"
+    "records": 656,
+    "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71"
   },
   "spend": {
     "actions_failed": 0,
@@ -109,16 +109,16 @@
   "target_format": "1.0",
   "unfillable_fields": {
     "card_id": 18,
-    "frames/frame_hash": 101,
+    "frames/frame_hash": 121,
     "guid": 20,
-    "http.elapsed_ms": 286,
-    "http.method/path/status/request_sha256": 274,
-    "http.request_sha256": 286,
-    "http.stream": 274,
-    "pricing_ref": 274,
-    "request": 274,
-    "response": 274,
-    "score": 286
+    "http.elapsed_ms": 335,
+    "http.method/path/status/request_sha256": 321,
+    "http.request_sha256": 335,
+    "http.stream": 321,
+    "pricing_ref": 321,
+    "request": 321,
+    "response": 321,
+    "score": 335
   },
   "warnings": []
 }
