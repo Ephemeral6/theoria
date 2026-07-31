@@ -20,13 +20,47 @@ or embed it (the runner and the tests do):
 
     with EnvProxy(EnvProxyConfig(...)) as p:
         arm_env = {"ARC_BASE_URL": p.base_url}
+
+## Two ways to run it, and why both exist
+
+The embedded form is a **library**: `proxy/runner.py`'s mock flows and the
+proxy's own tests want the handler logic in the same interpreter they are
+asserting from, and there is nothing to seal there -- the "arm" in those flows
+is the same process either way.
+
+The standalone form is the **seal**. An arm that starts this module as a child
+process reads no credential itself: the key enters *this* process, out of
+`.env`, and the arm holds a `http://127.0.0.1:<port>` URL and nothing else.
+That is the arrangement `Theoria.md` Phase 1 asks for -- 臂进程摸不到环境凭据 --
+and it is what `theoria-arm/harness/proxy_process.py` supervises. Everything
+the supervisor needs is here:
+
+* `--port 0 --port-file PATH` -- bind an ephemeral port and publish it, plus
+  this process's pid and the guard fingerprint, by atomic rename. The parent
+  polls the file. stdout is deliberately *not* the handshake channel: this
+  host's console encoding mangles it.
+* `--campaign` + `--reservation-id` (+ the caps, for the record) -- attach to a
+  claim the parent already opened on the shared pool, rather than taking a
+  second one for the same run. Attached means **not owned**: this process never
+  releases it, because the parent's run outlives this process.
+* `--spend-policy PATH` -- draw on the pool that policy names. Omitted means
+  the tracked one. An offline proof passes its own scratch policy here, the
+  same file the parent's gate was built from.
+* `--api-key-env VAR` -- read the key out of *this* process's environment under
+  a caller-chosen name instead of out of `.env`. For mocks and tests only, and
+  a variable name rather than a `--key` argument on purpose: a command line is
+  world-readable on Windows (`wmic process get commandline`).
+* `POST /__proxy/shutdown` -- the parent's clean stop. Windows has no SIGTERM,
+  and killing the process is a fine last resort but a poor first one.
 """
 
 import argparse
 import json
+import os
 import re
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Optional
 
@@ -35,7 +69,7 @@ from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
 from .paths import LEDGER_PATH, UPSTREAM_ARC
 from .redact import VAULT, looks_like_credential, read_secret, scrub_outbound
-from .spend_gate import (Reservation, SpendGate, SpendGateError,
+from .spend_gate import (Reservation, SpendGate, SpendGateError, SpendPolicy,
                          attach_reservation, default_campaign, default_gate)
 from .variants import (DEGENERATE_NOTE, Refusal, Variant, VariantRuntime,
                        _Remap)
@@ -54,6 +88,7 @@ class EnvProxyConfig:
     def __init__(self, *, run_id: str, arm: str,
                  upstream: str = UPSTREAM_ARC,
                  api_key: Optional[str] = None,
+                 api_key_env: str = "ARC_API_KEY",
                  require_key: bool = True,
                  ledger_path: str = LEDGER_PATH,
                  ledger: Optional[Ledger] = None,
@@ -76,8 +111,17 @@ class EnvProxyConfig:
         self.variant = variant
 
         # The credential enters the process here and nowhere else.
+        #
+        # `api_key_env` names *which* variable that is. It defaults to the real
+        # one, so every existing caller is unchanged; a mock or an offline
+        # proof points it at a variable of its own and the repository's `.env`
+        # is then not consulted at all. That last clause is the whole reason
+        # the parameter exists: a keyless run that fell back to `ARC_API_KEY`
+        # would quietly inject the live credential into a request bound for a
+        # loopback stub, which is a leak with a green test beside it.
+        self.api_key_env = api_key_env
         self.api_key = api_key if api_key is not None else read_secret(
-            "ARC_API_KEY", required=require_key)
+            api_key_env, required=require_key)
         VAULT.register(self.api_key, force=True)
 
         self.ledger = ledger or Ledger(ledger_path)
@@ -519,6 +563,22 @@ class _Handler(BaseHTTPRequestHandler):
                                        "arm": self.cfg.arm})
         if path == "/__proxy/state":
             return self._respond(200, self.server.summary())            # type: ignore
+        if path == "/__proxy/shutdown":
+            # The parent's clean stop for a standalone child. Answered first,
+            # stopped afterwards and from another thread: `shutdown()` blocks
+            # until `serve_forever` has returned, and the reply has to be on
+            # the wire before that happens or the parent reads a dropped
+            # connection and cannot tell a clean stop from a crash.
+            #
+            # It is bound to 127.0.0.1 like every other route here, and it
+            # stops a process the caller could stop by killing it anyway --
+            # there is no authority here that a local peer does not already
+            # have.
+            self._respond(200, {"ok": True, "stopping": True,
+                                "run_id": self.cfg.run_id})
+            threading.Thread(target=self.server.shutdown,
+                             name="env-proxy-shutdown", daemon=True).start()
+            return
         self._respond(404, {"error": "no such proxy endpoint"})
 
 
@@ -582,26 +642,207 @@ class EnvProxy:
         self.stop()
 
 
-def main(argv=None) -> int:
+def write_port_file(path: str, payload: Dict[str, Any]) -> None:
+    """Publish the handshake by atomic rename.
+
+    Written to `<path>.tmp` and renamed, because the parent is polling: a
+    reader that catches a half-written file sees invalid JSON, and the obvious
+    repair -- retry until it parses -- cannot tell a half-written file from a
+    child that published nonsense. `os.replace` is atomic on NTFS and on POSIX,
+    so the file either is not there or is complete.
+    """
+    tmp = path + ".tmp"
+    directory = os.path.dirname(os.path.abspath(path))
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+    with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(payload, fh, sort_keys=True)
+        fh.write("\n")
+    os.replace(tmp, path)
+
+
+def _parent_is_alive(pid: int) -> bool:
+    """Whether the process that started us still exists.
+
+    `os.kill(pid, 0)` is the POSIX idiom and is **actively dangerous on
+    Windows**: CPython implements `os.kill` there by opening the process and
+    calling `TerminateProcess` for any signal that is not a console event, so
+    the liveness probe would kill the very parent it is asking about. Hence the
+    ctypes branch.
+    """
+    if os.name == "nt":                                     # pragma: no cover
+        import ctypes                                        # noqa: PLC0415
+
+        SYNCHRONIZE = 0x00100000
+        QUERY_LIMITED = 0x1000
+        WAIT_TIMEOUT = 0x102
+        kernel32 = ctypes.windll.kernel32                    # type: ignore[attr-defined]
+        handle = kernel32.OpenProcess(SYNCHRONIZE | QUERY_LIMITED, False, pid)
+        if not handle:
+            return False
+        try:
+            # Signalled (0) means the process has exited; WAIT_TIMEOUT means it
+            # is still running. Anything else is an error we do not act on --
+            # shutting a working proxy down because a probe failed would be a
+            # worse failure than the stranded child this guards against.
+            return kernel32.WaitForSingleObject(handle, 0) == WAIT_TIMEOUT
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:                                  # alive, not ours
+        return True
+    return True
+
+
+def watch_parent(pid: int, httpd, interval: float = 2.0) -> threading.Thread:
+    """Stop serving once the parent is gone.
+
+    Belt to the supervisor's braces. The parent stops this child explicitly and
+    also kills it from an `atexit` hook, which covers a parent that raises; it
+    does not cover a parent that is hard-killed. Without this, that leaves a
+    process holding a bound port and an attached reservation until somebody
+    notices -- and it is holding a **credential**, which is the part that makes
+    it worth two dozen lines.
+
+    Two consecutive readings, because a single failed probe is not evidence.
+    """
+    def loop() -> None:
+        misses = 0
+        while True:
+            time.sleep(interval)
+            if _parent_is_alive(pid):
+                misses = 0
+                continue
+            misses += 1
+            if misses >= 2:
+                httpd.shutdown()
+                return
+
+    thread = threading.Thread(target=loop, name="env-proxy-parent-watch",
+                              daemon=True)
+    thread.start()
+    return thread
+
+
+def build_argument_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--port", type=int, default=8711)
+    ap.add_argument("--port", type=int, default=8711,
+                    help="0 asks the OS for a free one; pair it with --port-file")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--arm", required=True)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--upstream", default=UPSTREAM_ARC)
     ap.add_argument("--ledger", default=LEDGER_PATH)
     ap.add_argument("--variant", default=None, help="variant_id from proxy/variants/")
-    args = ap.parse_args(argv)
+    ap.add_argument("--max-attempts", type=int, default=5)
+    ap.add_argument("--timeout", type=float, default=60.0)
+
+    ap.add_argument("--port-file", default=None,
+                    help="publish {port, pid, guard} here once bound, by "
+                         "atomic rename. The parent's handshake.")
+    ap.add_argument("--parent-pid", type=int, default=None,
+                    help="stop when this process goes away")
+
+    ap.add_argument("--campaign", default=None)
+    ap.add_argument("--spend-policy", default=None,
+                    help="a spend policy JSON; omitted means the tracked pool")
+    ap.add_argument("--reservation-id", default=None,
+                    help="attach to a claim the parent already opened. "
+                         "Attached is not owned: this process never releases it.")
+    ap.add_argument("--usd-cap", type=float, default=0.0,
+                    help="the attached claim's cap, for the record only -- "
+                         "every limit is read back off the pool ledger")
+    ap.add_argument("--action-cap", type=int, default=0)
+
+    ap.add_argument("--api-key-env", default="ARC_API_KEY",
+                    help="which environment variable this process reads the "
+                         "key from when it is not in .env. NEVER a --key "
+                         "argument: command lines are readable by other users.")
+    ap.add_argument("--no-require-key", dest="require_key", action="store_false",
+                    help="run keyless (mocks, offline proofs)")
+    ap.set_defaults(require_key=True)
+    return ap
+
+
+def _spend_from_args(args) -> Dict[str, Any]:
+    """The gate and the reservation named on the command line.
+
+    A `--reservation-id` rebuilds a handle rather than reserving: `check`,
+    `record` and `release` all look the claim up in the pool ledger by id and
+    read the caps from **there**, so the two fields below are the whole handle
+    (`proxy/runner.py:_Handle` does the same thing for crash cleanup). Passing
+    one is what makes `spend_reservation_owned` False upstairs, and that is the
+    property that matters: a child that released the parent's claim would hand
+    back headroom the run is still spending under.
+    """
+    if args.spend_policy:
+        gate = SpendGate(SpendPolicy.load(args.spend_policy))
+    else:
+        gate = default_gate()
+    reservation = None
+    if args.reservation_id:
+        if not args.campaign:
+            raise SpendGateError(
+                "--reservation-id needs --campaign: a claim is identified by "
+                "its id and reported under its campaign, and a release that "
+                "names the wrong campaign is how one run hands back another's "
+                "headroom.")
+        reservation = Reservation(
+            args.reservation_id, args.campaign,
+            usd_cap=args.usd_cap, action_cap=args.action_cap,
+            # Not read by anything: `check` reads the real expiry off the pool
+            # ledger. A far-future value here would be a lie the parent's
+            # heartbeat is responsible for making true.
+            expires_epoch=0.0,
+            holder={"attached": True, "pid": os.getpid()})
+    return {"gate": gate, "reservation": reservation}
+
+
+def main(argv=None) -> int:
+    args = build_argument_parser().parse_args(argv)
 
     variant = Variant.find(args.variant) if args.variant else None
+    spend = _spend_from_args(args)
+
+    # The credential enters here and only here -- inside `EnvProxyConfig`,
+    # reading whichever variable `--api-key-env` names. `read_secret` looks in
+    # `.env` first and the process environment second, so a test can fill a
+    # channel of its own without the repository's key being anywhere near it.
     cfg = EnvProxyConfig(run_id=args.run_id, arm=args.arm, upstream=args.upstream,
+                         api_key_env=args.api_key_env,
+                         require_key=args.require_key,
                          ledger_path=args.ledger, variant=variant,
-                         host=args.host, port=args.port)
+                         host=args.host, port=args.port,
+                         timeout=args.timeout, max_attempts=args.max_attempts,
+                         campaign=args.campaign, spend_gate=spend["gate"],
+                         spend_reservation=spend["reservation"])
     proxy = EnvProxy(cfg)
     print("env proxy on %s -> %s" % (proxy.base_url, cfg.upstream))
     print("  ledger : %s" % cfg.ledger.path)
     print("  guard  : %s" % canonical(cfg.guard.fingerprint()))
     print("  key    : injected here; the arm never sees it")
+    sys.stdout.flush()
+
+    if args.port_file:
+        write_port_file(args.port_file, {
+            "port": proxy.port,
+            "pid": os.getpid(),
+            "base_url": proxy.base_url,
+            "upstream": cfg.upstream,
+            "run_id": cfg.run_id,
+            "arm": cfg.arm,
+            "campaign": cfg.campaign,
+            "guard": cfg.guard.fingerprint(),
+            # A boolean, never the value, and not even a masked one: the
+            # handshake file lands in a run directory.
+            "key_injected": bool(cfg.api_key),
+        })
+    if args.parent_pid:
+        watch_parent(args.parent_pid, proxy.httpd)
+
     try:
         proxy.httpd.serve_forever()
     except KeyboardInterrupt:
@@ -612,6 +853,10 @@ def main(argv=None) -> int:
         # standalone proxy holds its share of the shared pool for the full TTL
         # with nothing spent -- 40 of them take the pool offline for an hour
         # and the only recovery is to wait.
+        #
+        # `spend_reservation_owned` is False when `--reservation-id` attached
+        # to somebody else's claim, and then this does nothing, which is the
+        # point.
         if cfg.spend_reservation_owned:
             cfg.spend_gate.release(cfg.spend_reservation,
                                    reason="standalone proxy exited")
