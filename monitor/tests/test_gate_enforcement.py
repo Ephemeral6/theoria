@@ -85,7 +85,7 @@ def test_ci_merge_still_refuses_a_red_verify_gate():
 
 # ------------------------------------------- a gate must not dirty the tree
 
-def test_a_real_scan_can_run_without_touching_the_workspace(tmp_path):
+def test_a_real_scan_can_run_without_touching_the_workspace(real_scan):
     """S13's explicit warning, made executable.
 
     `scan.build` used to write `state.json`, `index.html` and `history.jsonl`
@@ -93,13 +93,15 @@ def test_a_real_scan_can_run_without_touching_the_workspace(tmp_path):
     real scan without dirtying the tree it was gating -- and a gate that dirties
     the tree can turn the *next* territory's gate red for a reason that has
     nothing to do with the branch.
+
+    S44: shares the session's one real scan (`conftest.real_scan`) instead of
+    paying its own ~60 seconds. The property under test is `out_dir` being
+    honoured, and it is honoured by the fixture's call exactly as it was here.
     """
-    out = str(tmp_path)
-    scan.build(False, out_dir=out)
-    written = sorted(os.listdir(out))
+    written = real_scan.files
     assert written == ["history.jsonl", "index.html", "state.json"]
     for name in written:
-        assert os.path.getsize(os.path.join(out, name)) > 0, name
+        assert os.path.getsize(os.path.join(real_scan.dir, name)) > 0, name
 
 
 # ------------------------------------------------------------- the probe

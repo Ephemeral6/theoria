@@ -380,6 +380,8 @@ def test_a_broken_spec_py_is_a_red_page_not_an_import_traceback(tmp_path,
     monkeypatch.setattr(scan, "_SPEC_IMPORT_ERROR",
                         SyntaxError("invalid syntax (spec.py, line 42)"))
 
+    # real-scan-exempt: `spec` is None, so `build` raises on the first line of
+    # its body. Costs milliseconds, not the ~55s a completed scan costs.
     with pytest.raises(SyntaxError):
         scan.build(False, out_dir=str(tmp_path))     # the gate still goes red
 
@@ -401,6 +403,8 @@ def test_build_still_raises_so_the_gate_still_goes_red(tmp_path, monkeypatch):
     green -- the same defect, one level up.
     """
     monkeypatch.setattr(scan, "PROBES", {"boom": _boom})
+    # real-scan-exempt: the probe table is a single exploding stub, so the run
+    # dies at the first probe instead of doing the expensive work.
     with pytest.raises(UnicodeDecodeError):
         scan.build(False, out_dir=str(tmp_path))
 
@@ -420,11 +424,15 @@ def test_the_gate_notices_a_swallowed_crash(tmp_path):
 
 # ------------------------------------------------------- companion greens
 
-def test_a_healthy_scan_says_so_and_stamps_an_epoch(tmp_path):
-    """Without this, a failure exit hardwired to fire would pass every test."""
-    scan.build(False, out_dir=str(tmp_path))
+def test_a_healthy_scan_says_so_and_stamps_an_epoch(real_scan):
+    """Without this, a failure exit hardwired to fire would pass every test.
 
-    state = json.loads((tmp_path / "state.json").read_text(encoding="utf-8"))
+    S44: this and the three greens below shared one `scan.build()` each --
+    4 × ~55s of the suite's 460s, all producing byte-identical output. They now
+    read the session's single real run (`conftest.real_scan`). Not one assertion
+    was dropped; only the five redundant scans were.
+    """
+    state = json.loads((real_scan.path / "state.json").read_text(encoding="utf-8"))
     assert state["scan_ok"] is True
     assert "scan_error" not in state
     assert isinstance(state["generated_epoch"], int)
@@ -433,32 +441,29 @@ def test_a_healthy_scan_says_so_and_stamps_an_epoch(tmp_path):
     # The historical shape is load-bearing: `render()` and `app.html` both
     # slice it `[5:16]`, and `history.jsonl` reuses it as `ts`.
     assert len(state["generated_at"]) == 19 and state["generated_at"][4] == "-"
-    assert not os.path.exists(str(tmp_path / "crashes.jsonl")), \
+    assert "crashes.jsonl" not in real_scan.files, \
         "a healthy scan must not write to the crash ledger"
 
 
-def test_a_healthy_scan_writes_the_same_three_files_as_before(tmp_path):
+def test_a_healthy_scan_writes_the_same_three_files_as_before(real_scan):
     """S30 must not add a fourth artifact to the success path.
 
     `test_gate_enforcement` asserts this write set exactly; stating it here too
     means a regression names S30 instead of looking like a gate bug.
     """
-    scan.build(False, out_dir=str(tmp_path))
-    assert sorted(os.listdir(str(tmp_path))) == ["history.jsonl", "index.html",
-                                                 "state.json"]
+    assert real_scan.files == ["history.jsonl", "index.html", "state.json"]
 
 
 # --------------------------------------------- the page distrusts the backend
 
-def test_the_page_computes_its_own_age(tmp_path):
+def test_the_page_computes_its_own_age(real_scan):
     """Rendering must not take the backend's word that it is still alive.
 
     `index.html` is a static file opened over `file://`; it cannot re-fetch
     anything. The generation instant is baked in and the browser owns a clock,
     which is enough to notice that nobody has written the file in a while.
     """
-    scan.build(False, out_dir=str(tmp_path))
-    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    page = real_scan.page
 
     assert "data-since=" in page and "data-stale=" in page
     assert "扫描可能已经挂了" in page, "the stale wording must be in the page"
@@ -477,10 +482,9 @@ def test_the_stale_threshold_is_two_scan_cycles():
         scan.build.refresh = old
 
 
-def test_a_clock_that_disagrees_reads_as_unknown_not_as_fresh(tmp_path):
+def test_a_clock_that_disagrees_reads_as_unknown_not_as_fresh(real_scan):
     """A future timestamp is a broken clock, not a healthy scan."""
-    scan.build(False, out_dir=str(tmp_path))
-    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    page = real_scan.page
     assert "生成时刻在未来" in page
     assert "年龄不可信" in page
 

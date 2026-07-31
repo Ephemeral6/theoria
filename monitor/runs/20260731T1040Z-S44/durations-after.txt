@@ -1,0 +1,30 @@
+﻿........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 40%]
+........................................................................ [ 54%]
+........................................................................ [ 68%]
+...........................xx........................................... [ 81%]
+........................................................................ [ 95%]
+.......................                                                  [100%]
+============================ slowest 20 durations =============================
+58.91s setup    tests/test_gate_budget.py::test_the_shared_fixture_really_is_a_real_scan
+4.52s call     tests/test_gate_budget.py::test_the_over_budget_line_appears_only_when_over_budget
+3.20s call     tests/test_gate_outcomes.py::test_hanging_gate_is_broken_not_green
+3.05s call     tests/test_gate_budget.py::test_a_suite_that_times_out_is_124_and_not_a_red_suite
+2.62s call     tests/test_merge_queue.py::test_unpushed_finds_the_branch_that_never_left_the_laptop
+2.61s call     tests/test_append_only_probe_anchor.py::test_the_stated_intent_and_the_code_agree_on_the_mainline_too
+2.60s call     tests/test_merge_queue.py::test_a_pushed_branch_is_left_to_the_queue_not_double_counted
+2.50s call     tests/test_merge_queue.py::test_a_merged_branch_whose_remote_was_deleted_is_not_reported
+2.50s call     tests/test_orphan_commits.py::test_content_already_upstream_does_not_count
+2.41s call     tests/test_append_only_probe_anchor.py::test_a_branch_correcting_its_own_unpublished_paragraph_is_green
+2.18s call     tests/test_orphan_commits.py::test_preserving_a_branch_takes_it_out_of_the_census
+2.04s call     tests/test_append_only_probe_anchor.py::test_a_branch_that_deletes_published_lines_is_still_red
+2.01s call     tests/test_orphan_commits.py::test_a_push_ruling_stays_red_until_it_is_actually_pushed
+1.84s call     tests/test_orphan_commits.py::test_pushed_but_unmerged_is_not_at_risk
+1.62s call     tests/test_orphan_commits.py::test_an_unrecognised_disposition_does_not_count_as_judged
+1.60s call     tests/test_orphan_commits.py::test_a_repo_with_everything_pushed_is_green
+1.49s call     tests/test_orphan_commits.py::test_a_repo_with_unpushed_work_is_red
+1.48s call     tests/test_reap_worktrees.py::test_apply_removes_only_the_finished_one
+1.44s call     tests/test_orphan_commits.py::test_a_disposition_moves_a_branch_out_of_unjudged_but_not_to_green
+1.36s call     tests/test_done_items_resurrect.py::test_before_the_fix_the_merged_back_item_is_handed_straight_out
+WALL_SECONDS=182.8012588

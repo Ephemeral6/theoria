@@ -1,0 +1,83 @@
+{
+  "api_calls": 0,
+  "base_commit": "6fabcc7ea957931b7676ddbdf7587e128b947e73",
+  "branch": "cleanup2/s44-monitor-gate",
+  "files": [
+    {
+      "path": "monitor/runs/20260731T1040Z-S44/RUN_STATE.md",
+      "sha256": "7337948762f1f07d27b9e63f54e9eb047b4ebbb22e8914fc922c5fdf264f6f86"
+    },
+    {
+      "path": "monitor/runs/20260731T1040Z-S44/durations-after.txt",
+      "sha256": "af2e5432a6a611736657efd7a1272aff2633b5e61e8595736a608268be8beae3"
+    },
+    {
+      "path": "monitor/runs/20260731T1040Z-S44/durations-before.txt",
+      "sha256": "399834d762aeee72ef2ae1b64dc9ee2ed31b13a55935b993d254634e2f1fdc25"
+    },
+    {
+      "path": "monitor/runs/20260731T1040Z-S44/gate-after.txt",
+      "sha256": "9e8551fcd9bd0cc45095fe486c57951531f74cb49dbb6cab3fbe249220c94407"
+    },
+    {
+      "path": "monitor/scan.py",
+      "sha256": "82e97626ba599b285d1c4f10fb11f2bfd15f9a3168a42219e1fb533c54a99010"
+    },
+    {
+      "path": "monitor/verify.py",
+      "sha256": "c5280b8e610390c3637a40ea0bbd8a4904eb58515eeea6af71db79f1fe7a95bb"
+    },
+    {
+      "path": "monitor/DECISIONS.md",
+      "sha256": "231709d9fc62958cd6cea081abca632e1b2778939bfbb7752233d83e18ee825d"
+    },
+    {
+      "path": "monitor/tests/conftest.py",
+      "sha256": "29b158818e4436f16c889d0ac16ef4d9dfa2e4050727703d5e40ea4ba7c68dfb"
+    },
+    {
+      "path": "monitor/tests/test_reflex_heartbeat.py",
+      "sha256": "3834fe51518ccce49a0f7904c973f859640f4363efa02437ebca49b82ecf9114"
+    },
+    {
+      "path": "monitor/tests/test_gate_budget.py",
+      "sha256": "0a093cb808a02ef63a4f3d5fbbf49cffcfa9c60fc851bd45e15e5a60f4fdad95"
+    },
+    {
+      "path": "monitor/tests/test_scan_failure_exit.py",
+      "sha256": "d9b953f6c0c99e5a381855250d96eb76f922426363e18090a5f5e9abd9816e0c"
+    },
+    {
+      "path": "monitor/tests/test_gate_enforcement.py",
+      "sha256": "8970cd6279fbf88c32347e5b5ed74b9313f966bceb811976f96161c636f491bf"
+    },
+    {
+      "path": "monitor/tests/test_verdict_reconcile.py",
+      "sha256": "2cb4ca27c47a2d7586086e3f2e9682b564f27a70d8cd925b1c65fa65fce232f3"
+    },
+    {
+      "path": "monitor/tests/test_gate_does_not_dirty_the_tree.py",
+      "sha256": "01b86d6782d9e9c929d0101ca9d9d9f2473fbb783c6462f9cf7d25d0a0b46c31"
+    }
+  ],
+  "measurements": {
+    "gate_exit": 0,
+    "gate_pytest_stage_s_after": 183.5,
+    "gate_wall_s_after": 236.914236,
+    "six_shared_scan_tests_s_before": 338.69,
+    "suite_wall_s_after": 182.8012588,
+    "suite_wall_s_before": 460.7675151,
+    "target_s": 300
+  },
+  "prompt_id": "S44-monitor-suite-outgrew-its-gate + S44-reflex-heartbeat-unwatched",
+  "prompt_paths": [
+    "monitor/board/done/S44-monitor-suite-outgrew-its-gate.W-1800.md",
+    "monitor/board/done/S44-S44-reflex-heartbeat-unwatched.W-1800.md"
+  ],
+  "sealed_pile_contact": false,
+  "seed": null,
+  "territory": "monitor",
+  "usd_spent": 0.0,
+  "utc": "2026-07-31T11:06:36Z",
+  "worker": "W-1800"
+}

@@ -57,6 +57,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -146,11 +147,29 @@ def emit(text: str = "", stream: Any = None) -> None:
 #: 其中一条正是带着修复补丁的那条。
 #:
 #: 抬到 2400 是**承认现实**，不是解决问题：一道要跑半小时的闸门迟早会被绕开。
-#: 真正的修法是让套件快回来（已上板 S44），这里只是让它在那之前不再冤枉分支。
+#: S44 做了真正的修法（见下面的 `TESTS_BUDGET_S`），而这个上限**留在 2400
+#: 不动**：套件现在只用得上它的一小部分，而这台机器上的墙钟是被争抢的——
+#: 原报告那 30 分钟是在六个并发 pytest 之下测到的，同一套件空载 460.8 秒。
+#: 收紧上限省不下任何东西，只会在忙碌的下午重演同一次冤枉。
 TESTS_TIMEOUT_S = 2400
+
+#: 这一段**应该**跑多久。S44 的硬指标。
+#
+#: 与上面的上限是两件事，而分开正是要点：上限管「什么时候放弃」，预算管
+#: 「什么时候这道闸门已经太贵了」。本仓从没有过后者，于是套件从几十秒长到
+#: 半小时的整个过程里，每一次运行都照样印 `passed`——**闸门的成本是不可见的，
+#: 直到它开始骗人**。
+#:
+#: 超预算是**报出来，不是判红**。判红会在争抢 CPU 的下午扣住一批无辜分支，
+#: 那恰好是这次事故的伤害本身，换个楼层再演一遍。理由写在
+#: `monitor/DECISIONS.md` 的 S44-a；结构性的那道闸由
+#: `tests/test_gate_budget.py::test_only_the_shared_fixture_runs_a_real_scan`
+#: 把守，它数的是源码而不是秒表，所以在空载和满载的机器上说同一句话。
+TESTS_BUDGET_S = 300
 
 
 def _tests() -> Tuple[str, int, str]:
+    started = time.time()
     try:
         proc = subprocess.run(
             [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
@@ -171,7 +190,20 @@ def _tests() -> Tuple[str, int, str]:
                 "TIMED OUT after %ds -- the suite did not finish, so nothing "
                 "was proved either way. This is NOT a red suite.\n%s"
                 % (TESTS_TIMEOUT_S, partial[-3000:]))
-    return "tests", proc.returncode, (proc.stdout or "") + (proc.stderr or "")
+    elapsed = time.time() - started
+    # 每一次都印，绿的也印。这一行就是 S44 的那条教训的执行形式：一个没人记的
+    # 数字会一直长，而它长的过程不产生任何一条不同的输出。
+    cost = "pytest stage took %.1fs (budget %ds, ceiling %ds)" % (
+        elapsed, TESTS_BUDGET_S, TESTS_TIMEOUT_S)
+    if elapsed > TESTS_BUDGET_S:
+        cost += ("\n!! OVER BUDGET by %.1fs -- the suite passed; it is the "
+                 "*gate* that is getting expensive. A gate that takes half an "
+                 "hour gets bypassed, and on 2026-07-30 it instead got read as "
+                 "nine branches being red. Re-measure with "
+                 "`pytest --durations=30` before raising this number."
+                 % (elapsed - TESTS_BUDGET_S))
+    return ("tests", proc.returncode,
+            cost + "\n" + (proc.stdout or "") + (proc.stderr or ""))
 
 
 def _real_run(out_dir: str) -> Tuple[str, int, str, Dict[str, Any]]:
