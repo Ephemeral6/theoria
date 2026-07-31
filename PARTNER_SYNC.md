@@ -1899,3 +1899,18 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`python monitor/scan.py` exit 0，逐字 `[2026-07-31 23:54:12] monitor/index.html written — Phase 1: 8/16 green`；`monitor` 套件 525 passed / 2 xfailed，exit 0，176s（<183s 闸门）。零 API、$0.00、零封存堆接触、无凭据值。
 阻塞：none（本件是裁决与记录，不修代码；`proxy/`、`theoria-arm/`、`verify-lab/` 全程只读）。
 下一步：Phase 1 剩余 8 个 partial 里可动的最短三条：p1-replay-audit（对 S31 起的真在线账本抽检 2 局）、p1-scorer（冻结打分器本体接入 → P-9）、模型代理到 (a) 的六条清单（第 1 条为所有者动作，见 S32 段）。
+
+
+## [proxy] 2026-07-31T18:30:00Z P12-replay-spotcheck-arm
+状态：复放抽检 ⟨2⟩ 局补上**第三套 harness**。板上 `p1-replay-audit` 的下一步写着「对 S31 起的真在线账本抽检 2 局」——g50t 其实已由 closeout/p1-replay-2 做过（26 会话 / 6 位 / 971 对比，PASS），真正的缺口是今天四条活 leg 的账本 `replay_spotcheck.py` **一条会话都读不出来**：`INSUFFICIENT, sessions: []`，不是错答案是空答案。成因是臂把被拒命令按自己的 step_idx 记一行再重试，而四条 leg 的第 0 步全是拒绝——`400 SERVER_ERROR / "game <id> not found"`，无帧、n_frames 0、不计费，**570 条活步里 494 条（87%）是这个形状**。加 `--compact-refusals`：只有「可证未执行」的封闭白名单才折叠，白名单外一律照旧截断；连续性仍按**原始 step_idx** 校验，每个位置仍要求各会话同一命令名。折叠只能制造假警报、造不出假一致（若拒绝真的执行过，会话历史不同 → 出现分歧 → FAIL）。严格路径逐字节不变（policy / session_origin 只在开关下出现），已归档报告的 manifest 哈希照旧可复现。结果：三条活 g50t leg（12:40 / 13:10 / 14:30）**PASS，10 位、22 次两两对比、零分歧**；并且逐位命中 baseline-arms 用另一套 harness 记的同一批帧哈希（`crosscheck_arm_vs_baseline.json`，6 位重叠、零分歧，PASS）。sk48 只有一条 leg，如实 INSUFFICIENT 并归档——缺文件和负结果不是一回事。
+测试：`cd proxy && python -m pytest -q` **450 passed**（改前 426，+24）。新 `proxy/tests/test_replay_spotcheck.py`——该工具 P-9 交付时零测试，跑过一次就把输出当证据。现在钉住：白名单的 7 个近似形状必须**不**折叠、原始索引连续性、折叠不掩盖分歧的负对照、严格路径对三份已归档报告的键集回归、三条活 leg 端到端。零 API、零模型调用、$0.00、零封存堆接触、无凭据值。
+阻塞：none。
+下一步：这仍**不是**回放——只证了环境在三套 harness 下确定，没证我们的代理能重放一局；`proxy/replay.py` 的真回放要花动作，照 P-9 原话仍欠。白名单只有一条，下一套 harness 若换拒绝形状会再次静默 INSUFFICIENT，做一次全账本拒绝形状普查可转成告警。
+留痕：`proxy/runs/20260731T1830Z-P12-replay-spotcheck-arm/`（四份报告 + 交叉核对脚本 + MANIFEST）。
+
+## [arc-recon] 2026-07-31T18:30:00Z P12-freeze-loop
+状态：战役冻结环路补上**清偿命令与不可改写半边的审计**。工单描述的「campaign_freeze.json 缺失、只有检测没有联动」已被 `5def1911` 与臂侧 `freeze_gate.py` 补上，不再重复提案；真正没有的是三样。一，`how_to_clear` 那段话从第一天起就没有命令——唯一的清偿方式是手改被跟踪的 JSON，不留理由、不具名、不立 incident。现有 `canary.py clear-freeze --reason --by [--adjudication INC-0NN]`：理由与所有者必填且逐字入档、引用的裁定 incident 必须真已存在、清偿自己也立 incident、**且不恢复 checked_utc**（所有者裁定的是过去的观测，不是新观测）。二，状态文件能被 `rm` 解冻：`init_freeze_from_runs` 拒绝覆盖却不拒绝创建，`rm` + `init-freeze` 就能从 canary_runs.jsonl 重建一个没有冻结记忆的文件——正是 refresh_freeze 花一整段禁止绿扫描做的那件事换了道门。现在 `freeze-audit` 拿只能追加的 `campaign_freeze_log.jsonl` 校状态文件（exit 0 OK / 1 DIVERGED / 2 UNADJUDICABLE_LOG），`init-freeze` 在日志末条是「已立案的冻结」时拒绝，`assert_campaigns_unfrozen()` 对 DIVERGED 也拒绝，`clear-freeze` 在状态文件缺失时照样能用。判据不可伪造：漂移路径**先立 incident 再冻结**，所以 incident 不存在的冻结条目本就不是漂移；incidents.jsonl 同样只能追加，把假冻结做成真的唯一办法就是真立一条案。三，跑套件时当场发现：`test_hygiene.py` / `test_canary_schedule.py` 两个 sandbox fixture 都写着「nothing here touches data/」，却都只重定向了它们写成时存在的四个 *_PATH，后加的 FREEZE_LOG_PATH 从来没进去——**每跑一次全套件就往被跟踪的只追加日志里追加六条伪造冻结事件**（本次会话两轮基线把它从 7 行推到 19 行），最早六条是和仪表一起提交的。这比不整洁严重：那份日志正是状态文件被审计所依据的记录。两个 fixture 已修，并新增 `arc-recon/conftest.py` 一条 autouse stat 快照守卫，任何测试改动/新增/删除 `arc-recon/data/` 下的文件即失败。本次会话写进去的 12 行已 `git checkout` 复原；**已提交的 6 行一字未动**——改掉自己审计所读的记录来让审计变绿正是那个病。
+测试：`cd arc-recon && python -m pytest -q` **349 passed in 525.40s**（改前 337，+12）。守卫加上后无新增失败，这才是有用的部分：两个 fixture 修好后套件里再无别处写 data/。零 API、零花费、零封存堆接触、无凭据值（未读 .env）。
+阻塞：none。
+下一步：臂侧只读状态文件、看不见 DIVERGED，删掉文件仍会开跑——已带**逐行 patch** 投 `monitor/inbox/20260731T1830Z-P12-to-theoria-arm-freeze-gate-reads-only-the-rewritable-half.md`，臂领地未碰。已提交的 6 条不可裁定条目留待所有者作废，我没有为此发明命令；`freeze-audit` 暂不进 `arc-recon/verify.sh`——现在接会因这 6 条直接把 verify 变红，接线该跟作废一起走，不该在它之前。
+留痕：`arc-recon/runs/20260731T1830Z-P12-freeze-loop/`（RUN_STATE.md、freeze_audit.json、MANIFEST）。
