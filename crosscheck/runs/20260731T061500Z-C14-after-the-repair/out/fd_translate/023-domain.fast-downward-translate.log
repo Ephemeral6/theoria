@@ -8,16 +8,16 @@ Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
 Normalizing Datalog program...
 Trivial rules: Converted to facts.
-Normalizing Datalog program: [0.016s CPU, 0.002s wall-clock]
-Preparing model... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program: [0.000s CPU, 0.002s wall-clock]
+Preparing model... [0.000s CPU, 0.001s wall-clock]
 Generated 94 rules.
-Computing model... [0.000s CPU, 0.002s wall-clock]
+Computing model... [0.000s CPU, 0.003s wall-clock]
 78 relevant atoms
 186 auxiliary atoms
 264 final queue length
 286 total queue pushes
 Completing instantiation... [0.000s CPU, 0.000s wall-clock]
-Instantiating: [0.016s CPU, 0.005s wall-clock]
+Instantiating: [0.000s CPU, 0.006s wall-clock]
 Computing fact groups...
 Finding invariants...
 5 initial candidates
@@ -64,4 +64,4 @@ Translator axioms: 1
 Translator task size: 5
 warning: could not determine peak memory
 Writing output... [0.000s CPU, 0.000s wall-clock]
-Done! [0.016s CPU, 0.010s wall-clock]
+Done! [0.000s CPU, 0.011s wall-clock]

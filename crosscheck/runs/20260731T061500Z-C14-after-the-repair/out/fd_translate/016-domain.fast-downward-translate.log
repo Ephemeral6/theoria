@@ -2,22 +2,22 @@ returncode: 0
 
 Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
 Parsing...
-Parsing: [0.000s CPU, 0.002s wall-clock]
+Parsing: [0.000s CPU, 0.003s wall-clock]
 Normalizing task... [0.000s CPU, 0.000s wall-clock]
 Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
 Normalizing Datalog program...
 Trivial rules: Converted to facts.
-Normalizing Datalog program: [0.000s CPU, 0.002s wall-clock]
-Preparing model... [0.000s CPU, 0.002s wall-clock]
+Normalizing Datalog program: [0.000s CPU, 0.003s wall-clock]
+Preparing model... [0.000s CPU, 0.003s wall-clock]
 Generated 160 rules.
-Computing model... [0.000s CPU, 0.001s wall-clock]
+Computing model... [0.016s CPU, 0.001s wall-clock]
 87 relevant atoms
 218 auxiliary atoms
 305 final queue length
 327 total queue pushes
 Completing instantiation... [0.000s CPU, 0.000s wall-clock]
-Instantiating: [0.000s CPU, 0.006s wall-clock]
+Instantiating: [0.016s CPU, 0.006s wall-clock]
 Computing fact groups...
 Finding invariants...
 11 initial candidates
@@ -39,7 +39,7 @@ Processing axioms...
 Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
 Translator axioms removed by simplifying: 0
 Processing axioms: [0.000s CPU, 0.000s wall-clock]
-Translating task: [0.016s CPU, 0.000s wall-clock]
+Translating task: [0.000s CPU, 0.000s wall-clock]
 14 effect conditions simplified
 0 implied preconditions added
 Detecting unreachable propositions...
@@ -64,4 +64,4 @@ Translator axioms: 1
 Translator task size: 5
 warning: could not determine peak memory
 Writing output... [0.000s CPU, 0.000s wall-clock]
-Done! [0.016s CPU, 0.011s wall-clock]
+Done! [0.016s CPU, 0.012s wall-clock]

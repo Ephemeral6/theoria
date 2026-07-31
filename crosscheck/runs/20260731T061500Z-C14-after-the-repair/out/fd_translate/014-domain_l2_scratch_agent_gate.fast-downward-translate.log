@@ -8,8 +8,8 @@ Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
 Normalizing Datalog program...
 Trivial rules: Converted to facts.
-Normalizing Datalog program: [0.016s CPU, 0.003s wall-clock]
-Preparing model... [0.000s CPU, 0.003s wall-clock]
+Normalizing Datalog program: [0.000s CPU, 0.003s wall-clock]
+Preparing model... [0.016s CPU, 0.003s wall-clock]
 Generated 210 rules.
 Computing model... [0.000s CPU, 0.001s wall-clock]
 87 relevant atoms
@@ -21,7 +21,7 @@ Instantiating: [0.016s CPU, 0.008s wall-clock]
 Computing fact groups...
 Finding invariants...
 11 initial candidates
-Finding invariants: [0.000s CPU, 0.001s wall-clock]
+Finding invariants: [0.000s CPU, 0.002s wall-clock]
 Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
 Instantiating groups... [0.000s CPU, 0.000s wall-clock]
 Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]

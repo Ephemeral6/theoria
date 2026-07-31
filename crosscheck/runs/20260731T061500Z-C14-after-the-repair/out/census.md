@@ -17,7 +17,7 @@ Defect counts (one action can carry several):
 |---|---|
 | `file-refused` | 103 |
 
-Independent planner: Fast Downward translator at `C:/Users/user/Desktop/theoria/cold-start-a0/.toolchain/downward/builds/release/bin`
+Independent planner: Fast Downward translator at `<checkout>/cold-start-a0/.toolchain/downward/builds/release/bin`
 
 | | |
 |---|---|
@@ -497,7 +497,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `ablation-arm/theory/a0_base.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cell', 'door', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'cell', 'button'}
   ```
 * `ablation-arm/theory/a0_no_button.dsl` -- fast-downward-translate: returncode `31`
 
@@ -512,7 +512,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `ablation-arm/theory/a0_no_button.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart'}
   ```
 * `ablation-arm/theory/a2_base.dsl` -- fast-downward-translate: returncode `31`
 
@@ -527,7 +527,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `ablation-arm/theory/a2_base.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'door', 'button', 'cell', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'button', 'cell', 'door'}
   ```
 * `ablation-arm/theory/a2_holed.dsl` -- fast-downward-translate: returncode `31`
 
@@ -542,7 +542,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `ablation-arm/theory/a2_holed.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart', 'button', 'door'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cart', 'door', 'cell'}
   ```
 * `cold-start-a0/prime/theory/theory_prime.dsl` -- fast-downward-translate: returncode `31`
 
@@ -557,7 +557,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a0/prime/theory/theory_prime.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'switch', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'cart', 'cell', 'door'}
   ```
 * `cold-start-a0/prime/theory/theory_prime_seeded.dsl` -- fast-downward-translate: returncode `31`
 
@@ -572,7 +572,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a0/prime/theory/theory_prime_seeded.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'switch', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'switch', 'door', 'cell'}
   ```
 * `cold-start-a0/theory/theory.dsl` -- fast-downward-translate: returncode `31`
 
@@ -587,7 +587,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a0/theory/theory.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cart', 'door', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'button', 'door', 'cell'}
   ```
 * `cold-start-a0/theory/theory_no_button.dsl` -- fast-downward-translate: returncode `31`
 
@@ -632,7 +632,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a2/theory/theory_holed.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cell', 'door', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart', 'button', 'door'}
   ```
 * `cold-start-a2/theory/theory_repaired.dsl` -- fast-downward-translate: returncode `31`
 
@@ -647,7 +647,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a2/theory/theory_repaired.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell', 'button', 'door'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'button', 'cell', 'door'}
   ```
 * `cold-start-a3/artifacts/finding_d_a3_008/domain_l2_scratch_agent_gate.dsl` -- fast-downward-translate: returncode `0`
 
@@ -662,7 +662,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `cold-start-a3/artifacts/finding_d_a3_008/domain_l2_scratch_agent_gate.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'gate', 'switch', 'agent'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'switch', 'agent', 'gate'}
   ```
 * `cold-start-a3/artifacts/finding_r09_blind/domain_l2_scratch_lifted.dsl` -- fast-downward-translate: returncode `0`
 
@@ -672,12 +672,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.000s CPU, 0.013s wall-clock]
+  Done! [0.016s CPU, 0.014s wall-clock]
   ```
 * `cold-start-a3/artifacts/finding_r09_blind/domain_l2_scratch_lifted.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'cell', 'gate', 'agent'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'agent', 'gate', 'switch', 'cell'}
   ```
 * `cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/domain.dsl` -- fast-downward-translate: returncode `0`
 
@@ -687,12 +687,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.016s CPU, 0.011s wall-clock]
+  Done! [0.016s CPU, 0.012s wall-clock]
   ```
 * `cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/domain.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'switch', 'door', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'switch', 'door', 'cart'}
   ```
 * `cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/domain.dsl` -- fast-downward-translate: returncode `0`
 
@@ -702,12 +702,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.016s CPU, 0.009s wall-clock]
+  Done! [0.000s CPU, 0.010s wall-clock]
   ```
 * `cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/domain.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell', 'block'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'block', 'cell', 'cart'}
   ```
 * `cold-start-a3/theory/domain.dsl` -- fast-downward-translate: returncode `0`
 
@@ -717,12 +717,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.016s CPU, 0.012s wall-clock]
+  Done! [0.000s CPU, 0.013s wall-clock]
   ```
 * `cold-start-a3/theory/domain.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'door', 'cart', 'cell'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'switch', 'cart', 'door'}
   ```
 * `cold-start-a3/theory/domain_l2_scratch.dsl` -- fast-downward-translate: returncode `0`
 
@@ -732,12 +732,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.016s CPU, 0.014s wall-clock]
+  Done! [0.016s CPU, 0.013s wall-clock]
   ```
 * `cold-start-a3/theory/domain_l2_scratch.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'door', 'cart', 'switch'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'cell', 'door', 'cart'}
   ```
 * `cold-start-a3/theory/push/domain.dsl` -- fast-downward-translate: returncode `0`
 
@@ -747,12 +747,12 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 5
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.016s CPU, 0.010s wall-clock]
+  Done! [0.000s CPU, 0.011s wall-clock]
   ```
 * `cold-start-a3/theory/push/domain.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'block', 'cell', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart', 'block'}
   ```
 * `theory-compiler/handover_packages/a0-cart/manual/MANUAL.dsl` -- fast-downward-translate: returncode `31`
 
@@ -767,7 +767,7 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
 * `theory-compiler/handover_packages/a0-cart/manual/MANUAL.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'door', 'cell', 'button', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'button', 'cell'}
   ```
 * `theory-compiler/tests/fixtures/cart_theory.dsl` -- fast-downward-translate: returncode `0`
 
@@ -777,10 +777,10 @@ A domain is only half of a planning task. Verdicts on the generated `(:goal ...)
   Translator task size: 110
   warning: could not determine peak memory
   Writing output... [0.000s CPU, 0.000s wall-clock]
-  Done! [0.000s CPU, 0.006s wall-clock]
+  Done! [0.000s CPU, 0.005s wall-clock]
   ```
 * `theory-compiler/tests/fixtures/cart_theory.dsl` -- pddl-3.1-parser: returncode `1`
 
   ```
-  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart'}
+  pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell'}
   ```
