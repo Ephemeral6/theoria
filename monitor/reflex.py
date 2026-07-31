@@ -409,21 +409,7 @@ def main():
         if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
-            merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-            flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-            events += merged + flagged
-            # S28: only stdout used to be read, so a crashed merger, a merger
-            # killed mid-run, and a clean no-op were **the same observation** --
-            # all three logged `quiet`. Measured: exits 0/1/3 all produced
-            # events=[] (EVIDENCE-3-standing-reflex.md).
-            #
-            # This is safe to alarm on rather than cry-wolf: ci_merge.py has no
-            # `sys.exit` anywhere, and a conflict or red gate is reported as a
-            # FLAG file on stdout, not as a status. So non-zero means the
-            # *merger* broke, not that a merge was declined.
-            if r.returncode != 0:
-                first = ((r.stderr or "").strip().splitlines() or [""])[0]
-                events.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+            events += merge_events(r)
 
         # 4b. supply alarm — authoring items needs judgment, so reflex cannot
         # refill the board itself; what it can do is make a dry board loud
