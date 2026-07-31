@@ -1,0 +1,331 @@
+
+== 0. required data sources present ==
+ok
+
+== 1. build pass A ==
+ok  (60 images)
+
+== 2. build pass B ==
+ok  (60 images)
+
+== 3. A vs B, byte for byte ==
+FAIL: pass A and pass B differ under 'csv':
+    diff -r /c/Users/user/Desktop/theoria/figures/.verify/A/csv/fig06_concept_timeline.csv /c/Users/user/Desktop/theoria/figures/.verify/B/csv/fig06_concept_timeline.csv
+    3,4c3,4
+    < Button,2,M3,,,adjudicated,Button,L-02,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,L-02,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    8,9c8,9
+    < Button,2,M3,,,adjudicated,Button,O-01,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-01,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    13,14c13,14
+    < Button,2,M3,,,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    < Button,3,M3,,,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    18,19c18,19
+    < Button,2,M3,,,adjudicated,Button,R-03,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-03,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    23c23
+    < Button,2,M3,,,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    27,28c27,28
+    < Door,2,M3,,,adjudicated,Door,L-02,accept,accept,,,,,
+    < Door,3,M3,,,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,L-02,accept,accept,,,,,
+    > Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    32,33c32,33
+    < Door,2,M3,,,adjudicated,Door,O-02,accept,accept,,,,,
+    < Door,3,M3,,,admitted,Door,O-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-02,accept,accept,,,,,
+FAIL: pass A and pass B differ under 'out':
+    Binary files /c/Users/user/Desktop/theoria/figures/.verify/A/out/dark/fig06_concept_timeline.png and /c/Users/user/Desktop/theoria/figures/.verify/B/out/dark/fig06_concept_timeline.png differ
+    diff -r /c/Users/user/Desktop/theoria/figures/.verify/A/out/dark/fig06_concept_timeline.svg /c/Users/user/Desktop/theoria/figures/.verify/B/out/dark/fig06_concept_timeline.svg
+    171c171
+    <       <g style="fill: #c3c2b7" transform="translate(301.79769 40.397704) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(301.79769 46.556501) scale(0.055 -0.055)">
+    208c208
+    <       <g style="fill: #c3c2b7" transform="translate(287.197768 46.556501) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(287.197768 52.715298) scale(0.055 -0.055)">
+    429c429
+    <       <g style="fill: #c3c2b7" transform="translate(284.598588 52.715298) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(284.598588 58.874095) scale(0.055 -0.055)">
+    536,537c536,537
+    <       <!-- no git -->
+    <       <g style="fill: #c3c2b7" transform="translate(298.032768 58.874095) scale(0.055 -0.055)">
+    ---
+    >       <!-- no commit ts -->
+    >       <g style="fill: #c3c2b7" transform="translate(287.841869 65.032892) scale(0.055 -0.055)">
+    539,591c539,557
+    <         <path id="DejaVuSans-67" d="M 2906 1791 
+    < Q 2906 2416 2648 2759 
+    < Q 2391 3103 1925 3103 
+    < Q 1463 3103 1205 2759 
+    < Q 947 2416 947 1791 
+    < Q 947 1169 1205 825 
+    < Q 1463 481 1925 481 
+    < Q 2391 481 2648 825 
+    < Q 2906 1169 2906 1791 
+    < z
+    < M 3481 434 
+    < Q 3481 -459 3084 -895 
+    < Q 2688 -1331 1869 -1331 
+    < Q 1566 -1331 1297 -1286 
+    < Q 1028 -1241 775 -1147 
+    < L 775 -588 
+    < Q 1028 -725 1275 -790 
+    < Q 1522 -856 1778 -856 
+    < Q 2344 -856 2625 -561 
+FAIL: pass A and pass B differ under 'paper':
+    diff -r /c/Users/user/Desktop/theoria/figures/.verify/A/paper/INDEX.md /c/Users/user/Desktop/theoria/figures/.verify/B/paper/INDEX.md
+    34c34
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    39,48c39,48
+    < | `figures/paper/light/figure1_concept_timeline.pdf` | `15cce1f7c9257f5589803f6dc3a272cb5c3262b51f79c81723d6b21605bf381a` |
+    < | `figures/paper/light/figure1_concept_timeline.png` | `fb987f73a92b26f5de741b6730261d0c3543a9181bdd9c265fe9b4633b34f8e4` |
+    < | `figures/paper/light/figure1_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    < | `figures/paper/dark/figure1_concept_timeline.pdf` | `cdb31d5b0bc690b4b389ddd17bd1888881882683f300220e85a0d9275c5a8b90` |
+    < | `figures/paper/dark/figure1_concept_timeline.png` | `61683cbc160b0a0d7cd757e28d78cc47b311817c09b28c9dc48813b55c35698f` |
+    < | `figures/paper/dark/figure1_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    < | `figures/out/light/fig06_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    < | `figures/out/light/fig06_concept_timeline.png` | `af291c7f67f83b0ada2badd73f6dcc9f4681ad74f3195d3fd2323458e9a6272a` |
+    < | `figures/out/dark/fig06_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    < | `figures/out/dark/fig06_concept_timeline.png` | `95efb5372b0badce1bfbf64ac0a73dd3f078e2568e65dabf9d5344f7ca89156d` |
+    ---
+    > | `figures/paper/light/figure1_concept_timeline.pdf` | `1f36e3996c07927cb145242d5686b6bfd5bc2aa1b92ec356baae55a77fc69f16` |
+    > | `figures/paper/light/figure1_concept_timeline.png` | `d5770f6f6cae48a27872779adc8b45b084479a87049210f03ccf8e330cb9eeb9` |
+    > | `figures/paper/light/figure1_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    > | `figures/paper/dark/figure1_concept_timeline.pdf` | `81ec9684724b233fd7a3170508f6ff7b06dca3b0d02baf7d7596f9f7ecb23c69` |
+    > | `figures/paper/dark/figure1_concept_timeline.png` | `15e52b5d2abb12df9097b956a6651e6d707283e21145227ace559a7660fc2022` |
+    > | `figures/paper/dark/figure1_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    > | `figures/out/light/fig06_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    > | `figures/out/light/fig06_concept_timeline.png` | `0f0b9fc8f89ec5189dfda1f2203c8e7eb3bbc4a0d3509f4f5518ba9eea4547ac` |
+    > | `figures/out/dark/fig06_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    > | `figures/out/dark/fig06_concept_timeline.png` | `833f3b602281e790d96a9c30336d739b36905eee1311425f13cb474bbe29fb5c` |
+    diff -r /c/Users/user/Desktop/theoria/figures/.verify/A/paper/captions/figure1.md /c/Users/user/Desktop/theoria/figures/.verify/B/paper/captions/figure1.md
+    12c12
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    15c15
+    < Run: A0 runs accounted for (cold-start-a0/artifacts/concept_accounts.json): `a0-base`, `a0-no-button`; revisions of the theorize log (cold-start-a0/THEORIZE_LOG.md): .
+    ---
+    > Run: A0 runs accounted for (cold-start-a0/artifacts/concept_accounts.json): `a0-base`, `a0-no-button`; revisions of the theorize log (cold-start-a0/THEORIZE_LOG.md): `848d683a3 2026-07-27T17:02:02Z`, `406d69f11 2026-07-28T01:20:16Z`, `85da55088 2026-07-28T01:33:12Z`, `672044a89 2026-07-28T02:24:29Z`, `3f3f39652 2026-07-28T02:41:00Z`, `76e756098 2026-07-28T14:41:15Z`, `4dd8e0f7f 2026-07-28T17:56:05Z`.
+    diff -r /c/Users/user/Desktop/theoria/figures/.verify/A/paper/dark/figure1_concept_timeline.pdf /c/Users/user/Desktop/theoria/figures/.verify/B/paper/dark/figure1_concept_timeline.pdf
+    207c207
+    < 1 0 -0 1 301.7951115885 1152.85328 cm
+    ---
+
+== 4. data-source hashes match the committed manifest ==
+FAIL: a data source changed under the figures:
+    --- /c/Users/user/Desktop/theoria/figures/SOURCES.sha256	2026-07-30 01:15:56.827457400 +0800
+    +++ /c/Users/user/Desktop/theoria/figures/.verify/A/SOURCES.sha256	2026-07-31 00:07:31.542849300 +0800
+    @@ -4,12 +4,12 @@
+     
+     5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236  baseline-arms/BUDGET_REPORT.md  [tracked]
+     0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b  baseline-arms/ledger.jsonl  [tracked]
+    -810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a  baseline-arms/out/pilot_ar25-0c556536.json  [tracked]
+    -079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8  baseline-arms/out/pilot_g50t-5849a774.json  [tracked]
+    -45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30  baseline-arms/out/pilot_g50t_sonnet_rerun.json  [tracked]
+    -e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5  baseline-arms/out/pilot_sk48-d8078629.json  [tracked]
+    -3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf  baseline-arms/out/pilot_sk48_sonnet_rerun.json  [tracked]
+    -130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e  baseline-arms/out/pilot_tn36-ef4dde99.json  [tracked]
+    +e131df71040d620431fc400a9adaf0a56f789273da4a34e3d5568f642e68e69b  baseline-arms/out/pilot_ar25-0c556536.json  [tracked]
+    +8b0eccdd5469e92ab5691b39c910eb33b6eec0cf31fd4eb2b5c7f69d85049528  baseline-arms/out/pilot_g50t-5849a774.json  [tracked]
+    +7ab527441d1d41c5ac73df3c12b7d5854e230c579745949e63f08cf7d61a587e  baseline-arms/out/pilot_g50t_sonnet_rerun.json  [tracked]
+    +ef4ee535c42255535e34e83f203e6bc2edeaf8f6777f6ed9cececbac261d787f  baseline-arms/out/pilot_sk48-d8078629.json  [tracked]
+    +e1e7765b5f8b47f84a962c17afef31e4cfa896ae1b38d5291b4d765595efc110  baseline-arms/out/pilot_sk48_sonnet_rerun.json  [tracked]
+    +07efca60b84ebaf1c0696288004134ba11e9608c868cc34689d7fd6a2ec35bdb  baseline-arms/out/pilot_tn36-ef4dde99.json  [tracked]
+     0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae  baseline-arms/out/shards/ledger.a7-g50t.jsonl  [untracked]
+     7e8a7af63730bc00b911fa160e321938b0c6261710b5b7486d3cf99820bef845  baseline-arms/out/shards/ledger.a7-sk48.jsonl  [untracked]
+     87c560e42b160901518de2e0d06742458f1c79be61d31e9761dc87b6c6f21678  baseline-arms/out/shards/ledger.a7-tn36.jsonl  [untracked]
+    @@ -54,7 +54,7 @@
+     ce085da8af43c407be831168be3283de2e6d4c00aef39cd13fb0da1faa4a99c5  cold-start-a3/artifacts/negative_controls.json  [tracked]
+     3545b6c742db1c91c38cbebc7a6b52b09a33760b7f459540450c5dd2073b9b72  cold-start-a3/artifacts/provenance_l2_transfer.json  [tracked]
+     ac57397580e0d5688fd9b6c56c513faf69531ecf1b7bf4a3ae9bf7c55b3c0346  cold-start-a3/artifacts/score_vs_truth.json  [tracked]
+    -a5ad9bf75921326fb541b1ed98a6bd893de98ce3e8afc56fc3f0bea7180f8591  papers/phase1-workshop/REVIEW.md  [tracked]
+    +a420a05429ffc44d49035a763c0222d926969fb1922c2642abb9a033cac19945  papers/phase1-workshop/REVIEW.md  [tracked]
+     52b323f24181c09dd971e8665f97f6afd3f74ba93761f034f72c86205d73545b  theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json  [tracked]
+     fb450e8733cc3c083c6fbdebeff691f0ce0f780ad38766e40eda054cd6e3935a  theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json  [tracked]
+     34dffab6bbf09f1719591f639ca37d6334435a607035123cff2faaa6e00bb420  theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json  [tracked]
+
+== 5. every declared artefact exists ==
+checked 6 figures -> 24 images + 6 CSVs
+
+== 6. the committed tree matches a fresh build ==
+FAIL: committed figures/csv differs from a fresh build:
+    diff -r /c/Users/user/Desktop/theoria/figures/csv/fig06_concept_timeline.csv /c/Users/user/Desktop/theoria/figures/.verify/A/csv/fig06_concept_timeline.csv
+    3,4c3,4
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,L-02,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,L-02,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    8,9c8,9
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-01,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,O-01,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    13,14c13,14
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    > Button,3,M3,,,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    18,19c18,19
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-03,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,R-03,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    23c23
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    27,28c27,28
+    < Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,L-02,accept,accept,,,,,
+    < Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,,,adjudicated,Door,L-02,accept,accept,,,,,
+    > Door,3,M3,,,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    32,33c32,33
+    < Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-02,accept,accept,,,,,
+    < Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,O-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,,,adjudicated,Door,O-02,accept,accept,,,,,
+FAIL: committed figures/out differs from a fresh build:
+    Binary files /c/Users/user/Desktop/theoria/figures/out/dark/fig06_concept_timeline.png and /c/Users/user/Desktop/theoria/figures/.verify/A/out/dark/fig06_concept_timeline.png differ
+    diff -r /c/Users/user/Desktop/theoria/figures/out/dark/fig06_concept_timeline.svg /c/Users/user/Desktop/theoria/figures/.verify/A/out/dark/fig06_concept_timeline.svg
+    171c171
+    <       <g style="fill: #c3c2b7" transform="translate(301.79769 46.556501) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(301.79769 40.397704) scale(0.055 -0.055)">
+    208c208
+    <       <g style="fill: #c3c2b7" transform="translate(287.197768 52.715298) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(287.197768 46.556501) scale(0.055 -0.055)">
+    429c429
+    <       <g style="fill: #c3c2b7" transform="translate(284.598588 58.874095) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(284.598588 52.715298) scale(0.055 -0.055)">
+    536,537c536,537
+    <       <!-- no commit ts -->
+    <       <g style="fill: #c3c2b7" transform="translate(287.841869 65.032892) scale(0.055 -0.055)">
+    ---
+    >       <!-- no git -->
+    >       <g style="fill: #c3c2b7" transform="translate(298.032768 58.874095) scale(0.055 -0.055)">
+    539,566c539,570
+    <         <path id="DejaVuSans-6d" d="M 3328 2828 
+    < Q 3544 3216 3844 3400 
+    < Q 4144 3584 4550 3584 
+    < Q 5097 3584 5394 3201 
+    < Q 5691 2819 5691 2113 
+    < L 5691 0 
+    < L 5113 0 
+    < L 5113 2094 
+    < Q 5113 2597 4934 2840 
+    < Q 4756 3084 4391 3084 
+    < Q 3944 3084 3684 2787 
+    < Q 3425 2491 3425 1978 
+    < L 3425 0 
+    < L 2847 0 
+    < L 2847 2094 
+    < Q 2847 2600 2669 2842 
+    < Q 2491 3084 2119 3084 
+    < Q 1678 3084 1418 2786 
+    < Q 1159 2488 1159 1978 
+FAIL: committed figures/paper differs from a fresh build:
+    diff -r /c/Users/user/Desktop/theoria/figures/paper/INDEX.md /c/Users/user/Desktop/theoria/figures/.verify/A/paper/INDEX.md
+    34c34
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    39,48c39,48
+    < | `figures/paper/light/figure1_concept_timeline.pdf` | `1f36e3996c07927cb145242d5686b6bfd5bc2aa1b92ec356baae55a77fc69f16` |
+    < | `figures/paper/light/figure1_concept_timeline.png` | `d5770f6f6cae48a27872779adc8b45b084479a87049210f03ccf8e330cb9eeb9` |
+    < | `figures/paper/light/figure1_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    < | `figures/paper/dark/figure1_concept_timeline.pdf` | `81ec9684724b233fd7a3170508f6ff7b06dca3b0d02baf7d7596f9f7ecb23c69` |
+    < | `figures/paper/dark/figure1_concept_timeline.png` | `15e52b5d2abb12df9097b956a6651e6d707283e21145227ace559a7660fc2022` |
+    < | `figures/paper/dark/figure1_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    < | `figures/out/light/fig06_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    < | `figures/out/light/fig06_concept_timeline.png` | `0f0b9fc8f89ec5189dfda1f2203c8e7eb3bbc4a0d3509f4f5518ba9eea4547ac` |
+    < | `figures/out/dark/fig06_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    < | `figures/out/dark/fig06_concept_timeline.png` | `833f3b602281e790d96a9c30336d739b36905eee1311425f13cb474bbe29fb5c` |
+    ---
+    > | `figures/paper/light/figure1_concept_timeline.pdf` | `15cce1f7c9257f5589803f6dc3a272cb5c3262b51f79c81723d6b21605bf381a` |
+    > | `figures/paper/light/figure1_concept_timeline.png` | `fb987f73a92b26f5de741b6730261d0c3543a9181bdd9c265fe9b4633b34f8e4` |
+    > | `figures/paper/light/figure1_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    > | `figures/paper/dark/figure1_concept_timeline.pdf` | `cdb31d5b0bc690b4b389ddd17bd1888881882683f300220e85a0d9275c5a8b90` |
+    > | `figures/paper/dark/figure1_concept_timeline.png` | `61683cbc160b0a0d7cd757e28d78cc47b311817c09b28c9dc48813b55c35698f` |
+    > | `figures/paper/dark/figure1_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    > | `figures/out/light/fig06_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    > | `figures/out/light/fig06_concept_timeline.png` | `af291c7f67f83b0ada2badd73f6dcc9f4681ad74f3195d3fd2323458e9a6272a` |
+    > | `figures/out/dark/fig06_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    > | `figures/out/dark/fig06_concept_timeline.png` | `95efb5372b0badce1bfbf64ac0a73dd3f078e2568e65dabf9d5344f7ca89156d` |
+    191,196c191,196
+    < | `baseline-arms/out/pilot_ar25-0c556536.json` | `810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    < | `baseline-arms/out/pilot_g50t-5849a774.json` | `079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    < | `baseline-arms/out/pilot_g50t_sonnet_rerun.json` | `45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    < | `baseline-arms/out/pilot_sk48-d8078629.json` | `e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    < | `baseline-arms/out/pilot_sk48_sonnet_rerun.json` | `3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    < | `baseline-arms/out/pilot_tn36-ef4dde99.json` | `130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    ---
+    > | `baseline-arms/out/pilot_ar25-0c556536.json` | `e131df71040d620431fc400a9adaf0a56f789273da4a34e3d5568f642e68e69b` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    > | `baseline-arms/out/pilot_g50t-5849a774.json` | `8b0eccdd5469e92ab5691b39c910eb33b6eec0cf31fd4eb2b5c7f69d85049528` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    > | `baseline-arms/out/pilot_g50t_sonnet_rerun.json` | `7ab527441d1d41c5ac73df3c12b7d5854e230c579745949e63f08cf7d61a587e` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    > | `baseline-arms/out/pilot_sk48-d8078629.json` | `ef4ee535c42255535e34e83f203e6bc2edeaf8f6777f6ed9cececbac261d787f` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+    > | `baseline-arms/out/pilot_sk48_sonnet_rerun.json` | `e1e7765b5f8b47f84a962c17afef31e4cfa896ae1b38d5291b4d765595efc110` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
+
+== 7. no figure reads an undeclared path ==
+ok  (every read goes through sources.py)
+
+== 8. coverage: everything on disk reaches the figure ==
+ok  (negative control fires)
+ok  (COVERAGE-NAMED: partial theoria run directory, not a failure: preflight-20260728T012031Z (has MANIFEST.json; missing cost_curve.json) -- manifest states 0 model calls and $0.00 coverage ok: 4 billing theoria run(s), 13 non-billing partial directory(ies) named above, and 14 roll-up run_id(s) found by walking the tree; every cost-bearing run drawn or explained, every outcome on disk on the plate, every shape absence carrying its reason. )
+== 9. the cross-arm cost claim reconciles, and the check is shown refusing ==
+ok  (negative control fires: planted cost and action mismatches both refused)
+ok  ( AGREE(known-defect) 78  UNCORROBORATED 21)
+      KNOWN DEFECT RESET_IN_DENOMINATOR: 78 run(s) -- capability_spectrum.actions +1; counts the successful RESET as an action; proxy/SCORING.md:60-62 says total_actions counts successful non-RESET commands
+
+== 10. every publication artefact exists ==
+checked 6 paper figures -> 36 artefacts + 6 captions + index
+
+== 11. the paper's SVG is the plate the pipeline built ==
+
+== 12. the index's digests match the files on disk ==
+ok  (checked 6 figures, every digest recomputed)
+
+== 13. every figure reaches a reader, and the check is shown refusing ==
+ok  (negative control fires: an undeclared, uncited new figure fails by name)
+FAIL: a figure this pipeline builds is cited nowhere and declared nowhere:
+    figure citations: 6 figure(s) from build_all.FIGURES, against 24 prose file(s) under papers/
+      CITED       fig05_a2_repair_loop: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/05_a2.md
+      CITED       fig06_concept_timeline: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+      CITED       fig07_a0_vs_a0prime: 3 file(s) -- papers/phase1-workshop/OUTLINE.md, papers/phase1-workshop/PAPER.md, papers/phase1-workshop/sections/03_a0.md
+      FAIL        fig02_bill_shape is declared 'not cited on purpose' and IS cited, in papers/phase1-workshop/REVIEW-2026-07-30.md. Remove it from NOT_CITED_ON_PURPOSE: a declaration that no longer describes the tree is a false statement in a gate, which is worse than no declaration.
+      FAIL        fig03_capability_spectrum is declared 'not cited on purpose' and IS cited, in papers/phase1-workshop/REVIEW-2026-07-30.md. Remove it from NOT_CITED_ON_PURPOSE: a declaration that no longer describes the tree is a false statement in a gate, which is worse than no declaration.
+      FAIL        fig04_a3_transfer is declared 'not cited on purpose' and IS cited, in papers/phase1-workshop/REVIEW-2026-07-30.md. Remove it from NOT_CITED_ON_PURPOSE: a declaration that no longer describes the tree is a false statement in a gate, which is worse than no declaration.
+    
+    3 cited, 0 uncited by declaration, 3 unaccounted for.
+    
+    Every figure this pipeline builds has to be accounted for: cited in the paper, or declared here with a reason. Neither is not an option.
+
+VERIFY: red.
