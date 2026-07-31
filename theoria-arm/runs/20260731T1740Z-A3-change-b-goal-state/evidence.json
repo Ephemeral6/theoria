@@ -1,0 +1,211 @@
+{
+ "part_1_loop_end_to_end_against_mock": {
+  "off": {
+   "actions_ok": 6,
+   "goal_modes": [
+    null,
+    null
+   ],
+   "goal_summary": null,
+   "levels_completed": 0,
+   "model_calls": 0,
+   "protocol": "off",
+   "run_state_has_goal_key": false,
+   "summary_has_goal_key": false,
+   "turn_record_keys": [
+    "actions_before",
+    "actions_spent",
+    "beat",
+    "detail",
+    "elapsed_s",
+    "predictor",
+    "probe",
+    "theorize",
+    "turn"
+   ],
+   "turns": 2,
+   "turns_carrying_a_goal_block": 0
+  },
+  "record": {
+   "actions_ok": 6,
+   "goal_modes": [
+    null,
+    "no_manual"
+   ],
+   "goal_summary": {
+    "absence_is_signed": false,
+    "absence_signature": null,
+    "actions_without_goal": 0,
+    "criterion": {
+     "max_proposals": 3,
+     "min_new_states": 4
+    },
+    "final_mode": "no_manual",
+    "first_no_goal_turn": null,
+    "goal_declared_ever": false,
+    "plan_status_counts": {},
+    "proposals": [],
+    "proposals_made": 0,
+    "protocol": "record",
+    "reading": "this leg never reached a turn with a compiled manual, so it was never in a position to hold a goal or to lack one.",
+    "turns": 1,
+    "turns_planning": 0,
+    "turns_without_goal": 0,
+    "turns_without_manual": 1
+   },
+   "levels_completed": 0,
+   "model_calls": 0,
+   "protocol": "record",
+   "run_state_has_goal_key": true,
+   "summary_has_goal_key": true,
+   "turn_record_keys": [
+    "actions_before",
+    "actions_spent",
+    "beat",
+    "detail",
+    "elapsed_s",
+    "goal",
+    "predictor",
+    "probe",
+    "theorize",
+    "turn"
+   ],
+   "turns": 2,
+   "turns_carrying_a_goal_block": 1
+  }
+ },
+ "part_2_scoreboard_columns": {
+  "off": {
+   "campaign_totals": {
+    "goal_proposals_due": 0,
+    "legs_recorded": 2,
+    "legs_with_rows": 2,
+    "level_boundaries": 0,
+    "turns": 12,
+    "turns_not_measured": 12,
+    "turns_planning": 0,
+    "turns_without_goal": 0,
+    "usd": 0.0
+   },
+   "legs": [
+    {
+     "goal_modes": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "goal_summary": null,
+     "leg": "leg-with-goal",
+     "plan_produced": true,
+     "plan_status": "sat"
+    },
+    {
+     "goal_modes": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "goal_summary": null,
+     "leg": "leg-no-goal",
+     "plan_produced": false,
+     "plan_status": "no_goal_declared"
+    }
+   ]
+  },
+  "record": {
+   "campaign_totals": {
+    "goal_proposals_due": 5,
+    "legs_recorded": 2,
+    "legs_with_rows": 2,
+    "level_boundaries": 0,
+    "turns": 12,
+    "turns_not_measured": 0,
+    "turns_planning": 6,
+    "turns_without_goal": 6,
+    "usd": 0.0
+   },
+   "legs": [
+    {
+     "goal_modes": [
+      "planning",
+      "planning",
+      "planning",
+      "planning",
+      "planning",
+      "planning"
+     ],
+     "goal_summary": {
+      "absence_is_signed": false,
+      "absence_signature": null,
+      "actions_without_goal": 0,
+      "criterion": {
+       "max_proposals": 3,
+       "min_new_states": 4
+      },
+      "final_mode": "planning",
+      "first_no_goal_turn": null,
+      "goal_declared_ever": true,
+      "plan_status_counts": {
+       "sat": 6
+      },
+      "proposals": [],
+      "proposals_made": 0,
+      "protocol": "record",
+      "reading": "this leg held a winning condition on every turn it had a manual; `plan` was searching for something the whole time.",
+      "turns": 6,
+      "turns_planning": 6,
+      "turns_without_goal": 0,
+      "turns_without_manual": 0
+     },
+     "leg": "leg-with-goal",
+     "plan_produced": true,
+     "plan_status": "sat"
+    },
+    {
+     "goal_modes": [
+      "exploring_no_goal",
+      "exploring_no_goal",
+      "exploring_no_goal",
+      "exploring_no_goal",
+      "exploring_no_goal",
+      "exploring_no_goal"
+     ],
+     "goal_summary": {
+      "absence_is_signed": false,
+      "absence_signature": null,
+      "actions_without_goal": 6,
+      "criterion": {
+       "max_proposals": 3,
+       "min_new_states": 4
+      },
+      "final_mode": "exploring_no_goal",
+      "first_no_goal_turn": 1,
+      "goal_declared_ever": false,
+      "plan_status_counts": {
+       "no_goal_declared": 6
+      },
+      "proposals": [],
+      "proposals_made": 0,
+      "protocol": "record",
+      "reading": "this leg spent 6 of 6 turns, and at least 6 actions, with no winning condition in the manual. On those turns `plan` could not succeed by construction -- not because the search was hard, but because `is_goal` was False everywhere. Reading those turns as failed planning is a category error. The absence is UNSIGNED: nothing in the manual argues for it. Silence and a considered refusal read identically in the old record and are not the same thing.",
+      "turns": 6,
+      "turns_planning": 0,
+      "turns_without_goal": 6,
+      "turns_without_manual": 0
+     },
+     "leg": "leg-no-goal",
+     "plan_produced": false,
+     "plan_status": "no_goal_declared"
+    }
+   ]
+  }
+ },
+ "prompt_id": "A3-change-b",
+ "what": "offline before/after for change B (goal-absence as a state)"
+}

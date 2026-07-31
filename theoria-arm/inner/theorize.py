@@ -204,7 +204,8 @@ instead).
 def build_prompt(store: FrameStore, engines: Dict[str, Any], books,
                  candidates_path: str, surprises: List[Any],
                  compile_errors: Optional[Dict[str, Any]] = None,
-                 certify_report: Optional[Dict[str, Any]] = None) -> str:
+                 certify_report: Optional[Dict[str, Any]] = None,
+                 goal_rider: Optional[str] = None) -> str:
     parts = [PREAMBLE, "", CARD, "",
              evidence_brief(store, engines, candidates_path)]
 
@@ -249,6 +250,13 @@ def build_prompt(store: FrameStore, engines: Dict[str, Any], books,
                   json.dumps(compile_errors, indent=1, sort_keys=True)[:4000],
                   "```"]
 
+    # The goal ask (`inner/goal.py`), when one is parked. It rides on a call a
+    # surprise already paid for -- it never causes one -- so it is appended
+    # last, after the evidence and before the output contract, where the reply
+    # is still governed by the same three blocks.
+    if goal_rider:
+        parts += ["", goal_rider]
+
     parts += ["", OUTPUT_CONTRACT]
     return "\n".join(parts)
 
@@ -292,6 +300,7 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
         certify_report: Optional[Dict[str, Any]] = None,
         objects_hint: Optional[List[Dict[str, Any]]] = None,
         step_idx: Optional[int] = None,
+        goal_rider: Optional[str] = None,
         engines: Optional[Dict[str, Any]] = None) -> TheorizeResult:
     """One theorize beat: dispatch, adjudicate, recompile."""
     result = TheorizeResult(calls=0, rounds=[], log=[], compiled=None)
@@ -306,7 +315,9 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
 
     compile_errors: Optional[Dict[str, Any]] = None
     prompt = build_prompt(store, engines, books, candidates_path,
-                          surprises or [], None, certify_report)
+                          surprises or [], None, certify_report,
+                          goal_rider=goal_rider)
+    result["goal_rider"] = bool(goal_rider)
 
     for attempt in range(REPAIR_ROUNDS + 1):
         reply = desk.call(prompt, beat="theorize", step_idx=step_idx,
@@ -323,7 +334,8 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
             compile_errors = {"reply": "the reply carried no === THEORY === "
                                        "block; emit all three blocks"}
             prompt = build_prompt(store, engines, books, candidates_path,
-                                  surprises or [], compile_errors, certify_report)
+                                  surprises or [], compile_errors,
+                                  certify_report, goal_rider=goal_rider)
             continue
 
         books.write(theory=parsed["theory"],
@@ -353,7 +365,8 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
             break
         compile_errors = compiled.get("errors")
         prompt = build_prompt(store, engines, books, candidates_path,
-                              surprises or [], compile_errors, certify_report)
+                              surprises or [], compile_errors, certify_report,
+                              goal_rider=goal_rider)
 
     result["snapshot_after"] = books.snapshot("after-theorize")
     result["ok"] = bool((result.get("_compiled") or {}).get("ok"))

@@ -37,6 +37,7 @@ import _bootstrap                                     # noqa: F401  (sys.path)
 
 from harness.modelcall import call_field
 
+from inner import goal as goal_beat
 from proxy.ledger import read_ledger
 
 #: Every field this archive copies out of `proxy.cost.price_run()`, named here
@@ -707,6 +708,11 @@ def _turn_spine(turns_json, invocations, budget) -> Dict[str, Any]:
                          "step_idx": (sorted(steps, key=str)[0] if steps
                                       else None),
                          "invocations": taken,
+                         # `inner/goal.py`'s three scoreboard columns, carried
+                         # from the turn record. All `None` when the goal
+                         # protocol was `off` or the run predates it -- which is
+                         # not the same as False, and must not become False.
+                         "goal": goal_beat.turn_row_fields(record),
                          "from": "turns.json"})
         checks.append({
             "check": "every billed theorize invocation was claimed by a turn",
@@ -996,6 +1002,19 @@ def turn_series(run_dir: str, *, records: Optional[List[Dict[str, Any]]] = None
                 "computational": sum(counts[k] for k in COMPUTATIONAL)},
             "surprise_seqs": seqs,
             "turn_source": row["from"],
+            # -- the goal columns (change B) --------------------------------
+            #
+            # `goal_mode` is the scoreboard column that separates "this leg
+            # planned and the plan failed" from "this leg never held a winning
+            # condition". Four live legs looked like the first and were the
+            # second, and no column in this file could tell them apart.
+            #
+            # None means NOT MEASURED -- the run predates `inner/goal.py` or
+            # played on the `off` rung. A reconstructed spine has no turn
+            # record at all, so it is None there too, and that is honest: the
+            # ledger carries no goal state and inferring one would be a
+            # fabrication.
+            **(row.get("goal") or goal_beat.turn_row_fields(None)),
         })
         running_actions += len(actions)
 

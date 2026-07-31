@@ -1,0 +1,80 @@
+{
+ "arm": "theoria",
+ "base_commit": "27407cb57945867d846a93ea0920f4c8d782cf57",
+ "branch": "ep/change-b",
+ "change": "B -- goal-absence as a first-class state (inner/goal.py)",
+ "default_behaviour_unchanged": true,
+ "files": [
+  {
+   "bytes": 14397,
+   "path": "RUN_STATE.md",
+   "sha256": "4795e189c184533c1b2044a25b6f47c77932b21de6abfa371f2295777f2e2a4a"
+  },
+  {
+   "bytes": 10171,
+   "path": "evidence.py",
+   "sha256": "a5c7e50506887cc48a8498b2d41cb8e2d43c5acd1fad6b614435608d5af0d3eb"
+  },
+  {
+   "bytes": 5042,
+   "path": "evidence.json",
+   "sha256": "0d7207c2f2c33ce307185fa6f333749c42292151ce2daf0350224af18250ac26"
+  },
+  {
+   "bytes": 4391,
+   "path": "make_manifest.py",
+   "sha256": "02dc7cc76b26b4094b6f2e5ec6ef79c1d52591342e4ee2f259e82c2b2a62c66c"
+  }
+ ],
+ "head_commit": "ce1a9b4a5fe45464684af3efad9a9d083082cc43",
+ "prompt_id": "A3-change-b",
+ "seed": null,
+ "seed_note": "nothing here draws a random number. The evidence script makes no model call and no network call, so its output is a function of the sources hashed below and of nothing else.",
+ "slug": "20260731T1740Z-A3-change-b-goal-state",
+ "sources": [
+  {
+   "bytes": 23949,
+   "path": "inner/goal.py",
+   "sha256": "9a94e2b0fabd387f9dee82c1d448df3cc1e6e8bc4e07b2896ce6ed82b5df2930"
+  },
+  {
+   "bytes": 83408,
+   "path": "inner/loop.py",
+   "sha256": "542d7a60b03dec0932d08971c919ab0d1eba7334dec84ba38fe2a4af9825f70f"
+  },
+  {
+   "bytes": 19138,
+   "path": "inner/theorize.py",
+   "sha256": "64c1e5e4a2b75aa0e92ac2d408dc9cf9d18271e8ca0ef39edd16408114d405fe"
+  },
+  {
+   "bytes": 19824,
+   "path": "inner/plan.py",
+   "sha256": "9356e70678351ed914f4f66850b5fe0aa165c2e668f5d38dcab45faf040c7289"
+  },
+  {
+   "bytes": 63101,
+   "path": "armtools/archive.py",
+   "sha256": "d4e81e2d96f8babb0f0cd69c5a8fae2b415e5c88243904cee4d320b1e47f32bb"
+  },
+  {
+   "bytes": 59349,
+   "path": "harness/campaign.py",
+   "sha256": "672e7c613c1d6c88bfe68d4a587d847cd5d496bfdcf0569b2f32b35ed83f93be"
+  },
+  {
+   "bytes": 21696,
+   "path": "tests/test_goal_state.py",
+   "sha256": "f07b87154b22ef1d1a23544949e79eb08b9694708e5ee6a7c922ee84e7222ce5"
+  }
+ ],
+ "sources_note": "arm-relative, and deliberately NOT in `files[]`: verify_provenance check 10 resolves `files[]` against the run directory.",
+ "spend": {
+  "arc_actions": 0,
+  "model_calls": 0,
+  "note": "offline only: proxy/mock, a scratch spend pool in a temp directory, and no desk.",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-07-31T17:40:00Z"
+}

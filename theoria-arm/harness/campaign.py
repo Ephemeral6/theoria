@@ -75,6 +75,8 @@ import _bootstrap                                      # noqa: F401  (sys.path)
 from harness import freeze_gate
 from harness import spend as spend_mod
 from harness.run import play
+from inner.goal import DEFAULT_PROTOCOL as GOAL_PROTOCOL_DEFAULT
+from inner.goal import PROTOCOLS as GOAL_PROTOCOLS
 from inner.loop import TheoriaArm
 
 #: The arm's directory. Deliberately not `harness.run.ARM`, which is the arm's
@@ -413,6 +415,7 @@ class Campaign:
                  env_key: Optional[str] = None,
                  require_key: bool = True,
                  spend_gate=None,
+                 goal_protocol: str = GOAL_PROTOCOL_DEFAULT,
                  expect_pool: Optional[Dict[str, Any]] = None):
         # `spend_gate`/`expect_pool` exist so a whole multi-leg campaign can be
         # rehearsed against a scratch pool in a temp directory. Without them
@@ -454,6 +457,10 @@ class Campaign:
         self.actions_per_level = actions_per_level
         self.model = model
         self.offline = offline
+        #: Change B's switch, passed straight through to every leg's arm. The
+        #: default is `off`, so a campaign that does not name it plays exactly
+        #: the campaign that was played on 2026-07-31.
+        self.goal_protocol = goal_protocol
         self.env_upstream = env_upstream
         self.env_key = env_key
         self.require_key = require_key
@@ -616,6 +623,7 @@ class Campaign:
                               budget_actions=self.actions_per_level,
                               offline=self.offline, model=self.model,
                               cost_ceiling_usd=ceiling,
+                              goal_protocol=self.goal_protocol,
                               seed_books=seed_books)
 
         kwargs: Dict[str, Any] = {"caps": caps, "campaign": campaign_name}
@@ -939,6 +947,24 @@ class Campaign:
                 "usd": round(sum(float(r.get("usd") or 0.0) for r in rows), 6),
                 "level_boundaries": sum(1 for r in rows
                                         if r.get("level_boundary")),
+                # -- the goal columns (change B) ------------------------------
+                #
+                # A campaign that completes no level looks the same whether its
+                # arm searched and lost or never held a winning condition. The
+                # four legs of 2026-07-31 were the second and this scoreboard
+                # could not say so. `turns_not_measured` is kept beside the
+                # other two on purpose: without it, a campaign of unmeasured
+                # legs reports `turns_without_goal: 0` and reads like a
+                # campaign that always had a goal.
+                "turns_planning": sum(
+                    1 for r in rows if r.get("goal_mode") == "planning"),
+                "turns_without_goal": sum(
+                    1 for r in rows
+                    if r.get("goal_mode") == "exploring_no_goal"),
+                "turns_not_measured": sum(
+                    1 for r in rows if r.get("goal_mode") is None),
+                "goal_proposals_due": sum(
+                    1 for r in rows if r.get("goal_proposal_due")),
             },
             "reading": (
                 "campaign_turn is the axis for C2's 前重后轻 claim. The "
@@ -1086,6 +1112,15 @@ def main(argv=None) -> int:
     ap.add_argument("--desk", action="store_true",
                     help="with --mock, still call the real desk. This SPENDS "
                          "model money against a mock world.")
+    ap.add_argument("--goal-protocol", default=GOAL_PROTOCOL_DEFAULT,
+                    choices=list(GOAL_PROTOCOLS),
+                    help="change B. `off` (default) is 2026-07-31's behaviour "
+                         "exactly. `record` names and writes the arm's goal "
+                         "state -- planning vs exploring-because-there-is-no-"
+                         "goal -- and spends nothing. `propose` additionally "
+                         "lets a criterion attach one goal request to a "
+                         "theorize call a surprise has already paid for; it "
+                         "never causes a model call of its own.")
     ap.add_argument("--pool", default=None,
                     help="a scratch spend-gate ledger. Required with --mock: "
                          "a rehearsal's fictional reservations must not land "
@@ -1132,6 +1167,7 @@ def main(argv=None) -> int:
     kwargs: Dict[str, Any] = {
         "prompt_id": args.prompt_id, "out_dir": args.out_dir,
         "games": args.games, "model": args.model,
+        "goal_protocol": args.goal_protocol,
         "campaign_usd": args.campaign_usd, "game_usd": args.game_usd,
         "actions_per_level": args.actions_per_level,
         "offline": args.mock and not args.desk,
