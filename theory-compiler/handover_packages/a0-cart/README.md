@@ -23,17 +23,10 @@ One manual compiles to four co-derived forms — English, planning, executable, 
 | form | where | derived from | in this package? |
 |---|---|---|---|
 | English | `manual/MANUAL.md` | the manual alone | yes |
-| planning (domain) | `manual/DOMAIN.pddl` | the manual alone | **no — see below** |
+| planning (domain) | `manual/DOMAIN.pddl` | the manual alone | yes |
 | executable | `levels/<board>/predictor.py` | the manual, on that board | yes |
 | proof | `levels/<board>/Level.lean` | the manual, on that board | yes |
-| planning (problem) | `levels/<board>/problem.pddl` | the manual, on that board | **no — see below** |
-
-**Not every form is here.** The following could not be derived from this manual, and the generator's own reason is recorded in `MANIFEST.json` under `forms`:
-
-- `planning_domain` — StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'
-- `planning_problem` — base: StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'; no-button: StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'
-
-This is stated rather than hidden. A package quietly missing a form would be read as the reader's failure to find it.
+| planning (problem) | `levels/<board>/problem.pddl` | the manual, on that board | yes |
 
 ## What is deliberately not here
 

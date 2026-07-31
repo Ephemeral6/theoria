@@ -235,6 +235,23 @@ shortfall is a checked number rather than a discovery someone makes twice. v0.2
 revision item 11 is the standing lesson: a declaration nobody verifies reads
 exactly like a verified one.
 
+**Correction, 2026-07-31.** The shortfall above is repaired. `gen_pddl` now
+dispatches events on (name, arity) — `moved/2`, `jumped/2`, `teleported/2`,
+`recolored/2`, `vanished/1`, `appeared/1`, `stayed/1` — refuses everything
+else by raising `UnsupportedClause`, translates the spatial spellings through
+`gen_python`'s `SPATIAL` table, and folds same-guard rules into one action
+(`cascade single_frame`). The generator's last step is `strips.parse_domain`
+on its own output, so an undeclared predicate, an unbound variable or an
+empty effect can no longer be shipped, only refused. The pin in
+`tests/test_writes.py` (`TestBackendObligationShortfall`) went red on the
+repair and was deleted, per its own instruction; the positive obligation now
+lives in `test_gen_pddl_meets_the_backend_obligation_on_a0` and
+`tests/test_e2e_rehearsal.py::TestForeignManual::
+test_pddl_compiled_against_the_level_solves_like_the_world`, which holds the
+A0 planning form to the known 12-step plan. The peg world's planning form is
+a *declared refusal* (line geometry, field-arithmetic guards), which is the
+honest count for that world: three forms and a named gap.
+
 ---
 
 ## 6. `free` on an object's own cell — ledger X-5

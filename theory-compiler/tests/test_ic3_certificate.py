@@ -268,12 +268,31 @@ class TestProvenance:
         assert doc["provenance"]["candidate_id"] == published[0]["id"]
 
     def test_the_fixture_lives_on_this_side_of_the_boundary(self):
-        """The emitting half belongs to engine-rig and is not written here."""
+        """The emitting half belongs to engine-rig and is not written here.
+
+        Until 2026-07-31 this asserted that NO ic3 certificate existed in
+        engine-rig's tree, because the schema was an unsigned draft. E8 then
+        implemented the emitting half exactly as drafted and the contract was
+        countersigned (CONTRACTS/ic3_certificate_v0.1.md, PARTNER_SYNC). The
+        boundary obligation is now positive: anything published there must
+        load through THIS side's reader and pass the three recomputed
+        obligations — an emitted certificate this reader refuses would be the
+        new boundary breach.
+        """
         assert CERT.parent == FIXTURES
         interop = REPO / "engine-rig" / "interop" / "certificates"
-        assert not list(interop.glob("ic3*")), (
-            "an ic3 certificate has appeared in engine-rig's tree; this track "
-            "does not write there and the schema is still a draft")
+        published = sorted(interop.glob("ic3*"))
+        assert published, ("the countersigned contract says the emitting half "
+                           "is implemented; its first certificate has gone")
+        for path in published:
+            cert = load_ic3_certificate(str(path))
+            assert cert.holds(cert.initial_state), "%s: inv_init fails" % path.name
+            escapes = [(s, m) for s in cert.states() for m in cert.moves()
+                       if cert.holds(s) and legal(s, m)
+                       and not cert.holds(apply_move(s, m))]
+            assert escapes == [], "%s: inv_closed fails" % path.name
+            assert all(not cert.holds(g) for g in cert.goal_states), (
+                "%s: goal_break fails" % path.name)
 
     def test_nothing_here_imports_engine_rig(self):
         source = (Path(__file__).parent.parent / "src" / "theory_compiler"

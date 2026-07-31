@@ -458,11 +458,71 @@ def ground(domain_text: str, problem_text: str) -> StripsTask:
 
     statics = frozenset(a for a in init if a.name in static_predicates)
 
+    # Static facts indexed by predicate, for the join below.
+    static_index: Dict[str, List[Tuple[str, ...]]] = {}
+    for atom in sorted(statics):
+        static_index.setdefault(atom.name, []).append(atom.args)
+    member: Dict[str, set] = {t: set(names) for t, names in by_type.items()}
+
     actions: List[GroundAction] = []
     for schema in schemas:
-        domains = [tuple(by_type[t]) for _, t in schema.params]
-        for binding_values in itertools.product(*domains):
-            binding = dict(zip([p for p, _ in schema.params], binding_values))
+        param_types = dict(schema.params)
+        static_lits = [(p, args) for p, args in schema.pre
+                       if p in set(static_predicates)]
+
+        # Bindings are grown by *joining on the static preconditions* rather
+        # than enumerating the full type-consistent product and filtering.
+        # The result set is identical — a binding survives iff every static
+        # precondition is in `init` — but the cost follows the number of
+        # static facts instead of |cells|^arity, which is what makes a
+        # four-cell-parameter action (the folded A0 press) groundable at all.
+        # Literals are joined most-constrained-first, greedily.
+        bindings: List[Dict[str, str]] = [{}]
+        remaining = list(static_lits)
+        while remaining and bindings:
+            def unbound(lit, bound_vars):
+                return len({a for a in lit[1] if a not in bound_vars})
+            bound_now = set(bindings[0])
+            remaining.sort(key=lambda lit: (unbound(lit, bound_now),
+                                            len(static_index.get(lit[0], ()))))
+            pred, args = remaining.pop(0)
+            facts = static_index.get(pred, [])
+            grown: List[Dict[str, str]] = []
+            for binding in bindings:
+                for fact in facts:
+                    if len(fact) != len(args):
+                        continue
+                    extended = dict(binding)
+                    ok = True
+                    for var, value in zip(args, fact):
+                        if extended.get(var, value) != value:
+                            ok = False
+                            break
+                        if var not in extended:
+                            if value not in member[param_types[var]]:
+                                ok = False
+                                break
+                            extended[var] = value
+                    if ok:
+                        grown.append(extended)
+            bindings = grown
+
+        # Whatever the statics did not pin ranges over its declared type.
+        free_params = [p for p, _t in schema.params
+                       if any(p not in b for b in bindings)] if bindings else []
+        if bindings and free_params:
+            grown = []
+            for binding in bindings:
+                missing = [p for p, _t in schema.params if p not in binding]
+                for values in itertools.product(
+                        *[tuple(by_type[param_types[p]]) for p in missing]):
+                    extended = dict(binding)
+                    extended.update(zip(missing, values))
+                    grown.append(extended)
+            bindings = grown
+
+        for binding in bindings:
+            binding_values = tuple(binding[p] for p, _t in schema.params)
 
             def instantiate(literals):
                 return frozenset(Atom(p, tuple(binding[a] for a in args)) for p, args in literals)

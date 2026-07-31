@@ -372,90 +372,31 @@ class TestAdditionsOnly:
         assert any("default table" in w for w in ir.warnings)
 
 
-# ------------------------------------------ the obligation gen_pddl does not meet
+# ------------------------------------------ the obligation, now met and checked
 
-class TestBackendObligationShortfall:
-    """`gen_pddl` does not satisfy the v0.3 backend obligation, and this is the
-    measurement that says so out loud.
-
-    It implements `moved` and `teleported`; for every other event it emits
-    `(and)` — an action with no effect at all. So the PDDL form of A0 has a
-    button-press that presses nothing. That is a **pre-existing** defect of
-    exactly the kind v0.2 revision item 10 was written about, and it is out of
-    C7's scope to repair: fixing it changes the fourth form of four manuals.
-
-    What is *not* acceptable is leaving the contract asserting an obligation
-    nothing checks — v0.2 revision item 11 is the standing lesson that a
-    declaration nobody verifies reads exactly like a verified one. So the
-    shortfall is pinned here, by name. The day `gen_pddl` grows the events, this
-    test goes red and gets deleted.
+def test_gen_pddl_meets_the_backend_obligation_on_a0():
+    """The pin this replaces (`TestBackendObligationShortfall`) recorded, by
+    name, that `gen_pddl` compiled three A0 rules to `:effect (and (and))` and
+    two more to an undeclared `?dest`. Its own docstring said: the day
+    `gen_pddl` grows the events, this test goes red and gets deleted. That day
+    came with the 2026-07-31 repair; what stands here instead is the positive
+    obligation — the A0 manual's PDDL form parses under the track's own STRIPS
+    reader, which refuses empty effects and unbound variables outright.
     """
+    from theory_compiler import strips
 
-    # Measured on `cold-start-a0/theory/theory.dsl`, 2026-07-28.
-    EMPTY_EFFECT = {"teleport-down", "press-left", "door-opens-left"}
-    UNDECLARED_DEST = {"push-left", "push-right"}
-
-    def _domain(self):
-        path = REPO / "cold-start-a0" / "theory" / "theory.dsl"
-        if not path.exists():
-            pytest.skip("cold-start-a0 is not in this checkout")
-        domain, _problem = generate_pddl(
-            parse_theory(path.read_text(encoding="utf-8")))
-        return domain
-
-    def test_three_actions_compile_to_no_effect_at_all(self):
-        domain = self._domain()
-        empty = {name for name in _action_names(domain)
-                 if "(and)" in _effect_of(domain, name)}
-        assert empty == self.EMPTY_EFFECT, (
-            "the set of actions gen_pddl compiles to an empty effect has "
-            "changed: %r. If it shrank, delete this pin and celebrate. If it "
-            "grew, a rule just stopped doing anything in the PDDL form."
-            % (sorted(empty),))
-
-    def test_two_more_reference_a_parameter_they_never_declare(self):
-        """Found while checking the above, and worse than an empty effect.
-
-        `push_left`'s guard is `free(leftof(Cart))`. `_extract_pred_pddl` knows
-        the direction words `above|below|left|right` and the manual writes
-        `leftof`/`rightof`, so no `?dest` parameter is created and no `(free
-        ?dest)` precondition is emitted — while `_event_to_pddl` goes on to
-        write `?dest` into the effect. The action is not merely weak; it is
-        **malformed**, and no planner will read this domain.
-
-        Not repaired here: C7 is about `mentions` and `free`, and repairing the
-        STRIPS backend changes the fourth form of four manuals. Pinned so that
-        it is a known number rather than a discovery someone makes twice.
-        """
-        domain = self._domain()
-        broken = set()
-        for name in _action_names(domain):
-            block = _action_block(domain, name)
-            params = block[:block.find(":precondition")]
-            if "?dest" in block and "?dest" not in params:
-                broken.add(name)
-        assert broken == self.UNDECLARED_DEST, (
-            "the set of PDDL actions using an undeclared ?dest has changed: %r"
-            % (sorted(broken),))
-
-
-def _action_names(pddl: str):
-    import re
-    return [m.group(1) for m in re.finditer(r"\(:action (\S+)", pddl)]
-
-
-def _action_block(pddl: str, action: str) -> str:
-    at = pddl.find("(:action %s" % action)
-    if at < 0:
-        return ""
-    end = pddl.find("(:action", at + 1)
-    return pddl[at:end if end > 0 else len(pddl)]
-
-
-def _effect_of(pddl: str, action: str) -> str:
-    block = _action_block(pddl, action)
-    at = block.find(":effect")
-    return block[at:] if at >= 0 else ""
+    path = REPO / "cold-start-a0" / "theory" / "theory.dsl"
+    if not path.exists():
+        pytest.skip("cold-start-a0 is not in this checkout")
+    domain, _problem = generate_pddl(
+        parse_theory(path.read_text(encoding="utf-8")))
+    _name, _arities, _types, schemas = strips.parse_domain(domain)
+    # 7 rules, 6 actions: press_left and door_opens_left share a guard and are
+    # one transition (`cascade single_frame`), so they fold into one action.
+    assert len(schemas) == 6
+    for schema in schemas:
+        assert schema.pre, schema.name
+        assert schema.add or schema.dele, schema.name
 
 
 # --------------------------------------------------------------- the two numbers
