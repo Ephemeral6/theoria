@@ -1887,3 +1887,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`python -m pytest battery/tests -q` **410 passed**（+21，全在 test_theoria_live.py，负控照 test_freeze.py 样式）；`freeze.check()` 空；`python -m battery.verify` **green，7/7 级全 ok**（第 7 级新增：伴生产物过期红、非 dev 行红、认识/经济族空读数红）。零 API、零花费、零封存堆接触、无凭据值。
 阻塞：none。
 下一步：leg 归档再落新提交（r3、sk48-l1 收官后）时 `python -m battery.audit.live_arm` 重生成并提交伴生产物——第 7 级会在忘掉这步时变红；要把活臂升为确证材料（进判别/结算预测），走 BATTERY_V1.md §8 的 BATTERY_V2 新版本流程。
+
+## [monitor] 2026-07-31T15:36Z p1-model-proxy-adjudication
+状态：Phase-1「模型代理」项正式裁决落账（monitor/spec.py `p1-proxy-model` 注记，循 p3-gate-exception 的登记先例）：按**改定义后已清偿**结案。史实逐字引 S32 分母（verify-lab/DUAL_PROXY.md，count.py 每轮重算）：环境代理 **924** 条真实端点腿 / 模型代理 **65-of-65 全 401** / **0 条 2xx**——模型代理零真实流量，S32 判 (b)。(a) 当下不可达且非工程缺陷：DUAL_PROXY §4 第 1 步要 .env 有 ANTHROPIC_API_KEY（现只有 ARC_API_KEY，本次以变量名核验、未读值），补它是所有者出资动作；第 2 步要换掉 D-P8-002 特意选定的 claude -p 订阅传输，属为凑数弱化设计。改定义的实质：『provider usage 逐字入账』经 CLI 包络已达成，每条 model_call 标 proxied:false 带 proxy_gap。留权：模型代理仍是任何未来 API 传输臂的强制通路，§4 六步清单为常设升级路径，触发条件是所有者出资决定。
+测试：worktree 内 `python -m pytest monitor/tests`：**525 passed, 2 xfailed in 155.52s**；spec 导入自检通过（p1 items: 16）。改动仅 spec.py 一条注记字符串 + 本段，无行为变更。零 API 调用、零花费、零封存堆接触、无凭据值（.env 仅以名核验）。
+阻塞：none。(a) 的门槛不是阻塞而是所有者决策点：出资配 API key 才启动 DUAL_PROXY §4 的 2–6 步（其中 2、4 是 theoria-arm 的活，3 触 proxy/）。
+下一步：若所有者拍板出资，按 §4 顺序派单且 model_proxy_succeeded 转非零须与改判同 commit；否则本项封存，论文用 DUAL_PROXY §3 的三句话原文。
