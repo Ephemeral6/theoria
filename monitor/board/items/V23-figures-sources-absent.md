@@ -1,8 +1,6 @@
 priority: 1
 cell: V5
 territory: figures
-released_by: --help
-
 # V23-figures-sources-absent · 图表闸门有一关此刻是红的，而没有任何东西报出来
 
 清理审计（2026-07-29）顺带发现：`figures/SOURCES.sha256:24-27` 把四个开发堆的

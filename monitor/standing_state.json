@@ -1,44 +1,44 @@
 {
   "RES-1": {
-    "last_cycle": 30,
-    "last_cycle_epoch": 1785342605.9055457,
-    "last_launch_epoch": 1785345488.130079,
-    "last_launch_utc": "2026-07-29T17:18:08Z",
-    "reason": "unread=0 held=2 claimable=0"
+    "last_cycle": 50,
+    "last_cycle_epoch": 1785418203.8098834,
+    "last_launch_epoch": 1785420012.047412,
+    "last_launch_utc": "2026-07-30T14:00:12Z",
+    "reason": "unread=0 held=1 claimable=0 exits=0"
   },
   "RES-2": {
-    "last_cycle": 25,
-    "last_cycle_epoch": 1785343503.3291707,
-    "last_launch_epoch": 1785345533.2316544,
-    "last_launch_utc": "2026-07-29T17:18:53Z",
+    "last_cycle": 40,
+    "last_cycle_epoch": 1785386703.5978923,
+    "last_launch_epoch": 1785378612.634475,
+    "last_launch_utc": "2026-07-30T02:30:12Z",
     "reason": "unread=0 held=1 claimable=0"
   },
   "RES-3": {
-    "last_cycle": 68,
-    "last_cycle_epoch": 1785346205.3785756,
-    "last_launch_epoch": 1785339003.6183884,
-    "last_launch_utc": "2026-07-29T15:30:03Z",
-    "reason": "unread=0 held=1 claimable=1"
+    "last_cycle": 105,
+    "last_cycle_epoch": 1785417310.8990233,
+    "last_launch_epoch": 1785420961.4522853,
+    "last_launch_utc": "2026-07-30T14:16:01Z",
+    "reason": "unread=0 held=2 claimable=0 exits=0"
   },
   "RES-4": {
-    "last_cycle": 26,
-    "last_cycle_epoch": 1785339048.626112,
-    "last_launch_epoch": 1785339048.6953058,
-    "last_launch_utc": "2026-07-29T15:30:48Z",
-    "reason": "unread=0 held=1 claimable=3"
+    "last_cycle": 63,
+    "last_cycle_epoch": 1785421804.9189446,
+    "last_launch_epoch": 1785420065.539258,
+    "last_launch_utc": "2026-07-30T14:01:05Z",
+    "reason": "unread=0 held=1 claimable=0 exits=0"
   },
   "OPS-A": {
-    "last_cycle": 0,
-    "last_cycle_epoch": 1785346205.4183807,
-    "last_launch_epoch": 1785345623.4198425,
-    "last_launch_utc": "2026-07-29T17:20:23Z",
-    "reason": "unread=0 held=0 claimable=1"
+    "last_cycle": 53,
+    "last_cycle_epoch": 1785421804.9228027,
+    "last_launch_epoch": 1785421067.9767377,
+    "last_launch_utc": "2026-07-30T14:17:47Z",
+    "reason": "unread=0 held=0 claimable=1 exits=0"
   },
   "OPS-M": {
-    "last_cycle": 18,
-    "last_cycle_epoch": 1785346205.4057527,
-    "last_launch_epoch": 1785345578.3206687,
-    "last_launch_utc": "2026-07-29T17:19:38Z",
-    "reason": "unread=0 held=0 claimable=1"
+    "last_cycle": 33,
+    "last_cycle_epoch": 1785421804.920845,
+    "last_launch_epoch": 1785421014.6901643,
+    "last_launch_utc": "2026-07-30T14:16:54Z",
+    "reason": "unread=0 held=0 claimable=1 exits=0"
   }
 }

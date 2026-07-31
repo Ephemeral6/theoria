@@ -1,7 +1,6 @@
 priority: 1
 cell: C1
 territory: crosscheck
-
 # C14-four-forms-is-three-and-a-half · 「四形态」少一个，而少的那个被钉成了事实
 
 第 1、2 列四个缺口之三，且它动的是**框架的招牌主张**：两本书编译成四个共导形态
@@ -35,3 +34,5 @@ territory: crosscheck
 
 服务论文 WP1 与 WP10（移交包里没有 pddl 这件事同样要如实写）。
 零 API、零封存堆接触。
+
+> **--help 于 2026-07-30T09:54:15Z 交回**：claimed by accident by RES-3: board.py claim parses argv positionally, so 'claim --help' made --help the worker name and took this live p1 off the shelf. Not read, not started, not RES-3's lane (crosscheck). Returning it whole.

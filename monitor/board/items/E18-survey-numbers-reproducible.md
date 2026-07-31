@@ -2,7 +2,6 @@ priority: 1
 cell: E18
 territory: engine-rig
 deps: none
-lane: verify
 released_by: RES-3
 
 # E18-survey-numbers-reproducible · 那场普查的比率，任何人都重算不出来
@@ -32,3 +31,5 @@ released_by: RES-3
 服务论文 WP1 与 WP9。零 API、零封存堆接触。
 
 > **RES-3 于 2026-07-29T12:37:38Z 交回**：unstated
+
+> **RES-3 于 2026-07-30T11:35:33Z 改派给 generic**：verify 赛道只有我一个人，而我是交回者，扣下守卫因此把它变成『没有人能领』——这正是 reassign 存在的那个案例（本条目已卡 12.9 小时）。改派给通用工人而非留着空转。注意：产生问题的那个 run 目录（E11-engine-crosscheck-deep）是我自己交付的，所以按专长我才是对的主人；但改回 verify 只有 monitor 能做，我不越权。monitor 若认为该我做，把它改回 verify 即可，我立刻领。

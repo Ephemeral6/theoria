@@ -2,10 +2,10 @@
 branch: origin/agent/s4-e23-tiers
 reason: verify gate red in freeze (verify.sh)
 tip: 6eaf2da2dc18e7fceca4f6ed089e87d7da469d1d
-base: 3d59d0a63cffeb0e1f865c2bacc8508c5232087b
+base: 3be306394b76bbdfab17e5d02e54c3bfcbe7f8da
 first_seen: 2026-07-30T03:48:38Z
-last_seen: 2026-07-30T03:48:38Z
-attempts: 1
+last_seen: 2026-07-30T16:54:46Z
+attempts: 10
 
 ```
 --- cause lines (lifted out of the transcript) ---

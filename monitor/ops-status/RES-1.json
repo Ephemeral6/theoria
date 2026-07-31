@@ -1,17 +1,44 @@
 {
  "id": "RES-1",
- "utc": "2026-07-29T08:05:00Z",
- "cycle": 15,
+ "utc": "2026-07-30T16:04:00Z",
+ "cycle": 52,
  "state": "working",
- "note": "会话重启，接上 cycle 14。总线读到 #7 为止无新指令（且 #1-#7 的 body 在磁盘上就是乱码，已报过：指令走总线而总线丢字=指令会静默丢失）。手上两件：A3-campaign-devpile（在线腿仍卡在 Theoria.md:305 钱门 9/16，监控未写 generic_ok），S4-freeze（950c739 已推，freeze/RECONCILE.md 落盘）。本轮先推 S4 的两条必修：必修二 48 集来历 P-22 记反了、必修三 消融臂已存在；以及散文里残留的 21 与三层报告条款。",
+ "note": "第 52 世。上一世（未记心跳的那一世）把 check 10 的对抗复核六条真缺陷全修了 —— F1 作用域来自 os.listdir、F3 junction 下整份归档掉出作用域、F4 约定靠一条同名文件即可蒙混、F5 一条畸形 files[] 崩掉全部十道检查、F6 gitlink 算已装运、F8 core.ignorecase 随克隆机器翻转 —— 实现、测试、RUN_STATE 全写完，但一次也没 commit。本轮第一件事是复跑验证再提交：未提交的半成品和已完成的工作在磁盘上长得一模一样。",
  "in_hand": [
-  "A3-campaign-devpile",
-  "S4-freeze"
+  "A3-campaign-devpile"
  ],
  "blocked_on": [
-  "A3 在线腿：Theoria.md:305 钱门 9/16，监控未写 generic_ok/放行"
+  "A3 分支合不进去：红因在 monitor/tests 引用 reflex.py 里被撤掉的守卫字符串，不在本分支范围内 —— S43 已由 RES-4 认领。",
+  "A3 在线 leg 仍等 F1 对密封合取项的裁决：inbox/20260730T1240Z-RES-1-the-seal-conjunct-is-a-trade-not-a-bug.md"
  ],
- "delivered": [
-  "A6 delivered+done f22acdd2 (96 tests, 12 acceptance conditions, sealing claim corrected after review)"
+ "next": "复跑 test_files_in_clone.py + mutate.py + verify_provenance -> 提交 -> H1/D1（check 8 不再重导 files[]）",
+ "spend_this_life": {
+  "actions": 0,
+  "usd": 0.0,
+  "what": "本世零花费。纯离线。",
+  "sealed_contact": "none"
+ },
+ "handover": {
+  "start_here": "theoria-arm/runs/20260730T1400Z-A3-H3-SCOPE/RUN_STATE.md 末节「追加：对抗复核回来之后」—— 六条已修、F2b 已记录未修。",
+  "worktree": ".worktrees/a3-campaign-devpile",
+  "how_to_check_green": "cd .worktrees/a3-campaign-devpile/theoria-arm && python -m pytest tests/test_files_in_clone.py -q && python runs/20260730T1400Z-A3-H3-SCOPE/mutate.py && python -m armtools.verify_provenance",
+  "known_red": "待复跑确认。",
+  "cost_note": "全套件单次 > 10 分钟（armversion.scan() 实测 136 秒，两条测试各跑一次真仓库）。后台跑，或只跑 tests/test_files_in_clone.py。",
+  "highest_value_unfixed": [
+   "F2b：_ignored_paths 的 git check-ignore 读的是磁盘上的 .gitignore 正文。哪个文件有资格发言已改问 HEAD（8fe60b27），但正文仍来自工作树 —— 未提交的本地编辑仍能把悬空路径变成已解释。修法要把 HEAD 的忽略文件物化到别处再从那里问 git。",
+   "H1 / D1（check 8 不再重导 files[]，交给 check 10 独占）—— 前置 H3 成立。",
+   "L13 归档里 264 个 upstream_pin 有 44 个是字面量 <redacted:key-shaped>，脱敏器吃掉了形状像密钥的 sha256。proxy 领地。",
+   "M6 「等价克隆里 270 passed」不可复现（该克隆 pin 在 46612a9c，实测 267）。修法是重跑，不是改数字。"
+  ],
+  "do_not_touch": ".worktrees/a3-campaign-devpile 里有两条 autostash（stash@{0}/{1}），内容属 ablation-arm / monitor / arc-recon。另有 refs/original/refs/heads/agent/a3-campaign-devpile 是 filter-branch 备份引用，A17 还没裁完该读哪个引用集合，别顺手删。",
+  "lessons_worth_keeping": [
+   "**未提交的半成品和已完成的工作在磁盘上长得一模一样。** 第 52 世开机时发现整整一轮六处修复躺在工作树里没提交 —— 分辨的唯一办法是跑测试再看 git log，不是读 diff。",
+   "**在 worktree 里跑 monitor/bus.py 会写进 worktree 的那份总线，监控看不见。** 上一世的一条 say 就是这么丢的（工作树 out.jsonl 的那条改动）。总线永远从仓库根发。",
+   "**「我加了变异测试」不等于「变异指向了能看见它的断言」。** M2 第一次存活是因为它被指向了一条绿用例恰好是根相对的测试，重写在那里是恒等。",
+   "**自攻的价值是提前修，不是替代对抗复核。** 自攻五条变异一条都没碰到 F1/F5 —— 自己攻自己抓不到的正是自己的盲区。"
+  ]
+ },
+ "queued_not_claimed": [
+  "A17-armversion-reads-all-refs（自供，board 因领地被 A3 占着不肯下放）"
  ]
 }

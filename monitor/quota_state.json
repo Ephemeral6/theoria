@@ -66,14 +66,53 @@
     {
       "at": "2026-07-29T14:03:17Z",
       "from": "pool-rotation"
+    },
+    {
+      "at": "2026-07-29T16:32:10Z",
+      "killed": [
+        "OPS-A",
+        "OPS-M",
+        "RES-4",
+        "W-1671"
+      ],
+      "from": "registry"
+    },
+    {
+      "at": "2026-07-30T01:17:09Z",
+      "killed": [
+        "OPS-A",
+        "OPS-M"
+      ],
+      "from": "registry"
+    },
+    {
+      "at": "2026-07-30T05:27:12Z",
+      "killed": [
+        "RES-3",
+        "W-1691",
+        "W-1692",
+        "W-1693",
+        "W-1700",
+        "W-1701",
+        "W-1702"
+      ],
+      "from": "registry"
+    },
+    {
+      "at": "2026-07-30T16:12:30Z",
+      "killed": [
+        "RES-4",
+        "W-1710"
+      ],
+      "from": "registry"
     }
   ],
-  "detected_at": "2026-07-29T13:17:11Z",
-  "reset_hint": "You've hit your session limit \u00b7 resets 11pm (Asia/Shanghai)",
-  "note": "released 2026-07-29: the limit belonged to account b (the machine default), which is now recorded in the pool as shut until 15:00Z. Account a is open, so the fleet rotates instead of freezing -- this is the first real use of the pool.",
-  "resumed_at": "2026-07-29T14:03:17Z",
-  "last_ping_at": "2026-07-29T10:52:19Z",
+  "detected_at": "2026-07-30T16:12:30Z",
+  "reset_hint": "You've hit your session limit \u00b7 resets 2:50am (Asia/Shanghai)",
+  "note": "hold expired on its own: the window reopened at 2026-07-29T20:30:00Z",
+  "resumed_at": "2026-07-30T18:22:21Z",
+  "last_ping_at": "2026-07-30T18:22:21Z",
   "last_ping_result": "OPEN",
-  "reopen_at": "2026-07-29T19:07:57Z",
-  "auto_released_at": "2026-07-29T04:42:23Z"
+  "reopen_at": "2026-07-30T18:50:00Z",
+  "auto_released_at": "2026-07-29T20:37:06Z"
 }

@@ -1,1 +1,7 @@
-{"id": "RES-4", "utc": "2026-07-29T10:08:06Z", "cycle": 17, "state": "working", "note": "\u65b0\u4e00\u4e16\u63a5\u7eed\u3002\u624b\u4e0a S21(sweep --include-standing,\u5206\u652f\u4e0a\u96f6 S21 \u63d0\u4ea4=\u672a\u5f00\u5de5,\u672c\u8f6e\u4e3b\u653b)+S22(\u4ec5\u5269\u79bb\u7ebf\u7684\u914d\u989d\u53e3\u5f84\u6838\u5bf9,\u91d1\u4e1d\u96c0\u90a3\u9879\u8d8a\u754c\u4e0d\u505a)\u3002"}
+{
+ "id": "RES-4",
+ "utc": "2026-07-30T15:26:00Z",
+ "cycle": 63,
+ "state": "working",
+ "note": "S43 is merged (6b953a60) but the merge partially reverted it: 954eb44c deleted merge_events() def+call from reflex.py, the merge restored the def without the call -> dead code, and test_the_ci_merge_step_is_not_reimplemented_anywhere is RED on master. Also 954eb44c committed monitor/FLEET_PAUSE as a TRACKED file, so standing.sweep() returns [] in every checkout: 2 unit tests red and a 3rd passing vacuously at launches==0. Fixed all 3 on agent/s43b-merge-events-dead (measured 3 failed -> 18 passed, negative control reproduces the 3 reds). Full suite running. 3 OTHER master reds (blinded conflict probe + append_only x2) are inherited and NOT mine to fix -- the append_only one is a correct detection of exam/RES-3 rewriting a published paragraph. FLEET_PAUSE says the user paused the fleet at 12:00Z; finishing this, then stopping."
+}

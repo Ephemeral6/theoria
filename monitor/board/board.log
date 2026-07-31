@@ -380,3 +380,42 @@
 2026-07-30T04:34:49Z CLAIM C13-certificate-bridge-two-halves by W-1700
 2026-07-30T04:35:42Z CLAIM C14-four-forms-is-three-and-a-half by W-1701
 2026-07-30T04:36:34Z CLAIM S31-a10-said-done-prove-it by W-1702
+2026-07-30T05:07:01Z DONE C13-certificate-bridge-two-halves by W-1700
+2026-07-30T05:07:10Z CLAIM S32-dual-agent-is-one-agent by W-1700
+2026-07-30T05:27:02Z SWEEP C14-four-forms-is-three-and-a-half released (worker W-1701: scheduled task is no longer running)
+2026-07-30T05:27:02Z SWEEP S31-a10-said-done-prove-it released (worker W-1702: scheduled task is no longer running)
+2026-07-30T05:27:02Z SWEEP S32-dual-agent-is-one-agent released (worker W-1700: scheduled task is no longer running)
+2026-07-30T07:37:50Z DONE S39-S39-writes-into-the-live-master-tree by RES-4
+2026-07-30T07:37:50Z CLAIM S40-S40-fleetkit-fork-has-drifted by RES-4
+2026-07-30T08:01:25Z DONE S40-S40-fleetkit-fork-has-drifted by RES-4
+2026-07-30T09:47:34Z CLAIM S41-S41-prior-work-scans-one-of-two by RES-4
+2026-07-30T09:47:47Z CLAIM S42-S42-fleetkit-three-lies by RES-4
+2026-07-30T09:53:39Z CLAIM C14-four-forms-is-three-and-a-half by --help
+2026-07-30T09:54:15Z RELEASE C14-four-forms-is-three-and-a-half by --help (claimed by accident by RES-3: board.py claim parses argv positionally, so 'claim --help' made --help the worker name and took this live p1 off the shelf. Not read, not started, not RES-3's lane (crosscheck). Returning it whole.)
+2026-07-30T10:16:38Z DONE S41-S41-prior-work-scans-one-of-two by RES-4
+2026-07-30T10:16:38Z CLAIM S43-S43-three-guards-reverted by RES-4
+2026-07-30T10:22:08Z DONE S42-S42-fleetkit-three-lies by RES-4
+2026-07-30T11:35:33Z REASSIGN E18-survey-numbers-reproducible from verify to generic by RES-3 (verify 赛道只有我一个人，而我是交回者，扣下守卫因此把它变成『没有人能领』——这正是 reassign 存在的那个案例（本条目已卡 12.9 小时）。改派给通用工人而非留着空转。注意：产生问题的那个 run 目录（E11-engine-crosscheck-deep）是我自己交付的，所以按专长我才是对的主人；但改回 verify 只有 monitor 能做，我不越权。monitor 若认为该我做，把它改回 verify 即可，我立刻领。)
+2026-07-30T11:58:06Z CLAIM C14-four-forms-is-three-and-a-half by W-1710
+2026-07-30T11:59:07Z CLAIM E18-survey-numbers-reproducible by W-1711
+2026-07-30T12:43:24Z DONE C14-four-forms-is-three-and-a-half by W-1710
+2026-07-30T12:43:28Z CLAIM S31-a10-said-done-prove-it by W-1710
+2026-07-30T14:02:02Z SWEEP E18-survey-numbers-reproducible released (worker W-1711: scheduled task is no longer running)
+2026-07-30T14:02:02Z SWEEP S31-a10-said-done-prove-it released (worker W-1710: scheduled task is no longer running)
+2026-07-30T15:26:34Z DONE S43-S43-three-guards-reverted by RES-4
+2026-07-30T15:41:54Z DONE V6-V23-large-space-verdict-gap by RES-3
+2026-07-30T15:42:00Z CLAIM V27-V27-manifest-absolute-paths by RES-3
+2026-07-30T15:59:27Z CLAIM E18-survey-numbers-reproducible by W-1691
+2026-07-30T15:59:27Z CLAIM S31-a10-said-done-prove-it by W-1702
+2026-07-30T15:59:28Z CLAIM S32-dual-agent-is-one-agent by W-1693
+2026-07-30T15:59:28Z CLAIM S44-monitor-suite-outgrew-its-gate by W-1690
+2026-07-30T15:59:28Z CLAIM V23-figures-sources-absent by W-1682
+2026-07-30T15:59:28Z CLAIM V25-worldgen-unchecked-is-not-holding by W-1681
+2026-07-30T15:59:28Z CLAIM V26-fuzzlab-readme-points-at-the-smoke-run by W-1710
+2026-07-30T16:12:02Z SWEEP E18-survey-numbers-reproducible released (worker W-1711: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP S31-a10-said-done-prove-it released (worker W-1702: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP S32-dual-agent-is-one-agent released (worker W-1693: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP S44-monitor-suite-outgrew-its-gate released (worker W-1690: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP V23-figures-sources-absent released (worker W-1682: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP V25-worldgen-unchecked-is-not-holding released (worker W-1681: scheduled task is no longer running)
+2026-07-30T16:12:02Z SWEEP V26-fuzzlab-readme-points-at-the-smoke-run released (worker W-1710: scheduled task is no longer running)

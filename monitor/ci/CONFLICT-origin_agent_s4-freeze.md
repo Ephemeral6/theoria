@@ -2,10 +2,10 @@
 branch: origin/agent/s4-freeze
 reason: verify gate red in freeze (verify.sh)
 tip: f47b6b30ca70f1f1a47e3ef894e0bfbb8e8dcc3e
-base: 3d59d0a63cffeb0e1f865c2bacc8508c5232087b
+base: 3be306394b76bbdfab17e5d02e54c3bfcbe7f8da
 first_seen: 2026-07-29T23:09:27Z
-last_seen: 2026-07-30T04:06:01Z
-attempts: 7
+last_seen: 2026-07-30T16:49:13Z
+attempts: 16
 
 ```
 --- cause lines (lifted out of the transcript) ---

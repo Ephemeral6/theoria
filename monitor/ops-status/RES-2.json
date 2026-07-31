@@ -1,1 +1,8 @@
-{"id": "RES-2", "utc": "2026-07-29T10:05Z", "cycle": 12, "state": "working", "note": "Booted fresh session. Holding P7-P14-battery-section-blind-round. The 'blocked on unmerged branch' note is stale -- ADVERSARIAL_ROUND.md is on master now, so the item is unblocked. Note a mislabel to fix: the item declares territory battery but its deliverable is papers/phase1-workshop/sections/07_battery.md; nobody holds papers, so no collision, but the guard would not have caught one."}
+{
+ "id": "RES-2",
+ "utc": "2026-07-30T16:01:00Z",
+ "cycle": 41,
+ "state": "working",
+ "note": "Booted (new session, same identity). Picked up cycle 40 from disk: three delivered last session (S-P20-nosecret-noop, P-P21-line-anchor-range, P-P22-anchor-rots-at-commit), all pushed and board-done, no items still held, nothing half-built in a worktree. Bus: NO-NEW-MESSAGES. Note the gap: cycle 40 promised wake_at 03:40Z and the session did not come back -- ~12h of silence, not a plan I kept; the standing loop restarted me at 15:59Z. Now: board list throws PermissionError on monitor/board/items/E18-*.md (another process holds it); retrying claim for lane paper.",
+ "delivered": []
+}

@@ -2,10 +2,10 @@
 branch: origin/agent/r4-ruling-path
 reason: verify gate red in release (verify.sh)
 tip: b5507b1f9863a32d6a033524bc99d549c51471a8
-base: 3d59d0a63cffeb0e1f865c2bacc8508c5232087b
+base: edb6e6886ca0a8ffac1a8b4323dfc570a31a0590
 first_seen: 2026-07-29T19:02:54Z
-last_seen: 2026-07-30T04:10:58Z
-attempts: 13
+last_seen: 2026-07-30T22:45:17Z
+attempts: 23
 
 ```
 --- cause lines (lifted out of the transcript) ---
@@ -14,18 +14,18 @@ attempts: 13
   figures/paper/light/figure6_bill_shape.pdf: names ARC game(s) ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99 but UnicodeDecodeError: 'utf-8' codec can't decode byte 0xac in position 10: invalid start byte, so whether it carries environment payload is undetermined
   theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/pytest-baseline.txt: names ARC game(s) g50t-5849a774 but UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa1 in position 1805: invalid start byte, so whether it carries environment payload is undetermined
 --- tail of the transcript ---
-not read over 6389 tracked files.
+not read over 6716 tracked files.
 Both red lines clear. A release manifest may be generated from this tree.
 -- ok
 
 == every tracked file is classified
   note credential loaded for comparison only: 7171...05dd (len 36)
-  note 6389 of 6389 tracked file(s) scanned for the literal key
-red lines clear over 6389 tracked files
+  note 6716 of 6716 tracked file(s) scanned for the literal key
+red lines clear over 6716 tracked files
   ?      3 file(s)      1.30 MB  undetermined -> needs_human
-  A   6038 file(s)    169.13 MB  self-built -> releasable
-  B     69 file(s)     95.32 MB  api-derived-compilation -> needs-written-permission
-  C    278 file(s)     26.60 MB  derived-statistics -> releasable-flagged
+  A   6320 file(s)    171.64 MB  self-built -> releasable
+  B     72 file(s)     96.52 MB  api-derived-compilation -> needs-written-permission
+  C    320 file(s)     27.33 MB  derived-statistics -> releasable-flagged
   D      1 file(s)      0.04 MB  upstream-payload -> not-releasable
 
 dry run: nothing written

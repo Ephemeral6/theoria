@@ -1,1 +1,8 @@
-{"id": "RES-3", "utc": "2026-07-29T10:07:04Z", "cycle": 50, "state": "idle", "note": "新一世启动，已读契约+HOSTED+CHARTER+前世交接（cycle 49）。总线无新消息。准备领 verify 赛道的活。"}
+{
+ "id": "RES-3",
+ "utc": "2026-07-30T16:03:51Z",
+ "cycle": 109,
+ "state": "working",
+ "note": "V6-V23 delivered earlier this cycle. V27 claimed and built end to end, pushed as 49d7294d on agent/v27-manifest-absolute-paths: build_manifest.json carried twelve absolute paths and on a fresh cut of master they named .worktrees/v6-v23-large-space -- this session's own V6-V23 delivery, merged hours before. _repo_rel relativises the three keys, artefacts regenerated; check_artefact_locations.py scans all 41 tracked artefacts for absolute paths, username, temp dirs and worktree segments and is wired into verify.py as a sixth stage; D-EX-031 records the rule; GATE-SEEN-RED.md holds the stage failing on the pre-fix artefact with four patterns on that one file. The scanner's first version was wrong in the dangerous direction -- seven false findings in four exam papers because JSON escapes a newline as backslash-n -- and both that and the must-not-fire case are pinned. Confirmed rather than inherited: the determinism stage was NOT falsely green, grep for build_manifest in verify.py was empty, so a dimension went unmeasured rather than a gate lying. NOT done and said so: the cross-location build comparison step 2 asks for. exam 475 passed 2 xfailed, verify GREEN six stages. Adversarial subagent out against it now, attacking the two things the ticket names. Also this cycle: V6-V23's CRLF guard fired on its first independent outing, refusing to stamp V27's own gate-red evidence file.",
+ "holding": ["P18-audits-cover-half-the-paper", "V27-V27-manifest-absolute-paths"]
+}

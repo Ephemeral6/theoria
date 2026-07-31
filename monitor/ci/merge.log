@@ -2061,3 +2061,411 @@
 2026-07-30T04:10:58Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 13 attempts since 2026-07-29T19:02:54Z]
 2026-07-30T04:29:32Z MERGED origin/agent/opsa-c47-a-receipt-a-reset-and-a-timestamp-that-lies (dirs: monitor; gates: verify:monitor(verify.sh))
 2026-07-30T04:38:27Z MERGED origin/agent/s22-residue-fullsweep (dirs: arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-30T04:56:35Z CLEARED flag for origin/agent/s11-sealed-halfguard (merged)
+2026-07-30T04:56:35Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/s11-sealed-halfguard
+2026-07-30T04:56:35Z BLOCKED: another merge holds the lock; merged nothing
+2026-07-30T04:56:47Z BLOCKED: another merge holds the lock; merged nothing
+2026-07-30T05:00:10Z FLAG origin/agent/opsa-c48-three-findings-already-filed: push rejected (race?)
+2026-07-30T05:00:19Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict
+2026-07-30T05:05:27Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)
+2026-07-30T05:10:24Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)
+2026-07-30T05:16:12Z MERGED origin/agent/v6-v23-large-space-verdict-gap (dirs: exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json)
+2026-07-30T05:16:28Z MERGED origin/agent/s11-sealed-halfguard (dirs: ; gates: none)
+2026-07-30T05:27:20Z CLEARED flag for origin/agent/opsa-c48-three-findings-already-filed (merged)
+2026-07-30T05:27:20Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/opsa-c48-three-findings-already-filed
+2026-07-30T05:32:08Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)
+2026-07-30T05:36:14Z FLAG origin/agent/opsm-c26-never-tried-branches-tie-at-zero: verify gate red in monitor (verify.sh)
+2026-07-30T05:36:22Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 18 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T05:40:33Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 22 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T05:40:39Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 19 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T05:41:22Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T05:42:21Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 15 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T05:43:21Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 14 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T05:44:04Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)
+2026-07-30T05:44:10Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict
+2026-07-30T05:48:36Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)
+2026-07-30T05:53:13Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)
+2026-07-30T06:07:14Z HELD 12 unchanged since last verdict: v5-battery-freeze (merge conflict, 18x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 22x); e8-ic3-scale (merge conflict, 19x); s4-freeze (verify gate red in freeze (verify.sh), 8x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 15x); r4-ruling-path (verify gate red in release (verify.sh), 14x); s4-e23-tiers (verify gate red in freeze (verify.sh), 2x); p18-audits-cover-half-onmaster (merge conflict, 2x)
+2026-07-30T06:22:11Z HELD 12 unchanged since last verdict: v5-battery-freeze (merge conflict, 18x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 22x); e8-ic3-scale (merge conflict, 19x); s4-freeze (verify gate red in freeze (verify.sh), 8x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 15x); r4-ruling-path (verify gate red in release (verify.sh), 14x); s4-e23-tiers (verify gate red in freeze (verify.sh), 2x); p18-audits-cover-half-onmaster (merge conflict, 2x)
+2026-07-30T06:40:28Z HELD 12 unchanged since last verdict: v5-battery-freeze (merge conflict, 18x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 22x); e8-ic3-scale (merge conflict, 19x); s4-freeze (verify gate red in freeze (verify.sh), 8x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 15x); r4-ruling-path (verify gate red in release (verify.sh), 14x); s4-e23-tiers (verify gate red in freeze (verify.sh), 2x); p18-audits-cover-half-onmaster (merge conflict, 2x)
+2026-07-30T06:52:35Z FLAG origin/agent/p18-audits-cover-half-the-paper: verify gate red in papers (verify.py)
+2026-07-30T06:57:25Z MERGED origin/agent/v6-v23-large-space-verdict-gap (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json)
+2026-07-30T06:57:36Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 19 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T07:03:05Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 23 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T07:03:15Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 20 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T07:04:19Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 9 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T07:05:32Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 16 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T07:07:02Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 15 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T07:08:37Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T07:08:47Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T07:14:28Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T07:19:48Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T07:26:01Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)
+2026-07-30T07:26:09Z FLAG origin/agent/opsm-c26-never-tried-branches-tie-at-zero: merge conflict
+2026-07-30T07:46:01Z MERGED origin/agent/v6-v23-large-space-verdict-gap (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json)
+2026-07-30T07:46:08Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 20 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T07:51:14Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 24 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T07:51:29Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 21 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T07:52:29Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 10 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T07:53:43Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 17 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T07:54:59Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 16 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T07:56:17Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T07:56:35Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T08:03:35Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T08:11:05Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T08:18:55Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T05:32:08Z]
+2026-07-30T08:19:09Z FLAG origin/agent/opsm-c26-never-tried-branches-tie-at-zero: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-30T05:36:14Z]
+2026-07-30T08:19:32Z FLAG origin/agent/p18-audits-cover-half-the-paper: verify gate red in papers (verify.py)
+2026-07-30T08:41:33Z FLAG origin/agent/s40-fleetkit-fork-has-drifted: verify gate red in monitor (verify.sh)
+2026-07-30T08:41:47Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 21 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T08:52:31Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 25 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T08:53:04Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 22 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T08:58:20Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 11 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T08:59:43Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 18 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T09:01:00Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 17 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T09:01:53Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T09:02:01Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 5 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T09:07:12Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T09:13:13Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T09:19:07Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-30T05:32:08Z]
+2026-07-30T09:19:15Z FLAG origin/agent/opsm-c26-never-tried-branches-tie-at-zero: merge conflict  [NEEDS-HUMAN: 4 attempts since 2026-07-30T05:36:14Z]
+2026-07-30T09:19:37Z FLAG origin/agent/p18-audits-cover-half-the-paper: verify gate red in papers (verify.py)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T06:52:35Z]
+2026-07-30T09:42:45Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 26 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T09:42:48Z HELD 13 unchanged since last verdict: v5-battery-freeze (merge conflict, 21x); e8-ic3-scale (merge conflict, 22x); s4-freeze (verify gate red in freeze (verify.sh), 11x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 18x); r4-ruling-path (verify gate red in release (verify.sh), 17x); s4-e23-tiers (verify gate red in freeze (verify.sh), 5x); p18-audits-cover-half-onmaster (merge conflict, 5x); s38-append-only-probe-branch-blind (verify gate red in monitor (verify.sh), 5x)
+2026-07-30T09:59:23Z HELD 14 unchanged since last verdict: v5-battery-freeze (merge conflict, 21x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 26x); e8-ic3-scale (merge conflict, 22x); s4-freeze (verify gate red in freeze (verify.sh), 11x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 18x); r4-ruling-path (verify gate red in release (verify.sh), 17x); s4-e23-tiers (verify gate red in freeze (verify.sh), 5x); p18-audits-cover-half-onmaster (merge conflict, 5x)
+2026-07-30T10:14:15Z CLEARED flag for origin/agent/opsm-c26-never-tried-branches-tie-at-zero (merged)
+2026-07-30T10:14:15Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/opsm-c26-never-tried-branches-tie-at-zero
+2026-07-30T10:26:34Z FLAG origin/agent/v6-v23-large-space-verdict-gap: verify gate red in monitor (verify.sh)
+2026-07-30T10:26:46Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 22 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T10:34:32Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 27 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T10:34:48Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 23 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T10:35:54Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 12 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T10:37:58Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 19 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T10:39:41Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 18 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T10:41:24Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T10:41:36Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 6 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T10:50:50Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T11:00:11Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T11:08:16Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 5 attempts since 2026-07-30T05:32:08Z]
+2026-07-30T11:09:04Z MERGED origin/agent/p18-audits-cover-half-the-paper (dirs: papers; gates: verify:papers(verify.py))
+2026-07-30T11:09:04Z CLEARED flag for origin/agent/p18-audits-cover-half-the-paper (merged)
+2026-07-30T11:25:26Z FLAG origin/agent/s41-prior-work-scans-one-of-two: verify gate red in monitor (verify.sh)
+2026-07-30T11:31:13Z FLAG origin/agent/s42-fleetkit-three-lies: verify gate red in monitor (verify.sh)
+2026-07-30T11:31:25Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 23 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T11:36:27Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 28 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T11:36:33Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 24 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T11:37:24Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 13 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T11:38:20Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 20 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T11:39:22Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 19 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T11:40:10Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T11:40:17Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 7 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T11:45:10Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T11:51:13Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T11:59:43Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 6 attempts since 2026-07-30T05:32:08Z]
+2026-07-30T12:04:35Z FLAG origin/agent/s40-fleetkit-fork-has-drifted: verify gate red in monitor (verify.sh)
+2026-07-30T12:14:21Z FLAG origin/agent/v6-v23-large-space-verdict-gap: verify gate red in monitor (verify.sh)
+2026-07-30T12:34:02Z FLAG origin/agent/c14-four-forms-is-three-and-a-half: verify gate red in monitor (verify.sh)
+2026-07-30T12:41:15Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 29 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T12:42:07Z FLAG origin/agent/p18-audits-cover-half-the-paper: verify gate red in papers (verify.py)
+2026-07-30T12:42:13Z HELD 14 unchanged since last verdict: v5-battery-freeze (merge conflict, 23x); e8-ic3-scale (merge conflict, 24x); s4-freeze (verify gate red in freeze (verify.sh), 13x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 20x); r4-ruling-path (verify gate red in release (verify.sh), 19x); s4-e23-tiers (verify gate red in freeze (verify.sh), 7x); p18-audits-cover-half-onmaster (merge conflict, 7x); s38-append-only-probe-branch-blind (verify gate red in monitor (verify.sh), 7x)
+2026-07-30T13:02:46Z FLAG origin/agent/s31-a10-said-done-prove-it: push rejected (race?)
+2026-07-30T13:03:05Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 24 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T13:09:49Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 30 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T13:10:04Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 25 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T13:11:07Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 14 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T13:12:20Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 21 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T13:13:37Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 20 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T13:14:42Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T13:14:55Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 8 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T13:20:37Z FLAG origin/agent/s38-append-only-probe-branch-blind: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-30T05:05:27Z]
+2026-07-30T13:26:40Z FLAG origin/agent/s39-writes-into-the-live-master-tree: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 8 attempts since 2026-07-30T05:10:24Z]
+2026-07-30T13:33:09Z FLAG origin/agent/c13-certificate-bridge-two-halves: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 7 attempts since 2026-07-30T05:32:08Z]
+2026-07-30T13:33:55Z FLAG origin/agent/p18-audits-cover-half-the-paper: verify gate red in papers (verify.py)
+2026-07-30T13:38:30Z FLAG origin/agent/s40-fleetkit-fork-has-drifted: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T08:41:33Z]
+2026-07-30T13:48:26Z FLAG origin/agent/v6-v23-large-space-verdict-gap: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 3 attempts since 2026-07-30T10:26:34Z]
+2026-07-30T13:53:17Z FLAG origin/agent/s41-prior-work-scans-one-of-two: verify gate red in monitor (verify.sh)
+2026-07-30T13:58:23Z FLAG origin/agent/s42-fleetkit-three-lies: verify gate red in monitor (verify.sh)
+2026-07-30T14:21:14Z FLAG origin/agent/s43-three-guards-reverted: verify gate red in monitor (verify.sh)
+2026-07-30T14:26:10Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 25 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T14:41:28Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 31 attempts since 2026-07-29T04:14:01Z]
+2026-07-30T14:49:13Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 26 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T15:00:30Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 15 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T15:04:24Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 22 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T15:09:23Z CLEARED flag for origin/agent/s43-three-guards-reverted (merged)
+2026-07-30T15:09:23Z SWEEP-FLAGS retired 1 stale flag(s): origin/agent/s43-three-guards-reverted
+2026-07-30T15:24:04Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T15:24:04Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T15:24:24Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 26 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T15:32:38Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T15:32:38Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T15:33:01Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 27 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T15:36:53Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 21 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T15:39:14Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 9 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T15:39:49Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 9 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T15:51:39Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T15:24:04Z]
+2026-07-30T15:51:39Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T16:08:13Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T15:24:04Z]
+2026-07-30T16:08:13Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T16:12:47Z CLEARED flag for origin/master (merged)
+2026-07-30T16:12:47Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T16:20:48Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T16:20:48Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T16:25:57Z MERGED origin/agent/v27-manifest-absolute-paths (dirs: exam; gates: verify:exam(verify.py))
+2026-07-30T16:26:11Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 27 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T16:47:46Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T16:47:46Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T16:47:58Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 28 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T16:49:13Z FLAG origin/agent/s4-freeze: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 16 attempts since 2026-07-29T23:09:27Z]
+2026-07-30T16:51:51Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 23 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T16:53:47Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 22 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T16:54:46Z FLAG origin/agent/s4-e23-tiers: verify gate red in freeze (verify.sh)  [NEEDS-HUMAN: 10 attempts since 2026-07-30T03:48:38Z]
+2026-07-30T16:54:56Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 10 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T17:01:41Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T16:20:48Z]
+2026-07-30T17:01:41Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:08:06Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T16:20:48Z]
+2026-07-30T17:08:06Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:20:30Z CLEARED flag for origin/master (merged)
+2026-07-30T17:20:30Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T17:25:39Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T17:25:39Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:30:51Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T17:30:51Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:36:36Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T17:36:36Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:42:45Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T17:42:45Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:49:01Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T17:49:01Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:54:32Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T17:54:32Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:59:42Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T17:59:42Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T17:59:51Z FLAG origin/agent/v6-v23-large-space-verdict-gap: merge conflict
+2026-07-30T18:05:17Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T18:05:17Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:10:23Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 9 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T18:10:23Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:15:37Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 10 attempts since 2026-07-30T17:25:39Z]
+2026-07-30T18:15:37Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:24:47Z CLEARED flag for origin/master (merged)
+2026-07-30T18:24:47Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T18:29:41Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T18:29:41Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:35:38Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T18:35:38Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:43:10Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T18:43:10Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T18:53:26Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T18:53:26Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:00:22Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T19:00:22Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:06:55Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T19:06:55Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:13:13Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T19:13:13Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:19:27Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T18:29:41Z]
+2026-07-30T19:19:27Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:29:30Z CLEARED flag for origin/master (merged)
+2026-07-30T19:29:30Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T19:35:33Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T19:35:33Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:40:35Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T19:40:35Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:45:55Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T19:45:55Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T19:52:42Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T19:52:42Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:01:47Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T20:01:47Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:09:17Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T20:09:17Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:17:14Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T20:17:14Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:27:38Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T19:35:33Z]
+2026-07-30T20:27:38Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:34:33Z CLEARED flag for origin/master (merged)
+2026-07-30T20:34:33Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T20:41:44Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T20:41:44Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:48:21Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T20:48:21Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T20:54:28Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T20:54:28Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:01:39Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:01:39Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:08:42Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:08:42Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:15:24Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:15:24Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:21:58Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:21:58Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:28:07Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:28:07Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:34:26Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 9 attempts since 2026-07-30T20:41:44Z]
+2026-07-30T21:34:26Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:39:27Z CLEARED flag for origin/master (merged)
+2026-07-30T21:39:27Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T21:43:49Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T21:43:49Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:48:02Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T21:48:02Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:52:32Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T21:52:32Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T21:57:03Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T21:57:03Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:02:10Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:02:10Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:06:18Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:06:18Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:10:28Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:10:28Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:14:47Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:14:47Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:19:02Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 9 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:19:02Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:23:20Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 10 attempts since 2026-07-30T21:43:49Z]
+2026-07-30T22:23:20Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:26:01Z MERGED origin/agent/s31-a10-said-done-prove-it (dirs: proxy; gates: verify:proxy(verify.py))
+2026-07-30T22:26:01Z CLEARED flag for origin/agent/s31-a10-said-done-prove-it (merged)
+2026-07-30T22:26:03Z HELD 8 unchanged since last verdict: v5-battery-freeze (merge conflict, 27x); e8-ic3-scale (merge conflict, 28x); s4-freeze (verify gate red in freeze (verify.sh), 16x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 23x); r4-ruling-path (verify gate red in release (verify.sh), 22x); s4-e23-tiers (verify gate red in freeze (verify.sh), 10x); p18-audits-cover-half-onmaster (merge conflict, 10x); v6-v23-large-space-verdict-gap (merge conflict, 1x)
+2026-07-30T22:29:26Z CLEARED flag for origin/master (merged)
+2026-07-30T22:29:26Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T22:37:30Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:37:30Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:37:36Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 28 attempts since 2026-07-29T04:33:05Z]
+2026-07-30T22:41:50Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:41:50Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:41:55Z FLAG origin/agent/e8-ic3-scale: merge conflict  [NEEDS-HUMAN: 29 attempts since 2026-07-29T04:15:47Z]
+2026-07-30T22:43:01Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:43:01Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-freeze adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-30T22:44:24Z FLAG origin/agent/r3-release-classifier-defaults: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 24 attempts since 2026-07-29T18:32:53Z]
+2026-07-30T22:45:17Z FLAG origin/agent/r4-ruling-path: verify gate red in release (verify.sh)  [NEEDS-HUMAN: 23 attempts since 2026-07-29T19:02:54Z]
+2026-07-30T22:46:02Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:46:02Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-e23-tiers adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-30T22:46:08Z FLAG origin/agent/p18-audits-cover-half-onmaster: merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-30T05:00:19Z]
+2026-07-30T22:50:22Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:50:22Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:55:07Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T22:55:07Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T22:59:48Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T22:59:48Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:04:03Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T23:04:03Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:08:17Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T23:08:17Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:08:23Z FLAG origin/agent/v6-v23-large-space-verdict-gap: merge conflict
+2026-07-30T23:12:43Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T23:12:43Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:16:59Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T23:16:59Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:21:22Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T22:50:22Z]
+2026-07-30T23:21:22Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:29:28Z CLEARED flag for origin/master (merged)
+2026-07-30T23:29:28Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-30T23:33:33Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:33:33Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:37:43Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:37:43Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:38:23Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:38:23Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-freeze adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-30T23:39:01Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:39:01Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-e23-tiers adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-30T23:43:19Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:43:19Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:47:45Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-30T23:47:45Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:52:31Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-30T23:43:18Z]
+2026-07-30T23:52:31Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-30T23:56:35Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-30T23:43:18Z]
+2026-07-30T23:56:35Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:00:42Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-30T23:43:18Z]
+2026-07-31T00:00:42Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:04:49Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-30T23:43:18Z]
+2026-07-31T00:04:49Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:08:52Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-30T23:43:18Z]
+2026-07-31T00:08:52Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:13:17Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-30T23:43:18Z]
+2026-07-31T00:13:17Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:13:18Z HELD 6 unchanged since last verdict: v5-battery-freeze (merge conflict, 28x); e8-ic3-scale (merge conflict, 29x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 24x); r4-ruling-path (verify gate red in release (verify.sh), 23x); p18-audits-cover-half-onmaster (merge conflict, 11x); v6-v23-large-space-verdict-gap (merge conflict, 2x)
+2026-07-31T00:19:26Z CLEARED flag for origin/master (merged)
+2026-07-31T00:19:26Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-31T00:23:32Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:23:32Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:27:35Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:27:35Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:28:14Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:28:14Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-freeze adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T00:28:54Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:28:54Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-e23-tiers adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T00:33:16Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:33:16Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:37:43Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T00:37:43Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:42:28Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T00:42:28Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:46:31Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T00:46:31Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:50:44Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T00:50:44Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:55:04Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T00:55:04Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T00:59:12Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T00:59:12Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:03:35Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-31T00:33:16Z]
+2026-07-31T01:03:35Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:03:37Z HELD 6 unchanged since last verdict: v5-battery-freeze (merge conflict, 28x); e8-ic3-scale (merge conflict, 29x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 24x); r4-ruling-path (verify gate red in release (verify.sh), 23x); p18-audits-cover-half-onmaster (merge conflict, 11x); v6-v23-large-space-verdict-gap (merge conflict, 2x)
+2026-07-31T01:09:28Z CLEARED flag for origin/master (merged)
+2026-07-31T01:09:28Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-31T01:13:32Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:13:32Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:17:43Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:17:43Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:18:23Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:18:23Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-freeze adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T01:19:02Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:19:02Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-e23-tiers adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T01:23:31Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:23:31Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:28:00Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T01:28:00Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:32:44Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:32:44Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:36:49Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:36:49Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:40:53Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:40:53Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:45:00Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:45:00Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:49:11Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:49:11Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:53:37Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 8 attempts since 2026-07-31T01:23:31Z]
+2026-07-31T01:53:37Z FLAG origin/master: BASE RED in monitor -- origin/agent/c14-four-forms-is-three-and-a-half adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T01:53:39Z HELD 6 unchanged since last verdict: v5-battery-freeze (merge conflict, 28x); e8-ic3-scale (merge conflict, 29x); r3-release-classifier-defaults (verify gate red in release (verify.sh), 24x); r4-ruling-path (verify gate red in release (verify.sh), 23x); p18-audits-cover-half-onmaster (merge conflict, 11x); v6-v23-large-space-verdict-gap (merge conflict, 2x)
+2026-07-31T01:59:26Z CLEARED flag for origin/master (merged)
+2026-07-31T01:59:26Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-31T02:03:40Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:03:40Z FLAG origin/master: BASE RED in monitor -- origin/agent/opsa-c53-vanishing-veto adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:07:50Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:07:50Z FLAG origin/master: BASE RED in monitor -- origin/agent/a3-campaign-devpile adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:08:31Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:08:31Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-freeze adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T02:09:11Z FLAG origin/master: BASE RED in freeze (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:09:11Z FLAG origin/master: BASE RED in freeze -- origin/agent/s4-e23-tiers adds no new failure and is NOT at fault; every branch touching freeze is blocked by master
+2026-07-31T02:13:29Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:13:29Z FLAG origin/master: BASE RED in monitor -- origin/agent/s38-append-only-probe-branch-blind adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:18:00Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own
+2026-07-31T02:18:00Z FLAG origin/master: BASE RED in monitor -- origin/agent/s39-writes-into-the-live-master-tree adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:22:40Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 3 attempts since 2026-07-31T02:13:29Z]
+2026-07-31T02:22:40Z FLAG origin/master: BASE RED in monitor -- origin/agent/c13-certificate-bridge-two-halves adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:26:49Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 4 attempts since 2026-07-31T02:13:29Z]
+2026-07-31T02:26:49Z FLAG origin/master: BASE RED in monitor -- origin/agent/p18-audits-cover-half-the-paper adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:30:54Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 5 attempts since 2026-07-31T02:13:29Z]
+2026-07-31T02:30:54Z FLAG origin/master: BASE RED in monitor -- origin/agent/s40-fleetkit-fork-has-drifted adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:35:05Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 6 attempts since 2026-07-31T02:13:29Z]
+2026-07-31T02:35:05Z FLAG origin/master: BASE RED in monitor -- origin/agent/s41-prior-work-scans-one-of-two adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:39:09Z FLAG origin/master: BASE RED in monitor (verify.sh): origin/master fails this gate on its own  [NEEDS-HUMAN: 7 attempts since 2026-07-31T02:13:29Z]
+2026-07-31T02:39:09Z FLAG origin/master: BASE RED in monitor -- origin/agent/s42-fleetkit-three-lies adds no new failure and is NOT at fault; every branch touching monitor is blocked by master
+2026-07-31T02:41:00Z CLEARED flag for origin/master (merged)
+2026-07-31T02:41:00Z SWEEP-FLAGS retired 1 stale flag(s): origin/master
+2026-07-31T02:41:00Z BLOCKED: another merge holds the lock; merged nothing
+2026-07-31T02:47:46Z FLAG origin/agent/v5-battery-freeze: merge conflict  [NEEDS-HUMAN: 29 attempts since 2026-07-29T04:33:05Z]

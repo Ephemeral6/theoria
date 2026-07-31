@@ -2,10 +2,10 @@
 branch: origin/agent/v5-battery-freeze
 reason: merge conflict
 tip: 32fa34d1e01ecd917c144ec256e6c3bb8781db07
-base: 3d59d0a63cffeb0e1f865c2bacc8508c5232087b
+base: 181900da5a8acb9961a211da634e64c15d816c17
 first_seen: 2026-07-29T04:33:05Z
-last_seen: 2026-07-30T03:48:50Z
-attempts: 17
+last_seen: 2026-07-31T02:47:46Z
+attempts: 29
 
 ```
 Auto-merging PARTNER_SYNC.md
