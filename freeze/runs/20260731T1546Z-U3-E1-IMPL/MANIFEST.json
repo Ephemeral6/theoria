@@ -1,0 +1,31 @@
+{
+ "prompt_id": "closeout/u3-e1",
+ "prompt": "Implement U3 (E1, primary endpoint one) attainment evaluator per frozen STATS_RULES.md 1.2/1.2.1; CLI + tests + negative controls + sweep over all theoria-arm and A0 runs",
+ "branch": "closeout/u3-e1",
+ "base_commit": "f6a95719",
+ "utc": "2026-07-31T15:46:00Z",
+ "seed": null,
+ "files": [
+  {
+   "path": "freeze/u3.py",
+   "sha256": "6b3fadc2e5293b81c75cef79154e49a41898da0a2e565bf1cb80a07d2cd78371"
+  },
+  {
+   "path": "freeze/tests/test_u3.py",
+   "sha256": "8ee679ade3aa0e71c46e42715a4a5a24ad16e3851d728d12e4f41b6015410e22"
+  },
+  {
+   "path": "freeze/runs/20260731T1546Z-U3-E1-IMPL/u3_table.md",
+   "sha256": "13f588a27a4baaa69bedb9006f5ea47c00fd518c75de89da31be082e24322b54"
+  },
+  {
+   "path": "freeze/runs/20260731T1546Z-U3-E1-IMPL/u3_table.json",
+   "sha256": "81e3acaf5c51764489ae7354c24dd0f30edf7f9d71a3c3576cb0af88ea088bb4"
+  },
+  {
+   "path": "freeze/runs/20260731T1546Z-U3-E1-IMPL/RUN_STATE.md",
+   "sha256": "35af963e5052a8be09f421558a9612af3f4dfa885442738b598ad3575e379ccc"
+  }
+ ],
+ "notes": "sweep read the MAIN tree theoria-arm/runs read-only while two live legs ran; gate: 29 passed in 14.00s"
+}

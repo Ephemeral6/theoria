@@ -1,0 +1,1172 @@
+[
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-aborted"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-aborted"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-aborted",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage2"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage2"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact-salvage2",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-aborted"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-aborted"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-aborted",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-salvage"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-salvage"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact-salvage",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact-salvage"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact-salvage"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact-salvage",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T025503Z-g50t-e08-fixed"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T025503Z-g50t-e08-fixed"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T025503Z-g50t-e08-fixed",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T072604Z-E3-engines-online"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-engines-online"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-engines-online",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null
+  },
+  "evidence": {
+   "cheap_green": false,
+   "kind": "arm_transfer",
+   "source": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried\\transfer.json"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_proof_layer",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried-salvage"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried-salvage"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried-salvage",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null,
+   "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+  },
+  "evidence": {
+   "cheap_green": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "kind": "arm_certify",
+   "proof_layer_available": false,
+   "source": "certify record"
+  },
+  "flags": {
+   "gap_candidate_g": true
+  },
+  "game": "sk48-d8078629",
+  "label": "declared_refusal",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T083400Z-E3-sk48-carried-v2",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T141546Z-S8-provenance-backfill"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T141546Z-S8-provenance-backfill"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T141546Z-S8-provenance-backfill",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T152910Z-a3-desk-gate"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T152910Z-a3-desk-gate"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T152910Z-a3-desk-gate",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T152930Z-a3-turn-series"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T152930Z-a3-turn-series"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T152930Z-a3-turn-series",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T210000Z-a3-level-boundary"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T210000Z-a3-level-boundary"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T210000Z-a3-level-boundary",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260728T233900Z-A3-campaign-devpile"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260728T233900Z-A3-campaign-devpile"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T233900Z-A3-campaign-devpile",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260728T235841Z-leg01\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T235841Z-leg01",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260728T235842Z-leg02\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T235842Z-leg02",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260728T235843Z-leg01\\certify.json"
+  },
+  "flags": {},
+  "game": "sk48-d8078629",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260728T235843Z-leg01",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260729T0030Z-a3-desk-live-proof\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T0030Z-a3-desk-live-proof",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null,
+   "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+  },
+  "evidence": {
+   "cheap_green": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "kind": "arm_certify",
+   "proof_layer_available": false,
+   "source": "certify record"
+  },
+  "flags": {
+   "gap_candidate_g": true
+  },
+  "game": "g50t-5849a774",
+  "label": "declared_refusal",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T004020Z-leg01-salvage"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01-salvage"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01-salvage",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T013000Z-A11"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T013000Z-A11"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T013000Z-A11",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T080000Z-E14-crash-is-not-a-finding"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T080000Z-E14-crash-is-not-a-finding"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T080000Z-E14-crash-is-not-a-finding",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260729T105653Z-leg01\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T105653Z-leg01",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\20260729T105729Z-leg01\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T105729Z-leg01",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T125500Z-A3-provenance-repair"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T125500Z-A3-provenance-repair"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T125500Z-A3-provenance-repair",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T162000Z-A3-two-recorded-not-fixed"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T162000Z-A3-two-recorded-not-fixed"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T162000Z-A3-two-recorded-not-fixed",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T1745Z-A3-per-model-ceiling"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T1745Z-A3-per-model-ceiling"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T1745Z-A3-per-model-ceiling",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T2015Z-A3-unblock"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T2015Z-A3-unblock"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T2015Z-A3-unblock",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260729T2040Z-A3-unpriced"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260729T2040Z-A3-unpriced"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260729T2040Z-A3-unpriced",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T0230Z-A3-MODEL-PATH-SEALING"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T0230Z-A3-MODEL-PATH-SEALING"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T0230Z-A3-MODEL-PATH-SEALING",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T0700Z-A3-COST-SHAPE-COUPLING"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T0700Z-A3-COST-SHAPE-COUPLING"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T0700Z-A3-COST-SHAPE-COUPLING",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T0855Z-A17-MEASUREMENT"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T0855Z-A17-MEASUREMENT"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T0855Z-A17-MEASUREMENT",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1020Z-A3-SEAL-CONJUNCT-ONE"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1020Z-A3-SEAL-CONJUNCT-ONE"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1020Z-A3-SEAL-CONJUNCT-ONE",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1200Z-A17-THE-STASH-WAS-INNOCENT"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1200Z-A17-THE-STASH-WAS-INNOCENT"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1200Z-A17-THE-STASH-WAS-INNOCENT",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1230Z-A3-ADVERSARIAL-TRIAGE"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1230Z-A3-ADVERSARIAL-TRIAGE"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1230Z-A3-ADVERSARIAL-TRIAGE",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260730T1400Z-A3-H3-SCOPE"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260730T1400Z-A3-H3-SCOPE"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260730T1400Z-A3-H3-SCOPE",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260731T1050Z-A16"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A16"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A16",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260731T1050Z-A17"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A17"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A17",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\20260731T1050Z-A8"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A8"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1050Z-A8",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null,
+   "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+  },
+  "evidence": {
+   "cheap_green": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "kind": "arm_certify",
+   "proof_layer_available": false,
+   "source": "certify record"
+  },
+  "flags": {
+   "gap_candidate_g": true
+  },
+  "game": "g50t-5849a774",
+  "label": "declared_refusal",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1240Z-A3-level2-carried",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null,
+   "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+  },
+  "evidence": {
+   "cheap_green": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "kind": "arm_certify",
+   "proof_layer_available": false,
+   "source": "certify record"
+  },
+  "flags": {
+   "gap_candidate_g": true
+  },
+  "game": "g50t-5849a774",
+  "label": "declared_refusal",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1310Z-A3-level2-carried-r2",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null,
+   "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+  },
+  "evidence": {
+   "cheap_green": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "kind": "arm_certify",
+   "proof_layer_available": false,
+   "source": "certify record"
+  },
+  "flags": {
+   "gap_candidate_g": true
+  },
+  "game": "g50t-5849a774",
+  "label": "declared_refusal",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1430Z-A3-level2-carried-r3",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": null,
+   "b_axioms": null,
+   "c_nonvacuous": null
+  },
+  "evidence": {
+   "cheap_green": false,
+   "kind": "arm_transfer",
+   "source": "<repo>\\theoria-arm\\runs\\20260731T1500Z-A3-sk48-carried-l1\\transfer.json"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_proof_layer",
+  "run": "<repo>\\theoria-arm\\runs\\20260731T1500Z-A3-sk48-carried-l1",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "certify.json is empty — the certify stage left no records"
+  },
+  "evidence": {
+   "kind": "arm_certify",
+   "source": "<repo>\\theoria-arm\\runs\\a3-gate-mock\\certify.json"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\a3-gate-mock",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\campaign-a3-g50t"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\campaign-a3-g50t"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\campaign-a3-g50t",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\preflight-20260728T012031Z"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\preflight-20260728T012031Z"
+  },
+  "flags": {},
+  "game": null,
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\preflight-20260728T012031Z",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\preflight-20260728T012057Z"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\preflight-20260728T012057Z"
+  },
+  "flags": {},
+  "game": "g50t-5849a774",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\preflight-20260728T012057Z",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "note": "no recognised proof-layer artefact in <repo>\\theoria-arm\\runs\\preflight-20260728T074237Z"
+  },
+  "evidence": {
+   "source": "<repo>\\theoria-arm\\runs\\preflight-20260728T074237Z"
+  },
+  "flags": {},
+  "game": "sk48-d8078629",
+  "label": "no_evidence",
+  "run": "<repo>\\theoria-arm\\runs\\preflight-20260728T074237Z",
+  "verdict": "not_attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": true,
+   "b_axioms": {
+    "drow_dcol_cases": true,
+    "goal_break": true,
+    "inv_closed": true,
+    "inv_init": true,
+    "unsolvable": true
+   },
+   "c_nonvacuous": {
+    "drow_dcol_cases": false,
+    "goal_break": true,
+    "inv_closed": true,
+    "inv_init": true,
+    "unsolvable": true
+   },
+   "c_residuals": [
+    "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)",
+    "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+   ],
+   "per_theorem": {
+    "drow_dcol_cases": {
+     "b": {
+      "axioms": [
+       "propext"
+      ],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": false,
+      "residuals": [],
+      "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+     },
+     "kind": "unknown"
+    },
+    "goal_break": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [],
+      "sub_checks": {
+       "a_inv_at_init": true,
+       "b_goals_excluded": true,
+       "c_init_has_action": true,
+       "c_provenance": "recorded trace: 1966 transitions",
+       "d_goal_nonempty": true,
+       "d_provenance": "a0_report grading: level(s) match actually solvable with recorded plan"
+      },
+      "why": "§1.2.1-unsolvable (a)-(d) discharged"
+     },
+     "kind": "unsolvable"
+    },
+    "inv_closed": {
+     "b": {
+      "axioms": [
+       "propext",
+       "Quot.sound"
+      ],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "inv_init": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "unsolvable": {
+     "b": {
+      "axioms": [
+       "propext",
+       "Quot.sound"
+      ],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [],
+      "sub_checks": {
+       "a_inv_at_init": true,
+       "b_goals_excluded": true,
+       "c_init_has_action": true,
+       "c_provenance": "recorded trace: 1966 transitions",
+       "d_goal_nonempty": true,
+       "d_provenance": "a0_report grading: level(s) match actually solvable with recorded plan"
+      },
+      "why": "§1.2.1-unsolvable (a)-(d) discharged"
+     },
+     "kind": "unsolvable"
+    }
+   }
+  },
+  "evidence": {
+   "kind": "lean_source_live",
+   "source": "<repo>\\a0-spike\\artifacts\\A0.lean"
+  },
+  "flags": {
+   "classical_choice_needed": false
+  },
+  "game": null,
+  "label": "discharged",
+  "run": "<repo>\\a0-spike",
+  "verdict": "attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": true,
+   "b_axioms": {
+    "inv_all": true,
+    "inv_closed": true,
+    "inv_init": true
+   },
+   "c_nonvacuous": {
+    "inv_all": true,
+    "inv_closed": true,
+    "inv_init": true
+   },
+   "c_residuals": [
+    "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)",
+    "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)",
+    "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+   ],
+   "per_theorem": {
+    "inv_all": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "inv_closed": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "inv_init": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    }
+   }
+  },
+  "evidence": {
+   "kind": "lean_source_live",
+   "source": "<repo>\\cold-start-a0\\theory\\generated\\theory.lean"
+  },
+  "flags": {
+   "classical_choice_needed": false
+  },
+  "game": null,
+  "label": "discharged",
+  "run": "<repo>\\cold-start-a0",
+  "verdict": "attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": true,
+   "b_axioms": {
+    "inv_all": true,
+    "inv_closed": true,
+    "inv_init": true
+   },
+   "c_nonvacuous": {
+    "inv_all": true,
+    "inv_closed": true,
+    "inv_init": true
+   },
+   "c_residuals": [
+    "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)",
+    "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)",
+    "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+   ],
+   "per_theorem": {
+    "inv_all": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "inv_closed": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    },
+    "inv_init": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": true,
+      "residuals": [
+       "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established definitionally (probe)"
+      ],
+      "why": "invariant not constant"
+     },
+     "kind": "invariant"
+    }
+   }
+  },
+  "evidence": {
+   "kind": "lean_source_live",
+   "source": "<repo>\\cold-start-a3\\theory\\generated_l1\\theory.lean"
+  },
+  "flags": {
+   "classical_choice_needed": false
+  },
+  "game": null,
+  "label": "discharged",
+  "run": "<repo>\\cold-start-a3\\theory\\generated_l1",
+  "verdict": "attained"
+ },
+ {
+  "criteria": {
+   "a_compiles": true,
+   "b_axioms": {
+    "inv_all": true,
+    "inv_closed": true,
+    "inv_init": true
+   },
+   "c_nonvacuous": {
+    "inv_all": false,
+    "inv_closed": false,
+    "inv_init": false
+   },
+   "c_residuals": [],
+   "per_theorem": {
+    "inv_all": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": false,
+      "residuals": [],
+      "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+     },
+     "kind": "invariant"
+    },
+    "inv_closed": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": false,
+      "residuals": [],
+      "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+     },
+     "kind": "invariant"
+    },
+    "inv_init": {
+     "b": {
+      "axioms": [],
+      "classical_choice_needed": false,
+      "never_allowed": [],
+      "ok": true,
+      "outside_whitelist": []
+     },
+     "c": {
+      "ok": false,
+      "residuals": [],
+      "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+     },
+     "kind": "invariant"
+    }
+   }
+  },
+  "evidence": {
+   "kind": "lean_source_live",
+   "source": "<repo>\\cold-start-a3\\theory\\generated_l1_vacuous\\theory.lean"
+  },
+  "flags": {
+   "classical_choice_needed": false
+  },
+  "game": null,
+  "label": "vacuous",
+  "run": "<repo>\\cold-start-a3\\theory\\generated_l1_vacuous",
+  "verdict": "not_attained"
+ }
+]
