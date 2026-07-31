@@ -585,8 +585,32 @@ def probe_append_only():
         # S30: blind here meant `dels = 0`, i.e. 「append-only 规则完好」 --
         # a clean bill of health for the one rule whose whole point is that
         # nobody can quietly delete from these files.
+        # S38：**锚在 `origin/master` 上，不在 HEAD 上。**
+        #
+        # 上面那段注释写的判据是对的（「once it is on the mainline it is frozen;
+        # on a branch, fix it until it is right」），它连 `6dec6f7` 不该被计入
+        # 都点名了。但实现从 HEAD 的第一父链求和，而在**分支上** HEAD 的第一父链
+        # 就是这条分支自己的提交——包括还没发布的那些。于是每一次作者修正自己
+        # 尚未发布的草稿段落，都被计成一次违反。**这个不一致只在分支上看得见**：
+        # 在 master 上，合并提交的 first-parent numstat 是净变化，分支内的来回
+        # 根本不出现，所以注释里那句话在那里是成立的。
+        #
+        # 实测（`runs/20260730T0410Z-S38/measure.json`，211 条本地分支）：
+        # 旧判据红 **26** 条，新判据红 **1** 条——**25 条是假红**。
+        # 而剩下的那 1 条是 `agent/v26-handover-leak-ruling`，它确实原地改写了
+        # 一段已由 `d35e89cb` 发布到主线的段落。同一天由另一条完全独立的路径
+        # （逐条读 diff 的人工裁决，S36）挑出来的也正是这一条。
+        #
+        # 假红的代价不是漏报，是**会自愈**：合并之后自己变绿，于是看见它的人
+        # 学到「这条闸会乱叫」。它还把便宜的错解摆在顺手的位置——去 `BASELINE`
+        # 加豁免行数，为一段从未发布的草稿**永久放宽对已发布内容的守卫**。
+        anchor = "origin/master"
+        if git_or_none("rev-parse", "--verify", "--quiet", anchor) is None:
+            # 没有远端锚点（新克隆、测试用的临时仓）。回落到 HEAD 是旧行为，
+            # 在 master 上正确；把这件事写进 detail，别让读者以为基础一样强。
+            anchor = "HEAD"
         out = git_or_none("log", "--first-parent", "--numstat", "--format=%h",
-                          "--", path)
+                          anchor, "--", path)
         if out is None:
             return {"status": "missing",
                     "detail": "问不出 %s 的删除历史（git 没有返回结果），"
@@ -598,10 +622,29 @@ def probe_append_only():
                 dels += int(parts[1])
             elif line.strip():
                 cur = line.strip()
+        # 本分支自己的贡献：`merge-base(anchor, HEAD)..HEAD` 的净删除。
+        # **必须用 merge-base，不能用两点 `anchor..HEAD`**：分支基线落后时，
+        # 两点 diff 会把「基线之后别人加的行」全部报成本分支删的
+        # ——S35 实测那样算是 5 增 33 删，而 33 行里一个字都不是它删的。
+        #
+        # 这一半是这道闸的牙齿：**一条净删除了已发布行的分支仍然红**，
+        # 而且是在它合并**之前**就红。旧实现在分支上红得毫无分辨力，
+        # 反而让这一类混在 25 条假红里。
+        own = 0
+        if anchor != "HEAD":
+            mb = git_or_none("merge-base", anchor, "HEAD")
+            if mb and mb.strip():
+                d = git_or_none("diff", "--numstat",
+                                "%s..HEAD" % mb.strip().splitlines()[0],
+                                "--", path)
+                for line in (d or "").splitlines():
+                    parts = line.split("	")
+                    if len(parts) == 3 and parts[1].isdigit():
+                        own += int(parts[1])
         allowed = BASELINE.get(path, 0)
-        if dels > allowed:
-            offenders.append("%s（删除 %d 行，超出已裁决豁免 %d 行）"
-                             % (path, dels, allowed))
+        if dels + own > allowed:
+            offenders.append("%s（已发布删除 %d 行 + 本分支净删除 %d 行，"
+                             "超出已裁决豁免 %d 行）" % (path, dels, own, allowed))
     if offenders:
         return {"status": "risk",
                 "detail": "追加式文件出现删除：" + "； ".join(offenders) +

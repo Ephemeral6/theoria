@@ -1,0 +1,219 @@
+{
+  "path": "PARTNER_SYNC.md",
+  "baseline": 1,
+  "published_dels_on_origin_master": 1,
+  "branches_examined": 211,
+  "red_under_old_criterion": 26,
+  "red_under_new_criterion": 1,
+  "false_reds": [
+    "agent/a10-shared-ledger-real-arms",
+    "agent/a11-bypass-attempts-explained",
+    "agent/a12-cost-claim-sources",
+    "agent/a14-campaign-json-untracked",
+    "agent/c10-unsolvable-proof-canon",
+    "agent/c2-semantics-migrate",
+    "agent/c9-count-lock-vocabulary",
+    "agent/e16-verdict-must-gate",
+    "agent/e17-held-out-validation",
+    "agent/p12-paper-multi-review",
+    "agent/p13-figure-numbering",
+    "agent/p17-machine-checked-ruling",
+    "agent/p18-certificate-verb-ruling",
+    "agent/p8-billshape-pipeline",
+    "agent/s14-gates-for-all",
+    "agent/s16-silent-failure-hunt",
+    "agent/s17-fleet-evidence-capture",
+    "agent/s18-fleetkit-extract",
+    "agent/s23-unreadable-is-not-clean",
+    "agent/s25-probe-the-merge-queue",
+    "agent/s32-close-gate-gap",
+    "agent/v18-battery-prereg-check",
+    "agent/v5-verdict-three-types",
+    "agent/v9-battery-gaming-audit",
+    "s35a-backup"
+  ],
+  "rows": [
+    {
+      "branch": "agent/a10-shared-ledger-real-arms",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/a11-bypass-attempts-explained",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/a12-cost-claim-sources",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/a14-campaign-json-untracked",
+      "old_criterion_dels": 4,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/c10-unsolvable-proof-canon",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/c2-semantics-migrate",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/c9-count-lock-vocabulary",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/e16-verdict-must-gate",
+      "old_criterion_dels": 4,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/e17-held-out-validation",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/p12-paper-multi-review",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/p13-figure-numbering",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/p17-machine-checked-ruling",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/p18-certificate-verb-ruling",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/p8-billshape-pipeline",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s14-gates-for-all",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s16-silent-failure-hunt",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s17-fleet-evidence-capture",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s18-fleetkit-extract",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s23-unreadable-is-not-clean",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s25-probe-the-merge-queue",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/s32-close-gate-gap",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/v18-battery-prereg-check",
+      "old_criterion_dels": 3,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/v26-handover-leak-ruling",
+      "old_criterion_dels": 5,
+      "old_red": true,
+      "branch_own_dels": 4,
+      "new_red": true
+    },
+    {
+      "branch": "agent/v5-verdict-three-types",
+      "old_criterion_dels": 4,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "agent/v9-battery-gaming-audit",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    },
+    {
+      "branch": "s35a-backup",
+      "old_criterion_dels": 2,
+      "old_red": true,
+      "branch_own_dels": 0,
+      "new_red": false
+    }
+  ]
+}

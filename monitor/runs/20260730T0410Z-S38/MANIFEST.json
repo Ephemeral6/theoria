@@ -1,0 +1,22 @@
+{
+  "prompt_id": "S38-S38-append-only-probe-branch-blind",
+  "branch": "agent/s38-append-only-probe-branch-blind",
+  "base_commit": "origin/master (branched from the remote, not this disk's master)",
+  "utc": "2026-07-30T04:10:00Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_spend_usd": 0.0,
+  "files": ["measure.py", "measure.json", "RUN_STATE.md"],
+  "changed": ["monitor/scan.py", "monitor/tests/test_append_only_probe_anchor.py"],
+  "measured": {
+    "branches_examined": 211,
+    "red_under_old_criterion": 26,
+    "red_under_new_criterion": 1,
+    "false_reds": 25,
+    "published_dels_on_origin_master": 1,
+    "the_one_that_stays_red": "agent/v26-handover-leak-ruling -- independently singled out the same day by S36's per-diff human adjudication, from a pool of ten, for the same reason",
+    "baseline_audit": "requirement 5: BASELINE has one entry (PARTNER_SYNC.md: 1) and it is the adjudicated mainline self-correction 63ef0bf, NOT an exemption added to suppress this false red",
+    "tests": "3 new; suite 397 passed, 2 xfailed"
+  }
+}
