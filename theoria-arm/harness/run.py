@@ -83,6 +83,8 @@ from proxy.paths import UPSTREAM_ARC
 
 from harness import freeze_gate
 from harness import spend as spend_mod
+from inner import goal as goal_mod
+from inner import probe as probe_mod
 from harness.proxy_process import EnvProxyProcess
 
 ARM = "theoria"                                       # registered in ledger.ARMS
@@ -440,6 +442,23 @@ def main(argv=None) -> int:
                          "recorded in CARRIED.json and transfer.json")
     ap.add_argument("--tags", default=None,
                     help="comma-separated scorecard tags")
+    # Three candidate changes landed on 2026-07-31, each switchable, each
+    # defaulting to this arm's historic behaviour. They arrived through three
+    # different plumbing paths -- a flag, a constructor argument and an
+    # environment variable -- which is three ways for a round to think it
+    # turned something on and be wrong. One path, here.
+    ap.add_argument("--goal-protocol", default=None,
+                    choices=("off", "record", "propose"),
+                    help="what the arm does about a manual with no goal "
+                         "clause. `off` (default) is historic: the plan beat "
+                         "returns no_goal_declared and nothing accumulates. "
+                         "`record` names the state per turn; `propose` also "
+                         "parks a rider on a theorize call a surprise already "
+                         "paid for. See inner/goal.py.")
+    ap.add_argument("--probe-economy", action="store_true",
+                    help="carry probe refutations forward so the frontier can "
+                         "shrink. Off by default (also settable with "
+                         "THEORIA_PROBE_ECONOMY=1). See inner/probe.py.")
     ap.add_argument("--desk-diet", default="full",
                     choices=("full", "off", "evidence", "patch", "diet", "on"),
                     help="what the desk is shown and asked to write back. "
@@ -487,7 +506,13 @@ def main(argv=None) -> int:
                           tags=([t.strip() for t in args.tags.split(",")]
                                 if args.tags else None),
                           prompt_id=args.prompt_id,
-                          desk_diet=args.desk_diet)
+                          desk_diet=args.desk_diet,
+                          goal_protocol=(args.goal_protocol
+                                         if args.goal_protocol is not None
+                                         else goal_mod.DEFAULT_PROTOCOL),
+                          probe_economy=(probe_mod.ProbeEconomyConfig(
+                              enabled=True, carry_refutations=True)
+                              if args.probe_economy else None))
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}
