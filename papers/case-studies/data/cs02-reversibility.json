@@ -1,0 +1,165 @@
+{
+  "id": "cs02",
+  "title": "Reversibility beats coverage",
+  "prose": "../02-reversibility-beats-coverage.md",
+  "claim": "A0 saw 233 of 236 reachable (state, action) pairs and shipped a manual wrong in three places. A0' saw 107 of 228 and shipped one with no errors. The controlled variable is not how much was seen but whether what was seen could be seen again.",
+  "relation_to_existing_figure": "papers/phase1-workshop/figures/data/fig2_coverage_accuracy.json carries the same two arms for the workshop paper. This file adds the probe-by-probe breakdown and the citation audit; it does not restate the arm rows.",
+
+  "arms": [
+    {
+      "arm": "A0",
+      "mechanism": "Button, latch -- pressable once",
+      "explorer": "exhaustive",
+      "pairs_total": 236,
+      "pairs_covered": 233,
+      "coverage": 0.987288,
+      "agree": 233,
+      "disagree": 3,
+      "accuracy_vs_truth": 0.987288,
+      "replay_green": true,
+      "revisions": 0,
+      "rules_untested_by_trace": 1,
+      "probe_rows": 9,
+      "probes_executable": 0,
+      "probes_hypothetical": 2,
+      "probes_untyped": 7,
+      "sources": [
+        "cold-start-a0/prime/A0P_REPORT.md:17-23",
+        "cold-start-a0/artifacts/score_vs_truth.json (base.behavioural)",
+        "cold-start-a0/artifacts/engines_report.json (probes)"
+      ]
+    },
+    {
+      "arm": "A0-prime run A",
+      "mechanism": "Switch, toggle -- re-witnessable",
+      "explorer": "truncated at 40% of the exhaustive walk",
+      "pairs_total": 228,
+      "pairs_covered": 107,
+      "coverage": 0.469298,
+      "agree": 228,
+      "disagree": 0,
+      "accuracy_vs_truth": 1.0,
+      "replay_green": true,
+      "revisions": 0,
+      "rules_untested_by_trace": 0,
+      "probe_rows": 27,
+      "probes_executable": 13,
+      "probes_hypothetical": 9,
+      "probes_untyped": 5,
+      "sources": [
+        "cold-start-a0/prime/A0P_REPORT.md:17-23",
+        "cold-start-a0/prime/artifacts/prime_report.json (run_a, engines)",
+        "cold-start-a0/prime/artifacts/engines_report.json (probes)"
+      ]
+    }
+  ],
+
+  "the_thirteen_executable_probes": {
+    "source": "cold-start-a0/prime/artifacts/engines_report.json, probes[] where tier == 'executable'",
+    "note": "These are executable probe *designs* emitted by probe_frontier, not thirteen executed experiments. Run A ran 0 coverage probes because no rule was untested; Run B ran 1. Every design here targets the toggle, the portal, or a rule adjacent to them.",
+    "rows": [
+      {"rule": "obj0_recolor7_LEFT", "action": "RIGHT", "at_transition": 85, "coverage": "1/1", "entropy_bits": 1.0, "n_hypotheses": 2, "mover_anchor": [3, 3]},
+      {"rule": "obj1_appear_LEFT", "action": "RIGHT", "at_transition": 85, "coverage": "1/1", "entropy_bits": 1.0, "n_hypotheses": 2, "mover_anchor": [3, 3]},
+      {"rule": "obj2_jump_DOWN", "action": "RIGHT", "at_transition": 11, "coverage": "2/2", "entropy_bits": 1.0, "n_hypotheses": 4, "mover_anchor": [6, 3]},
+      {"rule": "obj0_recolor7_RIGHT", "action": "RIGHT", "at_transition": 38, "coverage": "1/1", "entropy_bits": 0.918296, "n_hypotheses": 18, "mover_anchor": [6, 3]},
+      {"rule": "obj1_appear_RIGHT", "action": "RIGHT", "at_transition": 38, "coverage": "1/1", "entropy_bits": 0.918296, "n_hypotheses": 18, "mover_anchor": [6, 3]},
+      {"rule": "obj0_recolor7_UP", "action": "UP", "at_transition": 39, "coverage": "1/1", "entropy_bits": 0.863121, "n_hypotheses": 21, "mover_anchor": [1, 1]},
+      {"rule": "obj0_recolor8_UP", "action": "UP", "at_transition": 12, "coverage": "1/1", "entropy_bits": 0.863121, "n_hypotheses": 21, "mover_anchor": [1, 1]},
+      {"rule": "obj1_appear_UP", "action": "UP", "at_transition": 39, "coverage": "1/1", "entropy_bits": 0.863121, "n_hypotheses": 21, "mover_anchor": [1, 1]},
+      {"rule": "obj1_vanish_UP", "action": "UP", "at_transition": 12, "coverage": "1/1", "entropy_bits": 0.863121, "n_hypotheses": 21, "mover_anchor": [1, 1]},
+      {"rule": "obj0_still_UP", "action": "UP", "at_transition": 12, "coverage": "17/17", "entropy_bits": 0.811278, "n_hypotheses": 4, "mover_anchor": [1, 1]},
+      {"rule": "obj1_still_UP", "action": "UP", "at_transition": 12, "coverage": "17/17", "entropy_bits": 0.811278, "n_hypotheses": 4, "mover_anchor": [1, 1]},
+      {"rule": "obj2_step_UP", "action": "UP", "at_transition": 12, "coverage": "17/17", "entropy_bits": 0.811278, "n_hypotheses": 4, "mover_anchor": [1, 1]},
+      {"rule": "obj2_still_UP", "action": "UP", "at_transition": 12, "coverage": "2/2", "entropy_bits": 0.811278, "n_hypotheses": 4, "mover_anchor": [1, 1]}
+    ]
+  },
+
+  "why_A0_could_emit_none": {
+    "flavour_1": {
+      "kind": "extensionally identical predicates",
+      "detail": "free(strip(D)) / clear(strip(D)) / tcolor(D)==0 are the same predicate on this world: clear differs from free only off-grid and the border is solid wall; tcolor(D)==0 is free for a 1x1 mover.",
+      "source": "cold-start-a0/THEORIZE_LOG.md:130-143, :336-339"
+    },
+    "flavour_2": {
+      "kind": "gated behind an irreversible latch",
+      "detail": "The probe that would settle press_is_direction_free is trivial to design and impossible to run: drive the Cart to (2,2) and push DOWN into an unpressed Button. In this world the Button is already pressed by then.",
+      "source": "cold-start-a0/THEORIZE_LOG.md:241-245"
+    }
+  },
+
+  "A0_predicted_its_own_misses": {
+    "prediction": "R-05 rejected the direction generalisation of press_left for want of evidence, predicted the manual would therefore be wrong in exactly three places, and predicted replay would never notice.",
+    "prediction_source": "cold-start-a0/THEORIZE_LOG.md:222-245",
+    "outcome": "All three held.",
+    "outcome_source": "cold-start-a0/A0_REPORT.md:54-57, cold-start-a0/THEORIZE_LOG.md:512-514",
+    "misses": [
+      {"cart": [2, 2], "pressed": false, "action": "DOWN", "world": "Button pressed", "manual": "nothing happens"},
+      {"cart": [3, 1], "pressed": false, "action": "RIGHT", "world": "Button pressed", "manual": "nothing happens"},
+      {"cart": [4, 2], "pressed": false, "action": "UP", "world": "Button pressed", "manual": "nothing happens"}
+    ]
+  },
+
+  "mechanism_census_a0_prime": {
+    "source": "cold-start-a0/prime/artifacts/prime_report.json key trace.a0p-base",
+    "frames": 111,
+    "transitions": 110,
+    "reachable_states": 57,
+    "state_action_pairs": 228,
+    "covered_pairs": 107,
+    "win_frames": [],
+    "witnessed": {"step": 82, "blocked_by_wall": 18, "teleport": 2, "toggle_on_UP": 1, "toggle_on_DOWN": 1, "toggle_on_LEFT": 1, "toggle_on_RIGHT": 1, "toggle_off_UP": 1, "toggle_off_DOWN": 1, "toggle_off_LEFT": 1, "toggle_off_RIGHT": 1},
+    "never_witnessed": {"step": 79, "blocked_by_wall": 35, "blocked_by_crate": 6, "blocked_by_closed_door": 1}
+  },
+
+  "reidentification": {
+    "source": "cold-start-a0/prime/artifacts/prime_report.json key engines.reidentification",
+    "operator": "template_match+disjoint_lifetime",
+    "tracks_before": 7,
+    "tracks_after": 3,
+    "script_bits_before": 1971,
+    "script_bits_after": 1923,
+    "saved_bits": 48,
+    "note": "The toggle made the Door come and go, and mdl_segmenter matches only frame t against t+1, so the raw segmentation returned five Doors. A0's Door opened once and stayed open, so A0 could not have found this."
+  },
+
+  "run_b_seeded_error": {
+    "source": "cold-start-a0/prime/artifacts/prime_report.json key run_b",
+    "design": "controlled, labelled as such in the seeded manual's own header",
+    "seed": "push_onto_crate -- the Cart may walk onto colour 4; zero evidence, and the trajectory never pushes into the Crate, so replay cannot see it",
+    "replay": "GREEN -- 111 frames, 8991 pixels, 0 anomalies",
+    "caught_by": [
+      {"mechanism": "Lean transcription", "kind": "internal inconsistency, before the world was consulted", "message": "ArenaEscape: step sends the mover to (2, 4), which the board does not list as arena (from (2, 3) on right)"},
+      {"mechanism": "coverage probe", "kind": "empirical, the mechanism Theoria specifies under constraint 7", "detail": "navigate 3 steps to (2,3), predict Cart->(2,4), execute, observe Cart stays at (2,3) -> refuted"}
+    ],
+    "probes_run": 1,
+    "revisions": 1,
+    "repair": "delete rule push_onto_crate",
+    "accuracy_before": 0.991228,
+    "agree_before": 226,
+    "disagree_before": 2,
+    "accuracy_after": 1.0
+  },
+
+  "citation_audit": {
+    "finding": "cold-start-a0/prime/A0P_REPORT.md:51 states the comparison as '13 executable of 27 designed (A0: 0 of 22)'. The 27 is exactly A0-prime's probe-row count. The 22 is not reproducible from the tree.",
+    "checked": {
+      "A0_base_probe_rows": 9,
+      "A0_no_button_probe_rows": 8,
+      "A0_rows_across_both_manuals": 17,
+      "A0_frontier_members_summed_over_base_rows": 29,
+      "A0_prime_probe_rows": 27
+    },
+    "existing_gloss_that_does_not_hold": "papers/phase1-workshop/figures/data/fig2_coverage_accuracy.json, derivations.A0.executable_probes, proposes that the prose figure counts frontier members rather than probe rows. The frontier-member count is 29, not 22.",
+    "load_bearing_half_is_sound": "0 executable versus 13 is verifiable from both artefacts and is what the case study rests on.",
+    "recommendation": "correct or drop the 22 upstream"
+  },
+
+  "caveats": [
+    "The objection that bites is analytic, not statistical: A0-prime's toggle was designed so every direction-by-polarity case would have a witness, so the adjudication rule mechanically admits what it mechanically rejected in A0. This demonstrates the mechanism; it does not test it. (papers/phase1-workshop/figures/data/fig2_coverage_accuracy.json, key caveat)",
+    "n=1 per arm, both worlds self-built and adjudicated by the same instance.",
+    "The seeded error escaped the arena, which is what let the Lean form catch it for free. A right-looking-but-wrong clause on a tested firing state is caught by neither mechanism. (cold-start-a0/prime/A0P_REPORT.md:150-155)",
+    "No multi-round repair: Run A 0 revisions, Run B 1, and the repair was a deletion. (cold-start-a0/prime/A0P_REPORT.md:146-149)",
+    "A0-prime's goal was supplied from the problem statement, not induced -- the truncated trace never wins. (cold-start-a0/prime/THEORIZE_LOG.md:115-121)",
+    "Scale untested: 57 reachable states, 36 arena cells."
+  ]
+}

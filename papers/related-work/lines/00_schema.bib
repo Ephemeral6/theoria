@@ -1,0 +1,59 @@
+% ---------------------------------------------------------------------------
+% VERIFICATION STATUS — verified 2026-07-28, run 20260728T034703Z-p23
+% Full finding: ../SCHEMA_CITATION.md   Search trail: ../runs/20260728T034703Z-p23/00_schema/
+%
+% CONFIRMED (two independent sources, per README red line 2):
+%   author  — Google Scholar citation record on Guanning Zeng's own profile
+%             (user=SU6ooAQAAAAJ, citation_for_view=...:YFjsv_pBGBYC)
+%           + Haiwen Feng's own homepage https://havenfeng.github.io/
+%             The two agree name-for-name and position-for-position, all 11.
+%   title   — same two sources.
+%   year    — Google Scholar gives publication date 2026/7; Feng's homepage, 2026.
+%
+% CONFIRMED ABSENT — there is NO paper. Do not invent an arXiv id, DOI or venue.
+%   arXiv API au:"Guanning Zeng"  -> 9 papers, none is SCHEMA
+%   arXiv API all:"ARC-AGI-3"     -> 14 papers, no SCHEMA, no Zeng, no Feng
+%   DBLP full record, Guanning Zeng -> no SCHEMA / ARC-AGI entry
+%   CrossRef bibliographic query    -> no DOI-registered SCHEMA work
+%   Still web-only as of 2026-07-28. See SCHEMA_CITATION.md 2.4 to re-check.
+%
+% SINGLE-SOURCED, below the red-line-2 bar:
+%   howpublished = {Impossible Research} is carried second-hand from
+%   baseline-arms/SCHEMA_LOCATE.md 2.1, which read it off the project page's own
+%   BibTeX. It could NOT be independently corroborated: two targeted searches
+%   found no organisation by that name. It is retained on SCHEMA_LOCATE.md's
+%   authority, as the task brief directed, and flagged here so it is not mistaken
+%   for a verified field.
+%
+% DELIBERATELY OMITTED: per-author affiliations. "UC Berkeley" and "CMU" are each
+%   confirmed for individual authors, but the affiliation set of the WORK is not
+%   verifiable without the prohibited page. BibTeX has no honest field for that.
+%
+% ATTRIBUTION WARNING: Theoria.md cites this as "Feng et al." That is WRONG.
+%   Haiwen Feng is the ELEVENTH and LAST author. Cite as "Zeng et al. (2026)".
+%   Feng is a project lead (the * authors are Zeng, Li, Zanette, Feng), which is
+%   the likely origin of the error, but he is not the first author.
+%
+% !! HAZARD — DO NOT OPEN THE url FIELD BELOW. !!
+%   baseline-arms/INCIDENTS.md INC-BA-001: this page leaks the mechanics of nine
+%   SEALED-pile ARC games (substantively ls20-9607627b and ft09-0d8bbf25) and it
+%   places game content near the top, so a reader is contaminated before he can
+%   judge the page unsafe. The URL is recorded here because a @misc citation is
+%   meaningless without it -- NOT as an invitation to fetch it. Every field in
+%   this entry was established without opening it. Likewise do not open the
+%   HuggingFace dataset schema-harness/arc-agi-3-schema-traces, which holds a
+%   finished world model for all 25 games.
+% ---------------------------------------------------------------------------
+
+@misc{zeng2026schema,
+  author       = {Guanning Zeng and Jiani Wang and Wenjie Ma and Shaofeng Yin and
+                  Chenyang Wang and Shichen Liu and Angjoo Kanazawa and Wode Ni and
+                  Xiuyu Li and Andrea Zanette and Haiwen Feng},
+  title        = {{[schema]}: Frontier Models with the Right Harness Achieve
+                  $\sim$99\% on {ARC-AGI-3} Public},
+  year         = {2026},
+  month        = jul,
+  howpublished = {Impossible Research},
+  url          = {https://schema-harness.github.io},
+  note         = {Project webpage; no preprint or peer-reviewed version as of 2026-07-28}
+}

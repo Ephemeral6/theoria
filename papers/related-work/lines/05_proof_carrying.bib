@@ -1,0 +1,141 @@
+% papers/related-work/lines/05_proof_carrying.bib
+% Line 5 -- proof-carrying code, certifying algorithms, specification validity.
+% Arms papers/phase1-workshop/sections/08_related.md 8.2 (the proof-carrying-code
+% bullet and the specification-validity bullet).
+%
+% VERIFIED ENTRIES ONLY. Every entry below was cross-checked against two
+% independent sources, named per entry in 05_proof_carrying.md. Quarantined
+% candidates are in that file's "Quarantined" section and deliberately absent here.
+%
+% Citation house rule for this line: cite necula1997pcc for proof-carrying code as
+% an idea and as a name; add necula1996kernel only when the claim concerns priority
+% of the term or the kernel-extension application. Do not cross the two records.
+
+% ---------------------------------------------------------------- proof-carrying code
+
+@inproceedings{necula1996kernel,
+  author    = {Necula, George C. and Lee, Peter},
+  title     = {Safe Kernel Extensions Without Run-Time Checking},
+  booktitle = {Proceedings of the Second {USENIX} Symposium on Operating Systems
+               Design and Implementation ({OSDI} '96)},
+  pages     = {229--243},
+  year      = {1996},
+  publisher = {{ACM}},
+  doi       = {10.1145/238721.238781},
+  url       = {https://doi.org/10.1145/238721.238781},
+  note      = {Origin of the term ``proof-carrying code''. Reprinted in ACM SIGOPS
+               Operating Systems Review 30(SI):229--243, DOI 10.1145/248155.238781;
+               cite one or the other, not both}
+}
+
+@inproceedings{necula1997pcc,
+  author    = {Necula, George C.},
+  title     = {Proof-Carrying Code},
+  booktitle = {Proceedings of the 24th {ACM} {SIGPLAN-SIGACT} Symposium on
+               Principles of Programming Languages ({POPL} '97)},
+  pages     = {106--119},
+  year      = {1997},
+  publisher = {{ACM}},
+  doi       = {10.1145/263699.263712},
+  url       = {https://doi.org/10.1145/263699.263712},
+  note      = {Canonical citation for proof-carrying code}
+}
+
+@inproceedings{appel2001foundational,
+  author    = {Appel, Andrew W.},
+  title     = {Foundational Proof-Carrying Code},
+  booktitle = {Proceedings of the 16th Annual {IEEE} Symposium on Logic in
+               Computer Science ({LICS} 2001)},
+  pages     = {247--256},
+  year      = {2001},
+  publisher = {{IEEE} Computer Society},
+  doi       = {10.1109/LICS.2001.932501},
+  url       = {https://doi.org/10.1109/LICS.2001.932501}
+}
+
+% ------------------------------------------------------------- certifying algorithms
+
+@article{mcconnell2011certifying,
+  author  = {McConnell, Ross M. and Mehlhorn, Kurt and N{\"a}her, Stefan and
+             Schweitzer, Pascal},
+  title   = {Certifying Algorithms},
+  journal = {Computer Science Review},
+  volume  = {5},
+  number  = {2},
+  pages   = {119--161},
+  year    = {2011},
+  doi     = {10.1016/j.cosrev.2010.09.009},
+  url     = {https://doi.org/10.1016/j.cosrev.2010.09.009}
+}
+
+% -------------------------------------------- machine-checkable certificates in practice
+
+@inproceedings{wetzler2014drat,
+  author    = {Wetzler, Nathan and Heule, Marijn J. H. and Hunt, Warren A.},
+  title     = {{DRAT-trim}: Efficient Checking and Trimming Using Expressive
+               Clausal Proofs},
+  booktitle = {Theory and Applications of Satisfiability Testing -- {SAT} 2014},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {8561},
+  pages     = {422--429},
+  year      = {2014},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-09284-3_31},
+  url       = {https://doi.org/10.1007/978-3-319-09284-3_31}
+}
+
+@article{leroy2009compcert,
+  author  = {Leroy, Xavier},
+  title   = {Formal Verification of a Realistic Compiler},
+  journal = {Communications of the {ACM}},
+  volume  = {52},
+  number  = {7},
+  pages   = {107--115},
+  year    = {2009},
+  doi     = {10.1145/1538788.1538814},
+  url     = {https://doi.org/10.1145/1538788.1538814}
+}
+
+% ------------------------------------------------------------- specification validity
+
+@article{boehm1984validating,
+  author  = {Boehm, Barry W.},
+  title   = {Verifying and Validating Software Requirements and Design
+             Specifications},
+  journal = {{IEEE} Software},
+  volume  = {1},
+  number  = {1},
+  pages   = {75--88},
+  year    = {1984},
+  doi     = {10.1109/MS.1984.233702},
+  url     = {https://doi.org/10.1109/MS.1984.233702},
+  note    = {Cite for the verification/validation distinction. The ``am I building
+             the right product'' epigram is widely attributed to Boehm but was not
+             confirmed to appear in this article; see 05_proof_carrying.md}
+}
+
+@article{demillo1979social,
+  author  = {De Millo, Richard A. and Lipton, Richard J. and Perlis, Alan J.},
+  title   = {Social Processes and Proofs of Theorems and Programs},
+  journal = {Communications of the {ACM}},
+  volume  = {22},
+  number  = {5},
+  pages   = {271--280},
+  year    = {1979},
+  doi     = {10.1145/359104.359106},
+  url     = {https://doi.org/10.1145/359104.359106}
+}
+
+@article{fetzer1988verification,
+  author  = {Fetzer, James H.},
+  title   = {Program Verification: The Very Idea},
+  journal = {Communications of the {ACM}},
+  volume  = {31},
+  number  = {9},
+  pages   = {1048--1063},
+  year    = {1988},
+  doi     = {10.1145/48529.48530},
+  url     = {https://doi.org/10.1145/48529.48530},
+  note    = {The CACM article, not the 1993 or 2001 Springer reprints of the same
+             title. Published rebuttals are separate items and are not cited here}
+}

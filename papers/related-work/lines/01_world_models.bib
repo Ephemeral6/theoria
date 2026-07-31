@@ -1,0 +1,183 @@
+% papers/related-work/lines/01_world_models.bib
+% Line 1 --- world models, the three waves (世界模型三波谱系)
+% VERIFIED ENTRIES ONLY. Each entry below reached two independently retrieved
+% sources agreeing on title, year and venue; the source pair is named per entry
+% in 01_world_models.md. Works that failed that test are in the "Quarantined"
+% section of 01_world_models.md and deliberately have no entry here.
+% Generated: run 20260728T034703Z-p23.
+
+% ---------------------------------------------------------------------------
+% Wave I --- latent-vector world models
+% ---------------------------------------------------------------------------
+
+% Preprint / self-published form. The peer-reviewed version is ha2018recurrent,
+% which carries a DIFFERENT title. Do not merge these two entries.
+@misc{ha2018world,
+  title         = {World Models},
+  author        = {Ha, David and Schmidhuber, J{\"u}rgen},
+  year          = {2018},
+  eprint        = {1803.10122},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  doi           = {10.5281/zenodo.1207631},
+  url           = {https://arxiv.org/abs/1803.10122}
+}
+
+@inproceedings{ha2018recurrent,
+  title     = {Recurrent World Models Facilitate Policy Evolution},
+  author    = {Ha, David and Schmidhuber, J{\"u}rgen},
+  booktitle = {Advances in Neural Information Processing Systems 31 (NeurIPS 2018)},
+  year      = {2018},
+  url       = {https://proceedings.neurips.cc/paper/2018/hash/2de5d16682c3c35007e4e92982f1a2ba-Abstract.html}
+}
+
+@inproceedings{hafner2019learning,
+  title     = {Learning Latent Dynamics for Planning from Pixels},
+  author    = {Hafner, Danijar and Lillicrap, Timothy and Fischer, Ian and
+               Villegas, Ruben and Ha, David and Lee, Honglak and Davidson, James},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {97},
+  pages     = {2555--2565},
+  year      = {2019},
+  publisher = {PMLR},
+  url       = {http://proceedings.mlr.press/v97/hafner19a.html}
+}
+
+@inproceedings{hafner2020dream,
+  title     = {Dream to Control: Learning Behaviors by Latent Imagination},
+  author    = {Hafner, Danijar and Lillicrap, Timothy and Ba, Jimmy and Norouzi, Mohammad},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2020},
+  url       = {https://iclr.cc/virtual_2020/poster_S1lOTC4tDS.html}
+}
+
+% arXiv preprint 2301.04104 is titled "Mastering Diverse Domains through World
+% Models"; the Nature version below is retitled. Same work.
+@article{hafner2025mastering,
+  title   = {Mastering diverse control tasks through world models},
+  author  = {Hafner, Danijar and Pasukonis, Jurgis and Ba, Jimmy and Lillicrap, Timothy},
+  journal = {Nature},
+  volume  = {640},
+  number  = {8059},
+  pages   = {647--653},
+  year    = {2025},
+  doi     = {10.1038/s41586-025-08744-2},
+  url     = {https://doi.org/10.1038/s41586-025-08744-2}
+}
+
+@article{schrittwieser2020mastering,
+  title   = {Mastering Atari, Go, chess and shogi by planning with a learned model},
+  author  = {Schrittwieser, Julian and Antonoglou, Ioannis and Hubert, Thomas and
+             Simonyan, Karen and Sifre, Laurent and Schmitt, Simon and Guez, Arthur and
+             Lockhart, Edward and Hassabis, Demis and Graepel, Thore and
+             Lillicrap, Timothy and Silver, David},
+  journal = {Nature},
+  volume  = {588},
+  number  = {7839},
+  pages   = {604--609},
+  year    = {2020},
+  doi     = {10.1038/s41586-020-03051-4},
+  url     = {https://doi.org/10.1038/s41586-020-03051-4}
+}
+
+@inproceedings{bruce2024genie,
+  title     = {Genie: Generative Interactive Environments},
+  author    = {Bruce, Jake and Dennis, Michael D and Edwards, Ashley and
+               Parker-Holder, Jack and Shi, Yuge and Hughes, Edward and Lai, Matthew and
+               Mavalankar, Aditi and Steigerwald, Richie and Apps, Chris and
+               Aytar, Yusuf and Bechtle, Sarah Maria Elisabeth and Behbahani, Feryal and
+               Chan, Stephanie C. Y. and Heess, Nicolas and Gonzalez, Lucy and
+               Osindero, Simon and Ozair, Sherjil and Reed, Scott and Zhang, Jingwei and
+               Zolna, Konrad and Clune, Jeff and De Freitas, Nando and Singh, Satinder and
+               Rockt{\"a}schel, Tim},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {235},
+  pages     = {4603--4623},
+  year      = {2024},
+  publisher = {PMLR},
+  url       = {https://proceedings.mlr.press/v235/bruce24a.html}
+}
+
+% CVPR, not ICCV. The arXiv comment field on 2301.08243 says ICCV and is wrong.
+@inproceedings{assran2023self,
+  title     = {Self-Supervised Learning from Images with a Joint-Embedding
+               Predictive Architecture},
+  author    = {Assran, Mahmoud and Duval, Quentin and Misra, Ishan and
+               Bojanowski, Piotr and Vincent, Pascal and Rabbat, Michael and
+               LeCun, Yann and Ballas, Nicolas},
+  booktitle = {2023 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {15619--15629},
+  year      = {2023},
+  doi       = {10.1109/CVPR52729.2023.01499},
+  url       = {https://doi.org/10.1109/CVPR52729.2023.01499}
+}
+
+% v1 of the preprint circulated as "Do generative video models learn physical
+% principles from watching videos?"; the current arXiv and WACV title is below.
+@inproceedings{motamed2026generative,
+  title     = {Do generative video models understand physical principles?},
+  author    = {Motamed, Saman and Culp, Laura and Swersky, Kevin and
+               Jaini, Priyank and Geirhos, Robert},
+  booktitle = {2026 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+  pages     = {948--958},
+  year      = {2026},
+  doi       = {10.1109/WACV61042.2026.00099},
+  url       = {https://doi.org/10.1109/WACV61042.2026.00099}
+}
+
+% ---------------------------------------------------------------------------
+% Wave II --- program world models
+% ---------------------------------------------------------------------------
+
+@inproceedings{tang2024worldcoder,
+  title     = {WorldCoder, a Model-Based {LLM} Agent: Building World Models by
+               Writing Code and Interacting with the Environment},
+  author    = {Tang, Hao and Key, Darren and Ellis, Kevin},
+  booktitle = {Advances in Neural Information Processing Systems 37 (NeurIPS 2024)},
+  year      = {2024},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2024/hash/820c61a0cd419163ccbd2c33b268816e-Abstract-Conference.html}
+}
+
+@inproceedings{hao2023reasoning,
+  title     = {Reasoning with Language Model is Planning with World Model},
+  author    = {Hao, Shibo and Gu, Yi and Ma, Haodi and Hong, Joshua and
+               Wang, Zhen and Wang, Daisy and Hu, Zhiting},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in
+               Natural Language Processing},
+  address   = {Singapore},
+  publisher = {Association for Computational Linguistics},
+  month     = dec,
+  pages     = {8154--8173},
+  year      = {2023},
+  doi       = {10.18653/v1/2023.emnlp-main.507},
+  url       = {https://aclanthology.org/2023.emnlp-main.507/}
+}
+
+% ---------------------------------------------------------------------------
+% The verification regime, stated by the field itself
+% ---------------------------------------------------------------------------
+
+@inproceedings{agarwal2021deep,
+  title     = {Deep Reinforcement Learning at the Edge of the Statistical Precipice},
+  author    = {Agarwal, Rishabh and Schwarzer, Max and Castro, Pablo Samuel and
+               Courville, Aaron C. and Bellemare, Marc G.},
+  booktitle = {Advances in Neural Information Processing Systems 34 (NeurIPS 2021)},
+  year      = {2021},
+  url       = {https://proceedings.neurips.cc/paper/2021/hash/f514cec81cb148559cf475e7426eed5e-Abstract.html}
+}
+
+% arXiv-only in both arXiv and DataCite records; no venue found.
+@misc{wang2019benchmarking,
+  title         = {Benchmarking Model-Based Reinforcement Learning},
+  author        = {Wang, Tingwu and Bao, Xuchan and Clavera, Ignasi and Hoang, Jerrick and
+                   Wen, Yeming and Langlois, Eric and Zhang, Shunshi and Zhang, Guodong and
+                   Abbeel, Pieter and Ba, Jimmy},
+  year          = {2019},
+  eprint        = {1907.02057},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  doi           = {10.48550/arXiv.1907.02057},
+  url           = {https://arxiv.org/abs/1907.02057}
+}

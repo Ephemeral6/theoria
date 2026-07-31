@@ -1,0 +1,166 @@
+% papers/related-work/lines/03_cegis_ilp.bib
+% Line #3 — program synthesis: CEGIS and ILP.
+% Every entry below carries two independent agreeing sources, named per entry in
+% 03_cegis_ilp.md. Entries that could not be double-sourced are NOT here; they
+% are in the "Quarantined" section of that file.
+
+% ---------------------------------------------------------------------------
+% CEGIS
+% ---------------------------------------------------------------------------
+
+% The counterexample-guided loop. NB: this paper does NOT use the word "CEGIS";
+% it calls the loop "counterexample-driven". See solarlezama2008sketching.
+@inproceedings{solarlezama2006sketching,
+  author    = {Solar-Lezama, Armando and Tancau, Liviu and Bod{\'i}k, Rastislav
+               and Seshia, Sanjit A. and Saraswat, Vijay A.},
+  title     = {Combinatorial Sketching for Finite Programs},
+  booktitle = {Proceedings of the 12th International Conference on Architectural
+               Support for Programming Languages and Operating Systems
+               (ASPLOS XII)},
+  pages     = {404--415},
+  year      = {2006},
+  publisher = {ACM},
+  doi       = {10.1145/1168857.1168907}
+}
+
+% The paper that NAMES counterexample guided inductive synthesis and coins the
+% acronym CEGIS (ch. 4, "Counterexample Guided Inductive Synthesis").
+@phdthesis{solarlezama2008sketching,
+  author      = {Solar-Lezama, Armando},
+  title       = {Program Synthesis by Sketching},
+  school      = {University of California, Berkeley},
+  year        = {2008},
+  month       = dec,
+  type        = {{PhD} dissertation},
+  note        = {Technical Report UCB/EECS-2008-177},
+  url         = {https://www2.eecs.berkeley.edu/Pubs/TechRpts/2008/EECS-2008-177.html}
+}
+
+@inproceedings{alur2013sygus,
+  author    = {Alur, Rajeev and Bod{\'i}k, Rastislav and Juniwal, Garvit and
+               Martin, Milo M. K. and Raghothaman, Mukund and Seshia, Sanjit A.
+               and Singh, Rishabh and Solar-Lezama, Armando and Torlak, Emina
+               and Udupa, Abhishek},
+  title     = {Syntax-Guided Synthesis},
+  booktitle = {2013 Formal Methods in Computer-Aided Design (FMCAD)},
+  pages     = {1--8},
+  year      = {2013},
+  publisher = {IEEE},
+  doi       = {10.1109/FMCAD.2013.6679385}
+}
+
+% ---------------------------------------------------------------------------
+% Inductive logic programming
+% ---------------------------------------------------------------------------
+
+@article{muggleton1991ilp,
+  author  = {Muggleton, Stephen},
+  title   = {Inductive Logic Programming},
+  journal = {New Generation Computing},
+  volume  = {8},
+  number  = {4},
+  pages   = {295--318},
+  year    = {1991},
+  doi     = {10.1007/BF03037089}
+}
+
+@article{muggleton1994theory,
+  author  = {Muggleton, Stephen and De Raedt, Luc},
+  title   = {Inductive Logic Programming: Theory and Methods},
+  journal = {The Journal of Logic Programming},
+  volume  = {19--20},
+  pages   = {629--679},
+  year    = {1994},
+  doi     = {10.1016/0743-1066(94)90035-3}
+}
+
+@article{cropper2021popper,
+  author  = {Cropper, Andrew and Morel, Rolf},
+  title   = {Learning Programs by Learning from Failures},
+  journal = {Machine Learning},
+  volume  = {110},
+  number  = {4},
+  pages   = {801--856},
+  year    = {2021},
+  doi     = {10.1007/s10994-020-05934-z},
+  note    = {Preprint: arXiv:2005.02259 (2020)}
+}
+
+@article{evans2018dilp,
+  author  = {Evans, Richard and Grefenstette, Edward},
+  title   = {Learning Explanatory Rules from Noisy Data},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {61},
+  pages   = {1--64},
+  year    = {2018},
+  doi     = {10.1613/jair.5714},
+  note    = {Preprint: arXiv:1711.04574 (2017)}
+}
+
+% ---------------------------------------------------------------------------
+% Held in reserve — verified, not cited in the current draft.
+% These two share an IDENTICAL full title and differ only in author count,
+% venue and year. Cite deliberately; see 03_cegis_ilp.md appendix.
+% ---------------------------------------------------------------------------
+
+@inproceedings{muggleton2013metagol,
+  author    = {Muggleton, Stephen and Lin, Dianhuan},
+  title     = {Meta-Interpretive Learning of Higher-Order Dyadic Datalog:
+               Predicate Invention Revisited},
+  booktitle = {Proceedings of the 23rd International Joint Conference on
+               Artificial Intelligence (IJCAI 2013)},
+  pages     = {1551--1557},
+  year      = {2013},
+  url       = {https://www.ijcai.org/Abstract/13/231}
+}
+
+@article{muggleton2015metagol,
+  author  = {Muggleton, Stephen H. and Lin, Dianhuan and
+             Tamaddoni-Nezhad, Alireza},
+  title   = {Meta-Interpretive Learning of Higher-Order Dyadic Datalog:
+             Predicate Invention Revisited},
+  journal = {Machine Learning},
+  volume  = {100},
+  number  = {1},
+  pages   = {49--73},
+  year    = {2015},
+  doi     = {10.1007/s10994-014-5471-y}
+}
+
+% ---------------------------------------------------------------------------
+% Neighbours P-16's reviewer named as uncited
+% ---------------------------------------------------------------------------
+
+@article{mitchell1982generalization,
+  author  = {Mitchell, Tom M.},
+  title   = {Generalization as Search},
+  journal = {Artificial Intelligence},
+  volume  = {18},
+  number  = {2},
+  pages   = {203--226},
+  year    = {1982},
+  doi     = {10.1016/0004-3702(82)90040-6}
+}
+
+@inproceedings{gulwani2011flashfill,
+  author    = {Gulwani, Sumit},
+  title     = {Automating String Processing in Spreadsheets Using
+               Input-Output Examples},
+  booktitle = {Proceedings of the 38th Annual ACM SIGPLAN-SIGACT Symposium on
+               Principles of Programming Languages (POPL '11)},
+  pages     = {317--330},
+  year      = {2011},
+  publisher = {ACM},
+  doi       = {10.1145/1926385.1926423}
+}
+
+@article{angluin1987lstar,
+  author  = {Angluin, Dana},
+  title   = {Learning Regular Sets from Queries and Counterexamples},
+  journal = {Information and Computation},
+  volume  = {75},
+  number  = {2},
+  pages   = {87--106},
+  year    = {1987},
+  doi     = {10.1016/0890-5401(87)90052-6}
+}

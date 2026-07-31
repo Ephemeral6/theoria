@@ -1,0 +1,779 @@
+
+--- 01-birth-of-a-concept.md:8 -> ../../Theoria.md:94-94
+    94 | **概念是一次压缩动作。** "小车"为什么存在?因为每次都说"那个 6 色的 2×3 连通块"太长。一个概念入册的资格 = **它让说明书变短**;每个概念随身带账:压缩收益若干字节 + 支撑证据若干条。"对世界的最简描述"由此落位——不做硬优化目标(会诱发早期退化:什么都压,压出垃圾),做**幸存者之间的裁决**:重放、证明、戳探先筛,最短者胜。副产品是论文里最好看的材料:theory.dsl 的修订史就是**概念诞生时间线**——"portal"哪一步进入词汇表、什么证据触发、买到多少压缩、首见到首用隔了几步。带时间戳,看一个 LLM 发明"钥匙"这个概念。
+
+--- 01-birth-of-a-concept.md:22 -> ../../cold-start-a0/THEORIZE_LOG.md:36-37
+    36 | The board came out of extraction before any engine ran: 43 static cells, 38
+    37 | dynamic, background colour 0.
+
+--- 01-birth-of-a-concept.md:37 -> ../../cold-start-a0/THEORIZE_LOG.md:39-49
+    39 | ```
+    40 | 1 1 1 1 1 1 1 1 1
+    41 | 1 0 0 0 0 1 0 0 1
+    42 | 1 0 0 0 0 1 0 0 1
+    43 | 1 0 0 0 0 1 0 0 1
+    44 | 1 0 0 0 0 . 0 0 1     '.' = dynamic, the board cannot explain it
+    45 | 1 0 0 0 0 1 0 0 1
+    46 | 1 0 0 0 1 1 0 0 1
+    47 | 1 1 1 3 1 1 0 0 1
+    48 | 1 1 1 1 1 1 1 1 1
+    49 | ```
+
+--- 01-birth-of-a-concept.md:43 -> ../../cold-start-a0/THEORIZE_LOG.md:53-56
+    53 | pocket at (7,3); and the divider at column 5 has exactly one cell — (4,5) — that
+    54 | the board refuses to explain. **A hole in a wall that is not always a hole.**
+    55 | That observation is what made me look for a door before any rule was read.
+    56 | 
+
+--- 01-birth-of-a-concept.md:59 -> ../../cold-start-a0/THEORIZE_LOG.md:77-80
+    77 | | operator | script bits | tracks | events |
+    78 | |---|---|---|---|
+    79 | | `connected_components(4)` | 6511 | 90 | 332 |
+    80 | | `connected_components(4)+uniform_color` | **4423** | **3** | **216** |
+
+--- 01-birth-of-a-concept.md:63 -> ../../cold-start-a0/A0_REPORT.md:96-100
+    96 | **MDL adjudicated the segmentation.** The colour-agnostic connected-components
+    97 | operator fragmented the trajectory into 90 tracks with 88 vanishes and 87
+    98 | appears, because the Cart is constantly adjacent to the Button. The
+    99 | uniform-colour operator gave 3 tracks and 216 events. Script bits: 6511 vs 4423.
+   100 | The framework's own criterion picked the right operator with no thumb on the
+
+--- 01-birth-of-a-concept.md:66 -> ../../cold-start-a0/THEORIZE_LOG.md:65-67
+    65 | Evidence: present in 276 / 100 / 276 frames respectively; 214 `move` events all
+    66 | belong to `obj2`, 1 `recolor` to `obj0`, 1 `vanish` to `obj1`.
+    67 | 
+
+--- 01-birth-of-a-concept.md:76 -> ../../cold-start-a0/THEORIZE_LOG.md:69-73
+    69 | `obj0..2`. `obj2` is the Cart because it is the only thing that ever moves and
+    70 | it moves under the action. `obj1` is the Door because it sits in the wall's one
+    71 | unexplained cell and it is the thing that stops existing. `obj0` is the Button
+    72 | because it is the only object that changes without moving, and it does so in the
+    73 | same transition as `obj1` disappearing.
+
+--- 01-birth-of-a-concept.md:88 -> ../../cold-start-a0/THEORIZE_LOG.md:92-96
+    92 | | object | declaration | script bits | pixel baseline | account |
+    93 | |---|---|---|---|---|
+    94 | | Cart | 21 | 2169 | 5136 | **+2967** |
+    95 | | Button | 21 | 29 | 12 | **−17** |
+    96 | | Door | 21 | 25 | 12 | **−13** |
+
+--- 01-birth-of-a-concept.md:89 -> ../../cold-start-a0/A0_REPORT.md:111-115
+   111 | |---|---|---|---|
+   112 | | Cart | 2169 | 5136 | **+2967** |
+   113 | | Button | 29 | 12 | **−17** |
+   114 | | Door | 25 | 12 | **−13** |
+   115 | 
+
+--- 01-birth-of-a-concept.md:92 -> ../../Theoria.md:94-94
+    94 | **概念是一次压缩动作。** "小车"为什么存在?因为每次都说"那个 6 色的 2×3 连通块"太长。一个概念入册的资格 = **它让说明书变短**;每个概念随身带账:压缩收益若干字节 + 支撑证据若干条。"对世界的最简描述"由此落位——不做硬优化目标(会诱发早期退化:什么都压,压出垃圾),做**幸存者之间的裁决**:重放、证明、戳探先筛,最短者胜。副产品是论文里最好看的材料:theory.dsl 的修订史就是**概念诞生时间线**——"portal"哪一步进入词汇表、什么证据触发、买到多少压缩、首见到首用隔了几步。带时间戳,看一个 LLM 发明"钥匙"这个概念。
+
+--- 01-birth-of-a-concept.md:94 -> ../../Theoria.md:243-243
+   243 | | 5 | 无证据/无收益不入册:规则携支撑转移,概念携压缩账(字节),策略携证明或节点账 | 防编造机制、垃圾概念与迷信打法;被打脸时知道怪谁 |
+
+--- 01-birth-of-a-concept.md:97 -> ../../cold-start-a0/THEORIZE_LOG.md:98-101
+    98 | Theoria 1.8 says a concept's ticket of admission is that it makes the manual
+    99 | shorter, and constraint 5 says no entry without a gain. By that rule the Button
+   100 | and the Door should both be **rejected**: each has exactly one event in 275
+   101 | transitions, and a 21-bit declaration is more expensive than just listing the two
+
+--- 01-birth-of-a-concept.md:109 -> ../../cold-start-a0/THEORIZE_LOG.md:104-109
+   104 | They are admitted regardless, and the reason is a different constraint.
+   105 | Constraint 2 is full-frame responsibility: every pixel belongs to the board or to
+   106 | some object. Cells (3,2) and (4,5) change, so they cannot be board; if they are
+   107 | not objects either, then two pixels of every frame are unexplained and the cheap
+   108 | certify layer fails on frame 0. And the Door's rule cannot even be *stated*
+   109 | without the Button in the vocabulary.
+
+--- 01-birth-of-a-concept.md:112 -> ../../Theoria.md:240-240
+   240 | | 2 | 规划前全史重放——升级为双重对账(转移重放 + 渲染一致性,全帧责任制) | 感知规则与机制规则同罪同审;像素无一漏网 |
+
+--- 01-birth-of-a-concept.md:114 -> ../../Theoria.md:226-226
+   226 |   - 廉价层——theory.py 全史重放 + 渲染一致性(对象画回帧,逐格比对;**全帧责任制**:每个像素要么属棋盘、要么属某个对象,说明书没解释的像素就是意外——理论不许自己挑考题);
+
+--- 01-birth-of-a-concept.md:124 -> ../../cold-start-a0/THEORIZE_LOG.md:112-117
+   112 | found on the first cold start.** The compression account is not wrong — it is
+   113 | measuring the wrong alternative. The alternative to "Button is an object" is not
+   114 | "encode its pixel edits"; it is "leave the cell unexplained forever", which has
+   115 | no finite price in this accounting at all. Carried to `A0_REPORT.md` as the
+   116 | first framework finding; the negative numbers are written into `theory.dsl`
+   117 | honestly rather than suppressed.
+
+--- 01-birth-of-a-concept.md:130 -> ../../cold-start-a0/THEORIZE_LOG.md:476-478
+   476 | | rev | when | trigger | change |
+   477 | |---|---|---|---|
+   478 | | 1 | M3 | one pass over all 28 candidates plus the board map | the whole manual as it now stands: 3 objects, 7 rules, 2 invariants, 1 pending theorem |
+
+--- 01-birth-of-a-concept.md:133 -> ../../cold-start-a0/theory/theory.dsl:21-22
+    21 |   Button [segment: uniform_color ev: t99 compress: -5]
+    22 |   Door [segment: uniform_color ev: t99 compress: -1]
+
+--- 01-birth-of-a-concept.md:137 -> ../../cold-start-a0/THEORIZE_LOG.md:192-203
+   192 | Coverage 1/1, transition 99. Guard `act==LEFT ∧ tcolor(LEFT)==7`, frontier size
+   193 | 1 — the vocabulary pins it exactly, no ambiguity to adjudicate.
+   194 | 
+   195 | Read in words: pushing left into a cell showing colour 7 turns that colour into
+   196 | 8. Colour 7 is only ever the Button, so: **pushing into the unpressed Button
+   197 | presses it.** The Cart does not move (no `move` event at 99 on `obj2`; instead
+   198 | `obj2_still_LEFT` fires).
+   199 | 
+   200 | ### R-04 `obj1_vanish_LEFT` → **accept** as `door_opens_left`
+   201 | 
+   202 | Coverage 1/1, transition 99, guard **identical** to R-03.
+   203 | 
+
+--- 01-birth-of-a-concept.md:144 -> ../../cold-start-a0/THEORIZE_LOG.md:205-215
+   205 | the evidence does and does not give. What is observed is that at transition 99
+   206 | two things happen at once: the Button recolours and the Door vanishes. The
+   207 | evidence does **not** distinguish
+   208 | 
+   209 | * *press causes the Door to open* (cascade — one action, two events), from
+   210 | * *both are caused independently by the same push*, from
+   211 | * *the Door opens whenever the Button is pressed*, whatever pressed it.
+   212 | 
+   213 | One witness cannot tell these apart, and there will never be a second: the latch
+   214 | is irreversible, so this world can only ever press the Button once
+   215 | (cf. D-A0-003's three permanently uncoverable state-action pairs).
+
+--- 01-birth-of-a-concept.md:158 -> ../../cold-start-a0/THEORIZE_LOG.md:298-311
+   298 | ### L-02 `[cell(3,2) is 8] + [cell(4,5) is 5] mod 2 = 1` → **accept** as `door_latch`
+   299 | 
+   300 | The single most valuable line in the entire candidate stream, and the one I did
+   301 | not expect an engine to produce.
+   302 | 
+   303 | Read literally: over all 275 transitions, exactly one of *"the Button shows 8"*
+   304 | and *"the Door exists"* holds. In manual vocabulary:
+   305 | **the Door is present if and only if the Button is unpressed.**
+   306 | 
+   307 | This is the Button→Door dependency, recovered as a conservation law with 275
+   308 | transitions of support, by an engine that was handed 152 anonymous indicator bits
+   309 | and told nothing about buttons or doors. R-04's rule has one witness; this has
+   310 | all of them. Together they are the dependency: the rule says *when* it happens,
+   311 | the law says *that it always holds*.
+
+--- 01-birth-of-a-concept.md:159 -> ../../cold-start-a0/A0_REPORT.md:77-88
+    77 | **`zero_space` found the Button→Door dependency as a conservation law.**
+    78 | Handed 152 anonymous indicator bits and told nothing about buttons or doors, it
+    79 | returned
+    80 | 
+    81 | ```
+    82 | [cell (3,2) shows 8]  +  [cell (4,5) shows 5]   ≡  1   (mod 2)
+    83 | ```
+    84 | 
+    85 | — *the Door exists if and only if the Button is unpressed*, with 275
+    86 | transitions of support, against the single witness the rule miner had. The rule
+    87 | says when it happens; the law says that it always holds. This is the clause the
+    88 | whole A0 world was built to test, and an engine produced it unprompted.
+
+--- 01-birth-of-a-concept.md:161 -> ../../cold-start-a0/theory/theory.dsl:59-59
+    59 |   invariant door_latch count(Button, 8) + count(Door) = 1 [status: proven]
+
+--- 01-birth-of-a-concept.md:177 -> ../../cold-start-a0/A0_REPORT.md:123-129
+   123 | The compression account is not wrong, it is comparing against the wrong
+   124 | alternative. The alternative to "the Button is an object" is not "encode its
+   125 | pixel edits"; it is "leave the cell unexplained forever", which this accounting
+   126 | prices at zero. **Recommendation for the framework: the compression account
+   127 | should be computed against the shortest *responsibility-complete* description,
+   128 | not against a per-object pixel baseline.** Otherwise every rarely-moving object
+   129 | in every world will look like a bad concept.
+
+--- 01-birth-of-a-concept.md:185 -> ../../cold-start-a0/theory/theory.dsl:20-22
+    20 |   Cart [segment: uniform_color ev: t0-t274 compress: 2125]
+    21 |   Button [segment: uniform_color ev: t99 compress: -5]
+    22 |   Door [segment: uniform_color ev: t99 compress: -1]
+
+--- 01-birth-of-a-concept.md:194 -> ../../cold-start-a0/A0_REPORT.md:241-241
+   241 | | 3 | **done.** Button −17 → **−5**, Door −13 → **−1** on a responsibility-complete baseline, all three objects `mandatory` on expressibility. The §4 conflict is **narrowed, not dissolved**: an object with one event in 275 transitions still does not pay for itself *on the trace*. It pays on the *manual*, which is what 1.8 actually says. |
+
+--- 01-birth-of-a-concept.md:209 -> ../../cold-start-a0/THEORIZE_LOG.md:92-96
+    92 | | object | declaration | script bits | pixel baseline | account |
+    93 | |---|---|---|---|---|
+    94 | | Cart | 21 | 2169 | 5136 | **+2967** |
+    95 | | Button | 21 | 29 | 12 | **−17** |
+    96 | | Door | 21 | 25 | 12 | **−13** |
+
+--- 01-birth-of-a-concept.md:211 -> ../../cold-start-a0/prime/THEORIZE_LOG.md:43-47
+    43 | ### O-04 Concept accounts, on the responsibility-complete baseline
+    44 | Cart **+1698**, Switch **−13**, Door **−9**; all three `mandatory`, because
+    45 | `door_mirrors_switch` names two of them and the invariant language has no
+    46 | pixel-level paraphrase (`pipeline/concept_account.py`). Same conflict as A0's
+    47 | O-04, same resolution, and the same recommendation stands.
+
+--- 01-birth-of-a-concept.md:212 -> ../../cold-start-a2/THEORIZE_LOG.md:38-47
+    38 | **O-04 · Button and Door do not pay for themselves, and are admitted anyway.**
+    39 | `artifacts/concept_accounts.json`: Cart +1891 bits, Button −5, Door −1 (on the
+    40 | sweep). By Theoria §1.8's admission rule — a concept earns its place by making
+    41 | the manual shorter — the Button and the Door should be rejected. They are
+    42 | admitted on full-frame responsibility (their cells vary, so they cannot be
+    43 | board) and on the invariant language having no pixel-level paraphrase of
+    44 | `count(Button, 8) + count(Door) = 1`. Two of the framework's own criteria
+    45 | disagree. **This is A0's finding (A0_REPORT §4), reproduced on a second world
+    46 | rather than restated** — which is the only thing A2 can add to it.
+    47 | 
+
+--- 01-birth-of-a-concept.md:217 -> ../../cold-start-a2/THEORIZE_LOG.md:46-47
+    46 | rather than restated** — which is the only thing A2 can add to it.
+    47 | 
+
+--- 01-birth-of-a-concept.md:225 -> ../../cold-start-a0/THEORIZE_LOG.md:11-19
+    11 | The seal has one hole and it should be named rather than hidden: **the same
+    12 | instance both built the A0 world at M1 and adjudicated it at M3.** No file was
+    13 | consulted, but the world's design was not forgotten either. Every verdict below
+    14 | is therefore written to be checkable against the candidate stream alone — a
+    15 | reader who has only `artifacts/candidates.jsonl` and the board map should be able
+    16 | to re-derive each one, and where a verdict rests on an argument rather than on
+    17 | evidence (R-02, R-05) the argument is spelled out instead of asserted. That is
+    18 | the best available substitute for a seal that a single-agent spike cannot have,
+    19 | and `A0_REPORT.md` counts it as a threat to the result rather than a footnote.
+
+--- 01-birth-of-a-concept.md:226 -> ../../cold-start-a0/A0_REPORT.md:182-187
+   182 | 3. **The seal is imperfect.** The same instance built the world and adjudicated
+   183 |    it. No ground-truth file was read before M6, and every verdict in
+   184 |    `THEORIZE_LOG.md` is written to be re-derivable from the candidate stream
+   185 |    alone — but that is a weaker guarantee than a genuine blind. The
+   186 |    framework-level fix is the one Phase 3 already specifies: prompt iteration on
+   187 |    self-built worlds, ARC only as validation.
+
+--- 01-birth-of-a-concept.md:229 -> ../../cold-start-a2/A2_REPORT.md:271-273
+   271 | * **Nothing about whether an LLM would have written these manuals.** The
+   272 |   theorize step is done by hand here, as in A0 — the DSL files are checked in as
+   273 |   artefacts. A2 tests the instrument and the loop, not the theorizer.
+
+--- 02-reversibility-beats-coverage.md:19 -> ../../Theoria.md:32-36
+    32 | Schema 把世界模型写成可执行程序,检验方法是:对经历过的每一步重放比对,全对才放行。这能抓一类错误——**写错的规则**(预测会失败,当场暴露)。但它在构造上抓不到另一类——**漏写的规则**:历史里没有的东西,重放永远不会报错。
+    33 | 
+    34 | 关键是方向:漏写规则让模型里的世界**变小**(可能发生的事变少了)。于是这类错误系统性地把模型推向同一个错误结论:宣布"不可能"。
+    35 | 
+    36 | 实例:DC22。模型重放 175/175 全对,却漏了一条传送规则;基于它的完备搜索"正确地"证明了目标不可达,而这一关人类可解。换个说法:重放就是对过去的预测——**DC22 的模型预测满分,理解破产**,这就是 1.1 盲区的实名版本:缺的那条传送规则从未触发,不欠任何一帧。不是实现瑕疵,是方法的构造决定的。
+
+--- 02-reversibility-beats-coverage.md:29 -> ../../cold-start-a0/THEORIZE_LOG.md:225-230
+   225 | four directions, exactly as the push rule lifted across all four.
+   226 | 
+   227 | **Rejected**, and the manual is knowingly left incomplete. Constraint 5 forbids
+   228 | an entry without evidence, and the evidence for `press_up`, `press_down`,
+   229 | `press_right` is precisely zero — not thin, zero. The analogy to the lifted push
+   230 | rule is an argument, not a witness.
+
+--- 02-reversibility-beats-coverage.md:37 -> ../../cold-start-a0/THEORIZE_LOG.md:234-237
+   234 | says that pushing up into the Button does nothing, and full-history replay will
+   235 | never catch that.** It is the DC22 shape from Theoria 1.3 — a rule that is
+   236 | missing rather than wrong, invisible to replay, and it makes the modelled world
+   237 | *smaller* than the real one.
+
+--- 02-reversibility-beats-coverage.md:40 -> ../../cold-start-a0/theory/theory.dsl:60-60
+    60 |   theorem press_is_direction_free "推向未按下的按钮就会按下它，无论从哪个方向推——但这一条只有一个见证，本世界的闩锁不可逆，证据永远补不齐"
+
+--- 02-reversibility-beats-coverage.md:42 -> ../../Theoria.md:245-245
+   245 | | 7 | 定理未经戳探不得定案 | 现实不送反例,自己造;专戳证据最薄处 |
+
+--- 02-reversibility-beats-coverage.md:47 -> ../../cold-start-a0/THEORIZE_LOG.md:502-507
+   502 | `world/GROUND_TRUTH.md` and `artifacts/ground_truth.json` were first opened at
+   503 | **M6**, after M4 and M5 were both green, and only by
+   504 | `certify/score_vs_truth.py`. No clause above was written or revised after that
+   505 | point. M5's additions came from the plan's UNSAT and from `zero_space` on the
+   506 | variant trace, not from the referee's copy.
+   507 | 
+
+--- 02-reversibility-beats-coverage.md:56 -> ../../cold-start-a0/A0_REPORT.md:38-44
+    38 | | measurement | result |
+    39 | |---|---|
+    40 | | full-history replay (what certify sees) | **276/276 frames, 22 356/22 356 pixels, 0 anomalies** |
+    41 | | every reachable (state, action) pair, base world | **233/236 = 98.73 %** |
+    42 | | the 3 pairs the trajectory could never contain | **0/3 = 0 %** |
+    43 | | every reachable (state, action) pair, variant | **92/92 = 100 %** |
+    44 | | Lean obligations discharged | **2/2**, axiom lists empty in both |
+
+--- 02-reversibility-beats-coverage.md:68 -> ../../cold-start-a0/A0_REPORT.md:48-52
+    48 | ```
+    49 | cart (2,2) pressed=false  DOWN   world: Button pressed   manual: nothing happens
+    50 | cart (3,1) pressed=false  RIGHT  world: Button pressed   manual: nothing happens
+    51 | cart (4,2) pressed=false  UP     world: Button pressed   manual: nothing happens
+    52 | ```
+
+--- 02-reversibility-beats-coverage.md:72 -> ../../cold-start-a0/THEORIZE_LOG.md:512-514
+   512 | > on **233**. The three it gets wrong are pressing the Button from above, from
+   513 | > below and from the right — the three pairs R-05 named, for the reason R-05
+   514 | > gave, before the score existed.
+
+--- 02-reversibility-beats-coverage.md:88 -> ../../cold-start-a0/A0_REPORT.md:64-69
+    64 | The one thing that could have exposed it — a probe — could not be run, and the
+    65 | reason is structural rather than incidental: the Button's latch is
+    66 | **irreversible**, so once the trajectory presses it from the left the other
+    67 | three approaches are permanently unobservable. A0's own design made the decisive
+    68 | experiment impossible. That is a lesson about how to build the *next* self-made
+    69 | world, and it is written up in §6.
+
+--- 02-reversibility-beats-coverage.md:95 -> ../../cold-start-a0/THEORIZE_LOG.md:130-143
+   130 | **Frontier, 3 members per direction** — all three survive:
+   131 | 
+   132 | ```
+   133 | act==D ∧ free(strip(D))          <- accepted
+   134 | act==D ∧ clear(strip(D))
+   135 | act==D ∧ tcolor(D)==0
+   136 | ```
+   137 | 
+   138 | `probe_frontier` was asked to separate them and answered **no experiment in this
+   139 | world can** (P-02). That is correct and it is checkable by hand: `clear` differs
+   140 | from `free` only when the target strip runs off the grid, and the border is solid
+   141 | wall so the Cart can never get there; and `tcolor(D)==0` *is* `free` for a 1×1
+   142 | mover, since colour 0 is the background. Three names, one predicate, on this
+   143 | world.
+
+--- 02-reversibility-beats-coverage.md:96 -> ../../cold-start-a0/THEORIZE_LOG.md:336-339
+   336 | ### P-02 `obj2_step_{UP,DOWN,LEFT,RIGHT}`, `obj2_still_{UP,LEFT,RIGHT}` — **no split anywhere**
+   337 | Neither tier separates `free` / `clear` / `tcolor==0`. They are extensionally
+   338 | identical on this world. Reported as a verdict rather than as a failure: the
+   339 | right answer to "which experiment settles this?" is sometimes "none does".
+
+--- 02-reversibility-beats-coverage.md:103 -> ../../cold-start-a0/THEORIZE_LOG.md:241-245
+   241 | design and impossible to run: drive the Cart to (2,2) and push DOWN into an
+   242 | unpressed Button. In this world the Button is already pressed by then. **The
+   243 | experiment that would test this manual cannot be performed on this instance** —
+   244 | which is a genuine finding about A0's design, and is the single item I most
+   245 | expect to be wrong at M6.
+
+--- 02-reversibility-beats-coverage.md:110 -> ../../cold-start-a0/prime/A0P_REPORT.md:17-19
+    17 | | mechanism | Button, **latch** — pressable once | Switch, **toggle** — re-witnessable |
+    18 | | explorer | exhaustive | **truncated at 40 %** of the exhaustive walk |
+    19 | | state-action coverage | 233/236 = **99 %** | 107/228 = **47 %** |
+
+--- 02-reversibility-beats-coverage.md:127 -> ../../cold-start-a0/prime/THEORIZE_LOG.md:73-76
+    73 | direction-by-polarity combination has its own witness**. A0's `press_left` had
+    74 | one witness and *no* way to get a second, so `THEORIZE_LOG` R-05 there had to
+    75 | reject the direction generalisation and knowingly ship a hole. Here the
+    76 | generalisation is not an analogy, it is enumerated evidence, and it goes in.
+
+--- 02-reversibility-beats-coverage.md:173 -> ../../cold-start-a0/prime/A0P_REPORT.md:51-51
+    51 | | probes | 13 executable of 27 designed (A0: **0** of 22) |
+
+--- 02-reversibility-beats-coverage.md:198 -> ../../cold-start-a0/prime/A0P_REPORT.md:17-23
+    17 | | mechanism | Button, **latch** — pressable once | Switch, **toggle** — re-witnessable |
+    18 | | explorer | exhaustive | **truncated at 40 %** of the exhaustive walk |
+    19 | | state-action coverage | 233/236 = **99 %** | 107/228 = **47 %** |
+    20 | | full-history replay | green | green |
+    21 | | **accuracy vs ground truth** | 233/236 = **98.73 %** | **228/228 = 100 %** |
+    22 | | executable probes emitted | **0** | **13** |
+    23 | | rules left untested by the trace | 1 (unprobeable) | **0** |
+
+--- 02-reversibility-beats-coverage.md:212 -> ../../cold-start-a0/prime/THEORIZE_LOG.md:24-34
+    24 | The raw segmentation returned **seven** tracks for a three-object world: the
+    25 | Switch (one track, recolours match fine), the Cart, and **five Doors**. A0's Door
+    26 | opened once and stayed open; A0′'s Switch is a toggle, so its Door closes and
+    27 | reopens, and `mdl_segmenter` matches only frame *t* against frame *t+1* — nothing
+    28 | local can recognise an object that comes back.
+    29 | 
+    30 | Merging same-template, disjoint-lifetime tracks costs nothing to state and saves
+    31 | **48 bits** (re-declaring a returning object vs naming one already in the
+    32 | vocabulary), so it is applied: **7 → 3**. On the colour-agnostic operator the
+    33 | same pass gives 68 → 6. Written up in `pipeline/reidentify.py`; it is Theoria
+    34 | 1.8's template-matching operator, priced rather than asserted.
+
+--- 02-reversibility-beats-coverage.md:219 -> ../../cold-start-a0/A0_REPORT.md:169-175
+   169 | 1. **The theorize→certify inner loop never ran.** One pass over the candidate
+   170 |    stream produced a manual that passed both certify layers immediately. So A0
+   171 |    demonstrates that a manual *can* be induced; it demonstrates nothing about
+   172 |    *repair*, which is the loop's actual job and the thing Phase 3 will spend its
+   173 |    budget on. The revision count is 0, and a revision count of 0 is not a
+   174 |    success metric.
+   175 | 
+
+--- 02-reversibility-beats-coverage.md:230 -> ../../cold-start-a0/prime/A0P_REPORT.md:88-99
+    88 | **The seed.** One clause added to Run A's manual:
+    89 | 
+    90 | ```
+    91 | rule push_onto_crate [ev: none cov: 0/0]
+    92 |   when act=push(Cart, right) and colored(rightof(Cart), 4) then moved(Cart, right)
+    93 | ```
+    94 | 
+    95 | It claims the Cart can walk onto colour 4. It is false. It is chosen to be
+    96 | **invisible to replay**: the trajectory never once pushes into the Crate, so the
+    97 | rule never fires during the whole 110-transition history. This is the DC22 shape
+    98 | of Theoria 1.3 and the exact shape of A0's own real miss — the difference is that
+    99 | here the firing state is reachable.
+
+--- 02-reversibility-beats-coverage.md:239 -> ../../cold-start-a0/prime/A0P_REPORT.md:104-108
+   104 | |---|---|
+   105 | | full-history replay | **GREEN** — 111 frames, 8991 pixels, 0 anomalies. Blind, exactly as predicted. |
+   106 | | Lean transcription | **CAUGHT IT.** `ArenaEscape: step sends the mover to (2,4), which the board does not list as arena (from (2,3) on right)` |
+   107 | | coverage probe | **CAUGHT IT.** `push_onto_crate` has 2 firing states and neither is in the trace → navigate 3 steps to (2,3), predict Cart→(2,4), execute, observe Cart stays at (2,3) → **refuted** |
+   108 | | repair | delete the clause; 1 revision; accuracy **0.9912 → 1.0000** |
+
+--- 02-reversibility-beats-coverage.md:250 -> ../../cold-start-a0/prime/A0P_REPORT.md:110-122
+   110 | **Two independent mechanisms caught what replay could not**, and they caught it
+   111 | in different ways, which is worth separating:
+   112 | 
+   113 | * the **coverage probe** is the empirical one and is the mechanism Theoria
+   114 |   specifies (constraint 7). It found the rule *because* nothing in the trace
+   115 |   exercised it, navigated to a firing state using the manual, wrote its
+   116 |   prediction down first, and let the world disagree. This is the machinery A0
+   117 |   could not run at all;
+   118 | * the **Lean form** caught it as an *internal* inconsistency, before the world
+   119 |   was consulted: the manual's `step` sends the Cart to a cell the manual's own
+   120 |   board does not list as arena. That is a genuine second check and it was not
+   121 |   designed for — it fell out of transcribing the state space, and it turned a
+   122 |   `KeyError` into a typed certify diagnostic.
+
+--- 02-reversibility-beats-coverage.md:258 -> ../../cold-start-a0/prime/A0P_REPORT.md:36-39
+    36 | **Recommendation, stronger than A0_REPORT §7.2 stated it:** when designing a
+    37 | self-built world — or choosing which ARC levels to develop on — *reversibility of
+    38 | the mechanisms matters more than the breadth of the trajectory*. An irreversible
+    39 | mechanism caps what any amount of exploration can establish.
+
+--- 02-reversibility-beats-coverage.md:263 -> ../../cold-start-a2/THEORIZE_LOG.md:193-196
+   193 | One ordering constraint, and it is the world's: the Portal is one-way, so every
+   194 | left-room probe had to run before P-01. An irreversible world constrains
+   195 | experiment *order*, not only experiment design. A0 met the mirror image of this
+   196 | — an irreversible latch had ruled its divergent states out entirely.
+
+--- 02-reversibility-beats-coverage.md:278 -> ../../cold-start-a0/prime/A0P_REPORT.md:150-155
+   150 | 2. **The seeded error was of a convenient kind.** It escaped the arena, which is
+   151 |    what let the Lean form catch it for free. An error that stays inside the arena
+   152 |    would have had only the coverage probe to catch it, and only because the
+   153 |    clause was untested. A wrong-but-tested clause would fail replay; a
+   154 |    right-looking-but-wrong clause on a *tested* firing state is not covered by
+   155 |    either mechanism, and that gap is real.
+
+--- 02-reversibility-beats-coverage.md:281 -> ../../cold-start-a0/prime/A0P_REPORT.md:141-141
+   141 | | **修订抖动** | **still not measurable** | Run A 0 revisions, Run B 1. Neither run got near thrash; a world that forces several rounds is still to be built |
+
+--- 02-reversibility-beats-coverage.md:282 -> ../../cold-start-a0/prime/A0P_REPORT.md:146-149
+   146 | 
+   147 | 1. **No multi-round repair.** Run B took exactly one revision and the repair was
+   148 |    a deletion. Nothing here exercises a manual that has to be revised, re-probed
+   149 |    and revised again — the "修订抖动" row is still empty.
+
+--- 02-reversibility-beats-coverage.md:285 -> ../../cold-start-a0/prime/THEORIZE_LOG.md:115-123
+   115 | ## Goal — supplied, not induced, and flagged
+   116 | 
+   117 | The truncated trajectory never reaches the goal cell (`win_frames: []`), so
+   118 | unlike A0 the goal clause cannot be read off a win flag. `goal Cart.pos = (2,7)`
+   119 | is therefore **taken from the problem statement**, and that is recorded here
+   120 | rather than quietly assumed. It is confirmed later, empirically: the plan of
+   121 | Run A reaches (2,7) and the world's win flag fires (`plan_a0p_base.json`).
+   122 | 
+   123 | ---
+
+--- 02-reversibility-beats-coverage.md:287 -> ../../cold-start-a0/prime/A0P_REPORT.md:158-159
+   158 | 4. **Scale is still untested.** 57 reachable states, 36 arena cells. Lean's
+   159 |    `decide` is affordable here and will not be at 10⁶.
+
+--- 03-a-theorem-true-and-false.md:9 -> ../../Theoria.md:193-193
+   193 | 两层真值制度:Lean 担保"相对于说明书为真";说明书对不对得上世界,靠戳探与打脸。分开是特性——Phase 1 验收件 A2 的展品,正是一条"类型检查通过、对世界为假"的定理。
+
+--- 03-a-theorem-true-and-false.md:10 -> ../../Theoria.md:416-416
+   416 | 5. **实验**:主表三列;图 2 账单形状(三臂逐回合成本曲线);图 3 电池能力谱 + 考卷(含判决题行为对照与分层移交差值);图 4 迁移;图 5 DC22 案例(那条类型检查通过而对世界为假的定理,及其修复回路);图 6 概念诞生时间线(一个概念从证据到入册,带时间戳)。
+
+--- 03-a-theorem-true-and-false.md:24 -> ../../cold-start-a2/A2_REPORT.md:22-26
+    22 | > A2 is fulfilled by a self-built world isomorphic to DC22's failure structure
+    23 | > (a pushing world with a teleport rule; hole introduced by deleting that rule
+    24 | > from an otherwise-certified manual). The isomorphism argument may cite only
+    25 | > the structural description already printed in Theoria §1.3 — no upstream DC22
+    26 | > artifact is ever read.
+
+--- 03-a-theorem-true-and-false.md:28 -> ../../cold-start-a2/A2_REPORT.md:43-46
+    43 | **What is lost.** No claim about DC22 itself is available or made: not its
+    44 | geometry, not its 175 frames, not how its search actually failed. Anything this
+    45 | project later says about DC22 must carry INC-004's
+    46 | `design_document_disclosed` caveat.
+
+--- 03-a-theorem-true-and-false.md:32 -> ../../cold-start-a2/A2_REPORT.md:48-63
+    48 | **What is gained, and it is not nothing.** §1.3's claim is *constructive* — it is
+    49 | about what past-facing checking can and cannot see, not about one game. A
+    50 | self-built world can therefore make the claim **stronger** rather than merely
+    51 | re-illustrate it, in three ways this run uses:
+    52 | 
+    53 | 1. **The history is near-exhaustive.** DC22's 175 frames had unknown coverage,
+    54 |    which leaves "they just didn't explore enough" open. A2's play record covers
+    55 |    163 of the 164 reachable (state, action) pairs with the Cart in the left
+    56 |    room, and omits exactly the pair that fires the deleted rule
+    57 |    (`trace_summary.json`). The defect survives near-total evidence. It is not a
+    58 |    coverage failure.
+    59 | 2. **The history is a prefix, not a separate experiment.**
+    60 |    `history_trace = raw_trace[0 .. portal_transition]`, and the cut index is
+    61 |    found by looking at the frames for the single non-adjacent Cart move. There
+    62 |    is no room for the question "was the history curated?"
+    63 | 3. **The isomorphism is machine-checked, clause by clause** — see §2.
+
+--- 03-a-theorem-true-and-false.md:43 -> ../../cold-start-a2/theory/theory.dsl:51-52
+    51 |   rule teleport_down [ev: t183 cov: 1/1]
+    52 |     when act=push(Cart, down) and colored(below(Cart), 3) then jumped(Cart, portal_exit)
+
+--- 03-a-theorem-true-and-false.md:46 -> ../../cold-start-a2/theory/theory_holed.dsl:6-8
+     6 | #     rule teleport_down [ev: t183 cov: 1/1]
+     7 | #       when act=push(Cart, down) and colored(below(Cart), 3)
+     8 | #       then jumped(Cart, portal_exit)
+
+--- 03-a-theorem-true-and-false.md:49 -> ../../cold-start-a2/A2_REPORT.md:69-71
+    69 | `theory/theory_holed.dsl` is `theory/theory.dsl` minus one rule. Nothing else
+    70 | differs; `diff` the files and the deletion is the whole diff.
+    71 | 
+
+--- 03-a-theorem-true-and-false.md:54 -> ../../cold-start-a2/theory/theory.dsl:31-31
+    31 |   event moved(o, dir) | jumped(o, dest) | recolored(o, c) | vanished(o)
+
+--- 03-a-theorem-true-and-false.md:54 -> ../../cold-start-a2/theory/theory_holed.dsl:60-60
+    60 |   event moved(o, dir) | recolored(o, c) | vanished(o)
+
+--- 03-a-theorem-true-and-false.md:56 -> ../../cold-start-a2/theory/theory.dsl:34-43
+    34 |   rule push_up [ev: t9,t11,t13 cov: 56/56]
+    35 |     when act=push(Cart, up) and free(above(Cart)) then moved(Cart, up)
+    36 | 
+    37 |   rule push_down [ev: t3,t12,t16 cov: 51/51]
+    38 |     when act=push(Cart, down) and free(below(Cart)) then moved(Cart, down)
+    39 | 
+    40 |   rule push_left [ev: t8,t10,t21 cov: 39/39]
+    41 |     when act=push(Cart, left) and free(leftof(Cart)) then moved(Cart, left)
+    42 | 
+    43 |   rule push_right [ev: t2,t6,t15 cov: 43/43]
+
+--- 03-a-theorem-true-and-false.md:56 -> ../../cold-start-a2/theory/theory_holed.dsl:63-72
+    63 |   rule push_up [ev: t9,t11,t13 cov: 38/38]
+    64 |     when act=push(Cart, up) and free(above(Cart)) then moved(Cart, up)
+    65 | 
+    66 |   rule push_down [ev: t3,t12,t16 cov: 39/39]
+    67 |     when act=push(Cart, down) and free(below(Cart)) then moved(Cart, down)
+    68 | 
+    69 |   rule push_left [ev: t8,t10,t21 cov: 32/32]
+    70 |     when act=push(Cart, left) and free(leftof(Cart)) then moved(Cart, left)
+    71 | 
+    72 |   rule push_right [ev: t2,t6,t15 cov: 35/35]
+
+--- 03-a-theorem-true-and-false.md:58 -> ../../cold-start-a2/theory/theory.dsl:21-21
+    21 |   Cart [segment: uniform_color ev: t0-t247 compress: 1891]
+
+--- 03-a-theorem-true-and-false.md:58 -> ../../cold-start-a2/theory/theory_holed.dsl:50-50
+    50 |   Cart [segment: uniform_color ev: t0-t183 compress: 1433]
+
+--- 03-a-theorem-true-and-false.md:60 -> ../../cold-start-a2/theory/theory.dsl:66-66
+    66 |   theorem teleport_is_colour_triggered "推向颜色 3 的格子就会被传送，而不是因为站在 (6,4) 这一格——两条守卫在扫描轨迹上不可分辨，本关的传送口只有一个，证据永远补不齐"
+
+--- 03-a-theorem-true-and-false.md:61 -> ../../cold-start-a2/theory/theory_holed.dsl:87-87
+    87 |   theorem right_room_locked "小车永远到不了右边那个房间：第 5 列从第 1 行到第 7 行是完整的墙，而说明书里的每一条规则都只让小车走到相邻格，所以目标格 (2,7) 不可达"
+
+--- 03-a-theorem-true-and-false.md:79 -> ../../cold-start-a2/A2_REPORT.md:81-87
+    81 | |---|---|---|
+    82 | | certify, cheap | **GREEN** — 184 frames, 14 904 pixels, **0 anomalies** | `exhibit_report.json` |
+    83 | | plan (`fd_adapter`) | **UNSAT** | `plan_holed.json` |
+    84 | | certificate | `zero_space` → 21-cell occupancy law → 0/1 pagoda weight | `exhibit_report.json` |
+    85 | | certify, expensive | **GREEN** — Lean 4.9.0, `decide` only, no `sorry` | `generated_holed/theory.lean` |
+    86 | | `#print axioms unsolvable` | **`[]`** | ibid. |
+    87 | 
+
+--- 03-a-theorem-true-and-false.md:98 -> ../../cold-start-a2/theory/generated_holed/theory.lean:784-791
+   784 | theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true := by
+   785 |   rintro ⟨s, hr, hg⟩
+   786 |   have hi : I s = true := inv_all s hr
+   787 |   have hb : I s = false := goal_break s hg
+   788 |   rw [hi] at hb
+   789 |   exact absurd hb (by decide)
+   790 | 
+   791 | #print axioms unsolvable
+
+--- 03-a-theorem-true-and-false.md:100 -> ../../cold-start-a2/A2_REPORT.md:88-90
+    88 | `theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true` — 148 states, all
+    89 | decided by the kernel, no Mathlib, no `native_decide`, no axioms.
+    90 | 
+
+--- 03-a-theorem-true-and-false.md:112 -> ../../cold-start-a2/A2_REPORT.md:94-97
+    94 | Nothing in that column is broken. The planner is right: no plan exists *under
+    95 | this manual*. The invariant really is closed under the manual's `step`. Lean
+    96 | really did check it and the axiom list really is empty. **The manual is wrong,
+    97 | and every check in the column is a check of the manual against its own past.**
+
+--- 03-a-theorem-true-and-false.md:119 -> ../../cold-start-a2/A2_REPORT.md:112-118
+   112 | The same holed manual against the **full sweep** is RED — 128 unexplained pixels
+   113 | across 20 088 checked, 44 anomalies recorded (the cheap layer caps its anomaly
+   114 | list), the first at t184, cell (6,4), where the manual keeps the Cart that the
+   115 | world has already teleported away (`certify_cheap_vs_full_sweep`). The hole is invisible
+   116 | *relative to the evidence its theorizer had*, which is exactly §1.3's claim and
+   117 | exactly its limit. Reporting only the first half would be the kind of result
+   118 | this project exists to refuse to write.
+
+--- 03-a-theorem-true-and-false.md:128 -> ../../cold-start-a2/A2_REPORT.md:117-118
+   117 | exactly its limit. Reporting only the first half would be the kind of result
+   118 | this project exists to refuse to write.
+
+--- 03-a-theorem-true-and-false.md:133 -> ../../cold-start-a2/A2_REPORT.md:53-58
+    53 | 1. **The history is near-exhaustive.** DC22's 175 frames had unknown coverage,
+    54 |    which leaves "they just didn't explore enough" open. A2's play record covers
+    55 |    163 of the 164 reachable (state, action) pairs with the Cart in the left
+    56 |    room, and omits exactly the pair that fires the deleted rule
+    57 |    (`trace_summary.json`). The defect survives near-total evidence. It is not a
+    58 |    coverage failure.
+
+--- 03-a-theorem-true-and-false.md:147 -> ../../cold-start-a2/A2_REPORT.md:129-136
+   129 | | beat | claim | evidence | result |
+   130 | |---|---|---|---|
+   131 | | **打脸** | the theorem is false | `refutation.json` | 18 actions, `win` on frame 18 |
+   132 | | **定位** | §1.4's three-way narrows it | `locate_report.json` | board ✗, goal test ✗, **step ✓ at t=11** |
+   133 | | **戳探** | predictions first, then execute | `probes.jsonl` | 5 designed, 4 run, 1 recorded unrunnable |
+   134 | | **修订** | rewritten from the probe record | `theory_repaired.dsl` | re-derivable from grown evidence |
+   135 | | **重证** | old certificate dies, true one replaces it | `repair_report.json` | Lean RED then GREEN |
+   136 | | **解出** | plan, and the world agrees | `plan_repaired.json` | SAT in 18, 0 mismatches |
+
+--- 03-a-theorem-true-and-false.md:152 -> ../../Theoria.md:43-43
+    43 | - 断言一旦被现实打脸(有人解出来了),信息量极大:错误**必然**藏在那条真实解路上——某一步预测错了,或终点判断错了,或一开始就看错了棋盘。三选一,排查范围直接给出。(反证一句话:若三处全对,这条路在模型里也走得通,与"证明了不可能"矛盾。)
+
+--- 03-a-theorem-true-and-false.md:155 -> ../../cold-start-a2/A2_REPORT.md:139-143
+   139 | 
+   140 | **定位 is a three-check, not a search.** §1.4 says the error is *necessarily* on
+   141 | the witness path and in one of three places. All three are run rather than
+   142 | stopping at the first, because "step 12 disagrees" without "and the goal test
+   143 | and the board were fine" has narrowed nothing. Result: at t=11 the Cart is at
+
+--- 03-a-theorem-true-and-false.md:164 -> ../../cold-start-a2/A2_REPORT.md:144-147
+   144 | (6,4), the action is DOWN, the manual **fires nothing** and predicts it stays,
+   145 | the world puts it at (7,6). Since no rule in the manual moves the mover more
+   146 | than one cell, the diagnosis is sharper than "wrong": it is a **missing rule**.
+   147 | Nothing can be corrected; something has to be added.
+
+--- 03-a-theorem-true-and-false.md:175 -> ../../cold-start-a2/theory/theory.dsl:66-67
+    66 |   theorem teleport_is_colour_triggered "推向颜色 3 的格子就会被传送，而不是因为站在 (6,4) 这一格——两条守卫在扫描轨迹上不可分辨，本关的传送口只有一个，证据永远补不齐"
+    67 |     [depends: teleport_down probe: pending]
+
+--- 03-a-theorem-true-and-false.md:178 -> ../../cold-start-a2/THEORIZE_LOG.md:190-191
+   190 |   the reason. A probe that cannot be run is a finding; a probe quietly dropped
+   191 |   is a lie.
+
+--- 03-a-theorem-true-and-false.md:184 -> ../../cold-start-a2/theory/generated_repaired_stale/theory.lean:767-769
+   767 | theorem inv_closed (s : St) (d : Dir) : I s = true → I (step s d) = true := by
+   768 |   obtain ⟨c, buttonColour, doorPresent⟩ := s
+   769 |   cases c <;> cases buttonColour <;> cases doorPresent <;> cases d <;> decide
+
+--- 03-a-theorem-true-and-false.md:185 -> ../../cold-start-a2/A2_REPORT.md:157-161
+   157 | **The refuted certificate has a corpse.** `theory/generated_repaired_stale/`
+   158 | holds the exhibit's invariant regenerated against the repaired `step`. Lean
+   159 | fails it at line 769: `tactic 'decide' proved that the proposition ... is
+   160 | false`. A repaired manual that simply stopped mentioning its refuted theorem
+   161 | would have been edited, not corrected.
+
+--- 03-a-theorem-true-and-false.md:189 -> ../../cold-start-a2/A2_REPORT.md:160-161
+   160 | false`. A repaired manual that simply stopped mentioning its refuted theorem
+   161 | would have been edited, not corrected.
+
+--- 03-a-theorem-true-and-false.md:210 -> ../../cold-start-a2/A2_REPORT.md:169-178
+   169 | | | `generated_holed/theory.lean` | `generated_repaired/theory.lean` |
+   170 | |---|---|---|
+   171 | | theorem | `unsolvable` | `unsolvable` |
+   172 | | goal | the goal cell (2,7) | the sealed pocket (7,1) |
+   173 | | invariant | 0/1 pagoda weight, 0 on 21 cells | 0/1 pagoda weight, 0 on 35 cells |
+   174 | | tactic | `decide` | `decide` |
+   175 | | Mathlib | none | none |
+   176 | | `#print axioms` | `[]` | `[]` |
+   177 | | status | **GREEN** | **GREEN** |
+   178 | | **true of the world** | **NO** — 18-action witness | **YES** — 0 of 55 reachable states |
+
+--- 03-a-theorem-true-and-false.md:217 -> ../../cold-start-a2/A2_REPORT.md:180-185
+   180 | They differ in their weight table and in nothing else. The generator, the
+   181 | tactic, the dependency surface and the axiom list are identical. **The
+   182 | instrument cannot tell them apart, and it is not supposed to be able to.** Lean
+   183 | guarantees *true relative to the manual*; whether the manual matches the world is
+   184 | settled by §1.4's refutation loop and nowhere else. That is Theoria §1.10a's
+   185 | two-layer regime as two files you can diff — figure 5's content, in a form a
+
+--- 03-a-theorem-true-and-false.md:219 -> ../../Theoria.md:51-51
+    51 | 写进 Lean,只是把"人肉检查三条"换成"机器检查三条",并且证明不许偷偷依赖未声明的假设。要小心一件事:机器担保的是"相对于手册为真";手册对不对得上世界,靠 1.4 的打脸机制。两层分开,是特性不是缺陷。
+
+--- 03-a-theorem-true-and-false.md:228 -> ../../cold-start-a2/THEORIZE_LOG.md:149-155
+   149 | **L-04 · the region had to be widened for the repaired manual.** `zero_space` on
+   150 | `probed_trace.jsonl` proposes 22 cells — everywhere the Cart was observed,
+   151 | including (7,6) where the probe left it. That law is **not closed** under the
+   152 | repaired `step`: one move inside the right room leaves it. Widened to the
+   153 | manual's own reachability closure (35 cells), computed by running `theory.py`.
+   154 | See D-A2-009 — this is the division of labour in miniature, and the engine
+   155 | cannot be blamed for it: under-determined evidence is all it had.
+
+--- 03-a-theorem-true-and-false.md:238 -> ../../cold-start-a2/A2_REPORT.md:190-206
+   190 | ## 5 · Was the repair remembered or re-derived?
+   191 | 
+   192 | A fair objection to any self-built A2: the repairer already knows the answer,
+   193 | because the control manual is sitting in the same directory. Three checks
+   194 | address it and none of them is "trust us".
+   195 | 
+   196 | 1. **The repair was written from `probes.jsonl`**, whose P-01 record contains
+   197 |    the holed manual's own prediction — written before the action was taken and
+   198 |    refuted by the outcome.
+   199 | 2. **The grown evidence re-proposes the rule.** Running the miner on
+   200 |    `probed_trace.jsonl` proposes a jump effect again
+   201 |    (`engines_diff_probed.json`), so `theory_repaired.dsl` is derivable from the
+   202 |    evidence the theorizer holds after M8.
+   203 | 3. **The agreement with the control is a test, not an assumption.**
+   204 |    `test_the_repair_agrees_with_the_control_on_that_rule` asserts the two
+   205 |    `when` clauses are byte-identical. It passes — which is a *result*: the same
+   206 |    frontier survived the same description-length adjudication twice.
+
+--- 03-a-theorem-true-and-false.md:253 -> ../../cold-start-a2/A2_REPORT.md:208-209
+   208 | What is *not* claimed: that the repaired manual is uniquely determined. P-03
+   209 | says the opposite, on the record.
+
+--- 03-a-theorem-true-and-false.md:261 -> ../../cold-start-a2/A2_REPORT.md:215-219
+   215 | A2 writes no engine and no generator: the engines are `engine-rig`'s, the parser
+   216 | is the frozen v0.1 contract's, the compile backends and certify layer are
+   217 | `cold-start-a0`'s, imported unmodified. An exhibit produced by a compiler
+   218 | written for the exhibit would prove nothing about the instrument. Running that
+   219 | instrument on a second world found two things A0 could not have seen.
+
+--- 03-a-theorem-true-and-false.md:270 -> ../../cold-start-a2/A2_REPORT.md:221-230
+   221 | **The PDDL backend cannot ground a teleport (D-A2-006).** `gen_pddl_a0` emits a
+   222 | cell object only for cells in the derived arena, and a static coloured cell — a
+   223 | Portal entry — is never in it. `teleport-down`'s `?p - markedcell` parameter
+   224 | therefore has no inhabitant, the action never grounds, and the planner returns
+   225 | **UNSAT on a manual containing the teleport rule**. A0's goal was reachable
+   226 | through the Door, so no A0 plan ever needed the jump to ground: the bug was
+   227 | latent and returned a correct answer by luck. A2's control manual came back
+   228 | UNSAT on the first attempt. Worked around PDDL-only in
+   229 | `compile_a2.pddl_addressable`; the Lean and Python forms keep the unaugmented
+   230 | arena, since the Cart is never on the Portal.
+
+--- 03-a-theorem-true-and-false.md:275 -> ../../cold-start-a2/A2_REPORT.md:232-235
+   232 | **`lean_check` destroys the diagnostic when there is one (D-A2-007).** It decodes
+   233 | the toolchain's output with the process locale; Lean's error messages contain
+   234 | U+2019, this box is GBK, and the subprocess reader raises exactly when a proof
+   235 | fails. A0 never had a red Lean file. A2 has one on purpose.
+
+--- 03-a-theorem-true-and-false.md:280 -> ../../cold-start-a2/A2_REPORT.md:237-240
+   237 | Neither was fixed upstream: `cold-start-a0/` is the theory-compiler track's
+   238 | directory. Both are on `PARTNER_SYNC.md`, and
+   239 | `artifacts/upstream_pin.json` hashes every upstream file A2 imports, so "which
+   240 | compiler produced this exhibit" is a question the artefacts answer themselves.
+
+--- 03-a-theorem-true-and-false.md:286 -> ../../cold-start-a2/A2_REPORT.md:43-46
+    43 | **What is lost.** No claim about DC22 itself is available or made: not its
+    44 | geometry, not its 175 frames, not how its search actually failed. Anything this
+    45 | project later says about DC22 must carry INC-004's
+    46 | `design_document_disclosed` caveat.
+
+--- 03-a-theorem-true-and-false.md:287 -> ../../cold-start-a2/A2_REPORT.md:270-270
+   270 | * **Nothing about DC22.** See §1.
+
+--- 03-a-theorem-true-and-false.md:291 -> ../../cold-start-a2/A2_REPORT.md:271-273
+   271 | * **Nothing about whether an LLM would have written these manuals.** The
+   272 |   theorize step is done by hand here, as in A0 — the DSL files are checked in as
+   273 |   artefacts. A2 tests the instrument and the loop, not the theorizer.
+
+--- 03-a-theorem-true-and-false.md:296 -> ../../cold-start-a2/A2_REPORT.md:274-276
+   274 | * **Nothing about scale.** 55 reachable states, 148 in the Lean enumeration,
+   275 |   `decide` over the whole space. The invariant is found because a wall separates
+   276 |   two rooms; a world needing a genuinely clever pagoda is what A1 is for.
+
+--- 03-a-theorem-true-and-false.md:299 -> ../../cold-start-a2/A2_REPORT.md:277-279
+   277 | * **`fd_adapter` is still the bundled BFS stub**, not Fast Downward. Optimal for
+   278 |   unit costs, so `SAT`/`UNSAT` and plan length are sound here; the standing
+   279 |   caveat in `engine-rig/STATUS.md` is unchanged.
+
+--- 03-a-theorem-true-and-false.md:303 -> ../../engine-rig/STATUS.md:103-107
+   103 | Second half of the same tool: every generated cold-start domain solved by both
+   104 | backends. `a0-spike` (match / mismatch), `cold-start-a0` (base / no-button),
+   105 | `cold-start-a2` (base / holed / repaired) — **7 of 7 agree**, on plan length and
+   106 | on unsolvability, including three instances where FD independently proves the
+   107 | UNSAT the bundled search found. `runs/p13-fd-real/DIVIDEND.md`.
+
+--- 03-a-theorem-true-and-false.md:307 -> ../../cold-start-a2/A2_REPORT.md:280-283
+   280 | * **The `?dir`-parameterised rules are not used.** The miner's better manual —
+   281 |   one `obj1_step` at 189/189 instead of four ground rules — cannot be compiled,
+   282 |   because the Python backend's guard subset takes a literal direction. That is an
+   283 |   expressiveness gap in the backend, logged here rather than worked around.
+
+137/140 citations resolve across 3 documents
+  FAIL 01-birth-of-a-concept.md:246: missing target data/cs01-concept-birth.json
+  FAIL 02-reversibility-beats-coverage.md:293: missing target data/cs02-reversibility.json
+  FAIL 03-a-theorem-true-and-false.md:312: missing target data/cs03-two-lean-files.json
