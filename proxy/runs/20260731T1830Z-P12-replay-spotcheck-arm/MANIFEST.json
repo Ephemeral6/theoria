@@ -1,6 +1,6 @@
 {
   "_seed_note": "no randomness: the spot check and the cross-check are deterministic reads over fixed inputs.",
-  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
   "branch": "p12/proxy-freeze",
   "cost": {
     "_note": "zero network. Every frame hash compared here was already on disk before this run started.",

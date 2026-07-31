@@ -42,7 +42,11 @@ def main():
         "prompt_id": "P-12",
         "prompt": "Phase 1 acceptance gaps: campaign_freeze wiring",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
-        "base_commit": git("rev-parse", "master"),
+        # merge-base, not `rev-parse master`: master moved under this
+        # branch while the work was in flight (21a724ed landed in
+        # theoria-arm mid-session), and naming the moving tip would
+        # record a base this run was never built on.
+        "base_commit": git("merge-base", "master", "HEAD"),
         "utc": "2026-07-31T18:30:00Z",
         "_seed_note": "no randomness: freeze-audit is a deterministic read.",
         "cost": {"api_calls": 0, "model_calls": 0, "usd": 0.0,

@@ -1,6 +1,6 @@
 {
   "_seed_note": "no randomness: freeze-audit is a deterministic read.",
-  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
   "branch": "p12/proxy-freeze",
   "cost": {
     "_note": "offline. No canary sweep was run; clear-freeze and freeze-audit never touch the network.",
