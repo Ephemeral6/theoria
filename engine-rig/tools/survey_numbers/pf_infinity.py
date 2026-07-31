@@ -33,6 +33,37 @@ was never committed, and the partial records the shape of the draw but no seed.
 This module re-implements the recorded shape and declares its own seed; see
 `CAVEATS` and the `seed_sensitivity` block, which is the honest instrument for
 "is 1633 the same measurement as ours, or a different draw?".
+
+What this module found, after an adversarial review struck out three quarters of
+what an earlier version of it claimed (`extra.findings` carries the same list in
+machine-readable form, and `extra.withdrawn` says what was struck and why):
+
+* **Two figures reproduce.**  E11's two maximum entropy deltas -- 0.0617 bit for
+  `teleport`, 0.0584 for `blocked_UP` -- come out at 0.0617380 and 0.0583496
+  under one consistent reading: the maximum over states of the difference in the
+  **top-ranked action's** entropy, per-guard voting against per-world voting.
+  Both land in the right slot.  An earlier version took the max over all four
+  actions, got 0.0669 / 0.0617, and read the coincidence between its second
+  figure and E11's first as a row shift in the prose.  That was wrong: only two
+  of nine rules collapse at all, so a row shift would orphan two numbers.
+* **One agrees within the draw spread.**  `pf.zero_cost_bug` recomputes to 80
+  against E11's 82.  Two draws from a seedless recipe differ by about 10 on this
+  quantity; these two differ by 2.
+* **One is open.**  `pf.infinity_rows` recomputes to 1546 against E11's 1633 --
+  a difference of 87 against a two-draw spread of about 44, so about 2.0 sigma.
+  That is the whole of the disagreement this module reports.
+* **A fifth number, never previously compared, is added and also lands open**:
+  E11's 35 ranking differences over corpus A, against 52 here.  It is worth
+  having precisely because it points the *other* way: on `infinity_rows` the
+  recomputation is low and E11 high, on the ranking count the recomputation is
+  high and E11 low.  Two gaps of similar size and opposite sign are what
+  draw-to-draw variation looks like, not a systematic difference between the two
+  measurements.
+
+Everything the two corpora *can* pin down still agrees: 0 partition mismatches,
+0 entropy mismatches, 0 real reorderings, 4000/4000 agreement between the
+serialisation predicate and its cheap form, and every cell of E11's §4B table.
+Both defects are still live on today's tree.
 """
 
 from __future__ import annotations
@@ -82,9 +113,29 @@ ZERO_COST_NUMERATOR, ZERO_COST_DENOMINATOR = 2, 9
 # 1.11e-15 (~5 ULP), so 1e-12 is three orders of margin.
 TIE_TOL = 1e-12
 
-# Enough replicate corpora to say whether a published count is inside the
-# spread of the recipe or outside it.  Fixed, so the answer is reproducible.
-N_REPLICATES = 32
+# Enough replicate corpora to measure how far apart two draws from this recipe
+# typically land.  Fixed, so the answer is reproducible.
+#
+# This was 32, and the CAVEATS quoted a 200-replicate run the artefact did not
+# produce -- a caveat storing a number in prose, inside the ticket whose thesis
+# is that prose is not where a number is stored.  It is 200 now and the artefact
+# runs it, so every replicate figure quoted anywhere in this module is in
+# `extra.seed_sensitivity` below.  The 32-corpus range was also small enough to
+# be misleading: it put E11's `zero_cost_bug` "outside the range" and, at 200,
+# E11's value is inside.
+N_REPLICATES = 200
+
+# `|recomputed - E11| < sigma` -- the difference between two independent draws
+# from this recipe is smaller than the typical such difference.  A declared
+# threshold, not a p-value: the sampling distribution of these counts is only
+# approximately normal and the two defect counts are not independent of each
+# other (they are disjoint events on the same draw).  See `_cmp_draw`.
+DRAW_AGREEMENT_SIGMA = 1.0
+
+# E11 published its two entropy deltas to four decimals.  A recomputation is
+# taken to reproduce one when it is within 1e-4 of the published figure, i.e.
+# within the last digit E11 wrote down.
+ENTROPY_DELTA_TOL = 1e-4
 
 # --------------------------------------------------------------------------- B
 
@@ -98,13 +149,19 @@ E11 = "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep"
 PARTIAL = f"{E11}/partials/probe_frontier-via-bruteforce.md"
 
 # What the 2026-07-29 report claimed, verbatim, so the comparison is in the
-# artefact and not in anybody's memory.  Keys are `ENGINE_TABLE.md` registry keys.
+# artefact and not in anybody's memory.  Most keys are `ENGINE_TABLE.md` registry
+# keys; the three in `NOT_REGISTRY_KEYS` are figures E11 published as prose
+# without a registry entry.  They are scored here anyway -- a number's absence
+# from the registry is not a reason to leave it unchecked, and the earlier
+# version of this module missed a real disagreement (`pf.ranking_diffs`) for
+# exactly that reason.
 PROSE = {
     "pf.worlds": 4000,
     "pf.partition_mismatch": 0,
     "pf.entropy_mismatch": 0,
     "pf.entropy_dev": 1.11e-15,
     "pf.real_reorderings": 0,
+    "pf.ranking_diffs": 35,
     "pf.zero_cost_bug": {"numerator": 82, "denominator": 4000, "pct": 2.05},
     "pf.infinity_rows": {"numerator": 1633, "denominator": 4000, "pct": 40.825},
     "pf.rules": 9,
@@ -113,7 +170,20 @@ PROSE = {
     "pf.teleport_guards": 21,
     "pf.teleport_worlds": 18,
     "pf.argmax_states": 16,
+    "pf.entropy_delta_teleport": 0.0617,
+    "pf.entropy_delta_blocked_up": 0.0584,
 }
+
+NOT_REGISTRY_KEYS = frozenset({
+    "pf.ranking_diffs",             # partial §4A table row "排序序列 | 35 / 4000"
+    "pf.entropy_delta_teleport",    # partial §4B prose "最大熵差 0.0617 bit"
+    "pf.entropy_delta_blocked_up",  # partial §4B prose "最大熵差 0.0584 bit"
+})
+
+# The three corpus-A counts that are draws from a seedless recipe rather than
+# values.  They are compared to E11 through `_cmp_draw`, against the spread the
+# recipe actually produces, and never by equality.
+DRAW_KEYS = ("pf.infinity_rows", "pf.zero_cost_bug", "pf.ranking_diffs")
 
 CAVEATS = [
     "Corpus A's seed is not E11's.  The partial (§3A, and the reproduction "
@@ -123,10 +193,14 @@ CAVEATS = [
     "{0,0.25,1,2,5,12} with zero deliberately at 2/9) and no seed, no RNG, and "
     "no draw order.  This module re-implements that shape with "
     "`random.Random(BASE_SEED + i)` per world and BASE_SEED=20260729.  A "
-    "different seed gives a different count, so `pf.infinity_rows` and "
-    "`pf.zero_cost_bug` cannot be reproduced to the unit and are not claimed to "
-    "be.  `seed_sensitivity` reports the spread over 32 replicate corpora; read "
-    "the E11 figure as inside or outside that spread, not as equal or unequal.",
+    "different seed gives a different count, so `pf.infinity_rows`, "
+    "`pf.zero_cost_bug` and `pf.ranking_diffs` cannot be reproduced to the unit "
+    "and are not claimed to be.  `seed_sensitivity` runs 200 replicate corpora "
+    "and reports, for each of the three, how far apart two draws from this "
+    "recipe typically land -- `sd_of_difference` -- and how far apart this "
+    "module's draw and E11's actually are.  That comparison is recomputed "
+    "against E11 *directly*; neither figure is scored against the replicate "
+    "mean, because both are single draws and the mean is neither of them.",
 
     "Corpus A's draw order within a world is also unrecorded.  The order taken "
     "here is n_hyp, n_actions, n_obs, then the table row-major, then the "
@@ -138,7 +212,8 @@ CAVEATS = [
     "two caveats.  `ProbeValue.splits` is `n_classes > 1`, which no weight can "
     "change, and every zero-cost action outranks every priced one whatever the "
     "price is, so the two counts depend only on the table, the action count and "
-    "P(cost == 0) = 2/9.  Only the entropy figures see the weights.",
+    "P(cost == 0) = 2/9.  Only the entropy figures and `pf.ranking_diffs` see "
+    "the weights.",
 
     "`Infinity` is counted by serialisation, not in memory: the row is built by "
     "`to_payload` + `make_candidate`, written with the same `common.jsonio.dumps` "
@@ -177,37 +252,67 @@ CAVEATS = [
     "`rank_probes` over one representative guard per class, both at weight 1.0, "
     "and counts states where the top-ranked action differs.",
 
-    "Two prose figures adjacent to `pf.argmax_states` do not reproduce and are "
-    "not registry keys: the partial reports a maximum entropy delta of 0.0617 "
-    "bit for `teleport` and 0.0584 for `blocked_UP`; recomputed over the same "
-    "space they are 0.0669 and 0.0617.  Note that the recomputed `blocked_UP` "
-    "figure equals the published `teleport` one, which looks like a row shift in "
-    "the prose rather than a different measurement.  Recorded under "
-    "`extra.entropy_delta_bits`.",
+    "The two prose figures adjacent to `pf.argmax_states` -- a maximum entropy "
+    "delta of 0.0617 bit for `teleport` and 0.0584 for `blocked_UP` -- "
+    "**reproduce**, in the right slots, under one consistent reading: the "
+    "maximum over states of the difference in the **top-ranked action's** "
+    "entropy between per-guard and per-world voting.  That gives 0.0617380 for "
+    "`teleport` and 0.0583496 for `blocked_UP` (E11 rounded 0.05835 up to "
+    "0.0584).  It is also the reading the surrounding prose asks for: §4B is "
+    "about which experiment the engine recommends, i.e. the top-ranked action, "
+    "not about how far every action's entropy moves.  Two further figures from "
+    "the same run corroborate it -- `blocked_UP` argmax_moved = 0 ('argmax "
+    "未变') and `teleport` argmax_moved = 16 (= `pf.argmax_states`).  Taking the "
+    "maximum over all four actions instead gives 0.0669323 and 0.0616829; that "
+    "is kept as `all_actions_secondary` and is a different measurement, not "
+    "E11's.  An earlier version of this module published the all-actions pair as "
+    "a non-reproduction and read the coincidence between its `blocked_UP` figure "
+    "and E11's `teleport` figure as a row shift in the prose.  That inference "
+    "was wrong and is withdrawn: only two of the nine rules collapse at all, so "
+    "a row shift has nowhere to shift from and would orphan two numbers.",
 
-    "The two defect counts do not miss by the same amount, and the asymmetry is "
-    "the one place the recipe can be shown to be slightly off.  Over 200 "
-    "replicate corpora `pf.infinity_rows` averages 1591 (sd 31), putting E11's "
-    "1633 at the 89th percentile -- ordinary.  `pf.zero_cost_bug` averages 63 "
-    "(sd 7), putting E11's 82 at the 99th.  Digging one level: both counts are "
-    "closed-form in P(cost==0) and the three range endpoints, and the deficit is "
-    "entirely absorbed by moving an endpoint by one -- the exact thing '1-9 "
-    "hypotheses x 1-7 actions x 1-5 observations' cannot pin down.  The literal "
-    "reading predicts (1591, 64); n_hyp in 1..8 with n_actions in 2..6 predicts "
-    "(1618, 83); n_actions in 2..7 with P(zero)=1/6 predicts (1637, 79).  "
-    "`fuzzlab.worlds.hypset` excludes one-action worlds on purpose ('a "
-    "one-action world has nothing to rank'), so an off-by-one of exactly that "
-    "kind is the likeliest explanation.  Neither reading is recoverable from "
-    "the partial, so the recomputation reports the spread and stops there.",
+    "The recipe's own mean does not match either measurement of "
+    "`pf.zero_cost_bug`, and that is a statement about the recipe rather than "
+    "about E11.  Over 200 replicate corpora the literal reading of §3A averages "
+    "63 (sd 7); E11 measured 82 and this module's primary corpus measured 80, "
+    "which sit 2.6 and 2.3 replicate sd above that mean.  The instrument "
+    "therefore impeaches its own number about as hard as it impeaches E11's, "
+    "which is why no claim is made here that E11's value is anomalous.  "
+    "`extra.seed_sensitivity.recipe_fit` reports the same comparison as a sum of "
+    "squared z-scores over all three seedless counts, for E11's triple and for "
+    "this module's own, so the two can be read side by side; they come out the "
+    "same order of magnitude.  The likeliest explanation is that the literal "
+    "reading of '1-9 hypotheses x 1-7 actions x 1-5 observations, zero cost at "
+    "2/9' is slightly off in a way the partial cannot pin down -- but the "
+    "off-by-one is not identifiable: a joint comparison over the three counts "
+    "does not exclude the literal reading, and the earlier version's specific "
+    "candidate (n_hyp 1..8 with n_actions 2..6, argued from "
+    "`fuzzlab.worlds.hypset`) is refuted outright.  `hypset.generate` over 4000 "
+    "worlds gives 1007-1047 infinity rows against E11's 1633, about 23 sd away, "
+    "and its real ranges are n_hyp = 1 if singleton else 2..8, n_actions 2..6, "
+    "n_obs 2..4, P(cost==0) = 1/11 -- not the ranges that were attributed to it. "
+    "More decisively, the partial §1 says in as many words that hypset was not "
+    "used: 「本次没有导入 fuzzlab 的任何东西——生成器、oracle、不变式全部另写，"
+    "`hypset` 世界一个也没用」.  The recomputation reports the spread and stops "
+    "there.",
 
-    "`ranking_exact_tie` is 0 here by construction, where E11 reported 10 of its "
-    "35 ranking differences as 'exact tie on the engine's own key, decided by "
-    "the `str(action)` fallback'.  The independent sort key used here ends in "
-    "the same `str(action)` fallback the engine uses, so a pair that ties "
-    "exactly on `(-value, -entropy, cost)` sorts the same way on both sides and "
-    "cannot produce a difference at all.  E11's self-written key evidently "
-    "lacked that fallback, which is where its 10 came from.  The number that "
-    "matters, `pf.real_reorderings`, is 0 either way.",
+    "`pf.ranking_diffs` is scored here and was not scored by the earlier version "
+    "of this module, which is how a 52-against-35 gap went unnoticed: 35 was "
+    "absent from `PROSE`, so nothing compared it.  E11 reports 35 worlds of 4000 "
+    "whose ranking differs from its independent order (10 exact ties, 25 float "
+    "near-ties, 0 real reorderings); this module gets 52 (0 exact, 52 float, 0 "
+    "real).  It is a third handle on the same seedless draw and is sensitive to "
+    "n_actions and n_obs differently from the two defect counts, which is why it "
+    "is worth having.  `ranking_exact_tie` is 0 here by construction: the "
+    "independent sort key used here ends in the same `str(action)` fallback the "
+    "engine uses, so a pair that ties exactly on `(-value, -entropy, cost)` "
+    "sorts the same way on both sides and cannot produce a difference at all.  "
+    "E11's self-written key evidently lacked that fallback, which is where its "
+    "10 came from.  So the 52-vs-35 comparison is not like-for-like at the "
+    "margin -- E11's 35 includes a category this module cannot generate, which "
+    "makes its 35 an over-count relative to this definition and widens rather "
+    "than closes the gap.  The number that matters, `pf.real_reorderings`, is 0 "
+    "either way.",
 
     "`pf.entropy_dev` is a different corpus's float noise, so it confirms an "
     "order of magnitude and nothing sharper: 1.61e-15 here (about 7 ULP at 1.0) "
@@ -221,6 +326,17 @@ CAVEATS = [
     "that discipline for corpus A (see `method`) but reads corpus B's rankings "
     "straight off `rank_probes`.  Corpus B's numbers are counts of engine "
     "behaviour, not judgements of it.",
+
+    "Three claims an earlier version of this module published are withdrawn, "
+    "and are listed in `extra.withdrawn` with what replaced each: the 'row "
+    "shift in the prose' reading of the entropy deltas; the `hypset` off-by-one "
+    "as 'the likeliest explanation' of the defect-count deficit; and the use of "
+    "'E11's 82 is outside the 32-corpus range' to impeach E11, which the same "
+    "instrument does to its own 80 at the same range.  A count that used to be "
+    "reported as a disagreement -- `pf.zero_cost_bug`, 80 against 82 -- is "
+    "reported as agreeing within the draw spread.  The withdrawals are recorded "
+    "rather than deleted for the same reason the E11 prose is recorded verbatim: "
+    "a corrected artefact that does not say what it corrected cannot be checked.",
 ]
 
 
@@ -357,13 +473,21 @@ def _close(x: float, y: float) -> bool:
 
 
 def sweep_corpus_a(base_seed: int, n_worlds: int, *, full: bool,
+                   rank: bool = False,
                    rows_out: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """Every world of a synthetic corpus, engine against independently computed truth.
 
-    `full=False` runs only the two defect predicates (used for the replicate
-    band); `full=True` additionally builds and serialises every candidate row and
-    recomputes the partition / entropy / ranking columns.
+    Three levels, because the replicate band needs the third number too and
+    serialising 200 x 2724 candidate rows to get it would be waste:
+
+    * `full=False, rank=False` -- the two defect predicates only.
+    * `full=False, rank=True`  -- adds the independently computed partition,
+      entropy and ranking, so `ranking_diff_worlds` is available.  This is what
+      the replicate band runs.
+    * `full=True`              -- adds building and serialising every candidate
+      row, which is where the `Infinity` claim is actually tested.
     """
+    need_truth = full or rank
     infinity_rows = 0
     zero_cost_bug = 0
     partition_mismatch = 0
@@ -399,6 +523,7 @@ def sweep_corpus_a(base_seed: int, n_worlds: int, *, full: bool,
             # agree row by row before this shortcut is trusted.
             if zero_splits:
                 infinity_rows += 1
+        if not need_truth:
             continue
 
         # ---- independently computed truth for this world
@@ -435,6 +560,9 @@ def sweep_corpus_a(base_seed: int, n_worlds: int, *, full: bool,
             if order_e[0] != order_t[0]:
                 argmax_diff += 1
 
+        if not full:
+            continue
+
         # ---- the serialisation test, on the engine's own emit path
         has_bare_infinity = False
         reason = None
@@ -466,6 +594,7 @@ def sweep_corpus_a(base_seed: int, n_worlds: int, *, full: bool,
                 "n_actions": len(world.actions),
                 "n_observations": len(world.observations),
                 "strict_reader_reason": reason,
+                "ranking_order_differs": order_e != order_t,
             })
 
     out = {
@@ -474,17 +603,20 @@ def sweep_corpus_a(base_seed: int, n_worlds: int, *, full: bool,
         "infinity_rows": infinity_rows,
         "zero_cost_bug": zero_cost_bug,
     }
+    if need_truth:
+        out.update({
+            "ranking_diff_worlds": sum(ranking_diff.values()),
+            "ranking_exact_tie": ranking_diff["exact-tie"],
+            "ranking_float_tie": ranking_diff["float-tie"],
+            "real_reorderings": ranking_diff["real"],
+            "argmax_diff_worlds": argmax_diff,
+        })
     if full:
         out.update({
             "emitted_rows": emitted,
             "partition_mismatch": partition_mismatch,
             "entropy_mismatch": entropy_mismatch,
             "entropy_dev": entropy_dev,
-            "ranking_diff_worlds": sum(ranking_diff.values()),
-            "ranking_exact_tie": ranking_diff["exact-tie"],
-            "ranking_float_tie": ranking_diff["float-tie"],
-            "real_reorderings": ranking_diff["real"],
-            "argmax_diff_worlds": argmax_diff,
             "validator_complaints": validator_complaints,
             "serialisation_predicate_agrees": predicate_agrees,
         })
@@ -540,7 +672,8 @@ def sweep_corpus_b() -> Dict[str, Any]:
     per_rule: List[Dict[str, Any]] = []
     argmax_states = 0
     teleport_guards = teleport_worlds = 0
-    entropy_delta: Dict[str, float] = {}
+    entropy_delta_top: Dict[str, float] = {}
+    entropy_delta_all: Dict[str, float] = {}
 
     for rule in sorted(rules, key=lambda r: r.name):
         hyps = hypotheses_from_guards(rule.frontier, evaluate, label=rule.name)
@@ -557,7 +690,8 @@ def sweep_corpus_b() -> Dict[str, Any]:
 
         splittable = engine_splits = said_none_but_splits = 0
         moved = 0
-        worst_delta = 0.0
+        worst_delta_top = 0.0
+        worst_delta_all = 0.0
         collapsed = len(reps) < len(hyps)
         for state in states:
             ranked = rank_probes(hyps, state, PROBE_ACTIONS)
@@ -571,10 +705,20 @@ def sweep_corpus_b() -> Dict[str, Any]:
                 by_world = rank_probes(reps, state, PROBE_ACTIONS)
                 if ranked[0].action != by_world[0].action:
                     moved += 1
+                # E11's figure: how far the *recommended* experiment's entropy
+                # moves.  Costs are uniform here, so `ranked[0].entropy` is the
+                # maximum entropy over the four actions under each voting rule,
+                # and this is `max_a H_guard - max_a H_world`.  §4B is about
+                # which experiment gets recommended, so the top-ranked action is
+                # the quantity the prose is talking about.
+                worst_delta_top = max(
+                    worst_delta_top, abs(ranked[0].entropy - by_world[0].entropy))
+                # Secondary, and a different measurement: the largest move any
+                # of the four actions makes, whether or not it is recommended.
                 ea = {v.action: v.entropy for v in ranked}
                 eb = {v.action: v.entropy for v in by_world}
                 for a in PROBE_ACTIONS:
-                    worst_delta = max(worst_delta, abs(ea[a] - eb[a]))
+                    worst_delta_all = max(worst_delta_all, abs(ea[a] - eb[a]))
 
         per_rule.append({
             "rule": rule.name,
@@ -586,7 +730,8 @@ def sweep_corpus_b() -> Dict[str, Any]:
             "argmax_moved_by_world_voting": moved,
         })
         if collapsed:
-            entropy_delta[rule.name] = worst_delta
+            entropy_delta_top[rule.name] = worst_delta_top
+            entropy_delta_all[rule.name] = worst_delta_all
         if rule.name == "teleport":
             teleport_guards = len(hyps)
             teleport_worlds = len(reps)
@@ -600,7 +745,23 @@ def sweep_corpus_b() -> Dict[str, Any]:
         "teleport_worlds": teleport_worlds,
         "argmax_states": argmax_states,
         "per_rule": sorted(per_rule, key=lambda d: d["rule"]),
-        "entropy_delta_bits": {k: round(v, 6) for k, v in sorted(entropy_delta.items())},
+        "entropy_delta_bits": {
+            "definition": "max over the 15290 states of |H(top-ranked action) "
+                          "under one vote per guard - H(top-ranked action) under "
+                          "one vote per distinguishable world|.  Only the two "
+                          "rules whose guards collapse have one.",
+            "top_action": {k: round(v, 10)
+                           for k, v in sorted(entropy_delta_top.items())},
+            "all_actions_secondary": {
+                "note": "max over states AND over all four actions -- a "
+                        "different measurement, kept for completeness.  It is "
+                        "not E11's figure.",
+                "value": {k: round(v, 10)
+                          for k, v in sorted(entropy_delta_all.items())},
+            },
+            "e11_published": {"blocked_UP": PROSE["pf.entropy_delta_blocked_up"],
+                              "teleport": PROSE["pf.entropy_delta_teleport"]},
+        },
     }
 
 
