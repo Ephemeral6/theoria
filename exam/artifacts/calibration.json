@@ -613,7 +613,7 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
+      "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
     },
     "handover": {
       "calibrated": true,
@@ -880,7 +880,7 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
+      "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
     },
     "heldout": {
       "calibrated": true,
@@ -1605,7 +1605,7 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
+      "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
     },
     "verdict": {
       "calibrated": true,
@@ -2187,6 +2187,10 @@
           },
           "bluffer_sensitivity": 1.0,
           "bluffer_specificity": 0.0,
+          "denier_pair": [
+            0.0,
+            1.0
+          ],
           "verdict_weights": {
             "justification": 0.5,
             "search_credit": 0.4,
@@ -2197,7 +2201,7 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
+      "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
     }
   },
   "pre_registered": {
@@ -2266,7 +2270,7 @@
       "why": "ground truth must be accepted in full"
     }
   },
-  "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
+  "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4",
   "structural_expectations": {
     "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
     "null_all_unanswered": "every item of a null submission is `unanswered`",

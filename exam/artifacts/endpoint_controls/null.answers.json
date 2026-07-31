@@ -1,0 +1,11 @@
+{
+  "answers": {},
+  "capabilities": [],
+  "examinee_id": "control-null",
+  "meta": {
+    "control": "null",
+    "note": "a synthetic negative control for endpoint 2, not an arm"
+  },
+  "paper_id": "p15-verdict-a2",
+  "schema": "exam/v0.1"
+}

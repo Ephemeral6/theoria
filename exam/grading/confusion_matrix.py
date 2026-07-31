@@ -8,8 +8,10 @@ most of the information:
     (i)  small_unsolvable   exhaustive search answers correctly here.  A
                             complete searcher scores full marks for a reason
                             that does not transfer to any larger board.
-    (ii) large_unsolvable   2^60 to 2^120 configurations.  Enumeration is out
-                            of reach, so only an invariant can answer.
+    (ii) large_unsolvable   2^60 to 2^120 configurations, so the naive forward
+                            enumeration of (i) cannot terminate.  Scored on
+                            selecting some other method; the stronger reading
+                            is withdrawn (D-EX-028).
     (iii) solvable_hard     the false-positive trap, each with a computed
                             witness plan.
 
@@ -217,8 +219,18 @@ def verdict_matrix(modes: Optional[Sequence[str]] = None, *,
         klass = entry["truth"].get("class", "unclassified")
         classes[klass] = classes.get(klass, 0) + 1
 
+    # The paper's own negative controls ride along with the four protocol
+    # fakes. `bluffer` has been on this table since P-15 and is the only one of
+    # its kind on it, which means the table has only ever been read in the
+    # direction of over-claiming: `denier` (always `solvable`) and `overclaimer`
+    # (specificity 0.375 with a BA above one half) are the rows that make the
+    # pair readable in both directions. Declared by the paper, not by this
+    # module -- they mean nothing on a held-out prediction sheet.
+    declared = tuple(getattr(module, "NEGATIVE_CONTROL_MODES", ()))
+    default_modes = tuple(CALIBRATION_MODES) + declared
+
     submissions: Dict[str, Submission] = {}
-    for mode in (modes or CALIBRATION_MODES):
+    for mode in (modes or default_modes):
         answers = module.reference_answers(paper, key_doc, mode)
         submissions[mode] = _submission(mode, paper.paper_id, answers)
     if include_real:
@@ -231,7 +243,7 @@ def verdict_matrix(modes: Optional[Sequence[str]] = None, *,
             "fraction": report.fraction,
             "awarded": report.awarded,
             "possible": report.possible,
-            "is_fake": name in CALIBRATION_MODES,
+            "is_fake": name in default_modes,
             "pooled": confusion(report, key_doc, positive=POSITIVE),
             "split": per_class_confusion(report, key_doc),
         }
@@ -245,8 +257,17 @@ def verdict_matrix(modes: Optional[Sequence[str]] = None, *,
         "class_meaning": {
             "small_unsolvable": "(i) exhaustive search answers correctly here, "
                                 "possibly for a reason that does not transfer",
-            "large_unsolvable": "(ii) 2^60 to 2^120 configurations; only an "
-                                "invariant can answer",
+            # This string ships: it is written into
+            # `artifacts/matrix/verdict_confusion.json` and rendered into the
+            # `.md` beside it. It read "only an invariant can answer" for three
+            # cycles after D-EX-028 withdrew that claim, which made a generated
+            # artefact the last place the withdrawn sentence survived -- and the
+            # artefact is what a reader quotes. `tools/check_withdrawn_claims.py`
+            # is the gate; this line is why it exists.
+            "large_unsolvable": "(ii) 2^60 to 2^120 configurations, past what "
+                                "the naive forward enumeration of (i) can "
+                                "cover; scored on selecting a method that is "
+                                "not that one (D-EX-028)",
             "solvable_hard": "(iii) the false-positive trap, each with a "
                              "computed witness plan",
         },

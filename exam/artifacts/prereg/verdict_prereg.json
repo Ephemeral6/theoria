@@ -1,0 +1,706 @@
+{
+  "class_inventory": {
+    "items": [
+      {
+        "base_level": "orchard",
+        "board_size_class": "large",
+        "certificate_kind": "invariant",
+        "claim": "unsolvable",
+        "class": "large_unsolvable",
+        "constructive_justification": "The orchard board has no teleport, so every command displaces the cart by a unit vector or by nothing. With LEFT forbidden the surviving displacements have column components 0, 0 and +1, so the cart's column never decreases. It starts at column 2 and the goal is at column 1. The 118 switches still reachable from the start keep the naive state space past 10^35, so this verdict is not available to a plain forward enumeration; the monotone column costs three subtractions. (118 is reachable, not strictly-to-the-right: two of them, (1,2) and (3,2), sit directly above and below the start's own column. Strictly to the right there are 116, and 2^116 is 8.3e34, which would not clear 10^35 -- the looser phrasing was worth one order of magnitude and is not used.)",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-2986ed8ffc",
+        "lower_bound": 332306998946228968225951765070086144,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "forbid_action"
+        ],
+        "positional_states": 177,
+        "search_credible": false,
+        "variant_id": "a2var-ii4-orchard-noleft",
+        "witness_source": null
+      },
+      {
+        "base_level": "lattice",
+        "board_size_class": "large",
+        "certificate_kind": "cut_set",
+        "claim": "unsolvable",
+        "class": "large_unsolvable",
+        "constructive_justification": "The lattice board's separator row is solid except at (4,2), so that single cell is the only join between the corridor half and the goal room. There is no teleport on this board, so the cell cannot be crossed without being occupied at the end of a command. Declaring a loss on (4,2) severs the only join; the goal room becomes unreachable however the 120 switches are set, since no switch alters the geometry.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-6150a6eeb7",
+        "lower_bound": 1329227995784915872903807060280344576,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "observation_loss"
+        ],
+        "positional_states": 180,
+        "search_credible": false,
+        "variant_id": "a2var-ii2-lattice-bridge",
+        "witness_source": null
+      },
+      {
+        "base_level": "gantry",
+        "board_size_class": "large",
+        "certificate_kind": "invariant",
+        "claim": "unsolvable",
+        "class": "large_unsolvable",
+        "constructive_justification": "The gantry board's goal room (rows 5-6) sits under a separator row that is solid wall across its whole width, and is bounded by the border everywhere else, so it is a connected component of the board on its own. Relabelling LEFT and RIGHT is a bijection on the alphabet and cannot add an edge. The 120 latching switches make the state space astronomically large, which is exactly why the answer has to come from the partition rather than from a search: nothing about the switches touches the separator.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-721d09813c",
+        "lower_bound": 1329227995784915872903807060280344576,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "remap_action",
+          "remap_action"
+        ],
+        "positional_states": 180,
+        "search_credible": false,
+        "variant_id": "a2var-ii1-gantry-sealed",
+        "witness_source": null
+      },
+      {
+        "base_level": "spindle",
+        "board_size_class": "large",
+        "certificate_kind": "counting",
+        "claim": "unsolvable",
+        "class": "large_unsolvable",
+        "constructive_justification": "The spindle's corridor is 200 cells long, the cart starts at (2,1) and the goal is at (2,200). One command moves the cart at most one edge, and the board has no teleport, so at least 199 commands are needed. The budget is 150. The 400 switches do not enter the argument at all, which is the point: they put the reachable set past 10^18 states, so the verdict cannot come from enumeration, while the counting argument needs only the corridor's length.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-ee54166153",
+        "lower_bound": 1152921504606846976,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "step_limit"
+        ],
+        "positional_states": 600,
+        "search_credible": false,
+        "variant_id": "a2var-ii3-spindle-budget",
+        "witness_source": null
+      },
+      {
+        "base_level": "updraft",
+        "board_size_class": "small",
+        "certificate_kind": "invariant",
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "constructive_justification": "The updraft board carries no teleport, so every command displaces the cart by one of the four unit vectors or by nothing at all. With UP forbidden the surviving displacements have row components 0, +1 and 0, so the cart's row never decreases. It starts at row 5 and the goal is at row 1. The argument is four subtractions over the action alphabet and does not look at the state space at all.",
+        "enumerated": 7,
+        "enumeration_attempted": true,
+        "item_id": "vq-1015eb0bb1",
+        "lower_bound": 7,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "forbid_action"
+        ],
+        "positional_states": 7,
+        "search_credible": true,
+        "variant_id": "a2var-i2-updraft-noup",
+        "witness_source": null
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": "invariant",
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "constructive_justification": "Column 5 of the atrium board is solid wall from r1 to r7, so the right room touches the left room nowhere; its only entrance is the teleport at (7,4), and (7,4) is enterable only from the door cell (6,4) by a DOWN command -- its other three neighbours are wall. Forbidding DOWN therefore deletes the single edge joining the two rooms, and the cart's connected component is closed under every surviving command. The goal (2,7) lies in the other component. This follows from the board and the operator; no play is required to know it.",
+        "enumerated": 24,
+        "enumeration_attempted": true,
+        "item_id": "vq-17af763cab",
+        "lower_bound": 24,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "forbid_action"
+        ],
+        "positional_states": 24,
+        "search_credible": true,
+        "variant_id": "a2var-i1-atrium-nodown",
+        "witness_source": null
+      },
+      {
+        "base_level": "cistern",
+        "board_size_class": "small",
+        "certificate_kind": "cut_set",
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "constructive_justification": "The cistern board's two halves are joined by exactly one floor cell, (3,5): column 5 is wall at every other row. Every path from the start (3,1) to the goal (3,9) therefore occupies (3,5) at the end of some command -- there is no teleport and no slide on this board, so a cell cannot be crossed without being stood on. Declaring a loss there makes every such path terminate before it arrives.",
+        "enumerated": 20,
+        "enumeration_attempted": true,
+        "item_id": "vq-82f568ca11",
+        "lower_bound": 20,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "observation_loss"
+        ],
+        "positional_states": 20,
+        "search_credible": true,
+        "variant_id": "a2var-i3-cistern-cut",
+        "witness_source": null
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": "counting",
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "constructive_justification": "Counting settles it. One command displaces the cart by at most one edge of the board's adjacency graph -- a blocked move and a button press displace it by none, and the teleport is a single edge from (6,4) to (7,6). In that graph the goal (2,7) is 11 edges from the start (5,1), so at least 11 commands are needed under any policy whatsoever. The budget is 7. The bound is deliberately loose: it ignores the door, the button and the order of anything, so it survives every relabelling.",
+        "enumerated": 31,
+        "enumeration_attempted": true,
+        "item_id": "vq-8ff1c690ad",
+        "lower_bound": 31,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "step_limit"
+        ],
+        "positional_states": 55,
+        "search_credible": true,
+        "variant_id": "a2var-i4-atrium-budget",
+        "witness_source": null
+      },
+      {
+        "base_level": "quarry",
+        "board_size_class": "small",
+        "certificate_kind": "invariant",
+        "claim": "unsolvable",
+        "class": "small_unsolvable",
+        "constructive_justification": "The quarry board's goal room is enclosed by static wall on all four sides: row 3 is solid, row 6 is solid, and columns 0 and 8 are the border. No wrapper operator can open a wall, and relabelling LEFT and RIGHT is a bijection on the alphabet, so the set of reachable cells is exactly the base game's. The start (1,1) and the goal (4,7) lie in different connected components of the board, and did before the operator was applied.",
+        "enumerated": 14,
+        "enumeration_attempted": true,
+        "item_id": "vq-9725fbebf0",
+        "lower_bound": 14,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "remap_action",
+          "remap_action"
+        ],
+        "positional_states": 14,
+        "search_credible": true,
+        "variant_id": "a2var-i5-quarry-swap",
+        "witness_source": null
+      },
+      {
+        "base_level": "lattice",
+        "board_size_class": "large",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "The three declared hazards all sit in row 6, the goal room's back row, while the bridge at (4,2), the goal at (5,60) and the whole of row 5 are untouched. Deleting the three cells leaves the corridor, the switch rows, the bridge and row 5 connected, so a plan exists that dips into all 120 switches from the corridor, crosses the bridge and walks row 5 to the goal without ever standing on a hazard. The plan is long, which is the difficulty, not the verdict.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-0ffc3cd33f",
+        "lower_bound": 1329227995784915872903807060280344576,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "observation_loss"
+        ],
+        "positional_states": 298,
+        "search_credible": false,
+        "variant_id": "a2var-iii6-lattice-safe",
+        "witness_source": "construction"
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "The atrium's route never moves the cart leftwards: it goes up column 1 to the button, back down column 1, rightwards along the lower rows to the door, down through the teleport into (7,6), and up column 6 to the goal at (2,7) by a final rightward step. Forbidding LEFT therefore removes a command the winning sequence does not contain, and the sequence still wins.",
+        "enumerated": 55,
+        "enumeration_attempted": true,
+        "item_id": "vq-1881c8c383",
+        "lower_bound": 55,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "forbid_action"
+        ],
+        "positional_states": 55,
+        "search_credible": true,
+        "variant_id": "a2var-iii4-atrium-noleft",
+        "witness_source": "search"
+      },
+      {
+        "base_level": "lattice",
+        "board_size_class": "large",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "A plan that visits every switch and then the goal is constructed directly from the board's shape, with no search: take the switches in column order and chain shortest hops between them, then cross the bridge at (4,2) and walk row 5 to the goal. The plan that construction yields costs 416 commands and the budget is 456, so the budget is not an obstacle and the level's 2^120 states are irrelevant to saying so. The cost is stated for the plan actually shipped in the key rather than for the tidier corridor sweep it is easy to describe -- that one runs along row 2 and costs 418, also inside the budget, but it is not this item's witness and quoting its number here would be quoting an arithmetic that belongs to a different plan.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-6bab2f307c",
+        "lower_bound": 1329227995784915872903807060280344576,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "step_limit"
+        ],
+        "positional_states": 301,
+        "search_credible": false,
+        "variant_id": "a2var-iii7-lattice-roomy",
+        "witness_source": "construction"
+      },
+      {
+        "base_level": "lattice",
+        "board_size_class": "large",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "Relabelling LEFT and RIGHT is a bijection on the alphabet and its own inverse, so it maps winning sequences to winning sequences one for one. So it is enough that the base level is solvable, and it is: this board requires every one of its 120 switches latched AS WELL AS the cart on the goal, and the corridor sweep that dips into all 120 from row 2 and then crosses the open bridge at (4,2) does both. Reaching the goal is not winning here -- the 62-command walk straight to the goal loses -- which is why the switches are named rather than left implicit. The board is the same board as the sealed gantry item, which is the trap: the separator row is what decides these, not the size of the state space.",
+        "enumerated": null,
+        "enumeration_attempted": false,
+        "item_id": "vq-8c4f14b152",
+        "lower_bound": 1329227995784915872903807060280344576,
+        "naive_enumeration_feasible": false,
+        "operators": [
+          "remap_action",
+          "remap_action"
+        ],
+        "positional_states": 301,
+        "search_credible": false,
+        "variant_id": "a2var-iii8-lattice-swap",
+        "witness_source": "construction"
+      },
+      {
+        "base_level": "meander",
+        "board_size_class": "small",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "Relabelling is a bijection on the action alphabet, so it cannot change what is achievable: apply the swap to every command of a winning sequence in the base game and the wrapped game runs through exactly the same states. The meander's single serpentine route is about a hundred commands long, which is the whole difficulty -- a searcher that gives up at a shallow depth reports failure here, and failure to find is not a proof of absence.",
+        "enumerated": 99,
+        "enumeration_attempted": true,
+        "item_id": "vq-9e0aefdf80",
+        "lower_bound": 99,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "remap_action",
+          "remap_action"
+        ],
+        "positional_states": 99,
+        "search_credible": true,
+        "variant_id": "a2var-iii1-meander-swap",
+        "witness_source": "search"
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "A step limit is only an obstacle when it falls below what the level needs. The atrium's shortest winning sequence is eighteen commands -- up to the button, back down, across to the door, down through the teleport, up the right room and onto the goal -- and the budget here is 60. The wrapper therefore removes nothing: every winning sequence of the base game is still a winning sequence.",
+        "enumerated": 55,
+        "enumeration_attempted": true,
+        "item_id": "vq-abe007cdfa",
+        "lower_bound": 55,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "step_limit"
+        ],
+        "positional_states": 55,
+        "search_credible": true,
+        "variant_id": "a2var-iii2-atrium-roomy",
+        "witness_source": "search"
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "The level awards one point on victory and the tightened win test asks for at least one, so the test is satisfied by exactly the frames that satisfied it before. A tightened victory condition that a winning frame already meets changes nothing about which sequences win; it is the boundary case of the operator, and it is on the paper so that an examinee cannot read 'win_tighten' as a synonym for 'unsolvable'.",
+        "enumerated": 55,
+        "enumeration_attempted": true,
+        "item_id": "vq-c480b494f3",
+        "lower_bound": 55,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "win_tighten"
+        ],
+        "positional_states": 55,
+        "search_credible": true,
+        "variant_id": "a2var-iii5-atrium-tighten",
+        "witness_source": "search"
+      },
+      {
+        "base_level": "atrium",
+        "board_size_class": "small",
+        "certificate_kind": null,
+        "claim": "solvable",
+        "class": "solvable_hard",
+        "constructive_justification": "The three declared hazards (1,3), (1,4) and (3,3) sit in the middle of the left room, and none of them lies on THIS route: up column 1 to press the button, back down column 1, right along rows 5 and 6 to the door, through the teleport and up column 6. That route is 18 commands, it avoids all three cells, and exhibiting it settles the question -- a surviving route is a proof of solvability all by itself. Note what is deliberately NOT claimed: the hazards are not off *every* minimal route. (3,3) lies on 72 of the atrium's 204 shortest winning sequences, and 132 of them avoid all three cells.",
+        "enumerated": 49,
+        "enumeration_attempted": true,
+        "item_id": "vq-e6ae49645d",
+        "lower_bound": 49,
+        "naive_enumeration_feasible": true,
+        "operators": [
+          "observation_loss"
+        ],
+        "positional_states": 49,
+        "search_credible": true,
+        "variant_id": "a2var-iii3-atrium-offpath",
+        "witness_source": "search"
+      }
+    ],
+    "paper_id": "p15-verdict-a2",
+    "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
+  },
+  "control_check_failures": [],
+  "control_table": {
+    "controls": {
+      "abstainer": {
+        "balanced_accuracy": 0.0,
+        "certified_share": null,
+        "class_ii_coverage_positive": 0.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": null,
+        "observed_specificity": null,
+        "reasons": [
+          "specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.0"
+        ],
+        "score_fraction": 0.0,
+        "sensitivity": 0.0,
+        "specificity": 0.0,
+        "verdict": "不成立"
+      },
+      "bluffer": {
+        "balanced_accuracy": 0.5,
+        "certified_share": 0.0,
+        "class_ii_coverage_positive": 1.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": 1.0,
+        "observed_specificity": 0.0,
+        "reasons": [
+          "specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.5"
+        ],
+        "score_fraction": 0.264706,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "verdict": "不成立"
+      },
+      "cheater-v4": {
+        "balanced_accuracy": 1.0,
+        "certified_share": 0.0,
+        "class_ii_coverage_positive": 1.0,
+        "credited": true,
+        "is_control": false,
+        "observed_sensitivity": 1.0,
+        "observed_specificity": 1.0,
+        "reasons": [
+          "specificity 1.0000 >= 0.50, class (ii) coverage 1.0000 >= 0.50, BA 1.0000 > 0.50"
+        ],
+        "score_fraction": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 1.0,
+        "verdict": "成立"
+      },
+      "denier": {
+        "balanced_accuracy": 0.5,
+        "certified_share": null,
+        "class_ii_coverage_positive": 1.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": 0.0,
+        "observed_specificity": 1.0,
+        "reasons": [
+          "BA 0.5000 <= 0.50, which is exactly what a constant answer scores: always-`unsolvable` gives (1.0, 0.0) and always-`solvable` gives (0.0, 1.0), both BA 0.5"
+        ],
+        "score_fraction": 0.235294,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "verdict": "不成立"
+      },
+      "memoriser": {
+        "balanced_accuracy": 0.590278,
+        "certified_share": 1.0,
+        "class_ii_coverage_positive": 0.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": 1.0,
+        "observed_specificity": 1.0,
+        "reasons": [
+          "class (ii) coverage_positive 0.0000 < c_min 0.50 (0 of 4 large-space items answered) -- 不可结论, not 不成立: an arm that did not answer has not been refuted (launch_blockers 9.16)"
+        ],
+        "score_fraction": 0.588235,
+        "sensitivity": 0.555556,
+        "specificity": 0.625,
+        "verdict": "不可结论"
+      },
+      "null": {
+        "balanced_accuracy": 0.0,
+        "certified_share": null,
+        "class_ii_coverage_positive": 0.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": null,
+        "observed_specificity": null,
+        "reasons": [
+          "specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.0"
+        ],
+        "score_fraction": 0.0,
+        "sensitivity": 0.0,
+        "specificity": 0.0,
+        "verdict": "不成立"
+      },
+      "oracle": {
+        "balanced_accuracy": 1.0,
+        "certified_share": 1.0,
+        "class_ii_coverage_positive": 1.0,
+        "credited": true,
+        "is_control": true,
+        "observed_sensitivity": 1.0,
+        "observed_specificity": 1.0,
+        "reasons": [
+          "specificity 1.0000 >= 0.50, class (ii) coverage 1.0000 >= 0.50, BA 1.0000 > 0.50"
+        ],
+        "score_fraction": 1.0,
+        "sensitivity": 1.0,
+        "specificity": 1.0,
+        "verdict": "成立"
+      },
+      "overclaimer": {
+        "balanced_accuracy": 0.6875,
+        "certified_share": 0.0,
+        "class_ii_coverage_positive": 1.0,
+        "credited": false,
+        "is_control": true,
+        "observed_sensitivity": 1.0,
+        "observed_specificity": 0.375,
+        "reasons": [
+          "specificity 0.3750 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.6875"
+        ],
+        "score_fraction": 0.352941,
+        "sensitivity": 1.0,
+        "specificity": 0.375,
+        "verdict": "不成立"
+      }
+    },
+    "paper_id": "p15-verdict-a2",
+    "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4",
+    "scope": "One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.",
+    "thresholds": {
+      "S_min": 0.5,
+      "ba_floor": 0.5,
+      "c_min": 0.5
+    }
+  },
+  "control_transcripts": [
+    "exam/artifacts/endpoint_controls/oracle.answers.json",
+    "exam/artifacts/endpoint_controls/bluffer.answers.json",
+    "exam/artifacts/endpoint_controls/denier.answers.json",
+    "exam/artifacts/endpoint_controls/overclaimer.answers.json",
+    "exam/artifacts/endpoint_controls/abstainer.answers.json",
+    "exam/artifacts/endpoint_controls/memoriser.answers.json",
+    "exam/artifacts/endpoint_controls/null.answers.json"
+  ],
+  "floor_leave_one_out": {
+    "all_floors": [],
+    "without_S_min": [
+      "overclaimer"
+    ],
+    "without_ba_floor": [
+      "denier"
+    ],
+    "without_c_min": [
+      "memoriser"
+    ]
+  },
+  "paper_check_failures": [],
+  "prereg": {
+    "arm_expectations": [
+      {
+        "arm": "bare_cc",
+        "class": "small_unsolvable",
+        "predict": "verdict often correct -- the board is small enough to search by hand -- but `certified_share` = 0.0: no machine-checkable certificate, because the arm has no deliverable to write one in (Theoria.md 1.11, CC 无物可交记零)",
+        "refuted_if": "bare_cc submits a certificate that `check_certificate` accepts on any class (i) item",
+        "role": "prediction"
+      },
+      {
+        "arm": "ablation_no_theorem_obligation",
+        "class": "small_unsolvable",
+        "predict": "same verdict accuracy as theoria, `certified_share` materially lower -- this is the ablation's whole definition, and class (i) is where the two are otherwise hardest to tell apart",
+        "refuted_if": "the ablation's `certified_share` on class (i) is within 0.1 of theoria's",
+        "role": "prediction"
+      },
+      {
+        "arm": "theoria",
+        "class": "small_unsolvable",
+        "predict": "sensitivity 1.0 with `certified_share` > 0.5 -- the class exists to score the reason, and a framework that only searches here has not used what it is supposed to have",
+        "refuted_if": "theoria's class (i) `certified_share` <= bare_cc's",
+        "role": "prediction"
+      },
+      {
+        "arm": "bare_cc",
+        "class": "large_unsolvable",
+        "predict": "`coverage_positive` below `c_min`: the arm abstains or does not answer, and under 弃权计错 those become `fn`",
+        "refuted_if": "bare_cc answers >= c_min of class (ii) and is right on them",
+        "role": "prediction"
+      },
+      {
+        "arm": "ablation_no_theorem_obligation",
+        "class": "large_unsolvable",
+        "predict": "answers, and is right about as often as theoria, with no certificate -- the ablation removes the obligation to prove, not the ability to notice",
+        "refuted_if": "the ablation's class (ii) sensitivity is more than 0.25 below theoria's",
+        "role": "prediction"
+      },
+      {
+        "arm": "theoria",
+        "class": "large_unsolvable",
+        "predict": "`coverage_positive` = 1.0 and sensitivity 1.0. This is the class the architecture is for; abstention here is a failure, not caution",
+        "refuted_if": "theoria's class (ii) coverage < c_min, which routes the whole endpoint to 不可结论 for that arm",
+        "role": "prediction"
+      },
+      {
+        "arm": "bare_cc",
+        "class": "solvable_hard",
+        "predict": "specificity >= S_min. The bare arm is not expected to have a taste for impossibility proofs, so class (iii) is where it should look *best*",
+        "refuted_if": "bare_cc's specificity < S_min",
+        "role": "prediction"
+      },
+      {
+        "arm": "ablation_no_theorem_obligation",
+        "class": "solvable_hard",
+        "predict": "specificity >= S_min, and no lower than theoria's -- removing the theorem obligation should not make an arm *more* willing to declare impossibility",
+        "refuted_if": "the ablation's specificity is more than 0.25 below theoria's",
+        "role": "prediction"
+      },
+      {
+        "arm": "theoria",
+        "class": "solvable_hard",
+        "predict": "specificity >= 0.75, above the floor with margin. 敢说不可解的框架必须在这里闭嘴 -- a framework that ships unsolvability certificates has to be measurably quiet here, or the certificates are worth nothing",
+        "refuted_if": "theoria's specificity < S_min, which is 不成立 for this endpoint on its own, whatever BA says",
+        "role": "prediction"
+      }
+    ],
+    "arms": [
+      "bare_cc",
+      "theoria",
+      "ablation_no_theorem_obligation"
+    ],
+    "controls": {
+      "abstainer": {
+        "verdict": "不成立",
+        "why": "abstains everywhere. Before 弃权计错 both rates read `None` and no floor had a total order over it"
+      },
+      "bluffer": {
+        "verdict": "不成立",
+        "why": "always `unsolvable`: sensitivity 1.0, specificity 0.0. Killed by the specificity floor (STATS_RULES 2.3)"
+      },
+      "denier": {
+        "verdict": "不成立",
+        "why": "always `solvable`: sensitivity 0.0, specificity 1.0. Passes the specificity floor and the coverage floor, and is killed by the BA floor alone -- the mirror control without which the specificity floor could be mistaken for the whole instrument"
+      },
+      "memoriser": {
+        "verdict": "不可结论",
+        "why": "answers only what it has seen: pooled pair identical to ground truth on the items it answered, 0 of 4 on class (ii). 不可结论, never 不成立 -- silence is not refutation (launch_blockers 9.16)"
+      },
+      "null": {
+        "verdict": "不成立",
+        "why": "submits nothing; under 弃权计错 every item is an error on its own side"
+      },
+      "oracle": {
+        "verdict": "成立",
+        "why": "ground truth must be creditable, or the gate has never been observed to accept anything"
+      },
+      "overclaimer": {
+        "verdict": "不成立",
+        "why": "`unsolvable` everywhere except three solvable items: sensitivity 1.0, specificity 0.375, BA 0.6875, class (ii) coverage 1.0. It clears the BA floor and the coverage floor, and **only** the specificity floor refuses it -- which is why it exists. Without it, deleting `S_min` changed no verdict on this control set and the one-vote veto was carried on the strength of its name"
+      }
+    },
+    "endpoint": "主终点二 · 判决题准确率(含特异度)",
+    "endpoint_id": "endpoint-2-verdict",
+    "floors": {
+      "S_min": {
+        "catches_alone": [
+          "overclaimer"
+        ],
+        "source": "STATS_RULES.md 2.2, suggested 0.5, ⟨S_min⟩ needs_human",
+        "value": 0.5
+      },
+      "ba_floor": {
+        "catches_alone": [
+          "denier"
+        ],
+        "source": "exam: both constant strategies score exactly 0.5, so a strict inequality above it is the weakest statement that an arm is not a constant",
+        "value": 0.5
+      },
+      "c_min": {
+        "catches_alone": [
+          "memoriser"
+        ],
+        "source": "launch_blockers.json 9.16, ⟨c_min⟩ needs_human; exam proposes 0.5",
+        "value": 0.5
+      }
+    },
+    "known_blind_spot": "The gated numbers cannot separate `cheater-v4` -- a reader handed the sheet and nothing else -- from ground truth: identical in every cell, both credited. The only quantity that separates them is `certified_share` (0.0 against 1.0), which STATS_RULES 2.2 demotes to exploratory. exam publishes it on every transcript and has proposed the amendment through monitor/inbox rather than legislating it here.",
+    "paper_id": "p15-verdict-a2",
+    "readouts": {
+      "derived": [
+        "balanced_accuracy"
+      ],
+      "forbidden": [
+        "balanced_accuracy alone",
+        "a single accuracy over all 17 items",
+        "a rate whose denominator excluded abstentions"
+      ],
+      "primary": [
+        "sensitivity",
+        "specificity"
+      ],
+      "required_beside": [
+        "coverage_positive per class",
+        "certified_share",
+        "abstained / unanswered / unreadable counts"
+      ]
+    },
+    "scope": "One transcript, one paper: the floors and the readability of the pair. The cross-arm paired test of STATS_RULES.md 2.2.1 over <m> exam games is not implemented here and is not implied by a `credited` verdict.",
+    "scoring_rule": {
+      "answer_alphabet": [
+        "unsolvable",
+        "solvable",
+        "abstain"
+      ],
+      "certificate_grammar": [
+        "invariant",
+        "cut_set",
+        "counting"
+      ],
+      "class_sizes": {
+        "large_unsolvable": 4,
+        "small_unsolvable": 5,
+        "solvable_hard": 8
+      },
+      "endpoint_scalar": "BA = (sensitivity + specificity) / 2, from the confusion half after 弃权计错; never reported without both halves beside it",
+      "items": 17,
+      "non_answers_are_errors": [
+        "abstained",
+        "unanswered",
+        "unclassified"
+      ],
+      "points_per_item": {
+        "solvable": 2.0,
+        "unsolvable": 2.0
+      },
+      "score_is_not_the_scalar": "the marks total folds the reason half in and is reported separately (STATS_RULES 2.2)",
+      "weights": {
+        "justification": 0.5,
+        "search_credit": 0.4,
+        "verdict": 0.5
+      }
+    },
+    "sources": [
+      "Theoria.md:259",
+      "Theoria.md:373",
+      "freeze/STATS_RULES.md §2",
+      "freeze/launch_blockers.json 9.15",
+      "freeze/launch_blockers.json 9.16"
+    ],
+    "written_before": "any arm sits this paper; the only transcripts on disk when this was written are the four calibration fakes and `cheater-v4`, an adversarial reader, none of which is an arm"
+  }
+}

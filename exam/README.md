@@ -22,7 +22,28 @@ python -m exam.tools.run_exam          # calibrate the marker, then mark
 python -m exam.tools.run_selftest      # test the marker between its endpoints
 python -m pytest exam/tests -q         # 338 tests
 python -m exam.tools.archive_run <id>  # runs/<id>/MANIFEST.json
+python -m exam.tools.build_prereg      # endpoint 2's pre-registration + controls
+python -m exam.tools.endpoint_verdict --table   # the controls, and what kills each
 ```
+
+## The third primary endpoint
+
+`Theoria.md:373` names 判决题准确率(含特异度) as one of three primary endpoints.
+[`PREREG_VERDICT.md`](PREREG_VERDICT.md) is exam's half of its pre-registration —
+scoring rule, per-arm per-class predictions with refutation conditions,
+sensitivity and specificity as separate numbers with separate floors — and
+[`endpoint.py`](endpoint.py) executes it. Two rulings of `freeze/STATS_RULES.md`
+§2 land here because the implementation it cites does the opposite: 弃权计错 is
+a **layer** over `mark.confusion()` rather than an edit to it, and the class-(ii)
+coverage floor routes to 不可结论 rather than 不成立. Both are registered launch
+blockers (`freeze/launch_blockers.json` 9.15, 9.16) and both now have a command
+and two targets. D-EX-033.
+
+Seven controls run before any arm does, and each of the three floors refuses
+exactly one of them on its own — measured by leave-one-out on every verify run,
+not asserted. The one the endpoint credits and should not (`cheater-v4`, a
+sheet-only reader, separated from ground truth by `certified_share` alone) is
+printed in the same table.
 
 ## The four question types
 

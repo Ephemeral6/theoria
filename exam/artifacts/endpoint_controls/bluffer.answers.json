@@ -1,0 +1,65 @@
+{
+  "answers": {
+    "vq-0ffc3cd33f": {
+      "claim": "unsolvable"
+    },
+    "vq-1015eb0bb1": {
+      "claim": "unsolvable"
+    },
+    "vq-17af763cab": {
+      "claim": "unsolvable"
+    },
+    "vq-1881c8c383": {
+      "claim": "unsolvable"
+    },
+    "vq-2986ed8ffc": {
+      "claim": "unsolvable"
+    },
+    "vq-6150a6eeb7": {
+      "claim": "unsolvable"
+    },
+    "vq-6bab2f307c": {
+      "claim": "unsolvable"
+    },
+    "vq-721d09813c": {
+      "claim": "unsolvable"
+    },
+    "vq-82f568ca11": {
+      "claim": "unsolvable"
+    },
+    "vq-8c4f14b152": {
+      "claim": "unsolvable"
+    },
+    "vq-8ff1c690ad": {
+      "claim": "unsolvable"
+    },
+    "vq-9725fbebf0": {
+      "claim": "unsolvable"
+    },
+    "vq-9e0aefdf80": {
+      "claim": "unsolvable"
+    },
+    "vq-abe007cdfa": {
+      "claim": "unsolvable"
+    },
+    "vq-c480b494f3": {
+      "claim": "unsolvable"
+    },
+    "vq-e6ae49645d": {
+      "claim": "unsolvable"
+    },
+    "vq-ee54166153": {
+      "claim": "unsolvable"
+    }
+  },
+  "capabilities": [
+    "answers"
+  ],
+  "examinee_id": "control-bluffer",
+  "meta": {
+    "control": "bluffer",
+    "note": "a synthetic negative control for endpoint 2, not an arm"
+  },
+  "paper_id": "p15-verdict-a2",
+  "schema": "exam/v0.1"
+}

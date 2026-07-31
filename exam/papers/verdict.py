@@ -11,13 +11,20 @@ together:
         paper has its state space actually enumerated at build time, and the
         count and the cap are written into the truth file, so "exhaustive search
         is feasible here" is a measured number rather than an adjective.
-  (ii)  **large space, unsolvable.**  Enumeration is out of reach and only
-        invariant reasoning answers.  The bound is *demonstrated*, not asserted:
+  (ii)  **large space, unsolvable.**  *Naive* enumeration is out of reach --
+        forward enumeration over the full (cart, button, latch mask) state, the
+        method class (i) is graded on -- and the item is scored on selecting a
+        method that is not that one.  The bound is *demonstrated*, not asserted:
         each class (ii) level admits, by construction, a family of 2^m distinct
         reachable states obtained by dipping into any subset of m alcoves and
         returning to the corridor, and the arithmetic is recorded.  m is chosen
         by the level, not by us -- the builder computes the largest m the step
         budget allows and refuses to ship an item whose bound is below 10^12.
+        Theoria.md 1.11's stronger reading -- "只有不变量推理能答", no exhaustive
+        method is feasible -- **is withdrawn and must not be restated here**:
+        every shipped item of this class is settled by an exhaustive computation
+        over at most 600 nodes.  D-EX-028, and `tools/check_withdrawn_claims.py`
+        is the gate that keeps the withdrawn sentence from growing back.
   (iii) **solvable but hard.**  The false-positive trap.  The truth carries a
         witness plan that was *computed and replayed*, not asserted, and a
         `bluffer` who answers "unsolvable" everywhere has perfect sensitivity,
@@ -81,6 +88,21 @@ from ..model import (ARTIFACTS, HERE, Item, Paper, artifact_rel, canonical,
 
 PAPER_ID = "p15-verdict-a2"
 QUESTION_TYPE = "verdict"
+
+#: Examinees this paper can produce that are **not** in
+#: `exam.papers.CALIBRATION_MODES`.  The four calibration modes are a protocol
+#: obligation on every paper; these two are answers to a two-valued question and
+#: are meaningless elsewhere, so they are declared by the paper that can use
+#: them and read by name (`confusion_matrix.verdict_matrix`,
+#: `tools.endpoint_verdict`).
+#:
+#: They exist because a negative control run in one direction only shows that
+#: the instrument fires, not that it discriminates: `bluffer` says `unsolvable`
+#: to everything and `denier` says `solvable` to everything, and an endpoint
+#: that punishes one and not the other is measuring a preference rather than a
+#: pair.
+NEGATIVE_CONTROL_MODES: Tuple[str, ...] = ("denier", "abstainer",
+                                           "overclaimer")
 WORLD_ID = "a2"
 RUBRIC_ID = "verdict.a2.claim_and_certificate"
 
@@ -539,7 +561,8 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
     # returned 2^60 for a level with 1,830 reachable states. Worse, `comb_open`
     # plus an `observation_loss` on the corridor -- a shipped constructor and a
     # shipped operator -- produced 2^60 against a true 29,791, and `_large_space`
-    # stamped `exhaustive_feasible: False` on it. Repro in this run's
+    # stamped `exhaustive_feasible: False` on it (the old name of the field, see
+    # D-EX-028). Repro in this run's
     # `verify_checker_claims.py`. D-EX-021.
     #
     # The second premise, and it is a different one: the m dips must move m
@@ -1577,7 +1600,12 @@ def _self_check(items: Sequence[Item]) -> None:
 
 def reference_answers(paper: Paper, key_doc: Optional[Dict[str, Any]] = None,
                       mode: str = "oracle") -> Dict[str, Any]:
-    """The four calibration examinees of `exam.papers.CALIBRATION_MODES`.
+    """The four calibration examinees, plus this paper's own negative controls.
+
+    `CALIBRATION_MODES` stays at four: `denier` and `abstainer` are answers to a
+    two-valued question and mean nothing on a held-out prediction paper, so they
+    are declared here in `NEGATIVE_CONTROL_MODES` and requested by name rather
+    than added to a protocol-wide tuple.
 
     `bluffer` is the one that matters: it says "unsolvable" to everything, with
     no certificate, and the tests assert it scores sensitivity 1.0, specificity
@@ -1592,6 +1620,38 @@ def reference_answers(paper: Paper, key_doc: Optional[Dict[str, Any]] = None,
         return {}
     if mode == "bluffer":
         return {item_id: {"claim": "unsolvable"} for item_id in truths}
+    if mode == "denier":
+        # The bluffer's mirror image, and the reason it exists is that a control
+        # only ever run in one direction proves the instrument fires, not that
+        # it discriminates. `bluffer` buys sensitivity 1.0 for specificity 0.0;
+        # `denier` buys specificity 1.0 for sensitivity 0.0. Both land on
+        # BA = 0.5 exactly, which is what makes 0.5 a floor with an argument
+        # rather than a chosen constant (`exam/endpoint.py` BA_FLOOR).
+        return {item_id: {"claim": "solvable"} for item_id in truths}
+    if mode == "overclaimer":
+        # The control that makes the specificity floor load-bearing, and it was
+        # added *because* the leave-one-out measurement said the floor was not.
+        # With only `bluffer`, `abstainer` and `null` on the sheet, deleting
+        # `S_min` changed no verdict -- all three also fail the BA floor -- so a
+        # floor the pre-registration called a one-vote veto had never been
+        # observed to cast a vote. This one answers `unsolvable` everywhere
+        # except on the three lexicographically first solvable items:
+        # sensitivity 1.0, specificity 0.375, BA 0.6875, class (ii) coverage
+        # 1.0. It clears every other floor and only `S_min` refuses it.
+        #
+        # It reads the key to pick those three, which is what a synthetic
+        # control is allowed to do and an arm is not: it is a fixed point in the
+        # scoring rule's input space, not an examinee.
+        spared = sorted(item_id for item_id, truth in truths.items()
+                        if truth["claim"] == "solvable")[:3]
+        return {item_id: {"claim": "solvable" if item_id in spared
+                                   else "unsolvable"}
+                for item_id in truths}
+    if mode == "abstainer":
+        # The third degenerate strategy, and the one the frozen wording could
+        # not price until 弃权计错 was implemented: under `mark.confusion` it
+        # empties both denominators and both rates read `None`.
+        return {item_id: {"claim": "abstain"} for item_id in truths}
 
     answers: Dict[str, Any] = {}
     for item_id, truth in truths.items():

@@ -1,0 +1,65 @@
+{
+  "answers": {
+    "vq-0ffc3cd33f": {
+      "claim": "abstain"
+    },
+    "vq-1015eb0bb1": {
+      "claim": "abstain"
+    },
+    "vq-17af763cab": {
+      "claim": "abstain"
+    },
+    "vq-1881c8c383": {
+      "claim": "abstain"
+    },
+    "vq-2986ed8ffc": {
+      "claim": "abstain"
+    },
+    "vq-6150a6eeb7": {
+      "claim": "abstain"
+    },
+    "vq-6bab2f307c": {
+      "claim": "abstain"
+    },
+    "vq-721d09813c": {
+      "claim": "abstain"
+    },
+    "vq-82f568ca11": {
+      "claim": "abstain"
+    },
+    "vq-8c4f14b152": {
+      "claim": "abstain"
+    },
+    "vq-8ff1c690ad": {
+      "claim": "abstain"
+    },
+    "vq-9725fbebf0": {
+      "claim": "abstain"
+    },
+    "vq-9e0aefdf80": {
+      "claim": "abstain"
+    },
+    "vq-abe007cdfa": {
+      "claim": "abstain"
+    },
+    "vq-c480b494f3": {
+      "claim": "abstain"
+    },
+    "vq-e6ae49645d": {
+      "claim": "abstain"
+    },
+    "vq-ee54166153": {
+      "claim": "abstain"
+    }
+  },
+  "capabilities": [
+    "answers"
+  ],
+  "examinee_id": "control-abstainer",
+  "meta": {
+    "control": "abstainer",
+    "note": "a synthetic negative control for endpoint 2, not an arm"
+  },
+  "paper_id": "p15-verdict-a2",
+  "schema": "exam/v0.1"
+}

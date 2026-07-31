@@ -12,6 +12,8 @@ Stages, and each answers a different question:
 | `pytest` | do the exam's own properties hold, including the regressions for the defects that shipped? |
 | `run_exam --calibrate` | does the marker still reproduce four known scores before it marks anything? |
 | `run_selftest` | does the marker behave correctly *between* its endpoints, and does every injected fault still get caught? |
+| `build_prereg` | does endpoint 2's pre-registration still describe the paper that builds, and is every negative control still judged as pre-registered? |
+| `withdrawn_claims` | has a claim withdrawn by D-EX-028 grown back anywhere this territory writes? |
 | `artefact_locations` | does any tracked artefact record where its builder stood? |
 | `artifacts_match_committed` | is what is committed under `exam/artifacts/` what this code produces? |
 | `determinism` | do two builds in fresh interpreters produce byte-identical sheets? |
@@ -130,6 +132,19 @@ def main(argv: List[str] | None = None) -> int:
                                           "--calibrate"], env=build_env),
             _run("run_selftest", [py, "-m", "exam.tools.run_selftest"],
                  env=build_env),
+            # Endpoint 2. Gates on two things at once: the pre-registration
+            # still describes the paper that builds (class mix, points, rubric
+            # weights, certificate grammar), and every negative control is
+            # still judged as pre-registered -- `bluffer` 不成立, `memoriser`
+            # 不可结论, `denier` and `overclaimer` each refused by the one floor
+            # that catches them alone.
+            _run("build_prereg", [py, "-m", "exam.tools.build_prereg"],
+                 env=build_env),
+            # A claim withdrawn by D-EX-028 must not survive anywhere this
+            # territory writes -- least of all in a generated artefact, which
+            # is where it last did.
+            _run("withdrawn_claims",
+                 [py, "-m", "exam.tools.check_withdrawn_claims"]),
             _run("artefact_locations",
                  [py, "-m", "exam.tools.check_artefact_locations"]),
             _run("artifacts_match_committed",
