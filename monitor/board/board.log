@@ -465,3 +465,12 @@
 2026-07-31T11:05:15Z DONE S44-monitor-suite-outgrew-its-gate by W-1800
 2026-07-31T11:05:15Z CLAIM S44-S44-reflex-heartbeat-unwatched by W-1800
 2026-07-31T11:05:15Z DONE S44-S44-reflex-heartbeat-unwatched by W-1800
+2026-07-31T12:07:36Z DONE A16-A16-launch-gate-wired by W-1800
+2026-07-31T12:07:36Z DONE S31-a10-said-done-prove-it by W-1800
+2026-07-31T12:07:37Z DONE S32-dual-agent-is-one-agent by W-1800
+2026-07-31T12:07:37Z DONE V2-V25-verify-does-not-check-what-is-committed by W-1800
+2026-07-31T12:07:37Z DONE V26-fuzzlab-readme-points-at-the-smoke-run by W-1800
+2026-07-31T12:07:37Z CLAIM A3-A17-armversion-reads-all-refs by W-1800
+2026-07-31T12:07:37Z DONE A3-A17-armversion-reads-all-refs by W-1800
+2026-07-31T12:07:37Z CLAIM A8-campaign-ledger-pipeline by W-1800
+2026-07-31T12:07:37Z DONE A8-campaign-ledger-pipeline by W-1800
