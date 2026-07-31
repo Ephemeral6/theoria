@@ -223,11 +223,13 @@ sha256:84452e9030d47bb0dfacdd0abb64130b392938e1c041468aba5bb07e0d7c144c  battery
 sha256:ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427  battery/audit/exploits/economy.py
 sha256:dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e  battery/audit/exploits/exploration_planning.py
 sha256:08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e  battery/audit/exploits/mechanism_epistemic.py
+sha256:2a6cf70926717ab4349b36156336e155246a074b7ecd3bb2ea9b899a564b197a  battery/audit/frontload.py
 sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad  battery/audit/gaming.py
 sha256:47334ff6e20ee8e1d2bc92423b323c98616c098469c2073e84d4ce3ccd679141  battery/audit/live_arm.py
 sha256:740eb1601196a37d7a1b439e01faffbe4b538b6cc410be9303637ad16b0d0492  battery/audit/live_tiers.py
 sha256:35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd  battery/audit/redundancy.py
 sha256:c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5  battery/audit/stats.py
+sha256:96e1e2175c80cafc7ad2c23864243037ac4a0fe638ebb122f0b3e98627008ffd  battery/audit/threat.py
 sha256:6c57412f6311abf1a99f508e078caefdfc31287ea062f66b7b2cc6265fb256ba  battery/audit/v9/BLIND_DIGESTS.json
 sha256:832753c4aaf3390f0d0818ca3ad1a683c4a46b0729ee608cfd2b58293da42a70  battery/audit/v9/__init__.py
 sha256:1c098265a04e4c31a0a31a9ba2d0de6d8ed850423a0c54947e445a2ab058eb73  battery/audit/v9/attack.py
@@ -326,6 +328,7 @@ sha256:9c9d32c97323d05e714477bc733886f688cf41db115b448f16c0ae32c6b24215  battery
 sha256:74b8b440da5947f2b128d6746d08527ee9449176df27402ec3eeb8885c6e6831  battery/tests/test_live_tiers.py
 sha256:c7dd4fa9aa6bcdbd7fd1b0c9ae782fc4245dc877be656964d5191f919f85483f  battery/tests/test_metrics.py
 sha256:9f73b2e81991b5f8330c3c0c32d781a7e16c54bdf61f51799ff5d7bfe4e511e4  battery/tests/test_theoria_live.py
+sha256:fdbb1687c5c1520aa8d491905df67ee95c2fa2e65205037276dd44f44865d98a  battery/tests/test_threat_and_frontload.py
 sha256:ca5b597ca953a268d02006df377ceb60da734a2a0c77bb9f8c779868f295950c  battery/tests/test_v9_blinding.py
 sha256:c4e0c731981e835edfe94d7ed2973f6eed7e87ecfcc8303de8b3f01252e08982  battery/tests/test_v9_defences.py
 sha256:e771bb2b9d9dbe233302f4eed29a67afdc8dc577c87410cf967e8d488f091c08  battery/tests/test_v9_prereg.py
@@ -344,7 +347,7 @@ sha256:790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5  battery
 ### 2.5 freeze —— 冻结机制自身（2 个文件）
 
 ```freeze:freeze
-sha256:dbc430c49d301d88f4e9f8cbbb8eb6863c1ec830405fa888ed2a1cc366401e58  battery/freeze.py
+sha256:7dd19d8504bc935e06e746f7e7104a5119eb3b9dbc8e1866e76cf687cc3f096c  battery/freeze.py
 sha256:9d3f9e267585fd67717415c0176a8727f80808f3b17f415d52e4ac31ea341a94  battery/verify.py
 ```
 
@@ -361,8 +364,10 @@ sha256:1e4f5f88e7db52a4d4bb0a2d1b92470594418ac0371ff3b40b540c3323548dbe  battery
 sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery/artifacts/gaming_audit.json
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
+sha256:428832d2db7cd4eadfaa3e6de2f760b35bba154b20c8fb6040020163c7feefa9  battery/artifacts_live/frontload_e2l.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
 sha256:1a2d7fc4c75f252849c90eea096c0a0854a9050f8cd8c50cd025dc84eedd8fe6  battery/artifacts_live/live_arm_readings.json
+sha256:3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94  battery/artifacts_live/threat_model.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -909,3 +914,15 @@ until this commit. `battery/artifacts_live/live_arm_readings.json` re-derived
 block hash updated in place; **no frozen code, artefact or prediction moved**
 (`gaming_audit.json` still `191c0ee8cf2c…`). The staleness is not a defect of
 the archive — rung 7 exists to make exactly this visible, and it did.
+
+**Amendment 2026-08-01 (E2L 与威胁模型拆分入册):** 新增六个受冻文件——
+`audit/threat.py`、`audit/frontload.py`（code）、
+`tests/test_threat_and_frontload.py`（suite）、
+`artifacts_live/threat_model.json`、`artifacts_live/frontload_e2l.json`
+（readings）、`PREREG_E2L.md`（narrative，其完整性由 commit 祖先关系证明，
+见该文件 §0）。因此 `freeze:code` 由 50 → 52 个文件、`freeze:suite`
+23 → 24、`freeze:readings` 9 → 11，`freeze:*` 块按
+`python -m battery.freeze` 逐块重渲，`freeze.py` 自身的摘要随之更新。
+**冻结基线与既有七份冻结读数一个字节未动**（`gaming_audit.json` 仍是
+`191c0ee8cf2c…`，切堆摘要仍是 `3feca53e…`）。E2L **未进
+`battery.metrics.REGISTRY`**：它没过工序 1，不进回算、不进包络、不进主表。

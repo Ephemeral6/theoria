@@ -118,6 +118,10 @@ CODE = [
     "battery/audit/live_arm.py",
     "battery/audit/live_tiers.py",
     "battery/audit/stats.py",
+    # the threat-model split and the E2L candidate: both publish numbers and
+    # both can move a verdict, so they are frozen like any other audit code.
+    "battery/audit/threat.py",
+    "battery/audit/frontload.py",
     "battery/audit/validation.py",
     # exploits are not documentation: tier_of() prefers a demonstrated
     # verdict over the prose register, so editing one moves a metric
@@ -181,6 +185,7 @@ SUITE = [
     "battery/tests/test_live_tiers.py",
     "battery/tests/test_metrics.py",
     "battery/tests/test_theoria_live.py",
+    "battery/tests/test_threat_and_frontload.py",
     "battery/tests/test_v9_blinding.py",
     "battery/tests/test_v9_defences.py",
     "battery/tests/test_v9_prereg.py",
@@ -208,6 +213,8 @@ READINGS = [
     "battery/artifacts/validation_material.json",
     "battery/artifacts_live/gaming_audit.live.json",
     "battery/artifacts_live/live_arm_readings.json",
+    "battery/artifacts_live/threat_model.json",
+    "battery/artifacts_live/frontload_e2l.json",
 ]
 
 PREREG = "battery/PREDICTIONS.md"
@@ -223,6 +230,7 @@ NARRATIVE = [
     "battery/BATTERY_V1.md",        # the record does not hash itself
     "battery/BLINDING.md",
     "battery/PREREG_V9.md",         # its integrity is test_v9_prereg.py's job
+    "battery/PREREG_E2L.md",        # ancestry is the proof; see its §0
     "battery/audit/v9/REPORT.md",
     "battery/DECISIONS.md",
     "battery/INPUT_FORMAT.md",
