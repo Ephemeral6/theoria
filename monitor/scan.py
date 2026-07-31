@@ -1339,6 +1339,159 @@ def probe_standing():
                          "　→ **超过两个周期没跳，例行已停**" if stale else "")}
 
 
+#: 没有任何一轮在跑时，`reflex.log` 允许的最长静默。reflex 每 5 分钟一跳，
+#: 所以这是 4 跳。**它只在锁不存在时适用**——见下面的 docstring：一跳不等于
+#: 一轮，而一轮在这台机器上跑 25–50 分钟是常态，用同一个数去判「正在跑的那一轮」
+#: 会让健康的忙机器恒红，而恒红的探针会被关掉（本仓关掉过）。
+REFLEX_IDLE_MAX_S = 20 * 60
+#: `reflex.py:151` 自己的陈旧阈值，照抄而不是重定一个。两处对同一件事给不同
+#: 答案时，探针会在 reflex 认为自己健康的区间里报红，或者反过来。
+REFLEX_LOCK_STALE_S = 1500
+
+
+def _pid_alive(pidnum):
+    """这个 pid 还在吗。`run_console`，不是 utf-8——`tasklist` 说控制台代码页。
+
+    强制 UTF-8 读 `tasklist` 曾经在 reader 线程里炸掉、把 `.stdout` 变成
+    `None`、于是「活着」被读成「死了」（S28）。存活判据用错编码的方向恰好是
+    令人安心的那个方向，所以这里不复用那条路。
+    """
+    try:
+        out = childio.run_console(["tasklist", "/FI", "PID eq %d" % int(pidnum),
+                                   "/FO", "CSV"]).stdout or ""
+    except Exception:                       # noqa: BLE001 -- 见返回值
+        return None                         # 「问不出来」，不是「死了」
+    return str(int(pidnum)) in out
+
+
+def _reflex_last_tick(log_path):
+    """`reflex.log` 最后一行**内容**里的时间戳（epoch），读不出来给 None。
+
+    读内容，**绝不读 mtime**，而且这不是风格问题：`reflex.log` 是被跟踪文件，
+    任何 checkout / merge / reset / `git pull --ff-only`（`ci_merge.main()` 结尾
+    就有一次，cwd 是活工作树）都会把它的 mtime 推到现在。OPS-M 在
+    `inbox/20260729T152000Z-…-reflex-log-mtime-is-not-a-liveness-signal.md`
+    里实测过一次 3 小时 18 分的偏差，并**撤回了他自己两次提过的 mtime 判据**。
+    一个按 mtime 判活的探针，会在 git 刚走过的每一刻报「反射层健康」。
+    """
+    try:
+        with open(log_path, encoding="utf-8", errors="replace") as fh:
+            lines = [l.strip() for l in fh if l.strip()]
+    except OSError:
+        return None
+    for line in reversed(lines):
+        stamp = _parse_utc(line.split(" ", 1)[0])
+        if stamp is not None:
+            return stamp
+    return None
+
+
+def probe_reflex_heartbeat(log_path=None, lock_path=None, alive=None):
+    """反射层还在跑完整轮吗——`probe_standing` 为 standing.log 做的事，这里补给 reflex。
+
+    S44/RES-4 起的头：`grep -rn reflex.log monitor/*.py` 只命中 `reflex.py`
+    自己。同一台机器、同一类日志，standing 的有人看，reflex 的没有。
+
+    ## 为什么不是「末行超过 15 分钟即红」那么简单
+
+    因为**一跳不等于一轮**。计划任务 `TheoriaReflex` 是
+    `MultipleInstances: IgnoreNew` + 5 分钟触发：上一轮还活着时，新的一跳
+    **根本不会启动**。而 `reflex.log` 只在一轮**跑完**时写一行
+    （`reflex.py:445`，无事也写 `quiet`）。本机实测的成轮间隔是
+    ~50 分钟（`2026-07-30T23:22:27Z / 07-31T00:14:11Z / 01:04:34Z / 01:54:33Z`），
+    因为队列里每条 flag 都要跑一遍完整闸门。于是「末行 20 分钟没动」在一台
+    **完全健康的忙机器**上是常态，照它报红就是造噪音——而本仓关掉过噪音探针，
+    这条探针的价值全在它平时是绿的。
+
+    所以判据是两个信号的交叉，`reflex.lock` 负责回答「这段静默有没有解释」：
+
+    ========================================  ========================
+    锁 / 末行                                  判决
+    ========================================  ========================
+    锁不在，末行 <= 20 分钟                     green（刚跑完，下一跳还没到）
+    锁不在，末行 > 20 分钟                      **risk：没有一轮在跑，也没有一轮跑完**
+    锁在，pid 活，锁龄 < 1500s                  green（一轮正在跑，静默有解释）
+    锁在，pid 活，锁龄 >= 1500s                 **risk：卡住了，而接管永远不会来**
+    锁在，pid 死                                **risk：崩在 finally 之前**
+    锁在，pid 读不出来                          **risk：说不出来就不是绿**
+    ========================================  ========================
+
+    ## 第三行为什么是 risk 而不是「等它自己接管」
+
+    `reflex.py:150-153` 的自愈是：锁龄超过 1500 秒就删锁并接管。**执行这段
+    代码需要第二个 reflex 进程，而 `IgnoreNew` 恰好禁止那个进程存在。**
+    两条各自合理的设计（一个陈旧接管阀，一个防并发策略）合起来的净效果是
+    「进程卡死时永不接管」，而 `ExecutionTimeLimit: PT72H` 意味着 Windows
+    三天内也不会杀它。查证记录在 `monitor/DECISIONS.md` 的 S44 条目，实测值
+    取自本机 `Get-ScheduledTask TheoriaReflex`。这条自愈路径既然不会自己触发，
+    **就必须由一条探针替它喊人**——那正是这一行的用途。
+
+    ## 已经发生过一次
+
+    2026-07-30，`scan.py` 挂住（实测 673 秒对 600 秒预算），超时从 `main()`
+    抛出，`finally` 丢掉锁，一行 rlog 都没写：`reflex.log` 从 08:32:21Z 起
+    静默 131 分钟，而同期 `merge.log` 一直在走。它只静默了 131 分钟而不是
+    72 小时，纯粹因为有人碰巧在看。S43 把那个 `except` 装回去了，所以这个
+    **具体**的触发原因没了；下一次因为别的原因死在 rlog 之前，症状一模一样。
+    """
+    log_path = log_path or rel("monitor", "reflex.log")
+    lock_path = lock_path or rel("monitor", "reflex.lock")
+    alive = alive or _pid_alive
+
+    last = _reflex_last_tick(log_path)
+    if last is None:
+        return {"status": "risk",
+                "detail": "**`monitor/reflex.log` 读不出任何一轮的时间戳**"
+                          "（文件不存在或没有带时间戳的行）——反射层一次也没"
+                          "跑完过，或者日志被截断了。这不是「没事」。"}
+    age = int(time.time() - last)
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(last))
+    said = "上一轮跑完于 %s（%d 分钟前，读的是**末行内容**、不是 mtime）" \
+           % (stamp, age // 60)
+
+    if os.path.exists(lock_path):
+        lock_age = int(time.time() - os.path.getmtime(lock_path))
+        try:
+            pid = int(open(lock_path, encoding="utf-8",
+                           errors="replace").read().strip() or 0)
+        except (OSError, ValueError):
+            pid = 0
+        holder = alive(pid) if pid else None
+        if holder is None:
+            return {"status": "risk",
+                    "detail": said + "；`reflex.lock` 在盘上但**问不出持锁者是死是活**"
+                                     "（pid=%s）。说不出来不算绿。" % (pid or "空")}
+        if not holder:
+            return {"status": "risk",
+                    "detail": said + "；`reflex.lock` 留在盘上而 **pid %d 已经死了**"
+                                     "（锁龄 %d 秒）——上一轮崩在 `finally` 之前，"
+                                     "下一跳要等锁龄过 %d 秒才敢接管。"
+                                     % (pid, lock_age, REFLEX_LOCK_STALE_S)}
+        if lock_age >= REFLEX_LOCK_STALE_S:
+            return {"status": "risk",
+                    "detail": said + "；**pid %d 持锁 %d 秒（超过 %d 秒的陈旧阈值）"
+                                     "且还活着**——`reflex.py:150` 的接管需要第二个"
+                                     "进程，而计划任务的 `MultipleInstances: IgnoreNew`"
+                                     "禁止它启动，`ExecutionTimeLimit` 是 PT72H。"
+                                     "**这条自愈路径不会触发，需要人看一眼 pid %d。**"
+                                     % (pid, lock_age, REFLEX_LOCK_STALE_S, pid)}
+        return {"status": "green",
+                "detail": said + "；一轮正在跑（pid %d 持锁 %d 秒），"
+                                 "所以这段静默是有解释的。" % (pid, lock_age)}
+
+    if age > REFLEX_IDLE_MAX_S:
+        return {"status": "risk",
+                "detail": said + "，而 **`reflex.lock` 不存在——没有一轮在跑，"
+                                 "也没有一轮跑完**。超过 %d 分钟（%d 跳）就是"
+                                 "反射层停了：补员、熔断、扫孤儿、自动合并、"
+                                 "刷盘面五件事全部没人做。查 `TheoriaReflex` "
+                                 "是否被禁用或上一跳的 LastTaskResult。"
+                                 % (REFLEX_IDLE_MAX_S // 60,
+                                    REFLEX_IDLE_MAX_S // 300)}
+    return {"status": "green",
+            "detail": said + "，锁已释放——上一轮干净收尾，下一跳未到。"}
+
+
 def _accounts_rows():
     """账号池的结构化行。读不出来返回空表——**空表不等于「没问题」**，
     页面据此显示「账号池不可读」，而不是显示一个漂亮的空白。"""
@@ -1604,6 +1757,7 @@ def probe_master_tree():
 PROBES = {
     "accounts": probe_accounts,
     "standing": probe_standing,
+    "reflex_heartbeat": probe_reflex_heartbeat,
     "master_tree": probe_master_tree,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,

@@ -19,7 +19,6 @@ silence.
 
 import os
 import sys
-import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import scan                                                     # noqa: E402
@@ -98,25 +97,28 @@ def test_agreement_is_not_recorded_as_a_disagreement():
 
 # ------------------------------------------------- an unprobed item says so
 
-def test_the_build_counts_and_names_items_nothing_checks():
+def test_the_build_counts_and_names_items_nothing_checks(real_scan):
     """Eleven of the sixteen Phase 1 rows have no probe.
 
     Several are hand-written green, which on the board looked exactly like a
     green a machine had confirmed. The count has to be visible, or the headline
     "9/16" reads as sixteen checked things.
     """
-    # `out_dir=`, because `scan.build()` with no argument writes `state.json`,
-    # `index.html` and `history.jsonl` **into the repository**. That made every
-    # run of `monitor/verify.py` leave the tree dirty -- through its own test
-    # stage, not through its scan stage, which has honoured `out_dir` since S13.
+    # `out_dir=` is still the rule and is now the fixture's responsibility:
+    # `scan.build()` with no argument writes `state.json`, `index.html` and
+    # `history.jsonl` **into the repository**. That made every run of
+    # `monitor/verify.py` leave the tree dirty -- through its own test stage,
+    # not through its scan stage, which has honoured `out_dir` since S13.
     # `verify.py`'s docstring says in as many words that the gate does not dirty
     # the workspace and explains why it must not: a gate that reports its own
     # output as a change can turn the *next* territory's gate red for a reason
     # that has nothing to do with the branch being merged. The scan stage was
     # fixed and the suite that runs beside it was not, so the property was false
     # while the paragraph asserting it stayed true-looking.
-    with tempfile.TemporaryDirectory() as out:
-        state = scan.build(False, out_dir=out)
+    #
+    # S44: this was the sixth of six tests each paying ~55s for an identical
+    # real scan. `conftest.real_scan` runs it once for the session.
+    state = real_scan.state
     assert state["p1_unprobed"] > 0
     assert state["p1_unprobed"] + sum(
         1 for ph in state["phases"] if ph["id"] == "p1"

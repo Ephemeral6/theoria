@@ -97,6 +97,8 @@ def test_the_check_can_actually_see_a_violation():
 
     good = os.path.join(HERE, "_probe_compliant.py")
     with open(good, "w", encoding="utf-8", newline="\n") as fh:
+        # real-scan-exempt: a string literal fed to this file's own AST matcher.
+        # Nothing here calls anything.
         fh.write("import scan\n\n\ndef f(d):\n    return scan.build(False, out_dir=d)\n")
     try:
         assert _scan_build_calls(good) == [(5, True)]
