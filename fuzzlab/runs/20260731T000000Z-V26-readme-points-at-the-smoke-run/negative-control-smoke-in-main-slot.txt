@@ -1,0 +1,23 @@
+[ok  ] oracle and battery tests
+        ........................................................................ [ 51%]
+        ....................................................................     [100%]
+[ok  ] campaign smoke, all six engines
+          "worlds_checked": 360
+        }
+        
+        -> out\campaign.json
+[ok  ] engine-rig's own suite (the tree under test)
+        ........................................................................ [ 82%]
+        ........................................................................ [ 90%]
+        ..........ssss...s.........s..s..s...........ssss....................... [ 98%]
+        ...........                                                              [100%]
+
+[FAIL] published main result (out/campaign.json)
+        worlds_per_engine is 60, below the claimed 500
+        totals.worlds_checked is 360, below the claimed 3000
+
+out/campaign.json is the 60-world SMOKE snapshot, not the result above
+smoke totals: {"generator_errors": 0, "invariants": 26, "raised": 0, "skipped": 152, "unavailable": 0, "violated": 0, "worlds_checked": 360}
+
+FAILED: published main result is not at the claimed scale
+EXIT=1

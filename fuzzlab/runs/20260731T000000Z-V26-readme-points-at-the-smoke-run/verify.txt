@@ -1,0 +1,22 @@
+[ok  ] oracle and battery tests
+        ........................................................................ [ 51%]
+        ....................................................................     [100%]
+[ok  ] campaign smoke, all six engines
+          "worlds_checked": 360
+        }
+        
+        -> out\campaign.json
+[ok  ] engine-rig's own suite (the tree under test)
+        ........................................................................ [ 82%]
+        ........................................................................ [ 90%]
+        ..........ssss...s.........s..s..s...........ssss....................... [ 98%]
+        ...........                                                              [100%]
+
+[ok  ] published main result (runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/campaign.json)
+        500 worlds per engine x 6 engines, 26 invariants, seed 0x00005eedc1e4f002
+        totals: {"generator_errors": 0, "invariants": 26, "raised": 0, "skipped": 1142, "unavailable": 0, "violated": 0, "worlds_checked": 3000}
+
+out/campaign.json is the 60-world SMOKE snapshot, not the result above
+smoke totals: {"generator_errors": 0, "invariants": 26, "raised": 0, "skipped": 152, "unavailable": 0, "violated": 0, "worlds_checked": 360}
+
+green
