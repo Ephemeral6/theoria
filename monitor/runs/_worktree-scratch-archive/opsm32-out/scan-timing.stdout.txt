@@ -1,0 +1,40 @@
+    Phase 1: 11/16 项无任何机器检查，其状态是人工断言
+    裁决分歧 p1-seal-test：手写 partial / 探针 green → 取 partial（probe covers only part of this item, so it may not upgrade it）
+[2026-07-30 21:32:27] monitor/index.html written — Phase 1: 9/16 green
+  a0_state               green    A0 阶段件 10/10 落盘；候选 invariant×2, object_hypothesis×3, plan×1, rule_hypothesis×23。缺：无
+  a1_state               green    engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。
+  accounts               green    a（max20-a）已登录、窗口关至 2026-07-30T13:50:00Z，发车 57 次、撞限 8 次；b（max20-b）已登录、窗口开，发车 64 次、撞限 9 次　→ 1 个账号可用，撞限时会轮换而不是停机。
+  append_only            risk     追加式文件出现删除：PARTNER_SYNC.md（删除 3 行，超出已裁决豁免 1 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。
+  bus                    green    8 个会话在线，指令全部已读并回执。
+  clock_sanity           risk     **1 处手打的时间还没到**：heartbeat RES-4 自报 2026-07-30T13:20:00Z，超前 5 分钟。时钟不可能超前，所以这些是手打的；危险在方向——只会向前跑的自报时间让掉线看起来比实际新鲜、
+  conflict_scan          risk     文件内有合并冲突标记：.worktrees/a3-campaign-devpile/monitor/runs/opsm29/conflicts-triage.md, .worktrees/c14-four-forms-i
+  credential_hygiene     green    无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAU
+  determinism_state      green    逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。
+  disk_headroom          partial  磁盘剩 15.1 GB / 474 GB，接近会开始伪装成闸门失败的水位。299 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工
+  dispatch_board         green    派单已由工作板取代（见 supply 探针），本探针不再适用。
+  inbox                  partial  待裁决提案 204 份：2026-07-29T1430Z-W-1672-worktrees-hold-the-only-copy-of-paid-runs.md, 2026-07-29T160016Z-W-131-boa
+  merge_queue            risk     **合并队列最久的一条卡了 2485 分钟**（19 条待合、18 条被 flag）：verify gate red in monitor×5；verify gate red in monitor (verify.sh)
+  needs_human            risk     需要你重开的会话：OPS-B 浏览器专员（1497 分钟没心跳）； OPS-R 回顾员（1615 分钟没心跳）； RES-2 论文与释出研究员（499 分钟没心跳）； RES-3 验证与考卷研究员（91 分钟没心跳）
+  offline_done           partial  离线还差 4 格：C1 编译链(75%)、C2 离线验收(90%)、V1 指标电池(85%)、V2 考卷(80%)。战役线已获授权可先行，不必等齐。
+  ops_duty               risk     **50 条 TO-MONITOR 待监控回复**。 OPS-A 第52轮 working（18 分钟前）； OPS-B 第13轮 idle（1497 分钟前）； OPS-M 第32轮 working（12 分钟前）； 
+  orphan_commits         risk     孤立提交 19 个，分布在 7 条分支上；未裁决 5 条（agent/e18-survey-numbers-reproducible、agent/a3-campaign-devpile、agent/v25-worldge
+  pile_integrity         green    封存堆 21 局零接触（已核对 3229 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99
+  provenance_scan        partial  已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：6 个 run（正典 5，**无留痕 1**），最新 20260728T191437Z-A9
+  scheduled_tasks        risk     TheoriaReflex 运行中（reap / quota / 自动合并）； TheoriaDashboard 运行中（每 10 分钟重算 state.json）； TheoriaServe **未注册**（本地服务 
+  self_driving           risk     RES-1 第50轮 working（26 分钟前）； RES-2 第40轮 idle（499 分钟前）**说好 2026-07-30T03:40:00Z 醒，没醒**； RES-3 第105轮 working（91 分
+  spec_freshness         risk     spec.py 落后 323 个提交 / 92 次合并（判断陈旧到 risk 就该重扫）。
+  spend                  green    开发堆战役包 $200，已花 **$36.14**，剩 $163.86（14112 条记账）；分战役：arc-recon-canary-full $0.00、arc-recon-canary-quick $0.00、mo
+  standing               green    例行任务 已注册，上一跳 9 分钟前；累计起过 112 次常驻会话。最近：START RES-4 (lane=infra) ok=state-unknown [unread=1 held=1 claimable=0；ST
+  supply                 green    板上 4 件可领、6 件在做，供货充足。
+  verify_gates           green    工单声称的 11 个 verify 脚本全部在树上，且每个领地都有闸门。领地 25：自带闸门 24（其中 **21 个从未被证明能变红**）、仅测试套件 1、**无闸门 0**
+  [BLOCKING] F-11 — INC-BA-001：9 局封存局知识污染【已裁决·监控代行】
+  [BLOCKING] F-19 — Phase 3 钱门 9/16，开发堆战役驳回；k/Δ/B 由监控定【已裁决·监控代行 2026-07-29】
+  [BLOCKING] F-20 — 十三个 agent 的独立审计：监控高估约 11.5 个百分点，50.0 → 38.6【已裁决·监控代行：数字已改】
+  [BLOCKING] F-21 — 这个代码库没有第三个值：28 处「测不到」被写成了「测了，没问题」【已裁决·监控代行：四处当场修，其余四件上板】
+  [HIGH] F-12 — A0′：可逆性 > 覆盖率【已裁决·监控代行：写入基准文件】
+  [HIGH] F-13 — GAP-1：Schema 复现不可能【已裁决·监控代行：采纳路 A】
+  [HIGH] F-14 — CONTRACTS 的 kind 枚举被冻结条款卡住 M9 新引擎【已裁决·监控代行：升 v0.2】
+  [HIGH] F-17 — 工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全【已裁决·监控代行：五件上板】
+  [HIGH] F-18 — engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】
+  [HIGH] F-04 — 约束 5 与约束 2 在第一次冷启动上就互相矛盾
+  [HIGH] F-06 — 生成器分叉升级：gen_python 会把编译不了的守卫静默替换成 True

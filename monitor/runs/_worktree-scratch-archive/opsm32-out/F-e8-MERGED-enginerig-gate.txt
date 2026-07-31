@@ -1,0 +1,66 @@
+worktree: C:\Users\user\Desktop\theoria\.worktrees\opsm32-conf-e8
+territory: engine-rig
+cmd: ['D:\\Miniforge3\\python.exe', 'C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm32-conf-e8\\engine-rig\\verify.py']
+cwd: C:\Users\user\Desktop\theoria\.worktrees\opsm32-conf-e8\engine-rig
+rc: 1
+----------------------------------------------------------------------
+[1/3] suite
+   FAIL  suite red (exit 1)
+.. [ 17%]
+............................................s........................... [ 26%]
+.........ss............................................................. [ 35%]
+........................................................................ [ 44%]
+........................................................................ [ 52%]
+........................................................................ [ 61%]
+........................................................................ [ 70%]
+........................................................................ [ 79%]
+......................................F................................. [ 88%]
+.......................ssss...s.........s..s..s...........ssss.......... [ 97%]
+........................                                                 [100%]
+================================== FAILURES ===================================
+___________________ test_recheck_never_imports_the_engines ____________________
+
+    def test_recheck_never_imports_the_engines():
+        """The independence claim, enforced rather than asserted.
+    
+        `interop` is on the forbidden list as of E6.  The pagoda kind is rechecked
+        against certificates `interop/certificate_export.py` wrote, and that module
+        imports `engines.lp_potential.potential` -- so importing anything from
+        `interop` would reach the engine one hop further out and the independence
+        would be gone at exactly the point it is being claimed.  `anchors.py`
+        *reads* files under `interop/certificates/`, which is the same thing it does
+        to `cold-start-a2/` and is not an import.
+    
+        The scan is also asserted to have covered the modules the pagoda work
+        touched: a filter that silently stopped matching would otherwise leave this
+        test passing over nothing.
+        """
+        here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        package = os.path.join(here, "recheck")
+        forbidden = ("engines", "tools.", "interop")
+        offenders = []
+        scanned = []
+        for name in sorted(os.listdir(package)):
+            if not name.endswith(".py"):
+                continue
+            scanned.append(name)
+            with open(os.path.join(package, name), "r", encoding="utf-8") as handle:
+                text = handle.read()
+            for line in text.splitlines():
+                stripped = line.strip()
+                if stripped.startswith(("import ", "from ")) and any(
+                        token in stripped for token in forbidden):
+                    offenders.append("%s: %s" % (name, stripped))
+>       assert not offenders, offenders
+E       AssertionError: ['verify_all.py: from interop import peg1d']
+E       assert not ['verify_all.py: from interop import peg1d']
+
+tests\test_recheck.py:636: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_recheck.py::test_recheck_never_imports_the_engines - Assert...
+
+[2/3] one real run -- eight engines end to end, offline
+   ok    wrote candidates.jsonl
+[3/3] artefact self-check
+
+engine-rig: RED (1 problem(s))

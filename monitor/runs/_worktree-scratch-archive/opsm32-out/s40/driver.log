@@ -1,0 +1,23 @@
+{
+  "tag": "s40-mrg",
+  "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm32-s40-mrg",
+  "head": "cc7632864719e9687841fa4d0aa468971d42fe5a",
+  "gate_kind": "verify",
+  "gate_name": "verify.sh",
+  "gate_rc": 1,
+  "pytest_rc": 1,
+  "failing_ids": [
+    "tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green",
+    "tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk",
+    "tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green",
+    "tests/test_standing_reflex_no_third_value.py::test_reflex_reads_the_return_code_of_every_child_it_scrapes",
+    "tests/test_standing_reflex_no_third_value.py::test_a_failed_git_query_skips_revival_instead_of_reviving_everyone",
+    "tests/test_standing_reflex_no_third_value.py::test_supply_unknown_is_distinct_from_supply_low_zero"
+  ],
+  "gate_stages": [
+    "== tests              FAILED(1)",
+    "== board states disjoint ok",
+    "== real run           ok",
+    "== artifact fields    ok"
+  ]
+}

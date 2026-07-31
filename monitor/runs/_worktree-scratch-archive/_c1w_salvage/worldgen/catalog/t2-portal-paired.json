@@ -1,0 +1,56 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "portal": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "paired",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        4,
+        7
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "paired",
+        "pair": "p"
+      }
+    }
+  ],
+  "families": [
+    "portal"
+  ],
+  "flags": {},
+  "goal": [
+    5,
+    7
+  ],
+  "layout": [
+    "#########",
+    "#....#..#",
+    "#.####..#",
+    "#...##..#",
+    "#.###...#",
+    "#.....#.#",
+    "#########"
+  ],
+  "notes": "The variant that makes direction observable. A miner that has not lifted `?dir` cannot state this rule in fewer than four clauses.",
+  "seed": 203,
+  "tier": 2,
+  "variant_delta": "`paired` instead of `twoway`: the agent exits *through* the partner, so the landing cell depends on the direction of travel",
+  "variant_of": "t2-portal-pair",
+  "world_id": "t2-portal-paired"
+}

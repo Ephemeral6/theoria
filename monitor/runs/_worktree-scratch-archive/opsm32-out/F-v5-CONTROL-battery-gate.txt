@@ -1,0 +1,12 @@
+[1/4] suite
+   ok    352 passed in 12.52s
+[2/4] one real run -- the whole spectrum recomputed from the ledgers, offline
+   ok    wrote 7 file(s)
+[3/4] artefact self-check
+   ok    7 artefacts, 38 cards x 104 runs, 1629 measured cells, 128 insufficient-data, 2195 not-applicable, 1629 ok
+   note  this recompute saw 104 run(s); battery/artifacts/ was built from 95. Untracked inputs (baseline-arms/out/shards, schema traces) are absent from a clean checkout by design
+[4/4] the separation claim in the committed documents
+   ok    0 separating of 38 judged; 4 paired game(s) against the 6 the sign test needs; both documents agree
+
+battery: green -- suite, one real run, artefact fields, separation claim
+rc=0

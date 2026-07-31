@@ -1,0 +1,132 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "push",
+      "verdict": "unreachable"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_block",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "toggle_switch",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk_through_door",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_door",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "door_mirrors_net",
+      "verdict": "unreachable"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "teleport_twoway",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "blocked_portal_exit",
+      "verdict": "unreachable"
+    }
+  ],
+  "components": 1,
+  "reachable_states": 81,
+  "reversibility_score": 1.0,
+  "rules": {
+    "blocked_by_block": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_door": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 73,
+      "firing_transitions": 116,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "teleport_twoway": {
+      "firing_states": 6,
+      "firing_transitions": 6,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "toggle_switch": {
+      "firing_states": 6,
+      "firing_transitions": 6,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 81,
+      "firing_transitions": 188,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_door": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 7,
+  "rules_single_witness": [],
+  "rules_total": 7
+}

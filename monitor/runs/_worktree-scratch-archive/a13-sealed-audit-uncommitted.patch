@@ -1,0 +1,608 @@
+diff --git a/arc-recon/cascade/verify.py b/arc-recon/cascade/verify.py
+index 76aba294..bbf34d95 100644
+--- a/arc-recon/cascade/verify.py
++++ b/arc-recon/cascade/verify.py
+@@ -68,22 +68,68 @@ def sealed_ids() -> List[str]:
+ 
+ 
+ def audited_ledgers(run_dir: str) -> List[str]:
+-    """Every `ledger.*.jsonl` in the run directory, discovered rather than named.
++    """Every `ledger.*.jsonl` under the run directory, discovered not named.
+ 
+-    A13: the loop below builds filenames from `spec.SEQUENCES` -- the four
+-    development games -- so a file called `ledger.<sealed-id>.jsonl` dropped into
+-    a run directory was never `os.path.exists`-ed, never opened, and contributed
++    A13: `verify()` builds filenames from `spec.SEQUENCES` -- the four
++    development games -- so `ledger.<sealed-id>.jsonl` dropped into a run
++    directory was never `os.path.exists`-ed, never opened, and contributed
+     nothing to `checked`. The sealed check cannot be the one check that only
+-    looks where it expects the answer to be no. `redact_ledger.all_ledgers`
+-    already discovers these files this way; this is the same routine, applied to
+-    the audit that most needs it.
++    looks where it expects the answer to be no.
++
++    `os.walk`, not `os.listdir`: an adversarial pass pointed out that the first
++    version of this was one level deep while `redact_ledger.all_ledgers` -- the
++    routine whose discipline it claimed to copy -- recurses, so a shard
++    subdirectory was still invisible.
+     """
+-    if not os.path.isdir(run_dir):
+-        return []
+-    return sorted(
+-        os.path.join(run_dir, name) for name in os.listdir(run_dir)
+-        if name.startswith("ledger.") and name.endswith(".jsonl")
+-    )
++    out: List[str] = []
++    for root, _dirs, names in os.walk(run_dir):
++        if "__pycache__" in root:
++            continue
++        for name in names:
++            if name.startswith("ledger.") and name.endswith(".jsonl"):
++                out.append(os.path.join(root, name))
++    return sorted(out)
++
++
++def run_file_names(run_dir: str) -> List[str]:
++    """Every file under the run directory, for the name check.
++
++    Naming *any* run file after a sealed game is the thing the cut forbids --
++    `steps.<sealed>.jsonl` and `summary.<sealed>.json` say it as loudly as a
++    ledger does, and the first version of this checked only ledger names.
++    """
++    out: List[str] = []
++    for root, _dirs, names in os.walk(run_dir):
++        if "__pycache__" in root:
++            continue
++        out.extend(os.path.join(root, name) for name in names)
++    return sorted(out)
++
++
++def read_jsonl_lenient(path: str):
++    """`read_jsonl`, but a bad line is a finding rather than a traceback.
++
++    `read_jsonl` lets `JSONDecodeError` and `PermissionError` escape, so one
++    corrupt byte in a discovered ledger aborted `verify()` with no verdict and
++    no JSON output at all. A sealed audit that cannot read a file must say so,
++    which is the same rule `contamination.py` follows.
++    """
++    records, problems = [], []
++    try:
++        raw = open(path, encoding="utf-8").read().splitlines()
++    except (OSError, UnicodeDecodeError) as exc:
++        return [], ["%s: %s: %s" % (os.path.basename(path),
++                                    type(exc).__name__, exc)]
++    for i, line in enumerate(raw, 1):
++        line = line.strip()
++        if not line:
++            continue
++        try:
++            records.append(json.loads(line))
++        except ValueError as exc:
++            problems.append("%s line %d does not parse (%s), so it has not been "
++                            "audited" % (os.path.basename(path), i, exc))
++    return records, problems
+ 
+ 
+ def undiscovered_ledger_failures(run_dir: str,
+@@ -97,10 +143,10 @@ def undiscovered_ledger_failures(run_dir: str,
+     finished reading -- the sealed check being the one check that only looked
+     where it expected the answer to be no.
+ 
+-    The file *name* is checked as well as its contents. Naming a run file after
+-    a sealed game is already the thing the cut forbids, whatever the file turns
+-    out to hold, and a run that produced no records for it is not thereby
+-    innocent.
++    Every file *name* under the directory is checked, not only the ledgers':
++    `steps.<sealed>.jsonl` and `summary.<sealed>.json` say the forbidden thing
++    as loudly as a ledger does, and a run that produced no records for it is not
++    thereby innocent.
+ 
+     Separated from `verify()` so it can be tested: `verify()` loads the API key
+     for its secret sweep, and a check about sealed games should not require a
+@@ -108,19 +154,30 @@ def undiscovered_ledger_failures(run_dir: str,
+     """
+     sealed = sealed if sealed is not None else sealed_ids()
+     failures: List[str] = []
++    # Only the ledgers `verify()` ACTUALLY read. It skips a game whose
++    # `steps.<game>.jsonl` is absent, so building this from `spec.SEQUENCES`
++    # unconditionally excluded exactly those files from A7b as well -- a
++    # ledger named after a dev game, with no steps file, was audited by
++    # neither. An adversarial pass built that case on the shape of the real
++    # `-p20-followup` run directory, which holds one game of four.
+     expected = {os.path.join(run_dir, "ledger.%s.jsonl" % game)
+-                for game in spec.SEQUENCES}
++                for game in spec.SEQUENCES
++                if os.path.exists(os.path.join(run_dir, "steps.%s.jsonl" % game))}
+     undiscovered = 0
+     entries_read = 0
+-    for path in audited_ledgers(run_dir):
++    for path in run_file_names(run_dir):
+         name = os.path.basename(path)
+         for sealed_id, why in sealed_mod.hits(name, sealed).items():
+             failures.append("A7b %s: run file is named after sealed game %s (%s)"
+                             % (name, sealed_id, why))
++    for path in audited_ledgers(run_dir):
++        name = os.path.basename(path)
+         if path in expected:
+             continue                     # already read, entry by entry, by verify()
+         undiscovered += 1
+-        for entry in read_jsonl(path):
++        records, problems = read_jsonl_lenient(path)
++        failures.extend("A7b %s" % p for p in problems)
++        for entry in records:
+             entries_read += 1
+             for sealed_id, why in sealed_mod.hits_in_any(
+                     [entry.get("request_body"), entry.get("url"),
+diff --git a/arc-recon/contamination.py b/arc-recon/contamination.py
+index 53380ec0..8da8aaf0 100644
+--- a/arc-recon/contamination.py
++++ b/arc-recon/contamination.py
+@@ -131,28 +131,50 @@ def record_shape(entry: Dict[str, Any]) -> str:
+     return UNRECOGNISED
+ 
+ 
++# Which top-level keys each shape knows how to place. Everything else in a
++# record of that shape is UNCLASSIFIED, and an id found there fails closed.
++REQUEST_KEYS = {
++    # `game_id` at the top level of an HTTP record is still something we
++    # addressed, and `record_shape` resolves CALL before EPISODE, so it has to
++    # be listed here or a record carrying both would lose it.
++    CALL: ("url", "final_url", "request_body", "request_headers") + EPISODE_FIELDS,
++    EPISODE: EPISODE_FIELDS,
++    SUMMARY: (),
++}
++RESPONSE_KEYS = {
++    CALL: ("response_body", "response_summary"),
++    # NOT `frame`/`state`/`available_actions`. The listing carve-out is earned
++    # by one specific argument -- `GET /api/games` returns all 25 by
++    # construction -- and that argument is about a *response body*. A game
++    # state string, a grid of ints and a list of action numbers have no
++    # business holding a sealed id, so an id found there is unclassified and
++    # fails closed. (Checked: no shipped record trips this.)
++    EPISODE: ("response_body",),
++    # A probe's own aggregate output. `sealed_hits` and `denied_sealed_files`
++    # are named because their whole job is to *hold* sealed ids: they are a
++    # report about contamination, and scoring a report as the thing it reports
++    # would pin this gate red on its own findings.
++    SUMMARY: ("results", "totals", "state", "tripped", "rounds", "cells",
++              "sealed_hits", "denied_sealed_files", "denied_unknown_files",
++              "allowed_files", "environments", "storm_results",
++              "variant_results", "windows", "verdicts"),
++}
++
++
+ def request_and_response(entry: Dict[str, Any], shape: str):
+     """The two halves of a record: what we sent, and what came back.
+ 
+     The split is the module's oldest and most load-bearing distinction --
+-    contact versus listing -- and it now has to be made for three shapes rather
+-    than one. For an `episode` record the id itself is the request half: you
+-    cannot take a step in a game without naming it.
++    contact versus listing. For an `episode` record the id itself is the request
++    half: you cannot take a step in a game without naming it.
++
++    An adversarial pass over the first version of this found that `SUMMARY`
++    returned `([], [entry])` -- every field response-side -- which made the
++    whole record one big carve-out and gave any record with a `kind` key a free
++    pass. The carve-out is earned key by key or not at all.
+     """
+-    if shape == CALL:
+-        # `game_id` at the top level of an HTTP record is still something we
+-        # addressed, and `record_shape` resolves CALL before EPISODE, so it has
+-        # to be picked up here or a record carrying both would lose it.
+-        return ([entry.get("url"), entry.get("final_url"),
+-                 entry.get("request_body"), entry.get("request_headers")]
+-                + [entry.get(key) for key in EPISODE_FIELDS],
+-                [entry.get("response_body"), entry.get("response_summary")])
+-    if shape == EPISODE:
+-        return ([entry.get(key) for key in EPISODE_FIELDS],
+-                [entry.get(key) for key in
+-                 ("frame", "state", "available_actions", "response_body")])
+-    # A summary is wholly derived from responses; nothing in it was sent.
+-    return ([], [entry])
++    return ([entry.get(key) for key in REQUEST_KEYS.get(shape, ())],
++            [entry.get(key) for key in RESPONSE_KEYS.get(shape, ())])
+ 
+ 
+ OTHER_LEDGERS = [
+@@ -218,7 +240,7 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
+     """
+     ledger_path = ledger_path or os.path.join(DATA_DIR, "recon_ledger.jsonl")
+     sealed = piles()["sealed_pile"]
+-    short = {game_id.split("-")[0]: game_id for game_id in sealed}
++    short = {sealed_mod.stem(game_id): game_id for game_id in sealed}
+     contacts: Dict[str, List[str]] = {}
+     listed: Dict[str, int] = {}
+     unreadable: List[str] = []
+@@ -282,17 +304,24 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
+             # provably lists all 25, and no such argument is available for a
+             # field nobody has classified. Teaching `request_and_response` about
+             # the field is how you make it a listing again.
++            classified = set(REQUEST_KEYS.get(shape, ())) | set(
++                RESPONSE_KEYS.get(shape, ()))
+             for game_id, why in sealed_mod.hits(entry, sealed).items():
+-                if game_id in sent or game_id in back:
+-                    continue
++                # Per FIELD, not per game. An adversarial pass found that a
++                # record carrying a `GET /api/games` catalogue response masked
++                # every unclassified field of that same record for all 21 ids:
++                # the game was already in `back`, so the fallback skipped it.
+                 where = sorted(
+                     key for key in entry
+-                    if sealed_mod.hits({key: entry[key]}, [game_id])
++                    if key not in classified
++                    and sealed_mod.hits({key: entry[key]}, [game_id])
+                 )
++                if not where:
++                    continue
+                 contacts.setdefault(game_id, []).append(
+                     "%s %s [%s, in unclassified field(s) %s of a %s record]"
+                     % (entry.get("method") or shape, url or "-", why,
+-                       ", ".join(where) or "?", shape))
++                       ", ".join(where), shape))
+     return {
+         "ledger_lines": lines,
+         "definition": ("contact = sealed id in the request url or request body; "
+@@ -308,7 +337,11 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
+         # as "0 calls, sealed ADDRESSED: NONE". Deleting a ledger was a way
+         # through this gate; `all_ledger_audit` already knew that about the
+         # *other* tracks' ledgers and gave this one the benefit of the doubt.
+-        "clean": (not contacts) if (present and not unreadable) else None,
++        # G5: `lines == 0` is a third way of not having looked. Truncating a
++        # ledger to zero bytes used to audit clean while deleting the same file
++        # audited red, which made the weaker attack the effective one.
++        "clean": ((not contacts) if (present and not unreadable and lines)
++                  else None),
+         "sealed_ids_seen_in_responses": len(listed),
+         "responses_note": ("GET /api/games returns the whole public set, so all "
+                            "21 sealed ids appear in read-only responses; that is "
+@@ -425,8 +458,11 @@ def register_coverage() -> Dict[str, Any]:
+     # complaints reach `gate()`, and a problem nothing gates on is a comment.
+     known = set(piles()["dev_pile"]) | set(piles()["sealed_pile"])
+     for entry in good:
++        # `str()` because a registration is hand-written: a list here used to
++        # raise `TypeError: unhashable type` out of the membership test and
++        # abort the whole gate, which is a crash where a red was wanted.
+         game_id = entry["game_id"]
+-        if game_id in known:
++        if str(game_id) in known:
+             continue
+         problems.append(
+             "contamination log registers %r, which is in neither pile. The cut "
+@@ -436,7 +472,8 @@ def register_coverage() -> Dict[str, Any]:
+             "as a missing one. Nearest ids in the cut: %s"
+             % (game_id, ", ".join(sorted(
+                 other for other in known
+-                if other.split("-")[0] == str(game_id).split("-")[0]) or ["none"])))
++                if sealed_mod.stem(other) == sealed_mod.stem(str(game_id)))
++                or ["none"])))
+ 
+     return {"present": True, "lines": lines, "problems": problems, "entries": good}
+ 
+@@ -470,7 +507,15 @@ def current_register() -> Dict[str, Dict[str, Any]]:
+                 for game_id in ids}
+     for entry in entries():
+         game_id = entry["game_id"]
+-        if game_id not in register:
++        # `isinstance` before `in`, because the membership test is not total:
++        # `game_id: ["ls20-9607627b"]` raised `TypeError: unhashable type` from
++        # inside this loop and took the whole gate down with it. A crash is
++        # strictly worse than the red it replaced -- `register_coverage` had
++        # already classified that entry as a problem, and `gate()` would have
++        # gone red on it, but nobody ever saw the verdict because `claim_set`
++        # calls this function first. Fail-closed only counts if the close is
++        # reachable.
++        if not isinstance(game_id, str) or game_id not in register:
+             # Still skipped -- an id outside the cut has no row to update -- but
+             # no longer silently: `register_coverage` raises it as a problem and
+             # `gate()` turns it red. See the note there.
+diff --git a/arc-recon/precheck.py b/arc-recon/precheck.py
+index 711fc842..fccd4806 100644
+--- a/arc-recon/precheck.py
++++ b/arc-recon/precheck.py
+@@ -115,11 +115,14 @@ def assert_playable(game_id: str) -> None:
+             "first frame, so running this would burn a sealed game." % game_id
+         )
+     # Defence in depth: the short form must not collide with a sealed game.
+-    short = game_id.split("-")[0]
+-    for sealed in piles["sealed_pile"]:
+-        if sealed.split("-")[0] == short:
++    # A13 converged the stem rule onto `sealed.py` -- this used to be the third
++    # of three implementations of "is this id sealed", and they had drifted.
++    import sealed as sealed_mod
++    short = sealed_mod.stem(game_id)
++    for sealed_id in piles["sealed_pile"]:
++        if sealed_mod.stem(sealed_id) == short:
+             raise SealedGameError(
+-                "short id %s collides with sealed game %s" % (short, sealed)
++                "short id %s collides with sealed game %s" % (short, sealed_id)
+             )
+ 
+ 
+diff --git a/arc-recon/sealed.py b/arc-recon/sealed.py
+index cdde166e..afb32b1f 100644
+--- a/arc-recon/sealed.py
++++ b/arc-recon/sealed.py
+@@ -20,6 +20,12 @@ compares full ids; `contamination` only looked inside two named keys, and the
+ stem was under `tags`. Both would have reported clean on a request that named a
+ sealed game, had the game been sealed.
+ 
++An adversarial pass over the first version of this file added two more parts
++and corrected one claim. Matching is **case-insensitive**, and the text is
++searched **percent-decoded** as well as raw; and `precheck.assert_playable`
++below was converged onto this module too, so "three implementations" is now a
++description of the past rather than a boast about the present.
++
+ **The criterion, in one place, in three parts.** A sealed game is present in a
+ payload when any of these holds:
+ 
+@@ -45,6 +51,7 @@ holding; this module only answers "is it in there".
+ import json
+ import os
+ import re
++import urllib.parse
+ from typing import Any, Dict, Iterable, List, Sequence
+ 
+ HERE = os.path.dirname(os.path.abspath(__file__))
+@@ -81,18 +88,36 @@ def as_text(payload: Any) -> str:
+     if payload is None:
+         return ""
+     if isinstance(payload, str):
+-        return payload
++        text = payload
++    else:
++        try:
++            text = json.dumps(payload, ensure_ascii=False, default=str)
++        except (TypeError, ValueError):
++            text = str(payload)
++    # Percent-decoded as well as raw. `https://x/api/games/ls%32%30-9607627b`
++    # is the same request as the readable form, and an audit that only reads
++    # the readable form is one URL-encode away from blind -- the same defect,
++    # in a different alphabet. Both are searched, so a decode that mangles
++    # something cannot hide what the raw text already showed.
+     try:
+-        return json.dumps(payload, ensure_ascii=False, default=str)
++        decoded = urllib.parse.unquote(text)
+     except (TypeError, ValueError):
+-        return str(payload)
++        decoded = text
++    return text if decoded == text else text + chr(10) + decoded
+ 
+ 
+ def _stem_pattern(short: str) -> "re.Pattern":
+     # Whole-token: not preceded or followed by another id character. `ar25`
+     # matches in `["p20-cascade", "ar25"]` and in `ar25-0c556536`, and does not
+     # match inside `war2500`.
+-    return re.compile(r"(?<![0-9A-Za-z])%s(?![0-9A-Za-z])" % re.escape(short))
++    #
++    # Case-insensitive. Ids are lowercase everywhere in this repo today, so this
++    # changes nothing about the shipped ledgers -- and that is exactly why it is
++    # cheap to be right about: a check that only catches the casing it expects is
++    # the same shape of defect as one that only reads the fields it expects, and
++    # this whole work order is about that shape.
++    return re.compile(r"(?<![0-9A-Za-z])%s(?![0-9A-Za-z])" % re.escape(short),
++                      re.IGNORECASE)
+ 
+ 
+ def hits(payload: Any, sealed: Sequence[str] = None) -> Dict[str, str]:
+@@ -106,8 +131,9 @@ def hits(payload: Any, sealed: Sequence[str] = None) -> Dict[str, str]:
+     if not text:
+         return {}
+     found: Dict[str, str] = {}
++    lowered = text.lower()
+     for game_id in (sealed if sealed is not None else sealed_pile()):
+-        if game_id in text:
++        if game_id.lower() in lowered:
+             found[game_id] = "full id"
+             continue
+         if _stem_pattern(stem(game_id)).search(text):
+diff --git a/arc-recon/test_sealed_audit_negatives.py b/arc-recon/test_sealed_audit_negatives.py
+index 19ca0d89..db4f537d 100644
+--- a/arc-recon/test_sealed_audit_negatives.py
++++ b/arc-recon/test_sealed_audit_negatives.py
+@@ -47,12 +47,31 @@ if HERE not in sys.path:
+ import contamination                                        # noqa: E402
+ import sealed                                               # noqa: E402
+ from cascade import verify as cascade_verify                # noqa: E402
++import precheck                                             # noqa: E402
+ 
+ SEALED = sealed.sealed_pile()[0]
+ SEALED_STEM = sealed.stem(SEALED)
+ DEV = sealed.dev_pile()[0]
+ 
+ 
++def _gate_over(path):
++    """`gate()` with this ledger in the scan surface.
++
++    The item asks that all three samples turn the GATE red, not merely that a
++    helper returns False -- an adversarial pass pointed out that two of the
++    three asserted only the helper, on a temp file the gate never reads. The
++    scan surface is a module-level list, so pointing it at the fixture is what
++    makes the assertion about the thing that gates.
++    """
++    import contextlib
++    original = contamination.OTHER_LEDGERS
++    contamination.OTHER_LEDGERS = [path]
++    try:
++        return contamination.gate()
++    finally:
++        contamination.OTHER_LEDGERS = original
++
++
+ def _ledger(tmp_path, *records):
+     path = tmp_path / "ledger.jsonl"
+     path.write_text("".join(json.dumps(r) + "\n" for r in records),
+@@ -70,6 +89,7 @@ def test_an_episode_record_naming_a_sealed_game_is_a_contact(tmp_path):
+     assert report["clean"] is False
+     assert report["sealed_games_contacted"] == [SEALED]
+     assert report["record_shapes"] == {contamination.EPISODE: 1}
++    assert _gate_over(path)["red"] is True
+ 
+ 
+ def test_the_episode_shape_is_recognised_rather_than_skipped(tmp_path):
+@@ -116,6 +136,7 @@ def test_a_bare_sealed_stem_in_a_request_body_is_a_contact(tmp_path):
+     report = contamination.sealed_api_contacts(path)
+     assert report["clean"] is False
+     assert report["sealed_games_contacted"] == [SEALED]
++    assert _gate_over(path)["red"] is True
+ 
+ 
+ def test_a_bare_sealed_stem_in_a_request_body_fails_cascade_a7(tmp_path):
+@@ -328,3 +349,157 @@ def test_the_shipped_ledgers_survive_the_whole_record_scan():
+     audit = contamination.all_ledger_audit()
+     assert audit["all_clean"] is True
+     assert audit["ledgers_scanned"] == 3
++
++
++def test_the_criterion_does_not_depend_on_casing():
++    """A check that only catches the casing it expects is the same shape of
++    defect as one that only reads the fields it expects.
++
++    Every id in this repo is lowercase, so this changes nothing about the
++    shipped ledgers -- which is precisely why it costs nothing to be right
++    about, and why the shipped files are asserted clean alongside it.
++    """
++    assert sealed.hits(SEALED.upper()) == {SEALED: "full id"}
++    assert sealed.hits({"tags": [SEALED_STEM.upper()]}) == {SEALED: "stem"}
++    assert sealed.hits(SEALED.capitalize()) == {SEALED: "full id"}
++    assert contamination.all_ledger_audit()["all_clean"] is True
++
++
++# ------ 6. what an adversarial pass over the A13 fix itself found, all of it
++
++def test_a_summary_record_is_not_one_big_carve_out(tmp_path):
++    """`SUMMARY` used to return `([], [entry])` -- every field response-side.
++
++    Any record with a `kind` key was therefore exempt from the fail-closed
++    fallback entirely. The carve-out is earned key by key or not at all.
++    """
++    path = _ledger(tmp_path, {"kind": "x",
++                              "sent": {"game_id": SEALED, "action": "RESET"},
++                              "url_we_hit": "https://x/%s" % SEALED})
++    assert contamination.sealed_api_contacts(path)["clean"] is False
++
++
++def test_a_catalogue_response_does_not_mask_the_same_id_elsewhere(tmp_path):
++    """The fail-closed skip was per GAME, so one legitimate listing exempted
++    every unclassified field of that record for that game -- and a
++    `GET /api/games` response lists all 21 at once."""
++    path = _ledger(tmp_path, {
++        "url": "https://x/api/cmd/RESET", "method": "POST",
++        "note": "RESET %s" % SEALED,
++        "response_body": {"games": [{"game_id": g}
++                                    for g in sealed.sealed_pile()]}})
++    report = contamination.sealed_api_contacts(path)
++    assert report["clean"] is False
++    assert "note" in report["contacts"][SEALED][0]
++
++
++def test_an_episode_state_field_has_not_earned_the_listing_carve_out(tmp_path):
++    """`frame` / `state` / `available_actions` were blanket response-side.
++
++    The carve-out is earned by one argument -- `GET /api/games` returns all 25
++    by construction -- and that argument is about a response body. A state
++    string has no business holding a sealed id.
++    """
++    path = _ledger(tmp_path, {"game_id": DEV, "action": "RESET", "state": SEALED})
++    assert contamination.sealed_api_contacts(path)["clean"] is False
++
++
++def test_a_real_episode_record_still_passes(tmp_path):
++    path = _ledger(tmp_path, {"game_id": DEV, "action": "RESET",
++                              "state": "NOT_FINISHED", "frame": [[1, 2], [3, 4]],
++                              "available_actions": [1, 2, 3, 4, 6, 7]})
++    assert contamination.sealed_api_contacts(path)["clean"] is True
++
++
++def test_an_audit_report_about_sealed_games_is_not_itself_a_contact(tmp_path):
++    """`probe_log.jsonl` carries `sealed_hits: []` -- a field whose job is to
++    hold sealed ids. Scoring a report as the thing it reports would pin this
++    gate red on its own findings."""
++    path = _ledger(tmp_path, {"kind": "cell_audit", "sealed_hits": [],
++                              "clean": True, "corrupt_lines": 0})
++    assert contamination.sealed_api_contacts(path)["clean"] is True
++
++
++def test_a_truncated_ledger_is_not_clean(tmp_path):
++    """Deleting a ledger audited red; truncating it to zero bytes audited
++    green, which made the weaker attack the effective one."""
++    path = tmp_path / "ledger.jsonl"
++    path.write_text("", encoding="utf-8")
++    report = contamination.sealed_api_contacts(str(path))
++    assert report["clean"] is None
++    assert report["ledger_lines"] == 0
++
++
++def test_a_registration_whose_game_id_is_not_a_string_does_not_crash(
++        tmp_path, monkeypatch):
++    """`game_id: ["ls20-..."]` raised `TypeError: unhashable type` out of the
++    membership test and aborted the whole gate -- a crash where a red was
++    wanted."""
++    monkeypatch.setattr(contamination, "LOG_PATH",
++                        _log_with(tmp_path,
++                                  {"t": "2026-07-29T00:00:00Z",
++                                   "game_id": [SEALED], "level": "blurb_glimpsed",
++                                   "pile": "sealed", "claims": "in_claim_set"}))
++    assert contamination.register_coverage()["problems"]
++    assert contamination.gate()["red"] is True
++
++
++def test_a_dev_named_ledger_with_no_steps_file_is_still_audited(tmp_path):
++    """A7 skips a game whose `steps.<game>.jsonl` is absent, and A7b excluded
++    the same file unconditionally -- so it was audited by neither. The real
++    `-p20-followup` run directory has exactly this shape: one game of four."""
++    run_dir = tmp_path / "run"
++    run_dir.mkdir()
++    (run_dir / ("ledger.%s.jsonl" % DEV)).write_text(json.dumps({
++        "url": "https://x/api/cmd/RESET", "method": "POST",
++        "request_body": {"game_id": SEALED}}) + "\n", encoding="utf-8")
++    result = cascade_verify.undiscovered_ledger_failures(str(run_dir))
++    assert result["undiscovered"] == 1
++    assert any(SEALED in f for f in result["failures"])
++
++
++def test_a_ledger_in_a_subdirectory_is_discovered(tmp_path):
++    """`os.listdir` was one level deep; `redact_ledger.all_ledgers`, whose
++    discipline this claimed to copy, recurses."""
++    shard = tmp_path / "run" / "shard-1"
++    shard.mkdir(parents=True)
++    (shard / "ledger.rogue.jsonl").write_text(
++        json.dumps({"request_body": {"game_id": SEALED}}) + "\n",
++        encoding="utf-8")
++    result = cascade_verify.undiscovered_ledger_failures(str(tmp_path / "run"))
++    assert any(SEALED in f for f in result["failures"])
++
++
++def test_any_run_file_named_after_a_sealed_game_is_a_failure(tmp_path):
++    """Only `ledger.*` names were checked; `steps.*` and `summary.*` say the
++    forbidden thing just as loudly."""
++    run_dir = tmp_path / "run"
++    run_dir.mkdir()
++    (run_dir / ("steps.%s.jsonl" % SEALED)).write_text("{}\n", encoding="utf-8")
++    result = cascade_verify.undiscovered_ledger_failures(str(run_dir))
++    assert any("named after sealed game" in f for f in result["failures"])
++
++
++def test_a_corrupt_line_in_a_discovered_ledger_is_a_finding_not_a_traceback(
++        tmp_path):
++    """`read_jsonl` let `JSONDecodeError` escape, so one bad byte aborted
++    `verify()` with no verdict and no JSON output at all."""
++    run_dir = tmp_path / "run"
++    run_dir.mkdir()
++    (run_dir / "ledger.rogue.jsonl").write_text("{not json\n", encoding="utf-8")
++    result = cascade_verify.undiscovered_ledger_failures(str(run_dir))
++    assert any("does not parse" in f for f in result["failures"])
++
++
++def test_a_percent_encoded_id_is_still_found():
++    """An audit that only reads the readable form is one URL-encode away from
++    blind -- the same defect in a different alphabet."""
++    assert sealed.hits("https://x/api/games/ls%32%30-9607627b")
++
++
++def test_precheck_asks_the_same_module(tmp_path):
++    """The third implementation, converged. `assert_playable` had its own
++    `split("-")[0]` and its own loader."""
++    with pytest.raises(Exception):
++        precheck.assert_playable(SEALED)
++    precheck.assert_playable(DEV)          # must not raise

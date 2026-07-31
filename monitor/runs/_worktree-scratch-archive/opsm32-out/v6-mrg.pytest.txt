@@ -1,0 +1,129 @@
+rc: 1
+----------------------------------------------------------------------
+........................................................................ [ 18%]
+........................................................................ [ 36%]
+........................................................................ [ 54%]
+..............................................................xx........ [ 72%]
+.........................F............FF................................ [ 90%]
+...F.FF..............................                                    [100%]
+================================== FAILURES ===================================
+_____________ test_a_blinded_conflict_probe_does_not_report_green _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002A16589ADD0>
+
+    def test_a_blinded_conflict_probe_does_not_report_green(monkeypatch):
+        """The red. This is the exact false green that ran for 9 hours.
+    
+        Before the fix this returned `green` with the detail
+        「三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动」 --
+        a sentence asserting three checks passed, printed after two of them had
+        failed to run at all.
+        """
+        monkeypatch.setattr(scan, "git_or_none", lambda *a: None)
+        result = scan.probe_conflicts()
+    
+        assert result["status"] != "green", \
+            "a probe that could not look must not report that it looked and found nothing"
+>       assert result["status"] == "missing", \
+            "and it is `missing`, not `risk`: no evidence is not evidence of a conflict"
+E       AssertionError: and it is `missing`, not `risk`: no evidence is not evidence of a conflict
+E       assert 'risk' == 'missing'
+E         
+E         - missing
+E         + risk
+
+tests\test_scan_failure_exit.py:528: AssertionError
+__________________ test_a_deleted_append_only_file_is_a_risk __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002A1658986E0>
+
+    def test_a_deleted_append_only_file_is_a_risk(monkeypatch):
+        """Measured before the fix: status green, `4 个追加式文件无新增删除`, with one
+        of the four gone. Deletion is the violation the rule is about."""
+        real = scan.exists
+        gone = "battery/PREDICTIONS.md"
+        monkeypatch.setattr(scan, "exists",
+                            lambda p: False if p == gone else real(p))
+    
+        r = scan.probe_append_only()
+    
+        assert r["status"] == "risk"
+>       assert gone in r["detail"]
+E       AssertionError: assert 'battery/PREDICTIONS.md' in '追加式文件出现删除：PARTNER_SYNC.md（删除 3 行，超出已裁决豁免 1 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。'
+
+tests\test_scan_no_third_value.py:161: AssertionError
+__________________ test_all_files_present_still_reads_green ___________________
+
+    def test_all_files_present_still_reads_green():
+        """NEGATIVE CONTROL against the live repo, where all four exist.
+    
+        ADV-1/D10: this used to accept `("green", "risk")` and guard the wording
+        assertion behind `if r["status"] == "green"`. `risk` is the **exact** status
+        the fix introduces for an absent watched file, so on any checkout missing one
+        of the four this "negative control" passed without evaluating a single
+        assertion -- it could not fail in the state its positive twin constructs. It
+        only worked because this checkout happens to be complete.
+    
+        Now it says what it needs and fails if that is untrue. A missing watched file
+        here is real information, not noise to be tolerated: these are the
+        append-only files whose whole point is that nobody can quietly delete from
+        them.
+        """
+        r = scan.probe_append_only()
+    
+>       assert r["status"] == "green", (
+            "probe_append_only is %s on a checkout that should be clean: %s"
+            % (r["status"], r["detail"]))
+E       AssertionError: probe_append_only is risk on a checkout that should be clean: 追加式文件出现删除：PARTNER_SYNC.md（删除 3 行，超出已裁决豁免 1 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。
+E       assert 'risk' == 'green'
+E         
+E         - green
+E         + risk
+
+tests\test_scan_no_third_value.py:182: AssertionError
+_________ test_reflex_reads_the_return_code_of_every_child_it_scrapes _________
+
+    def test_reflex_reads_the_return_code_of_every_child_it_scrapes():
+        """The three siblings found alongside finding 10 -- board sweep, the reaper,
+        and the git query -- had the identical blind spot: output scraped, status
+        dropped. Guard against the pattern coming back by construction."""
+        src = open(os.path.join(HERE, "reflex.py"), encoding="utf-8").read()
+        for marker in ("sweep:EXIT-", "reap:EXIT-", "revive:GIT-EXIT-",
+                       "merge:EXIT-"):
+>           assert marker in src, "%s guard is missing" % marker
+E           AssertionError: sweep:EXIT- guard is missing
+E           assert 'sweep:EXIT-' in '"""Reflex layer (upgrade #1): everything that needs no judgment, every 5 min.\n\nRegistered as a Windows scheduled ta...emove(LOCK)\n        except OSError:\n            pass\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+tests\test_standing_reflex_no_third_value.py:253: AssertionError
+_____ test_a_failed_git_query_skips_revival_instead_of_reviving_everyone ______
+
+    def test_a_failed_git_query_skips_revival_instead_of_reviving_everyone():
+        """The failure direction here spends money.
+    
+        An empty `remote` makes every dead session look undelivered, so the loop
+        would relaunch sessions that had already finished. The fix must skip the
+        loop, not merely log -- so the revive call has to sit under the else.
+        """
+        src = open(os.path.join(HERE, "reflex.py"), encoding="utf-8").read()
+>       guard = src.index('events.append("revive:GIT-EXIT-%d(loop-skipped)"')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: substring not found
+
+tests\test_standing_reflex_no_third_value.py:288: ValueError
+____________ test_supply_unknown_is_distinct_from_supply_low_zero _____________
+
+    def test_supply_unknown_is_distinct_from_supply_low_zero():
+        """A broken board used to be quieter than an empty one: SUPPLY-LOW:0 was
+        emitted for the empty case and `except: pass` swallowed the broken one."""
+        src = open(os.path.join(HERE, "reflex.py"), encoding="utf-8").read()
+>       assert "SUPPLY-UNKNOWN:" in src
+E       assert 'SUPPLY-UNKNOWN:' in '"""Reflex layer (upgrade #1): everything that needs no judgment, every 5 min.\n\nRegistered as a Windows scheduled ta...emove(LOCK)\n        except OSError:\n            pass\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+tests\test_standing_reflex_no_third_value.py:299: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green
+FAILED tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk
+FAILED tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green
+FAILED tests/test_standing_reflex_no_third_value.py::test_reflex_reads_the_return_code_of_every_child_it_scrapes
+FAILED tests/test_standing_reflex_no_third_value.py::test_a_failed_git_query_skips_revival_instead_of_reviving_everyone
+FAILED tests/test_standing_reflex_no_third_value.py::test_supply_unknown_is_distinct_from_supply_low_zero

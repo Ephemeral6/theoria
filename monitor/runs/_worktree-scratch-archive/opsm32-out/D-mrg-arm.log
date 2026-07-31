@@ -1,0 +1,22 @@
+{
+  "tag": "D-mrg-arm",
+  "worktree": "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-mrg",
+  "dir": "theoria-arm",
+  "head": "1e29578a58ce1dc398c5830b7be6f6e6b78dd03d",
+  "gate_kind": "verify",
+  "gate_name": "verify.py",
+  "gate_cmd": [
+    "D:\\Miniforge3\\python.exe",
+    "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-mrg\\theoria-arm\\verify.py"
+  ],
+  "cwd": "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-mrg\\theoria-arm",
+  "gate_rc": 0,
+  "gate_failing_ids": [],
+  "gate_stages": [],
+  "pytest_rc": 0,
+  "pytest_failing_ids": [],
+  "pytest_tail": [
+    ".........................................................                [100%]"
+  ]
+}
+DONE rc=0

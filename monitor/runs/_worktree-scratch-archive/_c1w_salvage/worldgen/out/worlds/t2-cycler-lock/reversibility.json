@@ -1,0 +1,116 @@
+{
+  "claim_disagreements": [
+    "advance_cycler",
+    "collect_token"
+  ],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk_through_cycler",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": 1,
+      "re_witnessable": false,
+      "rule": "advance_cycler",
+      "verdict": "DISAGREES"
+    },
+    {
+      "claimed": false,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "collect_token",
+      "verdict": "DISAGREES"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk_through_lock",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_lock",
+      "verdict": "agrees"
+    }
+  ],
+  "components": 6,
+  "reachable_states": 61,
+  "reversibility_score": 0.8571,
+  "rules": {
+    "advance_cycler": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": 1,
+      "re_witnessable": false,
+      "single_witness": true
+    },
+    "blocked_by_lock": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 61,
+      "firing_transitions": 122,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "collect_token": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 57,
+      "firing_transitions": 102,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_cycler": {
+      "firing_states": 6,
+      "firing_transitions": 6,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_lock": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 6,
+  "rules_single_witness": [
+    "advance_cycler"
+  ],
+  "rules_total": 7
+}

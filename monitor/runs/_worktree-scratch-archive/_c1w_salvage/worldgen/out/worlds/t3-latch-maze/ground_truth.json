@@ -1,0 +1,473 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    8,
+    10
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 8 x 10",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "name": "latch_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
+      "verified": false
+    },
+    {
+      "holds": true,
+      "name": "token_count",
+      "statement": "the number of cells showing colour 5 equals the number of tokens not yet collected",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "name": "collection_is_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
+      "verified": false
+    },
+    {
+      "holds": true,
+      "name": "single_armed_tile",
+      "statement": "at most one fragile tile is armed at any instant",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "armed_tile_under_agent",
+      "statement": "an armed fragile tile's cell is the agent's cell",
+      "states_checked": 436,
+      "verified": true
+    },
+    {
+      "name": "tile_state_is_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again",
+      "verified": false
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "collapsed": 9,
+    "door": 4,
+    "floor": 0,
+    "fragile": 8,
+    "lock": 7,
+    "switch": 2,
+    "switch_on": 3,
+    "token": 5,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [
+      "collect_token"
+    ],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": false,
+        "measured": 1,
+        "re_witnessable": false,
+        "rule": "press_latch",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "latch_already_set",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      },
+      {
+        "claimed": false,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "collect_token",
+        "verdict": "DISAGREES"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_lock",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_lock",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": false,
+        "measured": 1,
+        "re_witnessable": false,
+        "rule": "cross_fragile",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_collapsed",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 26,
+    "reachable_states": 436,
+    "reversibility_score": 0.8182,
+    "rules": {
+      "blocked_by_collapsed": {
+        "firing_states": 10,
+        "firing_transitions": 10,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_door": {
+        "firing_states": 10,
+        "firing_transitions": 10,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_lock": {
+        "firing_states": 25,
+        "firing_transitions": 25,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 436,
+        "firing_transitions": 740,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "collect_token": {
+        "firing_states": 33,
+        "firing_transitions": 33,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "cross_fragile": {
+        "firing_states": 7,
+        "firing_transitions": 7,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "latch_already_set": {
+        "firing_states": 19,
+        "firing_transitions": 19,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "press_latch": {
+        "firing_states": 12,
+        "firing_transitions": 12,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "walk": {
+        "firing_states": 436,
+        "firing_transitions": 858,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 18,
+        "firing_transitions": 18,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_lock": {
+        "firing_states": 12,
+        "firing_transitions": 12,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 9,
+    "rules_single_witness": [
+      "cross_fragile",
+      "press_latch"
+    ],
+    "rules_total": 11
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "press_latch",
+      "reversible": false,
+      "then": "that switch's bit becomes 1, permanently, and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is 0"
+    },
+    {
+      "name": "latch_already_set",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is already 1"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    },
+    {
+      "name": "collect_token",
+      "reversible": false,
+      "then": "that token becomes collected \u2014 it stops being drawn and the global collected count rises by one \u2014 and the agent takes its cell",
+      "when": "act=D and the target cell holds an uncollected token"
+    },
+    {
+      "name": "walk_through_lock",
+      "reversible": true,
+      "then": "the agent moves onto the lock's cell",
+      "when": "act=D and the target cell holds a lock whose k is at most the global number of tokens collected so far \u2014 the count is shared by every lock, not kept per lock"
+    },
+    {
+      "name": "blocked_by_lock",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a lock whose k exceeds the global number of tokens collected so far"
+    },
+    {
+      "name": "cross_fragile",
+      "reversible": false,
+      "then": "the agent moves onto the tile and the tile arms.  The tile does not collapse on this step: the collapse happens later, in settlement, on the first step at which the agent is no longer standing there \u2014 so in the trace the tile changes to the collapsed colour one frame after the crossing, not in the frame of the crossing itself",
+      "when": "act=D and the target cell holds an intact fragile tile"
+    },
+    {
+      "name": "blocked_by_collapsed",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a collapsed fragile tile"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 34,
+    "goal": [
+      6,
+      8
+    ],
+    "optimal_length": 12,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 436,
+    "solvable": true,
+    "world_id": "t3-latch-maze"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "collapsed": 9,
+      "door": 4,
+      "fragile": 8,
+      "lock": 7,
+      "switch": 2,
+      "switch_on": 3,
+      "token": 5
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          4
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          1,
+          8
+        ],
+        "kind": "fragile",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          3
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "latch",
+          "net": "a"
+        }
+      },
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          5,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          5,
+          6
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          5,
+          8
+        ],
+        "kind": "lock",
+        "props": {
+          "k": 3
+        }
+      }
+    ],
+    "families": [
+      "consumable",
+      "count_lock",
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      6,
+      8
+    ],
+    "layout": [
+      "##########",
+      "#....#...#",
+      "#.##.#.#.#",
+      "#....#.#.#",
+      "#.##.#.#.#",
+      "#..#.#...#",
+      "#........#",
+      "##########"
+    ],
+    "notes": "The hardest world in the catalogue for an inductive pipeline: a latch, three tokens, a lock and a one-shot floor, so almost nothing can be seen twice. Built as the standing counter-example to any claim that coverage is what a manual needs.",
+    "seed": 304,
+    "tier": 3,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t3-latch-maze"
+  },
+  "world_id": "t3-latch-maze"
+}

@@ -1,0 +1,114 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": false,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "fall",
+      "verdict": "unreachable"
+    },
+    {
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "up_is_inert",
+      "verdict": "unreachable"
+    },
+    {
+      "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+      "measured": 1,
+      "re_witnessable": false,
+      "rule": "push",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_block",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": false,
+      "measured": 1,
+      "re_witnessable": false,
+      "rule": "cross_fragile",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_collapsed",
+      "verdict": "agrees"
+    }
+  ],
+  "components": 7,
+  "reachable_states": 18,
+  "reversibility_score": 0.6667,
+  "rules": {
+    "blocked_by_block": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_collapsed": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 18,
+      "firing_transitions": 37,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "cross_fragile": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": 1,
+      "re_witnessable": false,
+      "single_witness": true
+    },
+    "push": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": 1,
+      "re_witnessable": false,
+      "single_witness": true
+    },
+    "walk": {
+      "firing_states": 18,
+      "firing_transitions": 27,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 4,
+  "rules_single_witness": [
+    "cross_fragile",
+    "push"
+  ],
+  "rules_total": 6
+}

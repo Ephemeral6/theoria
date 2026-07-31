@@ -1,0 +1,320 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    5,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 61,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 5 x 9",
+      "states_checked": 61,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "phase_in_range",
+      "statement": "every cycler's phase stays in range(k)",
+      "states_checked": 61,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "color_reads_phase",
+      "statement": "the colour of a cycler cell determines its phase, except where the agent covers it",
+      "states_checked": 61,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "token_count",
+      "statement": "the number of cells showing colour 2 equals the number of tokens not yet collected",
+      "states_checked": 61,
+      "verified": true
+    },
+    {
+      "name": "collection_is_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
+      "verified": false
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "cycler": 4,
+    "cycler_1": 5,
+    "floor": 0,
+    "lock": 3,
+    "token": 2,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [
+      "advance_cycler",
+      "collect_token"
+    ],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_cycler",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": 1,
+        "re_witnessable": false,
+        "rule": "advance_cycler",
+        "verdict": "DISAGREES"
+      },
+      {
+        "claimed": false,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "collect_token",
+        "verdict": "DISAGREES"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_lock",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_lock",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 6,
+    "reachable_states": 61,
+    "reversibility_score": 0.8571,
+    "rules": {
+      "advance_cycler": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "blocked_by_lock": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 61,
+        "firing_transitions": 122,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "collect_token": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 57,
+        "firing_transitions": 102,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_cycler": {
+        "firing_states": 6,
+        "firing_transitions": 6,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_lock": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 6,
+    "rules_single_witness": [
+      "advance_cycler"
+    ],
+    "rules_total": 7
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "walk_through_cycler",
+      "reversible": true,
+      "then": "the agent enters the cell and the phase does not change",
+      "when": "act=D and the target cell holds a cycler whose phase equals its open phase"
+    },
+    {
+      "name": "advance_cycler",
+      "reversible": true,
+      "then": "the agent does not move and the cycler's phase becomes (phase + 1) mod k",
+      "when": "act=D and the target cell holds a cycler whose phase is not its open phase"
+    },
+    {
+      "name": "collect_token",
+      "reversible": false,
+      "then": "that token becomes collected \u2014 it stops being drawn and the global collected count rises by one \u2014 and the agent takes its cell",
+      "when": "act=D and the target cell holds an uncollected token"
+    },
+    {
+      "name": "walk_through_lock",
+      "reversible": true,
+      "then": "the agent moves onto the lock's cell",
+      "when": "act=D and the target cell holds a lock whose k is at most the global number of tokens collected so far \u2014 the count is shared by every lock, not kept per lock"
+    },
+    {
+      "name": "blocked_by_lock",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a lock whose k exceeds the global number of tokens collected so far"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 16,
+    "goal": [
+      3,
+      7
+    ],
+    "optimal_length": 8,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 61,
+    "solvable": true,
+    "world_id": "t2-cycler-lock"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "cycler": 4,
+      "cycler_1": 5,
+      "lock": 3,
+      "token": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          4
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          1,
+          7
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          2
+        ],
+        "kind": "cycler",
+        "props": {
+          "k": 2,
+          "open_phase": 1
+        }
+      },
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "lock",
+        "props": {
+          "k": 2
+        }
+      }
+    ],
+    "families": [
+      "color_cycle",
+      "count_lock"
+    ],
+    "flags": {},
+    "goal": [
+      3,
+      7
+    ],
+    "layout": [
+      "#########",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "One reversible gate and one monotone one, side by side, so the reversibility stamp has to separate them within a single world.",
+    "seed": 206,
+    "tier": 2,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t2-cycler-lock"
+  },
+  "world_id": "t2-cycler-lock"
+}

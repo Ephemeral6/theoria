@@ -1,0 +1,77 @@
+
+==============================================================================
+== build_papers
+==============================================================================
+exam -- built 4 paper(s), rubric digest 36a23877f696
+------------------------------------------------------------------------------
+  paper                  items  points   sheet sha      leakage
+  p15-heldout-a0         80     80       182066a2d5a5   probes=363 hits=0
+  p15-handover-a0        29     46       51681ccfe1a9   probes=58 hits=0
+  p15-adaptation-a0      60     144      b52ddbc8ed3d   probes=1284 hits=0
+  p15-verdict-a2         17     34       2e7e46f5970f   probes=85 hits=0
+------------------------------------------------------------------------------
+  sheets -> C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\papers
+  keys   -> C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\truth   (referee only)
+  cheater briefs -> C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\cheater
+
+==============================================================================
+== pytest
+==============================================================================
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 52%]
+.............................................x.......................... [ 69%]
+.............................x.......................................... [ 87%]
+.....................................................                    [100%]
+411 passed, 2 xfailed in 129.75s (0:02:09)
+
+==============================================================================
+== run_exam --calibrate
+==============================================================================
+exam -- calibration (rubric digest 36a23877f696)
+------------------------------------------------------------------------------
+  paper         oracle    null      memoriser   bluffer   verdict
+  adaptation    1.0000    0.0000    0.1708      0.1708    CALIBRATED
+  handover      1.0000    0.0000    0.7174      0.3261    CALIBRATED
+  heldout       1.0000    0.0000    0.5750      0.4500    CALIBRATED
+  verdict       1.0000    0.0000    0.5882      0.2647    CALIBRATED
+------------------------------------------------------------------------------
+
+  -> C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\exam_summary.json
+
+==============================================================================
+== run_selftest
+==============================================================================
+mutants: all passed
+faults: 8 injected, 0 uncaught, baseline clean
+  accepts_anything         calibration, mutant:garbage, mutant:partial_credit_survives, mutant:transplant
+  blends_the_pair          calibration
+  inflates_partial         calibration, mutant:partial_credit_survives, mutant:transplant
+  marks_by_item_name       calibration, mutant:garbage, mutant:partial_credit_survives, mutant:transplant
+  order_dependent          calibration, mutant:drop_exact, mutant:independence, mutant:key_order, mutant:monotone, mutant:partial_credit_survives
+  pays_for_silence         calibration, mutant:drop_exact
+  rejects_truth            calibration, mutant:partial_credit_survives
+  truncates_partial        calibration, mutant:partial_credit_survives
+protocol digest: 200c26f9c445844df27eb700dd7dd4de3c2f0db596c862479c6057bf17c51fa3
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\selftest.json
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\matrix\verdict_confusion.json
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm20-v21adv\exam\artifacts\matrix\verdict_confusion.md
+
+==============================================================================
+== determinism: two builds, fresh interpreters, PYTHONHASHSEED 7 vs 99
+==============================================================================
+  PYTHONHASHSEED=7   3374975ba083e9689e63a046d97dfaa5cb19cf3517a1ec96ee0871365b5adbe3 89d1cf410732946a74c2705894425299528c18324fca92c1d0d27c25a254ddc8 70be7a27c6f3c6ea6fa6c0744fdfa77bc57a36a5a9bf738948e91e085c035c71 5cf2a14603830ae2fa3f29824e0566d029ca44fda9186ea4e2969cf2bd37fb36
+  PYTHONHASHSEED=99  3374975ba083e9689e63a046d97dfaa5cb19cf3517a1ec96ee0871365b5adbe3 89d1cf410732946a74c2705894425299528c18324fca92c1d0d27c25a254ddc8 70be7a27c6f3c6ea6fa6c0744fdfa77bc57a36a5a9bf738948e91e085c035c71 5cf2a14603830ae2fa3f29824e0566d029ca44fda9186ea4e2969cf2bd37fb36
+  identical: True
+
+==============================================================================
+== summary
+==============================================================================
+  build_papers           ok
+  pytest                 ok
+  run_exam --calibrate   ok
+  run_selftest           ok
+  determinism            ok
+
+GREEN
+MASTER_GATE_EXIT=0

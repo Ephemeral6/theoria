@@ -1,0 +1,48 @@
+[
+  {
+    "tag": "s42-mrg",
+    "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm32-s42-mrg",
+    "head": "26c960773a5e4671baca14ad87ace45279520963",
+    "gate_kind": "verify",
+    "gate_name": "verify.sh",
+    "gate_rc": 1,
+    "pytest_rc": 1,
+    "failing_ids": [
+      "tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green",
+      "tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk",
+      "tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green",
+      "tests/test_standing_reflex_no_third_value.py::test_reflex_reads_the_return_code_of_every_child_it_scrapes",
+      "tests/test_standing_reflex_no_third_value.py::test_a_failed_git_query_skips_revival_instead_of_reviving_everyone",
+      "tests/test_standing_reflex_no_third_value.py::test_supply_unknown_is_distinct_from_supply_low_zero"
+    ],
+    "gate_stages": [
+      "== tests              FAILED(1)",
+      "== board states disjoint ok",
+      "== real run           ok",
+      "== artifact fields    ok"
+    ]
+  },
+  {
+    "tag": "v6-mrg",
+    "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm32-v6-mrg",
+    "head": "f0db2ea5d1d93a564ba893919019a9fa71c7df9a",
+    "gate_kind": "verify",
+    "gate_name": "verify.sh",
+    "gate_rc": 1,
+    "pytest_rc": 1,
+    "failing_ids": [
+      "tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green",
+      "tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk",
+      "tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green",
+      "tests/test_standing_reflex_no_third_value.py::test_reflex_reads_the_return_code_of_every_child_it_scrapes",
+      "tests/test_standing_reflex_no_third_value.py::test_a_failed_git_query_skips_revival_instead_of_reviving_everyone",
+      "tests/test_standing_reflex_no_third_value.py::test_supply_unknown_is_distinct_from_supply_low_zero"
+    ],
+    "gate_stages": [
+      "== tests              FAILED(1)",
+      "== board states disjoint ok",
+      "== real run           ok",
+      "== artifact fields    ok"
+    ]
+  }
+]

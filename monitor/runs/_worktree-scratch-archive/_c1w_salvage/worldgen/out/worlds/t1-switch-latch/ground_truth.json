@@ -1,0 +1,276 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    6,
+    7
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 37,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 6 x 7",
+      "states_checked": 37,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 37,
+      "verified": true
+    },
+    {
+      "name": "latch_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
+      "verified": false
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "door": 4,
+    "floor": 0,
+    "switch": 2,
+    "switch_on": 3,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": false,
+        "measured": 1,
+        "re_witnessable": false,
+        "rule": "press_latch",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "latch_already_set",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 2,
+    "reachable_states": 37,
+    "reversibility_score": 0.8333,
+    "rules": {
+      "blocked_by_door": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 26,
+        "firing_transitions": 32,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "latch_already_set": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "press_latch": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "walk": {
+        "firing_states": 37,
+        "firing_transitions": 104,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 5,
+    "rules_single_witness": [
+      "press_latch"
+    ],
+    "rules_total": 6
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "press_latch",
+      "reversible": false,
+      "then": "that switch's bit becomes 1, permanently, and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is 0"
+    },
+    {
+      "name": "latch_already_set",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is already 1"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 19,
+    "goal": [
+      4,
+      5
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 37,
+    "solvable": true,
+    "world_id": "t1-switch-latch"
+  },
+  "spec": {
+    "agent_start": [
+      2,
+      2
+    ],
+    "colors": {
+      "door": 4,
+      "switch": 2,
+      "switch_on": 3
+    },
+    "entities": [
+      {
+        "cell": [
+          2,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          4,
+          1
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "latch",
+          "net": "a"
+        }
+      }
+    ],
+    "families": [
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      4,
+      5
+    ],
+    "layout": [
+      "#######",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#######"
+    ],
+    "notes": "Byte-identical geometry to `t1-switch-toggle`; only `mode` differs. This is A0's Button against A0\u2032's Switch, isolated.",
+    "seed": 105,
+    "tier": 1,
+    "variant_delta": "the switch is a latch: it sets once and never clears",
+    "variant_of": "t1-switch-toggle",
+    "world_id": "t1-switch-latch"
+  },
+  "world_id": "t1-switch-latch"
+}

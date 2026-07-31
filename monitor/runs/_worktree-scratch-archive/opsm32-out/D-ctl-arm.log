@@ -1,0 +1,26 @@
+{
+  "tag": "D-ctl-arm",
+  "worktree": "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-ctl",
+  "dir": "theoria-arm",
+  "head": "cc7e414eb3bfde3325a50f9ce0e8dc896bda2b84",
+  "gate_kind": "verify",
+  "gate_name": "verify.py",
+  "gate_cmd": [
+    "D:\\Miniforge3\\python.exe",
+    "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-ctl\\theoria-arm\\verify.py"
+  ],
+  "cwd": "C:/Users/user/Desktop/theoria/.worktrees/opsm32-a3-ctl\\theoria-arm",
+  "gate_rc": 1,
+  "gate_failing_ids": [
+    "tests/test_arm.py::test_the_archive_stays_accountable"
+  ],
+  "gate_stages": [],
+  "pytest_rc": 1,
+  "pytest_failing_ids": [
+    "tests/test_arm.py::test_the_archive_stays_accountable"
+  ],
+  "pytest_tail": [
+    "FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError..."
+  ]
+}
+DONE rc=0

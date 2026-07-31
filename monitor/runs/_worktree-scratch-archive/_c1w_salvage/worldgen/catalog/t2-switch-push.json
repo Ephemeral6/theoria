@@ -1,0 +1,68 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2,
+    "door": 5,
+    "switch": 3,
+    "switch_on": 4
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "kind": "block",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "toggle",
+        "net": "a"
+      }
+    }
+  ],
+  "families": [
+    "push",
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    3,
+    7
+  ],
+  "layout": [
+    "#########",
+    "#.......#",
+    "#.#####.#",
+    "#.......#",
+    "#.#####.#",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "Two families that interact through geometry only: the block can be parked in front of the door, which is a configuration no single-family world can produce.",
+  "seed": 201,
+  "tier": 2,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t2-switch-push"
+}

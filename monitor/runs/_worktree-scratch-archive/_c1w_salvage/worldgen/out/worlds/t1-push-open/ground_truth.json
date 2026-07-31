@@ -1,0 +1,203 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    5,
+    7
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 49,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 5 x 7",
+      "states_checked": 49,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 49,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 49,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 5,
+    "reachable_states": 49,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 5,
+        "firing_transitions": 5,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 41,
+        "firing_transitions": 75,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 49,
+        "firing_transitions": 112,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 4,
+    "rules_single_witness": [],
+    "rules_total": 4
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 13,
+    "goal": [
+      2,
+      5
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "UP",
+      "RIGHT",
+      "DOWN"
+    ],
+    "reachable_states": 49,
+    "solvable": true,
+    "world_id": "t1-push-open"
+  },
+  "spec": {
+    "agent_start": [
+      2,
+      2
+    ],
+    "colors": {
+      "block": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          2,
+          3
+        ],
+        "kind": "block",
+        "props": {}
+      }
+    ],
+    "families": [
+      "push"
+    ],
+    "flags": {},
+    "goal": [
+      2,
+      5
+    ],
+    "layout": [
+      "#######",
+      "#..#..#",
+      "#.....#",
+      "#..#..#",
+      "#######"
+    ],
+    "notes": "A block in the only gap of a divider, with room on both sides. The agent can walk round and shove it back, so `push` is witnessable unboundedly often.",
+    "seed": 102,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t1-push-open"
+  },
+  "world_id": "t1-push-open"
+}

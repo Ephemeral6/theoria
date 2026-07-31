@@ -1,0 +1,57 @@
+worktree: C:\Users\user\Desktop\theoria\.worktrees\opsm32-conf-v5
+territory: battery
+cmd: ['D:\\Miniforge3\\python.exe', 'C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm32-conf-v5\\battery\\verify.py']
+cwd: C:\Users\user\Desktop\theoria\.worktrees\opsm32-conf-v5\battery
+rc: 1
+----------------------------------------------------------------------
+[1/4] suite
+   FAIL  suite red (exit 1)
+ssert freeze.check(root=tree) == []
+E       AssertionError: assert ['battery/aud...is one.', ...] == []
+E         
+E         Left contains 36 more items, first extra item: 'battery/audit/gaming.py hashes to sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad but BATTERY...ared with numbers produced by the new one — register a new freeze version (BATTERY_V2.md) instead of editing this one.'
+E         Use -v to get more diff
+
+battery\tests\test_freeze.py:42: AssertionError
+____________ test_an_edited_artefact_is_reported_but_does_not_fail ____________
+
+tree = 'C:\\Users\\user\\AppData\\Local\\Temp\\pytest-of-user\\pytest-3207\\test_an_edited_artefact_is_rep0'
+
+    def test_an_edited_artefact_is_reported_but_does_not_fail(tree):
+        """Phase 4 must be able to recompute. Silence would be the wrong answer too."""
+        target = os.path.join(tree, "battery", "artifacts", "gaming_audit.json")
+        with open(target, "a", encoding="utf-8", newline="\n") as fh:
+            fh.write("\n")
+>       assert freeze.check(root=tree) == []
+E       AssertionError: assert ['battery/aud...is one.', ...] == []
+E         
+E         Left contains 36 more items, first extra item: 'battery/audit/gaming.py hashes to sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad but BATTERY...ared with numbers produced by the new one — register a new freeze version (BATTERY_V2.md) instead of editing this one.'
+E         Use -v to get more diff
+
+battery\tests\test_freeze.py:261: AssertionError
+_______________ test_rendering_the_blocks_reproduces_the_record _______________
+
+    def test_rendering_the_blocks_reproduces_the_record():
+        """The document is the record: what freeze.py renders is what it reads."""
+        rendered = freeze.render_blocks()
+        record = open(freeze.RECORD, encoding="utf-8").read()
+        for block in rendered.split("\n\n"):
+>           assert block in record, block.splitlines()[0]
+E           AssertionError: ```freeze:code
+E           assert '```freeze:code\nsha256:fa19d34106854261c17eb7aef1b9ca7a38e2b4b86e8f9a177aa8bd8bf212cdda  battery/.gitattributes\nsha2...ttery/pytest.ini\nsha256:42ecdd0c8e6eafc8e997524ad4a309dff553569e2b206d807cd63b3d28af2244  battery/run_battery.py\n```' in '# BATTERY_V1 — 指标电池的冻结记录\n\n`Theoria.md:368` 的冻结清单十三项，第 8 项：\n\n> **指标电池 v1(定义与代码、逐指标方向预测)**\n\n这份文件就是那一项。它把电池的**定义**...battery/REPORT_V2.md:382-384`（**不在 `gaming_audit.json` 里**，见 W-K） |\n| 电池自身的弱点清单 | `battery/STATUS.md`（W-1 … W-11） |\n'
+
+battery\tests\test_freeze.py:295: AssertionError
+=========================== short test summary info ===========================
+FAILED battery\tests\test_freeze.py::test_the_freeze_holds_on_the_real_tree
+FAILED battery\tests\test_freeze.py::test_the_fixture_reproduces_the_real_verdict
+FAILED battery\tests\test_freeze.py::test_an_edited_artefact_is_reported_but_does_not_fail
+FAILED battery\tests\test_freeze.py::test_rendering_the_blocks_reproduces_the_record
+4 failed, 371 passed in 24.90s
+
+[2/4] one real run -- the whole spectrum recomputed from the ledgers, offline
+   ok    wrote 7 file(s)
+[3/4] artefact self-check
+   note  this recompute saw 104 run(s); battery/artifacts/ was built from 95. Untracked inputs (baseline-arms/out/shards, schema traces) are absent from a clean checkout by design
+[4/4] the separation claim in the committed documents
+
+battery: RED (1 problem(s))
