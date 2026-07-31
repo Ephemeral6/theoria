@@ -186,6 +186,12 @@ the same way — §7 now cites the effect sizes and not those aggregates.
 | no LLM in the loop on A0 | every economy metric `not-applicable` | `battery/REPORT_V0.md` §Coverage |
 | revision counts across the paper | 0, 0, 1, 1 | `cold-start-a0/THEORIZE_LOG.md`; `prime_report.json`; `cold-start-a2/artifacts/repair_report.json` |
 | concurrent-session incident | two sessions, one budget, one quota | `baseline-arms/INCIDENTS.md` INC-BA-003 |
+| general PDDL backend, pre-repair | 0 of 303 actions well-formed and non-empty (2026-07-30) | `crosscheck/FOUR_FORMS_TRUTH.md` §1; frozen run `crosscheck/runs/20260730T120005Z-C14-four-forms-is-three-and-a-half/` |
+| which generator made the paper's planning data | every planning number is `cold-start-a0/compile/gen_pddl_a0.py`'s (world-specific), none the general backend's | `crosscheck/runs/20260730T120005Z-C14-four-forms-is-three-and-a-half/out/TWO_BACKENDS.md` |
+| general PDDL backend, post-repair | 196 of 299 semantically non-empty, 103 declared refusals (34 theories); 2026-07-31 | `crosscheck/runs/20260731T061500Z-C14-after-the-repair/out/census.md` |
+| repaired backend on A0 | grounds every schema; solves the level in 12 steps (plan length) | `theory-compiler/tests/test_e2e_rehearsal.py`, `test_pddl_compiled_against_the_level_solves_like_the_world` |
+| handover packages, rebuilt | a0-cart: all five files of four forms generated; a0-sokoban2: planning form a declared refusal, reason on the cover | `theory-compiler/handover_packages/a0-cart/README.md`; `theory-compiler/handover_packages/a0-sokoban2/README.md` |
+| undeclared-PDDL-failure guard | live arm's green keyed on planning and prose forms too | `theoria-arm/inner/books.py` (the `result["ok"]` assignment and its comment) |
 
 ---
 
