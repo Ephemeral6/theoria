@@ -50,6 +50,11 @@ def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(canary, "CANARY_PATH", str(tmp_path / "canary.json"))
     monkeypatch.setattr(canary, "RUNS_PATH", str(tmp_path / "runs.jsonl"))
     monkeypatch.setattr(canary, "FREEZE_PATH", str(tmp_path / "freeze.json"))
+    # FREEZE_LOG_PATH was absent here until 2026-07-31, so this suite appended
+    # INC-TEST freeze events to the tracked append-only log on every run; the
+    # autouse guard in conftest.py now fails the test rather than the file.
+    monkeypatch.setattr(canary, "FREEZE_LOG_PATH",
+                        str(tmp_path / "freeze_log.jsonl"))
     monkeypatch.setattr(canary, "INCIDENTS_PATH",
                         str(tmp_path / "incidents.jsonl"))
     monkeypatch.setattr(sched, "CONFIG_PATH", str(tmp_path / "schedule.json"))
