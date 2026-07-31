@@ -1,0 +1,1273 @@
+{
+ "books_replayed": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+ "mode": "stub-desk",
+ "reps": [
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.057,
+   "error": null,
+   "exit_code": 0,
+   "index": 1,
+   "leg_dirs_created": [
+    "20260731T180709Z-leg01",
+    "20260731T180712Z-leg02",
+    "20260731T180715Z-leg03",
+    "20260731T180718Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 10.997,
+   "error": null,
+   "exit_code": 0,
+   "index": 2,
+   "leg_dirs_created": [
+    "20260731T180720Z-leg01",
+    "20260731T180723Z-leg02",
+    "20260731T180726Z-leg03",
+    "20260731T180728Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.203,
+   "error": null,
+   "exit_code": 0,
+   "index": 3,
+   "leg_dirs_created": [
+    "20260731T180732Z-leg01",
+    "20260731T180734Z-leg02",
+    "20260731T180737Z-leg03",
+    "20260731T180740Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 10.817,
+   "error": null,
+   "exit_code": 0,
+   "index": 4,
+   "leg_dirs_created": [
+    "20260731T180743Z-leg01",
+    "20260731T180745Z-leg02",
+    "20260731T180748Z-leg03",
+    "20260731T180751Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.228,
+   "error": null,
+   "exit_code": 0,
+   "index": 5,
+   "leg_dirs_created": [
+    "20260731T180754Z-leg01",
+    "20260731T180757Z-leg02",
+    "20260731T180759Z-leg03",
+    "20260731T180802Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.939,
+   "error": null,
+   "exit_code": 0,
+   "index": 6,
+   "leg_dirs_created": [
+    "20260731T180805Z-leg01",
+    "20260731T180808Z-leg02",
+    "20260731T180811Z-leg03",
+    "20260731T180813Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.719,
+   "error": null,
+   "exit_code": 0,
+   "index": 7,
+   "leg_dirs_created": [
+    "20260731T180817Z-leg01",
+    "20260731T180820Z-leg02",
+    "20260731T180823Z-leg03",
+    "20260731T180825Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 10.915,
+   "error": null,
+   "exit_code": 0,
+   "index": 8,
+   "leg_dirs_created": [
+    "20260731T180829Z-leg01",
+    "20260731T180832Z-leg02",
+    "20260731T180834Z-leg03",
+    "20260731T180837Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.049,
+   "error": null,
+   "exit_code": 0,
+   "index": 9,
+   "leg_dirs_created": [
+    "20260731T180840Z-leg01",
+    "20260731T180842Z-leg02",
+    "20260731T180845Z-leg03",
+    "20260731T180848Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.033,
+   "error": null,
+   "exit_code": 0,
+   "index": 10,
+   "leg_dirs_created": [
+    "20260731T180851Z-leg01",
+    "20260731T180854Z-leg02",
+    "20260731T180856Z-leg03",
+    "20260731T180859Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 11.314,
+   "error": null,
+   "exit_code": 0,
+   "index": 11,
+   "leg_dirs_created": [
+    "20260731T180902Z-leg01",
+    "20260731T180905Z-leg02",
+    "20260731T180908Z-leg03",
+    "20260731T180910Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  },
+  {
+   "columns": {
+    "actions_ok": 160,
+    "certify_rounds": 8,
+    "commands_sent": 164,
+    "desk_calls": 18,
+    "engine_dispatches": 8,
+    "legs_failed": 0,
+    "legs_played": 4,
+    "levels_boundaries": 0,
+    "steps": 164,
+    "surprise.execution_mismatch": 0,
+    "surprise.heuristic_miss": 0,
+    "surprise.probe_refutation": 0,
+    "surprise.proof_failure": 0,
+    "surprise.render_mismatch": 0,
+    "surprise.replay_mismatch": 4,
+    "surprise.search_timeout": 0,
+    "surprise.total": 4,
+    "theorize_rounds": 6,
+    "turns": 146,
+    "usd": 0.0
+   },
+   "desk_failures": [],
+   "elapsed_s": 10.897,
+   "error": null,
+   "exit_code": 0,
+   "index": 12,
+   "leg_dirs_created": [
+    "20260731T180913Z-leg01",
+    "20260731T180916Z-leg02",
+    "20260731T180919Z-leg03",
+    "20260731T180921Z-leg01"
+   ],
+   "leg_errors": [],
+   "mode": "stub-desk",
+   "stop": "3 legs in a row completed no level and met no new kind of surprise"
+  }
+ ],
+ "schema": "theoria-noise-floor/v1",
+ "summary": {
+  "columns": {
+   "actions_ok": {
+    "deterministic": true,
+    "max": 160,
+    "mean": 160.0,
+    "min": 160,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160,
+     160
+    ]
+   },
+   "certify_rounds": {
+    "deterministic": true,
+    "max": 8,
+    "mean": 8.0,
+    "min": 8,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8
+    ]
+   },
+   "commands_sent": {
+    "deterministic": true,
+    "max": 164,
+    "mean": 164.0,
+    "min": 164,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164
+    ]
+   },
+   "desk_calls": {
+    "deterministic": true,
+    "max": 18,
+    "mean": 18.0,
+    "min": 18,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18,
+     18
+    ]
+   },
+   "engine_dispatches": {
+    "deterministic": true,
+    "max": 8,
+    "mean": 8.0,
+    "min": 8,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8,
+     8
+    ]
+   },
+   "legs_failed": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "legs_played": {
+    "deterministic": true,
+    "max": 4,
+    "mean": 4.0,
+    "min": 4,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4
+    ]
+   },
+   "levels_boundaries": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "steps": {
+    "deterministic": true,
+    "max": 164,
+    "mean": 164.0,
+    "min": 164,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164,
+     164
+    ]
+   },
+   "surprise.execution_mismatch": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.heuristic_miss": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.probe_refutation": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.proof_failure": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.render_mismatch": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.replay_mismatch": {
+    "deterministic": true,
+    "max": 4,
+    "mean": 4.0,
+    "min": 4,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4
+    ]
+   },
+   "surprise.search_timeout": {
+    "deterministic": true,
+    "max": 0,
+    "mean": 0.0,
+    "min": 0,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "surprise.total": {
+    "deterministic": true,
+    "max": 4,
+    "mean": 4.0,
+    "min": 4,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4
+    ]
+   },
+   "theorize_rounds": {
+    "deterministic": true,
+    "max": 6,
+    "mean": 6.0,
+    "min": 6,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6,
+     6
+    ]
+   },
+   "turns": {
+    "deterministic": true,
+    "max": 146,
+    "mean": 146.0,
+    "min": 146,
+    "spread": 0,
+    "stdev": 0.0,
+    "values": [
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146,
+     146
+    ]
+   },
+   "usd": {
+    "deterministic": true,
+    "max": 0.0,
+    "mean": 0.0,
+    "min": 0.0,
+    "spread": 0.0,
+    "stdev": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "elapsed_s": {
+   "max": 11.939,
+   "min": 10.817
+  },
+  "moved": [],
+  "reps": 12,
+  "stop_signatures": [
+   "3 legs in a row completed no level and met no new kind of surprise"
+  ]
+ },
+ "utc": "2026-07-31T18:09:24Z",
+ "variation_audit": {
+  "files": {
+   "leg01/curves.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "levels[0].surprise_total[0] <1 vs 0>",
+     "levels[0].surprise_total[1] <0 vs 1>",
+     "levels[0].surprises.replay_mismatch[0] <1 vs 0>",
+     "levels[0].surprises.replay_mismatch[1] <0 vs 1>",
+     "rows[0].surprise_replay_mismatch <1 vs 0>",
+     "rows[0].surprise_total <1 vs 0>",
+     "rows[1].surprise_replay_mismatch <0 vs 1>",
+     "rows[1].surprise_total <0 vs 1>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg01/run.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "env_proxy.card_ids[0] <'card-60ffa5170610d11b' vs 'card-6d2905247cf6f5e8'>",
+     "env_proxy.guids.g50t-5849a774 <'guid-15adaa84a9598acd' vs 'guid-a6970c286ddaccba'>",
+     "env_proxy.upstream <'http://127.0.0.1:62270' vs 'http://127.0.0.1:62659'>",
+     "spend.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "spend.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.desk.spend_gate.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "summary.desk.spend_gate.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.scorecard.card_id <'card-60ffa5170610d11b' vs 'card-6d2905247cf6f5e8'>",
+     "summary.scorecard.environments[0].runs[0].guid <'guid-15adaa84a9598acd' vs 'guid-a6970c286ddaccba'>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg01/surprises.jsonl": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg01/turn_series.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "provenance.sources.RUN_STATE.json.sha256 <'b3bbebd54f7cae4c20184bf4d36aecc5056852e262ef40311f771df7394909db' vs '637ba3f22560ece7aff54bb2004698f1af4be3f37f2b8d68d52a323d031a51da'>",
+     "provenance.sources.desk_log.json.sha256 <'58122215b8a87c6bf1b9f5b5b950a69adecb7bc55fe433db6bec95909725de6a' vs '30f8464033a6315a1d90d78a8e0db9d11c592aaaf39338eb4998ce0f19066a24'>",
+     "provenance.sources.ledger.jsonl.sha256 <'9830e9e0204f11e24d7e09f8b24c3251e5ef7f6306e3f10280b49e61e8d43730' vs 'e2f19e038fc77c3b39efaf0f4c1fd86e74102d66bf53dd57eb1fa2f90a3d673e'>",
+     "provenance.sources.run.json.sha256 <'f742d4c07b8f6b3d1e5fa5964a0a93c7e55dc0e6e0b3babc25b441a051c863e8' vs '063c2a55339d0a3b57101f67cab26542cb7817b35c6cc5c44fb7272f4503ee32'>",
+     "provenance.sources.surprises.jsonl.sha256 <'4b6dfca18cf0740b9a7672c5e799835f3d5389761d601d449447bfc756e5d562' vs '106e07694541a2df792181b982b8ff56c0ce5d7d93652620a010cd1149ad6f8c'>",
+     "provenance.sources.theorize.json.sha256 <'4addc29024b6e0be4e5e4492f57aacd85ba776a1b66727d0521c832a8adec9b4' vs 'df3ea4185b05b75a7f79a672c97d1aab991a4ae127930b712fc7e6a2a6ab620c'>",
+     "provenance.sources.turns.json.sha256 <'4a73a32092ff7538298ea7ce6f6239aa2b597fd62b65e54fe4af331ada3ac06f' vs '2cbaa6050559e8971fb260fd99ad2578a3f9f24269b05308979d62a9d2bd519b'>",
+     "rows[1].wall_clock_s <1.0 vs 0.0>",
+     "rows[2].wall_clock_s <1.0 vs 0.0>",
+     "rows[3].wall_clock_s <1.0 vs 0.0>",
+     "rows[4].wall_clock_s <1.0 vs 0.0>",
+     "rows[5].wall_clock_s <1.0 vs 0.0>",
+     "rows[17].wall_clock_s <2.0 vs 1.0>",
+     "rows[18].wall_clock_s <2.0 vs 1.0>",
+     "rows[19].wall_clock_s <2.0 vs 1.0>",
+     "rows[20].wall_clock_s <2.0 vs 1.0>",
+     "rows[21].wall_clock_s <2.0 vs 1.0>",
+     "rows[22].wall_clock_s <2.0 vs 1.0>",
+     "rows[23].wall_clock_s <2.0 vs 1.0>",
+     "rows[24].wall_clock_s <2.0 vs 1.0>",
+     "rows[25].wall_clock_s <2.0 vs 1.0>",
+     "rows[26].wall_clock_s <2.0 vs 1.0>",
+     "rows[27].wall_clock_s <2.0 vs 1.0>",
+     "rows[28].wall_clock_s <2.0 vs 1.0>",
+     "rows[29].wall_clock_s <2.0 vs 1.0>",
+     "rows[30].wall_clock_s <2.0 vs 1.0>",
+     "rows[31].wall_clock_s <2.0 vs 1.0>",
+     "rows[32].wall_clock_s <2.0 vs 1.0>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg01/turns.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg02/curves.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "levels[0].surprise_total[0] <1 vs 0>",
+     "levels[0].surprise_total[1] <0 vs 1>",
+     "levels[0].surprises.replay_mismatch[0] <1 vs 0>",
+     "levels[0].surprises.replay_mismatch[1] <0 vs 1>",
+     "rows[0].surprise_replay_mismatch <1 vs 0>",
+     "rows[0].surprise_total <1 vs 0>",
+     "rows[1].surprise_replay_mismatch <0 vs 1>",
+     "rows[1].surprise_total <0 vs 1>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg02/run.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "env_proxy.card_ids[0] <'card-c0d246b3a7884f6c' vs 'card-558c55354fdbdb68'>",
+     "env_proxy.guids.g50t-5849a774 <'guid-e9c1053b2302a704' vs 'guid-eff817da118d23fc'>",
+     "env_proxy.upstream <'http://127.0.0.1:62270' vs 'http://127.0.0.1:62659'>",
+     "spend.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "spend.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.desk.spend_gate.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "summary.desk.spend_gate.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.scorecard.card_id <'card-c0d246b3a7884f6c' vs 'card-558c55354fdbdb68'>",
+     "summary.scorecard.environments[0].runs[0].guid <'guid-e9c1053b2302a704' vs 'guid-eff817da118d23fc'>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg02/surprises.jsonl": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg02/turn_series.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "provenance.sources.RUN_STATE.json.sha256 <'7c3d54089b5913c9a4b7a8606c07529cc2ddc1fba8a240a9e1d1feb206b7524f' vs 'd490781b097b7b36a71098a005792ab0ed4366d1c2810c22054b3a7ebc2c4c15'>",
+     "provenance.sources.desk_log.json.sha256 <'609b4da7c483fe3b96b56652ca4b231592e59ae547ccff2cc3091ba8f1a0347a' vs '9be1497ddad298bfc493c6425ef195b70ba2c2f4464019211a90a8e867c1d341'>",
+     "provenance.sources.ledger.jsonl.sha256 <'823285f9b018fcda7db58634fa3493029a5c96860e33b397b1c328efe2b14143' vs '0cd6ee78c29b1ccf163f7e707f522252cbfdba178032571fed11f1e9e7257803'>",
+     "provenance.sources.run.json.sha256 <'3a2f4b9af544f37e56854b171c63c6b3b87fbf9a38692b6aa5d52e22c1a6f2a2' vs '0f8a1c845ec9a8457e2f31aa0fba601dbdf34d9778a5d48ad847cf5d1f9b9543'>",
+     "provenance.sources.surprises.jsonl.sha256 <'0d051a53529583e045262e8455c723f21451dd7ed543a78b8ab5949a531604e5' vs 'd5285437121d16b9cc90e061ddf915c25fdb6695d42ff020acf73685729ea631'>",
+     "provenance.sources.theorize.json.sha256 <'daaa94f6883ba17bb4230d4e559a2e2748643f374a5bc0a7f5aef1a1fa0d8214' vs '6ad30dee17448a620f1bac577e438f7333d2ce7622549fe51561ac871c95e6e1'>",
+     "provenance.sources.turns.json.sha256 <'e9eaf88769b3fd54bd9fd88988bfcfbdf24ed61a5ff74e9e0fa029fafabbf2bd' vs '2d893e1a653b662560846f2b71750e6fcd5472b219d71cab59b7a8e8fa6f3296'>",
+     "rows[0].surprise_by_family.empirical <1 vs 0>",
+     "rows[0].surprise_counts.replay_mismatch <1 vs 0>",
+     "rows[0].surprise_seqs <len 1 vs 0>",
+     "rows[0].surprise_total <1 vs 0>",
+     "rows[1].surprise_by_family.empirical <0 vs 1>",
+     "rows[1].surprise_counts.replay_mismatch <0 vs 1>",
+     "rows[1].surprise_seqs <len 0 vs 1>",
+     "rows[1].surprise_total <0 vs 1>",
+     "rows[3].wall_clock_s <0.0 vs 1.0>",
+     "rows[30].wall_clock_s <1.0 vs 2.0>",
+     "rows[31].wall_clock_s <1.0 vs 2.0>",
+     "rows[32].wall_clock_s <1.0 vs 2.0>",
+     "rows[33].wall_clock_s <1.0 vs 2.0>",
+     "rows[34].wall_clock_s <1.0 vs 2.0>",
+     "rows[35].wall_clock_s <1.0 vs 2.0>",
+     "rows[36].wall_clock_s <1.0 vs 2.0>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg02/turns.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg03/curves.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "levels[0].surprise_total[0] <0 vs 1>",
+     "levels[0].surprise_total[2] <1 vs 0>",
+     "levels[0].surprises.replay_mismatch[0] <0 vs 1>",
+     "levels[0].surprises.replay_mismatch[2] <1 vs 0>",
+     "rows[0].surprise_replay_mismatch <0 vs 1>",
+     "rows[0].surprise_total <0 vs 1>",
+     "rows[2].surprise_replay_mismatch <1 vs 0>",
+     "rows[2].surprise_total <1 vs 0>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg03/run.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "env_proxy.card_ids[0] <'card-b0af589ccbb7c33b' vs 'card-d288a833aaa13663'>",
+     "env_proxy.guids.g50t-5849a774 <'guid-9890f83ae55970c3' vs 'guid-eed1415de720df85'>",
+     "env_proxy.upstream <'http://127.0.0.1:62270' vs 'http://127.0.0.1:62659'>",
+     "spend.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "spend.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.desk.spend_gate.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "summary.desk.spend_gate.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.scorecard.card_id <'card-b0af589ccbb7c33b' vs 'card-d288a833aaa13663'>",
+     "summary.scorecard.environments[0].runs[0].guid <'guid-9890f83ae55970c3' vs 'guid-eed1415de720df85'>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg03/surprises.jsonl": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg03/turn_series.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "provenance.sources.RUN_STATE.json.sha256 <'a80ded2b5212bbb5739f728410037a8699617b8535d59b44ae1138e93e64da5f' vs 'b64c9936507ef7fe2950a1db3bc534519602658fab5da00d8e4f126367e02156'>",
+     "provenance.sources.ledger.jsonl.sha256 <'e9ca9ab5adece57e6065c86f0b8d1c7acbbfd9a430b3773f1547fcd25b2a0d05' vs 'edf238df034d9d96c5e27d325be50e7b8a8eb75baed6644ec12a8d2bd628c842'>",
+     "provenance.sources.run.json.sha256 <'7ea3867d724ceb9e91b9ddbc94bc31710ff79a8367a6d96a51b79a26c6c6df34' vs '90c65bdd6f625dcae22df44edbebdf624ff3b6d5fccbf9f419be05cb180ddcad'>",
+     "provenance.sources.surprises.jsonl.sha256 <'c8e0896a61895f32536d588230dc4529f2ea4536f0e5a4eacf3ce7ae45a2cb9d' vs 'e75edcf4db54d293b2f873b0eda0abfbc61ff330d31f795318c69b0c83b2dc64'>",
+     "provenance.sources.theorize.json.sha256 <'8edd0e10eb74dbb8fad139385809250265bfb4944b8443bb68bb6edcbd485e74' vs 'f527dc0db83f4571ae6d7190e5b57b74379539c3f1f3c33816fa36a28d65a9bc'>",
+     "provenance.sources.turns.json.sha256 <'02c5e48a2bdd2386c0286b501c7c3bb9e39da3c9fce8e146d216b673aec25731' vs 'e6cc87b24adba90b2f32bfa770eb399b967370021fb6b23a6756099a231c2c94'>",
+     "rows[0].surprise_by_family.empirical <0 vs 1>",
+     "rows[0].surprise_counts.replay_mismatch <0 vs 1>",
+     "rows[0].surprise_seqs <len 0 vs 1>",
+     "rows[0].surprise_total <0 vs 1>",
+     "rows[2].surprise_by_family.empirical <1 vs 0>",
+     "rows[2].surprise_counts.replay_mismatch <1 vs 0>",
+     "rows[2].surprise_seqs <len 1 vs 0>",
+     "rows[2].surprise_total <1 vs 0>",
+     "rows[3].wall_clock_s <1.0 vs 0.0>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg03/turns.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg04/curves.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "levels[0].surprise_total[0] <1 vs 0>",
+     "levels[0].surprise_total[1] <0 vs 1>",
+     "levels[0].surprises.replay_mismatch[0] <1 vs 0>",
+     "levels[0].surprises.replay_mismatch[1] <0 vs 1>",
+     "rows[0].surprise_replay_mismatch <1 vs 0>",
+     "rows[0].surprise_total <1 vs 0>",
+     "rows[1].surprise_replay_mismatch <0 vs 1>",
+     "rows[1].surprise_total <0 vs 1>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg04/run.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "env_proxy.card_ids[0] <'card-624f0a06e1ad9f19' vs 'card-435d5ae094430632'>",
+     "env_proxy.guids.sk48-d8078629 <'guid-c022224a8f89314e' vs 'guid-55e7ebc2e845b0f4'>",
+     "env_proxy.upstream <'http://127.0.0.1:62270' vs 'http://127.0.0.1:62659'>",
+     "spend.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "spend.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.desk.spend_gate.pool.ledger_path <'../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep01-pool.jsonl' vs '../../../../AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/d83866d0-9264-42b5-8c7c-b6da8412d4aa/scratchpad/nf2/stub/work/rep02-pool.jsonl'>",
+     "summary.desk.spend_gate.pool.policy_sha256 <'a6ab525e522fab5b9462e041ade73f8ac347566a606f48b1c7bbcf90b032cb9d' vs 'd1e9aa6507aeee65dc02ee11acb6c1a7df0b881119c51a82e8c6b453b6bc013b'>",
+     "summary.scorecard.card_id <'card-624f0a06e1ad9f19' vs 'card-435d5ae094430632'>",
+     "summary.scorecard.environments[0].runs[0].guid <'guid-c022224a8f89314e' vs 'guid-55e7ebc2e845b0f4'>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg04/surprises.jsonl": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   },
+   "leg04/turn_series.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [
+     "provenance.sources.RUN_STATE.json.sha256 <'b4c2ae8c697b873a2fae11a1a79082d7e8d21ca8a7fe7a5033bf7ba210e8f695' vs '68117774ffc1945abda0f3d384ed73c2bdfbdd9027a93e2d87290391203fa77b'>",
+     "provenance.sources.desk_log.json.sha256 <'84f7b4b5ee30a91fd40491f9ef0758c885d53fe2b3df14d2a39a45089b96b26c' vs '03b26ddf58a4828e53a415098a50663a6ec543ddfe3b93d4688455c9a925e6a3'>",
+     "provenance.sources.ledger.jsonl.sha256 <'b47995b97fcd527ad8fcda9d55b7f3dceaa71de49b972d37167cbf80700a85d3' vs '31243b966aee931f7e5c790222248f74b1cbe34c93d7dfe35add2d354aa76741'>",
+     "provenance.sources.run.json.sha256 <'721e39ce41587baace38b2c5451957298d69225c9500398503811c593eac2dc5' vs 'c7e5b9d050f2606f555850440400ea3bb6f63bbbf1e284a576006ea4ccb5e76a'>",
+     "provenance.sources.surprises.jsonl.sha256 <'ee4da90ac408f4a226d93e36472c704cf61f975fa2c38065265c9c9bbcd074bd' vs '613d6cba6918ef5ca8cd6dd752204c73f1f16e07d971f21975e5c9c8301f7a9c'>",
+     "provenance.sources.theorize.json.sha256 <'0d72f6f74a3b4fb291fc9fe9abe2c3e767446ecaf30b2de3f4c71dffd8c28cb8' vs 'd07b58761f041e95da22de0186c623e7f33a808aeb8871353ac537713d28a61f'>",
+     "provenance.sources.turns.json.sha256 <'06b1e5c3a465585e3d30d60012487eebcff5c59a9f365e46ae9cc726749b90f4' vs '36400e80d44ac09bddeafe55f4c13256fcb1ad8bca0079a1297d0280aca4f50f'>",
+     "rows[4].wall_clock_s <0.0 vs 1.0>",
+     "rows[27].wall_clock_s <1.0 vs 2.0>",
+     "rows[28].wall_clock_s <1.0 vs 2.0>",
+     "rows[29].wall_clock_s <1.0 vs 2.0>",
+     "rows[30].wall_clock_s <1.0 vs 2.0>",
+     "rows[31].wall_clock_s <1.0 vs 2.0>"
+    ],
+    "identical_after_normalising": false,
+    "reps_with_file": 12
+   },
+   "leg04/turns.json": {
+    "byte_identical_raw": false,
+    "differing_paths": [],
+    "identical_after_normalising": true,
+    "reps_with_file": 12
+   }
+  },
+  "leg_count": {
+   "deterministic": true,
+   "values": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+   ]
+  },
+  "surprise_placement": {
+   "leg_observations_with_a_surprise": 48,
+   "max_displacement_rows": 2,
+   "modal_row": 0,
+   "off_mode_fraction": 0.3125,
+   "per_leg_ordinal": {
+    "leg01": {
+     "(0,)": 9,
+     "(1,)": 3
+    },
+    "leg02": {
+     "(0,)": 8,
+     "(1,)": 4
+    },
+    "leg03": {
+     "(0,)": 7,
+     "(1,)": 3,
+     "(2,)": 2
+    },
+    "leg04": {
+     "(0,)": 9,
+     "(1,)": 3
+    }
+   },
+   "reading": "the campaign-level surprise TOTALS can be perfectly deterministic while these move: armtools/archive.py joins a surprise to a turn by wall-clock containment, and `Surprise.ts` is truncated to the second while the turn edges are millisecond ledger stamps. Any turn shorter than a second is therefore a coin toss, and the written record calls the join `exact` anyway.",
+   "row_index_histogram": {
+    "0": 33,
+    "1": 13,
+    "2": 2
+   },
+   "surprises_placed": 48
+  },
+  "volatile_seen": [
+   "[].elapsed_s",
+   "env_proxy.run_id",
+   "frontload_input.run_id",
+   "frontload_input.slug",
+   "ledger",
+   "provenance.run_dir",
+   "rows[].elapsed_s",
+   "run_id",
+   "slug",
+   "spend.campaign",
+   "spend.pool.ledger_abspath",
+   "spend.reservation_id",
+   "summary.bill.elapsed_s",
+   "summary.carried_books.seed_from",
+   "summary.desk.spend_gate.campaign",
+   "summary.desk.spend_gate.pool.ledger_abspath",
+   "summary.desk.spend_gate.reservation_id",
+   "summary.elapsed_s",
+   "summary.run_id",
+   "summary.scorecard.opaque.opaque.run_id",
+   "summary.transfer.provenance.books_carried.seed_from",
+   "ts"
+  ]
+ }
+}
