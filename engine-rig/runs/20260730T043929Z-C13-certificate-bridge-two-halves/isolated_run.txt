@@ -1,0 +1,7 @@
+ACCEPTED good.json
+  the pagoda obligations hold for the stated weights over all 6 jump instances on 5 cells, under peg1d_jump
+  second opinion (not part of the verdict): 5 states reachable, goal reachable: False
+
+REJECTED bad.json
+  inv_closed: jump(1,2,3) raises the potential by 1
+  inv_closed: jump(3,2,1) raises the potential by 1

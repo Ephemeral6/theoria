@@ -1,0 +1,112 @@
+{
+  "claim": "unsolvable_11011_to_00111",
+  "conclusion": "no goal state is reachable from 11011",
+  "goal_states": [
+    "00111"
+  ],
+  "initial_potential": -4,
+  "initial_state": "11011",
+  "n_pos": 5,
+  "obligations": {
+    "goal_break": {
+      "holds": true,
+      "statement": "every goal state has potential > -4",
+      "witnesses": [
+        {
+          "exceeds_initial_by": 12,
+          "goal_state": "00111",
+          "holds": true,
+          "potential": 8
+        }
+      ]
+    },
+    "inv_closed": {
+      "checked_over": "the 5 move instances this document lists",
+      "holds": true,
+      "n_checked": 5,
+      "statement": "every legal move has delta <= 0",
+      "witnesses": [
+        {
+          "delta": 0,
+          "holds": true,
+          "move": "jump(1,2,3)",
+          "positions": [
+            1,
+            2,
+            3
+          ],
+          "w_dst": 0,
+          "w_over": 4,
+          "w_src": -4
+        },
+        {
+          "delta": -4,
+          "holds": true,
+          "move": "jump(2,1,0)",
+          "positions": [
+            2,
+            1,
+            0
+          ],
+          "w_dst": -4,
+          "w_over": -4,
+          "w_src": 4
+        },
+        {
+          "delta": 0,
+          "holds": true,
+          "move": "jump(2,3,4)",
+          "positions": [
+            2,
+            3,
+            4
+          ],
+          "w_dst": 4,
+          "w_over": 0,
+          "w_src": 4
+        },
+        {
+          "delta": -8,
+          "holds": true,
+          "move": "jump(3,2,1)",
+          "positions": [
+            3,
+            2,
+            1
+          ],
+          "w_dst": -4,
+          "w_over": 4,
+          "w_src": 0
+        },
+        {
+          "delta": 0,
+          "holds": true,
+          "move": "jump(4,3,2)",
+          "positions": [
+            4,
+            3,
+            2
+          ],
+          "w_dst": 4,
+          "w_over": 0,
+          "w_src": 4
+        }
+      ]
+    },
+    "inv_init": {
+      "holds": true,
+      "statement": "potential(initial) <= -4",
+      "value": -4
+    }
+  },
+  "produced_by": "engine-rig/engines/lp_potential",
+  "schema": "lp_potential/pagoda_certificate@1",
+  "verified": true,
+  "weights_integer": [
+    -4,
+    -4,
+    4,
+    0,
+    4
+  ]
+}

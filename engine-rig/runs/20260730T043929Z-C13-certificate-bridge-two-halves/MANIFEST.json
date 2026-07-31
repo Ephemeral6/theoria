@@ -1,0 +1,90 @@
+{
+  "adversarial_review": "two read-only passes; soundness survived ~10.4M enumerated accepted pairs with 0 counterexamples; 4 defects found in the test battery and fixed; see adversarial_review.md",
+  "api_calls": 0,
+  "author": "W-1700",
+  "base_commit": "12a48ecc1297fd42f8f31fc362cf7ef15176f9bf",
+  "branch": "agent/c13-certificate-bridge-two-halves",
+  "cost_usd": 0.0,
+  "deliverables": {
+    "1_round_trip_through_an_independent_reader": "interop/pagoda_reader.py (stdlib only, grounds the move relation); tests/test_pagoda_reader.py",
+    "2_format_pinned_in_CONTRACTS": "CONTRACTS/pagoda_certificate_v0.1.md -- additive: a new file, zero changes to the emitted document's fields",
+    "3_partner_sync_paragraph": "## [engine-rig] 2026-07-30T05:06:50Z C13-pagoda-certificate-contract",
+    "4_negative_samples": "8 ordinary refusals + 2 omission forgeries, one of which certifies a falsehood"
+  },
+  "files": [
+    {
+      "path": "engine-rig/interop/pagoda_reader.py",
+      "sha256": "a1e8350b628aab5f612f4d39bcac987afbdbf3d3ae47ea46b42810fb810ea274"
+    },
+    {
+      "path": "engine-rig/interop/export_certificates.py",
+      "sha256": "3253986cb4440c73d14db130f0a16c4b74a535f33238e1089f1fb4f9f0584814"
+    },
+    {
+      "path": "engine-rig/interop/certificate_export.py",
+      "sha256": "294cf2b6bf0ce1cfea35516b148548fcbb3fd0ab823b906f001f5b8becf1dca2"
+    },
+    {
+      "path": "engine-rig/interop/README.md",
+      "sha256": "a93f405b4c7b80249c0fcf885e2a362668bd1b7d0eb0a63d5c0cd4b753a4496e"
+    },
+    {
+      "path": "engine-rig/tests/test_pagoda_reader.py",
+      "sha256": "9abd97f576c83d0e57d23ce13566009125c87ee53b9d691c0d131cc6b68300c4"
+    },
+    {
+      "path": "engine-rig/DECISIONS.md",
+      "sha256": "aa79c75b57bdee4eb8b8eae420d36c04b58b233449c261453e0e5378690f5510"
+    },
+    {
+      "path": "CONTRACTS/pagoda_certificate_v0.1.md",
+      "sha256": "f1149886228bc2dd0b44b94be9b4a59444f5dd2348af179661104638788e5301"
+    },
+    {
+      "path": "engine-rig/interop/certificates/pagoda_4_1110_to_0100.json",
+      "sha256": "df7433a69afb6225848a2eee319d0918aac0858f498beeb77c5fd4357b6cf87c"
+    },
+    {
+      "path": "engine-rig/interop/certificates/pagoda_5_11011_to_00010.json",
+      "sha256": "f825c9f4c288550d6b70fba82249f7f5fd1de72648a1d5b5321a75311fbf7e9d"
+    },
+    {
+      "path": "engine-rig/interop/certificates/pagoda_5_11011_to_01000.json",
+      "sha256": "e5f85aae6ec5ed47d6df2f6fcd5e992e40b2fadf1055e9e5c2ba64dd430dc65c"
+    },
+    {
+      "path": "engine-rig/runs/20260730T043929Z-C13-certificate-bridge-two-halves/verify.py",
+      "sha256": "55c7885adbb1c8bedbcc867df8c65b48de5ae19e1617d30ccdf9f10dd0043472"
+    },
+    {
+      "path": "engine-rig/runs/20260730T043929Z-C13-certificate-bridge-two-halves/forged_omission.cert.json",
+      "sha256": "56a900d3f318cc3276eca947bcd7df759fbc73a77f5186d7e5e28e6cf398315c"
+    },
+    {
+      "path": "engine-rig/runs/20260730T043929Z-C13-certificate-bridge-two-halves/forged_falsehood.cert.json",
+      "sha256": "4b7c8b95691ff95ee345431c77c420cc0dde51a8696614f1f58a181a971630a8"
+    },
+    {
+      "path": "engine-rig/runs/20260730T043929Z-C13-certificate-bridge-two-halves/adversarial_review.md",
+      "sha256": "09f05b0f7dd5a2b07dc63b885d3951fe24f67ed641020772c2aee16f5c239261"
+    }
+  ],
+  "lane": "build",
+  "monitor_scan_bytes_changed": 0,
+  "network": false,
+  "non_vacuity": "three mutants killed: goal_break's <= boundary, a stubbed second_opinion, and inv_closed reading the document's witness list instead of grounding it (3 tests fail). The reader was restored byte-identically after each.",
+  "premise_correction": "The item asserts probe_a1_state reports partial and that the target state is bridge=true/consumed=false. It reports green on this base commit; monitor/state.json recorded green 44 minutes before the item was written. Nothing here was changed to produce that. Filed to monitor/inbox/.",
+  "prompt_id": "C13-certificate-bridge-two-halves",
+  "sealed_pile_contact": "none",
+  "territory": "engine-rig (plus the shared surfaces CONTRACTS/ and PARTNER_SYNC.md, and monitor/inbox/)",
+  "tests": {
+    "certificates_rebuild_byte_for_byte": true,
+    "contracts_gate": "green, 8 contract documents",
+    "engine_rig_suite": "584 passed, 27 skipped",
+    "engine_rig_suite_without_this_branch_s_file": "554 passed, 27 skipped",
+    "regressions": 0,
+    "run_local": "python runs/20260730T043929Z-C13-certificate-bridge-two-halves/verify.py -- ALL CHECKS PASS"
+  },
+  "theory_compiler_bytes_changed": 0,
+  "utc": "2026-07-30T04:39:29Z"
+}

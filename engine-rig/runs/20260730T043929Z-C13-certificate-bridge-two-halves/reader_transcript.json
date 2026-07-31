@@ -1,0 +1,26 @@
+[
+  {
+    "document": "pagoda_4_1110_to_0100.json",
+    "rejections": [],
+    "second_opinion": {
+      "goal_reachable": false,
+      "n_reachable": 2
+    }
+  },
+  {
+    "document": "pagoda_5_11011_to_00010.json",
+    "rejections": [],
+    "second_opinion": {
+      "goal_reachable": false,
+      "n_reachable": 5
+    }
+  },
+  {
+    "document": "pagoda_5_11011_to_01000.json",
+    "rejections": [],
+    "second_opinion": {
+      "goal_reachable": false,
+      "n_reachable": 5
+    }
+  }
+]
