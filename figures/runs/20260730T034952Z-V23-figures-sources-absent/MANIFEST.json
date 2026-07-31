@@ -1,0 +1,29 @@
+{
+  "prompt_id": "V23-figures-sources-absent",
+  "branch": "agent/v23-figures-sources-absent",
+  "base_commit": "3d59d0a63cffeb0e1f865c2bacc8508c5232087b",
+  "utc": "20260730T034952Z",
+  "worker": "W-1692",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "territory": "figures",
+  "also_written": [
+    "monitor/inbox/ (one note -- the standing exception)",
+    "PARTNER_SYNC.md (one appended paragraph)"
+  ],
+  "what": "V23: recompute the four dev-pile ledger hashes, run verify.sh green, explain why a red figures gate reached no reader, adjudicate all 61 manifest lines individually, and dispose of the three uncited plates.",
+  "predecessor": {
+    "worker": "W-1681",
+    "base_commit": "580c645d",
+    "state_found": "a complete run left UNCOMMITTED in .worktrees/v23-figures-sources-absent -- branch agent/v23-figures-sources-absent was 0 commits ahead of master and 61 behind. Nothing had been pushed.",
+    "preserved_as": "local branch wip/v23-w1681-residue, commit a60ca500, so the salvage is recoverable independently of this run",
+    "note": "Its findings are re-derived here against 3d59d0a6 rather than inherited. Where a number differs, this run's measurement wins and says so."
+  },
+  "steps": [
+    {
+      "utc": "20260730T034952Z",
+      "what": "baseline verify.sh on the untouched tree at 3d59d0a6",
+      "artifact": "verify.BEFORE.txt"
+    }
+  ]
+}

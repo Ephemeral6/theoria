@@ -83,32 +83,97 @@ EXCLUDED_DIRS: tuple[str, ...] = ("runs", "figures")
 #: names fig05/06/07 in a list, which is a gate's expectation and not a sentence.
 PROSE_SUFFIXES: tuple[str, ...] = (".md", ".tex")
 
-#: Figures the pipeline builds that the paper does not cite, **on purpose**, each
-#: with the reason. One line each. This is the only way a figure is allowed to be
-#: uncited; anything not here and not cited fails the gate by name.
+#: Rulings a declaration may carry. ``retire`` is the only one that may name no
+#: home section, because it is the only one that says the plate should not have
+#: one. The other two are both "this plate belongs in the paper"; they differ in
+#: whether the section is ready to receive it.
+RULINGS: tuple[str, ...] = ("promote", "hold", "retire")
+
+
+@dataclass(frozen=True)
+class Uncited:
+    """One uncited figure's disposition: a ruling, a home section, a reason.
+
+    **Why this is a record and not a string.** It was a string until V23, and the
+    gate checked only that the string was non-empty. So the gate was green over
+    three reasons, two of which were false statements about the tree:
+
+    * ``fig04_a3_transfer`` -- *"A3 transfer has no section in the workshop
+      paper's outline"*. ``papers/phase1-workshop/OUTLINE.md`` declares section 6
+      as A3 transfer and ``sections/06_a3_transfer.md`` exists, with a §6.2
+      titled "The bill".
+    * ``fig03_capability_spectrum`` -- *"is a Phase-4 artefact and the workshop
+      paper stops at Phase 1"*. ``sections/07_battery.md`` is 653 lines and is
+      entirely the metrics battery, citing
+      ``battery/artifacts/capability_spectrum.json`` throughout.
+
+    Both were written by a gate whose whole purpose is to stop a claim about
+    figures rotting quietly, and both rotted inside it. The lesson is not "write
+    better reasons" -- it is that a free-text reason is the one field here nothing
+    could check, so it was the field that went wrong.
+
+    ``home_section`` is the part of a reason that **can** be checked: the file it
+    names must exist. That does not make a reason true -- nothing mechanical can
+    -- and this gate does not claim otherwise. What it does is make the specific
+    false claim that actually occurred *unwritable*: you can no longer say "this
+    plate has no home section" without either naming a section that exists or
+    ruling ``retire``.
+    """
+
+    ruling: str
+    home_section: str | None
+    reason: str
+
+
+#: Figures the pipeline builds that the paper does not cite, each with its
+#: disposition. This is the only way a figure is allowed to be uncited; anything
+#: not here and not cited fails the gate by name.
 #:
-#: All three entries below are *pending a citation decision*, not a ruling that
-#: they should stay uncited. That decision belongs to the paper author -- it means
-#: writing a sentence in `papers/phase1-workshop/sections/`, and this side of the
-#: fence does not write the paper. What this gate can honestly do is stop the
-#: omission from being invisible, which is the state it was in until now:
-#: `check_figure_parity.py`'s three-entry map could not see these figures, so
-#: nothing anywhere reported that half the pipeline's output reaches no reader.
+#: The rulings are `figures/STATUS.md` D-F-007's, which is the authority for them
+#: and carries the evidence and the dissent. They are deliberately **not uniform**
+#: across the three: the first draft of that ruling was uniform, on a premise
+#: about the paper's reviewers that turned out to be backwards.
 #:
 #: Delete an entry the moment its figure is cited -- the gate will tell you, and
 #: fail, if you forget.
-NOT_CITED_ON_PURPOSE: dict[str, str] = {
-    "fig02_bill_shape": (
-        "pending a citation decision (paper author): the cost/bill panel has no home "
-        "section yet -- section 6's cost discussion cites numbers, not the plate"
+#:
+#: **Known, and larger than any of the three.** The paper embeds no figure at all
+#: -- no markdown image, no `\includegraphics`, no `<img>`, nowhere under
+#: `papers/`. So "cited" and "reaching a reader" are still different things here,
+#: and the three plates below are not the only ones invisible to a reader of
+#: `PAPER.md`: all six are. This gate measures citation because citation is what
+#: it can measure; it must not be read as measuring readership. Handed to
+#: `papers/` in `figures/STATUS.md`'s open-handover table.
+NOT_CITED_ON_PURPOSE: dict[str, Uncited] = {
+    "fig02_bill_shape": Uncited(
+        ruling="promote",
+        home_section="papers/phase1-workshop/sections/07_battery.md",
+        reason=(
+            "promote into §7.8 (STATUS.md D-F-007): E2 and E3 are two of Phase 4's "
+            "three pre-registered primary endpoints and §7.8 argues about them in "
+            "prose only. Awaiting the paper-side edit; this side does not write the "
+            "paper"
+        ),
     ),
-    "fig03_capability_spectrum": (
-        "pending a citation decision (paper author): the battery's capability spectrum "
-        "is a Phase-4 artefact and the workshop paper stops at Phase 1"
+    "fig03_capability_spectrum": Uncited(
+        ruling="promote",
+        home_section="papers/phase1-workshop/sections/07_battery.md",
+        reason=(
+            "promote into §7.1 (STATUS.md D-F-007): §7.1 states the battery matrix as "
+            "a bare list of totals and this plate draws exactly that, with absence "
+            "hatched rather than zeroed. Awaiting the paper-side edit"
+        ),
     ),
-    "fig04_a3_transfer": (
-        "pending a citation decision (paper author): A3 transfer has no section in the "
-        "workshop paper's outline; cite it or retire the plate"
+    "fig04_a3_transfer": Uncited(
+        ruling="hold",
+        home_section="papers/phase1-workshop/sections/06_a3_transfer.md",
+        reason=(
+            "hold, do not promote yet (STATUS.md D-F-007): the plate is a faithful "
+            "redraw of §6.2's own table, but §6 is under live recommendation to be cut "
+            "or demoted to an appendix by two independent P12 seats. Promoting a figure "
+            "into a section two reviewers want gone is a bet, not a disposition; its "
+            "fate follows §6's"
+        ),
     ),
 }
 
