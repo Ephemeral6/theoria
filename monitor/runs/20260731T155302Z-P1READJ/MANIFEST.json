@@ -1,0 +1,24 @@
+{
+  "prompt_id": "closeout/p1-board-readjudication",
+  "branch": "closeout/p1-board",
+  "base_commit": "f6a9571938d55faf6194337db537075d1258d596",
+  "utc": "2026-07-31T15:53:02Z",
+  "files": [
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "474584c6ed733d57e9194a9b0f730c8c9db3bd37a4cbc6460a3c445d1898a26d"
+    },
+    {
+      "path": "../../spec.py",
+      "note": "adjudicated artefact, hashed at commit time",
+      "repo_path": "monitor/spec.py",
+      "sha256": "18b89c10e7e140280cb85bc093d0a2300c64fec7d9ace300119763c248341bf9"
+    },
+    {
+      "path": "../../state.json",
+      "note": "adjudicated artefact, hashed at commit time",
+      "repo_path": "monitor/state.json",
+      "sha256": "b11c8e30ec8aee7faa36bd49d11f85c5ac5b5d2d9190a68fff0accbdd46c8b06"
+    }
+  ]
+}
