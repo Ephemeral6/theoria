@@ -1,0 +1,127 @@
+{
+  "arc-recon/data/recon_ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 5110836,
+    "sha256": "sha256:0c026b38c2e120905d298dfe31606a145d39ebeeade7f58cd0141956a90073a9"
+  },
+  "baseline-arms/out/shards/ledger.a7-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 6473299,
+    "sha256": "sha256:0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae"
+  },
+  "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 1742446,
+    "sha256": "sha256:b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5"
+  },
+  "baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 1894643,
+    "sha256": "sha256:89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1"
+  },
+  "baseline-arms/out/shards/ledger.ar25.jsonl": {
+    "abspath_hint": null,
+    "bytes": 6267799,
+    "sha256": "sha256:a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+  },
+  "baseline-arms/out/shards/ledger.g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 38311448,
+    "sha256": "sha256:7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5"
+  },
+  "baseline-arms/out/shards/probe_log.a7-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 120019,
+    "sha256": "sha256:528d4a21e0e031880c6398dfa6d198eadc597bdc210eb271f7b5d99f25124221"
+  },
+  "baseline-arms/out/shards/probe_log.a7up-opus-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 40211,
+    "sha256": "sha256:e1f3776dd837de1cfc33d8d0839b228a294b0850c0ad73323496383a5b935d87"
+  },
+  "baseline-arms/out/shards/probe_log.a7up-sonnet-g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 40008,
+    "sha256": "sha256:466a921d504d94bbdcc062ca8589653d01e8deff5c1bd0bd05f167a90018bfdc"
+  },
+  "baseline-arms/out/shards/probe_log.ar25.jsonl": {
+    "abspath_hint": null,
+    "bytes": 2362554,
+    "sha256": "sha256:1db5457eecdc7a2fc7f68367971b186e17570bf50ca5fd52857446b404e83574"
+  },
+  "baseline-arms/out/shards/probe_log.g50t.jsonl": {
+    "abspath_hint": null,
+    "bytes": 2669737,
+    "sha256": "sha256:b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899"
+  },
+  "ledger.jsonl": {
+    "abspath_hint": "C:/Users/user/Desktop/theoria/proxy/var/ledger.jsonl",
+    "bytes": 123386,
+    "sha256": "sha256:e0eaee8d3ddeeb47cd708b2f444f9a4da70cad64481f14df2ebc9775d373fa86"
+  },
+  "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2/MANIFEST.json": {
+    "abspath_hint": null,
+    "bytes": 6894,
+    "sha256": "sha256:c91baa9d7de86310c8c9bacb8d393396217bebb408a536d8e4a0677d9fed17fb"
+  },
+  "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2/replay_spotcheck_g50t.json": {
+    "abspath_hint": null,
+    "bytes": 3256,
+    "sha256": "sha256:19997ad4b932fe72f9cd9864bf3540ae72c0ec8b135c8fca8de3ae02522b3017"
+  },
+  "proxy/runs/p9-shell-harden/MANIFEST.json": {
+    "abspath_hint": null,
+    "bytes": 4368,
+    "sha256": "sha256:6faf175500c4eaaf8f5e356f7dfe7e84d20db210e5ae9e0f4921572b6a1594bf"
+  },
+  "proxy/runs/p9-shell-harden/replay_spotcheck_ar25.json": {
+    "abspath_hint": null,
+    "bytes": 2941,
+    "sha256": "sha256:5a735599b8897c1b8730c07c349c1fba1b4e85142670fadf6f3d33bd6ba00d3d"
+  },
+  "theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 251155,
+    "sha256": "sha256:fd7a0d9f72a863212962e52f6cd80dc74f8434c5fbe07fcc886aad2abba10659"
+  },
+  "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 3799600,
+    "sha256": "sha256:4dd50dd2f4c82821bfb0eff427fc257a3cd171e03d1d91c245647e1ed63fb81d"
+  },
+  "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 254573,
+    "sha256": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5"
+  },
+  "theoria-arm/runs/20260731T1240Z-A3-level2-carried/surprises.jsonl": {
+    "abspath_hint": null,
+    "bytes": 357,
+    "sha256": "sha256:24a5e0ed68fb0248aca8761fcb6d6bfbca496efe830397ef3c84d39bb461d7ee"
+  },
+  "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 1221520,
+    "sha256": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c"
+  },
+  "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/surprises.jsonl": {
+    "abspath_hint": null,
+    "bytes": 10493,
+    "sha256": "sha256:b95449691b03e197826060bf8db29c03d69c2acb81fe8e7e08105709a8de1584"
+  },
+  "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 3464005,
+    "sha256": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3"
+  },
+  "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/surprises.jsonl": {
+    "abspath_hint": null,
+    "bytes": 42784,
+    "sha256": "sha256:12eec8ca24ce366e3600e2652f8c3bbc80828cc126b5a76809704959d3dace0b"
+  },
+  "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl": {
+    "abspath_hint": null,
+    "bytes": 18934,
+    "sha256": "sha256:d08d2139b3827479bd04c17e48e05a681bd0d57df7b3e5c5a865d1047a231f63"
+  }
+}

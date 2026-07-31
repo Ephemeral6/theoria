@@ -1,0 +1,91 @@
+{
+  "comparisons": [
+    {
+      "action": "RESET",
+      "agree": true,
+      "frame_hash": "sha256:801726dc499f3f52f79a7a69f2720fcd308dbe625cbf9eb760442f71c298fba7",
+      "position": 0,
+      "sessions": 29
+    },
+    {
+      "action": "ACTION1",
+      "agree": true,
+      "frame_hash": "sha256:801726dc499f3f52f79a7a69f2720fcd308dbe625cbf9eb760442f71c298fba7",
+      "position": 1,
+      "sessions": 25
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+      "position": 2,
+      "sessions": 24
+    },
+    {
+      "action": "ACTION3",
+      "agree": true,
+      "frame_hash": "sha256:0752f8b0c82bd16302700744e621d0b692c3719dd0964adbcfe74f8e6fdc9cd4",
+      "position": 3,
+      "sessions": 17
+    },
+    {
+      "action": "ACTION4",
+      "agree": true,
+      "frame_hash": "sha256:5cc8add00a5dcfbcb2d4c171652b36cb9a572d7decadbccc533d06d378981257",
+      "position": 4,
+      "sessions": 16
+    },
+    {
+      "action": "ACTION5",
+      "agree": true,
+      "frame_hash": "sha256:dd5deaacbac46e31e5b548f587cab2a91f4b73da110aa1319cb5b7c17905a250",
+      "position": 5,
+      "sessions": 12
+    }
+  ],
+  "disagreements": [],
+  "game_id": "g50t-5849a774",
+  "live_depth_note": "the 3 live legs are present at all 6 compared positions; 971 of the 1304 pairwise comparisons are the archived P-9-era figure reproduced, 333 involve a live leg; live-vs-live depth (10 positions, 22 pairwise) is in replay_spotcheck_live_g50t.json",
+  "n_sessions": 29,
+  "pairwise_comparisons": 1304,
+  "sessions": [
+    "arm/20260731T1240Z-r1",
+    "arm/20260731T1310Z-r2",
+    "arm/20260731T1430Z-r3",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-043feb9c",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-04530b38",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-16527b65",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-2d998733",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-337b8fc5",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-52bd4daf",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-5de89c63",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-6b04826e",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-7272ff90",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-7f0e5671",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-7fadf62f",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-84d307e7",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-9f9f839a",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-a7959a24",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+    "bare_cc-g50t-claude-opus-5-6a39afc2",
+    "bare_cc-g50t-claude-sonnet-5-733ed586",
+    "recon/run-a",
+    "recon/run-a#2",
+    "recon/run-a#3",
+    "recon/run-a#4",
+    "recon/run-b",
+    "recon/run-b#2",
+    "recon/run-b#3"
+  ],
+  "sources": [
+    "reproduced archive canons (see regression_vs_archive.json)",
+    "arc-recon/data/recon_ledger.jsonl",
+    "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl",
+    "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+    "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl"
+  ],
+  "steps_compared": 6,
+  "verdict": "PASS"
+}

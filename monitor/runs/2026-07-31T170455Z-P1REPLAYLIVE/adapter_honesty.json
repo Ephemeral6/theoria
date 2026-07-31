@@ -1,0 +1,83 @@
+{
+  "files": {
+    "theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 92,
+      "failed_carrying_frames": 0,
+      "failed_steps": 82,
+      "run_ids": [
+        "r-e404e571d5724de2"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    },
+    "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 252,
+      "failed_carrying_frames": 0,
+      "failed_steps": 221,
+      "run_ids": [
+        "r-2c194a9cfb5e491a"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    },
+    "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 60,
+      "failed_carrying_frames": 0,
+      "failed_steps": 54,
+      "run_ids": [
+        "r-a80a4383312d408d"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    },
+    "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 99,
+      "failed_carrying_frames": 0,
+      "failed_steps": 85,
+      "run_ids": [
+        "r-70fa98dd8f4d4506"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    },
+    "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 234,
+      "failed_carrying_frames": 0,
+      "failed_steps": 200,
+      "run_ids": [
+        "r-41e482ba348b4a3a"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    },
+    "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl": {
+      "abandoned_commands": 0,
+      "env_steps": 5,
+      "failed_carrying_frames": 0,
+      "failed_steps": 4,
+      "run_ids": [
+        "r-01009b3d8f9942d7"
+      ],
+      "single_run_id": true,
+      "status200_without_frames": 0,
+      "trailing_failures": 0
+    }
+  },
+  "properties": [
+    "no failed step carries frames or frame_hash",
+    "no status-200 step lacks frames",
+    "every failure is a retry of the command that next succeeds",
+    "each run-dir ledger holds exactly one run_id"
+  ],
+  "violations": 0
+}

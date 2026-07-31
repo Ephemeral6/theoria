@@ -1,0 +1,99 @@
+{
+  "instrument": {
+    "emitter": "theoria-arm/inner/certify.py cheap(): render(step(state, manual_action)) vs the SINGLE recorded observation store.grids[t+1]; surprise minted in surprises_from() as kind=replay_mismatch",
+    "reads_environment_twice": false,
+    "verdict": "arm-side theory instrument: a mismatch says the compiled manual mispredicts a recorded frame; the environment is sampled once per transition, so the record carries no information about environment determinism in either direction"
+  },
+  "records": [
+    {
+      "arc_action": "ACTION2",
+      "cells_wrong": 1,
+      "environment_at_that_position": {
+        "action": "ACTION2",
+        "agree": true,
+        "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+        "sessions": 3
+      },
+      "handled_by": null,
+      "leg": "arm/20260731T1240Z-r1",
+      "position_in_spotcheck": 2,
+      "seq": 1,
+      "t": 1
+    },
+    {
+      "arc_action": "ACTION2",
+      "cells_wrong": 1,
+      "environment_at_that_position": {
+        "action": "ACTION2",
+        "agree": true,
+        "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+        "sessions": 3
+      },
+      "handled_by": "theorize",
+      "leg": "arm/20260731T1310Z-r2",
+      "position_in_spotcheck": 2,
+      "seq": 1,
+      "t": 1
+    },
+    {
+      "arc_action": "ACTION2",
+      "cells_wrong": 1,
+      "environment_at_that_position": {
+        "action": "ACTION2",
+        "agree": true,
+        "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+        "sessions": 3
+      },
+      "handled_by": "theorize",
+      "leg": "arm/20260731T1310Z-r2",
+      "position_in_spotcheck": 2,
+      "seq": 2,
+      "t": 1
+    },
+    {
+      "arc_action": "ACTION2",
+      "cells_wrong": 1,
+      "environment_at_that_position": {
+        "action": "ACTION2",
+        "agree": true,
+        "frame_hash": "sha256:e665977d6ad439ffb07bb1613e5bdae5caab80b8d4eb7e5eeccc57e2a4a97dc7",
+        "sessions": 3
+      },
+      "handled_by": "theorize",
+      "leg": "arm/20260731T1310Z-r2",
+      "position_in_spotcheck": 2,
+      "seq": 3,
+      "t": 1
+    },
+    {
+      "arc_action": "ACTION5",
+      "cells_wrong": 1,
+      "environment_at_that_position": null,
+      "handled_by": null,
+      "leg": "arm/20260731T1310Z-r2",
+      "position_in_spotcheck": 10,
+      "seq": 12,
+      "t": 9
+    },
+    {
+      "arc_action": "ACTION5",
+      "cells_wrong": 23,
+      "environment_at_that_position": {
+        "action": "ACTION5",
+        "agree": true,
+        "frame_hash": "sha256:dd5deaacbac46e31e5b548f587cab2a91f4b73da110aa1319cb5b7c17905a250",
+        "sessions": 3
+      },
+      "handled_by": "theorize",
+      "leg": "arm/20260731T1430Z-r3",
+      "position_in_spotcheck": 5,
+      "seq": 1,
+      "t": 4
+    }
+  ],
+  "summary": {
+    "conclusion": "5 of 6 arm-side replay_mismatch records sit at positions where the live environment returned the identical frame_hash across independent sessions; the remaining 1 lie past the point where the sessions diverge (prefix divergence) and carry no cross-session evidence either way. Structurally the verdict is the same for all 6: certify.py compares the manual's prediction against a single recorded observation, so a replay_mismatch is a statement about the theory, not about environment determinism",
+    "records_whose_position_the_environment_reproduced_bit_exactly": 5,
+    "replay_mismatch_records": 6
+  }
+}

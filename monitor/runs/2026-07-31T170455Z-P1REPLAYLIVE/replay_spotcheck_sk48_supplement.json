@@ -1,0 +1,59 @@
+{
+  "comparisons": [
+    {
+      "action": "RESET",
+      "agree": true,
+      "frame_hash": "sha256:2af9d6ed05c693230cef8c8d87ed874ed92751ebe6f0cf4c1d57356f40b71f8b",
+      "position": 0,
+      "sessions": 5
+    },
+    {
+      "action": "ACTION1",
+      "agree": true,
+      "frame_hash": "sha256:ea1fb5279a3c939bd69062af997c5fd68fa94efaa30f137f032ab416307d3afb",
+      "position": 1,
+      "sessions": 4
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:36dda2ff33b15d956ab698bdedc0aaf1d8950790e34f6bc4a61398e137406f02",
+      "position": 2,
+      "sessions": 4
+    },
+    {
+      "action": "ACTION3",
+      "agree": true,
+      "frame_hash": "sha256:71a459368eabd05ff5b3e372ef3c46a899c28d20d140e7bb2430e87052b77a00",
+      "position": 3,
+      "sessions": 4
+    },
+    {
+      "action": "ACTION4",
+      "agree": true,
+      "frame_hash": "sha256:11d20ed09d45f904048de966de7852e55be17980d6650769ae53f6b3fcfe65de",
+      "position": 4,
+      "sessions": 4
+    }
+  ],
+  "disagreements": [],
+  "game_id": "sk48-d8078629",
+  "n_sessions": 5,
+  "note": "supplementary: pre-S31 committed real-online sk48 legs; not part of the two-game claim, recorded as-is",
+  "pairwise_comparisons": 34,
+  "sessions": [
+    "arm/20260728T072604Z-E3",
+    "arm/20260728T083400Z-E3v2",
+    "arm/preflight-20260728T074237Z",
+    "recon/run-a",
+    "recon/run-b"
+  ],
+  "sources": [
+    "theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl",
+    "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl",
+    "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl",
+    "arc-recon/data/recon_ledger.jsonl"
+  ],
+  "steps_compared": 5,
+  "verdict": "PASS"
+}

@@ -1,0 +1,75 @@
+{
+  "spotcheck": {
+    "adjudication": {
+      "environment_reproduced_positions": 5,
+      "replay_mismatch_records": 6
+    },
+    "after_adversarial_fixes": {
+      "adapter_honesty_violations": 0,
+      "adjudication_conclusion": "5 of 6 at environment-reproduced positions; 1 past prefix divergence, no cross-session evidence either way",
+      "ar25_live_depth": "S31 RESET-only, position 0, 16/388 pairwise",
+      "canon_digests_drift": "5/5, path-dependence of upgrade_ledger, not shard movement",
+      "overall": "PASS",
+      "pinned_inputs_all_match": true
+    },
+    "combined_ar25": {
+      "disagreements": 0,
+      "pairwise": 388,
+      "positions": 9,
+      "sessions": 17,
+      "verdict": "PASS"
+    },
+    "combined_g50t": {
+      "disagreements": 0,
+      "pairwise": 1304,
+      "positions": 6,
+      "sessions": 29,
+      "verdict": "PASS"
+    },
+    "integrity": {
+      "hash_mismatches": 0,
+      "steps_with_frames": 1315
+    },
+    "live_g50t": {
+      "disagreements": 0,
+      "pairwise": 22,
+      "positions": 10,
+      "sessions": 3,
+      "verdict": "PASS"
+    },
+    "regression_ar25_match": true,
+    "regression_g50t_match": true,
+    "s31_excerpt_lines": 4,
+    "sk48_supplement": {
+      "disagreements": 0,
+      "pairwise": 34,
+      "positions": 5,
+      "sessions": 5,
+      "verdict": "PASS"
+    }
+  },
+  "sweep": {
+    "board_changes": {
+      "p1-access": "partial->green",
+      "p1-cascade": "partial->green",
+      "p1-replay-audit": "partial->green",
+      "p1-scorer": "partial, note rewritten",
+      "p1-variant": "partial->green",
+      "p2-audit": "partial, note rewritten",
+      "p2-material": "partial, note rewritten"
+    },
+    "cascade_verify_sh": "PASS (27 steps / 4 games / 31 ledger entries / 22 actions / 0 undiscovered ledgers)",
+    "scorer_corpus": {
+      "fail": 0,
+      "pass": 26,
+      "runs": 37,
+      "theoria_live_legs_pass": 4,
+      "undetermined_lost_cards": 11
+    },
+    "unblocked_by_nothing_still_partial": [
+      "p1-proxy-model (owner funding)",
+      "p1-seal-test (right conjunct, D-P8-002 + GAP-5)",
+      "p1-same-shell (DELIVERY_RULING s4 wiring, open-unassigned)"
+    ]
+  }
+}
