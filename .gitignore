@@ -12,7 +12,10 @@ __pycache__/
 .lake/
 *.egg-info/
 monitor/dispatch-logs/
-.claude/settings.local.json
+# .claude/ holds harness-local state (worktrees, local settings) that must
+# stay untracked; only the shared skills are repository content.
+.claude/*
+!.claude/skills/
 .worktrees/
 monitor/refresh.log
 

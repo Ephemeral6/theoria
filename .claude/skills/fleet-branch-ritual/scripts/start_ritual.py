@@ -48,14 +48,14 @@ def main(argv=None):
     ap.add_argument("--territory", required=True,
                     help="repo-relative directory this ticket may write to, e.g. engine-rig")
     ap.add_argument("--worktree", default=None,
-                    help="worktree path (default: <repo-parent>/theoria-wt-<ticket lowercased>)")
+                    help="worktree path (default: <repo>/.worktrees/<ticket lowercased>)")
     ap.add_argument("--branch", default=None, help="override branch name")
     ap.add_argument("--base", default=None, help="override base ref (default: newest master)")
     ap.add_argument("--sections", type=int, default=3, help="PARTNER_SYNC sections to show")
     ap.add_argument("--no-tests", action="store_true", help="skip the baseline test run")
     ap.add_argument("--no-fetch", action="store_true", help="skip `git fetch origin`")
     ap.add_argument("--prompt", default=None,
-                    help="path to the prompt file (default: monitor/prompts/<TICKET>-<slug>.md if present)")
+                    help="path to the work item (default: monitor/board/items/<TICKET>-<slug>.md if present)")
     ap.add_argument("--now", default=None, help="fixed UTC instant (rehearsals/tests)")
     args = ap.parse_args(argv)
 
@@ -65,7 +65,7 @@ def main(argv=None):
     ticket = args.ticket.strip()
     short = ticket.lower().replace("-", "")
     branch = args.branch or "agent/%s-%s" % (ticket.lower(), args.slug)
-    wt = Path(args.worktree) if args.worktree else root.parent / ("theoria-wt-%s" % short)
+    wt = Path(args.worktree) if args.worktree else root / ".worktrees" / short
 
     # 1 -- fetch
     if args.no_fetch:
@@ -113,7 +113,7 @@ def main(argv=None):
     territory_abs = (wt / args.territory).resolve()
     prompt_rel = args.prompt
     if prompt_rel is None:
-        guess = root / "monitor" / "prompts" / ("%s-%s.md" % (ticket, args.slug))
+        guess = root / "monitor" / "board" / "items" / ("%s-%s.md" % (ticket, args.slug))
         prompt_rel = rel(guess, root) if guess.exists() else None
 
     say("")

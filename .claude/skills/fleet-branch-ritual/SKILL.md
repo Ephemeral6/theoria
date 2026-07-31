@@ -1,6 +1,6 @@
 ---
 name: fleet-branch-ritual
-description: Start-of-ticket ritual for a Theoria fleet prompt (开工仪式) — cut agent/<ticket>-<slug> from the newest master, add an isolated git worktree, read the PARTNER_SYNC.md tail and the territory's STATUS/DECISIONS, then run the territory's test suite as a green baseline before anything is changed. Use at the very start of a session that was handed a monitor/prompts ticket (P-NN, A-N, B-N, R-N, M-0), or whenever the user says 开工 / 建分支 / 建 worktree / "start the ticket" / "set up a branch and worktree" / "get a baseline before I change code". Do not use for merges onto master, and do not use once the branch already exists.
+description: Start-of-ticket ritual for a Theoria fleet prompt (开工仪式) — cut agent/<ticket>-<slug> from the newest master, add an isolated git worktree, read the PARTNER_SYNC.md tail and the territory's STATUS/DECISIONS, then run the territory's test suite as a green baseline before anything is changed. Use at the very start of a session that was handed a monitor/board/items work item (P-NN, A-N, B-N, R-N, M-0), or whenever the user says 开工 / 建分支 / 建 worktree / "start the ticket" / "set up a branch and worktree" / "get a baseline before I change code". Do not use for merges onto master, and do not use once the branch already exists.
 ---
 
 # fleet-branch-ritual
@@ -29,7 +29,7 @@ Arguments you will actually vary:
 | `--ticket` | the prompt id exactly as the工单 writes it: `P-24`, `A-1`, `R-1` |
 | `--slug` | the branch slug from the工单's 分支制 line: `agent/p24-fleet-skills` → `fleet-skills` |
 | `--territory` | repo-relative dir the ticket may write to (`engine-rig`, `proxy`, `.claude/skills`) |
-| `--worktree` | override path; default `<repo parent>/theoria-wt-<ticket>` |
+| `--worktree` | override path; default `<repo>/.worktrees/<ticket>` |
 | `--sections` | how many PARTNER_SYNC sections to print (default 3) |
 | `--no-tests` | skip the baseline (only when the工单 says the territory has none) |
 | `--now` | fix the UTC instant, for a reproducible rehearsal |

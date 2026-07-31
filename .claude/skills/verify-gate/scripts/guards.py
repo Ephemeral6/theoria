@@ -14,6 +14,7 @@ harness in any language can gate on the exit codes.
 
 from __future__ import annotations
 
+import pathlib
 import argparse
 import json
 import re
@@ -133,7 +134,17 @@ def cmd_secret(args, root):
     """密钥: ARC_API_KEY must never reach a tracked file. Phase 4 publishes
     every tracked file and git history makes it irreversible."""
     cl = Checklist("credential sealing")
-    env = root / ".env"
+    # .env is gitignored, so it exists only in the main checkout; a guard
+    # that reads it relative to a worktree passes green because the check
+    # never ran (the repo's recurring failure shape). Resolve the main
+    # checkout root through git, and treat a missing .env as RED.
+    rc, common, _ = git(["rev-parse", "--git-common-dir"], cwd=root)
+    main_root = pathlib.Path(common.strip()).resolve().parent if rc == 0 else root
+    env = main_root / ".env"
+    cl.add(env.exists(), ".env found at the main checkout",
+           str(env) if env.exists() else
+           "MISSING at %s -- the credential guard cannot run; this is red, "
+           "not vacuously green" % env)
     rc, out, _ = git(["check-ignore", "-q", ".env"], cwd=root)
     cl.add(rc == 0 or not env.exists(), ".env is gitignored",
            "ignored" if rc == 0 else ("absent" if not env.exists() else "TRACKED -- fix now"))

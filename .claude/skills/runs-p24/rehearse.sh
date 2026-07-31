@@ -4,7 +4,7 @@
 #
 #   sh .claude/skills/runs-p24/rehearse.sh            (from a checkout that has the skills)
 #
-# It creates worktree ../theoria-wt-p24r on branch agent/p24r-rehearsal, uses
+# It creates worktree .worktrees/p24r on branch agent/p24r-rehearsal, uses
 # engine-rig as the rehearsal territory (a real suite, 150 tests), and removes
 # both at the end. Nothing is pushed. A sealed game id is used as a negative
 # control and is redacted out of this transcript before it is archived.
@@ -20,7 +20,7 @@ GATE="$SK/verify-gate/scripts/verify_gate.py"
 GUARD="$SK/verify-gate/scripts/guards.py"
 CLOSE="$SK/handoff-close/scripts/handoff_close.py"
 
-WT=$(cd .. && pwd)/theoria-wt-p24r
+WT=$(pwd)/.worktrees/p24r
 BRANCH=agent/p24r-rehearsal
 BASE=$(git rev-parse HEAD)
 PASS=0

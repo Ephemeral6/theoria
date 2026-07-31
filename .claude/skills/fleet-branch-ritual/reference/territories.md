@@ -39,7 +39,7 @@ territory root.** This table exists for the exceptions and the extras.
 ## Naming, as the fleet actually uses it
 
 * branch — `agent/<ticket lowercased>-<slug>`, e.g. `agent/p24-fleet-skills`
-* worktree — `<repo parent>/theoria-wt-<ticket>`, e.g. `../theoria-wt-p24`.
+* worktree — `<repo>/.worktrees/<ticket>`, e.g. `.worktrees/p24` (CLAUDE.md: never a sibling checkout).
   (`.claude/worktrees/<slug>` is the harness's own convention and is also in
   use; either is fine, both are outside every territory.)
 * runs — `<territory>/runs/<UTC>-<slug>/`
