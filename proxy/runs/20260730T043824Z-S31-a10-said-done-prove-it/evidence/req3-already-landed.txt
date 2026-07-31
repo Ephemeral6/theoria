@@ -1,0 +1,35 @@
+Requirement 3, as the ticket words it:
+  'reconciliation keys on the triple (cost, actions, turns); score is
+   self-reported and separately marked not cross-verifiable'
+
+What is on master at 12a48ecc:
+  RECONCILIATION_KEY = ('actions', 'cost', 'score_per_run')
+
+  legs (these vote):
+     actions        verdict=AGREE  votes=True
+     cost           verdict=AGREE  votes=True
+     score_per_run  verdict=AGREE  votes=True
+  gaps (these structurally cannot vote):
+     turns          verdict=ABSENT                 votes=False
+     score_per_step verdict=NOT_CROSS_VERIFIABLE   votes=False
+
+     turns detail: not reconcilable: no turn index exists in the ledger. battery/INPUT_FORMAT.md gap 5 -- 'No turn  ...
+
+So both halves the ticket asks for are present, in the AMENDED form:
+  - turns is named, declared absent, and cannot vote;
+  - score is marked not-cross-verifiable at PER-STEP only, because the
+    per-run figure is a real check with a proven failing path.
+
+The ticket quotes the PRE-CORRECTION text. Provenance:
+  - the triple is monitor finding F-19, published on A10's board item
+    (monitor/board/done/A10-shared-ledger-real-arms.W-1641.md:19-22).
+    It is not S29's; no S29 rules on reconciliation at all.
+  - F-19 withdrew it the same day, in its own words, at
+    monitor/spec.py:633-636:
+      turns 字段账本里不存在（INPUT_FORMAT gap 5），我用一条不可清偿的
+      义务替换了另一条；口径改为 cost x actions，turns 记为显式缺口且不投票。
+      分数不是整体不可核验——记分卡 close 响应带 score，缺的只是 per-step。
+
+Landing the ticket's literal wording would add a leg comparing a field
+nobody records, which can only ever print agreement -- the defect the
+proxy-side S29 (runs/20260729T1700Z-S29-measurement) exists to remove.

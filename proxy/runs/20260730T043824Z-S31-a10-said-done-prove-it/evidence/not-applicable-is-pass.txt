@@ -1,0 +1,23 @@
+A run with model_calls=0 -- 'no bill to reconcile'
+==============================================================
+  cost leg verdict : NOT_APPLICABLE
+  cost leg votes   : True
+  cost leg note    : the run made no model calls, so there is no bill to reconcile. Not the same as a bill that reconciled.
+  TOP-LEVEL VERDICT: PASS
+
+A run whose bill actually did reconcile:
+  cost leg verdict : AGREE
+  TOP-LEVEL VERDICT: PASS
+
+Both print 'PASS' at the top level.
+
+reconcile.py:239-240 says of the first: 'the run made no model calls, so
+there is no bill to reconcile. Not the same as a bill that reconciled.'
+The report then makes it exactly the same as a bill that reconciled:
+_leg (reconcile.py:155-158) stamps every leg votes=True, and the verdict
+branch (reconcile.py:479-484) special-cases only INCOMPLETE, so
+NOT_APPLICABLE falls through to PASS.
+
+test_a_run_with_no_model_calls_says_so_rather_than_agreeing
+(test_reconcile.py:247) asserts the LEG and never the top-level verdict,
+which is why the sentence in the note and the verdict could drift apart.

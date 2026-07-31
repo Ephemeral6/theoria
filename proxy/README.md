@@ -143,3 +143,11 @@ questions cannot tell "I failed" apart from "it was impossible".
   environment, read out of ledgers that already existed. It is not evidence that
   this harness reproduces a run, and it covers one game where the acceptance
   line asks for two.
+* **`var/ledger.jsonl` carries no real-arm records, and that is the expected
+  state.** The arms each write their own ledger by design; pointing them at the
+  shared one is cross-territory work nobody has been assigned. A check that
+  reads `var/` to decide whether a proxy delivery landed is reading a
+  gitignored path that no commit contains — `DELIVERY_RULING.md` is the ruling
+  and `python -m tools.audit_delivery` is the check that replaces it. Note also
+  that `reconcile` appends an incident **by default**: pass `--no-incident`
+  when you only mean to look.

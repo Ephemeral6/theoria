@@ -42,6 +42,28 @@ LEAKAGE_PATH = os.path.join(ARTIFACTS, "leakage.json")
 MANIFEST_PATH = os.path.join(ARTIFACTS, "build_manifest.json")
 
 
+def _repo_rel(path: str) -> str:
+    r"""A tracked generated artefact must not record where its builder stood.
+
+    `write_json` and `os.path.join(ARTIFACTS, ...)` both hand back absolute
+    paths, so `build_manifest.json` used to record twelve of them -- four papers
+    times three keys -- naming whichever worktree last ran the build.  Two costs,
+    and the second is the one that made this a ticket rather than a tidy-up:
+    every delivery in this territory carried twelve lines of pseudo-diff whose
+    two sides mean the same thing, which is a merge-conflict generator between
+    `exam` and `exam`; and `exam/tools/archive_run.py` folds this file into the
+    manifest it writes for every archived run, so the leak propagates into the
+    provenance canon and from there into a Phase 4 release manifest that
+    publishes every tracked file.  To an outside reader
+    `.worktrees\v5-verdict-three-types\...` is noise and a disclosure of local
+    directory structure at the same time.
+
+    Repo-relative, forward slashes, so the value is identical on every checkout
+    and on both platforms.
+    """
+    return os.path.relpath(path, REPO).replace(os.sep, "/")
+
+
 def _answer_labels(module: Any, paper: Paper, key_doc: Dict[str, Any]
                    ) -> Optional[Dict[str, str]]:
     """Short answer labels for the positional-independence check.
@@ -85,8 +107,10 @@ def build_one(question_type: str, *, write: bool = True) -> Dict[str, Any]:
     }
 
     if write:
-        out["sheet_path"] = write_json(paper_path(paper.paper_id), sheet)
-        out["key_path"] = write_json(truth_path(paper.paper_id), key_doc)
+        out["sheet_path"] = _repo_rel(
+            write_json(paper_path(paper.paper_id), sheet))
+        out["key_path"] = _repo_rel(
+            write_json(truth_path(paper.paper_id), key_doc))
         brief = leakage.cheater_brief(sheet)
         os.makedirs(CHEATER_DIR, exist_ok=True)
         brief_path = os.path.join(CHEATER_DIR, "%s.brief.txt" % paper.paper_id)
@@ -94,7 +118,7 @@ def build_one(question_type: str, *, write: bool = True) -> Dict[str, Any]:
             fh.write(brief)
             if not brief.endswith("\n"):
                 fh.write("\n")
-        out["cheater_brief_path"] = brief_path
+        out["cheater_brief_path"] = _repo_rel(brief_path)
         out["cheater_brief_sha256"] = sha256(brief)
     return out
 

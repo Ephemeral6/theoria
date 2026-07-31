@@ -1,0 +1,9 @@
+{
+  "prompt_id": "S31-a10-said-done-prove-it",
+  "branch": "agent/s31-a10-said-done-prove-it",
+  "base_commit": "50e106179323e1af3a2e1b5c82a35fd3d232c552",
+  "utc": "20260730T034733Z",
+  "worker": "W-1691",
+  "territory": "proxy",
+  "files": []
+}

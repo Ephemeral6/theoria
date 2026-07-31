@@ -1,0 +1,13 @@
+run_id                      arm        env_upstream                 model_upstream
+r-d65daf75add143dd         mock_arm   http://127.0.0.1:61552       http://127.0.0.1:61553
+r-d6936d48be894292-replay  replay     http://127.0.0.1:61726       None
+r-7a13b5c582844b99         mock_arm   http://127.0.0.1:56238       http://127.0.0.1:56239
+
+AXIS 1 -- arm identity is an experimental arm (bare_cc/schema_repro/theoria),
+          excluding event=incident (auditor footprints):
+    0
+AXIS 2 -- runs whose run_start names a non-localhost upstream (a paid/live run):
+    0
+
+Both axes are 0. The 2026-07-29 audit asked ONE question and both answers
+happened to be 0, so no one noticed it had asked only one of them.

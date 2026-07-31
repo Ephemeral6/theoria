@@ -1,9 +1,9 @@
 {
   "papers": [
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\cheater\\p15-heldout-a0.brief.txt",
+      "cheater_brief_path": "exam/artifacts/cheater/p15-heldout-a0.brief.txt",
       "cheater_brief_sha256": "cee19c15c253c66c7339ffb01a2286bf103b97c77b4ea8f174cae2d774ba29b7",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\truth\\p15-heldout-a0.truth.json",
+      "key_path": "exam/artifacts/truth/p15-heldout-a0.truth.json",
       "key_sha256": "24a5706e9a87a60484052d2cbdec98df222440c754995cb46948f83b310dd172",
       "leakage": {
         "label_sets_checked": [
@@ -271,14 +271,14 @@
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
       "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\papers\\p15-heldout-a0.paper.json",
+      "sheet_path": "exam/artifacts/papers/p15-heldout-a0.paper.json",
       "sheet_sha256": "22e6bacbe23100824849a72c74cff823f35603ec3d98dc2208380c9e7fb45a70",
       "total_points": 80.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\cheater\\p15-handover-a0.brief.txt",
+      "cheater_brief_path": "exam/artifacts/cheater/p15-handover-a0.brief.txt",
       "cheater_brief_sha256": "6f28396a6630867d035cf7d3cb2e8cac2f5d8165f3003c772ab2a59bbbfea768",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\truth\\p15-handover-a0.truth.json",
+      "key_path": "exam/artifacts/truth/p15-handover-a0.truth.json",
       "key_sha256": "0f95bd904b757e3d5dc2a0cbbacb9fb2532bbf64a540237d23efa63d44619801",
       "leakage": {
         "label_sets_checked": [
@@ -415,14 +415,14 @@
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
       "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\papers\\p15-handover-a0.paper.json",
+      "sheet_path": "exam/artifacts/papers/p15-handover-a0.paper.json",
       "sheet_sha256": "70bd11c2874ebafcae3d0351ef2b0426019f1498809db21ec45e747d225700b3",
       "total_points": 46.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\cheater\\p15-adaptation-a0.brief.txt",
+      "cheater_brief_path": "exam/artifacts/cheater/p15-adaptation-a0.brief.txt",
       "cheater_brief_sha256": "b67f5b849cc72929116b176f7aea50e10b404849a82b7a435dffdab12d217402",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\truth\\p15-adaptation-a0.truth.json",
+      "key_path": "exam/artifacts/truth/p15-adaptation-a0.truth.json",
       "key_sha256": "0c4611b6aea11d6ff2de4028e08888d5b2e69d9ffc26d8ed95d8dab1d1b72557",
       "leakage": {
         "label_sets_checked": [
@@ -734,14 +734,14 @@
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
       "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\papers\\p15-adaptation-a0.paper.json",
+      "sheet_path": "exam/artifacts/papers/p15-adaptation-a0.paper.json",
       "sheet_sha256": "f61ac65b29d700bbfe721a8f51534d643d46b687e8f0979b4bb8013ff676c56e",
       "total_points": 144.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\cheater\\p15-verdict-a2.brief.txt",
+      "cheater_brief_path": "exam/artifacts/cheater/p15-verdict-a2.brief.txt",
       "cheater_brief_sha256": "a57823516b8e25ca24c302a8c75927d40ad665e1cdaf602f3f7222390b9a5a99",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\truth\\p15-verdict-a2.truth.json",
+      "key_path": "exam/artifacts/truth/p15-verdict-a2.truth.json",
       "key_sha256": "1dd56b8d93323e9f764ae72807fd2e9577a75675e63a4cbe9e3b5167f11c1f17",
       "leakage": {
         "label_sets_checked": [
@@ -1255,7 +1255,7 @@
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
       "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v6-v23-large-space\\exam\\artifacts\\papers\\p15-verdict-a2.paper.json",
+      "sheet_path": "exam/artifacts/papers/p15-verdict-a2.paper.json",
       "sheet_sha256": "5cc9bff3860f1257978debe3a3f1957bf6d405e9482ce5b3788a8a21461b90ee",
       "total_points": 34.0
     }
