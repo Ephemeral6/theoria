@@ -1,0 +1,131 @@
+{
+ "books_carried": {
+  "carried": {
+   "playbook.dsl": {
+    "chars": 5215,
+    "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+   },
+   "theory.dsl": {
+    "chars": 36237,
+    "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+   }
+  },
+  "empty": false,
+  "seed_from": "runs/20260728T083400Z-E3-sk48-carried-v2/books",
+  "skipped": []
+ },
+ "carried": {
+  "playbook.dsl": {
+   "bytes": 5215,
+   "lines": 69,
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  "theory.dsl": {
+   "bytes": 36510,
+   "lines": 228,
+   "sha256": "0f3da068eb38ad9384573de2cafc8749a45dae9a60b208101627e3cba3074bb8",
+   "sha256_before_stripping": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  }
+ },
+ "declared_name_count": 64,
+ "declared_names": {
+  "event": [
+   "recolored"
+  ],
+  "invariant": [
+   "casing_population",
+   "cavity_population",
+   "erased_population",
+   "every_dynamic_cell_has_an_owner",
+   "pip_population",
+   "rail_population",
+   "stud_population"
+  ],
+  "landmark": [
+   "badge_head",
+   "meter_fourth",
+   "meter_next",
+   "meter_third",
+   "meter_tip",
+   "rail_witness",
+   "slot_a_head",
+   "slot_above_head",
+   "slot_b_head",
+   "strip_a_row_two",
+   "strip_a_seed",
+   "strip_b_row_two",
+   "strip_b_seed"
+  ],
+  "object": [
+   "Casing",
+   "Cavity",
+   "Erased",
+   "Pip",
+   "Rail",
+   "Stud"
+  ],
+  "rule": [
+   "key3_blanks_the_strip_pips",
+   "key3_blanks_the_strip_studs",
+   "key3_marches_the_meter_leftward",
+   "key4_advances_the_meter_once",
+   "key4_restores_the_strip_pips",
+   "key4_restores_the_strip_studs",
+   "key7_blanks_the_strip_pips",
+   "key7_blanks_the_strip_studs"
+  ],
+  "theorem": [
+   "colour_classes_are_not_the_worlds_objects_and_i_admit_the_cost",
+   "frame_zero_is_reconstructed_exactly",
+   "i_do_not_know_which_way_the_bar_runs",
+   "i_have_never_been_shown_rows_0_to_28",
+   "i_retract_that_cascade_length_carries_no_signal",
+   "i_reverse_my_preference_for_understatement_and_here_is_the_ledger",
+   "instance_anchoring_is_frame_zero_and_the_arm_extends_it_as_cells_vary",
+   "nesting_would_not_rescue_the_meter_either",
+   "nine_of_thirteen_is_the_ceiling_of_this_guard_language",
+   "no_goal_section_on_purpose",
+   "replay_is_open_loop_and_silence_on_the_selector_is_still_the_cheap_error",
+   "the_arena_is_lanes_and_the_badge_is_row_aligned_with_the_cavity",
+   "the_bar_is_between_fifty_one_and_sixty_one_cells_from_its_end",
+   "the_clock_ticks_in_extra_frames_not_in_actions",
+   "the_march_rule_stops_for_a_reason_i_do_not_trust",
+   "the_meter_cadence_is_inexpressible_and_i_checked_for_a_latch",
+   "the_panel_is_a_column_of_slots_and_it_continues_above_row_29",
+   "the_pre_registration_has_now_been_met_twice_and_the_checker_is_open_loop",
+   "the_restore_rules_are_conditioned_on_a_selection_the_manual_cannot_represent",
+   "the_seed_column_is_never_erased",
+   "the_seed_rule_is_a_one_shot_that_is_worth_three_transitions",
+   "the_strip_hides_and_shows_and_the_separator_is_still_one_action_away",
+   "the_strip_is_one_global_diagonal_texture",
+   "the_swap_has_a_second_blocker_twenty_four_of_its_cells_have_no_instance",
+   "the_swap_is_provably_inexpressible_here",
+   "the_tick_is_not_bound_to_the_restore_key_and_two_readings_are_dead",
+   "the_world_has_hidden_state_and_there_are_now_two_witnesses_on_two_keys",
+   "two_keys_have_never_been_pressed",
+   "what_the_engines_offered_and_why_none_of_it_was_taken"
+  ]
+ },
+ "landmarks_stripped": [
+  "slot_a_head",
+  "slot_b_head",
+  "slot_above_head",
+  "strip_a_seed",
+  "strip_b_seed",
+  "strip_a_row_two",
+  "strip_b_row_two",
+  "rail_witness",
+  "badge_head",
+  "meter_tip",
+  "meter_next",
+  "meter_third",
+  "meter_fourth"
+ ],
+ "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+ "not_carried": {
+  "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+ },
+ "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\theoria-arm\\runs\\20260728T083400Z-E3-sk48-carried-v2\\books",
+ "source_game_id": "sk48-d8078629",
+ "source_run": "20260728T083400Z-E3-sk48-carried-v2"
+}

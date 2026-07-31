@@ -1,0 +1,15 @@
+{
+ "carried": {
+  "playbook.dsl": {
+   "chars": 5215,
+   "sha256": "f7074bf88a45aa806b532a1d75c1b14901ceade1a05a035ff0aad81dca5a7537"
+  },
+  "theory.dsl": {
+   "chars": 36237,
+   "sha256": "895598d8eb2d70a61b89c6e3208b6f07a19ae7bd5377329f6257ae55a3440f64"
+  }
+ },
+ "empty": false,
+ "seed_from": "runs/20260728T083400Z-E3-sk48-carried-v2/books",
+ "skipped": []
+}
