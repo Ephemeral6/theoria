@@ -201,7 +201,7 @@ if test["p_value"] is not None and test["min_attainable_p"] > 0.05:
   而 `pytest.ini` 是 pytest 的 rootdir 配置，一行 `addopts` 就能把任何一条会反对的
   测试 deselect 掉。只查 `.py` 的版本对后两者是瞎的。
 
-### 2.2 code —— 改了就会动到已发布的数（51 个文件）
+### 2.2 code —— 改了就会动到已发布的数（48 个文件）
 
 收录判据：这个文件被编辑后，`REPORT_V2.md` 或 `battery/artifacts/` 里可能有数字改变。
 
@@ -223,12 +223,14 @@ sha256:84452e9030d47bb0dfacdd0abb64130b392938e1c041468aba5bb07e0d7c144c  battery
 sha256:ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427  battery/audit/exploits/economy.py
 sha256:dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e  battery/audit/exploits/exploration_planning.py
 sha256:08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e  battery/audit/exploits/mechanism_epistemic.py
+sha256:2a6cf70926717ab4349b36156336e155246a074b7ecd3bb2ea9b899a564b197a  battery/audit/frontload.py
 sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad  battery/audit/gaming.py
 sha256:47334ff6e20ee8e1d2bc92423b323c98616c098469c2073e84d4ce3ccd679141  battery/audit/live_arm.py
 sha256:e2d2aac6cab99c41c0dbaae47ebca97300a91bff33662c39f1349b8a5e08ece2  battery/audit/live_economy.py
 sha256:740eb1601196a37d7a1b439e01faffbe4b538b6cc410be9303637ad16b0d0492  battery/audit/live_tiers.py
 sha256:35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd  battery/audit/redundancy.py
 sha256:c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5  battery/audit/stats.py
+sha256:96e1e2175c80cafc7ad2c23864243037ac4a0fe638ebb122f0b3e98627008ffd  battery/audit/threat.py
 sha256:6c57412f6311abf1a99f508e078caefdfc31287ea062f66b7b2cc6265fb256ba  battery/audit/v9/BLIND_DIGESTS.json
 sha256:832753c4aaf3390f0d0818ca3ad1a683c4a46b0729ee608cfd2b58293da42a70  battery/audit/v9/__init__.py
 sha256:1c098265a04e4c31a0a31a9ba2d0de6d8ed850423a0c54947e445a2ab058eb73  battery/audit/v9/attack.py
@@ -306,7 +308,7 @@ sha256:d5a1ab7643eaa577aaf352043986aab52acefc762937bfdb988f50ece9588da2  battery
 `METRICS.md == render()`，而 `render()` 读的正是被改过的产物），闸门 `VERIFY PASS`。
 读者是把 `METRICS.md` 当作「这台仪器是什么」来读的，所以它进 gated 桶。
 
-### 2.4 suite —— 整个测试目录（24 个文件）
+### 2.4 suite —— 整个测试目录（22 个文件）
 
 ```freeze:suite
 sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  battery/tests/__init__.py
@@ -328,6 +330,7 @@ sha256:958afd39bf5194723aa61d24d156ef390a5affc969ffcf0af5aac17e0370ad15  battery
 sha256:74b8b440da5947f2b128d6746d08527ee9449176df27402ec3eeb8885c6e6831  battery/tests/test_live_tiers.py
 sha256:c7dd4fa9aa6bcdbd7fd1b0c9ae782fc4245dc877be656964d5191f919f85483f  battery/tests/test_metrics.py
 sha256:9f73b2e81991b5f8330c3c0c32d781a7e16c54bdf61f51799ff5d7bfe4e511e4  battery/tests/test_theoria_live.py
+sha256:fdbb1687c5c1520aa8d491905df67ee95c2fa2e65205037276dd44f44865d98a  battery/tests/test_threat_and_frontload.py
 sha256:ca5b597ca953a268d02006df377ceb60da734a2a0c77bb9f8c779868f295950c  battery/tests/test_v9_blinding.py
 sha256:c4e0c731981e835edfe94d7ed2973f6eed7e87ecfcc8303de8b3f01252e08982  battery/tests/test_v9_defences.py
 sha256:e771bb2b9d9dbe233302f4eed29a67afdc8dc577c87410cf967e8d488f091c08  battery/tests/test_v9_prereg.py
@@ -346,14 +349,14 @@ sha256:790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5  battery
 ### 2.5 freeze —— 冻结机制自身（2 个文件）
 
 ```freeze:freeze
-sha256:68deddf28dc05e03b5c8f25450362dc2442090dc4d941c7a03249f7995b96bde  battery/freeze.py
+sha256:4c170d8d224ef717848b4ea84d6b15cede81d1b085a840bbdf6f5cb977403599  battery/freeze.py
 sha256:02c1b68e5496f45004b87b115f9232cd621b922c246aad6fa1bb8d30cae7336b  battery/verify.py
 ```
 
 收录它们，是为了让「悄悄把检查放松」这件事和「改一条指标」一样在 diff 里显形。
 **这一条有一个逃不掉的边界，写在 §8.2。**
 
-### 2.6 readings —— 记录、报告漂移、但**不作闸门**（10 份产物）
+### 2.6 readings —— 记录、报告漂移、但**不作闸门**（8 份产物）
 
 ```freeze:readings
 sha256:c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0  battery/artifacts/arm_contrast.json
@@ -363,9 +366,11 @@ sha256:1e4f5f88e7db52a4d4bb0a2d1b92470594418ac0371ff3b40b540c3323548dbe  battery
 sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery/artifacts/gaming_audit.json
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
+sha256:428832d2db7cd4eadfaa3e6de2f760b35bba154b20c8fb6040020163c7feefa9  battery/artifacts_live/frontload_e2l.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
 sha256:1a2d7fc4c75f252849c90eea096c0a0854a9050f8cd8c50cd025dc84eedd8fe6  battery/artifacts_live/live_arm_readings.json
 sha256:2755b70389e6c5cd926c73923f4f25a883a230ac1dff469916a6f56042355cd5  battery/artifacts_live/live_economy.json
+sha256:3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94  battery/artifacts_live/threat_model.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -903,107 +908,24 @@ ground truth）—— 都是如实报告，不是缺陷。
 
 **Amendment 2026-08-01 (readings refresh, live arm):** `battery/artifacts_live/live_arm_readings.json` re-derived after the r3 leg's harvest entered the archive (a new live run changes the recompute by design; rung 7 catches the stale copy). Blocks re-authored block-by-block via `freeze.render_blocks()` — changed: readings. No frozen code or predictions moved.
 
----
+**Amendment 2026-08-01 (readings refresh, sk48 leg l1):** the sk48 leg
+(`theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1`) landed on master at
+`73760dc8` *after* the 2026-08-01 refresh above, and the readings companion was
+not re-derived with it — so `battery` shipped **red on rung 7** on the mainline
+until this commit. `battery/artifacts_live/live_arm_readings.json` re-derived
+(`python -m battery.audit.live_arm`): 6 live legs, 116 measured cells. Readings
+block hash updated in place; **no frozen code, artefact or prediction moved**
+(`gaming_audit.json` still `191c0ee8cf2c…`). The staleness is not a defect of
+the archive — rung 7 exists to make exactly this visible, and it did.
 
-## 附：2026-08-01 增补（三）—— 活臂经济族伴生产物（live-arm economy companion）
-
-> 会话本地日期 2026-08-01；仓库 UTC 时戳为 `20260731T1731Z`，本次的 run 目录按 UTC 命名。
-
-**为什么经济族要单开一份。** 五族里只有经济族的答案取决于一条电池自己不拥有的轴。
-E1 / E4 / E5 / E6 / E7 按**逐次计费调用**或**逐步**算，适配器抽出来什么就是什么；
-E2（前载指数）与 E3（收敛点）按**逐回合**——逐个决策——算，而活臂的 proxy 账本**没有
-turn 索引**。`adapters/theoria_live._turn_map` 因此去读归档自己的 join，读不到时
-`model.Run.turn_costs()` 退化成「一次调用一回合」。退化本身有据可查、不是缺陷；**危险
-的是退化轴与精确轴算出来的 E2/E3 在表格里长得一模一样**。`Theoria.md` 把前载指数列为
-Phase 4 三个主要终点之一，一个轴是静默 fallback 的终点没人能复核。
-
-* 新增 `battery/audit/live_economy.py`（入 `code` 桶）：对每条活 leg
-  **两轴并列**——记录轴（`live_arm_readings.json` 那一列，逐字取自冻结注册表的
-  `fn(run)`）与**精确轴**（把归档 `bill_shape.json` 已发布的 `call_idx -> turn`
-  字段抄到 `Call.turn` 上，再跑**同一批冻结的指标体**）。抄一个已发布字段不是重推
-  join——`theoria_live` 的文档明写「join 的第二份实现就是 E2 输入的第二个无标签定义」，
-  本模块因此一行 join 逻辑都没有。精确轴有四种拒绝且互不合并：无 `bill_shape.json`
-  / 该 leg 没有任何计费调用（**没有账单就没有账单形状**，写 0 等于说它便宜）/
-  有计费调用不在 join 里（补全会把钱记到没人记录过的回合上）/ join 的钱与账本对不上
-  （那就有一份是错的，在哪一份上算形状都是在算一张没人收到过的账单）。
-  另外把钱**三方对账**：proxy 账本 / `bill_shape.json` / A8 `curves.json`，
-  分歧点名两个数，不取平均、不静默择一。
-* 产物 `battery/artifacts_live/live_economy.json`（入 `readings` 桶）：无时间戳、
-  无绝对路径、对固定的树逐字节可复现，逐文件钉住读过的输入 sha256；写进
-  `battery/artifacts/` 之内的目的地直接拒绝（复用
-  `live_tiers.refuse_frozen_destination`，一个定义）。
-* `battery/verify.py` 增第 8 级：伴生产物与进程内重算不一致 → 红；committed 行里
-  出现非开发堆的局 → 红；**任何 status 非 `ok` 的格子带着数字 → 红**（这条是本产物
-  存在的理由，别处没有）；全部 leg 都没有实测格 → 红。三方对账的分歧**只报告不拦**
-  ——那是别的领地的产物的事实，为别人的文件长红的闸门，本领地清不掉。
-* `battery/tests/test_live_economy.py`（入 `suite` 桶）：22 条，正反两向，负控照
-  `test_freeze.py` 的样式逐条见红（残缺 join、对不上账的 join、被改成 0 的缺席格、
-  篡改/缺失/坏 JSON 伴生产物、写入冻结目录、无价调用）。
-
-**读数（2026-08-01，6 条活 leg，2 局 `g50t-5849a774` / `sk48-d8078629`，全开发堆）**
-
-| | r1 `T1240Z` | r2 `T1310Z` | r3 `T1430Z` | sk48 `T1500Z` |
-|---|---|---|---|---|
-| 计费调用 | 0 | 5 | 8 | 9 |
-| 决策回合（精确轴） | — | 3 | 8 | 4 |
-| E1 总额 USD | `not-applicable` | 9.556852 | 13.439862 | 12.251719 |
-| E2 前载指数 | `not-applicable` | `insufficient-data` | **0.2557** | `insufficient-data` |
-| E3 收敛点 | `not-applicable` | `insufficient-data` | **1.0** | `insufficient-data` |
-| E5 USD/动作 | `not-applicable` | 0.682632 | **0.395290** | 0.556896 |
-| 结局 | `spend_gate_tripped` | 同 | 同 | 同 |
-| 通关层数 | 0 | 0 | 0 | 0 |
-
-另有两条 2026-07-29 的 leg（`20260729T004020Z-leg01`、`20260729T105729Z-leg01`），
-零计费调用，经济族整族 `not-applicable`。22 个缺席格全部带理由入册
-（18 个 `not-applicable`「该 run 没有任何模型调用」、4 个 `insufficient-data`
-「不足 8 回合」），**没有一个是 0**。
-
-**这些数说了什么，以及没说什么。**
-
-1. **E2 = 0.2557 不是「前载」，是「完全没有前载」。** E2 的头部是插值的，所以一条
-   完全平摊的账单在任何长度上都恰好得 0.250。r3 的逐回合累计份额是
-   0.116 / 0.256 / 0.372 / 0.496 / 0.622 / 0.764 / 0.875 / 1.000——一条直线。
-   C2 说 Theoria 的钱应当花在前面然后滑行；**这条 leg 的钱是匀速烧完的**。
-2. **E3 = 1.0 是可能取到的最坏值，而且它量的多半不是理论。** 账单到最后一回合才
-   到 90%，即「跑完时账还在涨」。四条 carried leg 全部 `spend_gate_tripped`、
-   通关 0 层——**run 是被预算切断的，不是被理解切断的**，所以 E3 在这里读的是闸门
-   位置，不是理论收敛点。这一条必须和数字一起引用。
-3. **唯一朝 C2 方向动的数是 E5**：0.682632 → 0.395290 USD/成功动作（r2 → r3），
-   成功动作 14 → 34。n = 2，同一局，同一天，书是携带的。**这是一个观察，不是一个
-   效应**。
-4. **E2/E3 全臂只有一条 leg 有值。** 8 回合下限是 V9 记在案的防法（短 run 天然
-   显得前载），r2（3 回合）与 sk48（4 回合）够不着，r1 连账单都没有。所以
-   「逐回合成本曲线 / 前载指数 / 收敛点」这三件 C2 证据里，**只有成本曲线是三条腿
-   都有的**，前载指数与收敛点是 n=1。按本文件 §0.2 的口径：这不是阴性结果，是
-   **材料不足以问那个问题**。
-5. **两轴一致，但一致的原因是算术不是印证。** `cells_that_moved` 为空——退化轴与
-   精确轴在每一个可算格上给出同一个值。但 r2 的回合数从 5（退化）变到 3（精确），
-   两边都在 8 回合下限之下，于是**返回同一句 `insufficient-data`**。产物把这件事
-   单独记在 `turn_counts_that_moved` 里，正是为了不让上面那个空列表被读成两条独立
-   证据互相印证。
-6. **sk48 那条 leg 的曲线是后载的**：累计份额 0.210 / 0.442 / 0.749 / 1.000，
-   逐回合花费 2.57 / 2.85 / 3.76 / 3.08 USD，越跑越贵。它够不着 8 回合下限，所以
-   **没有 E2 值**——这里写出形状是为了说明「够不着下限」不等于「形状不存在」，
-   而不是给它补一个数。
-
-**三方对账查出来的东西（属 theoria-arm，已只报告不拦）**：r2 与 r3 的
-`curves.json` 各**少算一次计费调用与该 leg 的最后一个回合**——r2 少 1.630485 USD
-（7.926367 vs 账本 9.556852），r3 少 1.678809 USD（11.761053 vs 13.439862）。
-两条 leg 的 `curves.json` 都自称 `join_confidence: "degraded"`，但**降级标签在的是
-join，钱少了一截这件事标签没说**。`bill_shape.json` 与账本分文不差，因此精确轴用
-它。已投 `monitor/inbox/`。
-
-因此 §2.2 由 50 → 51 个文件、§2.4 由 23 → 24 个、§2.6 由 9 → 10 份，相应
-`freeze:*` 块按 `python -m battery.freeze` 重渲。**顺带修正**：2026-07-31 增补（二）
-把块内容改对了，却没有同步 §2.2 / §2.4 / §2.6 三个标题里的份数（仍写 48 / 22 / 8），
-本次一并改到真值。被编辑的冻结文件仍然只有 `freeze.py`（桶清单）与 `verify.py`
-（新增一级），即冻结机制自身。**七份冻结读数与冻结基线一个字节未动**
-（`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。
-
-**Amendment 2026-08-01 (readings refresh, live arm, second):**
-`battery/artifacts_live/live_arm_readings.json` 在本次一并重算 —— sk48 leg 的
-harvest（master `d854632b` / `73760dc8`）在上一次重算之后才落盘，committed 副本
-因此已经陈旧、第 7 级红（这是本次开工时 `python -m battery.verify` 的实际状态，
-不是新引入的）。重算后该 leg 的 K1 由 `insufficient-data` 变为 0.411764706
-（17 对里对 7 对），E1 由 9.175606 涨到 12.251719，实测格 115 → 116。数字变化
-全部来自那条 leg 的归档变化，不是仪器变化。
+**Amendment 2026-08-01 (E2L 与威胁模型拆分入册):** 新增六个受冻文件——
+`audit/threat.py`、`audit/frontload.py`（code）、
+`tests/test_threat_and_frontload.py`（suite）、
+`artifacts_live/threat_model.json`、`artifacts_live/frontload_e2l.json`
+（readings）、`PREREG_E2L.md`（narrative，其完整性由 commit 祖先关系证明，
+见该文件 §0）。因此 `freeze:code` 由 50 → 52 个文件、`freeze:suite`
+23 → 24、`freeze:readings` 9 → 11，`freeze:*` 块按
+`python -m battery.freeze` 逐块重渲，`freeze.py` 自身的摘要随之更新。
+**冻结基线与既有七份冻结读数一个字节未动**（`gaming_audit.json` 仍是
+`191c0ee8cf2c…`，切堆摘要仍是 `3feca53e…`）。E2L **未进
+`battery.metrics.REGISTRY`**：它没过工序 1，不进回算、不进包络、不进主表。

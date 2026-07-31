@@ -1,0 +1,71 @@
+{
+  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "branch": "ep/e2-frontload",
+  "files": [
+    {
+      "path": "battery/PREREG_E2L.md",
+      "sha256": "sha256:dfdbc8abe035ae7e3174ed65555548c1b1a3b4af0c5bb2302bdd05890b0379c7"
+    },
+    {
+      "path": "battery/audit/threat.py",
+      "sha256": "sha256:96e1e2175c80cafc7ad2c23864243037ac4a0fe638ebb122f0b3e98627008ffd"
+    },
+    {
+      "path": "battery/audit/frontload.py",
+      "sha256": "sha256:2a6cf70926717ab4349b36156336e155246a074b7ecd3bb2ea9b899a564b197a"
+    },
+    {
+      "path": "battery/tests/test_threat_and_frontload.py",
+      "sha256": "sha256:fdbb1687c5c1520aa8d491905df67ee95c2fa2e65205037276dd44f44865d98a"
+    },
+    {
+      "path": "battery/artifacts_live/threat_model.json",
+      "sha256": "sha256:3182b32b5a033137db3022ec34bac236dfec31922179ede3d9a3e26e0df7ae94"
+    },
+    {
+      "path": "battery/artifacts_live/frontload_e2l.json",
+      "sha256": "sha256:428832d2db7cd4eadfaa3e6de2f760b35bba154b20c8fb6040020163c7feefa9"
+    },
+    {
+      "path": "battery/runs/20260801T0300Z-E2L-frontload-step-axis/RUN_STATE.md",
+      "sha256": "sha256:e9508dfc927035e97a83bc7f25784e77ecd2175becc1c35585592f975577e317"
+    }
+  ],
+  "headline": {
+    "E2L_live_legs_evaluable": 3,
+    "E2L_on_repaired_batched_turn_label": 0.3225806451612903,
+    "E2L_on_repaired_first_turn_bill": 1.0,
+    "E2L_paired_games": 0,
+    "E2L_tier_on_first_audit": "reference",
+    "E2_cleared_by_t_arm": true,
+    "E2_cleared_by_t_arm_survives_a_repaired_attack": false,
+    "E2_on_repaired_batched_turn_label": 0.973387097,
+    "invariants_dropped_by_the_corpus": [
+      "I7",
+      "I8"
+    ],
+    "invariants_kept": 8,
+    "invariants_proposed": 10,
+    "metrics_gameable_t_arm": 33,
+    "metrics_gameable_t_rec": 37,
+    "v9_attacks": 112,
+    "v9_landed_t_arm": 80,
+    "v9_landed_t_rec": 95,
+    "v9_main_table": 0
+  },
+  "prereg": {
+    "claim": "landed before any E2L value existed; prove with `git merge-base --is-ancestor <prereg_commit> <results_commit>`",
+    "commit": "c1315231c4fefd2c2139e4d129fd777ad5ccc24d",
+    "file": "battery/PREREG_E2L.md"
+  },
+  "prompt": "battery territory: make E2 (front-loading index paired difference) a frozen primary endpoint with a metric under it that survives the anti-gaming audit, or name the blocker",
+  "prompt_id": "battery-E2-frontload-endpoint",
+  "seed": null,
+  "spend": {
+    "api_usd": 0.0,
+    "model_calls": 0,
+    "network": "none",
+    "sealed_pile_contact": "none"
+  },
+  "utc": "2026-08-01T03:00:00Z"
+}

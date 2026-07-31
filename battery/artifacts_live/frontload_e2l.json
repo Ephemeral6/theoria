@@ -1,0 +1,172 @@
+{
+  "definition": "share of a run's total model cost billed in the first 25% of its steps, interpolated at the boundary; cost is attributed to `Call.step_idx`, never to `Call.turn`",
+  "direction": "higher",
+  "gates": {
+    "G1": "any unpriced call -> unsound (V9-D3)",
+    "G2": "total cost <= 0 -> thin",
+    "G3": "fewer than 8 steps -> thin",
+    "G4": "any priced call without a step_idx -> unsound; no fallback to call order",
+    "G5": "fewer than 2 new states after the head -> thin"
+  },
+  "live_legs": [
+    {
+      "anchored_priced_rows": 0,
+      "game_id": "g50t-5849a774",
+      "join_confidence": "exact",
+      "leg": "20260731T1240Z-A3-level2-carried",
+      "priced_rows": 0,
+      "reason": "total cost is zero",
+      "status": "thin",
+      "total_usd": 0.0,
+      "turn_rows": 2,
+      "value": null
+    },
+    {
+      "actions_taken": 13,
+      "anchored_priced_rows": 2,
+      "axis_break_even_steps": 24.0,
+      "axis_margin_steps": 11.0,
+      "first_priced_step": 6,
+      "game_id": "g50t-5849a774",
+      "head_steps": 2.75,
+      "join_confidence": "degraded",
+      "leg": "20260731T1310Z-A3-level2-carried-r2",
+      "priced_rows": 2,
+      "reason": "share of cost billed in the first 25% of 11 step(s)",
+      "status": "ok",
+      "steps": 11,
+      "total_usd": 7.926367,
+      "turn_rows": 10,
+      "value": 0.0
+    },
+    {
+      "actions_taken": 33,
+      "anchored_priced_rows": 7,
+      "axis_break_even_steps": 24.0,
+      "axis_margin_steps": -9.0,
+      "first_priced_step": 6,
+      "game_id": "g50t-5849a774",
+      "head_steps": 7.75,
+      "join_confidence": "degraded",
+      "leg": "20260731T1430Z-A3-level2-carried-r3",
+      "priced_rows": 7,
+      "reason": "share of cost billed in the first 25% of 31 step(s)",
+      "status": "ok",
+      "steps": 31,
+      "total_usd": 11.761053,
+      "turn_rows": 30,
+      "value": 0.13219828190554025
+    },
+    {
+      "actions_taken": 21,
+      "anchored_priced_rows": 4,
+      "axis_break_even_steps": 24.0,
+      "axis_margin_steps": 3.0,
+      "first_priced_step": 6,
+      "game_id": null,
+      "head_steps": 4.75,
+      "join_confidence": "ambiguous-reconstructed",
+      "leg": "20260731T1500Z-A3-sk48-carried-l1",
+      "priced_rows": 4,
+      "reason": "share of cost billed in the first 25% of 19 step(s)",
+      "status": "ok",
+      "steps": 19,
+      "total_usd": 12.251719,
+      "turn_rows": 5,
+      "value": 0.0
+    }
+  ],
+  "n_probes_landing_on_E2": 3,
+  "n_probes_landing_on_E2L": 1,
+  "probes": [
+    {
+      "E2": {
+        "S2_reached_target": true,
+        "status": "ok",
+        "target": 0.95,
+        "value": 0.973387097
+      },
+      "E2L": {
+        "S2_reached_target": false,
+        "reason": "share of cost billed in the first 25% of steps",
+        "status": "ok",
+        "target": 0.95,
+        "value": 0.3225806451612903
+      },
+      "breaks": [],
+      "certificate_violations": [],
+      "lands_on_E2": true,
+      "lands_on_E2L": false,
+      "note": "thirty equal calls labelled turn=0, but every one of them anchored to a real step: the batching convention survives, the impossible record does not",
+      "poverty_certified": true,
+      "probe": "batched-turn-label-coherent",
+      "reachability": "arm-reachable"
+    },
+    {
+      "E2": {
+        "S2_reached_target": true,
+        "status": "ok",
+        "target": 0.95,
+        "value": 1.0
+      },
+      "E2L": {
+        "S2_reached_target": true,
+        "reason": "share of cost billed in the first 25% of steps",
+        "status": "ok",
+        "target": 0.95,
+        "value": 1.0
+      },
+      "breaks": [],
+      "certificate_violations": [],
+      "lands_on_E2": true,
+      "lands_on_E2L": true,
+      "note": "the whole bill on step 0 of 40, the rest free and still moving",
+      "poverty_certified": true,
+      "probe": "first-turn-bill-coherent",
+      "reachability": "arm-reachable"
+    },
+    {
+      "E2": {
+        "S2_reached_target": true,
+        "status": "ok",
+        "target": 0.95,
+        "value": 1.0
+      },
+      "E2L": {
+        "S2_reached_target": false,
+        "reason": "0 new state(s) reached after the head; paying up front and then not moving is not front-loading, it is stopping",
+        "status": "thin",
+        "target": 0.95,
+        "value": null
+      },
+      "breaks": [],
+      "certificate_violations": [],
+      "lands_on_E2": true,
+      "lands_on_E2L": false,
+      "note": "the whole bill on step 0 of 40, and then one button pressed forever",
+      "poverty_certified": true,
+      "probe": "first-turn-bill-frozen-world",
+      "reachability": "arm-reachable"
+    }
+  ],
+  "process_1_material": {
+    "arms": [
+      "theoria"
+    ],
+    "control_arm_legs": 0,
+    "evaluable_legs": [
+      "20260731T1310Z-A3-level2-carried-r2",
+      "20260731T1430Z-A3-level2-carried-r3",
+      "20260731T1500Z-A3-sk48-carried-l1"
+    ],
+    "games_with_an_evaluable_leg": [
+      "g50t-5849a774"
+    ],
+    "min_attainable_p": null,
+    "n_evaluable": 3,
+    "n_paired_games": 0,
+    "verdict": "no-data: the endpoint is a paired difference and there is no control arm on any of these games, so the number of pairs is 0 and no amount of Theoria-side replication changes it"
+  },
+  "target": 0.95,
+  "what": "E2L -- the front-load index on the step axis, defined in PREREG_E2L.md before any of these numbers existed. Published beside E2, not instead of it: E2L has not passed process 1 and is not in `battery.metrics.REGISTRY`."
+}
