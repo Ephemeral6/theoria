@@ -203,7 +203,28 @@ clock-time-of-day are all folded into the treatment effect — and
 [2606.17799](https://arxiv.org/html/2606.17799v1) shows those move the number at fixed model and
 fixed harness.
 
-**Schedule: a 2×2 crossover, swapped every round.**
+**Two designs are available, and they demand opposite things. Pick one per campaign and write it
+down, because mixing them is worse than either.**
+
+*Design A — within-round crossover.* Baseline and changed configuration both run inside one round;
+the treatment contrast is within-round; account assignment **swaps every round**.
+
+*Design B — cross-round comparison.* Every leg in a round runs the same tree, and the contrast is
+round N vs round N+1. This is what `theoria-arm/armtools/round.py` implements (landed on master as
+`21a724ed`, after this worktree was cut): `--legs g50t-5849a774:a sk48-d8078629:b`, one account per
+leg, the account written into the leg tags and the slug. Under Design B the pairing axis is the
+game, so **the game↔account assignment must be pinned across every round being compared** — and
+swapping it, as Design A requires, would confound the very contrast the round exists to measure.
+
+**The invariant that covers both: the account must be held constant within each paired comparison
+unit, and must never vary with the condition.** Design A satisfies it by crossing over; Design B
+satisfies it by pinning. Choosing per campaign is mandatory; a campaign that swaps assignments
+midway through a Design-B sequence has silently destroyed its own baseline.
+
+The rest of this section is written for Design A. Under Design B, substitute "consecutive rounds"
+for "cells" and keep the void rule unchanged.
+
+**Design A schedule: a 2×2 crossover, swapped every round.**
 
 ```
 Round k      | game X            | game Y
@@ -222,13 +243,11 @@ Four legs, both accounts see both conditions, both games see both conditions. Th
   Re-run or redesign; do not report it as evidence either way.
 - **Never let one account run both legs of a paired comparison for the same game** — that pairs on
   the wrong axis.
-- Both accounts write to the same `proxy/var/spend_gate.jsonl` pool and the same ledger format, so
-  an `account` field must be present in the leg manifest. **It is not there today** — I grepped
-  `theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/MANIFEST.json` and found `prompt_id`,
-  `branch` and `base_commit` (the latter two `null`) but no account identifier. Until a leg
-  manifest records which account ran it, the crossover of §2.7 is unauditable and the account main
-  effect cannot be estimated. **Adding that field is a prerequisite of the first two-account
-  round**, and it belongs to the `theoria-arm` territory, so it goes to `monitor/inbox/`.
+- The account must be recorded per leg or none of this is auditable. The four legs analysed here
+  do not record it — r3's `MANIFEST.json` has `prompt_id` but `branch` and `base_commit` both
+  `null` and no account identifier. `round.py` (master `21a724ed`) fixes this going forward: it
+  writes the account into the leg slug and into the leg's tags. **Legs launched outside `round.py`
+  still carry no account and cannot enter a comparison.**
 
 Parallelism buys wall-clock, never sample size: 4 legs run on 2 accounts is still 4 legs.
 
@@ -472,11 +491,14 @@ like. The round is designed so that a null result *names the next class* instead
    the full public ARC-AGI-3 set. I constrained the fetches to methodology and wrote no mechanics
    down, but a stricter reading of `CLAUDE.md`'s sealed-pile rule would have skipped them entirely.
    Flagging rather than burying it.
-7. **The account-crossover schedule (§2.7) has an unmet prerequisite.** Leg manifests carry no
-   account identifier — checked against r3's `MANIFEST.json`, which has `prompt_id` but `branch`
-   and `base_commit` both `null` and no account field. §2.7 cannot be audited until
-   `theoria-arm` adds one. That is another territory's file, so it is a `monitor/inbox/` ask, not
-   an edit.
+7. **§2.7 was written before I saw `round.py`, and it is the part most likely to be wrong.** A
+   concurrent session landed `theoria-arm/armtools/round.py` on master as `21a724ed` — after this
+   worktree was cut from `73760dc8`, so it is not in my tree and I read it only via
+   `git show master:`. It implements Design B (one configuration per round, account pinned per
+   game) where §2.7 was originally written for Design A (crossover within a round). I have
+   reconciled them and stated the invariant that covers both, but I have **not** run either, and
+   the two designs' relative power at n = 4 legs is unmeasured. If the fleet has already committed
+   to Design B, the swap instruction in §2.7 must not be applied to it.
 
 ---
 
