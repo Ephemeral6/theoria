@@ -1,0 +1,39 @@
+{
+  "arc_actions": {
+    "claude_collection_4_games": 1466,
+    "fraction_of_pool": 0.58,
+    "mean_per_game": 366.5,
+    "pool_actions": 15845,
+    "projected_25_games": 9163
+  },
+  "method": "cache_read x 0.1, cache_creation x 1.25 (5m default; the 1h split is not recorded per run in this corpus), input x 1, output x model output rate. Deduped token counts only.",
+  "note": "This prices what an equivalent reproduction would have cost at pricing_v1, on the four development-pile games, for the one collection that records tokens. It is a lower bound: it excludes retries, and this track measures ~5 HTTP per successful action pre-cookie-jar (harness/unit_prices.py).",
+  "pool_headroom_usd": 143.5,
+  "price_table": {
+    "effective": "2026-07-28",
+    "name": "pricing_v1",
+    "source": "Anthropic published list prices, first-party Claude API, as of 2026-07-28"
+  },
+  "runs": {
+    "claude_fable_opus/claude-fable-5_max_sk48_100.0": {
+      "model": "claude-fable-5",
+      "usd": 137.7
+    },
+    "claude_fable_opus/claude-fable-5_max_tn36_94.74": {
+      "model": "claude-fable-5",
+      "usd": 124.3
+    },
+    "claude_fable_opus/claude-opus-4-8_max_ar25_100.0": {
+      "model": "claude-opus-4-8",
+      "usd": 101.81
+    },
+    "claude_fable_opus/claude-opus-4-8_max_g50t_100.0": {
+      "model": "claude-opus-4-8",
+      "usd": 286.0
+    }
+  },
+  "shortfall_multiple": 28.3,
+  "usd_25_games_extrapolated": 4061.26,
+  "usd_4_games": 649.8,
+  "usd_per_game_mean": 162.45
+}
