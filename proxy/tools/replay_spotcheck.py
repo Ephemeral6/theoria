@@ -33,14 +33,48 @@ What this shows is cross-session, cross-campaign determinism of the
 environment. What it does not show is that *our* proxies reproduce a run --
 that needs a live replay through `proxy/replay.py`, and it is still owed.
 
+## The third harness, and why the two rules were not enough
+
+`theoria-arm`'s live legs of 2026-07-31 are canonical v1.0 ledgers written by
+a harness neither of the above knew about, and this tool read exactly zero
+sessions out of them: `INSUFFICIENT, 0 session(s) with a failure-free
+opening`. The cause is a shape the ar25 sources never had. The arm records a
+*refused* command as its own `env_step` at its own `step_idx` and then retries
+under the next one, so a leg that ends with 34 frames spends 234 step
+indices getting there -- and step 0 is a refusal in every leg. Truncating at
+the first failed step therefore truncates at the first step.
+
+So a third rule, off by default (`--compact-refusals`):
+
+  * **A refusal that provably executed nothing is not a step.** Only one shape
+    qualifies today (`400 SERVER_ERROR`, `game <id> not found`, no frame, and
+    `n_frames: 0`), it is a closed whitelist, and anything outside it still
+    truncates the session exactly as before. `refusals_compacted` in the
+    report says how many rows each session lost, so a reader can see the
+    compaction rather than infer it.
+
+The whitelist is narrow on purpose, but the *direction* of the residual risk
+is what makes the rule safe. Suppose a refusal did secretly execute. Then two
+sessions that met different numbers of them have genuinely different
+histories, and comparing them position by position produces a *disagreement*
+-- a FAIL, not a false PASS. Compaction can manufacture alarm; it cannot
+manufacture agreement. Every position still has to carry the same command
+name in every session or the comparison stops there, and the contiguity check
+now runs over the raw `step_idx` space, so a dropped row still has to be
+accounted for by a refusal rather than by a hole.
+
     python -m proxy.tools.replay_spotcheck --canon out.jsonl --game ar25-0c556536
     python -m proxy.tools.replay_spotcheck --canon out.jsonl \
         --recon arc-recon/data/recon_ledger.jsonl --game ar25-0c556536 -o report.json
+    python -m proxy.tools.replay_spotcheck --compact-refusals --game g50t-5849a774 \
+        --canon theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl \
+        --canon theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl
 """
 
 import argparse
 import json
 import os
+import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -48,6 +82,40 @@ from ..ledger import frame_hash, read_ledger
 
 #: One step of one session: what was commanded, and what came back.
 Step = Dict[str, Any]
+
+#: The closed whitelist of refusals that provably ran nothing upstream.
+#: Keyed by the name that appears in `refusals_compacted`, so a report says
+#: which shape was compacted and not merely how many rows.
+#:
+#: `game <id> not found` is a lookup failure: the API could not resolve the
+#: game, so there was no game to apply the command to, no frame came back, and
+#: `n_frames` is 0. It is also not charged -- the scorecard counts successful
+#: actions only (baseline-arms' four-sample measurement, PARTNER_SYNC
+#: 2026-07-28), which is a second, independent witness that nothing ran.
+#:
+#: Adding a shape here is a claim about upstream behaviour, not a convenience.
+#: The default is still to truncate, and an unrecognised failure always does.
+_GAME_NOT_FOUND = re.compile(r"^game \S+ not found$")
+
+
+def non_executing_refusal(record: Dict[str, Any]) -> Optional[str]:
+    """The refusal shape this row matches, or None.
+
+    None covers both "it succeeded" and "it failed in a way we cannot claim to
+    understand"; the caller treats the second as a hard truncation, which is
+    the pre-existing behaviour and the safe one.
+    """
+    http = record.get("http") or {}
+    if http.get("status") != 400:
+        return None
+    if record.get("frames") is not None or (record.get("n_frames") or 0) != 0:
+        return None
+    response = record.get("response")
+    if not isinstance(response, dict) or response.get("error") != "SERVER_ERROR":
+        return None
+    if _GAME_NOT_FOUND.match(str(response.get("message", ""))):
+        return "game-not-found"
+    return None
 
 
 def _action_key(action: Dict[str, Any]) -> str:
@@ -69,6 +137,7 @@ def sessions_from_canon(path: str, game_id: str) -> Dict[str, List[Step]]:
             "action": _action_key(record.get("action") or {}),
             "frame_hash": record.get("frame_hash"),
             "ok": status == 200 and record.get("frames") is not None,
+            "refusal": non_executing_refusal(record),
         })
     for steps in out.values():
         steps.sort(key=lambda s: s["step_idx"])
@@ -156,7 +225,9 @@ def sessions_from_recon(path: str, game_id: str) -> Dict[str, List[Step]]:
     return out
 
 
-def clean_prefix(steps: List[Step]) -> List[Step]:
+def clean_prefix(steps: List[Step],
+                 compact_refusals: bool = False) -> Tuple[List[Step],
+                                                          Dict[str, int]]:
     """Everything up to the first step that did not come back with a frame --
     or that does not sit at the next contiguous `step_idx`.
 
@@ -167,23 +238,56 @@ def clean_prefix(steps: List[Step]) -> List[Step]:
     step_idx 6 would be compared at position 3 against other sessions' fourth
     command -- a misalignment wearing a disagreement's clothes. Steps past a
     hole are real observations at a position this filtered history cannot
-    name, so they are dropped, not shifted."""
+    name, so they are dropped, not shifted.
+
+    `compact_refusals` drops rows matching `non_executing_refusal` instead of
+    truncating on them. Note what does *not* change: contiguity is still
+    checked against the raw `step_idx` counter, not against the length of the
+    retained list. A dropped row therefore still has to be paid for by a
+    refusal at that exact index; a genuine hole in the numbering is still a
+    hole, and still truncates. Returns the prefix and a count per refusal
+    shape, because a compaction a reader cannot see is a compaction a reader
+    cannot check."""
     prefix: List[Step] = []
+    compacted: Dict[str, int] = {}
+    seen = 0
     for step in steps:
-        if not step["ok"] or step["step_idx"] != len(prefix):
+        if step["step_idx"] != seen:
+            break
+        seen += 1
+        shape = step.get("refusal")
+        if compact_refusals and shape and not step["ok"]:
+            compacted[shape] = compacted.get(shape, 0) + 1
+            continue
+        if not step["ok"]:
             break
         prefix.append(step)
-    return prefix
+    return prefix, compacted
 
 
-def spotcheck(sessions: Dict[str, List[Step]], game_id: str) -> Dict[str, Any]:
-    prefixes = {name: clean_prefix(steps) for name, steps in sessions.items()}
-    prefixes = {k: v for k, v in prefixes.items() if v}
+def spotcheck(sessions: Dict[str, List[Step]], game_id: str,
+              compact_refusals: bool = False) -> Dict[str, Any]:
+    built = {name: clean_prefix(steps, compact_refusals)
+             for name, steps in sessions.items()}
+    prefixes = {name: prefix for name, (prefix, _) in built.items() if prefix}
+    compacted = {name: counts for name, (prefix, counts) in built.items()
+                 if prefix and counts}
+    # The `policy` block appears only under compaction, and deliberately so:
+    # the strict path's output has to stay byte-identical to the reports
+    # already archived under `proxy/runs/` (P-9's ar25 check, the closeout
+    # g50t check) and hashed in their manifests. A provenance record you can
+    # no longer reproduce is a provenance record you have to take on trust.
+    policy = {"refusals": "compacted",
+              "compactable_shapes": ["game-not-found"],
+              "refusals_compacted": compacted}
     if len(prefixes) < 2:
-        return {"game_id": game_id, "verdict": "INSUFFICIENT",
-                "detail": "%d session(s) with a failure-free opening; agreement "
-                          "needs at least two" % len(prefixes),
-                "sessions": sorted(prefixes)}
+        report = {"game_id": game_id, "verdict": "INSUFFICIENT",
+                  "detail": "%d session(s) with a failure-free opening; "
+                            "agreement needs at least two" % len(prefixes),
+                  "sessions": sorted(prefixes)}
+        if compact_refusals:
+            report["policy"] = policy
+        return report
 
     comparisons: List[Dict[str, Any]] = []
     disagreements: List[Dict[str, Any]] = []
@@ -211,7 +315,7 @@ def spotcheck(sessions: Dict[str, List[Step]], game_id: str) -> Dict[str, Any]:
         position += 1
 
     pairwise = sum(c["sessions"] * (c["sessions"] - 1) // 2 for c in comparisons)
-    return {
+    report = {
         "game_id": game_id,
         "sessions": sorted(prefixes),
         "n_sessions": len(prefixes),
@@ -222,6 +326,9 @@ def spotcheck(sessions: Dict[str, List[Step]], game_id: str) -> Dict[str, Any]:
         "verdict": "PASS" if comparisons and not disagreements else (
             "FAIL" if disagreements else "INSUFFICIENT"),
     }
+    if compact_refusals:
+        report["policy"] = policy
+    return report
 
 
 def main(argv=None) -> int:
@@ -231,17 +338,34 @@ def main(argv=None) -> int:
     ap.add_argument("--recon", default=None,
                     help="arc-recon/data/recon_ledger.jsonl (read-only)")
     ap.add_argument("--game", required=True)
+    ap.add_argument("--compact-refusals", action="store_true",
+                    help="treat a refusal that provably executed nothing "
+                         "(400 SERVER_ERROR / game not found, no frame) as "
+                         "not-a-step instead of truncating there. Required to "
+                         "read theoria-arm ledgers, which give every retried "
+                         "refusal its own step_idx")
     ap.add_argument("-o", "--out", default=None)
     args = ap.parse_args(argv)
 
     sessions: Dict[str, List[Step]] = {}
+    origin: Dict[str, str] = {}
     for path in args.canon:
-        sessions.update(sessions_from_canon(path, args.game))
+        found = sessions_from_canon(path, args.game)
+        origin.update({name: path for name in found})
+        sessions.update(found)
     if args.recon:
         sessions.update(sessions_from_recon(args.recon, args.game))
 
-    report = spotcheck(sessions, args.game)
+    report = spotcheck(sessions, args.game, args.compact_refusals)
     report["sources"] = {"canon": args.canon, "recon": args.recon}
+    if args.compact_refusals:
+        # Which ledger each session came out of. Only under compaction, for
+        # the byte-stability reason above -- and it earns its place there,
+        # because compaction is the mode in which one file is one session and
+        # "26 sessions" stops being the whole provenance story.
+        report["session_origin"] = {name: origin[name]
+                                    for name in report.get("sessions", [])
+                                    if name in origin}
     blob = json.dumps(report, indent=2, sort_keys=True)
     if args.out:
         with open(args.out, "w", encoding="utf-8", newline="") as fh:

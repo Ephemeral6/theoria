@@ -1,0 +1,74 @@
+{
+  "_seed_note": "no randomness: the spot check and the cross-check are deterministic reads over fixed inputs.",
+  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "branch": "p12/proxy-freeze",
+  "cost": {
+    "_note": "zero network. Every frame hash compared here was already on disk before this run started.",
+    "api_calls": 0,
+    "model_calls": 0,
+    "usd": 0.0
+  },
+  "files": [
+    {
+      "path": "replay_spotcheck_g50t_arm.json",
+      "sha256": "sha256:8217baf748ded1c66565e673eeaf95607639a21acb46d38cf00e1ac8d9e0f06d"
+    },
+    {
+      "path": "replay_spotcheck_g50t_arm_strict.json",
+      "sha256": "sha256:406dd8d37b10b3260aaa0dca2b767b165c3ced77af6cd485bfa586317673137d"
+    },
+    {
+      "path": "replay_spotcheck_sk48_arm.json",
+      "sha256": "sha256:c08350724b670aabbe959b92253d4ff5514290eee6cac2c3768d19e42061109b"
+    },
+    {
+      "path": "crosscheck_arm_vs_baseline.json",
+      "sha256": "sha256:63d49c1baa0883653ee4b15b8cef2ad01ff17fa25d01f5eb4288ae0b079eda44"
+    },
+    {
+      "path": "crosscheck_baseline.py",
+      "sha256": "sha256:8a2b9b1004985b2157689cb84ba1f31c392185c3bb30a2af0e4c7d61eb570870"
+    },
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "sha256:7f21b79053f665b75af0e35ac57ca6e860639344ebaa1a39e05055340b23eaa1"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl",
+      "read_only": true,
+      "sha256": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl",
+      "read_only": true,
+      "sha256": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl",
+      "read_only": true,
+      "sha256": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3"
+    },
+    {
+      "path": "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1/ledger.jsonl",
+      "read_only": true,
+      "sha256": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e"
+    },
+    {
+      "path": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2/replay_spotcheck_g50t.json",
+      "read_only": true,
+      "sha256": "sha256:19997ad4b932fe72f9cd9864bf3540ae72c0ec8b135c8fca8de3ae02522b3017"
+    }
+  ],
+  "pile_discipline": {
+    "_note": "both development pile (arc-recon/data/piles.json). No sealed-pile id appears in any file of this run.",
+    "games": [
+      "g50t-5849a774",
+      "sk48-d8078629"
+    ]
+  },
+  "prompt": "Phase 1 acceptance gaps: 复放抽检 ⟨2⟩ 局 + campaign_freeze",
+  "prompt_id": "P-12",
+  "utc": "2026-07-31T18:30:00Z"
+}
