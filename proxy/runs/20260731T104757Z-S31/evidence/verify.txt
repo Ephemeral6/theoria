@@ -1,0 +1,14 @@
+[1/5] suite
+   ok    421 passed in 68.18s (0:01:08)
+[2/5] the spend gate (verify_spend.sh, superseded but not dropped)
+   ok    spend gate has no off switch, no stray egress
+[3/5] one real run -- one game through both proxies, offline mocks, no key, no cost
+   ok    played one game, wrote ledger.jsonl
+[4/5] artefact self-check
+   ok    61 records (29 env_step, 28 model_call), seq dense 1..61, one run_id, all 6 envelope fields, LEDGER_FORMAT v1.0 clean
+[5/5] the win_tighten degeneracy guard, in both directions
+   ok    refused the marked stream (exit 2), passed it unmarked (13 marker(s) removed)
+   note  the suite wrote 16 file(s) into proxy/var/ (gitignored, nothing tracked moves): scores/r-0cbaa33f929f44ec.json, scores/r-2a22d8178ec844d7.json, scores/r-4d28f828fb8541e9.json, scores/r-7e79b5b75d91409e.json, ...
+
+proxy: green -- suite, one real run, artefact fields, degeneracy guard
+exit=0

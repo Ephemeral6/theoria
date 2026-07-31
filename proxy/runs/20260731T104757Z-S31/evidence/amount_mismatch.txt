@@ -1,0 +1,19 @@
+CONTROL, untampered        verdict=PASS       cost leg=AGREE        incident written=False
+PLANTED, +1 token          verdict=FAIL       cost leg=DISAGREE     incident written=True
+
+what disagreed:
+[
+  {
+    "call_idx": 0,
+    "key": "output_tokens",
+    "model_usage": 43066,
+    "usage": 43067
+  }
+]
+
+  C-3: 1 model_call(s) record a `usage` block that disagrees with the per-model breakdown in their own response envelope, so the numbers the bill is derived from are not the numbers the provider billed: call 0 output_tokens is 43067, modelUsage says 43066
+
+the other two legs are untouched, so a reader can tell which
+quantity was wrong:
+  actions        AGREE
+  score_per_run  AGREE

@@ -1,0 +1,4 @@
+pool theoria-shared-2026-07  (policy 732778326d64)
+  spent    $  36.1423 / $214.90     7425 / 24000 actions
+  held     $   0.0000                 0 actions   (0 live reservation(s))
+  free     $ 178.7577             16575 actions

@@ -1,0 +1,21 @@
+LEDGER_FORMAT.md is read for:
+  legs declared in the table   ['actions', 'cost', 'score_per_run']
+code is read for:
+  reconcile.RECONCILIATION_KEY ['actions', 'cost', 'score_per_run']
+  gaps in a real report        ['score_per_step', 'turns']
+
+GREEN: no drift
+
+negative controls
+----------------------------------------------------------------------
+a leg renamed inside the table
+   RED  the table declares legs ['actions', 'spend', 'score_per_run'] and RECONCILIATION_KEY is ['actions', 'cost', 'score_per_run']
+`turns` promoted to a fourth leg -- the ticket's own mistake
+   RED  the table declares legs ['actions', 'cost', 'turns', 'score_per_run'] and RECONCILIATION_KEY is ['actions', 'cost', 'score_per_run']
+   RED  `turns` is a non-voting gap in the report and the document lists it as a leg of the obligation
+`gaps.turns` dropped from the document
+   RED  the report carries `gaps.turns` and the document never names it, so a reader cannot tell the quantity is reported-but-not-voting
+`gaps.score_per_step` dropped from the document
+   RED  the report carries `gaps.score_per_step` and the document never names it, so a reader cannot tell the quantity is reported-but-not-voting
+a leg added to the code and not the document (drift the other way)
+   RED  the table declares legs ['actions', 'cost', 'score_per_run'] and RECONCILIATION_KEY is ['actions', 'cost', 'score_per_run', 'turns']

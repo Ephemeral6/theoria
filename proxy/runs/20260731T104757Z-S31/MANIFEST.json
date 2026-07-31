@@ -1,0 +1,109 @@
+{
+  "api_calls": 0,
+  "base_commit": "6fabcc7ea957931b7676ddbdf7587e128b947e73",
+  "branch": "cleanup2/s31-a10",
+  "cell": "S3",
+  "credentials": "none read, none written; presence-only checks",
+  "files": [
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/LIVE_PROBE_PLAN.md",
+      "sha256": "acd5af920fce36ee76a00d78e7ffe35d766d9a5a36820912a7c8875a0a89d185"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/RUN_STATE.md",
+      "sha256": "7b98dd775cbcb515ea6450d31a520997f4d07f2ce349d08a7b9ef41523c99a38"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/dry_run.rung1.txt",
+      "sha256": "09197e3e3e40f65551af9a5ff6dedb44bf923e966d9555f22d1d5b4ac00b7e17"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/dry_run.rung2.txt",
+      "sha256": "08268695655f1d911b8788b9913f54256af638d82ae5caf7d5e9730af086108c"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/amount_mismatch.py",
+      "sha256": "19a982271b9b58c6666ec1d5d75b395f6a6448f0adf0ac3e429f42bfeba90a4a"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/amount_mismatch.txt",
+      "sha256": "5276e0d78b8b4c2ae78565c6606fad596e077a277d88d246389fe04845a4aa72"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/audit_delivery.txt",
+      "sha256": "8ddb12024c66ae0afbbee8e3e4ddd5f2bb1b84566d4b8d390532dd154ded6f2b"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/branch_state.txt",
+      "sha256": "7516ead6142ba8754f47d0edea6b3d36962268d87502427ceb7eeb63ccb77901"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/doc_code_sync.py",
+      "sha256": "f76e00fb8143d5066056fcdde09c663db986d1cbb7ae202471b67bfc36477b46"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/doc_code_sync.txt",
+      "sha256": "7574067bd563d86aebf51f02092b9264af641a507fd77638c06e23ee0bb901bc"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/pool.txt",
+      "sha256": "7cc280007970416d44b77b7d07b4f659dd74994d5f7f1775982a94ecb7252300"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/req4_amount_mismatch.txt",
+      "sha256": "fc83b415592071133158fa40dc94b4622139a3d3ebdec779acdab7c426f309c3"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/evidence/verify.txt",
+      "sha256": "578bf118cd75c3343df80dca0634a052e61c09f090a7924e14c3869b0d0e8f2d"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/live_probe.py",
+      "sha256": "bcdeeb79ff601fb05d5704898d9f6a386428e792e9156ebc24903a700a5a58b8"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/make_manifest.py",
+      "sha256": "462d2b1908e102ccb864336dc89c6470dc69f9f1f482c3b5f4abb0abeac85c0c"
+    },
+    {
+      "path": "proxy/runs/20260731T104757Z-S31/refusals.txt",
+      "sha256": "1cae9e11231a60965a400d161eb8391d7113e32daf5a31b5fc21dfe636d9e3f2"
+    },
+    {
+      "path": "proxy/tests/test_ledger_format_sync.py",
+      "sha256": "38eed2d96f79734f499c12d3191e08947dd524e4c9d5da6e583896ec30af9128"
+    },
+    {
+      "path": "proxy/LEDGER_FORMAT.md",
+      "sha256": "844765c3ef1573a69f4dc2eb8b618bc0a36081b6dd71a468af22a598696c4fb4"
+    },
+    {
+      "path": "proxy/DELIVERY_RULING.md",
+      "sha256": "eac5d31d0ce0036a397428a738e9a18cfb862cc594b9d8866f40c5aa5ae66be5"
+    }
+  ],
+  "gates": {
+    "cd proxy && python -m pytest": "421 passed in 66.77s (414 baseline + 7 new)",
+    "cd proxy && python verify.py": "proxy: green -- 5/5 stages"
+  },
+  "goal": "Fourth pickup of S31. Establish what A10 and S31's own branch actually delivered against master; turn the reconciliation ruling from a restated paragraph into a gate; demonstrate the amount-mismatch negative sample; and prepare the live real-arm probe fully without firing it.",
+  "network_egress": "none -- the live probe was prepared and not fired; the shared spend pool is unchanged at $36.1423 spent, 0 held, 0 live reservations",
+  "prompt": "monitor/board/claimed/S31-a10-said-done-prove-it.W-1800.md",
+  "prompt_id": "S31-a10-said-done-prove-it",
+  "relay": {
+    "chain": [
+      "W-1691 (died mid-sentence)",
+      "W-1702 (8 commits, unpushed)",
+      "W-1710 (pushed and verified)",
+      "W-1800 (this run)"
+    ],
+    "finding": "requirements 1, 3 and 4 were already on master and were re-verified rather than inherited; agent/s31-a10-said-done-prove-it is stale, not unmerged, and must not be merged",
+    "prior_run": "proxy/runs/20260730T125718Z-S31-a10-said-done-prove-it"
+  },
+  "sealed_pile_contact": "none -- the dev-pile whitelist is read from arc-recon/data/piles.json's `dev_pile` key and the sealed list is never loaded; a refused id is not echoed",
+  "status": "done",
+  "territory": "proxy",
+  "usd_spent": 0.0,
+  "utc": "2026-07-31T10:47:57Z",
+  "worker": "W-1800"
+}
