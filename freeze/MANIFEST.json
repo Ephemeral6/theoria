@@ -1,4 +1,31 @@
 {
+  "endpoints": {
+    "computable_today": 0,
+    "detail": [
+      {
+        "name": "U3 达成率",
+        "slot": 1,
+        "status": "in-family, not computable",
+        "why": "the value is decided by the Lean kernel and a hashed non-triviality checker with a negative control, not by reading the arm's own ledger -- so the E2 finding does not reach it. Blocked on STATS_RULES.md 9.2 / 9.14 / 9.17-9.20."
+      },
+      {
+        "name": "判决题准确率（含特异度）",
+        "slot": 2,
+        "status": "in-family, not computable",
+        "why": "the marks are produced by `exam`'s grader against ground truth, not written by the arm. Blocked on STATS_RULES.md 9.15 / 9.16; 9.16 is a DISCRIMINATION defect (`memoriser` scores identically to ground truth), not a gaming one."
+      },
+      {
+        "name": "前载指数配对差",
+        "slot": 3,
+        "status": "WITHDRAWN 2026-08-01 (STATS_RULES.md 3.0)",
+        "why": "the value is a total function of a record the arm lays out, and its bucketing axis `Call.turn` is a free label in that record: `batched-turn-label-coherent` reaches 0.973387097 arm-reachably with a passing poverty certificate. Demoted to exploratory; the slot is kept so the divisor cannot fall."
+      }
+    ],
+    "family_divisor": 3,
+    "in_confirmatory_family": 2,
+    "note": "Holm's divisor is 3 and does not follow the slot count down. `in_confirmatory_family` counts slots that may still carry a confirmatory claim; `computable_today` counts those whose launch blockers are cleared.",
+    "slots": 3
+  },
   "entries": [
     {
       "absent": [],
@@ -7,19 +34,19 @@
       "note": "No `__version__` and no tag in the `theoria-arm` namespace, so the only handle is the commit. The ablation arm's loop is a separate implementation that the thirteen do not name and Theoria.md:376 makes mandatory; hashed here rather than left to be noticed later.",
       "paths": [
         {
-          "files": 12,
+          "files": 14,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/inner",
-          "sha256": "656f8bade2e8bca0636044ac50bd6a355e8c78311a352994804a793c88ac8aa9",
+          "sha256": "b0fe77449fb0e842126f65e6f97f40fc7cb25860220ad2516c6aab1de2eb240a",
           "tracked": true
         },
         {
-          "files": 8,
+          "files": 9,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/harness",
-          "sha256": "1689712a65bc849aa7f74b5c263c13435f2e4fdcf5bb3b52d0c4aa614bffe972",
+          "sha256": "71a1a0fcce371a4bd5f6a744e21798a68d4e8303b50e1861cb1eb462dfdb12b1",
           "tracked": true
         },
         {
@@ -31,11 +58,11 @@
           "tracked": true
         },
         {
-          "files": 9,
+          "files": 14,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/armtools",
-          "sha256": "06481b49837df0e9dec76b046735f12af9b5868ab7aac665785c95d0c37885b6",
+          "sha256": "4ebe89585f2f99b63502375314555f97481cc8e14a309b70da586cc5b217794d",
           "tracked": true
         },
         {
@@ -150,7 +177,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/theorize.py",
-          "sha256": "db4a2ea600780002af1f006e996eb04764b6610689d5d64b1d3cadf04955305c",
+          "sha256": "6a4be6c63fe2d49054d314d5ffc85c16c0dfe85b88529cf565e628088c6a3cb3",
           "tracked": true
         },
         {
@@ -215,7 +242,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/ENGINE_MANIFEST.md",
-          "sha256": "6ce103f9022c65b36ca103360e25b7b51ccb6a11ade15c8cb7d1cc8cffc99d1f",
+          "sha256": "6f5099fbae641ee18c5d3e5e17f43f8253bf77cfc7e06cdd9ce25c67feac170b",
           "tracked": true
         },
         {
@@ -240,7 +267,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/probe.py",
-          "sha256": "9ef9421b8d9b648932e9a64e3fd7793958bc6bbf633463dca4a3c1f87485955d",
+          "sha256": "6777af47df9d4659132b5765e4ac1efb015dfa052c411249a87c9b96ac7ef604",
           "tracked": true
         },
         {
@@ -265,7 +292,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/plan.py",
-          "sha256": "e73f204a26b76e9306b5879731e36176e9e6e388e60279d3a804446b88e22f7a",
+          "sha256": "9356e70678351ed914f4f66850b5fe0aa165c2e668f5d38dcab45faf040c7289",
           "tracked": true
         },
         {
@@ -326,11 +353,11 @@
           "tracked": true
         },
         {
-          "files": 31,
+          "files": 35,
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "battery/audit",
-          "sha256": "e38234ca4c060a40028917611481f821573b8f8f62558cbf31b8f6d548966f5b",
+          "sha256": "986d3d82e5424f5c54c96bac886c55211878fcf6029aac129fa635609358acab",
           "tracked": true
         },
         {
@@ -354,7 +381,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/BATTERY_V1.md",
-          "sha256": "81ef7964eb844a522209e075d9d4654a3cb7b9afea5268c1665d3ca293d90793",
+          "sha256": "4fae1e05be2263feb2011c255964e47627beaf5e36fb13e249eed499605f4f9b",
           "tracked": true
         }
       ],
@@ -421,7 +448,7 @@
       "absent": [],
       "n": 10,
       "name": "统计裁决规则",
-      "note": "The rules are written (this kit) and the machinery exists (`stats.py` implements the sign test and Wilcoxon deterministically, no scipy). **They are not wired to each other**: the three endpoint definitions in STATS_RULES.md do not correspond to any function in `stats.py`, and no test proves the two compute the same thing. Until this kit is on master the rules are one `rm -rf .worktrees/` from nonexistent, which is how both earlier drafts of them were nearly lost.",
+      "note": "**Two of the three primary endpoints are claimable, not three (2026-08-01, §3.0).** The front-loading index paired difference was WITHDRAWN from the confirmatory family: it buckets cost by `Call.turn`, a label the recorder writes, and battery's repaired attack `batched-turn-label-coherent` reaches 0.973387097 on it while breaking none of the corpus-validated recorder invariants and passing the poverty certificate (`battery/audit/threat.py`, `battery/artifacts_live/frontload_e2l.json`). No threshold repairs that -- the endpoint has no threshold, it has a significance test, and what failed is the axis. Swapping in the step-axis E2L is refused four ways (PREREG_V9 R1 demotes only; E2L has not passed process 1; E2L is itself reached at 1.0 by `first-turn-bill-coherent`; and `n_paired_games` is 0). **Holm's divisor stays 3** so the withdrawal buys the two survivors nothing, guarded by `freeze/e2_withdrawal.py` (verify.sh stage [19], 8 controls) and stage [16]'s `*/family` probe. The rules are written (this kit) and the machinery exists (`stats.py` implements the sign test and Wilcoxon deterministically, no scipy). **They are not wired to each other**: the three endpoint definitions in STATS_RULES.md do not correspond to any function in `stats.py`, and no test proves the two compute the same thing. Until this kit is on master the rules are one `rm -rf .worktrees/` from nonexistent, which is how both earlier drafts of them were nearly lost.",
       "paths": [
         {
           "files": 1,
@@ -438,6 +465,14 @@
           "path": "battery/audit/stats.py",
           "sha256": "c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5",
           "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "worktree",
+          "kind": "file",
+          "path": "freeze/e2_withdrawal.py",
+          "sha256": "bfc5dde89ed6311fbb30fc66e8b07c4776c462e92f7411dac521a222ac359d43",
+          "tracked": false
         }
       ],
       "status": "partial"
@@ -574,20 +609,18 @@
       "status": "partial"
     },
     {
-      "absent": [
-        "arc-recon/data/campaign_freeze.json"
-      ],
+      "absent": [],
       "n": "X-1",
       "name": "campaign_freeze.json（清单外，但缺得最响）",
       "note": "Absent from disk and from git, and read by `arc-recon/canary.py:71` and `baseline-arms/harness/transport_ab.py:53`. `release/CHECKLIST.md:89` already records that a reader handed this release would find no frozen campaign roster. Neither earlier draft names it.",
       "paths": [
         {
-          "files": 0,
-          "hashed_from": null,
-          "kind": "absent",
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
           "path": "arc-recon/data/campaign_freeze.json",
-          "sha256": null,
-          "tracked": false
+          "sha256": "dd22e2719bb8145e27f03763d9dbe418cd9ce61546b357dde41e2fc29bfa1a27",
+          "tracked": true
         }
       ],
       "status": "blocked"
@@ -628,20 +661,18 @@
   ],
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
-    "branch": "master",
-    "commit": "45cd6ebd0426f94c19b1fb4a109c2eac46aa5322",
+    "branch": "r2/freeze-e2",
+    "commit": "af138a0d2302b85f193b9a65f57aadb65c55f95a",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
-    "absent_paths": [
-      "arc-recon/data/campaign_freeze.json"
-    ],
+    "absent_paths": [],
     "blocked": 5,
     "freeze_ready": false,
     "items": 13,
     "partial": 10,
     "ready": 0,
-    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing."
+    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing. Separately and independently of the item count: 2 of the 3 primary-endpoint slots may still carry a confirmatory claim (slot 3, the front-loading index paired difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), and 0 of them can be computed today. Holm's divisor stays 3. See `endpoints`."
   }
 }

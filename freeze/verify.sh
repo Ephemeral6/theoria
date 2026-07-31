@@ -1754,6 +1754,50 @@ fi
 rm -f /tmp/_loc.$$
 echo
 
+# ------------- 19. the front-load endpoint's withdrawal, and its price
+#
+# 2026-08-01 (R2).  `STATS_RULES.md` §3.0 withdrew the third primary endpoint --
+# the front-loading index paired difference -- from the confirmatory family,
+# because its bucketing axis is a recorder-written label and battery's repaired
+# attack `batched-turn-label-coherent` reaches 0.973387097 on it while breaking
+# none of the corpus-validated recorder invariants (`battery/audit/threat.py`,
+# `battery/artifacts_live/frontload_e2l.json`).
+#
+# WHY A STAGE AND NOT JUST PROSE.  A withdrawal is cheap to hollow out in the
+# direction that pays.  Drop the endpoint AND Holm's divisor together and the
+# two survivors get alpha/2 instead of alpha/3 -- the sign test's entry price
+# falls from k >= 7 to k >= 6, i.e. withdrawing an endpoint you cannot pass buys
+# back a whole game on the two you still hope to. Stage [16]'s `*/family` probe
+# already refuses that trade for an INCONCLUSIVE endpoint; this stage refuses it
+# for a WITHDRAWN one, and guards five other ways to keep the words while losing
+# the ruling: an outcome block quietly restored to confirmatory, §8's `除 E2 外`
+# exception coming back, the surviving axis defect being deleted along with the
+# endpoint, the measured value being blurred into a paraphrase.
+#
+# The SELFTEST is a hard failure, launch_gate.py's disposition: a gate that
+# cannot be seen to say no about each of those has not been shown to check
+# anything.  Seven mutations, each of which must turn the check red, plus the
+# positive control that the unmutated files pass -- a control built on text that
+# has moved is reported as a failure, never as a skip.
+echo "[19] the §3.0 withdrawal of the front-load endpoint is intact, at its price"
+export PYTHONIOENCODING=utf-8
+w_out="$(python "$HERE/e2_withdrawal.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "e2_withdrawal.py --verify: $(printf '%s' "$w_out" | head -1 | sed 's/^PASS //')"
+else
+  bad "the §3.0 withdrawal has been hollowed out -- read the FAIL lines"
+  printf '%s\n' "$w_out" | sed 's/^/        /'
+fi
+
+ws_out="$(python "$HERE/e2_withdrawal.py" --selftest 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "e2_withdrawal.py --selftest: $(printf '%s' "$ws_out" | tail -1 | tr -d ' ') controls, every one demonstrated to fire"
+else
+  bad "e2_withdrawal.py --selftest is red -- this stage cannot be trusted either way"
+  printf '%s\n' "$ws_out" | sed 's/^/        /'
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

@@ -1,0 +1,105 @@
+{
+ "prompt_id": "r2/freeze-e2",
+ "prompt": "Act on battery's E2 verdict: rule on the front-loading paired difference as a frozen primary endpoint, produce the replacement wording in STATS_RULES.md and CLAIMS_TEXT.md, and make freeze/MANIFEST.json's readiness reflect the ruling",
+ "branch": "r2/freeze-e2",
+ "base_commit": "af138a0d",
+ "utc": "2026-08-01T03:00:00Z",
+ "seed": null,
+ "ruling": {
+  "endpoint": "前载指数配对差 (Theoria.md:373 primary endpoint 3; battery metric id E2)",
+  "verdict": "WITHDRAWN from the confirmatory family, demoted to exploratory",
+  "where": "freeze/STATS_RULES.md §3.0",
+  "holm_divisor_after": 3,
+  "primary_slots": 3,
+  "in_confirmatory_family_after": 2,
+  "computable_today": 0,
+  "evidence": {
+   "attack": "batched-turn-label-coherent",
+   "value": 0.973387097,
+   "target": 0.95,
+   "reachability": "arm-reachable",
+   "poverty_certified": true,
+   "breaks": [],
+   "source": "battery/artifacts_live/frontload_e2l.json"
+  },
+  "why_not_a_threshold": "the endpoint has no threshold -- it is a Wilcoxon/sign test under Holm; what failed is the validity of the bucketing axis",
+  "why_not_E2L": [
+   "PREREG_V9 R1 demotes only",
+   "E2L has not passed process 1 and is not in REGISTRY",
+   "E2L itself reaches 1.0 under first-turn-bill-coherent",
+   "n_paired_games = 0, so no calibration is possible"
+  ]
+ },
+ "gates": {
+  "freeze/verify.sh": {
+   "baseline_failures": 3,
+   "after_failures": 2,
+   "moved": [
+    "[12] MANIFEST.json FAIL -> PASS",
+    "[19] new stage, PASS + PASS"
+   ],
+   "unchanged_red": [
+    "[15b] BUDGET_TABLE (live round is spending; regenerating mid-round would pin a moving balance)",
+    "[18] locations (all 11 findings are other territories' run dirs)"
+   ]
+  },
+  "freeze/e2_withdrawal.py --selftest": "8/8, every control demonstrated to fire",
+  "freeze/residuals.py --verify": "green (E2-AXIS, E2-BACK registered)",
+  "freeze/build_manifest.py --verify": "green after regeneration"
+ },
+ "files": [
+  {
+   "path": "freeze/STATS_RULES.md",
+   "sha256": "08a40f0b8adda7558e4e06d707b03ab3dd4b03d567941bc73ac002381d1bd8ce"
+  },
+  {
+   "path": "freeze/CLAIMS_TEXT.md",
+   "sha256": "f68e45efd00d9a14edb6dd8922a0dd568d57ce9acfc32be248228136ddfdb018"
+  },
+  {
+   "path": "freeze/MANIFEST_DRAFT.md",
+   "sha256": "5dd20662f53062feabde8b1ceb9f7f0dfb1ab6d7ce3fc2edf3457be7fe4f342e"
+  },
+  {
+   "path": "freeze/MANIFEST.json",
+   "sha256": "bbc0dab8ac8a4265e438772a9366e9140926f709e89a604b8318081f2725f62b"
+  },
+  {
+   "path": "freeze/RESIDUALS.json",
+   "sha256": "3caad011b94872f5e518d36655ea0cb90d83fbea382911efc685e0aa00801888"
+  },
+  {
+   "path": "freeze/build_manifest.py",
+   "sha256": "f6b72e885ca8e990d24fcb9605dc35c89fce2a7f812976bf1b7c2a3c9cdcd5c0"
+  },
+  {
+   "path": "freeze/e2_withdrawal.py",
+   "sha256": "bfc5dde89ed6311fbb30fc66e8b07c4776c462e92f7411dac521a222ac359d43"
+  },
+  {
+   "path": "freeze/verify.sh",
+   "sha256": "bacc24ce3fe15ba371c2a1c2062723eef6c14c98c9d4c6ac95e32b6adceb2487"
+  },
+  {
+   "path": "monitor/inbox/2026-08-01T0300Z-freeze-to-battery-e2-withdrawn-and-turn_costs-mixes-two-axes.md",
+   "sha256": "46d7976a379a0d245fff70a95f7cc3a81b4b74eb31e3845e10501b863422eef7"
+  },
+  {
+   "path": "freeze/runs/20260801T0300Z-R2-E2-RULING/RUN_STATE.md",
+   "sha256": "3bbc92a841e9e914b4d8175bd21291c4702ed803cafd29c68c0bc6066a056c57"
+  },
+  {
+   "path": "freeze/runs/20260801T0300Z-R2-E2-RULING/gate_e2_withdrawal.txt",
+   "sha256": "f43c842cdda129dc02e511f2c2f2bfe0da8cb4f0e4bd4c6bc6dab05221a2c38c"
+  },
+  {
+   "path": "freeze/runs/20260801T0300Z-R2-E2-RULING/verify_baseline.txt",
+   "sha256": "4d80f2ad0e0dcfc220c6fa7ace23ac01f4cdddb1381702f63f419a916ad03d45"
+  },
+  {
+   "path": "freeze/runs/20260801T0300Z-R2-E2-RULING/verify_after.txt",
+   "sha256": "15becfbaf2681aede3c2ef4c94367efcb8aef641d57efdabebfaabf8cbd72413"
+  }
+ ],
+ "notes": "offline only: zero API calls, zero spend, zero sealed-pile contact, no directory containing R1 was read or written. battery/ was read-only; the cross-territory request went to monitor/inbox/."
+}
