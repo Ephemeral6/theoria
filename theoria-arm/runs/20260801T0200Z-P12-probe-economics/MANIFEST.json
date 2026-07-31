@@ -9,34 +9,22 @@
   "tests/test_probe_economics.py",
   "tests/test_probe_guard_in_the_loop.py"
  ],
+ "delivered_sha256": {
+  "inner/loop.py": "62b4df6bc28954b89f00087d4853fa99a8d52a180455eb7915a096f0d782fd5d",
+  "inner/plan.py": "9356e70678351ed914f4f66850b5fe0aa165c2e668f5d38dcab45faf040c7289",
+  "inner/probe.py": "0d1657fb840346adafddb51999feebf60b1f3492a230e5afcc7f18a1d7fbc342",
+  "tests/test_probe_economics.py": "aa8dbef7ee7410bb75471a9cd69c071ad580593610e6aee6bce031866a8ad5db",
+  "tests/test_probe_guard_in_the_loop.py": "bb12f77fce5abc0a7745d6bec98afe86902b17cf49898f8eeafd5680ca75fda7"
+ },
+ "delivered_sha256_note": "hashes of the source this ticket changed, at the commit that carries this manifest. Deliberately NOT in `files[]`: that list is the run's own artefacts, and check 10 of `armtools.verify_provenance` refuses a path outside the run directory.",
  "files": [
   {
-   "path": "../../inner/loop.py",
-   "sha256": "62b4df6bc28954b89f00087d4853fa99a8d52a180455eb7915a096f0d782fd5d"
-  },
-  {
-   "path": "../../inner/plan.py",
-   "sha256": "9356e70678351ed914f4f66850b5fe0aa165c2e668f5d38dcab45faf040c7289"
-  },
-  {
-   "path": "../../inner/probe.py",
-   "sha256": "0d1657fb840346adafddb51999feebf60b1f3492a230e5afcc7f18a1d7fbc342"
-  },
-  {
-   "path": "../../tests/test_probe_economics.py",
-   "sha256": "aa8dbef7ee7410bb75471a9cd69c071ad580593610e6aee6bce031866a8ad5db"
-  },
-  {
-   "path": "../../tests/test_probe_guard_in_the_loop.py",
-   "sha256": "bb12f77fce5abc0a7745d6bec98afe86902b17cf49898f8eeafd5680ca75fda7"
-  },
-  {
    "path": "RUN_STATE.md",
-   "sha256": "eb2177c1afd83f7f18e7666e8e44d9972e4f51353cad56a1c0ba18d1f96c566f"
+   "sha256": "66b08223426e516497f3183da7b784609f5ce5f844c332495529541869a79bdb"
   },
   {
    "path": "make_manifest.py",
-   "sha256": "95d7431649fb8b2c3218e867aa396f692adb7811693e1818b5438a4d1b1698ab"
+   "sha256": "21d347fc744e62a6a20f00273e4885ca39326d957d6e16e1a0364f7a0bf303d7"
   },
   {
    "path": "mock_campaign_after.json",

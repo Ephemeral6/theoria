@@ -127,6 +127,12 @@ arm, offline against proxy/mock … ok, game g50t-5849a774, budget 6 actions, no
 key, no network`, and `[3/3] artefact self-check`.
 
 `python -m armtools.verify_provenance` — 9 of 10 PASS, the tenth as above.
+(This ticket briefly made it 8 of 10: the first cut of `make_manifest.py` put
+the five changed source files into `files[]` as `../../inner/loop.py` and check
+10 correctly refused every one — "not a path inside the run". `files[]` is the
+run's own artefacts; the delivered source is hashed in its own
+`delivered_sha256` block instead. Recorded rather than quietly corrected,
+because the check caught a real category error in what a manifest claims.)
 Notably PASS: *no sealed-pile game appears anywhere in the archive*, and *runs/
 contains no test or smoke fixture* (the seven mock leg directories this ticket
 produced were deleted rather than left behind).

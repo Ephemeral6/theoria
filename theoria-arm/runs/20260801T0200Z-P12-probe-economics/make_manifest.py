@@ -43,15 +43,23 @@ def _sha256(path):
 
 
 def main():
+    # `files[]` is the run's own artefacts and nothing else.
+    # `verify_provenance` check 10 walks it looking for shipped paths and
+    # refuses anything outside the run directory -- rightly: a manifest is a
+    # record of what this run produced, and a source file in `inner/` belongs
+    # to the commit, not to the run. The delivered source is hashed too, but in
+    # its own block, so the two claims can never be confused.
     files = []
     for rel in LOCAL:
         path = os.path.join(HERE, rel)
         if os.path.exists(path):
             files.append({"path": rel, "sha256": _sha256(path)})
+
+    delivered_sha256 = {}
     for rel in DELIVERED:
         path = os.path.join(ARM, rel)
         if os.path.exists(path):
-            files.append({"path": "../../" + rel, "sha256": _sha256(path)})
+            delivered_sha256[rel] = _sha256(path)
 
     replay = json.load(open(os.path.join(HERE, "probe_replay.json"),
                             encoding="utf-8"))
@@ -62,6 +70,13 @@ def main():
         "branch": BRANCH,
         "cell": "P12",
         "delivered": DELIVERED,
+        "delivered_sha256": delivered_sha256,
+        "delivered_sha256_note": ("hashes of the source this ticket changed, "
+                                  "at the commit that carries this manifest. "
+                                  "Deliberately NOT in `files[]`: that list is "
+                                  "the run's own artefacts, and check 10 of "
+                                  "`armtools.verify_provenance` refuses a path "
+                                  "outside the run directory."),
         "files": sorted(files, key=lambda f: f["path"]),
         "lane": "arm",
         "measured": {
