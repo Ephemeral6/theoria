@@ -1,0 +1,298 @@
+stage [15] evidence -- are build_engine_manifest.py --verify and
+build_budget_table.py --verify real gates, and are they wired?
+
+Worktree  C:/Users/user/Desktop/theoria/.worktrees/s4-freeze   branch agent/s4-freeze
+HEAD      3b0dd342  ("OPS-A cycle 42: the build lane has two fail-closed gates ...")
+Date      2026-07-30
+Scope     nothing outside freeze/ was written; no file inside the repo was mutated;
+          every mutation was made on a copy in $TMPDIR (/tmp/tmp.*, i.e.
+          C:/Users/user/AppData/Local/Temp/...), the same mechanism verify.sh
+          stage [13] uses at verify.sh:836-844.  No git command was run.
+
+==============================================================================
+0. THE PREMISE -- is either --verify wired into verify.sh?
+==============================================================================
+Grep of freeze/verify.sh for  build_engine_manifest|build_budget_table|
+BUDGET_TABLE|ENGINE_MANIFEST  ->  NO MATCHES.  Confirmed: verify.sh [0]..[14]
+invokes neither generator, and names neither artefact.
+
+But the premise is half-contradicted in a way that matters for the wiring:
+paste-ready snippets for BOTH already exist, unwired, and BOTH claim stage [15].
+
+  freeze/runs/.../item05/verify_sh_stage15.snippet.sh
+        stage [15], ENGINE_MANIFEST only.  Calls --verify as a hard fail AND
+        adds three greps against the PUBLISHED file (roster is 8 packages, the
+        D-018 collision is still disclosed, the ⛔ 5-b version gap is still
+        stated) plus a note.  Those three are the counterweight to the fact
+        that the generator is both sides of the --verify comparison.
+  freeze/runs/.../item12/NOTES_FOR_RES1.md §1
+        stage [15], BUDGET_TABLE only, as a fenced bash block.  Splits the red
+        by POOL ABSENT / CITATION DRIFT / other, and adds a note when the
+        verdict line contains "0 fit both".
+  freeze/runs/.../endpoints/verify_sh_stage16.snippet.sh
+        stage [16], and its header already assumes "[15] is taken
+        (... ENGINE_MANIFEST)".
+
+So this is not "two gates nobody thought about"; it is two gates that were
+built, dry-run, documented and then not wired, with a stage-number collision
+between the two drafts that no single reader had noticed.  Neither runs today.
+
+==============================================================================
+1. build_engine_manifest.py --verify  -- DOES IT EXIST, WHAT DOES IT CHECK
+==============================================================================
+YES.  argparse flag at :983, dispatched at :988, implemented in verify() at
+:918-978.  Docstring :61-64: "--verify is what belongs in a gate."
+
+Checks, in order:
+  a. freeze/ENGINE_MANIFEST.md exists                      -> else print + rc 1
+  b. the <!-- ENGINE-HASHES:BEGIN/END --> block parses as
+     `kind sha path` triples                               -> else rc 1
+  c. every pinned row equals a hash recomputed from git at HEAD
+     (git rev-parse HEAD:<path>, never a worktree hash), reported per row as
+     DRIFTED / EXTRA / MISSING                              -> else rc 1
+  d. the whole file re-renders byte-identically, modulo the one
+     `<!-- generated-from: -->` line                        -> else rc 1
+
+Exit contract: 0 = ok, 1 = drift.  (main() returns verify()'s value; no other
+codes.)
+
+  $ python freeze/build_engine_manifest.py --verify
+  freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+  EXIT=0
+
+Failure text is shown under 2. below (real, not quoted from the source).
+
+==============================================================================
+2. NEGATIVE CONTROL FOR build_engine_manifest.py -- IT FIRES
+==============================================================================
+Stage [13]'s mechanism does NOT transfer verbatim, and the reason is a finding:
+
+  freeze/n_feasibility.py contains no `HERE`, no `REPO`, no `__file__`, no
+  os.path.join and no open() -- it is pure arithmetic.  That is why copying the
+  single file to $(mktemp -d) and sed-ing a constant works there.
+
+  build_engine_manifest.py pins  HERE = dirname(abspath(__file__)),
+  REPO = dirname(HERE), OUT = HERE/ENGINE_MANIFEST.md, does
+  sys.path.insert(0, HERE) to import build_manifest, and shells out to git with
+  cwd=REPO.  A bare copy in $TMPDIR therefore has the wrong REPO, no
+  build_manifest to import, and no repository to run git in: it would exit
+  non-zero for reasons that have nothing to do with the artefact, and a control
+  built that way would report "fires" while proving nothing.
+  Same shape for build_budget_table.py (HERE/REPO/OUT_JSON/OUT_MD, plus
+  REPO/proxy/... reads).  This is the V24 "battery blind hardcoded path" defect
+  class: the verifier cannot be pointed at a copy of its own artefact.
+
+  It is WORKED AROUND, not fatal.  Pin HERE to the real freeze/ (so REPO,
+  sys.path, git and every companion read stay correct) and redirect ONLY the
+  artefact path.  Two sed expressions.  The tmp path must be converted to a
+  native path first, because a sed replacement string is not MSYS path-mangled
+  and Python on Windows cannot open /c/Users/....
+
+Setup actually run:
+
+  here_py="$(cd "$HERE" && python -c 'import os;print(os.getcwd().replace(os.sep,"/"))')"
+    -> C:/Users/user/Desktop/theoria/.worktrees/s4-freeze/freeze
+  tmp="$(mktemp -d)"           -> /tmp/tmp.pKlCeHjSvH
+  tmp_py                       -> C:/Users/user/AppData/Local/Temp/tmp.pKlCeHjSvH
+                                  (outside the repo tree -- checked)
+  cp freeze/ENGINE_MANIFEST.md "$tmp/"
+  sed -e 's|^HERE = os.path.dirname(os.path.abspath(__file__))$|HERE = r"<here_py>"|' \
+      -e 's|^OUT = os.path.join(HERE, "ENGINE_MANIFEST.md")$|OUT = r"<tmp_py>/ENGINE_MANIFEST.md"|' \
+      freeze/build_engine_manifest.py > "$tmp/bem.py"
+
+  resulting lines 73-75 of the copy:
+    HERE = r"C:/Users/user/Desktop/theoria/.worktrees/s4-freeze/freeze"
+    REPO = os.path.dirname(HERE)
+    OUT  = r"C:/Users/user/AppData/Local/Temp/tmp.pKlCeHjSvH/ENGINE_MANIFEST.md"
+
+FAITHFULNESS CHECK -- relocated copy, UNMUTATED artefact (must be green):
+
+  $ python "$tmp/bem.py" --verify
+  freeze/ENGINE_MANIFEST.md still describes this tree (55 pinned rows, 8 packages, 2/8 milestone tags still pin their own bytes, 0 engine version strings)
+  EXIT=0
+
+  Byte-identical to the in-place run, so the relocation changed nothing but the
+  artefact's location.  Without this step a botched sed would silently turn the
+  control into a tautology.
+
+MUTATION -- flip the first hex character of the first `blob` pin row in the COPY:
+
+  $ python "$tmp/bem.py" --verify
+  DRIFT: freeze/ENGINE_MANIFEST.md no longer describes this tree.
+         1 row(s) disagree:
+    DRIFTED  engine-rig/DECISIONS.md
+               pinned  blob 0c0472764690d4c82e6543eb92c4f5e3937577f6
+               at HEAD blob cc0472764690d4c82e6543eb92c4f5e3937577f6
+         regenerate it and read the diff before freezing.
+  EXIT=1
+
+The snippet ships a plain-sed version of the same mutation (zero the
+`tree ...  engine-rig/engines` row, which hash_rows() always emits), so no
+python is needed to build the mutant.  Executed end to end in 5. below.
+
+Corroboration, independently produced earlier and tracked in this run:
+freeze/runs/.../item05/negative-control.txt records four mutations against this
+verifier (hash moved -> named row; derived count moved, hashes intact ->
+rendering detector; pin block deleted -> refuses to pass; whole file rewritten
+CRLF -> correctly stays GREEN).  Those were done in place with restore-from-
+baseline; this run reproduces the first one out-of-tree.
+
+==============================================================================
+3. build_budget_table.py --verify  -- DOES IT EXIST, WHAT DOES IT CHECK
+==============================================================================
+YES.  argparse flags at :962 (--verify), :965 (--allow-absent-pool), :970
+(--emit-pool-digest); the verify branch is :979-1021.  Docstring :49-52:
+"--verify is what belongs in a gate."
+
+Checks, each independently setting rc = 1:
+  a. freeze/BUDGET_TABLE.json exists                        -> print + return 1
+  b. json.loads(on-disk) minus the `generated_from` key equals a freshly built
+     dict minus the same key.  On mismatch it prints the top-level SECTIONS
+     that moved, and prints an extra three-line warning if `pool` or `balance`
+     is among them ("THE BALANCE MOVED").
+  c. BUDGET_TABLE.md still exists and still carries its
+     <!-- BEGIN GENERATED --> / <!-- END GENERATED --> markers, and the
+     re-spliced block equals what is on disk.
+  d. the pool (proxy/var/spend_gate.jsonl) is present, unless
+     --allow-absent-pool.
+  e. no cited path:line in CITED_LINES has drifted.
+  f. CITED_SECTIONS that are not yet on disk are printed but do NOT fail.
+Exit contract: 0 = ok, 1 = any of a-e.  In --verify mode it writes nothing.
+
+  $ python freeze/build_budget_table.py --verify
+  DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+         sections that moved: balance, citations, pool, verdict
+         `pool`/`balance` moved => THE BALANCE MOVED. A frozen
+         budget table with a stale balance is the failure this
+         gate exists to catch. Regenerate and re-read it.
+  DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+  CITATION DRIFT: freeze/STATS_RULES.md:777, freeze/STATS_RULES.md:791
+  EXIT=1
+
+>>> IT IS RED TODAY.  Field-level diff of on-disk BUDGET_TABLE.json against a
+    fresh build (read-only, computed in memory):
+
+      balance.actions_remaining              18810   -> 18704
+      balance.actions_spent_on_test_traffic   3308   ->  3414
+      balance.actions_used                    5190   ->  5296
+      pool.actions                            5190   ->  5296
+      pool.actions_test_like                  3308   ->  3414
+      pool.lines                             11874   -> 12154
+      pool.max_seq                           11874   -> 12154
+      pool.kinds        release/reserve/spend 2280/2280/7314 -> 2346/2346/7462
+      pool.sha256       8b02a324... -> 03d09798...
+      verdict.statement (restated with the new headroom)
+
+    No dollar figure moved -- pool.usd is unchanged.  What moved is the ACTION
+    headroom: 280 new pool lines, 106 more actions, all of them $0.0000.  So
+    this is a true "the balance moved" red, not a hand edit.
+
+    The citation drift is a separate, genuine defect in the tree:
+    build_budget_table.py CITED_LINES expects "0.78" at STATS_RULES.md:777 and
+    "0.513" at :791.  Measured today: "0.78" is at line 770, "0.513" at line
+    805.  STATS_RULES.md has been edited underneath the citation table and the
+    two line numbers are now wrong.  Regenerating the budget table does not fix
+    this; the two numbers in CITED_LINES have to be corrected.
+
+==============================================================================
+4. NEGATIVE CONTROL FOR build_budget_table.py -- MECHANISM PROVED,
+   EXIT-CODE CONTROL NOT AVAILABLE TODAY
+==============================================================================
+Same relocation, three sed expressions (HERE, OUT_JSON, OUT_MD), copies of both
+BUDGET_TABLE.json and BUDGET_TABLE.md in /tmp/tmp.SJminC8Vmd:
+
+    HERE     = r"C:/Users/user/Desktop/theoria/.worktrees/s4-freeze/freeze"
+    REPO     = os.path.dirname(HERE)
+    OUT_JSON = r"C:/Users/user/AppData/Local/Temp/tmp.SJminC8Vmd/BUDGET_TABLE.json"
+    OUT_MD   = r"C:/Users/user/AppData/Local/Temp/tmp.SJminC8Vmd/BUDGET_TABLE.md"
+
+  relocated copy, UNMUTATED  -> output byte-identical to the in-place run above,
+                                EXIT=1 (the pre-existing red).  Relocation is
+                                faithful.
+
+  relocated copy, MUTATED    -> sed 's/"usd_per_success_action": 0.0435/..0.9999/'
+                                on the COPIED json, i.e. a section that is clean
+                                today:
+
+    DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+           sections that moved: balance, citations, pool, unit_prices, verdict
+           ...
+    EXIT=1
+
+  `unit_prices` appears in the moved list ONLY in the mutated run.  So the
+  artefact half of this check is demonstrably live: edit the generated table and
+  the verifier names the section you edited.
+
+  What could NOT be proved is an exit-code control, because the baseline is
+  already 1.  `if python ... ; then bad "did not fire"; else ok "fires"; fi`
+  would print "fires" no matter what it mutated -- or even if it mutated
+  nothing.  Shipping that would be a false statement about a test that ran on
+  nothing, so the snippet ships a `note` instead, and says why.  Once 15b is
+  green the control can be promoted to 15a's exact shape.
+
+==============================================================================
+5. THE SNIPPET, RUN END TO END
+==============================================================================
+freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/verify_sh_stage15.snippet.sh
+sourced from a throwaway harness in /tmp that defines only HERE / ok / bad /
+note exactly as verify.sh:25-35 does:
+
+  [15] the other two generated artefacts still describe their sources
+    PASS  build_engine_manifest.py --verify: ENGINE_MANIFEST.md still pins the tree it describes
+    PASS  negative control fires: zeroing one pinned hash in a copy of ENGINE_MANIFEST.md turns this stage red
+    FAIL  BUDGET_TABLE.{json,md} no longer recompute from the ledgers -- regenerate and read the diff
+          DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+                 sections that moved: balance, citations, pool, verdict
+                 `pool`/`balance` moved => THE BALANCE MOVED. A frozen
+                 budget table with a stale balance is the failure this
+                 gate exists to catch. Regenerate and re-read it.
+          DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+          CITATION DRIFT: freeze/STATS_RULES.md:777, freeze/STATS_RULES.md:791
+    NOTE  15b has no negative control: it is red today, and a control that requires a red from an already-red check proves nothing (evidence: endpoints/stage15-evidence.txt)
+  FAIL=1 WARN=1
+
+Timing:  build_engine_manifest.py --verify  ~5.5 s (x3 in this stage)
+         build_budget_table.py    --verify  ~7.8 s (x1)
+         => the stage adds roughly 20 s to verify.sh.
+
+==============================================================================
+6. CONSEQUENCE FOR THE WIRING -- READ BEFORE PASTING
+==============================================================================
+verify.sh as it stands TODAY is GREEN:
+
+  $ bash freeze/verify.sh   (tail)
+  [12] MANIFEST.json still describes this tree      PASS
+  [13] cell yield vs <n> ...                        PASS + negative control PASS
+  [14] every gap ... names who fixes it             PASS
+   DRAFT COMPLETE -- all 13 items landed or annotated; 2 note(s)
+
+Pasting stage [15] as written flips it to DRAFT INCOMPLETE on one failure.
+That failure is true, and it is exactly the class stage [12] exists for, but it
+is RES-1's call whether to (a) regenerate the budget table and fix the two
+CITED_LINES numbers first, then paste, or (b) paste now and let the gate be red
+until item 12 is reconciled.  Do not soften 15b to a `note` to keep the script
+green: the generator's own docstring calls a moved balance "the one event that
+must invalidate a frozen budget table".
+
+Standing property, independent of today's state: 15b will go red on its own
+after any proxied spend, because proxy/var/spend_gate.jsonl is gitignored and
+append-only.  A stop-hook that must be regenerated after every campaign call is
+a design decision, not a bug -- but it is a decision, and it should be made
+deliberately rather than discovered.
+
+==============================================================================
+7. NOTHING IN THE REPO WAS MUTATED
+==============================================================================
+Every mutation was written to /tmp/tmp.* and the directories were removed.
+freeze/ENGINE_MANIFEST.md verifies green at the end of this run (section 5),
+which is a stronger statement than a byte comparison: it matches what the
+generator produces from HEAD right now.  freeze/BUDGET_TABLE.json and
+freeze/BUDGET_TABLE.md were only read and copied; their pre-existing red is the
+same red they showed on the first read, before anything was copied.
+
+(For the record: freeze/ENGINE_MANIFEST.md is NOT byte-identical to
+freeze/runs/.../item05/ENGINE_MANIFEST.baseline.md.  The difference is §4's
+D-018 paragraph, which is the revision build_engine_manifest.py:730-738
+documents as RES-1's own walk-back of an overreaching claim.  That baseline was
+taken at HEAD 5822e5e5; this run is at 3b0dd342.  It is not damage from this
+run.)

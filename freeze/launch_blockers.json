@@ -1,35 +1,109 @@
 {
- "_what": "The executable half of STATS_RULES.md §9's 开跑前置条件 rows. Read by freeze/launch_gate.py, which is the thing that answers 'may the sealed campaign spend?'. §9 is the authority for WHICH rows are blockers; this file records, per row, the command that clears one.",
- "_how_a_blocker_clears": "state=implemented, plus a cmd template containing {target}, plus two targets that both exist on disk. The gate runs the SAME template against positive_target (must exit 0) and negative_target (must exit non-zero). A check that only ever runs on things it should pass cannot be told apart from a stub, so the rejection is the half that carries the weight.",
- "_how_it_does_not_clear": "Editing this file. Every field here is an instruction to run something; none of them is believed.",
- "_written": "2026-07-29, S4, RES-1",
-
- "blockers": {
-  "9.2": {
-   "subject": "U3 criterion (c): an executable non-triviality check",
-   "state": "unimplemented",
-   "why": "No code anywhere evaluates criterion (c). The N-4 adversarial round's own reading: (c) will otherwise be written after the sealed campaign has run, by someone who wants C1 to hold. Since the G1 revision relaxed criterion (b) from an empty axiom set to a whitelist, (c) is the only remaining barrier against a tautology passing as U3.",
-   "negative_target_when_implemented": "cold-start-a3/theory/generated_l1_vacuous",
-   "negative_target_exists": true,
-   "note": "The negative control is already on disk and is not hypothetical: D-A3-007 records this vacuous certificate arising on its own -- three obligations green, #print axioms empty, nothing proved. Any check offered for this row must reject it."
-  },
-
-  "9.11": {
-   "subject": "envelope re-run (INC-BA-003 + abort-threshold scaling)",
-   "state": "implemented",
-   "why": "Both halves have landed, and this entry said so was possible: 'if the re-run has in fact landed, this entry is what has to change, and it has to change into a command.' (a) Abort-threshold scaling: D-016 (baseline-arms/DECISIONS.md) split the old absolute `actions_failed >= 10` into a consecutive rule (`bare_cc.py:77 CONSECUTIVE_FAILURE_ABORT`, outcome `api_unusable`) and a budget-scaled cumulative cap (`cumulative_failure_cap(budget) = max(10, budget)`, outcome `failure_grind`). (b) Envelope re-run: `baseline-arms/runs/20260728T103135Z-a7/envelope.json`, 9 cells run 2026-07-28 post-fix, all `budget_exhausted` with `actions_failed: 0` and `action_success_rate: 1.0`. Found by the S4-freeze-complete adversarial round on 2026-07-29 while refuting STATS_RULES.md 5.7's first version, which had cited this row as an open blocker owned by someone else.",
-   "cmd": ["python", "-c", "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); o=[r['outcome'] for g in d.get('games',{}).values() for r in g['repeats']]+[e['outcome'] for e in d.get('episodes',[])]; sys.exit(0 if o and 'api_unusable' not in o else 1)", "{target}"],
-   "positive_target": "baseline-arms/runs/20260728T103135Z-a7/envelope.json",
-   "negative_target": "baseline-arms/out/campaign/campaign_ar25.json",
-   "residual_not_blocking": "ar25-0c556536's three degraded cells were never re-run (that file's own `excluded` field). That keeps a pessimistic reading of the cell-yield rate on the books (3/12 rather than 0/9, STATS_RULES.md 5.7.2) but is not a launch blocker: the rule that produced those three verdicts no longer exists in the code, and D-016 already ruled the verdict 'guaranteed by construction, not earned by the API'. Cost to close it anyway: 3 cells, one game, order $3-4. Owner RES-1 (campaign lane -- it spends).",
-   "owner_hint": "baseline-arms"
-  },
-
-  "9.14": {
-   "subject": "U3 attainment rate has no implementation at all",
-   "state": "unimplemented",
-   "why": "One of the three primary endpoints, with no prediction, no battery id, and no consumer for Step.won (build_manifest.py:173-178, PREDICTIONS.md:585, battery ENDPOINTS.md:15 'unfalsifiable'). Freezing a statistical ruling over a quantity nothing computes freezes an unexecutable sentence.",
-   "clears_when": "the rate can be computed end to end at least once, and the computation rejects a run in which no game was won"
+  "_what": "The executable half of STATS_RULES.md §9's 开跑前置条件 rows. Read by freeze/launch_gate.py, which is the thing that answers 'may the sealed campaign spend?'. §9 is the authority for WHICH rows are blockers; this file records, per row, the command that clears one.",
+  "_how_a_blocker_clears": "state=implemented, plus a cmd template containing {target}, plus two targets that both exist on disk. The gate runs the SAME template against positive_target (must exit 0) and negative_target (must exit non-zero). A check that only ever runs on things it should pass cannot be told apart from a stub, so the rejection is the half that carries the weight.",
+  "_how_it_does_not_clear": "Editing this file. Every field here is an instruction to run something; none of them is believed.",
+  "_written": "2026-07-29, S4, RES-1",
+  "blockers": {
+    "9.2": {
+      "subject": "U3 criterion (c): an executable non-triviality check",
+      "state": "unimplemented",
+      "why": "No code anywhere evaluates criterion (c). The N-4 adversarial round's own reading: (c) will otherwise be written after the sealed campaign has run, by someone who wants C1 to hold. Since the G1 revision relaxed criterion (b) from an empty axiom set to a whitelist, (c) is the only remaining barrier against a tautology passing as U3.",
+      "negative_target_when_implemented": "cold-start-a3/theory/generated_l1_vacuous",
+      "negative_target_exists": true,
+      "note": "The negative control is already on disk and is not hypothetical: D-A3-007 records this vacuous certificate arising on its own -- three obligations green, #print axioms empty, nothing proved. Any check offered for this row must reject it."
+    },
+    "9.11": {
+      "subject": "envelope re-run (INC-BA-003 + abort-threshold scaling)",
+      "state": "implemented",
+      "why": "Both halves have landed, and this entry said so was possible: 'if the re-run has in fact landed, this entry is what has to change, and it has to change into a command.' (a) Abort-threshold scaling: D-016 (baseline-arms/DECISIONS.md) split the old absolute `actions_failed >= 10` into a consecutive rule (`bare_cc.py:77 CONSECUTIVE_FAILURE_ABORT`, outcome `api_unusable`) and a budget-scaled cumulative cap (`cumulative_failure_cap(budget) = max(10, budget)`, outcome `failure_grind`). (b) Envelope re-run: `baseline-arms/runs/20260728T103135Z-a7/envelope.json`, 9 cells run 2026-07-28 post-fix, all `budget_exhausted` with `actions_failed: 0` and `action_success_rate: 1.0`. Found by the S4-freeze-complete adversarial round on 2026-07-29 while refuting STATS_RULES.md 5.7's first version, which had cited this row as an open blocker owned by someone else.",
+      "cmd": [
+        "python",
+        "-c",
+        "import json,sys; d=json.load(open(sys.argv[1],encoding='utf-8')); o=[r['outcome'] for g in d.get('games',{}).values() for r in g['repeats']]+[e['outcome'] for e in d.get('episodes',[])]; sys.exit(0 if o and 'api_unusable' not in o else 1)",
+        "{target}"
+      ],
+      "positive_target": "baseline-arms/runs/20260728T103135Z-a7/envelope.json",
+      "negative_target": "baseline-arms/out/campaign/campaign_ar25.json",
+      "residual_not_blocking": "ar25-0c556536's three degraded cells were never re-run (that file's own `excluded` field). That keeps a pessimistic reading of the cell-yield rate on the books (3/12 rather than 0/9, STATS_RULES.md 5.7.2) but is not a launch blocker: the rule that produced those three verdicts no longer exists in the code, and D-016 already ruled the verdict 'guaranteed by construction, not earned by the API'. Cost to close it anyway: 3 cells, one game, order $3-4. Owner RES-1 (campaign lane -- it spends).",
+      "owner_hint": "baseline-arms"
+    },
+    "9.14": {
+      "subject": "U3 attainment rate has no implementation at all",
+      "state": "unimplemented",
+      "why": "One of the three primary endpoints, with no prediction, no battery id, and no consumer for Step.won (build_manifest.py:173-178, PREDICTIONS.md:585, battery ENDPOINTS.md:15 'unfalsifiable'). Freezing a statistical ruling over a quantity nothing computes freezes an unexecutable sentence.",
+      "clears_when": "the rate can be computed end to end at least once, and the computation rejects a run in which no game was won"
+    },
+    "9.15": {
+      "subject": "「弃权计错」与它点名的实现方向相反",
+      "state": "unimplemented",
+      "why": "STATS_RULES.md §2.2 pre-registers 弃权计错 and names exam/grading/mark.py:95 confusion() as the implementation. That implementation does the opposite and says so: abstentions (:125-130), unanswered submissions (:120-124) and illegible answers (:131-144) each `continue` out of the tp/fp/tn/fn tally, so there are THREE exits from the specificity denominator, not one. exam/DECISIONS.md D-EX-015 records the opposite semantics as 'the right call'. The cheapest rescue reading of an unfavourable result therefore costs ZERO: abstain on the class-iii items you are unsure of and the cited implementation removes them from the denominator. Worse, _rate (:155-156) returns None on an empty denominator (confusion_matrix.py:23-26 makes this a design principle), and `None < ⟨S_min⟩` is not false but undefined -- so the one-vote specificity veto has no total order and can be made structurally untriggerable.",
+      "clears_when": "A conversion layer (`abstain_as_wrong`) exists and is hashed, counting abstained/unanswered/unclassified into the error cell on the corresponding truth side, so that tp+fn and tn+fp equal the class sizes and neither rate is ever undefined; OR the exam track changes mark.confusion's semantics and D-EX-015 is superseded. Either way the row clears with a command and two targets, per this file's contract -- not by editing this entry.",
+      "negative_target_when_implemented": "an examinee transcript that abstains on every class-iii item: the layer must score it as wrong, not as 1.000",
+      "negative_target_exists": false,
+      "note": "Invisible to verify.sh stage [16] by construction: 弃权计错 IS stated in both frozen files, so the wording gate is green on it. This is a rule-vs-implementation defect, which is a different gate. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.1."
+    },
+    "9.16": {
+      "subject": "判决题 BA 分不出 `memoriser` 与真值",
+      "state": "unimplemented",
+      "why": "The pre-registered scalar is BA = (sensitivity + specificity)/2 taken from the confusion half, with the exam's total score demoted to exploratory (§2.2, citing Theoria.md:259 '这里考的是理由'). The measurement contradicts that choice. exam/DECISIONS.md:371-374: the memoriser's pooled pair is sensitivity 1.000 / specificity 1.000, 'numerically identical to ground truth', while it abstains on 4 of 4 large-space items -- so BA = 1.000 for an arm that has never answered the class the campaign exists to test. exam/STATUS.md:53-56: `oracle` and `cheater-v4` are identical in EVERY cell of the class split and differ only in the score -- the very quantity §2.2 demotes. This is not a wording that can be gamed; it is a wording that, executed correctly, returns the wrong conclusion.",
+      "clears_when": "Both mandatory negative controls run and are hashed before any sealed game: `bluffer` must be judged 不成立, and `memoriser` must NOT be judged 成立. Plus the class-split adjudication is in force with a ⟨c_min⟩ floor on class (ii) coverage_positive, whose breach routes to 不可结论 (not 不成立). ⟨c_min⟩ is itself needs_human.",
+      "negative_target_when_implemented": "exam's `memoriser` examinee: the endpoint must refuse to judge it 成立",
+      "negative_target_exists": true,
+      "note": "Supersedes and tightens 9.12, which pinned `bluffer` alone -- and `bluffer` is already killed by the specificity floor, so it was the control that did not need to be run. Registered by RES-1, E-WORDING, 2026-07-29; argued in STATS_RULES.md §2.3.2."
+    },
+    "9.17": {
+      "subject": "⟨R⟩（每格重跑上限）未定死、且不在封印范围内",
+      "state": "unimplemented",
+      "why": "§1.4 的不可结论出口触发在 d 上，而 d 是「⟨R⟩ 次重跑之后仍无有效 episode」的局数。⟨R⟩ 在 §9.7 记为 needs_human、建议 3、至今未定；且 n_feasibility.py 的 FLOORS_DIGEST 只封 FLOORS/POWER/N_RULED，⟨R⟩ 不在其中。按出数模型 P(该格进 d)=q^{n(1+R)}：q=0.5719 时 R=3 给 0.011、R=0 给 0.327，即一个未封的人选数字能把 E[d] 从 0.22 格推到 6.2 格——从「这个出口几乎不触发」推到「它总是触发」。第二条同源通道：重跑要花钱，§5.7.2 记着 ar25 三格就是为了 $3-4 没重跑，于是预算上限直接换算成裁决（预算压紧→重跑停→格进 d→不成立软化为不可结论）。",
+      "clears_when": "⟨R⟩ 在任何封存局开跑前落盘为一个整数，并纳入 n_feasibility.py 的摘要封印（与 FLOORS/POWER/N_RULED 同一个 digest），使改动它必然让闸门变红。另需一条记录证明 ⟨R⟩ 次重跑是被真正尝试过的，而不是因预算耗尽被放弃——incident ledger 现在只记作废，不记未尝试的重跑。",
+      "negative_target_when_implemented": "一个把 ⟨R⟩ 改掉而未更新封印的副本：闸门必须拒绝",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）按对抗性复核结果登记；论证见 STATS_RULES.md §1.4.2 第 2 点。这一条是 §1.4 自称「不引入任何新旋钮」时漏掉的那个旋钮。"
+    },
+    "9.18": {
+      "subject": "`api_unusable` 是臂可以自己制造的，而 d 收它",
+      "state": "unimplemented",
+      "why": "§1.4.3 把 d 建立在「harness 判定的、与结果量无关的成因」上，并点名 api_unusable。但 D-016 之后它的判据是对臂自己发出的动作连续 10 次非 200 响应（baseline-arms/harness/bare_cc.py:455-475, CONSECUTIVE_FAILURE_ABORT=10）：臂连发十个会被拒绝的动作就把 api_unusable 写进自己的 summary——harness 写下那个字符串，动作是臂选的。同一份代码在隔壁情形已承认这个区别：failure_grind 被刻意不记作 api_unusable，理由逐字是「那是关于臂的结果」（bare_cc.py:64-67）。于是 §1.4.3 排除 8-turn 那一支的理由（臂可以自己停手，那是一个杠杆）对它自己也成立。后果：臂可以零成本把 不成立 抬成 不可结论（§1.4.2 第 4 点）。",
+      "clears_when": "二择一，且在任何封存局开跑前落盘：(a) api_unusable 的判据改成臂无关的（例如要求同期存在独立的服务端健康信号），或 (b) 把「连续失败」那一支从 d 的成因里排除，d 只收 model_error / harness_error / no_reset_window 一类真正由 harness 侧产生的结局。任一方案都须附一个阴性对照：一个故意连发坏动作的假臂，其被杀的格不得进入 d。",
+      "negative_target_when_implemented": "一个故意连发 10 个被拒动作的假臂：它的格不得计入 d",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）按对抗性复核结果登记，并经独立复读 bare_cc.py 确认。"
+    },
+    "9.19": {
+      "subject": "d 不可计算：「这一格出数了」在树上没有定义",
+      "state": "unimplemented",
+      "why": "§1.4 的三值裁决要 d，而 d 要求先能判「该局是否取得过一次有效尝试」。这与 §9.14 卡在同一处：U3 达成率本身没有任何计算代码，所以「有效尝试」也没有。§5.7.5 已写明「这一格出数了」在树上没有定义。规则可以先落盘（先定序、后定 m 的次序），但开跑前必须有实现，否则 d 会在看到结果之后被人工裁定，而 d 恰好选择三个结局中的哪一个。",
+      "clears_when": "与 §9.14 同一处清除：U3 单局达成判据成为代码，并同时给出「该局是否取得有效尝试」的判定，二者都以 harness outcome 与 Lean 产物为输入、不含任何人工裁量。",
+      "negative_target_when_implemented": "一局有 episode 但无任何 Lean 产物：必须判为「有尝试、未达成」，不得判为进 d",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES（2026-07-30）登记；§1.4.3 散文里写了「这是开跑前置条件」却没进表，本条把它补进表。"
+    },
+    "9.20": {
+      "subject": "g（缺格局数）不可计算、可被臂拧、且是「不成立」的唯一否决键——三样一起，而它一条闸门都没有",
+      "state": "unimplemented",
+      "why": "§1.4.2 把 g 放进 A 行，A 行是通往「C1 不成立」的唯一一扇门；于是抬高 g 就能否决不成立，而 a=0、d=0、g=19 这组数会让一个什么都没证出来的臂公布『我们不主张 C1 成立，也不主张 C1 不成立』。三件事同时成立才使它承重：(1) g 不可计算——§1.2.1 的「状态空间太大」在树上没有可执行判据，与 §9.19 记 d 的那条同型；(2) g 可被臂拧——§1.4.4 自己逐字写着「『原理上可查、但检查开销超预算』这个残余情形是臂能拧的：§1.2.1 假设检查量与状态空间同阶，而可不变量的元数与论域是臂选的」；(3) 它没有对称的闸门——d 有 §9.17/9.18/9.19 三条，g 有零条。本轮对抗性复核指出这个不对称本身就是发现：带三条闸门的那个量只能买到不可结论，零闸门的那个量能否决不成立。§1.4.4 关于「方向不同、进 A 行是保守方向」的辩护只在『不可结论不是作者想要的结局』时成立，而 §1.4.8 已经承认它是。",
+      "clears_when": "g 有一个局级、先验、与臂产出无关的判据（状态空间上界 + 冻结的检查算力预算，两者都在开跑前落盘并纳入封印），且『局造成的缺格』与『臂选的检查太贵』这条切分有可执行形式；在此之前，g 不得进入任何裁决算术——A 行退回 a + d < 过线，并按 §1.4.4 显式承认它会把「13 达成 + 6 缺格」判成不成立。",
+      "negative_target_when_implemented": "一个把可不变量元数调高到检查跑不完、从而把失败格重标为缺格的臂，必须被判据抓成未达成而不是 g",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E1-HOLES 第二轮对抗性复核后登记（2026-07-30）。g 是同一轮里为修一个真缺陷（13+6+0 会印出主结论而那 6 局从没被评估过）而加进 A 行的，加得对；错的是加完没有跟着建闸门，于是补上的洞旁边开了一个没上锁的门。"
+    },
+    "9.21": {
+      "subject": "配对终点的剔除数是臂能自己抬高的，而抬高它能把「不成立」换成「不可结论」（§4.4.3 第 1 行）",
+      "state": "unimplemented",
+      "why": "§4.4.3 第 1 行按 ⟨v_clean⟩ 判「clean 层在结构上不可能显著 → 不可结论」，而剔除成因之一是 §3.2 的 `thin`：E2 在 turns < 8 时返回 `thin`、该对作废，而回合数完全是臂的选择。于是压短回合即可压低 ⟨v_clean⟩，把第 4 行的不成立换成第 1 行的不可结论。这是 §9.18（api_unusable 臂可自制而 d 收它）与 §9.20（g 可被臂拧而它是「不成立」的唯一否决键）之后的同类第三例；三例同形说明它不是三次疏忽而是一条系统性的东西——凡「没能测到」能软化一个不利裁决的地方，都必须先问那个「没能」是不是臂说了算的。",
+      "clears_when": "`thin` 与「臂无关的不可评」有可执行的切分，且切分在开跑前落盘并纳入封印；或 MIN_TURNS_FOR_SHAPE 这一支被排除出 §4.4.3 第 1 行的 ⟨v_clean⟩ 折减。在此之前取保守分支：thin 造成的剔除不进第 1 行的折减，即第 1 行按「若 thin 对全部可评」计算 ⟨v_clean⟩。",
+      "negative_target_when_implemented": "一个把回合压到 8 以下从而制造 thin、借此把不成立软化为不可结论的臂，必须被判据抓成「有尝试、未达成」而不是不可评",
+      "negative_target_exists": false,
+      "note": "由 RES-1 在 S4-E23-TIERS（2026-07-30）登记；与 §9.20 同一缺陷类，应同批清除。"
+    },
+    "9.22": {
+      "subject": "§4.1.0 的剔除上限有两个不等价的边界，而在 ⟨m⟩ = 16 上它们给出相反的裁决",
+      "state": "unimplemented",
+      "why": "§4.1.0 的散文写「剔除的对数 > 全部对数的 1/3」，同一节给终点二那句写「门槛按 ⌈⟨m_clean⟩/3⌉ 现算」。两式只在对数是 3 的倍数时分歧（n = 3、6、9、12、15、18），其余处处相等——所以它躲过了所有以 19 为例的检查。其中 n = 9 会翻转裁决：> n/3 给 ⟨v_clean⟩ = 6、p = 0.03125 > 0.0167（§4.4.3 第 1 行触发 → 不可结论）；⌈n/3⌉ 给 ⟨v_clean⟩ = 7、p = 0.015625 ≤ 0.0167（不触发 → 可以走到成立）。而 ⟨m⟩ = 16 → ⟨m_clean⟩ = 9（claim_set.json 现算），它看起来不存在只因 §2.2.1 的散文表只列了六个 ⟨m⟩，而 ⟨m⟩ 是 needs_human、范围 1..19。于是在 ⟨m⟩ = 16 上选哪个边界等于选 C4 发不发得出来，且两个边界都写在同一节里，谁都能在看到 ⟨v_clean⟩ 之后引用更方便的那一个。",
+      "clears_when": "§4.1.0 二择一（散文的 > n/3 与终点二那句的 ⌈n/3⌉ 统一成一式），并由 freeze/tier_conj.py 的 --verify 守着；VERDICT_FLIPPING_N 随之应为空。",
+      "negative_target_when_implemented": "把 §4.1.0 的两式改回不一致时，tier_conj.py --verify 必须变红并点名会翻转裁决的对数",
+      "negative_target_exists": true,
+      "note": "由 RES-1 在 S4-E23-TIERS（2026-07-30）登记。发现路径值得记：本条的登记初稿写「这个分歧动不了 §4.4」，是 tier_conj.py --verify 当场把那句话打红的——一句只在举例上成立的话被写成了一般结论。"
+    }
   }
- }
 }

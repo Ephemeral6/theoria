@@ -58,7 +58,21 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import sys
+
+# Same fix as residuals.py:54 and launch_gate.py -- and it was the last of the
+# three still missing it.  This file prints ⟨n⟩ / ⟨X⟩ in its summary, and a GBK
+# console has no U+27E8, so `python freeze/n_feasibility.py --verify` run BY HAND
+# died with UnicodeEncodeError before printing its verdict.  Inside verify.sh it
+# never showed, because verify.sh:753 exports PYTHONIOENCODING=utf-8 -- so the
+# breakage was invisible to the gate and visible only to a human following this
+# file's own reproduce instructions.  That is the worse direction of the two.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 
 #: 树上两份**已跟踪**的测量。q 只能取自这里，且每一份都带它测的是什么。
 #: 键名进闸门的哈希，所以增删一份测量必须是一次显式改动。
@@ -111,6 +125,50 @@ FLOORS = {
 #: 现在的做法：地板集的摘要**写死在这里**，且 `verify()` 的每个数都**从 `FLOORS`
 #: 推**，不再有第二处 14。改地板 ⇒ 摘要不符 ⇒ 红。
 FLOORS_DIGEST = "2c84a913533a3e79"
+
+#: claim 层的**建议**地板，从 `FLOORS` 取，不再有第二处 14（2026-07-30，RES-1，
+#: S4-E1-HOLES）。上面那句「`verify()` 的每个数都从 `FLOORS` 推，不再有第二处 14」
+#: 此前是**不实**的：`compute()` 与 `verify()` 各有两处把 14 写死（本轮之前的
+#: :201/:203/:254/:257）。摘要封印挡住了「悄悄把 14 改成 10 还全绿」那条老路，
+#: 但挡不住这条：人合法地重定 ⟨X⟩ 并同步更新摘要之后，这四处仍按 14 计算，
+#: 而标签写着「claim floor」。那是同一种错误换了一层——标签说的和数不是一回事。
+CLAIM_FLOOR = FLOORS["claim-14/19"][0]
+
+
+def check_floor_labels():
+    """Every `FLOORS` key states its own numbers; assert it is telling the truth.
+
+    Second round of adversarial review, 2026-07-30. Deriving the four call
+    sites from `FLOORS` removed the second copy of 14 from the *arithmetic*
+    and left one in the *label*: `FLOORS["claim-14/19"]`. The legal edit for a
+    human who re-picks ⟨X⟩ = 12 within §1.3's interval is to change the tuple
+    and reseal the digest -- and doing exactly that (`(12, CLAIM_CELLS)` plus a
+    new digest) leaves `--verify` at exit 0 while the printed threshold table
+    carries a row **labelled `claim-14/19` holding k = 12**.
+
+    That is the same defect this constant was introduced to remove, relocated
+    from four call sites into one dict key: the label says one thing and the
+    number is another. The digest cannot catch it, because reselaing is the
+    legitimate half of the act.
+
+    So the key is parsed and checked rather than trusted. A re-pick now has to
+    rename the key too, which is the point: the name is published (it is the
+    row label in §5.7.2's table), and a published name that disagrees with the
+    number under it is how a reader gets misled without anybody lying.
+    """
+    bad = []
+    for name, (k, n) in FLOORS.items():
+        digits = re.findall(r"\d+", name)
+        if len(digits) != 2:
+            bad.append("%s: a floor key must state exactly two numbers "
+                       "(floor and cells); found %d" % (name, len(digits)))
+            continue
+        label_k, label_n = int(digits[0]), int(digits[1])
+        if (label_k, label_n) != (k, n):
+            bad.append("%s: the label says %d/%d, the value is %d/%d"
+                       % (name, label_k, label_n, k, n))
+    return bad
+
 
 #: 裁定值（`STATS_RULES.md` §5.5）。本文不改它。
 N_RULED = 2
@@ -198,9 +256,9 @@ def compute():
             "expected_live_of_19_at_n_ruled": round(
                 CLAIM_CELLS * cell_yield(N_RULED, qhi), 4),
             "power_claim_floor_at_n_ruled_using_cp_upper": round(
-                power_at(N_RULED, qhi, 14, CLAIM_CELLS), 6),
+                power_at(N_RULED, qhi, CLAIM_FLOOR, CLAIM_CELLS), 6),
             "clears_at_cp_upper": bool(
-                power_at(N_RULED, qhi, 14, CLAIM_CELLS) >= POWER),
+                power_at(N_RULED, qhi, CLAIM_FLOOR, CLAIM_CELLS) >= POWER),
         })
     thresholds = []
     for label, (k, cells) in sorted(FLOORS.items()):
@@ -230,6 +288,9 @@ def verify():
             "改完请同时改 STATS_RULES.md §1.2、CLAIMS_TEXT.md C1 与本文封印。"
             % (floors_digest(), FLOORS_DIGEST))
 
+    # 标签不得与它自己声明的数字不符（第二轮对抗性复核，2026-07-30）。
+    fails.extend(check_floor_labels())
+
     # 每个数都从 FLOORS 推，不再有第二处 14。
     for label, (k, cells) in sorted(FLOORS.items()):
         for n in (1, 2, 3):
@@ -251,10 +312,10 @@ def verify():
                        for k in ("hits", "episodes")])
     q_pes = cp_upper(*[MEASUREMENTS["A7-postfix-with-degraded"][k]
                        for k in ("hits", "episodes")])
-    if power_at(N_RULED, q_opt, 14, CLAIM_CELLS) < POWER:
+    if power_at(N_RULED, q_opt, CLAIM_FLOOR, CLAIM_CELLS) < POWER:
         fails.append("A7-postfix 的 CP 上端 %.4f 下 n=2 已过不了 0.80 —— "
                      "「⟨n⟩=2 够用」这句话失效，重写 §5.7" % q_opt)
-    if power_at(N_RULED, q_pes, 14, CLAIM_CELLS) >= POWER:
+    if power_at(N_RULED, q_pes, CLAIM_FLOOR, CLAIM_CELLS) >= POWER:
         fails.append("A7-postfix-with-degraded 的 CP 上端 %.4f 下 n=2 已过门槛 —— "
                      "ar25 重跑不再是决定项，重写 §5.7 与 §9.11" % q_pes)
     return fails

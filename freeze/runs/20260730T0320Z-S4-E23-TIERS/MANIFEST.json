@@ -1,0 +1,19 @@
+{
+  "prompt_id": "S4-S4-E23-TIERS",
+  "branch": "agent/s4-e23-tiers",
+  "base_commit": "f47b6b30ca70f1f1a47e3ef894e0bfbb8e8dcc3e",
+  "utc": "2026-07-30T03:20:00Z",
+  "agent": "RES-1",
+  "lane": "campaign",
+  "territory": "freeze",
+  "what": "终点二三的「两层一致」兑成 STATS_RULES.md §4.4 的六行按序求值；⟨k⟩ 符号冲突改名为 ⟨v⟩ 并写下下标约定；新增 freeze/tier_conj.py 作为 §4.4 算术的可执行形式，并接进 verify.sh 作为阶段 [17]。",
+  "gates": {
+    "freeze/verify.sh": "DRAFT COMPLETE — 18 阶段、0 失败、3 note（在提交之后的干净树上复跑）",
+    "freeze/tier_conj.py --verify": "exit 0",
+    "freeze/residuals.py": "每一处缺口都有 owner、落点与清除条件"
+  },
+  "new_probes": ["E2/conj", "E3/conj", "*/family", "*/vsym"],
+  "new_negative_controls": 5,
+  "new_launch_blockers": ["9.21", "9.22"],
+  "api_contact": "none"
+}
