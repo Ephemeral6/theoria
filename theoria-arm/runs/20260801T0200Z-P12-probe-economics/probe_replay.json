@@ -1,0 +1,87 @@
+{
+ "constants": {
+  "MAX_PROBES_BETWEEN_THEORIZE": 4,
+  "MAX_VACUOUS_PROBES_IN_A_ROW": 3,
+  "MIN_NEW_FRAMES_BETWEEN_THEORIZE": 4
+ },
+ "legs": [
+  {
+   "claimed_bits": 0.0,
+   "distinct_experiments": 1,
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "probes_designed": 1,
+   "probes_kept_under_guard": 0,
+   "probes_resolved": 0,
+   "realised_bits": 0.0,
+   "refused_cap": 0,
+   "refused_repeat": 0,
+   "refused_vacuous_streak": 0,
+   "theorize_rounds_live": null,
+   "theorize_rounds_under_guard": 0,
+   "vacuous": 0,
+   "vacuous_pct": null
+  },
+  {
+   "claimed_bits": 7.316,
+   "distinct_experiments": 5,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "probes_designed": 9,
+   "probes_kept_under_guard": 4,
+   "probes_resolved": 8,
+   "realised_bits": 0.0,
+   "refused_cap": 0,
+   "refused_repeat": 4,
+   "refused_vacuous_streak": 0,
+   "theorize_rounds_live": null,
+   "theorize_rounds_under_guard": 1,
+   "vacuous": 8,
+   "vacuous_pct": 100.0
+  },
+  {
+   "claimed_bits": 21.602,
+   "distinct_experiments": 24,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "probes_designed": 29,
+   "probes_kept_under_guard": 19,
+   "probes_resolved": 28,
+   "realised_bits": 0.0,
+   "refused_cap": 0,
+   "refused_repeat": 4,
+   "refused_vacuous_streak": 5,
+   "theorize_rounds_live": null,
+   "theorize_rounds_under_guard": 6,
+   "vacuous": 28,
+   "vacuous_pct": 100.0
+  },
+  {
+   "claimed_bits": 14.249,
+   "distinct_experiments": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "probes_designed": 17,
+   "probes_kept_under_guard": 8,
+   "probes_resolved": 16,
+   "realised_bits": 2.714,
+   "refused_cap": 0,
+   "refused_repeat": 8,
+   "refused_vacuous_streak": 0,
+   "theorize_rounds_live": null,
+   "theorize_rounds_under_guard": 3,
+   "vacuous": 11,
+   "vacuous_pct": 68.8
+  }
+ ],
+ "runs_root": "C:/Users/user/Desktop/theoria/theoria-arm/runs",
+ "totals": {
+  "claimed_bits": 43.167,
+  "distinct_experiments": 38,
+  "probes_designed": 56,
+  "probes_kept_under_guard": 31,
+  "probes_resolved": 52,
+  "realised_bits": 2.714,
+  "refused_cap": 0,
+  "refused_repeat": 16,
+  "refused_vacuous_streak": 5,
+  "theorize_rounds_under_guard": 10,
+  "vacuous": 47
+ }
+}

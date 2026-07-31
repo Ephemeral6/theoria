@@ -1,0 +1,115 @@
+{
+ "budget": {
+  "actions_per_level": 40,
+  "campaign_usd": 200.0,
+  "game_usd": 60.0,
+  "leg_usd_cap": 25.0
+ },
+ "by_game": {
+  "ar25-0c556536": 0.0,
+  "g50t-5849a774": 0.0,
+  "sk48-d8078629": 0.0,
+  "tn36-ef4dde99": 0.0
+ },
+ "elapsed_s": 4.2,
+ "games": [
+  "g50t-5849a774",
+  "sk48-d8078629",
+  "tn36-ef4dde99",
+  "ar25-0c556536"
+ ],
+ "legs": [
+  {
+   "actions_ok": 40,
+   "books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01\\books",
+   "campaign": "theoria-arm:p12-arm-diag-after:g50t-5849a774:20260731T173932Z-leg01",
+   "carried": null,
+   "cost_accounting": {
+    "cli_cost_usd": 0.0,
+    "gate_absent": false,
+    "gate_usd_charged": 0.0,
+    "governing_source": "gate",
+    "governing_usd": 0.0
+   },
+   "curves_error": null,
+   "curves_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01\\curves.json",
+   "game_id": "g50t-5849a774",
+   "index": 1,
+   "levels": {
+    "boundaries": 0,
+    "events": [],
+    "finished": false,
+    "level": 1,
+    "levels_completed": 0,
+    "reset_probes": [],
+    "starts": [
+     0
+    ]
+   },
+   "outcome": "budget_exhausted",
+   "run_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01",
+   "seed_books": null,
+   "slug": "20260731T173932Z-leg01",
+   "stopped_because": "action budget spent",
+   "surprises": {
+    "by_family": {
+     "computational": 0,
+     "empirical": 0
+    },
+    "by_kind": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 0,
+     "search_timeout": 0
+    },
+    "total": 0,
+    "unhandled": 0
+   },
+   "theorize_rounds": 0,
+   "turn_series_error": null,
+   "usd": 0.0,
+   "utc": "2026-07-31T17:39:35Z"
+  },
+  {
+   "cost_accounting": {
+    "governing_source": "gate-settled-never-spent",
+    "governing_usd": 0.0,
+    "why": "the leg raised before returning a summary; this figure comes from the shared pool where the pool could answer, and from the leg's ceiling where it could not"
+   },
+   "error": "FileNotFoundError: no theory.dsl carried in from C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01\\books -- refusing to start a 'carried' run with an empty manual, because that is indistinguishable from a cold start in every artefact this run writes. `Books(seed_from=)` reported: {'seed_from': 'C:\\\\Users\\\\user\\\\Desktop\\\\theoria\\\\.worktrees\\\\p12-arm-diag\\\\theoria-arm\\\\runs\\\\20260731T173932Z-leg01\\\\books', 'carried': {}, 'skipped': [{'file': 'theory.dsl', 'why': 'not present'}, {'file': 'playbook.dsl', 'why': 'not present'}], 'empty': True}",
+   "event": "leg_failed",
+   "game_id": "g50t-5849a774",
+   "index": 2,
+   "usd": 0.0,
+   "utc": "2026-07-31T17:39:36Z"
+  },
+  {
+   "cost_accounting": {
+    "governing_source": "gate-settled-never-spent",
+    "governing_usd": 0.0,
+    "why": "the leg raised before returning a summary; this figure comes from the shared pool where the pool could answer, and from the leg's ceiling where it could not"
+   },
+   "error": "FileNotFoundError: no theory.dsl carried in from C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01\\books -- refusing to start a 'carried' run with an empty manual, because that is indistinguishable from a cold start in every artefact this run writes. `Books(seed_from=)` reported: {'seed_from': 'C:\\\\Users\\\\user\\\\Desktop\\\\theoria\\\\.worktrees\\\\p12-arm-diag\\\\theoria-arm\\\\runs\\\\20260731T173932Z-leg01\\\\books', 'carried': {}, 'skipped': [{'file': 'theory.dsl', 'why': 'not present'}, {'file': 'playbook.dsl', 'why': 'not present'}], 'empty': True}",
+   "event": "leg_failed",
+   "game_id": "g50t-5849a774",
+   "index": 3,
+   "usd": 0.0,
+   "utc": "2026-07-31T17:39:37Z"
+  }
+ ],
+ "levels_completed": 0,
+ "prompt_id": "p12-arm-diag-after",
+ "spent_usd": 0.0,
+ "stopped": {
+  "detail": {
+   "game_id": "g50t-5849a774",
+   "last_error": "no theory.dsl carried in from C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p12-arm-diag\\theoria-arm\\runs\\20260731T173932Z-leg01\\books -- refusing to start a 'carried' run with an empty manual, because that is indistinguishable from a cold start in every artefact this run writes. `Books(seed_from=)` reported: {'seed_from': 'C:\\\\Users\\\\user\\\\Desktop\\\\theoria\\\\.worktrees\\\\p12-arm-diag\\\\theoria-arm\\\\runs\\\\20260731T173932Z-leg01\\\\books', 'carried': {}, 'skipped': [{'file': 'theory.dsl', 'why': 'not present'}, {'file': 'playbook.dsl', 'why': 'not present'}], 'empty': True}"
+  },
+  "reason": "3 legs in a row made no progress; the last 3 ended in an exception"
+ },
+ "utc": "2026-07-31T17:39:37Z",
+ "zero_progress_streak": 3
+}

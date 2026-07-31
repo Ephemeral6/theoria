@@ -28,6 +28,7 @@ legal action -- to buy the evidence a first manual needs. That sweep is the
 cheapest possible: no model calls at all.
 """
 
+import hashlib
 import json
 import os
 import shutil
@@ -81,6 +82,34 @@ DEFAULT_WALL_CLOCK_S = 3 * 3600
 #: ends before the quota is met still theorizes on what it has -- the quota
 #: delays a call, it never cancels one.
 MIN_NEW_FRAMES_BETWEEN_THEORIZE = 4
+
+#: How many probes in a row may come back with an **empty posterior** before the
+#: arm stops probing and goes and looks at somewhere else in the world.
+#:
+#: A probe whose observation matches no hypothesis -- not the manual, not any
+#: ablation of it, not even `inert` -- has eliminated nothing. Its realised
+#: information gain is 0 bits (`inner/probe.information_gain_bits`), whatever
+#: the design's expected bits said. One of those is a finding. Three in a row is
+#: a message about the frontier, not about the world: the manual is missing a
+#: mechanism, and no ablation of what is already written can reach the answer,
+#: so the next ablation-designed probe will be vacuous too.
+#:
+#: This is measured, not feared. `20260731T1430Z-A3-level2-carried-r3` ran 28
+#: resolved probes and every one of them was vacuous; `20260731T1500Z-...-l1`
+#: ran 16 and every one of them was vacuous. Between them that is 44 actions
+#: and, at one theorize per four probes, roughly $17 of desk time spent on
+#: experiments that could not discriminate.
+MAX_VACUOUS_PROBES_IN_A_ROW = 3
+
+#: How many probes may be spent between one theorize call and the next.
+#:
+#: The probe designer has no memory of the answers: it re-derives the frontier
+#: from the rolled-forward manual, so until the *manual* changes it keeps
+#: proposing from the same hypothesis set. `...-r3` shows the consequence
+#: exactly -- P-25 and P-27 were byte-identical designs, as were P-26 and P-28:
+#: four actions, two questions. Capping the run of probes between adjudications
+#: bounds that without forbidding it.
+MAX_PROBES_BETWEEN_THEORIZE = 4
 
 #: **This repo has never observed a level completion.** Across every recorded
 #: live response — ~2,600 envelopes spanning all four development-pile games,
@@ -200,6 +229,14 @@ class TheoriaArm:
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
         self.tags = list(tags or ["theoria", "p8", "first-contact"])
         self.prompt_id = prompt_id
+
+        #: (kind, playbook-token) pairs already reported to the desk, so a
+        #: standing gap in the playbook fires once per revision of that
+        #: playbook rather than once per turn. See `plan.surprises_from`.
+        self._plan_gaps_reported: set = set()
+        #: Probes spent since the last theorize call. Reset by theorize, not by
+        #: the turn: the frontier cannot change until the manual does.
+        self._probes_since_theorize = 0
 
         #: The books this run started from, if it did not start from nothing.
         #: `Books(seed_from=...)` above already copied the pair and hashed it
@@ -812,7 +849,10 @@ class TheoriaArm:
                 self.plan_reports.append(plan_report)
                 record["plan"] = {k: v for k, v in plan_report.items()
                                   if k != "tiers"}
-                plan_beat.surprises_from(plan_report, self.register)
+                plan_beat.surprises_from(
+                    plan_report, self.register,
+                    reported=self._plan_gaps_reported,
+                    token=_book_token(self.books.playbook))
 
                 if plan_report.get("status") == "sat" and plan_report.get("plan"):
                     self._commit(namespace, plan_report, record)
@@ -908,6 +948,11 @@ class TheoriaArm:
             self.register.handled("theorize")
             self.theorize_reports.append(report)
             rounds += 1
+            # The manual has been adjudicated, so the ablation frontier is a
+            # different set now and the probe caps start again. Reset here
+            # rather than per turn: a turn is not what makes a probe novel.
+            self._probes_since_theorize = 0
+            self.probes.vacuous_streak = 0
             # RUN_STATE is otherwise only written on an ARC command, which
             # leaves a watcher blind for the several minutes a theorize takes.
             self._write_run_state()
@@ -1054,22 +1099,65 @@ class TheoriaArm:
                     except Exception:                  # noqa: BLE001
                         predictions[hypothesis.id] = "error"
 
+        # -- the three reasons a designed probe is not worth its action ------
+        #
+        # Each of these was paid for in the record on 2026-07-31. All three end
+        # the same way -- record the refusal as a finding, then explore -- and
+        # the exploration is the point: it takes the LEAST-TRIED legal action,
+        # which is precisely what breaks the standing pattern. `...-l1` spent
+        # its last fourteen actions alternating ACTION4/ACTION3 and revisiting
+        # states it had already been in, because the frontier kept nominating
+        # the same two actions and nothing in the loop noticed.
+        refusal: Optional[str] = None
+        if chosen is not None:
+            streak = self.probes.vacuous_streak
+            repeat_of = self.probes.already_asked(chosen, predictions)
+            if streak >= MAX_VACUOUS_PROBES_IN_A_ROW:
+                refusal = (
+                    "%d probes in a row came back with an empty posterior: "
+                    "every hypothesis refuted, including `inert`, so each "
+                    "eliminated nothing (0.0 bits realised). The frontier is "
+                    "built by ablating the manual, so while the manual is "
+                    "unchanged the next one is vacuous too. Going for evidence "
+                    "the ablation frontier cannot reach instead."
+                    % streak)
+            elif repeat_of is not None:
+                refusal = (
+                    "this is the same experiment as %s -- same action, same "
+                    "prediction from every hypothesis, therefore the same "
+                    "partition of the frontier. Re-running it cannot separate "
+                    "anything %s did not." % (repeat_of, repeat_of))
+            elif self._probes_since_theorize >= MAX_PROBES_BETWEEN_THEORIZE:
+                refusal = (
+                    "%d probes already spent since the last adjudication "
+                    "(cap %d). The frontier is a function of the manual, and "
+                    "the manual has not changed since, so further probes are "
+                    "drawn from the same hypothesis set."
+                    % (self._probes_since_theorize,
+                       MAX_PROBES_BETWEEN_THEORIZE))
+            if refusal is not None:
+                chosen = None
+
         if chosen is None:
-            # Nothing splits anything. Say so, then explore honestly.
+            # Nothing splits anything, or nothing worth an action does. Say so,
+            # then explore honestly.
             if design is not None:
                 self.probes.record_unrunnable(
-                    reason=(design.get("verdict")
+                    reason=(refusal
+                            or design.get("verdict")
                             or design.get("error")
                             or "no separating action"),
                     design_report=design, step_idx=len(self.store.steps))
             chosen = min(legal, key=lambda a: (self.action_counts.get(a, 0), a))
             record["probe"] = {"kind": "exploration",
                                "action": chosen,
-                               "why": "no action separates the hypotheses; "
+                               "why": refusal or
+                                      "no action separates the hypotheses; "
                                       "taking the least-tried legal action"}
             self._send(chosen, note="exploration")
             return
 
+        self._probes_since_theorize += 1
         probe_id = self.probes.record_design(
             action=chosen, design_report=design, predictions=predictions,
             step_idx=len(self.store.steps),
@@ -1081,13 +1169,42 @@ class TheoriaArm:
         record["probe"] = {"kind": "probe", "probe_id": probe_id,
                            "action": chosen,
                            "manual_survived": result["manual_survived"],
+                           "information_gain_bits":
+                               result["information_gain_bits"],
+                           "frontier_vacuous": result["frontier_vacuous"],
                            "refuted": result["refuted"]}
         if not result["manual_survived"]:
+            # What the desk is given about a refutation, and what it is not.
+            #
+            # It used to be given `predictions` in full: sixteen to twenty-four
+            # opaque sixteen-hex-digit grid hashes, one per hypothesis, dumped
+            # as JSON into a prompt that already ran to 100k characters. A hash
+            # is unreadable to the reader -- it cannot be compared, decoded, or
+            # reasoned from -- so that block was pure token cost, four times
+            # over on a turn with four pending surprises.
+            #
+            # What is diagnostic is the SHAPE: how many hypotheses there were,
+            # how many survived, what that is worth in bits against what the
+            # design expected, and whether this is the n-th vacuous answer in a
+            # row. Those are the numbers that distinguish "one rule of the
+            # manual is wrong" from "the manual is missing a mechanism", which
+            # is the distinction the desk is being paid to make.
             self.register.fire(
                 "probe_refutation", result["verdict"],
                 step_idx=len(self.store.steps) - 1,
                 payload={"probe_id": probe_id, "action": chosen,
-                         "predictions": predictions, "observed": observed})
+                         "observed": observed,
+                         "manual_predicted": predictions.get("manual"),
+                         "n_hypotheses": result["n_hypotheses"],
+                         "n_survivors": result["n_survivors"],
+                         "information_gain_bits":
+                             result["information_gain_bits"],
+                         "expected_bits": result["expected_bits"],
+                         "frontier_vacuous": result["frontier_vacuous"],
+                         "vacuous_streak": result["vacuous_streak"],
+                         "hypothesis_space": ("every hypothesis is the manual "
+                                              "or an ablation of it, plus "
+                                              "`inert`")})
 
     # -- the account -------------------------------------------------------
     def _finish(self) -> Dict[str, Any]:
@@ -1282,6 +1399,17 @@ class TheoriaArm:
         if self.carried:
             _dump(os.path.join(out, "transfer.json"), self.transfer_summary())
         self._write_run_state()
+
+
+def _book_token(text: str) -> str:
+    """A short, stable name for one revision of a book.
+
+    Used to decide whether a standing gap has already been reported: the gap
+    belongs to the text, so the token is the text's digest. A rewrite that
+    leaves the gap in place gets a new token and the desk hears about it again,
+    which is right -- it just failed to fix it.
+    """
+    return hashlib.sha256((text or "").encode("utf-8")).hexdigest()[:16]
 
 
 def _roll_forward(namespace, store):
