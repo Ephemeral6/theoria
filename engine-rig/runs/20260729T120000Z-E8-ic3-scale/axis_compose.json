@@ -1,0 +1,1493 @@
+{
+  "axis": "compose",
+  "axis_letter": "C",
+  "question": "at a roughly-held state-space size, and exactly held only across the matched pair, does IC3 pay forthe number of mechanism families a world composes, or only for the size?",
+  "family": "worldgen catalogue",
+  "ladder": [
+    "t1-switch-latch",
+    "t1-tokens-lock",
+    "t2-cycler-lock",
+    "t2-lock-fragile",
+    "t3-cycler-portal-lock",
+    "t3-latch-maze"
+  ],
+  "matched_pair": {
+    "worlds": [
+      "t1-tokens-lock",
+      "t2-cycler-lock"
+    ],
+    "why": "same declared product (128) and same variable count (19), one family against two. Every other adjacent pair moves size and family count together, so this is the only comparison on the ladder that can attribute a difference to composition."
+  },
+  "stretch": [
+    "t3-latch-maze"
+  ],
+  "budget_seconds": 180.0,
+  "complete": true,
+  "stopped_early": null,
+  "shrunken_domain_caveat": "worldgen states are multi-valued and IC3 is boolean, so the adapter hands IC3 the DECLARED PRODUCT -- floor cells crossed with each mechanism slot's own domain -- not the 2^n bit space. Every invariant in this table is therefore inductive over that well-formed subspace and over nothing else. Structurally that is the shrunken-domain forgery recheck/ exists to catch; what makes it a caveat rather than a forgery is that the shrink is declared, is carried on every row as n_states, and is forced -- a one-hot relaxation over 2^42 states has no enumerating oracle. No row here claims a theorem about the bit space.",
+  "recheck": {
+    "status": "not available",
+    "why": "recheck/ accepts a certificate only against a rule set built by a second, independent transcription. A worldgen-to-ruleset transcriber would have to re-implement consumable's three-state tile, portal landing and the settle fixpoint, and this axis does not build one. A rechecker fed by the same adapter would agree with itself, so the column says 'not available' rather than 'passed'."
+  },
+  "adapter_gate": {
+    "runs": "before IC3, on every world",
+    "on_failure": "verdict adapter-mismatch, escalated -- never timeout and never a capability claim",
+    "results": [
+      {
+        "world_id": "t1-switch-latch",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      },
+      {
+        "world_id": "t1-tokens-lock",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      },
+      {
+        "world_id": "t2-cycler-lock",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      },
+      {
+        "world_id": "t2-lock-fragile",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      },
+      {
+        "world_id": "t3-cycler-portal-lock",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      },
+      {
+        "world_id": "t3-latch-maze",
+        "passed": true,
+        "inferred_from": "the verdict. A timeout or a dead child leaves no evidence either way and reads null, not true.",
+        "checks": "edges vs GridWorld.transitions() on the reachable set, encode/decode round trip, reachable set inside the declared subspace, init, bad set disjoint from GridWorld.reachable() and separated by a mechanism",
+        "detail": null
+      }
+    ]
+  },
+  "vacuity": {
+    "guard": "every row carries n_satisfying / n_states and near_vacuous at ratio >= 0.9",
+    "read_it_with": "bad_fraction, strengthening and property_already_inductive. An earlier version of this note claimed coverage is high BY CONSTRUCTION because '1 - coverage can never exceed bad_fraction by much'; the first row of this axis's own table refutes it (t1-switch-latch excludes 5 of 34 states against a bad_fraction of 0.029, five times over). Coverage is high on the other five rungs for a reason that is a finding rather than a construction: no edge leads into their bad set at all, so `!bad` was already inductive and there was nothing to strengthen. `strengthening` = states_excluded / n_bad says the same thing in a number whose failing value, 1.0, looks neutral; `property_already_inductive` says it in a word."
+  },
+  "determinism": {
+    "deterministic_half": "Re-derived exactly by a verify pass, as on axis A. The one correction this axis makes is n_states: harness._blank_deterministic fills it as 2**n, which is right for peg-N and wrong here, where System.states is an enumerated tuple.",
+    "timing_half": "Presence and ordering only, never equality.",
+    "sorting": "Declared states, each state's move list, and the bad set are all sorted, following engines.ic3_pdr.system.peg_system; worldgen itself has no RNG anywhere."
+  },
+  "boundary": null,
+  "escalations": [],
+  "matched_comparison": {
+    "comparable": true,
+    "one_family": "t1-tokens-lock",
+    "two_families": "t2-cycler-lock",
+    "n_states": [
+      128,
+      128
+    ],
+    "n_variables": [
+      19,
+      19
+    ],
+    "n_bad": [
+      7,
+      6
+    ],
+    "n_clauses": [
+      3,
+      2
+    ],
+    "n_literals": [
+      6,
+      4
+    ],
+    "converged_at_frame": [
+      3,
+      3
+    ],
+    "states_blocked": [
+      4,
+      3
+    ],
+    "coverage": [
+      "121/128",
+      "122/128"
+    ],
+    "ic3_seconds": [
+      0.023768,
+      0.014755
+    ],
+    "ic3_seconds_ratio": 0.621,
+    "machine_dependent": true
+  },
+  "separability": {
+    "rows": [
+      {
+        "world_id": "t1-switch-latch",
+        "n_families": 1,
+        "families_in_invariant": [
+          "switch_door"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 5.0
+      },
+      {
+        "world_id": "t1-tokens-lock",
+        "n_families": 1,
+        "families_in_invariant": [
+          "count_lock"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 1.0
+      },
+      {
+        "world_id": "t2-cycler-lock",
+        "n_families": 2,
+        "families_in_invariant": [
+          "count_lock"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 1.0
+      },
+      {
+        "world_id": "t2-lock-fragile",
+        "n_families": 2,
+        "families_in_invariant": [
+          "count_lock"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 1.0
+      },
+      {
+        "world_id": "t3-cycler-portal-lock",
+        "n_families": 3,
+        "families_in_invariant": [
+          "count_lock"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 1.0
+      },
+      {
+        "world_id": "t3-latch-maze",
+        "n_families": 3,
+        "families_in_invariant": [
+          "count_lock"
+        ],
+        "n_families_in_invariant": 1,
+        "strengthening": 1.0
+      }
+    ],
+    "separable_everywhere": true,
+    "note": "Every invariant on this ladder names the variables of at most one mechanism family (plus the agent's position). The extra families in the 2- and 3-family worlds contribute state that the invariant never mentions, so IC3 was never asked to reason across the composition. The ladder therefore measures composition cost for a SEPARABLE property; a property whose proof had to couple two families would be a different measurement and this table does not stand in for it."
+  },
+  "steps": [
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t1-switch-latch",
+        "n": 18,
+        "initial": "r1c2|switch_r4c1=0",
+        "goal_states": [
+          "r4c5|switch_r4c1=0"
+        ],
+        "max_levels": 64,
+        "world_id": "t1-switch-latch",
+        "families": [
+          "switch_door"
+        ],
+        "n_families": 1,
+        "n_states": 34,
+        "n_bad": 1,
+        "bad_key": "agent-at-goal-latch-unset"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 34,
+        "n_satisfying": 29,
+        "coverage": "29/34",
+        "coverage_ratio": 0.852941,
+        "near_vacuous": false,
+        "n_clauses": 5,
+        "n_literals": 10,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 18,
+        "literal_saturation": 0.111111,
+        "converged_at_frame": 6,
+        "states_blocked": 19,
+        "literals_dropped": 313,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r1c5 | switch_r4c1) & (!at_r2c5 | switch_r4c1) & (!at_r3c4 | switch_r4c1) & (!at_r3c5 | switch_r4c1) & (!at_r4c5 | switch_r4c1)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.121921,
+        "ic3_seconds": 0.034219,
+        "check_seconds": 7e-05,
+        "build_seconds": 0.000624
+      },
+      "world": {
+        "summary": {
+          "world_id": "t1-switch-latch",
+          "families": [
+            "switch_door"
+          ],
+          "n_families": 1,
+          "n_floor_cells": 17,
+          "n_slots": 1,
+          "n_variables": 18,
+          "declared_product": 34,
+          "initial": "r1c2|switch_r4c1=0",
+          "bad": {
+            "key": "agent-at-goal-latch-unset",
+            "statement": "the agent stands on the goal at r4c5 while the latch at r4c1 is still 0",
+            "separated_by": "switch_door",
+            "cells": [
+              [
+                4,
+                5
+              ]
+            ]
+          },
+          "n_bad": 1,
+          "bad_states": [
+            "r4c5|switch_r4c1=0"
+          ],
+          "tier": 1,
+          "notes": "Byte-identical geometry to `t1-switch-toggle`; only `mode` differs. This is A0's Button against A0\u2032's Switch, isolated."
+        },
+        "layout": {
+          "world_id": "t1-switch-latch",
+          "families": [
+            "switch_door"
+          ],
+          "n_floor_cells": 17,
+          "n_variables": 18,
+          "declared_product": 34,
+          "slots": [
+            {
+              "name": "switch_r4c1",
+              "family": "switch_door",
+              "kind": "switch",
+              "cell": [
+                4,
+                1
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                17
+              ],
+              "onehot": false
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 26,
+          "agent_cells": 16,
+          "optimal_length": 9,
+          "separating_frontier": [
+            {
+              "cell": [
+                4,
+                1
+              ],
+              "kind": "switch",
+              "ever_passable": true
+            }
+          ]
+        }
+      },
+      "derived": {
+        "n_families": 1,
+        "families": [
+          "switch_door"
+        ],
+        "n_bad": 1,
+        "bad_fraction": 0.029412,
+        "states_excluded": 5,
+        "strengthening": 5.0,
+        "near_vacuous": false,
+        "edges_into_bad": 1,
+        "property_already_inductive": false,
+        "families_in_invariant": [
+          "geometry",
+          "switch_door"
+        ],
+        "recheck": "not available"
+      }
+    },
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t1-tokens-lock",
+        "n": 19,
+        "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+        "goal_states": [
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0",
+          "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0",
+          "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1",
+          "r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0"
+        ],
+        "max_levels": 64,
+        "world_id": "t1-tokens-lock",
+        "families": [
+          "count_lock"
+        ],
+        "n_families": 1,
+        "n_states": 128,
+        "n_bad": 7,
+        "bad_key": "agent-on-lock-below-count"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 121,
+        "coverage": "121/128",
+        "coverage_ratio": 0.945312,
+        "near_vacuous": true,
+        "n_clauses": 3,
+        "n_literals": 6,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 19,
+        "literal_saturation": 0.105263,
+        "converged_at_frame": 3,
+        "states_blocked": 4,
+        "literals_dropped": 69,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r3c4 | token_r1c3) & (!at_r3c4 | token_r1c5) & (!at_r3c4 | token_r3c1)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.115873,
+        "ic3_seconds": 0.023768,
+        "check_seconds": 0.00018,
+        "build_seconds": 0.002017
+      },
+      "world": {
+        "summary": {
+          "world_id": "t1-tokens-lock",
+          "families": [
+            "count_lock"
+          ],
+          "n_families": 1,
+          "n_floor_cells": 16,
+          "n_slots": 3,
+          "n_variables": 19,
+          "declared_product": 128,
+          "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+          "bad": {
+            "key": "agent-on-lock-below-count",
+            "statement": "the agent stands on the lock at r3c4 while fewer than 3 of the 3 tokens are collected",
+            "separated_by": "count_lock",
+            "cells": [
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          "n_bad": 7,
+          "bad_states": [
+            "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=0",
+            "r3c4|token_r1c3=0|token_r1c5=0|token_r3c1=1",
+            "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=0",
+            "r3c4|token_r1c3=0|token_r1c5=1|token_r3c1=1",
+            "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=0",
+            "r3c4|token_r1c3=1|token_r1c5=0|token_r3c1=1",
+            "r3c4|token_r1c3=1|token_r1c5=1|token_r3c1=0"
+          ],
+          "tier": 1,
+          "notes": "Collect three, then the lock opens. Monotone by construction: every `collect_token` has exactly one witness, and the lock never re-closes."
+        },
+        "layout": {
+          "world_id": "t1-tokens-lock",
+          "families": [
+            "count_lock"
+          ],
+          "n_floor_cells": 16,
+          "n_variables": 19,
+          "declared_product": 128,
+          "slots": [
+            {
+              "name": "token_r1c3",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                3
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                16
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c5",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                5
+              ],
+              "index": 1,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                17
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r3c1",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                3,
+                1
+              ],
+              "index": 2,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                18
+              ],
+              "onehot": false
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 50,
+          "agent_cells": 16,
+          "optimal_length": 8,
+          "separating_frontier": []
+        }
+      },
+      "derived": {
+        "n_families": 1,
+        "families": [
+          "count_lock"
+        ],
+        "n_bad": 7,
+        "bad_fraction": 0.054688,
+        "states_excluded": 7,
+        "strengthening": 1.0,
+        "near_vacuous": true,
+        "edges_into_bad": 0,
+        "property_already_inductive": true,
+        "families_in_invariant": [
+          "geometry",
+          "count_lock"
+        ],
+        "recheck": "not available"
+      }
+    },
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t2-cycler-lock",
+        "n": 19,
+        "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+        "goal_states": [
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0",
+          "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1",
+          "r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0"
+        ],
+        "max_levels": 64,
+        "world_id": "t2-cycler-lock",
+        "families": [
+          "color_cycle",
+          "count_lock"
+        ],
+        "n_families": 2,
+        "n_states": 128,
+        "n_bad": 6,
+        "bad_key": "agent-on-lock-below-count"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 122,
+        "coverage": "122/128",
+        "coverage_ratio": 0.953125,
+        "near_vacuous": true,
+        "n_clauses": 2,
+        "n_literals": 4,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 19,
+        "literal_saturation": 0.105263,
+        "converged_at_frame": 3,
+        "states_blocked": 3,
+        "literals_dropped": 52,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r3c4 | token_r1c4) & (!at_r3c4 | token_r1c7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.106533,
+        "ic3_seconds": 0.014755,
+        "check_seconds": 0.000148,
+        "build_seconds": 0.002117
+      },
+      "world": {
+        "summary": {
+          "world_id": "t2-cycler-lock",
+          "families": [
+            "color_cycle",
+            "count_lock"
+          ],
+          "n_families": 2,
+          "n_floor_cells": 16,
+          "n_slots": 3,
+          "n_variables": 19,
+          "declared_product": 128,
+          "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+          "bad": {
+            "key": "agent-on-lock-below-count",
+            "statement": "the agent stands on the lock at r3c4 while fewer than 2 of the 2 tokens are collected",
+            "separated_by": "count_lock",
+            "cells": [
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          "n_bad": 6,
+          "bad_states": [
+            "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=0",
+            "r3c4|cycler_r3c2=0|token_r1c4=0|token_r1c7=1",
+            "r3c4|cycler_r3c2=0|token_r1c4=1|token_r1c7=0",
+            "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=0",
+            "r3c4|cycler_r3c2=1|token_r1c4=0|token_r1c7=1",
+            "r3c4|cycler_r3c2=1|token_r1c4=1|token_r1c7=0"
+          ],
+          "tier": 2,
+          "notes": "One reversible gate and one monotone one, side by side, so the reversibility stamp has to separate them within a single world."
+        },
+        "layout": {
+          "world_id": "t2-cycler-lock",
+          "families": [
+            "color_cycle",
+            "count_lock"
+          ],
+          "n_floor_cells": 16,
+          "n_variables": 19,
+          "declared_product": 128,
+          "slots": [
+            {
+              "name": "cycler_r3c2",
+              "family": "color_cycle",
+              "kind": "cycler",
+              "cell": [
+                3,
+                2
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                16
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c4",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                4
+              ],
+              "index": 1,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                17
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c7",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                7
+              ],
+              "index": 2,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                18
+              ],
+              "onehot": false
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 61,
+          "agent_cells": 16,
+          "optimal_length": 8,
+          "separating_frontier": []
+        }
+      },
+      "derived": {
+        "n_families": 2,
+        "families": [
+          "color_cycle",
+          "count_lock"
+        ],
+        "n_bad": 6,
+        "bad_fraction": 0.046875,
+        "states_excluded": 6,
+        "strengthening": 1.0,
+        "near_vacuous": true,
+        "edges_into_bad": 0,
+        "property_already_inductive": true,
+        "families_in_invariant": [
+          "geometry",
+          "count_lock"
+        ],
+        "recheck": "not available"
+      }
+    },
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t2-lock-fragile",
+        "n": 30,
+        "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+        "goal_states": [
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=1",
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=2",
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=0",
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=1",
+          "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=2",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=0",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=1",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=2",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=0",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=1",
+          "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=2",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=1",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=2",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=0",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=1",
+          "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=2",
+          "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=0",
+          "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=1",
+          "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=2"
+        ],
+        "max_levels": 64,
+        "world_id": "t2-lock-fragile",
+        "families": [
+          "count_lock",
+          "consumable"
+        ],
+        "n_families": 2,
+        "n_states": 576,
+        "n_bad": 21,
+        "bad_key": "agent-on-lock-below-count"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 576,
+        "n_satisfying": 555,
+        "coverage": "555/576",
+        "coverage_ratio": 0.963542,
+        "near_vacuous": true,
+        "n_clauses": 3,
+        "n_literals": 6,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 30,
+        "literal_saturation": 0.066667,
+        "converged_at_frame": 4,
+        "states_blocked": 7,
+        "literals_dropped": 199,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r5c6 | token_r1c3) & (!at_r5c6 | token_r1c5) & (!at_r5c6 | token_r3c1)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.258636,
+        "ic3_seconds": 0.152221,
+        "check_seconds": 0.000835,
+        "build_seconds": 0.010782
+      },
+      "world": {
+        "summary": {
+          "world_id": "t2-lock-fragile",
+          "families": [
+            "count_lock",
+            "consumable"
+          ],
+          "n_families": 2,
+          "n_floor_cells": 24,
+          "n_slots": 4,
+          "n_variables": 30,
+          "declared_product": 576,
+          "initial": "r1c1|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+          "bad": {
+            "key": "agent-on-lock-below-count",
+            "statement": "the agent stands on the lock at r5c6 while fewer than 3 of the 3 tokens are collected",
+            "separated_by": "count_lock",
+            "cells": [
+              [
+                5,
+                6
+              ]
+            ]
+          },
+          "n_bad": 21,
+          "bad_states": [
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=1",
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=0|fragile_r3c7=2",
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=0",
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=1",
+            "r5c6|token_r1c3=0|token_r1c5=0|token_r3c1=1|fragile_r3c7=2",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=0",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=1",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=0|fragile_r3c7=2",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=0",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=1",
+            "r5c6|token_r1c3=0|token_r1c5=1|token_r3c1=1|fragile_r3c7=2",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=0",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=1",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=0|fragile_r3c7=2",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=0",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=1",
+            "r5c6|token_r1c3=1|token_r1c5=0|token_r3c1=1|fragile_r3c7=2",
+            "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=0",
+            "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=1",
+            "r5c6|token_r1c3=1|token_r1c5=1|token_r3c1=0|fragile_r3c7=2"
+          ],
+          "tier": 2,
+          "notes": "Both irreversible families at once. Nearly every rule here has a single witness, which makes it the worst case for a pipeline that leans on repetition \u2014 and therefore the one worth running."
+        },
+        "layout": {
+          "world_id": "t2-lock-fragile",
+          "families": [
+            "count_lock",
+            "consumable"
+          ],
+          "n_floor_cells": 24,
+          "n_variables": 30,
+          "declared_product": 576,
+          "slots": [
+            {
+              "name": "token_r1c3",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                3
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                24
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c5",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                5
+              ],
+              "index": 1,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                25
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r3c1",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                3,
+                1
+              ],
+              "index": 2,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                26
+              ],
+              "onehot": false
+            },
+            {
+              "name": "fragile_r3c7",
+              "family": "consumable",
+              "kind": "fragile",
+              "cell": [
+                3,
+                7
+              ],
+              "index": 3,
+              "domain": [
+                0,
+                1,
+                2
+              ],
+              "bits": [
+                27,
+                28,
+                29
+              ],
+              "onehot": true
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 87,
+          "agent_cells": 24,
+          "optimal_length": 18,
+          "separating_frontier": []
+        }
+      },
+      "derived": {
+        "n_families": 2,
+        "families": [
+          "count_lock",
+          "consumable"
+        ],
+        "n_bad": 21,
+        "bad_fraction": 0.036458,
+        "states_excluded": 21,
+        "strengthening": 1.0,
+        "near_vacuous": true,
+        "edges_into_bad": 0,
+        "property_already_inductive": true,
+        "families_in_invariant": [
+          "geometry",
+          "count_lock"
+        ],
+        "recheck": "not available"
+      }
+    },
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t3-cycler-portal-lock",
+        "n": 41,
+        "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c8=0",
+        "goal_states": [
+          "r5c4|cycler_r3c2=0|token_r1c4=0|token_r1c8=0",
+          "r5c4|cycler_r3c2=0|token_r1c4=0|token_r1c8=1",
+          "r5c4|cycler_r3c2=0|token_r1c4=1|token_r1c8=0",
+          "r5c4|cycler_r3c2=1|token_r1c4=0|token_r1c8=0",
+          "r5c4|cycler_r3c2=1|token_r1c4=0|token_r1c8=1",
+          "r5c4|cycler_r3c2=1|token_r1c4=1|token_r1c8=0",
+          "r5c4|cycler_r3c2=2|token_r1c4=0|token_r1c8=0",
+          "r5c4|cycler_r3c2=2|token_r1c4=0|token_r1c8=1",
+          "r5c4|cycler_r3c2=2|token_r1c4=1|token_r1c8=0"
+        ],
+        "max_levels": 64,
+        "world_id": "t3-cycler-portal-lock",
+        "families": [
+          "color_cycle",
+          "portal",
+          "count_lock"
+        ],
+        "n_families": 3,
+        "n_states": 432,
+        "n_bad": 9,
+        "bad_key": "agent-on-lock-below-count"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 432,
+        "n_satisfying": 423,
+        "coverage": "423/432",
+        "coverage_ratio": 0.979167,
+        "near_vacuous": true,
+        "n_clauses": 2,
+        "n_literals": 4,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 41,
+        "literal_saturation": 0.04878,
+        "converged_at_frame": 3,
+        "states_blocked": 5,
+        "literals_dropped": 198,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r5c4 | token_r1c4) & (!at_r5c4 | token_r1c8)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.187556,
+        "ic3_seconds": 0.071754,
+        "check_seconds": 0.000645,
+        "build_seconds": 0.009797
+      },
+      "world": {
+        "summary": {
+          "world_id": "t3-cycler-portal-lock",
+          "families": [
+            "color_cycle",
+            "portal",
+            "count_lock"
+          ],
+          "n_families": 3,
+          "n_floor_cells": 36,
+          "n_slots": 3,
+          "n_variables": 41,
+          "declared_product": 432,
+          "initial": "r1c1|cycler_r3c2=0|token_r1c4=0|token_r1c8=0",
+          "bad": {
+            "key": "agent-on-lock-below-count",
+            "statement": "the agent stands on the lock at r5c4 while fewer than 2 of the 2 tokens are collected",
+            "separated_by": "count_lock",
+            "cells": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          "n_bad": 9,
+          "bad_states": [
+            "r5c4|cycler_r3c2=0|token_r1c4=0|token_r1c8=0",
+            "r5c4|cycler_r3c2=0|token_r1c4=0|token_r1c8=1",
+            "r5c4|cycler_r3c2=0|token_r1c4=1|token_r1c8=0",
+            "r5c4|cycler_r3c2=1|token_r1c4=0|token_r1c8=0",
+            "r5c4|cycler_r3c2=1|token_r1c4=0|token_r1c8=1",
+            "r5c4|cycler_r3c2=1|token_r1c4=1|token_r1c8=0",
+            "r5c4|cycler_r3c2=2|token_r1c4=0|token_r1c8=0",
+            "r5c4|cycler_r3c2=2|token_r1c4=0|token_r1c8=1",
+            "r5c4|cycler_r3c2=2|token_r1c4=1|token_r1c8=0"
+          ],
+          "tier": 3,
+          "notes": "A reversible gate, a monotone lock and a teleport, so that a single world contains one rule of each reversibility class."
+        },
+        "layout": {
+          "world_id": "t3-cycler-portal-lock",
+          "families": [
+            "color_cycle",
+            "portal",
+            "count_lock"
+          ],
+          "n_floor_cells": 36,
+          "n_variables": 41,
+          "declared_product": 432,
+          "slots": [
+            {
+              "name": "cycler_r3c2",
+              "family": "color_cycle",
+              "kind": "cycler",
+              "cell": [
+                3,
+                2
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1,
+                2
+              ],
+              "bits": [
+                36,
+                37,
+                38
+              ],
+              "onehot": true
+            },
+            {
+              "name": "token_r1c4",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                4
+              ],
+              "index": 1,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                39
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c8",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                8
+              ],
+              "index": 2,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                40
+              ],
+              "onehot": false
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 262,
+          "agent_cells": 36,
+          "optimal_length": 5,
+          "separating_frontier": []
+        }
+      },
+      "derived": {
+        "n_families": 3,
+        "families": [
+          "color_cycle",
+          "portal",
+          "count_lock"
+        ],
+        "n_bad": 9,
+        "bad_fraction": 0.020833,
+        "states_excluded": 9,
+        "strengthening": 1.0,
+        "near_vacuous": true,
+        "edges_into_bad": 0,
+        "property_already_inductive": true,
+        "families_in_invariant": [
+          "geometry",
+          "count_lock"
+        ],
+        "recheck": "not available"
+      }
+    },
+    {
+      "spec": {
+        "axis": "compose",
+        "label": "t3-latch-maze",
+        "n": 42,
+        "initial": "r1c1|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+        "goal_states": [
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+          "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=2"
+        ],
+        "max_levels": 64,
+        "world_id": "t3-latch-maze",
+        "families": [
+          "switch_door",
+          "count_lock",
+          "consumable"
+        ],
+        "n_families": 3,
+        "n_states": 1680,
+        "n_bad": 42,
+        "bad_key": "agent-on-lock-below-count"
+      },
+      "budget_seconds": 180.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1680,
+        "n_satisfying": 1638,
+        "coverage": "1638/1680",
+        "coverage_ratio": 0.975,
+        "near_vacuous": true,
+        "n_clauses": 3,
+        "n_literals": 6,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 42,
+        "literal_saturation": 0.047619,
+        "converged_at_frame": 4,
+        "states_blocked": 7,
+        "literals_dropped": 283,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!at_r5c8 | token_r1c4) & (!at_r5c8 | token_r5c1) & (!at_r5c8 | token_r5c6)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.828307,
+        "ic3_seconds": 0.665283,
+        "check_seconds": 0.002943,
+        "build_seconds": 0.041698
+      },
+      "world": {
+        "summary": {
+          "world_id": "t3-latch-maze",
+          "families": [
+            "switch_door",
+            "count_lock",
+            "consumable"
+          ],
+          "n_families": 3,
+          "n_floor_cells": 35,
+          "n_slots": 5,
+          "n_variables": 42,
+          "declared_product": 1680,
+          "initial": "r1c1|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+          "bad": {
+            "key": "agent-on-lock-below-count",
+            "statement": "the agent stands on the lock at r5c8 while fewer than 3 of the 3 tokens are collected",
+            "separated_by": "count_lock",
+            "cells": [
+              [
+                5,
+                8
+              ]
+            ]
+          },
+          "n_bad": 42,
+          "bad_states": [
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=0|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=0|token_r5c1=1|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=0|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=0|token_r5c6=1|fragile_r1c8=2",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=0",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=1",
+            "r5c8|switch_r3c3=1|token_r1c4=1|token_r5c1=1|token_r5c6=0|fragile_r1c8=2"
+          ],
+          "tier": 3,
+          "notes": "The hardest world in the catalogue for an inductive pipeline: a latch, three tokens, a lock and a one-shot floor, so almost nothing can be seen twice. Built as the standing counter-example to any claim that coverage is what a manual needs."
+        },
+        "layout": {
+          "world_id": "t3-latch-maze",
+          "families": [
+            "switch_door",
+            "count_lock",
+            "consumable"
+          ],
+          "n_floor_cells": 35,
+          "n_variables": 42,
+          "declared_product": 1680,
+          "slots": [
+            {
+              "name": "switch_r3c3",
+              "family": "switch_door",
+              "kind": "switch",
+              "cell": [
+                3,
+                3
+              ],
+              "index": 0,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                35
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r1c4",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                1,
+                4
+              ],
+              "index": 1,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                36
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r5c1",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                5,
+                1
+              ],
+              "index": 2,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                37
+              ],
+              "onehot": false
+            },
+            {
+              "name": "token_r5c6",
+              "family": "count_lock",
+              "kind": "token",
+              "cell": [
+                5,
+                6
+              ],
+              "index": 3,
+              "domain": [
+                0,
+                1
+              ],
+              "bits": [
+                38
+              ],
+              "onehot": false
+            },
+            {
+              "name": "fragile_r1c8",
+              "family": "consumable",
+              "kind": "fragile",
+              "cell": [
+                1,
+                8
+              ],
+              "index": 4,
+              "domain": [
+                0,
+                1,
+                2
+              ],
+              "bits": [
+                39,
+                40,
+                41
+              ],
+              "onehot": true
+            }
+          ]
+        },
+        "ground_truth": {
+          "solvable": true,
+          "reachable_states": 436,
+          "agent_cells": 34,
+          "optimal_length": 12,
+          "separating_frontier": [
+            {
+              "cell": [
+                3,
+                3
+              ],
+              "kind": "switch",
+              "ever_passable": true
+            }
+          ]
+        }
+      },
+      "derived": {
+        "n_families": 3,
+        "families": [
+          "switch_door",
+          "count_lock",
+          "consumable"
+        ],
+        "n_bad": 42,
+        "bad_fraction": 0.025,
+        "states_excluded": 42,
+        "strengthening": 1.0,
+        "near_vacuous": true,
+        "edges_into_bad": 0,
+        "property_already_inductive": true,
+        "families_in_invariant": [
+          "geometry",
+          "count_lock"
+        ],
+        "recheck": "not available"
+      }
+    }
+  ],
+  "provenance": {
+    "prompt_id": "E8-ic3-bounds",
+    "branch": "agent/e8-ic3-scale",
+    "base_commit": "df5b4b72a7fd07f775997389d70070ca864defb2",
+    "utc": "2026-07-29T11:30:29Z",
+    "command": "python -m ic3bounds --out runs/20260729T120000Z-E8-ic3-scale --axis compose --timeout 180",
+    "host": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.13",
+      "machine": "AMD64"
+    }
+  }
+}

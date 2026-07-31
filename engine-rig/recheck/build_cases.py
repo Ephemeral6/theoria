@@ -17,6 +17,11 @@ Six worlds:
   certificates differ only in the goal, and `interop/README.md`'s finding is
   precisely that the two targets are separately provable and their disjunction
   is not.
+* **peg5 .. peg13** -- the same world widened, which is axis A of the E8
+  boundary measurement: 32 up to 8192 states, each with the invariant `ic3_pdr`
+  converges on for it.  The rule sets are built here from the geometry; the
+  invariants are transcribed literals.  That split is deliberate and is the
+  two-transcriptions rule -- see `PEG_IC3_INVARIANTS`.
 * **keyed-gate** -- three flags and one guarded rule, written for this package
   rather than transcribed.  It is the exhibit for the pagoda obligation being
   quantified over moves *legal from the region*: its only potential-raising move
@@ -88,12 +93,10 @@ def dump(path: str, payload: dict) -> str:
 PEG_N = 4
 PEG_GOAL = "0100"
 
-# The board size only ever appears in prose, and prose is what the committed
-# bytes are made of, so it is a table rather than an f-string.
-PEG_SIZE_WORD = {4: "four", 5: "five"}
-
 # One anchor per board: a number somebody else published about that world,
-# outside this package and before it.
+# outside this package and before it.  Only the boards with *named* rule sets
+# (the M9 anchor and the peg5 pagoda pair) appear here; gradient steps carry a
+# peg1d anchor computed at check time instead of a hand literal.
 PEG_HAND_VERIFIED = {
     4: "peg4.py's docstring: 1110, 0111 and 1011 are unsolvable; 1101 solves "
        "in 2 moves",
@@ -107,6 +110,13 @@ PEG_WORLD = {
        "frozen fixtures/peg4",
 }
 
+# Only for the `comment` line, which is prose.  A gradient step whose size has
+# no word here falls back to the digits, which reads fine.
+_NUMBER_WORDS = {
+    4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten",
+}
+
+
 
 def peg_moves(n: int = PEG_N) -> List[Tuple[int, int, int]]:
     """Every jump the geometry allows, as (src, over, dst)."""
@@ -119,28 +129,73 @@ def peg_moves(n: int = PEG_N) -> List[Tuple[int, int, int]]:
     return sorted(out, key=lambda m: (m[0], m[2]))
 
 
-def peg_ruleset(start: str, goal: str = PEG_GOAL,
-                name: Optional[str] = None) -> dict:
-    """A 1D peg board of any size, named for its start unless two share one.
+def peg_name(start: str, n: int = PEG_N) -> str:
+    return "peg%d-%s" % (n, start)
 
-    The 5-cell board carries two rule sets from one start, because the pagoda
-    certificates `lp_potential` produced for it differ only in which cell the
-    last peg has to land on -- and that difference is the whole finding in
-    `interop/README.md`, so the two goals must not be allowed to share a file.
+
+def _peg_goal_prose(goal: str) -> str:
+    pegs = [i for i, cell in enumerate(goal) if cell == "1"]
+    if len(pegs) == 1:
+        return "exactly one peg, at position %d (state %s)" % (pegs[0], goal)
+    return "state %s" % goal
+
+
+def peg_ruleset(start: str, n: Optional[int] = None, goal: str = PEG_GOAL,
+                name: Optional[str] = None) -> dict:
+    """1D peg solitaire on `n` positions, as rules rather than as an edge list.
+
+    Parameterised over `n` and `goal` because axis A of the E8 boundary
+    measurement is a *gradient* in state-space size, and a gradient whose steps
+    have no rule set has no independent checker either -- the point of the axis
+    is to carry the "an independent checker accepts this" column all the way up
+    it, not only at the M9 anchor.
+
+    `n = 4` reproduces Fixture C exactly, bytes included; that case is the
+    anchor and its wording is its own.
+
+    `name` exists for the peg5 pagoda pair: two rule sets from one start,
+    because the pagoda certificates `lp_potential` produced for it differ only
+    in which cell the last peg has to land on -- and that difference is the
+    whole finding in `interop/README.md`, so the two goals must not be allowed
+    to share a file.  A named rule set keeps the hand-verified provenance of
+    `PEG_HAND_VERIFIED`; an unnamed gradient step carries the peg1d anchor.
     """
-    n = len(start)
+    if n is None:
+        n = len(start)                      # the anchor and pagoda calls pass no n
     moves = peg_moves(n)
+    if len(start) != n or len(goal) != n:
+        raise ValueError("start %r and goal %r must both be %d positions"
+                         % (start, goal, n))
+    if name is not None or n == PEG_N:
+        # The M9 anchor and the peg5 pagoda pair: hand-verified literals from
+        # outside this package, published before it.
+        provenance = {
+            "world": PEG_WORLD[n],
+            "goal": _peg_goal_prose(goal),
+            "hand_verified": PEG_HAND_VERIFIED[n],
+        }
+    else:
+        provenance = {
+            # peg4 is the frozen M1 fixture; every wider board comes from the
+            # generic builder, which was written for lp_potential and knows
+            # nothing about this package.
+            "world": "engine-rig/interop/peg1d.py",
+            "goal": _peg_goal_prose(goal),
+            "anchor": (
+                "interop.peg1d -- an independent transcription of the same geometry, "
+                "written for lp_potential before this gradient existed. verify_all "
+                "compares its edge relation and its distance_to(%s, [%s]) against "
+                "the relation derived here." % (start, goal)
+            ),
+        }
     return {
         "schema": RULESET_SCHEMA,
-        "name": name or "peg%d-%s" % (n, start),
+        "name": name or peg_name(start, n),
         "comment": "Fixture C, 1D peg solitaire on %s positions, started at "
                    "%s. A move jumps a peg over a neighbouring peg into an "
-                   "empty hole and removes the jumped peg." % (PEG_SIZE_WORD[n], start),
-        "provenance": {
-            "world": PEG_WORLD[n],
-            "goal": "exactly one peg, at position %d (state %s)" % (goal.index("1"), goal),
-            "hand_verified": PEG_HAND_VERIFIED[n],
-        },
+                   "empty hole and removes the jumped peg."
+                   % (_NUMBER_WORDS.get(n, str(n)), start),
+        "provenance": provenance,
         "variables": [
             {"name": "pos%d" % i, "domain": [0, 1],
              "comment": "1 if position %d holds a peg" % i}
@@ -170,25 +225,291 @@ def peg_ruleset(start: str, goal: str = PEG_GOAL,
     }
 
 
-def peg_ic3_certificate() -> dict:
-    """`ic3_pdr`'s answer on 0111, transcribed clause by clause.
+# --------------------------------------------------------- the size gradient
+#
+# Axis A of E8: the M9 configuration widened.  Every step is the same shape --
+# position 0 empty, every other position filled, goal a single peg at position 1
+# -- so what changes along the axis is the size of the state space (16 up to
+# 8192) and nothing else.  Every one of them is unsolvable, which
+# `interop.peg1d.distance_to` says independently.
+#
+# 4..8 came first, one position at a time.  10, 12 and 13 were added afterwards
+# because `ic3bounds.axis_size.LADDER` is (4, 6, 8, 10, 12, 13, 14) and the
+# ladder's recheck column can only be filled at a size that has a rule set here:
+# a gradient step with no independent transcription has no independent checker,
+# and the column would have had to read "not available" at exactly the sizes the
+# measurement is about.  n=14 is absent because IC3 does not finish it inside the
+# 300s budget -- there is no invariant at that rung to check, and inventing a
+# case for it would put a rule set in the tree that nothing certifies.
+PEG_GRADIENT: Tuple[Tuple[int, str, str], ...] = (
+    (4, "0111", "0100"),
+    (5, "01111", "01000"),
+    (6, "011111", "010000"),
+    (7, "0111111", "0100000"),
+    (8, "01111111", "01000000"),
+    (10, "0111111111", "0100000000"),
+    (12, "011111111111", "010000000000"),
+    (13, "0111111111111", "0100000000000"),
+)
 
-    STATUS.md, M9: `I(s) = (!pos1 | pos2) & (pos1 | !pos2)`.  Written here as
-    the two clauses rather than as `pos1 == pos2`, so that what is rechecked is
-    the shape the engine actually emitted.
-    """
-    return {
-        "schema": CERTIFICATE_SCHEMA,
-        "name": "peg4-0111-ic3-invariant",
-        "kind": "inductive_invariant",
-        "claim": "unsolvable",
+# `ic3_pdr`'s answers, transcribed clause by clause, in the order
+# `ic3bounds.emit.ordered_clauses` writes them.
+#
+# **Transcribed, not computed.**  This file is inside `recheck/`, which imports
+# nothing from `engines/` -- a test enforces it -- so the invariants arrive here
+# as literals, exactly as M9's did.  `tests/test_ic3bounds_emit.py` re-runs the
+# engine and fails if what it converges on is no longer what is written below,
+# which is the check that keeps a literal honest.
+#
+# Each clause is a tuple of `(variable, the value that satisfies it)`; a clause
+# is a disjunction, the clause list a conjunction.
+PEG_IC3_INVARIANTS: Dict[Tuple[int, str, str], dict] = {
+    (4, "0111", "0100"): {
         "produced_by": "engines/ic3_pdr (M9)",
         "comment": "(!pos1 | pos2) & (pos1 | !pos2) -- positions 1 and 2 always "
                    "hold the same thing.",
-        "ruleset": {"name": "peg4-0111"},
-        "predicate": ["and",
-                      ["or", eq(var("pos1"), lit(0)), eq(var("pos2"), lit(1))],
-                      ["or", eq(var("pos1"), lit(1)), eq(var("pos2"), lit(0))]],
+        "clauses": (
+            (("pos1", 0), ("pos2", 1)),
+            (("pos1", 1), ("pos2", 0)),
+        ),
+    },
+    (5, "01111", "01000"): {
+        "clauses": (
+            (("pos1", 0), ("pos2", 1), ("pos4", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1)),
+        ),
+    },
+    (6, "011111", "010000"): {
+        "clauses": (
+            (("pos0", 0), ("pos1", 0), ("pos5", 1)),
+            (("pos0", 0), ("pos2", 0), ("pos4", 0)),
+            (("pos0", 0), ("pos3", 1), ("pos4", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos5", 1)),
+            (("pos2", 0), ("pos3", 1), ("pos4", 0)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos5", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 0)),
+        ),
+    },
+    (7, "0111111", "0100000"): {
+        "clauses": (
+            (("pos4", 0), ("pos5", 0), ("pos6", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos6", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos6", 1)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
+             ("pos6", 1)),
+        ),
+    },
+    (8, "01111111", "01000000"): {
+        "clauses": (
+            (("pos1", 0), ("pos2", 0), ("pos3", 0), ("pos7", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0)),
+            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0)),
+            (("pos1", 0), ("pos2", 0), ("pos3", 0), ("pos5", 1), ("pos6", 0)),
+            (("pos1", 0), ("pos2", 0), ("pos3", 1), ("pos4", 0), ("pos6", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos7", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos7", 1)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
+             ("pos6", 1), ("pos7", 1)),
+        ),
+    },
+    (10, "0111111111", "0100000000"): {
+        "clauses": (
+            (("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
+            (("pos4", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
+             ("pos9", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1),
+             ("pos8", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0),
+             ("pos8", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos9", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 0)),
+            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos9", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
+             ("pos9", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1),
+             ("pos8", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0),
+             ("pos8", 0)),
+            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos9", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
+             ("pos7", 0), ("pos8", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
+             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1)),
+        ),
+    },
+    (12, "011111111111", "010000000000"): {
+        "clauses": (
+            (("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0), ("pos11", 1)),
+            (("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1), ("pos10", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 0),
+             ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 1),
+             ("pos10", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
+             ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1),
+             ("pos10", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
+             ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1),
+             ("pos10", 0)),
+            (("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1), ("pos9", 1),
+             ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
+             ("pos9", 0), ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
+             ("pos9", 1), ("pos10", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 1),
+             ("pos8", 0), ("pos10", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos7", 0), ("pos9", 0),
+             ("pos10", 1), ("pos11", 0)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 1), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos8", 0),
+             ("pos9", 0), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos8", 0),
+             ("pos9", 1), ("pos10", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 1), ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
+             ("pos8", 1), ("pos9", 1), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
+             ("pos7", 0), ("pos9", 0), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
+             ("pos7", 0), ("pos9", 1), ("pos10", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
+             ("pos7", 1), ("pos8", 0), ("pos10", 0)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
+             ("pos8", 1), ("pos9", 1), ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
+             ("pos7", 0), ("pos8", 0), ("pos9", 0), ("pos10", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
+             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1),
+             ("pos11", 1)),
+        ),
+    },
+    (13, "0111111111111", "0100000000000"): {
+        "clauses": (
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 0),
+             ("pos10", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos10", 0),
+             ("pos11", 0), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
+             ("pos10", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
+             ("pos11", 0), ("pos12", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
+             ("pos10", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
+             ("pos11", 0), ("pos12", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
+             ("pos10", 1), ("pos12", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
+             ("pos11", 0), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
+             ("pos9", 0), ("pos10", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
+             ("pos10", 0), ("pos11", 0), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
+             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
+             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
+            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1),
+             ("pos12", 1)),
+            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
+             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1),
+             ("pos12", 1)),
+            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
+             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1),
+             ("pos11", 1), ("pos12", 1)),
+        ),
+    },
+}
+
+
+def render_peg_cnf(clauses: Sequence[Sequence[Tuple[str, int]]]) -> str:
+    """`(!pos1 | pos2) & (pos1 | !pos2)` -- the engine's own rendering.
+
+    Written here rather than imported from `engines.ic3_pdr.system` for the one
+    reason everything in this package is written twice: this file may not import
+    the engine it is transcribing.
+    """
+    return " & ".join(
+        "(%s)" % " | ".join(name if value else "!" + name for name, value in clause)
+        for clause in clauses
+    )
+
+
+def peg_ic3_certificate(start: str = "0111", n: int = PEG_N,
+                        goal: str = PEG_GOAL) -> dict:
+    """`ic3_pdr`'s answer on `start`, transcribed clause by clause.
+
+    STATUS.md, M9: `I(s) = (!pos1 | pos2) & (pos1 | !pos2)` on `0111`.  Written
+    as the clauses rather than as `pos1 == pos2`, so that what is rechecked is
+    the shape the engine actually emitted -- and so that the emitted shape and
+    this transcription can be compared literal by literal.
+    """
+    entry = PEG_IC3_INVARIANTS[(n, start, goal)]
+    clauses = entry["clauses"]
+    comment = entry.get("comment") or (
+        "%s -- %d clause(s) over %d positions, the invariant ic3_pdr converges "
+        "on for %s. Its size in states is pinned in recheck/verify_all.py and "
+        "cross-checked against the engine's own count in "
+        "tests/test_ic3bounds_emit.py."
+        % (render_peg_cnf(clauses), len(clauses), n, start)
+    )
+    return {
+        "schema": CERTIFICATE_SCHEMA,
+        "name": "%s-ic3-invariant" % peg_name(start, n),
+        "kind": "inductive_invariant",
+        "claim": "unsolvable",
+        "produced_by": entry.get(
+            "produced_by",
+            "engines/ic3_pdr, emitted through ic3bounds/emit.py (E8 axis A)"),
+        "comment": comment,
+        "ruleset": {"name": peg_name(start, n)},
+        "predicate": ["and"] + [
+            ["or"] + [eq(var(name), lit(value)) for name, value in clause]
+            for clause in clauses
+        ],
     }
 
 
@@ -751,6 +1072,17 @@ def all_cases() -> Dict[str, dict]:
             "11011", goal="00010", name="peg5-11011-to-00010"),
         "keyed-gate.rules.json": keyed_gate_ruleset(),
         "keyed-gate-pagoda.cert.json": keyed_gate_certificate(),
+    }
+    # The E8 size gradient. n=4 is already above -- it is the M9 anchor and
+    # keeps its own filenames and wording -- so the loop starts at the next
+    # step and adds one rule set and one certificate per size.
+    for n, start, goal in PEG_GRADIENT:
+        if n == PEG_N:
+            continue
+        cases["%s.rules.json" % peg_name(start, n)] = peg_ruleset(start, n, goal)
+        cases["%s-ic3.cert.json" % peg_name(start, n)] = peg_ic3_certificate(
+            start, n, goal)
+    cases.update({
         "a2-holed.rules.json": a2_ruleset(with_teleport=False),
         "a2-world.rules.json": a2_ruleset(with_teleport=True),
         "a2-right-room-locked.cert.json": a2_certificate(),
@@ -772,7 +1104,7 @@ def all_cases() -> Dict[str, dict]:
             "sokoban-open4far", OPEN4_GRID, (4, 4),
             (("b1", (2, 2)), ("b2", (3, 3))),
             (("b1", (4, 2)), ("b2", (1, 3)))),
-    }
+    })
     for name, ruleset_name, weights, bound, document in PAGODA_CLAIMS:
         cases["%s.cert.json" % name] = pagoda_certificate(
             name, ruleset_name, weights, bound, document)
