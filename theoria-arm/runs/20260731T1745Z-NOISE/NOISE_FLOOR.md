@@ -427,8 +427,9 @@ Artefacts in this directory:
 * `negative_control.json` — the guard being seen to refuse.
 * `MANIFEST.json` — provenance and per-file sha256.
 
-The gate at the time of writing (`cd theoria-arm && python -m pytest -q`) has
-**two pre-existing failures on master, neither caused by this work**:
+The gate at the time of writing (`cd theoria-arm && python -m pytest -q`):
+**457 collected, 455 passed, 2 failed, 0 skipped.** Both failures are
+**pre-existing on master and neither is caused by this work**:
 `tests/test_arm.py::test_the_archive_stays_accountable`
 (`re-deriving every manifest reproduces it byte for byte: drifted:
 ['20260731T1240Z-A3-level2-carried', '20260731T1310Z-A3-level2-carried-r2',

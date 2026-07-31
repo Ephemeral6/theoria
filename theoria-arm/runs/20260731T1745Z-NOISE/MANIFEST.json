@@ -17,9 +17,9 @@
  ],
  "files": [
   {
-   "bytes": 21811,
+   "bytes": 21871,
    "path": "NOISE_FLOOR.md",
-   "sha256": "76bdce82f8aa84710be9010823272f5650dee2048b2cef932c3cf13d3d353e01"
+   "sha256": "7bd2b1495a91271e9c708c14db46dcd7292085b712aca53f0f11a5787dbd16c1"
   },
   {
    "bytes": 4951,
@@ -58,6 +58,7 @@
    "tests/test_arm.py::test_the_archive_stays_accountable",
    "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
   ],
+  "result": "457 collected, 455 passed, 2 failed, 0 skipped",
   "test_noise_floor": "9 passed",
   "verified_pre_existing": "both reproduce with armtools/noise_floor.py, tests/test_noise_floor.py and this directory removed from the tree"
  },
