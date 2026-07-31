@@ -1893,3 +1893,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：worktree 内 `python -m pytest monitor/tests`：**525 passed, 2 xfailed in 155.52s**；spec 导入自检通过（p1 items: 16）。改动仅 spec.py 一条注记字符串 + 本段，无行为变更。零 API 调用、零花费、零封存堆接触、无凭据值（.env 仅以名核验）。
 阻塞：none。(a) 的门槛不是阻塞而是所有者决策点：出资配 API key 才启动 DUAL_PROXY §4 的 2–6 步（其中 2、4 是 theoria-arm 的活，3 触 proxy/）。
 下一步：若所有者拍板出资，按 §4 顺序派单且 model_proxy_succeeded 转非零须与改判同 commit；否则本项封存，论文用 DUAL_PROXY §3 的三句话原文。
+
+## [monitor] 2026-07-31T15:53:02Z P1READJ-phase1-2-closeout
+状态：**Phase 1/2 收口重裁**（分支 `closeout/p1-board`，基 `f6a95719`；留痕 `monitor/runs/20260731T155302Z-P1READJ/`）。今日三件实质变化对着板重裁：臂侧封印按构造成立（merge `b375a9bd`：EnvProxy 入子进程，`test_seal_process.py` 证父进程无钥匙整局跑通）、共享账本收下第一条真臂记录（`proxy/runs/20260731T104757Z-S31/FIRED.md`，双轴同证、2 动作 $0.00）、例外登记簿 #1–#12 齐且 #9 起是先登记后开火的正身；A16 把 launch_gate 接进封存堆开跑路径（board done，负对照齐）。**逐项诚实表（16 项）**：p1-proxy-env 绿（封印引文更新）｜p1-proxy-model **绿→partial**（依 S32 判决 `verify-lab/DUAL_PROXY.md`：已建成未验，真实供应商 0/65 成功，臂现走 CLI 直连 `proxied: false`，D-P8-002——原绿把「仪表存在」读成了「仪表已验」）｜p1-variant partial｜p1-runner 绿｜p1-scorer partial｜p1-determinism 绿｜p1-access partial｜p1-cascade partial｜p1-cut 绿｜p1-a0 绿｜p1-a1 绿｜p1-a2 绿｜p1-engines 绿｜p1-seal-test partial（左合取项按构造成立，右合取项模型侧按设计不经代理、bare_cc 为 GAP-5 裁决前状态）｜p1-replay-audit partial｜p1-same-shell partial（Theoria 臂**已存在且真飞过**，#10 结算 $9.5569/18 动作，P-8 那句「唯一还不存在」作废；仍欠 DELIVERY_RULING.md §4 三领地例行接线）。**Phase 1 绿数 9/16 → 8/16——数字降是因为一个绿此前言过其实，不是现实倒退**。Phase 2 不变：p2-battery 绿、p2-audit/p2-material partial（1/3 绿）。收口结论：**Phase 1 未全绿，「全绿才准烧游戏钱」的门照字面仍不满足**；一切跨门花费继续走例外登记簿（先登记后动手），钱门项 `p3-gate-exception` 保持 risk 不追认。
+测试：`python monitor/scan.py` exit 0，逐字 `[2026-07-31 23:54:12] monitor/index.html written — Phase 1: 8/16 green`；`monitor` 套件 525 passed / 2 xfailed，exit 0，176s（<183s 闸门）。零 API、$0.00、零封存堆接触、无凭据值。
+阻塞：none（本件是裁决与记录，不修代码；`proxy/`、`theoria-arm/`、`verify-lab/` 全程只读）。
+下一步：Phase 1 剩余 8 个 partial 里可动的最短三条：p1-replay-audit（对 S31 起的真在线账本抽检 2 局）、p1-scorer（冻结打分器本体接入 → P-9）、模型代理到 (a) 的六条清单（第 1 条为所有者动作，见 S32 段）。

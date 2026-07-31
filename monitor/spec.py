@@ -35,35 +35,43 @@ PHASES = [
                 "status": "green",
                 "note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + "
                         "mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。"
-                        "监控下轮独立复跑其密封测试。",
+                        "2026-07-31 封印升级（merge b375a9bd）：EnvProxy 移入独立子进程"
+                        "（theoria-arm/harness/proxy_process.py），臂父进程无钥匙"
+                        "由整局 mock 对局证明（ARC_API_KEY 不在父环境、read_secret 抛错，"
+                        "哨兵仍从子进程到达上游）。这就是 RES-1 密封合取项之争"
+                        "（inbox 20260730T1240Z）的进程读法答案——按构造成立，不再靠裁决。",
                 "blocks": ["p1-seal-test", "p1-same-shell", "p1-replay-audit"],
             },
             {
                 "id": "p1-proxy-model",
                 "label": "模型代理（provider usage 逐字入账）",
                 "clause": "Phase 1 · 自下而上五层 (3)",
-                "status": "green",
-                "note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 "
-                        "usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。\n\n"
-                        "【正式裁决·Phase-1 收尾 2026-07-31】本项按**改定义后已清偿**"
-                        "（redefined-and-discharged）结案，规矩同 p3-gate-exception：如实"
-                        "登记，不粉饰。**史实**（S32 复算的分母，verify-lab/DUAL_PROXY.md，"
-                        "每轮由 dualagent/count.py 重算）：环境代理 924 条真实端点腿在账"
-                        "（1009 条代理腿中，其余 85 条打回环夹具）；模型代理 65 条 "
-                        "model_call **全部 401（65-of-65）**，**0 条 2xx**——模型代理"
-                        "从未载过一条真实流量，S32 判 (b)。**(a) 当下不可达，且非工程"
-                        "缺陷**：DUAL_PROXY §4 六步清单第 1 步要求 .env 里有 "
-                        "ANTHROPIC_API_KEY，而 .env 只有 ARC_API_KEY——补它是所有者出资"
-                        "动作，任何代理不得代办；第 2 步要换掉 theoria-arm D-P8-002 "
-                        "特意选定的 claude -p 订阅传输，等于为凑数而弱化既定设计。"
-                        "**改定义**：本项的实质是『provider usage 逐字入账』，这一点经 "
-                        "CLI 包络已达成——usage 块逐字写入 run 账本，每条 model_call 标 "
-                        "proxied:false 并带 proxy_gap 注明原因（D-P8-002），无人能把它"
-                        "误读成代理流量；账面上明写的损失照旧：request 是臂发给 CLI 的"
-                        "提示词而非 CLI 发给上游的 /v1/messages 体，入token构成不可由"
-                        "此账本得出结论。**留权**：模型代理仍是任何未来 API 传输臂的"
-                        "**强制通路**；DUAL_PROXY §4 六步清单为常设升级路径，触发条件"
-                        "是所有者决定出资配 API key，届时 count.py 的 "
+                "status": "partial",
+                "note": "改判 2026-07-31，依 S32 裁决（verify-lab/DUAL_PROXY.md，inbox "
+                        "20260731T1800Z）：**一个代理在真实流量上已验，一个已建成未验**。"
+                        "模型代理已建（proxy/model_proxy.py + pricing/），边界行为有记录，"
+                        "但真实供应商上 0/65 次请求成功（全 401：代理按设计剥客户端凭据，"
+                        "仓库无供应商钥匙可注入）；2026-07-31 起臂的模型调用走 vendor CLI "
+                        "直连，逐调用记 proxied: false（D-P8-002，声明缺口）。"
+                        "此前的 green 把『仪表存在』读成了『仪表已验』——降回 partial。\n\n"
+                        "【在案裁定·未采计】同日另有一份改定义结案论证，全文照录；"
+                        "板面判决仍取 partial——Theoria.md:290 的设计原文是模型流量"
+                        "**过代理**入账，CLI 包络路径达成的是记账而非过代理，把义务"
+                        "改写成已达成的那一半再结案，正是本仓库其它地方点名要防的移动："
+                        "**史实**（S32 复算的分母，每轮由 dualagent/count.py 重算）："
+                        "环境代理 924 条真实端点腿在账（1009 条代理腿中，其余 85 条打"
+                        "回环夹具）；模型代理 65 条 model_call **全部 401（65-of-65）**，"
+                        "**0 条 2xx**。**(a) 当下不可达，且非工程缺陷**：DUAL_PROXY §4 "
+                        "六步清单第 1 步要求 .env 里有 ANTHROPIC_API_KEY，而 .env 只有 "
+                        "ARC_API_KEY——补它是所有者出资动作，任何代理不得代办；第 2 步"
+                        "要换掉 theoria-arm D-P8-002 特意选定的 claude -p 订阅传输，"
+                        "等于为凑数而弱化既定设计。**已达成的一半**：usage 块经 CLI "
+                        "包络逐字写入 run 账本，每条 model_call 标 proxied:false 并带 "
+                        "proxy_gap 注明原因，无人能把它误读成代理流量；账面明写的损失"
+                        "照旧：request 是臂发给 CLI 的提示词而非上游 /v1/messages 体，"
+                        "入token构成不可由此账本得出结论。**留权**：模型代理仍是任何"
+                        "未来 API 传输臂的**强制通路**；六步清单为常设升级路径，触发"
+                        "条件是所有者决定出资配 API key，届时 count.py 的 "
                         "model_proxy_succeeded 转非零并须同一 commit 改判本条。",
                 "blocks": ["c2"],
             },
@@ -176,8 +184,15 @@ PHASES = [
                 "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
                 "clause": "Phase 1 验收单",
                 "status": "partial",
-                "note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，"
-                        "红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。"
+                "note": "左合取项（臂内无凭据）2026-07-31 起**按构造成立**："
+                        "merge b375a9bd 把 EnvProxy 移入子进程，"
+                        "theoria-arm/tests/test_seal_process.py 证明父进程无钥匙也能整局"
+                        "跑通 mock 对局；模型路径另有封存堆护栏（21 个 ID + 词干，"
+                        "SealedPileBreach 在循环层致死）。右合取项（绕开双代理出网必须"
+                        "失败）仍是 partial：test_bypass_negative.py 只覆盖臂内绕环境"
+                        "代理一侧；模型侧按设计不经代理（D-P8-002，proxied: false），"
+                        "『双代理』在活路径上只有一半；bare_cc 臂记为裁决前状态"
+                        "（GAP-5，baseline-arms/STATUS.md）——未做同样拆分前不得再飞。"
                         "凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
                 "probe": "credential_hygiene",
                 # The item is a conjunction and this probe tests one half: it
@@ -200,9 +215,16 @@ PHASES = [
                 "label": "三臂经双代理落同一账本、打分器通吃",
                 "clause": "Phase 1 验收单、第二部分总纪律",
                 "status": "partial",
-                "note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。"
-                        "Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。"
-                        "**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。",
+                "note": "2026-07-31 两件实质推进：(1) 共享账本收下**第一条真臂记录**"
+                        "（S31 探针，proxy/runs/20260731T104757Z-S31/FIRED.md：双轴同证"
+                        "——env_step 带 arm: bare_cc × run_start 带真上游 "
+                        "three.arcprize.org；2 动作 $0.00，登记簿 #9 先登记后开火）。"
+                        "(2) **Theoria 臂已存在且真飞过**：A3 level2 战役两腿实花 "
+                        "$9.5569 / 18 动作（登记簿 #10 已结算），P-8 那句『唯一还不"
+                        "存在』作废。仍 partial 的理由：一条探针记录 ≠ 三臂例行经由"
+                        "（FIRED.md 自己写明 DELIVERY_RULING.md §4 的三领地接线缺口"
+                        "仍开放）；模型侧 CLI 直连使『双代理』只有一半（D-P8-002）；"
+                        "打分器通吃仍待 p1-scorer。",
             },
         ],
     },
