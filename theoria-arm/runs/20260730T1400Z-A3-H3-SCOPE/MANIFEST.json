@@ -16,10 +16,14 @@
   ],
   "measured": {
     "check_10_scope_before": "12 runs, 107 listed paths",
-    "check_10_scope_after": "35 runs, 161 listed paths",
+    "check_10_scope_after": "36 runs, 166 listed paths (35/161 before this run's own manifest was committed)",
     "suite_before_this_cycle": "272 passed, 5 failed",
-    "mutations_applied": 5,
-    "mutations_that_bit": 5
+    "mutations_applied": 10,
+    "mutations_that_bit": 10,
+    "adversarial_findings": 8,
+    "adversarial_findings_real": 7,
+    "adversarial_findings_fixed": 6,
+    "verdicts_moved_in_the_real_archive": 0
   },
   "files": [
     {"path": "MANIFEST.json"},

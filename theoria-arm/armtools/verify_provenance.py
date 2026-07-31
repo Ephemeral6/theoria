@@ -19,6 +19,7 @@ opinion of anything. Everything is checked against the ledgers.
 
 import json
 import os
+import posixpath
 import subprocess
 import sys
 import tempfile
@@ -299,11 +300,31 @@ def run(runs_root: Optional[str] = None) -> Checks:
     top = backfill._repo_top(runs_root)
     shipped = backfill.paths_the_clone_ships(runs_root)
     examined = {"runs": 0, "paths": 0}
-    for row in survey if shipped is not None and top else []:
-        run_dir = os.path.join(runs_root, row["slug"])
-        prefix = os.path.relpath(run_dir, top).replace(os.sep, "/")
-        if "%s/MANIFEST.json" % prefix not in shipped:
-            continue                      # in flight: no clone can see it either
+    # **Which runs, decided by the commit and not by `os.listdir`.** This
+    # iterated `survey` until an adversarial pass measured what that costs: the
+    # set of runs examined was a working-tree input, so a run this commit ships
+    # whose directory is missing from *this* disk -- sparse checkout, partial
+    # clone, an `rm -rf` before a verify -- was silently skipped, and the machine
+    # with *less* data got the green. The two-machines property failed at the
+    # outermost loop, above every careful thing done inside it.
+    #
+    # `realpath` on both sides of the `relpath`, and that is not decoration:
+    # `git rev-parse --show-toplevel` resolves junctions and symlinks
+    # physically, so a `runs_root` reached through one produced a prefix naming a
+    # directory in no commit, every run fell out of scope, and the check reported
+    # a contented `0 manifests`.
+    slugs = []
+    if shipped is not None and top:
+        runs_prefix = os.path.relpath(os.path.realpath(runs_root),
+                                      os.path.realpath(top)).replace(os.sep, "/")
+        for path in sorted(shipped):
+            if not path.startswith(runs_prefix + "/"):
+                continue
+            parts = path[len(runs_prefix) + 1:].split("/")
+            if len(parts) == 2 and parts[1] == "MANIFEST.json":
+                slugs.append(parts[0])
+    for slug in slugs:
+        prefix = "%s/%s" % (runs_prefix, slug)
         # The manifest is read out of the **commit**, not off the disk. Asking
         # git which paths are shipped and then reading the list of them from the
         # working tree would leave the working tree deciding half the answer: a
@@ -316,51 +337,88 @@ def run(runs_root: Optional[str] = None) -> Checks:
             manifest = json.loads(blob.decode("utf-8")) if blob else {}
         except (ValueError, UnicodeDecodeError) as exc:
             dangling.append("%s: the MANIFEST.json this commit ships is not "
-                            "readable JSON (%s)" % (row["slug"], exc))
+                            "readable JSON (%s)" % (slug, exc))
             continue
-        listed = [(e.get("path") if isinstance(e, dict) else e)
-                  for e in ((manifest or {}).get("files") or [])]
-        listed = [p.replace("\\", "/") for p in listed if p]
+        # **A malformed entry is a fault, not a blank.** `files[]` used to be
+        # comprehended straight into strings, and an integer or a list where a
+        # path belonged raised `AttributeError` out of `run()` -- destroying all
+        # ten checks over one bad manifest -- while `{"path": ""}`, `{"path":
+        # null}` and a record with no `path` key were dropped in silence, so the
+        # count in the detail line claimed coverage the check did not have.
+        entries = (manifest or {}).get("files")
+        if entries is None:
+            entries = []
+        if not isinstance(entries, list):
+            dangling.append("%s: files[] is a %s, not a list"
+                            % (slug, type(entries).__name__))
+            continue
+        listed = []
+        for entry in entries:
+            path = entry.get("path") if isinstance(entry, dict) else entry
+            if isinstance(path, str) and path:
+                # `posixpath.normpath` after the separator swap, so `./kept.json`
+                # is the same claim as `kept.json` rather than a dangling one.
+                listed.append(posixpath.normpath(path.replace("\\", "/")))
+            else:
+                dangling.append("%s: a files[] record names no usable path (%r)"
+                                % (slug, entry))
         examined["runs"] += 1
         examined["paths"] += len(listed)
 
         stray = {p for p in listed if not backfill.path_is_inside_the_run(p)}
         for path in sorted(stray):
             dangling.append("%s -> %s (not a path inside the run)"
-                            % (row["slug"], path))
+                            % (slug, path))
         rest = [p for p in listed if p not in stray]
         run_rel = {p for p in rest if "%s/%s" % (prefix, p) in shipped}
-        root_rel = {p for p in rest if p in shipped} - run_rel
+        # **A root-relative path must name a directory to be in.** Membership in
+        # `shipped` alone is not enough, and an adversarial pass showed why: a
+        # manifest listing one `REPORT.md` the run never had went green off the
+        # repository root's copy, because that one path resolved at the root and
+        # so the whole manifest was read as root-relative. Requiring a directory
+        # component keeps the shape this exists for -- E14's 23 paths are
+        # `theoria-arm/...` and `a0-spike/...` -- and drops the bare top-level
+        # filenames that collide with ordinary run artefacts.
+        #
+        # The cost, stated rather than hidden: a genuinely root-relative manifest
+        # listing a top-level file (`CLAUDE.md`) has that entry called dangling.
+        # No manifest in this archive does, and the false red is the cheaper
+        # mistake -- it names a path a reader can check, where the false green
+        # names nothing at all.
+        root_rel = {p for p in rest
+                    if "/" in p and p in shipped} - run_rel
         if run_rel and root_rel:
             dangling.append(
                 "%s mixes two path conventions: %r are relative to the run and "
-                "%r to the repository root" % (row["slug"], sorted(run_rel),
+                "%r to the repository root" % (slug, sorted(run_rel),
                                                sorted(root_rel)))
             continue                    # its own fault; not also "dangling"
         # Which convention this manifest is written in, decided once for the
-        # whole manifest. Root-relative only when nothing at all resolves inside
-        # the run -- the shape `20260729T080000Z-E14-crash-is-not-a-finding`
-        # actually has (23 paths, all `theoria-arm/...` or `a0-spike/...`, none
-        # of them of the run). Anything in between was already caught above as
-        # mixed, so this is not a second gate; it exists to name the anchor.
-        by_root = bool(root_rel) and not run_rel
+        # whole manifest. `run_rel` is empty here whenever `root_rel` is not --
+        # the branch above returned in the only case where both could be -- so
+        # this reads the one that is populated, and falls to run-relative when
+        # neither is.
+        by_root = bool(root_rel)
         resolved = root_rel if by_root else run_rel
         # **The anchor, and this is the part that was wrong.** `_ignored_paths`
         # runs `git check-ignore` from the directory it is handed, so asking it
         # about a root-relative path from inside the run directory asks about
         # `<run>/theoria-arm/...`: a path nobody wrote, which no rule matches, so
         # every unresolved path in a root-relative manifest was unexplainable by
-        # construction. Rules must be asked from wherever the paths are written
-        # from.
-        anchor = top if by_root else run_dir
-        # Residual, and not closable here: a manifest whose paths *all* happen to
-        # resolve at the root is read as root-relative even if its author meant
-        # them relative to the run. Telling those apart needs the manifest to
-        # declare its convention, which is a schema change, not a check.
+        # construction.
+        #
+        # Both conventions are now asked from `top`, with run-relative paths
+        # rewritten to `<prefix>/<path>` first. Asking from the run directory
+        # would need that directory to exist on this disk, and the scope above is
+        # deliberately not a function of this disk -- a run the commit ships but
+        # the working tree lacks would have had every path called unexplainable.
+        rewrite = (lambda p: p) if by_root else (lambda p: "%s/%s" % (prefix, p))
         unresolved = [p for p in rest if p not in resolved]
-        explained = backfill._ignored_paths(anchor, unresolved)
-        for path in sorted(set(unresolved) - explained):
-            dangling.append("%s/%s" % (row["slug"], path))
+        explained = backfill._ignored_paths(
+            top, [rewrite(p) for p in unresolved])
+        for path in sorted(p for p in set(unresolved)
+                           if rewrite(p) not in explained):
+            dangling.append("%s/%s" % (slug, path))
 
     detail = ("%(runs)d manifests this commit ships, %(paths)d listed paths: "
               "every one is shipped too, or named by a `.gitignore` rule that "

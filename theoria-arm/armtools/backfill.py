@@ -959,7 +959,17 @@ def _ignored_paths(run_dir: str, rel_paths: List[str]) -> set:
         return set()
     try:
         proc = subprocess.run(
-            ["git", "check-ignore", "-v", "-z", "--stdin"],
+            # `-c core.ignorecase=false`, because that setting is written into
+            # `.git/config` at clone time from the *filesystem*: a Windows or
+            # macOS clone gets `true` and a Linux clone `false`, so a rule whose
+            # casing differs from the path it names is honoured on one machine
+            # and not the other. Measured on a scratch repository -- rule
+            # `runs/*/TRACE.JSONL` against a listed `trace.jsonl` gave green with
+            # `true` and red with `false`. Contrived casing, but it is exactly
+            # the "same commit, two machines, two answers" shape this file
+            # exists to remove, and pinning it costs one flag.
+            ["git", "-c", "core.ignorecase=false",
+             "check-ignore", "-v", "-z", "--stdin"],
             input=b"\0".join(p.encode("utf-8") for p in rel_paths),
             cwd=run_dir, capture_output=True, check=False)
     except OSError:
@@ -1104,15 +1114,28 @@ def paths_the_clone_ships(any_dir_in_repo: str) -> Optional[set]:
     """
     top = _repo_top(any_dir_in_repo)
     try:
-        proc = subprocess.run(["git", "ls-tree", "-r", "--name-only", "-z",
-                               "HEAD"], cwd=top or any_dir_in_repo,
+        proc = subprocess.run(["git", "ls-tree", "-r", "-z", "HEAD"],
+                              cwd=top or any_dir_in_repo,
                               capture_output=True, check=False)
     except OSError:
         return None
     if proc.returncode != 0:
         return None
-    return {p.replace(os.sep, "/")
-            for p in proc.stdout.decode("utf-8", "replace").split("\0") if p}
+    out = set()
+    for record in proc.stdout.decode("utf-8", "replace").split("\0"):
+        if not record or "\t" not in record:
+            continue
+        meta, path = record.split("\t", 1)
+        # `--name-only` would be shorter, and it was, until an adversarial pass
+        # pointed out that `ls-tree -r` also lists **gitlinks**: a submodule
+        # entry (mode 160000) satisfied "the clone ships it" while a plain
+        # `git clone` leaves that directory empty, so the reader has nothing.
+        # Only blobs count. Symlink blobs (120000) are kept -- a clone does carry
+        # them, and what they point at is a question about the repository's
+        # contents rather than about whether the path is there.
+        if meta.split(" ")[1:2] == ["blob"]:
+            out.add(path.replace(os.sep, "/"))
+    return out
 
 
 def blob_the_clone_ships(any_dir_in_repo: str,

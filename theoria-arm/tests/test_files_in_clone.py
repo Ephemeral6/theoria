@@ -23,6 +23,7 @@ Two properties are pinned here:
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -571,6 +572,16 @@ def test_check_ten_rejects_a_path_that_is_not_of_this_run(tmp_path, monkeypatch)
     assert red["ok"] is False, "a path climbing out of the run directory passed"
     assert "not a path inside the run" in red["detail"]
 
+    # Escapes that climb out and come back, which the single case above does not
+    # discriminate. A mutation pass proved the gap: deleting the running-depth
+    # guard from `path_is_inside_the_run` and keeping only its final check left
+    # the whole suite green, because `../../outside.json` is the one input on
+    # which the guarded and unguarded versions agree.
+    for climbing in ("../x/y", "../a/../b/c", "../../../a/b/c/d"):
+        red = verdict("kept.json", climbing)
+        assert red["ok"] is False, "an escape that returns passed: %r" % climbing
+        assert "not a path inside the run" in red["detail"]
+
     for absolute in (str(outside), "/etc/passwd", "C:/Windows/win.ini"):
         red = verdict("kept.json", absolute)
         assert red["ok"] is False, "an absolute path passed: %r" % absolute
@@ -769,6 +780,168 @@ def test_check_ten_holds_one_path_convention_per_manifest(tmp_path, monkeypatch)
     assert red["ok"] is False
     assert "mixes two path conventions" in red["detail"]
     assert "elsewhere/report.md" in red["detail"]
+
+
+def test_check_ten_examines_a_run_this_disk_does_not_have(tmp_path, monkeypatch):
+    """The scope is the commit's, not `os.listdir`'s.
+
+    Every careful thing this check does inside the loop was defeated at the
+    outermost one: the runs examined came from `backfill.survey`, which lists the
+    working tree, so a run this commit ships whose directory is missing here --
+    sparse checkout, partial clone, an `rm -rf` before a verify -- was skipped in
+    silence. Same commit, opposite verdicts, and the **green** one was the
+    machine short of data. Found by an adversarial pass, latent rather than live:
+    no run in this archive is missing from the disk today.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "kept.json"}, {"path": "gone.json"}]}),
+        encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json", "runs/somerun/MANIFEST.json",
+            "runs/somerun/ledger.jsonl")
+
+    red = _check_ten_row(runs_root, monkeypatch)
+    assert red["ok"] is False and "gone.json" in red["detail"]
+
+    # Now delete the whole run directory. The commit is unchanged, so the answer
+    # must be unchanged -- a clone still carries every one of those files.
+    shutil.rmtree(str(run_dir))
+    assert not run_dir.exists()
+    still = _check_ten_row(runs_root, monkeypatch)
+    assert still["ok"] is False, (
+        "deleting the run directory made the check green; the set of runs "
+        "examined is a working-tree input: %r" % still["detail"]
+    )
+    assert "gone.json" in still["detail"]
+    assert still["detail"] == red["detail"], (
+        "the verdict moved when only the disk moved")
+
+
+def test_check_ten_reports_a_malformed_files_record_instead_of_crashing(
+        tmp_path, monkeypatch):
+    """One bad manifest must not take the other nine checks down with it.
+
+    `files[]` was comprehended straight into strings, so an integer or a list
+    where a path belonged raised `AttributeError` out of `run()` -- all ten
+    checks destroyed, a traceback instead of a verdict, over a committed
+    manifest a reader could see. And the quiet half: `{"path": ""}`,
+    `{"path": null}` and a record with no `path` key were dropped without
+    comment while the detail line went on reporting a path count, claiming
+    coverage the check did not have.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json")
+
+    def verdict(files):
+        (run_dir / "MANIFEST.json").write_text(json.dumps({"files": files}),
+                                               encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
+        return _check_ten_row(runs_root, monkeypatch)
+
+    # A bare string entry is a documented shape and still passes.
+    assert verdict(["kept.json"])["ok"] is True
+    # `./kept.json` is the same claim as `kept.json`, not a dangling one.
+    assert verdict([{"path": "./kept.json"}])["ok"] is True
+
+    for broken in (12, ["kept.json"], {"path": 12}, {"path": None},
+                   {"path": ""}, {"sha256": "x"}):
+        row = verdict([{"path": "kept.json"}, broken])
+        assert row["ok"] is False, (
+            "a files[] record with no usable path was dropped in silence: %r"
+            % (broken,))
+        assert "no usable path" in row["detail"]
+
+    row = verdict({"kept.json": "x"})           # `files` itself is not a list
+    assert row["ok"] is False and "not a list" in row["detail"]
+
+
+def test_check_ten_does_not_count_a_gitlink_as_shipped(tmp_path, monkeypatch):
+    """`ls-tree -r` lists submodule entries, and a plain clone leaves them empty.
+
+    `--name-only` cannot tell a blob from a gitlink, so a manifest pointing into
+    an uninitialised submodule read as "the clone ships it" while the reader with
+    the clone gets an empty directory.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (run_dir / "kept.json").write_text("{}\n", encoding="utf-8")
+    (run_dir / "MANIFEST.json").write_text(
+        json.dumps({"files": [{"path": "kept.json"}, {"path": "mod"}]}),
+        encoding="utf-8")
+    _commit(root, "runs/somerun/kept.json", "runs/somerun/MANIFEST.json")
+
+    head = _git(["rev-parse", "HEAD"], str(root)).stdout.strip()
+    added = _git(["update-index", "--add", "--cacheinfo",
+                  "160000,%s,runs/somerun/mod" % head], str(root))
+    assert added.returncode == 0, added.stderr
+    _commit(root)                                # commits the whole index
+
+    # Precondition: git does list it, so a name-only reading would accept it.
+    names = _git(["ls-tree", "-r", "--name-only", "HEAD"], str(root)).stdout
+    assert "runs/somerun/mod" in names
+
+    row = _check_ten_row(runs_root, monkeypatch)
+    assert row["ok"] is False, "a gitlink counted as a file the clone ships"
+    assert "mod" in row["detail"]
+
+
+def test_a_bare_top_level_filename_does_not_make_a_manifest_root_relative(
+        tmp_path, monkeypatch):
+    """The false green the two-conventions rule opened, and its price.
+
+    Reading a manifest as root-relative because its paths happen to resolve at
+    the root means one entry with an ordinary name is enough: a run that never
+    had a `REPORT.md`, listing one, passed on the strength of the repository
+    root's copy. A root-relative path must now name a directory to be in.
+
+    The cost is asserted too, because it is real and should fail loudly rather
+    than be discovered: a genuinely root-relative manifest listing a top-level
+    file has that entry called dangling.
+    """
+    root = tmp_path / "repo"
+    runs_root = root / "runs"
+    run_dir = runs_root / "somerun"
+    run_dir.mkdir(parents=True)
+    _git(["init", "-q"], str(root))
+    _archive_material_run(run_dir)
+    (root / "REPORT.md").write_text("#\n", encoding="utf-8")
+    (root / "elsewhere").mkdir()
+    (root / "elsewhere" / "note.md").write_text("#\n", encoding="utf-8")
+    _commit(root, "REPORT.md", "elsewhere/note.md")
+
+    def verdict(*paths):
+        (run_dir / "MANIFEST.json").write_text(
+            json.dumps({"files": [{"path": p} for p in paths]}),
+            encoding="utf-8")
+        _commit(root, "runs/somerun/MANIFEST.json")
+        return _check_ten_row(runs_root, monkeypatch)
+
+    assert (run_dir / "REPORT.md").exists() is False
+    red = verdict("REPORT.md")
+    assert red["ok"] is False, (
+        "a run that never had a REPORT.md passed on the repository root's copy")
+    assert "REPORT.md" in red["detail"]
+    assert "mixes two path conventions" not in red["detail"], (
+        "the reader is pointed at the wrong repair")
+
+    # ...and the shape this rule exists for still passes.
+    assert verdict("elsewhere/note.md")["ok"] is True
 
 
 def test_check_ten_is_actually_wired_into_the_run(tmp_path):
