@@ -18,7 +18,7 @@ Regenerate all of it with `python figures/build_all.py`; check it with `bash fig
 | Figure 3 | §5 | `fig05_a2_repair_loop` | `figures/fig05_a2_repair_loop.py` | 13 file(s) | complete |
 | Figure 4 | §6 | `fig04_a3_transfer` | `figures/fig04_a3_transfer.py` | 7 file(s) | complete |
 | Figure 5 | §7 | `fig03_capability_spectrum` | `figures/fig03_capability_spectrum.py` | 4 file(s) | complete |
-| Figure 6 | §7 | `fig02_bill_shape` | `figures/fig02_bill_shape.py` | 34 file(s) | complete |
+| Figure 6 | §7 | `fig02_bill_shape` | `figures/fig02_bill_shape.py` | 37 file(s) | complete |
 
 ## Artefacts and digests
 
@@ -169,20 +169,20 @@ trusting it.
 ### Figure 6 — Bill shape: what each arm's turns cost, and when
 
 * plate `fig02_bill_shape`, §7 (The metrics battery, recomputed over existing trajectories)
-* CSV `figures/csv/fig02_bill_shape.csv` sha256 `7ebba11c7006c2bd1681067bffec2538509083b30dc573086c5189d348138c2a`
+* CSV `figures/csv/fig02_bill_shape.csv` sha256 `08bc1bf28130977ba02657111f7bc2492ca3828247d99db6ee72d381c07ea415`
 
 | artefact | sha256 |
 |---|---|
-| `figures/paper/light/figure6_bill_shape.pdf` | `e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205` |
-| `figures/paper/light/figure6_bill_shape.png` | `9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461` |
-| `figures/paper/light/figure6_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
-| `figures/paper/dark/figure6_bill_shape.pdf` | `6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f` |
-| `figures/paper/dark/figure6_bill_shape.png` | `557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c` |
-| `figures/paper/dark/figure6_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
-| `figures/out/light/fig02_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
-| `figures/out/light/fig02_bill_shape.png` | `5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e` |
-| `figures/out/dark/fig02_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
-| `figures/out/dark/fig02_bill_shape.png` | `a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989` |
+| `figures/paper/light/figure6_bill_shape.pdf` | `f3e4e88ccd5159f1119b8190788ef7c0c60797b50e181df432a5a85b79b4b393` |
+| `figures/paper/light/figure6_bill_shape.png` | `80651075f335f9ab98a4be529599f0eacae3887d812dfcd07d1869f1b99aa690` |
+| `figures/paper/light/figure6_bill_shape.svg` | `bbb9e053d06afee0f25fe85fd6c27960cbbd665d6d1ba579eae9400be81324fb` |
+| `figures/paper/dark/figure6_bill_shape.pdf` | `88a970d3726ab19f074b0d23b64da464c306971b8d3c50e5dfa98d0ea444a400` |
+| `figures/paper/dark/figure6_bill_shape.png` | `a2abdd393b4bb0788529e6afea9fd796e1c83c01dfd378e004fa7e077eca9b3c` |
+| `figures/paper/dark/figure6_bill_shape.svg` | `c28bf1ac2a850cda7c19147bcc9769f09c124acf9b7783656db939f891a5063b` |
+| `figures/out/light/fig02_bill_shape.svg` | `bbb9e053d06afee0f25fe85fd6c27960cbbd665d6d1ba579eae9400be81324fb` |
+| `figures/out/light/fig02_bill_shape.png` | `791d0515bd72eebe38061376cc748c335ca580810a6cebc0d6300e4b8730bd5e` |
+| `figures/out/dark/fig02_bill_shape.svg` | `c28bf1ac2a850cda7c19147bcc9769f09c124acf9b7783656db939f891a5063b` |
+| `figures/out/dark/fig02_bill_shape.png` | `07f8efd18bd4dc4a2645fde2e5da5f8c7ba6d40e1f144777186277aa2bb5922e` |
 
 | data source | sha256 | what |
 |---|---|---|
@@ -209,14 +209,17 @@ trusting it.
 | `baseline-arms/out/shards/ledger.g50t.jsonl` | `7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `baseline-arms/out/shards/ledger.sk48.jsonl` | `4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `baseline-arms/out/shards/ledger.tn36.jsonl` | `bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b` | envelope campaign ledger shard, same two dialects as the pilot ledger |
+| `baseline-arms/out/shards/ledger.transport-ab.jsonl` | `46ae8185d993c750d81728f698884f7bc0f456c52fab6a49be3dd68005f53dad` | envelope campaign ledger shard, same two dialects as the pilot ledger |
 | `battery/REPORT_V0.md` | `90bf3eb00defeb4a525d15983e3baec46c51939300febd5ccc3c97e1783e2245` | the step-failure confound panel C draws: 'Between 27% and 45% of steps in the pilot' failed outright, which makes E5 cost-per-action a price list |
 | `battery/artifacts/capability_spectrum.json` | `205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6` | cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints |
-| `papers/phase1-workshop/REVIEW.md` | `a5ad9bf75921326fb541b1ed98a6bd893de98ce3e8afc56fc3f0bea7180f8591` | the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records that the 27% lower bound does not reproduce. Declared so both numbers travel: the plate had been drawing the refuted bound alone |
-| `theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json` | `52b323f24181c09dd971e8665f97f6afd3f74ba93761f034f72c86205d73545b` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
+| `papers/phase1-workshop/REVIEW.md` | `a420a05429ffc44d49035a763c0222d926969fb1922c2642abb9a033cac19945` | the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records that the 27% lower bound does not reproduce. Declared so both numbers travel: the plate had been drawing the refuted bound alone |
+| `theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json` | `cee120429c60502da53c44f9e25a0d60e7bc60e26cc9b1bef124c518a42ba035` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
 | `theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json` | `fb450e8733cc3c083c6fbdebeff691f0ce0f780ad38766e40eda054cd6e3935a` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json] |
-| `theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json` | `34dffab6bbf09f1719591f639ca37d6334435a607035123cff2faaa6e00bb420` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
+| `theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json` | `2a5100151de87d55258a850716feff5f7366a033232ae6dc4389e7e23e15270e` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
 | `theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/cost_curve.json` | `183c07e7e4c9678dcde120ea51df3ab481b5cf40d05092b6f307244a56dbb873` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json] |
 | `theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json` | `b3b56e1c4db28510d29baa4c68bf064a48b787bf1f0bda3e4993f72904038105` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
 | `theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json` | `481e94ae45cc50cbe64078b08732332f5a4b5437dc81dab14a568a65c55f9cd2` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json] |
+| `theoria-arm/runs/20260729T105729Z-leg01/MANIFEST.json` | `fb84b412ff53c301a4a34aacf17effece44ec7a6e686112d46a3aff0ebb206f6` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
+| `theoria-arm/runs/20260729T105729Z-leg01/cost_curve.json` | `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json] |
 | `theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json` | `4e4c15d3d4cd6fa167808532747a9d4b4330c2ef14caa5db7f8d6f5c7b824bad` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json] |
 | `theoria-arm/runs/preflight-20260728T012057Z/cost_curve.json` | `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570` | a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json] |

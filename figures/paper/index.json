@@ -750,44 +750,44 @@
         {
           "format": "pdf",
           "path": "figures/paper/light/figure6_bill_shape.pdf",
-          "sha256": "e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205",
+          "sha256": "f3e4e88ccd5159f1119b8190788ef7c0c60797b50e181df432a5a85b79b4b393",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/paper/light/figure6_bill_shape.png",
-          "sha256": "9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461",
+          "sha256": "80651075f335f9ab98a4be529599f0eacae3887d812dfcd07d1869f1b99aa690",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/paper/light/figure6_bill_shape.svg",
-          "sha256": "6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c",
+          "sha256": "bbb9e053d06afee0f25fe85fd6c27960cbbd665d6d1ba579eae9400be81324fb",
           "theme": "light"
         },
         {
           "format": "pdf",
           "path": "figures/paper/dark/figure6_bill_shape.pdf",
-          "sha256": "6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f",
+          "sha256": "88a970d3726ab19f074b0d23b64da464c306971b8d3c50e5dfa98d0ea444a400",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/paper/dark/figure6_bill_shape.png",
-          "sha256": "557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c",
+          "sha256": "a2abdd393b4bb0788529e6afea9fd796e1c83c01dfd378e004fa7e077eca9b3c",
           "theme": "dark"
         },
         {
           "format": "svg",
           "path": "figures/paper/dark/figure6_bill_shape.svg",
-          "sha256": "4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8",
+          "sha256": "c28bf1ac2a850cda7c19147bcc9769f09c124acf9b7783656db939f891a5063b",
           "theme": "dark"
         }
       ],
       "cite": "Figure 6",
       "csv": {
         "path": "figures/csv/fig02_bill_shape.csv",
-        "sha256": "7ebba11c7006c2bd1681067bffec2538509083b30dc573086c5189d348138c2a"
+        "sha256": "08bc1bf28130977ba02657111f7bc2492ca3828247d99db6ee72d381c07ea415"
       },
       "generator": "figures/fig02_bill_shape.py",
       "missing_sources": [],
@@ -800,6 +800,7 @@
             "20260728T012311Z-g50t-first-contact-aborted",
             "20260728T014402Z-g50t-first-contact-aborted",
             "20260728T015354Z-g50t-first-contact",
+            "20260729T105729Z-leg01",
             "preflight-20260728T012057Z"
           ],
           "kind": "discovery",
@@ -832,25 +833,25 @@
         {
           "format": "svg",
           "path": "figures/out/light/fig02_bill_shape.svg",
-          "sha256": "6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c",
+          "sha256": "bbb9e053d06afee0f25fe85fd6c27960cbbd665d6d1ba579eae9400be81324fb",
           "theme": "light"
         },
         {
           "format": "png",
           "path": "figures/out/light/fig02_bill_shape.png",
-          "sha256": "5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e",
+          "sha256": "791d0515bd72eebe38061376cc748c335ca580810a6cebc0d6300e4b8730bd5e",
           "theme": "light"
         },
         {
           "format": "svg",
           "path": "figures/out/dark/fig02_bill_shape.svg",
-          "sha256": "4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8",
+          "sha256": "c28bf1ac2a850cda7c19147bcc9769f09c124acf9b7783656db939f891a5063b",
           "theme": "dark"
         },
         {
           "format": "png",
           "path": "figures/out/dark/fig02_bill_shape.png",
-          "sha256": "a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989",
+          "sha256": "07f8efd18bd4dc4a2645fde2e5da5f8c7ba6d40e1f144777186277aa2bb5922e",
           "theme": "dark"
         }
       ],
@@ -918,105 +919,112 @@
           "path": "baseline-arms/out/shards/ledger.a7-g50t.jsonl",
           "present": true,
           "sha256": "0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7-sk48.jsonl",
           "present": true,
           "sha256": "7e8a7af63730bc00b911fa160e321938b0c6261710b5b7486d3cf99820bef845",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7-tn36.jsonl",
           "present": true,
           "sha256": "87c560e42b160901518de2e0d06742458f1c79be61d31e9761dc87b6c6f21678",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7recheck.jsonl",
           "present": true,
           "sha256": "d4c131b2a6d749ba831ca21400a08d42b2afb024bfc6619674928cb4a8cff61a",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7smoke.jsonl",
           "present": true,
           "sha256": "aae77cb96fec2d0a1b224ef536f5a08ef162c7ed0d1066ef7af7d9a489f01992",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl",
           "present": true,
           "sha256": "b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl",
           "present": true,
           "sha256": "d9f38d30cdb109b592cce3e2b80a24621836d6f7a39b1537a2cca44ba562e0b0",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl",
           "present": true,
           "sha256": "006a78a33499c4d58a1b4ed6df67fe4eb554851b35033ccd46d5faf3271ee447",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl",
           "present": true,
           "sha256": "89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl",
           "present": true,
           "sha256": "bd0642458c40fc1f2c8da5d49dfaee8956f507058de79fb4901321bc750cc2b3",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl",
           "present": true,
           "sha256": "570088da13eb58f0cfb6bc05ee64b420d0ed61c25638a3db11012cc3d0a4ad61",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
           "present": true,
           "sha256": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
           "present": true,
           "sha256": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
           "present": true,
           "sha256": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0",
-          "tracked": false,
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
           "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
           "present": true,
           "sha256": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b",
-          "tracked": false,
+          "tracked": true,
+          "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.transport-ab.jsonl",
+          "present": true,
+          "sha256": "46ae8185d993c750d81728f698884f7bc0f456c52fab6a49be3dd68005f53dad",
+          "tracked": true,
           "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
         },
         {
@@ -1036,14 +1044,14 @@
         {
           "path": "papers/phase1-workshop/REVIEW.md",
           "present": true,
-          "sha256": "a5ad9bf75921326fb541b1ed98a6bd893de98ce3e8afc56fc3f0bea7180f8591",
+          "sha256": "a420a05429ffc44d49035a763c0222d926969fb1922c2642abb9a033cac19945",
           "tracked": true,
           "what": "the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records that the 27% lower bound does not reproduce. Declared so both numbers travel: the plate had been drawing the refuted bound alone"
         },
         {
           "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json",
           "present": true,
-          "sha256": "52b323f24181c09dd971e8665f97f6afd3f74ba93761f034f72c86205d73545b",
+          "sha256": "cee120429c60502da53c44f9e25a0d60e7bc60e26cc9b1bef124c518a42ba035",
           "tracked": true,
           "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
         },
@@ -1057,7 +1065,7 @@
         {
           "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json",
           "present": true,
-          "sha256": "34dffab6bbf09f1719591f639ca37d6334435a607035123cff2faaa6e00bb420",
+          "sha256": "2a5100151de87d55258a850716feff5f7366a033232ae6dc4389e7e23e15270e",
           "tracked": true,
           "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
         },
@@ -1079,6 +1087,20 @@
           "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json",
           "present": true,
           "sha256": "481e94ae45cc50cbe64078b08732332f5a4b5437dc81dab14a568a65c55f9cd2",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260729T105729Z-leg01/MANIFEST.json",
+          "present": true,
+          "sha256": "fb84b412ff53c301a4a34aacf17effece44ec7a6e686112d46a3aff0ebb206f6",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260729T105729Z-leg01/cost_curve.json",
+          "present": true,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
           "tracked": true,
           "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
         },
