@@ -371,6 +371,29 @@ class SealedPileGuard:
                     found.append(token)
         return found
 
+    def game_ids_in_text(self, text: Optional[str]) -> List[str]:
+        """Every game id or registered stem a single piece of text mentions.
+
+        The public form of `_ids_in_text`, for callers that have prose rather
+        than a request -- specifically the arm's model desk, which has to keep
+        game identifiers out of a *prompt* (`Theoria.md:353`'s 硬规) and had no
+        scanner but a naive substring test against the one game it knew about.
+
+        Reusing this scanner rather than writing a second one is the point.
+        `s in prompt` over 25 stems is not a smaller version of this check, it
+        is a different and wrong one: `sk48` would fire inside `task48`, `ar25`
+        inside `similar25`, and a desk that refuses ordinary English is a desk
+        that gets its guard switched off. What is here instead is token-bounded
+        (`_TOKEN` against the register), sees percent-encoded, NFKC and
+        zero-width-stripped readings, and follows one level of base64 -- all
+        properties the red team paid for on the request path.
+
+        It does **not** run the manufactured value-join: there are no fields to
+        join in a prompt, and the join's ids are judged by a stricter rule that
+        does not apply to prose.
+        """
+        return self._ids_in_text(text or "")
+
     def game_ids_in(self, path: str, query: str, body: Any,
                     raw: Any = None, headers: Any = None) -> List[str]:
         """Every game id a request mentions, wherever it hides."""

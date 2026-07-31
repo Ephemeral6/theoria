@@ -400,11 +400,59 @@ def test_a_run_names_its_campaign_and_shares_one_claim(tmp_path, monkeypatch,
         assert r.campaign == \
             "theoria-arm:A3-campaign-devpile:g50t-5849a774:named"
         assert not r.campaign.startswith("theoria:r-")
-        assert r._cfg.spend_reservation is r.spend.reservation
-        assert r._cfg.spend_reservation_owned is False, \
-            "the env proxy must not release a claim the desk still spends under"
+        # The env proxy is a child process now, so "handed the same claim" is
+        # an argv rather than an attribute: `--reservation-id` is what makes
+        # the child attach to this reservation instead of taking its own, and
+        # `proxy/env_proxy.py` sets `spend_reservation_owned` False for any
+        # reservation it did not itself reserve -- so passing the id *is* the
+        # not-owned property. The assertion below is on the wire the parent
+        # actually built, which is the thing that can silently stop happening.
+        assert r.proxy.reservation is r.spend.reservation
+        argv = r.proxy._argv("<port-file>", str(tmp_path))
+        assert "--reservation-id" in argv
+        assert argv[argv.index("--reservation-id") + 1] == \
+            r.spend.reservation.reservation_id
+        assert argv[argv.index("--campaign") + 1] == r.campaign
         assert r.run.spend_binding is r.spend
         assert len(pool.totals().live) == 1
+
+
+def test_the_env_proxy_child_never_owns_the_claim_it_was_given(tmp_path, pool):
+    """The other half of the assertion above, checked where it is decided.
+
+    `Run` passes a reservation id on the command line; the child rebuilds a
+    handle from it, and `EnvProxyConfig` marks any reservation it was *handed*
+    as one it does not own -- so it never releases it. This walks the child's
+    own argument parser and constructor rather than starting a process, because
+    what is being pinned is the rule and not the plumbing. A child that gave
+    the claim back would hand back headroom the desk is still spending under,
+    and the run's next model call would die complaining about a reservation
+    that "is not in the pool ledger".
+    """
+    from proxy.env_proxy import (EnvProxyConfig, _spend_from_args,   # noqa: PLC0415
+                                 build_argument_parser)
+
+    reservation = pool.reserve("theoria-arm:test:attach", 1.0, 10,
+                               holder={"test": True})
+    try:
+        args = build_argument_parser().parse_args([
+            "--arm", "theoria", "--run-id", "r-attach",
+            "--campaign", reservation.campaign,
+            "--reservation-id", reservation.reservation_id,
+            "--usd-cap", "1.0", "--action-cap", "10", "--no-require-key"])
+        rebuilt = _spend_from_args(args)["reservation"]
+        assert rebuilt.reservation_id == reservation.reservation_id
+        assert rebuilt.campaign == reservation.campaign
+
+        cfg = EnvProxyConfig(
+            run_id="r-attach", arm="theoria", api_key="stub-not-a-credential",
+            require_key=False, ledger_path=str(tmp_path / "ledger.jsonl"),
+            campaign=reservation.campaign, spend_gate=pool,
+            spend_reservation=rebuilt)
+        assert cfg.spend_reservation_owned is False
+        assert cfg.spend_reservation is rebuilt
+    finally:
+        pool.release(reservation, "test over")
 
 
 def test_the_auto_derived_campaign_name_is_refused(pool, expect, caps):

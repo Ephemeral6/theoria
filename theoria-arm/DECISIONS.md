@@ -456,3 +456,114 @@ The advance budget is spent **per boundary, not per run**: it was never reset on
 success, so a run that advanced twice stopped at the third boundary reporting
 `level_advance_unknown` immediately after advancing twice. g50t has seven
 levels.
+
+---
+
+## D-A3-005 · The environment proxy is a child process, because the seal is a boundary and not a discipline
+
+`Run.__init__` used to build an `EnvProxyConfig`, and that constructor's second
+statement is `read_secret("ARC_API_KEY", ...)`. So the live game credential was
+resident at `run._cfg.api_key`, and in the process-wide `VAULT`, inside the same
+interpreter that runs the inner loop, the engines and every line of
+model-facing code. Nothing leaked it. It was simply *there*, and `Theoria.md`
+Phase 1's 臂进程摸不到环境凭据 was false as written -- measured with a sentinel
+key in `runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/`, not argued about.
+
+`python -m proxy.env_proxy` is now started as a child (`harness/proxy_process.py`)
+and this process holds a `http://127.0.0.1:<port>` URL and nothing else. The
+child reads `.env` itself. **The parent neither passes the credential nor reads
+it**, which is what makes this a seal: an arm-side bug cannot leak a value its
+process never held, and no amount of care in the parent was ever going to be
+checkable the way a process boundary is.
+
+Three things were deliberately *not* done.
+
+`proxy/env_proxy.py`'s in-process `EnvProxy` class is untouched. `proxy/runner.py`
+runs the env proxy, the model proxy and a mock arm in one interpreter and the
+proxy track's tests assert against handler objects directly; the "arm" there is
+the test, so there is nothing to seal and forking those flows would cost the
+ability to poke at internals for no property gained. The standalone CLI is
+additive: a `--port-file` handshake, `--campaign`/`--reservation-id` to attach
+to a claim the parent already opened, `--api-key-env` for stubs, and
+`POST /__proxy/shutdown`.
+
+The credential is never a command-line argument, only a variable *name*. On
+Windows any user can read another process's command line, so a `--key` flag
+would publish to the whole machine what this decision exists to contain. The
+stub channel is a different variable name from `ARC_API_KEY` as well, so a mock
+run cannot silently fall back to the real credential and inject it into a
+request bound for a loopback stub -- a leak with a green test beside it.
+
+The reservation is **attached, not owned**. The parent opens one claim on the
+shared pool and passes its id; the child rebuilds a handle and `EnvProxyConfig`
+marks any reservation it was handed as one it does not release. A child that
+released it would hand back headroom the desk is still spending under. That is
+also what makes hard-killing the child safe, which matters because Windows has
+no SIGTERM: `stop()` asks over HTTP, waits, and only then insists.
+
+What it costs: about a second of child startup per run, and the ledger now has
+two writers. `proxy/ledger.py` takes a cross-process lock on a sidecar file and
+re-reads the tail inside it, and the step and call counters are disjoint by
+writer, so one hash chain with two writers is exactly as sound as one with one.
+`tests/test_seal_process.py` verifies a real two-writer run's chain rather than
+citing the lock.
+
+The instrument matters as much as the fix. `tests/test_seal_process.py` plays a
+whole mock game in a fresh interpreter with `ARC_API_KEY` removed *and*
+`read_secret` replaced by something that raises, and asserts the positive half
+too -- a sentinel arriving at the upstream as `X-API-Key` -- because "the
+sentinel is nowhere in the parent" is also satisfied by a proxy that injects
+nothing, which is not a seal but a broken proxy.
+
+---
+
+## D-A3-006 · The pile cut is screened by the desk, not by whoever built it
+
+`inner/loop.py` hands `ModelDesk(forbid_in_prompt=...)` every sealed id and
+stem, tested with a bare `in`. Two failures pull in opposite directions and
+both are real.
+
+It is only as good as the caller: a `ModelDesk` built anywhere else -- a smoke
+script, a new beat, a test -- gets the default empty tuple and screens nothing.
+And a bare `in` over twenty-five stems refuses ordinary English (`sk48` fires
+inside `task48`), which is how a guard ends up switched off, taking the
+twenty-one that matter with it.
+
+So `ModelDesk` now loads the cut itself and scans with the proxy's own
+`SealedPileGuard.game_ids_in_text` -- token-bounded against the register,
+percent-decoding, NFKC-normalising, zero-width-stripping, one level of base64.
+All properties the red team already paid for on the request path; reusing the
+scanner rather than writing a second one is the point of the change.
+
+The ids are read from `arc-recon/data/piles.json` at construction and **never
+hard-coded**. Writing twenty-one sealed identifiers into this arm's source
+would put the exam set in a tracked file, and a copy of a cut is a second cut
+that can disagree with the first. Fail-closed: a desk that cannot enumerate the
+sealed pile cannot promise it kept the pile out of a prompt, so it does not get
+built.
+
+Three outcomes, and the middle one is why this is not one `if`. A sealed id or
+bare stem raises `SealedPileBreach`; a development id raises `AnonymityBreach`;
+an id-*shaped* string that is in neither pile is allowed through. That last one
+is deliberate: `<2-6 alphanumerics>-<8 hex>` is a shape ordinary prompt text
+hits by accident -- a branch name, a run slug, half a digest -- and the sealed
+pile is a fixed enumeration, so a shape absent from the register is not a
+sealed game. The request path can afford `unknown_policy = deny` because a
+request names one game on purpose; a 20,000-character prompt does not.
+
+`SealedPileBreach` subclasses `AnonymityBreach` so `inner/loop.py`'s
+`except (AnonymityBreach, CredentialBreach): raise` keeps the stricter case
+fatal without editing another agent's file. The two still need separate names:
+an `AnonymityBreach` says a run is inadmissible and is undone by repeating it
+with a game-free slug, while a sealed leak teaches a model a game the exam has
+not run yet -- `piles.json` rule 3, the class of event INC-BA-001 is -- and no
+repetition un-teaches it. They must be distinguishable in a ledger and in a
+traceback. The subclassing is load-bearing enough that `tests/test_arm.py`
+drives both through the real loop: making them siblings is the obvious refactor
+for "different incidents", and it would drop the stricter one into the broad
+`except Exception` handler.
+
+The incident is written **before** the raise. An incident recorded only by a
+traceback is an incident in a terminal somebody has already closed, and the
+record uses `sealed_pile_in_prompt`, which was already in `proxy/canon.py`'s
+open set and had never been raised by anything.

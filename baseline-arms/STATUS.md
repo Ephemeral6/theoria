@@ -273,6 +273,38 @@ F-15 要求的「degraded 单独一行」；`audit_cells` 的封存前缀是子�
 
 ## 缺口与阻塞
 
+### GAP-5（新，2026-07-31 清理战役登记）：本轨道的凭据仍在臂进程里，且不走环境代理
+
+**只登记，不改代码。** 这一条不是本轨道犯的错，是**规矩后来变严了**，本段把差
+距写下来，免得下一个会话把「其他臂已经封印了」误读成本轨道也封印了。
+
+事实，逐条可查：
+
+* `harness/arc_client.py:137` 的 `load_api_key()` 直接打开 `.env` 取
+  `ARC_API_KEY`，`arc_client.py:199` 把它存进 `self._key`；调用直接打到 ARC，
+  **不经过 `proxy/` 的环境代理**。凭据因此常驻臂进程，整个 run 期间都在。
+* `Theoria.md` 第一阶段的封印是个合取：臂进程摸不到环境凭据，**且**绕过两个代理
+  的出口必须失败。本轨道两个合取项都不满足——没有代理，也就没有第二项可谈。
+* 时间线是这样的：本轨道 M5/M6 写在这条裁决落地之前，`theoria-arm` 到
+  2026-07-31 才把环境代理改成**子进程**（`theoria-arm/harness/proxy_process.py`，
+  臂进程自己不再读 `.env`）。本轨道的设计**早于**那次裁决，不是无视它。
+
+处置，两个臂分开判：
+
+* **schema 复现臂：已退役，判定为「只记不修」。** M3 已裁官方 release
+  「找不到」（[`SCHEMA_LOCATE.md`](SCHEMA_LOCATE.md)），这个臂从未成为会打游戏的
+  harness（M6 只有路 A 材料）。一个不再开跑的臂不值得为它改客户端；本段与
+  [`AUDIT.md`](AUDIT.md) 的登记就是它的全部处置。
+* **`bare_cc`：没有退役，所以这是一个真阻塞。** M5 方差战役停在闸门红 1/4，
+  `agent/p12-envelope-finish` 打算续跑。**在再花一分钱之前**，`arc_client` 需要
+  真修：加一个 `ARC_BASE_URL` 之类的代理指向、去掉自己读 key 的那条路径，
+  `run_pilot.py` / `run_campaign.py` 复用 `theoria-arm` 那个
+  `EnvProxyProcess`——它是臂无关的，run_id / arm / campaign / reservation 都是
+  参数。在那之前的临时管制是 [`BUDGET_REPORT.md`](BUDGET_REPORT.md) §9 的停跑
+  条件：**客户端未接代理，不得线上续跑**。
+* `harness/bare_cc.py:186` 已经在起 `claude -p` 之前 `env.pop("ARC_API_KEY")`，
+  那一行是对的，**保留**。它挡的是模型子进程，不是本条说的臂进程常驻。
+
 ### GAP-4（新，A14 发现）：战役重启会把已花的钱从账上抹掉
 
 四份检查点每份的 `episodes[]` 只列 12 个 run，而对应的分片账本里有 **14** 个。
