@@ -58,6 +58,60 @@ cd theoria-arm && python -m harness.run --game g50t-5849a774 --budget 120 --mode
 cd theoria-arm && python -m armtools.archive --slug <the slug>
 ```
 
+## Carrying the books to a second game
+
+The second online game (E3) starts from the first game's manual instead of from
+nothing. Only the two hand-written books travel:
+
+```bash
+cd theoria-arm && python -m armtools.spend_check \
+    --basis-run runs/<the first run> \
+    --out runs/<this run>/BUDGET_PLAN.json \
+    --game sk48-d8078629 --actions 120 --ceiling 18 --legal-actions 5
+```
+
+```bash
+cd theoria-arm && python -m harness.run --game sk48-d8078629 --budget 120 \
+    --cost-ceiling 18 --prompt-id E3-engines-online \
+    --seed-books runs/<the first run>/books --carry-source-game g50t-5849a774 \
+    --slug "$(date -u +%Y%m%dT%H%M%SZ)-sk48-carried"
+```
+
+```bash
+cd theoria-arm && bash verify_e3.sh                 # offline, no quota
+cd theoria-arm && bash verify_e3.sh <the live slug> # and the live artefacts
+```
+
+**`problem.json` never travels.** It is the level instance, computed from the
+frames of the game being played, and carrying it would import the previous
+game's board and make the transfer claim unfalsifiable. `transfer.json` names
+the exclusion rather than leaving it as an absent line of code.
+
+**The measurement happens before the first model call.** `_cold_transfer` runs
+between the opening sweep and the main loop: it computes this level's problem
+from the carried manual's own declarations, compiles, and certifies — so the
+numbers belong to an *unrepaired* manual. Once the desk has been called, what
+is being measured is a repaired manual, and the run can no longer tell the
+difference.
+
+**The carried manual predicts its own failure number, and that prediction is
+scored.** `render_accounting_closed` states `unexplained(frame_0) = D0 - K` and
+claims it is arithmetic runnable in advance. That claim is about this
+framework's renderer, not about g50t, so a different game can genuinely test
+it. The prediction is written to disk before certify runs, on the same
+discipline `probe` follows.
+
+**A refusal is a delivery.** `engines_online.jsonl` gets a row per dispatch per
+engine, with `delivered`, `error`, `skipped` and `n_refusals` as separate
+columns. `cegis_miner` refusing because a world does not narrate as one mover
+is the engine working; an engine that raises or comes back empty without saying
+why is not.
+
+**The action budget is not the binding constraint.** At the first run's
+measured $1.26 per desk call, a 120-action run costs about $35. `BUDGET_PLAN.json`
+computes that from the prior run's cost curve and states which constraint binds
+*before* the first action is spent.
+
 ## The four things to know before building on this
 
 **The model side is recorded but not proxied.** `proxy/model_proxy.py` strips

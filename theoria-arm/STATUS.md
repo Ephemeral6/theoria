@@ -1,13 +1,126 @@
 # STATUS — theoria-arm
 
-**Milestone: P-8, the Theoria arm's first online contact.** Branch
-`agent/p8-theoria-arm`, base commit `df9f748`. This file is the state of the
-track; the reasons live in `DECISIONS.md` and the per-run account in
-`runs/<slug>/MANIFEST.json`.
+**Milestone: E3, the second online game.** Branch `agent/e3-engines-online`,
+base commit `e182c95`. The previous milestone, P-8 (first online contact), is
+recorded below and unchanged. This file is the state of the track; the reasons
+live in `DECISIONS.md` and the per-run account in `runs/<slug>/MANIFEST.json`.
+
+> **Read the E3 section as of 2026-07-28, not as of today.** It was written on a
+> branch 993 commits behind and ported onto master on 2026-07-31. Master carried
+> work E3 could not have known about, and two of E3's statements are false of the
+> arm you are reading:
+>
+> * **the shared spend gate exists** and is mandatory — see GAPS.md GAP E3-2's
+>   closing note. E3 recorded it as absent, correctly, on its own commit.
+> * **the game id never enters a prompt.** `ModelDesk(forbid_in_prompt=...)`
+>   enforces Theoria.md:353 for the played id *and every sealed one*, checked
+>   before the subprocess starts. E3 predates it.
+>
+> Everything E3 says about what its two paid legs did is unchanged and still
+> true: those runs happened on that commit, under those conditions.
 
 ---
 
-## Where this stands
+## E3 — carrying the books to sk48
+
+P-8 proved the loop turns online. E3 asks two different questions, and neither
+of them is about winning:
+
+1. **does the engine supply chain hold up on a live game** — one row per
+   dispatch per engine in `engines_online.jsonl`, with `delivered`, `error`,
+   `skipped` and `n_refusals` as four separate columns, because a refusal is an
+   engine working and an error is not;
+2. **does a written theory transfer to a game it was not written for** — the
+   g50t manual is carried into sk48 and certified *cold*, before the first
+   model call, so the numbers belong to an unrepaired manual.
+
+The game is **sk48-d8078629**, and tn36 was excluded for a mechanical reason
+rather than a preference: `precheck.json` records its `available_actions` as
+`[6]`, ACTION6 is the click family that `_legal_actions` filters out (D-P8-012),
+and the arm would have found no legal action and stopped before its first turn.
+sk48 offers `[1, 2, 3, 4, 6, 7]`. Pre-flight on it cost **0 billed actions**:
+64×64, ten colours, eight levels, RESET in 5 attempts, and no `score` field —
+the same Phase 1 obligation gap P-8 reported, unchanged.
+
+### What the first carry actually established, after review
+
+The mechanism ran: carry the two books, compute the new level from the carried
+manual's own declarations, compile the four forms, certify against the new
+game's frames — all before a model was called. That machinery is what E3 asked
+to be built and it works.
+
+**The transfer claim itself is untested by that run, and the reason is sharp.**
+The carried manual's generated `ACTIONS` is `[('key', 5)]` and all three of its
+rules open with `if action != ('key', 5): return False`. sk48's
+`available_actions` is `[1,2,3,4,6,7]` — **there is no ACTION5**. So every rule
+in the manual is unreachable, `step` is the identity for every action this arm
+can send, and replay 0/5 is trivial rather than structural. The manual's
+colour-semantics theorem also asserts the background is 0; on sk48 it is 5.
+
+The first reading of this run claimed the manual's render-accounting formula
+predicted its own failure number (70 against an observed 72) and that the +2 was
+a transfer result. An adversarial review refuted it and the refutation holds:
+`certify`'s `cells_unexplained` is **identically** `D0 − covered_by_objects`
+given how the board is built and how the generated `render` paints, so the
+prediction error is identically `K − covered_by_objects`, **D0 cancels**, and
+the agreement could never have failed. The "corrected formula" derived from it
+is that same quantity's definition written backwards. And the correction was
+already in the carried manual one theorem below the formula, so sk48 taught
+nobody anything: a faithful reading predicts 72, exactly right, and the
+refutation was of `inner/transfer.py`.
+
+The superseded reading is kept verbatim in the run's `RUN_STATE.md` under the
+correction. Full account: `DECISIONS.md` D-E3-012.
+
+**The requirement this produces for any future carry:** check that the carried
+manual's declared actions intersect the new game's `available_actions` *before
+spending anything*. It is free to compute and it is the difference between a
+transfer experiment and a manual that cannot be tested on the game it was
+carried to.
+
+### Two faults the live run found
+
+**INC-TA-006 — an upstream schema change ate a paid desk call.**
+`LEDGER_FORMAT.md` §4 closed `model_call`'s field set after P-8 landed, and P-8
+wrote five fields straight onto that record. `canon.py` refused every one of
+this arm's model calls, *after* the provider had been paid: `desk.calls` said 1,
+`desk_log.json` was `[]`, and the ledger held zero `model_call` records. Cost:
+$2.695 and one discarded reply, stopped before it became $15. The fields now
+ride inside `request`; a paid reply is no longer discarded by a bookkeeping
+failure; and a test drives `ModelDesk` into a real `RunLedger`. `upstream_pin()`
+had hashed the change into every manifest all along — **nothing compares those
+hashes between runs**, so it documented the incident instead of preventing it.
+
+**INC-TA-007 — level data crossed despite the exclusion.** Seven of g50t's
+landmark coordinates reached sk48's computed level verbatim through
+`# arc-cell:` comments inside the manual, which does travel. Stripped on carry
+now, with both hashes recorded so the modification is visible.
+
+### Before the money
+
+`armtools/spend_check.py` runs first and writes `BUDGET_PLAN.json`. Two things
+come out of it.
+
+**S3's shared spend gate has not landed.** `proxy/spend_gate.py` does not exist
+on this commit and `agent/s3-spend-gate` carries nothing matching `*spend*`
+under `proxy/`. The gate is looked for every time, used if present, and
+recorded `absent` with no reservation held if not — never as a pass. A test
+pins that.
+
+**The action budget is not the binding constraint.** At P-8's measured $1.2635
+per desk call, reaching 120 actions costs about **$35**; an $18 ceiling stops the
+run at roughly **29–61 actions**. Saying so before the first action is what makes
+the outturn a measurement of the bill's shape rather than a shortfall against
+120.
+
+```bash
+cd theoria-arm && bash verify_e3.sh                 # 78 tests + a carried mock run
+cd theoria-arm && bash verify_e3.sh <the live slug> # and the live artefacts
+```
+
+---
+
+## P-8 — where the first online contact stands
 
 The three arms of `Theoria.md`'s main table are: `bare_cc` (zero division of
 labour, measured), the Schema reproduction (half), and this one (full). This is

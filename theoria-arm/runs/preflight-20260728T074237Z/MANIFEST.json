@@ -1,0 +1,287 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 28,
+  "sha256": "d5c5161cca2e1dda80c97feef7b7323f6f95718c638a8d29b9fb3a90b809dcdd"
+ },
+ "base_commit": "2fbef9ee081a9afbd80410a2954d3f3aec7b4e0a",
+ "branch": null,
+ "classification": {
+  "archive_material": true,
+  "kind": "preflight",
+  "why": "a pre-flight: the live chain exercised for zero billed actions. Cheap, but live, and part of the account"
+ },
+ "constraint_8": {
+  "bootstrap_calls_allowed": 0,
+  "bootstrap_note": "the first theorize of a run answers no surprise because no manual exists yet for the world to contradict; it is counted as the one permitted bootstrap call and every later call must be covered by a surprise.",
+  "calls_at_forbidden_beats": {},
+  "calls_beyond_bootstrap": 0,
+  "calls_by_beat": {},
+  "calls_not_covered_by_a_surprise": 0,
+  "holds": true,
+  "model_calls": 0,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
+  "surprises": 0,
+  "surprises_by_kind": {},
+  "surprises_licensing_a_call": 0,
+  "surprises_retired": 0
+ },
+ "cost": {
+  "cache_ttl_diagnosis": {
+   "cache_creation_1h_tokens": 0,
+   "cache_creation_5m_tokens": 0,
+   "table": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "verdict": "no 1-hour cache writes in this run, so the flat 1.25x multiplier is the right one and this is not a source of disagreement"
+  },
+  "cli_reported_usd": 0.0,
+  "from_price_table": {
+   "missing_usage_keys": null,
+   "model_calls": 0,
+   "per_model": {},
+   "pricing": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "unmeasured_calls": 0,
+   "unpriced_models": null,
+   "unpriced_usage_keys": null,
+   "usd_total": 0.0
+  },
+  "model_calls": 0,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "usage_keys_the_table_cannot_price": null,
+  "usage_total": {},
+  "verdict": "nothing to compare: the CLI reported no cost (an offline or cached run)"
+ },
+ "elapsed_s": 10.7,
+ "files": [
+  {
+   "path": "ledger.jsonl",
+   "sha256": "d08d2139b3827479bd04c17e48e05a681bd0d57df7b3e5c5a865d1047a231f63"
+  },
+  {
+   "path": "run.json",
+   "sha256": "2f15074562dd10a332c6af4b89ae3dfb46fd56f3e1b5e65601618c4b6314ebaf"
+  }
+ ],
+ "game_id": "sk48-d8078629",
+ "guard": {
+  "allow_only": null,
+  "cut_version": "v1",
+  "n_dev": 4,
+  "n_sealed": 21,
+  "piles_path": "arc-recon/data/piles.json",
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "unknown_policy": "deny"
+ },
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 15,
+  "records_this_run": 15
+ },
+ "note_at_run_start": "pre-flight: RESET only, zero billed actions",
+ "outcome": "preflight",
+ "parent_run": {
+  "card_id": "95f3bf0d-6c7f-48fc-b0f3-99292855258e",
+  "parent_run_id_from_scorecard_opaque": "r-01009b3d8f9942d7",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": null
+ },
+ "prompt_id": "P-8",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "d5c5161cca2e1dda80c97feef7b7323f6f95718c638a8d29b9fb3a90b809dcdd",
+   "commits": [
+    "2fbef9ee081a9afbd80410a2954d3f3aec7b4e0a"
+   ],
+   "detail": "exactly one commit reachable from any ref carries this arm_version",
+   "earliest_commit": "2fbef9ee081a9afbd80410a2954d3f3aec7b4e0a",
+   "relation_to_the_run": {
+    "claim": "this run's arm sources were byte-identical to the tree held by this commit. The commit was created 10 s before the run started, so it is not 'the commit the run ran from' -- it is the commit whose tree the run's files match.",
+    "commit_committed_unix": 1785224547,
+    "commit_minus_run_start_s": -10,
+    "run_started_unix": 1785224557
+   },
+   "verdict": "matched"
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "base_commit": "armtools.armversion: the arm_version this run recorded is reconstructed from exactly one commit's tree",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "prompt_id": "the 'p8' tag on the scorecard this run opened; no opaque.prompt_id was stamped, because the card was never closed",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
+  "mode": "backfill",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
+ "quota": {
+  "agree": true,
+  "billed_actions_from_ledger": 0,
+  "billed_actions_from_scorecard": [
+   0
+  ],
+  "env_steps": 5,
+  "model_calls": 0,
+  "resets": 1
+ },
+ "reconciliation": {
+  "env_steps": 5,
+  "env_steps_ok": 1,
+  "http_amplification": null,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 0
+ },
+ "run_id": "r-01009b3d8f9942d7",
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "95f3bf0d-6c7f-48fc-b0f3-99292855258e",
+   "environments": [
+    {
+     "actions": 0,
+     "completed": false,
+     "id": "sk48-d8078629",
+     "level_count": 8,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 0,
+       "completed": false,
+       "guid": "9c18b834-6978-4c1e-a256-d4144db95f75",
+       "level_actions": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "run_id": "r-01009b3d8f9942d7"
+   },
+   "score": 0.0,
+   "tags": [
+    "theoria",
+    "p8",
+    "preflight",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 0,
+     "id": "keyboard_click",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 8,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 0,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 8,
+   "total_levels_completed": 0
+  }
+ ],
+ "sealing": {
+  "by_kind": {
+   "credential_in_body": 6
+  },
+  "bypass_attempts": 0,
+  "credential_in_body": 6,
+  "cut_integrity": true,
+  "game_ids_anywhere_in_the_records": [
+   "sk48-d8078629"
+  ],
+  "guard_blocks": 0,
+  "incidents": 6,
+  "redacted_markers": 0,
+  "sealed_game_ids_found": [],
+  "sealed_pile_requests": 0,
+  "sealed_pile_untouched": true
+ },
+ "slug": "preflight-20260728T074237Z",
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
+ },
+ "utc": "2026-07-28T07:42:37.547Z"
+}

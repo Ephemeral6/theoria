@@ -171,3 +171,119 @@ live run and that model answered in text.
 
 The full account is in `INCIDENTS.md` INC-TA-004 and in the two
 `runs/*-aborted/ABORTED.md` files, which are kept rather than deleted.
+
+---
+
+# GAPS — E3's contract, line by line
+
+> E3 · 引擎在线供货：Theoria 臂第二局
+>
+> P-8 已交付首个在线对局（g50t）。第二局要证的是不同的东西：**引擎在线供货链路稳定
+> + 跨关迁移在真 API 上成立**。选 sk48 或 tn36（预检 PASS），携第一局的两本书进场，
+> 度量 theorize 轮数、意外七种计数、逐回合成本曲线（C2 账单形状的真数据）。动作预算
+> ≤120，先算后花；账本经 proxy，用共享花费闸门（S3 落地后必须用）。
+
+| clause | status |
+|---|---|
+| a second online game, sk48 or tn36 | **done** — sk48; tn36 is unplayable by this arm and the reason is mechanical (D-E3-009) |
+| carry the first game's two books in | **done** — and one defect found doing it (INC-TA-007) |
+| engine supply chain holds up online | **done**, with a finding that matters more than the pass |
+| **cross-game transfer holds on the real API** | **GAP — the strongest claim E3 asked for is not established.** See GAP E3-1 |
+| theorize rounds measured | **done** |
+| the seven surprises counted | **done** |
+| per-turn cost curve, real C2 data | **done**, and it refutes the projection it was measured against |
+| action budget ≤ 120 | **done** — never approached; cost binds first, by design and by measurement |
+| compute before spending | **done** — `BUDGET_PLAN.json` predates the first action |
+| ledger through the proxy | **done** for the environment side; the model side carries P-8's standing gap, plus a new one (INC-TA-006) |
+| **use the shared spend gate** | **GAP — the gate does not exist.** See GAP E3-2 |
+
+---
+
+## GAP E3-1 · Cross-game transfer is *not* established, and this run could not have established it
+
+This is the headline clause and it is not delivered. The mechanism was built and
+ran; the claim was not tested.
+
+**What was delivered.** A manual written for g50t was carried into sk48,
+compiled against sk48's *computed* level, and certified over sk48's frames
+before any model call. That machinery works, costs nothing, and is what a
+transfer experiment needs.
+
+**Why it tested nothing.** The carried manual's generated `ACTIONS` is
+`[('key', 5)]` and all three of its rules open with
+`if action != ('key', 5): return False`. sk48's `available_actions` is
+`[1, 2, 3, 4, 6, 7]` — **there is no ACTION5**. So every rule was unreachable,
+`step` was the identity for every action this arm can send, and the replay
+result was evidence about that mismatch rather than about the manual's content.
+A manual whose action vocabulary does not intersect the new game's cannot be
+tested on it.
+
+**A second reason, independent of the first.** The cold certify's headline
+number was read as a test of the manual's render-accounting formula. It is not
+one: `cells_unexplained` is identically `D0 − covered_by_objects` given how
+`problem_from_frames` builds the board and how the generated `render` paints, so
+the prediction error is identically `K − covered_by_objects` and D0 cancels. The
+formula's own qualifier — already written in the carried manual one theorem
+below it — predicts the observed 72 exactly. Full account: `DECISIONS.md`
+D-E3-012, and the superseded reading is kept verbatim in the run's
+`RUN_STATE.md`.
+
+**What was done about it.** `transfer.action_overlap` now computes the
+intersection at the cold beat, for free, and the cold report leads with
+`carried_theory_is_testable_on_this_game`. This does not turn the gap into a
+pass — it makes the next carry able to see the gap before it spends anything.
+
+**What would close it.** A carry between two games whose action vocabularies
+overlap, so the carried rules can fire and be confirmed or refuted. Nothing in
+the pile cut prevents that; it simply was not true of g50t → sk48, and nothing
+checked before the run.
+
+## GAP E3-2 · The shared spend gate does not exist, so this run could not use it
+
+E3 requires `proxy/spend_gate.py` "once S3 has landed". It has not:
+the file does not exist on this commit and `agent/s3-spend-gate` carries nothing
+matching `*spend*` under `proxy/`. `armtools/spend_check.gate_status()` looks
+for it every run, would load and `reserve()` against it if present, and records
+`absent` with no reservation held otherwise — never as a pass, and a test pins
+that.
+
+So this run budgeted against its own arithmetic and **could not see what a
+concurrent session was spending against the same Anthropic bill.** One half of
+S3's stated premise has since been refuted by browser-ops — ARC has no quota at
+all, a key's only permission dimension is the game set — so the contention that
+remains is the model bill, which is the whole of E3's $18.
+
+> **Closed 2026-07-31, when this work was ported onto master.** The gate exists.
+> `proxy/spend_gate.py` and `theoria-arm/harness/spend.py` landed with
+> A3-campaign-devpile: every desk call now brackets itself with a reservation on
+> the shared pool, and `ModelDesk.binding()` **raises** `NoSpendBinding` rather
+> than permitting an ungated call, so an unbracketed desk call is no longer a
+> degraded mode of this arm — it is impossible. INC-BA-003 is the incident that
+> made the case: the single live g50t run spent $6.317658 while the pool's
+> report showed this arm's campaigns at $0.00, which is the sentence above
+> measured rather than predicted.
+>
+> The gap paragraph is **kept, not rewritten**. E3's two paid legs really did
+> spend ~$8.40 outside any pool's sight, and this is the only place in the
+> repository that says so. What changed is the code, not what happened.
+
+## GAP E3-3 · The bill's basis was wrong by 2.1×, and the projection is superseded by its own run
+
+`BUDGET_PLAN.json` projected from P-8's measured $1.2635 per desk call that $18
+buys about 14 calls and 29–61 actions. The first live sk48 call cost **$2.695** —
+2.1× the basis — because the prompt now carries a 21 KB inherited manual on top
+of the frames and the engine report. So $18 buys about 6–7 calls, not 14.
+
+The projection was not wrong to be made; it was made from the only measurement
+available and it is what makes the deviation legible. But a carried run's cost
+basis is not a cold run's, and the next projection should say so.
+
+## GAP E3-4 · `zero_space` is the arm's wall-clock bottleneck and is slowest when least informative
+
+Not a shortfall against the brief — the brief asked whether the supply chain
+holds, and it does — but the number belongs here because it bounds everything
+this arm can do next. `zero_space` was 99.9% of a 348-second engine dispatch,
+and its cost tracks the **null-space dimension**, which is largest exactly when
+the transitions are too few to constrain the features and its own verdict is
+THIN. Benchmarks and the live numbers are in the run's `RUN_STATE.md`. It is
+engine-rig's territory; this is a report, not a request.

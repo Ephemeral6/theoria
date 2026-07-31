@@ -204,12 +204,40 @@ def run(runs_root: Optional[str] = None) -> Checks:
     # 5 -- every run that spent an action has an API-confirmed number for it,
     #      whether in its own manifest or by a named pointer to the salvage
     #      that recovered it.
+    #
+    #      **Three shapes, because there are three ways a run comes to have its
+    #      card.** `scorecard` is what `archive.build` copies out of `run.json`
+    #      for a run that finished normally and wrote one. `scorecard_recovered_by`
+    #      names the salvage that closed a card this run died holding.
+    #      `scorecards_recovered` is the derivation path's shape
+    #      (`armtools.backfill`), and it is the *strongest* of the three: the
+    #      closed card as the API returned it, read straight out of this run's
+    #      own ledger.
+    #
+    #      That third shape had no reader here until the E3 sk48 carry landed,
+    #      because until then every backfilled archive run had either spent
+    #      nothing or died before closing. `20260728T083400Z-E3-sk48-carried-v2`
+    #      is the first that closed its own card *and* got its manifest by
+    #      derivation, and this check called it unconfirmed while its manifest
+    #      carried the API's own count of 30. A check that reads two of the three
+    #      shapes reports a provenance gap that is really a shape it does not
+    #      know.
+    #
+    #      Matched on `opaque.run_id`, not merely on presence: a salvage's
+    #      `scorecards_recovered` holds somebody else's card, and that must not
+    #      confirm the salvage's own actions.
     unconfirmed = []
     for row in survey:
         if not row["archive_material"] or not row["billed_actions_from_ledger"]:
             continue
         manifest = _manifest(runs_root, row["slug"]) or {}
         if manifest.get("scorecard") or manifest.get("scorecard_recovered_by"):
+            continue
+        own = [card for card in (manifest.get("scorecards_recovered") or [])
+               if ((card.get("opaque") or {}).get("run_id")
+                   == manifest.get("run_id")
+                   and card.get("total_actions") is not None)]
+        if own:
             continue
         unconfirmed.append(row["slug"])
     checks.check("every run that spent actions can point at its scorecard",

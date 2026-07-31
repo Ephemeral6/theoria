@@ -266,7 +266,8 @@ class ModelDesk:
                  transcript_dir: Optional[str] = None,
                  forbid_in_prompt: Sequence[str] = (),
                  pile_guard: Optional[SealedPileGuard] = None,
-                 screen_dev_pile: bool = True):
+                 screen_dev_pile: bool = True,
+                 context: Optional[Any] = None):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model
         self.pricing_ref = pricing_ref
@@ -338,12 +339,24 @@ class ModelDesk:
         #: a flag so that a caller which deliberately shows the desk a dev id
         #: -- there is no such caller today -- has to say so.
         self.screen_dev_pile = screen_dev_pile
+        #: An optional zero-argument callable returning whatever the caller
+        #: wants stamped on each log entry. The bill's *shape* -- what the nth
+        #: dollar bought -- needs the action count standing when the call was
+        #: made, and that number lives in the loop, not here. Asking for it at
+        #: call time is the only way to get it right: reconstructing it
+        #: afterwards from timestamps guesses, and a guessed x-axis is not a
+        #: measurement.
+        self.context = context
 
         self.calls = 0
         self.cli_cost_usd = 0.0
         self.unpriced_calls = 0
         self.usage_total: Dict[str, int] = {}
         self.log: List[Dict[str, Any]] = []
+        #: Ledger writes that were refused after the provider had been paid.
+        #: Empty is the expected state; non-empty means the run's ledger is
+        #: incomplete and says exactly where.
+        self.ledger_failures: List[Dict[str, Any]] = []
 
     # -- the account -------------------------------------------------------
     def _absorb_usage(self, usage: Dict[str, Any]) -> None:
@@ -357,7 +370,14 @@ class ModelDesk:
                "usage_total": dict(self.usage_total),
                "cost_ceiling_usd": self.cost_ceiling_usd,
                "unpriced_calls": self.unpriced_calls,
-               "beats": sorted({entry["beat"] for entry in self.log})}
+               "beats": sorted({entry["beat"] for entry in self.log}),
+               # Ledger writes refused after the provider was paid. Empty is
+               # the expected state; non-empty says the run's ledger is
+               # incomplete and exactly where. See `_record_to_ledger`.
+               "ledger_failures": list(self.ledger_failures),
+               "calls_missing_from_ledger": sum(
+                   1 for f in self.ledger_failures
+                   if f.get("stage") == "model_call")}
         binding = self.spend or getattr(self.run, "spend_binding", None)
         out["spend_gate"] = binding.describe() if binding is not None else None
         return out
@@ -616,20 +636,20 @@ class ModelDesk:
         # with the first. The comment forty lines above already said the field
         # set was closed and that `request` is the one place this arm may add
         # its own vocabulary. The code did the opposite of its own comment.
-        self.run.model_call(
-            provider=PROVIDER,
-            model=model,
-            request=request,
-            response=envelope,
-            usage=usage,
-            pricing_ref=self.pricing_ref,
-            step_idx=step_idx,
-            http={"method": "CLI", "path": "claude -p --output-format json",
-                  "status": 200 if envelope.get("subtype") == "success" else 500,
-                  "elapsed_ms": elapsed_ms, "attempts": 1,
-                  "forwarded": False, "stream": False},
-        )
+        #
+        # E3 hit the same crash from the other side and drew the second lesson:
+        # fixing the field set is necessary but not sufficient, because ANY
+        # refusal from the writer lands after the money is gone. So the write
+        # goes through `_record_to_ledger`, which is wrapped, and the arm's own
+        # record is appended FIRST.
 
+        # The money is already gone. Everything below is bookkeeping, and no
+        # bookkeeping failure may be allowed to discard a reply that has been
+        # paid for -- so the arm's own record is written FIRST and the ledger
+        # write is wrapped. E3's first live desk call cost $2.695 and was thrown
+        # away because the ledger raised between the payment and the append:
+        # `desk.calls` said 1, `desk_log.json` was `[]`, and no transcript
+        # existed. Order is the fix; see DECISIONS D-E3-010.
         entry = {"call": self.calls, "beat": beat, "label": label,
                  "model": model, "elapsed_ms": elapsed_ms,
                  "cli_cost_usd": cli_cost, "usage": usage,
@@ -637,8 +657,16 @@ class ModelDesk:
                  "gate_unpriced": priced is None,
                  "step_idx": step_idx, "chars_in": len(prompt),
                  "chars_out": len(text)}
+        if self.context is not None:
+            try:
+                entry.update(self.context() or {})
+            except Exception as exc:                   # noqa: BLE001
+                entry["context_error"] = "%s: %s" % (type(exc).__name__, exc)
         self.log.append(entry)
         self._write_transcript(entry, prompt, text, stderr)
+
+        self._record_to_ledger(entry, request, envelope, usage, step_idx,
+                               elapsed_ms, beat, label)
 
         if not text.strip():
             # An empty reply is not silence: the envelope says why. Naming the
@@ -738,6 +766,52 @@ class ModelDesk:
             # The refusal is the point; a ledger that would not take the record
             # must not convert it into a sent prompt.
             pass
+    # -- the ledger ---------------------------------------------------------
+    def _record_to_ledger(self, entry, request, envelope, usage, step_idx,
+                          elapsed_ms, beat, label) -> None:
+        """The canonical `model_call`, and nothing beside it.
+
+        P-8 wrote `beat`, `label`, `transport`, `proxied` and `proxy_gap`
+        straight onto the record. `LEDGER_FORMAT.md` §4 closed that field set
+        after P-8 landed and `canon.py` now refuses all five, which is what
+        killed E3's first live desk call.
+
+        They are not dropped -- they are nested inside `request`, which is a
+        caller-owned object on the canonical record and already carried `beat`,
+        `label` and `transport` before this change. So nothing is lost and no
+        new event is invented: `EVENTS` in `proxy/ledger.py` is closed to seven
+        names, none of which fits a model call's metadata, and adding one would
+        mean editing another track's directory. `beat` therefore remains on the
+        ledger, one level deeper, and constraint 8 stays checkable from the file
+        rather than from prose. `armtools/archive.py` reads both depths.
+
+        A refusal here is recorded and survived, never raised. By the time this
+        runs the provider has been paid and the reply is already in `self.log`
+        and on disk as a transcript; turning a bookkeeping problem into a lost
+        call is strictly worse than an incomplete ledger plus a loud entry
+        saying so. `ledger_failures` rides in `summary()` so it cannot be missed.
+        """
+        http = {"method": "CLI", "path": "claude -p --output-format json",
+                "status": 200 if envelope.get("subtype") == "success" else 500,
+                "elapsed_ms": elapsed_ms, "attempts": 1,
+                "forwarded": False, "stream": False}
+        try:
+            record = self.run.model_call(
+                provider=PROVIDER, model=entry["model"], request=request,
+                response=envelope, usage=usage, pricing_ref=self.pricing_ref,
+                step_idx=step_idx, http=http)
+        except Exception as exc:                       # noqa: BLE001
+            self.ledger_failures.append(
+                {"call": entry["call"], "stage": "model_call",
+                 "error": "%s: %s" % (type(exc).__name__, exc)})
+            entry["ledger_error"] = "%s: %s" % (type(exc).__name__, exc)
+            return
+        # A writer that accepted the record but returned nothing is not a
+        # failure -- the record is on the ledger, which is the property this
+        # method exists to secure. Only the back-reference is unavailable, and
+        # a missing back-reference must not be reported as a missing call.
+        if isinstance(record, dict):
+            entry["call_idx"] = record.get("call_idx")
 
     # -- plumbing ----------------------------------------------------------
     def _invoke(self, prompt: str, model: str):

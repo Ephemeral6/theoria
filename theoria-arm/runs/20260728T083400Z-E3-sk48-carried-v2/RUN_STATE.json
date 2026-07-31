@@ -1,0 +1,52 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 90,
+  "actions_ok": 30,
+  "ceiling_actions": 120,
+  "ceiling_commands": 2000,
+  "commands_sent": 252,
+  "http_amplification": 8.4,
+  "probe_actions": 25,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [
+   "theorize"
+  ],
+  "calls": 30,
+  "calls_missing_from_ledger": 0,
+  "cli_cost_usd": 8.404868,
+  "cost_ceiling_usd": 15.0,
+  "ledger_failures": [],
+  "model": "claude-opus-5",
+  "usage_total": {
+   "cache_creation_input_tokens": 200030,
+   "cache_read_input_tokens": 0,
+   "input_tokens": 12,
+   "output_tokens": 249982
+  }
+ },
+ "elapsed_s": 7416.4,
+ "outcome": "budget_exhausted",
+ "steps": 31,
+ "stopped_because": "wall clock (7220s)",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 39
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 23,
+   "proof_failure": 0,
+   "render_mismatch": 1,
+   "replay_mismatch": 15,
+   "search_timeout": 0
+  },
+  "total": 39,
+  "unhandled": 2
+ }
+}

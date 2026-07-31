@@ -567,3 +567,261 @@ The incident is written **before** the raise. An incident recorded only by a
 traceback is an incident in a terminal somebody has already closed, and the
 record uses `sealed_pile_in_prompt`, which was already in `proxy/canon.py`'s
 open set and had never been raised by anything.
+# E3 — the second online game
+
+## D-E3-001 · The manual travels; the level instance never does
+
+> Ported 2026-07-31: the flag is spelled `--seed-books` on master (the E3
+> spelling still works as an alias, because it is in the archived run records),
+> and the copy itself is done once, by `Books(seed_from=...)`. Master had
+> independently built the same carry for the level boundary; two writers for one
+> carry is a provenance record that can disagree with itself, so
+> `transfer.carry` now adorns that record rather than making a second one.
+> Nothing below changes about *what* travels.
+
+`--seed-books` copies `theory.dsl` and `playbook.dsl` and refuses to copy
+`problem.json`. That is not tidiness — it is the whole content of the transfer
+claim. `inner/books.py` already draws the domain/problem split by arithmetic:
+the manual is the domain, and the level is computed from the frames of the game
+being played. So "the same `theory.dsl` against a different computed problem"
+is what C3 transfer *means* here, and carrying the level file would import
+g50t's board into sk48 and leave the manual being checked against a world it
+was written for while appearing to be checked against a new one. The exclusion
+is a named entry in `transfer.json` rather than an absent line of code, and a
+test asserts the file does not arrive.
+
+A carry from a source with no `theory.dsl` **raises**. A failed carry and a
+cold start produce the same empty book, so every artefact downstream would be
+uninterpretable; refusing is the only way the difference stays visible.
+
+## D-E3-002 · The cold beat runs before the first model call, and its prediction is written first
+
+The transfer datum has to be taken on an *unrepaired* manual. Once the desk has
+been called on the new game, what is being measured is a repaired manual, which
+is a much weaker claim and one the run cannot distinguish afterwards. So
+`_cold_transfer` sits between the opening sweep and the main loop: compute this
+level's problem from the carried manual's own declarations, compile, certify,
+and record — with `model_calls_so_far: 0` in the report as the assertion that
+this is what happened.
+
+The ordering *inside* the beat matters as much. The carried manual's own
+render-accounting formula is evaluated and written to disk as a
+`prediction-only` revision of `transfer.json` **before** certify runs, on the
+same discipline `probe` already follows: a prediction recorded after its result
+is not a prediction. A test spies on the writes and asserts the first one
+carries a prediction and no certify result.
+
+## D-E3-003 · The formula is the part of a game-specific manual another game can test
+
+Almost everything in the g50t manual is about g50t — its lattice, its gate, its
+HUD — and carrying those to sk48 tests nothing except that they are wrong.
+One clause is different. `render_accounting_closed` states a *formula*,
+`unexplained(frame_0) = D0 - K`, and claims it is arithmetic that can be run in
+advance. That claim is not about g50t; it is about how this framework's
+renderer and its responsibility checker interact. A different game can
+therefore genuinely confirm or refute it, and that is the one honest
+cross-game test available at zero model cost.
+
+It is evaluated strictly inside its stated domain. `arc-instances: all` spreads
+one declaration over every dynamic cell of its colour and breaks the formula's
+"one colour, one pixel" step outright, so when a spread declaration is present
+the prediction is **withheld** rather than reported wrong: a formula applied
+outside its stated domain is not a test of it. `verdict` is one of `held`,
+`refuted`, `withheld`, `unscorable` — the last for a manual whose `render`
+raised, where certify reports no count at all and scoring it as a refutation
+would be a second error on top of the first.
+
+## D-E3-004 · Retention is measured by name, and says that is all it measures
+
+What survived the new game is counted over declared names — objects,
+landmarks, events, rules, invariants, theorems — kept, dropped and added.
+Names are a mechanical proxy for content and the report labels itself as one:
+a kept name may have a completely rewritten body. The snapshots under
+`books/snapshots/` are where bodies are compared, and every revision is kept
+for exactly that reason. Reporting a retention rate without the caveat would
+be the kind of number that gets quoted without its scope.
+
+## D-E3-005 · A refusal is a delivery; an error is not
+
+`engines_online.jsonl` gets one row per dispatch per engine, and `delivered`,
+`error`, `skipped` and `n_refusals` are four separate columns. `cegis_miner`'s
+precondition — exactly one `move` event per transition — is a real claim about
+a world, and a real game need not satisfy it; an engine that refuses with its
+reason is an engine working correctly. What would falsify E3's supply-chain
+claim is an engine that raises, hangs, or comes back empty without saying why.
+Conflating the two would turn a measurement of the engines into a measurement
+of the game.
+
+The dispatch was lifted out of `theorize.run` into the loop so that every sweep
+gets a row whether or not a desk call follows it. The cold beat makes no model
+call at all, and its sweep is still on the record; a desk call that fails still
+had its engines run.
+
+Each row carries `run_id`. The file is append-only and sits beside a ledger
+that partitions by `run_id` for the same reason: a slug reused across runs must
+stay readable. Real slugs are UTC-stamped so it should not happen — but "should
+not happen" is not a partition key, and the test suite hit exactly this on its
+second consecutive run.
+
+## D-E3-006 · The bill's x-axis is sampled when the money is spent
+
+`ModelDesk` takes an optional `context` callable and stamps whatever it returns
+onto each log entry. The loop supplies the billed-action count, the command
+count, the transition count and the turn index, sampled at the moment of the
+call. Reconstructing that axis afterwards from timestamps guesses, and a
+guessed x-axis is not a measurement.
+
+`bill_shape.json` is deliberately **not** `cost_curve.json`: `armtools/archive.py`
+owns that name and writes a flat per-call list rebuilt from the ledger. Two
+artefacts, two names, no race. The file also states in its own text that
+`actions_at_call` counts billed actions while `commands_sent` counts HTTP
+requests, and that a curve against one is not a curve against the other —
+because on this API the two differ by the 400-wave retry envelope.
+
+## D-E3-007 · The spend gate is checked for, used if present, and reported absent if not
+
+E3's brief makes `proxy/spend_gate.py` mandatory *once S3 has landed*. It has
+not: the file does not exist on this commit and `agent/s3-spend-gate` carries
+nothing under `proxy/` matching `*spend*`. `armtools/spend_check.gate_status()`
+therefore looks for it every time, loads and calls `reserve()` if it is there,
+and otherwise records `absent` with that reason and holds no reservation.
+
+Fail-closed is S3's rule for the gate's own callers, and it cannot bind a
+caller that runs before the gate exists — there is nothing to fail closed
+against. What *can* be required is that the situation is never recorded as a
+pass, and a test pins that: an absent gate must report `absent` and
+`reservation.held == False`, never `ok`. Every plan already carries the
+`campaign` field S3's `reserve(campaign, usd_cap, action_cap)` will want, so
+adopting the gate is a wiring change rather than a rewrite.
+
+## D-E3-008 · The action budget is not this arm's binding constraint, and the plan says so first
+
+Measured on the first live contact: $1.2635 per desk call, 516 seconds per
+call, five calls for $6.32. The evidence gate holds the desk back until four
+new transitions have arrived, so one cycle is roughly four actions and one to
+two calls. Reaching a 120-action budget therefore costs about **$35** and most
+of a day, and an $18 ceiling stops the run at roughly **29–61 actions**.
+
+That arithmetic is computed from the prior run's measured cost — never
+hardcoded, because a hardcoded price is a number nobody re-derives when the
+model changes — and written to `BUDGET_PLAN.json` before the first action is
+spent. Stating it in advance is what makes the outturn a measurement of the
+bill's shape rather than a shortfall against 120.
+
+## D-E3-009 · sk48, not tn36, and the reason is mechanical
+
+Both passed `arc-recon`'s determinism pre-check, so either was eligible. But
+`precheck.json` records tn36's `available_actions` as `[6]`, and every one of
+its sixteen probe actions returned an identical frame hash — ACTION1–4 do
+nothing there because they are not offered. ACTION6 is the click family, whose
+payload shape is unsolved in this repo (1,254 attempts, every one HTTP 500) and
+which `_legal_actions` filters out by D-P8-012. The arm would have found no
+legal action and stopped before its first turn. sk48 offers `[1, 2, 3, 4, 6, 7]`
+and its actions visibly change the frame, so it is the only one of the two this
+arm can actually play.
+
+A consequence worth naming: sk48 offers **ACTION7**, which g50t never did. The
+carried manual contains a theorem, `two_action_keys_have_never_been_pressed`,
+whose whole content is that keys 6 and 7 are unknown and must be held in
+reserve. The opening sweep presses 7 on the first turn, because the sweep
+predates any manual and takes the world's word for what is legal. The manual's
+advice and the arm's behaviour disagree on turn one, in the record, for free.
+
+## D-E3-010 · The five extra fields ride inside `request`, and a paid reply outranks a tidy ledger
+
+`LEDGER_FORMAT.md` §4 closed `model_call`'s field set after P-8 landed, and P-8
+wrote `beat`, `label`, `transport`, `proxied` and `proxy_gap` straight onto that
+record. `canon.py` refuses all five (INC-TA-006).
+
+Dropping them was not available. `beat` is what makes constraint 8 checkable
+from the ledger rather than asserted in prose, and `proxied`/`transport` are
+what stop a reader mistaking this arm's CLI traffic for proxied traffic. §4's
+own refusal text points at §6 — "put it on an auxiliary record instead" — but
+that route is closed here: `EVENTS` in `proxy/ledger.py` admits exactly seven
+names, and none of them fits a model call's metadata (`env_meta` requires
+`http` and means the environment side, `guard_block` requires `rule`/`path`,
+`incident.kind` has a whitelist). Adding an eighth means editing another
+track's directory.
+
+So they went into `request`, which is a caller-owned object on the canonical
+record and already carried three of the five. Nothing is lost, no event is
+invented, no upstream file is touched, and `beat` stays on the ledger one level
+deeper. `armtools/archive.py` reads both depths, because a constraint-8 check
+that silently read `unknown` off every record of a P-8-era run would report a
+violation that is really a schema migration.
+
+The second half of this decision matters more than the first. **By the time the
+ledger is written the provider has been paid**, so the arm's own log entry and
+the transcript are written *first*, the ledger write is wrapped, and a refusal
+is recorded in `desk.ledger_failures` and surfaced in
+`summary()["calls_missing_from_ledger"]`. An incomplete ledger that says exactly
+where it is incomplete is strictly better than a call that cost $2.70 and left
+nothing behind. The old ordering turned a schema mismatch into a lost purchase.
+
+And the test that pins it drives `ModelDesk` into a **real** `RunLedger` with
+only the CLI stubbed. P-8's tests checked the record's shape against hand-built
+dictionaries and passed while the live writer refused the real thing; the gap
+was not a missing assertion but a missing subject.
+
+## D-E3-011 · Landmark coordinates are level data, so they are stripped on carry
+
+Excluding `problem.json` from the carry turned out to be an exclusion drawn
+around a filename when the thing to exclude was a kind of content. Seven of
+g50t's landmark coordinates reached sk48's computed level verbatim through
+`# arc-cell: (r, c)` comments **inside the manual**, which is exactly what does
+travel (INC-TA-007).
+
+`transfer.strip_level_data` removes the hints at carry time. Three details are
+deliberate:
+
+* **On carry, not on write.** The source run's books are untouched, and the
+  stripping is visible as a diff in the `rev01-carried` snapshot rather than
+  being a silent difference between two files that claim the same provenance.
+* **Both hashes are recorded.** `sha256` and `sha256_before_stripping` sit side
+  by side in `CARRIED.json`, so a reader checking what was carried cannot miss
+  that the text was modified in transit.
+* **The landmark still declares itself.** Only the coordinates go. The level
+  then places it at the origin and lists it under `landmarks_defaulted`, which
+  is the pre-existing and visible failure mode for a coordinate the level cannot
+  supply — not a new silent one.
+
+## D-E3-012 · The first cold-transfer reading was wrong, and the run record keeps both
+
+An adversarial review refuted E3's first headline, and every one of its points
+was verified independently before being accepted.
+
+The claim was that the carried manual predicted its own responsibility number on
+sk48 (70 against an observed 72) and that the +2 was a mechanically explained
+transfer result. What is actually true is that `certify`'s `cells_unexplained`
+is **identically** `D0 − covered_by_objects`, given how `problem_from_frames`
+builds the board and how the generated `render` paints one pixel per object. So
+the prediction error is identically `K − covered_by_objects`, **D0 cancels**, and
+the agreement could never have failed. The "corrected formula" derived from it is
+`n_unexplained_at_t0`'s own definition written backwards — unfalsifiable, and
+right on every game forever.
+
+Worse for the claim: the correction was already in the carried manual, one
+theorem below the formula. `responsibility_ceiling_is_two_pixels` says colours
+whose raster-first cells are constant board cells "would explain nothing they
+were not already given" — precisely sk48's condition on two of three objects. A
+reading faithful to the theorem *cluster* predicts 72, exactly right. The
+refutation was of `inner/transfer.py`, which implements the formula's
+one-sentence summary and drops the qualifier beside it.
+
+And no theory content transferred at all: the carried manual's only declared
+action is `('key', 5)`, sk48 does not offer ACTION5, so every rule is unreachable
+and `step` is the identity for every action the arm can send.
+
+Two decisions come out of this.
+
+**The run record keeps the original reading verbatim, under the correction.** A
+run that quietly rewrote its own first conclusion would be the exact failure this
+repository keeps writing incident reports about, and the superseded text is the
+evidence that the review did work rather than a claim that it did.
+
+**A carry should check the action-vocabulary intersection before it spends
+anything.** It is free to compute — the manual's declared actions against the
+game's `available_actions` — and it is the difference between a transfer
+experiment and a manual that cannot be tested on the game it was carried to.
+Recorded here as the next run's first requirement rather than implemented in the
+middle of a live run.

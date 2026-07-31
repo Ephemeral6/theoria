@@ -1,0 +1,902 @@
+{
+  "arm": "theoria",
+  "arm_version": {
+    "files": 28,
+    "sha256": "ea9a5501905c5feebd9c354f4cbda6048f694a05be0933d0733a22987bba45f6"
+  },
+  "env_proxy": {
+    "arm": "theoria",
+    "card_ids": [
+      "cf572892-0713-4ccf-9b75-73edd831c7df"
+    ],
+    "commands": 252,
+    "denials": 0,
+    "guard": {
+      "allow_only": null,
+      "cut_version": "v1",
+      "n_dev": 4,
+      "n_sealed": 21,
+      "piles_path": "arc-recon/data/piles.json",
+      "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+      "unknown_policy": "deny"
+    },
+    "guids": {
+      "sk48-d8078629": "484bcde1-cdfa-4db1-b1bf-da98f6419b62"
+    },
+    "incidents": 281,
+    "key_injected": true,
+    "meta_calls": 30,
+    "run_id": "r-2c194a9cfb5e491a",
+    "upstream": "https://three.arcprize.org",
+    "variant": null
+  },
+  "game_id": "sk48-d8078629",
+  "ledger": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\20260728T083400Z-E3-sk48-carried-v2\\ledger.jsonl",
+  "run_id": "r-2c194a9cfb5e491a",
+  "slug": "20260728T083400Z-E3-sk48-carried-v2",
+  "summary": {
+    "action_counts": {
+      "1": 1,
+      "2": 1,
+      "3": 13,
+      "4": 14,
+      "7": 1
+    },
+    "bill": {
+      "actions_billed": 30,
+      "commands_sent": 252,
+      "desk_calls": 30,
+      "elapsed_s": 7417.1,
+      "http_amplification": 8.4,
+      "transitions_observed": 30,
+      "usd": 8.404868,
+      "usd_per_billed_action": 0.280162,
+      "usd_per_transition": 0.280162
+    },
+    "budget": {
+      "actions_failed": 0,
+      "actions_left": 90,
+      "actions_ok": 30,
+      "ceiling_actions": 120,
+      "ceiling_commands": 2000,
+      "commands_sent": 252,
+      "http_amplification": 8.4,
+      "probe_actions": 25,
+      "reserve_for_probes": 0,
+      "resets": 1
+    },
+    "certify_rounds": 15,
+    "desk": {
+      "beats": [
+        "theorize"
+      ],
+      "calls": 30,
+      "calls_missing_from_ledger": 0,
+      "cli_cost_usd": 8.404868,
+      "cost_ceiling_usd": 15.0,
+      "ledger_failures": [],
+      "model": "claude-opus-5",
+      "usage_total": {
+        "cache_creation_input_tokens": 200030,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 12,
+        "output_tokens": 249982
+      }
+    },
+    "desk_failures": [],
+    "elapsed_s": 7416.4,
+    "engine_dispatches": 15,
+    "engines_online": {
+      "candidate_rows": 4941,
+      "dispatch_errors": 0,
+      "dispatches": 15,
+      "per_engine": {
+        "cegis_miner": {
+          "delivered": 15,
+          "dispatches": 15,
+          "errored": 0,
+          "refused_with_reason": 15,
+          "skipped": 0
+        },
+        "mdl_segmenter": {
+          "delivered": 15,
+          "dispatches": 15,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        },
+        "zero_space": {
+          "delivered": 15,
+          "dispatches": 15,
+          "errored": 0,
+          "refused_with_reason": 0,
+          "skipped": 0
+        }
+      }
+    },
+    "game_id": "sk48-d8078629",
+    "levels_completed": 0,
+    "model_calls": 30,
+    "outcome": "budget_exhausted",
+    "run_id": "r-2c194a9cfb5e491a",
+    "score": null,
+    "scorecard": {
+      "card_id": "cf572892-0713-4ccf-9b75-73edd831c7df",
+      "environments": [
+        {
+          "actions": 30,
+          "completed": false,
+          "id": "sk48-d8078629",
+          "level_count": 8,
+          "levels_completed": 0,
+          "resets": 0,
+          "runs": [
+            {
+              "actions": 30,
+              "completed": false,
+              "guid": "484bcde1-cdfa-4db1-b1bf-da98f6419b62",
+              "level_actions": [
+                30,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "level_baseline_actions": [
+                61,
+                177,
+                101,
+                103,
+                230,
+                181,
+                125,
+                92
+              ],
+              "level_scores": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "levels_completed": 0,
+              "resets": 0,
+              "score": 0.0,
+              "state": "NOT_FINISHED"
+            }
+          ],
+          "score": 0.0
+        }
+      ],
+      "opaque": {
+        "prompt_id": "E3-engines-online",
+        "run_id": "r-2c194a9cfb5e491a"
+      },
+      "score": 0.0,
+      "tags": [
+        "theoria",
+        "e3",
+        "second-game",
+        "carried-books",
+        "agent"
+      ],
+      "tags_scores": [
+        {
+          "actions": 30,
+          "id": "keyboard_click",
+          "levels_completed": 0,
+          "number_of_environments": 1,
+          "number_of_levels": 8,
+          "score": 0.0
+        }
+      ],
+      "total_actions": 30,
+      "total_environments": 1,
+      "total_environments_completed": 0,
+      "total_levels": 8,
+      "total_levels_completed": 0
+    },
+    "steps": 31,
+    "stopped_because": "wall clock (7220s)",
+    "surprises": {
+      "by_family": {
+        "computational": 0,
+        "empirical": 39
+      },
+      "by_kind": {
+        "execution_mismatch": 0,
+        "heuristic_miss": 0,
+        "probe_refutation": 23,
+        "proof_failure": 0,
+        "render_mismatch": 1,
+        "replay_mismatch": 15,
+        "search_timeout": 0
+      },
+      "total": 39,
+      "unhandled": 2
+    },
+    "theorize_rounds": 14,
+    "transfer": {
+      "actions_spent_so_far": 5,
+      "certify": {
+        "cheap_green": false,
+        "proof_layer_available": false,
+        "replay": {
+          "detail": "0/5 transitions replay exactly",
+          "matched": 0,
+          "ok": false,
+          "transitions": 5
+        },
+        "replay_first_divergence": {
+          "arc_action": "ACTION1",
+          "cells": [
+            {
+              "cell": [
+                30,
+                11
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                30,
+                12
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                30,
+                13
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                30,
+                14
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                30,
+                15
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                30,
+                16
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                31,
+                11
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                31,
+                12
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                31,
+                13
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                31,
+                14
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                31,
+                15
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                31,
+                16
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                32,
+                11
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                32,
+                12
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                32,
+                13
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                32,
+                14
+              ],
+              "manual_says": 5,
+              "world_says": 6
+            },
+            {
+              "cell": [
+                32,
+                15
+              ],
+              "manual_says": 5,
+              "world_says": 0
+            },
+            {
+              "cell": [
+                32,
+                16
+              ],
+              "manual_says": 5,
+              "world_says": 1
+            },
+            {
+              "cell": [
+                32,
+                17
+              ],
+              "manual_says": 5,
+              "world_says": 2
+            },
+            {
+              "cell": [
+                32,
+                18
+              ],
+              "manual_says": 5,
+              "world_says": 1
+            },
+            {
+              "cell": [
+                32,
+                19
+              ],
+              "manual_says": 5,
+              "world_says": 1
+            },
+            {
+              "cell": [
+                32,
+                20
+              ],
+              "manual_says": 5,
+              "world_says": 2
+            },
+            {
+              "cell": [
+                32,
+                21
+              ],
+              "manual_says": 5,
+              "world_says": 1
+            },
+            {
+              "cell": [
+                32,
+                22
+              ],
+              "manual_says": 5,
+              "world_says": 1
+            }
+          ],
+          "cells_wrong": 70,
+          "kind": "frame_mismatch",
+          "t": 0
+        },
+        "responsibility": {
+          "cells_unexplained": 72,
+          "detail": "72 pixels of frame 0 belong to neither the board nor any declared object",
+          "ok": false,
+          "total_cells": 4096
+        },
+        "unambiguous": {
+          "actions": 1,
+          "detail": "no (state, action) among 6 x 1 admitted two rules",
+          "ok": true,
+          "scope": "sampled",
+          "states": 6
+        }
+      },
+      "compiled": {
+        "errors": {
+          "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+        },
+        "forms": [
+          "markdown",
+          "pddl",
+          "python"
+        ],
+        "lean_state_estimate": null,
+        "ok": true,
+        "parsed": true
+      },
+      "desk_calls_after_carry": 30,
+      "final_declared_names": {
+        "event": [
+          "recolored"
+        ],
+        "invariant": [
+          "casing_population",
+          "cavity_population",
+          "erased_population",
+          "every_dynamic_cell_has_an_owner",
+          "pip_population",
+          "rail_population",
+          "stud_population"
+        ],
+        "landmark": [
+          "badge_head",
+          "meter_fourth",
+          "meter_next",
+          "meter_third",
+          "meter_tip",
+          "rail_witness",
+          "slot_a_head",
+          "slot_above_head",
+          "slot_b_head",
+          "strip_a_row_two",
+          "strip_a_seed",
+          "strip_b_row_two",
+          "strip_b_seed"
+        ],
+        "object": [
+          "Casing",
+          "Cavity",
+          "Erased",
+          "Pip",
+          "Rail",
+          "Stud"
+        ],
+        "rule": [
+          "key3_blanks_the_strip_pips",
+          "key3_blanks_the_strip_studs",
+          "key3_marches_the_meter_leftward",
+          "key4_advances_the_meter_once",
+          "key4_restores_the_strip_pips",
+          "key4_restores_the_strip_studs",
+          "key7_blanks_the_strip_pips",
+          "key7_blanks_the_strip_studs"
+        ],
+        "theorem": [
+          "colour_classes_are_not_the_worlds_objects_and_i_admit_the_cost",
+          "frame_zero_is_reconstructed_exactly",
+          "i_do_not_know_which_way_the_bar_runs",
+          "i_have_never_been_shown_rows_0_to_28",
+          "i_retract_that_cascade_length_carries_no_signal",
+          "i_reverse_my_preference_for_understatement_and_here_is_the_ledger",
+          "instance_anchoring_is_frame_zero_and_the_arm_extends_it_as_cells_vary",
+          "nesting_would_not_rescue_the_meter_either",
+          "nine_of_thirteen_is_the_ceiling_of_this_guard_language",
+          "no_goal_section_on_purpose",
+          "replay_is_open_loop_and_silence_on_the_selector_is_still_the_cheap_error",
+          "the_arena_is_lanes_and_the_badge_is_row_aligned_with_the_cavity",
+          "the_bar_is_between_fifty_one_and_sixty_one_cells_from_its_end",
+          "the_clock_ticks_in_extra_frames_not_in_actions",
+          "the_march_rule_stops_for_a_reason_i_do_not_trust",
+          "the_meter_cadence_is_inexpressible_and_i_checked_for_a_latch",
+          "the_panel_is_a_column_of_slots_and_it_continues_above_row_29",
+          "the_pre_registration_has_now_been_met_twice_and_the_checker_is_open_loop",
+          "the_restore_rules_are_conditioned_on_a_selection_the_manual_cannot_represent",
+          "the_seed_column_is_never_erased",
+          "the_seed_rule_is_a_one_shot_that_is_worth_three_transitions",
+          "the_strip_hides_and_shows_and_the_separator_is_still_one_action_away",
+          "the_strip_is_one_global_diagonal_texture",
+          "the_swap_has_a_second_blocker_twenty_four_of_its_cells_have_no_instance",
+          "the_swap_is_provably_inexpressible_here",
+          "the_tick_is_not_bound_to_the_restore_key_and_two_readings_are_dead",
+          "the_world_has_hidden_state_and_there_are_now_two_witnesses_on_two_keys",
+          "two_keys_have_never_been_pressed",
+          "what_the_engines_offered_and_why_none_of_it_was_taken"
+        ]
+      },
+      "model_calls_so_far": 0,
+      "prediction": {
+        "D0": 73,
+        "K": 3,
+        "available": true,
+        "background": 5,
+        "declared_colours": [
+          1,
+          2,
+          9
+        ],
+        "declared_colours_present_in_frame_0": [
+          1,
+          2,
+          9
+        ],
+        "dynamic_cells": 97,
+        "formula": "unexplained(frame_0) = D0 - K",
+        "objects_declared": 3,
+        "predicted_unexplained": 70
+      },
+      "prediction_scored": {
+        "detail": "the carried manual predicted its own responsibility number on a game it was not written for and was wrong by +2 (predicted 70, observed 72)",
+        "error": 2,
+        "formula": "unexplained(frame_0) = D0 - K",
+        "observed": 72,
+        "predicted": 70,
+        "verdict": "refuted"
+      },
+      "provenance": {
+        "carried": {
+          "playbook.dsl": {
+            "bytes": 3597,
+            "lines": 49,
+            "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+          },
+          "theory.dsl": {
+            "bytes": 21508,
+            "lines": 140,
+            "sha256": "106431f377af67789c79ad89c5f748a1e2813e733e2daaeee079f15923a841d9",
+            "sha256_before_stripping": "6e2694bc04186ee82659ed748b88685247b690d51d546a2100eeb1d564a5a9e0"
+          }
+        },
+        "declared_name_count": 35,
+        "declared_names": {
+          "event": [
+            "jumped"
+          ],
+          "invariant": [
+            "one_marker"
+          ],
+          "landmark": [
+            "button_cell",
+            "corridor_cell",
+            "gate_cell",
+            "goal_cell",
+            "hud_slot_a",
+            "hud_slot_b",
+            "start_cell"
+          ],
+          "object": [
+            "Marker",
+            "Spent",
+            "Unused"
+          ],
+          "rule": [
+            "key5_advances_marker",
+            "key5_consumes_slot_b",
+            "key5_marks_slot_a_spent"
+          ],
+          "theorem": [
+            "cascade_length_is_a_signal",
+            "cell_five_zero_is_the_gate",
+            "conceded_pixels",
+            "direction_map_is_one_third_known",
+            "floor_map",
+            "goal_is_the_cupped_cell",
+            "hud_is_two_attempts_and_one_is_gone",
+            "lattice_geometry",
+            "no_goal_section_on_purpose",
+            "render_accounting_closed",
+            "replay_can_never_pass_here",
+            "responsibility_ceiling_is_two_pixels",
+            "spent_anchor_unresolved_and_maybe_unresolvable",
+            "tally_is_a_two_command_clock",
+            "the_eight_line_is_probably_a_wire_and_the_blob_is_its_button",
+            "the_mover_is_unnameable",
+            "the_ribbon_is_too_narrow_for_the_ring",
+            "two_action_keys_have_never_been_pressed",
+            "vacated_cell_repaints_to_five",
+            "void_blocks_and_the_guard_language_is_inverted"
+          ]
+        },
+        "landmarks_stripped": [
+          "hud_slot_a",
+          "hud_slot_b",
+          "start_cell",
+          "button_cell",
+          "gate_cell",
+          "corridor_cell",
+          "goal_cell"
+        ],
+        "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+        "not_carried": {
+          "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+        },
+        "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact\\books",
+        "source_game_id": "g50t-5849a774",
+        "source_run": "20260728T015354Z-g50t-first-contact"
+      },
+      "retention": {
+        "by_kind": {
+          "event": {
+            "added": [
+              "recolored"
+            ],
+            "carried": 1,
+            "dropped": [
+              "jumped"
+            ],
+            "kept": []
+          },
+          "invariant": {
+            "added": [
+              "casing_population",
+              "cavity_population",
+              "erased_population",
+              "every_dynamic_cell_has_an_owner",
+              "pip_population",
+              "rail_population",
+              "stud_population"
+            ],
+            "carried": 1,
+            "dropped": [
+              "one_marker"
+            ],
+            "kept": []
+          },
+          "landmark": {
+            "added": [
+              "badge_head",
+              "meter_fourth",
+              "meter_next",
+              "meter_third",
+              "meter_tip",
+              "rail_witness",
+              "slot_a_head",
+              "slot_above_head",
+              "slot_b_head",
+              "strip_a_row_two",
+              "strip_a_seed",
+              "strip_b_row_two",
+              "strip_b_seed"
+            ],
+            "carried": 7,
+            "dropped": [
+              "button_cell",
+              "corridor_cell",
+              "gate_cell",
+              "goal_cell",
+              "hud_slot_a",
+              "hud_slot_b",
+              "start_cell"
+            ],
+            "kept": []
+          },
+          "object": {
+            "added": [
+              "Casing",
+              "Cavity",
+              "Erased",
+              "Pip",
+              "Rail",
+              "Stud"
+            ],
+            "carried": 3,
+            "dropped": [
+              "Marker",
+              "Spent",
+              "Unused"
+            ],
+            "kept": []
+          },
+          "rule": {
+            "added": [
+              "key3_blanks_the_strip_pips",
+              "key3_blanks_the_strip_studs",
+              "key3_marches_the_meter_leftward",
+              "key4_advances_the_meter_once",
+              "key4_restores_the_strip_pips",
+              "key4_restores_the_strip_studs",
+              "key7_blanks_the_strip_pips",
+              "key7_blanks_the_strip_studs"
+            ],
+            "carried": 3,
+            "dropped": [
+              "key5_advances_marker",
+              "key5_consumes_slot_b",
+              "key5_marks_slot_a_spent"
+            ],
+            "kept": []
+          },
+          "theorem": {
+            "added": [
+              "colour_classes_are_not_the_worlds_objects_and_i_admit_the_cost",
+              "frame_zero_is_reconstructed_exactly",
+              "i_do_not_know_which_way_the_bar_runs",
+              "i_have_never_been_shown_rows_0_to_28",
+              "i_retract_that_cascade_length_carries_no_signal",
+              "i_reverse_my_preference_for_understatement_and_here_is_the_ledger",
+              "instance_anchoring_is_frame_zero_and_the_arm_extends_it_as_cells_vary",
+              "nesting_would_not_rescue_the_meter_either",
+              "nine_of_thirteen_is_the_ceiling_of_this_guard_language",
+              "replay_is_open_loop_and_silence_on_the_selector_is_still_the_cheap_error",
+              "the_arena_is_lanes_and_the_badge_is_row_aligned_with_the_cavity",
+              "the_bar_is_between_fifty_one_and_sixty_one_cells_from_its_end",
+              "the_clock_ticks_in_extra_frames_not_in_actions",
+              "the_march_rule_stops_for_a_reason_i_do_not_trust",
+              "the_meter_cadence_is_inexpressible_and_i_checked_for_a_latch",
+              "the_panel_is_a_column_of_slots_and_it_continues_above_row_29",
+              "the_pre_registration_has_now_been_met_twice_and_the_checker_is_open_loop",
+              "the_restore_rules_are_conditioned_on_a_selection_the_manual_cannot_represent",
+              "the_seed_column_is_never_erased",
+              "the_seed_rule_is_a_one_shot_that_is_worth_three_transitions",
+              "the_strip_hides_and_shows_and_the_separator_is_still_one_action_away",
+              "the_strip_is_one_global_diagonal_texture",
+              "the_swap_has_a_second_blocker_twenty_four_of_its_cells_have_no_instance",
+              "the_swap_is_provably_inexpressible_here",
+              "the_tick_is_not_bound_to_the_restore_key_and_two_readings_are_dead",
+              "the_world_has_hidden_state_and_there_are_now_two_witnesses_on_two_keys",
+              "two_keys_have_never_been_pressed",
+              "what_the_engines_offered_and_why_none_of_it_was_taken"
+            ],
+            "carried": 20,
+            "dropped": [
+              "cascade_length_is_a_signal",
+              "cell_five_zero_is_the_gate",
+              "conceded_pixels",
+              "direction_map_is_one_third_known",
+              "floor_map",
+              "goal_is_the_cupped_cell",
+              "hud_is_two_attempts_and_one_is_gone",
+              "lattice_geometry",
+              "render_accounting_closed",
+              "replay_can_never_pass_here",
+              "responsibility_ceiling_is_two_pixels",
+              "spent_anchor_unresolved_and_maybe_unresolvable",
+              "tally_is_a_two_command_clock",
+              "the_eight_line_is_probably_a_wire_and_the_blob_is_its_button",
+              "the_mover_is_unnameable",
+              "the_ribbon_is_too_narrow_for_the_ring",
+              "two_action_keys_have_never_been_pressed",
+              "vacated_cell_repaints_to_five",
+              "void_blocks_and_the_guard_language_is_inverted"
+            ],
+            "kept": [
+              "no_goal_section_on_purpose"
+            ]
+          }
+        },
+        "names_added_on_the_new_game": 63,
+        "names_carried": 35,
+        "names_dropped": 34,
+        "names_kept": 1,
+        "retention_rate": 0.0286,
+        "scope": "names only. A kept name may have a completely rewritten body; the snapshot diffs are the record of that."
+      },
+      "stage": "cold",
+      "world": {
+        "actions_used": [
+          "ACTION1",
+          "ACTION2",
+          "ACTION3",
+          "ACTION4",
+          "ACTION7",
+          "RESET"
+        ],
+        "background": 5,
+        "cascade_lengths": [
+          1,
+          2
+        ],
+        "cells_needing_an_owner": 73,
+        "colours_seen": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          14
+        ],
+        "constant_cells": 3999,
+        "distinct_states": 5,
+        "dynamic_box": [
+          29,
+          10,
+          54,
+          63
+        ],
+        "dynamic_cells": 97,
+        "max_frames_in_one_command": 2,
+        "shape": [
+          64,
+          64
+        ],
+        "states": 6,
+        "steps": 6
+      }
+    },
+    "turns": 27,
+    "win_levels": 8,
+    "world": {
+      "actions_used": [
+        "ACTION1",
+        "ACTION2",
+        "ACTION3",
+        "ACTION4",
+        "ACTION7",
+        "RESET"
+      ],
+      "background": 5,
+      "cascade_lengths": [
+        1,
+        2
+      ],
+      "cells_needing_an_owner": 81,
+      "colours_seen": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        14
+      ],
+      "constant_cells": 3991,
+      "distinct_states": 21,
+      "dynamic_box": [
+        29,
+        10,
+        54,
+        63
+      ],
+      "dynamic_cells": 105,
+      "max_frames_in_one_command": 2,
+      "shape": [
+        64,
+        64
+      ],
+      "states": 31,
+      "steps": 31
+    }
+  }
+}

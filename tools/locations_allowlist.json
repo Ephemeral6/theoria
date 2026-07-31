@@ -507,6 +507,24 @@
    "reason": "write-once provenance record"
   },
   {
+   "dir": "theoria-arm/runs/20260728T072604Z-E3-engines-online",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once budget record for the E3 paid legs; landed 2026-07-31 by the E3 trace-machinery port, after this allowlist was generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T072604Z-E3-sk48-carried",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once paid run record (E3 leg 1, 9 billed actions); landed 2026-07-31 by the E3 trace-machinery port, after this allowlist was generated"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2",
+   "dated": "2026-07-31",
+   "files": 4,
+   "reason": "write-once paid run record (E3 leg 2, 30 billed actions); landed 2026-07-31 by the E3 sk48 salvage, after this allowlist was generated"
+  },
+  {
    "dir": "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile",
    "dated": "2026-07-31",
    "files": 7,
@@ -613,6 +631,12 @@
    "dated": "2026-07-31",
    "files": 1,
    "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/preflight-20260728T074237Z",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once live preflight record (0 billed actions); landed 2026-07-31 by the E3 trace-machinery port, after this allowlist was generated"
   },
   {
    "dir": "theory-compiler/runs/20260728T102343Z-c7",

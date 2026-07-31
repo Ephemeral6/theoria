@@ -1,0 +1,383 @@
+{
+ "actions_spent_so_far": 5,
+ "certify": {
+  "cheap_green": false,
+  "proof_layer_available": false,
+  "replay": {
+   "detail": "0/5 transitions replay exactly",
+   "matched": 0,
+   "ok": false,
+   "transitions": 5
+  },
+  "replay_first_divergence": {
+   "arc_action": "ACTION1",
+   "cells": [
+    {
+     "cell": [
+      30,
+      11
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      30,
+      12
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      30,
+      13
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      30,
+      14
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      30,
+      15
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      30,
+      16
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      31,
+      11
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      31,
+      12
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      31,
+      13
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      31,
+      14
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      31,
+      15
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      31,
+      16
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      32,
+      11
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      32,
+      12
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      32,
+      13
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      32,
+      14
+     ],
+     "manual_says": 5,
+     "world_says": 6
+    },
+    {
+     "cell": [
+      32,
+      15
+     ],
+     "manual_says": 5,
+     "world_says": 0
+    },
+    {
+     "cell": [
+      32,
+      16
+     ],
+     "manual_says": 5,
+     "world_says": 1
+    },
+    {
+     "cell": [
+      32,
+      17
+     ],
+     "manual_says": 5,
+     "world_says": 2
+    },
+    {
+     "cell": [
+      32,
+      18
+     ],
+     "manual_says": 5,
+     "world_says": 1
+    },
+    {
+     "cell": [
+      32,
+      19
+     ],
+     "manual_says": 5,
+     "world_says": 1
+    },
+    {
+     "cell": [
+      32,
+      20
+     ],
+     "manual_says": 5,
+     "world_says": 2
+    },
+    {
+     "cell": [
+      32,
+      21
+     ],
+     "manual_says": 5,
+     "world_says": 1
+    },
+    {
+     "cell": [
+      32,
+      22
+     ],
+     "manual_says": 5,
+     "world_says": 1
+    }
+   ],
+   "cells_wrong": 70,
+   "kind": "frame_mismatch",
+   "t": 0
+  },
+  "responsibility": {
+   "cells_unexplained": 72,
+   "detail": "72 pixels of frame 0 belong to neither the board nor any declared object",
+   "ok": false,
+   "total_cells": 4096
+  },
+  "unambiguous": {
+   "actions": 1,
+   "detail": "no (state, action) among 6 x 1 admitted two rules",
+   "ok": true,
+   "scope": "sampled",
+   "states": 6
+  }
+ },
+ "compiled": {
+  "errors": {
+   "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+  },
+  "forms": [
+   "markdown",
+   "pddl",
+   "python"
+  ],
+  "lean_state_estimate": null,
+  "ok": true,
+  "parsed": true
+ },
+ "model_calls_so_far": 0,
+ "prediction": {
+  "D0": 73,
+  "K": 3,
+  "available": true,
+  "background": 5,
+  "declared_colours": [
+   1,
+   2,
+   9
+  ],
+  "declared_colours_present_in_frame_0": [
+   1,
+   2,
+   9
+  ],
+  "dynamic_cells": 97,
+  "formula": "unexplained(frame_0) = D0 - K",
+  "objects_declared": 3,
+  "predicted_unexplained": 70
+ },
+ "prediction_scored": {
+  "detail": "the carried manual predicted its own responsibility number on a game it was not written for and was wrong by +2 (predicted 70, observed 72)",
+  "error": 2,
+  "formula": "unexplained(frame_0) = D0 - K",
+  "observed": 72,
+  "predicted": 70,
+  "verdict": "refuted"
+ },
+ "provenance": {
+  "carried": {
+   "playbook.dsl": {
+    "bytes": 3597,
+    "lines": 49,
+    "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+   },
+   "theory.dsl": {
+    "bytes": 21329,
+    "lines": 140,
+    "sha256": "6e2694bc04186ee82659ed748b88685247b690d51d546a2100eeb1d564a5a9e0"
+   }
+  },
+  "declared_name_count": 35,
+  "declared_names": {
+   "event": [
+    "jumped"
+   ],
+   "invariant": [
+    "one_marker"
+   ],
+   "landmark": [
+    "button_cell",
+    "corridor_cell",
+    "gate_cell",
+    "goal_cell",
+    "hud_slot_a",
+    "hud_slot_b",
+    "start_cell"
+   ],
+   "object": [
+    "Marker",
+    "Spent",
+    "Unused"
+   ],
+   "rule": [
+    "key5_advances_marker",
+    "key5_consumes_slot_b",
+    "key5_marks_slot_a_spent"
+   ],
+   "theorem": [
+    "cascade_length_is_a_signal",
+    "cell_five_zero_is_the_gate",
+    "conceded_pixels",
+    "direction_map_is_one_third_known",
+    "floor_map",
+    "goal_is_the_cupped_cell",
+    "hud_is_two_attempts_and_one_is_gone",
+    "lattice_geometry",
+    "no_goal_section_on_purpose",
+    "render_accounting_closed",
+    "replay_can_never_pass_here",
+    "responsibility_ceiling_is_two_pixels",
+    "spent_anchor_unresolved_and_maybe_unresolvable",
+    "tally_is_a_two_command_clock",
+    "the_eight_line_is_probably_a_wire_and_the_blob_is_its_button",
+    "the_mover_is_unnameable",
+    "the_ribbon_is_too_narrow_for_the_ring",
+    "two_action_keys_have_never_been_pressed",
+    "vacated_cell_repaints_to_five",
+    "void_blocks_and_the_guard_language_is_inverted"
+   ]
+  },
+  "not_carried": {
+   "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+  },
+  "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact\\books",
+  "source_game_id": "g50t-5849a774",
+  "source_run": "20260728T015354Z-g50t-first-contact"
+ },
+ "stage": "cold",
+ "world": {
+  "actions_used": [
+   "ACTION1",
+   "ACTION2",
+   "ACTION3",
+   "ACTION4",
+   "ACTION7",
+   "RESET"
+  ],
+  "background": 5,
+  "cascade_lengths": [
+   1,
+   2
+  ],
+  "cells_needing_an_owner": 73,
+  "colours_seen": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   8,
+   9,
+   14
+  ],
+  "constant_cells": 3999,
+  "distinct_states": 5,
+  "dynamic_box": [
+   29,
+   10,
+   54,
+   63
+  ],
+  "dynamic_cells": 97,
+  "max_frames_in_one_command": 2,
+  "shape": [
+   64,
+   64
+  ],
+  "states": 6,
+  "steps": 6
+ }
+}

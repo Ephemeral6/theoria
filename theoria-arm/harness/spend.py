@@ -246,15 +246,23 @@ MODEL_CALL_TIMEOUT_S = 1800
 #: 0.0028860377/s, and writing 0.0028860 here would leave the recorded rate below
 #: the observed one -- a smaller instance of the same defect. The archive test
 #: catches it, which is how this line came to say 0.0028861.
+#: **Re-derived 2026-07-31, E3 port.** Merging the E3 sk48 carry brought two
+#: paid opus-5 legs into the archive that were on disk but not on any branch,
+#: and both maximands moved: the worst rate is now $1.222096 over 401 042 ms =
+#: 0.0030473018/s (`runs/20260728T083400Z-E3-sk48-carried-v2`), 5.6% above the
+#: figure below it, and the worst call is $1.742637 from the same run. Nothing
+#: was wrong with the old numbers -- they described the archive as it then was.
+#: That is exactly why the archive test re-derives instead of re-reading: a
+#: constant sized from measurements goes stale when measurements arrive.
 OBSERVED_USD_PER_SECOND = {
-    "claude-opus-5": 0.0028861,
+    "claude-opus-5": 0.0030474,
     "claude-haiku-4-5": 0.0006376,
 }
 
 #: The worst single settled call per model, the other half of the sizing rule.
 #: Same runs and same script as `OBSERVED_USD_PER_SECOND`.
 OBSERVED_WORST_CALL_USD = {
-    "claude-opus-5": 1.489011,
+    "claude-opus-5": 1.742637,      # E3 sk48-carried-v2, 642 721 ms
     "claude-haiku-4-5": 0.146292,
 }
 
@@ -307,14 +315,22 @@ OBSERVED_WORST_CALL_USD = {
 #: overstates the second. Splitting them is a real option and is not taken here
 #: unilaterally: it changes what the pool reports as spent, which is the
 #: monitor's to rule on.
+#: **`claude-opus-5` was $6.00 and is now $7.00 (2026-07-31, the E3 port).**
+#: `4 x $1.742637 = $6.97` is the binding half against the enlarged archive, so
+#: $6.00 no longer satisfied the rule this table states about itself. The four
+#: derived entries are re-scaled from the new anchor by the same arithmetic they
+#: already carried; only `claude-haiku-4-5` is unmoved, because no haiku call
+#: arrived with the E3 runs.
 MODEL_CALL_CEILINGS_USD = {
     # measured on this arm.  2026-07-31: the cleanup campaign landed the
     # true records of runs whose committed snapshots had said $0.00 (P8
-    # g50t, E3 sk48); the archive-implied worst single opus call rose from
-    # $1.489 to $1.7258 and the old $6.00 row stopped covering its own
-    # archive.  Raised, and the derived rows rescaled by their stated
-    # formulas.  The ceiling grows with the record; it never shrinks.
-    "claude-opus-5":   7.00,       # max(1800 x 0.0028860, 4 x 1.725832) = 6.90
+    # g50t, E3 sk48); with the E3 legs in the archive the implied worst
+    # single opus call is $1.7426 and the old $6.00 row stopped covering
+    # its own archive.  Raised, and the derived rows rescaled by their
+    # stated formulas.  The ceiling grows with the record; it never
+    # shrinks.  (Both the campaign and the E3 port derived 7.00
+    # independently before this merge joined them.)
+    "claude-opus-5":   7.00,       # max(1800 x 0.0030474, 4 x 1.742637) = 6.97
     "claude-haiku-4-5": 1.25,      # max(1800 x 0.0006376, 4 x 0.146292) = 1.15
     # not measured here: opus-5 x output-price ratio x 1.25 throughput margin
     "claude-opus-4-8": 7.00,       # same list price as opus-5, same family

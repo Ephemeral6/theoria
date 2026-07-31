@@ -1,0 +1,81 @@
+{
+ "carried": {
+  "playbook.dsl": {
+   "bytes": 3597,
+   "lines": 49,
+   "sha256": "d6406993aeae0f8eb501cf02cc56b14221084129a83b534065289c26bb3f107b"
+  },
+  "theory.dsl": {
+   "bytes": 21508,
+   "lines": 140,
+   "sha256": "106431f377af67789c79ad89c5f748a1e2813e733e2daaeee079f15923a841d9",
+   "sha256_before_stripping": "6e2694bc04186ee82659ed748b88685247b690d51d546a2100eeb1d564a5a9e0"
+  }
+ },
+ "declared_name_count": 35,
+ "declared_names": {
+  "event": [
+   "jumped"
+  ],
+  "invariant": [
+   "one_marker"
+  ],
+  "landmark": [
+   "button_cell",
+   "corridor_cell",
+   "gate_cell",
+   "goal_cell",
+   "hud_slot_a",
+   "hud_slot_b",
+   "start_cell"
+  ],
+  "object": [
+   "Marker",
+   "Spent",
+   "Unused"
+  ],
+  "rule": [
+   "key5_advances_marker",
+   "key5_consumes_slot_b",
+   "key5_marks_slot_a_spent"
+  ],
+  "theorem": [
+   "cascade_length_is_a_signal",
+   "cell_five_zero_is_the_gate",
+   "conceded_pixels",
+   "direction_map_is_one_third_known",
+   "floor_map",
+   "goal_is_the_cupped_cell",
+   "hud_is_two_attempts_and_one_is_gone",
+   "lattice_geometry",
+   "no_goal_section_on_purpose",
+   "render_accounting_closed",
+   "replay_can_never_pass_here",
+   "responsibility_ceiling_is_two_pixels",
+   "spent_anchor_unresolved_and_maybe_unresolvable",
+   "tally_is_a_two_command_clock",
+   "the_eight_line_is_probably_a_wire_and_the_blob_is_its_button",
+   "the_mover_is_unnameable",
+   "the_ribbon_is_too_narrow_for_the_ring",
+   "two_action_keys_have_never_been_pressed",
+   "vacated_cell_repaints_to_five",
+   "void_blocks_and_the_guard_language_is_inverted"
+  ]
+ },
+ "landmarks_stripped": [
+  "hud_slot_a",
+  "hud_slot_b",
+  "start_cell",
+  "button_cell",
+  "gate_cell",
+  "corridor_cell",
+  "goal_cell"
+ ],
+ "landmarks_stripped_why": "a landmark's `# arc-cell: (r, c)` is level data, not domain: the manual names the landmark and the level places it. Carrying the coordinates would move one game's geometry into another game's computed level, which is the same defect excluding problem.json exists to prevent -- and it happened on the first live carry before this was added.",
+ "not_carried": {
+  "problem.json": "the level instance is computed from the frames of the game being played; carrying it would import the previous game's board and make the transfer claim unfalsifiable"
+ },
+ "source_books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact\\books",
+ "source_game_id": "g50t-5849a774",
+ "source_run": "20260728T015354Z-g50t-first-contact"
+}
