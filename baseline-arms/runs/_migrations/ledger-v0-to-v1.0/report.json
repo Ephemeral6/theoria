@@ -1,0 +1,247 @@
+{
+  "cost_rows": 321,
+  "counts": {
+    "env_step": 335,
+    "model_call": 321,
+    "unknown": 0
+  },
+  "generated_at": "2026-07-28T03:33:29Z",
+  "grades": {
+    "attempts_defaulted": 160,
+    "joined_arm": 321,
+    "joined_card_id": 317,
+    "joined_guid": 315,
+    "nonconforming_action": 8
+  },
+  "joins": {
+    "probe_log": {
+      "bytes": 1383911,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:394b7cf371d820df0bcb3ace4dc2a42153f31bf10a302ae6bc621c39635aac00"
+    },
+    "run_summaries": [
+      {
+        "bytes": 6203,
+        "path": "baseline-arms/out/campaign_cells.jsonl",
+        "sha256": "sha256:f320014da003bb4e4f7bc1fca5e8fae5209cb9da6dd835170fcfba8d1d835d68"
+      },
+      {
+        "bytes": 2273,
+        "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+        "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a"
+      },
+      {
+        "bytes": 2302,
+        "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+        "sha256": "sha256:079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8"
+      },
+      {
+        "bytes": 783,
+        "path": "baseline-arms/out/pilot_g50t_sonnet_rerun.json",
+        "sha256": "sha256:45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30"
+      },
+      {
+        "bytes": 2295,
+        "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+        "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5"
+      },
+      {
+        "bytes": 796,
+        "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
+        "sha256": "sha256:3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf"
+      },
+      {
+        "bytes": 2259,
+        "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+        "sha256": "sha256:130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e"
+      }
+    ]
+  },
+  "migrator": "baseline-arms/migrate_ledger/1.1.0",
+  "output": {
+    "bytes": 5087005,
+    "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
+    "records": 656,
+    "sha256": "sha256:ae765beff4d8941f6411010c6e2be047036df61c8c0985d6dc04d52be94a84a9"
+  },
+  "records": 656,
+  "runs": {
+    "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8": {
+      "env_step": 30,
+      "model_call": 29,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b": {
+      "env_step": 25,
+      "model_call": 24,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd": {
+      "env_step": 22,
+      "model_call": 21,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-42306405": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593": {
+      "env_step": 2,
+      "model_call": 1,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-opus-5-2f8b6919": {
+      "env_step": 18,
+      "model_call": 17,
+      "unknown": 0
+    },
+    "bare_cc-ar25-claude-sonnet-5-fe359600": {
+      "env_step": 1,
+      "model_call": 1,
+      "unknown": 0
+    },
+    "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8": {
+      "env_step": 2,
+      "model_call": 1,
+      "unknown": 0
+    },
+    "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-g50t-claude-opus-5-f60e48af": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-g50t-claude-sonnet-5-3345f981": {
+      "env_step": 3,
+      "model_call": 3,
+      "unknown": 0
+    },
+    "bare_cc-g50t-claude-sonnet-5-ddabe772": {
+      "env_step": 21,
+      "model_call": 24,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1": {
+      "env_step": 3,
+      "model_call": 2,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb": {
+      "env_step": 1,
+      "model_call": 0,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0": {
+      "env_step": 1,
+      "model_call": 0,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758": {
+      "env_step": 6,
+      "model_call": 5,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-opus-5-42705d3c": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-sonnet-5-9022a076": {
+      "env_step": 7,
+      "model_call": 10,
+      "unknown": 0
+    },
+    "bare_cc-sk48-claude-sonnet-5-95c42cfd": {
+      "env_step": 1,
+      "model_call": 1,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309": {
+      "env_step": 3,
+      "model_call": 2,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a": {
+      "env_step": 21,
+      "model_call": 20,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18": {
+      "env_step": 28,
+      "model_call": 27,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-opus-5-96d23ad9": {
+      "env_step": 11,
+      "model_call": 10,
+      "unknown": 0
+    },
+    "bare_cc-tn36-claude-sonnet-5-3f3ac227": {
+      "env_step": 3,
+      "model_call": 3,
+      "unknown": 0
+    }
+  },
+  "runs_seen": 26,
+  "side_table_misses": [
+    "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+    "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+    "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+    "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+    "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309"
+  ],
+  "sidecar": {
+    "bytes": 53792,
+    "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
+    "records": 321,
+    "sha256": "sha256:920901af9208ebe5dd67dbf78ca610c293663d00938163d6bafafd4e49b1771f"
+  },
+  "source": {
+    "bytes": 5641570,
+    "path": "baseline-arms/ledger.jsonl",
+    "records": 656,
+    "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71"
+  },
+  "target_format": "1.0",
+  "unfillable_fields": {
+    "card_id": 18,
+    "frames/frame_hash": 121,
+    "guid": 20,
+    "http.elapsed_ms": 335,
+    "http.method/path/status/request_sha256": 321,
+    "http.request_sha256": 335,
+    "http.stream": 321,
+    "pricing_ref": 321,
+    "request": 321,
+    "response": 321,
+    "score": 335
+  },
+  "unmapped_keys": {
+    "available_actions": 214,
+    "frames_returned": 188,
+    "game_id": 321,
+    "is_error": 321,
+    "model": 335,
+    "prompt_chars": 321,
+    "reason": 121,
+    "win_levels": 214
+  },
+  "warnings": []
+}

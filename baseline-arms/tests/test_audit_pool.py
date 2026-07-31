@@ -235,6 +235,29 @@ def test_a_give_up_step_is_not_counted_as_a_refused_action():
     assert audit_cells.reached_api(dict(refusal, reached_api=False)) is False
 
 
+# The three P-12 tn36 episodes are the exception, and they are named one by one
+# rather than filtered out by a rule. They were run on 2026-07-28T03:07Z, lived
+# in a worktree until the salvage branch committed them, and every one of the 24
+# scorecard closes that round returned 404 -- the round's own STATUS records the
+# reconciliation obligation as 0/3 completed, not as met. So the score genuinely
+# cannot be reconciled, and the audit is right to say so.
+#
+# The findings are pinned verbatim instead of the cells being skipped: a new
+# finding on one of these cells, or one of these findings disappearing, still
+# fails. What is exempted is a known, recorded, unfixable gap -- not the check.
+KNOWN_UNRECONCILED_TN36 = {
+    "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18": [
+        "no scorecard captured -- score cannot be reconciled (D-015)"],
+    "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a": [
+        "no scorecard captured -- score cannot be reconciled (D-015)"],
+    # 30 RESETs, all refused, $0 spent: `no_reset_window`. No RESET landed, so
+    # there is no episode for a scorecard to be about.
+    "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f": [
+        "expected exactly 1 RESET, found 0",
+        "no scorecard captured -- score cannot be reconciled (D-015)"],
+}
+
+
 def test_the_real_tn36_cells_now_reconcile():
     """The regression, against the actual records rather than a fixture."""
     from harness import audit_cells, run_campaign
@@ -246,9 +269,19 @@ def test_the_real_tn36_cells_now_reconcile():
         pytest.skip("tn36 has not been run in this checkout")
     records = [r for r, _, _ in audit_cells.read_jsonl(audit_cells.ledger_paths())]
     probes = [r for r, _, _ in audit_cells.read_jsonl(audit_cells.probe_paths())]
+    seen_known = set()
     for cell in cells:
         report = audit_cells.audit_run(cell, records, probes)
+        known = KNOWN_UNRECONCILED_TN36.get(cell["run_id"])
+        if known is not None:
+            seen_known.add(cell["run_id"])
+            assert report["findings"] == known, (cell["run_id"],
+                                                 report["findings"])
+            continue
         assert not report["findings"], (cell["run_id"], report["findings"])
+    # If a named cell is no longer in the records, the exemption is stale and
+    # must be removed rather than left standing over nothing.
+    assert seen_known == set(KNOWN_UNRECONCILED_TN36)
 
 
 def test_auditing_one_campaign_does_not_judge_anothers_cells(scratch_gate):

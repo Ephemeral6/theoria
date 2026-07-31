@@ -9,9 +9,11 @@
 | M2 裸 CC harness + 记账管线 | `baseline-arms-m2-harness` | ✅ 达成 |
 | M3 Schema 官方发布物定位 | `baseline-arms-m3-schema-locate` | ✅ 达成（判定为「找不到」支） |
 | M4 试点 + 预算闸门 | `baseline-arms-m4-pilot-gate` | ✅ 达成 |
-| M5 方差包络战役 | `baseline-arms-m5-variance` | ⚠️ **闸门红，停在 1/4 局** |
+| M5 方差包络战役 | `baseline-arms-m5-variance` | ⚠️ **G4 二次触发，停在 2/4 局** |
 | M6 Schema 路 A 材料 | `baseline-arms-m6-path-a` | ✅ 达成 |
 | A14 花过钱的产物入库 | — | ✅ 达成（2026-07-29） |
+| M7 账本正典迁移（F-16） | — | ✅ 达成 |
+| M8 溯源档案 `runs/`（METHOD 8/9） | — | ✅ 达成 |
 
 文档：[`AUDIT.md`](AUDIT.md)（第 0 步审计）·
 [`SCHEMA_LOCATE.md`](SCHEMA_LOCATE.md)（M3 结论）·
@@ -19,7 +21,8 @@
 [`DECISIONS.md`](DECISIONS.md)（设计决策）·
 [`INCIDENTS.md`](INCIDENTS.md)（事件）·
 [`TOUCHED_GAMES.md`](TOUCHED_GAMES.md)（触碰登记）·
-[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）
+[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）·
+[`runs/MANIFEST.json`](runs/MANIFEST.json)（溯源档案索引）
 
 ---
 
@@ -80,7 +83,135 @@ blob 与磁盘的哈希确实不同，加上就相同。
 
 ---
 
-## 本轮（P-7）结果摘要
+## P-12 那一轮（2026-07-28）：**部分采纳**，先读这一段再读下一段
+
+下一段是 P-12 分支交付时写的原文，逐字保留。它描述的东西**有一半没有进主线**，
+所以先说清楚哪一半：
+
+| P-12 交付的 | 处置 |
+|---|---|
+| `harness/interlock.py` 互锁模块 | **采纳**，接进 `campaign` / `run_pilot` / `bare_cc` 三个花钱入口 |
+| 互锁接进 `run_campaign` | **未采纳**（该文件整取主线）——缺口在 `tests/test_interlock.py` 里被断言 |
+| F-15 裁决通道 `harness/adjudications.py` | **采纳为模块与记录**；主线闸门不读它，读的是 barrier |
+| 「G6a 改坐班 + 新增 G6c」的闸门时钟 | **未采纳**（D-022）。主线用 barrier 分段，不引入 sittings |
+| 账本正典迁移 F-16（`migrate_ledger` / `validate_canon`） | **采纳**，产物在 `runs/_migrations/` |
+| 溯源档案 `runs/`（20 条 → 现 46 条） | **采纳**，并按合并后的证据重建 |
+| 那一轮真实花掉的 $1.68 与三个 tn36 格 | **采纳**：账本、probe_log、cells、run.json 四处齐全 |
+
+**原因**：那一轮把闸门重写成 `adjudications` / `interlock` / `g4_suspended` /
+`sittings` / `attach_exposure`；主线同期把它写成 `barriers` /
+`campaign_barriers.jsonl` / `judged` / 每战役一份 `gate_path(campaign)`。
+**两者是互斥的方案，不是可以叠起来的两层**，同一个 `run_campaign.py` 上 13 处冲突。
+所有权裁决取主线，`run_campaign.py` 整份取主线版本，
+`tests/test_gate_clocks.py` 与 `tests/test_gate_g4.py` 一并删除（共 31 例）。
+详见 `DECISIONS.md` D-020…D-025 与本次合并提交。
+
+**必须一并知道的一件事（合并引入的，需要一个所有者裁决）**：那三个 tn36 死格
+进了 `out/campaign_cells.jsonl` 之后，用主线的闸门**现算**会判 **红**——
+G4（两个连续死格）与 G6a（judged 段的起点被这三个更早的格子往前推，算出 75 h）。
+`out/campaign_gate.json` 里躺着的仍是主线那份**绿**的快照（裁决要求整取主线）。
+**落盘的判定与现算的判定现在不一致**，这不是可以忽略的差异：
+G4 那一条是真的（那一轮确实红着停在 2/4 局），G6a 那一条是主线单时钟设计下的假阳性
+——正是 D-022 想修而未被采纳的那个问题。开跑之前必须有人裁决，不要读那份绿快照当放行。
+
+---
+
+## 本轮（P-12）结果摘要
+
+### 包络续跑：**G4 第二次触发，停在 2/4 局**——这是工单允许的唯一一种停
+
+前置条件先解决了：对方那场 S1 全量四局跑完（48 集 / 1453 动作 / $48.39 /
+**0 通关**），互锁放行。**先跑 tn36 而不是 g50t**，因为开跑时另一个轨道正用
+opus-5 打 g50t，同局并发是最尖锐的争用，换个顺序不花钱。
+
+三格全死：`api_unusable`（17 ok / 10 failed）、`api_unusable`（10 / 10）、
+**`no_reset_window`（0 / 0，30 次 RESET 全被拒，$0）**。闸门判红，
+`sk48` / `g50t` **未开跑**，`run_campaign` 拒开并退出码 3。本轮花 $1.68，
+累计包络 $4.21——**钱又一次不是停下的原因**。
+
+三件必须分开说的（详见 [`BUDGET_REPORT.md`](BUDGET_REPORT.md) §15，合并时由 §12 顺延）：
+
+* **`actions_failed >= 10` 的绝对阈值又来了。** 两个跑起来的格子失败数**都恰好是
+  10**，和 ar25 三格同一个指纹。§11.5 第 2 条至今未修，本轮**也没有修**——
+  工单要「按原协议续跑」，改阈值就不是原协议，而且那正是 §11.3 拒绝的动作。
+* **`no_reset_window` 那一格的 0 不是臂的方差**，是它根本没拿到会话
+  （tn36 本轮 RESET 成功率实测 **6/63 ≈ 9.5%**）。把它计进去，成功动作
+  cv 从 **0.367**（只算真正开起来的两格）膨胀到 **0.949**。
+  **0.949 不该拿去定 Phase 4 的 ⟨n⟩。** 本轨道不自行删格，但这条写在数字旁边。
+* **对账义务本轮 0/3 完成**，比 P-7 更差：24 次 scorecard 关闭全部 404。
+  如实登记，不回填。
+
+劣化仍在（成功率 0.574、HTTP/动作 9.56、$/动作 0.0622，三项都比试点差），
+**但已不能再归因于 INC-BA-003**——同轨道并发消除了。剩下两个候选解释
+（仓库 25 个并发 worktree 的跨轨道争用 / ARC 侧本身更不稳）本轮数据分不开，
+**没有为了区分它们再花钱**。
+
+### 另外三件事
+
+外加开工时发现的一件必须先解决的。
+
+### 先解决的那件：包络续跑的前置条件在开工时**并未满足**
+
+`BUDGET_REPORT.md` §11.5 把「先解决 INC-BA-003」写成复跑的前置条件。开工时对方那场
+S1 全量**仍在跑**（g50t 第 9 集、sk48 第 11 集，两场合计已花约 $42）。照工单直接开跑，
+量到的还是争用——§11.2 已经证过一次。
+
+处置是把那句话变成一个检查：`harness/interlock.py`（`DECISIONS.md` D-021），
+两个独立信号（进程表 + 跨 worktree 的检查点新鲜度），两个都拿不到时判阻塞，无 override。
+配套把 INC-BA-003 抱怨的「谁都看不见合计数」补上：`campaign_gate.json` 现在带
+`combined_exposure`。
+
+顺带**跑一次真的就抓到一个假阳性**：`--gate-only` 是只读的，却被算成一场活着的战役——
+一个会对自己的诊断说「不」的互锁。已修，见提交 `6b19d38`。
+
+### 闸门的两处改动（都必须被当成改动来审，不是背景噪声）
+
+1. **F-15 落地通道**（D-020）。闸门是从 `campaign_cells.jsonl` 现算的，三个 ar25 死格
+   就在文件头，`--gate-only` 判红，`run_campaign` 拒开任何一局——**不给裁决一条通道，
+   F-15 就无法执行**。`harness/adjudications.py` 是能想到的最窄的通道：
+   只有 `G4` 可挂起、只对逐条点名的 `run_id`、点名其他子句在写入和读取时各被拒一次、
+   轨道不能自裁。那三格花的 $2.5275 仍进每一个 cap。
+2. **G6a 改量「坐班」，新增 G6c**（D-022）。**8 h 的 cap 一个字没动。**
+   原来的 G6a 从第一行起算，在包络停摆的六个多小时里一直走，开工时读到 6.2 h——
+   等对方战役跑完就会先撞上 8 h。**遵守 §11.5 会触发 §11.5 要求你在其之下遵守的子句。**
+   连续跑满八小时照样触发；日历时钟真正抓得住的残余移进 G6c（原先不存在），
+   所以闸门净增一条约束。
+
+### 账本正典迁移（F-16）：**完成**
+
+`harness/migrate_ledger.py`，560 条全部抬进 v1.0，原文件未动，产物在
+`runs/_migrations/ledger-v0-to-v1.0/`。四个来源等级逐字段标注。
+join 命中：card_id 268/286、guid 266/286、arm 274/274。
+
+**抬不动的必须点名**：`model_call.request` / `response` v0 只记了长度和错误标志，
+而正典把逐字记录定为模型侧不可重放的替代品——**每一条被抬上来的 model_call 都永久
+不可重放**，这个洞只能由 proxy 对未来的运行补。`score` 不是忘了记，上游响应里就没有。
+金额移进 sidecar（正典禁止账本里出现美元数）。
+4 条 `ACTION0` 原样保留并标记——请求真的发出去过。
+
+261 例 fuzz，核心不变量是**键守恒**：输入的每一个键要么映射、要么在 `lift_unmapped`、
+要么在 `lift_dropped_to_sidecar`。
+
+顺带发现两件与 proxy 有关的事，已在 PARTNER_SYNC 登记：
+`proxy/tools/validate_ledger.py` 与 `upgrade_ledger.py` **都不存在**（`proxy/tools/`
+这个目录没有），而 `LEDGER_FORMAT.md` 用现在时描述它们；§7 对 v0 的描述说有 8 个键，
+实际有 24 个。
+
+### 溯源档案 `runs/`：**完成**
+
+20 条：17 个 run（其中 **10 个是死 run**，同等归档）、路 A 那次抓取、这次迁移、
+以及一条「**故意没归档什么**」。`prompt_id` 对 P-12 之前的活标 `retro:P-7`。
+`seed` 一律留空并写明原因——本臂没有 seed，填一个数会比留空更糟。
+
+顺带修掉三个只在「第二局落地时才咬人」的缺陷（提交 `fa462a2`）：
+`summarise_campaign` 的 (game, model) 折叠会静默丢格；它没有任何办法表达
+F-15 要求的「degraded 单独一行」；`audit_cells` 的封存前缀是子串匹配，
+对 8 位十六进制的 run_id 尾巴有约 1.5%/百条的**假阳性**——而它印出来的是
+「sealed ids present」，跟真事故长得一模一样。
+
+---
+
+## 上一轮（P-7）结果摘要
 
 ### M5 方差包络：**闸门 G4 触发，跑完第 1 局即停**
 

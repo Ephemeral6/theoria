@@ -1,0 +1,120 @@
+{
+  "arm": "bare_cc",
+  "budget": 30,
+  "campaign": "phase3-unit-price-remeasure",
+  "card_id": "2fa84fe8-c80f-4c8c-b276-1321e734fe9e",
+  "ended": "2026-07-28T14:53:10Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 30777,
+      "path": "baseline-arms/out/campaign_cells.jsonl",
+      "sha256": "sha256:4cdafafb7858e65e1ba3a7d89950d8e92fcdfacc6d39e8cc1a58df64fb2d1e57",
+      "stability": "append_only",
+      "tracked": true
+    },
+    {
+      "note": "current-state snapshot, rewritten in place; no hash recorded",
+      "path": "baseline-arms/out/campaign_gate.json",
+      "stability": "snapshot",
+      "tracked": true
+    },
+    {
+      "bytes": 5641570,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71",
+      "stability": "append_only",
+      "tracked": true
+    },
+    {
+      "bytes": 1389481,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:c40c33cde39dea3075ad60fe8c5af29c7ee6e806ad47246e41b0976b3cb6a6ee",
+      "stability": "append_only",
+      "tracked": true
+    }
+  ],
+  "game_id": "sk48-d8078629",
+  "id": "bare_cc-sk48-claude-sonnet-5-70d92713",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 0,
+    "model_call": 0,
+    "other": 0
+  },
+  "model": "claude-sonnet-5",
+  "outcome": "budget_exhausted",
+  "prompt_id": "retro:unattributed",
+  "repeat": 1,
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 7,
+    "actions_ok": 23,
+    "cost_usd": 4.1174278,
+    "http_calls_gameplay": 92,
+    "levels_completed": 0,
+    "model_calls": 33,
+    "wall_seconds": 1337.7
+  },
+  "started": "2026-07-28T14:30:53Z",
+  "summary": {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 7,
+    "actions_failed_consecutive_max": 3,
+    "actions_ok": 23,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 419352,
+    "cache_read_tokens": 1096082,
+    "campaign": "phase3-unit-price-remeasure",
+    "card_id": "2fa84fe8-c80f-4c8c-b276-1321e734fe9e",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 15.048
+    },
+    "cost_usd": 4.1174278,
+    "ended": "2026-07-28T14:53:10Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 4.0,
+    "http_calls_gameplay": 92,
+    "input_tokens": 66,
+    "levels_completed": 0,
+    "model": "claude-sonnet-5",
+    "model_call_retries": 3,
+    "model_calls": 33,
+    "outcome": "budget_exhausted",
+    "output_tokens": 64837,
+    "repeat": 1,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-sk48-claude-sonnet-5-70d92713",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 95,
+      "campaign": "phase3-unit-price-remeasure",
+      "model_calls_charged": 33,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-728f97cd28044190",
+      "unpriced_calls": 0,
+      "usd_cap": 15.048,
+      "usd_charged": 4.117428
+    },
+    "started": "2026-07-28T14:30:53Z",
+    "wall_seconds": 1337.7,
+    "win_levels": 8
+  }
+}

@@ -32,7 +32,7 @@ import time
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
-from . import arc_client, ledger, spend
+from . import arc_client, interlock, ledger, spend
 
 PROVIDER = "anthropic-claude-code-cli"
 
@@ -566,6 +566,18 @@ def main(argv=None) -> int:
     ap.add_argument("--budget", type=int, default=20)
     ap.add_argument("--action-retries", type=int, default=8)
     args = ap.parse_args(argv)
+
+    # INC-BA-003 / DECISIONS.md D-021: no campaign in this track starts while
+    # another one is spending. This check is in every spending entry point, not
+    # only the envelope's -- serialisation that holds in one direction only is
+    # not serialisation, it just decides which campaign loses the race.
+    lock = interlock.check()
+    if not lock["clear"]:
+        print("interlock: BLOCKED -- another campaign is live in this track")
+        for reason in lock["blockers"]:
+            print("  %s" % reason)
+        print("`python -m harness.interlock` reports the current state.")
+        return 4
 
     summary = play(args.game, args.model, args.budget,
                    action_retries=args.action_retries)
