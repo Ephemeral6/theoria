@@ -62,7 +62,11 @@ SKIP_DIRS = {".git", "__pycache__", ".toolchain", ".lake", "node_modules",
              # 工作树是主树的副本，它们的内容在主树里已经被扫过；而真正的规矩
              # （CLAUDE.md）说的是「密钥不得进入任何**被跟踪的**文件」，
              # 那件事在主树上就能判完。
-             ".worktrees"}
+             ".worktrees",
+             # S41: `.claude/worktrees/` is the harness's own worktree root
+             # and holds full repo copies too. Naming one root and not the
+             # other is the S36 shape; `.claude` covers it by name.
+             ".claude"}
 
 
 # ---------------------------------------------------------------- helpers
