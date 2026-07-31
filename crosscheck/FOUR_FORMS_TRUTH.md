@@ -437,3 +437,30 @@ by a planner that never heard of the generator — and the repair distance.
   for a missing `semantics:` section, so a wider reading of "expressible" gives
   313. Numerator 0 either way.
 * Zero API calls. Zero sealed-pile contact. $0.00.
+
+---
+
+## Superseded — the repair landed (2026-07-31)
+
+Everything above is the **pre-repair record** and stays frozen: 0 of 303
+usable actions from the general backend, measured 2026-07-30, run dir
+`runs/20260730T120005Z-…` untouched. It did its job — the number forced
+the repair.
+
+`gen_pddl` was repaired on 2026-07-31 (commit "the fourth form is
+generated, not hand-fitted"; the defect list in TWO_BACKENDS.md maps
+one-to-one onto the patch). Post-repair census, same instrument, fresh
+run dir `runs/20260731T061500Z-C14-after-the-repair/`:
+
+| corpus | actions owed | semantically non-empty | lost to refusal |
+|---|---|---|---|
+| all .dsl in repo | 299 | **196 (65.6%)** | 103 |
+
+The 103 are **declared refusals** (`by_defect: {file-refused: 103}`, 34
+theories whose guards use line geometry or field arithmetic the grammar
+cannot yet say) — the generator now refuses what it cannot translate
+instead of emitting empty actions under a green light. The A0 manual's
+planning form grounds and solves its level with the known 12-step plan;
+`books.py` turns red on an undeclared PDDL failure. The verify gate's
+"max good = 0" assertion was retired with the claim it pinned; the gate
+now checks the slicing table is arithmetic over the committed census.

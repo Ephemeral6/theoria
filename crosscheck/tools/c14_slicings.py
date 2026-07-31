@@ -22,7 +22,7 @@ import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RUN = os.path.join(REPO, "crosscheck", "runs",
-                   "20260730T120005Z-C14-four-forms-is-three-and-a-half", "out")
+                   "20260731T061500Z-C14-after-the-repair", "out")
 
 # Paths that are copies, snapshots or the compiler's own test fixtures rather
 # than a hand-authored theory.  Used only by the "canonical" slicings.

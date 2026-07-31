@@ -1,0 +1,3738 @@
+{
+  "fd_translate_dir": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a0\\.toolchain\\downward\\builds\\release\\bin",
+  "files": [
+    {
+      "actions": [],
+      "dsl": "a0-spike/theory/theory.dsl",
+      "error": "UnsupportedClause: no such direction: 'dir'",
+      "n_rules": 5,
+      "outcome": "refused",
+      "rules": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ]
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "ablation-arm/theory/a0_base.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cell', 'door', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_left",
+        "door_opens_left"
+      ],
+      "slug": "001-a0_base"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "distinct",
+        "free",
+        "landmark-portal-exit"
+      ],
+      "dsl": "ablation-arm/theory/a0_no_button.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 5,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down"
+      ],
+      "slug": "002-a0_no_button"
+    },
+    {
+      "actions": [],
+      "dsl": "ablation-arm/theory/a0_playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "ablation-arm/theory/a2_base.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'door', 'button', 'cell', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_up",
+        "door_opens_up"
+      ],
+      "slug": "004-a2_base"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-7",
+        "colour-8",
+        "free",
+        "present"
+      ],
+      "dsl": "ablation-arm/theory/a2_holed.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart', 'button', 'door'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 6,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "press_up",
+        "door_opens_up"
+      ],
+      "slug": "005-a2_holed"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a0/prime/theory/theory_prime.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'switch', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 21,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "switch_on_up",
+        "switch_on_down",
+        "switch_on_left",
+        "switch_on_right",
+        "door_opens_up",
+        "door_opens_down",
+        "door_opens_left",
+        "door_opens_right",
+        "switch_off_up",
+        "switch_off_down",
+        "switch_off_left",
+        "switch_off_right",
+        "door_shuts_up",
+        "door_shuts_down",
+        "door_shuts_left",
+        "door_shuts_right"
+      ],
+      "slug": "006-theory_prime"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-onto-crate",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 4,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-on-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-off-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a0/prime/theory/theory_prime_seeded.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'door', 'switch', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 22,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "push_onto_crate",
+        "teleport_down",
+        "switch_on_up",
+        "switch_on_down",
+        "switch_on_left",
+        "switch_on_right",
+        "door_opens_up",
+        "door_opens_down",
+        "door_opens_left",
+        "door_opens_right",
+        "switch_off_up",
+        "switch_off_down",
+        "switch_off_left",
+        "switch_off_right",
+        "door_shuts_up",
+        "door_shuts_down",
+        "door_shuts_left",
+        "door_shuts_right"
+      ],
+      "slug": "007-theory_prime_seeded"
+    },
+    {
+      "actions": [],
+      "dsl": "cold-start-a0/theory/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a0/theory/theory.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cart', 'door', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_left",
+        "door_opens_left"
+      ],
+      "slug": "009-theory"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "distinct",
+        "free",
+        "landmark-portal-exit"
+      ],
+      "dsl": "cold-start-a0/theory/theory_no_button.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 5,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down"
+      ],
+      "slug": "010-theory_no_button"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a2/theory/theory.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell', 'button', 'door'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_up",
+        "door_opens_up"
+      ],
+      "slug": "011-theory"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-7",
+        "colour-8",
+        "free",
+        "present"
+      ],
+      "dsl": "cold-start-a2/theory/theory_holed.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cell', 'door', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 6,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "press_up",
+        "door_opens_up"
+      ],
+      "slug": "012-theory_holed"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a2/theory/theory_repaired.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell', 'button', 'door'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_up",
+        "door_opens_up"
+      ],
+      "slug": "013-theory_repaired"
+    },
+    {
+      "actions": [
+        {
+          "action": "step-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-exit-a",
+        "landmark-exit-b",
+        "present"
+      ],
+      "dsl": "cold-start-a3/artifacts/finding_d_a3_008/domain_l2_scratch_agent_gate.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.003s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.016s CPU, 0.003s wall-clock]\nPreparing model... [0.000s CPU, 0.003s wall-clock]\nGenerated 210 rules.\nComputing model... [0.000s CPU, 0.001s wall-clock]\n87 relevant atoms\n280 auxiliary atoms\n367 final queue length\n389 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.016s CPU, 0.008s wall-clock]\nComputing fact groups...\nFinding invariants...\n11 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n12 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.002s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n11 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.014s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'gate', 'switch', 'agent'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 28,
+      "outcome": "compiled",
+      "rules": [
+        "step_up",
+        "step_down",
+        "step_left",
+        "step_right",
+        "warp_a_up",
+        "warp_a_down",
+        "warp_a_left",
+        "warp_a_right",
+        "warp_b_up",
+        "warp_b_down",
+        "warp_b_left",
+        "warp_b_right",
+        "switch_press_up",
+        "switch_press_down",
+        "switch_press_left",
+        "switch_press_right",
+        "gate_opens_up",
+        "gate_opens_down",
+        "gate_opens_left",
+        "gate_opens_right",
+        "switch_release_up",
+        "switch_release_down",
+        "switch_release_left",
+        "switch_release_right",
+        "gate_closes_up",
+        "gate_closes_down",
+        "gate_closes_left",
+        "gate_closes_right"
+      ],
+      "slug": "014-domain_l2_scratch_agent_gate"
+    },
+    {
+      "actions": [
+        {
+          "action": "step-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-warp-a-exit",
+        "landmark-warp-b-exit",
+        "present"
+      ],
+      "dsl": "cold-start-a3/artifacts/finding_r09_blind/domain_l2_scratch_lifted.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.003s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.000s CPU, 0.003s wall-clock]\nPreparing model... [0.000s CPU, 0.003s wall-clock]\nGenerated 210 rules.\nComputing model... [0.000s CPU, 0.001s wall-clock]\n87 relevant atoms\n280 auxiliary atoms\n367 final queue length\n389 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.000s CPU, 0.008s wall-clock]\nComputing fact groups...\nFinding invariants...\n11 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n12 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.002s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n11 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.000s CPU, 0.013s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'cell', 'gate', 'agent'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "step",
+        "warp_a",
+        "warp_b",
+        "switch_press",
+        "gate_opens",
+        "switch_release",
+        "gate_closes"
+      ],
+      "slug": "015-domain_l2_scratch_lifted"
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "unpress-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "unpress-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-exit-a",
+        "landmark-exit-b",
+        "present"
+      ],
+      "dsl": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/domain.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.002s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.000s CPU, 0.002s wall-clock]\nPreparing model... [0.000s CPU, 0.002s wall-clock]\nGenerated 160 rules.\nComputing model... [0.000s CPU, 0.001s wall-clock]\n87 relevant atoms\n218 auxiliary atoms\n305 final queue length\n327 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.000s CPU, 0.006s wall-clock]\nComputing fact groups...\nFinding invariants...\n11 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n12 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.002s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.016s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n11 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.011s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'switch', 'door', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 20,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_a_up",
+        "teleport_a_down",
+        "teleport_a_left",
+        "teleport_a_right",
+        "teleport_b_up",
+        "teleport_b_down",
+        "teleport_b_left",
+        "teleport_b_right",
+        "press_up",
+        "door_opens_up",
+        "press_down",
+        "door_opens_down",
+        "unpress_up",
+        "door_closes_up",
+        "unpress_down",
+        "door_closes_down"
+      ],
+      "slug": "016-domain"
+    },
+    {
+      "actions": [],
+      "dsl": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [
+        {
+          "action": "step-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-up",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-down",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-left",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-right",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-2",
+        "free"
+      ],
+      "dsl": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/domain.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.016s CPU, 0.002s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.000s CPU, 0.002s wall-clock]\nPreparing model... [0.000s CPU, 0.000s wall-clock]\nGenerated 94 rules.\nComputing model... [0.000s CPU, 0.002s wall-clock]\n78 relevant atoms\n186 auxiliary atoms\n264 final queue length\n286 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.000s CPU, 0.005s wall-clock]\nComputing fact groups...\nFinding invariants...\n5 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n8 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.001s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n3 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.009s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cart', 'cell', 'block'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 12,
+      "outcome": "compiled",
+      "rules": [
+        "step_up",
+        "step_down",
+        "step_left",
+        "step_right",
+        "shove_up",
+        "shove_down",
+        "shove_left",
+        "shove_right",
+        "block_up",
+        "block_down",
+        "block_left",
+        "block_right"
+      ],
+      "slug": "018-domain"
+    },
+    {
+      "actions": [],
+      "dsl": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/packs/push-v1/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-a-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-b-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "unpress-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "unpress-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-exit-a",
+        "landmark-exit-b",
+        "present"
+      ],
+      "dsl": "cold-start-a3/theory/domain.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.003s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.000s CPU, 0.002s wall-clock]\nPreparing model... [0.016s CPU, 0.002s wall-clock]\nGenerated 160 rules.\nComputing model... [0.000s CPU, 0.001s wall-clock]\n87 relevant atoms\n218 auxiliary atoms\n305 final queue length\n327 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.016s CPU, 0.006s wall-clock]\nComputing fact groups...\nFinding invariants...\n11 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n12 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.002s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n11 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.012s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'switch', 'door', 'cart', 'cell'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 20,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_a_up",
+        "teleport_a_down",
+        "teleport_a_left",
+        "teleport_a_right",
+        "teleport_b_up",
+        "teleport_b_down",
+        "teleport_b_left",
+        "teleport_b_right",
+        "press_up",
+        "door_opens_up",
+        "press_down",
+        "door_opens_down",
+        "unpress_up",
+        "door_closes_up",
+        "unpress_down",
+        "door_closes_down"
+      ],
+      "slug": "020-domain"
+    },
+    {
+      "actions": [
+        {
+          "action": "step-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-a-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "warp-b-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-press-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "switch-release-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-4",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-exit-a",
+        "landmark-exit-b",
+        "present"
+      ],
+      "dsl": "cold-start-a3/theory/domain_l2_scratch.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.003s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.016s CPU, 0.004s wall-clock]\nPreparing model... [0.000s CPU, 0.003s wall-clock]\nGenerated 210 rules.\nComputing model... [0.000s CPU, 0.001s wall-clock]\n87 relevant atoms\n280 auxiliary atoms\n367 final queue length\n389 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.016s CPU, 0.009s wall-clock]\nComputing fact groups...\nFinding invariants...\n11 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n12 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.002s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n11 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.014s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'door', 'cart', 'switch'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 28,
+      "outcome": "compiled",
+      "rules": [
+        "step_up",
+        "step_down",
+        "step_left",
+        "step_right",
+        "warp_a_up",
+        "warp_a_down",
+        "warp_a_left",
+        "warp_a_right",
+        "warp_b_up",
+        "warp_b_down",
+        "warp_b_left",
+        "warp_b_right",
+        "switch_press_up",
+        "switch_press_down",
+        "switch_press_left",
+        "switch_press_right",
+        "door_opens_up",
+        "door_opens_down",
+        "door_opens_left",
+        "door_opens_right",
+        "switch_release_up",
+        "switch_release_down",
+        "switch_release_left",
+        "switch_release_right",
+        "door_closes_up",
+        "door_closes_down",
+        "door_closes_left",
+        "door_closes_right"
+      ],
+      "slug": "021-domain_l2_scratch"
+    },
+    {
+      "actions": [],
+      "dsl": "cold-start-a3/theory/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [
+        {
+          "action": "step-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "step-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-up",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-down",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-left",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "shove-right",
+          "defects": [],
+          "n_effect_literals": 7,
+          "n_precondition_literals": 7,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-2",
+        "free"
+      ],
+      "dsl": "cold-start-a3/theory/push/domain.dsl",
+      "error": null,
+      "goal": {
+        "text": "(and)",
+        "verdict": "placeholder",
+        "why": "contains the bare (and) placeholder"
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.002s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nTrivial rules: Converted to facts.\nNormalizing Datalog program: [0.016s CPU, 0.002s wall-clock]\nPreparing model... [0.000s CPU, 0.000s wall-clock]\nGenerated 94 rules.\nComputing model... [0.000s CPU, 0.002s wall-clock]\n78 relevant atoms\n186 auxiliary atoms\n264 final queue length\n286 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.016s CPU, 0.005s wall-clock]\nComputing fact groups...\nFinding invariants...\n5 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n8 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.001s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n3 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n1 of 8 variables necessary.\n0 of 1 mutex groups necessary.\n0 of 14 operators necessary.\n1 of 1 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 1\nTranslator derived variables: 1\nTranslator facts: 2\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 0\nTranslator axioms: 1\nTranslator task size: 5\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.016s CPU, 0.010s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'block', 'cell', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 12,
+      "outcome": "compiled",
+      "rules": [
+        "step_up",
+        "step_down",
+        "step_left",
+        "step_right",
+        "shove_up",
+        "shove_down",
+        "shove_left",
+        "shove_right",
+        "block_up",
+        "block_down",
+        "block_left",
+        "block_right"
+      ],
+      "slug": "023-domain"
+    },
+    {
+      "actions": [],
+      "dsl": "cold-start-a3/theory/push/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "exam/handover_bundles/tier1_manual/MANUAL.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "exam/handover_bundles/tier2_manual_playbook/MANUAL.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "exam/handover_bundles/tier2_manual_playbook/PLAYBOOK.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 6,
+      "outcome": "refused",
+      "rules": [
+        "cursor_to_slot2",
+        "ring_to_slot2",
+        "locked_clears",
+        "done_stamped",
+        "budget_opens",
+        "budget_advances"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "step_down_from_home",
+        "key5_sends_ring_home",
+        "key5_spends_token_a",
+        "key5_lights_token_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "step_down_from_home",
+        "key5_sends_ring_home",
+        "key5_spends_token_a",
+        "key5_lights_token_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=5) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "key5_advances_marker",
+        "key5_marks_slot_a_spent",
+        "key5_consumes_slot_b"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev02-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev02-after-theorize/theory.dsl",
+      "error": null,
+      "n_rules": 0,
+      "outcome": "no-rules",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev03-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev03-before-theorize/theory.dsl",
+      "error": null,
+      "n_rules": 0,
+      "outcome": "no-rules",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev04-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev04-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "meter_burn_key2",
+        "meter_burn_key4",
+        "key2_vacates_body"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev05-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev05-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 3,
+      "outcome": "refused",
+      "rules": [
+        "meter_burn_key2",
+        "meter_burn_key4",
+        "key2_vacates_body"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev06-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev06-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "key2_body_leaves",
+        "key2_body_arrives",
+        "key5_body_clears",
+        "key5_body_respawns"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev07-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev07-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "key2_body_leaves",
+        "key2_body_arrives",
+        "key5_body_clears",
+        "key5_body_respawns"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev08-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev08-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "key2_body_leaves",
+        "key2_body_arrives",
+        "key5_body_clears",
+        "key5_body_respawns"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev09-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/snapshots/rev09-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "key2_body_leaves",
+        "key2_body_arrives",
+        "key5_body_clears",
+        "key5_body_respawns"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed/books/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 4,
+      "outcome": "refused",
+      "rules": [
+        "key2_body_leaves",
+        "key2_body_arrives",
+        "key5_body_clears",
+        "key5_body_respawns"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev02-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev02-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev03-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev03-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev04-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev04-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev05-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev05-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev06-after-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev06-after-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev07-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev07-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev08-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev08-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev09-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev09-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev10-before-theorize/playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/snapshots/rev10-before-theorize/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2/books/theory.dsl",
+      "error": "UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 1,
+      "outcome": "refused",
+      "rules": [
+        "move_down"
+      ]
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 5,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "press-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 6,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "anchored",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "colour-3",
+        "colour-7",
+        "colour-8",
+        "distinct",
+        "free",
+        "landmark-portal-exit",
+        "present"
+      ],
+      "dsl": "theory-compiler/handover_packages/a0-cart/manual/MANUAL.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-2-7)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": false,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing task\n\t->Parsing goal\n\t->Parsing condition\n\t->Parsing literal\nUndefined object\nGot: cell-2-7\n",
+          "returncode": 31,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'door', 'cell', 'button', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 7,
+      "outcome": "compiled",
+      "rules": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down",
+        "press_left",
+        "door_opens_left"
+      ],
+      "slug": "086-MANUAL"
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/handover_packages/a0-cart/playbook/PLAYBOOK.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/handover_packages/a0-sokoban2/manual/MANUAL.dsl",
+      "error": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031).",
+      "n_rules": 6,
+      "outcome": "refused",
+      "rules": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_on_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ]
+    },
+    {
+      "actions": [
+        {
+          "action": "push-up",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-down",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-left",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "push-right",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 3,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        },
+        {
+          "action": "teleport",
+          "defects": [],
+          "n_effect_literals": 4,
+          "n_precondition_literals": 4,
+          "semantically_non_empty": true,
+          "undeclared_predicates": [],
+          "undeclared_variables": []
+        }
+      ],
+      "declared_predicates": [
+        "adjacent-down",
+        "adjacent-left",
+        "adjacent-right",
+        "adjacent-up",
+        "at",
+        "boundary-down",
+        "boundary-left",
+        "boundary-right",
+        "boundary-up",
+        "distinct",
+        "free",
+        "landmark-origin"
+      ],
+      "dsl": "theory-compiler/tests/fixtures/cart_theory.dsl",
+      "error": null,
+      "goal": {
+        "text": "(at cart1 cell-0-0)",
+        "verdict": "stated",
+        "why": ""
+      },
+      "independent_checks": [
+        {
+          "accepted": true,
+          "output": "Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.\nParsing...\nParsing: [0.000s CPU, 0.002s wall-clock]\nNormalizing task... [0.000s CPU, 0.000s wall-clock]\nInstantiating...\nGenerating Datalog program... [0.000s CPU, 0.000s wall-clock]\nNormalizing Datalog program...\nNormalizing Datalog program: [0.000s CPU, 0.001s wall-clock]\nPreparing model... [0.000s CPU, 0.000s wall-clock]\nGenerated 37 rules.\nComputing model... [0.000s CPU, 0.000s wall-clock]\n72 relevant atoms\n84 auxiliary atoms\n156 final queue length\n178 total queue pushes\nCompleting instantiation... [0.000s CPU, 0.000s wall-clock]\nInstantiating: [0.000s CPU, 0.002s wall-clock]\nComputing fact groups...\nFinding invariants...\n5 initial candidates\nFinding invariants: [0.000s CPU, 0.001s wall-clock]\nChecking invariant weight... [0.000s CPU, 0.000s wall-clock]\nInstantiating groups... [0.000s CPU, 0.000s wall-clock]\nCollecting mutex groups... [0.000s CPU, 0.000s wall-clock]\nChoosing groups...\n6 uncovered facts\nChoosing groups: [0.000s CPU, 0.000s wall-clock]\nBuilding translation key... [0.000s CPU, 0.000s wall-clock]\nComputing fact groups: [0.000s CPU, 0.001s wall-clock]\nBuilding STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]\nBuilding dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]\nBuilding mutex information...\nBuilding mutex information: [0.000s CPU, 0.000s wall-clock]\nTranslating task...\nProcessing axioms...\nSimplifying axioms... [0.000s CPU, 0.000s wall-clock]\nTranslator axioms removed by simplifying: 0\nProcessing axioms: [0.000s CPU, 0.000s wall-clock]\nTranslating task: [0.000s CPU, 0.000s wall-clock]\n14 effect conditions simplified\n0 implied preconditions added\nDetecting unreachable propositions...\n0 operators removed\n0 axioms removed\n1 propositions removed\nDetecting unreachable propositions: [0.000s CPU, 0.000s wall-clock]\nReordering and filtering variables...\n7 of 7 variables necessary.\n0 of 1 mutex groups necessary.\n14 of 14 operators necessary.\n0 of 0 axiom rules necessary.\nReordering and filtering variables: [0.000s CPU, 0.000s wall-clock]\nTranslator variables: 7\nTranslator derived variables: 0\nTranslator facts: 18\nTranslator goal facts: 1\nTranslator mutex groups: 0\nTranslator total mutex groups size: 0\nTranslator operators: 14\nTranslator axioms: 0\nTranslator task size: 110\nwarning: could not determine peak memory\nWriting output... [0.000s CPU, 0.000s wall-clock]\nDone! [0.000s CPU, 0.006s wall-clock]\n",
+          "returncode": 0,
+          "tool": "fast-downward-translate"
+        },
+        {
+          "accepted": false,
+          "output": "pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'cell', 'cart'}\n",
+          "returncode": 1,
+          "tool": "pddl-3.1-parser"
+        }
+      ],
+      "n_rules": 2,
+      "outcome": "compiled",
+      "rules": [
+        "push",
+        "teleport"
+      ],
+      "slug": "089-cart_theory"
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/countlock_theory.dsl",
+      "error": "UnsupportedClause: act=take(... T1 ...): neither a declared object type nor a direction; this backend cannot type the parameter",
+      "n_rules": 6,
+      "outcome": "refused",
+      "rules": [
+        "walk",
+        "take_t1",
+        "take_t2",
+        "take_t3",
+        "gate_opens",
+        "gate_holds"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/peg4_theory.dsl",
+      "error": "UnsupportedClause: act=jump(...): argument VarRef(name='a') is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 2,
+      "outcome": "refused",
+      "rules": [
+        "jump_right",
+        "jump_left"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/peg_playbook.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/peg_theory.dsl",
+      "error": "UnsupportedClause: act=jump(...): argument VarRef(name='a') is not a name; a type-quantified schema must be grounded before this backend can read it",
+      "n_rules": 2,
+      "outcome": "refused",
+      "rules": [
+        "jump_right",
+        "jump_left"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/playbook_violation.dsl",
+      "error": "SemanticsError: theory.dsl has no `semantics:` section. The frame axiom, the conflict policy and the cascade shape are facts about the world, not constants of the framework, and this parser will not assume them: a v0.1 manual read under an assumed default compiles silently to a different world. Declare all three: see CONTRACTS/dsl_grammar_v0.2.md.",
+      "n_rules": null,
+      "outcome": "not-a-theory",
+      "rules": []
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/sokoban2_theory.dsl",
+      "error": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031).",
+      "n_rules": 6,
+      "outcome": "refused",
+      "rules": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_on_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ]
+    },
+    {
+      "actions": [],
+      "dsl": "theory-compiler/tests/fixtures/sokoban2_x5_theory.dsl",
+      "error": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031).",
+      "n_rules": 5,
+      "outcome": "refused",
+      "rules": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ]
+    }
+  ],
+  "prompt_id": "C14-four-forms-is-three-and-a-half",
+  "summary": {
+    "actions_defective": 103,
+    "actions_owed": 299,
+    "actions_semantically_non_empty": 196,
+    "by_defect": {
+      "file-refused": 103
+    },
+    "domains_fast_downward_accepted": 8,
+    "dsl_files_seen": 97,
+    "fraction_good": 0.6555,
+    "problem_goals_by_verdict": {
+      "placeholder": 7,
+      "stated": 13
+    },
+    "rules_lost_to_refusal": 103,
+    "theories_compiled": 20,
+    "theories_refused": 34,
+    "theories_with_rules": 54
+  }
+}

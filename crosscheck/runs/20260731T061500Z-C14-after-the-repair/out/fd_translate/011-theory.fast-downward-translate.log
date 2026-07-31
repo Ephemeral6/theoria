@@ -1,0 +1,10 @@
+returncode: 31
+
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing task
+	->Parsing goal
+	->Parsing condition
+	->Parsing literal
+Undefined object
+Got: cell-2-7
