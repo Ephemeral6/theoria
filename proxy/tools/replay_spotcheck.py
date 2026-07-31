@@ -85,8 +85,23 @@ def sessions_from_recon(path: str, game_id: str) -> Dict[str, List[Step]]:
 
     The precheck's `note` field carries the run label (`... run-a`, `run-b`),
     which is what separates its two passes.
+
+    A label is not always a single session. The g50t-5849a774 precheck shows
+    the other shape: several aborted passes (a successful RESET whose first
+    ACTION then failed and was abandoned) and a later partial pass, all under
+    the same `run-a` / `run-b` label. Folding those into one session would
+    put two RESET frames at position 0 of the same history and then interleave
+    two different sweeps -- a fabricated disagreement. So every *successful*
+    RESET opens a new pass, and each pass is its own session: the first pass
+    of a label keeps the plain `recon/<label>` name (which is what the ar25
+    spot check archived, so that report stays reproducible), later passes are
+    `recon/<label>#2`, `#3`, ... An aborted pass survives as a one-step
+    session; that is honest -- its RESET frame really was observed, and the
+    spot check only counts positions at least two sessions reach.
     """
     out: Dict[str, List[Step]] = {}
+    passes: Dict[str, int] = {}
+    current: Dict[str, str] = {}
     if not os.path.exists(path):
         return out
     with open(path, encoding="utf-8") as fh:
@@ -120,7 +135,17 @@ def sessions_from_recon(path: str, game_id: str) -> Dict[str, List[Step]]:
             # The precheck numbers its actions from #0 and does not number
             # RESET; canon puts RESET at step 0, so shift to match.
             step_idx = 0 if name == "RESET" else int(indices[0][1:]) + 1
-            out.setdefault("recon/" + label, []).append({
+            if name == "RESET":
+                # A successful RESET opens a new pass of this label.
+                passes[label] = passes.get(label, 0) + 1
+                current[label] = "recon/" + label + (
+                    "" if passes[label] == 1 else "#%d" % passes[label])
+            session = current.get(label)
+            if session is None:
+                # An action with no successful RESET before it under this
+                # label: no history to attach it to.
+                continue
+            out.setdefault(session, []).append({
                 "step_idx": step_idx,
                 "action": name,
                 "frame_hash": frame_hash(frames),
@@ -132,10 +157,20 @@ def sessions_from_recon(path: str, game_id: str) -> Dict[str, List[Step]]:
 
 
 def clean_prefix(steps: List[Step]) -> List[Step]:
-    """Everything up to the first step that did not come back with a frame."""
+    """Everything up to the first step that did not come back with a frame --
+    or that does not sit at the next contiguous `step_idx`.
+
+    The contiguity rule exists because a session can have holes: the g50t
+    precheck alternated full and short game-id spellings, and the short-id
+    rows fail the game filter, so its sessions arrive as step_idx 0,1,2,6,7,8.
+    Comparison positions are list indices; without the rule, the step at
+    step_idx 6 would be compared at position 3 against other sessions' fourth
+    command -- a misalignment wearing a disagreement's clothes. Steps past a
+    hole are real observations at a position this filtered history cannot
+    name, so they are dropped, not shifted."""
     prefix: List[Step] = []
     for step in steps:
-        if not step["ok"]:
+        if not step["ok"] or step["step_idx"] != len(prefix):
             break
         prefix.append(step)
     return prefix
