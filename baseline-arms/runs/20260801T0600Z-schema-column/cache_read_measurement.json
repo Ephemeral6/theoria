@@ -1,0 +1,109 @@
+{
+  "cache_read_range": [
+    75629154,
+    285274933
+  ],
+  "cache_read_range_naive": [
+    318894498,
+    1318506283
+  ],
+  "n_runs": 8,
+  "n_runs_with_token_usage": 4,
+  "root": "<resolved at run time; payload is gitignored>",
+  "runs": {
+    "claude_fable_opus/claude-fable-5_max_sk48_100.0": {
+      "assistant_messages": 279,
+      "cache_creation_tokens": 1722449,
+      "cache_read_tokens": 90936629,
+      "cache_read_tokens_naive": 320003982,
+      "collection": "claude_fable_opus",
+      "env_steps": 1347,
+      "input_tokens": 525,
+      "output_tokens": 504523,
+      "usage_records_naive": 992
+    },
+    "claude_fable_opus/claude-fable-5_max_tn36_94.74": {
+      "assistant_messages": 197,
+      "cache_creation_tokens": 2303090,
+      "cache_read_tokens": 75629154,
+      "cache_read_tokens_naive": 318894498,
+      "collection": "claude_fable_opus",
+      "env_steps": 936,
+      "input_tokens": 370,
+      "output_tokens": 397521,
+      "usage_records_naive": 842
+    },
+    "claude_fable_opus/claude-opus-4-8_max_ar25_100.0": {
+      "assistant_messages": 288,
+      "cache_creation_tokens": 1064481,
+      "cache_read_tokens": 146465504,
+      "cache_read_tokens_naive": 681302570,
+      "collection": "claude_fable_opus",
+      "env_steps": 1522,
+      "input_tokens": 11540,
+      "output_tokens": 874559,
+      "usage_records_naive": 1338
+    },
+    "claude_fable_opus/claude-opus-4-8_max_g50t_100.0": {
+      "assistant_messages": 564,
+      "cache_creation_tokens": 14047118,
+      "cache_read_tokens": 285274933,
+      "cache_read_tokens_naive": 1318506283,
+      "collection": "claude_fable_opus",
+      "env_steps": 3383,
+      "input_tokens": 14069,
+      "output_tokens": 2219836,
+      "usage_records_naive": 2613
+    },
+    "gpt_5_6_sol/gpt_5_6_sol_max_sk48": {
+      "assistant_messages": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_read_tokens_naive": 0,
+      "collection": "gpt_5_6_sol",
+      "env_steps": 3652,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_records_naive": 0
+    },
+    "gpt_5_6_sol/gpt_5_6_sol_max_tn36": {
+      "assistant_messages": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_read_tokens_naive": 0,
+      "collection": "gpt_5_6_sol",
+      "env_steps": 1508,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_records_naive": 0
+    },
+    "gpt_5_6_sol/gpt_5_6_sol_xhigh_ar25": {
+      "assistant_messages": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_read_tokens_naive": 0,
+      "collection": "gpt_5_6_sol",
+      "env_steps": 727,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_records_naive": 0
+    },
+    "gpt_5_6_sol/gpt_5_6_sol_xhigh_g50t": {
+      "assistant_messages": 0,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_read_tokens_naive": 0,
+      "collection": "gpt_5_6_sol",
+      "env_steps": 1386,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usage_records_naive": 0
+    }
+  },
+  "table_claim_reproduced": false,
+  "table_claim_reproduced_naive": false,
+  "table_claim_tokens": [
+    204000000,
+    341000000
+  ]
+}

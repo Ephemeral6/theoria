@@ -1,0 +1,59 @@
+{
+  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "branch": "ep/schema-arm-ruling",
+  "files": [
+    {
+      "bytes": 23220,
+      "path": "baseline-arms/SCHEMA_ARM_RULING.md",
+      "sha256": "8cf1ab7d7f08213181564dbd4c0affe13bca771a12f718ac5e4b11540bd0302a"
+    },
+    {
+      "bytes": 12291,
+      "path": "baseline-arms/harness/schema_column.py",
+      "sha256": "793095452762357fd912bb24a90404f811749661facbe3ed4a895dd61c31bd59"
+    },
+    {
+      "bytes": 6742,
+      "path": "baseline-arms/tests/test_schema_column.py",
+      "sha256": "2368dc3017a1f783a785654c0f225d1effeb585b041a3d9edc634f3377945e15"
+    },
+    {
+      "bytes": 3004,
+      "path": "baseline-arms/runs/20260801T0600Z-schema-column/RUN_STATE.md",
+      "sha256": "7b4105da9f3f3f2f9e2b39aa14b3f21d4ee5c1a1753424117ef9e9d54910d695"
+    },
+    {
+      "bytes": 3185,
+      "path": "baseline-arms/runs/20260801T0600Z-schema-column/cache_read_measurement.json",
+      "sha256": "9cad6276b518cb321c5775ae24390d88cb72a671a5cada19cf685d59bba120ef"
+    },
+    {
+      "bytes": 1485,
+      "path": "baseline-arms/runs/20260801T0600Z-schema-column/path_a_costing.json",
+      "sha256": "b7163e1bd92fd07557dbcfe90a833b5dfd406a6d109723457f6ffc597c2cc3d1"
+    }
+  ],
+  "gate": {
+    "baseline_before": "509 passed",
+    "cmd": "cd baseline-arms && python -m pytest -q",
+    "result": "534 passed"
+  },
+  "inputs": {
+    "payload_sha256": "303555de54b1bbfdc25ce34eee986106a6cd3806bbd0d86170eb5437638a2f28",
+    "piles_declared_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "price_table": "proxy/pricing/pricing_v1.json (effective 2026-07-28)",
+    "schema_traces_manifest_sha256": "b71b7f64e09afe6703fc3f8770834d1075d82306df6b9b7bc7353b05e11c14ba"
+  },
+  "note": "The payload is gitignored and absent from a linked worktree; the measurement artefacts here are the byte record of the run that had it, resolved via THEORIA_SCHEMA_TRACES. cache_read_measurement.json has its \"root\" field replaced by a placeholder so the file is machine-independent and byte-stable. Hashes are over LF-normalised bytes (git normalises on commit; a CRLF working copy would not reproduce them).",
+  "prompt": "baseline-arms: rule on the main table Schema (repro) column",
+  "prompt_id": "ep/schema-arm-ruling",
+  "seed": null,
+  "spend": {
+    "arc_actions": 0,
+    "arc_usd": 0.0,
+    "live_model_usd": 0.0,
+    "network_calls": 0
+  },
+  "territory": "baseline-arms",
+  "utc": "2026-08-01T06:00:00Z"
+}
