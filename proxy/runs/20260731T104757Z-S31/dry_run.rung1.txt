@@ -1,0 +1,69 @@
+S31 live-arm probe -- DRY RUN. Nothing was sent; $0.00.
+======================================================================
+
+rung 1: env upstream LIVE
+         model upstream loopback mock
+
+the call
+  game        ar25-0c556536   (development pile; whitelist from arc-recon/data/piles.json)
+  arm         bare_cc
+  budget      1 action(s) -> RESET + 1 ACTION, 0 model call(s)
+  env_upstream    https://three.arcprize.org
+  model_upstream  loopback
+  ledger      <checkout>/proxy/var/ledger.jsonl
+
+  !! THIS IS A WORKTREE. `paths.py` resolves LEDGER_PATH and .env from
+     __file__, so both are worktree-local -- but `SpendGate` walks to the
+     MAIN checkout on purpose, so the pool is genuinely shared. Firing
+     from here would charge the shared pool and write the evidence into a
+     gitignored file nobody audits. Run the live rung from the main
+     checkout. (It would in fact refuse first, on the absent key -- the
+     fail-closed order is right, but do not rely on it.)
+
+the budget, computed before anything is reserved
+  per-call ceiling  $0.009688   (claude-haiku-4-5, max_tokens=256, 4204 input tokens estimated
+                     at 3.0 chars/token, cache multiplier 2.0 -- 
+                     cost.py:163, the same function the gate will use)
+  model calls       0
+  worst case        $0.000000
+  ARC requests      4  (scorecard/open, RESET, ACTION, scorecard/close)
+
+the reservation it will take
+  spend_gate.reserve('s31-live-arm-probe', usd_cap=0.05, action_cap=10,
+                     holder={'run_id': ..., 'arm': 'bare_cc', 'game_id': 'ar25-0c556536',
+                            'undeclared': False})
+  headroom over worst case: n/a -- rung 1 spends no model dollars
+  NOT the default. `default_run_caps` is $5.00 / 600 actions (spend_policy.json),
+  which is what `python -m proxy.runner` would take, because its CLI has no
+  --usd-cap flag. Declaring is why this is a script and not that command.
+
+the pool, right now
+  pool      theoria-shared-2026-07
+  spent     $36.1423 / $214.90   7425 / 24000 actions
+  free      $178.7577            16575 actions
+  this run would take $0.05 of that hold, and give back the unspent remainder
+
+credentials, by presence only -- no value is read or printed here
+  ARC_API_KEY        ABSENT   required for this rung
+  ANTHROPIC_API_KEY  ABSENT   not needed at this rung
+
+what would prove it worked: a run_start record of this shape
+{
+  "arm": "bare_cc",
+  "env_upstream": "https://three.arcprize.org",
+  "event": "run_start",
+  "game_id": "ar25-0c556536",
+  "model_upstream": "<loopback>",
+  "run_id": "r-<minted>",
+  "spend_gate": {
+    "campaign": "s31-live-arm-probe",
+    "pool": "theoria-shared-2026-07",
+    "reservation_id": "res-<minted>"
+  },
+  "v": "1.0"
+}
+
+  axis 1 is `arm` in ['bare_cc', 'schema_repro', 'theoria'] on a non-incident record.
+  axis 2 is `env_upstream` or `model_upstream` off this machine.
+  BOTH must be yes. Axis 1 alone is satisfiable for $0.00 by `--mock --arm bare_cc`,
+  which is the forgery this item exists to name.

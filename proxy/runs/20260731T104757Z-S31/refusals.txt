@@ -1,0 +1,7 @@
+=== refusals (archived) ===
+REFUSED: the id given is not in the development pile. The whitelist is positive and holds exactly: ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99. The sealed list is never loaded, so this refusal does not depend on knowing what was asked for -- and the id is not repeated here for the same reason.
+exit=2
+REFUSED: --go needs --authorised-by. A live call carries a name.
+exit=2
+REFUSED: rung 2 needs ANTHROPIC_API_KEY and it is not set. Refusing before the reservation, so a run that cannot pay does not first take the pool's headroom.
+exit=2

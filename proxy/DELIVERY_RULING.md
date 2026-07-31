@@ -146,6 +146,71 @@ the digest and checked for substance instead, so the audit cannot go red on
 somebody else's correct work. It re-runs `demo_three_arms.py` rather than
 believing its archived output.
 
+## 7. Appended 2026-07-31 — S31's own delivery, checked the same way
+
+S31 was re-dispatched under the cleanup campaign after being returned untouched
+on 2026-07-31T09:06Z, so the first thing this pass did was ask of *S31* the
+question S31 asks of A10. The answer is the same shape and it is written down
+here so it is not asked a fourth time. Raw evidence:
+`runs/20260731T104757Z-S31/evidence/branch_state.txt`.
+
+```
+$ git log --oneline master..agent/s31-a10-said-done-prove-it
+  a2a271c4 Merge remote-tracking branch 'origin/master' into agent/s31-...
+$ git diff --stat master agent/s31-a10-said-done-prove-it -- proxy/
+  7 files changed, 48 insertions(+), 1115 deletions(-)      # all reductions
+```
+
+**Nothing is outstanding.** The one commit `master` does not contain is a merge
+commit; every work commit is already an ancestor, and the two-dot diff over
+`proxy/` is all deletions, which means `master` is *ahead* of the branch rather
+than missing anything from it. `DELIVERY_RULING.md`, `tools/audit_delivery.py`,
+`tests/test_audit_delivery.py` and `tests/test_reconcile_amount.py` are all
+tracked on `master` today. The branch is stale, not unmerged, and merging it
+would be a regression. **Do not merge it.**
+
+Read `git log master..<branch>` before concluding a branch is unmerged: a
+non-empty output containing only merge commits is the signature of a branch that
+is behind, and it looks identical to the signature of one that is ahead if you
+only count lines.
+
+**The third requirement's premise is misattributed, and the misattribution will
+recur.** The ticket asks to "land the S29 ruling: reconcile on the
+(cost × actions × turns) triple". That triple is not S29's — S29 is the
+measurement item (`runs/20260729T1700Z-S29-measurement/`), which is about
+unmeasured usage pricing to a confident $0.00. The triple is monitor finding
+F-19, and **F-19 withdrew the `turns` leg the same day it published it**,
+because no turn index exists anywhere in the ledger. The original ask is at
+`monitor/spec.py:653-654` and the correction at `:678-681`, in F-19's own
+words: *"口径改为 cost × actions，turns 记为显式缺口且不投票"* — and, separately,
+*"分数不是整体不可核验……缺的只是 per-step"*. (§3 above cites `:627-636` for that
+correction; those line numbers have moved. Another territory's line numbers are
+not a stable anchor — quote the text, then locate it.) `RECONCILIATION_KEY` has been `("actions", "cost", "score_per_run")`
+since commit `26b387e5`, with `turns` carried as `gaps.turns` /
+`verdict: ABSENT` / `votes: false` and per-step score as
+`gaps.score_per_step` / `NOT_CROSS_VERIFIABLE`. Landing the ticket's literal
+wording would add a fourth leg over a field nobody records, which can only ever
+print agreement — a check with no failing path, which is the exact defect
+`reconcile.py` was rewritten to remove.
+
+That ruling is now enforced rather than restated.
+`tests/test_ledger_format_sync.py` reads the voting legs out of
+`LEDGER_FORMAT.md` §3's table and the gap names out of a real `reconcile_run`
+report, and goes red if the document and the code disagree — in particular if a
+declared gap is ever written up as a leg. Four negative controls, one per way
+they can drift, are in the same file; the parse and every red is archived at
+`runs/20260731T104757Z-S31/evidence/doc_code_sync.txt`.
+
+**The live probe is prepared and unfired.** Requirement 2's diagnostic half was
+answered offline on 2026-07-30 (the write end is not broken — 61 records
+carrying `arm: bare_cc` were written through the real writer against loopback
+mocks). What remains is axis 2, and axis 2 costs money, which the session owner
+gates. `runs/20260731T104757Z-S31/LIVE_PROBE_PLAN.md` carries the exact command,
+the budget arithmetic, the `reserve()` call and the record shape that would
+prove success; `live_probe.py` beside it dry-runs by default and fires on
+`--go --authorised-by`. The shared pool is unchanged by this pass: `$36.1423`
+spent, **0 held, 0 live reservations**.
+
 The general rule, which is the part worth keeping when A10 is forgotten:
 
 > **Check a delivery against the tracked artefacts it actually produced, on

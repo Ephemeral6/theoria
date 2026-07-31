@@ -250,7 +250,8 @@ the requirement; faking a comparison over them would be the defect.
   levels_completed, state, win_levels` (INC-TA-002, confirmed against 196
   successful command responses in `arc-recon/data/recon_ledger.jsonl`, none of
   which carries one). Whatever wrote the record is its only witness. It is
-  reported under a field name that says so and it does not vote on the verdict.
+  reported as `gaps.score_per_step` with verdict `NOT_CROSS_VERIFIABLE`, under a
+  field name that says so, and **it does not vote** on the verdict.
   **This label is scoped to the per-step quantity only.** The per-run score on
   the scorecard is a different quantity, it *is* cross-verifiable, and the leg
   above keeps checking it — widening the label to "score" would discard a check
@@ -268,6 +269,18 @@ the requirement; faking a comparison over them would be the defect.
   for a changed meaning or a new *required* field, and an optional one is
   neither — `prev` (§2) is the precedent — so this can be added at `v` `1.0`.
   Until an arm writes one, the leg stays `ABSENT`.
+
+**Kept in sync by a gate, not by care** (added 2026-07-31, S31).
+`proxy/tests/test_ledger_format_sync.py` reads the voting legs out of the table
+above and the gap names out of a real `reconcile_run` report, and goes red when
+the two disagree — in particular when a quantity the reconciler reports as a
+non-voting gap gets written up here as a leg of the obligation. That is not a
+hypothetical drift: a work item asked for exactly it (a `turns` leg) six days
+after the finding that requested it had already withdrawn it, and a document
+listing `turns` as the third leg would have made a check with no failing path
+look like the specification. It is not a digest check — this file is still being
+edited, and a digest would go red on somebody else's correct prose while staying
+green on a leg quietly renamed inside the table.
 
 **Four verdicts, and the fourth is the reason for the other three.**
 `PASS` (every voting leg agreed) / `FAIL` (a leg disagreed) / `INCOMPLETE`

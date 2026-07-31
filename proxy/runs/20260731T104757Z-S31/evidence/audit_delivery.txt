@@ -1,0 +1,28 @@
+A10's tracked evidence, on paths that are in the commit
+   moved on proxy/ledger.py (substance checked below)
+   moved on proxy/reconcile.py (substance checked below)
+   moved on proxy/LEDGER_FORMAT.md (substance checked below)
+   moved on proxy/README.md (substance checked below)
+   pinned   proxy/tests/test_ledger_concurrency.py
+   pinned   proxy/tests/test_reconcile.py
+   pinned   proxy/runs/20260729T010000Z-A10/SCOPE.md
+   pinned   proxy/runs/20260729T010000Z-A10/RUN_STATE.md
+   pinned   proxy/runs/20260729T010000Z-A10/demo_three_arms.py
+   pinned   proxy/runs/20260729T010000Z-A10/demo_output.txt
+
+A10's substance, in files later items kept editing
+   still there  the fail-closed cross-process ledger lock A10 added
+   still there  the OS-level sidecar lock (fcntl/msvcrt) that replaced the threading.Lock
+   still there  the reconciliation key A10 re-derived
+   still there  `turns` carried as a declared non-voting gap rather than a faked leg
+
+A10's demo, re-run (temp dir only, no network, no spend)
+   exit 0 -- three arm identities, one ledger, chain intact
+
+The shared ledger -- reported, not judged
+   state: ABSENT
+   no file at this path. `proxy/.gitignore:3` excludes `var/`, so this is the normal state of a fresh checkout and is NOT a finding about any commit.
+
+A10: delivered. Tracked evidence present, demo reproduces, and the
+shared ledger's zero is the state SCOPE.md said it would be.
+exit=0

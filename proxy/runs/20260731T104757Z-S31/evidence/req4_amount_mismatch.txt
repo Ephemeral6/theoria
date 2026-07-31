@@ -1,0 +1,13 @@
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 8 items
+
+tests/test_reconcile_amount.py::test_a_cli_run_whose_usage_is_the_usage_billed_reconciles PASSED [ 12%]
+tests/test_reconcile_amount.py::test_red_a_usage_block_inflated_900000x_makes_the_cost_leg_disagree PASSED [ 25%]
+tests/test_reconcile_amount.py::test_red_a_single_edited_token_count_is_enough PASSED [ 37%]
+tests/test_reconcile_amount.py::test_red_an_envelope_edited_to_match_a_tampered_usage_still_fails_elsewhere PASSED [ 50%]
+tests/test_reconcile_amount.py::test_a_transport_with_no_second_witness_is_absent_and_not_a_pass PASSED [ 62%]
+tests/test_reconcile_amount.py::test_the_gap_is_named_in_the_legs_note PASSED [ 75%]
+tests/test_reconcile_amount.py::test_a_cli_success_that_lost_its_breakdown_is_INCOMPLETE_not_PASS PASSED [ 87%]
+tests/test_reconcile_amount.py::test_a_run_with_no_bill_is_distinguishable_from_one_that_reconciled PASSED [100%]
+
+============================== 8 passed in 0.23s ==============================

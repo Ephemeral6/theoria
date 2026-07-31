@@ -1,0 +1,38 @@
+S31 step 1 -- where A10 and S31's own branch stand against master
+master = 6fabcc7e fleet resumed: the pause flag comes down on the owner's inst
+
+$ git branch -a | grep a10
+  agent/a10-shared-ledger-real-arms
+  agent/s31-a10-said-done-prove-it
++ cleanup2/s31-a10
+  remotes/origin/agent/a10-shared-ledger-real-arms
+
+$ git merge-base --is-ancestor agent/a10-shared-ledger-real-arms master; echo $?
+  -> 0  (0 = fully merged)
+
+$ git log --oneline master..agent/s31-a10-said-done-prove-it
+a2a271c4 Merge remote-tracking branch 'origin/master' into agent/s31-a10-said-done-prove-it
+  (one merge commit; no work commit is outstanding)
+
+$ git diff --stat master agent/s31-a10-said-done-prove-it -- proxy/
+ proxy/env_proxy.py                                 | 257 +-----------
+ proxy/guard.py                                     |  23 --
+ .../MANIFEST.json                                  |  80 ++--
+ .../RUN_STATE.md                                   |  22 -
+ .../mutants.json                                   | 316 +-------------
+ .../mutants.txt                                    | 459 +--------------------
+ .../pytest.txt                                     |   6 +-
+ 7 files changed, 48 insertions(+), 1115 deletions(-)
+  (all deletions/reductions: master is AHEAD of the branch. Nothing to merge.)
+
+$ git check-ignore -v proxy/var/ledger.jsonl
+proxy/.gitignore:3:var/	proxy/var/ledger.jsonl
+
+$ git ls-files proxy/var/
+  (empty -- the path the 2026-07-29 audit parsed has never been tracked at any commit)
+
+$ git ls-files proxy/DELIVERY_RULING.md proxy/tools/audit_delivery.py proxy/tests/test_reconcile_amount.py proxy/tests/test_audit_delivery.py
+proxy/DELIVERY_RULING.md
+proxy/tests/test_audit_delivery.py
+proxy/tests/test_reconcile_amount.py
+proxy/tools/audit_delivery.py
