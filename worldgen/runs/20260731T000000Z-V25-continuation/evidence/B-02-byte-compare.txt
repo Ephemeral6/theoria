@@ -1,0 +1,20 @@
+### git status --porcelain worldgen/out
+(end — empty above means no change)
+
+### git diff --stat worldgen/out
+(end)
+
+### git status --porcelain worldgen/catalog
+(end)
+
+### git status --porcelain worldgen/ (whole tree)
+ M worldgen/tests/test_verify_qc_gate.py
+?? worldgen/runs/20260730T034948Z-V25-worldgen-unchecked-is-not-holding/evidence/02-master-partition-census.txt
+?? worldgen/runs/20260731T000000Z-V25-continuation/
+(end)
+### re-check, 2026-07-30T16:05:00Z
+?? worldgen/runs/20260730T034948Z-V25-worldgen-unchecked-is-not-holding/evidence/02-master-partition-census.txt
+?? worldgen/runs/20260731T000000Z-V25-continuation/evidence/B-01-build-check.txt
+?? worldgen/runs/20260731T000000Z-V25-continuation/evidence/B-02-byte-compare.txt
+?? worldgen/runs/20260731T000000Z-V25-continuation/evidence/C-mut-baseline.txt
+(end)
