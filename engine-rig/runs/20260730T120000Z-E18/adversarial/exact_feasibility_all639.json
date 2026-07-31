@@ -1,0 +1,30 @@
+{
+  "conclusion": "monotone in bound: feasible at B implies feasible at any B' > B, so 'still infeasible at 100, 10^4 and 10^6' is one claim (the largest bound), not three. Exact Phase-1 over the rationals with no box at all agrees with HiGHS on every sampled world: 638 infeasible, 1 feasible.",
+  "disagreements_with_highs": [],
+  "exactly_feasible_unbounded": 1,
+  "exactly_infeasible_unbounded": 638,
+  "feasible_witnesses": [
+    {
+      "exact_recheck_holds": true,
+      "goal_gaps": [
+        "1",
+        "13"
+      ],
+      "i": 2302,
+      "max_abs_weight": "12",
+      "seed": 17475932563032345095,
+      "weights": [
+        "12",
+        "9",
+        "3",
+        "7",
+        "-1",
+        "11",
+        "10",
+        "-4"
+      ]
+    }
+  ],
+  "sampled": 639,
+  "step": 1
+}

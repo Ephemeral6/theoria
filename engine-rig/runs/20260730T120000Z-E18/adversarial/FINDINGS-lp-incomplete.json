@@ -1,0 +1,105 @@
+{
+  "reviewer": "adversarial review of engine-rig/tools/survey_numbers/lp_incomplete.py",
+  "module_sha_reviewed": "unchanged across fc89427c..ee385e54",
+  "environment": {"python": "3.13.13", "numpy": "2.4.4", "scipy": "1.17.1",
+                  "matches_E11": true},
+  "verdicts": {
+    "A_headline_639_2189_29_2pct_and_tables": "SURVIVES",
+    "B_2a1c30d_does_not_move_the_number": "SURVIVES",
+    "C_638_at_each_of_three_bounds": "SURVIVES (and is now stronger than claimed)",
+    "D_the_two_639s_are_the_same_set": "REFUTED as verified; the artefact's check is a tautology"
+  },
+  "evidence": {
+    "independent_recount.json": "3000 worlds recomputed with every methodological choice flipped (BFS over graph['edges'] and over moves_from_graph instead of spec.triples; own BFS instead of fuzzlab.oracles.search; engine verdict by status word instead of `certificate is None`; one solve instead of two). 2189/811/1550/1450/639, 29.2%, prefix-500 233/120/113. 0 disagreements between the three successor sources; 0 disagreements with the generator's own solvable flag.",
+    "old_module_provenance.json": "attack line 4. The extracted pre-2a1c30d module imports nothing: 0 modules added to sys.modules, 0 symbols resolving under engine-rig/engines/, bytes identical to `git show`, distinct CertificateError/Move/Certificate classes, distinct __globals__, every class method's co_filename in the temp dir. Only scipy.linprog and numpy are shared, which is unavoidable and is what E11 shared too.",
+    "undecided_injection.json": "attack lines 3, 5, 6. Executes the dead branches.",
+    "exact_feasibility_all639.json": "attack line 5. Exact rational Phase-1 simplex (Bland), no weight box at all, over all 639: 638 exactly infeasible, 1 exactly feasible (i=2302, weights [12,9,3,7,-1,11,10,-4], gaps +1/+13). Controls: 60 certified worlds exactly feasible, 60 reachable worlds exactly infeasible.",
+    "run_plain_1.json vs run_plain_2.json": "byte-identical (sha256 067f7f4c...). run_n500.json reproduces the N=3000 slice_500 block exactly, so --n 500 is a prefix, not a fresh draw."
+  },
+  "defects_found": [
+    {
+      "id": "F1",
+      "where": "_incompleteness()",
+      "severity": "latent on this corpus, methodological",
+      "what": "The numerator is `not certificate_issued` -- the collapsed two-valued predicate 2a1c30d exists to remove. A world where HiGHS returns status 1/3/4 would be counted as an incompleteness, i.e. a solver failure published as a fact about the world.",
+      "proof": "undecided_injection.json A: 10 unreachable worlds (4 status-0, 3 status-2, 3 status-1) give _incompleteness.numerator = 6; the status-word answer is 3."
+    },
+    {
+      "id": "F2",
+      "where": "_caliber()",
+      "severity": "latent on this corpus, arithmetic",
+      "what": "old_rule_numerator = new['numerator'] + extra double-counts. The undecided-and-unreachable worlds are already inside new['numerator'] (see F1), so they are added twice.",
+      "proof": "same corpus: old_rule_numerator = 9, truth = 6, overshoot = +3, while worlds_where_the_rules_differ = 3 is correct."
+    },
+    {
+      "id": "F3",
+      "where": "_wider_box(), the LpUnavailable and CertificateError branches",
+      "severity": "latent, and it is the exact defect 2a1c30d was about",
+      "what": "A solve that FAILS at a wider bound is entered into feasible_any, so it is reported as `lp.box_blocked` -- documented as 'the box, not the mathematics, was doing the refusing' -- and _no_farkas subtracts it from 639.",
+      "proof": "undecided_injection.json C: injected LpUnavailable at bound=1e6 gives box_blocked=1, no_farkas=1-1=0. An injected CertificateError does the same. CertificateError is the live risk: Fraction(float).limit_denominator(1000) on weights near 1e6 is far likelier to fail exact re-checking than at |w|<=10."
+    },
+    {
+      "id": "F4",
+      "where": "_wider_box() bounds_table['undecided']",
+      "severity": "reporting",
+      "what": "The field reads tally['undecided'], but decide() RETURNS status words 'budget'/'unbounded'/'numerical' rather than raising, so those land in status_counts and are invisible in the summary field.",
+      "proof": "injected returned-BUDGET at bound=1e6: status_counts {'budget': 1}, undecided field 0."
+    },
+    {
+      "id": "F5",
+      "where": "_denominators()['same_set_of_worlds']",
+      "severity": "the claim it is offered as evidence for is not tested",
+      "what": "The docstring says 'the set identity is checked rather than assumed'. What is computed is set(box_blocked world ids) <= set(numerator ids) -- a subset test on the 1-element box_blocked list. It returns True for the empty list, and _wider_box selects its `silent` set with the identical predicate _denominators uses, so it cannot fail on real data.",
+      "proof": "undecided_injection.json D."
+    },
+    {
+      "id": "F6",
+      "where": "the BAD CITATION caveat and _wider_box's docstring",
+      "severity": "a finding that is not a finding",
+      "what": "The module says PAPER.md / 10_adjudication.md:289 'states that of the 639 silences 638 are still infeasible at bounds of 100, 10^4 and 10^6 and cite engine-rig/ENGINE_TABLE.md'. It does not. The parenthetical (engine-rig/ENGINE_TABLE.md) is attached to the item heading -- lp_potential's 29.2 % incompleteness rate -- which ENGINE_TABLE.md publishes verbatim as `lp.incomplete = 639 / 2189 = 29.2 %`. The bound sentence carries no citation of its own; it says 'A reviewer rebuilt the LP independently and re-derived it'. Section 10.5 uses the same heading-plus-artefact form for every entry. ENGINE_TABLE.md also contains 638, 1 and bound=10; only the bound triple is absent.",
+      "proof": "papers/phase1-workshop/sections/10_adjudication.md:270-297; engine-rig/ENGINE_TABLE.md:25,260,265."
+    },
+    {
+      "id": "F7",
+      "where": "_wider_box(), 'counted per bound, not collapsed'",
+      "severity": "framing",
+      "what": "The three bounds are one claim, not three. The constraint system is homogeneous apart from the margin and the box only widens, so w feasible at |w|<=B is feasible at any B'>B; infeasible at 1e6 entails infeasible at 1e4 and at 100. Three equal counts are forced unless the solver is inconsistent. Re-running is a fine solver-consistency check; the criticism of E11's collapsed number is not earned.",
+      "proof": "monotonicity, plus exact_feasibility_all639.json: 638 infeasible with NO box at all."
+    },
+    {
+      "id": "F8",
+      "where": "counts.wider_box / counts.no_farkas at --n 500",
+      "severity": "cosmetic inconsistency",
+      "what": "The scope guard the module carefully applies to _base_rates and to the top-level agrees_with_e11 (prose only compared at N=3000) is not applied here: --n 500 publishes agrees_with_e11_all_three: false and no_farkas.agrees: false, which mean 'different corpus', exactly the bare false the module's own comment says it avoids."
+    },
+    {
+      "id": "F9",
+      "where": "_common.main() vs run_all.py",
+      "severity": "portability",
+      "what": "_common.py claims 'the JSON these scripts write is byte-stable across platforms'. The documented CLI path writes to stdout: on Windows that is CRLF plus ensure_ascii escaping, so `python -m tools.survey_numbers.lp_incomplete > f` and run_all.py produce byte-different files for identical content (433 CRLFs and \\u00a7 vs raw UTF-8 and LF). The numbers are identical; the byte-stability claim is not true of the invocation the module documents."
+    },
+    {
+      "id": "F10",
+      "where": "_load_old_potential()",
+      "severity": "hygiene",
+      "what": "tempfile.mkdtemp() is never removed; every --verify-old-code run leaves a directory behind."
+    },
+    {
+      "id": "F11",
+      "where": "docstring, 'the sole edit to solve()'s body between 2a1c30d^ and HEAD is options=...'",
+      "severity": "overstatement",
+      "what": "The whole post-linprog branch changed (status table, LpOutcome, the success/status contradiction check). What is true, and is what the argument needs, is that the LP handed to HiGHS is unchanged: an AST-level diff shows moves_from_graph, _occupancy, check_exactly, Move and Certificate.holds all byte-identical, and the constraint-matrix construction identical. Also, options=None is scipy's own default, so the added argument is genuinely a no-op."
+    },
+    {
+      "id": "F12",
+      "where": "docstring, 'i < 500 is exactly the world the E4 campaign saw'",
+      "severity": "true, but only partly checkable from committed state",
+      "what": "fuzzlab/out/campaign.json -- the file E11 points a reader at -- is a 60-world run (worlds_per_engine: 60), and fuzzlab/out/seeds.jsonl holds 60 jumpgraph rows. The E4 MANIFEST records worlds_per_engine: 500 and a 500-world artefact survives at fuzzlab/runs/20260728T161127Z-V13-audit-the-published-surface/partials/campaign.500w.json. All 60 committed seeds equal prng.derive(0x00005EEDC1E4F002, 'jumpgraph', i) for i=0..59, so the corpus IS the campaign's prefix; only the first 60 of the 500 are verifiable against a committed seed table."
+    }
+  ],
+  "upgrade_available": {
+    "what": "lp.no_farkas can stop being an epistemic gap.",
+    "detail": "exact_feasibility.py decides pagoda existence in exact rationals with no box. Over all 639 it returns 638 infeasible and 1 feasible, matching HiGHS exactly. A Phase-1 optimum > 0 in exact arithmetic IS the infeasibility proof (its final objective row is the Farkas multiplier vector), so the 638 are no longer 'a solver's claim, not a proof' -- and the statement is stronger than the paper's, because it holds with no weight box at all rather than at |w| <= 10^6.",
+    "controls": "60 certified worlds exactly feasible; 60 reachable worlds exactly infeasible (soundness requires the latter)."
+  }
+}

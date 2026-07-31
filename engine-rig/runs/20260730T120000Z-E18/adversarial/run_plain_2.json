@@ -1,0 +1,433 @@
+{
+  "agrees_with_e11": true,
+  "caveats": [
+    "CALIBER (2a1c30d): the code path that produced E11's 29.2% was rewritten after the E11 run. `if not result.success: return None` became `only HiGHS status 2 returns None; statuses 1/3/4 raise LpUnavailable`, and E15 (99204472, d2b75c26, af884509) then widened the same seam into LpOutcome without changing the decision rule. The number above is measured on today's code and is the number of record. counts.pre_2a1c30d measures the old rule from the same solver statuses: old 639/2189 = 29.2%, new 639/2189 = 29.2%, delta +0 world(s) in the numerator. HiGHS returned status 1/3/4 on 0 of 3000 worlds, which is the only place the two rules can differ.",
+    "SHARED DEPENDENCY: scipy.optimize.linprog / HiGHS decides the engine's verdict, and there is no second solver here to check it against. scipy 1.17.1, numpy 2.4.4, Python 3.13.13. E11 ran scipy 1.17.1, numpy 2.4.4, Python 3.13.13; a HiGHS behaviour change would move this number and would be invisible from inside this script.",
+    "SHARED DEPENDENCY: fuzzlab.worlds.jumpgraph.generate produces both the truth and the engine's input (E11 \u00a72.1). A generator that only emitted easy geometries would flatter both sides.",
+    "SHARED DEPENDENCY: the (src, over, dst) peg-jump convention is hard-coded in Move.delta, jumpgraph.apply, fuzzlab/props and in _successors here -- four copies of one rule (E11 \u00a72.2). If the convention is wrong they are all wrong together.",
+    "NOT A PROOF OF NON-EXISTENCE: 'no certificate' on an unreachable world means HiGHS reported the LP infeasible in floating point with |w_i| <= 10. No exact rational infeasibility certificate (Farkas dual) is produced, so the numerator rests on the solver's word (E11 \u00a77). E11 found exactly 1 of the 639 to be feasible at bound=100 -- seed 17475932563032345095, index 2302 -- so the box, not the mathematics, does the refusing there.",
+    "SCOPE: n_pos <= 9 (jumpgraph.MAX_POSITIONS), so <= 512 states per world and the exhaustive BFS is what buys the truth. The silence-vs-n_pos trend is decreasing over 4..9; extrapolating past 9 is unjustified in either direction.",
+    "The E11 partial's own numbers were independently reproduced by the E15 census (runs/20260729T044500Z-E15-solver-status-bit/SUMMARY.json) on post-2a1c30d code. This module is a third, differently-plumbed reading, not a copy of either.",
+    "BAD CITATION (finding, not a caveat about this run): PAPER.md and papers/phase1-workshop/sections/10_adjudication.md:289 state that of the 639 silences '638 are still infeasible at bounds of 100, 10^4 and 10^6' and cite engine-rig/ENGINE_TABLE.md. ENGINE_TABLE.md contains no bound but lp.weight_bound=10 -- the strings '10^4', '10^6' and 'bound = 100' do not occur in it. The true source is the E11 partial at lines 275-277, which was prose. The claim itself recomputes exactly (638), counted per bound rather than collapsed: bound=100 -> 638 still infeasible, bound=10000 -> 638 still infeasible, bound=1000000 -> 638 still infeasible. The citation is what is wrong, not the number.",
+    "DENOMINATOR: 639 is quoted against two different denominators. ENGINE_TABLE's lp.incomplete is 639/2189 (2189 = genuinely unreachable worlds); the paper's 'of 639 silences' reuses the numerator as a denominator. counts.denominators_for_639 confirms these are the same set of worlds, so both sentences are true -- but the engine is silent on 1450 worlds, not 639, and the other 811 silences are reachable worlds the engine correctly declines to certify. A reader who reads 639 as the silence count is off by 2.3x.",
+    "NOT A PROOF, PART 2: lp.no_farkas = 638 is recomputed here, but only the count is. Zero exact rational infeasibility certificates (Farkas duals) were produced by this module either, so the paper's limitation at 10_adjudication.md:294 stands exactly as written and is not weakened or strengthened by this script."
+  ],
+  "counts": {
+    "base_rates": {
+      "certificate_error": {
+        "agrees": true,
+        "count": 0,
+        "e11_count": 0,
+        "e11_pct": 0.0,
+        "pct": 0.0
+      },
+      "certificate_issued": {
+        "agrees": true,
+        "count": 1550,
+        "e11_count": 1550,
+        "e11_pct": 51.7,
+        "pct": 51.7
+      },
+      "goal_truly_reachable": {
+        "agrees": true,
+        "count": 811,
+        "e11_count": 811,
+        "e11_pct": 27.0,
+        "pct": 27.0
+      },
+      "goal_truly_unreachable": {
+        "agrees": true,
+        "count": 2189,
+        "e11_count": 2189,
+        "e11_pct": 73.0,
+        "pct": 73.0
+      },
+      "no_certificate": {
+        "agrees": true,
+        "count": 1450,
+        "e11_count": 1450,
+        "e11_pct": 48.3,
+        "pct": 48.3
+      }
+    },
+    "campaign_seed": "0x00005EEDC1E4F002",
+    "denominators_for_639": {
+      "all_silences": {
+        "count": 1450,
+        "on_reachable_worlds": 811,
+        "on_unreachable_worlds": 639,
+        "share_that_is_incompleteness_pct": 44.1
+      },
+      "numerator": 639,
+      "paper_phrasing": {
+        "denominator": 639,
+        "denominator_means": "silences that fall on a genuinely unreachable world -- i.e. the registry's numerator, reused as a denominator",
+        "pct_of_that_denominator": 99.8,
+        "quote": "of 639 silences, 638 are still infeasible at bounds of 100, 10^4 and 10^6"
+      },
+      "reading_hazard": "The engine is silent on 1450 worlds, not 639. 'of 639 silences' names the 639 silences that land on a genuinely unreachable world; the other 811 are the engine correctly declining to prove a false statement about a reachable one (E11 \u00a75.4 -- no public path yields a certificate for a solvable configuration, so every reachable world is a silence by construction). Both sentences are true; a reader who takes 639 for the silence count is off by 2.3x and would compute the box artefact's scale as 1/639 = 0.156% instead of 1/1450 = 0.069%.",
+      "registry": {
+        "denominator": 2189,
+        "denominator_means": "worlds whose goal is genuinely unreachable",
+        "key": "lp.incomplete",
+        "pct": 29.2,
+        "ratio": "639 / 2189"
+      },
+      "same_set_of_worlds": true
+    },
+    "e11_prose_scope": "E11 \u00a74.3 quotes 639/2189 at N=3000; the top-level agrees_with_e11 is only meaningful at the default N=3000 (this run: N=3000)",
+    "engine_status_histogram": {
+      "certified": 1550,
+      "no_linear_pagoda": 1450
+    },
+    "environment": {
+      "numpy": "2.4.4",
+      "python": "3.13.13",
+      "scipy": "1.17.1"
+    },
+    "family": "jumpgraph",
+    "incompleteness": {
+      "denominator": 2189,
+      "numerator": 639,
+      "pct": 29.2,
+      "rate": 0.291914,
+      "share_of_all_worlds_pct": 21.3
+    },
+    "integrity": {
+      "bfs_budget_exhausted": 0,
+      "lp_unavailable": 0,
+      "oracle_disagreements": 0,
+      "reachability_undetermined": 0,
+      "run_vs_decide_disagreements": 0
+    },
+    "jsonl_written": null,
+    "n_pos_histogram": {
+      "4": 510,
+      "5": 480,
+      "6": 522,
+      "7": 495,
+      "8": 482,
+      "9": 511
+    },
+    "no_farkas": {
+      "agrees": true,
+      "derivation": "silent-and-unreachable (639) minus rescued-by-a-wider-box (1)",
+      "e11_prose": 638,
+      "evidence": "scipy.optimize.linprog reporting HiGHS status 2 in floating point at |w_i| <= 10. No exact rational infeasibility certificate was computed for any of them, so 'no linear pagoda exists' remains a solver's claim, not a proof.",
+      "farkas_duals_produced": 0,
+      "recomputed": 638,
+      "registry_key": "lp.no_farkas"
+    },
+    "pre_2a1c30d": {
+      "commit": "2a1c30d",
+      "delta_numerator": 0,
+      "delta_pct": 0.0,
+      "note": "The delta is zero only because HiGHS never returned 1, 3 or 4 on this corpus.  That is a fact about these 3000 LPs, not a guarantee: the two rules are genuinely different functions and the first iteration limit would separate them.",
+      "of_those_truly_unreachable": 0,
+      "old_rule_denominator": 2189,
+      "old_rule_numerator": 639,
+      "old_rule_pct": 29.2,
+      "solver_status_histogram": {
+        "0": 1550,
+        "2": 1450
+      },
+      "unreachable_worlds_in_denominator": 2189,
+      "verified_against_old_module": null,
+      "what_changed": "`if not result.success: return None` became `only HiGHS status 2 returns None; 1/3/4 raise LpUnavailable`.  The LP handed to HiGHS is unchanged: the sole edit to solve()'s body between 2a1c30d^ and HEAD is `options=dict(solver_options) if solver_options else None`, which is a no-op at the default.",
+      "worlds_where_the_rules_differ": 0
+    },
+    "reachable_states_total": 32756,
+    "slice_500": {
+      "agrees_with_e11": true,
+      "available": true,
+      "e11_prose": {
+        "no_certificate_and_unreachable_pct": 22.6,
+        "no_certificate_because_reachable_pct": 24.0,
+        "no_certificate_total_pct": 46.6
+      },
+      "incompleteness": {
+        "denominator": 380,
+        "numerator": 113,
+        "pct": 29.7,
+        "rate": 0.297368,
+        "share_of_all_worlds_pct": 22.6
+      },
+      "no_certificate_and_unreachable": 113,
+      "no_certificate_and_unreachable_pct": 22.6,
+      "no_certificate_because_reachable": 120,
+      "no_certificate_because_reachable_pct": 24.0,
+      "no_certificate_total": 233,
+      "no_certificate_total_pct": 46.6,
+      "worlds": 500
+    },
+    "state_space_total": 505312,
+    "state_space_total_e11": 505312,
+    "wider_box": {
+      "bounds": {
+        "100": {
+          "agrees_with_e11_all_three": true,
+          "bound": 100,
+          "certificate_error": 0,
+          "e11_prose_all_three": 638,
+          "feasible": 1,
+          "feasible_worlds": [
+            {
+              "bound": 100,
+              "exact_recheck_over_spec_triples": {
+                "goal_break": true,
+                "goal_gaps": [
+                  "1",
+                  "13"
+                ],
+                "holds": true,
+                "initial_potential": "9",
+                "inv_closed": true,
+                "max_abs_weight": "12",
+                "triples_checked": 17
+              },
+              "goal_states": [
+                "00000010",
+                "10000010"
+              ],
+              "i": 2302,
+              "initial": "00100011",
+              "n_pos": 8,
+              "reachable_size": 4,
+              "seed": 17475932563032345095,
+              "weights": [
+                "12",
+                "9",
+                "3",
+                "7",
+                "-1",
+                "11",
+                "10",
+                "-4"
+              ]
+            }
+          ],
+          "status_counts": {
+            "certified": 1,
+            "no_linear_pagoda": 638
+          },
+          "still_infeasible": 638,
+          "undecided": 0
+        },
+        "10000": {
+          "agrees_with_e11_all_three": true,
+          "bound": 10000,
+          "certificate_error": 0,
+          "e11_prose_all_three": 638,
+          "feasible": 1,
+          "feasible_worlds": [
+            {
+              "bound": 10000,
+              "exact_recheck_over_spec_triples": {
+                "goal_break": true,
+                "goal_gaps": [
+                  "1",
+                  "13"
+                ],
+                "holds": true,
+                "initial_potential": "9",
+                "inv_closed": true,
+                "max_abs_weight": "12",
+                "triples_checked": 17
+              },
+              "goal_states": [
+                "00000010",
+                "10000010"
+              ],
+              "i": 2302,
+              "initial": "00100011",
+              "n_pos": 8,
+              "reachable_size": 4,
+              "seed": 17475932563032345095,
+              "weights": [
+                "12",
+                "9",
+                "3",
+                "7",
+                "-1",
+                "11",
+                "10",
+                "-4"
+              ]
+            }
+          ],
+          "status_counts": {
+            "certified": 1,
+            "no_linear_pagoda": 638
+          },
+          "still_infeasible": 638,
+          "undecided": 0
+        },
+        "1000000": {
+          "agrees_with_e11_all_three": true,
+          "bound": 1000000,
+          "certificate_error": 0,
+          "e11_prose_all_three": 638,
+          "feasible": 1,
+          "feasible_worlds": [
+            {
+              "bound": 1000000,
+              "exact_recheck_over_spec_triples": {
+                "goal_break": true,
+                "goal_gaps": [
+                  "1",
+                  "13"
+                ],
+                "holds": true,
+                "initial_potential": "9",
+                "inv_closed": true,
+                "max_abs_weight": "12",
+                "triples_checked": 17
+              },
+              "goal_states": [
+                "00000010",
+                "10000010"
+              ],
+              "i": 2302,
+              "initial": "00100011",
+              "n_pos": 8,
+              "reachable_size": 4,
+              "seed": 17475932563032345095,
+              "weights": [
+                "12",
+                "9",
+                "3",
+                "7",
+                "-1",
+                "11",
+                "10",
+                "-4"
+              ]
+            }
+          ],
+          "status_counts": {
+            "certified": 1,
+            "no_linear_pagoda": 638
+          },
+          "still_infeasible": 638,
+          "undecided": 0
+        }
+      },
+      "box_blocked": {
+        "agrees": true,
+        "e11_prose": 1,
+        "note": "silent-and-unreachable worlds that stop being silent once the weight box is widened -- the box, not the mathematics, was doing the refusing",
+        "recomputed": 1,
+        "registry_key": "lp.box_blocked",
+        "worlds": [
+          {
+            "bound": 100,
+            "exact_recheck_over_spec_triples": {
+              "goal_break": true,
+              "goal_gaps": [
+                "1",
+                "13"
+              ],
+              "holds": true,
+              "initial_potential": "9",
+              "inv_closed": true,
+              "max_abs_weight": "12",
+              "triples_checked": 17
+            },
+            "first_bound": 100,
+            "goal_states": [
+              "00000010",
+              "10000010"
+            ],
+            "i": 2302,
+            "initial": "00100011",
+            "n_pos": 8,
+            "reachable_size": 4,
+            "seed": 17475932563032345095,
+            "status": "certified",
+            "weights": [
+              "12",
+              "9",
+              "3",
+              "7",
+              "-1",
+              "11",
+              "10",
+              "-4"
+            ]
+          }
+        ]
+      },
+      "note": "Counted per bound, not collapsed. `bound` is a solver parameter and not part of the pagoda definition, so every infeasibility here is infeasibility *within* the box and each box is its own claim.",
+      "probed": 639,
+      "still_infeasible_at_all_three": {
+        "agrees": true,
+        "citation_is_wrong": true,
+        "citation_note": "ENGINE_TABLE.md contains no bound other than lp.weight_bound=10; the strings '10^4', '10^6' and 'bound = 100' do not occur in it. The actual source is runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/lp_potential-via-exhaustive.md:275-277, which is prose with no script behind it. This module is that script.",
+        "cited_to": "engine-rig/ENGINE_TABLE.md",
+        "claim": "PAPER.md / 10_adjudication.md:289: 'of 639 silences, 638 are still infeasible at bounds of 100, 10^4 and 10^6'",
+        "e11_prose": 638,
+        "recomputed": 638
+      }
+    },
+    "worlds": 3000
+  },
+  "e11_prose": {
+    "denominator": 2189,
+    "numerator": 639,
+    "pct": 29.2
+  },
+  "inputs": [
+    {
+      "path": "engine-rig/common/candidates.py",
+      "sha256": "34868b1135b9ff2854156bc1960ead01963bca093905a4bf8fea2c966fdc78cc"
+    },
+    {
+      "path": "engine-rig/common/rng.py",
+      "sha256": "8ce308ad4da312d84ae39e4bcbccffa5de16af22e7a90f6ec80fb87e8348d9a3"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/__init__.py",
+      "sha256": "f800825380d50196d104b14285efe95f50e60b624683e4a47380702335bcbeeb"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/potential.py",
+      "sha256": "dff44f53a751b0fa60ecdb64ee89337e9e8d3b1b59f7fb6f8b2ca6c7accfc92d"
+    },
+    {
+      "path": "engine-rig/tools/survey_numbers/_common.py",
+      "sha256": "236e20029ee25742e3e99d3fbdd12f8eefdd555cf5049170dd8b0603f3c06ab2"
+    },
+    {
+      "path": "engine-rig/tools/survey_numbers/lp_incomplete.py",
+      "sha256": "ca0526c8514f7ccf91a26354879bbf642481c074e5b8cab53e181bedab128b75"
+    },
+    {
+      "path": "fuzzlab/oracles/search.py",
+      "sha256": "177182f9eeece21aef5bd8f73fb181eeb78bd1943f73ea7f9e0da11578079196"
+    },
+    {
+      "path": "fuzzlab/prng.py",
+      "sha256": "9d18e3290f29b85a88f76d385f34be59c101e73c721a8e55ce287b8e42a8c66d"
+    },
+    {
+      "path": "fuzzlab/rig.py",
+      "sha256": "443d29f82d5735e60b0db9dfd49c5b444f54f35da143852a0f255543ed48dda3"
+    },
+    {
+      "path": "fuzzlab/worlds/common.py",
+      "sha256": "ec57a8039fe21810c734cdd7e72d99c10617c2ae360757429cecee44d8d233b0"
+    },
+    {
+      "path": "fuzzlab/worlds/jumpgraph.py",
+      "sha256": "ef807e300342d36d660c8a2cff2e553d113381905b01e378de9cd036fd588938"
+    }
+  ],
+  "key": "lp.incomplete",
+  "method": "Draw world i from prng.derive(0x00005EEDC1E4F002, 'jumpgraph', i) for i = 0..2999 and generate it with fuzzlab.worlds.jumpgraph.generate. Ground truth: forward BFS from spec.initial over successors built in this module from spec.triples -- NOT from graph['edges'], preserving E11 \u00a71 step 3, because the engine's move list is built from edges and an oracle sharing that table shares its failures. Unreachable = the BFS enumerated the whole reachable set within fuzzlab.oracles.search.STATE_BUDGET and met no goal. Engine answer: engines.lp_potential.decide for the status word and engines.lp_potential.run for the (certificate, heuristic) pair, with their agreement checked. Numerator = unreachable worlds with no certificate; denominator = unreachable worlds.",
+  "question": "Of the jumpgraph worlds whose goal is genuinely unreachable (proved by exhaustive forward BFS over spec.triples, no budget exhaustion), on what fraction does lp_potential issue no certificate?",
+  "value": {
+    "denominator": 2189,
+    "numerator": 639,
+    "pct": 29.2
+  }
+}

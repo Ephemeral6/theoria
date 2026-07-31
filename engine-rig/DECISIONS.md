@@ -1219,3 +1219,89 @@ earlier. Nothing here was changed to make that so — the probe is untouched and
 this branch changes zero bytes under `theory-compiler/`. The correction is filed
 on the board and in `monitor/inbox/`, because a work item whose premise has
 expired is worth more as a correction than as a completed ticket.
+## D-037 · Every number that reaches the paper has a path from artefact to script
+
+*(Numbered 037 after C13's D-036, which landed on master first. E18. The cross-check of 2026-07-29 published five ratios that the paper then
+quoted; its run directory holds nine Markdown files and a manifest — no data,
+no script. This entry is the rule that follows, and the machinery that enforces
+it.)*
+
+**Context.** `runs/20260729T000000Z-E11-engine-crosscheck-deep/` adjudicated 50
+claims across six engines and found four real defects. The *mechanisms* were
+confirmed by later auditors reading source. The *counts* were not confirmed by
+anyone, because nothing in the directory could produce them: 639/2189 = 29.2 %,
+126/300, 104/149, 1633/4000 and 82/4000 existed only as sentences.
+
+This was not caught by the number registry, and the reason is worth stating
+because the registry is otherwise the strongest instrument in the territory.
+Every one of the 87 E11-sourced entries in `ENGINE_TABLE.md` is an
+`md(path, regex)` probe (`tools/engine_table.py:116-131`). Such a probe
+guarantees a **string-equality chain between two documents**: the digits in the
+table are the digits in the report, and if the report is edited the probe drifts
+or stops matching. It does not touch whether the report's digits correspond to a
+computation. **A regex over prose is a transcription check, not a recomputation
+check.** Worse, `jf`/`jlf` (`:134-149`) read real JSON for other facts, so in
+the rendered provenance table a prose-backed fact and a data-backed fact are
+typographically indistinguishable.
+
+**The rule.** A number that enters the paper body, or the registry that feeds
+it, must have a runnable script, a digested list of the inputs that script read,
+and its raw counts on disk. Absent that, the number is *unconfirmed* — quotable
+as a report's claim, never as a measurement. Prose is where a number is
+explained, not where it is stored.
+
+**Three dispositions, and only these three,** for a number that cannot be
+recomputed: re-measure on today's code and label the change of caliber;
+withdraw it; or publish it as a declared spread with a declared seed. What is
+forbidden is leaving a bare digit nobody can derive. A frozen reimplementation
+of deleted behaviour is *not* a fourth option on its own — it makes the number
+reproducible while leaving it describing an engine that no longer exists, so it
+counts only when the today-caliber number is published beside it.
+
+**What this cost, and what it bought.** Six modules under
+`tools/survey_numbers/` recompute the families; `runs/20260730T120000Z-E18/`
+holds their counts and per-world raw records; `verify.py` grows a fourth rung
+that re-derives every number and fails on drift. Of the numbers rescripted,
+the great majority reproduced exactly — `mdl` 22/22, `cegis` at E11's caliber
+11/11, `zero_space` 11/11, and `lp`'s whole base-rate table including the
+29.2 % the ticket believed was lost. That is a real result about the
+cross-check's honesty, and it was not available before, because a report that
+agrees with itself is not evidence either way.
+
+Three things the recomputation found that no amount of re-reading would have:
+
+* **`2a1c30d` does not move 29.2 %.** The ticket assumed it did. The commit
+  narrowed `if not result.success: return None` to "status 2 → `None`,
+  statuses 1/3/4 raise", and the solver-status histogram over the corpus is
+  `{0: 1550, 2: 1450}` — no world lands in the band where the rules differ.
+  Verified twice, the second time by importing the genuine pre-`2a1c30d` module
+  out of git and running all 3000 worlds: 3000/3000 agree. **True of the code
+  path, false of the number** — a distinction only a rerun can draw.
+* **`cegis`'s caliber did change, and the defect survived the repair.** V-13
+  (`eb61aa98`) made `props._mine` mine the mover rather than `tracks[0]`, so
+  104/149 describes a mining path the engine no longer takes; today it is
+  155/232. The *ratio* barely moves (69.8 % → 66.8 %) because the defect is
+  structural in `lift`, so repairing F-1 handed the miner more unverified rules
+  to publish. Both calibers are published side by side.
+* **`probe_frontier`'s two counts are unreproducible by construction.** E11's
+  generator lived in a session scratchpad and was never committed, and the
+  partial records the shape of the draw but no seed, no RNG and no draw order.
+  1633/4000 recomputes to 1546/4000 and 82/4000 to 80/4000 under a *declared*
+  seed. The right registry entry for these is a spread with a seed, not a digit
+  — which is the third disposition above, used in earnest.
+
+**The enforcement, and its limits.** `tests/test_survey_numbers.py` guards the
+wiring — every module exposes `compute()`, every counts file names a module
+that still exists and inputs that were present when it ran, every disagreement
+with E11 carries a caveat, and every registry key still probed out of E11 prose
+is declared in `tools/survey_numbers/unscripted.py` with a reason. `verify.py`
+rung 4 guards the values by re-deriving them. The split is deliberate: a suite
+that recomputed thousands of worlds would be too slow to run, would be skipped,
+and a skipped check is the defect this entry exists about.
+
+What it does not do: it cannot tell a right computation from a wrong one, only a
+present one from an absent one. Three of the six modules had to resolve
+ambiguities in E11's prose recipe by reading code, and each recorded which
+reading it took rather than the reading that made the number come out — but a
+shared misreading of the same document would pass. And `input_digests()` pins
+what a script read, not that it read the right thing.
