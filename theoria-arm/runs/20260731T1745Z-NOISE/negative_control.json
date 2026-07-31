@@ -1,0 +1,39 @@
+{
+ "campaign_stop": "3 legs in a row made no progress; the last 3 ended in an exception",
+ "columns": {
+  "actions_ok": 6,
+  "certify_rounds": 0,
+  "commands_sent": 7,
+  "desk_calls": 1,
+  "engine_dispatches": 2,
+  "legs_failed": 2,
+  "legs_played": 1,
+  "levels_boundaries": 0,
+  "steps": 7,
+  "surprise.execution_mismatch": 0,
+  "surprise.heuristic_miss": 0,
+  "surprise.probe_refutation": 0,
+  "surprise.proof_failure": 0,
+  "surprise.render_mismatch": 0,
+  "surprise.replay_mismatch": 0,
+  "surprise.search_timeout": 0,
+  "surprise.total": 0,
+  "theorize_rounds": 0,
+  "turns": 2,
+  "usd": 7.0
+ },
+ "desk_failures": [
+  "{\"error\": \"DeskWasNotStubbed: armtools.noise_floor forbids starting the real `claude` CLI: this measurement is offline and must not spend. Reaching claude_bin() means a desk call escaped the stub.\", \"step_idx\": 6}",
+  "{\"error\": \"SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $7.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.\", \"step_idx\": 7}"
+ ],
+ "direct_call": "DeskWasNotStubbed: armtools.noise_floor forbids starting the real `claude` CLI: this measurement is offline and must not spend. Reaching claude_bin() means a desk call escaped the stub.",
+ "error": null,
+ "expected": "a run that reaches the desk must refuse, not spend",
+ "leg_errors": [
+  "FileNotFoundError: no theory.dsl carried in from C:\\Users\\user\\Desktop\\theoria\\.worktrees\\noise-floor\\theoria-arm\\runs\\20260731T180925Z-leg01\\books -- refusing to start a 'carried' run with an empty manual, because that is indistinguishable from a cold start in every artefact this run writes. `Books(seed_from=)` reported: {'seed_from': 'C:\\\\Users\\\\user\\\\Desktop\\\\theoria\\\\.worktrees\\\\noise-floor\\\\theoria-arm\\\\runs\\\\20260731T180925Z-leg01\\\\books', 'carried': {}, 'skipped': [{'file': 'theory.dsl', 'why': 'not present'}, {'file': 'playbook.dsl', 'why': 'not present'}], 'empty': True}",
+  "FileNotFoundError: no theory.dsl carried in from C:\\Users\\user\\Desktop\\theoria\\.worktrees\\noise-floor\\theoria-arm\\runs\\20260731T180925Z-leg01\\books -- refusing to start a 'carried' run with an empty manual, because that is indistinguishable from a cold start in every artefact this run writes. `Books(seed_from=)` reported: {'seed_from': 'C:\\\\Users\\\\user\\\\Desktop\\\\theoria\\\\.worktrees\\\\noise-floor\\\\theoria-arm\\\\runs\\\\20260731T180925Z-leg01\\\\books', 'carried': {}, 'skipped': [{'file': 'theory.dsl', 'why': 'not present'}, {'file': 'playbook.dsl', 'why': 'not present'}], 'empty': True}"
+ ],
+ "mode": "negative-control",
+ "refused": true,
+ "utc": "2026-07-31T18:09:29Z"
+}
