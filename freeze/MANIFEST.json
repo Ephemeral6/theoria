@@ -455,7 +455,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "4b8a14a146638c76ca6ed07c8e58bb8c6f94230ab977c084430f463142cae10f",
+          "sha256": "dcc2dbb7ed50fd83a1b3504eddf5c16e6a8cc644ddeb81914e0d6db7c652e007",
           "tracked": true
         },
         {
@@ -468,11 +468,11 @@
         },
         {
           "files": 1,
-          "hashed_from": "worktree",
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/e2_withdrawal.py",
           "sha256": "bfc5dde89ed6311fbb30fc66e8b07c4776c462e92f7411dac521a222ac359d43",
-          "tracked": false
+          "tracked": true
         }
       ],
       "status": "partial"
@@ -488,7 +488,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
-          "sha256": "7bbcf264b936dfbe4371e20ac2373afdf2ed178b9119cf65ae19dbc7d83bc97d",
+          "sha256": "05f129a4200e802f2ac278ec957ba925d6568e311530fde00c2521b6f0558f85",
           "tracked": true
         }
       ],
@@ -594,7 +594,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "4b8a14a146638c76ca6ed07c8e58bb8c6f94230ab977c084430f463142cae10f",
+          "sha256": "dcc2dbb7ed50fd83a1b3504eddf5c16e6a8cc644ddeb81914e0d6db7c652e007",
           "tracked": true
         },
         {
@@ -662,8 +662,8 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "r2/freeze-e2",
-    "commit": "af138a0d2302b85f193b9a65f57aadb65c55f95a",
-    "dirty": true
+    "commit": "5e033b2fe990cbb38e82226741e45b6834153c11",
+    "dirty": false
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
