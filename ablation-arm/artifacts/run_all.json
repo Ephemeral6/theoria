@@ -77,7 +77,7 @@
   "surprise_kinds_available_to_this_arm": 6,
   "surprise_kinds_in_taxonomy": 7,
   "upstream_files_changed": [],
-  "upstream_trees_hashed": 493,
+  "upstream_trees_hashed": 589,
   "upstream_unchanged": true,
   "what": "ablation-arm end-to-end run (A4a step 3)",
   "worlds": {

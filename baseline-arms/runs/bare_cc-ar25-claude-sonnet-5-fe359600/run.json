@@ -7,9 +7,9 @@
   "error": "None",
   "evidence": [
     {
-      "bytes": 2273,
+      "bytes": 2353,
       "path": "baseline-arms/out/pilot_ar25-0c556536.json",
-      "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+      "sha256": "sha256:e131df71040d620431fc400a9adaf0a56f789273da4a34e3d5568f642e68e69b",
       "stability": "fixed",
       "tracked": true
     },
@@ -26,6 +26,13 @@
       "sha256": "sha256:c40c33cde39dea3075ad60fe8c5af29c7ee6e806ad47246e41b0976b3cb6a6ee",
       "stability": "append_only",
       "tracked": true
+    },
+    {
+      "bytes": 4477,
+      "path": "baseline-arms/out/pilot_ar25.log",
+      "sha256": "sha256:69ab429d24fed9c18138b8904231e852ec98f84f3ec3d20d1bfa635954630967",
+      "stability": "fixed",
+      "tracked": false
     }
   ],
   "game_id": "ar25-0c556536",

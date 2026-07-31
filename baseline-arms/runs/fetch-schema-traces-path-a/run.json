@@ -3,9 +3,9 @@
   "campaign": "m6-schema-path-a",
   "evidence": [
     {
-      "bytes": 44390,
+      "bytes": 45464,
       "path": "baseline-arms/schema_traces/MANIFEST.json",
-      "sha256": "sha256:817545a1cf382175f3e0537743f5dcc5d0817844f7555a41e5792abe8a0844c3",
+      "sha256": "sha256:b71b7f64e09afe6703fc3f8770834d1075d82306df6b9b7bc7353b05e11c14ba",
       "stability": "fixed",
       "tracked": true
     },

@@ -1,9 +1,9 @@
 {
   "campaign_seed": "0x00005eedc1e4f002",
-  "engine_rig_head": "18a5c90",
+  "engine_rig_head": "21a724ed",
   "engines": [
     {
-      "elapsed_s": 0.2,
+      "elapsed_s": 0.28,
       "engine": "mdl_segmenter",
       "family": "gridworld",
       "generator_errors": [],
@@ -13,6 +13,18 @@
         "masks_partition_the_foreground": 60,
         "script_bits_identity": 60
       },
+      "invariant_worlds_skipped": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "invariant_worlds_unavailable": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
       "invariants": [
         "events_agree_with_tracks",
         "masks_follow_anchors",
@@ -21,14 +33,33 @@
       ],
       "n_invariants": 4,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "events_agree_with_tracks": {},
+        "masks_follow_anchors": {},
+        "masks_partition_the_foreground": {},
+        "script_bits_identity": {}
+      },
       "skipped": 0,
+      "skips_by_cause": {
+        "events_agree_with_tracks": {},
+        "masks_follow_anchors": {},
+        "masks_partition_the_foreground": {},
+        "script_bits_identity": {}
+      },
+      "skips_by_cause_class": {
+        "events_agree_with_tracks": {},
+        "masks_follow_anchors": {},
+        "masks_partition_the_foreground": {},
+        "script_bits_identity": {}
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
       "worlds_requested": 60
     },
     {
-      "elapsed_s": 10.52,
+      "elapsed_s": 12.1,
       "engine": "cegis_miner",
       "family": "gridworld",
       "generator_errors": [],
@@ -40,6 +71,22 @@
         "guards_partition_the_evidence": 54,
         "rules_fire_on_the_action_they_name": 54
       },
+      "invariant_worlds_skipped": {
+        "applicable_equals_support": 6,
+        "effects_agree_with_the_evidence": 6,
+        "frontier_guards_are_consistent": 6,
+        "frontier_is_complete_to_size": 6,
+        "guards_partition_the_evidence": 6,
+        "rules_fire_on_the_action_they_name": 6
+      },
+      "invariant_worlds_unavailable": {
+        "applicable_equals_support": 0,
+        "effects_agree_with_the_evidence": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0,
+        "rules_fire_on_the_action_they_name": 0
+      },
       "invariants": [
         "applicable_equals_support",
         "effects_agree_with_the_evidence",
@@ -50,14 +97,81 @@
       ],
       "n_invariants": 6,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "applicable_equals_support": {
+          "declined": 6
+        },
+        "effects_agree_with_the_evidence": {
+          "declined": 6
+        },
+        "frontier_guards_are_consistent": {
+          "declined": 6
+        },
+        "frontier_is_complete_to_size": {
+          "declined": 6
+        },
+        "guards_partition_the_evidence": {
+          "declined": 6
+        },
+        "rules_fire_on_the_action_they_name": {
+          "declined": 6
+        }
+      },
       "skipped": 36,
+      "skips_by_cause": {
+        "applicable_equals_support": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        },
+        "effects_agree_with_the_evidence": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        },
+        "frontier_guards_are_consistent": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        },
+        "frontier_is_complete_to_size": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        },
+        "guards_partition_the_evidence": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        },
+        "rules_fire_on_the_action_they_name": {
+          "mined_track_is_not_the_mover": 3,
+          "unminable": 3
+        }
+      },
+      "skips_by_cause_class": {
+        "applicable_equals_support": {
+          "declined": 6
+        },
+        "effects_agree_with_the_evidence": {
+          "declined": 6
+        },
+        "frontier_guards_are_consistent": {
+          "declined": 6
+        },
+        "frontier_is_complete_to_size": {
+          "declined": 6
+        },
+        "guards_partition_the_evidence": {
+          "declined": 6
+        },
+        "rules_fire_on_the_action_they_name": {
+          "declined": 6
+        }
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
       "worlds_requested": 60
     },
     {
-      "elapsed_s": 0.18,
+      "elapsed_s": 0.21,
       "engine": "zero_space",
       "family": "parityworld",
       "generator_errors": [],
@@ -67,6 +181,18 @@
         "membership_agrees": 60,
         "rank_nullity": 60
       },
+      "invariant_worlds_skipped": {
+        "law_space_is_complete": 0,
+        "laws_hold_on_trajectory": 0,
+        "membership_agrees": 0,
+        "rank_nullity": 0
+      },
+      "invariant_worlds_unavailable": {
+        "law_space_is_complete": 0,
+        "laws_hold_on_trajectory": 0,
+        "membership_agrees": 0,
+        "rank_nullity": 0
+      },
       "invariants": [
         "law_space_is_complete",
         "laws_hold_on_trajectory",
@@ -75,14 +201,33 @@
       ],
       "n_invariants": 4,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "law_space_is_complete": {},
+        "laws_hold_on_trajectory": {},
+        "membership_agrees": {},
+        "rank_nullity": {}
+      },
       "skipped": 0,
+      "skips_by_cause": {
+        "law_space_is_complete": {},
+        "laws_hold_on_trajectory": {},
+        "membership_agrees": {},
+        "rank_nullity": {}
+      },
+      "skips_by_cause_class": {
+        "law_space_is_complete": {},
+        "laws_hold_on_trajectory": {},
+        "membership_agrees": {},
+        "rank_nullity": {}
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
       "worlds_requested": 60
     },
     {
-      "elapsed_s": 4.85,
+      "elapsed_s": 5.75,
       "engine": "lp_potential",
       "family": "jumpgraph",
       "generator_errors": [],
@@ -92,6 +237,18 @@
         "infinite_means_unreachable": 31,
         "three_conditions_hold": 31
       },
+      "invariant_worlds_skipped": {
+        "certificate_implies_unreachable": 29,
+        "heuristic_is_admissible": 29,
+        "infinite_means_unreachable": 29,
+        "three_conditions_hold": 29
+      },
+      "invariant_worlds_unavailable": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
       "invariants": [
         "certificate_implies_unreachable",
         "heuristic_is_admissible",
@@ -100,14 +257,57 @@
       ],
       "n_invariants": 4,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "certificate_implies_unreachable": {
+          "declined": 29
+        },
+        "heuristic_is_admissible": {
+          "declined": 29
+        },
+        "infinite_means_unreachable": {
+          "declined": 29
+        },
+        "three_conditions_hold": {
+          "declined": 29
+        }
+      },
       "skipped": 116,
+      "skips_by_cause": {
+        "certificate_implies_unreachable": {
+          "no_certificate": 29
+        },
+        "heuristic_is_admissible": {
+          "no_certificate": 29
+        },
+        "infinite_means_unreachable": {
+          "no_certificate": 29
+        },
+        "three_conditions_hold": {
+          "no_certificate": 29
+        }
+      },
+      "skips_by_cause_class": {
+        "certificate_implies_unreachable": {
+          "declined": 29
+        },
+        "heuristic_is_admissible": {
+          "declined": 29
+        },
+        "infinite_means_unreachable": {
+          "declined": 29
+        },
+        "three_conditions_hold": {
+          "declined": 29
+        }
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
       "worlds_requested": 60
     },
     {
-      "elapsed_s": 0.91,
+      "elapsed_s": 1.26,
       "engine": "fd_adapter",
       "family": "blockworld",
       "generator_errors": [],
@@ -116,6 +316,16 @@
         "optimal_rungs_are_optimal": 60,
         "plan_replays_to_the_goal": 60
       },
+      "invariant_worlds_skipped": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "invariant_worlds_unavailable": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
       "invariants": [
         "no_plan_means_unsolvable",
         "optimal_rungs_are_optimal",
@@ -123,14 +333,30 @@
       ],
       "n_invariants": 3,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "no_plan_means_unsolvable": {},
+        "optimal_rungs_are_optimal": {},
+        "plan_replays_to_the_goal": {}
+      },
       "skipped": 0,
+      "skips_by_cause": {
+        "no_plan_means_unsolvable": {},
+        "optimal_rungs_are_optimal": {},
+        "plan_replays_to_the_goal": {}
+      },
+      "skips_by_cause_class": {
+        "no_plan_means_unsolvable": {},
+        "optimal_rungs_are_optimal": {},
+        "plan_replays_to_the_goal": {}
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
       "worlds_requested": 60
     },
     {
-      "elapsed_s": 0.01,
+      "elapsed_s": 0.03,
       "engine": "probe_frontier",
       "family": "hypset",
       "generator_errors": [],
@@ -141,6 +367,20 @@
         "ranking_is_sound": 60,
         "splits_flag_is_honest": 60
       },
+      "invariant_worlds_skipped": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "invariant_worlds_unavailable": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
       "invariants": [
         "costs_are_the_world's",
         "entropy_matches_bruteforce",
@@ -150,7 +390,29 @@
       ],
       "n_invariants": 5,
       "raised": 0,
+      "skip_worlds_by_cause_class": {
+        "costs_are_the_world's": {},
+        "entropy_matches_bruteforce": {},
+        "partition_matches_truth": {},
+        "ranking_is_sound": {},
+        "splits_flag_is_honest": {}
+      },
       "skipped": 0,
+      "skips_by_cause": {
+        "costs_are_the_world's": {},
+        "entropy_matches_bruteforce": {},
+        "partition_matches_truth": {},
+        "ranking_is_sound": {},
+        "splits_flag_is_honest": {}
+      },
+      "skips_by_cause_class": {
+        "costs_are_the_world's": {},
+        "entropy_matches_bruteforce": {},
+        "partition_matches_truth": {},
+        "ranking_is_sound": {},
+        "splits_flag_is_honest": {}
+      },
+      "unavailable": 0,
       "violated": 0,
       "worlds_checked": 60,
       "worlds_generated": 60,
@@ -159,11 +421,30 @@
   ],
   "prompt_id": "E4-property-fuzz",
   "raises_by_invariant": {},
+  "skips_by_cause": {
+    "declined.cegis_miner.applicable_equals_support.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.applicable_equals_support.unminable": 3,
+    "declined.cegis_miner.effects_agree_with_the_evidence.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.effects_agree_with_the_evidence.unminable": 3,
+    "declined.cegis_miner.frontier_guards_are_consistent.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.frontier_guards_are_consistent.unminable": 3,
+    "declined.cegis_miner.frontier_is_complete_to_size.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.frontier_is_complete_to_size.unminable": 3,
+    "declined.cegis_miner.guards_partition_the_evidence.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.guards_partition_the_evidence.unminable": 3,
+    "declined.cegis_miner.rules_fire_on_the_action_they_name.mined_track_is_not_the_mover": 3,
+    "declined.cegis_miner.rules_fire_on_the_action_they_name.unminable": 3,
+    "declined.lp_potential.certificate_implies_unreachable.no_certificate": 29,
+    "declined.lp_potential.heuristic_is_admissible.no_certificate": 29,
+    "declined.lp_potential.infinite_means_unreachable.no_certificate": 29,
+    "declined.lp_potential.three_conditions_hold.no_certificate": 29
+  },
   "totals": {
     "generator_errors": 0,
     "invariants": 26,
     "raised": 0,
     "skipped": 152,
+    "unavailable": 0,
     "violated": 0,
     "worlds_checked": 360
   },

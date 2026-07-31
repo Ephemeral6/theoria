@@ -7,9 +7,9 @@
   "error": "None",
   "evidence": [
     {
-      "bytes": 796,
+      "bytes": 825,
       "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
-      "sha256": "sha256:3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf",
+      "sha256": "sha256:e1e7765b5f8b47f84a962c17afef31e4cfa896ae1b38d5291b4d765595efc110",
       "stability": "fixed",
       "tracked": true
     },

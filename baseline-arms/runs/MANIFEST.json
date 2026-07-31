@@ -479,7 +479,7 @@
       "prompt_id": "retro:unattributed"
     }
   ],
-  "entries_sha256": "sha256:f88accc33931fead05f894ae42e75543975786611ec753e7fdf3d188758ae9ad",
+  "entries_sha256": "sha256:30b9421d99f2e67ba38209bf2cb026adb2b6f951f57af03837b2f01a9c2645dc",
   "files": [
     "runs/s1-full-run-not-archived/run.json",
     "runs/fetch-schema-traces-path-a/run.json",
@@ -528,13 +528,13 @@
     "runs/bare_cc-tn36-claude-sonnet-5-21a1a163/run.json",
     "runs/bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc/run.json"
   ],
-  "generated_at": "2026-07-31T06:22:54Z",
+  "generated_at": "2026-07-31T17:27:48Z",
   "prompt_id": "P-12",
   "provenance": {
-    "base_commit": "9b25129e004d57b19ac56cfb39a151f4399c3a9b",
-    "branch": "cleanup/p12-envelope-selective",
+    "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+    "branch": "master",
     "tree_dirty": true,
-    "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\cleanup-p12"
+    "worktree": "C:\\Users\\user\\Desktop\\theoria"
   },
   "schema": "baseline-arms/runs/v1",
   "seed_policy": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",

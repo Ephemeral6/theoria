@@ -355,175 +355,24 @@
       "V9-battery-gaming-audit"
     ],
     "delivered_today": [
-      "A10-shared-ledger-real-arms",
-      "A11-bypass-attempts-explained",
-      "A12-cost-claim-sources",
-      "A13-sealed-audit-reads-the-wrong-fields",
-      "A14-campaign-json-untracked",
-      "A15-ablation-calibration-uncommitted",
       "A16-A16-launch-gate-wired",
       "A3-A17-armversion-reads-all-refs",
-      "开发堆在线战役：把 Theoria 臂推到退出条件",
       "A3-campaign-level2",
-      "对照版 AI（去掉证明能力）上线",
-      "把对照版 AI 真正建起来",
-      "对照版 AI 的离线标定",
-      "跨关迁移协议：把学到的知识带去下一关",
-      "补齐对照组的成绩数据",
       "A8-campaign-ledger-pipeline",
-      "A9-readonly-baseline",
       "C1-P23-fourth-form-unqualified",
-      "世界工厂：7 类机制、20 个带标准答案的练习世界",
-      "C10-unsolvable-proof-canon",
-      "C11-tool-failure-as-truth",
-      "C13-certificate-bridge-two-halves",
-      "C14-four-forms-is-three-and-a-half",
-      "把死锁定理和不变量送进 Lean 做机器验证",
-      "给世界工厂加「改一条规则」的变体生成",
-      "语法 v0.3：把散落的提法收进契约",
-      "移交测试包：让陌生 agent 只读两本书就能接手",
-      "语法补计数锁词汇",
-      "E10-engine-crosscheck",
-      "E11-engine-crosscheck-deep",
-      "E12-adopt-the-unsolvable-canon",
-      "E13-engine-section-numbers",
-      "E14-crash-is-not-a-finding",
-      "E15-solver-status-bit",
-      "E16-verdict-must-gate",
-      "E17-held-out-validation",
-      "E18-survey-numbers-reproducible",
-      "E19-merge-clean-but-broken",
-      "给专业规划器的三档性能定价",
       "让引擎在真游戏里供货（第二关）",
-      "用 500 个随机世界轰炸六个引擎找 bug",
-      "证书独立复核器（不靠 Lean 一条路）",
-      "量化引擎改进带来的实际红利",
-      "E7-deadlock-claim-audit",
-      "E8-ic3-scale",
-      "引擎章节的论文表格",
-      "P-P21-line-anchor-range",
-      "P-P22-anchor-rots-at-commit",
-      "把图正式接进论文正文",
-      "P11-battery-section-refresh",
-      "P12-paper-multi-review",
-      "P13-P13-figure-numbering-and-plates",
-      "P13-paper-intro-abstract",
-      "P14-honesty-section",
-      "P15-capability-column-has-no-signal",
-      "P16-P16-uncited-number-gate",
-      "P17-P17-bare-filename-citations",
-      "P17-P17-machine-checked-ruling",
-      "P18-P18-certificate-verb-ruling",
-      "P18-audits-cover-half-the-paper",
-      "P19-P19",
-      "P4-P16-e06-contradiction",
-      "论文figures：把数据变成可复现的图",
-      "P5-R4-ruling-path-for-undetermined",
-      "释出包：陌生人一条命令复跑全部结果",
-      "把各处结果组装成论文正文",
-      "P7-P14-battery-section-blind-round",
-      "论文第 7 节：相关工作",
-      "把论文「账单形状」图接上真数据管线",
-      "把论文推进到可投稿",
-      "释出许可条款落地",
-      "R3-release-classifier-defaults",
       "R4-worktree-rescue",
-      "S-P20-nosecret-noop",
-      "S-S33-monitor-gate-red-on-master",
-      "S-S34-papers-owes-a-verify-gate",
-      "让配额熔断器学会自己开闩",
-      "S10-invariant-on-resource",
-      "S11-sealed-halfguard",
-      "熔断器的全链路测试",
-      "S13-verify-gate-enforced",
-      "S14-gates-for-all",
-      "S15-ledger-hashchain",
-      "S16-silent-failure-hunt",
-      "S17-fleet-evidence-capture",
-      "S18-fleetkit-extract",
-      "S19-session-liveness",
-      "把「金丝雀重放」做成每天自动跑的体检",
-      "S20-gate-negative-sample",
-      "S21-app-session-death",
-      "S22-access-check-close",
-      "S23-unreadable-is-not-clean",
-      "S24-merge-conflict-drain",
-      "S25-probe-the-merge-queue",
-      "S26-phase1-gate-must-decide",
-      "S27-S27-release-must-stick",
-      "S27-credential-in-body-triage",
-      "S28-S28-claim-warns-on-existing-branch",
-      "S28-no-third-value-in-the-monitor",
-      "S29-S29-third-condition-and-lock-ignore",
-      "S29-S29-triage-the-five-red-gates",
-      "S29-measurement-missing-is-not-zero",
-      "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
-      "S30-S30-clock-sanity-widen",
-      "S30-scan-crash-is-invisible",
-      "S31-S31-fleetkit-gate",
       "S31-a10-said-done-prove-it",
-      "S32-S32-close-the-gate-gap",
       "S32-dual-agent-is-one-agent",
-      "S35-s35-reserved-but-unreachable",
-      "S36-s36-orphan-commits-one-disk",
-      "S38-S38-append-only-probe-branch-blind",
-      "S39-S39-writes-into-the-live-master-tree",
-      "S4-E-WORDING",
-      "S4-S34-done-items-resurrect",
-      "S4-S4-E1-HOLES",
-      "S4-S4-E23-TIERS",
-      "起草大考前要封存的规则包",
-      "冻结清单 13 项补齐到可提交",
-      "S40-S40-fleetkit-fork-has-drifted",
-      "S41-S41-prior-work-scans-one-of-two",
-      "S42-S42-fleetkit-three-lies",
-      "S43-S43-three-guards-reverted",
       "S44-S44-reflex-heartbeat-unwatched",
       "S44-monitor-suite-outgrew-its-gate",
-      "Phase 1 收口：把地基验收单清干净",
-      "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
-      "账本哈希链（让账本不可篡改）",
-      "S8-provenance-backfill",
-      "契约变更协议：改契约要走什么流程",
-      "V-V26-handover-leak-ruling",
-      "V10-fuzz-mutation-power",
-      "V11-handover-auto",
-      "V11-negative-control-census",
-      "V12-worldgen-gate-deaf",
-      "V13-audit-the-published-surface",
-      "V14-standing-negative-control-probe",
-      "V15-census-sampling-frame",
-      "V16-determinism-has-no-caller",
-      "V17-pin-the-partial-verdict",
-      "V18-battery-prereg-check",
-      "V19-unverified-is-not-true",
-      "V2-V25-leakage-loo-and-multiplicity",
       "V2-V25-verify-does-not-check-what-is-committed",
-      "让考卷跑在新造的 20 个练习世界上",
-      "V20-figures-pipeline-red",
-      "V21-leakage-gate-token-level",
-      "V21-lp-unavailable-is-not-a-pass",
-      "V22-battery-separated-zero-metrics",
-      "V23-figures-sources-absent",
-      "V24-battery-blind-hardcoded-path",
-      "V25-worldgen-unchecked-is-not-holding",
-      "V26-fuzzlab-readme-points-at-the-smoke-run",
-      "V27-V27-manifest-absolute-paths",
-      "指标体系首次区分两组 AI 的能力差",
-      "考卷自检 + 出三类判决题（验判卷的人对不对）",
-      "V5-battery-freeze",
-      "V5-verdict-three-types",
-      "V6-V22-wintighten-absent-vs-below",
-      "V6-V23-large-space-verdict-gap",
-      "封存考卷的干跑演练",
-      "V7-exam-stress-fanout",
-      "V8-judge-trust-audit",
-      "V9-battery-gaming-audit"
+      "V26-fuzzlab-readme-points-at-the-smoke-run"
     ],
     "in_progress_plain": [],
     "ops": [
       {
-        "age_min": 44,
+        "age_min": 1587,
         "cycle": 0,
         "id": "OPS-A",
         "kind": "ops",
@@ -534,7 +383,7 @@
         "state": "idle"
       },
       {
-        "age_min": 44,
+        "age_min": 3250,
         "cycle": 13,
         "id": "OPS-B",
         "kind": "ops",
@@ -545,7 +394,7 @@
         "state": "idle"
       },
       {
-        "age_min": 44,
+        "age_min": 1588,
         "cycle": 34,
         "id": "OPS-M",
         "kind": "ops",
@@ -556,7 +405,7 @@
         "state": "working"
       },
       {
-        "age_min": 44,
+        "age_min": 3368,
         "cycle": 3,
         "id": "OPS-R",
         "kind": "ops",
@@ -569,7 +418,7 @@
     ],
     "standing": [
       {
-        "age_min": 44,
+        "age_min": 1586,
         "cycle": 52,
         "id": "RES-1",
         "kind": "standing",
@@ -580,7 +429,7 @@
         "state": "working"
       },
       {
-        "age_min": 44,
+        "age_min": 1588,
         "cycle": 41,
         "id": "RES-2",
         "kind": "standing",
@@ -591,7 +440,7 @@
         "state": "working"
       },
       {
-        "age_min": 44,
+        "age_min": 1584,
         "cycle": 109,
         "id": "RES-3",
         "kind": "standing",
@@ -602,7 +451,7 @@
         "state": "working"
       },
       {
-        "age_min": 44,
+        "age_min": 1622,
         "cycle": 63,
         "id": "RES-4",
         "kind": "standing",
@@ -1488,60 +1337,60 @@
   "fleet": {
     "standing": [
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "RES-1",
-        "idle_min": 43,
+        "idle_min": 1587,
         "role": "战役"
       },
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "RES-2",
-        "idle_min": 43,
+        "idle_min": 1588,
         "role": "论文"
       },
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "RES-3",
-        "idle_min": 43,
+        "idle_min": 1584,
         "role": "验证"
       },
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "RES-4",
-        "idle_min": 43,
+        "idle_min": 1622,
         "role": "基建"
       },
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "OPS-M",
-        "idle_min": 43,
+        "idle_min": 1588,
         "role": "合并"
       },
       {
-        "account": null,
+        "account": "a",
         "alive": false,
         "holding": [],
         "id": "OPS-A",
-        "idle_min": 43,
+        "idle_min": 1587,
         "role": "审计"
       }
     ],
     "workers": [],
     "workers_holding": {}
   },
-  "generated_at": "2026-08-01 01:44:00",
-  "generated_at_utc": "2026-07-31T17:44:00Z",
-  "generated_epoch": 1785519840,
+  "generated_at": "2026-08-01 02:28:16",
+  "generated_at_utc": "2026-07-31T18:28:16Z",
+  "generated_epoch": 1785522496,
   "grid": {
     "A1": {
       "active": [
@@ -2752,24 +2601,53 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/history.jsonl",
-      "monitor/index.html",
-      "monitor/spec.py",
-      "monitor/state.json",
-      "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/"
+      "blation-arm/artifacts/a0-base/episode.jsonl",
+      "ablation-arm/artifacts/a2-base/episode.jsonl",
+      "ablation-arm/artifacts/a2-charitable/episode.jsonl",
+      "ablation-arm/artifacts/run_all.json",
+      "arc-recon/data/campaign_freeze_log.jsonl",
+      "arc-recon/data/claim_set.json",
+      "baseline-arms/runs/MANIFEST.json",
+      "baseline-arms/runs/bare_cc-ar25-claude-haiku-4-5-20251001-42306405/run.json",
+      "baseline-arms/runs/bare_cc-ar25-claude-opus-5-2f8b6919/run.json",
+      "baseline-arms/runs/bare_cc-ar25-claude-sonnet-5-fe359600/run.json",
+      "baseline-arms/runs/bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e/run.json",
+      "baseline-arms/runs/bare_cc-g50t-claude-opus-5-f60e48af/run.json",
+      "baseline-arms/runs/bare_cc-g50t-claude-sonnet-5-3345f981/run.json",
+      "baseline-arms/runs/bare_cc-g50t-claude-sonnet-5-ddabe772/run.json",
+      "baseline-arms/runs/bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e/run.json",
+      "baseline-arms/runs/bare_cc-sk48-claude-opus-5-42705d3c/run.json",
+      "baseline-arms/runs/bare_cc-sk48-claude-sonnet-5-9022a076/run.json",
+      "baseline-arms/runs/bare_cc-sk48-claude-sonnet-5-95c42cfd/run.json",
+      "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-3a033821/run.json",
+      "baseline-arms/runs/bare_cc-tn36-claude-opus-5-96d23ad9/run.json",
+      "baseline-arms/runs/bare_cc-tn36-claude-sonnet-5-3f3ac227/run.json",
+      "baseline-arms/runs/fetch-schema-traces-path-a/run.json",
+      "baseline-arms/runs/s1-full-run-not-archived/run.json",
+      "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/DRILL.json",
+      "exam/runs/20260729T1030Z-V6-exam-on-sealed-dryrun/truth.json",
+      "fuzzlab/out/campaign.json",
+      "fuzzlab/out/findings.jsonl",
+      "ablation-arm/artifacts/a0-base/episode.jsonl.lock",
+      "ablation-arm/artifacts/a2-base/episode.jsonl.lock",
+      "ablation-arm/artifacts/a2-charitable/episode.jsonl.lock",
+      "theoria-arm/runs/audit-smoke/"
     ],
     "dirty_known": true,
     "engine_candidates": 44,
-    "git_branch": "closeout/p1-replay-live",
-    "git_head": "d854632b r3 and the sk48 leg land: replay mismatches fall to one, surprises become probes",
+    "git_branch": "master",
+    "git_head": "575fe88e merge closeout/p1-replay-live: the notes catch up with the disk -- Phase 1 9/16 -> 12/16 (phase 1/2 closeout)",
     "incidents": 18,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 270,
-    "sync_last": "2026-07-31T15:53:02Z",
+    "sync_entries": 271,
+    "sync_last": "2026-07-31T18:24:17Z",
     "tests": {},
     "untracked": [
-      "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/"
+      "ablation-arm/artifacts/a0-base/episode.jsonl.lock",
+      "ablation-arm/artifacts/a2-base/episode.jsonl.lock",
+      "ablation-arm/artifacts/a2-charitable/episode.jsonl.lock",
+      "theoria-arm/runs/audit-smoke/"
     ]
   },
   "p1_green": 12,
@@ -3022,7 +2900,7 @@
           "status": "green"
         },
         {
-          "_note": "左合取项（臂内无凭据）2026-07-31 起**按构造成立**：merge b375a9bd 把 EnvProxy 移入子进程，theoria-arm/tests/test_seal_process.py 证明父进程无钥匙也能整局跑通 mock 对局；模型路径另有封存堆护栏（21 个 ID + 词干，SealedPileBreach 在循环层致死）。右合取项（绕开双代理出网必须失败）仍是 partial：test_bypass_negative.py 只覆盖臂内绕环境代理一侧；模型侧按设计不经代理（D-P8-002，proxied: false），『双代理』在活路径上只有一半；bare_cc 臂记为裁决前状态（GAP-5，baseline-arms/STATUS.md）——未做同样拆分前不得再飞。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：未找到 .env / ARC_API_KEY，无法验证。〕",
+          "_note": "左合取项（臂内无凭据）2026-07-31 起**按构造成立**：merge b375a9bd 把 EnvProxy 移入子进程，theoria-arm/tests/test_seal_process.py 证明父进程无钥匙也能整局跑通 mock 对局；模型路径另有封存堆护栏（21 个 ID + 词干，SealedPileBreach 在循环层致死）。右合取项（绕开双代理出网必须失败）仍是 partial：test_bypass_negative.py 只覆盖臂内绕环境代理一侧；模型侧按设计不经代理（D-P8-002，proxied: false），『双代理』在活路径上只有一半；bare_cc 臂记为裁决前状态（GAP-5，baseline-arms/STATUS.md）——未做同样拆分前不得再飞。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。〕",
           "_probed": true,
           "_status": "partial",
           "clause": "Phase 1 验收单",
@@ -3266,23 +3144,23 @@
       "status": "green"
     },
     "clock_sanity": {
-      "detail": "**6 处手打的时间还没到**：manifest 20260731T1800Z-V2-artifacts-match-committed 自报 2026-07-31T18:00:00Z，超前 17 分钟；manifest 20260731T1800Z-S32-dual-agent-is-one-agent 自报 2026-07-31T18:00:00Z，超前 17 分钟；PARTNER_SYNC 2026-07-31T18:00:00Z 自报 2026-07-31T18:00:00Z，超前 17 分钟；PARTNER_SYNC 2026-07-31T18:00:00Z 自报 2026-07-31T18:00:00Z，超前 17 分钟。时钟不可能超前，所以这些是手打的；危险在方向——只会向前跑的自报时间让掉线看起来比实际新鲜、让留痕看起来比实际更新。取值请用 date -u。",
+      "detail": "**35 处时间戳读不出来**：manifest 20260729T021247Z-V9-battery-gaming-audit（不是 ISO8601Z：'20260729T021247Z'）；manifest 20260728T141724Z-E5-cert-recheck（不是 ISO8601Z：'20260728T141724Z'）；manifest 20260728T150713Z-E7-deadlock-claim-audit（不是 ISO8601Z：'20260728T150713Z'）；manifest 20260729T020000Z-V5-verdict-three-types（不是 ISO8601Z：'20260729T020000Z'）。读不出不等于没问题。",
       "status": "risk"
     },
     "conflict_scan": {
-      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：3b94c90d level2 carried: two legs, eighteen actions, \\$9.56, and（monitor+theoria-arm）； 2d12b966 S31 probe fired: both axes witnessed for 2 actions and （monitor+proxy）； aabba1f8 the records: three manifests, the detached-worktree tra（monitor+theoria-arm）； 35f26120 s31: the ruling was already on master — so this pass ma（monitor+proxy）； c5106930 the readme sent readers to a smoke run, and the check t（fuzzlab+monitor）； f6616121 the dual-agent claim gets its denominator: one proxy va（monitor+verify-lab）",
+      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：3b94c90d level2 carried: two legs, eighteen actions, \\$9.56, and（monitor+theoria-arm）； 2d12b966 S31 probe fired: both axes witnessed for 2 actions and （monitor+proxy）； aabba1f8 the records: three manifests, the detached-worktree tra（monitor+theoria-arm）",
       "status": "risk"
     },
     "credential_hygiene": {
-      "detail": "未找到 .env / ARC_API_KEY，无法验证。",
-      "status": "partial"
+      "detail": "密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。",
+      "status": "green"
     },
     "determinism_state": {
       "detail": "逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。",
       "status": "green"
     },
     "disk_headroom": {
-      "detail": "磁盘剩 62.8 GB / 474 GB；30 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工",
+      "detail": "磁盘剩 62.0 GB / 474 GB；31 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工",
       "status": "green"
     },
     "dispatch_board": {
@@ -3296,67 +3174,116 @@
       "status": "partial"
     },
     "master_tree": {
-      "detail": "master 的共享树上有 **19 条**不属于舰队活状态的脏路径（被跟踪源文件 19，未跟踪未归档 0；另 2 条是正常活状态，共 21）：baseline-arms/runs/MANIFEST.json、baseline-arms/runs/bare_cc-ar25-claude-haiku-4-5-20251001-42306405/run.json、baseline-arms/runs/bare_cc-ar25-claude-opus-5-2f8b6919/run.json、baseline-arms/runs/bare_cc-ar25-claude-sonnet-5-fe359600/run.json等 19 条。留在这里，一次 `git add -A` 会把它裹走，一次 `git checkout --` 会把它抹掉，两个方向都不报错——本仓已有一个提交就叫 “On master: autostash”。（提交钩子**未装**（`python monitor/master_tree_guard.py install-hook`）——本探针只观察，拦不住任何一次提交）",
+      "detail": "master 的共享树上有 **31 条**不属于舰队活状态的脏路径（被跟踪源文件 27，未跟踪未归档 4；另 0 条是正常活状态，共 31）：ablation-arm/artifacts/a0-base/episode.jsonl、ablation-arm/artifacts/a2-base/episode.jsonl、ablation-arm/artifacts/a2-charitable/episode.jsonl、ablation-arm/artifacts/run_all.json等 31 条。留在这里，一次 `git add -A` 会把它裹走，一次 `git checkout --` 会把它抹掉，两个方向都不报错——本仓已有一个提交就叫 “On master: autostash”。（提交钩子**未装**（`python monitor/master_tree_guard.py install-hook`）——本探针只观察，拦不住任何一次提交）",
       "status": "risk"
     },
     "merge_queue": {
-      "detail": "**合并队列最久的一条卡了 2202 分钟**（1 条待合、1 条被 flag）：merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-30T05:00:19Z]×1。**2 件板上已 done、分支却还没进 master**：A13-sealed-audit-reads-the-wrong-fields、S31-a10-said-done-prove-it。其中 **2 件根本没推上远端**（不是排队慢，是不在队里）：A13-sealed-audit-reads-the-wrong-fields、S31-a10-said-done-prove-it。",
+      "detail": "**合并队列最久的一条卡了 2247 分钟**（1 条待合、1 条被 flag）：merge conflict  [NEEDS-HUMAN: 11 attempts since 2026-07-30T05:00:19Z]×1。**2 件板上已 done、分支却还没进 master**：A13-sealed-audit-reads-the-wrong-fields、S31-a10-said-done-prove-it。其中 **2 件根本没推上远端**（不是排队慢，是不在队里）：A13-sealed-audit-reads-the-wrong-fields、S31-a10-said-done-prove-it。",
       "status": "risk"
     },
     "needs_human": {
-      "detail": "六个 App 会话全部在岗，无需你出手。",
-      "rows": [],
-      "status": "green"
+      "detail": "需要你重开的会话：OPS-A 漂移审计员（1586 分钟没心跳）； OPS-B 浏览器专员（3249 分钟没心跳）； OPS-M 合并裁判（1587 分钟没心跳）； OPS-R 回顾员（3367 分钟没心跳）； RES-1 在线战役研究员（1585 分钟没心跳）； RES-2 论文与释出研究员（1587 分钟没心跳）； RES-3 验证与考卷研究员（1583 分钟没心跳）； RES-4 基础设施研究员（1621 分钟没心跳）",
+      "rows": [
+        {
+          "id": "OPS-A",
+          "name": "漂移审计员",
+          "prompt": "monitor/prompts/ops/OPS-A.md",
+          "why": "1586 分钟没心跳"
+        },
+        {
+          "id": "OPS-B",
+          "name": "浏览器专员",
+          "prompt": "monitor/prompts/ops/OPS-B.md",
+          "why": "3249 分钟没心跳"
+        },
+        {
+          "id": "OPS-M",
+          "name": "合并裁判",
+          "prompt": "monitor/prompts/ops/OPS-M.md",
+          "why": "1587 分钟没心跳"
+        },
+        {
+          "id": "OPS-R",
+          "name": "回顾员",
+          "prompt": "monitor/prompts/ops/OPS-R.md",
+          "why": "3367 分钟没心跳"
+        },
+        {
+          "id": "RES-1",
+          "name": "在线战役研究员",
+          "prompt": "monitor/prompts/ops/RES-1.md",
+          "why": "1585 分钟没心跳"
+        },
+        {
+          "id": "RES-2",
+          "name": "论文与释出研究员",
+          "prompt": "monitor/prompts/ops/RES-2.md",
+          "why": "1587 分钟没心跳"
+        },
+        {
+          "id": "RES-3",
+          "name": "验证与考卷研究员",
+          "prompt": "monitor/prompts/ops/RES-3.md",
+          "why": "1583 分钟没心跳"
+        },
+        {
+          "id": "RES-4",
+          "name": "基础设施研究员",
+          "prompt": "monitor/prompts/ops/RES-4.md",
+          "why": "1621 分钟没心跳"
+        }
+      ],
+      "status": "risk"
     },
     "offline_done": {
       "detail": "离线还差 4 格：C1 编译链(75%)、C2 离线验收(90%)、V1 指标电池(85%)、V2 考卷(80%)。战役线已获授权可先行，不必等齐。",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**57 条 TO-MONITOR 待监控回复**。 OPS-A 第0轮 idle（43 分钟前）； OPS-B 第13轮 idle（43 分钟前）； OPS-M 第34轮 working（43 分钟前）； OPS-R 第3轮 idle（43 分钟前）",
+      "detail": "**57 条 TO-MONITOR 待监控回复**。 OPS-A 第0轮 idle（1587 分钟前）； OPS-B 第13轮 idle（3250 分钟前）； OPS-M 第34轮 working（1588 分钟前）； OPS-R 第3轮 idle（3368 分钟前）",
       "rows": [
         {
-          "age_min": 43,
+          "age_min": 1587,
           "cycle": 0,
           "id": "OPS-A",
           "name": "漂移审计员",
           "note": "booted",
           "state": "idle",
-          "status": "green"
+          "status": "risk"
         },
         {
-          "age_min": 43,
+          "age_min": 3250,
           "cycle": 13,
           "id": "OPS-B",
           "name": "浏览器专员",
           "note": "总线空、邮箱无 OPEN、与 origin 同步。本轮只做一件事：把 OPS-M 10:08Z 的 hold 裁决与我 cycle 11 的升级路径洞对上——两者互补不重叠（它让该重试的重试，我让只能等人裁决的浮出水面），S11 正落在第二类且已躺约 21 小时。条款巡检昨日刚跑，按天未到期",
           "state": "idle",
-          "status": "green"
+          "status": "risk"
         },
         {
-          "age_min": 43,
+          "age_min": 1588,
           "cycle": 34,
           "id": "OPS-M",
           "name": "合并裁判",
           "note": "New session, continuing as cycle 34 (not 0 -- role is on disk per HOSTED.md). Bus NO-NEW-MESSAGES, no URGENT. Two state changes since c33: (1) the monitor's hand-merge of s43 COMPLETED -- .git/MERGE_HEAD is gone, so my commit freeze is lifted; (2) THE HEADLINE: origin/master is now BASE RED in the monitor gate as of 15:24:04Z, and ci_merge itself has written the exculpation three times -- 'every branch touching monitor is blocked by master'. That makes master, not any branch, the top merge-blocker; it is exactly my beat and it is this cycle's work. 18 flags in monitor/ci/ (up from 17). Fanning out to find which commit turned master red and whether the red is a real defect or a test asserting stale board state.",
           "state": "working",
-          "status": "green"
+          "status": "risk"
         },
         {
-          "age_min": 43,
+          "age_min": 3368,
           "cycle": 3,
           "id": "OPS-R",
           "name": "回顾员",
           "note": "cycle 3 done: 4 mining shards + 1 adversary, all completed. 3 proposals filed. HEADLINE IS AGAINST MYSELF: my cycle-2 bus message labelled APP-V3/battery as LIVE when it had been DONE 6h earlier (board.log:139, 19:00:28Z) -- observed 15:44Z, published 01:40Z, never re-read. OPS-A did the same shape at cycle 32. Retrospective latency now exceeds fleet state-change rate (19 CLAIMs in 4h), so any 'current state' claim from a long-cycle agent is structurally stale; proposed fix is re-verify-before-publish. My UNTESTED instance-vs-class hypothesis: REFUTED by its own merge-base criterion -- 25/35 links pass ancestry but 21 of those explicitly CITE the prior fix, only 4 (11%) match 'did not know', zero chains have >=2; 8 class-level artifacts did land; and a blanket encoding fix is provably harmful (childio doctrine). Sole survivor: line endings, 19 per-dir .gitattributes, root file exists with one unrelated line, fix is one line. Case 5: adversary stopped an overcorrection -- it belongs to E16's verdict-not-gated family, NOT to RES-3's tool-failure-as-truth family; my original separation was half right. Retracted a number I quoted (lp_potential 638/639 is about box bound; source says 639/639 status 2). Unexploded list rechecked: 11/13 real+live, 1 fixed 14min after filing, 1 (pid substring collision) I had misread. LIVE NOW: RES-1 died 05:38:39Z and RES-3 died 05:31:23Z, both still advertising working, holding 3 unsweepable claims; worker auto-supply 100% dead 8h (252 fail / 0 spawn, no diagnostics); sealed-pile probe sees 17% of request bodies and cannot match short names (no breach found); unauthorised live-API leg spent against g50t while monitor's own ruling said do not spend. ADDENDUM (re-verified 05:58Z, per the rule this cycle proposes): RES-2 ALSO died 05:51:29Z, after my shards ran -- three of four standing research sessions dead in this cycle (RES-3 05:31Z, RES-1 05:38Z, RES-2 05:51Z), all still advertising working, holding 4 unsweepable claims. claimed/ now 7 not 6: RES-4 re-claimed S22 exactly as it predicted when releasing it. Sleeping 14400s.",
           "state": "idle",
-          "status": "green"
+          "status": "risk"
         }
       ],
-      "status": "partial",
+      "status": "risk",
       "to_monitor": 57
     },
     "orphan_commits": {
-      "detail": "孤立提交 15 个，分布在 11 条分支上；未裁决 11 条（ep/e2-frontload、ep/schema-arm-ruling、p12/iteration-practice、ep/c-desk-diet），已判 push 但还没推 0 条（无）。对 ci_merge 而言这些工作不是红，是**不存在**。保存（不排合并队列）：git push origin ep/e2-frontload:refs/heads/preserve/ep-e2-frontload",
+      "detail": "孤立提交 27 个，分布在 14 条分支上；未裁决 14 条（ep/e2-frontload、p12/proxy-freeze、ep/exam-verdict-prereg、ep/noise-floor），已判 push 但还没推 0 条（无）。对 ci_merge 而言这些工作不是红，是**不存在**。保存（不排合并队列）：git push origin ep/e2-frontload:refs/heads/preserve/ep-e2-frontload",
       "status": "risk"
     },
     "pile_integrity": {
@@ -3364,11 +3291,11 @@
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：6 个 run（正典 5，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：7 个 run（正典 7），最新 P-11； baseline-arms：49 个 run（正典 2，**无留痕 47**），最新 s1-full-run-not-archived； battery：8 个 run（正典 8），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：2 个 run（正典 2），最新 p-17； crosscheck：3 个 run（正典 2，**无留痕 1**），最新 20260731T061500Z-C14-after-the-repair； engine-rig：18 个 run（正典 17，非正典 1(md)），最新 p13-fd-real； exam：15 个 run（正典 15），最新 p15-rehearsal-01； figures：11 个 run（正典 9，**无留痕 2**），最新 20260730T160327Z-V23-figures-sources-absent； fleet-study：3 个 run（正典 3），最新 20260728T233850Z-S17； fleetkit：3 个 run（正典 3），最新 20260730T101232Z-S42； freeze：10 个 run（正典 9，**无留痕 1**），最新 20260731T1546Z-U3-E1-IMPL； fuzzlab：5 个 run（正典 5），最新 20260731T000000Z-V26-readme-points-at-the-smoke-run； papers：4 个 run（正典 4），最新 20260730T031500Z-P22； proxy：14 个 run（正典 14），最新 p9-shell-harden； release：6 个 run（正典 6），最新 20260729T1835Z-R4； theoria-arm：56 个 run（正典 49，**无留痕 7**），最新 preflight-20260728T074237Z； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：5 个 run（正典 5），最新 20260731T1800Z-S32-dual-agent-is-one-agent； worldgen：7 个 run（正典 7），最新 20260731T000000Z-V25-continuation。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：6 个 run（正典 5，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：7 个 run（正典 7），最新 P-11； baseline-arms：49 个 run（正典 2，**无留痕 47**），最新 s1-full-run-not-archived； battery：8 个 run（正典 8），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：2 个 run（正典 2），最新 p-17； crosscheck：3 个 run（正典 2，**无留痕 1**），最新 20260731T061500Z-C14-after-the-repair； engine-rig：18 个 run（正典 17，非正典 1(md)），最新 p13-fd-real； exam：15 个 run（正典 15），最新 p15-rehearsal-01； figures：11 个 run（正典 9，**无留痕 2**），最新 20260730T160327Z-V23-figures-sources-absent； fleet-study：3 个 run（正典 3），最新 20260728T233850Z-S17； fleetkit：3 个 run（正典 3），最新 20260730T101232Z-S42； freeze：10 个 run（正典 9，**无留痕 1**），最新 20260731T1546Z-U3-E1-IMPL； fuzzlab：5 个 run（正典 5），最新 20260731T000000Z-V26-readme-points-at-the-smoke-run； papers：4 个 run（正典 4），最新 20260730T031500Z-P22； proxy：14 个 run（正典 14），最新 p9-shell-harden； release：6 个 run（正典 6），最新 20260729T1835Z-R4； theoria-arm：57 个 run（正典 49，**无留痕 8**），最新 preflight-20260728T074237Z； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：5 个 run（正典 5），最新 20260731T1800Z-S32-dual-agent-is-one-agent； worldgen：7 个 run（正典 7），最新 20260731T000000Z-V25-continuation。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2。",
       "status": "partial"
     },
     "reflex_heartbeat": {
-      "detail": "上一轮跑完于 2026-07-31T01:54:33Z（948 分钟前，读的是**末行内容**、不是 mtime），而 **`reflex.lock` 不存在——没有一轮在跑，也没有一轮跑完**。超过 20 分钟（4 跳）就是反射层停了：补员、熔断、扫孤儿、自动合并、刷盘面五件事全部没人做。查 `TheoriaReflex` 是否被禁用或上一跳的 LastTaskResult。",
+      "detail": "上一轮跑完于 2026-07-31T01:54:33Z（992 分钟前，读的是**末行内容**、不是 mtime），而 **`reflex.lock` 不存在——没有一轮在跑，也没有一轮跑完**。超过 20 分钟（4 跳）就是反射层停了：补员、熔断、扫孤儿、自动合并、刷盘面五件事全部没人做。查 `TheoriaReflex` 是否被禁用或上一跳的 LastTaskResult。",
       "status": "risk"
     },
     "scheduled_tasks": {
@@ -3376,19 +3303,19 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第52轮 working（42 分钟前）； RES-2 第41轮 working（42 分钟前）； RES-3 第109轮 working（42 分钟前）； RES-4 第63轮 working（42 分钟前）",
-      "status": "green"
+      "detail": "RES-1 第52轮 working（1585 分钟前）**疑似停下等人**； RES-2 第41轮 working（1587 分钟前）**疑似停下等人**； RES-3 第109轮 working（1583 分钟前）**疑似停下等人**； RES-4 第63轮 working（1621 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。（RES-1、RES-2、RES-3、RES-4）",
+      "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 2 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 3 个提交 / 1 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "spend": {
-      "detail": "闸门账本尚未产生记录。",
-      "status": "partial"
+      "detail": "开发堆战役包 $200，已花 **$71.56**，剩 $128.44（15878 条记账）；分战役：arc-recon-canary-full $0.00、arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36",
+      "status": "green"
     },
     "standing": {
-      "detail": "例行任务 已注册，上一跳 42 分钟前；累计起过 123 次常驻会话。最近：skip OPS-M: already running (scheduled task) [unread=0 held=0 claimabl；skip OPS-A: already running (scheduled task) [unread=0 held=0 claimabl；nothing to start；PAUSED — monitor/FLEET_PAUSE 存在，本跳不起任何会话　→ **超过两个周期没跳，例行已停**",
+      "detail": "例行任务 已注册，上一跳 1672 分钟前；累计起过 123 次常驻会话。最近：skip OPS-M: already running (scheduled task) [unread=0 held=0 claimabl；skip OPS-A: already running (scheduled task) [unread=0 held=0 claimabl；nothing to start；PAUSED — monitor/FLEET_PAUSE 存在，本跳不起任何会话　→ **超过两个周期没跳，例行已停**",
       "status": "risk"
     },
     "supply": {
@@ -3490,5 +3417,14 @@
     }
   ],
   "stale_after_s": 1200,
-  "verdict_overrides": []
+  "verdict_overrides": [
+    {
+      "hand": "partial",
+      "item": "p1-seal-test",
+      "kept": "partial",
+      "probe": "credential_hygiene",
+      "probe_said": "green",
+      "why": "probe covers only part of this item, so it may not upgrade it"
+    }
+  ]
 }
