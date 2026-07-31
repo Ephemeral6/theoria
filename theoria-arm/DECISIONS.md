@@ -920,3 +920,64 @@ A run re-archived through `archive.build` after this change will write a
 different `turn_series.json` than it would have before, and that is the declared
 price — the same one `ARCHIVE_COST_FIELDS` names for a shape change, paid in the
 open rather than avoided by keeping a column the scoreboard needs out of it.
+
+## D-C-MERGE-001 · Three knobs, one prompt builder: the union, and the instrument that could not see it
+
+`goal_protocol` (`inner/goal.py`), `probe_economy` (`inner/probe.py`) and
+`desk_diet` (`inner/deskdiet.py`) were prepared by three sessions inside two
+days, each default-off, each with its own proof that its own default moves
+nothing. They are independent in intent. They are not independent in code: two
+of the three meet inside `theorize.build_prompt`, and the merge of
+`ep/c-desk-diet` had to say what that function is.
+
+**1. The prompt is built inside the repair loop, once per attempt, and the
+rider is threaded into it.** The `goal_protocol` side built the prompt once
+before the loop and rebuilt it at each `continue`, passing `goal_rider=` to all
+three call sites. The `desk_diet` side deleted all of that and moved
+construction to the top of the loop, because `allow_patch` is a per-attempt
+decision -- the last repair attempt withdraws the patch contract. The diet's
+shape wins: it is strictly more general, and one call site cannot drift from
+another. The rider becomes a `build_prompt` keyword on that single site.
+
+The failure this avoids is quiet. A resolution that keeps the deletion and
+forgets the keyword sends attempt 1 with the goal ask and attempts 2 and 3
+without it; nothing raises, no existing test looks, and a `propose` leg would
+report a rider it half-delivered. `tests/test_three_knobs_default_off.py`
+compares the beat's actual prompts, attempt by attempt, against `build_prompt`
+called with no knobs at all -- not against a golden string, which would only
+prove that two copies of one mistake agree.
+
+**2. `armtools/prompt_census.py` gets a `goal_rider` row, classified
+`feedback`.** This is the defect the merge created and neither branch could
+see. The census cuts a prompt at literal anchors and gives every unclaimed byte
+to the section that opened last. It shipped knowing the twelve sections
+`build_prompt` emitted on its own branch; the rider was a thirteenth. Total
+chars are conserved either way, so nothing raises -- the ~1.4 kB ask is simply
+billed to `engine_proposals` and reads as evidence growth that never happened.
+That is the one direction that would flatter the diet, which is the measurement
+the whole `desk_diet` change is judged by.
+
+`feedback` rather than `boilerplate` was a real choice. The rider is near-fixed
+text, which argues for `boilerplate`; but `boilerplate` is defined in that file
+as text identical on every call of every leg forever, and the rider carries this
+leg's own turn and action counts. Of the four kinds it is the arm telling the
+desk about the arm's position -- not the world (`evidence`), not the desk's own
+output handed back (`books`). A fifth kind was not added: `KINDS` is consumed by
+every rollup in that file and by the shipped `bench.json`.
+
+Adding the row moves no published number: it is optional, absent from every
+archived prompt, and the per-section rollup skips names absent from both ends,
+so `runs/20260801T0200Z-C-desk-diet/prompt_census.txt` and `bench.txt` both
+re-derive byte for byte after the change (checked by re-running the MANIFEST's
+own `reproduce` commands, not by reading the code).
+
+**3. Nothing was reconciled away.** Unlike `merge-ep-probe-econ`, where two
+sessions had built two mechanisms for one defect and the merge had to choose,
+these three changes touch disjoint machinery: what the desk is asked about the
+goal, which hypotheses the probe designer reasons over, and what the desk is
+shown and asked to write back. Every conflicted hunk is a union -- import list,
+constructor parameters, constructor body, and the `theorize.run` call site --
+and the resolved `inner/loop.py` differs from master only by the branch's four
+edits and from the branch only by master's. The claim each side made separately,
+that its default is today's arm, is re-asserted for the conjunction rather than
+inherited from the three halves.

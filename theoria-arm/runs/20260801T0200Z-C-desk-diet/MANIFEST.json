@@ -1,0 +1,194 @@
+{
+ "prompt_id": "C-desk-diet-what-the-desk-is-shown-and-what-it-costs",
+ "branch": "ep/c-desk-diet",
+ "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+ "utc": "2026-08-01T02:00:00Z",
+ "territory": "theoria-arm",
+ "lane": "framework-change",
+ "what": "Candidate framework change C: measure what the desk is shown, then change it. Two switchable knobs, default = today's behaviour byte for byte.",
+ "leg": "offline only -- no ARC action, no live model call, no credential read, no sealed-pile contact",
+
+ "measurement_first": {
+  "instrument": "armtools/prompt_census.py",
+  "method": "every archived desk prompt is cut into the sections inner.theorize.build_prompt concatenates, using that function's own literal headings as anchors scanned in build order from a moving offset. Splitting on '^## ' would be wrong: the grammar card carries six '##' headings of its own and the manual is arbitrary desk-written text.",
+  "legs_read": [
+   "20260731T1240Z-A3-level2-carried (0 desk calls -- no desk/ directory)",
+   "20260731T1310Z-A3-level2-carried-r2 (5 calls, $9.56)",
+   "20260731T1430Z-A3-level2-carried-r3 (8 calls, $13.44)",
+   "20260731T1500Z-A3-sk48-carried-l1 (9 calls, $12.25)"
+  ],
+  "composition_r3_all_calls": {
+   "boilerplate": {"chars": 93624, "share": 0.132},
+   "evidence": {"chars": 169655, "share": 0.240},
+   "books": {"chars": 386538, "share": 0.546},
+   "feedback": {"chars": 57768, "share": 0.082}
+  },
+  "r3_per_section_first_call_to_last": {
+   "preamble": [2811, 2811],
+   "grammar_card": [8017, 8017],
+   "obs_summary": [482, 485],
+   "current_frame": [4294, 4294],
+   "command_diffs": [673, 3374],
+   "engine_proposals": [14241, 14242],
+   "manual": [32958, 51253],
+   "playbook": [4305, 8439],
+   "surprises": [2127, 6152],
+   "certify": [3830, 1690],
+   "output_contract": [875, 875]
+  },
+  "findings": [
+   "NOTHING WAS REUSED. cache_read_input_tokens is 0 on 21 of the 22 archived opus-5 calls of today's legs. The prompt's stable prefix ends after preamble+grammar_card -- 10828 chars, ~11% -- because the very next section ('## What has been observed') changes every call. Theoria.md:59's 处处付全价 is literally true.",
+   "THE CONTEXT DOES ROLL BIGGER, BUT THE WORLD IS NOT WHAT RE-ROLLS. r3's prompt went 74613 -> 101632 chars (+36%) over eight calls, yet current_frame and obs_summary are flat (render_window already clips to the box that ever changed) and engine_proposals is pinned at its 14000-char truncation cap on every call of every leg. Evidence is 24% of the prompt and nearly static. 54.6% of what the desk is shown is the desk's own previous output, and that is what grows: the manual went 32958 -> 51253 chars inside one leg. So the Schema failure mode of Theoria.md:59 is PRESENT but its mechanism here is the books being handed back plus 13% fixed boilerplate re-sent at full price, not a re-read of the frame.",
+   "THE INPUT SIDE IS NOT WHERE THE MONEY IS. Regressing cli_cost_usd on the archived opus-5 usage blocks gives $10.56/Mtok cache-creation and $25.13/Mtok output, r2=0.99998 over 63 calls; the 2.38 ratio matches list pricing's 75:30 within the fit's error. Over today's 22 calls that is $9.46 (26.9%) input against $25.77 (73.1%) output, total $35.25. The desk emits 39782-59673 output tokens per call with no downward trend, because OUTPUT_CONTRACT says 'the whole of theory.dsl, not a diff'. The bill therefore grows with the manual's SIZE rather than falling with what is still unknown -- the inversion Theoria.md 1.6 forbids."
+  ],
+  "per_leg": {
+   "20260731T1310Z-A3-level2-carried-r2": {"calls": 5, "usd": 9.56, "usd_per_call": 1.91, "cache_read_total_tokens": 35564, "books_share": 0.492, "repeat_share": 0.375},
+   "20260731T1430Z-A3-level2-carried-r3": {"calls": 8, "usd": 13.44, "usd_per_call": 1.68, "cache_read_total_tokens": 0, "books_share": 0.546, "repeat_share": 0.116},
+   "20260731T1500Z-A3-sk48-carried-l1": {"calls": 9, "usd": 12.25, "usd_per_call": 1.36, "cache_read_total_tokens": 0, "books_share": 0.541, "repeat_share": 0.277}
+  },
+  "note_on_the_one_cache_hit": "r2 call 3 is the only cache hit in the archive (35564 read tokens) and it still cost $2.86 -- it also carried the largest cache CREATION of any call, 99629. One hit in 22 is not a mechanism to build on."
+ },
+
+ "implemented": {
+  "module": "inner/deskdiet.py",
+  "knobs": {
+   "evidence_delta": "default OFF. The command table is rendered from the previous desk call's high-water mark rather than from t0, and the engine block prints only the reports whose bytes changed, NAMING the unchanged ones -- a desk that cannot tell 'said nothing new' from 'was not run' would read silence as a retraction and drop a probe:pending on it.",
+   "theory_patch": "default OFF. When a manual already exists the contract asks for anchored edit ops instead of the whole book. A full === THEORY === block is always still allowed and is the right answer for a structural rewrite."
+  },
+  "switch": "--desk-diet full|off|evidence|patch|diet|on on harness/run.py, threaded through inner/loop.py to inner/theorize.run(diet=...). Default 'full'. An unknown spec RAISES at construction rather than defaulting, so a typo cannot produce a leg labelled 'diet' that ran 'full'.",
+  "default_is_byte_identical": "tests/test_desk_diet.py::test_full_mode_is_byte_identical_to_today compares against build_prompt called with NO diet argument at all -- not against a golden string, which would only prove two copies of the same mistake agree -- across the cold, warm, surprise and compile-error branches.",
+  "live_instrumentation": "every desk call records its own prompt composition into theorize's result under 'prompt_census', so the next person asking where the money went reads a number instead of writing a parser.",
+  "fail_closed": "every op must name an anchor occurring EXACTLY ONCE. Zero -> refused. Two -> refused. One bad op refuses the WHOLE patch, because half-applying leaves a manual nobody wrote and anchors the desk's next patch against text it never saw. A refusal rides the repair loop that already exists for compile errors, and the LAST attempt withdraws the patch contract and demands the whole book -- worst case is today's behaviour plus two calls, not a lost round. The refusal note's wording changes with the withdrawal: telling the desk to 'send a corrected patch' on the one attempt that will not take one would buy a refusal with a paid call. That wart was found by the test, not by reading."
+ },
+
+ "offline_before_after": {
+  "tool": "armtools/desk_diet_bench.py",
+  "design": "four arms, same rounds, same frames, same engine reports, and the SAME semantic change to the manual each round. The bench refuses to report at all unless every arm ended with a byte-identical manual (ArmsDisagree), because otherwise the cheap arm might simply be the one that wrote less theory.",
+  "fixture_calibration": "manual starts at 32958 chars (r3's at call 1) and grows 2613 chars per round (r3's measured growth 32958->51253 over seven later calls). The first draft used a 1525-char manual and reported that the patch contract COST 0.5% -- true of that world and of no leg this arm has ever run.",
+  "rates": "2.3371 chars/token (IQR 1.9906-2.5777) from 31 within-leg pairs, +3601 fixed tokens/call; $10.56/Mtok cache-creation, $25.13/Mtok output, r2=0.99998, from 63 archived claude-opus-5 desk calls in 8 legs. Chars->tokens is fitted by WITHIN-leg differences so each leg's fixed CLI overhead cancels instead of being explained by the slope; a pooled fit reads r2=0.51 for exactly that reason.",
+  "result_8_rounds": {
+   "full": {"calls": 8, "prompt_chars": 461982, "reply_chars": 362761, "est_input_usd": 2.391, "est_output_usd": 3.900, "est_total_usd": 6.291, "vs_full": "baseline"},
+   "evidence": {"calls": 8, "prompt_chars": 452326, "reply_chars": 362761, "est_input_usd": 2.347, "est_output_usd": 3.900, "est_total_usd": 6.247, "vs_full": "-0.7%"},
+   "patch": {"calls": 8, "prompt_chars": 475318, "reply_chars": 27126, "est_input_usd": 2.451, "est_output_usd": 0.292, "est_total_usd": 2.743, "vs_full": "-56.4%"},
+   "diet": {"calls": 8, "prompt_chars": 465662, "reply_chars": 27126, "est_input_usd": 2.408, "est_output_usd": 0.292, "est_total_usd": 2.699, "vs_full": "-57.1%"}
+  },
+  "reading": [
+   "evidence ALONE buys -0.7%. The delta knob does exactly what it claims -- the evidence block falls 28004 -> 18348 chars, -34% -- and it is worth almost nothing, because evidence was never the expensive part. This is the knob the brief expected to matter and the measurement says it does not. It ships anyway, off by default, because it also WIDENS what the desk sees (see defect_found_not_fixed) and because a knob that is measured and small beats a knob that is assumed and absent.",
+   "patch buys -56.4%, and costs +13336 chars of prompt (the contract itself) to get it. Replies fall 362761 -> 27126 chars, -92.5%.",
+   "diet's -57.1% is patch plus evidence; the two do not interact."
+  ],
+  "conditional": "The output-side number is what happens IF a live desk answers the patch contract with a patch. This arm is offline; a scripted desk answering the contract is not evidence that a live one will. What the bench DOES establish: the input-side figure (fully measured), that the patch path reproduces the manual byte for byte, and the size of the prize. bench.json carries output_saving_is_conditional: true and the printed form says 'the output-side saving is CONDITIONAL'."
+ },
+
+ "negative_controls": [
+  "an anchor that does not occur -> refused, matches=0",
+  "an ambiguous anchor -> refused, with its count",
+  "one bad op refuses the whole patch and leaves the manual alone",
+  "an unknown op -> refused",
+  "a missing `with` on replace/insert_after -> refused",
+  "a missing, empty or non-string `find` -> refused",
+  "a non-object op -> refused",
+  "a patch block that is not JSON -> refused",
+  "a patch block that is not a list -> refused",
+  "an empty patch BLOCK -> refused, but an empty LIST is a legitimate 'no change'",
+  "no patch block at all -> absence, not refusal (only failure should cost a repair round on the patch's account)",
+  "a refused patch costs repair rounds and then the contract is withdrawn -- asserted end to end through the beat, including that the withdrawal changes the refusal note's wording",
+  "an unknown --desk-diet spec raises rather than defaulting to full",
+  "the census refuses a string that is not a desk prompt, and conserves bytes exactly",
+  "the token fit refuses a single point, and two points at the same x",
+  "the bench refuses to price when the archive is absent ('refusing to invent a price')",
+  "the bench's own control fires: with apply_patch monkeypatched to silently drop an op, bench() raises ArmsDisagree instead of reporting a cheap arm",
+  "the bench's ambiguity guard fired for real during development -- the first fixture took a fixed 120-char tail and every round was refused at 23 matches deep; the scripted desk now grows a whole-line tail until it is unique, as the contract instructs, and _unique_tail records why"
+ ],
+
+ "defect_found_not_fixed": {
+  "what": "evidence_brief's full path renders labelled[:max_steps] -- the FIRST thirty steps. Past step 30 of a level the desk is shown the opening and never the transitions that just fired the surprise it is being paid to answer.",
+  "status": "left in place in full mode. It is a live-behaviour change to a default four legs already ran under, and this round is one change. The delta path renders the newest instead, so evidence_delta is a widening as well as a trim; test_evidence_delta_shows_the_newest_steps_which_full_mode_does_not pins both halves.",
+  "for": "whoever takes the next round"
+ },
+
+ "residual_gaps": [
+  "NO LIVE CONFIRMATION. Nothing here proves a live desk patches rather than dumping the book. One live leg at --desk-diet patch settles it; until then -56% is conditional.",
+  "THE RATES ARE THIS ARM'S, NOT A VENDOR'S. $10.56/$25.13 per Mtok are regressed from 63 archived opus-5 calls. They are what this arm was charged. A plan or model change moves them; re-run archive_rates(), do not trust this file.",
+  "PATCH QUALITY IS NOT MODELLED. A desk that writes a bad patch pays for the retry. The bench's desk always writes an applicable patch (it verifies its own anchor's uniqueness). The refusal path's COST is bounded by construction -- at most two extra calls per beat -- but its FREQUENCY is unknown until a live leg runs.",
+  "BOILERPLATE IS UNTOUCHED. Preamble + grammar card + contracts are 13-16% of every prompt, re-billed as cache creation every call because cache_read is 0. Making that prefix actually cacheable is a change to how the CLI is invoked, not to what the prompt says, and is out of this change's scope. It is the next-largest lever after the patch contract.",
+  "THE CENSUS SEGMENTS BY HEADING. A manual that happened to contain one of build_prompt's own heading strings would shift a boundary. Anchors are scanned in build order from a moving offset, which bounds the damage, but it is a text heuristic and not a parse."
+ ],
+
+ "changed": [
+  "theoria-arm/armtools/prompt_census.py (new)",
+  "theoria-arm/armtools/desk_diet_bench.py (new)",
+  "theoria-arm/inner/deskdiet.py (new)",
+  "theoria-arm/tests/test_desk_diet.py (new)",
+  "theoria-arm/inner/theorize.py (diet parameter, patch path, live census; full mode byte-identical)",
+  "theoria-arm/inner/loop.py (desk_diet ctor kwarg, passed to theorize.run)",
+  "theoria-arm/harness/run.py (--desk-diet flag)",
+  "theoria-arm/runs/20260801T0200Z-C-desk-diet/ (this run)"
+ ],
+ "not_changed": [
+  "no file outside theoria-arm/",
+  "no default behaviour: --desk-diet defaults to full and full is byte-identical",
+  "PARTNER_SYNC.md -- not appended; this branch is not merged and a board paragraph is published only on the mainline",
+  "master -- not pushed, not merged, not touched",
+  "CONTRACTS/ -- untouched"
+ ],
+
+ "tests": {
+  "new_file": "theoria-arm/tests/test_desk_diet.py -- 30 tests, all passing",
+  "suite": "see gate_outputs below",
+  "pre_existing_failures": {
+   "count": 2,
+   "which": [
+    "tests/test_arm.py::test_the_archive_stays_accountable -- verify_provenance check 're-deriving every manifest reproduces it byte for byte' reports drifted: ['20260731T1240Z-A3-level2-carried', '20260731T1310Z-A3-level2-carried-r2', '20260731T1430Z-A3-level2-carried-r3', '20260731T1500Z-A3-sk48-carried-l1']",
+    "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive -- claude-opus-5: the recorded rate $0.0030474/s is below the worst rate in the archive, $0.0042222/s"
+   ],
+   "proof_they_are_not_mine": "both reproduce on a pristine checkout of base_commit 21a724ed with none of this branch's files present (the new files were moved out of the tree and the two tests re-run). Both read runs/*/MANIFEST.json and runs/*/desk_log.json, which this branch does not touch; both are drift from today's four live legs landing on master.",
+   "not_repaired_here": "the manifests belong to a concurrent session's in-flight archive refresh and the rate constant is that session's measurement to publish. Repairing another territory-mate's artefacts mid-flight is how two sessions collide. Recorded, not touched."
+  }
+ },
+
+ "gate_outputs": {
+  "cd theoria-arm && python -m pytest -q": {
+   "verbatim_tail": [
+    "FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...",
+    "FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive",
+    "2 failed, 476 passed in 503.60s (0:08:23)"
+   ],
+   "reading": "both failures are the pre-existing pair, unchanged in identity and detail from the pristine base_commit run. 476 passed includes this branch's 30 new tests."
+  },
+  "cd theoria-arm && python verify.py": {
+   "verbatim": [
+    "[1/3] suite",
+    "   FAIL  suite red (exit 1)",
+    "[2/3] one real run -- the whole arm, offline against proxy/mock",
+    "   ok    game g50t-5849a774, budget 6 actions, no key, no network",
+    "[3/3] artefact self-check",
+    "",
+    "theoria-arm: RED (1 problem(s))"
+   ],
+   "reading": "RED, and the one problem is rung 1 -- the same suite, so the same two pre-existing failures. Rung 2 is the load-bearing one for this change and it is green: the whole arm ran end to end offline against proxy/mock with the new code in place. Rung 3 raised nothing. verify.py is RED at base_commit 21a724ed for the same reason and would be RED there with none of this branch present.",
+   "not_claimed_green": "this gate is reported red. A branch that renamed its own gate's verdict would be worth less than the change it carries."
+  }
+ },
+
+ "sealed_pile_contact": "none. This branch names no game id at all; the census and the bench read only prompt text lengths and usage blocks, and the bench's world is synthetic.",
+ "spend": "none. No ARC action, no live model call, no credential read. Every desk in this branch is a scripted double.",
+ "did_not_do": [
+  "change A (probe economics) -- explicitly out of scope, one change per round",
+  "change B (level completion) -- explicitly out of scope",
+  "fix the labelled[:max_steps] head-slice in full mode -- see defect_found_not_fixed",
+  "push, merge, tag, or touch the main tree"
+ ],
+
+ "files": [
+  {"path": "prompt_census.txt", "what": "the census of the four live legs, human-readable"},
+  {"path": "prompt_census.json", "what": "the same, machine-readable, per call and per section"},
+  {"path": "bench.txt", "what": "the four-arm before/after, human-readable"},
+  {"path": "bench.json", "what": "the same, machine-readable, with the fitted rates and the conditional flag"}
+ ],
+ "reproduce": [
+  "cd theoria-arm && python -m armtools.prompt_census --leg 20260731T1240Z-A3-level2-carried --leg 20260731T1310Z-A3-level2-carried-r2 --leg 20260731T1430Z-A3-level2-carried-r3 --leg 20260731T1500Z-A3-sk48-carried-l1",
+  "cd theoria-arm && python -m armtools.desk_diet_bench --rounds 8",
+  "cd theoria-arm && python -m pytest tests/test_desk_diet.py -q"
+ ]
+}

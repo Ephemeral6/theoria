@@ -440,6 +440,15 @@ def main(argv=None) -> int:
                          "recorded in CARRIED.json and transfer.json")
     ap.add_argument("--tags", default=None,
                     help="comma-separated scorecard tags")
+    ap.add_argument("--desk-diet", default="full",
+                    choices=("full", "off", "evidence", "patch", "diet", "on"),
+                    help="what the desk is shown and asked to write back. "
+                         "`full` (the default) is this arm's historic prompt, "
+                         "byte for byte. `evidence` sends only what changed "
+                         "since the previous desk call; `patch` asks for an "
+                         "edit to the manual instead of the whole manual; "
+                         "`diet` is both. See inner/deskdiet.py for the "
+                         "measurement that chose them.")
     ap.add_argument("--prompt-id", default="P-8",
                     help="written into the scorecard's opaque block and into "
                          "every manifest, so a run can be traced to the item "
@@ -477,7 +486,8 @@ def main(argv=None) -> int:
                           carry_source_game=args.carry_source_game,
                           tags=([t.strip() for t in args.tags.split(",")]
                                 if args.tags else None),
-                          prompt_id=args.prompt_id)
+                          prompt_id=args.prompt_id,
+                          desk_diet=args.desk_diet)
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}

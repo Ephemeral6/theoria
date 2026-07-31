@@ -44,7 +44,7 @@ from harness.modelcall import (AnonymityBreach, CostCeilingReached,
 from world.adapt import run_engines as adapt_run_engines
 from world.frames import FrameStore, Step, grid_hash
 
-from . import (certify, commit, goal as goal_beat, plan as plan_beat,
+from . import (certify, commit, deskdiet, goal as goal_beat, plan as plan_beat,
                probe as probe_beat, theorize, transfer)
 from .books import Books
 from .goal import GoalState
@@ -212,7 +212,8 @@ class TheoriaArm:
                  tags: Optional[List[str]] = None,
                  goal_protocol: str = DEFAULT_GOAL_PROTOCOL,
                  prompt_id: str = "P-8",
-                 probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None):
+                 probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None,
+                 desk_diet: Optional[str] = None):
         self.game_id = game_id
         self.offline = offline
         self.run = run
@@ -265,6 +266,13 @@ class TheoriaArm:
         #: Probes spent since the last theorize call. Reset by theorize, not by
         #: the turn: the frontier cannot change until the manual does.
         self._probes_since_theorize = 0
+
+        #: What the desk is shown and what it is asked to write back.
+        #: `None` -> `full`, which is today's prompt byte for byte. Parsed here
+        #: rather than at first use so a typo in a launch command fails before
+        #: the socket opens, not four hours and $12 into a leg that turns out to
+        #: have measured the wrong arm. See `inner/deskdiet.py`.
+        self.desk_diet = deskdiet.DeskDiet.parse(desk_diet)
 
         #: The books this run started from, if it did not start from nothing.
         #: `Books(seed_from=...)` above already copied the pair and hashed it
@@ -958,7 +966,8 @@ class TheoriaArm:
                                     if self.certify_reports else None),
                     step_idx=len(self.store.steps),
                     goal_rider=rider,
-                    engines=engines)
+                    engines=engines,
+                    diet=self.desk_diet)
             except CostCeilingReached:
                 raise                                  # the run's honest end
             except (AnonymityBreach, CredentialBreach):
