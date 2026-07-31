@@ -1,0 +1,7 @@
+{"canary_run": {"card_id": "46a9c5dc-ec9c-468c-a0f0-0a4917cdbbe8", "note": "S22 item (1) run 2 of 2: second cross-session full sweep, and end-to-end verification that settlement now charges actions (not http_calls) against the real gate. RES-1 cycle 43.", "t": "2026-07-30T03:49:08Z", "verdicts": {"ar25-0c556536": "PASS", "g50t-5849a774": "PASS", "sk48-d8078629": "PASS", "tn36-ef4dde99": "PASS"}}, "checked_utc": "2026-07-30T03:49:08Z", "event": "initialized", "from": "canary_runs.jsonl", "frozen": false, "t": "2026-07-31T15:40:00Z"}
+{"event": "frozen", "games": ["ar25-0c556536"], "incident": "INC-TEST", "reason": "test freeze", "t": "2026-07-31T15:40:08Z"}
+{"event": "frozen", "games": ["ar25-0c556536"], "incident": "INC-TEST", "reason": "test freeze", "t": "2026-07-31T15:40:08Z"}
+{"event": "frozen", "games": ["ar25-0c556536"], "incident": "INC-999", "reason": "test drift", "t": "2026-07-31T15:40:16Z"}
+{"event": "frozen", "games": ["ar25-0c556536"], "incident": "INC-999", "reason": "test drift", "t": "2026-07-31T15:40:16Z"}
+{"event": "frozen", "games": ["ar25-0c556536"], "incident": "INC-998", "reason": "first", "t": "2026-07-31T15:40:16Z"}
+{"event": "frozen", "games": ["sk48-d8078629"], "incident": "INC-999", "reason": "second", "t": "2026-07-31T15:40:16Z"}

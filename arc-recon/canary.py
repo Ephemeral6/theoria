@@ -69,6 +69,7 @@ from precheck import (                                      # noqa: E402
 CANARY_PATH = os.path.join(DATA_DIR, "canary.json")
 RUNS_PATH = os.path.join(DATA_DIR, "canary_runs.jsonl")
 FREEZE_PATH = os.path.join(DATA_DIR, "campaign_freeze.json")
+FREEZE_LOG_PATH = os.path.join(DATA_DIR, "campaign_freeze_log.jsonl")
 INCIDENTS_PATH = os.path.join(DATA_DIR, "incidents.jsonl")
 PRECHECK_PATH = os.path.join(DATA_DIR, "precheck.json")
 
@@ -154,6 +155,17 @@ def file_incident(entry: Dict[str, Any]) -> str:
     return entry["id"]
 
 
+def _log_freeze_event(event: str, entry: Dict[str, Any]) -> None:
+    """The freeze file's history, kept beside it in an append-only log.
+
+    The JSON file is a *state* -- overwritten in place so a gate can read one
+    document and know today's answer. History does not belong in a file that
+    gets overwritten, so every transition (and every green refresh) is also
+    appended here, where nothing ever rewrites it.
+    """
+    _append_jsonl(FREEZE_LOG_PATH, {"t": _now(), "event": event, **entry})
+
+
 def freeze_campaigns(incident_id: str, games: List[str], reason: str,
                      detail: Dict[str, Any]) -> None:
     """Write the cross-track, cross-session campaign gate.
@@ -183,6 +195,111 @@ def freeze_campaigns(incident_id: str, games: List[str], reason: str,
         ),
         "history": history,
     })
+    _log_freeze_event("frozen", {"incident": incident_id,
+                                 "games": sorted(games), "reason": reason})
+
+
+def refresh_freeze(run: Dict[str, Any]) -> Dict[str, Any]:
+    """The green half of the loop: record that a sweep checked and found nothing.
+
+    Writes/refreshes `campaign_freeze.json` as `{"frozen": false,
+    "checked_utc": ...}` with the run that vouches for it. Three rules, each
+    load-bearing:
+
+    * **A green run never clears a freeze.** `how_to_clear` in the frozen file
+      says clearing is an owner decision recorded as an incident, and a canary
+      that could thaw itself would have the INC-003 self-healing shape one
+      level up -- drift can be intermittent, and the first sweep to catch the
+      environment back on its old behaviour proves nothing about the runs made
+      while it was off it. A green check against a frozen file is *logged*
+      (`green-while-frozen`) and the state returned unchanged.
+    * **The file is never deleted.** Refreshing overwrites the state document;
+      the append log beside it (`campaign_freeze_log.jsonl`) keeps every
+      transition.
+    * **Only an all-PASS run refreshes.** The caller enforces this; INCOMPLETE
+      is an outage, and an outage must not be able to stamp `checked_utc` as
+      though the environment had been observed.
+    """
+    state = freeze_state()
+    run_ref = {"t": run.get("t"), "card_id": run.get("card_id"),
+               "verdicts": run.get("verdicts"), "note": run.get("note", "")}
+    if state.get("frozen"):
+        _log_freeze_event("green-while-frozen", {
+            "canary_run": run_ref,
+            "note": ("the sweep passed but the freeze stands; clearing is an "
+                     "owner decision (see how_to_clear), not a green sweep's"),
+        })
+        return state
+    new_state = {
+        "frozen": False,
+        "checked_utc": run.get("t") or _now(),
+        "canary_run": run_ref,
+        "note": ("Written by the last all-PASS canary sweep. frozen:true is "
+                 "written by drift (canary.py replay) and only an owner "
+                 "decision clears it; history is in campaign_freeze_log.jsonl. "
+                 "Never delete this file."),
+        "history": list(state.get("history", [])),
+    }
+    _write_json(FREEZE_PATH, new_state)
+    _log_freeze_event("green", {"checked_utc": new_state["checked_utc"],
+                                "canary_run": run_ref})
+    return new_state
+
+
+def init_freeze_from_runs() -> Dict[str, Any]:
+    """Create the initial freeze file offline, from the last recorded replay.
+
+    No API call is made: the last line of `canary_runs.jsonl` is the most
+    recent *observed* state of the environment, and initialising from it is
+    exactly as trustworthy as that record -- which the file says out loud, so
+    a reader can tell an offline initialisation from a live sweep. Refuses to
+    overwrite an existing file: once created, the file's state is owned by the
+    live paths (drift freezes, green refreshes, owners clear).
+    """
+    if os.path.exists(FREEZE_PATH):
+        raise RuntimeError("%s already exists; the live paths own it now "
+                           "(replay --write-freeze refreshes, drift freezes)"
+                           % FREEZE_PATH)
+    last = None
+    if os.path.exists(RUNS_PATH):
+        for line in open(RUNS_PATH, encoding="utf-8"):
+            if line.strip():
+                last = json.loads(line)
+    if last is None:
+        raise RuntimeError("%s has no recorded replay to initialise from; "
+                           "run `canary.py replay --write-freeze` instead "
+                           "(SPENDS ACTIONS)" % RUNS_PATH)
+    verdicts = last.get("verdicts") or {}
+    run_ref = {"t": last.get("t"), "card_id": last.get("card_id"),
+               "verdicts": verdicts, "note": last.get("note", "")}
+    if last.get("froze_campaigns") or "DRIFT" in verdicts.values():
+        # The record says the environment drifted. Initialising `frozen: false`
+        # from it would be the instrument contradicting its own last reading.
+        drifted = sorted(g for g, v in verdicts.items() if v == "DRIFT")
+        freeze_campaigns(last.get("incident", "unrecorded"), drifted,
+                         "initialised offline from canary_runs.jsonl: the last "
+                         "recorded replay drifted", {"canary_run": run_ref})
+        _log_freeze_event("initialized", {"from": "canary_runs.jsonl",
+                                          "canary_run": run_ref,
+                                          "frozen": True})
+        return freeze_state()
+    state = {
+        "frozen": False,
+        "checked_utc": last.get("t"),
+        "canary_run": run_ref,
+        "note": ("Initialised OFFLINE from the last recorded replay in "
+                 "canary_runs.jsonl -- no API call was made, so checked_utc "
+                 "is that run's timestamp, not this command's. frozen:true is "
+                 "written by drift (canary.py replay) and only an owner "
+                 "decision clears it; history is in campaign_freeze_log.jsonl. "
+                 "Never delete this file."),
+        "history": [],
+    }
+    _write_json(FREEZE_PATH, state)
+    _log_freeze_event("initialized", {"from": "canary_runs.jsonl",
+                                      "checked_utc": state["checked_utc"],
+                                      "canary_run": run_ref, "frozen": False})
+    return state
 
 
 def freeze_state() -> Dict[str, Any]:
@@ -601,13 +718,34 @@ def _cmd_replay(args) -> int:
           % (run["actions_executed"], run["http_calls"],
              json.dumps(run["verdicts"], sort_keys=True)))
     if run.get("froze_campaigns"):
+        # The freeze itself is unconditional (written inside `replay`);
+        # --write-freeze governs only the green refresh below.
         print("  DRIFT -> incident %s filed; campaigns FROZEN (%s)"
               % (run["incident"], FREEZE_PATH))
         return 1
     if any(v != "PASS" for v in run["verdicts"].values()):
+        # INCOMPLETE never touches the freeze file: an outage is not an
+        # observation of the environment and must not stamp checked_utc.
         print("  INCOMPLETE: a replay could not finish. Not drift, not a pass; "
               "re-run when the API is available.")
         return 4
+    if args.write_freeze:
+        state = refresh_freeze(run)
+        print("  freeze file %s: frozen=%s checked_utc=%s"
+              % (FREEZE_PATH, state.get("frozen"),
+                 state.get("checked_utc", "(unchanged; frozen stands)")))
+    return 0
+
+
+def _cmd_init_freeze(args) -> int:
+    state = init_freeze_from_runs()
+    print("  %s initialised offline from %s: frozen=%s"
+          % (FREEZE_PATH, RUNS_PATH, state.get("frozen")))
+    if state.get("frozen"):
+        print("  the last recorded replay DRIFTED; campaigns start FROZEN")
+        return 1
+    print("  checked_utc=%s (the last recorded replay's timestamp)"
+          % state.get("checked_utc"))
     return 0
 
 
@@ -673,12 +811,22 @@ def build_parser() -> argparse.ArgumentParser:
     rep.add_argument("--note", default="",
                      help="free text stored with the run; use it to say why "
                           "this replay was made (e.g. 'before the INC-007 fix')")
+    rep.add_argument("--write-freeze", action="store_true",
+                     help="on an all-PASS sweep, write/refresh "
+                          "data/campaign_freeze.json as {frozen: false, "
+                          "checked_utc}. Drift always freezes, flag or no "
+                          "flag; a green sweep never clears a standing freeze")
     rep.set_defaults(func=_cmd_replay)
 
     sub.add_parser("status", help="offline: spec, last replay, freeze state"
                    ).set_defaults(func=_cmd_status)
     sub.add_parser("check-freeze", help="exit 1 if campaigns are frozen"
                    ).set_defaults(func=_cmd_check_freeze)
+    sub.add_parser("init-freeze",
+                   help="offline: create data/campaign_freeze.json from the "
+                        "last recorded replay in canary_runs.jsonl (no API "
+                        "call; refuses if the file already exists)"
+                   ).set_defaults(func=_cmd_init_freeze)
 
     reb = sub.add_parser("rebaseline",
                          help="deliberately replace expectations (SPENDS ACTIONS)")
