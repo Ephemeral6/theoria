@@ -355,3 +355,307 @@ def test_the_quota_fill_is_wired_into_build_not_merely_available(tmp_path):
         "20260729T004020Z-legX-salvage#r-sal"
     # and the card is no longer counted as lost, which is the older half of it
     assert manifest["scorecards_opened_and_never_closed"] == []
+
+
+# ------------------ a number the API can never hand back, said out loud
+#
+# `20260728T025503Z-g50t-e08-fixed` spent 13 billed actions and its session was
+# killed before it could make the closing call. Every *other* unclosed card in
+# this archive has a salvage behind it, so the number was only ever misfiled --
+# recoverable, and recovered. This one is not: the API auto-closes an open card
+# about fifteen minutes after the last action, and a closed card 404s on read
+# (`arc-recon/ACCESS_CHECK.md` §3). The count is unobtainable **by
+# construction**, and no amount of later tooling changes that.
+#
+# Which leaves two ways for the archive to be wrong about it and one way to be
+# right. It can print a total nobody can defend, or it can go red on a gap
+# nobody can close -- and a permanent red is the failure mode where somebody
+# eventually widens the tolerance until the check stops meaning anything. The
+# third option is to subtract it *by disclosure*: the manifest says which card
+# and why, and the reconciliation names the run, the card and the count it is
+# not reconciling. These tests pin the disclosure in both directions, because an
+# exemption an undeclared gap can also claim is not an exemption -- it is a hole
+# with better wording.
+
+def _live_start(run_id):
+    """A `run_start` that makes `classify` call the directory archive material.
+
+    The non-loopback `env_upstream` is the load-bearing part: with `127.0.0.1`
+    the directory classifies as `mock` and every check in `verify_provenance`
+    skips it, so a fixture in that state asserts nothing at all.
+    """
+    return {"v": "1.0", "event": "run_start", "run_id": run_id, "arm": "theoria",
+            "ts": "2026-07-28T02:55:03.738Z",
+            "env_upstream": "https://three.arcprize.org"}
+
+
+def _opened(run_id, card_id):
+    """The scorecard open, logged as `env_meta`.
+
+    That is how the arm logs it, and it is why opening a card is not itself a
+    billed action -- `quota` counts `env_step` records only. A fixture that logs
+    the open as a step inflates its own ledger total by one and quietly stops
+    testing the arithmetic it was written for.
+    """
+    return {"v": "1.0", "event": "env_meta", "run_id": run_id,
+            "http": {"path": "/api/scorecard/open", "status": 200},
+            "request": {"tags": ["p8"]},
+            "response": {"card_id": card_id}}
+
+
+def _closed(run_id, card_id, total_actions, owner=None):
+    return {"v": "1.0", "event": "env_meta", "run_id": run_id,
+            "http": {"path": "/api/scorecard/close", "status": 200},
+            "response": {"card_id": card_id, "total_actions": total_actions,
+                         "total_levels_completed": 0, "score": 0.0,
+                         "opaque": {"run_id": owner or run_id,
+                                    "prompt_id": "P-8"}}}
+
+
+def _billed(run_id, n):
+    return [{"v": "1.0", "event": "env_step", "run_id": run_id,
+             "http": {"path": "/api/cmd/ACTION1", "status": 200},
+             "action": {"name": "ACTION1"}} for _ in range(n)]
+
+
+def _write_ledger(run_dir, records):
+    run_dir.mkdir(parents=True, exist_ok=True)
+    (run_dir / "ledger.jsonl").write_text(
+        "\n".join(json.dumps(r) for r in records) + "\n", encoding="utf-8")
+
+
+def test_a_card_nobody_could_ever_close_is_declared_in_the_scorecard_slot(tmp_path):
+    """`scorecard` absent reads as "this run has no scorecard".
+
+    It has one. What it does not have is the number, and those are different
+    facts. The absence was a lie of omission sitting in the field a reader looks
+    in first -- and `verify_provenance` check 5, which asks every spending run to
+    point at its card, could not tell that run apart from one that had simply
+    never been given a manifest at all.
+    """
+    runs = tmp_path / "runs"
+    _write_ledger(runs / "killed",
+                  [_live_start("r-killed"), _opened("r-killed", "card-lost")]
+                  + _billed("r-killed", 13))
+
+    manifest = backfill.build("killed", runs_root=str(runs), table={})
+
+    card = manifest.get("scorecard")
+    assert card, ("the `scorecard` slot is empty for a run that opened one; a "
+                  "reader is left to infer the loss from an absence")
+    assert card["card_id"] == "card-lost"
+    assert card["status"] == "opened_never_closed"
+    assert card["total_actions"] is None, (
+        "a total was invented for a card that 404s on read")
+    assert "13" in card["note"], (
+        "the note omits the 13 actions the ledger does hold, which is the only "
+        "record there is")
+    # and the older declaration is still there, because check 6 reads that one
+    assert manifest["scorecards_opened_and_never_closed"] == ["card-lost"]
+
+
+def test_a_run_that_spent_nothing_is_not_given_a_lost_number_to_mourn(tmp_path):
+    """The cheap negative control: a pre-flight opens a card and closes nothing.
+
+    `preflight-20260728T012031Z` is exactly that shape in the real archive. It
+    spent no action, so there is no number for the API to be withholding, and a
+    declaration of loss would file a zero-cost absence in the same column as 13
+    genuinely unreconciled actions.
+    """
+    runs = tmp_path / "runs"
+    _write_ledger(runs / "preflight-x",
+                  [_live_start("r-pre"), _opened("r-pre", "card-untouched")])
+
+    manifest = backfill.build("preflight-x", runs_root=str(runs), table={})
+
+    assert "scorecard" not in manifest
+    assert manifest["scorecards_opened_and_never_closed"] == ["card-untouched"]
+
+
+def test_a_card_a_salvage_recovered_is_not_declared_lost(tmp_path):
+    """The sharp negative control, and the one that would do real damage.
+
+    These runs already have a real API number one directory over, in
+    `scorecard_recovered_by`. A declaration of loss beside it would be two
+    contradictory statements in the same file -- and worse, it would exempt from
+    check 4 a set of actions that reconciles perfectly well, which is the exact
+    failure the disclosure route exists to avoid.
+    """
+    runs = tmp_path / "runs"
+    _write_ledger(runs / "dead",
+                  [_live_start("r-dead"), _opened("r-dead", "card-c")]
+                  + _billed("r-dead", 9))
+    _write_ledger(runs / "dead-salvage",
+                  [_live_start("r-sal"),
+                   _closed("r-sal", "card-c", 9, owner="r-dead")])
+
+    manifest = backfill.build("dead", runs_root=str(runs), table={})
+
+    assert "scorecard" not in manifest, (
+        "a recovered card was also declared lost; the manifest now says both")
+    assert manifest["scorecard_recovered_by"]["total_actions"] == 9
+    assert manifest["scorecards_opened_and_never_closed"] == []
+
+
+# ------------------------------- and the reconciliation has to act on it
+CHECK_FOUR = "billed actions reconcile: ledgers vs closed scorecards"
+
+
+def _check_four(runs_root, monkeypatch):
+    """Check 4's own verdict, from a real `run()` over the fixture tree.
+
+    Not a local reimplementation of the split. A test that recomputes the check
+    it is testing asserts that the code equals itself -- measured on check 10,
+    where replacing its loop body with `for row in []` left the whole suite
+    green.
+
+    `armversion.scan` is stubbed because it walks every ref in a repository
+    carrying hundreds of worktrees (136 s, measured). It belongs to check 8,
+    whose verdict goes deliberately unread here: these fixture manifests are
+    hand-written and re-derivation will not reproduce them, which is check 8
+    working rather than a fact about check 4.
+    """
+    from armtools import armversion, verify_provenance   # noqa: PLC0415
+
+    monkeypatch.setattr(armversion, "scan", lambda *a, **k: {})
+    rows = [r for r in verify_provenance.run(str(runs_root)).rows
+            if r["check"] == CHECK_FOUR]
+    assert len(rows) == 1, "check 4 did not run at all: %r" % rows
+    return rows[0]
+
+
+def _two_run_archive(tmp_path):
+    """One run that closed its card, one whose card can never be closed.
+
+    4 billed actions behind a card the API says was billed 4, and 13 behind a
+    card that was opened and abandoned. The ledgers total 17; the only API
+    arithmetic in existence covers 4 of them.
+    """
+    runs = tmp_path / "runs"
+    _write_ledger(runs / "closed-its-card",
+                  [_live_start("r-ok"), _opened("r-ok", "card-ok")]
+                  + _billed("r-ok", 4) + [_closed("r-ok", "card-ok", 4)])
+    _write_ledger(runs / "session-was-killed",
+                  [_live_start("r-killed"), _opened("r-killed", "card-lost")]
+                  + _billed("r-killed", 13))
+    return runs
+
+
+def _declare(runs, slug, payload):
+    (runs / slug / "MANIFEST.json").write_text(json.dumps(payload),
+                                               encoding="utf-8")
+
+
+def test_a_declared_unclosed_card_reconciles_by_disclosure(tmp_path, monkeypatch):
+    """The passing shape -- and the detail string is half of what it asserts.
+
+    Passing quietly on 17-vs-4 would be worse than the red it replaces. This
+    check exists to be the number Phase 4 defends, so "we did not count 13 of
+    them" has to be legible in the one line the gate prints. The split is
+    asserted, and so are the run and the card it names.
+    """
+    runs = _two_run_archive(tmp_path)
+    _declare(runs, "session-was-killed",
+             {"scorecards_opened_and_never_closed": ["card-lost"]})
+
+    row = _check_four(runs, monkeypatch)
+
+    assert row["ok"] is True, row["detail"]
+    detail = row["detail"]
+    assert "ledgers say 17 = 4 reconciled" in detail, detail
+    assert "13 declared unreconcilable" in detail, detail
+    assert "session-was-killed" in detail and "card-lost" in detail, (
+        "the exemption is anonymous: %s" % detail)
+
+
+def test_an_undeclared_gap_still_fails(tmp_path, monkeypatch):
+    """The same 13 actions, with nothing in the archive owning up to them.
+
+    This is the assertion that makes the one above mean anything. If the split
+    were driven by "the ledger and the cards disagree" rather than by "a
+    manifest says which card and why", every future gap would exempt itself and
+    the check would have been repaired into a decoration.
+    """
+    runs = _two_run_archive(tmp_path)          # no manifest for the killed run
+
+    row = _check_four(runs, monkeypatch)
+
+    assert row["ok"] is False, (
+        "13 undeclared actions dropped out of the account silently: %s"
+        % row["detail"])
+    assert "MISMATCH" in row["detail"]
+    assert "ledgers say 17 = 17 reconciled" in row["detail"], row["detail"]
+
+
+def test_declaring_some_other_card_buys_no_exemption(tmp_path, monkeypatch):
+    """The exemption is per card, not per run.
+
+    A declaration naming a card the run never opened must not carry the run's
+    real orphan out of the reconciled column with it. Loose matching -- "this
+    run declared *something*, so exempt it" -- would let one honest disclosure
+    launder every later one.
+    """
+    runs = _two_run_archive(tmp_path)
+    _declare(runs, "session-was-killed",
+             {"scorecards_opened_and_never_closed": ["a-card-from-another-run"]})
+
+    row = _check_four(runs, monkeypatch)
+
+    assert row["ok"] is False, row["detail"]
+    assert "MISMATCH" in row["detail"]
+
+
+def test_the_scorecard_slot_alone_is_enough_to_declare(tmp_path, monkeypatch):
+    """Either form declares, because two writers write them.
+
+    `backfill.build` emits both the list and the `scorecard` block; a manifest
+    written by hand may carry only one. Requiring both would make the exemption
+    depend on which tool wrote the file rather than on what the file says.
+    """
+    runs = _two_run_archive(tmp_path)
+    _declare(runs, "session-was-killed",
+             {"scorecard": {"card_id": "card-lost",
+                            "status": "opened_never_closed",
+                            "total_actions": None}})
+
+    assert _check_four(runs, monkeypatch)["ok"] is True
+
+
+def test_a_scorecard_block_without_the_status_declares_nothing(tmp_path,
+                                                               monkeypatch):
+    """Only an explicit `opened_never_closed` exempts.
+
+    Otherwise any manifest carrying a `scorecard` key -- including one simply
+    asserting a total nobody read back from the API -- would exempt its own run
+    from the arithmetic that exists to check exactly that kind of claim.
+    """
+    runs = _two_run_archive(tmp_path)
+    _declare(runs, "session-was-killed",
+             {"scorecard": {"card_id": "card-lost", "total_actions": 13}})
+
+    row = _check_four(runs, monkeypatch)
+
+    assert row["ok"] is False, row["detail"]
+    assert "MISMATCH" in row["detail"]
+
+
+def test_the_killed_run_in_this_archive_carries_its_declaration():
+    """Over the real artefact, which is what the claim is actually about.
+
+    The fixtures above prove the rule; this proves it was applied to the run the
+    rule was written for. Skipped rather than failed where the run is absent --
+    this file is read in worktrees that predate it.
+    """
+    slug = "20260728T025503Z-g50t-e08-fixed"
+    path = os.path.join(RUNS_DIR, slug, "MANIFEST.json")
+    if not os.path.exists(path):
+        pytest.skip("%s is not in this tree" % slug)
+    with open(path, encoding="utf-8") as fh:
+        manifest = json.load(fh)
+
+    card = manifest.get("scorecard") or {}
+    assert card.get("status") == "opened_never_closed", (
+        "the run whose card auto-closed server-side does not say so: %r" % card)
+    assert card["card_id"] in manifest["scorecards_opened_and_never_closed"]
+    assert card["total_actions"] is None
+    assert manifest["quota"]["billed_actions_from_ledger"] == 13

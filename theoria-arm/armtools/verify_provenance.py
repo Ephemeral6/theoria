@@ -7,9 +7,14 @@ at least once before this file existed:
 * **every run under `runs/` has a manifest.** Five did not.
 * **no directory under `runs/` is a fixture.** Two were, and by directory
   listing they were indistinguishable from experiments that cost money.
-* **every billed action has a number the API itself confirms.** Two runs died
-  before closing their scorecard, so their manifests said `scorecard: null`
-  while the number sat, unreferenced, in a salvage run's ledger.
+* **every billed action has a number the API itself confirms, or a declaration
+  saying why it never can.** Two runs died before closing their scorecard, so
+  their manifests said `scorecard: null` while the number sat, unreferenced, in
+  a salvage run's ledger. A third had no salvage and could never have one --
+  the card auto-closed server-side and closed cards 404 -- and for that one the
+  account is settled by disclosure: check 4 splits the ledger total and names
+  the part no API number exists for, rather than passing on a total nobody can
+  defend or failing on a gap nobody can close.
 
 Nothing here calls the network, spends an action, or reads the working tree's
 opinion of anything. Everything is checked against the ledgers.
@@ -54,6 +59,31 @@ def _manifest(runs_root: str, slug: str) -> Optional[Dict[str, Any]]:
         return None
     with open(path, encoding="utf-8") as fh:
         return json.load(fh)
+
+
+def _declared_unclosed(manifest: Dict[str, Any]) -> set:
+    """Which card ids this manifest declares it opened and never closed.
+
+    Two places say it, because two writers say it. `backfill.build` emits the
+    list `scorecards_opened_and_never_closed` (check 6 reads that one), and it
+    also fills the singular `scorecard` slot with a `status:
+    "opened_never_closed"` declaration so that a reader of the field that
+    normally holds the API's close response is told the number is gone rather
+    than left to infer it from the field's absence. A manifest written by hand
+    may carry either. Both count, and neither is required to carry the other --
+    requiring both would make the exemption depend on which tool wrote the file
+    instead of on what the file says.
+
+    Read strictly: a `scorecard` block with no `card_id`, or with some other
+    `status`, declares nothing here. An exemption from the archive's arithmetic
+    has to name the card it is claiming for.
+    """
+    out = set(manifest.get("scorecards_opened_and_never_closed") or [])
+    card = manifest.get("scorecard")
+    if isinstance(card, dict) and card.get("status") == "opened_never_closed" \
+            and card.get("card_id"):
+        out.add(card["card_id"])
+    return out
 
 
 def run(runs_root: Optional[str] = None) -> Checks:
@@ -101,9 +131,30 @@ def run(runs_root: Optional[str] = None) -> Checks:
 
     # 4 -- the billed-action total, from the ledgers, against the API's own
     #      arithmetic. This is the number Phase 4 has to be able to defend.
+    #
+    #      Not every action *can* be put next to an API number, and the first
+    #      version of this check could not say so. A run whose session was killed
+    #      never made the closing call; the API auto-closes the card about
+    #      fifteen minutes later and a closed card 404s on read
+    #      (`arc-recon/ACCESS_CHECK.md` §3), so its total is unobtainable **by
+    #      construction** -- no salvage, no retry, no later tooling recovers it.
+    #      Against a single total that is indistinguishable from an unexplained
+    #      gap, and it read as one: `20260728T025503Z-g50t-e08-fixed`'s 13 billed
+    #      actions turned this check red with a detail that said only MISMATCH,
+    #      which invites the two wrong repairs -- widen the tolerance, or drop the
+    #      run -- over the right one, which is to say out loud what cannot be
+    #      reconciled and why.
+    #
+    #      So the ledger total is *split*, never reduced. The reconciled part must
+    #      still equal the closed cards exactly. The other part is only allowed to
+    #      exist where the run's own manifest declares the card as opened and
+    #      never closed, and it is named in the detail with its slug and its
+    #      count. An orphan nobody declared is not eligible for the second bucket:
+    #      it stays in the first, where it fails the equality and shows up as the
+    #      mismatch it is. Disclosure is the only thing that moves an action out
+    #      of the reconciled column, and disclosure is checkable.
     ledger_total = 0
-    api_total = 0
-    per_run = []
+    per_run: List[tuple] = []
     cards: Dict[str, Dict[str, Any]] = {}
     for row in survey:
         if not row["archive_material"]:
@@ -113,16 +164,42 @@ def run(runs_root: Optional[str] = None) -> Checks:
         mine = backfill.records_of(records, None) if records else []
         spent = backfill.quota(mine, [])["billed_actions_from_ledger"]
         ledger_total += spent
-        per_run.append({"slug": row["slug"], "billed": spent})
+        per_run.append((row["slug"], spent, mine))
         for card in backfill.recovered_scorecards(mine):
             cards[card["card_id"]] = card
     api_total = sum(c.get("total_actions") or 0 for c in cards.values())
-    checks.check(
-        "billed actions reconcile: ledgers vs closed scorecards",
-        ledger_total == api_total,
-        "ledgers say %d, the %d closed scorecards say %d%s"
-        % (ledger_total, len(cards), api_total,
-           "" if ledger_total == api_total else " -- MISMATCH"))
+
+    # `cards` has to be complete before any run can be judged: whether a card is
+    # an orphan is an archive-wide question, not a per-run one -- a card this run
+    # never closed may have been closed by a salvage three directories over, and
+    # that run reconciles normally.
+    reconciled, unreconcilable, disclosed = 0, 0, []
+    for slug, spent, mine in per_run:
+        orphans = {c["card_id"]
+                   for c in backfill.opened_scorecards(mine)} - set(cards)
+        stated = _declared_unclosed(_manifest(runs_root, slug) or {})
+        if orphans and orphans <= stated:
+            unreconcilable += spent
+            disclosed.append("%s: %d against %s" % (slug, spent,
+                                                    ", ".join(sorted(orphans))))
+        else:
+            # Includes a run with orphans it declared only *some* of: a partial
+            # declaration buys no exemption at all, or the undeclared remainder
+            # would ride out of the account on the declared one's ticket.
+            reconciled += spent
+    detail = ("ledgers say %d = %d reconciled against %d closed cards + %d "
+              "declared unreconcilable (cards opened and never closed; closed "
+              "cards 404, so the API-side total is unobtainable by "
+              "construction)" % (ledger_total, reconciled, len(cards),
+                                 unreconcilable))
+    if disclosed:
+        detail += " [%s]" % "; ".join(disclosed)
+    if reconciled != api_total:
+        detail += (" -- MISMATCH: the reconciled part is %d and the closed "
+                   "cards say %d; the difference is declared by nobody"
+                   % (reconciled, api_total))
+    checks.check("billed actions reconcile: ledgers vs closed scorecards",
+                 reconciled == api_total, detail)
 
     # 5 -- every run that spent an action has an API-confirmed number for it,
     #      whether in its own manifest or by a named pointer to the salvage

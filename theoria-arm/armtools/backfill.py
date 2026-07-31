@@ -557,6 +557,8 @@ def build(slug: str, *, runs_root: Optional[str] = None,
     else:
         recovered_by = None
 
+    spent = _quota_with_recovered(quota(mine, closed), recovered_by)
+
     manifest: Dict[str, Any] = {
         # CLAUDE.md's four required fields come first and every one of them is
         # either a derived value or an explicit null with a reason in
@@ -579,7 +581,7 @@ def build(slug: str, *, runs_root: Optional[str] = None,
         "outcome": end.get("outcome"),
         "elapsed_s": end.get("elapsed_s"),
         "note_at_run_start": start.get("note"),
-        "quota": _quota_with_recovered(quota(mine, closed), recovered_by),
+        "quota": spent,
         "scorecards_recovered": closed,
         "scorecards_opened_and_never_closed": orphans,
         "parent_run": parent_of(slug, closed, runs_root),
@@ -600,9 +602,70 @@ def build(slug: str, *, runs_root: Optional[str] = None,
             "the archive -- ever closed it. The API's own count of what it was "
             "billed was therefore never read back, and cannot be, offline. The "
             "ledger's own count stands unconfirmed; see `quota`.")
+        declaration = _unclosed_declaration(orphans, spent, closed, recovered_by)
+        if declaration:
+            manifest["scorecard"] = declaration
     if recovered_by:
         manifest["scorecard_recovered_by"] = recovered_by
     return manifest
+
+
+def _unclosed_declaration(orphans: List[str], spent: Dict[str, Any],
+                          closed: List[Dict[str, Any]],
+                          recovered_by: Optional[Dict[str, Any]]
+                          ) -> Optional[Dict[str, Any]]:
+    """The `scorecard` slot for a run whose card was opened and never closed.
+
+    `scorecard` is where a manifest says which card holds this run's actions.
+    `archive.py` fills it with the API's own close response; a run that died
+    before making the closing call has none, and the field was simply absent --
+    which reads as "this run has no scorecard", when the truth is "this run has
+    a scorecard and its number is gone". Those are different facts and only one
+    of them is true, so the absence was a small lie of omission sitting in the
+    file whose job is to be the account.
+
+    It is gone for a reason that does not go away with effort: the API
+    auto-closes an open card roughly fifteen minutes after the last action, and
+    a closed card 404s on read (`arc-recon/ACCESS_CHECK.md` §3). So the count is
+    **unobtainable by construction**, not merely unread, and no later salvage
+    can recover it -- which is exactly what distinguishes this from
+    `scorecard_recovered_by`, where a salvage did make the call and the number
+    survives one directory over.
+
+    Three conditions, and each of them is the reason for a different silence:
+
+    * nothing closed -- if this run closed its own card, `scorecard` belongs to
+      the close response and this must not overwrite it;
+    * nothing recovered -- if a salvage closed it, `scorecard_recovered_by`
+      already carries a real number and a declaration of loss would contradict
+      it;
+    * the run was actually billed -- a run that spent no action (a pre-flight)
+      has no number for the API to be missing, and manufacturing a declaration
+      of loss for it would report an absence that costs nothing as if it were
+      an unreconciled spend.
+
+    Exactly one orphan, deliberately. With two, "the scorecard" is not a single
+    card and picking the first would silently pick. That case has never occurred
+    here; if it does, this returns nothing and `verify_provenance` check 5 goes
+    red, which is the correct way for an unhandled shape to surface.
+    """
+    if closed or recovered_by or len(orphans) != 1:
+        return None
+    billed = spent.get("billed_actions_from_ledger") or 0
+    if not billed:
+        return None
+    return {
+        "card_id": orphans[0],
+        "status": "opened_never_closed",
+        "total_actions": None,
+        "note": ("this run opened this scorecard and no run in the archive ever "
+                 "closed it. The API auto-closes an open card about fifteen "
+                 "minutes after the last action and a closed card 404s on read "
+                 "(ACCESS_CHECK §3), so the API-side action total is "
+                 "unobtainable by construction, not merely unread -- no salvage "
+                 "can recover it. The ledger's %d billed action(s) are the only "
+                 "record." % billed),
+    }
 
 
 def branch_of(slug: str, runs_root: str) -> Dict[str, Optional[str]]:
