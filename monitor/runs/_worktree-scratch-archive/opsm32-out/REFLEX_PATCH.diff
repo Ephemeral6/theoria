@@ -1,0 +1,255 @@
+diff --git a/monitor/reflex.py b/monitor/reflex.py
+index 8b73a24b..6cd7c964 100644
+--- a/monitor/reflex.py
++++ b/monitor/reflex.py
+@@ -20,6 +20,7 @@ import socket
+ import subprocess
+ import sys
+ import time
++import traceback
+ import childio  # noqa: E402  (per-child decoding, see its docstring)
+ 
+ HERE = os.path.dirname(os.path.abspath(__file__))
+@@ -42,6 +43,17 @@ HEADROOM_GB = 3.0        # 不动用的余量
+ PER_SESSION_GB = 0.6     # 单个会话的保守估计（实测 0.42–0.52）
+ MIN_FREE_GB = HEADROOM_GB + PER_SESSION_GB
+ 
++# 两个子进程的期限，提出来命名，因为 **600 这个数已经被量出来是错的**。
++# 2026-07-30 实测：`scan.py` 在满载舰队下跑完一次要 1571–1602 秒（仪表盘任务的
++# 那个实例，无期限，跑完了）；同一时刻手工计时的另一次超过 761 秒仍未结束。
++# reflex 给它 600 秒，于是**每一跳都在期限上被杀**，而 `subprocess.run` 抛出的
++# `TimeoutExpired` 从第 361 行一路穿过第 363 行的 rlog——从 01:33:34Z 到 12:52Z，
++# 十一个小时没有一跳写出过收尾行，reflex.log 看起来和「任务从没触发」一模一样。
++# 期限本身该不该抬高是监控的判断（抬高会让一跳超过五分钟的调度间隔），
++# 所以这里只把它变成一个可改的数，并且保证超时**是一个事件而不是一次静默死亡**。
++MERGE_TIMEOUT_S = 3600
++SCAN_TIMEOUT_S = 600
++
+ 
+ def rlog(msg):
+     stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+@@ -71,6 +83,43 @@ def run_console(args, timeout=2400):
+                           timeout=timeout)
+ 
+ 
++class Unfinished:
++    """The result of a child that never returned one.
++
++    `run()` raises on a deadline, and **every raise between the first child and
++    `rlog()` is a silent outage**: the cycle dies with no line at all, which from
++    outside is byte-identical to a cycle the scheduler never started. That is not
++    a hypothetical -- it is the 2026-07-30 outage, and it cost two cycles of
++    triage because the brightest instrument to hand (`ci_merge`'s `merge.log`) is
++    written by the *child*, so it stays fresh exactly while the parent is the
++    thing that is failing.
++
++    Returning a result object rather than propagating keeps the caller's shape
++    (`.returncode` / `.stdout` / `.stderr` are all read downstream) and, more to
++    the point, keeps the cycle alive long enough to write down what happened.
++    `returncode` is deliberately non-zero so the existing EXIT- alarms fire on it
++    too: a killed child must not be able to read as a clean no-op, which is the
++    whole of S28 finding 10.
++    """
++
++    def __init__(self, why):
++        self.returncode = -1
++        self.stdout = ""
++        self.stderr = why
++
++
++def run_guarded(args, timeout, tag, events):
++    """`run`, but a deadline or a failed spawn becomes an event, not an exit."""
++    try:
++        return run(args, timeout=timeout)
++    except subprocess.TimeoutExpired:
++        events.append("%s:TIMEOUT(%ds)" % (tag, timeout))
++        return Unfinished("killed at the %ds deadline" % timeout)
++    except OSError as exc:
++        events.append("%s:SPAWN-FAILED:%s" % (tag, type(exc).__name__))
++        return Unfinished("%s: %s" % (type(exc).__name__, exc))
++
++
+ def load_loop():
+     if os.path.exists(LOOP):
+         return json.load(open(LOOP, encoding="utf-8"))
+@@ -116,12 +165,28 @@ def merge_events(r):
+ 
+ def main():
+     if os.path.exists(LOCK):
+-        if time.time() - os.path.getmtime(LOCK) < 1500:
+-            return 0            # previous reflex still at work
++        age = int(time.time() - os.path.getmtime(LOCK))
++        if age < 1500:
++            # 「上一跳还没跑完」以前是一次无声的 return 0。这台机器上任务计划的
++            # Operational 日志是关掉的（`Get-WinEvent -ListLog` 实测 IsEnabled
++            # False），而 TheoriaReflex 是 MultipleInstances=IgnoreNew，所以被拒
++            # 掉的那一跳在**任何地方**都不留痕迹。重叠一两分钟是常态，不值一行；
++            # 超过三跳就是上一跳卡住了，那正是要看见的东西。
++            if age > 900:
++                rlog("cycle-skip: previous reflex still holds the lock "
++                     "(%ds old)" % age)
++            return 0
++        rlog("stale-lock: removed a lock %ds old -- the previous cycle died "
++             "without releasing it" % age)
+         os.remove(LOCK)
+     open(LOCK, "w").write(str(os.getpid()))
++    events = []
++    # 开跳一行。收尾行（本函数末尾那个 rlog）由**父进程**在所有子进程都回来之后
++    # 才写，所以「跑了一半死掉」和「压根没跑」在 reflex.log 里长得一样——这是
++    # 2026-07-30 那次十一小时停摆里唯一真正缺的仪表。有了这一行，两者的区别
++    # 就是「有 cycle-start 没有收尾行」和「连 cycle-start 都没有」。
++    rlog("cycle-start pid=%d" % os.getpid())
+     try:
+-        events = []
+ 
+         # 0. launch queue — the monitor never spawns sessions itself anymore:
+         # anything spawned from its tool shell gets silently killed (proven
+@@ -157,8 +222,11 @@ def main():
+         # Three researchers died to a session limit on 2026-07-29 and six items
+         # -- including the campaign mainline -- stayed locked for two hours
+         # because this ran without it.
+-        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep",
+-                  "--include-standing"])
++        sw = run_guarded([sys.executable, os.path.join(HERE, "board.py"),
++                          "sweep", "--include-standing"], 2400, "sweep", events)
++        if sw.returncode != 0:
++            first = ((sw.stderr or "").strip().splitlines() or [""])[0]
++            events.append("sweep:EXIT-%d %s" % (sw.returncode, first[:120]))
+         events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
+                    if "freed from" in l]
+         # A standing release is reported separately and by name. It is a much
+@@ -206,9 +274,12 @@ def main():
+                               else "serve:restart-FAILED(port still shut)")
+ 
+         # 1. reap
+-        out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+-                   "--reap"]).stdout
+-        killed = [l for l in out.splitlines() if "killed" in l]
++        rp = run_guarded([sys.executable, os.path.join(HERE, "dispatch.py"),
++                          "--reap"], 2400, "reap", events)
++        if rp.returncode != 0:
++            first = ((rp.stderr or "").strip().splitlines() or [""])[0]
++            events.append("reap:EXIT-%d %s" % (rp.returncode, first[:120]))
++        killed = [l for l in rp.stdout.splitlines() if "killed" in l]
+         events += ["reap:" + l.split()[0] for l in killed]
+ 
+         # 2. quota
+@@ -309,31 +380,40 @@ def main():
+                    if os.path.exists(reg_path) else {})
+             state = load_loop()
+             deaths = state.get("death_counts", {})
+-            remote = run(["git", "branch", "-r", "--list", "origin/agent/*",
+-                          "--format=%(refname:short)"]).stdout.lower()
++            # 这一问失败的方向是**花钱**：`remote` 空掉会让每个死掉的会话看起来都
++            # 没交付，于是这一跳把已经交付完的会话统统重开一遍。所以读退出码，
++            # 而且读到非零就跳过整个循环，不是只记一行然后照跳。
++            gq = run_guarded(["git", "branch", "-r", "--list", "origin/agent/*",
++                              "--format=%(refname:short)"], 2400, "revive-git",
++                             events)
+             revived = 0
+-            for pid_str, entry in sorted(reg.items()):
+-                if pid_str.startswith(("M-", "A-", "B-", "R-")):
+-                    continue        # ops run in the user's app now
+-                if entry.get("reaped") not in ("exited",
+-                                               "killed-permission-wall"):
+-                    continue
+-                slug = (pid_str.lower().replace("-", "")
+-                        if len(pid_str) <= 4 else pid_str.lower())
+-                if "agent/%s" % slug in remote:
+-                    continue        # it delivered; nothing to revive
+-                n = deaths.get(pid_str, 0)
+-                if n >= MAX_DEATHS:
+-                    events.append("three-strikes:%s" % pid_str)
+-                    continue
+-                if revived:
+-                    time.sleep(45)   # stagger is law
+-                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+-                         "--only", pid_str])
+-                if "launched" in r.stdout:
+-                    deaths[pid_str] = n + 1
+-                    revived += 1
+-                    events.append("revive:%s(#%d)" % (pid_str, n + 1))
++            if gq.returncode != 0:
++                events.append("revive:GIT-EXIT-%d(loop-skipped)"
++                              % gq.returncode)
++            else:
++                remote = gq.stdout.lower()
++                for pid_str, entry in sorted(reg.items()):
++                    if pid_str.startswith(("M-", "A-", "B-", "R-")):
++                        continue        # ops run in the user's app now
++                    if entry.get("reaped") not in ("exited",
++                                                   "killed-permission-wall"):
++                        continue
++                    slug = (pid_str.lower().replace("-", "")
++                            if len(pid_str) <= 4 else pid_str.lower())
++                    if "agent/%s" % slug in remote:
++                        continue        # it delivered; nothing to revive
++                    n = deaths.get(pid_str, 0)
++                    if n >= MAX_DEATHS:
++                        events.append("three-strikes:%s" % pid_str)
++                        continue
++                    if revived:
++                        time.sleep(45)   # stagger is law
++                    r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
++                             "--only", pid_str])
++                    if "launched" in r.stdout:
++                        deaths[pid_str] = n + 1
++                        revived += 1
++                        events.append("revive:%s(#%d)" % (pid_str, n + 1))
+             if revived or deaths != state.get("death_counts", {}):
+                 state["death_counts"] = deaths
+                 save_loop(state)
+@@ -342,26 +422,47 @@ def main():
+         # (git + pytest only), and a worker's proposal caught it being
+         # stopped by a budget it cannot possibly consume.
+         if True:
+-            r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
+-                    timeout=3600)
++            r = run_guarded([sys.executable, os.path.join(HERE, "ci_merge.py")],
++                            MERGE_TIMEOUT_S, "merge", events)
+             events += merge_events(r)
+ 
+         # 4b. supply alarm — authoring items needs judgment, so reflex cannot
+         # refill the board itself; what it can do is make a dry board loud
+         # instead of silent. Idle agents look identical to busy ones.
++        #
++        # `except Exception: pass` 是这里的原始缺陷，而且它比空板更安静：空板至少
++        # 发得出 SUPPLY-LOW:0，读不动板子连一个字都没有。第三个值走 else 分支，
++        # 这样「量到 0」和「没量出来」是两条不同的行。
+         try:
+             import board as board_mod
+             depth = len(board_mod.candidates())
++        except Exception as exc:
++            events.append("SUPPLY-UNKNOWN:%s" % type(exc).__name__)
++        else:
+             if depth <= 2:
+                 events.append("SUPPLY-LOW:%d" % depth)
+-        except Exception:
+-            pass
+ 
+-        # 5. light dashboard refresh
+-        run([sys.executable, os.path.join(HERE, "scan.py")], timeout=600)
++        # 5. light dashboard refresh — the last child, and the one that killed
++        # the heartbeat for eleven hours on 2026-07-30. See SCAN_TIMEOUT_S.
++        sc = run_guarded([sys.executable, os.path.join(HERE, "scan.py")],
++                         SCAN_TIMEOUT_S, "scan", events)
++        # scan.py 的 main() 崩了会 return 1（它自己的注释说「reflex.py now checks
++        # this」——在这次改动之前那句话是假的，返回码被整个丢掉了）。
++        if sc.returncode != 0:
++            last = ((sc.stderr or "").strip().splitlines() or [""])[-1]
++            events.append("scan:EXIT-%d %s" % (sc.returncode, last[:120]))
+ 
+         rlog(" | ".join(events) if events else "quiet")
+         return 0
++    except BaseException as exc:        # noqa: BLE001 — re-raised two lines down
++        # 兜底。上面每一处具名的守卫都可能漏掉下一个新加的子进程调用，而漏掉的
++        # 代价是**整条心跳无声消失**。这一段保证不管从哪里抛出来，reflex.log 里
++        # 都有一行说了从哪抛的；然后照样 re-raise，让任务计划也看到失败。
++        rlog("%s | CYCLE-DIED:%s %s"
++             % (" | ".join(events) if events else "(no events yet)",
++                type(exc).__name__,
++                (traceback.format_exc().strip().splitlines() or [""])[-1][:200]))
++        raise
+     finally:
+         try:
+             os.remove(LOCK)

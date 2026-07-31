@@ -1,0 +1,82 @@
+PATH-EXISTS C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam -> True
+GATE kind=verify name=verify.py cmd=['D:\\Miniforge3\\python.exe', 'C:\\Users\\user\\Desktop\\theoria\\.worktrees\\opsm30-v6-mrg\\exam\\verify.py']
+PYTHONPATH=C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg
+
+==============================================================================
+== build_papers
+==============================================================================
+exam -- built 4 paper(s), rubric digest 7a1cfd1a1aa3
+------------------------------------------------------------------------------
+  paper                  items  points   sheet sha      leakage
+  p15-heldout-a0         80     80       22e6bacbe231   probes=363 hits=0
+  p15-handover-a0        29     46       70bd11c2874e   probes=58 hits=0
+  p15-adaptation-a0      60     144      f61ac65b29d7   probes=1284 hits=0
+  p15-verdict-a2         17     34       5cc9bff3860f   probes=85 hits=0
+------------------------------------------------------------------------------
+  sheets -> C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\papers
+  keys   -> C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\truth   (referee only)
+  cheater briefs -> C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\cheater
+
+==============================================================================
+== pytest
+==============================================================================
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 45%]
+........................................................................ [ 61%]
+...................x.................................................... [ 76%]
+................x....................................................... [ 91%]
+........................................                                 [100%]
+470 passed, 2 xfailed in 187.90s (0:03:07)
+
+==============================================================================
+== run_exam --calibrate
+==============================================================================
+exam -- calibration (rubric digest 7a1cfd1a1aa3)
+------------------------------------------------------------------------------
+  paper         oracle    null      memoriser   bluffer   verdict
+  adaptation    1.0000    0.0000    0.1708      0.1708    CALIBRATED
+  handover      1.0000    0.0000    0.7174      0.3261    CALIBRATED
+  heldout       1.0000    0.0000    0.5750      0.4500    CALIBRATED
+  verdict       1.0000    0.0000    0.5882      0.2647    CALIBRATED
+------------------------------------------------------------------------------
+
+  -> C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\exam_summary.json
+
+==============================================================================
+== run_selftest
+==============================================================================
+mutants: all passed
+faults: 8 injected, 0 uncaught, baseline clean
+  accepts_anything         calibration, mutant:garbage, mutant:partial_credit_survives, mutant:transplant
+  blends_the_pair          calibration
+  inflates_partial         calibration, mutant:partial_credit_survives, mutant:transplant
+  marks_by_item_name       calibration, mutant:garbage, mutant:partial_credit_survives, mutant:transplant
+  order_dependent          calibration, mutant:drop_exact, mutant:independence, mutant:key_order, mutant:monotone, mutant:partial_credit_survives
+  pays_for_silence         calibration, mutant:drop_exact
+  rejects_truth            calibration, mutant:partial_credit_survives
+  truncates_partial        calibration, mutant:partial_credit_survives
+protocol digest: 200c26f9c445844df27eb700dd7dd4de3c2f0db596c862479c6057bf17c51fa3
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\selftest.json
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\matrix\verdict_confusion.json
+wrote C:\Users\user\Desktop\theoria\.worktrees\opsm30-v6-mrg\exam\artifacts\matrix\verdict_confusion.md
+
+==============================================================================
+== determinism: two builds, fresh interpreters, PYTHONHASHSEED 7 vs 99
+==============================================================================
+  PYTHONHASHSEED=7   09d5edaf82cdc9804cd81f8ae6a6a4fca370985bfa24b683418353e394e17b36 5628e26d3613a95683180aae26f3d41dc12e83a14007ee299f40441fd9636289 c98636b195a523d0f76d18ea4b49f5b407f23c05a5893627ebe61b724798e07d 1aec369c10d072a51a81c041220903fe181b23655fe1d43c915fd221c6827c11
+  PYTHONHASHSEED=99  09d5edaf82cdc9804cd81f8ae6a6a4fca370985bfa24b683418353e394e17b36 5628e26d3613a95683180aae26f3d41dc12e83a14007ee299f40441fd9636289 c98636b195a523d0f76d18ea4b49f5b407f23c05a5893627ebe61b724798e07d 1aec369c10d072a51a81c041220903fe181b23655fe1d43c915fd221c6827c11
+  identical: True
+
+==============================================================================
+== summary
+==============================================================================
+  build_papers           ok
+  pytest                 ok
+  run_exam --calibrate   ok
+  run_selftest           ok
+  determinism            ok
+
+GREEN
+
+==== RC=0 ====

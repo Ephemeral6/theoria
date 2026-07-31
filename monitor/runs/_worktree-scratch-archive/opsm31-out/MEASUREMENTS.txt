@@ -1,0 +1,65 @@
+OPS-M cycle 31 measurement: origin/agent/s4-e23-tiers (tip 6eaf2da2) freeze gate red
+====================================================================================
+utc: 2026-07-30 (session), base master cc7e414eb3bfde3325a50f9ce0e8dc896bda2b84
+
+FAILING STAGE
+  [15] the other two generated artefacts still describe their sources
+  sub-check 15b: `python freeze/build_budget_table.py --verify`
+  verbatim FAIL line:
+    FAIL  BUDGET_TABLE.{json,md} no longer recompute from the ledgers -- regenerate and read the diff
+  Stage [15] exists ONLY on the branch. master's freeze/verify.sh ends at [14]
+  and contains zero references to build_budget_table / build_engine_manifest /
+  tier_conj (grep returned no matches). => Arm C skipped, stage is branch-only.
+
+ARM A  .worktrees/opsm31-s4e-tip  (6eaf2da2 detached)
+  RC=1, "DRAFT INCOMPLETE -- 1 check(s) failed"
+  only failure = 15b. causes printed:
+    DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+           sections that moved: balance, pool, verdict
+           `pool`/`balance` moved => THE BALANCE MOVED.
+    DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+  transcript: .worktrees/opsm31-out/s4e-tip.txt
+
+ARM B  .worktrees/opsm31-s4e-mrg  (cc7e414e + `git merge --no-edit 6eaf2da2` -> d92e3993)
+  merge was CLEAN (22 files, 4406 insertions). master is NOT an ancestor of tip.
+  RC=1, identical to Arm A modulo the worktree path (verified by diff).
+  merged freeze/verify.sh is byte-identical to the branch's; merged
+  freeze/BUDGET_TABLE.json byte-identical to the branch's.
+  transcript: .worktrees/opsm31-out/s4e-mrg.txt
+
+ARM C  skipped: [15] does not exist on master, master cannot run it.
+
+MECHANISM
+  freeze/build_budget_table.py (branch version), read_pool() / resolve_pool():
+    resolve_pool(rel):  REPO/proxy/var/spend_gate.jsonl, else walk up out of
+                        `.worktrees/<id>/` to the main checkout, else None.
+  proxy/var/ is gitignored (proxy/.gitignore:3 `var/`) and untracked, so NO fresh
+  worktree contains it.
+  monitor/ci_merge.py:513   wt = tempfile.mkdtemp(prefix="ci-merge-")
+    -> the merge worktree is C:\Users\user\AppData\Local\Temp\ci-merge-XXXX,
+       which has NO `.worktrees` path component, so resolve_pool returns None.
+  Empirical resolve_pool table (pure path logic, measured):
+    C:\...\theoria                                  -> ...\proxy\var\spend_gate.jsonl
+    C:\...\theoria\.worktrees\opsm31-s4e-tip        -> ...\proxy\var\spend_gate.jsonl
+    C:\...\theoria\.worktrees\opsm31-s4e-mrg        -> ...\proxy\var\spend_gate.jsonl
+    C:\Users\user\AppData\Local\Temp\ci-merge-abc123 -> None
+  Pool line counts:
+    pinned in the branch's BUDGET_TABLE.json: pool.lines = 12995,
+      sha256 ab26738d345b45e8c3c6eef89dcaa1a24e879f9bed82492fc92116cc32e15b22
+    live during this measurement: 13947 lines, then 13967 lines ~10 min later.
+
+POOL-ABSENT PROBE (relocated copy, HERE pinned to the Arm A freeze/, only
+resolve_pool forced to return None -- same relocation trick the stage's own
+negative controls use):
+  control (pool resolvable):  rc=1, sections moved: balance, pool, verdict
+  probe   (pool absent):      rc=1, sections moved: balance, pool, projection,
+                              verdict, PLUS
+    POOL ABSENT: the pool is gitignored (proxy/.gitignore:3) and this checkout
+    does not have one; every balance figure below is unverifiable here
+  That POOL ABSENT string is present verbatim in the flag file's transcript
+  tail, which is how we know ci_merge's run took the pool-less path.
+  scripts/outputs: bt_relocated.py, bt_relocated.out.txt,
+                   bt_poolabsent.py, bt_poolabsent.out.txt
+
+VERDICT: ENVIRONMENT-ARTIFACT, compounded by a structurally un-greenable gate
+  the branch added. No tracked-content defect on the branch produces this red.

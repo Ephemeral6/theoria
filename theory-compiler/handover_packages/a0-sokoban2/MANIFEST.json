@@ -1,5 +1,5 @@
 {
-  "bundle_digest": "c64e2eb81b266b503e8d360ca18e7384fa7c84314a144132901f6ca08f9d1c71",
+  "bundle_digest": "74f4a3e7a4984522713e2de04c894afc61fb31ec45e28919b13f058fd6c96368",
   "compile_warnings": [],
   "context_scan": {
     "blocking": 0,
@@ -16,7 +16,7 @@
   },
   "files": {
     "GLOSSARY.md": "8602cad92990d9f6c703940c0cd43fcded630006b864ad76b368a3441908ce09",
-    "README.md": "13cc3581a734bf186b265f96cf7336be1cfe3683ea09ea25ad4bc214718b9750",
+    "README.md": "88fda9d74d026c158f844909674e1eca57e66295e3308dfcfe326ba10821ccf8",
     "SEAL.md": "e8ff2fd2e51708cf0c54ca52a9efa955b98c1ea134dfec31aa3e7343b1ad4e21",
     "levels/crossing-up/BOARD.md": "b240c8f8b60b97d0c0b725649b8b93828040bcd2fea30477a6c64d3e59b75404",
     "levels/crossing-up/LEVEL.json": "3b9d5acf94c044845736570ea793574d4f07fe7dd07b88fb73cbf89d0763b6ef",
@@ -39,11 +39,11 @@
     },
     "planning_domain": {
       "status": "refused",
-      "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+      "why": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031)."
     },
     "planning_problem": {
       "status": "refused",
-      "why": "crossing-up: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition.; match: UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+      "why": "crossing-up: UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031).; match: UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031)."
     },
     "proof": {
       "status": "generated"
@@ -56,7 +56,7 @@
       },
       "planning_problem": {
         "status": "refused",
-        "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+        "why": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031)."
       },
       "proof": {
         "status": "generated"
@@ -68,7 +68,7 @@
       },
       "planning_problem": {
         "status": "refused",
-        "why": "UnsupportedClause: free(Box.pos) names its cell through an object, which excludes that object from its own occupancy test (v0.3, X-5). This STRIPS encoding holds `free` as a property of a cell and has no way to say `free except for Box`. Refusing rather than dropping the precondition."
+        "why": "UnsupportedClause: guard comparison Comparison(op='=', left=FieldAccess(obj='Box', field_name='pos'), right=FuncCall(name='ahead', args=[NameRef(name='Player'), NameRef(name='up')])) has no STRIPS image in this subset. Refusing rather than dropping the precondition (D-TC-031)."
       },
       "proof": {
         "status": "generated"

@@ -1,0 +1,94 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2,
+    "door": 5,
+    "portal": 7,
+    "switch": 3,
+    "switch_on": 4
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        3
+      ],
+      "kind": "block",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        5
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        6,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "toggle",
+        "net": "a"
+      }
+    }
+  ],
+  "families": [
+    "portal",
+    "push",
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    7,
+    8
+  ],
+  "layout": [
+    "##########",
+    "#....#...#",
+    "#.##.#.#.#",
+    "#.#....#.#",
+    "#.#..#.#.#",
+    "#.#..#.#.#",
+    "#........#",
+    "#........#",
+    "##########"
+  ],
+  "notes": "Push, switch-door and a two-way portal in one grid. Three families is where the vocabulary a segmenter has to invent stops being obvious.",
+  "seed": 301,
+  "tier": 3,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t3-full-house"
+}

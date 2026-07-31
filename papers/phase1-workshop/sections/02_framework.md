@@ -20,7 +20,18 @@ documents (`Theoria.md` §1.7–§1.9):
 The manual answers understanding; the playbook answers competence. Everything
 downstream is generated from them: `Theoria.md` §1.10a's four co-derived forms
 (Lean, Python, PDDL, Markdown) come from one source, so a disagreement between
-forms is a bug that can be *seen* rather than a drift that cannot.
+forms is a bug that can be *seen* rather than a drift that cannot. One caveat
+on that sentence is load-bearing enough to state here rather than leave to
+§11.3: an **empty** form cannot disagree with anything. For the PDDL form that
+was the repository's actual condition until 2026-07-31 — the general backend
+emitted semantically empty actions under a green light, 0 usable of 303 across
+every DSL file in the tree (`crosscheck/FOUR_FORMS_TRUTH.md`) — so on the fourth
+form the visibility mechanism this paragraph describes was not degraded but
+inoperative. It is guarded in code now rather than assumed: the generator
+parses its own output before shipping and refuses, with a written reason, what
+it cannot translate, and the live arm's `theoria-arm/inner/books.py` turns red
+on an undeclared PDDL failure. §11.3 has the numbers on both sides of the
+repair; §3's planning results never ran through that backend.
 
 Two constraints matter for reading the results below.
 

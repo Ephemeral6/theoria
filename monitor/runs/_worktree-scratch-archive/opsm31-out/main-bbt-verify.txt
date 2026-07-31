@@ -1,0 +1,8 @@
+DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+       sections that moved: balance, citations, pool, verdict
+       `pool`/`balance` moved => THE BALANCE MOVED. A frozen
+       budget table with a stale balance is the failure this
+       gate exists to catch. Regenerate and re-read it.
+DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+CITATION DRIFT: freeze/STATS_RULES.md:777, freeze/STATS_RULES.md:791
+RC=1

@@ -1,0 +1,82 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "aa137d1e-76a2-482b-a8eb-ba42bc16b4c3",
+  "ended": "2026-07-27T17:18:55Z",
+  "error": "None",
+  "evidence": [
+    {
+      "bytes": 2295,
+      "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+      "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+      "stability": "fixed",
+      "tracked": true
+    },
+    {
+      "bytes": 5641570,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71",
+      "stability": "append_only",
+      "tracked": true
+    },
+    {
+      "bytes": 1389481,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:c40c33cde39dea3075ad60fe8c5af29c7ee6e806ad47246e41b0976b3cb6a6ee",
+      "stability": "append_only",
+      "tracked": true
+    }
+  ],
+  "game_id": "sk48-d8078629",
+  "id": "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 1,
+    "model_call": 1,
+    "other": 0
+  },
+  "model": "claude-sonnet-5",
+  "outcome": "model_error",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "cost_usd": 0.10029869999999999,
+    "http_calls_gameplay": 0,
+    "levels_completed": 0,
+    "model_calls": 1,
+    "wall_seconds": 38.4
+  },
+  "started": "2026-07-27T17:18:20Z",
+  "summary": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 11730,
+    "cache_read_tokens": 24009,
+    "card_id": "aa137d1e-76a2-482b-a8eb-ba42bc16b4c3",
+    "cost_usd": 0.10029869999999999,
+    "ended": "2026-07-27T17:18:55Z",
+    "error": "None",
+    "final_state": null,
+    "game_id": "sk48-d8078629",
+    "http_amplification": null,
+    "http_calls_gameplay": 0,
+    "input_tokens": 2,
+    "levels_completed": 0,
+    "model": "claude-sonnet-5",
+    "model_calls": 1,
+    "outcome": "model_error",
+    "output_tokens": 1514,
+    "reset_attempts": 2,
+    "run_id": "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+    "started": "2026-07-27T17:18:20Z",
+    "wall_seconds": 38.4,
+    "win_levels": 8
+  },
+  "superseded_by_rerun": true
+}

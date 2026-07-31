@@ -1,0 +1,177 @@
+ M monitor/accounts.log
+ M monitor/accounts_state.json
+ M monitor/board/board.log
+ D monitor/board/claimed/C13-certificate-bridge-two-halves.W-1700.md
+ D monitor/board/claimed/C14-four-forms-is-three-and-a-half.W-1701.md
+ D monitor/board/claimed/S31-a10-said-done-prove-it.W-1702.md
+ D monitor/board/claimed/S39-S39-writes-into-the-live-master-tree.RES-4.md
+ M monitor/board/items/E18-survey-numbers-reproducible.md
+ D monitor/board/items/S40-S40-fleetkit-fork-has-drifted.md
+ M monitor/bus/OPS-A/cursor.json
+ M monitor/bus/OPS-A/out.jsonl
+ M monitor/bus/OPS-M/cursor.json
+ M monitor/bus/OPS-M/out.jsonl
+ M monitor/bus/RES-1/cursor.json
+ M monitor/bus/RES-1/out.jsonl
+ M monitor/bus/RES-2/cursor.json
+ M monitor/bus/RES-2/out.jsonl
+ M monitor/bus/RES-3/cursor.json
+ M monitor/bus/RES-3/out.jsonl
+ M monitor/bus/RES-4/cursor.json
+ M monitor/bus/RES-4/in.jsonl
+ M monitor/bus/RES-4/out.jsonl
+ M monitor/ci/CONFLICT-origin_agent_a3-campaign-devpile.md
+ M monitor/ci/CONFLICT-origin_agent_e8-ic3-scale.md
+ M monitor/ci/CONFLICT-origin_agent_r3-release-classifier-defaults.md
+ M monitor/ci/CONFLICT-origin_agent_r4-ruling-path.md
+ D monitor/ci/CONFLICT-origin_agent_s11-sealed-halfguard.md
+ M monitor/ci/CONFLICT-origin_agent_s4-e23-tiers.md
+ M monitor/ci/CONFLICT-origin_agent_s4-freeze.md
+ M monitor/ci/CONFLICT-origin_agent_v5-battery-freeze.md
+ M monitor/ci/merge.log
+ M monitor/index.html
+ M monitor/mailbox/OPS-A.md
+ M monitor/mailbox/OPS-M.md
+ M monitor/mailbox/RES-1.md
+ M monitor/mailbox/RES-2.md
+ M monitor/ops-status/OPS-A.json
+ M monitor/ops-status/OPS-M.json
+ M monitor/ops-status/RES-1.json
+ M monitor/ops-status/RES-2.json
+ M monitor/ops-status/RES-3.json
+ M monitor/ops-status/RES-4.json
+ M monitor/quota_state.json
+ M monitor/reflex.log
+ M monitor/spec.py
+ M monitor/standing.log
+ M monitor/standing_state.json
+ M monitor/state.json
+ M release/runs/20260728T234923Z-S23/after/contamination.planted.txt
+ M release/runs/20260728T234923Z-S23/before/contamination.planted.txt
+?? .claude/
+?? .mongate_clean.log
+?? "C\357\200\272UsersuserDesktoptheoriamonitorpermtest.txt"
+?? monitor/board/claimed/S43-S43-three-guards-reverted.RES-4.md
+?? monitor/board/done/C13-certificate-bridge-two-halves.W-1700.md
+?? monitor/board/done/S39-S39-writes-into-the-live-master-tree.RES-4.md
+?? monitor/board/done/S40-S40-fleetkit-fork-has-drifted.RES-4.md
+?? monitor/board/done/S41-S41-prior-work-scans-one-of-two.RES-4.md
+?? monitor/board/done/S42-S42-fleetkit-three-lies.RES-4.md
+?? monitor/board/items/A3-A17-armversion-reads-all-refs.md
+?? monitor/board/items/C14-four-forms-is-three-and-a-half.md
+?? monitor/board/items/S31-a10-said-done-prove-it.md
+?? monitor/ci/CONFLICT-origin_agent_c13-certificate-bridge-two-halves.md
+?? monitor/ci/CONFLICT-origin_agent_p18-audits-cover-half-onmaster.md
+?? monitor/ci/CONFLICT-origin_agent_s38-append-only-probe-branch-blind.md
+?? monitor/ci/CONFLICT-origin_agent_s39-writes-into-the-live-master-tree.md
+?? monitor/ci/CONFLICT-origin_agent_s40-fleetkit-fork-has-drifted.md
+?? monitor/ci/CONFLICT-origin_agent_s41-prior-work-scans-one-of-two.md
+?? monitor/ci/CONFLICT-origin_agent_s42-fleetkit-three-lies.md
+?? monitor/ci/CONFLICT-origin_agent_v6-v23-large-space-verdict-gap.md
+?? monitor/ci/archive/CONFLICT-origin_agent_opsa-c48-three-findings-already-filed.20260730T052720Z.md
+?? monitor/ci/archive/CONFLICT-origin_agent_opsm-c26-never-tried-branches-tie-at-zero.20260730T101415Z.md
+?? monitor/ci/archive/CONFLICT-origin_agent_p18-audits-cover-half-the-paper.20260730T110904Z.md
+?? monitor/ci/archive/CONFLICT-origin_agent_s11-sealed-halfguard.20260730T045635Z.md
+?? monitor/inbox/2026-07-29T1430Z-W-1672-worktrees-hold-the-only-copy-of-paid-runs.md
+?? monitor/inbox/2026-07-29T160016Z-W-131-board-empty-is-territory-locked.md
+?? monitor/inbox/2026-07-29T160040Z-W-1630-board-empty-and-e8-resurrected.md
+?? monitor/inbox/2026-07-29T160041Z-W-1660-list-hides-8-of-11-open-items.md
+?? monitor/inbox/2026-07-29T160500Z-W-2402-seven-workers-wrote-the-same-note-in-two-minutes.md
+?? monitor/inbox/20260729T0545Z-RES-1-e5-cost-per-action-counts-the-reset.md
+?? monitor/inbox/20260729T0546Z-RES-1-figures-pins-another-tracks-living-document.md
+?? monitor/inbox/20260729T0555Z-RES-1-the-dollar-model-is-not-fine-and-the-zero-proves-nothing.md
+?? monitor/inbox/20260729T0635Z-RES-4-s22-third-release.md
+?? monitor/inbox/20260729T071500Z-RES-1-a3-playbook-does-not-parse.md
+?? monitor/inbox/20260729T091000Z-RES-3-handoff.md
+?? monitor/inbox/20260729T100000Z-W-1670-a14-cross-territory-consequences.md
+?? monitor/inbox/20260729T101500Z-OPS-R-nothing-in-the-harness-observes-the-monitor.md
+?? monitor/inbox/20260729T101800Z-OPS-R-this-cycle-found-nothing-new-and-two-of-my-last-three-were-rediscoveries.md
+?? monitor/inbox/20260729T102000Z-RES-2-fig06-docstring-count.md
+?? monitor/inbox/20260729T110500Z-RES-2-i-edited-master-working-tree.md
+?? monitor/inbox/20260729T1120Z-RES-3-proposal-V24-exam-verify-repairs-staleness.md
+?? monitor/inbox/20260729T1145Z-RES-3-two-findings-outside-my-territory.md
+?? monitor/inbox/20260729T1150Z-RES-3-handoff.md
+?? monitor/inbox/20260729T121500Z-RES-2-verify-paper-cannot-see-an-uncited-number.md
+?? monitor/inbox/20260729T1310Z-RES-1-merge-queue-silent.md
+?? monitor/inbox/20260729T133000Z-W-1660-e8-ic3-bounds-touches-a-paper-sentence.md
+?? monitor/inbox/20260729T1440Z-RES-1-worktree-cwd-green-on-the-wrong-tree.md
+?? monitor/inbox/20260729T153000Z-RES-3-e15-and-e17-merge-clean-but-do-not-run.md
+?? monitor/inbox/20260729T154500Z-W-1671-battery-v22-two-stale-artifacts.md
+?? monitor/inbox/20260729T1556Z-RES-3-board-worker-id-accepts-flags.md
+?? monitor/inbox/20260729T160000Z-W-1660-e8-the-null-space-half-does-not-hold.md
+?? monitor/inbox/20260729T1600Z-W-1640-board-empty-but-nine-items-queued.md
+?? monitor/inbox/20260729T1600Z-W-2400-board-empty-but-eleven-items-on-it.md
+?? monitor/inbox/20260729T1600Z-W-251-board-empty-all-eleven-items-are-reserved-or-territory-blocked.md
+?? monitor/inbox/20260729T1602Z-W-1621-board-empty-for-generic-workers.md
+?? monitor/inbox/20260729T160554Z-W-1672-e8-is-one-ruling-from-landing-not-a-redo.md
+?? monitor/inbox/20260729T1605Z-W-1661-claim-warning-never-reads-done.md
+?? monitor/inbox/20260729T160750Z-W-250-sweep-dry-is-not-a-dry-run.md
+?? monitor/inbox/20260729T160802Z-W-1641-sweep-dies-on-the-double-claim.md
+?? monitor/inbox/20260729T160825Z-W-1631-released-by-on-a-laned-item-is-a-permanent-deadlock.md
+?? monitor/inbox/20260729T160829Z-W-1622-the-spend-gate-has-a-lane-shaped-hole.md
+?? monitor/inbox/20260729T1609Z-W-1632-git-is-a-second-writer-to-the-board.md
+?? monitor/inbox/20260729T161200Z-W-252-e18-has-s22-shape-nobody-can-claim-it.md
+?? monitor/inbox/20260729T161447Z-W-1642-an-unrecognised-lane-reopens-the-spend-gate.md
+?? monitor/inbox/20260729T161500Z-W-130-e8-was-never-reopened-the-board-never-committed-that-it-closed.md
+?? monitor/inbox/20260729T161500Z-W-1650-the-one-line-fix-is-safe-to-land.md
+?? monitor/inbox/20260729T1615Z-W-1670-an-item-released-by-its-own-lane-owner-is-claimable-by-nobody.md
+?? monitor/inbox/20260729T1615Z-W-1671-two-items-claimable-by-nobody.md
+?? monitor/inbox/20260729T161955Z-W-2401-hold-cap-is-counted-from-a-number-git-can-inflate-and-four-items-exist-only-on-this-disk.md
+?? monitor/inbox/20260729T173500Z-opsm-every-stuck-branch-is-recorded-as-finished.md
+?? monitor/inbox/20260729T174500Z-opsm-v5-correction-the-freeze-is-not-what-blocks-it.md
+?? monitor/inbox/20260729T174800Z-opsm-s11-ruling-confirmed-under-attack-and-the-fix-is-verified.md
+?? monitor/inbox/20260729T175500Z-opsm-a3-sat-13-hours-on-master-s-red-and-the-real-one-is-semantic.md
+?? monitor/inbox/20260729T180500Z-RES-2-figures-red-is-masters-and-holds-a-papers-branch-forever.md
+?? monitor/inbox/20260729T181000Z-opsm-a-branch-was-gated-on-eight-territories-it-never-touched.md
+?? monitor/inbox/20260729T182000Z-W-1681-figures-4-5-6-promote-ruling.md
+?? monitor/inbox/20260729T182600Z-opsm-the-liveness-probe-i-asked-for-would-watch-the-wrong-file.md
+?? monitor/inbox/20260729T184500Z-opsm-v5-i-corrected-a-wrong-reason-with-another-wrong-reason.md
+?? monitor/inbox/20260729T185000Z-opsm-s11-i-measured-a-dominance-and-declined-to-state-it.md
+?? monitor/inbox/20260729T191000Z-opsm-i-almost-escalated-a-documented-feature-as-a-defect.md
+?? monitor/inbox/20260729T1950Z-RES-1-price-unpriced-holes.md
+?? monitor/inbox/20260729T2110Z-RES-1-cost-alias-gap.md
+?? monitor/inbox/20260729T2110Z-RES-1-the-4usd-was-for-a-call-that-never-happened.md
+?? monitor/inbox/20260729T2148Z-opsm-the-release-gate-is-green-because-nobody-opens-the-files.md
+?? monitor/inbox/20260729T2150Z-opsm-v5-and-s4-are-blocked-on-each-other-and-the-pin-was-1-of-36.md
+?? monitor/inbox/20260729T2153Z-opsm-a3-was-flagged-ten-times-for-a-break-master-landed-on-purpose.md
+?? monitor/inbox/20260729T2154Z-opsm-cmd-done-records-no-branch-so-the-shipped-probe-has-a-false-positive-and-a-blind-spot.md
+?? monitor/inbox/20260729T2200Z-opsm-i-spent-this-cycle-restating-a-ruling-my-own-later-note-had-already-retracted.md
+?? monitor/inbox/20260729T2212Z-opsm-there-was-a-fourth-option-and-it-is-green-do-not-bypass-the-release-gate.md
+?? monitor/inbox/20260729T2214Z-opsm-v21-must-not-land-the-merged-gate-goes-silent-exactly-where-master-fires.md
+?? monitor/inbox/20260729T2215Z-RES-1-the-sealed-main-table-does-not-fit-the-money.md
+?? monitor/inbox/20260729T2235Z-RES-4-mutation-must-not-run-in-a-live-worktree.md
+?? monitor/inbox/20260729T2240Z-RES-4-s37-parked-headcount-spends-money.md
+?? monitor/inbox/20260729T2255Z-RES-1-board-py-crashes-printing-the-item-it-just-claimed.md
+?? monitor/inbox/20260729T231500Z-RES-2-negative-sample-shadowed-by-prose.md
+?? monitor/inbox/20260729T233000Z-RES-2-a-new-gate-silently-retires-the-old-one.md
+?? monitor/inbox/20260729T235719Z-RES-3-board-claim-eats-option-flags.md
+?? monitor/inbox/20260730T0015Z-opsm-v25-masters-halt-was-a-false-positive-and-that-undermines-my-v21-ruling-too.md
+?? monitor/inbox/20260730T0105Z-RES-1-power-gate-cheapest-blocker.md
+?? monitor/inbox/20260730T0106Z-RES-1-15b-green-is-an-instant.md
+?? monitor/inbox/20260730T0300Z-RES-3-worldgen-cannot-host-a-large-space-world.md
+?? monitor/inbox/20260730T0301Z-RES-3-lp-potential-certifies-a-solvable-level.md
+?? monitor/inbox/20260730T0315Z-RES-2-a-line-anchor-into-a-growing-log-is-wrong-when-committed.md
+?? monitor/inbox/20260730T032120Z-opsm-r3-r4-the-signature-you-are-being-asked-for-is-smaller-than-two-of-us-told-you.md
+?? monitor/inbox/20260730T035500Z-W-1693-paper-says-unrepaired-about-a-line-repaired-on-master.md
+?? monitor/inbox/20260730T035536Z-opsm-r3-r4-are-red-on-their-own-merits-and-r4-swallows-r3.md
+?? monitor/inbox/20260730T040713Z-opsm-a-housekeeping-tag-is-a-write-into-every-arm-manifest.md
+?? monitor/inbox/20260730T040758Z-opsm-a3-the-arm-gate-is-red-on-clean-master-and-a3-cannot-fix-it.md
+?? monitor/inbox/20260730T041222Z-opsm-s11-ruling-amended-the-conclusion-stands-the-exhibit-i-chose-does-not.md
+?? monitor/inbox/20260730T041353Z-opsm-e8-and-freeze-two-gates-that-fail-for-reasons-outside-the-branch.md
+?? monitor/inbox/20260730T045622Z-opsm-every-never-tried-branch-ties-at-zero-so-the-tie-breaks-on-the-alphabet.md
+?? monitor/inbox/20260730T051344Z-opsm-URGENT-the-sealed-guard-bypass-is-live-on-master-and-my-own-ruling-named-it-wrong.md
+?? monitor/inbox/20260730T0530Z-RES-4-claude-worktrees-ignored-only-locally.md
+?? monitor/inbox/20260730T0532Z-RES-4-should-the-precommit-hook-be-installed-fleetwide.md
+?? monitor/inbox/20260730T0625Z-RES-3-adversarial-checks-need-a-stated-predicate.md
+?? monitor/inbox/20260730T070500Z-RES-3-name-the-evidence-class-of-every-number.md
+?? monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md
+?? monitor/inbox/20260730T0840Z-RES-1-a-rederived-view-lives-inside-an-immutable-record.md
+?? monitor/inbox/20260730T1000Z-RES-4-six-worktree-blind-spots-in-five-territories-not-mine.md
+?? monitor/inbox/20260730T1240Z-RES-1-the-seal-conjunct-is-a-trade-not-a-bug.md
+?? monitor/inbox/opsm-worktree-salvage-manifest.txt
+?? monitor/res/RES-3-notes/
+?? scratchpad/
+?? theoria-arm/runs/20260729T2040Z-A3-unpriced/
+?? theoria-arm/runs/pytest-count-test_the_scorecard_action_coun0/
+?? theoria-arm/runs/pytest-test_the_shell_turns_end_to_en0/
+?? worldgen/out/qc/t2-lock-fragile/engines_report.json

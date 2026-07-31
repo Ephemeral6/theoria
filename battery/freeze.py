@@ -114,6 +114,7 @@ CODE = [
     "battery/audit/discriminate.py",
     "battery/audit/gaming.py",
     "battery/audit/redundancy.py",
+    "battery/audit/live_tiers.py",
     "battery/audit/stats.py",
     "battery/audit/validation.py",
     # exploits are not documentation: tier_of() prefers a demonstrated
@@ -175,6 +176,7 @@ SUITE = [
     "battery/tests/test_exploits_mechanism_epistemic.py",
     "battery/tests/test_freeze.py",
     "battery/tests/test_guard.py",
+    "battery/tests/test_live_tiers.py",
     "battery/tests/test_metrics.py",
     "battery/tests/test_v9_blinding.py",
     "battery/tests/test_v9_defences.py",
@@ -189,6 +191,10 @@ FREEZE = [
 ]
 
 # Recorded, reported on drift, and deliberately NOT gated. See module docstring.
+# `artifacts_live/` is in here too: the live-tier companion is a reading of the
+# live code, and verify.py's rung 6 is what gates it (against a recompute, not
+# against this record) — gating it here as well would demand a freeze version
+# per legitimate regeneration.
 READINGS = [
     "battery/artifacts/arm_contrast.json",
     "battery/artifacts/capability_spectrum.json",
@@ -197,6 +203,7 @@ READINGS = [
     "battery/artifacts/gaming_audit.json",
     "battery/artifacts/redundancy.json",
     "battery/artifacts/validation_material.json",
+    "battery/artifacts_live/gaming_audit.live.json",
 ]
 
 PREREG = "battery/PREDICTIONS.md"

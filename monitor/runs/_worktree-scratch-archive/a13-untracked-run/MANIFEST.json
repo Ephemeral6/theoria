@@ -1,0 +1,25 @@
+{
+  "prompt_id": "A13-sealed-audit-reads-the-wrong-fields",
+  "branch": "agent/a13-sealed-audit-reads-the-wrong-fields",
+  "base_commit": "cdc18c00d66dfe4fe56d82cac57dee4dbe27acab",
+  "utc": "2026-07-29T15:15Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "arc-recon",
+  "api_calls": 0,
+  "network": "none",
+  "sealed_pile_contact": "none",
+  "files": [
+    "arc-recon/sealed.py",
+    "arc-recon/contamination.py",
+    "arc-recon/cascade/verify.py",
+    "arc-recon/precheck.py",
+    "arc-recon/test_sealed_audit_negatives.py",
+    "arc-recon/verify.sh",
+    "arc-recon/README.md",
+    "arc-recon/data/claim_set.json"
+  ],
+  "tests": {
+    "test_sealed_audit_negatives.py": "33 passed"
+  }
+}

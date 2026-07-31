@@ -1,0 +1,24 @@
+{
+  "budget": 30,
+  "coverage": "28/148",
+  "coverage_fraction": 0.1892,
+  "covered_pairs": 28,
+  "frames": 31,
+  "reachable_states": 37,
+  "rules_never_witnessed": {
+    "blocked_by_door": 4,
+    "blocked_by_wall": 26,
+    "press_latch": 1,
+    "walk": 85,
+    "walk_through_door": 4
+  },
+  "rules_witnessed": {
+    "blocked_by_wall": 6,
+    "latch_already_set": 2,
+    "press_latch": 1,
+    "walk": 21
+  },
+  "state_action_pairs": 148,
+  "transitions": 30,
+  "win_frames": []
+}

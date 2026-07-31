@@ -1,0 +1,62 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": "conditional \u2014 the rule is re-witnessable iff the agent can walk back to the mouth",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "teleport_oneway",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "blocked_portal_exit",
+      "verdict": "unreachable"
+    }
+  ],
+  "components": 2,
+  "reachable_states": 26,
+  "reversibility_score": 1.0,
+  "rules": {
+    "blocked_by_wall": {
+      "firing_states": 26,
+      "firing_transitions": 54,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "teleport_oneway": {
+      "firing_states": 2,
+      "firing_transitions": 2,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 26,
+      "firing_transitions": 48,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 3,
+  "rules_single_witness": [],
+  "rules_total": 3
+}

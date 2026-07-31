@@ -205,7 +205,13 @@ PAPER_FIGURES: tuple[PaperFigure, ...] = (
             "median normalised within its row and oriented so that further along the "
             "ramp is always better. The empty cells are the result as much as the "
             "full ones: structural absences are hatched and insufficient data is "
-            "outlined, and neither is ever drawn as a zero."
+            "outlined, and neither is ever drawn as a zero. The tier column and the "
+            "dagger markers are the frozen 2026-07-28 baseline "
+            "(`battery/artifacts/gaming_audit.json`, kept unrewritten per "
+            "PREREG_V9 §5); the live audit has since demoted every remaining "
+            "main-table metric to reference -- the current per-metric tiers and "
+            "the frozen-vs-live diff are in "
+            "`battery/artifacts_live/gaming_audit.live.json`."
         ),
         run_refs=(
             RunRef("json_value", "capability_spectrum", "battery version", pointer="battery_version"),

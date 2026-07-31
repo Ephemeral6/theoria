@@ -193,16 +193,27 @@ def load_cells(campaign: Optional[str] = None) -> List[Dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------- gate
-def elapsed_seconds(cells: List[Dict[str, Any]]) -> Optional[float]:
-    """Real time since the first cell started, in seconds."""
+def elapsed_seconds(cells: List[Dict[str, Any]],
+                    now: Optional[float] = None) -> Optional[float]:
+    """Real time since the first cell started, in seconds.
+
+    `now` is an injectable wall clock (epoch seconds), defaulting to the real
+    one. Without it G6a is untestable: the clause reads the machine's clock, so
+    a test can only assert what a real elapsed span happens to be right now, and
+    the clause could be deleted outright with the suite staying green. Ported
+    from the P-12 branch, which is the branch that proved it (that branch's
+    replacement clock design was not adopted -- see DECISIONS.md D-022 -- but
+    this parameter is orthogonal to which clock the gate keeps).
+    """
     stamps = [c.get("started") for c in cells if c.get("started")]
     if not stamps:
         return None
     first = time.strptime(min(stamps), "%Y-%m-%dT%H:%M:%SZ")
-    return time.time() - time.mktime(first) + time.timezone
+    return (time.time() if now is None else now) - time.mktime(first) + time.timezone
 
 
-def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
+def evaluate_gate(cells: List[Dict[str, Any]],
+                  now: Optional[float] = None) -> Dict[str, Any]:
     """Returns {"state": "green"|"red", "tripped": [...], "totals": {...}}.
 
     Deliberately computed from the persisted cell records rather than from
@@ -265,7 +276,7 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
     # cell. Measured across an adjudicated stop it would count the stop itself,
     # which is a duration nobody spent and nothing was running for. G6b below
     # is the work-done clock and keeps summing every cell ever recorded.
-    elapsed = elapsed_seconds(judged)
+    elapsed = elapsed_seconds(judged, now=now)
     if elapsed is not None and elapsed > ELAPSED_SECONDS_CAP:
         tripped.append("G6a elapsed %.1f h > cap %.1f h"
                        % (elapsed / 3600, ELAPSED_SECONDS_CAP / 3600))
@@ -303,8 +314,8 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             "compute_seconds": round(total_wall, 1),
             "elapsed_seconds": round(elapsed, 1) if elapsed is not None else None,
             "elapsed_seconds_all_cells": (
-                round(elapsed_seconds(cells), 1)
-                if elapsed_seconds(cells) is not None else None),
+                round(elapsed_seconds(cells, now=now), 1)
+                if elapsed_seconds(cells, now=now) is not None else None),
             "http_per_action": round(total_http / total_ok, 2) if total_ok else None,
             "action_success_rate": (round(total_ok / (total_ok + total_failed), 3)
                                     if (total_ok + total_failed) else None),
@@ -335,7 +346,12 @@ def gate_path(campaign: str = CAMPAIGN_NAME) -> str:
 
 def write_gate(gate: Dict[str, Any], campaign: str = CAMPAIGN_NAME) -> None:
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(gate_path(campaign), "w", encoding="utf-8") as fh:
+    # newline="\n": on Windows the default translates to CRLF, and .gitattributes
+    # then normalises it back on the way into git -- so the file on disk and the
+    # file in the tree differ byte for byte, with no error anywhere. Determinism
+    # is a requirement here, not a nicety (CLAUDE.md conventions), so write LF
+    # directly. Ported from the P-12 branch; independent of the gate's design.
+    with open(gate_path(campaign), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(gate, fh, indent=2, sort_keys=True)
     ledger.probe("campaign_gate", {"campaign": campaign, "state": gate["state"],
                                    "tripped": gate["tripped"],

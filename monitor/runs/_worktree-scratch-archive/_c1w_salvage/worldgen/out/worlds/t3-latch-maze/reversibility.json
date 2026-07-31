@@ -1,0 +1,179 @@
+{
+  "claim_disagreements": [
+    "collect_token"
+  ],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": false,
+      "measured": 1,
+      "re_witnessable": false,
+      "rule": "press_latch",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "latch_already_set",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk_through_door",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_door",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": null,
+      "re_witnessable": null,
+      "rule": "door_mirrors_net",
+      "verdict": "unreachable"
+    },
+    {
+      "claimed": false,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "collect_token",
+      "verdict": "DISAGREES"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk_through_lock",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_lock",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": false,
+      "measured": 1,
+      "re_witnessable": false,
+      "rule": "cross_fragile",
+      "verdict": "agrees"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_collapsed",
+      "verdict": "agrees"
+    }
+  ],
+  "components": 26,
+  "reachable_states": 436,
+  "reversibility_score": 0.8182,
+  "rules": {
+    "blocked_by_collapsed": {
+      "firing_states": 10,
+      "firing_transitions": 10,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_door": {
+      "firing_states": 10,
+      "firing_transitions": 10,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_lock": {
+      "firing_states": 25,
+      "firing_transitions": 25,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 436,
+      "firing_transitions": 740,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "collect_token": {
+      "firing_states": 33,
+      "firing_transitions": 33,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "cross_fragile": {
+      "firing_states": 7,
+      "firing_transitions": 7,
+      "max_witnesses": 1,
+      "re_witnessable": false,
+      "single_witness": true
+    },
+    "latch_already_set": {
+      "firing_states": 19,
+      "firing_transitions": 19,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "press_latch": {
+      "firing_states": 12,
+      "firing_transitions": 12,
+      "max_witnesses": 1,
+      "re_witnessable": false,
+      "single_witness": true
+    },
+    "walk": {
+      "firing_states": 436,
+      "firing_transitions": 858,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_door": {
+      "firing_states": 18,
+      "firing_transitions": 18,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_lock": {
+      "firing_states": 12,
+      "firing_transitions": 12,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 9,
+  "rules_single_witness": [
+    "cross_fragile",
+    "press_latch"
+  ],
+  "rules_total": 11
+}

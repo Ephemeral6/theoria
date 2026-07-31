@@ -1,0 +1,371 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    7,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 462,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 462,
+      "verified": true
+    },
+    {
+      "holds": false,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 462,
+      "verified": true,
+      "violations": [
+        {
+          "state": [
+            1,
+            1,
+            [
+              31,
+              0
+            ]
+          ]
+        },
+        {
+          "state": [
+            1,
+            1,
+            [
+              46,
+              0
+            ]
+          ]
+        },
+        {
+          "state": [
+            1,
+            1,
+            [
+              46,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 462,
+      "verified": true
+    },
+    {
+      "holds": false,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 462,
+      "verified": true,
+      "violations": [
+        {
+          "state": [
+            3,
+            4,
+            [
+              30,
+              0
+            ]
+          ]
+        },
+        {
+          "state": [
+            3,
+            4,
+            [
+              32,
+              0
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "invariants_all_hold": false,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "door": 5,
+    "floor": 0,
+    "switch": 3,
+    "switch_on": 4,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "toggle_switch",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 12,
+    "reachable_states": 462,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 12,
+        "firing_transitions": 12,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_door": {
+        "firing_states": 18,
+        "firing_transitions": 18,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 462,
+        "firing_transitions": 884,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 26,
+        "firing_transitions": 26,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "toggle_switch": {
+        "firing_states": 30,
+        "firing_transitions": 30,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 458,
+        "firing_transitions": 860,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 18,
+        "firing_transitions": 18,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 7,
+    "rules_single_witness": [],
+    "rules_total": 7
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    },
+    {
+      "name": "toggle_switch",
+      "reversible": true,
+      "then": "that switch's bit flips 0\u21941 and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in toggle mode"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 24,
+    "goal": [
+      3,
+      7
+    ],
+    "optimal_length": 8,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 462,
+    "solvable": true,
+    "world_id": "t2-switch-push"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2,
+      "door": 5,
+      "switch": 3,
+      "switch_on": 4
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          2
+        ],
+        "kind": "block",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "toggle",
+          "net": "a"
+        }
+      }
+    ],
+    "families": [
+      "push",
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      3,
+      7
+    ],
+    "layout": [
+      "#########",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "Two families that interact through geometry only: the block can be parked in front of the door, which is a configuration no single-family world can produce.",
+    "seed": 201,
+    "tier": 2,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t2-switch-push"
+  },
+  "world_id": "t2-switch-push"
+}

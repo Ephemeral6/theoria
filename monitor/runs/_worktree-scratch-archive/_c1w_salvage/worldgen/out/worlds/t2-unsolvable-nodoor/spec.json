@@ -1,0 +1,44 @@
+{
+  "agent_start": [
+    2,
+    2
+  ],
+  "colors": {
+    "door": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    }
+  ],
+  "families": [
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "layout": [
+    "#######",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#######"
+  ],
+  "notes": "cold-start-a0's unsolvable variant, generalised: a door on an empty net never opens. Ships an exhaustive-reachability certificate and names the entity whose removal would flip it.",
+  "seed": 207,
+  "tier": 2,
+  "variant_delta": "the switch is deleted, so the door's net has no driver",
+  "variant_of": "t1-switch-toggle",
+  "world_id": "t2-unsolvable-nodoor"
+}

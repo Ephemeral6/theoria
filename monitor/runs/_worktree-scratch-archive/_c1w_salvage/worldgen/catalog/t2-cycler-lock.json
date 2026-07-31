@@ -1,0 +1,73 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "cycler": 4,
+    "cycler_1": 5,
+    "lock": 3,
+    "token": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        1,
+        7
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        2
+      ],
+      "kind": "cycler",
+      "props": {
+        "k": 2,
+        "open_phase": 1
+      }
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "lock",
+      "props": {
+        "k": 2
+      }
+    }
+  ],
+  "families": [
+    "color_cycle",
+    "count_lock"
+  ],
+  "flags": {},
+  "goal": [
+    3,
+    7
+  ],
+  "layout": [
+    "#########",
+    "#.......#",
+    "#.#####.#",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "One reversible gate and one monotone one, side by side, so the reversibility stamp has to separate them within a single world.",
+  "seed": 206,
+  "tier": 2,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t2-cycler-lock"
+}

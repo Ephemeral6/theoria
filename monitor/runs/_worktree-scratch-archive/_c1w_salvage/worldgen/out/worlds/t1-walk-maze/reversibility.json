@@ -1,0 +1,41 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    }
+  ],
+  "components": 1,
+  "reachable_states": 24,
+  "reversibility_score": 1.0,
+  "rules": {
+    "blocked_by_wall": {
+      "firing_states": 24,
+      "firing_transitions": 48,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 24,
+      "firing_transitions": 48,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 2,
+  "rules_single_witness": [],
+  "rules_total": 2
+}

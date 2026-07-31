@@ -16,6 +16,16 @@ Rung 4 was added by V22, after a cell whose maximum attainable score was zero
 was carried elsewhere as 60%.  Rungs 1-3 were green the whole time and would
 have stayed green: nothing in them reads a sentence.
 
+Two rungs sit on top of those four.  The freeze rung (printed first) checks the
+tree still matches BATTERY_V1.md.  The live-tier rung (printed last) checks the
+committed `battery/artifacts_live/gaming_audit.live.json` against an in-process
+recompute and against the frozen baseline it pins: the frozen
+`battery/artifacts/gaming_audit.json` predates B17/V9 and still names nine
+main-table metrics the live code demotes, PREREG_V9 §5 forbids rewriting it,
+and the divergence is therefore a documented permanent fact — REPORTED
+exit-code-neutrally, while the things that can rot around it (a stale
+companion, a rewritten baseline, a vanished STATUS.md disclosure) are RED.
+
 Rung 3 is the one that is usually missing.  A green suite says the metrics do
 what their author thought; it does not say the recompute ran, and it does not
 say the spectrum it emitted holds any measurement at all.  The two are
@@ -141,7 +151,7 @@ def fail(problems, message):
 
 
 def rung_freeze(problems):
-    """[1/5] the freeze record: BATTERY_V1.md still describes this tree.
+    """[1/6] the freeze record: BATTERY_V1.md still describes this tree.
 
     The suite runs this same check (`test_freeze.py`), but the gate does not
     trust the suite to have been collected: one `addopts` line in `pytest.ini`
@@ -150,7 +160,7 @@ def rung_freeze(problems):
     hold on two independent paths -- V5's adversarial pass demonstrated the
     single-path version being disarmed six different ways.
     """
-    print("[1/5] the freeze record")
+    print("[1/6] the freeze record")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery import freeze
@@ -174,7 +184,7 @@ MIN_TESTS_PASSED = 300
 
 
 def rung_tests(problems):
-    print("[2/5] suite")
+    print("[2/6] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -208,7 +218,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_dir):
-    print("[3/5] one real run -- the whole spectrum recomputed from the "
+    print("[3/6] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -237,7 +247,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[4/5] artefact self-check")
+    print("[4/6] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -341,7 +351,7 @@ def rung_artifact_fields(problems, out_dir):
 
 
 def rung_separation_claim(problems):
-    """[5/5] the documents state the true separation count, and cannot go stale.
+    """[5/6] the documents state the true separation count, and cannot go stale.
 
     Added by V22.  Process 1's headline number is **zero** -- no metric
     separates the specified gradient -- and the way that number went wrong was
@@ -367,7 +377,7 @@ def rung_separation_claim(problems):
     somebody rewrites it.  A gate that could only catch the claim going too
     high would let it rot in the other direction.
     """
-    print("[5/5] the separation claim in the committed documents")
+    print("[5/6] the separation claim in the committed documents")
     path = os.path.join(SHIPPED, "discrimination_arms.json")
     if not os.path.exists(path):
         fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
@@ -452,6 +462,113 @@ def rung_separation_claim(problems):
         print("   ok    %d separating of %d judged; %d paired game(s) against "
               "the %d the sign test needs; both documents agree"
               % (len(separating), len(metrics), paired, needed))
+
+
+def rung_live_tiers(problems, live_path=None, frozen_path=None,
+                    status_path=None):
+    """[6/6] the live-tier companion tracks the code, and the freeze holds.
+
+    The frozen `battery/artifacts/gaming_audit.json` names nine main-table
+    metrics; the live `tier_of()` demotes all of them (B17, then V9).
+    `PREREG_V9.md` §5 forbids rewriting the baseline — the conflict stays in
+    the open, in `battery/artifacts_live/gaming_audit.live.json`.  This rung
+    keeps the four ways that arrangement can rot from rotting silently:
+
+    * RED if the committed companion differs from an in-process recompute —
+      the companion going stale is the same failure class as the frozen
+      artefact's, one level up, and it is the one this rung exists to catch;
+    * RED if the companion's `frozen_sha256` no longer matches the frozen
+      file on disk — someone rewrote or regenerated the baseline, which is a
+      PREREG violation either way, and a human must look before anything
+      re-pins it;
+    * the frozen-vs-live divergence itself is REPORTED, exit-code-neutrally.
+      It is a documented permanent fact; a rung that is red forever is a rung
+      people learn to ignore, which is this repo's own stated failure mode;
+    * RED if divergence exists but STATUS.md no longer carries the disclosure
+      — pinned as a derived sentence (the count read from the frozen file),
+      the way rung 5 pins STATUS_CLAIM, so the sentence must track the
+      artefact rather than merely having once been written.
+    """
+    print("[6/6] the live-tier companion artefact")
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.audit import live_tiers
+
+    live_path = live_path or live_tiers.DEFAULT_OUT
+    frozen_path = frozen_path or live_tiers.FROZEN
+    status_path = status_path or os.path.join(HERE, "STATUS.md")
+    before = len(problems)
+
+    if not os.path.exists(live_path):
+        fail(problems, "%s is absent; the live tiers have no committed form "
+                       "to check. Generate it: python -m battery.audit."
+                       "live_tiers" % live_path)
+        return
+    with open(live_path, encoding="utf-8") as fh:
+        try:
+            committed = json.load(fh)
+        except json.JSONDecodeError as exc:
+            fail(problems, "committed gaming_audit.live.json is not JSON: %s"
+                 % exc)
+            return
+
+    # (ii) first, because (i)'s verdict reads differently under a rewritten
+    # baseline: the recompute would differ *because* the pin moved.
+    actual = live_tiers.frozen_sha256(frozen_path)
+    if committed.get("frozen_sha256") != actual:
+        fail(problems, "gaming_audit.live.json pins the frozen baseline at %s "
+                       "but battery/artifacts/gaming_audit.json now hashes to "
+                       "%s. The baseline is frozen by PREREG_V9.md §5; a "
+                       "rewritten or regenerated baseline is a preregistration "
+                       "violation and needs a human, not a re-pin."
+             % (committed.get("frozen_sha256"), actual))
+
+    # (i) the committed companion against an in-process recompute.
+    fresh = live_tiers.build(frozen_path)
+    if committed != fresh:
+        changed = sorted(
+            set(k for k in set(committed) | set(fresh)
+                if committed.get(k) != fresh.get(k)))
+        fail(problems, "committed gaming_audit.live.json differs from an "
+                       "in-process recompute (top-level keys that moved: %s). "
+                       "A stale companion is the exact failure this artefact "
+                       "exists to make visible — regenerate and commit: "
+                       "python -m battery.audit.live_tiers"
+             % (", ".join(changed) or "byte-level only"))
+
+    # (iii) the divergence table.  Reported, never fatal: it is a documented
+    # permanent fact, disclosed in STATUS.md and checked below.
+    diff = fresh["diff_vs_frozen"]
+    if diff:
+        print("   note  frozen-vs-live tier divergence, %d metric(s) "
+              "(reported, not gated -- PREREG_V9 §5 keeps the frozen "
+              "baseline in place and this file in the open):" % len(diff))
+        for row in diff:
+            print("         %-4s frozen=%-9s live=%s"
+                  % (row["metric"], row["frozen"], row["live"]))
+
+    # (iv) the disclosure.  Only demanded while there is something to disclose.
+    if diff:
+        with open(frozen_path, encoding="utf-8") as fh:
+            frozen_doc = json.load(fh)
+        claim = live_tiers.STALE_CLAIM % len(frozen_doc.get("main", []))
+        try:
+            with open(status_path, encoding="utf-8") as fh:
+                status_text = fh.read()
+        except OSError as exc:
+            fail(problems, "could not read STATUS.md: %s" % exc)
+            return
+        if claim not in status_text:
+            fail(problems, "the frozen and live audits diverge on %d "
+                           "metric(s), but STATUS.md no longer carries the "
+                           "disclosure; it must contain %r verbatim, so that "
+                           "a reader of the status document cannot walk away "
+                           "with the frozen main table as the current one."
+                 % (len(diff), claim))
+
+    if len(problems) == before:
+        print("   ok    companion matches the recompute; baseline pin holds; "
+              "%d divergence(s) disclosed in STATUS.md" % len(diff))
 
 
 def _non_tied(entry):
@@ -540,13 +657,14 @@ def main():
         shutil.rmtree(scratch, ignore_errors=True)
 
     rung_separation_claim(problems)
+    rung_live_tiers(problems)
 
     print()
     if problems:
         print("battery: RED (%d problem(s))" % len(problems))
         return 1
     print("battery: green -- freeze, suite, one real run, artefact "
-          "fields, separation claim")
+          "fields, separation claim, live tiers")
     return 0
 
 

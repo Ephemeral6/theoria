@@ -1,0 +1,206 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "grid": [
+    6,
+    7
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 19,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 6 x 7",
+      "states_checked": 19,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 2 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 19,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "door": 2,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "rule": "walk_through_door",
+        "verdict": "unreachable"
+      },
+      {
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 1,
+    "reachable_states": 19,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_door": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 14,
+        "firing_transitions": 18,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 19,
+        "firing_transitions": 54,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [],
+    "rules_total": 3
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 19,
+    "goal": [
+      4,
+      5
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 19,
+    "solvable": true,
+    "world_id": "t2-unsolvable-nodoor"
+  },
+  "spec": {
+    "agent_start": [
+      2,
+      2
+    ],
+    "colors": {
+      "door": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          2,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      }
+    ],
+    "families": [
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      4,
+      5
+    ],
+    "layout": [
+      "#######",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#######"
+    ],
+    "notes": "cold-start-a0's unsolvable variant, generalised: a door on an empty net never opens. Ships an exhaustive-reachability certificate and names the entity whose removal would flip it.",
+    "seed": 207,
+    "tier": 2,
+    "variant_delta": "the switch is deleted, so the door's net has no driver",
+    "variant_of": "t1-switch-toggle",
+    "world_id": "t2-unsolvable-nodoor"
+  },
+  "world_id": "t2-unsolvable-nodoor"
+}

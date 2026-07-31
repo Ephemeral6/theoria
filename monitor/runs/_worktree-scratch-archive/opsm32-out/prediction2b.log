@@ -1,0 +1,102 @@
+start 12:41:26Z reflex.log lines=280 last=2026-07-30T08:32:21Z quota: wi
+12:41:26Z procs=[scan:35256(ppid9716,1286s) reflex:6328(ppid2360,867s) ci_merge:2592(ppid6328,758s) scan:39452(ppid36252,3s)] reflexlog=280 mergelog=2168
+12:41:58Z procs=[scan:35256(ppid9716,1318s) reflex:6328(ppid2360,898s) ci_merge:2592(ppid6328,790s) scan:39452(ppid36252,34s)] reflexlog=280 mergelog=2168
+12:42:29Z procs=[scan:35256(ppid9716,1349s) reflex:6328(ppid2360,929s) scan:39452(ppid36252,65s) scan:18472(ppid6328,14s)] reflexlog=280 mergelog=2170
+12:43:01Z procs=[scan:35256(ppid9716,1381s) reflex:6328(ppid2360,962s) scan:39452(ppid36252,98s) scan:18472(ppid6328,47s)] reflexlog=280 mergelog=2170
+12:43:33Z procs=[scan:35256(ppid9716,1413s) reflex:6328(ppid2360,993s) scan:39452(ppid36252,130s) scan:18472(ppid6328,79s)] reflexlog=280 mergelog=2170
+12:44:04Z procs=[scan:35256(ppid9716,1444s) reflex:6328(ppid2360,1025s) scan:39452(ppid36252,161s) scan:18472(ppid6328,110s)] reflexlog=280 mergelog=2170
+12:44:36Z procs=[scan:35256(ppid9716,1475s) reflex:6328(ppid2360,1056s) scan:39452(ppid36252,192s) scan:18472(ppid6328,141s)] reflexlog=280 mergelog=2170
+12:45:07Z procs=[scan:35256(ppid9716,1506s) reflex:6328(ppid2360,1087s) scan:39452(ppid36252,223s) scan:18472(ppid6328,172s)] reflexlog=280 mergelog=2170
+12:45:38Z procs=[scan:35256(ppid9716,1538s) reflex:6328(ppid2360,1118s) scan:39452(ppid36252,254s) scan:18472(ppid6328,203s)] reflexlog=280 mergelog=2170
+12:46:10Z procs=[scan:35256(ppid9716,1571s) reflex:6328(ppid2360,1151s) scan:39452(ppid36252,287s) scan:18472(ppid6328,236s)] reflexlog=280 mergelog=2170
+12:46:42Z procs=[reflex:6328(ppid2360,1184s) scan:39452(ppid36252,320s) scan:18472(ppid6328,269s)] reflexlog=280 mergelog=2170
+12:47:15Z procs=[reflex:6328(ppid2360,1215s) scan:39452(ppid36252,351s) scan:18472(ppid6328,300s)] reflexlog=280 mergelog=2170
+12:47:47Z procs=[reflex:6328(ppid2360,1247s) scan:39452(ppid36252,383s) scan:18472(ppid6328,332s)] reflexlog=280 mergelog=2170
+12:48:18Z procs=[reflex:6328(ppid2360,1278s) scan:39452(ppid36252,414s) scan:18472(ppid6328,363s)] reflexlog=280 mergelog=2170
+12:48:49Z procs=[reflex:6328(ppid2360,1309s) scan:39452(ppid36252,446s) scan:18472(ppid6328,394s)] reflexlog=280 mergelog=2170
+12:49:20Z procs=[reflex:6328(ppid2360,1340s) scan:39452(ppid36252,477s) scan:18472(ppid6328,426s)] reflexlog=280 mergelog=2170
+12:49:52Z procs=[reflex:6328(ppid2360,1372s) scan:39452(ppid36252,508s) scan:18472(ppid6328,457s)] reflexlog=280 mergelog=2170
+12:50:23Z procs=[reflex:6328(ppid2360,1404s) scan:39452(ppid36252,540s) scan:18472(ppid6328,489s) scan:31304(ppid7004,23s)] reflexlog=280 mergelog=2170
+12:50:55Z procs=[reflex:6328(ppid2360,1436s) scan:39452(ppid36252,572s) scan:18472(ppid6328,521s) scan:31304(ppid7004,55s)] reflexlog=280 mergelog=2170
+12:51:27Z procs=[reflex:6328(ppid2360,1467s) scan:39452(ppid36252,603s) scan:18472(ppid6328,552s) scan:31304(ppid7004,86s)] reflexlog=280 mergelog=2170
+12:51:58Z procs=[reflex:6328(ppid2360,1498s) scan:39452(ppid36252,634s) scan:18472(ppid6328,583s) scan:31304(ppid7004,118s)] reflexlog=280 mergelog=2170
+12:52:29Z procs=[scan:39452(ppid36252,666s) scan:31304(ppid7004,149s)] reflexlog=280 mergelog=2170
+12:53:02Z procs=[scan:39452(ppid36252,698s) scan:31304(ppid7004,181s)] reflexlog=280 mergelog=2170
+12:53:33Z procs=[scan:39452(ppid36252,730s) scan:31304(ppid7004,213s)] reflexlog=280 mergelog=2170
+12:54:05Z procs=[scan:39452(ppid36252,761s) scan:31304(ppid7004,244s)] reflexlog=280 mergelog=2170
+12:54:36Z procs=[scan:39452(ppid36252,792s) scan:31304(ppid7004,275s)] reflexlog=280 mergelog=2170
+12:55:07Z procs=[scan:39452(ppid36252,824s) scan:31304(ppid7004,307s)] reflexlog=280 mergelog=2170
+12:55:39Z procs=[scan:39452(ppid36252,856s) scan:31304(ppid7004,339s)] reflexlog=280 mergelog=2170
+12:56:12Z procs=[scan:39452(ppid36252,888s) scan:31304(ppid7004,371s) scan:41900(ppid23592,25s)] reflexlog=280 mergelog=2170
+12:56:43Z procs=[scan:39452(ppid36252,920s) scan:31304(ppid7004,403s)] reflexlog=280 mergelog=2170
+12:57:15Z procs=[scan:39452(ppid36252,951s) scan:31304(ppid7004,434s) reflex:30148(ppid2360,15s)] reflexlog=280 mergelog=2170
+12:57:48Z procs=[scan:39452(ppid36252,984s) scan:31304(ppid7004,467s) reflex:30148(ppid2360,48s)] reflexlog=280 mergelog=2170
+12:58:20Z procs=[scan:39452(ppid36252,1016s) scan:31304(ppid7004,500s) reflex:30148(ppid2360,80s)] reflexlog=280 mergelog=2170
+12:58:53Z procs=[scan:39452(ppid36252,1049s) scan:31304(ppid7004,532s) reflex:30148(ppid2360,113s)] reflexlog=280 mergelog=2170
+12:59:24Z procs=[scan:39452(ppid36252,1081s) scan:31304(ppid7004,564s) reflex:30148(ppid2360,144s) ci_merge:39280(ppid30148,16s)] reflexlog=280 mergelog=2170
+12:59:56Z procs=[scan:39452(ppid36252,1113s) scan:31304(ppid7004,596s) reflex:30148(ppid2360,177s) ci_merge:39280(ppid30148,48s)] reflexlog=280 mergelog=2170
+13:00:28Z procs=[scan:39452(ppid36252,1145s) scan:31304(ppid7004,628s) reflex:30148(ppid2360,208s) ci_merge:39280(ppid30148,80s)] reflexlog=280 mergelog=2170
+13:01:00Z procs=[scan:39452(ppid36252,1177s) scan:31304(ppid7004,660s) reflex:30148(ppid2360,240s) ci_merge:39280(ppid30148,112s)] reflexlog=280 mergelog=2170
+13:01:32Z procs=[scan:39452(ppid36252,1209s) scan:31304(ppid7004,692s) reflex:30148(ppid2360,272s) ci_merge:39280(ppid30148,144s)] reflexlog=280 mergelog=2170
+13:02:03Z procs=[scan:39452(ppid36252,1240s) scan:31304(ppid7004,723s) reflex:30148(ppid2360,304s) ci_merge:39280(ppid30148,175s)] reflexlog=280 mergelog=2170
+13:02:36Z procs=[scan:39452(ppid36252,1273s) scan:31304(ppid7004,756s) reflex:30148(ppid2360,336s) ci_merge:39280(ppid30148,208s)] reflexlog=280 mergelog=2170
+13:03:09Z procs=[scan:39452(ppid36252,1306s) scan:31304(ppid7004,789s) reflex:30148(ppid2360,369s) ci_merge:39280(ppid30148,241s)] reflexlog=280 mergelog=2172
+13:03:41Z procs=[scan:39452(ppid36252,1337s) scan:31304(ppid7004,820s) reflex:30148(ppid2360,401s) ci_merge:39280(ppid30148,272s)] reflexlog=280 mergelog=2172
+13:04:12Z procs=[scan:39452(ppid36252,1368s) scan:31304(ppid7004,851s) reflex:30148(ppid2360,431s) ci_merge:39280(ppid30148,303s)] reflexlog=280 mergelog=2172
+13:04:42Z procs=[scan:39452(ppid36252,1399s) scan:31304(ppid7004,882s) reflex:30148(ppid2360,462s) ci_merge:39280(ppid30148,334s)] reflexlog=280 mergelog=2172
+13:05:14Z procs=[scan:39452(ppid36252,1430s) scan:31304(ppid7004,914s) reflex:30148(ppid2360,494s) ci_merge:39280(ppid30148,366s)] reflexlog=280 mergelog=2172
+13:05:45Z procs=[scan:39452(ppid36252,1461s) scan:31304(ppid7004,945s) reflex:30148(ppid2360,525s) ci_merge:39280(ppid30148,396s)] reflexlog=280 mergelog=2172
+13:06:16Z procs=[scan:39452(ppid36252,1492s) scan:31304(ppid7004,976s) reflex:30148(ppid2360,556s) ci_merge:39280(ppid30148,428s)] reflexlog=280 mergelog=2172
+13:06:47Z procs=[scan:39452(ppid36252,1523s) scan:31304(ppid7004,1007s) reflex:30148(ppid2360,587s) ci_merge:39280(ppid30148,459s)] reflexlog=280 mergelog=2172
+13:07:18Z procs=[scan:39452(ppid36252,1554s) scan:31304(ppid7004,1038s) reflex:30148(ppid2360,618s) ci_merge:39280(ppid30148,489s)] reflexlog=280 mergelog=2172
+13:07:49Z procs=[scan:39452(ppid36252,1585s) scan:31304(ppid7004,1068s) reflex:30148(ppid2360,649s) ci_merge:39280(ppid30148,520s)] reflexlog=280 mergelog=2172
+13:08:20Z procs=[scan:39452(ppid36252,1616s) scan:31304(ppid7004,1099s) reflex:30148(ppid2360,680s) ci_merge:39280(ppid30148,551s)] reflexlog=280 mergelog=2172
+13:08:51Z procs=[scan:39452(ppid36252,1647s) scan:31304(ppid7004,1130s) reflex:30148(ppid2360,711s) ci_merge:39280(ppid30148,582s)] reflexlog=280 mergelog=2172
+13:09:22Z procs=[scan:39452(ppid36252,1678s) scan:31304(ppid7004,1161s) reflex:30148(ppid2360,742s) ci_merge:39280(ppid30148,613s)] reflexlog=280 mergelog=2172
+13:09:53Z procs=[scan:39452(ppid36252,1709s) scan:31304(ppid7004,1192s) reflex:30148(ppid2360,773s) ci_merge:39280(ppid30148,644s)] reflexlog=280 mergelog=2173
+13:10:24Z procs=[scan:39452(ppid36252,1740s) scan:31304(ppid7004,1223s) reflex:30148(ppid2360,803s) ci_merge:39280(ppid30148,675s)] reflexlog=280 mergelog=2174
+13:10:54Z procs=[scan:39452(ppid36252,1770s) scan:31304(ppid7004,1254s) reflex:30148(ppid2360,834s) ci_merge:39280(ppid30148,706s)] reflexlog=280 mergelog=2174
+13:11:25Z procs=[scan:39452(ppid36252,1801s) scan:31304(ppid7004,1285s) reflex:30148(ppid2360,865s) ci_merge:39280(ppid30148,736s)] reflexlog=280 mergelog=2175
+13:11:56Z procs=[scan:39452(ppid36252,1832s) scan:31304(ppid7004,1315s) reflex:30148(ppid2360,896s) ci_merge:39280(ppid30148,767s)] reflexlog=280 mergelog=2175
+13:12:27Z procs=[scan:39452(ppid36252,1863s) scan:31304(ppid7004,1346s) reflex:30148(ppid2360,926s) ci_merge:39280(ppid30148,798s)] reflexlog=280 mergelog=2176
+13:12:57Z procs=[scan:39452(ppid36252,1894s) scan:31304(ppid7004,1377s) reflex:30148(ppid2360,957s) ci_merge:39280(ppid30148,829s)] reflexlog=280 mergelog=2176
+13:13:28Z procs=[scan:39452(ppid36252,1925s) scan:31304(ppid7004,1408s) reflex:30148(ppid2360,988s) ci_merge:39280(ppid30148,860s)] reflexlog=280 mergelog=2176
+13:13:59Z procs=[scan:39452(ppid36252,1955s) scan:31304(ppid7004,1439s) reflex:30148(ppid2360,1019s) ci_merge:39280(ppid30148,890s)] reflexlog=280 mergelog=2177
+13:14:30Z procs=[scan:39452(ppid36252,1986s) scan:31304(ppid7004,1469s) reflex:30148(ppid2360,1050s) ci_merge:39280(ppid30148,921s)] reflexlog=280 mergelog=2177
+13:15:01Z procs=[scan:39452(ppid36252,2017s) scan:31304(ppid7004,1500s) reflex:30148(ppid2360,1080s) ci_merge:39280(ppid30148,952s)] reflexlog=280 mergelog=2179
+13:15:32Z procs=[scan:39452(ppid36252,2048s) scan:31304(ppid7004,1531s) reflex:30148(ppid2360,1111s) ci_merge:39280(ppid30148,983s)] reflexlog=280 mergelog=2179
+13:16:02Z procs=[scan:39452(ppid36252,2078s) scan:31304(ppid7004,1562s) reflex:30148(ppid2360,1142s) ci_merge:39280(ppid30148,1014s)] reflexlog=280 mergelog=2179
+13:16:33Z procs=[scan:39452(ppid36252,2109s) scan:31304(ppid7004,1593s) reflex:30148(ppid2360,1173s) ci_merge:39280(ppid30148,1044s)] reflexlog=280 mergelog=2179
+13:17:04Z procs=[scan:39452(ppid36252,2140s) scan:31304(ppid7004,1623s) reflex:30148(ppid2360,1204s) ci_merge:39280(ppid30148,1075s)] reflexlog=280 mergelog=2179
+13:17:35Z procs=[scan:39452(ppid36252,2171s) scan:31304(ppid7004,1654s) reflex:30148(ppid2360,1234s) ci_merge:39280(ppid30148,1106s)] reflexlog=280 mergelog=2179
+13:18:05Z procs=[scan:39452(ppid36252,2201s) scan:31304(ppid7004,1685s) reflex:30148(ppid2360,1265s) ci_merge:39280(ppid30148,1136s)] reflexlog=280 mergelog=2179
+13:18:36Z procs=[scan:39452(ppid36252,2232s) scan:31304(ppid7004,1715s) reflex:30148(ppid2360,1296s) ci_merge:39280(ppid30148,1167s)] reflexlog=280 mergelog=2179
+13:19:07Z procs=[scan:39452(ppid36252,2263s) scan:31304(ppid7004,1746s) reflex:30148(ppid2360,1327s) ci_merge:39280(ppid30148,1198s)] reflexlog=280 mergelog=2179
+13:19:38Z procs=[scan:39452(ppid36252,2294s) scan:31304(ppid7004,1777s) reflex:30148(ppid2360,1357s) ci_merge:39280(ppid30148,1229s)] reflexlog=280 mergelog=2179
+13:20:08Z procs=[scan:39452(ppid36252,2324s) scan:31304(ppid7004,1808s) reflex:30148(ppid2360,1388s) ci_merge:39280(ppid30148,1259s)] reflexlog=280 mergelog=2179
+13:20:39Z procs=[scan:39452(ppid36252,2355s) scan:31304(ppid7004,1839s) reflex:30148(ppid2360,1419s) ci_merge:39280(ppid30148,1290s)] reflexlog=280 mergelog=2180
+13:21:10Z procs=[scan:39452(ppid36252,2386s) scan:31304(ppid7004,1870s) reflex:30148(ppid2360,1450s) ci_merge:39280(ppid30148,1321s)] reflexlog=280 mergelog=2180
+13:21:41Z procs=[scan:39452(ppid36252,2417s) scan:31304(ppid7004,1900s) reflex:30148(ppid2360,1481s) ci_merge:39280(ppid30148,1352s)] reflexlog=280 mergelog=2180
+13:22:12Z procs=[scan:39452(ppid36252,2448s) scan:31304(ppid7004,1931s) reflex:30148(ppid2360,1511s) ci_merge:39280(ppid30148,1383s)] reflexlog=280 mergelog=2180
+13:22:43Z procs=[scan:39452(ppid36252,2479s) scan:31304(ppid7004,1962s) reflex:30148(ppid2360,1542s) ci_merge:39280(ppid30148,1414s)] reflexlog=280 mergelog=2180
+13:23:13Z procs=[scan:39452(ppid36252,2509s) scan:31304(ppid7004,1993s) reflex:30148(ppid2360,1573s) ci_merge:39280(ppid30148,1445s)] reflexlog=280 mergelog=2180
+13:23:44Z procs=[scan:39452(ppid36252,2540s) scan:31304(ppid7004,2023s) reflex:30148(ppid2360,1604s) ci_merge:39280(ppid30148,1475s)] reflexlog=280 mergelog=2180
+13:24:15Z procs=[scan:39452(ppid36252,2571s) scan:31304(ppid7004,2054s) reflex:30148(ppid2360,1635s) ci_merge:39280(ppid30148,1506s)] reflexlog=280 mergelog=2180
+13:24:46Z procs=[scan:39452(ppid36252,2602s) scan:31304(ppid7004,2085s) reflex:30148(ppid2360,1665s) ci_merge:39280(ppid30148,1537s)] reflexlog=280 mergelog=2180
+13:25:16Z procs=[scan:39452(ppid36252,2632s) scan:31304(ppid7004,2116s) reflex:30148(ppid2360,1696s) ci_merge:39280(ppid30148,1567s)] reflexlog=280 mergelog=2180
+13:25:47Z procs=[scan:39452(ppid36252,2663s) scan:31304(ppid7004,2146s) reflex:30148(ppid2360,1727s) ci_merge:39280(ppid30148,1598s)] reflexlog=280 mergelog=2180
+13:26:18Z procs=[scan:39452(ppid36252,2694s) scan:31304(ppid7004,2177s) reflex:30148(ppid2360,1757s) ci_merge:39280(ppid30148,1629s)] reflexlog=280 mergelog=2180
+13:26:48Z procs=[scan:39452(ppid36252,2724s) scan:31304(ppid7004,2208s) reflex:30148(ppid2360,1788s) ci_merge:39280(ppid30148,1660s)] reflexlog=280 mergelog=2181
+13:27:19Z procs=[scan:39452(ppid36252,2755s) scan:31304(ppid7004,2238s) reflex:30148(ppid2360,1819s) ci_merge:39280(ppid30148,1690s)] reflexlog=280 mergelog=2181
+13:27:50Z procs=[scan:39452(ppid36252,2786s) scan:31304(ppid7004,2269s) reflex:30148(ppid2360,1850s) ci_merge:39280(ppid30148,1721s)] reflexlog=280 mergelog=2181
+13:28:21Z procs=[scan:39452(ppid36252,2817s) scan:31304(ppid7004,2300s) reflex:30148(ppid2360,1880s) ci_merge:39280(ppid30148,1752s)] reflexlog=280 mergelog=2181
+13:28:51Z procs=[scan:39452(ppid36252,2848s) scan:31304(ppid7004,2331s) reflex:30148(ppid2360,1911s) ci_merge:39280(ppid30148,1783s)] reflexlog=280 mergelog=2181
+13:29:22Z procs=[scan:39452(ppid36252,2878s) scan:31304(ppid7004,2362s) reflex:30148(ppid2360,1942s) ci_merge:39280(ppid30148,1814s)] reflexlog=280 mergelog=2181
+13:29:53Z procs=[scan:39452(ppid36252,2909s) scan:31304(ppid7004,2393s) reflex:30148(ppid2360,1973s) ci_merge:39280(ppid30148,1844s)] reflexlog=280 mergelog=2181
+13:30:24Z procs=[scan:39452(ppid36252,2940s) scan:31304(ppid7004,2423s) reflex:30148(ppid2360,2004s) ci_merge:39280(ppid30148,1875s)] reflexlog=280 mergelog=2181
+13:30:55Z procs=[scan:39452(ppid36252,2971s) scan:31304(ppid7004,2454s) reflex:30148(ppid2360,2035s) ci_merge:39280(ppid30148,1906s)] reflexlog=280 mergelog=2181
+13:31:25Z procs=[scan:39452(ppid36252,3002s) scan:31304(ppid7004,2485s) reflex:30148(ppid2360,2065s) ci_merge:39280(ppid30148,1937s)] reflexlog=280 mergelog=2181
+13:31:56Z procs=[scan:39452(ppid36252,3032s) scan:31304(ppid7004,2516s) reflex:30148(ppid2360,2096s) ci_merge:39280(ppid30148,1967s)] reflexlog=280 mergelog=2181
+13:32:27Z procs=[scan:39452(ppid36252,3063s) scan:31304(ppid7004,2547s) reflex:30148(ppid2360,2127s) ci_merge:39280(ppid30148,1999s)] reflexlog=280 mergelog=2181
+13:32:58Z procs=[scan:31304(ppid7004,2577s) reflex:30148(ppid2360,2158s) ci_merge:39280(ppid30148,2029s)] reflexlog=280 mergelog=2181
+done 13:33:29Z

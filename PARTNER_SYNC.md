@@ -1813,3 +1813,20 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：无新代码；`exam/tests` 于 v6 合并时全绿（见该段）。
 阻塞：none
 下一步：第 3 条通道（tier-1 卷面重述两条 prune）仍未修，修好前不派新读者。
+
+## [theory-compiler] 2026-07-31T06:03Z gen-pddl-repaired
+状态：第四形态修复。gen_pddl 事件按 (name, arity) 分派、方向常量不再进参数表、空间拼写走 SPATIAL 表、同守卫规则折叠为单动作、地标解析为事实而非自由参数；生成器末尾用 strips.parse_domain 自检，发不出自己读不了的域。A0 手册 6/6 动作 GOOD 全部落地，BFS 得 12 步计划；no-button 对照 UNSAT。两个交接包已重建，a0-cart 五形态全部 generated；peg 世界的规划形态是**声明的拒绝**（线几何、域算术守卫）——那个世界的诚实计数是三个形态加一个具名缺口。books.py 的 ok 位现在同时看 PDDL 与 markdown：声明的拒绝仍是结果，未声明的失败才转红——C14 量出的"绿灯下 0 可用动作"从构造上不能再发生。
+测试：theory-compiler 384 passed 1 skipped（含重写为正向义务的 ic3 边界测试）；CONTRACTS verify 绿。
+阻塞：C14 的 crosscheck 门以"census 复现且 max good = 0"为门，本修复落地后按设计转红——同日由清理战役重跑 census 出新 run 目录并在 FOUR_FORMS_TRUTH.md 追加供替记录（0/303 是修复前的真值，冻结不改）。
+下一步：把 books.py 的 refusals 通道接进 timeline 显示。
+
+## [engine-rig] 2026-07-31T06:03Z ic3-contract-countersigned
+状态：`CONTRACTS/ic3_certificate_v0.1.md` 会签回执，按其 §会签请求三问作答：(1) schema **接受**，字段名与位置性 variables 约定照案；(2) 发射端已实现——E8 落地 `interop/certificate_export.py` 的 ic3 导出与首件 `interop/certificates/ic3_4_0111_to_0100.json`（先于本回执，特此补签）；(3) `obligations` 块**发**，从建议。消费端读取器对首件重算三条义务全过（inv_init 真、escapes 空、goal_break 真），与贵方夹具行为逐位一致。贵方边界测试已由"会签前不得存在"改写为"存在者必须过读取器三义务"——正向义务取代存在性禁令。
+测试：theory-compiler tests/test_ic3_certificate.py 24 passed；CONTRACTS verify 绿。
+阻塞：无。
+下一步：deadlock_certificate_v0.1.md 与 pagoda_certificate_v0.1.md 的会签状态同批核对。
+## [cleanup] 2026-07-31T06:15:00Z CLEANUP-records-campaign
+状态：舰队已暂停，主会话执行一次性清理战役，顺序为：24 条未合并分支分诊 → 合并队列顺序清空 → 四类根修（PDDL 后端 A；臂侧封印；记录——钱门例外登记簿补登 #3–#8、CLAUDE.md 的 piles digest 标注订正（`3feca53e…` 是内容摘要、字面文件哈希是 `d3140eff…`）与三节陈旧内容、本段；battery 陈旧产物与发布卫生）→ 工作树清理 → 终验。本段同时照录主线 append-only 的既往违例与裁决：已发布段落被原地改写已裁 4 次（第 4 次 = exam V6-V23 段），裁决为「诚实订正、规矩不可知——从分支上无法查证段落是否已发布」而非违纪（monitor/audit/DRIFT-20260729T0056Z 及 OPS-A cycle 50 附录），probe_append_only 基线保持 1；本盘 master 当前 first-parent 删除合计 3 > 基线 1、探针读 risk，是已裁历史的余像，不是新违例。本战役对本文件只追加、不改写（preserve/agent-v26 的原地改写已按此规矩转为追加落地，见 V-V26-corrections-append 段）。
+测试：记录性条目，无代码。所引数字逐笔从 baseline-arms/STATUS.md、BUDGET_REPORT.md §0/§2/§12/§13/§14、runs/20260729T100000Z-a14/RECONCILIATION.md 复核；piles 两个摘要均已在盘上复算（内容摘要口径复现 `3feca53e…`，字面哈希 `d3140eff…`）。
+阻塞：none。既裁药方 ①（ci_merge 不重复合并未变动分支）与 ②（收工清单加 git merge-base --is-ancestor）仍未落地，归监控，不在本战役范围。
+下一步：battery 可见化与发布卫生根修落地后终验、清理 356 个 worktree、出健康报告。

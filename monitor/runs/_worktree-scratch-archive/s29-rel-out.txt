@@ -1,0 +1,142 @@
+
+== red-line negative controls
+.F..F...........................                                         [100%]
+================================== FAILURES ===================================
+______________________ test_the_partition_loses_nothing _______________________
+
+    def test_the_partition_loses_nothing():
+        """Every tracked file is either shipped or named as withheld. A file in
+        neither list is the one omission no reader can detect."""
+        manifest = {r["path"] for r in bundle.read_manifest()}
+        shipped = {r["path"] for r in rows("BUNDLE.jsonl")}
+        withheld = {r["path"] for r in rows("FRAME_HASHES.jsonl")}
+>       assert shipped | withheld == manifest
+E       AssertionError: assert {'.env.exampl...v0.2.md', ...} == {'.env.exampl...v0.2.md', ...}
+E         
+E         Extra items in the right set:
+E         'release/.gitattributes'
+E         Use -v to get more diff
+
+tests\test_bundle.py:44: AssertionError
+_____________________ test_the_bundle_on_disk_is_current ______________________
+
+    def test_the_bundle_on_disk_is_current():
+        """`--check`, run as a test. A stale bundle carries the authority of having
+        been checked without the fact of it."""
+>       assert bundle.check() == 0
+E       assert 1 == 0
+E        +  where 1 = <function check at 0x000001F6D7FF1DA0>()
+E        +    where <function check at 0x000001F6D7FF1DA0> = bundle.check
+
+tests\test_bundle.py:76: AssertionError
+---------------------------- Captured stdout call -----------------------------
+FAIL BUNDLE.jsonl is stale -- rerun release/bundle.py
+=========================== short test summary info ===========================
+FAILED tests/test_bundle.py::test_the_partition_loses_nothing - AssertionErro...
+FAILED tests/test_bundle.py::test_the_bundle_on_disk_is_current - assert 1 == 0
+-- FAILED (exit 1)
+
+== red lines clear, and every tracked file was actually read (--mode generate)
+  note      credential loaded for comparison only: 7171...05dd (len 36)
+  note      5634 of 5634 tracked file(s) scanned for the literal key
+  note      sealed pile: 21 game(s), read from arc-recon/data/piles.json
+  note      5634 of 5634 tracked file(s) scanned for sealed game ids
+  note      51 file(s) mention a sealed id without carrying payload -- guards, tests, audit documents and the cut itself. Naming a sealed game in order to keep it out is not contact with it, and a release that stripped these would be hiding the very ledger that proves the seal held. Listed, not failed:
+  note          PARTNER_SYNC.md names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          arc-recon/README.md names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          arc-recon/data/claim_set.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/contamination_log.jsonl names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/games.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/incidents.jsonl names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/piles.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/recon_findings.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/data/recon_ledger.jsonl names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/runs/P-11/MANIFEST.json names ft09-0d8bbf25, ls20-9607627b, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          arc-recon/runs/P-11/RUN_STATE.md names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          arc-recon/test_hygiene.py names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b, sc25-635fd71a, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          baseline-arms/AUDIT.md names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          baseline-arms/INCIDENTS.md names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44 (source or prose; ids named here are constants and guards, not content)
+  note          baseline-arms/STATUS.md names ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          baseline-arms/schema_traces/MANIFEST.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          baseline-arms/tests/test_transport.py names ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          battery/guard.py names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          battery/tests/test_adapter_schema_traces.py names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          battery/tests/test_adapters.py names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          battery/tests/test_guard.py names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          browser-ops/TERMS.md names re86-8af5384d (source or prose; ids named here are constants and guards, not content)
+  note          fleet-study/data/counterevidence.jsonl names ft09-0d8bbf25, ls20-9607627b, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          monitor/ci/CONFLICT-origin_agent_r2-release-licence.md names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          monitor/index.html names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          monitor/mailbox/archive/20260728T2227-OPS-A.md names bp35-0a0ad940, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          monitor/prompts/archive/T-08-a2-decision.md names dc22-fdcac232 (source or prose; ids named here are constants and guards, not content)
+  note          monitor/spec.py names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          monitor/state.json names dc22-fdcac232, ft09-0d8bbf25, ls20-9607627b, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/evidence-arms-and-environment.md names ft09-0d8bbf25, ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/evidence-metric-glossary.md names bp35-0a0ad940, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          proxy/REDTEAM.md names ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          proxy/tests/test_guard.py names dc22-fdcac232 (source or prose; ids named here are constants and guards, not content)
+  note          proxy/tests/test_redteam.py names ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          proxy/tests/test_seal.py names dc22-fdcac232 (source or prose; ids named here are constants and guards, not content)
+  note          release/MANIFEST.jsonl names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          release/runs/20260728T212958Z-S23/before/check_redlines.generate.txt names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T212958Z-S23/before/check_redlines.verify.txt names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T212958Z-S23/before/contamination.txt names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/RUN_STATE.md names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/after/check_redlines.full_tree.txt names bp35-0a0ad940, dc22-fdcac232, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/after/check_redlines.planted.txt names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/after/contamination.planted.txt names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/before/check_redlines.full_tree.txt names bp35-0a0ad940, dc22-fdcac232, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/before/check_redlines.planted.txt names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
+  note          release/runs/20260728T234923Z-S23/before/contamination.planted.txt names bp35-0a0ad940, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, ls20-9607627b, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44 (source or prose; ids named here are constants and guards, not content)
+  note          theoria-arm/tests/test_arm.py names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/ADVERSARIAL.md names ls20-9607627b (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/CENSUS_TABLE.md names bp35-0a0ad940, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/exam-battery.md names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/proxy-arcrecon.md names dc22-fdcac232, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+
+red lines: 0 credential violation(s), 0 sealed-pile violation(s), 0 file(s) this check could not read over 5634 tracked files.
+Both red lines clear. A release manifest may be generated from this tree.
+-- ok
+
+== every tracked file is classified
+  note credential loaded for comparison only: 7171...05dd (len 36)
+  note 5634 of 5634 tracked file(s) scanned for the literal key
+red lines clear over 5634 tracked files
+  A   5355 file(s)    100.07 MB  self-built -> releasable
+  B     53 file(s)     31.18 MB  api-derived-compilation -> needs-written-permission
+  C    225 file(s)     11.04 MB  derived-statistics -> releasable-flagged
+  D      1 file(s)      0.04 MB  upstream-payload -> not-releasable
+
+dry run: nothing written
+-- ok
+
+== no checklist item rests on an unclassified file
+7 present, 3 withheld, 0 absent, 0 undetermined
+  WITHHELD     全部账本  (18 file(s))
+  PRESENT      两本书（各形态）  (138 file(s))
+  PRESENT      Lean 证明  (25 file(s))
+  PRESENT      候选箱  (33 file(s))
+  WITHHELD     探针日志  (10 file(s))
+  PRESENT      电池代码与回算结果  (49 file(s))
+  PRESENT      冻结清单  (2 file(s))
+  PRESENT      incident ledger  (3 file(s))
+  PRESENT      复跑说明  (1 file(s))
+  WITHHELD     runs 档案（P5 条目追加）  (488 file(s))
+-- ok
+
+== the S23 before/after archive still reproduces
+base ref: bac8282
+  check_redlines before: exit 0
+  check_redlines after: exit 2
+  contamination before: exit 0
+  contamination after: exit 1
+
+wrote before/ and after/ under release\runs\20260728T234923Z-S23
+
+Before: both checks reported CLEAN on inputs they could not read.
+After:  both report the failure and exit non-zero.
+-- ok
+
+VERIFY: RED
+
+=====STDERR=====

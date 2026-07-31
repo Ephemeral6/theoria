@@ -49,6 +49,14 @@ is an explicit, hand-maintained theory: a **manual** saying what the world is an
 a **playbook** saying how to win, compiled to four co-derived forms — Lean,
 Python, PDDL and Markdown — and certified in two layers: full-history replay at
 the pixel, and declared laws discharged in Lean with the axiom list inspected.
+The fourth form carries a date: until 2026-07-31 the framework's general PDDL
+backend compiled 0 of 303 actions to anything usable — an empty form no
+disagreement between forms could expose — and every planning number in this
+paper was produced through a separate, world-specific generator instead. The
+repair, the post-repair census (196 of 299 actions semantically non-empty and
+well-formed, the other 103 declared refusals rather than silent empties), and
+the census's own scope — it measured no form but PDDL, and its bar is a
+ceiling on correctness, not a floor — are §11.3's.
 Neither layer certifies the manual against the world. **The one thing this paper
 claims is that we built that instrument, ran it end to end on small deterministic
 worlds we constructed ourselves, and then held our own measurements to the same

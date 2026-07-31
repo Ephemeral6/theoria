@@ -6,7 +6,8 @@ sha256: 6b633fcc35ae612f20f4028eb45aaca1b6ed86a24eb1304af555c46228325376
 lines: 3729
 bytes: 237872
 scope: full text L1-3729, as an index over five slice reports in runs/20260730T000000Z-P18-audits-cover-half/
-status: binding
+status: stale
+superseded_by: CITECHECK-2026-07-31.md
 date: 2026-07-30
 ```
 

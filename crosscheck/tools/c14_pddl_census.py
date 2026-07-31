@@ -312,6 +312,24 @@ def find_fd_translate() -> str:
     return ""
 
 
+def relativize_machine_path(path: str) -> str:
+    """A recorded toolchain path must not name the build machine.
+
+    An absolute path in a tracked artefact trips the release location gate
+    (tools/check_locations.py); everything under the checkout (or a sibling
+    worktree root) is rewritten to a <checkout>/ prefix.
+    """
+    if not path:
+        return path
+    norm = path.replace(os.sep, "/")
+    roots = sorted({REPO.replace(os.sep, "/"),
+                    os.path.dirname(REPO.replace(os.sep, "/"))},
+                   key=len, reverse=True)
+    for root in roots:
+        if root and norm.startswith(root + "/"):
+            return "<checkout>/" + norm[len(root) + 1:]
+    return norm
+
 def fd_translate(domain_path: str, problem_path: str, binroot: str) -> dict:
     """Feed one domain+problem to Fast Downward's translator.
 
@@ -399,7 +417,7 @@ def main(argv=None) -> int:
 
     summary = tally(records)
     payload = {"prompt_id": "C14-four-forms-is-three-and-a-half",
-               "fd_translate_dir": binroot or None,
+               "fd_translate_dir": relativize_machine_path(binroot) or None,
                "summary": summary, "files": records}
     with open(os.path.join(outdir, "census.json"), "w", encoding="utf-8",
               newline="\n") as fh:
@@ -481,8 +499,9 @@ def render(records: list, summary: dict, binroot: str) -> str:
     for k, v in summary["by_defect"].items():
         A("| `%s` | %d |" % (k, v))
     A("")
+    rel_bin = relativize_machine_path(binroot)
     A("Independent planner: %s\n"
-      % (("Fast Downward translator at `%s`" % binroot.replace(os.sep, "/"))
+      % (("Fast Downward translator at `%s`" % rel_bin)
          if binroot else "**not run** -- no FD build on this machine"))
     A("| | |")
     A("|---|---|")

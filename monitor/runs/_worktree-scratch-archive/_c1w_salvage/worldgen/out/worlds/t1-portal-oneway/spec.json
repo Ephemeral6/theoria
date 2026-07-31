@@ -1,0 +1,49 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "portal": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "dest": [
+          3,
+          3
+        ],
+        "mode": "oneway"
+      }
+    }
+  ],
+  "families": [
+    "portal"
+  ],
+  "flags": {},
+  "goal": [
+    5,
+    7
+  ],
+  "layout": [
+    "#########",
+    "#.......#",
+    "#.#####.#",
+    "#.#...#.#",
+    "#.#.###.#",
+    "#.#.#.#.#",
+    "#...#...#",
+    "#########"
+  ],
+  "notes": "One mouth, one destination, no way back except on foot. The rule is re-witnessable because the agent can walk back round to the mouth \u2014 the *route* is one-way, the *rule* is not, and the stamp distinguishes them.",
+  "seed": 106,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-portal-oneway"
+}

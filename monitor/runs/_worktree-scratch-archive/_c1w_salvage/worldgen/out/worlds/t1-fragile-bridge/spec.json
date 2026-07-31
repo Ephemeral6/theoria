@@ -1,0 +1,49 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "collapsed": 3,
+    "fragile": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        1,
+        3
+      ],
+      "kind": "fragile",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        3
+      ],
+      "kind": "fragile",
+      "props": {}
+    }
+  ],
+  "families": [
+    "consumable"
+  ],
+  "flags": {},
+  "goal": [
+    1,
+    5
+  ],
+  "layout": [
+    "#######",
+    "#.....#",
+    "#.#.#.#",
+    "#.....#",
+    "#######"
+  ],
+  "notes": "Two one-shot crossings and two routes. Cross the wrong one and the other still gets you there; cross both and you are stranded. The collapse lands one frame *after* the agent leaves, which is the inductively interesting bit.",
+  "seed": 109,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-fragile-bridge"
+}

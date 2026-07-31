@@ -36,7 +36,7 @@ import tempfile
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DEFAULT_RUN = os.path.join(
     REPO, "crosscheck", "runs",
-    "20260730T120005Z-C14-four-forms-is-three-and-a-half")
+    "20260731T061500Z-C14-after-the-repair")
 
 # Fields of the summary block that do not depend on any local toolchain.
 PURE_SUMMARY_FIELDS = (

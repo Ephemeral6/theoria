@@ -53,7 +53,17 @@ def peg():
 
 # ------------------------------------------------------ litmus 1: no regression
 
-def test_peg_still_produces_all_four_forms(peg):
+def test_peg_still_produces_three_forms_and_a_declared_pddl_refusal(peg):
+    """The peg world's planning form is a *refusal*, and now says so.
+
+    Before the 2026-07-31 `gen_pddl` repair this test asserted `":action" in
+    domain` — and the domain it accepted contained one direction-less action
+    whose guards (`?a.alive = true`, `?b.pos = ?a.pos + 1`) had been silently
+    dropped, on a line world the generator cannot lay out. The repair makes
+    the backend refuse what it cannot carry, so the honest assertion is the
+    refusal itself, with the reason attached. Three forms plus a named gap is
+    the true count for this world.
+    """
     ast, problem = peg
     code = generate_python(ast, problem)
     ns = {}
@@ -68,11 +78,11 @@ def test_peg_still_produces_all_four_forms(peg):
     assert_no_dsl_syntax(md)
     assert "How a Turn Works" in md              # E-03 reaches the human reader
 
-    domain, instance = generate_pddl(ast, problem_name="peg", grid_width=5,
-                                     grid_height=1)
-    for name, text in (("domain", domain), ("problem", instance)):
-        assert text.count("(") == text.count(")"), f"unbalanced parens in {name}"
-    assert ":action" in domain and ":goal" in instance
+    from theory_compiler.generators.gen_python import UnsupportedClause
+    with pytest.raises(UnsupportedClause):
+        generate_pddl(ast, problem_name="peg", grid_width=5, grid_height=1)
+    with pytest.raises(UnsupportedClause, match="line world"):
+        generate_pddl(ast, problem=problem)
 
 
 # ------------------------------------- litmus 2: a world the generators never saw
@@ -127,6 +137,41 @@ class TestForeignManual:
                                          grid_width=9, grid_height=9)
         assert domain.count("(") == domain.count(")")
         assert instance.count("(") == instance.count(")")
+
+    def test_pddl_compiled_against_the_level_solves_like_the_world(self):
+        """The fourth form, held to the same bar as the executable form.
+
+        Compiled with the real level, the planning form must (a) pass the
+        track's own STRIPS reader, (b) ground every schema to at least one
+        instance, and (c) reach the goal in the 12 steps the world is known
+        to need (`cold-start-a0/artifacts/fd_real.json`). Before the
+        2026-07-31 repair this manual compiled to three empty effects, two
+        unbound `?dest`s and a press that pressed nothing.
+        """
+        from collections import deque
+        from theory_compiler import strips
+
+        domain, instance = generate_pddl(self.ast, problem=self.problem)
+        _name, _arities, _types, schemas = strips.parse_domain(domain)
+        assert len(schemas) == 6      # 7 rules; press + door fold (cascade)
+        task = strips.ground(domain, instance)
+        grounded = {a.name for a in task.actions}
+        assert grounded == {s.name for s in schemas}
+
+        init, goal = frozenset(task.init), set(task.goal)
+        seen, queue, depth = {init}, deque([(init, 0)]), None
+        while queue:
+            state, d = queue.popleft()
+            if goal <= state:
+                depth = d
+                break
+            for action in task.actions:
+                if action.applicable(state):
+                    nxt = frozenset((state - action.dele) | action.add)
+                    if nxt not in seen:
+                        seen.add(nxt)
+                        queue.append((nxt, d + 1))
+        assert depth == 12
 
 
 # ------------------------------------------------------------- the acceptance

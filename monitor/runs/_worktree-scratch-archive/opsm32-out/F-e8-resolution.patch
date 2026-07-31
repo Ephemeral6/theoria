@@ -1,0 +1,1616 @@
+diff --git a/engine-rig/ic3bounds/recheck_column.py b/engine-rig/ic3bounds/recheck_column.py
+new file mode 100644
+index 00000000..77e26af2
+--- /dev/null
++++ b/engine-rig/ic3bounds/recheck_column.py
+@@ -0,0 +1,451 @@
++"""The recheck column: what an *independent* checker says about each rung.
++
++E8 asks, per gradient step, for four things: solve time, invariant size, whether
++an independent checker's recheck passes, and the failure mode.  `harness.py`
++produced the first two and its own six-verdict taxonomy; `emit.py` could turn an
++`Invariant` into a `recheck` certificate; `recheck/` could check one.  Nothing
++joined them, so the third column did not exist.  This module is the join.
++
++**The taxonomy is `recheck`'s own exit codes, not a new one.**  `python -m
++recheck` already answers with a status a caller can read without parsing prose,
++and those five codes are exactly the failure modes the item asks to be named:
++
++    0  ACCEPT             the three conditions hold on the emitted predicate
++    1  REJECT             at least one fails -- the independent checker refuses
++                          the engine's invariant, which is a finding about the
++                          invariant or the rule set, never a rounding error
++    2  would-not-load     the rule set or the certificate never became an
++                          object to check.  This is the honest reading of an
++                          *uncheckable* certificate: a peg board of n >= 20
++                          declares a product above `recheck.ruleset.MAX_STATES`
++                          (1_000_000) and `load_ruleset` refuses it, so there is
++                          no verdict rather than a passing one
++    3  INCONSISTENT       the conditions hold and the goal is reachable anyway.
++                          A defect in the rechecker, escalated rather than
++                          rounded down to a pass
++    4  rechecker-crashed  the recheck itself failed.  Distinguished from REJECT
++                          because Python's own exit status for an uncaught
++                          exception is 1, and a crash that looks like a refusal
++                          is a benchmark that lies quietly
++
++and one row type that is not an exit code at all:
++
++    n/a -- no invariant   the rung timed out, hit the level cap, or the engine
++                          was refused.  There is no invariant, so there is
++                          nothing for an independent checker to check.  Such a
++                          row reads `n/a -- no invariant` and never `passed`;
++                          `is_pass` is False for it, by construction.
++
++**Why the parent re-renders rather than re-running IC3.**  The invariant crosses
++the process boundary as `cnf_text`, in the engine's own rendering and in
++`emit.ordered_clauses`' order.  Reading it back costs nothing, where a second
++`ic3()` call would cost the ladder's whole budget over again -- 310 seconds at
++n=12 and n=13 alone.  The read-back is not trusted: the clauses are re-rendered
++through `System.render_cnf` and compared with the recorded string character for
++character, and their counts against the row's own `n_clauses` and `n_literals`.
++A parser that lost or invented a literal fails there, before anything is checked.
++
++**The count cross-check rides on every row, and it is what makes the column
++non-vacuous.**  A verdict alone does not say the predicate denotes the set the
++engine converged on: on peg-6 a one-literal weakening is ACCEPTed while denoting
++27 states instead of 30 (`tests/test_ic3bounds_emit.py`).  So every row carries
++both counts -- the engine's, over 2^n boolean tuples, and the rechecker's, over
++the product of the declared domains -- and whether they agree.  `emit.cross_check`
++does the comparison; it is called with `strict=False` here because a table that
++raises reports nothing, and a disagreement has to be *shown*.  It is not
++softened: a row whose counts disagree is a finding, `is_pass` is False, and
++`axis_size` fails the run on it.
++
++**Two transcriptions, still two.**  The rule set the rechecker reads is
++`recheck.build_cases`' -- written from the geometry, importing nothing from
++`engines/` -- and is preferred from the committed, byte-checked case file when
++one exists at that size.  This module writes only the invariant, through
++`emit.py`.  Nothing here builds a rule set out of the `System` IC3 searched.
++"""
++
++import os
++from typing import Any, Dict, List, Optional, Sequence, Tuple
++
++from ic3bounds import harness
++from recheck import build_cases
++
++EXIT_ACCEPT = 0
++EXIT_REJECT = 1
++EXIT_WOULD_NOT_LOAD = 2
++EXIT_INCONSISTENT = 3
++EXIT_CRASHED = 4
++
++#: `python -m recheck`'s exit code -> the word this column prints for it.
++STATUS_BY_EXIT: Dict[int, str] = {
++    EXIT_ACCEPT: "ACCEPT",
++    EXIT_REJECT: "REJECT",
++    EXIT_WOULD_NOT_LOAD: "would-not-load",
++    EXIT_INCONSISTENT: "INCONSISTENT",
++    EXIT_CRASHED: "rechecker-crashed",
++}
++
++#: The row that has nothing to check.  Never "passed", and `is_pass` says so.
++NO_INVARIANT = "n/a — no invariant"
++
++#: A row whose spec is not a single-goal peg board.  Axis A never produces one;
++#: it is here so a caller that does gets a word rather than a wrong verdict.
++NOT_A_PEG_BOARD = "n/a — not a single-goal peg board"
++
++#: Every key of the column, in the order they are written.  Present on every
++#: row, `None` where the status makes them inapplicable -- a missing key and a
++#: null are different claims, as in `harness.DETERMINISTIC_FIELDS`.
++COLUMN_FIELDS: Tuple[str, ...] = (
++    "status",
++    "exit_code",
++    "ruleset",
++    "ruleset_source",
++    "certificate",
++    "engine_n_states",
++    "engine_n_satisfying",
++    "recheck_n_states",
++    "recheck_n_satisfying",
++    "counts_agree",
++    "agrees_with_recorded_row",
++    "conditions",
++    "finding",
++    "detail",
++)
++
++TAXONOMY: Dict[str, str] = {
++    "0": "ACCEPT -- the three conditions hold on the emitted predicate",
++    "1": "REJECT -- an independent checker refuses the engine's invariant",
++    "2": "would-not-load -- the rule set or certificate never became an object "
++         "to check (a peg board of n >= 20 exceeds recheck.ruleset.MAX_STATES = "
++         "1000000). This is the honest reading of an uncheckable certificate",
++    "3": "INCONSISTENT -- the conditions hold and the goal is reachable anyway; "
++         "a defect in the rechecker, escalated rather than rounded to a pass",
++    "4": "rechecker-crashed -- the recheck itself failed, kept separate from "
++         "REJECT because Python's own status for a crash is 1",
++    "n/a": "%s -- the rung produced no invariant, so there is nothing for an "
++           "independent checker to check. Not a pass." % NO_INVARIANT,
++}
++
++
++class ColumnError(RuntimeError):
++    """The column could not be produced.  Reported as `rechecker-crashed`."""
++
++
++def _blank() -> Dict[str, Any]:
++    return {key: None for key in COLUMN_FIELDS}
++
++
++def _ordered(column: Dict[str, Any]) -> Dict[str, Any]:
++    return {key: column.get(key) for key in COLUMN_FIELDS}
++
++
++# ------------------------------------------------------------------ the parser
++
++def parse_cnf(text: Optional[str], variables: Sequence[str]) -> List[frozenset]:
++    """`(!pos1 | pos2) & (pos1 | !pos2)` -> the clause set that rendered it.
++
++    The inverse of `System.render_cnf`, and never used without the round trip in
++    `clauses_of` checking it.  `"true"` is that function's word for the empty
++    clause set and is read back as one.
++    """
++    if text is None:
++        raise ColumnError("the row carries no cnf_text, so there is no "
++                          "invariant to hand an independent checker")
++    stripped = text.strip()
++    if stripped in ("", "true"):
++        return []
++    index_of = {name: index for index, name in enumerate(variables)}
++    clauses: List[frozenset] = []
++    for chunk in stripped.split(" & "):
++        if not (chunk.startswith("(") and chunk.endswith(")")):
++            raise ColumnError("clause %r is not parenthesised as render_clause "
++                              "writes them" % chunk)
++        literals: List[Tuple[int, bool]] = []
++        for token in chunk[1:-1].split(" | "):
++            value = not token.startswith("!")
++            name = token if value else token[1:]
++            if name not in index_of:
++                raise ColumnError("literal %r names no variable of the system "
++                                  "(%s)" % (token, ", ".join(variables)))
++            literals.append((index_of[name], value))
++        clause = frozenset(literals)
++        if len(clause) != len(literals):
++            raise ColumnError("clause %r repeats a literal, so reading it back "
++                              "would lose one" % chunk)
++        clauses.append(clause)
++    return clauses
++
++
++def clauses_of(system, deterministic: Dict[str, Any]) -> List[frozenset]:
++    """The row's invariant, read back and then proved to be the row's invariant.
++
++    Three guards, because a silent parser bug here would make every verdict
++    below it a verdict about a different clause set: the re-rendering must equal
++    the recorded string exactly, and the clause and literal counts must equal the
++    ones the harness recorded from the object the engine returned.
++    """
++    text = deterministic.get("cnf_text")
++    clauses = parse_cnf(text, system.variables)
++    rendered = system.render_cnf(clauses)
++    if rendered != text:
++        raise ColumnError(
++            "reading the invariant back did not reproduce it: recorded %r, "
++            "re-rendered %r" % (text, rendered))
++    n_clauses = deterministic.get("n_clauses")
++    if n_clauses is not None and len(clauses) != n_clauses:
++        raise ColumnError("the row records %d clause(s); reading its cnf_text "
++                          "back gives %d" % (n_clauses, len(clauses)))
++    n_literals = deterministic.get("n_literals")
++    if n_literals is not None and sum(len(c) for c in clauses) != n_literals:
++        raise ColumnError("the row records %d literal(s); reading its cnf_text "
++                          "back gives %d" % (n_literals,
++                                             sum(len(c) for c in clauses)))
++    return clauses
++
++
++# ----------------------------------------------------------------- the ruleset
++
++def case_name(n: int, start: str) -> str:
++    return build_cases.peg_name(start, n)
++
++
++def case_path(n: int, start: str) -> str:
++    return os.path.join(build_cases.CASES_DIR, "%s.rules.json" % case_name(n, start))
++
++
++def ruleset_for(n: int, start: str, goal: str):
++    """`(rule set, where it came from)`, from the independent transcription.
++
++    The committed case is preferred where one exists: it is byte-checked by
++    `python -m recheck.build_cases --check`, so using it makes the column a
++    statement about a file under review rather than about something generated on
++    the spot.  Above the committed sizes the same generator is called in memory
++    -- `recheck.ruleset.ruleset_from_spec` hashes it over exactly the bytes
++    `build_cases` would have written, so the binding still means the file it
++    would be.  Either way the rule set comes from `recheck/`, never from the
++    `System` IC3 searched.
++    """
++    from recheck.ruleset import load_ruleset, ruleset_from_spec
++
++    path = case_path(n, start)
++    if os.path.exists(path):
++        # Repo-relative on purpose: an absolute path in an artefact is this
++        # machine's directory layout wearing the clothes of a result.
++        return load_ruleset(path), "recheck/cases/%s.rules.json" % case_name(n, start)
++    # OPS-M cycle 32 merge note: `peg_ruleset` is `(start, goal, name, gradient)`
++    # after the merge -- `n` is derived from `start`, and `gradient=True` selects
++    # the `interop.peg1d` provenance these sizes carry.  The old positional
++    # `(start, n, goal)` silently passed an int as `goal`.
++    return (ruleset_from_spec(build_cases.peg_ruleset(start, goal=goal,
++                                                      gradient=True)),
++            "recheck.build_cases.peg_ruleset(%r, %d, %r) -- no committed case "
++            "at this size" % (start, n, goal))
++
++
++# ------------------------------------------------------------------ the column
++
++def _no_invariant(deterministic: Dict[str, Any]) -> Dict[str, Any]:
++    column = _blank()
++    column["status"] = NO_INVARIANT
++    column["counts_agree"] = None
++    column["finding"] = False
++    column["detail"] = (
++        "the rung's verdict is %r, so no invariant exists and an independent "
++        "checker has nothing to check. This row is not a pass and must not be "
++        "read as one." % deterministic.get("verdict")
++    )
++    return _ordered(column)
++
++
++def _failed(exit_code: int, detail: str, **extra: Any) -> Dict[str, Any]:
++    column = _blank()
++    column.update(extra)
++    column["status"] = STATUS_BY_EXIT[exit_code]
++    column["exit_code"] = exit_code
++    column["finding"] = True
++    column["detail"] = detail
++    return _ordered(column)
++
++
++def column_for(record: Dict[str, Any]) -> Dict[str, Any]:
++    """One row's recheck column, computed from the record and nothing else.
++
++    Runs in the parent, after the budgeted child has exited, so it costs the
++    rung's wall-clock budget nothing and appears in no timing.  It is
++    deterministic: same record in, same column out.
++    """
++    deterministic = record.get("deterministic") or {}
++    spec = record.get("spec") or {}
++    if deterministic.get("verdict") != harness.INVARIANT:
++        return _no_invariant(deterministic)
++
++    goal_states = list(spec.get("goal_states") or ())
++    if len(goal_states) != 1:
++        column = _blank()
++        column["status"] = NOT_A_PEG_BOARD
++        column["finding"] = False
++        column["detail"] = (
++            "the rule set generator `recheck.build_cases.peg_ruleset` takes one "
++            "goal state and this rung declares %d, so no independent rule set "
++            "exists for it. Not a pass." % len(goal_states))
++        return _ordered(column)
++
++    n = int(spec["n"])
++    start = str(spec["initial"])
++    goal = str(goal_states[0])
++    name = case_name(n, start)
++    certificate_name = "%s-ic3-invariant" % name
++
++    try:
++        ruleset, source = ruleset_for(n, start, goal)
++    except Exception as exc:                     # noqa: BLE001 -- see the docstring
++        return _failed(
++            EXIT_WOULD_NOT_LOAD,
++            "the rule set for %s would not load, so the certificate is "
++            "uncheckable rather than refused: %s: %s"
++            % (name, type(exc).__name__, exc),
++            ruleset=name, certificate=certificate_name,
++            engine_n_states=deterministic.get("n_states"),
++            engine_n_satisfying=deterministic.get("n_satisfying"))
++
++    from ic3bounds import emit
++
++    try:
++        system = harness.build_system(harness.StepSpec(
++            axis=str(spec.get("axis", "size")),
++            label=str(spec.get("label", name)),
++            n=n, initial=start, goal_states=(goal,)))
++        clauses = clauses_of(system, deterministic)
++        certificate = emit.certificate_spec(
++            system, clauses, name=certificate_name,
++            ruleset_name=ruleset.name, ruleset_sha256=ruleset.sha256,
++            produced_by="engines/ic3_pdr, via ic3bounds/emit.py (E8 axis A)")
++        crossed = emit.cross_check(system, clauses, ruleset, certificate,
++                                   strict=False)
++    except Exception as exc:                     # noqa: BLE001 -- deliberately broad
++        return _failed(
++            EXIT_CRASHED,
++            "producing or rechecking the certificate for %s failed, which is "
++            "neither a REJECT nor a pass: %s: %s"
++            % (name, type(exc).__name__, exc),
++            ruleset=ruleset.name, ruleset_source=source,
++            certificate=certificate_name,
++            engine_n_states=deterministic.get("n_states"),
++            engine_n_satisfying=deterministic.get("n_satisfying"))
++
++    column = _blank()
++    column.update({
++        "ruleset": ruleset.name,
++        "ruleset_source": source,
++        "certificate": certificate_name,
++        "engine_n_states": crossed.engine_n_states,
++        "engine_n_satisfying": crossed.engine_n_satisfying,
++        "recheck_n_states": crossed.recheck_n_states,
++        "recheck_n_satisfying": crossed.recheck_n_satisfying,
++        "conditions": dict(sorted(crossed.recheck_conditions.items())),
++    })
++
++    # The engine counted twice: once inside the budgeted child, once here.  If
++    # those two disagree the row is not describing the run it claims to.
++    recorded_ok = (crossed.engine_n_satisfying == deterministic.get("n_satisfying")
++                   and crossed.engine_n_states == deterministic.get("n_states"))
++    column["agrees_with_recorded_row"] = recorded_ok
++
++    if crossed.verdict is None:
++        # `cross_check` returned before the rechecker ever counted anything --
++        # an off-domain literal, or a binding the certificate could not satisfy.
++        # Nothing was checked, and an unchecked translation is not a weak pass.
++        column.update(_failed(
++            EXIT_WOULD_NOT_LOAD,
++            "the certificate for %s was never evaluated, so there is no verdict "
++            "to report: %s" % (name, "; ".join(crossed.reasons) or "no reason given"),
++            **{key: column[key] for key in
++               ("ruleset", "ruleset_source", "certificate", "engine_n_states",
++                "engine_n_satisfying", "conditions")}))
++        column["agrees_with_recorded_row"] = recorded_ok
++        return _ordered(column)
++
++    from recheck.verify import ACCEPT, INCONSISTENT, REJECT
++
++    exit_code = {ACCEPT: EXIT_ACCEPT, REJECT: EXIT_REJECT,
++                 INCONSISTENT: EXIT_INCONSISTENT}[crossed.verdict]
++    column["status"] = STATUS_BY_EXIT[exit_code]
++    column["exit_code"] = exit_code
++    column["counts_agree"] = bool(crossed.counts_agree)
++    column["finding"] = bool(
++        exit_code != EXIT_ACCEPT or not crossed.counts_agree or not recorded_ok)
++
++    detail = []
++    if exit_code != EXIT_ACCEPT:
++        failed = sorted(k for k, ok in crossed.recheck_conditions.items() if not ok)
++        detail.append("the independent checker returned %s (failing: %s)"
++                      % (crossed.verdict, ", ".join(failed) or "none named"))
++    if not crossed.counts_agree:
++        detail.append(
++            "COUNT MISMATCH: the engine's invariant holds on %s of %s states, "
++            "the emitted predicate on %s of %s -- the predicate denotes a "
++            "different set, so the verdict is about a different object"
++            % (crossed.engine_n_satisfying, crossed.engine_n_states,
++               crossed.recheck_n_satisfying, crossed.recheck_n_states))
++    if not recorded_ok:
++        detail.append(
++            "the row records %s/%s satisfying; re-counting the same invariant "
++            "here gives %s/%s"
++            % (deterministic.get("n_satisfying"), deterministic.get("n_states"),
++               crossed.engine_n_satisfying, crossed.engine_n_states))
++    if not column["finding"]:
++        detail.append(
++            "%s of %s states, counted over 2^%d boolean tuples by the engine and "
++            "over the product of %s's declared domains by the rechecker"
++            % (crossed.engine_n_satisfying, crossed.engine_n_states, n,
++               ruleset.name))
++    detail.extend(crossed.reasons)
++    column["detail"] = " | ".join(detail) or "no reason given"
++    return _ordered(column)
++
++
++# ------------------------------------------------------------------ the reading
++
++def is_pass(column: Optional[Dict[str, Any]]) -> bool:
++    """ACCEPT *and* the two counts agree.  Nothing else is a pass.
++
++    Written as one function because "did the recheck pass?" is the question the
++    item asks, and answering it from `status` alone would call the peg-6
++    dropped-literal forgery green.
++    """
++    if not column:
++        return False
++    return (column.get("status") == "ACCEPT"
++            and column.get("counts_agree") is True
++            and column.get("agrees_with_recorded_row") is True)
++
++
++def cell(column: Optional[Dict[str, Any]]) -> str:
++    """The table cell: the status, and the two counts where there are two."""
++    if not column:
++        return "-"
++    status = column.get("status") or "-"
++    engine = column.get("engine_n_satisfying")
++    rechecked = column.get("recheck_n_satisfying")
++    if engine is None or rechecked is None:
++        # One number is not a comparison, so none is offered: a row that was
++        # refused before anything was counted says so and stops there.
++        return status
++    return "%s (%s=%s%s)" % (status, rechecked, engine,
++                             "" if column.get("counts_agree") else " MISMATCH")
++
++
++def findings(steps: Sequence[Dict[str, Any]]) -> List[str]:
++    """Rows whose recheck column is a defect rather than a result.
++
++    A REJECT is in here deliberately.  It is not a boundary of IC3 -- it says an
++    independent checker refuses something the engine's own checker accepted, and
++    that is the single most interesting thing this column could report.
++    """
++    out: List[str] = []
++    for step in steps:
++        column = step.get("recheck")
++        if column and column.get("finding"):
++            out.append("%s: %s -- %s" % (step["spec"]["label"],
++                                         column.get("status"),
++                                         column.get("detail")))
++    return out
+diff --git a/engine-rig/recheck/build_cases.py b/engine-rig/recheck/build_cases.py
+index 93e433ef..63434a60 100644
+--- a/engine-rig/recheck/build_cases.py
++++ b/engine-rig/recheck/build_cases.py
+@@ -17,6 +17,14 @@ Six worlds:
+   certificates differ only in the goal, and `interop/README.md`'s finding is
+   precisely that the two targets are separately provable and their disjunction
+   is not.
++* **peg5 .. peg13, from `01111…`** -- the same world widened, which is axis A of
++  the E8 boundary measurement: 32 up to 8192 states, each with the invariant
++  `ic3_pdr` converges on for it.  The rule sets are built here from the geometry;
++  the invariants are transcribed literals.  That split is deliberate and is the
++  two-transcriptions rule -- see `PEG_IC3_INVARIANTS`.  These are the *gradient*
++  cases and cite `interop.peg1d` rather than a published number; the `11011` pair
++  above is *anchored* and cites `interop/README.md`.  Both are 5-cell boards, so
++  `peg_ruleset` takes the distinction as an argument rather than inferring it.
+ * **keyed-gate** -- three flags and one guarded rule, written for this package
+   rather than transcribed.  It is the exhibit for the pagoda obligation being
+   quantified over moves *legal from the region*: its only potential-raising move
+@@ -89,11 +97,20 @@ PEG_N = 4
+ PEG_GOAL = "0100"
+ 
+ # The board size only ever appears in prose, and prose is what the committed
+-# bytes are made of, so it is a table rather than an f-string.
+-PEG_SIZE_WORD = {4: "four", 5: "five"}
++# bytes are made of, so it is a table rather than an f-string.  A gradient step
++# whose size has no word here falls back to the digits, which reads fine.
++#
++# OPS-M cycle 32 merge note: this replaces HEAD's `PEG_SIZE_WORD = {4, 5}` and
++# e8's `_NUMBER_WORDS = {4..10}` with their union under one name.  The two
++# agreed on 4 and 5, which are the only sizes HEAD's committed cases use, so
++# every byte HEAD published is unchanged.
++PEG_SIZE_WORD = {
++    4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten",
++}
+ 
+ # One anchor per board: a number somebody else published about that world,
+-# outside this package and before it.
++# outside this package and before it.  Only the *anchored* cases have one; the
++# gradient cases cite `interop.peg1d` instead -- see `peg_ruleset`.
+ PEG_HAND_VERIFIED = {
+     4: "peg4.py's docstring: 1110, 0111 and 1011 are unsolvable; 1101 solves "
+        "in 2 moves",
+@@ -119,28 +136,82 @@ def peg_moves(n: int = PEG_N) -> List[Tuple[int, int, int]]:
+     return sorted(out, key=lambda m: (m[0], m[2]))
+ 
+ 
+-def peg_ruleset(start: str, goal: str = PEG_GOAL,
+-                name: Optional[str] = None) -> dict:
+-    """A 1D peg board of any size, named for its start unless two share one.
++def peg_name(start: str, n: int = PEG_N) -> str:
++    return "peg%d-%s" % (n, start)
++
++
++def _peg_goal_prose(goal: str) -> str:
++    pegs = [i for i, cell in enumerate(goal) if cell == "1"]
++    if len(pegs) == 1:
++        return "exactly one peg, at position %d (state %s)" % (pegs[0], goal)
++    return "state %s" % goal
++
+ 
+-    The 5-cell board carries two rule sets from one start, because the pagoda
+-    certificates `lp_potential` produced for it differ only in which cell the
+-    last peg has to land on -- and that difference is the whole finding in
+-    `interop/README.md`, so the two goals must not be allowed to share a file.
++def peg_ruleset(start: str, goal: str = PEG_GOAL,
++                name: Optional[str] = None,
++                gradient: bool = False) -> dict:
++    """A 1D peg board of `len(start)` positions, as rules rather than an edge list.
++
++    Two callers with two provenance stories, and `gradient` is a parameter rather
++    than a function of `n` because **the 5-cell board appears at both** and the
++    two must not be given one story:
++
++    * the *anchored* cases -- peg4's four starts, and the two `11011` rule sets
++      the theory-compiler fixture uses -- cite a number somebody else published
++      about that world (`PEG_HAND_VERIFIED`).  The 5-cell board carries two rule
++      sets from one start because the pagoda certificates `lp_potential` produced
++      for it differ only in which cell the last peg lands on, and that difference
++      is the whole finding in `interop/README.md`, so the two goals must not be
++      allowed to share a file -- hence `name`.
++    * the *gradient* cases -- axis A of the E8 boundary measurement, 32 up to
++      8192 states -- have no separately published number, because a gradient
++      whose steps have no rule set has no independent checker either.  They cite
++      the independent transcription `interop.peg1d` that `verify_all`'s
++      `peg_relation_anchor` differentials them against.
++
++    `n = 4` reproduces Fixture C exactly, bytes included; that case is the anchor
++    and its wording is its own.
++
++    OPS-M cycle 32 merge note: HEAD's signature was `(start, goal, name)` with
++    `n = len(start)`; e8's was `(start, n, goal)` with `n` explicit and no
++    `name`.  Deriving `n` from `start` makes the two agree without a third
++    convention, and e8's only call site is updated to keywords.  `_peg_goal_prose`
++    is e8's and is a strict superset of HEAD's one-liner for every committed goal
++    in the tree (all single-peg), so no byte moves.
+     """
+     n = len(start)
++    if len(goal) != n:
++        raise ValueError("start %r and goal %r must both be %d positions"
++                         % (start, goal, n))
+     moves = peg_moves(n)
++    if gradient:
++        provenance = {
++            # Every wider board comes from the generic builder, which was
++            # written for lp_potential and knows nothing about this package.
++            "world": "engine-rig/interop/peg1d.py",
++            "goal": _peg_goal_prose(goal),
++            "anchor": (
++                "interop.peg1d -- an independent transcription of the same "
++                "geometry, written for lp_potential before this gradient "
++                "existed. verify_all compares its edge relation and its "
++                "distance_to(%s, [%s]) against the relation derived here."
++                % (start, goal)
++            ),
++        }
++    else:
++        provenance = {
++            "world": PEG_WORLD[n],
++            "goal": _peg_goal_prose(goal),
++            "hand_verified": PEG_HAND_VERIFIED[n],
++        }
+     return {
+         "schema": RULESET_SCHEMA,
+-        "name": name or "peg%d-%s" % (n, start),
++        "name": name or peg_name(start, n),
+         "comment": "Fixture C, 1D peg solitaire on %s positions, started at "
+                    "%s. A move jumps a peg over a neighbouring peg into an "
+-                   "empty hole and removes the jumped peg." % (PEG_SIZE_WORD[n], start),
+-        "provenance": {
+-            "world": PEG_WORLD[n],
+-            "goal": "exactly one peg, at position %d (state %s)" % (goal.index("1"), goal),
+-            "hand_verified": PEG_HAND_VERIFIED[n],
+-        },
++                   "empty hole and removes the jumped peg."
++                   % (PEG_SIZE_WORD.get(n, str(n)), start),
++        "provenance": provenance,
+         "variables": [
+             {"name": "pos%d" % i, "domain": [0, 1],
+              "comment": "1 if position %d holds a peg" % i}
+@@ -170,25 +241,291 @@ def peg_ruleset(start: str, goal: str = PEG_GOAL,
+     }
+ 
+ 
+-def peg_ic3_certificate() -> dict:
+-    """`ic3_pdr`'s answer on 0111, transcribed clause by clause.
++# --------------------------------------------------------- the size gradient
++#
++# Axis A of E8: the M9 configuration widened.  Every step is the same shape --
++# position 0 empty, every other position filled, goal a single peg at position 1
++# -- so what changes along the axis is the size of the state space (16 up to
++# 8192) and nothing else.  Every one of them is unsolvable, which
++# `interop.peg1d.distance_to` says independently.
++#
++# 4..8 came first, one position at a time.  10, 12 and 13 were added afterwards
++# because `ic3bounds.axis_size.LADDER` is (4, 6, 8, 10, 12, 13, 14) and the
++# ladder's recheck column can only be filled at a size that has a rule set here:
++# a gradient step with no independent transcription has no independent checker,
++# and the column would have had to read "not available" at exactly the sizes the
++# measurement is about.  n=14 is absent because IC3 does not finish it inside the
++# 300s budget -- there is no invariant at that rung to check, and inventing a
++# case for it would put a rule set in the tree that nothing certifies.
++PEG_GRADIENT: Tuple[Tuple[int, str, str], ...] = (
++    (4, "0111", "0100"),
++    (5, "01111", "01000"),
++    (6, "011111", "010000"),
++    (7, "0111111", "0100000"),
++    (8, "01111111", "01000000"),
++    (10, "0111111111", "0100000000"),
++    (12, "011111111111", "010000000000"),
++    (13, "0111111111111", "0100000000000"),
++)
++
++# `ic3_pdr`'s answers, transcribed clause by clause, in the order
++# `ic3bounds.emit.ordered_clauses` writes them.
++#
++# **Transcribed, not computed.**  This file is inside `recheck/`, which imports
++# nothing from `engines/` -- a test enforces it -- so the invariants arrive here
++# as literals, exactly as M9's did.  `tests/test_ic3bounds_emit.py` re-runs the
++# engine and fails if what it converges on is no longer what is written below,
++# which is the check that keeps a literal honest.
++#
++# Each clause is a tuple of `(variable, the value that satisfies it)`; a clause
++# is a disjunction, the clause list a conjunction.
++PEG_IC3_INVARIANTS: Dict[Tuple[int, str, str], dict] = {
++    (4, "0111", "0100"): {
++        "produced_by": "engines/ic3_pdr (M9)",
++        "comment": "(!pos1 | pos2) & (pos1 | !pos2) -- positions 1 and 2 always "
++                   "hold the same thing.",
++        "clauses": (
++            (("pos1", 0), ("pos2", 1)),
++            (("pos1", 1), ("pos2", 0)),
++        ),
++    },
++    (5, "01111", "01000"): {
++        "clauses": (
++            (("pos1", 0), ("pos2", 1), ("pos4", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1)),
++        ),
++    },
++    (6, "011111", "010000"): {
++        "clauses": (
++            (("pos0", 0), ("pos1", 0), ("pos5", 1)),
++            (("pos0", 0), ("pos2", 0), ("pos4", 0)),
++            (("pos0", 0), ("pos3", 1), ("pos4", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos5", 1)),
++            (("pos2", 0), ("pos3", 1), ("pos4", 0)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos5", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 0)),
++        ),
++    },
++    (7, "0111111", "0100000"): {
++        "clauses": (
++            (("pos4", 0), ("pos5", 0), ("pos6", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos6", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos6", 1)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
++             ("pos6", 1)),
++        ),
++    },
++    (8, "01111111", "01000000"): {
++        "clauses": (
++            (("pos1", 0), ("pos2", 0), ("pos3", 0), ("pos7", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0)),
++            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0)),
++            (("pos1", 0), ("pos2", 0), ("pos3", 0), ("pos5", 1), ("pos6", 0)),
++            (("pos1", 0), ("pos2", 0), ("pos3", 1), ("pos4", 0), ("pos6", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos7", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos7", 1)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
++             ("pos6", 1), ("pos7", 1)),
++        ),
++    },
++    (10, "0111111111", "0100000000"): {
++        "clauses": (
++            (("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
++            (("pos4", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos9", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 1), ("pos8", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
++             ("pos9", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1),
++             ("pos8", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0),
++             ("pos8", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos9", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 0)),
++            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos9", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
++             ("pos9", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 1),
++             ("pos8", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 1), ("pos6", 0),
++             ("pos8", 0)),
++            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos9", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
++             ("pos7", 0), ("pos8", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
++             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1)),
++        ),
++    },
++    (12, "011111111111", "010000000000"): {
++        "clauses": (
++            (("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0), ("pos11", 1)),
++            (("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1), ("pos10", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 0),
++             ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 1),
++             ("pos10", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
++             ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1),
++             ("pos10", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
++             ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 1),
++             ("pos10", 0)),
++            (("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1), ("pos9", 1),
++             ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
++             ("pos9", 0), ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
++             ("pos9", 1), ("pos10", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 1),
++             ("pos8", 0), ("pos10", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos7", 0), ("pos9", 0),
++             ("pos10", 1), ("pos11", 0)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 1), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos8", 0),
++             ("pos9", 0), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos8", 0),
++             ("pos9", 1), ("pos10", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 1), ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
++             ("pos8", 1), ("pos9", 1), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
++             ("pos7", 0), ("pos9", 0), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
++             ("pos7", 0), ("pos9", 1), ("pos10", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
++             ("pos7", 1), ("pos8", 0), ("pos10", 0)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
++             ("pos8", 1), ("pos9", 1), ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos6", 0),
++             ("pos7", 0), ("pos8", 0), ("pos9", 0), ("pos10", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
++             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1),
++             ("pos11", 1)),
++        ),
++    },
++    (13, "0111111111111", "0100000000000"): {
++        "clauses": (
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos9", 0),
++             ("pos10", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos8", 0), ("pos10", 0),
++             ("pos11", 0), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
++             ("pos10", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
++             ("pos11", 0), ("pos12", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
++             ("pos10", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
++             ("pos11", 0), ("pos12", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos9", 0),
++             ("pos10", 1), ("pos12", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos8", 0), ("pos10", 0),
++             ("pos11", 0), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
++             ("pos9", 0), ("pos10", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 0), ("pos7", 0),
++             ("pos10", 0), ("pos11", 0), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos6", 0), ("pos7", 0), ("pos8", 1),
++             ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 0), ("pos5", 0), ("pos7", 0),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos2", 0), ("pos4", 0), ("pos5", 0), ("pos6", 1), ("pos7", 1),
++             ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1), ("pos12", 1)),
++            (("pos1", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1),
++             ("pos12", 1)),
++            (("pos2", 0), ("pos3", 0), ("pos4", 1), ("pos5", 1), ("pos6", 1),
++             ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1), ("pos11", 1),
++             ("pos12", 1)),
++            (("pos1", 0), ("pos2", 1), ("pos3", 1), ("pos4", 1), ("pos5", 1),
++             ("pos6", 1), ("pos7", 1), ("pos8", 1), ("pos9", 1), ("pos10", 1),
++             ("pos11", 1), ("pos12", 1)),
++        ),
++    },
++}
++
++
++def render_peg_cnf(clauses: Sequence[Sequence[Tuple[str, int]]]) -> str:
++    """`(!pos1 | pos2) & (pos1 | !pos2)` -- the engine's own rendering.
++
++    Written here rather than imported from `engines.ic3_pdr.system` for the one
++    reason everything in this package is written twice: this file may not import
++    the engine it is transcribing.
++    """
++    return " & ".join(
++        "(%s)" % " | ".join(name if value else "!" + name for name, value in clause)
++        for clause in clauses
++    )
++
++
++def peg_ic3_certificate(start: str = "0111", n: int = PEG_N,
++                        goal: str = PEG_GOAL) -> dict:
++    """`ic3_pdr`'s answer on `start`, transcribed clause by clause.
+ 
+-    STATUS.md, M9: `I(s) = (!pos1 | pos2) & (pos1 | !pos2)`.  Written here as
+-    the two clauses rather than as `pos1 == pos2`, so that what is rechecked is
+-    the shape the engine actually emitted.
++    STATUS.md, M9: `I(s) = (!pos1 | pos2) & (pos1 | !pos2)` on `0111`.  Written
++    as the clauses rather than as `pos1 == pos2`, so that what is rechecked is
++    the shape the engine actually emitted -- and so that the emitted shape and
++    this transcription can be compared literal by literal.
+     """
++    entry = PEG_IC3_INVARIANTS[(n, start, goal)]
++    clauses = entry["clauses"]
++    comment = entry.get("comment") or (
++        "%s -- %d clause(s) over %d positions, the invariant ic3_pdr converges "
++        "on for %s. Its size in states is pinned in recheck/verify_all.py and "
++        "cross-checked against the engine's own count in "
++        "tests/test_ic3bounds_emit.py."
++        % (render_peg_cnf(clauses), len(clauses), n, start)
++    )
+     return {
+         "schema": CERTIFICATE_SCHEMA,
+-        "name": "peg4-0111-ic3-invariant",
++        "name": "%s-ic3-invariant" % peg_name(start, n),
+         "kind": "inductive_invariant",
+         "claim": "unsolvable",
+-        "produced_by": "engines/ic3_pdr (M9)",
+-        "comment": "(!pos1 | pos2) & (pos1 | !pos2) -- positions 1 and 2 always "
+-                   "hold the same thing.",
+-        "ruleset": {"name": "peg4-0111"},
+-        "predicate": ["and",
+-                      ["or", eq(var("pos1"), lit(0)), eq(var("pos2"), lit(1))],
+-                      ["or", eq(var("pos1"), lit(1)), eq(var("pos2"), lit(0))]],
++        "produced_by": entry.get(
++            "produced_by",
++            "engines/ic3_pdr, emitted through ic3bounds/emit.py (E8 axis A)"),
++        "comment": comment,
++        "ruleset": {"name": peg_name(start, n)},
++        "predicate": ["and"] + [
++            ["or"] + [eq(var(name), lit(value)) for name, value in clause]
++            for clause in clauses
++        ],
+     }
+ 
+ 
+@@ -751,6 +1088,20 @@ def all_cases() -> Dict[str, dict]:
+             "11011", goal="00010", name="peg5-11011-to-00010"),
+         "keyed-gate.rules.json": keyed_gate_ruleset(),
+         "keyed-gate-pagoda.cert.json": keyed_gate_certificate(),
++    }
++    # The E8 size gradient. n=4 is already above -- it is the M9 anchor and
++    # keeps its own filenames and wording -- so the loop starts at the next
++    # step and adds one rule set and one certificate per size.  `11011`'s two
++    # 5-cell rule sets are above too and are anchored, not gradient; the loop's
++    # 5-cell step starts from `01111`, so the filenames do not collide.
++    for n, start, goal in PEG_GRADIENT:
++        if n == PEG_N:
++            continue
++        cases["%s.rules.json" % peg_name(start, n)] = peg_ruleset(
++            start, goal=goal, gradient=True)
++        cases["%s-ic3.cert.json" % peg_name(start, n)] = peg_ic3_certificate(
++            start, n, goal)
++    cases.update({
+         "a2-holed.rules.json": a2_ruleset(with_teleport=False),
+         "a2-world.rules.json": a2_ruleset(with_teleport=True),
+         "a2-right-room-locked.cert.json": a2_certificate(),
+@@ -772,7 +1123,7 @@ def all_cases() -> Dict[str, dict]:
+             "sokoban-open4far", OPEN4_GRID, (4, 4),
+             (("b1", (2, 2)), ("b2", (3, 3))),
+             (("b1", (4, 2)), ("b2", (1, 3)))),
+-    }
++    })
+     for name, ruleset_name, weights, bound, document in PAGODA_CLAIMS:
+         cases["%s.cert.json" % name] = pagoda_certificate(
+             name, ruleset_name, weights, bound, document)
+diff --git a/engine-rig/recheck/verify_all.py b/engine-rig/recheck/verify_all.py
+index 9882508d..9ecfe254 100644
+--- a/engine-rig/recheck/verify_all.py
++++ b/engine-rig/recheck/verify_all.py
+@@ -9,8 +9,9 @@ Four sections, and the script is red if any of them deviates:
+    so a difference means someone did.
+ 2. **anchors** -- the rule sets say what their sources say: A2's own 18-action
+    refutation replays frame by frame through `a2-world`, Lean's 592-row `step`
+-   table agrees with `a2-holed`, and the sokoban optima the fixture states by
+-   hand (ring 1, open4 6) come back out of the derived relation.
++   table agrees with `a2-holed`, the sokoban optima the fixture states by
++   hand (ring 1, open4 6) come back out of the derived relation, and every peg
++   board's derived relation is compared edge by edge against `interop.peg1d`.
+ 3. **matrix** -- every certificate against every rule set it is meant to be
+    checked against, with the verdict declared here in advance.  The two rows
+    this item exists for are `a2-holed -> ACCEPT` and `a2-world -> REJECT`: the
+@@ -21,6 +22,15 @@ Four sections, and the script is red if any of them deviates:
+ 
+ The expected verdicts live in this file rather than being read off a previous
+ run, so a regression cannot re-baseline itself.
++
++**The count column.**  A verdict on its own does not establish that the
++certificate under test denotes the set of states the engine converged on.  A
++translation that drops one literal denotes a smaller set, and on peg-6 one such
++drop is ACCEPTed -- a green column about the wrong object.  So every IC3 row
++also carries the number of states the invariant holds on, counted here over the
++product of the declared domains, and compares it with `IC3_N_SATISFYING` below,
++which is what the engine counted over its own boolean space.  A row whose
++verdict is right and whose count is wrong is `OFF SCRIPT`.
+ """
+ 
+ import argparse
+@@ -29,9 +39,15 @@ import os
+ import sys
+ from typing import Dict, List, Optional, Sequence, Tuple
+ 
++# `interop.peg1d` is the peg geometry as another part of the rig writes it --
++# built for lp_potential, before this package existed, and sharing no code with
++# either the rechecker or IC3. It is imported for the anchors only: the point of
++# an anchor is that it comes from somewhere else. It is not part of `engines/`,
++# and the independence rule this package lives under is unchanged.
++from interop import peg1d
+ from recheck import anchors, build_cases, forgeries
+ from recheck.certificate import load_certificate
+-from recheck.ruleset import load_ruleset
++from recheck.ruleset import RuleSet, load_ruleset
+ from recheck.verify import ACCEPT, REJECT, reachable_states, recheck, shortest_plan
+ 
+ CASES_DIR = build_cases.CASES_DIR
+@@ -47,6 +63,25 @@ MATRIX: Tuple[Tuple[str, str, str, Optional[str], str], ...] = (
+      "before the invariant is evaluated at all; the forgery catalogue's "
+      "`invariant-on-a-solvable-start` strips the binding and shows it fails "
+      "`inv_init` on the merits too"),
++    ("peg5-01111", "peg5-01111-ic3", ACCEPT, None,
++     "E8 axis A, step 2: the same configuration one position wider, 32 states"),
++    ("peg6-011111", "peg6-011111-ic3", ACCEPT, None,
++     "E8 axis A, step 3: 64 states, and the first step where the invariant "
++     "stops being two clauses -- eight, over four of the six positions"),
++    ("peg7-0111111", "peg7-0111111-ic3", ACCEPT, None,
++     "E8 axis A, step 4: 128 states"),
++    ("peg8-01111111", "peg8-01111111-ic3", ACCEPT, None,
++     "E8 axis A, step 5: 256 states, eleven clauses"),
++    ("peg10-0111111111", "peg10-0111111111-ic3", ACCEPT, None,
++     "E8 axis A, ladder rung 4: 1024 states, twenty clauses. The first rung "
++     "added for the ladder rather than for the one-position-at-a-time gradient"),
++    ("peg12-011111111111", "peg12-011111111111-ic3", ACCEPT, None,
++     "E8 axis A, ladder rung 5: 4096 states, twenty-nine clauses -- the widest "
++     "invariant on the ladder, found in ~100s"),
++    ("peg13-0111111111111", "peg13-0111111111111-ic3", ACCEPT, None,
++     "E8 axis A, ladder rung 6: 8192 states, and the LAST rung IC3 answers "
++     "inside the 300s budget. n=14 times out, so there is no invariant above "
++     "this row for anyone to recheck"),
+     ("a2-holed", "a2-right-room-locked", ACCEPT, None,
+      "agrees with Lean: generated_holed/theory.lean proves this closed, "
+      "axiom-free, and so does this rechecker, over all 148 states"),
+@@ -74,6 +109,27 @@ PAGODA_MATRIX: Tuple[Tuple[str, str, str, Optional[str], str], ...] = tuple(
+     for name, ruleset, _weights, _bound, document in build_cases.PAGODA_CLAIMS
+ )
+ 
++# certificate -> (states the invariant holds on, states in the space), as
++# `engines.ic3_pdr.check.verify` counted them over 2^n boolean tuples.
++#
++# Declared here, in advance, exactly like the verdicts above: this package
++# cannot compute these numbers -- it imports nothing from the engine that
++# produced them -- so they are written down and the rechecker's own count, taken
++# over the product of the declared domains, has to match.  Two enumerations, two
++# encodings, one set of states.  `tests/test_ic3bounds_emit.py` is the other
++# half of the loop: it re-runs the engine and fails if what it counts is no
++# longer what is written here.
++IC3_N_SATISFYING: Dict[str, Tuple[int, int]] = {
++    "peg4-0111-ic3": (8, 16),
++    "peg5-01111-ic3": (24, 32),
++    "peg6-011111-ic3": (30, 64),
++    "peg7-0111111-ic3": (98, 128),
++    "peg8-01111111-ic3": (176, 256),
++    "peg10-0111111111-ic3": (766, 1024),
++    "peg12-011111111111-ic3": (3466, 4096),
++    "peg13-0111111111111-ic3": (7780, 8192),
++}
++
+ SOKOBAN_LEVELS = ("sokoban-ringstuck", "sokoban-open4far")
+ 
+ # What the fixture says, on grounds this encoding shares nothing with.
+@@ -97,6 +153,28 @@ PEG5_REACHABLE: Tuple[str, ...] = ("00111", "01001", "10010", "11011", "11100")
+ PEG5_RULESETS = ("peg5-11011-to-01000", "peg5-11011-to-00010")
+ 
+ 
++def peg_cases() -> List[Tuple[str, int, str, str, Optional[int]]]:
++    """(case name, n, start, goal, the hand-verified distance, if there is one).
++
++    The four four-position starts carry `peg4.py`'s docstring numbers; the wider
++    boards of the E8 gradient have no hand-verified literal to carry, which is
++    exactly why `interop.peg1d` is consulted for every row below rather than
++    only for the ones without one.
++    """
++    hand = dict(PEG_REACHABILITY)
++    rows = [
++        (build_cases.peg_name(start, build_cases.PEG_N), build_cases.PEG_N,
++         start, build_cases.PEG_GOAL, hand[start])
++        for start, _ in PEG_REACHABILITY
++    ]
++    rows += [
++        (build_cases.peg_name(start, n), n, start, goal, None)
++        for n, start, goal in build_cases.PEG_GRADIENT
++        if n != build_cases.PEG_N
++    ]
++    return rows
++
++
+ def _load(name: str, suffix: str):
+     return os.path.join(CASES_DIR, "%s.%s.json" % (name, suffix))
+ 
+@@ -113,7 +191,7 @@ def run_matrix() -> List[Dict[str, object]]:
+     for rules_name, cert_name, expected, condition, why in MATRIX + PAGODA_MATRIX:
+         verdict = recheck(ruleset(rules_name), load_certificate(_load(cert_name, "cert")))
+         failed = sorted(name for name, ok in verdict.conditions.items() if not ok)
+-        rows.append({
++        row = {
+             "ruleset": rules_name,
+             "certificate": cert_name,
+             "expected": expected,
+@@ -125,11 +203,28 @@ def run_matrix() -> List[Dict[str, object]]:
+             "second_opinion": verdict.search.get("says"),
+             "witness_plan": verdict.search.get("witness_plan"),
+             "n_states": verdict.stats.get("n_states"),
++            "n_satisfying": verdict.stats.get("n_satisfying"),
+             "as_declared": (
+                 verdict.verdict == expected
+                 and (condition is None or condition in failed)
+             ),
+-        })
++        }
++
++        # The count column.  A row that is rejected at the binding never gets as
++        # far as counting anything, so the comparison is made only where the
++        # certificate was actually evaluated -- and a missing count where one was
++        # expected is a failure, not a skip.
++        declared = IC3_N_SATISFYING.get(cert_name)
++        if declared is not None and expected == ACCEPT:
++            engine_satisfying, engine_states = declared
++            row["engine_n_satisfying"] = engine_satisfying
++            row["engine_n_states"] = engine_states
++            row["counts_agree"] = (
++                verdict.stats.get("n_satisfying") == engine_satisfying
++                and verdict.stats.get("n_states") == engine_states
++            )
++            row["as_declared"] = bool(row["as_declared"]) and row["counts_agree"]
++        rows.append(row)
+ 
+     for level in SOKOBAN_LEVELS:
+         for filename in sorted(os.listdir(CASES_DIR)):
+@@ -216,6 +311,58 @@ def run_pagoda() -> Dict[str, object]:
+     }
+ 
+ 
++def peg_relation_anchor(ruleset: RuleSet, n: int,
++                        max_witnesses: int = 6) -> Dict[str, object]:
++    """The derived relation of a peg rule set against `interop.peg1d`'s.
++
++    The same shape of check as `anchors.a2_lean_step_table`, and there for the
++    same reason: a rule set is a transcription, and a transcription is only worth
++    what an outside artefact says about it.  Every `(state, jump)` pair is
++    compared -- `2^n * 2(n-2)` of them -- and an illegal jump has to come back as
++    the self-loop `frame persist` makes it, not as a missing edge.  A single
++    reversed guard or misindexed effect shows up here and not in any verdict.
++    """
++    states = ruleset.states()
++    rows = ruleset.transitions()
++    index_of = {state: i for i, state in enumerate(states)}
++    moves = peg1d.move_instances(n)
++    labels = ["jump(%d,%d,%d)" % (m["src"], m["over"], m["dst"]) for m in moves]
++
++    action_index = {action: i for i, action in enumerate(ruleset.actions)}
++    missing = sorted(set(labels) - set(ruleset.actions))
++    extra = sorted(set(ruleset.actions) - set(labels))
++    mismatches: List[str] = []
++    n_compared = 0
++
++    if not missing and not extra:
++        for state in states:
++            text = "".join(str(int(value)) for value in state)
++            source = index_of[state]
++            for move, label in zip(moves, labels):
++                n_compared += 1
++                target = rows[source][action_index[label]]
++                got = ("<off-domain>" if target < 0 else
++                       "".join(str(int(value)) for value in states[target]))
++                want = peg1d.apply(text, move) if peg1d.legal(text, move) else text
++                if got != want and len(mismatches) < max_witnesses:
++                    mismatches.append("%s -%s-> peg1d %s, rules %s"
++                                      % (text, label, want, got))
++
++    return {
++        "ruleset": ruleset.name,
++        "n_pos": n,
++        "n_compared": n_compared,
++        "n_expected": len(states) * len(moves),
++        "missing_actions": missing,
++        "undeclared_actions": extra,
++        "mismatches": mismatches,
++        "why": "interop/peg1d.py -- the same geometry transcribed for "
++               "lp_potential, sharing no code with this package",
++        "agrees": (not missing and not extra and not mismatches
++                   and n_compared == len(states) * len(moves)),
++    }
++
++
+ def run_anchors() -> Dict[str, object]:
+     out: Dict[str, object] = {}
+ 
+@@ -241,18 +388,28 @@ def run_anchors() -> Dict[str, object]:
+     out["sokoban_optima"] = plans
+ 
+     peg = []
+-    for start, optimum in PEG_REACHABILITY:
+-        plan = shortest_plan(load_ruleset(_load("peg4-%s" % start, "rules"))) \
+-            if os.path.exists(_load("peg4-%s" % start, "rules")) else "absent"
+-        if plan == "absent":
++    relations = []
++    for name, n, start, goal, hand in peg_cases():
++        if not os.path.exists(_load(name, "rules")):
+             continue
++        rules = load_ruleset(_load(name, "rules"))
++        plan = shortest_plan(rules)
+         length = len(plan) if plan is not None else None
++        # `peg1d.distance_to` is the independent number. The hand-verified
++        # literals only exist for the four-position board, so they are checked
++        # when present and never stood in for: a gradient step with no hand
++        # number still has an outside opinion, which is the whole requirement.
++        independent = peg1d.distance_to(start, [goal])
+         peg.append({
+-            "start": start, "hand_verified": optimum, "derived": length,
+-            "why": "peg4.py's docstring, hand-verified by exhaustive expansion",
+-            "agrees": length == optimum,
++            "ruleset": name, "start": start, "n_pos": n, "goal": goal,
++            "hand_verified": hand, "peg1d": independent, "derived": length,
++            "why": "interop.peg1d.distance_to, plus peg4.py's docstring where it "
++                   "has one -- both hand-verified by exhaustive expansion",
++            "agrees": length == independent and (hand is None or length == hand),
+         })
++        relations.append(peg_relation_anchor(rules, n))
+     out["peg_reachability"] = peg
++    out["peg_relation"] = relations
+ 
+     # The 5-cell board, against the reachable set interop/README.md names.
+     peg5 = []
+@@ -277,6 +434,7 @@ def run_anchors() -> Dict[str, object]:
+         and all(row["agrees"] for row in plans)
+         and all(row["agrees"] for row in peg)
+         and all(row["agrees"] for row in peg5)
++        and all(row["agrees"] for row in relations)
+     )
+     out["all_available"] = (
+         out["a2_episode_replay"].get("agrees") is True
+@@ -318,6 +476,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
+             "matrix_off_script": len(off_script),
+             "pagoda_certificates": pagoda["n_certificates"],
+             "pagoda_passed": pagoda["n_passed"],
++            "counts_compared": sum(1 for row in matrix if "counts_agree" in row),
++            "counts_disagreeing": sum(1 for row in matrix
++                                      if row.get("counts_agree") is False),
+             "forgeries": forged["n_forgeries"],
+             "forgeries_off_script": forged["n_off_script"],
+         },
+@@ -325,15 +486,30 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
+ 
+     print("cases      %d generated, %d drifted" % (len(build_cases.all_cases()), len(drift)))
+     for row in matrix:
+-        print("  %-8s %-22s %-34s %s"
+-              % (row["verdict"], row["ruleset"], row["certificate"],
++        # The count column: what the engine counted, what this package counted.
++        # A blank means the certificate was refused before anything was counted,
++        # which is a different statement from "the counts agree".
++        if "counts_agree" in row:
++            counts = "%s=%s %s" % (row["n_satisfying"], row["engine_n_satisfying"],
++                                   "ok" if row["counts_agree"] else "MISMATCH")
++        else:
++            counts = "-"
++        print("  %-8s %-22s %-34s %-14s %s"
++              % (row["verdict"], row["ruleset"], row["certificate"], counts,
+                  "as declared" if row["as_declared"] else "OFF SCRIPT"))
+     print("anchors    %s" % ("agree" if anchor_report["agrees"] else "DISAGREE"))
+-    for row in anchor_report["sokoban_optima"] + anchor_report["peg_reachability"]:
+-        key = row.get("ruleset") or ("peg4-%s" % row.get("start"))
++    for row in anchor_report["sokoban_optima"]:
+         print("  %-18s stated=%-5s derived=%-5s %s"
+-              % (key, row.get("stated_optimum", row.get("hand_verified")),
+-                 row["derived"], "ok" if row["agrees"] else "MISMATCH"))
++              % (row["ruleset"], row["stated_optimum"], row["derived"],
++                 "ok" if row["agrees"] else "MISMATCH"))
++    for row in anchor_report["peg_reachability"]:
++        print("  %-18s peg1d=%-5s derived=%-5s hand=%-5s %s"
++              % (row["ruleset"], row["peg1d"], row["derived"],
++                 row["hand_verified"], "ok" if row["agrees"] else "MISMATCH"))
++    for row in anchor_report["peg_relation"]:
++        print("  %-18s %d/%d edges agree with peg1d %s"
++              % (row["ruleset"], row["n_compared"] - len(row["mismatches"]),
++                 row["n_expected"], "ok" if row["agrees"] else "MISMATCH"))
+     replay = anchor_report["a2_episode_replay"]
+     print("  a2 replay          %s" % (
+         "%d/%d frames agree, world win=%s" % (replay.get("n_frames", 0),
+diff --git a/engine-rig/tests/test_ic3bounds_recheck_column.py b/engine-rig/tests/test_ic3bounds_recheck_column.py
+new file mode 100644
+index 00000000..eb209052
+--- /dev/null
++++ b/engine-rig/tests/test_ic3bounds_recheck_column.py
+@@ -0,0 +1,357 @@
++"""The recheck column: the third thing E8 asks for, per gradient step.
++
++`test_ic3bounds_harness.py` pins the solve time and the invariant size;
++`test_ic3bounds_emit.py` pins the translation and its count cross-check.  This
++file pins the join -- that every rung of axis A carries an independent checker's
++verdict, and that the two ways a column like this goes quietly wrong are both
++closed:
++
++* **A row with nothing to check must not read as a pass.**  The top of the
++  ladder is a timeout.  There is no invariant on that row, so `status` is
++  `n/a -- no invariant` and `is_pass` is False; a column that scored it green
++  would be reporting a pass on an object that does not exist.
++* **ACCEPT alone must not read as a pass either.**  The count cross-check is
++  what makes the column non-vacuous, so it is asserted to be *evaluated* on
++  every row -- both numbers present, both compared -- and a row whose recount
++  disagrees with what the run recorded is shown turning red even while the
++  rechecker still says ACCEPT.
++
++Cheap on purpose, like the harness tests: nothing here goes above n=6.  The
++sizes that cost minutes are covered by `recheck.verify_all`'s matrix and by
++`test_ic3bounds_emit.py`, which re-run the engine once each.
++"""
++
++import copy
++import json
++import os
++
++import pytest
++
++from ic3bounds import axis_size, harness
++from ic3bounds import recheck_column as column
++from recheck import build_cases
++
++FAST_BUDGET = 60.0
++
++
++def _row(n, timeout=FAST_BUDGET, **kwargs):
++    return harness.run_step(axis_size.spec_for(n, **kwargs),
++                            timeout_seconds=timeout)
++
++
++def _column(n, **kwargs):
++    return column.column_for(_row(n, **kwargs))
++
++
++# ------------------------------------------------------------------ the anchor
++
++def test_the_m9_anchor_row_rechecks_accept_with_eight_of_eight():
++    """M9's row, rechecked by something that never saw the engine.
++
++    8 = 8 is the whole column in one line: the engine counted its invariant
++    over 16 boolean tuples, `recheck/` counted the emitted predicate over the
++    product of `peg4-0111`'s declared domains, and the two are the same set.
++    """
++    got = _column(4)
++    assert got["status"] == "ACCEPT"
++    assert got["exit_code"] == column.EXIT_ACCEPT == 0
++    assert got["ruleset"] == "peg4-0111"
++    assert got["ruleset_source"] == "recheck/cases/peg4-0111.rules.json"
++    assert got["certificate"] == "peg4-0111-ic3-invariant"
++    assert (got["engine_n_satisfying"], got["engine_n_states"]) == (8, 16)
++    assert (got["recheck_n_satisfying"], got["recheck_n_states"]) == (8, 16)
++    assert got["counts_agree"] is True
++    assert got["agrees_with_recorded_row"] is True
++    assert got["conditions"] == {
++        "goal_break": True, "inv_closed": True, "inv_init": True,
++        "predicate_wellformed": True, "ruleset_binding": True,
++    }
++    assert got["finding"] is False
++    assert column.is_pass(got)
++
++
++def test_the_column_reads_the_invariant_off_the_row_rather_than_re_running_ic3():
++    """The row's own `cnf_text`, read back and re-rendered to prove it.
++
++    The parent cannot afford a second `ic3()` -- 310s at n=12 and n=13 alone --
++    so the invariant crosses as text.  Text is only as good as its round trip.
++    """
++    record = _row(4)
++    system = harness.build_system(axis_size.spec_for(4))
++    clauses = column.clauses_of(system, record["deterministic"])
++    assert system.render_cnf(clauses) == record["deterministic"]["cnf_text"]
++    assert len(clauses) == 2 and sum(len(c) for c in clauses) == 4
++
++
++def test_a_reading_that_does_not_round_trip_is_refused():
++    record = _row(4)
++    record["deterministic"]["cnf_text"] = "(pos1 | !pos2) & (!pos1 | pos2)"
++    system = harness.build_system(axis_size.spec_for(4))
++    with pytest.raises(column.ColumnError):
++        column.clauses_of(system, record["deterministic"])
++
++
++def test_a_reading_that_loses_a_literal_is_refused_by_the_recorded_counts():
++    record = _row(4)
++    record["deterministic"]["cnf_text"] = "(!pos1) & (pos1 | !pos2)"
++    system = harness.build_system(axis_size.spec_for(4))
++    with pytest.raises(column.ColumnError) as raised:
++        column.clauses_of(system, record["deterministic"])
++    assert "literal" in str(raised.value)
++
++
++# ------------------------------------------------- the row with nothing to check
++
++def test_a_timed_out_row_reads_no_invariant_and_never_passed():
++    """The boundary rung.  There is no invariant, so there is no verdict.
++
++    This is the assertion the whole column exists to make honestly: n=14 is the
++    result E8 was asked to find, and it must not arrive wearing a green tick.
++    """
++    got = column.column_for(_row(6, timeout=0.01))
++    assert got["status"] == column.NO_INVARIANT == "n/a \u2014 no invariant"
++    assert got["exit_code"] is None
++    assert got["counts_agree"] is None
++    assert got["engine_n_satisfying"] is None
++    assert got["recheck_n_satisfying"] is None
++    assert got["finding"] is False          # a boundary, not a defect
++    assert column.is_pass(got) is False
++    assert "pass" not in got["status"]
++    assert "not a pass" in got["detail"]
++    assert column.cell(got) == column.NO_INVARIANT
++
++
++def test_every_verdict_without_an_invariant_gets_the_same_word():
++    """`level-cap` is not a timeout, but it has no invariant either."""
++    capped = column.column_for(_row(6, max_levels=2))
++    assert capped["status"] == column.NO_INVARIANT
++    assert column.is_pass(capped) is False
++
++    for verdict in (harness.TIMEOUT, harness.LEVEL_CAP, harness.ENGINE_REFUSED,
++                    harness.ADAPTER_MISMATCH, harness.COUNTEREXAMPLE):
++        got = column.column_for(
++            {"spec": axis_size.spec_for(4).as_json(),
++             "deterministic": {"verdict": verdict}})
++        assert got["status"] == column.NO_INVARIANT, verdict
++        assert column.is_pass(got) is False, verdict
++
++
++# ------------------------------------------------------- the count cross-check
++
++def test_the_cross_check_is_evaluated_on_every_row_that_answered():
++    """Not "was it configured" -- both numbers are on every row, and compared."""
++    payload = axis_size.run(ns=(4, 6), timeout_seconds=FAST_BUDGET,
++                            command="test")
++    assert [step["spec"]["n"] for step in payload["steps"]] == [4, 6]
++    for step in payload["steps"]:
++        got = step["recheck"]
++        assert got["status"] == "ACCEPT"
++        # Both counts present, and the comparison actually made -- a `None`
++        # here would mean the column was reporting a verdict nobody checked.
++        assert isinstance(got["engine_n_satisfying"], int)
++        assert isinstance(got["recheck_n_satisfying"], int)
++        assert got["counts_agree"] is True
++        assert got["agrees_with_recorded_row"] is True
++        assert column.is_pass(got)
++    assert [step["recheck"]["engine_n_satisfying"]
++            for step in payload["steps"]] == [8, 30]
++    assert payload["recheck_findings"] == []
++    assert payload["recheck"]["taxonomy"]["2"].startswith("would-not-load")
++    assert column.NO_INVARIANT in payload["recheck"]["no_invariant"]
++
++
++def test_a_recount_that_disagrees_with_the_row_is_a_finding_not_a_pass():
++    """The comparison is made, not copied.
++
++    If the column simply echoed `n_satisfying` back at itself the assertion
++    below would be unfalsifiable.  Move the recorded number and the row goes
++    red while the independent verdict stays ACCEPT -- which is exactly the
++    shape of failure a verdict-only column cannot see.
++    """
++    record = _row(4)
++    record["deterministic"]["n_satisfying"] = 9
++    got = column.column_for(record)
++    assert got["status"] == "ACCEPT"                  # the verdict is unmoved
++    assert got["agrees_with_recorded_row"] is False
++    assert got["finding"] is True
++    assert column.is_pass(got) is False
++    assert "re-counting" in got["detail"]
++
++
++def test_a_weakened_invariant_is_caught_although_it_still_rechecks_accept():
++    """Trap 8, at the row level: the same set, or a different one?
++
++    On peg-6 there is a one-literal weakening that satisfies all three
++    conditions -- `tests/test_ic3bounds_emit.py` is where that is established.
++    Written into a row it stays ACCEPT and denotes fewer states, so the counts
++    are the only thing between the table and a green cell about the wrong
++    object.  The assertion that some weakening survives the verdict is
++    deliberate: if none does, this test has stopped demonstrating anything.
++    """
++    record = _row(6)
++    system = harness.build_system(axis_size.spec_for(6))
++    honest = column.clauses_of(system, record["deterministic"])
++    recorded = record["deterministic"]["n_satisfying"]
++
++    accepted_but_smaller = []
++    for position, clause in enumerate(honest):
++        for literal in sorted(clause):
++            weakened = list(honest)
++            weakened[position] = frozenset(x for x in clause if x != literal)
++            forged = copy.deepcopy(record)
++            forged["deterministic"]["cnf_text"] = system.render_cnf(weakened)
++            forged["deterministic"]["n_clauses"] = len(weakened)
++            forged["deterministic"]["n_literals"] = sum(len(c) for c in weakened)
++            got = column.column_for(forged)
++            if got["status"] != "ACCEPT":
++                continue                      # refused on the merits
++            if got["engine_n_satisfying"] == recorded:
++                continue                      # a redundant literal: the same set
++            accepted_but_smaller.append(got)
++
++    assert accepted_but_smaller, (
++        "peg-6 is here because a weakening of its invariant passes all three "
++        "conditions. If none does any more the case must be re-chosen -- do not "
++        "delete the assertion")
++    for got in accepted_but_smaller:
++        assert got["status"] == "ACCEPT"
++        assert got["agrees_with_recorded_row"] is False
++        assert got["finding"] is True
++        assert column.is_pass(got) is False
++
++
++# ----------------------------------------------------------------- the taxonomy
++
++def test_the_taxonomy_is_rechecks_own_exit_codes_and_not_a_new_one():
++    """`python -m recheck` already answers in five codes.  These are those."""
++    from recheck import __main__ as recheck_cli
++    from recheck.verify import ACCEPT, INCONSISTENT, REJECT
++
++    assert recheck_cli.EXIT[ACCEPT] == column.EXIT_ACCEPT == 0
++    assert recheck_cli.EXIT[REJECT] == column.EXIT_REJECT == 1
++    assert recheck_cli.EXIT[INCONSISTENT] == column.EXIT_INCONSISTENT == 3
++    # 2 and 4 have no verdict behind them, so they are read off the module the
++    # exit codes are defined in rather than guessed at here.
++    assert "2  the input would not load" in recheck_cli.__doc__
++    assert "4  the recheck itself failed" in recheck_cli.__doc__
++    assert column.EXIT_WOULD_NOT_LOAD == 2 and column.EXIT_CRASHED == 4
++    assert set(column.STATUS_BY_EXIT) == {0, 1, 2, 3, 4}
++    assert set(column.TAXONOMY) == {"0", "1", "2", "3", "4", "n/a"}
++
++
++def test_a_certificate_too_big_to_load_is_uncheckable_and_not_a_pass():
++    """`MAX_STATES` is the honest meaning of "uncheckable certificate".
++
++    A 20-position board declares 2^20 = 1048576 states, above
++    `recheck.ruleset.MAX_STATES`, so the rule set never becomes an object and
++    there is no verdict to report -- exit 2, not a REJECT and emphatically not
++    an ACCEPT.  No engine is run: the refusal happens before anything is built.
++    """
++    from recheck.ruleset import MAX_STATES
++
++    n = 20
++    assert 2 ** n > MAX_STATES >= 2 ** 13
++    fabricated = {
++        "spec": {"axis": "size", "label": "n=20", "n": n,
++                 "initial": "0" + "1" * (n - 1),
++                 "goal_states": ["01" + "0" * (n - 2)], "max_levels": 64},
++        "deterministic": {"verdict": harness.INVARIANT,
++                          "cnf_text": "(!pos1 | pos2)",
++                          "n_clauses": 1, "n_literals": 2,
++                          "n_satisfying": 1, "n_states": 2 ** n},
++    }
++    got = column.column_for(fabricated)
++    assert got["exit_code"] == column.EXIT_WOULD_NOT_LOAD == 2
++    assert got["status"] == "would-not-load"
++    assert got["finding"] is True
++    assert column.is_pass(got) is False
++    assert got["recheck_n_satisfying"] is None
++    assert "uncheckable" in got["detail"]
++
++
++def test_a_crash_in_the_rechecker_is_not_reported_as_a_refusal():
++    """Python's own status for an uncaught exception is 1, which is REJECT."""
++    record = _row(4)
++    record["deterministic"]["cnf_text"] = "pos1 & pos2"      # no parentheses
++    got = column.column_for(record)
++    assert got["exit_code"] == column.EXIT_CRASHED == 4
++    assert got["exit_code"] != column.EXIT_REJECT
++    assert got["status"] == "rechecker-crashed"
++    assert got["finding"] is True
++    assert column.is_pass(got) is False
++
++
++def test_findings_name_the_row_and_the_run_fails_on_them():
++    payload = axis_size.run(ns=(4,), timeout_seconds=FAST_BUDGET, command="test")
++    assert payload["recheck_findings"] == []
++    payload["steps"][0]["recheck"]["finding"] = True
++    payload["steps"][0]["recheck"]["status"] = "REJECT"
++    found = column.findings(payload["steps"])
++    assert len(found) == 1 and found[0].startswith("n=4: REJECT")
++
++
++# ------------------------------------------------------- the ladder is covered
++
++def test_every_ladder_rung_that_answers_has_a_rule_set_available():
++    """A rung whose size has no independent transcription has no column.
++
++    Every rung but the last returned an invariant, so every rung but the last
++    needs a rule set.  Two ways to have one, and the distinction is the point:
++    the sizes in `build_cases.PEG_GRADIENT` have a **committed** case under
++    `recheck/cases/`, and the rungs added when the ladder was made contiguous are
++    **generated in memory** by `ruleset_for`, which hashes over exactly the bytes
++    `build_cases` would have written.  Both are independent of the engine; only
++    one is on disk.  A rung with neither would have no column at all, and this
++    asserts there is no such rung.
++
++    n=14 deliberately has no committed case: it timed out, there is no invariant,
++    and a rule set nothing certifies would only be clutter.
++    """
++    answered = [n for n in axis_size.LADDER if n != 14]
++    committed = {n for n, _, _ in build_cases.PEG_GRADIENT}
++    generated = [n for n in answered if n not in committed]
++    assert generated, "the ladder is contiguous, so some rungs are above the "                       "committed gradient -- if not, this test has gone stale"
++
++    for n in answered:
++        start = axis_size.initial_for(n)
++        ruleset, source = column.ruleset_for(n, start, axis_size.goal_for(n))
++        assert ruleset.name == build_cases.peg_name(start, n)
++        if n in committed:
++            assert source == "recheck/cases/%s.rules.json" % ruleset.name
++            assert os.path.exists(column.case_path(n, start)), n
++            certificate = os.path.join(
++                build_cases.CASES_DIR,
++                "%s-ic3.cert.json" % build_cases.peg_name(start, n))
++            assert os.path.exists(certificate), n
++        else:
++            assert "no committed case" in source, n
++
++    assert not os.path.exists(column.case_path(14, axis_size.initial_for(14)))
++
++
++def test_the_committed_case_is_preferred_over_one_generated_on_the_spot():
++    """The byte-checked file, where there is one: `--check` reviews that."""
++    from recheck.ruleset import canonical_text
++
++    ruleset, source = column.ruleset_for(4, "0111", "0100")
++    assert source == "recheck/cases/peg4-0111.rules.json"
++    with open(column.case_path(4, "0111"), "r", encoding="utf-8") as handle:
++        # OPS-M cycle 32 merge note: `peg_ruleset` is now
++        # `(start, goal, name, gradient)`; peg4 is an *anchored* case, so this is
++        # the same call `all_cases` makes for `peg4-0111.rules.json` -- which is
++        # what this assertion is about.
++        assert handle.read().replace("\r\n", "\n") == canonical_text(
++            build_cases.peg_ruleset("0111", goal="0100"))
++
++    # And above the committed sizes the same generator answers, with the digest
++    # it would have had as a file -- so the binding still means the file.
++    ruleset, source = column.ruleset_for(9, "011111111", "010000000")
++    assert "no committed case" in source
++    assert ruleset.name == "peg9-011111111"
++
++
++def test_the_column_carries_no_absolute_path_or_wall_clock():
++    blob = json.dumps(_column(4))
++    assert "C:\\" not in blob and "/home/" not in blob and "/tmp/" not in blob
++    assert "engine-rig" not in blob
++    assert "seconds" not in blob

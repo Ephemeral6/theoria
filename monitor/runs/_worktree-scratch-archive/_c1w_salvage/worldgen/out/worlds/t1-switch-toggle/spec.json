@@ -1,0 +1,57 @@
+{
+  "agent_start": [
+    2,
+    2
+  ],
+  "colors": {
+    "door": 4,
+    "switch": 2,
+    "switch_on": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        4,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "toggle",
+        "net": "a"
+      }
+    }
+  ],
+  "families": [
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "layout": [
+    "#######",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#######"
+  ],
+  "notes": "A0\u2032's central mechanic on its own. The switch is re-witnessable from all four directions and both ways.",
+  "seed": 104,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-switch-toggle"
+}
