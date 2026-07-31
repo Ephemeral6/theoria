@@ -201,7 +201,7 @@ if test["p_value"] is not None and test["min_attainable_p"] > 0.05:
   而 `pytest.ini` 是 pytest 的 rootdir 配置，一行 `addopts` 就能把任何一条会反对的
   测试 deselect 掉。只查 `.py` 的版本对后两者是瞎的。
 
-### 2.2 code —— 改了就会动到已发布的数（47 个文件）
+### 2.2 code —— 改了就会动到已发布的数（48 个文件）
 
 收录判据：这个文件被编辑后，`REPORT_V2.md` 或 `battery/artifacts/` 里可能有数字改变。
 
@@ -223,6 +223,7 @@ sha256:ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427  battery
 sha256:dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e  battery/audit/exploits/exploration_planning.py
 sha256:08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e  battery/audit/exploits/mechanism_epistemic.py
 sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad  battery/audit/gaming.py
+sha256:740eb1601196a37d7a1b439e01faffbe4b538b6cc410be9303637ad16b0d0492  battery/audit/live_tiers.py
 sha256:35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd  battery/audit/redundancy.py
 sha256:c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5  battery/audit/stats.py
 sha256:6c57412f6311abf1a99f508e078caefdfc31287ea062f66b7b2cc6265fb256ba  battery/audit/v9/BLIND_DIGESTS.json
@@ -302,7 +303,7 @@ sha256:d5a1ab7643eaa577aaf352043986aab52acefc762937bfdb988f50ece9588da2  battery
 `METRICS.md == render()`，而 `render()` 读的正是被改过的产物），闸门 `VERIFY PASS`。
 读者是把 `METRICS.md` 当作「这台仪器是什么」来读的，所以它进 gated 桶。
 
-### 2.4 suite —— 整个测试目录（21 个文件）
+### 2.4 suite —— 整个测试目录（22 个文件）
 
 ```freeze:suite
 sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  battery/tests/__init__.py
@@ -320,6 +321,7 @@ sha256:051709eb517f44fe3b89a9836fa4cee2885cf4d1b27a1bc381e5f453ec6200cf  battery
 sha256:e7e4799ef6dbeb96271b46fa819cc7ebb5efd7fe6089d8e49fda1eaa6f2d7d3a  battery/tests/test_exploits_mechanism_epistemic.py
 sha256:5b17a09cba2ffb176698dcbffad3a58b7c31c2b31562be22350d6dc8e2d8c793  battery/tests/test_freeze.py
 sha256:9c9d32c97323d05e714477bc733886f688cf41db115b448f16c0ae32c6b24215  battery/tests/test_guard.py
+sha256:74b8b440da5947f2b128d6746d08527ee9449176df27402ec3eeb8885c6e6831  battery/tests/test_live_tiers.py
 sha256:c7dd4fa9aa6bcdbd7fd1b0c9ae782fc4245dc877be656964d5191f919f85483f  battery/tests/test_metrics.py
 sha256:ca5b597ca953a268d02006df377ceb60da734a2a0c77bb9f8c779868f295950c  battery/tests/test_v9_blinding.py
 sha256:c4e0c731981e835edfe94d7ed2973f6eed7e87ecfcc8303de8b3f01252e08982  battery/tests/test_v9_defences.py
@@ -339,14 +341,14 @@ sha256:790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5  battery
 ### 2.5 freeze —— 冻结机制自身（2 个文件）
 
 ```freeze:freeze
-sha256:4609981b527648dd8fc176a98d9f4b610a7d908a14b8dcbb0cdd2ee03940abad  battery/freeze.py
-sha256:b479d87fb1adec30a8e8485b00dc3ce73a6bc02486784c92005c5d462d3d9c9d  battery/verify.py
+sha256:d367952fdb961f9d8e6cba46e56adc9f178dff9679456173314cee0815275e1f  battery/freeze.py
+sha256:fe53c6455ff73ae1c73a0041fe4966f8d0605b074f4f26a1eb513225ee438baf  battery/verify.py
 ```
 
 收录它们，是为了让「悄悄把检查放松」这件事和「改一条指标」一样在 diff 里显形。
 **这一条有一个逃不掉的边界，写在 §8.2。**
 
-### 2.6 readings —— 记录、报告漂移、但**不作闸门**（7 份产物）
+### 2.6 readings —— 记录、报告漂移、但**不作闸门**（8 份产物）
 
 ```freeze:readings
 sha256:c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0  battery/artifacts/arm_contrast.json
@@ -356,6 +358,7 @@ sha256:1e4f5f88e7db52a4d4bb0a2d1b92470594418ac0371ff3b40b540c3323548dbe  battery
 sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery/artifacts/gaming_audit.json
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
+sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -810,3 +813,29 @@ python -m battery.verify   # 1) 冻结记录 2) battery/tests 3) 产物漂移（
 | 预注册记分板 | `battery/REPORT_V1.md`、`battery/REPORT_V2.md:111-149, 334-342` |
 | E2 警告原句 | `battery/REPORT_V2.md:382-384`（**不在 `gaming_audit.json` 里**，见 W-K） |
 | 电池自身的弱点清单 | `battery/STATUS.md`（W-1 … W-11） |
+
+---
+
+## 附：2026-07-31 增补 —— 活层级伴生产物（live tiers companion）
+
+本次增补把 V9 之后的**现行**层级判定落成一份**另开的文件**，正是 `PREREG_V9.md`
+§5 的处方（不修改任何已提交产物，冲结论另开文件、冲突留在明面上）执行成代码：
+
+* 新增 `battery/audit/live_tiers.py`（入 `code` 桶）：从 `gaming.tier_of()` 重算
+  逐指标现行层级，携带 V9 降级证据（R3：降级要点名 run 和数），并给出与冻结基线
+  `battery/artifacts/gaming_audit.json` 的逐条分歧（9 条，冻结 main → 现行
+  reference）。产物 `battery/artifacts_live/gaming_audit.live.json`（入
+  `readings` 桶）**无时间戳、无绝对路径**，对固定的树逐字节可复现；生成器对解析到
+  `battery/artifacts/` 之内的输出路径**直接拒绝**。
+* `battery/verify.py` 增第 6 级：伴生产物与进程内重算不一致 → 红；
+  `frozen_sha256` 与盘上冻结文件不再相符 → 红（基线被改写是预注册违规）；
+  冻结-现行分歧表**只报告、不改 exit code**（它是已披露的永久事实）；分歧存在而
+  `STATUS.md` 不再携带那句按冻结文件计数推导出的披露 → 红。
+* `battery/tests/test_live_tiers.py`（入 `suite` 桶）：正反两向，负控照
+  `test_freeze.py` 的样式逐条见红。
+
+因此 §2.2 由 47 → 48 个文件、§2.4 由 21 → 22 个、§2.6 由 7 → 8 份，相应
+`freeze:*` 块按 `python -m battery.freeze` 重渲。**冻结基线本身一个字节未动**
+（`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。被编辑的冻结文件只有
+`freeze.py`（桶清单扩充）与 `verify.py`（新增一级）——即冻结机制自身；按 §2.5
+的口径，机制的改动本就要在 diff 里露面，这一段就是那个露面。
