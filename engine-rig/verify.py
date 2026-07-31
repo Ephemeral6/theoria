@@ -2,16 +2,26 @@
 
     cd engine-rig && python verify.py
 
-Three rungs, and the territory is finished only if all three are green:
+Four rungs, and the territory is finished only if all four are green:
 
   1. the suite passes;
   2. the real pipeline runs once, offline -- all eight engines end to end;
-  3. the artefacts that run produced have the fields they claim to have.
+  3. the artefacts that run produced have the fields they claim to have;
+  4. every survey number that reaches the paper still recomputes, from a script,
+     to the value on disk.
 
 Rung 3 is the one that is usually missing.  A green suite says the code does
 what its author thought; it does not say the pipeline ran, and it does not say
 the stream it emitted still matches the frozen contract.  The two are different
 claims and only the second one is "this territory is done".
+
+Rung 4 is E18's (D-037).  The cross-check of 2026-07-29 published five ratios
+that the paper then quoted, and its run directory holds nine Markdown files and
+a manifest -- no data, no script.  A number that only a report remembers is not
+evidence, and `tools/engine_table.py`'s registry did not catch it because a
+regex against prose proves the paper's digits match the report's digits and
+says nothing about whether the report's digits match a computation.  This rung
+re-runs the recomputations and fails if any of them drifts.
 
 Two rules this gate keeps, because breaking either is how gates in this repo
 have failed before:
@@ -53,6 +63,10 @@ MIN_ENGINES = 5
 
 REFERENCE = os.path.join(HERE, "artifacts", "candidates.jsonl")
 
+# Rung 4's committed output: one JSON per survey number, written by
+# `tools.survey_numbers.run_all` (D-037, E18).
+COUNTS = os.path.join(HERE, "runs", "20260730T120000Z-E18", "counts")
+
 
 def sh(argv, cwd=HERE):
     """Run a stage, decoding as UTF-8 rather than as the host locale.
@@ -71,7 +85,7 @@ def fail(problems, message):
 
 
 def rung_tests(problems):
-    print("[1/3] suite")
+    print("[1/4] suite")
     r = sh([sys.executable, "-m", "pytest", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be the fifth
@@ -87,7 +101,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_path):
-    print("[2/3] one real run -- eight engines end to end, offline")
+    print("[2/4] one real run -- eight engines end to end, offline")
     r = sh([sys.executable, "-m", "tools.run_all",
             "--out", out_path, "--deterministic", "--force"])
     if r.returncode != 0:
@@ -102,7 +116,7 @@ def rung_real_run(problems, out_path):
 
 
 def rung_artifact_fields(problems, out_path):
-    print("[3/3] artefact self-check")
+    print("[3/4] artefact self-check")
     records, bad_lines = [], 0
     with open(out_path, encoding="utf-8") as fh:
         for n, line in enumerate(fh, 1):
@@ -148,6 +162,35 @@ def rung_artifact_fields(problems, out_path):
               "contract clean" % (len(records), len(engines), len(REQUIRED)))
 
 
+def rung_survey_numbers(problems):
+    """Re-run the E18 recomputations and compare against the committed counts.
+
+    `--check` is the whole point: it re-derives every number rather than reading
+    the JSON back, so a script that has quietly stopped agreeing with itself --
+    or with the engine it measures -- turns this red.  It writes nothing.
+
+    Slow by the standards of the other rungs (thousands of worlds), so it is
+    skippable for a quick loop, and skipping is *printed*: a rung that can
+    vanish without saying so is how a gate becomes decoration.
+    """
+    print("[4/4] survey numbers -- every paper ratio recomputes from script")
+    if os.environ.get("ENGINE_RIG_SKIP_SURVEY"):
+        print("   skip  ENGINE_RIG_SKIP_SURVEY is set -- rung 4 did NOT run")
+        return
+    if not os.path.isdir(COUNTS):
+        fail(problems, "no counts directory at %s -- the recomputations have "
+                       "no committed output to check against"
+             % os.path.relpath(COUNTS, HERE))
+        return
+    r = sh([sys.executable, "-m", "tools.survey_numbers.run_all",
+            "--out", COUNTS, "--check"])
+    if r.returncode != 0:
+        fail(problems, "survey-number recomputation red (exit %d)\n%s"
+             % (r.returncode, (r.stdout + r.stderr)[-3000:]))
+        return
+    print("   ok    %s" % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
+
+
 def reference_drift(out_path):
     """Does the committed reference still match what the code produces?
 
@@ -177,6 +220,7 @@ def main():
             drift = reference_drift(out_path)
             if drift:
                 print("   note  %s" % drift)
+        rung_survey_numbers(problems)
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
 
@@ -184,7 +228,8 @@ def main():
     if problems:
         print("engine-rig: RED (%d problem(s))" % len(problems))
         return 1
-    print("engine-rig: green -- suite, one real run, artefact fields")
+    print("engine-rig: green -- suite, one real run, artefact fields, "
+          "survey numbers")
     return 0
 
 

@@ -82,44 +82,75 @@ fig06 falls back to its ordinal axis and says so on the plate.
 
 ## Declared and absent — named on purpose
 
-Absent sources stay in `sources.py` with `tracked=False, optional=True`, so they
-appear in `SOURCES.sha256` as `ABSENT…` lines. A source that is missing should
-be *legible as missing*, not merely unmentioned.
+Absent sources stay in `sources.py` with `optional=True`, so they appear in
+`SOURCES.sha256` as `ABSENT…` lines. A source that is missing should be
+*legible as missing*, not merely unmentioned.
 
-**`baseline-arms/out/shards/ledger.*.jsonl`** — the envelope campaign ledgers,
+> **V23 CORRECTION (2026-07-29).** This section's whole example is obsolete and
+> the paragraphs below are kept struck through rather than deleted, because what
+> happened to them is the more useful record. A14 committed the envelope ledger
+> shards (`9307f139` for the four dev-pile ones, the envelope campaign's own
+> commits for the eleven `a7*` ones) and `out/campaign/campaign_*.json` with
+> them. So there is now **no `ABSENT…` line in `SOURCES.sha256` at all**, and
+> `figures/` has no declared-and-absent source left to point at.
+>
+> The `envelope_ledger` rule kept saying `tracked=False, optional=True,
+> floor=0` for two days after that. `SOURCES.sha256`'s status column is written
+> from that declaration and never from git, so the manifest asserted
+> `[untracked]` about fifteen committed files — and gate 4, which compares a
+> committed manifest against a freshly generated one, was green throughout,
+> because both sides of it were reading the same wrong sentence. The rule is now
+> `tracked=True`, keeping `optional=True` and a floor of zero — because
+> `release/LICENCE_POSTURE.md` classes these shards B, excluded from the release
+> tree by default, so a numeric floor would stop a release build. What the floor
+> was reaching for is derived instead: `tracked_but_missing()` asks git which
+> members are committed and requires each of those to be on disk. And
+> `check_tracking.py` (gate 14) re-derives the status column from
+> `git ls-tree -r HEAD` so that the next divergence between this declaration and
+> the tree is reported by something that is not the declaration.
+>
+> ~~Untracked in `master`~~ — the shards, `out/campaign/campaign_*.json`, and
+> every number this file draws from them are now checkable from a clean
+> checkout. Do not restore the "not checkable" caveat without checking
+> `git ls-files` first; that is the mistake this correction records.
+
+~~**`baseline-arms/out/shards/ledger.*.jsonl`** — the envelope campaign ledgers,
 four known files. **Untracked in `master`.** They exist in one working tree and
 not in a clean checkout, so a figure built on them could not be rebuilt, which
 fails the determinism requirement at its root rather than at its margin. They are
 substantial: ~2 000 cost rows against the tracked ledger's 274, with runs up to
 83 turns against the tracked ledger's 29. Figure 2 would be a better figure with
-them. It is built without them anyway.
+them. It is built without them anyway.~~
 
-As of P8 these are a `Rule` (`envelope_ledger`) with a floor of **zero** — absent
+~~As of P8 these are a `Rule` (`envelope_ledger`) with a floor of **zero** — absent
 is the expected state here, and a build that required them could not run from a
 clean checkout. The four known paths stay in the rule's `expected` list so they
-keep their `ABSENT…` lines in `SOURCES.sha256`. Drop any of them in and it is
-picked up automatically; so is **any other shard matching `ledger.*.jsonl`**,
-including one whose name nobody wrote down, which is the part the previous
-hand-written list could not do.
+keep their `ABSENT…` lines in `SOURCES.sha256`.~~ Drop any further shard in and it
+is picked up automatically — **any file matching `ledger.*.jsonl` that git
+tracks**, including one whose name nobody wrote down, which is the part the
+original hand-written list could not do. The reverse case is caught too, and by
+git rather than by a floor: `tracked_but_missing()` stops the build when a
+committed shard has left the working tree, instead of letting the bill quietly
+shorten. A shard that is present and *un*committed is warned about rather than
+folded in (`untracked_but_present()`), because "paid data on disk that no plate
+draws" and "no such data" must not look the same.
 
-**Name the cost of that, because it is real.** This rule is the one place where
+~~**Name the cost of that, because it is real.** This rule is the one place where
 discovery is deliberately not tracked-only, so a working tree that *has* the
 shards builds a different figure from a clean checkout — more curves, a
-different `SOURCES.sha256`, and gates 4 and 6 red. That was already true of the
-four named paths before P8; the rule widens it to any matching filename. It is
-now said out loud rather than left to be discovered as an unexplained hash diff:
-`build_all.py` prints a `WARN` naming every untracked shard it folded in, so the
-red gate arrives with its reason attached.
+different `SOURCES.sha256`, and gates 4 and 6 red.~~ That exemption is withdrawn.
+The rule is tracked-only like every other one, which closes the hole it opened:
+an untracked `ledger.*.jsonl` dropped into the shard directory used to be
+hashed and drawn here and not on a clean checkout. `build_all.py` still prints a
+`WARN` naming any untracked source it folds in — that check was widened in V23
+from rules to every declared source, because the thirty-odd hand-written
+`Source` entries were never filtered against git at all, so the one class it
+covered was the class that could no longer occur.
 
-Two of this file's own numbers come from that same untracked tree — the ~2 000
-cost rows and the USD 48.39 — and are therefore **not checkable from a clean
-checkout**. They were measured in a working tree that has the shards. Anyone
-verifying them needs that tree.
-
-The same tree holds `out/campaign/campaign_*.json`, whose four files sum to
-**USD 48.39** of campaign spend that appears in no tracked report. Not read here,
-for the same reason, and flagged so that a release manifest quoting a project
-total knows the number exists.
+`out/campaign/campaign_*.json` sums to **USD 48.39** of campaign spend that
+appears in no tracked *report*. The files themselves are tracked, so the number
+is checkable; it is still flagged here so that a release manifest quoting a
+project total knows it exists. Not read by any figure.
 
 ---
 

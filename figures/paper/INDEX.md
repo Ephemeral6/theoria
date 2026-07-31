@@ -169,25 +169,25 @@ trusting it.
 ### Figure 6 — Bill shape: what each arm's turns cost, and when
 
 * plate `fig02_bill_shape`, §7 (The metrics battery, recomputed over existing trajectories)
-* CSV `figures/csv/fig02_bill_shape.csv` sha256 `08bc1bf28130977ba02657111f7bc2492ca3828247d99db6ee72d381c07ea415`
+* CSV `figures/csv/fig02_bill_shape.csv` sha256 `0783012ed8238cc46a1453bd11c7b13364945ad1e73ffb1f7b8b275b83312646`
 
 | artefact | sha256 |
 |---|---|
-| `figures/paper/light/figure6_bill_shape.pdf` | `e6e8a1c7651443d13501064e73ccb7c9a168a756ed374fac51d08d3fc3717442` |
-| `figures/paper/light/figure6_bill_shape.png` | `f4182c42591a4d66576d3b0e28d55e22bb4036db4671b7461c4ec2b9c0f0a255` |
-| `figures/paper/light/figure6_bill_shape.svg` | `4f986de966918a31bd6a5d6a49d4b6b4ec6cda88675eede97e776076acff3e33` |
-| `figures/paper/dark/figure6_bill_shape.pdf` | `d7d704243bfefc006a23a8b86d5f6f4a1fd85b28d42542bcab647463b23aed43` |
-| `figures/paper/dark/figure6_bill_shape.png` | `a9863eea122cb52119ddffcda1f68881eca26c929d81276c04ac6275b678aac7` |
-| `figures/paper/dark/figure6_bill_shape.svg` | `81171ed406ae791070b9d6eb362518598b3cfaccfd801d794e89cea18932a04a` |
-| `figures/out/light/fig02_bill_shape.svg` | `4f986de966918a31bd6a5d6a49d4b6b4ec6cda88675eede97e776076acff3e33` |
-| `figures/out/light/fig02_bill_shape.png` | `2295ee90d58c23915cb07b606a85436f3bf56ada2f56937df62a24d192634908` |
-| `figures/out/dark/fig02_bill_shape.svg` | `81171ed406ae791070b9d6eb362518598b3cfaccfd801d794e89cea18932a04a` |
-| `figures/out/dark/fig02_bill_shape.png` | `c3e843a662d42e2626f0783d2ef54e4fbeb6da7188aeb60735fbb0bb90770835` |
+| `figures/paper/light/figure6_bill_shape.pdf` | `1b6d526ebe3d826de8a75d9bfd09173a2770fb6d764474cf405a664669b06e0f` |
+| `figures/paper/light/figure6_bill_shape.png` | `ea6f83664ea9f5c1adb32fde01c77919d8fae8d07feb245a43a4bf0e924a70ae` |
+| `figures/paper/light/figure6_bill_shape.svg` | `507c40b0dc5723573372708c724e01c5ee0d7e58df4af985d65bee004493f764` |
+| `figures/paper/dark/figure6_bill_shape.pdf` | `7c7910f5c9422407fa5e6ccedb6da8aba1037ddb0c84e17584edd53a65f8efee` |
+| `figures/paper/dark/figure6_bill_shape.png` | `d5c9f17583cae992f4866f0c29beb37a3776ef67e12f2a462d32848be0c2f0e9` |
+| `figures/paper/dark/figure6_bill_shape.svg` | `2adc3a9771f45ab3dcde0013efc2f689bcfb68379c00e3ed2eee71f6cb66823d` |
+| `figures/out/light/fig02_bill_shape.svg` | `507c40b0dc5723573372708c724e01c5ee0d7e58df4af985d65bee004493f764` |
+| `figures/out/light/fig02_bill_shape.png` | `5dd4fe979184b08d6405feb844d477c97066c5d23831a92df685a0c177ff2cd6` |
+| `figures/out/dark/fig02_bill_shape.svg` | `2adc3a9771f45ab3dcde0013efc2f689bcfb68379c00e3ed2eee71f6cb66823d` |
+| `figures/out/dark/fig02_bill_shape.png` | `7841466b2136afb1caee4ac99f1038d6b0bc49a6e8dca1f107a0dcee42cda176` |
 
 | data source | sha256 | what |
 |---|---|---|
-| `baseline-arms/BUDGET_REPORT.md` | `5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236` | section 2.1's per-arm price table -- the USD 0.1459 per successful action for bare_cc opus, which is the only baseline figure comparable to the theoria arm's |
-| `baseline-arms/ledger.jsonl` | `0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b` | pilot ledger; model-call records carry total_cost_usd, usage and step_idx |
+| `baseline-arms/BUDGET_REPORT.md` | `806aa490817292fe83c66cf061a615b841bd514730bcd73c2bd885eb4df46217` | section 2.1's per-arm price table -- the USD 0.1459 per successful action for bare_cc opus, which is the only baseline figure comparable to the theoria arm's |
+| `baseline-arms/ledger.jsonl` | `c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71` | pilot ledger; model-call records carry total_cost_usd, usage and step_idx |
 | `baseline-arms/out/pilot_ar25-0c556536.json` | `810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
 | `baseline-arms/out/pilot_g50t-5849a774.json` | `079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |
 | `baseline-arms/out/pilot_g50t_sonnet_rerun.json` | `45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30` | per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted |

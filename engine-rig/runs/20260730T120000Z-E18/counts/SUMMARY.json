@@ -1,0 +1,13 @@
+{
+  "disagreements": [
+    "pf.infinity_rows"
+  ],
+  "numbers": [
+    "cegis.lifted_tautological",
+    "lp.incomplete",
+    "mdl.objid",
+    "pf.infinity_rows"
+  ],
+  "python": "3.13.13",
+  "repo_root": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e18-survey-numbers-reproducible"
+}

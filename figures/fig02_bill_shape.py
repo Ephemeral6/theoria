@@ -108,7 +108,10 @@ NAME = "fig02_bill_shape"
 #: The one ledger named by hand. Everything else this figure reads arrives
 #: through a discovery rule, named here so the reader can find it:
 #:
-#:   ``envelope_ledger``  optional campaign shards, untracked by design
+#:   ``envelope_ledger``  the envelope campaign's ledger shards. Read
+#:                        "optional campaign shards, untracked by design" until
+#:                        V23; A14 committed all fifteen, so the rule is
+#:                        tracked and floored like every other one now.
 #:   ``pilot_rollup``     per-run roll-ups: the ``outcome`` column and the
 #:                        endpoint cross-check. Never used to patch a cost.
 #:   ``theoria_run``      the theoria arm, a ``(cost_curve, MANIFEST)`` pair per
@@ -288,8 +291,22 @@ def _load_ledgers() -> tuple[list[dict], list[dict], list[str]]:
             f"skipped): {', '.join(absent)}. The arm axis reads the record, so "
             "dropping any of them in changes no code here."
         )
+    elif len(present) > len(LEDGER_KEYS):
+        notes.append(
+            f"{len(present) - len(LEDGER_KEYS)} envelope ledger shard(s) folded in "
+            "beside the pilot ledger, every one committed."
+        )
     else:
-        notes.append("every optional source was present and folded in.")
+        # V23: the honest statement for a tree where the shards are excluded on
+        # purpose -- release/LICENCE_POSTURE.md classes them B, so the release
+        # builds this branch. Absence here is legal and it is not nothing: the
+        # campaign's spend is missing from the bill, and saying so is the whole
+        # job of this note.
+        notes.append(
+            "no envelope ledger shard was read: none is committed in this tree. The "
+            "bill therefore covers the pilot ledger alone and excludes the envelope "
+            "campaign -- expected in a release tree, a defect in the source repo."
+        )
     return calls, steps, notes
 
 
@@ -974,7 +991,7 @@ def _shape_value(curve: dict, metric: str):
 
 
 def _render(
-    curves: list[dict], shape: dict, theme_name: str, n_absent_optional: int
+    curves: list[dict], shape: dict, theme_name: str
 ) -> list[str]:
     p = theme.apply_theme(theme_name)
 
@@ -1411,7 +1428,7 @@ def _render(
     fig.suptitle(
         "Figure 2 -- bill shape: the per-turn cost curve (C2: bought early, spent late)"
     )
-    theme.caveat(fig, _caveat_text(curves, shape, n_absent_optional), theme=theme_name)
+    theme.caveat(fig, _caveat_text(curves, shape), theme=theme_name)
     return theme.save(fig, NAME, theme_name)
 
 
@@ -1424,7 +1441,7 @@ def _render(
 BASELINE_PRICE_CITE = "baseline-arms/BUDGET_REPORT.md 2.1, opus row"
 
 
-def _caveat_text(curves: list[dict], shape: dict, n_absent_optional: int) -> str:
+def _caveat_text(curves: list[dict], shape: dict) -> str:
     """The caveat, with its arithmetic computed rather than typed.
 
     Two of these numbers used to be literals that the same build also computed
@@ -1471,9 +1488,36 @@ def _caveat_text(curves: list[dict], shape: dict, n_absent_optional: int) -> str
         "THAT SHARE TRAVEL, because they disagree: battery/REPORT_V0.md says 27-45%, and "
         "papers/phase1-workshop/REVIEW.md recomputes 28.3-45.1% and records that the 27% lower "
         "bound does not reproduce. The panel is annotated with REPORT_V0's band, which is the "
-        f"one it was drawn against. {n_absent_optional} optional ledger(s) declared and absent "
-        "-- named by rule in figures/sources.py, not silently dropped. "
+        f"one it was drawn against. {_envelope_caveat()} "
         + _shape_caveat(curves, shape)
+    )
+
+
+def _envelope_caveat() -> str:
+    """What the envelope shards contribute to this bill, or that they are missing.
+
+    This replaced ``"{n} optional ledger(s) declared and absent"``, which was a
+    number that could not vary. Once ``envelope_ledger`` became a tracked rule
+    with no ``expected`` list, ``_discover`` only emits a ``Source`` for a file
+    that is on disk, so the absent count is zero by construction and the sentence
+    printed ``0`` on every plate forever. A caveat whose number cannot change is
+    not a caveat, and this one sat on the face of a publication figure.
+
+    So it reports the live fact instead, in the two states that actually occur: a
+    source repo where the shards are committed and read, and a release tree where
+    they are excluded by licence posture and the bill is correspondingly narrower.
+    """
+    n = len(sources.discovered(ENVELOPE_RULE))
+    if n:
+        return (
+            f"The envelope campaign's {n} committed ledger shard(s) are folded in, "
+            "declared by rule in figures/sources.py rather than by a list that ages."
+        )
+    return (
+        "NO ENVELOPE LEDGER SHARD IS COMMITTED IN THIS TREE, so this bill covers the "
+        "pilot ledger alone and excludes the envelope campaign entirely -- expected "
+        "in a release tree (release/LICENCE_POSTURE.md classes them B, excluded by "
+        "default), and absence is not zero."
     )
 
 
@@ -1555,13 +1599,9 @@ def build() -> dict:
     rows = csv_rows(curves)
     csv_path = theme.write_csv(NAME, CSV_HEADER, rows)
 
-    n_absent_optional = sum(
-        1 for src in sources.discovered(ENVELOPE_RULE) if not src.exists()
-    )
-
     images: list[str] = []
     for theme_name in theme.THEMES:
-        images.extend(_render(curves, shape, theme_name, n_absent_optional))
+        images.extend(_render(curves, shape, theme_name))
 
     notes.append(
         f"{len(curves)} curves drawn over {len({c['game_id'] for c in curves})} games, "

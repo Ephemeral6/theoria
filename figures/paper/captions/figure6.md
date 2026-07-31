@@ -9,7 +9,7 @@
 ## Provenance (not printed — the audit trail behind the caption)
 
 * plate `fig02_bill_shape`, paper §7
-* CSV `figures/csv/fig02_bill_shape.csv` sha256 `08bc1bf28130977ba02657111f7bc2492ca3828247d99db6ee72d381c07ea415`
+* CSV `figures/csv/fig02_bill_shape.csv` sha256 `0783012ed8238cc46a1453bd11c7b13364945ad1e73ffb1f7b8b275b83312646`
 * publication artefacts: `figures/paper/light/figure6_bill_shape.pdf`, `figures/paper/light/figure6_bill_shape.png`, `figures/paper/light/figure6_bill_shape.svg`, `figures/paper/dark/figure6_bill_shape.pdf`, `figures/paper/dark/figure6_bill_shape.png`, `figures/paper/dark/figure6_bill_shape.svg`
 
 Run: theoria-arm run directories (rule 'theoria_run'): `20260728T012311Z-g50t-first-contact-aborted`, `20260728T014402Z-g50t-first-contact-aborted`, `20260728T015354Z-g50t-first-contact`, `20260729T105729Z-leg01`, `preflight-20260728T012057Z`; baseline pilot roll-ups (rule 'pilot_rollup'): `pilot_ar25-0c556536.json`, `pilot_g50t-5849a774.json`, `pilot_g50t_sonnet_rerun.json`, `pilot_sk48-d8078629.json`, `pilot_sk48_sonnet_rerun.json`, `pilot_tn36-ef4dde99.json`; battery version (battery/artifacts/capability_spectrum.json): `v2`.
@@ -18,8 +18,8 @@ Status: complete — every source this plate declares is on disk.
 
 | data source | sha256 |
 |---|---|
-| `baseline-arms/BUDGET_REPORT.md` | `5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236` |
-| `baseline-arms/ledger.jsonl` | `0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b` |
+| `baseline-arms/BUDGET_REPORT.md` | `806aa490817292fe83c66cf061a615b841bd514730bcd73c2bd885eb4df46217` |
+| `baseline-arms/ledger.jsonl` | `c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71` |
 | `baseline-arms/out/pilot_ar25-0c556536.json` | `810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a` |
 | `baseline-arms/out/pilot_g50t-5849a774.json` | `079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8` |
 | `baseline-arms/out/pilot_g50t_sonnet_rerun.json` | `45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30` |

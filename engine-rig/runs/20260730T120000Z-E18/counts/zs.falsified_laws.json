@@ -1,0 +1,659 @@
+{
+  "agrees_with_e11": true,
+  "caveats": [
+    "WHAT 102 MEANS, AND WHAT IT DOES NOT. It is a count of laws that hold under the engine's *declared* quantifier -- the observed trajectory -- and fail under a *stronger* one: every legal transition reachable from the initial state. It is NOT a defect count and it is NOT an arithmetic error. `engine-rig/DECISIONS.md` D-003 pre-registers exactly this mechanism ('If a pair never fires, the observed difference space is smaller and the recovered invariant space is correspondingly larger -- still sound, but weaker than the ground truth') three months before it was measured, and `zerospace.py:209` puts the quantifier on the method signature: 'Is this vector one of the conservation laws the evidence supports?'. E11's own CROSSCHECK.md:92-101 retracts the defect reading and keeps the number. Two facts in this module's own output say the same thing quantitatively: the engine's dimension is >= the true dimension in 200/200 worlds (never below -- soundness is one-directional), and the elimination itself agrees with an independent GF(2) oracle in 200/200. This module recomputes the count. It does not re-open the adjudication. A bare '102' with no note is how the original misreading happened.",
+    "QUANTIFIER, stated exactly. 'Legal transition' here means (reachable state, declared operation). `parityworld.apply_operation` has no precondition -- it unconditionally shifts every cell in the operation's support -- so every such pair is legal and no impossible transition is enumerated. This is *weaker* than `lp_potential`'s `check_exactly::inv_closed`, which quantifies over move instances irrespective of reachability. The partial chose the weaker one so every counterexample starts from a genuinely reachable state, and says so: 102 is a LOWER BOUND. A stronger quantifier can only find more.",
+    "SHARED DEPENDENCY, unavoidable. `parityworld.apply_operation` produces both the trajectory under audit and this module's reachability graph. If it is itself wrong, both paths are wrong in the same direction -- which can only *mask* a finding of this shape (over-reported laws), never manufacture one. The falsification verdict (`increment_is_even`) is three lines of stdlib and touches neither `engines/zero_space/gf2.py` (the code under audit) nor `fuzzlab/oracles/gf2.py`; the oracle is used only for the `true_dim` column and for `same_span`.",
+    "SAME_SPAN IS A CONTROL, NOT EVIDENCE. 200/200 reproduces, but the adversarial review's sharpening is the point: the oracle takes differences against state 0 and the engine takes consecutive differences, and those two row sets are linear combinations of each other, so equal spans is a theorem rather than an observation. It cannot come out any other way, and `fuzzlab/props/zero_space.py::law_space_is_complete` -- which makes the same comparison -- therefore carries zero information in this direction.",
+    "COMMIT 2a1c30d (C11) MOVES NOTHING, and neither do the two zero_space commits after it. 2a1c30d added `truncated_cells` / `scope_exhaustive` bookkeeping to `local_laws` and renamed the literal 8 to `SUBSET_ENUMERATION_LIMIT`; 3de10b7b and 99204472 (E15) added the `undetermined` scope and its payload keys. All three are inert on this corpus for one checkable reason: `parityworld` uses at most 4 colours, so a cell's feature group is at most 4 wide against a limit of 8, the truncation branch is never entered, and `support.truncated_cells` counts 0 `undetermined` laws across all 200 worlds. The arithmetic path -- `gf2.null_space`, `local_laws`'s subset enumeration, `quotient_basis` -- is byte-identical to E11's base ed592a6. These are today's numbers regardless: the recomputation runs on today's code, which is the number of record.",
+    "NO fuzzlab/props DRIFT ON THIS PATH. The V-13 corpus repair (eb61aa98) changed which object `fuzzlab/props/_mine` selects, moving the `cegis_miner` numbers. This corpus does not route through `fuzzlab/props` at all -- it calls `fuzzlab.worlds.parityworld.generate` directly, exactly as the partial did. `git log ed592a6..HEAD` shows zero commits touching `fuzzlab/worlds/parityworld.py`, `fuzzlab/oracles/gf2.py`, `fuzzlab/prng.py` or `fuzzlab/worlds/common.py`, so there is no second caliber to report. `fuzzlab/props/zero_space.py` did move (e1319503) and is deliberately not called here.",
+    "PROSE SLIP, off by one, in the partial -- no registry number moves. The 13-world table's fourth column is headed 轨迹步数 ('trajectory steps') and its values are *state counts*: seed 12 is listed at 18, and the world has 18 states / 17 transitions. Under the state-count reading the table matches 13/13 (`support.dirty_world_table` agrees); under the step reading it matches 0/13. The same off-by-one reaches a quoted payload: the partial's hand-checkable example says seed 111's law carries `coverage: 4/4` and seed 12's carries `coverage 18/18`, but `zero_space/__init__.py:34` sets coverage to `n_transitions/n_transitions`, which is 3/3 and 17/17. The adversarial review's own transcript of seed 111 ('轨迹 AACA -> BACA -> ACBC -> CBBC') shows 4 states and 3 transitions, consistent with this. The underlying data is right; two rendered strings are not.",
+    "91 vs 100, both reproduced. The partial says 91 of the 102 counterexamples start from a state the trajectory itself visited; the adversarial review recomputed 100 and diagnosed the difference as the partial having looked only at the first counterexample in its enumeration order. Both are in `counts`: first-witness gives exactly 91 and any-witness exactly 100, which confirms the diagnosis as well as the numbers. 100 is the better figure; 91 is a conservative under-count. Neither is in the registry.",
+    "`zs.fixtureB_features` IS REGISTERED AGAINST THE WRONG DOCUMENT. The registry (`tools/engine_table.py:607`) regexes 16 out of `partials/probe_frontier-via-bruteforce.md`, not out of either zero_space source. Recomputed here from the fixture itself: `fixtures/pair_flip.py` declares 8 cells and 2 colours, `analyse` builds 16 features over 41 states and 40 transitions, and reports a 9-dimensional law space (8 cell_local + 1 global). Both fixture numbers are now derived from the fixture rather than from a third engine's report.",
+    "THE g50t GROUP IS A CENSUS OF WHAT WAS PUBLISHED, NOT A CHECK THAT IT HOLDS. 366 / 370 / 4 all recompute from `theoria-arm/runs/20260728T015354Z-g50t-first-contact/candidates.jsonl` as the modal published group (732 rows of 1821), and 366 = 370 - 4 is arithmetic. What is NOT computable offline is whether any of those 366 laws survives the quantifier this module applies to parityworld: that needs reachability enumeration over the live ARC game. Reported as a gap, exactly as both E11 sources report it. `g50t-5849a774` is a development-pile game so reading the artefact is permitted; nothing under `theoria-arm/` was written.",
+    "CROSSCHECK.md's '2911 such rows in theoria-arm' OVER-ATTRIBUTES, and the total is what reproduces. There are exactly 2911 `zero_space` rows across all committed `candidates*.jsonl` under `theoria-arm/` (1821 + 728 + 362, in the g50t first-contact run and its two aborted predecessors), so 2911 is right as a *row count*. But 'such rows' reads as rows in the 370/366/4 group, and only 1098 are: the other two groups are 365/362/3 (1448 rows) and 370/365/5 (365 rows). The digit is correct; the sentence attaches it to the wrong set.",
+    "SCOPE IS THE SECOND FINDING AND IT IS NOT ABOUT THE QUANTIFIER. Of 1271 `cell_local` laws, 329 have a support that is a *proper subset* of a cell's colour group, and 0 of those lie in the engine's own `cell_local_subspace()` -- they are world facts filed as encoding artefacts. Confirmed from the other side: all 51 falsified `cell_local` laws are proper-subset ones and no whole-group encoding law was ever falsified. The reason the partial gave for this being invisible ('all 15 tests run on Fixture B') was overturned by the adversarial review -- 10 of 15 do, and two hand-built worlds actually trigger the divergence. The correct reason is that no test asserts anything about what `scope` *means*. This module measures the labels; it does not adjudicate which definition is right.",
+    "GAP -- ONE FAMILY ONLY. Every parityworld number here is a fact about `parityworld`. `gridworld`, `blockworld`, `hypset` and `jumpgraph` are never fed to this engine, by the battery or by anything else, so there is no evidence about behaviour on any other family and none is claimed.",
+    "GAP -- `run_all --only X --check` reported STALE for every count file written by a *different* module, because the stale sweep did not know the run was deliberately partial. Fixed in `run_all.py` (stale detection is skipped when `--only` is given); a full `--check` still reports staleness. This was pre-existing and affects every sibling module's stated acceptance command, not just this one.",
+    "Every figure agrees with E11."
+  ],
+  "counts": {
+    "arm.zero_space_rows": {
+      "agrees": true,
+      "e11_prose": 2911,
+      "note": "CROSSCHECK.md:104 calls these '2911 such rows'; only 1098 of them are in the 370/366/4 group -- see caveats",
+      "recomputed": 2911,
+      "registry_key": null
+    },
+    "fixtureB.dimension": {
+      "agrees": true,
+      "e11_prose": 9,
+      "note": "the '9 维空间' the adversarial review pairs with 40 transitions",
+      "recomputed": 9,
+      "registry_key": null
+    },
+    "g50t.arithmetic_holds": {
+      "agrees": true,
+      "e11_prose": true,
+      "note": "366 = 370 - 4 is arithmetic, not a bug (CROSSCHECK.md:105)",
+      "recomputed": true,
+      "registry_key": null
+    },
+    "g50t.difference_rank": {
+      "agrees": true,
+      "e11_prose": 4,
+      "recomputed": 4,
+      "registry_key": null
+    },
+    "g50t.n_features": {
+      "agrees": true,
+      "e11_prose": 370,
+      "recomputed": 370,
+      "registry_key": null
+    },
+    "g50t.space_dimension": {
+      "agrees": true,
+      "e11_prose": 366,
+      "note": "modal published group on the live g50t run (development pile)",
+      "recomputed": 366,
+      "registry_key": null
+    },
+    "support.cell_local_whole_group": {
+      "agrees": true,
+      "e11_prose": 942,
+      "recomputed": 942,
+      "registry_key": null
+    },
+    "support.composition": {
+      "agrees": true,
+      "e11_prose": [
+        [
+          "free",
+          2,
+          36
+        ],
+        [
+          "free",
+          3,
+          34
+        ],
+        [
+          "free",
+          4,
+          31
+        ],
+        [
+          "planted",
+          2,
+          99
+        ]
+      ],
+      "note": "the partial's 'planted/k=2 99, free/k=2 36, free/k=3 34, free/k=4 31'",
+      "recomputed": [
+        [
+          "free",
+          2,
+          36
+        ],
+        [
+          "free",
+          3,
+          34
+        ],
+        [
+          "free",
+          4,
+          31
+        ],
+        [
+          "planted",
+          2,
+          99
+        ]
+      ],
+      "registry_key": null
+    },
+    "support.dirty_world_table": {
+      "agrees": true,
+      "columns": [
+        "seed",
+        "k",
+        "n_cells",
+        "n_trajectory_states",
+        "engine_dimension",
+        "true_dimension",
+        "n_falsified"
+      ],
+      "e11_prose": [
+        [
+          12,
+          4,
+          6,
+          18,
+          11,
+          10,
+          1
+        ],
+        [
+          21,
+          4,
+          8,
+          12,
+          23,
+          18,
+          9
+        ],
+        [
+          35,
+          4,
+          7,
+          26,
+          15,
+          14,
+          1
+        ],
+        [
+          60,
+          4,
+          8,
+          9,
+          25,
+          21,
+          22
+        ],
+        [
+          64,
+          4,
+          6,
+          17,
+          12,
+          10,
+          6
+        ],
+        [
+          80,
+          4,
+          8,
+          16,
+          23,
+          18,
+          10
+        ],
+        [
+          86,
+          4,
+          7,
+          7,
+          22,
+          13,
+          18
+        ],
+        [
+          92,
+          3,
+          7,
+          7,
+          17,
+          13,
+          13
+        ],
+        [
+          98,
+          3,
+          5,
+          7,
+          9,
+          7,
+          4
+        ],
+        [
+          111,
+          3,
+          4,
+          4,
+          9,
+          6,
+          7
+        ],
+        [
+          126,
+          4,
+          4,
+          8,
+          9,
+          5,
+          6
+        ],
+        [
+          142,
+          3,
+          4,
+          13,
+          7,
+          6,
+          2
+        ],
+        [
+          156,
+          3,
+          6,
+          13,
+          11,
+          8,
+          3
+        ]
+      ],
+      "note": "the partial's 13-row table, transcribed; its fourth column is headed 轨迹步数 (steps) but holds the state count -- see caveats",
+      "recomputed": [
+        [
+          12,
+          4,
+          6,
+          18,
+          11,
+          10,
+          1
+        ],
+        [
+          21,
+          4,
+          8,
+          12,
+          23,
+          18,
+          9
+        ],
+        [
+          35,
+          4,
+          7,
+          26,
+          15,
+          14,
+          1
+        ],
+        [
+          60,
+          4,
+          8,
+          9,
+          25,
+          21,
+          22
+        ],
+        [
+          64,
+          4,
+          6,
+          17,
+          12,
+          10,
+          6
+        ],
+        [
+          80,
+          4,
+          8,
+          16,
+          23,
+          18,
+          10
+        ],
+        [
+          86,
+          4,
+          7,
+          7,
+          22,
+          13,
+          18
+        ],
+        [
+          92,
+          3,
+          7,
+          7,
+          17,
+          13,
+          13
+        ],
+        [
+          98,
+          3,
+          5,
+          7,
+          9,
+          7,
+          4
+        ],
+        [
+          111,
+          3,
+          4,
+          4,
+          9,
+          6,
+          7
+        ],
+        [
+          126,
+          4,
+          4,
+          8,
+          9,
+          5,
+          6
+        ],
+        [
+          142,
+          3,
+          4,
+          13,
+          7,
+          6,
+          2
+        ],
+        [
+          156,
+          3,
+          6,
+          13,
+          11,
+          8,
+          3
+        ]
+      ],
+      "registry_key": null
+    },
+    "support.engine_dim_total": {
+      "agrees": true,
+      "e11_prose": 1832,
+      "note": "the partial's '1832 vs 1788'",
+      "recomputed": 1832,
+      "registry_key": null
+    },
+    "support.falsified_cell_local": {
+      "agrees": true,
+      "e11_prose": 51,
+      "recomputed": 51,
+      "registry_key": null
+    },
+    "support.falsified_cell_local_from_subsets": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 51,
+        "numerator": 51,
+        "pct": 100.0,
+        "text": "51/51"
+      },
+      "note": "every falsified cell_local law is a proper-subset one; no whole-group encoding law was ever falsified",
+      "recomputed": {
+        "denominator": 51,
+        "numerator": 51,
+        "pct": 100.0,
+        "text": "51/51"
+      },
+      "registry_key": null
+    },
+    "support.max_reachable_states": {
+      "agrees": true,
+      "e11_prose": 512,
+      "recomputed": 512,
+      "registry_key": null
+    },
+    "support.no_reverse_direction": {
+      "agrees": true,
+      "e11_prose": true,
+      "note": "engine dimension is >= the true dimension in every world; the disagreement is one-directional, which is what 'still sound' means",
+      "recomputed": true,
+      "registry_key": null
+    },
+    "support.true_dim_total": {
+      "agrees": true,
+      "e11_prose": 1788,
+      "recomputed": 1788,
+      "registry_key": null
+    },
+    "support.truncated_cells": {
+      "agrees": true,
+      "e11_prose": 0,
+      "note": "E15's UNDETERMINED scope never fires here: parityworld has at most 4 colours per cell against SUBSET_ENUMERATION_LIMIT=8, so no scope label in this corpus is budget-decided",
+      "recomputed": 0,
+      "registry_key": null
+    },
+    "support.witness_on_trajectory_any": {
+      "agrees": true,
+      "e11_prose": 100,
+      "note": "the adversarial review's correction: 100, not 91; both reproduce, and the review's diagnosis of the gap is confirmed",
+      "recomputed": 100,
+      "registry_key": null
+    },
+    "support.witness_on_trajectory_first": {
+      "agrees": true,
+      "e11_prose": 91,
+      "note": "the partial's 91 -- first counterexample in enumeration order",
+      "recomputed": 91,
+      "registry_key": null
+    },
+    "support.worlds_over_budget": {
+      "agrees": true,
+      "e11_prose": 0,
+      "note": "reachability budget 400000 states; the partial reports no world touching it",
+      "recomputed": 0,
+      "registry_key": null
+    },
+    "zs.cell_local_in_span": {
+      "agrees": true,
+      "e11_prose": 0,
+      "note": "of the proper-subset ones, how many lie in the engine's own cell_local_subspace(); zero means none of them is an encoding law",
+      "recomputed": 0,
+      "registry_key": "zs.cell_local_in_span"
+    },
+    "zs.cell_local_laws": {
+      "agrees": true,
+      "e11_prose": 1271,
+      "recomputed": 1271,
+      "registry_key": "zs.cell_local_laws"
+    },
+    "zs.cell_local_subsets": {
+      "agrees": true,
+      "e11_prose": 329,
+      "note": "cell_local laws whose support is a *proper* subset of the cell's feature group; the rest are whole-group encoding laws",
+      "recomputed": 329,
+      "registry_key": "zs.cell_local_subsets"
+    },
+    "zs.dirty_worlds": {
+      "agrees": true,
+      "e11_prose": 13,
+      "recomputed": 13,
+      "registry_key": "zs.dirty_worlds",
+      "seeds": [
+        12,
+        21,
+        35,
+        60,
+        64,
+        80,
+        86,
+        92,
+        98,
+        111,
+        126,
+        142,
+        156
+      ]
+    },
+    "zs.falsified_laws": {
+      "agrees": true,
+      "e11_prose": 102,
+      "note": "NOT a defect count -- see caveats[0]; D-003 pre-registers the mechanism and calls it sound",
+      "recomputed": 102,
+      "registry_key": "zs.falsified_laws"
+    },
+    "zs.fixtureB_features": {
+      "agrees": true,
+      "e11_prose": 16,
+      "note": "8 cells x 2 colours; recomputed from fixtures/data/pair_flip.jsonl, not from the probe_frontier partial the registry regexes",
+      "recomputed": 16,
+      "registry_key": "zs.fixtureB_features"
+    },
+    "zs.fixtureB_transitions": {
+      "agrees": true,
+      "e11_prose": 40,
+      "recomputed": 40,
+      "registry_key": "zs.fixtureB_transitions"
+    },
+    "zs.g50t_coverage_full": {
+      "agrees": true,
+      "e11_prose": true,
+      "recomputed": true,
+      "registry_key": "zs.g50t_coverage_full"
+    },
+    "zs.g50t_modal_transitions": {
+      "agrees": true,
+      "e11_prose": 6,
+      "recomputed": 6,
+      "registry_key": "zs.g50t_modal_transitions"
+    },
+    "zs.g50t_rows": {
+      "agrees": true,
+      "e11_prose": 1821,
+      "recomputed": 1821,
+      "registry_key": "zs.g50t_rows"
+    },
+    "zs.g50t_worst": {
+      "agrees": true,
+      "e11_prose": "370 features, 6 transitions, difference_rank 4, 366-dim law space",
+      "recomputed": "370 features, 6 transitions, difference_rank 4, 366-dim law space",
+      "registry_key": "zs.g50t_worst"
+    },
+    "zs.k2_clean": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 135,
+        "numerator": 0,
+        "pct": 0.0,
+        "text": "0/135"
+      },
+      "recomputed": {
+        "denominator": 135,
+        "numerator": 0,
+        "pct": 0.0,
+        "text": "0/135"
+      },
+      "registry_key": "zs.k2_clean"
+    },
+    "zs.k3_dirty": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 65,
+        "numerator": 13,
+        "pct": 20.0,
+        "text": "13/65"
+      },
+      "recomputed": {
+        "denominator": 65,
+        "numerator": 13,
+        "pct": 20.0,
+        "text": "13/65"
+      },
+      "registry_key": "zs.k3_dirty"
+    },
+    "zs.same_span": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 200,
+        "numerator": 200,
+        "pct": 100.0,
+        "text": "200/200"
+      },
+      "note": "control, not evidence: the oracle's rows (x_t ^ x_0) and the engine's (x_t ^ x_{t+1}) provably span the same subspace",
+      "recomputed": {
+        "denominator": 200,
+        "numerator": 200,
+        "pct": 100.0,
+        "text": "200/200"
+      },
+      "registry_key": "zs.same_span"
+    },
+    "zs.worlds": {
+      "agrees": true,
+      "e11_prose": 200,
+      "note": "parityworld seeds 1..200, contiguous, chosen before any result",
+      "recomputed": 200,
+      "registry_key": "zs.worlds"
+    }
+  },
+  "e11_prose": 102,
+  "inputs": [
+    {
+      "path": "engine-rig/engines/zero_space/README.md",
+      "sha256": "db52c2c960f3cee9c016349eaa3dc07e192adf719180abeee86107547092dae9"
+    },
+    {
+      "path": "engine-rig/engines/zero_space/__init__.py",
+      "sha256": "b367d04cd2e29a0d5070d717dc7aaf50d9e5b0d86bfea542250279db201f418b"
+    },
+    {
+      "path": "engine-rig/engines/zero_space/gf2.py",
+      "sha256": "a1acc2ccb401c1d328ceed1bbad4541f39229c09f86cbfbd5aa5b28c45705c16"
+    },
+    {
+      "path": "engine-rig/engines/zero_space/zerospace.py",
+      "sha256": "7a546f51effcbb5ef457c931021c2fbb474f796de37675cfa27a23e2ee9e3dde"
+    },
+    {
+      "path": "engine-rig/fixtures/data/pair_flip.jsonl",
+      "sha256": "cb8c67681bf8319005b7db03b2300e93b0185b9bb67c2fa385f6289372550ba8"
+    },
+    {
+      "path": "engine-rig/fixtures/pair_flip.py",
+      "sha256": "74cf5dbb7589aeb4c2a712ea7905a2a8121e029b3b5a2183bc10f08565271106"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/ADVERSARIAL-zero_space.md",
+      "sha256": "789ecee914cf4816415b4b904dd672bb8f7630c0e2caa8bf0051b23fa5304411"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/CROSSCHECK.md",
+      "sha256": "b44bf5be121be910be7ee3516e944ce9e2810d41f9d3c1e9c6a3d078c48391b4"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/zero_space-via-lp.md",
+      "sha256": "585a1aeea3218f370d97082147a4eb136474a94e94c978c31274d9ac762eb113"
+    },
+    {
+      "path": "fuzzlab/oracles/gf2.py",
+      "sha256": "b29a94f22aa596037764ca2e0e85f5f9e367af83974a8778538359c30ee3bcc7"
+    },
+    {
+      "path": "fuzzlab/prng.py",
+      "sha256": "9d18e3290f29b85a88f76d385f34be59c101e73c721a8e55ce287b8e42a8c66d"
+    },
+    {
+      "path": "fuzzlab/worlds/common.py",
+      "sha256": "ec57a8039fe21810c734cdd7e72d99c10617c2ae360757429cecee44d8d233b0"
+    },
+    {
+      "path": "fuzzlab/worlds/parityworld.py",
+      "sha256": "4ee00bd5d17140eeb15deb4ad61991a790c5e51e273a61fbc1b7edc7e9858b8d"
+    },
+    {
+      "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/candidates.jsonl",
+      "sha256": "d1cdf57e0b10cbce6833089bb80ffcec7483711c12871b8ecbdf44d70cf7094a"
+    },
+    {
+      "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/candidates.jsonl",
+      "sha256": "035dc7524d213cb3ba114b441adc25b6810d4b7ffb7b738eb513937ffe0ba2a2"
+    },
+    {
+      "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/candidates.jsonl",
+      "sha256": "0f754ad0431a938496702a4b419ccabe1d966692f4600d114ff9f4502749e737"
+    }
+  ],
+  "key": "zs.falsified_laws",
+  "method": "Corpus: 200 parityworld worlds, fuzzlab.worlds.parityworld.generate(seed) for seed in [1,200]. For each world: engines.zero_space.zerospace.analyse(world.states, world.colors) for the laws under audit; then BFS from world.states[0] applying every declared operation to every reachable state (apply_operation has no precondition, so the transition relation is reachable-states x operations) to enumerate ALL legal transitions, budget 400000 states. A law `a` is falsified iff some transition x->y has bin(a & (enc(x) ^ enc(y))).count('1') odd -- three lines of stdlib, calling neither the engine's gf2 nor the oracle's. true_dim is fuzzlab.oracles.gf2.null_space over the distinct reachable differences; same_span compares that oracle's trajectory null space against result.basis. cell_local laws are classified whole-group vs proper-subset against the feature groups, and the proper-subset ones tested for membership in the engine's own cell_local_subspace(). Fixture B is analysed from fixtures/data/pair_flip.jsonl. The g50t block is a census of committed candidate JSONL under theoria-arm/ (read-only, development-pile game). No network, no API, no RNG beyond the seed stream.",
+  "module": "tools.survey_numbers.zero_space_span",
+  "question": "How many vectors that zero_space published as conservation laws over 200 parityworld worlds are falsified by some legal transition of the same world -- i.e. hold on the sampled trajectory but not under the stronger quantifier lp_potential uses?",
+  "value": 102
+}

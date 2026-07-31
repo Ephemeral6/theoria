@@ -127,9 +127,20 @@ def _run(tmp_path, command, *, payload_on_disk=None, artifact_name="IMPLANT.json
                 "stage_key": "implanted",
             }],
         }, handle)
+    # Both ends of the pipe are pinned to UTF-8, and neither is the default.
+    # `verify.py` prints em dashes (`VERDICT: green — ...`); with `text=True`
+    # alone the parent decodes with the ambient codepage, so on a GBK-default
+    # Windows the reader thread died on `\xe2\x80\x94`, `proc.stdout` came back
+    # **None**, and every gate-line assertion below failed with `TypeError:
+    # argument of type 'NoneType' is not iterable` -- the exit-code assertion
+    # having already passed. A locale that silently deletes half of what this
+    # negative control checks is the failure mode this file exists to refuse,
+    # so the child's encoding is forced too rather than inherited.
+    env = dict(os.environ, PYTHONIOENCODING="utf-8")
     return subprocess.run(
         [sys.executable, "-m", "worldgen.verify", "--selftest-spec", spec_path],
-        cwd=ROOT, capture_output=True, text=True)
+        cwd=ROOT, capture_output=True, text=True,
+        encoding="utf-8", errors="replace", env=env)
 
 
 # --------------------------------------------------------------------------

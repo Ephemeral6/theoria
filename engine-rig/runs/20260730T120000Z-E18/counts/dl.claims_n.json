@@ -1,0 +1,937 @@
+{
+  "agrees_with_e11": true,
+  "caveats": [
+    "THREE ENCODINGS, ACTUALLY RUN. CROSSCHECK.md:39 says three encodings agree bit-for-bit on open4far. Recomputed here by three that ran -- own_strips (fresh grounder, atom sets with `clear` stored), positional (C4's shape: (player,b1,b2) with `clear` derived), engine (fd_adapter's own grounder and BFS) -- plus C4's verify/EVIDENCE.json read from disk. All four give 112 ground actions / 3352 reachable states / optimal 11: agreement confirmed.",
+    "LIMIT ON THAT AGREEMENT -- the world description is a common ancestor. All three recomputed encodings read engine-rig/fixtures/data/sokoban_open4far.pddl, and theory-compiler/tests/fixtures/strips/sokoban_open4far.pddl (the file C4's Lean was built from) is byte-identical to it. So the agreement is evidence about the encodings, not about the board; a systematic error in fixtures/sokoban.py would be inherited by all four. E11 recorded the same limitation (shared dependency 1) and this module inherits it.",
+    "The `engine` encoding is the defendant's own code and is NOT independent -- E11 excluded it deliberately. It is run here because the claim under audit is an agreement claim: E11 showed its grounder agrees with C4's Lean and left 'does the engine agree with either' to inference. It does.",
+    "AMBIGUITY RESOLVED -- what `dl.claims_n` counts. 36 deadlock theorems (open4far 16, open4 16, ringstuck 2, ring 2, harvested by deadlock_carver.carve) plus 14 categorical unsolvability claims U1-U14. carve() is claim harvest only; no engine decision procedure runs on an adjudicating path here.",
+    "THE RECHECK GAP, COUNTED. 18 of the 36 deadlock claims carry a recheck/cases/*.cert.json and 18 do not -- the open4 16 and the ring 2, exactly the split E11 named. '50/50 upheld' would be weaker if the recheck path and the cross-check path shared a premise, so the 18 cert-carrying patterns were adjudicated a second time from the certificate predicate (['=',['var','b1'],['lit','1,1']] -> at(b1,c11)) rather than from carve(): 18/18 same verdict. The remaining 18 are judged here by nothing else in the repo.",
+    "U10 is CONFIRMED *of the holed manual* and REFUTED *of the world*, which is how the repo already records it. My own rule-set evaluator (recheck/expr.py was not imported) reaches the goal on a2-world at distance 18 and finds inv_closed broken by 1 transition(s), every one of them cart 6,4 -> 7,6: True. That is the teleport_down rule, which a2-world.rules.json's own provenance names as the single rule the holed manual is missing. E11 printed the button=7 instance of that transition; this module's tie-break surfaces {\"from\": {\"button\": 8, \"cart\": \"6,4\", \"door\": \"no\"}, \"to\": {\"button\": 8, \"cart\": \"7,6\", \"door\": \"no\"}} first, and E11's exact witness is ABSENT in the set. Counted as CONFIRMED, following E11's convention that a claim is judged against what it claims.",
+    "FINDING (cosmetic, and the only place this module parts company with the prose) -- E11 section 6b prints the inv_closed witness as `{button: 7, cart: \"6,4\", door: \"no\"} --down--> {button: 7, cart: \"7,6\", door: \"no\"}`. No such state is reachable: `press_up` and `door_opens_up` share one guard and both fire on `up`, so door==\"no\" forces button==8, and this module counts 0 reachable a2-world states with door==\"no\" and button==7. The witness's button field is stale; the transition it names (cart 6,4 -> 7,6 under teleport_down) and the localisation to a single rule are both correct, and it is the only inv_closed break in the reachable set. Reported rather than smoothed over, because the whole point of a named witness is that a reader can go and look at it.",
+    "The four worldgen worlds are confirmed by RELAXATION, not by modelling worldgen's door/switch semantics: every door a switch could drive is treated as permanently open, which can only add reachable states. Cell counts t2-unsolvable-nodoor 11, v-707a64ad 12, v-d2c2b1b9 12, v-ce732813 3. Two match the certificates exactly (t2-unsolvable-nodoor 11, v-ce732813 3); for the two v-* worlds the certificate counts 21 states (cell x net) and 11 agent_cells where this counts 12 cells under the relaxation. Different units -- stated, not glossed, and not a match.",
+    "FAST DOWNWARD IS ABSENT on this machine (.toolchain/ is gitignored; backends.find_fast_downward() returned None) and NONE of the eleven numbers depends on it. All three sokoban encodings are complete BFS over a 3352-state space that exhausts in milliseconds; no planner is consulted for any figure here. The one place the toolchain could bite is fd.open4far_optimal: `optimal` is only a property of the search that produced it, and fd_adapter's own fd-satisficing rung (lazy_greedy/lama-first) is not optimal, so a plan length read off that rung could exceed 11 without any of these numbers being wrong. This module never calls solve(); it BFSes, so 11 is optimal by construction. engines.fd_adapter.search.search() agrees: plan length 11, 808 expansions, exhaustive=True.",
+    "COMMIT 2a1c30d (C11) landed after E11's base commit ed592a6 and touched engines/fd_adapter/{backends,search}.py, bench/fdrun.py and tools/p13_fd_dividend.py. It moves none of the eleven. What it changed in this territory is provenance, not arithmetic: SearchResult gained `max_expansions` and `exhaustive` fields (both kept out of as_json(), so candidates.jsonl is byte-unchanged), and run_fast_downward() gained encoding='utf-8', errors='replace' on the subprocess. No successor function, no goal test, no grounding rule moved -- verified by recomputing on today's tree and getting E11's 112 / 3352 / 9552 / 14 / 448 / 2904 / 11 back unchanged. Its real subject is the other direction: reading a tool's exit state as a fact about the world, which is E11 section 4's finding and is about cold-start-a0's fd_unsat.py, a file 2a1c30d did not touch (that track's to take or leave).",
+    "GAP -- E11 section 4's exit-code contradiction is NOT re-measured here. It is a claim about two source files' constants (backends.py's FD_SEARCH_UNSOLVABLE=11 versus cold-start-a0's FD_UNSOLVABLE_EXIT=12), adjudicated against runs/p13-fd-real/TOOLCHAIN_MANIFEST.md. With no FD build present neither E11 nor this module can re-run the planner, and no registry number in this family depends on the answer.",
+    "GAP -- the nine exam items and three ARC-variant claims are COUNTED, not adjudicated, exactly as in E11. The counts are recomputed from disk (exam/artifacts/truth/p15-verdict-a2.truth.json: 9 unsolvable items with a certificate_blob, 5 small_unsolvable + 4 large_unsolvable; proxy/variants/*.json: 3 with claim==unsolvable out of 4 files). The five small_unsolvable items carry exhaustive_feasible with 7-31 enumerated states and remain the obvious next target.",
+    "GAP -- U8 and U9 are judged against their own Lean encodings. `step` was re-executed from a0-spike/artifacts/A0.lean's definition and the no-button step table (148 entries) was parsed out of cold-start-a0/theory/generated_no_button/theory.lean. A DSL->Lean transcription error is out of reach here, the same scope the Lean proof has.",
+    "U8's documented retraction reproduced: with the box sliding one cell instead of two, the space grows 315 -> 2070 states and the box does reach (3,2), so the parity invariant genuinely stops holding -- a correct retraction, not a defect.",
+    "Per-pattern match counts, all with zero alive: open4far {'1': [210], '2': [14]}; open4 {'1': [210], '2': [14]}; ring {'1': [11]}; ringstuck {'1': [11]}.",
+    "Every figure agrees with E11."
+  ],
+  "counts": {
+    "dl.a0_push1_states": {
+      "agrees": true,
+      "e11_prose": 2070,
+      "recomputed": 2070,
+      "registry_key": null
+    },
+    "dl.a0_push2_states": {
+      "agrees": true,
+      "e11_prose": 315,
+      "recomputed": 315,
+      "registry_key": null
+    },
+    "dl.a2_holed_reachable": {
+      "agrees": true,
+      "e11_prose": 41,
+      "recomputed": 41,
+      "registry_key": null
+    },
+    "dl.a2_inv_closed_breaks": {
+      "agrees": true,
+      "e11_prose": 1,
+      "recomputed": 1,
+      "registry_key": null
+    },
+    "dl.a2_product_states": {
+      "agrees": true,
+      "e11_prose": 148,
+      "recomputed": 148,
+      "registry_key": null
+    },
+    "dl.a2_world_distance": {
+      "agrees": true,
+      "e11_prose": 18,
+      "recomputed": 18,
+      "registry_key": null
+    },
+    "dl.a2_world_reachable": {
+      "agrees": true,
+      "e11_prose": 55,
+      "recomputed": 55,
+      "registry_key": null
+    },
+    "dl.cert_decoded_patterns": {
+      "agrees": true,
+      "e11_prose": 18,
+      "recomputed": 18,
+      "registry_key": null
+    },
+    "dl.cert_verdicts_agree": {
+      "agrees": true,
+      "e11_prose": 18,
+      "recomputed": 18,
+      "registry_key": null
+    },
+    "dl.claims": {
+      "agrees": true,
+      "e11_prose": "50 CONFIRMED, 0 refuted",
+      "recomputed": "50 CONFIRMED, 0 refuted",
+      "registry_key": "dl.claims"
+    },
+    "dl.claims_n": {
+      "agrees": true,
+      "e11_prose": 50,
+      "recomputed": 50,
+      "registry_key": "dl.claims_n"
+    },
+    "dl.control_corner_alive": {
+      "agrees": true,
+      "e11_prose": 70,
+      "recomputed": 70,
+      "registry_key": null
+    },
+    "dl.control_pair_alive": {
+      "agrees": true,
+      "e11_prose": 14,
+      "recomputed": 14,
+      "registry_key": null
+    },
+    "dl.coverage_open4far": {
+      "agrees": true,
+      "e11_prose": 55.9,
+      "recomputed": 55.9,
+      "registry_key": "dl.coverage_open4far"
+    },
+    "dl.exam_small_unsolvable": {
+      "agrees": true,
+      "e11_prose": 5,
+      "recomputed": 5,
+      "registry_key": null
+    },
+    "dl.ic3_satisfying": {
+      "agrees": true,
+      "e11_prose": 8,
+      "recomputed": 8,
+      "registry_key": null
+    },
+    "dl.no_button_cells": {
+      "agrees": true,
+      "e11_prose": 23,
+      "recomputed": 23,
+      "registry_key": null
+    },
+    "dl.no_button_step_entries": {
+      "agrees": true,
+      "e11_prose": 148,
+      "recomputed": 148,
+      "registry_key": null
+    },
+    "dl.open4_optimal": {
+      "agrees": true,
+      "e11_prose": 6,
+      "recomputed": 6,
+      "registry_key": null
+    },
+    "dl.open4far_alive": {
+      "agrees": true,
+      "e11_prose": 448,
+      "recomputed": 448,
+      "registry_key": null
+    },
+    "dl.open4far_covered": {
+      "agrees": true,
+      "e11_prose": 1624,
+      "recomputed": 1624,
+      "registry_key": null
+    },
+    "dl.open4far_dead": {
+      "agrees": true,
+      "e11_prose": 2904,
+      "recomputed": 2904,
+      "registry_key": null
+    },
+    "dl.open4far_edges": {
+      "agrees": true,
+      "e11_prose": 9552,
+      "recomputed": 9552,
+      "registry_key": null
+    },
+    "dl.open4far_goal_states": {
+      "agrees": true,
+      "e11_prose": 14,
+      "recomputed": 14,
+      "registry_key": null
+    },
+    "dl.recheck_untouched": {
+      "agrees": true,
+      "e11_prose": 18,
+      "recomputed": 18,
+      "registry_key": null
+    },
+    "dl.ring_actions": {
+      "agrees": true,
+      "e11_prose": 40,
+      "recomputed": 40,
+      "registry_key": null
+    },
+    "dl.ringstuck_covered": {
+      "agrees": true,
+      "e11_prose": 22,
+      "recomputed": 22,
+      "registry_key": null
+    },
+    "dl.ringstuck_states": {
+      "agrees": true,
+      "e11_prose": 44,
+      "recomputed": 44,
+      "registry_key": null
+    },
+    "dl.theorems": {
+      "agrees": true,
+      "e11_prose": "36 of 36",
+      "recomputed": "36 of 36",
+      "registry_key": "dl.theorems"
+    },
+    "dl.unadjudicated_arc": {
+      "agrees": true,
+      "e11_prose": 3,
+      "recomputed": 3,
+      "registry_key": "dl.unadjudicated_arc"
+    },
+    "dl.unadjudicated_exam": {
+      "agrees": true,
+      "e11_prose": 9,
+      "recomputed": 9,
+      "registry_key": "dl.unadjudicated_exam"
+    },
+    "dl.uncovered": {
+      "agrees": true,
+      "e11_prose": 44.1,
+      "recomputed": 44.1,
+      "registry_key": "dl.uncovered"
+    },
+    "dl.well_formed_open4far": {
+      "agrees": true,
+      "e11_prose": 3360,
+      "recomputed": 3360,
+      "registry_key": null
+    },
+    "extra": {
+      "a0_box_cells_push2": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "a0_push1_reaches_goal_cell": true,
+      "a2_obligations": {
+        "a2-holed": {
+          "all_breaking_transitions_move_cart_6_4_to_7_6": null,
+          "breaking_transitions": 0,
+          "e11_witness_present": false,
+          "first_breaking_transition": null,
+          "goal_break": true,
+          "goal_reachable": false,
+          "inv_closed": true,
+          "inv_init": true,
+          "reachable_states_with_door_no_and_button_7": 0
+        },
+        "a2-world": {
+          "all_breaking_transitions_move_cart_6_4_to_7_6": true,
+          "breaking_transitions": 1,
+          "e11_witness_present": false,
+          "first_breaking_transition": {
+            "from": {
+              "button": 8,
+              "cart": "6,4",
+              "door": "no"
+            },
+            "to": {
+              "button": 8,
+              "cart": "7,6",
+              "door": "no"
+            }
+          },
+          "goal_break": true,
+          "goal_reachable": true,
+          "inv_closed": false,
+          "inv_init": true,
+          "reachable_states_with_door_no_and_button_7": 0
+        }
+      },
+      "c4_evidence_recorded": {
+        "corner_reachable_states_covered": 210,
+        "encodable_states": 3360,
+        "ground_actions": 112,
+        "note": "read from verify/EVIDENCE.json; no Lean toolchain was invoked here",
+        "pair_reachable_states_covered": 14,
+        "plan_length": 11,
+        "reachable_states": 3352
+      },
+      "fast_downward": {
+        "build_found": false,
+        "executable": null,
+        "note": "no FD build on this machine; every number here is BFS over the full reachable set, so none of them can move with the toolchain"
+      },
+      "ic3_invariant_check": {
+        "closed_under_every_jump_from_every_satisfying_state": true,
+        "contains_reachable_set_of_0111": true,
+        "excludes_goal_0100": true,
+        "holds_at_0111": true,
+        "satisfying_states": 8,
+        "state_space": 16
+      },
+      "negative_controls": [
+        {
+          "alive_matches": 70,
+          "correctly_rejected": true,
+          "pattern": "at(b1,c22)",
+          "reachable_matches": 210
+        },
+        {
+          "alive_matches": 14,
+          "correctly_rejected": true,
+          "pattern": "at(b1,c22) AND at(b2,c23)",
+          "reachable_matches": 14
+        }
+      ],
+      "open4far_four_way": {
+        "all_four_agree": true,
+        "c4_lean_recorded": {
+          "ground_actions": 112,
+          "optimal_plan": 11,
+          "reachable_states": 3352
+        },
+        "engine": {
+          "ground_actions": 112,
+          "optimal_plan": 11,
+          "reachable_states": 3352
+        },
+        "own_strips": {
+          "ground_actions": 112,
+          "optimal_plan": 11,
+          "reachable_states": 3352
+        },
+        "positional": {
+          "ground_actions": 112,
+          "optimal_plan": 11,
+          "reachable_states": 3352
+        }
+      },
+      "per_instance": {
+        "open4": {
+          "coverage_pct": 55.9,
+          "instance_dead_states": 2904,
+          "matches_per_pattern": {
+            "1": [
+              210
+            ],
+            "2": [
+              14
+            ]
+          },
+          "reachable_states_covered": 1624,
+          "refuted": 0,
+          "theorems": 16,
+          "vacuous_over_reachable": 0
+        },
+        "open4far": {
+          "coverage_pct": 55.9,
+          "instance_dead_states": 2904,
+          "matches_per_pattern": {
+            "1": [
+              210
+            ],
+            "2": [
+              14
+            ]
+          },
+          "reachable_states_covered": 1624,
+          "refuted": 0,
+          "theorems": 16,
+          "vacuous_over_reachable": 0
+        },
+        "ring": {
+          "coverage_pct": 100.0,
+          "instance_dead_states": 22,
+          "matches_per_pattern": {
+            "1": [
+              11
+            ]
+          },
+          "reachable_states_covered": 22,
+          "refuted": 0,
+          "theorems": 2,
+          "vacuous_over_reachable": 0
+        },
+        "ringstuck": {
+          "coverage_pct": 50.0,
+          "instance_dead_states": 44,
+          "matches_per_pattern": {
+            "1": [
+              11
+            ]
+          },
+          "reachable_states_covered": 22,
+          "refuted": 0,
+          "theorems": 2,
+          "vacuous_over_reachable": 0
+        }
+      },
+      "sokoban": {
+        "open4": {
+          "engine": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 6,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "engine_search_exhaustive": true,
+          "engine_search_expansions": 47,
+          "engine_search_plan_length": 6,
+          "own_strips": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 6,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "positional": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 6,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "positional_encodable_states": 4096,
+          "positional_well_formed_states": 3360,
+          "three_encodings_agree": true
+        },
+        "open4far": {
+          "engine": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 11,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "engine_search_exhaustive": true,
+          "engine_search_expansions": 808,
+          "engine_search_plan_length": 11,
+          "own_strips": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 11,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "positional": {
+            "alive": 448,
+            "dead": 2904,
+            "edges": 9552,
+            "goal_states_reachable": 14,
+            "ground_actions": 112,
+            "optimal_plan": 11,
+            "reachable_states": 3352,
+            "solvable": true
+          },
+          "positional_encodable_states": 4096,
+          "positional_well_formed_states": 3360,
+          "three_encodings_agree": true
+        },
+        "ring": {
+          "engine": {
+            "alive": 22,
+            "dead": 22,
+            "edges": 84,
+            "goal_states_reachable": 11,
+            "ground_actions": 40,
+            "optimal_plan": 1,
+            "reachable_states": 44,
+            "solvable": true
+          },
+          "engine_search_exhaustive": true,
+          "engine_search_expansions": 1,
+          "engine_search_plan_length": 1,
+          "own_strips": {
+            "alive": 22,
+            "dead": 22,
+            "edges": 84,
+            "goal_states_reachable": 11,
+            "ground_actions": 40,
+            "optimal_plan": 1,
+            "reachable_states": 44,
+            "solvable": true
+          },
+          "positional": {
+            "alive": 22,
+            "dead": 22,
+            "edges": 84,
+            "goal_states_reachable": 11,
+            "ground_actions": 40,
+            "optimal_plan": 1,
+            "reachable_states": 44,
+            "solvable": true
+          },
+          "positional_encodable_states": 144,
+          "positional_well_formed_states": 132,
+          "three_encodings_agree": true
+        },
+        "ringstuck": {
+          "engine": {
+            "alive": 0,
+            "dead": 44,
+            "edges": 84,
+            "goal_states_reachable": 0,
+            "ground_actions": 40,
+            "optimal_plan": null,
+            "reachable_states": 44,
+            "solvable": false
+          },
+          "engine_search_exhaustive": true,
+          "engine_search_expansions": 44,
+          "engine_search_plan_length": null,
+          "own_strips": {
+            "alive": 0,
+            "dead": 44,
+            "edges": 84,
+            "goal_states_reachable": 0,
+            "ground_actions": 40,
+            "optimal_plan": null,
+            "reachable_states": 44,
+            "solvable": false
+          },
+          "positional": {
+            "alive": 0,
+            "dead": 44,
+            "edges": 84,
+            "goal_states_reachable": 0,
+            "ground_actions": 40,
+            "optimal_plan": null,
+            "reachable_states": 44,
+            "solvable": false
+          },
+          "positional_encodable_states": 144,
+          "positional_well_formed_states": 132,
+          "three_encodings_agree": true
+        }
+      },
+      "unadjudicated": {
+        "arc_variants": [
+          "v001-step-limit-3",
+          "v002-forbid-down",
+          "v003-touch-loss-goal-approach"
+        ],
+        "exam_items": [
+          "vq-1015eb0bb1",
+          "vq-17af763cab",
+          "vq-2986ed8ffc",
+          "vq-6150a6eeb7",
+          "vq-721d09813c",
+          "vq-82f568ca11",
+          "vq-8ff1c690ad",
+          "vq-9725fbebf0",
+          "vq-ee54166153"
+        ],
+        "exam_large_unsolvable": 4,
+        "exam_small_unsolvable": 5
+      },
+      "worldgen": [
+        {
+          "certificate_agent_cells": 11,
+          "certificate_solvable": false,
+          "certificate_states": 11,
+          "driveable_doors": [],
+          "forbidden_action": null,
+          "goal": [
+            4,
+            5
+          ],
+          "goal_reachable": false,
+          "relaxed_cells": 11,
+          "undriven_doors": [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "world": "t2-unsolvable-nodoor"
+        },
+        {
+          "certificate_agent_cells": 11,
+          "certificate_solvable": false,
+          "certificate_states": 21,
+          "driveable_doors": [
+            [
+              4,
+              2
+            ]
+          ],
+          "forbidden_action": null,
+          "goal": [
+            4,
+            5
+          ],
+          "goal_reachable": false,
+          "relaxed_cells": 12,
+          "undriven_doors": [
+            [
+              3,
+              4
+            ]
+          ],
+          "world": "v-707a64ad"
+        },
+        {
+          "certificate_agent_cells": 11,
+          "certificate_solvable": false,
+          "certificate_states": 21,
+          "driveable_doors": [
+            [
+              4,
+              2
+            ]
+          ],
+          "forbidden_action": null,
+          "goal": [
+            4,
+            5
+          ],
+          "goal_reachable": false,
+          "relaxed_cells": 12,
+          "undriven_doors": [
+            [
+              3,
+              4
+            ]
+          ],
+          "world": "v-d2c2b1b9"
+        },
+        {
+          "certificate_agent_cells": 3,
+          "certificate_solvable": false,
+          "certificate_states": 3,
+          "driveable_doors": [],
+          "forbidden_action": "DOWN",
+          "goal": [
+            5,
+            7
+          ],
+          "goal_reachable": false,
+          "relaxed_cells": 3,
+          "undriven_doors": [],
+          "world": "v-ce732813"
+        }
+      ]
+    },
+    "fd.open4far_actions": {
+      "agrees": true,
+      "e11_prose": 112,
+      "recomputed": 112,
+      "registry_key": "fd.open4far_actions"
+    },
+    "fd.open4far_optimal": {
+      "agrees": true,
+      "e11_prose": 11,
+      "recomputed": 11,
+      "registry_key": "fd.open4far_optimal"
+    },
+    "fd.open4far_states": {
+      "agrees": true,
+      "e11_prose": 3352,
+      "recomputed": 3352,
+      "registry_key": "fd.open4far_states"
+    },
+    "ic3.states": {
+      "agrees": true,
+      "e11_prose": 16,
+      "recomputed": 16,
+      "registry_key": "ic3.states"
+    }
+  },
+  "e11_prose": 50,
+  "inputs": [
+    {
+      "path": "a0-spike/artifacts/A0.lean",
+      "sha256": "a03f9a55ccb158c28a6318ba1c3fa2fb0bdabb0269455161c499c8ecd6c0b25f"
+    },
+    {
+      "path": "a0-spike/artifacts/adaptation.json",
+      "sha256": "54cbe7fbe1ac653369bef574b2a9455cc1424e6d3cb189306d2730398001a19c"
+    },
+    {
+      "path": "cold-start-a0/theory/generated_no_button/theory.lean",
+      "sha256": "e73a105a0e573ff68f802df9b3f2d24b2ac638fc223b1ae88e91564504e4ca10"
+    },
+    {
+      "path": "engine-rig/artifacts/candidates.jsonl",
+      "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a"
+    },
+    {
+      "path": "engine-rig/engines/deadlock_carver/carve.py",
+      "sha256": "3bcf4891a0dadaf86f2ba17f03deba073af7227775ab0eeee674a88da04a6075"
+    },
+    {
+      "path": "engine-rig/engines/deadlock_carver/mutex.py",
+      "sha256": "4d24c6debb4621c54aa8edd87a91318df3e899721f182614d91109cf2219624b"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/backends.py",
+      "sha256": "7702b16adf4a12ce0caa0598d0aa55a896226698f87bc047606b1346034ed396"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/pddl.py",
+      "sha256": "6871e89bcb55e4a5e93f85bdbf53679cdcc3ebd0c1c4908a2f6b931a190658e7"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/search.py",
+      "sha256": "4051b3ca8133aad1c2dfa200e5b3a2ab469a10b9c41202d33be97e4b25bb0376"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_domain.pddl",
+      "sha256": "40ce1effb64bc626412c8e9dd163d51dfbefdd7ee27d588784450631606b98c1"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_open4.pddl",
+      "sha256": "73eefbc8723257e171af084c566ff9da213341858405b94021f3b003a8966662"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_open4far.pddl",
+      "sha256": "639583f4dac05102449132717a760b10feca3e87c06918c76a23aa2b0c53cfe1"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_ring.pddl",
+      "sha256": "d0da518dd3278ec6cb62b391e228867ab71a8e72e5f3826a6077c69ff35d0b8b"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_ringstuck.pddl",
+      "sha256": "f0a22a9b97934bf85bd4319e321839cff3fce4fe4349e967610a881bae72b023"
+    },
+    {
+      "path": "engine-rig/interop/certificates/pagoda_5_11011_to_00010.json",
+      "sha256": "f825c9f4c288550d6b70fba82249f7f5fd1de72648a1d5b5321a75311fbf7e9d"
+    },
+    {
+      "path": "engine-rig/interop/certificates/pagoda_5_11011_to_01000.json",
+      "sha256": "e5f85aae6ec5ed47d6df2f6fcd5e992e40b2fadf1055e9e5c2ba64dd430dc65c"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-holed.rules.json",
+      "sha256": "47065c5e8270ce2b7891f36e138d8ea56dad8251afb2100459d6a2b106518045"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-right-room-locked.cert.json",
+      "sha256": "1005005e65ec230511d77597d2969f015c46cc23298e322978e2633d472141d3"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-world.rules.json",
+      "sha256": "92270094ab2d7f3a5cf16f6690157c61ad5ac618acc1b76f59682f38a66b621e"
+    },
+    {
+      "path": "engine-rig/recheck/cases/keyed-gate-pagoda.cert.json",
+      "sha256": "d987a02551220a0a4a9ef89a795a6fcb3f97f7729aede5dfbf4c11c5c81feda1"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-0111-ic3.cert.json",
+      "sha256": "6387a05c465ab50fc3caa52468755782875c482e5bb775a6e2d843ce820c3f7c"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-1110-pagoda.cert.json",
+      "sha256": "bd5faba40bdf0b24c9e20595a4aa26e1b39549d334f4f4531cc6b961f0992040"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg5-11011-to-00010-pagoda.cert.json",
+      "sha256": "8af7f87068ceb0db15e506ed4f37c983080290f417248fc1a09476f2e8ed5896"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg5-11011-to-01000-pagoda.cert.json",
+      "sha256": "1d541c8b50a090479c85407f24c9d7585900cde9afd03fe9f031683630a685c7"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-11.cert.json",
+      "sha256": "1a23ab90a49512e22f8bbe4baf73f3fb9f5bb8c49798ca7867a2e560a35dc307"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-12-b2-13.cert.json",
+      "sha256": "a447995558173bebbac5e4103598a465304a2e7182c92970387076436345eb60"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-13-b2-12.cert.json",
+      "sha256": "3f7192751540b5414056e4e28e695df2880cf2b6514fa034d65d9df51894edb1"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-14.cert.json",
+      "sha256": "7eba72a84c7e16809fe0491a16dfcf2ec9bbd3a0b2c01b39fc63ebecdd7c6a84"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-21-b2-31.cert.json",
+      "sha256": "ec696b12eefbaeb75b2d46cb46ebc4b1f658e863afad3d8ef70cb7221c381cbe"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-24-b2-34.cert.json",
+      "sha256": "f8c9db1739a8563ae29434e6279599b32cbaf05f9c038448e5c1fce90574cbcf"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-31-b2-21.cert.json",
+      "sha256": "452d9f2dfdd6d06d0142291df6383fca03ceb715319288a8844000fd9cbc1f26"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-34-b2-24.cert.json",
+      "sha256": "a3bf8826d3ca8d399dd12577c4f0437e729ebea82c495fb4a49ef8bf3dc25258"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-41.cert.json",
+      "sha256": "32baa80f2029f6e97b42984a72d4545c4c3a6230b7a9f009c4b5e7e9e5e7e6b9"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-42-b2-43.cert.json",
+      "sha256": "7d66f20031ff2e6fb5705b669efa3f1dc066922e72c7a947e824e60481b14788"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-43-b2-42.cert.json",
+      "sha256": "09cdb6c270810b62215791592ff91a442731fd865fbe4daf74655dabe050e7eb"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-44.cert.json",
+      "sha256": "4542330f047d01aa5271f74ab9591a222b146d7e22d659d4b0cc96dc1b7f2bea"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-11.cert.json",
+      "sha256": "a30b1772a9d30f712d89df8ae7c822307b08874a6e6cc92ab95106e5e7017a46"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-14.cert.json",
+      "sha256": "84c21a8cca53c5fde29a27eee94195a76c1e1d55fb4514cfec1bde21631f5f5d"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-41.cert.json",
+      "sha256": "09a102c9ca8350dafe3b189518ce40615cd892d4e2535a39f96fc5de5e9af56b"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-44.cert.json",
+      "sha256": "1f5e70e40326473f01e5d9b7ffd9035b5ef3ac9dcce9e62b9d4a3ca7d1461aec"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ringstuck-dead-b1-11.cert.json",
+      "sha256": "e6d33e18271df3635daf2690b1d0390722ec446d4fdd3a5b438b9849c7199351"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ringstuck-dead-b1-14.cert.json",
+      "sha256": "d60282c02840a95da47463d826137cb343aff7a1b89544db1eb346923c4d6149"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/deadlock-via-reachability.md",
+      "sha256": "56b3ec8bdcb803e5632fdeeb0e12c5a7ebbad1d94f9f255201a66b8fae3f09b6"
+    },
+    {
+      "path": "exam/artifacts/truth/p15-verdict-a2.truth.json",
+      "sha256": "81e5f8bb716c5f6c1af8f3086ed3920dcb71dad00a4d2ddc8e0330db309e9b6c"
+    },
+    {
+      "path": "proxy/variants/v001-step-limit-3.json",
+      "sha256": "69a33cc200ca22e76fbfb9106f005518207d1aba492dff9c080a9a394dd5f21e"
+    },
+    {
+      "path": "proxy/variants/v002-forbid-down.json",
+      "sha256": "9da93060256c4de0f525713950e97efe654619eb90cfe474ed83be6cd54f1a14"
+    },
+    {
+      "path": "proxy/variants/v003-touch-loss-goal-approach.json",
+      "sha256": "b7d708278c2468ef27d1bbb99987835d32aa3d855afa0c6ab202eddefd918900"
+    },
+    {
+      "path": "proxy/variants/v004-swap-left-right.json",
+      "sha256": "68af575351866a341cf7ac61622200ab3624d87729ff9e32c175f7ec4efa6cf6"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/EVIDENCE.json",
+      "sha256": "a9f1df8ad1ca7c3d9ffd7c389a665a860ef8c5454fdba0d3ec69da71bb3a5e12"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/strips/sokoban_open4far.pddl",
+      "sha256": "639583f4dac05102449132717a760b10feca3e87c06918c76a23aa2b0c53cfe1"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-unsolvable-nodoor/ground_truth.json",
+      "sha256": "876feb5fa241c610f7554afb5d1a6fa9d42ab0afc017387f34613e67b78ad42c"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-unsolvable-nodoor/spec.json",
+      "sha256": "34be4dacbbfc9a8bdc6f441f3f66d796eb17b9b48449be3afb567c76f0d25435"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/ground_truth.json",
+      "sha256": "0f9454d04742a2130bc21bb978a855f5bcbda4142ccf89da9a8a636fbc8353c7"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/spec.json",
+      "sha256": "077e7b0a53ea208b4035e1e74e2aef804e901ba02f37a954c5331578ea238ed2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/ground_truth.json",
+      "sha256": "3160424429e16c54d2521f341cb9bb9a07c08c8c22f5f72792ae3b168015defc"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/spec.json",
+      "sha256": "32b453c94f74e0561a59b7986eea9488805897ead51791c3e13b81c53b490f40"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/ground_truth.json",
+      "sha256": "f9d8a48b24280823d2bd54bc60361010df5756b4fc3cef3e2dec7668a2c9bfac"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/spec.json",
+      "sha256": "d6b17b0d3346a37cda70caf54228c3517ddd83d3bb0f3f7650cf3fe2de86680d"
+    }
+  ],
+  "key": "dl.claims_n",
+  "method": "Census: 36 deadlock theorems harvested by deadlock_carver.carve over the four sokoban instances, plus 14 categorical unsolvability claims read out of candidates.jsonl, recheck/cases/, interop/certificates/, the Lean files and worldgen's ground_truth.json. Adjudication: exhaustive forward BFS from the initial state, then a backward closure from the goal states over the reachable subgraph -- a state is alive if some goal state is reachable from it, dead otherwise. No budget anywhere, so every 'unreachable' is a proof and not a timeout. sokoban is computed three times over (own STRIPS grounder / positional encoding with `clear` derived / fd_adapter's own) and compared against C4's verify/EVIDENCE.json. peg-4 and peg-5 use a jump rule re-implemented from fixtures/peg4.py's docstring; the a2 manuals use a rule-set evaluator written here rather than recheck/expr.py; A0 and the no-button manual re-execute the `step` written in their own Lean; the four worldgen worlds are judged by an open-door relaxation over the layout literal. No network, no API, no planner, no RNG.",
+  "module": "tools.survey_numbers.deadlock_reach",
+  "question": "How many machine-readable deadlock / unsolvability claims does the rig carry, and how many of them survive exhaustive reachability?",
+  "value": 50
+}

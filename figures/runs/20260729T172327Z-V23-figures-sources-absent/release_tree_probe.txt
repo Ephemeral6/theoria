@@ -1,0 +1,38 @@
+git on PATH: True  (the release-tarball condition: a binary, and no repository)
+
+case A -- no repository:
+  PASS  in_git_work_tree() is False in a non-repo
+  PASS  git_log degrades instead of raising
+        returned 0 row(s)
+  PASS  and says why, in GIT_DEGRADED
+        C:\Users\user\AppData\Local\Temp\v23-release-tree.rizyvdx4 is not a git work tree; cold-start-a0/THEORIZE_LOG.md has no commit-timestamp axis and the figure falls back to its ordinal one
+
+case B -- the class-B shards are absent on purpose:
+  PASS  _tracked_paths cannot answer, and records that
+        C:\Users\user\AppData\Local\Temp\v23-release-tree.rizyvdx4 is not a git work tree, so no source's tracked/untracked status could be checked and the tracked-only filter did not apply. Expected when building from a release tarball; a figure built here is not a figure whose inputs were verified as committed.
+  PASS  envelope_ledger is floor=0 and optional
+        floor=0 optional=True tracked=True
+  PASS  it discovers nothing there, without complaint
+        discovered 0
+  PASS  no floor violation from envelope_ledger
+        []
+  PASS  tracked_but_missing() is empty
+        []
+
+NOT FIXED HERE, AND FOUND BY WRITING THIS PROBE -- `figures/` cannot build in a
+default release tree at all, and never could. `release/LICENCE_POSTURE.md:48`
+puts `baseline-arms/ledger.jsonl` in class B ("NEEDS WRITTEN PERMISSION.
+Default: excluded"), and `sources.py` declares it as the `pilot_ledger` Source
+with `optional=False`. So `check_required()` reports it missing and gate 0 goes
+red before any other gate runs -- for the required ledger, not for the shards.
+`pilot_rollup`'s floor of 6 is a second, similar question depending on how
+`baseline-arms/out/pilot_*.json` is classified, which is not mine to rule on.
+
+This probe therefore checks the narrow thing it can honestly check: that V23's
+change to `envelope_ledger` adds no new release-time failure. It does not claim
+the release build works. Whether `figures/` should be reproducible from a class-A
+tree is a `release/` decision -- either the plates that read class-B inputs are
+declared unbuildable downstream, or those inputs get written permission. Reported
+to monitor rather than decided here.
+RELEASE-TREE PROBE: green. The class-B shard exclusion no longer turns gate 0 red, and a tree with no repository degrades instead of raising.
+exit=0

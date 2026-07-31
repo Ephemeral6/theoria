@@ -1,0 +1,376 @@
+{
+  "agrees_with_e11": false,
+  "caveats": [
+    "Corpus A's seed is not E11's.  The partial (§3A, and the reproduction appendix) says the four scripts lived in a session scratchpad and were not committed; it records the *shape* of the draw (1-9 hypotheses x 1-7 actions x 1-5 observations, weights from {0.5,1,2,3,7}, costs from {0,0.25,1,2,5,12} with zero deliberately at 2/9) and no seed, no RNG, and no draw order.  This module re-implements that shape with `random.Random(BASE_SEED + i)` per world and BASE_SEED=20260729.  A different seed gives a different count, so `pf.infinity_rows` and `pf.zero_cost_bug` cannot be reproduced to the unit and are not claimed to be.  `seed_sensitivity` reports the spread over 32 replicate corpora; read the E11 figure as inside or outside that spread, not as equal or unequal.",
+    "Corpus A's draw order within a world is also unrecorded.  The order taken here is n_hyp, n_actions, n_obs, then the table row-major, then the weights, then the costs.  Any other order is a different corpus at the same seed -- one more reason the counts are a spread rather than a value.",
+    "The nonzero cost values and the hypothesis weights are provably irrelevant to both defect counts, which removes most of the sting from the previous two caveats.  `ProbeValue.splits` is `n_classes > 1`, which no weight can change, and every zero-cost action outranks every priced one whatever the price is, so the two counts depend only on the table, the action count and P(cost == 0) = 2/9.  Only the entropy figures see the weights.",
+    "`Infinity` is counted by serialisation, not in memory: the row is built by `to_payload` + `make_candidate`, written with the same `common.jsonio.dumps` that `emit` uses, and re-read with `json.loads(parse_constant=<raise>)`.  A row counts only when a strict reader rejects it.",
+    "Only worlds that actually emit are counted, mirroring `probe_frontier.run`, which calls `emit` only when `best is not None`.  So a world holding a zero-cost action whose top-ranked probe splits nothing writes no row and is not an `Infinity` row -- it is a `pf.zero_cost_bug` world instead.  The two defects are disjoint by construction.",
+    "Corpus A's candidate ids and timestamps are pinned (THEORIA_DETERMINISTIC_IDS=1, a fixed timestamp) for the duration of `compute()` and restored afterwards.  Without that the uuid4 ids make the run non-reproducible, and `run_all --check` would report drift that is not there.",
+    "Corpus B's state space is read as 110 anchors of a (2,3) object on 12x12 x 139 obstacle placements (138 free cells, plus the no-obstacle board) = 15290.  The partial says only 'each anchor x each single-obstacle position'; 110 x 138 is 15180, so the empty board must be included to reach the published 15290.  That reading reproduces E11's whole §4B table -- guard counts, distinguishable worlds, splittable states and engine-splits for all nine rules -- cell for cell, which is what settles it.",
+    "Corpus B's nine rules are `MiningResult.all_rules` minus the lifted `push` (action `?dir`).  `mine` returns ten rules with a frontier of two or more; the lifted one is excluded because `evaluate` cannot resolve `act==?dir` and would score every guard silent.  The partial's table names exactly the nine ground rules.",
+    "`pf.teleport_worlds` counts equivalence classes of frontier guards under their full fires/silent vector over all 15290 x 4 state-action pairs.  `pf.argmax_states` compares `rank_probes` over all 21 guards against `rank_probes` over one representative guard per class, both at weight 1.0, and counts states where the top-ranked action differs.",
+    "Two prose figures adjacent to `pf.argmax_states` do not reproduce and are not registry keys: the partial reports a maximum entropy delta of 0.0617 bit for `teleport` and 0.0584 for `blocked_UP`; recomputed over the same space they are 0.0669 and 0.0617.  Note that the recomputed `blocked_UP` figure equals the published `teleport` one, which looks like a row shift in the prose rather than a different measurement.  Recorded under `extra.entropy_delta_bits`.",
+    "The two defect counts do not miss by the same amount, and the asymmetry is the one place the recipe can be shown to be slightly off.  Over 200 replicate corpora `pf.infinity_rows` averages 1591 (sd 31), putting E11's 1633 at the 89th percentile -- ordinary.  `pf.zero_cost_bug` averages 63 (sd 7), putting E11's 82 at the 99th.  Digging one level: both counts are closed-form in P(cost==0) and the three range endpoints, and the deficit is entirely absorbed by moving an endpoint by one -- the exact thing '1-9 hypotheses x 1-7 actions x 1-5 observations' cannot pin down.  The literal reading predicts (1591, 64); n_hyp in 1..8 with n_actions in 2..6 predicts (1618, 83); n_actions in 2..7 with P(zero)=1/6 predicts (1637, 79).  `fuzzlab.worlds.hypset` excludes one-action worlds on purpose ('a one-action world has nothing to rank'), so an off-by-one of exactly that kind is the likeliest explanation.  Neither reading is recoverable from the partial, so the recomputation reports the spread and stops there.",
+    "`ranking_exact_tie` is 0 here by construction, where E11 reported 10 of its 35 ranking differences as 'exact tie on the engine's own key, decided by the `str(action)` fallback'.  The independent sort key used here ends in the same `str(action)` fallback the engine uses, so a pair that ties exactly on `(-value, -entropy, cost)` sorts the same way on both sides and cannot produce a difference at all.  E11's self-written key evidently lacked that fallback, which is where its 10 came from.  The number that matters, `pf.real_reorderings`, is 0 either way.",
+    "`pf.entropy_dev` is a different corpus's float noise, so it confirms an order of magnitude and nothing sharper: 1.61e-15 here (about 7 ULP at 1.0) against E11's 1.11e-15 (about 5 ULP).  E11's `pf.ulp = 5` is therefore a floor, not a bound; the conclusion it was used for -- that 1e-9 is safe with orders of margin and 2.2e-16 would produce false positives -- is unaffected and is reinforced.",
+    "Corpus B is a recomputation, not a cross-check.  E11 recomputed partitions and entropies from an independently written formula; this module reuses that discipline for corpus A (see `method`) but reads corpus B's rankings straight off `rank_probes`.  Corpus B's numbers are counts of engine behaviour, not judgements of it."
+  ],
+  "counts": {
+    "extra": {
+      "corpus_a": {
+        "argmax_diff_worlds": 12,
+        "base_seed": 20260729,
+        "emitted_rows": 2724,
+        "entropy_dev": 1.609823385706477e-15,
+        "entropy_mismatch": 0,
+        "infinity_rows": 1546,
+        "partition_mismatch": 0,
+        "ranking_diff_worlds": 52,
+        "ranking_exact_tie": 0,
+        "ranking_float_tie": 52,
+        "real_reorderings": 0,
+        "serialisation_predicate_agrees": 4000,
+        "validator_complaints": 0,
+        "worlds": 4000,
+        "zero_cost_bug": 80
+      },
+      "corpus_b": {
+        "argmax_states": 16,
+        "entropy_delta_bits": {
+          "blocked_UP": 0.061683,
+          "teleport": 0.066932
+        },
+        "evals_per_rule": 61160,
+        "per_rule": [
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 2,
+            "engine_first_choice_splits": 300,
+            "guards": 2,
+            "rule": "blocked_DOWN",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 300
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 2,
+            "engine_first_choice_splits": 198,
+            "guards": 2,
+            "rule": "blocked_LEFT",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 198
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 6,
+            "engine_first_choice_splits": 1727,
+            "guards": 6,
+            "rule": "blocked_RIGHT",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 1727
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 12,
+            "engine_first_choice_splits": 1551,
+            "guards": 14,
+            "rule": "blocked_UP",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 1551
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 2,
+            "engine_first_choice_splits": 300,
+            "guards": 2,
+            "rule": "push_DOWN",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 300
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 2,
+            "engine_first_choice_splits": 198,
+            "guards": 2,
+            "rule": "push_LEFT",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 198
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 3,
+            "engine_first_choice_splits": 1588,
+            "guards": 3,
+            "rule": "push_RIGHT",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 1588
+          },
+          {
+            "argmax_moved_by_world_voting": 0,
+            "distinguishable_worlds": 2,
+            "engine_first_choice_splits": 300,
+            "guards": 2,
+            "rule": "push_UP",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 300
+          },
+          {
+            "argmax_moved_by_world_voting": 16,
+            "distinguishable_worlds": 18,
+            "engine_first_choice_splits": 2957,
+            "guards": 21,
+            "rule": "teleport",
+            "said_none_but_a_split_existed": 0,
+            "states_with_a_splitting_action": 2957
+          }
+        ],
+        "rules": 9,
+        "states": 15290,
+        "teleport_guards": 21,
+        "teleport_worlds": 18
+      },
+      "defect_status_today": {
+        "E11-PF-1 zero-cost best_probe None": "OPEN -- best_probe still takes ranked[0] and reads its .splits",
+        "E11-PF-3 bare Infinity": "OPEN -- frontier.py:44 still returns float('inf') at cost 0 and jsonio.dumps still calls json.dumps with the default allow_nan=True",
+        "note": "recomputed on the current tree, not on E11's base commit",
+        "validator": "still passes every row: validate_rows returned 0 complaints over the whole corpus"
+      },
+      "seed_sensitivity": {
+        "infinity_rows": {
+          "e11_inside_min_max": true,
+          "e11_value": 1633,
+          "e11_z": 0.88,
+          "max": 1676,
+          "mean": 1603.812,
+          "median": 1609,
+          "min": 1521,
+          "primary_seed_value": 1546,
+          "stdev": 33.28,
+          "values": [
+            1521,
+            1528,
+            1565,
+            1567,
+            1570,
+            1574,
+            1581,
+            1585,
+            1590,
+            1591,
+            1592,
+            1593,
+            1597,
+            1597,
+            1601,
+            1601,
+            1609,
+            1610,
+            1614,
+            1617,
+            1618,
+            1618,
+            1619,
+            1619,
+            1625,
+            1631,
+            1635,
+            1641,
+            1642,
+            1646,
+            1649,
+            1676
+          ]
+        },
+        "n_replicates": 32,
+        "note": "the same recipe on 32 further 4000-world corpora, one per base seed; E11's seed is unknown, so this spread -- not the point estimate -- is what its counts should be read against. `e11_z` is how many replicate standard deviations the E11 count sits from the recipe's mean.",
+        "zero_cost_bug": {
+          "e11_inside_min_max": false,
+          "e11_value": 82,
+          "e11_z": 2.29,
+          "max": 76,
+          "mean": 63.344,
+          "median": 66,
+          "min": 49,
+          "primary_seed_value": 80,
+          "stdev": 8.146,
+          "values": [
+            49,
+            50,
+            51,
+            52,
+            53,
+            53,
+            54,
+            57,
+            57,
+            58,
+            58,
+            58,
+            63,
+            63,
+            63,
+            64,
+            66,
+            66,
+            66,
+            68,
+            68,
+            68,
+            68,
+            71,
+            71,
+            71,
+            71,
+            72,
+            72,
+            75,
+            75,
+            76
+          ]
+        }
+      }
+    },
+    "pf.argmax_states": {
+      "agrees": true,
+      "e11_prose": 16,
+      "recomputed": 16
+    },
+    "pf.entropy_dev": {
+      "agrees": true,
+      "e11_prose": 1.11e-15,
+      "recomputed": 1.609823385706477e-15
+    },
+    "pf.entropy_mismatch": {
+      "agrees": true,
+      "e11_prose": 0,
+      "recomputed": 0
+    },
+    "pf.evals_per_rule": {
+      "agrees": true,
+      "e11_prose": 61160,
+      "recomputed": 61160
+    },
+    "pf.infinity_rows": {
+      "agrees": false,
+      "e11_prose": {
+        "denominator": 4000,
+        "numerator": 1633,
+        "pct": 40.825
+      },
+      "recomputed": {
+        "denominator": 4000,
+        "numerator": 1546,
+        "pct": 38.65
+      }
+    },
+    "pf.partition_mismatch": {
+      "agrees": true,
+      "e11_prose": 0,
+      "recomputed": 0
+    },
+    "pf.real_reorderings": {
+      "agrees": true,
+      "e11_prose": 0,
+      "recomputed": 0
+    },
+    "pf.rules": {
+      "agrees": true,
+      "e11_prose": 9,
+      "recomputed": 9
+    },
+    "pf.states": {
+      "agrees": true,
+      "e11_prose": 15290,
+      "recomputed": 15290
+    },
+    "pf.teleport_guards": {
+      "agrees": true,
+      "e11_prose": 21,
+      "recomputed": 21
+    },
+    "pf.teleport_worlds": {
+      "agrees": true,
+      "e11_prose": 18,
+      "recomputed": 18
+    },
+    "pf.worlds": {
+      "agrees": true,
+      "e11_prose": 4000,
+      "recomputed": 4000
+    },
+    "pf.zero_cost_bug": {
+      "agrees": false,
+      "e11_prose": {
+        "denominator": 4000,
+        "numerator": 82,
+        "pct": 2.05
+      },
+      "recomputed": {
+        "denominator": 4000,
+        "numerator": 80,
+        "pct": 2.0
+      }
+    }
+  },
+  "e11_prose": {
+    "denominator": 4000,
+    "numerator": 1633,
+    "pct": 40.825
+  },
+  "inputs": [
+    {
+      "path": "CONTRACTS/candidates_schema.md",
+      "sha256": "2006cd073090672b37a315d86d2caacbdbf92e00346279bdc5c69623f1b15221"
+    },
+    {
+      "path": "engine-rig/common/candidates.py",
+      "sha256": "34868b1135b9ff2854156bc1960ead01963bca093905a4bf8fea2c966fdc78cc"
+    },
+    {
+      "path": "engine-rig/common/jsonio.py",
+      "sha256": "6a1125155c236e3aab345e01145a26acaaa11ebecfc926f1746629f37335969e"
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/atoms.py",
+      "sha256": "429d1548e673fb37284b46ac7e4949e21287bdfda9104850e20f9c5b79deba70"
+    },
+    {
+      "path": "engine-rig/engines/cegis_miner/miner.py",
+      "sha256": "60835f2383525f8112ae3ecf7c5e84ee695db0af2a61694453c569a4d61c2438"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/__init__.py",
+      "sha256": "5f90cf0186655797f472d7c455eaa550ac7c22a477ec1b3a7193854a16a0212e"
+    },
+    {
+      "path": "engine-rig/engines/probe_frontier/__init__.py",
+      "sha256": "f25e012f355231ba0802edf0653b5c76c27895ba856754e1c1fb58a4b455fad8"
+    },
+    {
+      "path": "engine-rig/engines/probe_frontier/frontier.py",
+      "sha256": "2b24b90940456029e621fb12b286a2aa00a854d64ca245b2f57be93465d8a844"
+    },
+    {
+      "path": "engine-rig/fixtures/data/cart_world.jsonl",
+      "sha256": "605ddd0a277599c153d83aaec9f94f2c78b7c959b3ec72ab09a1ee569078ca66"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/probe_frontier-via-bruteforce.md",
+      "sha256": "e0b78975eb7ebd19bbb6e16d7a54ae2978ff68903167a827aa42c335bc464045"
+    },
+    {
+      "path": "engine-rig/tools/validate_candidates.py",
+      "sha256": "c4791d53674b56950c603c75ca7caa5e4a63a9c295698c2932b329a15eb0dfc4"
+    }
+  ],
+  "key": "pf.infinity_rows",
+  "method": "Corpus A: 4000 synthetic prediction tables re-implementing the generator shape recorded in the E11 partial §3A, seeded random.Random(20260729 + i) per world.  Per world the engine's rank_probes is compared against a partition read straight off the table and an entropy computed by the algebraically equal but numerically different log2(W) - (1/W) sum(w log2 w) with math.fsum. The Infinity claim is tested by serialisation: to_payload + make_candidate + common.jsonio.dumps (the same writer emit uses), then json.loads(parse_constant=<raise>); a row counts only if the strict reader rejects it.  Corpus B: cart_world -> mdl_segmenter -> cegis_miner.mine, nine ground rules, exhaustive enumeration of 15290 states x 4 actions, guards grouped into distinguishable worlds by their full fires/silent vector.",
+  "module": "tools.survey_numbers.pf_infinity",
+  "question": "How many of 4000 synthetic probe_frontier worlds emit a candidate row that a strict JSON reader rejects because it carries a bare `Infinity` token -- and does every other probe_frontier number E11 published as prose recompute?",
+  "value": {
+    "denominator": 4000,
+    "numerator": 1546,
+    "pct": 38.65
+  }
+}

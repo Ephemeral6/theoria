@@ -1,0 +1,45 @@
+=== V25 req-1: merge status of the fix ===
+generated 2026-07-30T03:51:50Z
+
+-- ancestry vs master --
+23ec1793 ON-MASTER
+abd9d47b ON-MASTER
+57e6c716 ON-MASTER
+
+-- merge commit --
+b7783af7f0600121a194e7b99ba358c9f13551b2 2026-07-29T21:10:03+08:00 Merge remote-tracking branch 'origin/agent/v19-unverified-is-not-true' into opsm/merge-vlab
+
+-- ci_merge trail --
+1640:2026-07-29T02:40:32Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1652:2026-07-29T02:50:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1663:2026-07-29T02:57:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1675:2026-07-29T03:06:22Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1686:2026-07-29T03:16:03Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1698:2026-07-29T03:30:02Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1711:2026-07-29T03:45:45Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1724:2026-07-29T04:02:37Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1739:2026-07-29T04:33:01Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+1831:2026-07-29T10:29:45Z HELD 10 unchanged since last verdict: p10-figures-into-paper (merge conflict, 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a10-shared-ledger-real-arms (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); e8-ic3-scale (merge conflict, 1x); v19-unverified-is-not-true (merge conflict, 1x)
+1840:2026-07-29T14:19:43Z CLEARED-BY-OPS-M flags for a10-shared-ledger-real-arms, v19-unverified-is-not-true, p13-figure-numbering (merged to master by hand: the conflict resolutions were made in a previous session's worktrees and ci_merge cannot reproduce them)
+
+-- master truth.py has no optimistic default --
+master:worldgen/RUN_STATE.md:893:"invariants_all_hold": all(i.get("holds", True) for i in invariants),
+master:worldgen/RUN_STATE.md:990:`mutate.py`'s `row.get("holds", True)` was dead behind a `verified` guard and
+master:worldgen/build.py:263:    `.get("holds", True)`, one function away from it, and with the same
+master:worldgen/core/truth.py:15:  two-class boolean read with `.get("holds", True)` until V19, which meant a
+master:worldgen/core/truth.py:201:#: shape was a single `holds` boolean read with `.get("holds", True)`, so a row
+master:worldgen/core/truth.py:395:            # for the same reason `.get("holds", True)` was: nothing was
+master:worldgen/mutate.py:1142:    # Explicit `status`, not `row.get("holds", True)`.  The default was already
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/ADVERSARIAL-VERBATIM.md:193:| A01-holds-key-optimistic-default | `classify`: `row.get("holds", True)` | yes | no | |
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/INBOX-PROPOSAL-20260729-reversibility-deferred-is-the-same-disease-at-7x-scale.md:13:V19 修的是：`invariants_all_hold` 用 `.get("holds", True)` 把**未验证**写成**成立**，
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/OPTIMISTIC-DEFAULTS.md:31:### 1. `core/truth.py:279` (pre-fix) — `all(i.get("holds", True) for i in invariants)`
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/OPTIMISTIC-DEFAULTS.md:76:### 4. `mutate.py:1143` (pre-fix) — `row.get("verified") and not row.get("holds", True)`
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/OPTIMISTIC-DEFAULTS.md:81:The `.get("holds", True)` default is unreachable: it sits behind a
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/RUN_STATE.md:14:"invariants_all_hold": all(i.get("holds", True) for i in invariants),
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/gen_mutants.py:31:  HOLDS_BRANCH.replace('row.get("holds") is True', 'row.get("holds", True) is True')])
+master:worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/gen_mutants.py:302:  '                       if row.get("verified") and not row.get("holds", True))\n'])
+master:worldgen/tests/invariant_sandbox.py:6:"invariants_all_hold": all(i.get("holds", True) for i in invariants),
+master:worldgen/tests/test_build_gate.py:71:    the good news, which is the same defect as `.get("holds", True)` and would
+master:worldgen/tests/test_invariant_gate.py:154:    """Change the three-state back to `all(i.get("holds", True) ...)` and the
+master:worldgen/tests/test_invariant_status.py:5:unexercised claim had no value for it, and `.get("holds", True)` supplied one.
+master:worldgen/tests/test_invariant_status.py:120:    anything on, which is `.get("holds", True)` again — this time in a row that

@@ -1,0 +1,253 @@
+{
+  "agrees_with_e11": true,
+  "caveats": [
+    "Prose percentages are re-rendered from the prose's own fraction at 4 dp, so `agrees` turns on the fraction and never on E11's rounding (E11 wrote '40.3 %', this writes 40.3333).",
+    "AMBIGUITY RESOLVED -- `b_objid`. README.md's cost table says `ceil(log2 max_objects)`; `costs.py:24-26,50` computes `max(1, ceil(log2(max(2, max_objects))))`. These differ for `max_objects <= 2`, which is the common case in `gridworld`. Took the code reading: it is what the engine actually charges, and it is the only reading under which E11's 'every individual event's bits: 0 mismatches' can hold.",
+    "AMBIGUITY RESOLVED -- honest id width. Prose says 'at ceil(log2 n_tracks) per event'. Took it literally and clamped the per-event shortfall at zero (`max(0, honest - b_objid)`), since a field that is already wide enough is not an under-charge. Checked against the three neighbouring readings: `bits_for(n_tracks)` clamped and unclamped both also give 9675 bits; only unclamped `ceil(log2 n_tracks)` differs, at 7462 (4.42 %), and it is the reading the word 'under-charge' rules out. The choice is not load-bearing for the published figure.",
+    "AMBIGUITY RESOLVED -- the 800-world operator sweep. Section 7 says only 'additionally swept over 800 worlds' without restating the seeds. Took the same stream extended, `derive(0xE11C5EC, 'gridworld', i)` for i in [0,800). Confirmed by witness: section 7's example seed 12147563315917480426 is in this sweep and gives 4 tracks vs 10 with script_bits 313 vs 421, exactly as published.",
+    "AMBIGUITY RESOLVED -- 'matching ground truth in every frame'. Compared the engine's per-frame mask *set* (from `anchors[t]` + `cells`, payload only) against `GridWorld.truth_masks()[t]` as sets of sorted cell tuples. Equality of sets, not of order or of track identity across frames.",
+    "The cost table is transcribed from README.md, not imported from `costs.py`, so the bit checks are code-independent but not doc-independent -- an error shared by README and `costs.py` passes. E11 recorded the same limitation (section 9) and this module inherits it rather than closing it.",
+    "`b_objid` is derived from `own_components()`, a local flood fill, not from the engine's `connected_components`: D1 is a claim about the engine's own component count, so importing it would be circular. The two are compared anyway and the agreement is reported below rather than asserted.",
+    "GAP -- `recolor` is unexercised: `gridworld` emits 0 recolor events in 6939, so the re-pricing and reconstruction paths for it are written and never executed here, exactly as in E11 (section 9). Nothing in this module measures them.",
+    "own_components() agrees with engines.mdl_segmenter.connected_components on max-objects-per-frame in 300/300 worlds.",
+    "Commit 2a1c30d (C11) added `SegmentationError` and the IMPOSSIBLE-pair guard to `segmenter.py` after E11's base commit ed592a6, so these figures are recomputed on code E11 never ran. It moves nothing: the guard adds no arithmetic and raises rather than returns, and it fired zero times across the 1900 segmentations here (300 corpus + 1600 operator sweep) -- any firing would have aborted this run.",
+    "Worst-case witness (D1 and the ground-truth inflation are the same world): seed 9374841901514197509, 40 tracks addressed by a 2-bit id (capacity 4), for 4 real objects.",
+    "Every figure agrees with E11."
+  ],
+  "counts": {
+    "mdl.beats_baseline": {
+      "agrees": true,
+      "e11_prose": 242,
+      "recomputed": 242
+    },
+    "mdl.beats_baseline_honest": {
+      "agrees": true,
+      "e11_prose": 232,
+      "recomputed": 232
+    },
+    "mdl.cells": {
+      "agrees": true,
+      "e11_prose": 506302,
+      "recomputed": 506302
+    },
+    "mdl.cells_wrong": {
+      "agrees": true,
+      "e11_prose": 0,
+      "recomputed": 0
+    },
+    "mdl.events_mispriced": {
+      "agrees": true,
+      "e11_prose": 0,
+      "recomputed": 0
+    },
+    "mdl.events_repriced": {
+      "agrees": true,
+      "e11_prose": 6939,
+      "recomputed": 6939
+    },
+    "mdl.frames": {
+      "agrees": true,
+      "e11_prose": 6993,
+      "recomputed": 6993
+    },
+    "mdl.frames_replayed_exact": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 6993,
+        "numerator": 3275,
+        "pct": 46.8325
+      },
+      "recomputed": {
+        "denominator": 6993,
+        "numerator": 3275,
+        "pct": 46.8325
+      }
+    },
+    "mdl.groundtruth_frames": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 6993,
+        "numerator": 5979,
+        "pct": 85.4998
+      },
+      "recomputed": {
+        "denominator": 6993,
+        "numerator": 5979,
+        "pct": 85.4998
+      }
+    },
+    "mdl.groundtruth_worlds": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 300,
+        "numerator": 173,
+        "pct": 57.6667
+      },
+      "recomputed": {
+        "denominator": 300,
+        "numerator": 173,
+        "pct": 57.6667
+      }
+    },
+    "mdl.inflated_worlds": {
+      "agrees": true,
+      "e11_prose": 127,
+      "recomputed": 127
+    },
+    "mdl.objid_undercharge": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 168843,
+        "numerator": 9675,
+        "pct": 5.7302
+      },
+      "recomputed": {
+        "denominator": 168843,
+        "numerator": 9675,
+        "pct": 5.7302
+      }
+    },
+    "mdl.objid_worlds": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 300,
+        "numerator": 126,
+        "pct": 42.0
+      },
+      "recomputed": {
+        "denominator": 300,
+        "numerator": 126,
+        "pct": 42.0
+      }
+    },
+    "mdl.operator_differs": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 800,
+        "numerator": 479,
+        "pct": 59.875
+      },
+      "recomputed": {
+        "denominator": 800,
+        "numerator": 479,
+        "pct": 59.875
+      }
+    },
+    "mdl.operator_same": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 800,
+        "numerator": 0,
+        "pct": 0.0
+      },
+      "recomputed": {
+        "denominator": 800,
+        "numerator": 0,
+        "pct": 0.0
+      }
+    },
+    "mdl.script_bits_total": {
+      "agrees": true,
+      "e11_prose": 168843,
+      "recomputed": 168843
+    },
+    "mdl.tracks": {
+      "agrees": true,
+      "e11_prose": 1807,
+      "recomputed": 1807
+    },
+    "mdl.unrecoverable": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 506302,
+        "numerator": 18118,
+        "pct": 3.5785
+      },
+      "recomputed": {
+        "denominator": 506302,
+        "numerator": 18118,
+        "pct": 3.5785
+      }
+    },
+    "mdl.verdict_flips": {
+      "agrees": true,
+      "e11_prose": 10,
+      "recomputed": 10
+    },
+    "mdl.worlds": {
+      "agrees": true,
+      "e11_prose": 300,
+      "recomputed": 300
+    },
+    "mdl.worlds_replayed_exact": {
+      "agrees": true,
+      "e11_prose": {
+        "denominator": 300,
+        "numerator": 121,
+        "pct": 40.3333
+      },
+      "recomputed": {
+        "denominator": 300,
+        "numerator": 121,
+        "pct": 40.3333
+      }
+    },
+    "mdl.worst_tracks": {
+      "agrees": true,
+      "e11_prose": 40,
+      "recomputed": 40
+    }
+  },
+  "e11_prose": {
+    "denominator": 300,
+    "numerator": 126,
+    "pct": 42.0
+  },
+  "inputs": [
+    {
+      "path": "engine-rig/common/rng.py",
+      "sha256": "8ce308ad4da312d84ae39e4bcbccffa5de16af22e7a90f6ec80fb87e8348d9a3"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/README.md",
+      "sha256": "bdc6f675a7c360b83138d6ee42fee1b2ad189df535db74d44227c892a6964318"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/__init__.py",
+      "sha256": "5f90cf0186655797f472d7c455eaa550ac7c22a477ec1b3a7193854a16a0212e"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/costs.py",
+      "sha256": "c94bf196b1908289713a750a67ca00fd819b94a4e7a1a6fafaea35ca981e3694"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/segmenter.py",
+      "sha256": "8de890e35c08c71760e3e4864404fdc295238b4f3c3b4cf53ca6952ad9d23e26"
+    },
+    {
+      "path": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/mdl_segmenter-via-reconstruction.md",
+      "sha256": "6971b3665240906dbb4507b993b09e64cfd507cc1491f171cceb4460d88df7d0"
+    },
+    {
+      "path": "fuzzlab/prng.py",
+      "sha256": "9d18e3290f29b85a88f76d385f34be59c101e73c721a8e55ce287b8e42a8c66d"
+    },
+    {
+      "path": "fuzzlab/worlds/common.py",
+      "sha256": "ec57a8039fe21810c734cdd7e72d99c10617c2ae360757429cecee44d8d233b0"
+    },
+    {
+      "path": "fuzzlab/worlds/gridworld.py",
+      "sha256": "ce7d9f0bb478f01ae3673dbf478e41425aff399d8c210fc637642253c4010d82"
+    }
+  ],
+  "key": "mdl.objid",
+  "method": "Corpus: 300 gridworld worlds, seeds derive(0xE11C5EC, 'gridworld', i) for i in [0,300); the section-7 operator A/B additionally over i in [0,800). For each world: segment with engines.mdl_segmenter.segment_trajectory (background=0, split_by_color=False); recompute max_objects with a local flood fill and b_objid = max(1, ceil(log2(max(2, max_objects)))); compare against len(seg.tracks). Reconstruct every frame from the published payload alone (anchors + cells + color, never Track.masks) onto an all-background canvas of the world's dimensions, painting UNKNOWN where color is null, and diff against the original. Re-price every event from its own parameters using a cost table transcribed from the engine README. Compare per-frame mask sets against GridWorld.truth_masks(). No network, no API, no RNG beyond the seed stream.",
+  "module": "tools.survey_numbers.mdl_objid",
+  "question": "In how many of the 300 gridworld worlds does mdl_segmenter's script carry more tracks than its object-id field can address (n_tracks > 2**b_objid)?",
+  "value": {
+    "denominator": 300,
+    "numerator": 126,
+    "pct": 42.0
+  }
+}

@@ -1,0 +1,171 @@
+out  : C:\Users\user\Desktop\theoria\.worktrees\v23-figures-sources-absent\figures\out
+csv  : C:\Users\user\Desktop\theoria\.worktrees\v23-figures-sources-absent\figures\csv
+paper: C:\Users\user\Desktop\theoria\.worktrees\v23-figures-sources-absent\figures\paper
+
+[fig02_bill_shape]
+  csv  csv\fig02_bill_shape.csv
+  img  out\light\fig02_bill_shape.svg
+  img  out\light\fig02_bill_shape.png
+  img  paper\light\figure6_bill_shape.pdf
+  img  paper\light\figure6_bill_shape.png
+  img  paper\light\figure6_bill_shape.svg
+  img  out\dark\fig02_bill_shape.svg
+  img  out\dark\fig02_bill_shape.png
+  img  paper\dark\figure6_bill_shape.pdf
+  img  paper\dark\figure6_bill_shape.png
+  img  paper\dark\figure6_bill_shape.svg
+  note ledgers read: pilot_ledger, envelope_ledger:ledger.a7-g50t.jsonl, envelope_ledger:ledger.a7-sk48.jsonl, envelope_ledger:ledger.a7-tn36.jsonl, envelope_ledger:ledger.a7recheck.jsonl, envelope_ledger:ledger.a7smoke.jsonl, envelope_ledger:ledger.a7up-opus-g50t.jsonl, envelope_ledger:ledger.a7up-opus-sk48.jsonl, envelope_ledger:ledger.a7up-opus-tn36.jsonl, envelope_ledger:ledger.a7up-sonnet-g50t.jsonl, envelope_ledger:ledger.a7up-sonnet-sk48.jsonl, envelope_ledger:ledger.a7up-sonnet-tn36.jsonl, envelope_ledger:ledger.ar25.jsonl, envelope_ledger:ledger.g50t.jsonl, envelope_ledger:ledger.sk48.jsonl, envelope_ledger:ledger.tn36.jsonl -- 2764 model_call rows, 2832 env_step rows.
+  note 15 envelope ledger shard(s) folded in beside the pilot ledger, every one committed.
+  note roll-ups: 6 file(s) found by rule 'pilot_rollup' under baseline-arms/out/, 14 run(s) with a declared outcome. Discovered, not listed: the tuple this replaced named four of the six and the two it missed were drawn as outcome-unknown while their outcomes sat committed on disk.
+  note 2 run(s) have env_step rows but no model_call rows (4f5d7ddb, b1ae92a0): no cost is known for them, so no curve is drawn and no zero is substituted.
+  note 1 run(s) have model_call rows that sum to exactly 0.00 USD (bare_cc-g50t-claude-haiku-4-5-20251001-29065be4): billed nothing, so no curve and no zero-cost curve either -- a run with no bill has no shape. A NEGATIVE total still stops the build, because that is a corrupt ledger rather than an absence.
+  note arm derived from env_step (model_call rows carry no arm field; env_step rows do).
+  note endpoint cross-check: 14 of 94 runs have a roll-up; ledger-summed cost agrees with roll-up cost_usd on 14 of them (tolerance 1e-06 USD, worst |diff| 4.441e-16).
+  note 80 run(s) have no roll-up record, so their outcome is absent, not 'fine': drawn dotted and labelled as such in the legend.
+  note 2 run(s) took zero actions, so they have no step-failure rate; panel C labels them absent rather than 0%.
+  note theoria: 4 run director(ies) found by rule 'theoria_run' under theoria-arm/runs/, each carrying both cost_curve.json and MANIFEST.json. Directories carrying only one of the two are skipped by the rule rather than by omission from a list.
+  note theoria preflight-20260728T012057Z: cost_curve.json is empty -- no model call was billed, so no curve. Not a zero-cost run; a run with no calls.
+  note theoria: 2 attempt(s) were billed and abandoned (20260728T012311Z-g50t-first-contact-aborted, 20260728T014402Z-g50t-first-contact-aborted), together 2.038212 USD. Their manifests declare outcome null, so they are drawn dotted as outcome-absent rather than labelled aborted, and their cost is in the arm's total. Omitting them would understate what this arm cost.
+  note theoria: 1 discovered run(s) billed nothing and are drawn as no curve rather than as a zero-cost curve (preflight-20260728T012057Z). This branch existed before P8 and had never executed: the only run that reaches it was not in the hand-written tuple, so the code for the empty case was never once exercised on real data.
+  note theoria cost basis: cost_curve.json carries the provider's own arithmetic (6.317658 USD over 5 calls on 20260728T015354Z-g50t-first-contact). The repo's price table recomputes 5.795338, a -8.3% disagreement; 0.436763 USD of it is a known table defect (1-hour cache writes priced at the 5-minute multiplier). The CLI figure is plotted; the disagreement is not averaged away. Basis run chosen by rule (the discovered run with a game_id and the largest billed total; ties by slug), not by name.
+  note theoria per-action price: 0.9025 USD over 7 successful actions (40 HTTP attempts, amplification 5.714). Its turn-cost and the baseline's are not the same quantity: a baseline turn buys one model call that picks one action, a theoria turn buys a desk call that theorizes across the run.
+  note shape metrics E2/E3/E4 read from battery v2 (95 runs, arms bare_cc, schema_repro, theoria_a0, theoria_a0_spike, theoria_a2) -- not recomputed here. E2 is a Phase 4 primary endpoint; a second implementation would be a second definition.
+  note 19 drawn run(s) have no battery run and therefore no E2/E3/E4 (20260728T012311Z-g50t-first-contact-aborted, 20260728T014402Z-g50t-first-contact-aborted, 20260728T015354Z-g50t-first-contact, bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8, bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc, bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f, bare_cc-g50t-claude-haiku-4-5-20251001-d706111e, bare_cc-g50t-claude-opus-5-6a39afc2, bare_cc-g50t-claude-sonnet-5-733ed586, bare_cc-sk48-claude-haiku-4-5-20251001-64c11385, bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824, bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4, bare_cc-sk48-claude-opus-5-ddd63c48, bare_cc-sk48-claude-sonnet-5-70d92713, bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a, bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b, bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10, bare_cc-tn36-claude-opus-5-914490bf, bare_cc-tn36-claude-sonnet-5-21a1a163). Battery v2 scores the arms bare_cc, schema_repro, theoria_a0, theoria_a0_spike, theoria_a2; the live theoria arm is not among them, so its shape metrics are absent with a reason and are never drawn as zero.
+  note battery turn axis agrees with this plate's step axis on all 67 run(s) that carry a turn count, so every E3 crossing that exists is markable. Stated as a checked result, not as an assumption -- the check is the reason the marks may be drawn at all.
+  note battery support labelling, reported not reconciled (1 run(s)): E4's support key 'turns' holds len(run.calls) while E2/E3's holds len(run.turn_costs()) -- billed calls against decisions, which differ exactly when a decision was retried. bare_cc-g50t-claude-sonnet-5-ddabe772: E2/E3 support says 20 turns, E4 support says 24. Panel D's x-axis is therefore labelled with what E4 actually counts.
+  note 97 curves drawn over 5 games, 3 models, 2 arm(s); 2746 CSV rows.
+
+[fig03_capability_spectrum]
+  csv  csv\fig03_capability_spectrum.csv
+  img  out\light\fig03_capability_spectrum.svg
+  img  out\light\fig03_capability_spectrum.png
+  img  paper\light\figure5_capability_spectrum.pdf
+  img  paper\light\figure5_capability_spectrum.png
+  img  paper\light\figure5_capability_spectrum.svg
+  img  out\dark\fig03_capability_spectrum.svg
+  img  out\dark\fig03_capability_spectrum.png
+  img  paper\dark\figure5_capability_spectrum.pdf
+  img  paper\dark\figure5_capability_spectrum.png
+  img  paper\dark\figure5_capability_spectrum.svg
+  note battery v2: 38 metrics x 5 arms = 190 cells over 95 runs; ok 85, not-applicable 96, insufficient-data 9.
+  note gaming_audit.json demoted 29 of 38 metrics to reference tier by its own rule (accidental and not defended -> reference; else main. Where an executed exploit exists its fields decide, because the prose register's booleans are unfalsifiable as written.); they carry † on the row label and a tier band.
+  note 31 of 38 metrics have no cross-arm contrast at all (banded): no control arm and no Theoria arm both score them, so the column difference is unavailable rather than small. Design of the Theoria-side contrast: unpaired; no game is shared between the arms.
+  note bound pair enforced adjacent in the row order: K4 (evidence coverage) must never be read without K2 (held-out accuracy) beside it: A0 scores K4 = 1.000 because it refused the one generalisation it lacked evidence for, which is exactly why its K2 = 0.000.
+  note arm_contrast.json is stale: it knows arms ['bare_cc', 'theoria_a0', 'theoria_a0_spike', 'theoria_a2'] while the spectrum scores ['bare_cc', 'schema_repro', 'theoria_a0', 'theoria_a0_spike', 'theoria_a2']. The column axis and the overlap band are therefore computed from capability_spectrum.json itself. The 0 metric(s) the stale artefact misses gain their contrast from the arm it does not know about.
+  note 190 CSV rows, 10 images.
+
+[fig04_a3_transfer]
+  csv  csv\fig04_a3_transfer.csv
+  img  out\light\fig04_a3_transfer.svg
+  img  out\light\fig04_a3_transfer.png
+  img  paper\light\figure4_a3_transfer.pdf
+  img  paper\light\figure4_a3_transfer.png
+  img  paper\light\figure4_a3_transfer.svg
+  img  out\dark\fig04_a3_transfer.svg
+  img  out\dark\fig04_a3_transfer.png
+  img  paper\dark\figure4_a3_transfer.pdf
+  img  paper\dark\figure4_a3_transfer.png
+  img  paper\dark\figure4_a3_transfer.svg
+  note cross-check 1/4 bill_table.table vs bill_table.like_for_like_level_2: agree on all 9 lines.
+  note cross-check 2/4 per-arm ledger counts vs the like-for-like block: agree on all 18 cells.
+  note cross-check 3/4 event amounts vs counts (13 billed events for the control, 8 for the transfer arm): agree on all 18 cells.
+  note cross-check 4/4 precomputed ratio/saved against the two values they summarise: agree on all 9 lines.
+  note cost_to_first_plan agrees between each arm's ledger and bill_table on all 18 cells.
+  note A3_REPORT.md parsed: 2 of the control arm's 5 theorize rounds (40%) were toolchain conformance. Drawn on panel A; not hard-coded, and no fallback -- if that sentence stops matching, the build fails.
+  note A3_REPORT.md's headline sentence anchored, and it is looser than the plate: '347 -> 10' crosses two meter lines (347 is world_frames from-scratch, 10 is world_actions transfer), and '332 -> 0' is CROSS-LEVEL (cost-to-first-plan world_actions, l1_cold_start -> transfer). The figure draws neither pairing: panel A draws 347 -> 11 and 346 -> 10 like-for-like, panel B draws 336 -> 0 within level 2.
+  note A3_REPORT.md's '6 derived from the frame, 3 supplied' agrees with provenance_l2_transfer.json field by field (panel E).
+  note 9 caveat anchors checked in A3_REPORT.md and all present: bill-structural-not-economic, blind-partially-broken, flat-lines-would-mislead, incident-A3-I1, levels-not-games, model-calls-not-measured, no-naming-agreement, who-carried-the-books, zeros-real-not-dollars. Each is the sentence a clause of the drawn caveat comes from; a missing one fails the build by name rather than letting the clause go stale.
+  note n = 1 run per arm. There is no replication and no variance in any artefact this figure reads, so no error bar is drawn; the only genuine sample size on the plate is the accuracy row's n = 248/252/252 reachable (state, action) pairs.
+  note 3 of 9 meter lines save nothing at all compile_runs 1:1, certify_runs 3:3, plan_runs 1:1 -- drawn and banded, not dropped.
+  note no shortest-path length is drawn for l2-rewired. A3_REPORT.md's control table says solvable in 15 (read here, not remembered); DECISIONS.md D-A3-010 says one less and is deliberately not a declared source, so this module can see only one side of that conflict. No artefact carries either number, so the figure states neither.
+  note headline like-for-like: world_frames 347 -> 11 (ratio 0.0317); the line A3 calls the one that matters is cost-to-first-plan world_actions 336 -> 0.
+  note 46 CSV rows over 5 sections; 5 panels drawn per theme.
+
+[fig05_a2_repair_loop]
+  csv  csv\fig05_a2_repair_loop.csv
+  img  out\light\fig05_a2_repair_loop.svg
+  img  out\light\fig05_a2_repair_loop.png
+  img  paper\light\figure3_a2_repair_loop.pdf
+  img  paper\light\figure3_a2_repair_loop.png
+  img  paper\light\figure3_a2_repair_loop.svg
+  img  out\dark\fig05_a2_repair_loop.svg
+  img  out\dark\fig05_a2_repair_loop.png
+  img  paper\dark\figure3_a2_repair_loop.pdf
+  img  paper\dark\figure3_a2_repair_loop.png
+  img  paper\dark\figure3_a2_repair_loop.svg
+  note L3 cross-check: probes.jsonl and probe_report.json agree -- 5 designed, 4 executable, 4 refuted, 1 not separable.
+  note L3 'confirmed: 0' is a coding artefact, not a finding: a probe is coded 'refuted' when it refutes at least one hypothesis, and all 4 executable probes did. 4 of 4 also left a hypothesis standing (P-02.1/2/3 confirm `ring_is_solid`), so the figure reports 'executed / left a hypothesis standing / not separable' and never draws a 0 bar for `confirmed` beside a 4 bar for `refuted`.
+  note beat accounting: loop_ledger holds 8 beats (M0+M5 prelude + 6 loop) and its summary reads 8 pass / 0 fail / 0 absent. The figure draws the loop's own score, 6/6, and never the 8-pass summary.
+  note summary.absent = 0 is a real zero and is legended as one: ledger.py has a genuine third status ('absent', for a missing artefact), the channel was exercisable, and no beat hit it.
+  note P-03 is drawn hatched, not as a zero: tier 'hypothetical', status 'not_separable_in_this_world', and no outcome fields exist on the record at all (the world has exactly one Portal, so neither separating configuration is reachable).
+  note M5's plan is UNSAT with backend null and no 'length' key: an UNSAT arm has no plan length, so the figure marks it structurally absent rather than 0 (M0's SAT plan is length 18, L6's repaired plan is length 18).
+  note M0's hole is now a number: the sweep (248 frames) makes the miner propose 23 rules, 1 with a jump effect; the history (184 frames) makes it propose 22, 0 with a jump effect. The set difference is asserted to be exactly {obj1_jump_DOWN} in both directions, so a changed miner stops the build instead of redrawing the hole as something else. The 0 is a MEASURED zero -- the miner ran and proposed no jump rule -- and is drawn as a shorter bar with its count printed, never as an absence.
+  note the full-sweep RED is drawn as 44 anomalies over 248 frames, still labelled a CAP: the cheap layer caps its anomaly list, so 44 remains a ceiling, not a count. That caveat is unchanged by the pixel figures, which count a different quantity.
+  note PROSE-SOURCED, and labelled as such everywhere it is drawn: the full sweep's 128 unexplained pixels of 20088 checked exist only in A2_REPORT.md's prose -- exhibit_report.certify_cheap_vs_full_sweep carries no pixel key at all. Two tripwires guard it: the same sentence's anomaly count must equal the artefact's (44), and the pixel total must equal 248 frames x 81 pixels/frame, the rate the two JSON certify records independently agree on.
+  note L4 keeps its honest point AND gains its corroboration, drawn as two separate things: the beat's own ledger metric is still a boolean (re_derivable_from_grown_evidence = true) with no count-shaped metric in loop_ledger, and engines_diff_probed.json -- a different artefact -- shows what that boolean asserts: the grown 196-frame evidence re-proposes 23 rules, 1 with a jump effect, and it is asserted to be obj1_jump_DOWN again, now at transition 194 rather than 183. The node labels which is which.
+  note history_trace.portal_transitions [] and win_frames [] are empty by construction, not by measurement: the history is cut at the portal transition (t=183), which is what omits the single pair 'cart=(6,4) pressed=1 act=DOWN' and puts the hole in the manual.
+  note L4's own ledger accounting is still a boolean and no 0/N is synthesised from it; the node also draws the 1 teleport-down step and 1 PDDL cell the repair actually added.
+  note no declared-source gaps remain for this figure: the three files P-21 shipped as 'undeclared-source' (engines_diff.json, engines_diff_probed.json, A2_REPORT.md) are declared, hashed and drawn. UNDECLARED_WANTS is kept empty rather than deleted so the next gap is reported the same way instead of quietly dropped.
+  note K12/K13: 2 of 7 theory-bearing runs carry a value (a0-spike, a2-probed); 5 are status 'not-applicable' (a0-base, a0-no-button, a2-play-record, a2-refutation, a2-sweep) and are drawn hatched, never as 0. a0-spike's K12 = 0.000 IS a measured zero (0 of 24 required beats over 4 rebuild episodes) and is drawn as a zero-length bar with its numerator printed, so it cannot be mistaken for an absence.
+  note 172 CSV rows over 8 ledger beats + 2 battery cards; value_kind census: absent-by-construction 2, measured 135, not-applicable 10, real-zero 17, structurally-absent 8. Every number on the plate has a row here with its source and JSON path.
+  note figure text is English only: the bilingual ledger names are preserved verbatim in the CSV's name_bilingual column, and the English half is split off programmatically (on U+00B7) for the plate, because DejaVu Sans has no CJK coverage and a substituted system font would make the SVG path data machine-dependent.
+
+[fig06_concept_timeline]
+  csv  csv\fig06_concept_timeline.csv
+  img  out\light\fig06_concept_timeline.svg
+  img  out\light\fig06_concept_timeline.png
+  img  paper\light\figure1_concept_timeline.pdf
+  img  paper\light\figure1_concept_timeline.png
+  img  paper\light\figure1_concept_timeline.svg
+  img  out\dark\fig06_concept_timeline.svg
+  img  out\dark\fig06_concept_timeline.png
+  img  paper\dark\figure1_concept_timeline.pdf
+  img  paper\dark\figure1_concept_timeline.png
+  img  paper\dark\figure1_concept_timeline.svg
+  note 13 engine proposal(s) are adjudicated by more than one entry, which is the log's own doing (R-06 names the LEFT still-rules that R-07's wildcard also covers): row 13 (obj2_jump_DOWN) claimed by P-01+R-02; row 14 (obj2_step_DOWN) claimed by P-02+R-01; row 15 (obj2_step_LEFT) claimed by P-02+R-01; row 16 (obj2_step_RIGHT) claimed by P-02+R-01; row 17 (obj2_step_UP) claimed by P-02+R-01; row 18 (obj2_still_DOWN) claimed by P-03+R-07; row 19 (obj2_still_LEFT) claimed by P-02+R-07; row 20 (obj2_still_RIGHT) claimed by P-02+R-07; row 21 (obj2_still_UP) claimed by P-02+R-07; row 24 (obj2_still) claimed by P-02+R-07; row 25 (obj2_step) claimed by P-02+R-01; row 5 (obj0_still_LEFT) claimed by R-06+R-07; row 9 (obj1_still_LEFT) claimed by R-06+R-07
+  note 1 row(s) in the stream are adjudicated nowhere in the log and are not part of any lane: fd_adapter/plan.
+  note git log --follow cold-start-a0/THEORIZE_LOG.md: 7 commit(s). Birth 848d683 2026-07-27T17:02:02Z; 6 later commit(s) classified as E-ledger edits, not manual revisions -- the log's own revision table lists exactly 2 revisions, both authored at M3/M5.
+  note 27 log entries over 6 lanes -> 30 rows (3 of them are second copies of an item whose manual name is claimed by two concepts, L-02 door_latch above all).
+  note compression accounts disagree and are NOT reconciled: Button -5 bits in concept_accounts.json vs -17 bits in THEORIZE_LOG O-04; Cart +2125 bits in concept_accounts.json vs +2967 bits in THEORIZE_LOG O-04; Door -1 bits in concept_accounts.json vs -13 bits in THEORIZE_LOG O-04. The figure plots the JSON (responsibility-complete (concept_accounts.json, a0-base)); the log's table is a pixel baseline that was never updated after the re-pricing, and its numbers are carried in the CSV as their own rows.
+  note Round 0 declares 28 candidate rows; the stream holds 29. Differences, reported not reconciled: plan: log says 0, stream has 1
+  note every candidate row carries the same timestamp (2026-07-28T00:00:00Z), so the stream supplies no clock either -- one more reason the axis is ordinal.
+  note revision table: 2 revision(s), 0 of them triggered by certify; 3 compiler defect(s) on the subordinate lane. The zero is derived from the table's own trigger column, not quoted.
+  note ground-truth seal: 233/236 reachable (state, action) pairs agree; the misses are attributed in the log to R-05.
+  note 36 main rows (30 items over 6 lanes) plus 7 subordinate rows; 119 CSV rows; figure 17.4x16.5 in.
+
+[fig07_a0_vs_a0prime]
+  csv  csv\fig07_a0_vs_a0prime.csv
+  img  out\light\fig07_a0_vs_a0prime.svg
+  img  out\light\fig07_a0_vs_a0prime.png
+  img  paper\light\figure2_a0_vs_a0prime.pdf
+  img  paper\light\figure2_a0_vs_a0prime.png
+  img  paper\light\figure2_a0_vs_a0prime.svg
+  img  out\dark\fig07_a0_vs_a0prime.svg
+  img  out\dark\fig07_a0_vs_a0prime.png
+  img  paper\dark\figure2_a0_vs_a0prime.pdf
+  img  paper\dark\figure2_a0_vs_a0prime.png
+  img  paper\dark\figure2_a0_vs_a0prime.svg
+  note A0' is cold-start-a0/prime, NOT a0-spike. PLAN.md section 2 identified a0-spike as A0'; a0-spike is a different world run by the other track (papers/phase1-workshop/sections/03_a0.md 3.5) and appears here only in panel B, behind a divider, as the denominator contrast.
+  note A0 coverage derived as pairs - held_out_pairs = 236 - 3 = 233; 233/236 = 0.987288. The held-out set is the pairs the trajectory could never contain, so its complement is covered.
+  note A0' coverage read from trace.a0p-base: 107/228 = 0.469298; the artefact's own coverage string agrees.
+  note truncation derived across two artefacts: A0' budget 110 transitions over A0's 275 steps (battery runs.a0-base.steps) = 40.0% -- A0P_REPORT section 1's 'truncated at 40%', arrived at independently.
+  note cross-check holds: A0's covered count and agreement count are both 233, because the 3 uncovered pairs are exactly the 3 the manual gets wrong -- pressing the Button from DOWN/RIGHT/UP (THEORIZE_LOG R-05 named them before the score existed).
+  note A0 manual rules counted from score_vs_truth.structural (clauses that are neither null nor '<missing>'): 7. Rejected at R-05 and still missing: press (up/down/right).
+  note A0' toggle witnesses, one per direction x polarity: 8 of 8, each with [1] witness(es). That is what 're-witnessable' buys, and it is also why the contrast is analytically entailed rather than tested.
+  note A0' has no battery run: no run id in capability_spectrum.json contains 'prime', and battery/adapters/ has a0.py, a0_spike.py, a2.py and no prime adapter. Panel B draws that column as a structural gap, hatched, not as a value.
+  note SOURCE NEEDED, degraded rather than added: A0's executable-probe count (A0P_REPORT section 1 reports 0 of 22 designed) lives in cold-start-a0/artifacts/engines_report.json, which is not declared in figures/sources.py. Panel C draws that cell as not-readable, not as 0.
+  note SOURCE NEEDED, degraded rather than added: object counts. A0''s 3 comes from prime_report engines.tracks; A0's 3 is prose only (papers/phase1-workshop/sections/03_a0.md 3.3) and is labelled as such on the plate.
+  note Run B's certify_cheap is the bare boolean true; the 111-frame / 8991-pixel shape of that check is recorded under run_a, on the unseeded manual. Panel D says so rather than borrowing run A's counts.
+  note 44 CSV rows; 3 colour series (A0, A0', a0-spike) = theme.MAX_ALLPAIRS_SERIES, and every absence wears no colour at all.
+
+paper index -> paper\index.json
+paper index -> paper\INDEX.md
+paper index -> paper\captions\figure1.md
+paper index -> paper\captions\figure2.md
+paper index -> paper\captions\figure3.md
+paper index -> paper\captions\figure4.md
+paper index -> paper\captions\figure5.md
+paper index -> paper\captions\figure6.md
+sources hashed -> SOURCES.sha256
+
+OK: 6 figure(s) built.
