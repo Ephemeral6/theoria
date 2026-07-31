@@ -1,0 +1,49 @@
+=== A17 requirement 5: gates re-run from a fresh detached worktree ===
+worktree : C:/Users/user/Desktop/theoria/.worktrees/d1  (git worktree add --detach)
+commit   : 1026a6a9e46edcb5f7b44813419859b513247f4c
+utc      : 2026-07-31T11:42:53Z
+
+--- git status --porcelain  (must be empty: no untracked artefacts) ---
+(end)
+
+--- [1] cd theoria-arm && python -m pytest -q ---
+........................................................................ [ 83%]
+......................................................................   [100%]
+430 passed in 394.00s (0:06:34)
+
+--- [2] python -m armtools.verify_provenance ---
+PASS  runs/ contains no test or smoke fixture                                                       every directory under runs/ is archive material or a process record
+PASS  every run has a MANIFEST.json                                                                 17 runs, 17 manifests
+PASS  prompt_id / branch / base_commit / utc are present or explicitly accounted for                every manifest either carries the four or names what it lost
+PASS  billed actions reconcile: ledgers vs closed scorecards                                        ledgers say 84 = 71 reconciled against 9 closed cards + 13 declared unreconcilable (cards opened and never closed; closed cards 404, so the API-side total is unobtainable by construction) [20260728T025503Z-g50t-e08-fixed: 13 against 3d6e68e3-d571-4592-86dc-857dadd39572; preflight-20260728T012031Z: 0 against bbbd5b57-de5d-4f14-aa0e-adaedb234fef]
+PASS  every run that spent actions can point at its scorecard                                       each of the 15 runs that spent an action carries its scorecard or names the salvage holding it
+PASS  every scorecard opened and never closed is declared as such                                   2 orphan(s), all declared in the manifest of the run that opened them
+PASS  no sealed-pile game appears anywhere in the archive                                           every manifest's sealing check is clean
+PASS  re-deriving every manifest reproduces it byte for byte                                        17 manifests, all byte-stable under re-derivation
+PASS  every recorded base_commit carries its verification verdict                                   each base_commit is either derived from the recorded arm_version or carries a check that says it is not
+PASS  every file a shipped manifest lists is shipped too or excluded by the repository's own rules  42 manifests this commit ships, 388 listed paths: every one is shipped too, or named by a `.gitignore` rule that says why it is not
+
+OK: 10 checks
+
+--- [3] python verify.py ---
+[1/3] suite
+   ok    430 tests collected, suite green
+[2/3] one real run -- the whole arm, offline against proxy/mock
+   ok    game g50t-5849a774, budget 6 actions, no key, no network
+[3/3] artefact self-check
+   ok    11 ledger records (7 env_steps), 17 run files, all 17 manifest fields, sealing clean, dev pile only
+
+theoria-arm: green -- suite, one offline run, artefact fields
+
+utc-end  : 2026-07-31T12:00:36Z
+
+--- what this transcript does and does not cover ---
+gated commit : 1026a6a9e46edcb5f7b44813419859b513247f4c
+after it     : records, plus two non-behavioural source edits, both named:
+               (a) 10 added lines inside armtools/curves.py module docstring
+               (b) one dead no-op expression removed from
+                   tests/test_armversion_read_set.py (that file re-run alone
+                   afterwards: 12 passed)
+               `git diff 1026a6a9 HEAD -- "theoria-arm/**/*.py"` shows exactly
+               those. Stated rather than implied, because "the gates ran on
+               this code" is the kind of claim that quietly stops being true.

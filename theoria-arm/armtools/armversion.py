@@ -42,6 +42,61 @@ import _bootstrap                                     # noqa: F401  (sys.path)
 
 ARM_PREFIX = "theoria-arm/"
 
+#: **The declared read set**: which refs a provenance answer is allowed to
+#: depend on. Written down as a constant because that is the whole point -- the
+#: input to every archived verdict used to be `--all`, i.e. "whatever happens to
+#: be under `refs/` on this machine right now", which is not a thing anyone
+#: declared and not a thing anyone controls.
+#:
+#: Measured before it was chosen (`runs/20260731T1050Z-A17/`):
+#:
+#:   | read set                        | commits | arm versions |
+#:   |---------------------------------|---------|--------------|
+#:   | `--all`                         |    1425 |           68 |
+#:   | `--branches --remotes HEAD`     |    1418 |           68 |
+#:   | `HEAD` alone                    |    1394 |           66 |
+#:
+#: The 7 commits `--all` adds are `refs/stash` (3) and `refs/original/...` (4)
+#: -- an autostash `git merge` created without being asked, and a
+#: `git filter-branch` backup ref. Neither is anybody's idea of a publication,
+#: and between them they contribute **zero** arm versions, so dropping them
+#: costs nothing measurable and closes two channels into a provenance answer.
+#:
+#: `--tags` is deliberately **not** here, which is the item's named risk
+#: (anyone creating a tag changes the scan's input). Measured: 0 commits in
+#: this repository are reachable from a tag and from nothing else, so excluding
+#: tags removes no commit today. That "today" is doing work, so `scan()` also
+#: *counts* what the read set excludes rather than trusting this paragraph to
+#: stay true -- see `excluded`.
+#:
+#: `HEAD` alone was rejected on measurement, not on taste: it loses 2 arm
+#: versions that exist only on branches other than the checked-out one. A run
+#: recording one of those would be told that it "executed against a working
+#: tree that was never committed in that state" -- an accusation about honesty,
+#: produced by which branch someone happened to be standing on.
+#:
+#: `origin/master`'s first-parent chain was rejected for the symmetric reason,
+#: measured earlier (`runs/20260730T0855Z-A17-MEASUREMENT/` §2): it turns
+#: `20260729T004020Z-leg01` from `ambiguous/4` into `no_match/0`, i.e. it
+#: accuses every run whose branch has not merged yet. An archive is written
+#: *during* a campaign, so that is not an edge case, it is the normal state.
+#:
+#: **What this does not fix, said plainly.** The answer is still a function of
+#: the repository's branches, so a colleague pushing a branch that reaches an
+#: old arm state still moves it. Making the answer a constant needs each
+#: manifest to record the refs it was derived under -- a new field, and
+#: therefore a migration of all 17 archived manifests. That is deliberately not
+#: done here: this change was chosen partly *because* it rewrites nothing
+#: (measured: every archived verdict is identical under `--all` and under this
+#: set), and a migration is a separate decision with its own mechanical guard.
+DEFAULT_REFS = ("--branches", "--remotes", "HEAD")
+
+#: Ref selectors whose commits the read set deliberately leaves out, and which
+#: `scan()` therefore counts so that "it excludes nothing today" cannot quietly
+#: stop being true. Not a blocklist -- `rev-list` has no such thing -- but the
+#: probe that would notice.
+WATCHED_EXCLUSIONS = ("--tags",)
+
 
 def _git(*args: str, binary: bool = False):
     out = subprocess.run(["git", *args], cwd=_bootstrap.REPO,
@@ -122,7 +177,53 @@ def _arm_version_of_tree(tree: str) -> Optional[Dict[str, Any]]:
             "sha256": hashlib.sha256(blob.encode("utf-8")).hexdigest()}
 
 
-def scan(refs: str = "--all") -> Dict[str, Any]:
+def _as_refs(refs) -> List[str]:
+    """One ref selector or several, always as a list of argv tokens.
+
+    `scan(refs)` used to splice its argument into `git rev-list` as a **single**
+    token, so `"--branches --remotes"` reached git as one argument and came
+    back as a usage error. Every candidate read set below that is not literally
+    `--all` needs more than one token, so the signature has to widen before the
+    choice can even be evaluated. A plain string still works and still means
+    one token: this widening changes no existing call.
+    """
+    if isinstance(refs, str):
+        return [refs]
+    tokens = [str(r) for r in refs]
+    if not tokens:
+        raise ValueError("scan() needs at least one ref selector; an empty "
+                         "read set would scan nothing and report every "
+                         "recorded arm_version as no_match")
+    return tokens
+
+
+def _excluded(selectors: List[str]) -> Dict[str, Any]:
+    """How many commits the watched selectors reach that the read set does not.
+
+    The case for leaving `--tags` out of `DEFAULT_REFS` rests on a measurement
+    -- zero commits in this repository are reachable from a tag and from
+    nothing else -- and a measurement written into a comment is a measurement
+    that stops being true without telling anyone. This asks git the same
+    question on every scan, with `rev-list --count A --not B`, which is the
+    direct form rather than the difference of two totals. (Subtracting two
+    totals is exactly how the 2026-07-30 measurement got its attribution wrong;
+    `runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT/` §3 is the write-up, and
+    its rule is: if git can be asked directly, ask it directly.)
+
+    Never raises: this is a diagnostic beside the answer, not a gate on it. A
+    git that cannot answer records why instead of failing the scan.
+    """
+    out: Dict[str, Any] = {}
+    for watched in WATCHED_EXCLUSIONS:
+        try:
+            count = _git("rev-list", "--count", watched, "--not", *selectors)
+            out[watched] = int(count.strip())
+        except (RuntimeError, ValueError) as exc:
+            out[watched] = "unmeasured: %s: %s" % (type(exc).__name__, exc)
+    return out
+
+
+def scan(refs=DEFAULT_REFS) -> Dict[str, Any]:
     """**Every** reachable commit, with the arm hash its tree carries.
 
     The obvious implementation walks `git log --all -- theoria-arm`, on the
@@ -135,16 +236,48 @@ def scan(refs: str = "--all") -> Dict[str, Any]:
     equally consistent. An adversarial review found this; no manifest here was
     wrong, by luck of which hashes the runs happened to record.
 
-    So: every commit from `rev-list --all`, resolved to its `theoria-arm`
-    subtree. Distinct subtrees are few (17 across 347 commits), and the hash is
-    computed once per subtree rather than once per commit, which is what makes
-    the exhaustive scan affordable.
+    So: every commit from `rev-list`, resolved to its `theoria-arm` subtree.
+    Distinct subtrees are few (17 across 347 commits when this was written; 99
+    across 1418 now), and the hash is computed once per subtree rather than
+    once per commit, which is what makes the exhaustive scan affordable.
 
-    Still not covered, and said rather than implied: commits reachable only
-    from the reflog or dangling entirely. `locate`'s verdicts are about what is
-    reachable from a ref.
+    ## Which refs, and why that is a decision rather than a default
+
+    `refs` was `"--all"` -- and `--all` is not a read set anybody chose, it is
+    whatever happens to be under `refs/` on this machine. That matters because
+    the answer is *published*: `backfill.provenance` copies `locate()`'s whole
+    reply, `commits` list included, into `MANIFEST.json`, and
+    `verify_provenance` check 8 re-derives every manifest and compares it
+    **byte for byte**. Measured (`runs/20260731T1050Z-A17/measurement.json`):
+    splice one extra commit into one hash's group and **8 of the 8** archived
+    manifests that carry a `matched`/`ambiguous` verdict change bytes. So a ref
+    appearing is not a cosmetic difference in a diagnostic -- it is check 8
+    going red across an archive nobody touched.
+
+    And it is constructible, which was the open question. In a throwaway
+    `git init` + bare-origin fixture, three of four attempted triggers fire:
+
+    * a tag on an off-mainline commit with a **unique** arm subtree turns a
+      recorded hash from `no_match` into `matched`;
+    * a tag on one with a **duplicated** subtree turns `matched` into
+      `ambiguous`;
+    * a plain **branch** does both of those too -- this was never really about
+      tags, it is about refs;
+    * a tag on a commit HEAD already reaches changes nothing, which is the
+      reverse control and is pinned by a test.
+
+    `DEFAULT_REFS` is the answer, with its tradeoffs argued where it is
+    defined. `refs` still accepts one selector or several; a bare string is one
+    token, as before.
+
+    ## What is still not covered, said rather than implied
+
+    Commits reachable only from the reflog, or dangling entirely. `locate`'s
+    verdicts are about what is reachable from a declared ref -- now literally
+    so.
     """
-    revs = [line.strip() for line in _git("rev-list", refs).split("\n")
+    selectors = _as_refs(refs)
+    revs = [line.strip() for line in _git("rev-list", *selectors).split("\n")
             if line.strip()]
 
     # One batch call resolves every commit to its arm subtree oid; a per-commit
@@ -160,7 +293,7 @@ def scan(refs: str = "--all") -> Dict[str, Any]:
             tree_of[sha] = fields[0]
 
     when = {}
-    for line in _git("log", refs, "--format=%H %ct").split("\n"):
+    for line in _git("log", *selectors, "--format=%H %ct").split("\n"):
         line = line.strip()
         if line:
             sha, _, ct = line.partition(" ")
@@ -186,7 +319,8 @@ def scan(refs: str = "--all") -> Dict[str, Any]:
     commits.sort(key=lambda c: -c["unix"])
     for group in by_hash.values():
         group.sort(key=lambda c: c["unix"])
-    return {"refs": refs,
+    return {"refs": selectors,
+            "excluded": _excluded(selectors),
             "commits_scanned": len(revs),
             "commits_carrying_the_arm": len(commits),
             "distinct_arm_subtrees": len(version_of_tree),

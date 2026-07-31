@@ -1,0 +1,38 @@
+{
+ "base_commit": "1026a6a9e46edcb5f7b44813419859b513247f4c",
+ "branch": "cleanup2/arm3",
+ "cell": "A8",
+ "delivered": [
+  "armtools/curves.py",
+  "tests/test_curves.py",
+  "harness/campaign.py"
+ ],
+ "deviation_from_the_item_text": "the item says runs/<level>/curves.json. Written as runs/<slug>/curves.json plus runs/<slug>/curves/level-NN.json instead: a level is a thing inside a leg, one level can be split across two legs, and two games in one campaign both have a level 1 -- a path keyed by level alone collides in all three cases.",
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "8ae512099e179a2c0a8e3c65d19f062150f7b9e7c4b9307a619acdfa1815d0aa"
+  }
+ ],
+ "lane": "campaign",
+ "measured": {
+  "empty_result_floor": "zero turns is refused outright, found by attacking the self-check after writing it: 0 == 0 satisfies the equality, so a leg that never took a turn would have written a syntactically perfect curves.json of zeros -- and zero in a cost curve reads as 'cheap', not as 'did not happen'. The refusal names both numbers so the reader can tell 'nothing played' from 'the join lost every row', which is the dangerous case and was previously indistinguishable.",
+  "end_to_end_against_the_mock": "one --mock leg: 36 turns, 41 = 41, curves.json and curves/level-01.json written, curves_error null. The mock leg directory was removed afterwards rather than left in runs/.",
+  "self_check_on_the_real_archive": {
+   "20260728T025503Z-g50t-e08-fixed": "3 turns, 146 = 146",
+   "20260728T072604Z-E3-sk48-carried": "1 turn, 92 = 92",
+   "20260729T004020Z-leg01": "52 turns, 104 = 104"
+  },
+  "why_not_one_turn_per_env_step": "a turn issues many environment commands -- RESET, retries, refused actions. The observed ratio reaches 146:3, so a self-check written literally as 'turn count == env_step count' would raise on all three of these real archives. The invariant is that the curves ACCOUNT FOR every command."
+ },
+ "prompt_id": "A8-campaign-ledger-pipeline",
+ "sealed_pile_contact": "none",
+ "spend": {
+  "api_calls": 0,
+  "note": "entirely offline: no ARC API call, no model call, no network",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-07-31T10:50:12Z",
+ "what": "per-level curve pipeline: theorize rounds, the seven surprise counts and cumulative cost, cut at the level boundaries inner/levels.py recorded, written per leg by run_leg beside write_turn_series. It reduces the existing turn_series join and never re-derives it. The self-check is a strict equality between the commands the curves account for and the ledger's env_step count, and it raises."
+}
