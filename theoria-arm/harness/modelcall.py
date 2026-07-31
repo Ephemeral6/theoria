@@ -469,9 +469,12 @@ class ModelDesk:
         # sealed game from the game being played, and that distinction is the
         # difference between "this run is inadmissible" and "the exam set has
         # been contaminated". The substring list stays behind it as a belt: it
-        # is blunter (a bare `in`, so `ls20` matches inside a word) but it also
-        # catches an id welded into a longer token, which a token-bounded scan
-        # deliberately does not.
+        # is blunter -- a bare `in`, so a four-character stem also matches
+        # inside an ordinary word -- but that bluntness catches an id welded
+        # into a longer token, which a token-bounded scan deliberately does
+        # not. No stem is named here: a comment that quotes one puts a sealed
+        # identifier in a tracked file for the sake of an example, and the
+        # example works without it.
         self._screen_the_pile(prompt, beat=beat, label=label)
 
         leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})
