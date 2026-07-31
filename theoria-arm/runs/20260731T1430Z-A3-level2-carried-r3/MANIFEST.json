@@ -1,0 +1,653 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 60,
+  "sha256": "aa56f54766d274dc661b5c77ac3a1e5beb695e42d3132336b7e9bf8fa62555a1"
+ },
+ "base_commit": null,
+ "branch": null,
+ "classification": {
+  "archive_material": true,
+  "kind": "experiment",
+  "why": "a live run that reached its own end"
+ },
+ "constraint_8": {
+  "bootstrap_calls_allowed": 1,
+  "bootstrap_note": "the first theorize of a run answers no surprise because no manual exists yet for the world to contradict; it is counted as the one permitted bootstrap call and every later call must be covered by a surprise.",
+  "calls_at_forbidden_beats": {},
+  "calls_beyond_bootstrap": 7,
+  "calls_by_beat": {
+   "theorize": 8
+  },
+  "calls_not_covered_by_a_surprise": 0,
+  "holds": true,
+  "model_calls": 8,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
+  "surprises": 29,
+  "surprises_by_kind": {
+   "probe_refutation": 28,
+   "replay_mismatch": 1
+  },
+  "surprises_licensing_a_call": 29,
+  "surprises_retired": 0
+ },
+ "cost": {
+  "cache_ttl_diagnosis": {
+   "cache_creation_1h_tokens": 330383,
+   "cache_creation_5m_tokens": 0,
+   "table": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "under_billed_usd": 1.238936,
+   "verdict": "330383 of this run's cache-creation tokens were 1-hour writes. `proxy/cost.py` priced them at the 5-minute multiplier because it reads the flat usage key and not the nested `cache_creation` object, so the table under-states this run by about $1.2389. The multiplier it needs is already in pricing_v1.json (`cache_creation_input_tokens_1h`); what is missing is the read."
+  },
+  "cli_reported_usd": 13.439862,
+  "delta_usd": -0.246427,
+  "from_price_table": {
+   "missing_usage_keys": null,
+   "model_calls": 8,
+   "per_model": {
+    "claude-opus-5": {
+     "calls": 8,
+     "usd": 13.193435
+    }
+   },
+   "pricing": {
+    "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+    "table": "pricing_v1"
+   },
+   "unmeasured_calls": 0,
+   "unpriced_models": null,
+   "unpriced_usage_keys": null,
+   "usd_total": 13.193435
+  },
+  "model_calls": 8,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "relative_delta": -0.0183,
+  "usage_keys_the_table_cannot_price": null,
+  "usage_total": {
+   "cache_creation_input_tokens": 330383,
+   "cache_read_input_tokens": 0,
+   "input_tokens": 16,
+   "output_tokens": 395581
+  },
+  "verdict": "the price table and the provider's own arithmetic agree to within 2%: pricing_v1.json is validated against a real bill for the first time"
+ },
+ "elapsed_s": 5736.4,
+ "files": [
+  {
+   "path": "CARRIED.json",
+   "sha256": "41f467bf82bd92156de37af58960292ff276cbdae49af79f2d43e6a37e879e5f"
+  },
+  {
+   "path": "RUN_STATE.json",
+   "sha256": "8ed187e18a857570cb0fdde203f3c2f1ecf5eea3de9b5c71f8c5f15d60800d01"
+  },
+  {
+   "path": "bill_shape.json",
+   "sha256": "20262f685f1ed9f6248191343ff044d9a6d81c8c9ecc6d56401cca7d93daa4d1"
+  },
+  {
+   "path": "books/CARRIED.json",
+   "sha256": "6fa7db8bb3f34d5a8336871b8838f6f48c1059e4c8fd3956f8832ee392034c4d"
+  },
+  {
+   "path": "books/generated/theory.md",
+   "sha256": "196dd3f054128712e79c542c158b9e9435ab895c887a8311ffdb48340e37fc64"
+  },
+  {
+   "path": "books/generated/theory.py",
+   "sha256": "32f779309397e93f7a65ad02b1ac60a27d8b0062e40c15b8917eba66aa6af6fe"
+  },
+  {
+   "path": "books/playbook.dsl",
+   "sha256": "8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16"
+  },
+  {
+   "path": "books/problem.json",
+   "sha256": "8644cee12092f978d3fc96304774aa4347f92bab28be172a9e5adc8b4204e710"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/playbook.dsl",
+   "sha256": "36888fc272c978da503f4c94d6b24429b69cc53d5233e3b2655ffe2ffde5d9b4"
+  },
+  {
+   "path": "books/snapshots/rev01-carried/theory.dsl",
+   "sha256": "0564855d908e15ece813348faf7ee89eb8abc03a007c05f56213673df1a4619c"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/playbook.dsl",
+   "sha256": "36888fc272c978da503f4c94d6b24429b69cc53d5233e3b2655ffe2ffde5d9b4"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/problem.json",
+   "sha256": "dc392fcc96fc8d470eeb9d417a7f8cc2996bc8349c2b22223eea54f286fc137b"
+  },
+  {
+   "path": "books/snapshots/rev02-after-cold-certify/theory.dsl",
+   "sha256": "0564855d908e15ece813348faf7ee89eb8abc03a007c05f56213673df1a4619c"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/playbook.dsl",
+   "sha256": "36888fc272c978da503f4c94d6b24429b69cc53d5233e3b2655ffe2ffde5d9b4"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/problem.json",
+   "sha256": "dc392fcc96fc8d470eeb9d417a7f8cc2996bc8349c2b22223eea54f286fc137b"
+  },
+  {
+   "path": "books/snapshots/rev03-before-theorize/theory.dsl",
+   "sha256": "0564855d908e15ece813348faf7ee89eb8abc03a007c05f56213673df1a4619c"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/playbook.dsl",
+   "sha256": "b57cb588a15c00b94c4151ae67f1abe6e2fc625fcd6c208e5e0dc8f9da597fe8"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/problem.json",
+   "sha256": "2a91d501eb84c9edfe25aadb741b291a1899fe43da5d4c0184c1987e8c39892c"
+  },
+  {
+   "path": "books/snapshots/rev04-after-theorize/theory.dsl",
+   "sha256": "4172056ba8137aa34fdbfe1abaf5090ba458cc063a869aeb7d1da1e450298268"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/playbook.dsl",
+   "sha256": "b57cb588a15c00b94c4151ae67f1abe6e2fc625fcd6c208e5e0dc8f9da597fe8"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/problem.json",
+   "sha256": "2a91d501eb84c9edfe25aadb741b291a1899fe43da5d4c0184c1987e8c39892c"
+  },
+  {
+   "path": "books/snapshots/rev05-before-theorize/theory.dsl",
+   "sha256": "4172056ba8137aa34fdbfe1abaf5090ba458cc063a869aeb7d1da1e450298268"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/playbook.dsl",
+   "sha256": "7a28c1d067278facd23b4c20e877db735bbecd6c6e195658c49e04aa49b92694"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev06-after-theorize/theory.dsl",
+   "sha256": "07a2c2172158185f2c1c5e5cb86633801f84660697188c7e0e36e78dfe4a81ed"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/playbook.dsl",
+   "sha256": "7a28c1d067278facd23b4c20e877db735bbecd6c6e195658c49e04aa49b92694"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/problem.json",
+   "sha256": "0bbd4303ef0f33e8ce1fc45b510672fb980ec9d8fb20fbc4eda0fef7fdfd2414"
+  },
+  {
+   "path": "books/snapshots/rev07-before-theorize/theory.dsl",
+   "sha256": "07a2c2172158185f2c1c5e5cb86633801f84660697188c7e0e36e78dfe4a81ed"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/playbook.dsl",
+   "sha256": "33ee7daca33b44bd17641ca5670bb5637993d4580af680eabf5b25b0fbdb97fa"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/problem.json",
+   "sha256": "372a5d2c3d33bf0f908fc1abf6ce860c49bf4d0775158682af29c0baa1760bb1"
+  },
+  {
+   "path": "books/snapshots/rev08-after-theorize/theory.dsl",
+   "sha256": "3bdbee400c89fb3c19ae66de283d699afef0d97b2e7e586ba10d37e74b4ba2b2"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/playbook.dsl",
+   "sha256": "33ee7daca33b44bd17641ca5670bb5637993d4580af680eabf5b25b0fbdb97fa"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/problem.json",
+   "sha256": "372a5d2c3d33bf0f908fc1abf6ce860c49bf4d0775158682af29c0baa1760bb1"
+  },
+  {
+   "path": "books/snapshots/rev09-before-theorize/theory.dsl",
+   "sha256": "3bdbee400c89fb3c19ae66de283d699afef0d97b2e7e586ba10d37e74b4ba2b2"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/playbook.dsl",
+   "sha256": "cc828d35ff8e631801171160afcdeccc861d368b851ac5f0b37462a0291c1cfe"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/problem.json",
+   "sha256": "eab7d585e57b8d575f3f82934327a5204b5ba61c5ef8405102ca524ed1503059"
+  },
+  {
+   "path": "books/snapshots/rev10-after-theorize/theory.dsl",
+   "sha256": "d53fe05a67a836455570b422b9655933da22f1010f634f7e8f3df8d308510c0a"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/playbook.dsl",
+   "sha256": "cc828d35ff8e631801171160afcdeccc861d368b851ac5f0b37462a0291c1cfe"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/problem.json",
+   "sha256": "eab7d585e57b8d575f3f82934327a5204b5ba61c5ef8405102ca524ed1503059"
+  },
+  {
+   "path": "books/snapshots/rev11-before-theorize/theory.dsl",
+   "sha256": "d53fe05a67a836455570b422b9655933da22f1010f634f7e8f3df8d308510c0a"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/playbook.dsl",
+   "sha256": "d34bd52b7c2474aa9e4b440e9300449112c0b8612bfa96c6b7a6f02e96348aeb"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/problem.json",
+   "sha256": "479e4b9aa48607741638bf006814ef84228d1ded344db38292341b560cd63005"
+  },
+  {
+   "path": "books/snapshots/rev12-after-theorize/theory.dsl",
+   "sha256": "ca6ea5d9336818287c1f36208f5fda780390e4065602e3c4bbb48d3c0d1862a5"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/playbook.dsl",
+   "sha256": "d34bd52b7c2474aa9e4b440e9300449112c0b8612bfa96c6b7a6f02e96348aeb"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/problem.json",
+   "sha256": "479e4b9aa48607741638bf006814ef84228d1ded344db38292341b560cd63005"
+  },
+  {
+   "path": "books/snapshots/rev13-before-theorize/theory.dsl",
+   "sha256": "ca6ea5d9336818287c1f36208f5fda780390e4065602e3c4bbb48d3c0d1862a5"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/playbook.dsl",
+   "sha256": "2452c3d34a646e5887fd7ffae1f471407c65b9c7b453e1b550ca975bee3a087a"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/problem.json",
+   "sha256": "afb444ac8bb621029fc87a765998c4b9039330819e07e81d33e041274e83b41c"
+  },
+  {
+   "path": "books/snapshots/rev14-after-theorize/theory.dsl",
+   "sha256": "7917d0e7949d1544f1b2a88d2853e47dcd6cb9ec44067951b65b997c4f5ec746"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/playbook.dsl",
+   "sha256": "2452c3d34a646e5887fd7ffae1f471407c65b9c7b453e1b550ca975bee3a087a"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/problem.json",
+   "sha256": "afb444ac8bb621029fc87a765998c4b9039330819e07e81d33e041274e83b41c"
+  },
+  {
+   "path": "books/snapshots/rev15-before-theorize/theory.dsl",
+   "sha256": "7917d0e7949d1544f1b2a88d2853e47dcd6cb9ec44067951b65b997c4f5ec746"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/playbook.dsl",
+   "sha256": "e6e4f46d4b7e4a974058298c75c14da330df44e3118ea1df44bcd2a86c1aa8d5"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/problem.json",
+   "sha256": "d6cc47bea5423cae3f36ab47f77271d21ddfc4fdeb39d448fe629ad76437008f"
+  },
+  {
+   "path": "books/snapshots/rev16-after-theorize/theory.dsl",
+   "sha256": "84cd5d1b4b74c1f4c791b8173dba994f2923dbe718c04755778cb3be6aee8231"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/playbook.dsl",
+   "sha256": "e6e4f46d4b7e4a974058298c75c14da330df44e3118ea1df44bcd2a86c1aa8d5"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/problem.json",
+   "sha256": "d6cc47bea5423cae3f36ab47f77271d21ddfc4fdeb39d448fe629ad76437008f"
+  },
+  {
+   "path": "books/snapshots/rev17-before-theorize/theory.dsl",
+   "sha256": "84cd5d1b4b74c1f4c791b8173dba994f2923dbe718c04755778cb3be6aee8231"
+  },
+  {
+   "path": "books/theory.dsl",
+   "sha256": "8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090"
+  },
+  {
+   "path": "candidates.jsonl",
+   "sha256": "531071db44fceccdaf320ac2813289425d5e6c35d7975611b64118ee5c28e3ed"
+  },
+  {
+   "path": "certify.json",
+   "sha256": "0529786ac3f1388b8654b24b9df52e7b263026101c6a500e4add0f29c8d2ef4f"
+  },
+  {
+   "path": "commit.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+   "path": "curves.json",
+   "sha256": "9b51f42a3a4f24728a99a82c09d08711fd3e93c081ccaa2bf16b9fa42ae13d73"
+  },
+  {
+   "path": "curves/level-01.json",
+   "sha256": "8578dc866d98d98e35037caa3b95d98adc7a7278dee9d678f57f16436b459926"
+  },
+  {
+   "path": "desk/call-001-theorize-round1.md",
+   "sha256": "6f895cef3d159fd79dcf7fcaf5bc6e6f8953db322a43032a377074c2d09841f1"
+  },
+  {
+   "path": "desk/call-002-theorize-round1.md",
+   "sha256": "3cdf200942693af641f9dc8e815e42c1c2fe2a93c7e9949468dd2404b78fd701"
+  },
+  {
+   "path": "desk/call-003-theorize-round1.md",
+   "sha256": "d3061ec482e35b18e1d39bd5c35376f8ce31f1e1006ac96146dc01dfb35f7b3b"
+  },
+  {
+   "path": "desk/call-004-theorize-round1.md",
+   "sha256": "dd420df5f9db7ddae55acd1a9cffc7c3de839537571f998832c7d02705fa8b9f"
+  },
+  {
+   "path": "desk/call-005-theorize-round1.md",
+   "sha256": "e60da1bead89b4e3cc6ef79a1b7ed830464edc0f59a9644feb2f4cf5c3f01c56"
+  },
+  {
+   "path": "desk/call-006-theorize-round1.md",
+   "sha256": "041cdbc91306942248dbedf9ccbcb89292b825f1a0df9a83d7572db94906a2de"
+  },
+  {
+   "path": "desk/call-007-theorize-round1.md",
+   "sha256": "25a40d7f7eaee4e55c0a967964acb58f267c6b83e80ac38d24825853de40e590"
+  },
+  {
+   "path": "desk/call-008-theorize-round1.md",
+   "sha256": "379cdd79ba741806b6ac41117d7fe7a4122f91f5854f01763ce9cc499747671d"
+  },
+  {
+   "path": "desk_failures.json",
+   "sha256": "5cbbaa6fa6344fec5107af036f8e5672e79844ed7a63b404a527e53351b72ee0"
+  },
+  {
+   "path": "desk_log.json",
+   "sha256": "775db53c0b6dd865ad4cd8e1b383d04f4e152d36a44f11fa7890a6a67c0c70b9"
+  },
+  {
+   "path": "engines_online.json",
+   "sha256": "d269af843f9ab659ded6bf4862c011ca36894f7e9de6a1176310d0e30f05d564"
+  },
+  {
+   "path": "engines_online.jsonl",
+   "sha256": "99472431f4d6685334c93879de95a482c319b7cb553083cae51c54c44600e242"
+  },
+  {
+   "path": "env_proxy.log",
+   "sha256": "050499536a38cda529155ceb82d18b9e498495a8ad9a126a26190f865335ce3c"
+  },
+  {
+   "path": "ledger.jsonl",
+   "sha256": "871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3"
+  },
+  {
+   "path": "ledger.jsonl.lock",
+   "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
+  },
+  {
+   "path": "levels.jsonl",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "plan.json",
+   "sha256": "a2d5b67b0105a640ec81ae4ef511ecf240e5939dfdce1a54c17d94d927831983"
+  },
+  {
+   "path": "probes.jsonl",
+   "sha256": "329f84017959006e572c1b85c24f2ae7edc97a8e1235f4a0bf8d00eb280ccab3"
+  },
+  {
+   "path": "run.json",
+   "sha256": "7535e5e6b59b006bf2f09bea49fd229aa2758c90415488630c39a1dfc01c29ff"
+  },
+  {
+   "path": "surprises.jsonl",
+   "sha256": "12eec8ca24ce366e3600e2652f8c3bbc80828cc126b5a76809704959d3dace0b"
+  },
+  {
+   "path": "theorize.json",
+   "sha256": "26869eebdc54a8cea9dcc2f202e091172af0d20763d32518cb4609e219d8efe3"
+  },
+  {
+   "path": "transfer.json",
+   "sha256": "e01d4ef1c272c68f575146273fd39e9f865e7b80588ac5237f75339a555f8ff6"
+  },
+  {
+   "path": "turns.json",
+   "sha256": "74018a8760a20606358437dc87c197e278396aecf4c73bdf1ea31bc5cb27ebce"
+  }
+ ],
+ "game_id": "g50t-5849a774",
+ "guard": {
+  "allow_only": null,
+  "cut_version": "v1",
+  "n_dev": 4,
+  "n_sealed": 21,
+  "piles_path": "arc-recon/data/piles.json",
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "unknown_policy": "deny"
+ },
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 487,
+  "records_this_run": 487
+ },
+ "note_at_run_start": null,
+ "outcome": "spend_gate_tripped",
+ "parent_run": {
+  "card_id": "63953c63-aa5e-4d61-9aa5-883921b62e91",
+  "parent_run_id_from_scorecard_opaque": "r-41e482ba348b4a3a",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": "A3-campaign-level2"
+ },
+ "prompt_id": "A3-campaign-level2",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "aa56f54766d274dc661b5c77ac3a1e5beb695e42d3132336b7e9bf8fa62555a1",
+   "commits": [],
+   "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
+   "verdict": "no_match",
+   "window": {
+    "first_commit_after": {
+     "arm_sha256": "1f1143cf8633eaee7474f3013f1801cfec79cc4d59e0f7b836c7d1d75abc8c9e",
+     "commit": "f6a9571938d55faf6194337db537075d1258d596",
+     "files": 54,
+     "unix": 1785510377
+    },
+    "last_commit_before": {
+     "arm_sha256": "1f1143cf8633eaee7474f3013f1801cfec79cc4d59e0f7b836c7d1d75abc8c9e",
+     "commit": "ed75a03052e0dce472627442b326460131ee5c7e",
+     "files": 54,
+     "unix": 1785507104
+    },
+    "note": "the run happened between these two commits; its arm_version matches neither, so its sources were uncommitted edits somewhere inside that window"
+   }
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit",
+    "why": "the arm_version this run recorded (aa56f54766d2, 60 files) is reconstructed by no commit reachable from any ref: the run executed against uncommitted working-tree edits. The commits it fell between are given under `arm_version_lookup.window`; the exact sources are not recoverable from git."
+   },
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
+  "mode": "backfill",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
+ "quota": {
+  "agree": true,
+  "billed_actions_from_ledger": 33,
+  "billed_actions_from_scorecard": [
+   33
+  ],
+  "env_steps": 234,
+  "model_calls": 8,
+  "resets": 1
+ },
+ "reconciliation": {
+  "env_steps": 234,
+  "env_steps_ok": 34,
+  "http_amplification": 7.091,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 33
+ },
+ "run_id": "r-41e482ba348b4a3a",
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "63953c63-aa5e-4d61-9aa5-883921b62e91",
+   "environments": [
+    {
+     "actions": 33,
+     "completed": false,
+     "id": "g50t-5849a774",
+     "level_count": 7,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 33,
+       "completed": false,
+       "guid": "a7766d2d-a549-4738-bc3c-5a468a82450d",
+       "level_actions": [
+        33,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        78,
+        175,
+        179,
+        230,
+        96,
+        54,
+        67
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "prompt_id": "A3-campaign-level2",
+    "run_id": "r-41e482ba348b4a3a"
+   },
+   "score": 0.0,
+   "tags": [
+    "level2",
+    "carried",
+    "W-1800",
+    "r3",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 33,
+     "id": "keyboard",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 7,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 33,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 7,
+   "total_levels_completed": 0
+  }
+ ],
+ "sealing": {
+  "by_kind": {
+   "credential_in_body": 238
+  },
+  "bypass_attempts": 0,
+  "credential_in_body": 238,
+  "cut_integrity": true,
+  "game_ids_anywhere_in_the_records": [
+   "g50t-5849a774"
+  ],
+  "guard_blocks": 0,
+  "incidents": 238,
+  "redacted_markers": 0,
+  "sealed_game_ids_found": [],
+  "sealed_pile_requests": 0,
+  "sealed_pile_untouched": true
+ },
+ "slug": "20260731T1430Z-A3-level2-carried-r3",
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
+ },
+ "utc": "2026-07-31T14:11:52.557Z"
+}
