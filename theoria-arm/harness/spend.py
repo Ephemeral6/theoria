@@ -308,14 +308,19 @@ OBSERVED_WORST_CALL_USD = {
 #: unilaterally: it changes what the pool reports as spent, which is the
 #: monitor's to rule on.
 MODEL_CALL_CEILINGS_USD = {
-    # measured on this arm
-    "claude-opus-5":   6.00,       # max(1800 x 0.0028860, 4 x 1.489011) = 5.96
+    # measured on this arm.  2026-07-31: the cleanup campaign landed the
+    # true records of runs whose committed snapshots had said $0.00 (P8
+    # g50t, E3 sk48); the archive-implied worst single opus call rose from
+    # $1.489 to $1.7258 and the old $6.00 row stopped covering its own
+    # archive.  Raised, and the derived rows rescaled by their stated
+    # formulas.  The ceiling grows with the record; it never shrinks.
+    "claude-opus-5":   7.00,       # max(1800 x 0.0028860, 4 x 1.725832) = 6.90
     "claude-haiku-4-5": 1.25,      # max(1800 x 0.0006376, 4 x 0.146292) = 1.15
     # not measured here: opus-5 x output-price ratio x 1.25 throughput margin
-    "claude-opus-4-8": 6.00,       # same list price as opus-5, same family
-    "claude-fable-5": 15.00,       # output $50/M -> 6.00 x 2.0 x 1.25
-    "claude-mythos-5": 15.00,
-    "claude-sonnet-5": 4.50,       # output $15/M -> 6.00 x 0.6 x 1.25
+    "claude-opus-4-8": 7.00,       # same list price as opus-5, same family
+    "claude-fable-5": 17.50,       # output $50/M -> 7.00 x 2.0 x 1.25
+    "claude-mythos-5": 17.50,
+    "claude-sonnet-5": 5.25,       # output $15/M -> 7.00 x 0.6 x 1.25
 }
 
 
