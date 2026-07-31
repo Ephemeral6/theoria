@@ -30,3 +30,4 @@ __pycache__/
 # 10 KB mean candidate is a signal about what the miner is emitting, and it is
 # filed as such rather than being quietly dropped here.
 runs/20260729T004020Z-leg01/candidates.jsonl
+runs/_round_logs/
