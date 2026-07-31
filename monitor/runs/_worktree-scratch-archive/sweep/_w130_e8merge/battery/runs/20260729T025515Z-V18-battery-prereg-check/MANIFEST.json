@@ -1,0 +1,130 @@
+{
+  "prompt_id": "V18-battery-prereg-check",
+  "branch": "agent/v18-battery-prereg-check",
+  "base_commit": "c43ad7422dd9b7d36cc2610a1d4ab704994751a8",
+  "utc": "2026-07-29T02:55:15Z",
+  "task": "Theoria.md Phase 2 process 2 -- freeze-gate review of battery/PREDICTIONS.md",
+  "network": "none",
+  "api_calls": 0,
+  "model_calls": 0,
+  "sealed_pile_contact": "none",
+  "paths_written": [
+    "battery/PREDICTIONS.md (append only)",
+    "battery/runs/20260729T025515Z-V18-battery-prereg-check"
+  ],
+  "commands": [
+    {
+      "cmd": "python -m battery.run_battery --out battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute",
+      "exit": 0,
+      "note": "--out kept battery/artifacts/ untouched"
+    },
+    {
+      "cmd": "python -m pytest battery -q",
+      "exit": 0,
+      "result": "319 passed in 3.91s"
+    }
+  ],
+  "findings": {
+    "statements_reviewed": 89,
+    "order_violations_prediction_after_recompute": 0,
+    "order_proof": "git merge-base --is-ancestor, both directions, all four batches",
+    "undeclared_prior_knowledge": 0,
+    "still_corresponding": 53,
+    "annotated": 36,
+    "falsifiable": 80,
+    "satisfiable_but_uninformative_F4_fails": 3,
+    "unfalsifiable": 1,
+    "measured_falsified": 13,
+    "measured_holds": 31,
+    "resting_on_metrics_v9_called_gameable": 88,
+    "resting_on_metrics_shown_robust": 0,
+    "primary_endpoints_with_a_falsifiable_cross_arm_prediction": 0
+  },
+  "predictions_md": {
+    "frozen_prefix_bytes": 35087,
+    "frozen_prefix_sha256": "sha256:9614abf2054bccb0e57ff590df21946ebca53924b0d58311b10cf68975882453",
+    "prefix_after_this_run": "sha256:9614abf2054bccb0e57ff590df21946ebca53924b0d58311b10cf68975882453",
+    "prefix_intact": true,
+    "full_sha256_after_this_run": "sha256:b6050f7a47fdcd8a7c6c96fa1d238791dfd0d20f51de50b042e2082b5abd4085",
+    "diff": "95 insertions, 0 deletions",
+    "note": "agent/v5-battery-freeze BATTERY_V1.md pins the full-text hash; per its own rule an append needs a new freeze version, not a hash edit. Not edited here."
+  },
+  "adversarial_review": {
+    "report": "battery/runs/20260729T025515Z-V18-battery-prereg-check/ADVERSARIAL.md",
+    "overturned": [
+      "measured column missing from the 34-row table -- at least 4 falsifications unreported",
+      "V9 D1/D2/D3 called a calibration change in one section and not backfilled into the verdicts",
+      "arithmetic: 17/17 should be 15/19; 70 should be 68",
+      "falsifiability criterion missing F4 -- three counterexample arms built and landed",
+      "O-4 over-charged; declared in REPORT_V0.md:74-82 twelve hours earlier",
+      "verdict-question endpoint: exam/grading/calibration.py has a hard-blocking prereg",
+      "U3 endpoint: the proxy/scoring/ location claim was marked verified and was not"
+    ],
+    "stood": [
+      "order proof and the opening of the prereg commits",
+      "direction= never changed",
+      "45169a6 and efc21d1 touch no metric body",
+      "no row silently dropped",
+      "the E2 self-correction in 3a"
+    ]
+  },
+  "files": [
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/ADVERSARIAL.md",
+      "sha256": "sha256:0cddf6b2bde9c6e9ca17726c314f43916274640bdc05b2e1ec2d0a35930b25b5"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/ENDPOINTS.md",
+      "sha256": "sha256:f0ed76e622ea7a1ec0fa6bf0581b07a4d4551a114789470b5853e615d764058e"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/REVIEW_TABLE.md",
+      "sha256": "sha256:a71f5b8e4d4ec0dd9f7405cbddb6001b15b910d87ec6992d55c1fab8e2ca1518"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/RUN_STATE.md",
+      "sha256": "sha256:b53472fefa7ea6275fdc13184fec6a4b4e7d7c9a11789da2e992610fdfd4b84f"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/pytest.txt",
+      "sha256": "sha256:6ac4925ec6ba128b9eb726920f3fb461197cfe4c192879c7feb6add13779a6fb"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute_stdout.txt",
+      "sha256": "sha256:75db5a92cf749947967f795e971cad80297814c9dc9b9bee28d4ff99da14e428"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/arm_contrast.json",
+      "sha256": "sha256:b8418a669530a6788cbe8ec49a087332d7398aa269b0eced96ddeb4c380cf14e"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/capability_spectrum.json",
+      "sha256": "sha256:e82c672cf8d4dcce2f8b9221c3dfaa7886d339444490ef6318a40a3abe420fd9"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/discrimination.json",
+      "sha256": "sha256:a181804fbcfc0e05db97d6b999fa039f60de82eb893e6397a52a6e2f0adc52dd"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/discrimination_arms.json",
+      "sha256": "sha256:459fc6f3308e44f96aa0646333fcc1c1466e02e4df2fe5e23f5ad9fe12326210"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/gaming_audit.json",
+      "sha256": "sha256:990b014ee129d7cf73188b58a8bed58c4d49eab8dcc89fe805860cc259d2e968"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/redundancy.json",
+      "sha256": "sha256:fa88aae9ea83abef902494cb7bee07fa3d50d244c55dbc113170c33b90bb69e5"
+    },
+    {
+      "path": "battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute/validation_material.json",
+      "sha256": "sha256:f4ae8da0e08846b1d4e58b05a0ce0208a251a753246d45f7ad6ecdd62ea3fd9f"
+    },
+    {
+      "path": "battery/PREDICTIONS.md",
+      "sha256": "sha256:b6050f7a47fdcd8a7c6c96fa1d238791dfd0d20f51de50b042e2082b5abd4085",
+      "note": "annotated by this run; prefix 35087 bytes unchanged"
+    }
+  ]
+}

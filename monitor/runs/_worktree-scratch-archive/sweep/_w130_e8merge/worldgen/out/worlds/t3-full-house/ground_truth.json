@@ -1,0 +1,493 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 2654,
+    "injective": true,
+    "states": 2654
+  },
+  "grid": [
+    9,
+    10
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "block_count",
+      "blocks_disjoint",
+      "door_presence_tracks_net",
+      "agent_conserved",
+      "mouths_static"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 9 x 10",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "agent_conserved",
+      "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "mouths_static",
+      "statement": "each of the 2 portal mouth(s) shows colour 7 unless the agent is standing on it",
+      "states_checked": 2654,
+      "status": "holds",
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "door": 5,
+    "floor": 0,
+    "portal": 7,
+    "switch": 3,
+    "switch_on": 4,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "toggle_switch",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_toggle_would_shut_door",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "teleport_twoway",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_portal_exit",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 11,
+    "reachable_states": 2654,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 61,
+        "firing_transitions": 61,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_door": {
+        "firing_states": 62,
+        "firing_transitions": 62,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 2406,
+        "firing_transitions": 3634,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 113,
+        "firing_transitions": 113,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "teleport_twoway": {
+        "firing_states": 190,
+        "firing_transitions": 190,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "toggle_switch": {
+        "firing_states": 186,
+        "firing_transitions": 186,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 2654,
+        "firing_transitions": 6308,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 62,
+        "firing_transitions": 62,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 8,
+    "rules_single_witness": [],
+    "rules_total": 8
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [
+      "door_mirrors_net"
+    ],
+    "declared": [
+      "blocked_by_block",
+      "blocked_by_door",
+      "blocked_by_wall",
+      "blocked_portal_exit",
+      "blocked_toggle_would_shut_door",
+      "door_mirrors_net",
+      "push",
+      "teleport_twoway",
+      "toggle_switch",
+      "walk",
+      "walk_through_door"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_portal_exit",
+      "blocked_toggle_would_shut_door"
+    ],
+    "fired": [
+      "blocked_by_block",
+      "blocked_by_door",
+      "blocked_by_wall",
+      "push",
+      "teleport_twoway",
+      "toggle_switch",
+      "walk",
+      "walk_through_door"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    },
+    {
+      "name": "toggle_switch",
+      "reversible": true,
+      "then": "that switch's bit flips 0\u21941 and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in toggle mode"
+    },
+    {
+      "clause": true,
+      "name": "blocked_toggle_would_shut_door",
+      "reversible": true,
+      "then": "nothing changes \u2014 the switch visibly refuses to flip",
+      "when": "act=D and the target cell holds a switch whose flip would leave the door the agent is standing on impassable",
+      "why": "without it the agent ends up inside a solid cell, the door's own `door_presence_tracks_net` invariant fails, and the agent (painted last) erases the closed door's colour, so two states render alike"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "cascade": true,
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    },
+    {
+      "name": "teleport_twoway",
+      "reversible": true,
+      "then": "the agent is placed on the other mouth, independently of D",
+      "when": "act=D and the target cell holds one mouth of a two-way pair and the other mouth is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_portal_exit",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a portal whose landing cell is a wall, out of bounds, or occupied"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 43,
+    "goal": [
+      7,
+      8
+    ],
+    "optimal_length": 6,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 2654,
+    "solvable": true,
+    "world_id": "t3-full-house"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2,
+      "door": 5,
+      "portal": 7,
+      "switch": 3,
+      "switch_on": 4
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          3
+        ],
+        "kind": "block",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          5
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "twoway",
+          "pair": "p"
+        }
+      },
+      {
+        "cell": [
+          5,
+          8
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "twoway",
+          "pair": "p"
+        }
+      },
+      {
+        "cell": [
+          6,
+          1
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "toggle",
+          "net": "a"
+        }
+      }
+    ],
+    "families": [
+      "portal",
+      "push",
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      7,
+      8
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "##########",
+      "#....#...#",
+      "#.#..#.#.#",
+      "#.#....#.#",
+      "#.#..#.#.#",
+      "#.#..#.#.#",
+      "#........#",
+      "#........#",
+      "##########"
+    ],
+    "notes": "Push, switch-door and a two-way portal in one grid. Three families is where the vocabulary a segmenter has to invent stops being obvious.",
+    "seed": 301,
+    "tier": 3,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t3-full-house"
+  },
+  "world_id": "t3-full-house"
+}

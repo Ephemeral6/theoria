@@ -1,0 +1,172 @@
+{
+ "background": 1,
+ "board": [
+  [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  [
+   1,
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   0,
+   1
+  ],
+  [
+   1,
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1
+  ],
+  [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   0,
+   1
+  ],
+  [
+   1,
+   1,
+   0,
+   4,
+   0,
+   0,
+   0,
+   1
+  ],
+  [
+   1,
+   0,
+   0,
+   0,
+   0,
+   0,
+   3,
+   1
+  ],
+  [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ]
+ ],
+ "grid": [
+  8,
+  8
+ ],
+ "instances_per_declaration": {
+  "Floor": 4
+ },
+ "name": "level-1",
+ "objects": [
+  {
+   "color": 0,
+   "name": "Floor_r2c1",
+   "pos": [
+    2,
+    1
+   ],
+   "present": true,
+   "type": "Floor"
+  },
+  {
+   "color": 0,
+   "name": "Floor_r3c1",
+   "pos": [
+    3,
+    1
+   ],
+   "present": true,
+   "type": "Floor"
+  },
+  {
+   "color": 0,
+   "name": "Floor_r4c1",
+   "pos": [
+    4,
+    1
+   ],
+   "present": true,
+   "type": "Floor"
+  },
+  {
+   "color": 0,
+   "name": "Floor_r5c1",
+   "pos": [
+    5,
+    1
+   ],
+   "present": true,
+   "type": "Floor"
+  },
+  {
+   "color": 2,
+   "name": "Cart",
+   "pos": [
+    1,
+    1
+   ],
+   "present": true,
+   "type": "Cart"
+  },
+  {
+   "color": 3,
+   "name": "Landmark_3",
+   "pos": [
+    6,
+    6
+   ],
+   "present": true,
+   "type": "Landmark_3"
+  },
+  {
+   "color": 4,
+   "name": "Landmark_4",
+   "pos": [
+    5,
+    3
+   ],
+   "present": true,
+   "type": "Landmark_4"
+  }
+ ],
+ "responsibility": {
+  "covered_by_objects": 5,
+  "dynamic_cells": 5,
+  "n_unexplained_at_t0": 0,
+  "need_an_owner_at_t0": 5,
+  "will_be_unexplained_at_t0": []
+ }
+}

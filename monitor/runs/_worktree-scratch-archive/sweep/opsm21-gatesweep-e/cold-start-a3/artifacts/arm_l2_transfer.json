@@ -1,0 +1,319 @@
+{
+  "arm": "l2_transfer",
+  "bill": {
+    "arm": "l2_transfer",
+    "carries_books": true,
+    "cost_to_first_plan": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    },
+    "counts": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 3,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 10,
+      "world_frames": 11
+    },
+    "events": [
+      {
+        "amount": 1,
+        "line": "world_frames",
+        "running_total": 1,
+        "seq": 0,
+        "why": "the transfer arm's entire observation"
+      },
+      {
+        "amount": 1,
+        "line": "compile_runs",
+        "running_total": 1,
+        "seq": 1,
+        "why": "domain.dsl + problem_2 -> four forms"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 1,
+        "seq": 2,
+        "why": "render/responsibility check on frame 0"
+      },
+      {
+        "amount": 1,
+        "line": "plan_runs",
+        "running_total": 1,
+        "seq": 3,
+        "why": "fd_adapter.solve on a3-l2"
+      },
+      {
+        "amount": 10,
+        "line": "world_actions",
+        "running_total": 10,
+        "seq": 4,
+        "why": "executing the plan"
+      },
+      {
+        "amount": 10,
+        "line": "world_frames",
+        "running_total": 11,
+        "seq": 5,
+        "why": "frames returned by the execution (frame 0 already charged)"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 2,
+        "seq": 6,
+        "why": "replay the execution under the manual"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 3,
+        "seq": 7,
+        "why": "Lean on the carried domain, new instance"
+      }
+    ],
+    "level": "a3-l2",
+    "note": "carries domain.dsl + playbook.dsl from level 1, unchanged"
+  },
+  "certify_lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l2/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  },
+  "certify_replay": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 11,
+    "green": true,
+    "pixels_checked": 891,
+    "pixels_unexplained": 0,
+    "trace": "l2_transfer_execution.jsonl",
+    "transitions": 10
+  },
+  "certify_static": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 1,
+    "green": true,
+    "pixels_checked": 81,
+    "pixels_unexplained": 0,
+    "trace": "l2_transfer_frame0_trace.jsonl",
+    "transitions": 0
+  },
+  "compiled": {
+    "domain.pddl": 4491,
+    "problem.json": 2509,
+    "problem.pddl": 3692,
+    "theory.lean": 60595,
+    "theory.md": 5380,
+    "theory.py": 13891
+  },
+  "execution": {
+    "actions": [
+      "LEFT",
+      "DOWN",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP"
+    ],
+    "actions_spent": 10,
+    "level": "a3-l2",
+    "plan_length": 10,
+    "trace": "l2_transfer_execution.jsonl",
+    "win": true
+  },
+  "level": "a3-l2",
+  "outcome": "win",
+  "plan": {
+    "actions": [
+      "(push-left c6-7 c6-6)",
+      "(press-down c6-6 c7-6 c3-1)",
+      "(push-up c6-6 c5-6)",
+      "(push-up c5-6 c4-6)",
+      "(push-up c4-6 c3-6)",
+      "(push-up c3-6 c2-6)",
+      "(teleport-b-up c2-6 c1-6 c4-1)",
+      "(push-up c4-1 c3-1)",
+      "(push-up c3-1 c2-1)",
+      "(push-up c2-1 c1-1)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "left",
+      "down",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "domain": "theory/generated_l2/domain.pddl",
+    "green": true,
+    "length": 10,
+    "manual_final_cell": [
+      1,
+      1
+    ],
+    "manual_reaches_goal": true,
+    "manual_trail": [
+      [
+        6,
+        7
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "name": "a3-l2",
+    "problem": "theory/generated_l2/problem.pddl",
+    "status": "SAT",
+    "world_actions": [
+      "LEFT",
+      "DOWN",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP"
+    ]
+  },
+  "provenance": {
+    "also_derivable": {
+      "goal_cell": null,
+      "goal_cell_note": "the goal cell is not rendered (D-A3-002); one frame or a thousand, it is not in the pixels",
+      "landmarks": {},
+      "landmarks_note": "a portal exit is plain floor (D-A3-003); it is not in the pixels either"
+    },
+    "counts": {
+      "arena_cells": 35,
+      "background": 0,
+      "board_non_background_cells": 46,
+      "grid": [
+        9,
+        9
+      ],
+      "object_names": [
+        "Cart",
+        "Door",
+        "Switch"
+      ],
+      "objects": 3
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_frame",
+      "background": "derived_from_frame",
+      "board": "derived_from_frame",
+      "goal_cell": "supplied",
+      "height": "derived_from_frame",
+      "landmarks": "supplied",
+      "name": "supplied",
+      "objects": "derived_from_frame",
+      "width": "derived_from_frame"
+    },
+    "inputs_read": {
+      "actions": 0,
+      "frames": 1
+    },
+    "route": "frame",
+    "shared_priors": {
+      "note": "the manual's word_table, identical on both routes, so it does not separate them",
+      "object_colour_map": {
+        "5": "Door",
+        "6": "Cart",
+        "7": "Switch",
+        "8": "Switch"
+      }
+    },
+    "source": "artifacts/l2_frame0.json",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        1,
+        1
+      ],
+      "landmarks": {
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ]
+      },
+      "name": "a3-l2"
+    }
+  },
+  "theorize_triggered": false
+}

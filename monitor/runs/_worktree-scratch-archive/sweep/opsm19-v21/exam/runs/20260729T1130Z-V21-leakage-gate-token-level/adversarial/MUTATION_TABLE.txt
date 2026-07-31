@@ -1,0 +1,51 @@
+Tests (baseline all pass):
+   0  test_a_clean_paper_is_not_flagged
+   1  test_a_constant_token_predicts_nothing_and_is_skipped
+   2  test_a_degenerate_whole_value_subset_does_not_disable_the_token_check
+   3  test_a_field_that_was_never_scored_says_so_in_the_report
+   4  test_a_group_too_small_to_score_is_recorded_rather_than_skipped
+   5  test_a_subset_correction_does_not_desensitise_the_token_check
+   6  test_a_subset_floor_from_an_earlier_field_cannot_suppress_a_later_leak
+   7  test_a_subset_with_one_answer_left_is_not_a_prediction
+   8  test_a_token_leak_hidden_by_a_unique_marker_is_caught
+   9  test_a_token_on_one_item_is_an_identifier_not_a_rule
+  10  test_a_token_rate_equal_to_the_floor_is_not_a_hit
+  11  test_an_answer_key_printed_into_the_item_id_is_caught
+  12  test_every_shipped_paper_derives_at_least_one_label_set
+  13  test_hits_and_coverage_come_from_one_traversal
+  14  test_no_label_set_is_derived_that_cannot_then_be_scored
+  15  test_short_tokens_are_dropped_as_punctuation_noise
+  16  test_the_old_whole_value_check_alone_would_have_missed_it
+  17  test_the_report_carries_the_coverage_not_just_the_function
+  18  test_the_shipped_papers_stay_green_with_item_id_checked
+  19  test_unscored_singleton_values_are_counted_not_discarded
+
+A '.' means the test still PASSED against the broken implementation
+(i.e. it does not pin that behaviour); 'X' means it caught the mutation.
+
+mutation                                               0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19   caught
+A: token check deleted                                 .  .  X  .  .  .  X  .  X  .  .  X  .  .  .  .  .  .  .  .   4/20  FAIL(AssertionError)
+B: _token_hits_within stubbed to []                    .  .  X  .  .  .  X  .  X  .  .  X  .  .  .  .  .  .  .  .   4/20  FAIL(AssertionError)
+C: both holder guards removed                          X  X  .  .  .  .  X  X  X  X  X  .  .  X  .  .  .  X  X  X   11/20  FAIL(IndexError)
+D: `len(holders) == n` guard removed                   X  X  .  .  .  .  X  X  X  X  X  .  .  X  .  .  .  X  X  X   11/20  FAIL(IndexError)
+E: `len(holders) < 2` guard removed                    .  .  .  .  .  .  .  .  .  X  .  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+F: MIN_TOKEN = 1                                       .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  X  .  .  .  .   1/20  FAIL(AssertionError)
+G: MIN_TOKEN = 99 (no token ever survives)             .  .  X  .  .  .  X  .  X  .  .  X  .  .  .  X  .  .  .  .   5/20  FAIL(AssertionError)
+H: MIN_LABELLED = 1                                    .  .  .  .  .  .  .  .  .  .  .  .  .  .  X  .  .  .  .  .   1/20  FAIL(AssertionError)
+I: MIN_LABELLED = 99 (no label set derived)            .  .  .  X  .  .  .  .  .  .  .  .  X  .  .  .  .  .  .  .   2/20  FAIL(AssertionError)
+J: derive_label_sets reverted to the 60% floor         .  .  .  .  .  .  .  .  .  .  .  .  X  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+K: singleton counting removed                          .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .  X  .  X   3/20  FAIL(AssertionError)
+K2: constant/absent fields silently skipped again      .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+K3: unscorable groups return an empty pair again       .  .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+K4: coverage dropped from the report                   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  X  .  .   1/20  FAIL(KeyError)
+K5: item_id removed from the allowlist                 .  .  .  .  .  .  .  .  .  .  .  X  .  .  .  .  .  .  X  .   2/20  FAIL(AssertionError)
+L: degenerate-subset guard removed (pre-V21 behaviour)   .  .  .  .  .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+M: the `continue` bug reintroduced                     .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+N: subset floor assigned back to the group floor       .  .  X  .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .   2/20  FAIL(AssertionError)
+O: METADATA_FIELDS narrowed to ('points',)             .  .  X  .  .  .  X  .  X  .  .  X  .  .  .  .  .  X  X  X   7/20  FAIL(AssertionError)
+P: token-level floor comparison weakened to >=         .  .  .  .  .  .  .  .  .  .  X  .  .  .  .  .  .  .  .  .   1/20  FAIL(AssertionError)
+Q: field_tokens always returns the empty set           .  .  X  .  .  .  X  .  X  .  .  X  .  .  .  X  .  .  .  .   5/20  FAIL(AssertionError)
+R: floor contamination, spelled to EVADE test 3's source grep   .  .  X  .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .   2/20  FAIL(AssertionError)
+S: floor contamination, spelled the exact way test 3 greps for   .  .  X  .  .  .  X  .  .  .  .  .  .  .  .  .  .  .  .  .   2/20  FAIL(AssertionError)
+
+OK: 23 mutations, every one caught by at least one test.

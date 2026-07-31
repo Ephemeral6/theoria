@@ -1,0 +1,17 @@
+{
+ "id": "RES-1",
+ "utc": "2026-07-29T08:05:00Z",
+ "cycle": 15,
+ "state": "working",
+ "note": "会话重启，接上 cycle 14。总线读到 #7 为止无新指令（且 #1-#7 的 body 在磁盘上就是乱码，已报过：指令走总线而总线丢字=指令会静默丢失）。手上两件：A3-campaign-devpile（在线腿仍卡在 Theoria.md:305 钱门 9/16，监控未写 generic_ok），S4-freeze（950c739 已推，freeze/RECONCILE.md 落盘）。本轮先推 S4 的两条必修：必修二 48 集来历 P-22 记反了、必修三 消融臂已存在；以及散文里残留的 21 与三层报告条款。",
+ "in_hand": [
+  "A3-campaign-devpile",
+  "S4-freeze"
+ ],
+ "blocked_on": [
+  "A3 在线腿：Theoria.md:305 钱门 9/16，监控未写 generic_ok/放行"
+ ],
+ "delivered": [
+  "A6 delivered+done f22acdd2 (96 tests, 12 acceptance conditions, sealing claim corrected after review)"
+ ]
+}

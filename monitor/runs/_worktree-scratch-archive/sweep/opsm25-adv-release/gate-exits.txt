@@ -1,0 +1,3 @@
+adv-release exit=0
+adv-r3 exit=1
+adv-r4 exit=1

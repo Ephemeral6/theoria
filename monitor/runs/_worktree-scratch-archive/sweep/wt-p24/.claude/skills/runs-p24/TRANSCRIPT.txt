@@ -1,0 +1,5 @@
+=== P-24 rehearsal ===
+host checkout : C:/Users/user/Desktop/theoria-wt-p24
+base          : 3b193734d2d57626e805d3930bbda6a18671769b
+
+########## 1. fleet-branch-ritual -- open the ticket

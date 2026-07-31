@@ -1,0 +1,335 @@
+{
+  "arm": "theoria",
+  "arm_version": {
+    "files": 32,
+    "sha256": "15d26502a10a5d967af662c3ce3f1ada1eb9c1503d18ce538f86438d090c721d"
+  },
+  "env_proxy": {
+    "arm": "theoria",
+    "card_ids": [
+      "card-81e9e618bcf438ee"
+    ],
+    "commands": 13,
+    "denials": 0,
+    "guard": {
+      "allow_only": null,
+      "cut_version": "v1",
+      "n_dev": 4,
+      "n_sealed": 21,
+      "piles_path": "arc-recon/data/piles.json",
+      "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+      "unknown_policy": "deny"
+    },
+    "guids": {
+      "g50t-5849a774": "guid-7c13a7f5b9f50447"
+    },
+    "incidents": 0,
+    "key_injected": true,
+    "meta_calls": 2,
+    "run_id": "r-96e128ffb1c64bad",
+    "upstream": "http://127.0.0.1:51931",
+    "variant": null
+  },
+  "game_id": "g50t-5849a774",
+  "ledger": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\ledger.jsonl",
+  "run_id": "r-96e128ffb1c64bad",
+  "slug": "20260729T0035Z-a3-desk-live-proof2",
+  "spend": {
+    "action_cap": 105,
+    "actions_charged": 0,
+    "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+    "caps": {
+      "action_cap": 105,
+      "arithmetic": {
+        "action_cap": 105,
+        "action_cap_hard_bound": 900,
+        "actions_budget": 12,
+        "arm_attempts_capped_by_commands_ceiling": false,
+        "arm_attempts_planned": 35,
+        "commands_ceiling": 300,
+        "cost_ceiling_usd": 1.5,
+        "env_max_attempts": 3,
+        "fixed_commands": 3,
+        "http_per_command": 1.75,
+        "model_call_ceiling_usd": 4.0,
+        "retry_safety": 1.5,
+        "ttl_seconds": 3600.0,
+        "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+        "usd_cap": 5.5,
+        "wall_clock_s": 1500.0
+      },
+      "ttl_seconds": 3600.0,
+      "usd_cap": 5.5
+    },
+    "model_call_ceiling_usd": 4.0,
+    "model_calls_charged": 4,
+    "pool": {
+      "action_ceiling": 24000,
+      "gate_version": "1.0",
+      "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+      "ledger_path": "../../proxy/var/spend_gate.jsonl",
+      "policy_path": "proxy/spend_policy.json",
+      "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+      "pool": "theoria-shared-2026-07",
+      "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+      "usd_ceiling": 214.9
+    },
+    "released": false,
+    "renewals": 0,
+    "reservation_id": "res-d9f50ec3c0ba4a9d",
+    "tripped": {
+      "message": "1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+      "rule": "UNPRICED_SPEND"
+    },
+    "unpriced_calls": 1,
+    "usd_cap": 5.5,
+    "usd_charged": 4.393156
+  },
+  "summary": {
+    "action_counts": {
+      "1": 2,
+      "2": 5,
+      "3": 2,
+      "4": 2,
+      "5": 1
+    },
+    "budget": {
+      "actions_failed": 0,
+      "actions_left": 0,
+      "actions_ok": 12,
+      "ceiling_actions": 12,
+      "ceiling_commands": 300,
+      "commands_sent": 13,
+      "http_amplification": 1.083,
+      "probe_actions": 4,
+      "reserve_for_probes": 0,
+      "resets": 1
+    },
+    "carried_books": null,
+    "certify_rounds": 3,
+    "desk": {
+      "beats": [
+        "theorize"
+      ],
+      "calls": 4,
+      "cli_cost_usd": 0.393156,
+      "cost_ceiling_usd": 1.5,
+      "model": "claude-haiku-4-5-20251001",
+      "spend_gate": {
+        "action_cap": 105,
+        "actions_charged": 0,
+        "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+        "caps": {
+          "action_cap": 105,
+          "arithmetic": {
+            "action_cap": 105,
+            "action_cap_hard_bound": 900,
+            "actions_budget": 12,
+            "arm_attempts_capped_by_commands_ceiling": false,
+            "arm_attempts_planned": 35,
+            "commands_ceiling": 300,
+            "cost_ceiling_usd": 1.5,
+            "env_max_attempts": 3,
+            "fixed_commands": 3,
+            "http_per_command": 1.75,
+            "model_call_ceiling_usd": 4.0,
+            "retry_safety": 1.5,
+            "ttl_seconds": 3600.0,
+            "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+            "usd_cap": 5.5,
+            "wall_clock_s": 1500.0
+          },
+          "ttl_seconds": 3600.0,
+          "usd_cap": 5.5
+        },
+        "model_call_ceiling_usd": 4.0,
+        "model_calls_charged": 4,
+        "pool": {
+          "action_ceiling": 24000,
+          "gate_version": "1.0",
+          "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+          "ledger_path": "../../proxy/var/spend_gate.jsonl",
+          "policy_path": "proxy/spend_policy.json",
+          "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+          "pool": "theoria-shared-2026-07",
+          "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+          "usd_ceiling": 214.9
+        },
+        "released": false,
+        "renewals": 0,
+        "reservation_id": "res-d9f50ec3c0ba4a9d",
+        "tripped": {
+          "message": "1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+          "rule": "UNPRICED_SPEND"
+        },
+        "unpriced_calls": 1,
+        "usd_cap": 5.5,
+        "usd_charged": 4.393156
+      },
+      "unpriced_calls": 1,
+      "usage_total": {
+        "cache_creation_input_tokens": 38563,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 27,
+        "output_tokens": 58945
+      }
+    },
+    "desk_failures": [
+      {
+        "error": "ModelError: unparseable CLI output: ",
+        "step_idx": 9
+      },
+      {
+        "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+        "step_idx": 10
+      },
+      {
+        "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+        "step_idx": 11
+      },
+      {
+        "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+        "step_idx": 12
+      }
+    ],
+    "elapsed_s": 632.3,
+    "game_id": "g50t-5849a774",
+    "levels": {
+      "boundaries": 0,
+      "events": [],
+      "level": 1,
+      "levels_completed": 0,
+      "starts": [
+        0
+      ]
+    },
+    "levels_completed": 0,
+    "model_calls": 4,
+    "outcome": "budget_exhausted",
+    "run_id": "r-96e128ffb1c64bad",
+    "score": null,
+    "scorecard": {
+      "card_id": "card-81e9e618bcf438ee",
+      "environments": [
+        {
+          "actions": 12,
+          "completed": false,
+          "id": "g50t-5849a774",
+          "level_count": 3,
+          "levels_completed": 0,
+          "resets": 0,
+          "runs": [
+            {
+              "actions": 12,
+              "completed": false,
+              "guid": "guid-7c13a7f5b9f50447",
+              "level_actions": [
+                0,
+                0,
+                0
+              ],
+              "level_baseline_actions": [
+                8,
+                8,
+                8
+              ],
+              "level_scores": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "levels_completed": 0,
+              "resets": 0,
+              "score": 0.0,
+              "state": "NOT_FINISHED"
+            }
+          ],
+          "score": 0.0
+        }
+      ],
+      "opaque": {
+        "opaque": {
+          "prompt_id": "P-8",
+          "run_id": "r-96e128ffb1c64bad"
+        },
+        "tags": [
+          "theoria",
+          "p8",
+          "first-contact"
+        ]
+      },
+      "score": 0.0,
+      "tags": [
+        "theoria",
+        "p8",
+        "first-contact"
+      ],
+      "tags_scores": [],
+      "total_actions": 12,
+      "total_environments": 1,
+      "total_environments_completed": 0,
+      "total_levels": 3,
+      "total_levels_completed": 0
+    },
+    "steps": 13,
+    "stopped_because": "action budget spent",
+    "surprises": {
+      "by_family": {
+        "computational": 0,
+        "empirical": 8
+      },
+      "by_kind": {
+        "execution_mismatch": 0,
+        "heuristic_miss": 0,
+        "probe_refutation": 4,
+        "proof_failure": 0,
+        "render_mismatch": 1,
+        "replay_mismatch": 3,
+        "search_timeout": 0
+      },
+      "total": 8,
+      "unhandled": 2
+    },
+    "theorize_rounds": 3,
+    "turns": 8,
+    "win_levels": null,
+    "world": {
+      "actions_used": [
+        "ACTION1",
+        "ACTION2",
+        "ACTION3",
+        "ACTION4",
+        "ACTION5",
+        "RESET"
+      ],
+      "background": 1,
+      "cascade_lengths": [
+        1
+      ],
+      "cells_needing_an_owner": 7,
+      "colours_seen": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "constant_cells": 57,
+      "distinct_states": 7,
+      "dynamic_box": [
+        0,
+        0,
+        7,
+        3
+      ],
+      "dynamic_cells": 7,
+      "max_frames_in_one_command": 1,
+      "shape": [
+        8,
+        8
+      ],
+      "states": 13,
+      "steps": 13
+    }
+  }
+}

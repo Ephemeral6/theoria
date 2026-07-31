@@ -1,0 +1,17 @@
+{
+  "agent": "RES-4",
+  "base_commit": "443211dd",
+  "branch": "agent/s27-credential-triage",
+  "lane": "infra",
+  "prompt_id": "S27-credential-in-body-triage",
+  "result": {
+    "distinct_details": 1,
+    "fragments_matching_live_key": 0,
+    "heuristic_matches": 394352,
+    "incidents": 2439,
+    "jsonl_files_scanned": 1033
+  },
+  "state": "triage complete; heuristic tightening recommended and deliberately not implemented",
+  "territory": "proxy",
+  "utc": "2026-07-29T10:22:37Z"
+}

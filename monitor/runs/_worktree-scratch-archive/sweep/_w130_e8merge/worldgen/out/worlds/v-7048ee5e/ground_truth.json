@@ -1,0 +1,205 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 17,
+    "injective": true,
+    "states": 17
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 17,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 17,
+      "status": "holds",
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "action_forbidden",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 7,
+    "reachable_states": 17,
+    "reversibility_score": 1.0,
+    "rules": {
+      "action_forbidden": {
+        "firing_states": 17,
+        "firing_transitions": 17,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 17,
+        "firing_transitions": 25,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 17,
+        "firing_transitions": 26,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [],
+    "rules_total": 3
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "action_forbidden",
+      "blocked_by_wall",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "action_forbidden",
+      "blocked_by_wall",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D, D is not `UP`, and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D, D is not `UP`, and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "action_forbidden",
+      "reversible": true,
+      "then": "nothing changes \u2014 the command is refused before the grid is consulted, so the refusal is indistinguishable from a world in which that direction never does anything",
+      "when": "act=D and D is `UP`"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 17,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 10,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 17,
+    "solvable": true,
+    "world_id": "v-7048ee5e"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {},
+    "entities": [],
+    "families": [],
+    "flags": {
+      "forbidden_action": "UP"
+    },
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": null,
+    "layout": [
+      "#########",
+      "#...#...#",
+      "#.#.#.#.#",
+      "#.#...#.#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "",
+    "seed": 0,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "v-7048ee5e"
+  },
+  "world_id": "v-7048ee5e"
+}

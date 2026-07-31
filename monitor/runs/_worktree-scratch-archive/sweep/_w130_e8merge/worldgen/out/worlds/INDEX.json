@@ -1,0 +1,1088 @@
+{
+  "prompt_id": "C1-worldgen",
+  "totals": {
+    "claim_disagreements": [],
+    "frame_collisions": [],
+    "invariant_failures": [],
+    "invariant_unverified": [],
+    "invariant_verdict_mismatch": [],
+    "mean_reversibility": 0.9495,
+    "rule_correspondence_failures": [],
+    "solvability_intent_failures": [],
+    "tiers": {
+      "1": 9,
+      "2": 7,
+      "3": 4
+    },
+    "unsolvable": [
+      "t2-unsolvable-nodoor"
+    ],
+    "variant_pairs": [
+      "t1-push-corridor",
+      "t1-switch-latch",
+      "t2-portal-paired",
+      "t2-unsolvable-nodoor"
+    ],
+    "worlds": 20
+  },
+  "worlds": [
+    {
+      "budget": 40,
+      "claim_disagreements": [],
+      "coverage": "38/96",
+      "coverage_fraction": 0.3958,
+      "declared_never_fires": [],
+      "distinct_frames": 24,
+      "dormant_clauses": [],
+      "entities": 0,
+      "families": [],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 10,
+      "reachable_states": 24,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "rules_re_witnessable": 2,
+      "rules_single_witness": [],
+      "rules_total": 2,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 41,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "budget": 40,
+      "claim_disagreements": [],
+      "coverage": "40/196",
+      "coverage_fraction": 0.2041,
+      "declared_never_fires": [],
+      "distinct_frames": 49,
+      "dormant_clauses": [],
+      "entities": 1,
+      "families": [
+        "push"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        5,
+        7
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 5,
+      "reachable_states": 49,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "walk"
+      ],
+      "rules_re_witnessable": 4,
+      "rules_single_witness": [],
+      "rules_total": 4,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 41,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-push-open"
+    },
+    {
+      "budget": 20,
+      "claim_disagreements": [],
+      "coverage": "19/60",
+      "coverage_fraction": 0.3167,
+      "declared_never_fires": [],
+      "distinct_frames": 15,
+      "dormant_clauses": [],
+      "entities": 1,
+      "families": [
+        "push"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        5,
+        6
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 5,
+      "reachable_states": 15,
+      "reversibility_score": 0.75,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "walk"
+      ],
+      "rules_re_witnessable": 3,
+      "rules_single_witness": [
+        "push"
+      ],
+      "rules_total": 4,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 21,
+      "variant_delta": "same mechanism, dead-end corridor instead of an open room",
+      "variant_of": "t1-push-open",
+      "win_in_trace": false,
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "budget": 40,
+      "claim_disagreements": [],
+      "coverage": "39/104",
+      "coverage_fraction": 0.375,
+      "declared_never_fires": [],
+      "distinct_frames": 26,
+      "dormant_clauses": [],
+      "entities": 3,
+      "families": [
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        6,
+        7
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 9,
+      "reachable_states": 26,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_wall",
+        "blocked_toggle_would_shut_door",
+        "walk",
+        "walk_through_door"
+      ],
+      "rules_re_witnessable": 6,
+      "rules_single_witness": [],
+      "rules_total": 6,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_wall",
+        "blocked_toggle_would_shut_door",
+        "walk",
+        "walk_through_door"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 41,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "budget": 30,
+      "claim_disagreements": [],
+      "coverage": "29/104",
+      "coverage_fraction": 0.2788,
+      "declared_never_fires": [],
+      "distinct_frames": 26,
+      "dormant_clauses": [
+        "blocked_toggle_would_shut_door"
+      ],
+      "entities": 3,
+      "families": [
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        6,
+        7
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 9,
+      "reachable_states": 26,
+      "reversibility_score": 0.8333,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_door",
+        "blocked_by_wall",
+        "walk",
+        "walk_through_door"
+      ],
+      "rules_re_witnessable": 5,
+      "rules_single_witness": [
+        "press_latch"
+      ],
+      "rules_total": 6,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_door",
+        "blocked_by_wall",
+        "walk",
+        "walk_through_door"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 31,
+      "variant_delta": "the switch is a latch: it sets once and never clears",
+      "variant_of": "t1-switch-toggle",
+      "win_in_trace": false,
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "budget": 10,
+      "claim_disagreements": [],
+      "coverage": "10/104",
+      "coverage_fraction": 0.0962,
+      "declared_never_fires": [],
+      "distinct_frames": 26,
+      "dormant_clauses": [
+        "blocked_portal_exit"
+      ],
+      "entities": 1,
+      "families": [
+        "portal"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        8,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 10,
+      "reachable_states": 26,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_wall",
+        "teleport_oneway",
+        "walk"
+      ],
+      "rules_re_witnessable": 3,
+      "rules_single_witness": [],
+      "rules_total": 3,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_wall",
+        "teleport_oneway",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 11,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "budget": 70,
+      "claim_disagreements": [],
+      "coverage": "69/232",
+      "coverage_fraction": 0.2974,
+      "declared_never_fires": [],
+      "distinct_frames": 58,
+      "dormant_clauses": [],
+      "entities": 1,
+      "families": [
+        "color_cycle"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        6,
+        7
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 5,
+      "reachable_states": 58,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "advance_cycler",
+        "blocked_by_wall",
+        "walk",
+        "walk_through_cycler"
+      ],
+      "rules_re_witnessable": 4,
+      "rules_single_witness": [],
+      "rules_total": 4,
+      "rules_with_uncovered_pairs": [
+        "advance_cycler",
+        "blocked_by_wall",
+        "walk",
+        "walk_through_cycler"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 71,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": true,
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "budget": 50,
+      "claim_disagreements": [],
+      "coverage": "43/200",
+      "coverage_fraction": 0.215,
+      "declared_never_fires": [],
+      "distinct_frames": 50,
+      "dormant_clauses": [],
+      "entities": 4,
+      "families": [
+        "count_lock"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        5,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 8,
+      "reachable_states": 50,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "walk",
+        "walk_through_lock"
+      ],
+      "rules_re_witnessable": 5,
+      "rules_single_witness": [],
+      "rules_total": 5,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "walk",
+        "walk_through_lock"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 51,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "budget": 10,
+      "claim_disagreements": [],
+      "coverage": "10/168",
+      "coverage_fraction": 0.0595,
+      "declared_never_fires": [],
+      "distinct_frames": 42,
+      "dormant_clauses": [],
+      "entities": 2,
+      "families": [
+        "consumable"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        5,
+        7
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 4,
+      "reachable_states": 42,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_collapsed",
+        "blocked_by_wall",
+        "cross_fragile",
+        "walk"
+      ],
+      "rules_re_witnessable": 4,
+      "rules_single_witness": [],
+      "rules_total": 4,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_collapsed",
+        "blocked_by_wall",
+        "cross_fragile",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 1,
+      "trace_frames": 11,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "budget": 190,
+      "claim_disagreements": [],
+      "coverage": "156/700",
+      "coverage_fraction": 0.2229,
+      "declared_never_fires": [],
+      "distinct_frames": 175,
+      "dormant_clauses": [
+        "blocked_toggle_would_shut_door"
+      ],
+      "entities": 3,
+      "families": [
+        "push",
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 8,
+      "reachable_states": 175,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "push",
+        "toggle_switch",
+        "walk",
+        "walk_through_door"
+      ],
+      "rules_re_witnessable": 7,
+      "rules_single_witness": [],
+      "rules_total": 7,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "push",
+        "toggle_switch",
+        "walk",
+        "walk_through_door"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 191,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": true,
+      "world_id": "t2-switch-push"
+    },
+    {
+      "budget": 40,
+      "claim_disagreements": [],
+      "coverage": "40/96",
+      "coverage_fraction": 0.4167,
+      "declared_never_fires": [],
+      "distinct_frames": 24,
+      "dormant_clauses": [
+        "blocked_portal_exit"
+      ],
+      "entities": 2,
+      "families": [
+        "portal"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 3,
+      "reachable_states": 24,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_wall",
+        "teleport_twoway",
+        "walk"
+      ],
+      "rules_re_witnessable": 3,
+      "rules_single_witness": [],
+      "rules_total": 3,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_wall",
+        "teleport_twoway",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 41,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": true,
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "budget": 10,
+      "claim_disagreements": [],
+      "coverage": "10/24",
+      "coverage_fraction": 0.4167,
+      "declared_never_fires": [],
+      "distinct_frames": 6,
+      "dormant_clauses": [
+        "blocked_portal_exit"
+      ],
+      "entities": 2,
+      "families": [
+        "portal"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 2,
+      "reachable_states": 6,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "rules_re_witnessable": 3,
+      "rules_single_witness": [],
+      "rules_total": 3,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 11,
+      "variant_delta": "`paired` instead of `twoway`: the agent exits *through* the partner, so the landing cell depends on the direction of travel",
+      "variant_of": "t2-portal-pair",
+      "win_in_trace": true,
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "budget": 10,
+      "claim_disagreements": [],
+      "coverage": "9/140",
+      "coverage_fraction": 0.0643,
+      "declared_never_fires": [],
+      "distinct_frames": 35,
+      "dormant_clauses": [],
+      "entities": 1,
+      "families": [
+        "gravity",
+        "push"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 10,
+      "reachable_states": 35,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "walk"
+      ],
+      "rules_re_witnessable": 4,
+      "rules_single_witness": [],
+      "rules_total": 4,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 11,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "budget": 110,
+      "claim_disagreements": [],
+      "coverage": "102/348",
+      "coverage_fraction": 0.2931,
+      "declared_never_fires": [],
+      "distinct_frames": 87,
+      "dormant_clauses": [],
+      "entities": 5,
+      "families": [
+        "consumable",
+        "count_lock"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 18,
+      "reachable_states": 87,
+      "reversibility_score": 0.8571,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_collapsed",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "cross_fragile",
+        "walk",
+        "walk_through_lock"
+      ],
+      "rules_re_witnessable": 6,
+      "rules_single_witness": [
+        "cross_fragile"
+      ],
+      "rules_total": 7,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_collapsed",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "cross_fragile",
+        "walk",
+        "walk_through_lock"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 111,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "budget": 60,
+      "claim_disagreements": [],
+      "coverage": "53/244",
+      "coverage_fraction": 0.2172,
+      "declared_never_fires": [],
+      "distinct_frames": 61,
+      "dormant_clauses": [],
+      "entities": 4,
+      "families": [
+        "color_cycle",
+        "count_lock"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        5,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 8,
+      "reachable_states": 61,
+      "reversibility_score": 0.8571,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "advance_cycler",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "walk",
+        "walk_through_cycler",
+        "walk_through_lock"
+      ],
+      "rules_re_witnessable": 6,
+      "rules_single_witness": [
+        "advance_cycler"
+      ],
+      "rules_total": 7,
+      "rules_with_uncovered_pairs": [
+        "advance_cycler",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "walk",
+        "walk_through_cycler",
+        "walk_through_lock"
+      ],
+      "solvable": true,
+      "tier": 2,
+      "trace_frames": 61,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "budget": 10,
+      "claim_disagreements": [],
+      "coverage": "10/44",
+      "coverage_fraction": 0.2273,
+      "declared_never_fires": [],
+      "distinct_frames": 11,
+      "dormant_clauses": [],
+      "entities": 2,
+      "families": [
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        6,
+        7
+      ],
+      "intended_solvable": false,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": null,
+      "reachable_states": 11,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_door",
+        "blocked_by_wall",
+        "walk"
+      ],
+      "rules_re_witnessable": 3,
+      "rules_single_witness": [],
+      "rules_total": 3,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_door",
+        "blocked_by_wall",
+        "walk"
+      ],
+      "solvable": false,
+      "tier": 2,
+      "trace_frames": 11,
+      "variant_delta": "the switch is deleted, so the door's net has no driver",
+      "variant_of": "t1-switch-toggle",
+      "win_in_trace": false,
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "budget": 220,
+      "claim_disagreements": [],
+      "coverage": "217/10616",
+      "coverage_fraction": 0.0204,
+      "declared_never_fires": [],
+      "distinct_frames": 2654,
+      "dormant_clauses": [
+        "blocked_portal_exit",
+        "blocked_toggle_would_shut_door"
+      ],
+      "entities": 5,
+      "families": [
+        "portal",
+        "push",
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        9,
+        10
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 6,
+      "reachable_states": 2654,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "push",
+        "teleport_twoway",
+        "toggle_switch",
+        "walk",
+        "walk_through_door"
+      ],
+      "rules_re_witnessable": 8,
+      "rules_single_witness": [],
+      "rules_total": 8,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "push",
+        "teleport_twoway",
+        "toggle_switch",
+        "walk",
+        "walk_through_door"
+      ],
+      "solvable": true,
+      "tier": 3,
+      "trace_frames": 221,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": true,
+      "world_id": "t3-full-house"
+    },
+    {
+      "budget": 20,
+      "claim_disagreements": [],
+      "coverage": "19/156",
+      "coverage_fraction": 0.1218,
+      "declared_never_fires": [],
+      "distinct_frames": 39,
+      "dormant_clauses": [],
+      "entities": 3,
+      "families": [
+        "consumable",
+        "gravity",
+        "push"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        7,
+        9
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 8,
+      "reachable_states": 39,
+      "reversibility_score": 1.0,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_block",
+        "blocked_by_collapsed",
+        "blocked_by_wall",
+        "cross_fragile",
+        "push",
+        "walk"
+      ],
+      "rules_re_witnessable": 6,
+      "rules_single_witness": [],
+      "rules_total": 6,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_block",
+        "blocked_by_collapsed",
+        "blocked_by_wall",
+        "cross_fragile",
+        "push",
+        "walk"
+      ],
+      "solvable": true,
+      "tier": 3,
+      "trace_frames": 21,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "budget": 160,
+      "claim_disagreements": [],
+      "coverage": "156/1048",
+      "coverage_fraction": 0.1489,
+      "declared_never_fires": [],
+      "distinct_frames": 262,
+      "dormant_clauses": [
+        "blocked_portal_exit"
+      ],
+      "entities": 6,
+      "families": [
+        "color_cycle",
+        "count_lock",
+        "portal"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        8,
+        10
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 5,
+      "reachable_states": 262,
+      "reversibility_score": 0.875,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "advance_cycler",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "teleport_twoway",
+        "walk",
+        "walk_through_cycler",
+        "walk_through_lock"
+      ],
+      "rules_re_witnessable": 7,
+      "rules_single_witness": [
+        "advance_cycler"
+      ],
+      "rules_total": 8,
+      "rules_with_uncovered_pairs": [
+        "advance_cycler",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "teleport_twoway",
+        "walk",
+        "walk_through_cycler",
+        "walk_through_lock"
+      ],
+      "solvable": true,
+      "tier": 3,
+      "trace_frames": 161,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": true,
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "budget": 150,
+      "claim_disagreements": [],
+      "coverage": "128/1744",
+      "coverage_fraction": 0.0734,
+      "declared_never_fires": [],
+      "distinct_frames": 436,
+      "dormant_clauses": [
+        "blocked_toggle_would_shut_door"
+      ],
+      "entities": 7,
+      "families": [
+        "consumable",
+        "count_lock",
+        "switch_door"
+      ],
+      "fired_undeclared": [],
+      "frame_determines_state": true,
+      "grid": [
+        8,
+        10
+      ],
+      "intended_solvable": true,
+      "invariants_all_hold": true,
+      "invariants_unverified": [],
+      "invariants_violated": [],
+      "optimal_length": 12,
+      "reachable_states": 436,
+      "reversibility_score": 0.8182,
+      "rule_correspondence_agrees": true,
+      "rules_never_witnessed": [
+        "blocked_by_collapsed",
+        "blocked_by_door",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "cross_fragile",
+        "latch_already_set",
+        "press_latch",
+        "walk",
+        "walk_through_door",
+        "walk_through_lock"
+      ],
+      "rules_re_witnessable": 9,
+      "rules_single_witness": [
+        "cross_fragile",
+        "press_latch"
+      ],
+      "rules_total": 11,
+      "rules_with_uncovered_pairs": [
+        "blocked_by_collapsed",
+        "blocked_by_door",
+        "blocked_by_lock",
+        "blocked_by_wall",
+        "collect_token",
+        "cross_fragile",
+        "latch_already_set",
+        "press_latch",
+        "walk",
+        "walk_through_door",
+        "walk_through_lock"
+      ],
+      "solvable": true,
+      "tier": 3,
+      "trace_frames": 151,
+      "variant_delta": "",
+      "variant_of": null,
+      "win_in_trace": false,
+      "world_id": "t3-latch-maze"
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+tree  : /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures
+branch: agent/v23-figures-sources-absent
+commit: efab00d0
+
+== 0. required data sources present ==
+ok
+
+== 1. build pass A ==
+ok  (60 images)
+
+== 2. build pass B ==
+ok  (60 images)
+
+== 2b. what the two builds warned about ==
+ok  (neither build pass warned)
+
+== 3. A vs B, byte for byte ==
+FAIL: pass A and pass B differ under 'csv':
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/csv/fig06_concept_timeline.csv /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/csv/fig06_concept_timeline.csv
+    3,4c3,4
+    < Button,2,M3,,,adjudicated,Button,L-02,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,L-02,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    8,9c8,9
+    < Button,2,M3,,,adjudicated,Button,O-01,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-01,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    13,14c13,14
+    < Button,2,M3,,,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    < Button,3,M3,,,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    18,19c18,19
+    < Button,2,M3,,,adjudicated,Button,R-03,accept,accept,,,,,
+    < Button,3,M3,,,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-03,accept,accept,,,,,
+    > Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    23c23
+    < Button,2,M3,,,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    ---
+    > Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    27,28c27,28
+    < Door,2,M3,,,adjudicated,Door,L-02,accept,accept,,,,,
+    < Door,3,M3,,,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,L-02,accept,accept,,,,,
+    > Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    32,33c32,33
+    < Door,2,M3,,,adjudicated,Door,O-02,accept,accept,,,,,
+    < Door,3,M3,,,admitted,Door,O-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-02,accept,accept,,,,,
+FAIL: pass A and pass B differ under 'out':
+    Binary files /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/out/dark/fig06_concept_timeline.png and /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/out/dark/fig06_concept_timeline.png differ
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/out/dark/fig06_concept_timeline.svg /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/out/dark/fig06_concept_timeline.svg
+    171c171
+    <       <g style="fill: #c3c2b7" transform="translate(301.79769 40.397704) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(301.79769 46.556501) scale(0.055 -0.055)">
+    208c208
+    <       <g style="fill: #c3c2b7" transform="translate(287.197768 46.556501) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(287.197768 52.715298) scale(0.055 -0.055)">
+    429c429
+    <       <g style="fill: #c3c2b7" transform="translate(284.598588 52.715298) scale(0.055 -0.055)">
+    ---
+    >       <g style="fill: #c3c2b7" transform="translate(284.598588 58.874095) scale(0.055 -0.055)">
+    536,537c536,537
+    <       <!-- no git -->
+    <       <g style="fill: #c3c2b7" transform="translate(298.032768 58.874095) scale(0.055 -0.055)">
+    ---
+    >       <!-- no commit ts -->
+    >       <g style="fill: #c3c2b7" transform="translate(287.841869 65.032892) scale(0.055 -0.055)">
+    539,591c539,557
+    <         <path id="DejaVuSans-67" d="M 2906 1791 
+    < Q 2906 2416 2648 2759 
+    < Q 2391 3103 1925 3103 
+    < Q 1463 3103 1205 2759 
+    < Q 947 2416 947 1791 
+    < Q 947 1169 1205 825 
+    < Q 1463 481 1925 481 
+    < Q 2391 481 2648 825 
+    < Q 2906 1169 2906 1791 
+    < z
+    < M 3481 434 
+    < Q 3481 -459 3084 -895 
+    < Q 2688 -1331 1869 -1331 
+    < Q 1566 -1331 1297 -1286 
+    < Q 1028 -1241 775 -1147 
+    < L 775 -588 
+    < Q 1028 -725 1275 -790 
+    < Q 1522 -856 1778 -856 
+    < Q 2344 -856 2625 -561 
+FAIL: pass A and pass B differ under 'paper':
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/paper/INDEX.md /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/paper/INDEX.md
+    34c34
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    39,48c39,48
+    < | `figures/paper/light/figure1_concept_timeline.pdf` | `15cce1f7c9257f5589803f6dc3a272cb5c3262b51f79c81723d6b21605bf381a` |
+    < | `figures/paper/light/figure1_concept_timeline.png` | `fb987f73a92b26f5de741b6730261d0c3543a9181bdd9c265fe9b4633b34f8e4` |
+    < | `figures/paper/light/figure1_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    < | `figures/paper/dark/figure1_concept_timeline.pdf` | `cdb31d5b0bc690b4b389ddd17bd1888881882683f300220e85a0d9275c5a8b90` |
+    < | `figures/paper/dark/figure1_concept_timeline.png` | `61683cbc160b0a0d7cd757e28d78cc47b311817c09b28c9dc48813b55c35698f` |
+    < | `figures/paper/dark/figure1_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    < | `figures/out/light/fig06_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    < | `figures/out/light/fig06_concept_timeline.png` | `af291c7f67f83b0ada2badd73f6dcc9f4681ad74f3195d3fd2323458e9a6272a` |
+    < | `figures/out/dark/fig06_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    < | `figures/out/dark/fig06_concept_timeline.png` | `95efb5372b0badce1bfbf64ac0a73dd3f078e2568e65dabf9d5344f7ca89156d` |
+    ---
+    > | `figures/paper/light/figure1_concept_timeline.pdf` | `1f36e3996c07927cb145242d5686b6bfd5bc2aa1b92ec356baae55a77fc69f16` |
+    > | `figures/paper/light/figure1_concept_timeline.png` | `d5770f6f6cae48a27872779adc8b45b084479a87049210f03ccf8e330cb9eeb9` |
+    > | `figures/paper/light/figure1_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    > | `figures/paper/dark/figure1_concept_timeline.pdf` | `81ec9684724b233fd7a3170508f6ff7b06dca3b0d02baf7d7596f9f7ecb23c69` |
+    > | `figures/paper/dark/figure1_concept_timeline.png` | `15e52b5d2abb12df9097b956a6651e6d707283e21145227ace559a7660fc2022` |
+    > | `figures/paper/dark/figure1_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    > | `figures/out/light/fig06_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    > | `figures/out/light/fig06_concept_timeline.png` | `0f0b9fc8f89ec5189dfda1f2203c8e7eb3bbc4a0d3509f4f5518ba9eea4547ac` |
+    > | `figures/out/dark/fig06_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    > | `figures/out/dark/fig06_concept_timeline.png` | `833f3b602281e790d96a9c30336d739b36905eee1311425f13cb474bbe29fb5c` |
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/paper/captions/figure1.md /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/paper/captions/figure1.md
+    12c12
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    15c15
+    < Run: A0 runs accounted for (cold-start-a0/artifacts/concept_accounts.json): `a0-base`, `a0-no-button`; revisions of the theorize log (cold-start-a0/THEORIZE_LOG.md): .
+    ---
+    > Run: A0 runs accounted for (cold-start-a0/artifacts/concept_accounts.json): `a0-base`, `a0-no-button`; revisions of the theorize log (cold-start-a0/THEORIZE_LOG.md): `848d683a3 2026-07-27T17:02:02Z`, `406d69f11 2026-07-28T01:20:16Z`, `85da55088 2026-07-28T01:33:12Z`, `672044a89 2026-07-28T02:24:29Z`, `3f3f39652 2026-07-28T02:41:00Z`, `76e756098 2026-07-28T14:41:15Z`, `4dd8e0f7f 2026-07-28T17:56:05Z`.
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/paper/dark/figure1_concept_timeline.pdf /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/B/paper/dark/figure1_concept_timeline.pdf
+    207c207
+    < 1 0 -0 1 301.7951115885 1152.85328 cm
+    ---
+
+== 4. data-source hashes match the committed manifest ==
+FAIL: a data source changed under the figures:
+    --- /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/SOURCES.sha256	2026-07-30 11:49:41.889568600 +0800
+    +++ /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/SOURCES.sha256	2026-07-31 00:07:35.101520200 +0800
+    @@ -10,21 +10,21 @@
+     e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5  baseline-arms/out/pilot_sk48-d8078629.json  [tracked]
+     3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf  baseline-arms/out/pilot_sk48_sonnet_rerun.json  [tracked]
+     130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e  baseline-arms/out/pilot_tn36-ef4dde99.json  [tracked]
+    -0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae  baseline-arms/out/shards/ledger.a7-g50t.jsonl  [untracked]
+    -7e8a7af63730bc00b911fa160e321938b0c6261710b5b7486d3cf99820bef845  baseline-arms/out/shards/ledger.a7-sk48.jsonl  [untracked]
+    -87c560e42b160901518de2e0d06742458f1c79be61d31e9761dc87b6c6f21678  baseline-arms/out/shards/ledger.a7-tn36.jsonl  [untracked]
+    -d4c131b2a6d749ba831ca21400a08d42b2afb024bfc6619674928cb4a8cff61a  baseline-arms/out/shards/ledger.a7recheck.jsonl  [untracked]
+    -aae77cb96fec2d0a1b224ef536f5a08ef162c7ed0d1066ef7af7d9a489f01992  baseline-arms/out/shards/ledger.a7smoke.jsonl  [untracked]
+    -b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5  baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl  [untracked]
+    -d9f38d30cdb109b592cce3e2b80a24621836d6f7a39b1537a2cca44ba562e0b0  baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl  [untracked]
+    -006a78a33499c4d58a1b4ed6df67fe4eb554851b35033ccd46d5faf3271ee447  baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl  [untracked]
+    -89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1  baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl  [untracked]
+    -bd0642458c40fc1f2c8da5d49dfaee8956f507058de79fb4901321bc750cc2b3  baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl  [untracked]
+    -570088da13eb58f0cfb6bc05ee64b420d0ed61c25638a3db11012cc3d0a4ad61  baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl  [untracked]
+    -a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9  baseline-arms/out/shards/ledger.ar25.jsonl  [untracked]
+    -7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5  baseline-arms/out/shards/ledger.g50t.jsonl  [untracked]
+    -4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0  baseline-arms/out/shards/ledger.sk48.jsonl  [untracked]
+    -bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b  baseline-arms/out/shards/ledger.tn36.jsonl  [untracked]
+    +0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae  baseline-arms/out/shards/ledger.a7-g50t.jsonl  [tracked]
+    +7e8a7af63730bc00b911fa160e321938b0c6261710b5b7486d3cf99820bef845  baseline-arms/out/shards/ledger.a7-sk48.jsonl  [tracked]
+    +87c560e42b160901518de2e0d06742458f1c79be61d31e9761dc87b6c6f21678  baseline-arms/out/shards/ledger.a7-tn36.jsonl  [tracked]
+    +d4c131b2a6d749ba831ca21400a08d42b2afb024bfc6619674928cb4a8cff61a  baseline-arms/out/shards/ledger.a7recheck.jsonl  [tracked]
+    +aae77cb96fec2d0a1b224ef536f5a08ef162c7ed0d1066ef7af7d9a489f01992  baseline-arms/out/shards/ledger.a7smoke.jsonl  [tracked]
+    +b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5  baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl  [tracked]
+    +d9f38d30cdb109b592cce3e2b80a24621836d6f7a39b1537a2cca44ba562e0b0  baseline-arms/out/shards/ledger.a7up-opus-sk48.jsonl  [tracked]
+    +006a78a33499c4d58a1b4ed6df67fe4eb554851b35033ccd46d5faf3271ee447  baseline-arms/out/shards/ledger.a7up-opus-tn36.jsonl  [tracked]
+    +89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1  baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl  [tracked]
+    +bd0642458c40fc1f2c8da5d49dfaee8956f507058de79fb4901321bc750cc2b3  baseline-arms/out/shards/ledger.a7up-sonnet-sk48.jsonl  [tracked]
+    +570088da13eb58f0cfb6bc05ee64b420d0ed61c25638a3db11012cc3d0a4ad61  baseline-arms/out/shards/ledger.a7up-sonnet-tn36.jsonl  [tracked]
+    +a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9  baseline-arms/out/shards/ledger.ar25.jsonl  [tracked]
+    +7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5  baseline-arms/out/shards/ledger.g50t.jsonl  [tracked]
+    +4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0  baseline-arms/out/shards/ledger.sk48.jsonl  [tracked]
+    +bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b  baseline-arms/out/shards/ledger.tn36.jsonl  [tracked]
+     90bf3eb00defeb4a525d15983e3baec46c51939300febd5ccc3c97e1783e2245  battery/REPORT_V0.md  [tracked]
+     c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0  battery/artifacts/arm_contrast.json  [tracked]
+     205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6  battery/artifacts/capability_spectrum.json  [tracked]
+    @@ -54,7 +54,7 @@
+
+== 5. every declared artefact exists ==
+checked 6 figures -> 24 images + 6 CSVs
+
+== 6. the committed tree matches a fresh build ==
+FAIL: committed figures/csv differs from a fresh build:
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/csv/fig06_concept_timeline.csv /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/csv/fig06_concept_timeline.csv
+    3,4c3,4
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,L-02,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,L-02,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    8,9c8,9
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-01,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,O-01,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    13,14c13,14
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+    > Button,3,M3,,,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    18,19c18,19
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-03,accept,accept,,,,,
+    < Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,R-03,accept,accept,,,,,
+    > Button,3,M3,,,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    23c23
+    < Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    ---
+    > Button,2,M3,,,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+    27,28c27,28
+    < Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,L-02,accept,accept,,,,,
+    < Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,,,adjudicated,Door,L-02,accept,accept,,,,,
+    > Door,3,M3,,,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    32,33c32,33
+    < Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-02,accept,accept,,,,,
+    < Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,O-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+    ---
+    > Door,2,M3,,,adjudicated,Door,O-02,accept,accept,,,,,
+FAIL: committed figures/out differs from a fresh build:
+    Binary files /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/out/dark/fig02_bill_shape.png and /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/out/dark/fig02_bill_shape.png differ
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/out/dark/fig02_bill_shape.svg /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/out/dark/fig02_bill_shape.svg
+    23883c23883
+    <    <!-- annotated with REPORT_V0's band, which is the one it was drawn against. 0 optional ledger(s) declared and absent - - named by rule in figures/sources.py, not silently dropped. E2/E3/E4 ARE THE BATTERY'S NUMBERS, NOT -->
+    ---
+    >    <!-- annotated with REPORT_V0's band, which is the one it was drawn against. The envelope campaign's 15 committed ledger shard(s) are folded in, declared by rule in figures/sources.py rather than by a list that ages. E2/E3/E4 -->
+    23957,24098c23957,24104
+    <     <use xlink:href="#DejaVuSans-30" transform="translate(3742.408203 0)"/>
+    <     <use xlink:href="#DejaVuSans-20" transform="translate(3806.03125 0)"/>
+    <     <use xlink:href="#DejaVuSans-6f" transform="translate(3837.818359 0)"/>
+    <     <use xlink:href="#DejaVuSans-70" transform="translate(3899 0)"/>
+    <     <use xlink:href="#DejaVuSans-74" transform="translate(3962.476562 0)"/>
+    <     <use xlink:href="#DejaVuSans-69" transform="translate(4001.685547 0)"/>
+    <     <use xlink:href="#DejaVuSans-6f" transform="translate(4029.46875 0)"/>
+    <     <use xlink:href="#DejaVuSans-6e" transform="translate(4090.650391 0)"/>
+    <     <use xlink:href="#DejaVuSans-61" transform="translate(4154.029297 0)"/>
+    <     <use xlink:href="#DejaVuSans-6c" transform="translate(4215.308594 0)"/>
+    <     <use xlink:href="#DejaVuSans-20" transform="translate(4243.091797 0)"/>
+    <     <use xlink:href="#DejaVuSans-6c" transform="translate(4274.878906 0)"/>
+    <     <use xlink:href="#DejaVuSans-65" transform="translate(4302.662109 0)"/>
+    <     <use xlink:href="#DejaVuSans-64" transform="translate(4364.185547 0)"/>
+    <     <use xlink:href="#DejaVuSans-67" transform="translate(4427.662109 0)"/>
+    <     <use xlink:href="#DejaVuSans-65" transform="translate(4491.138672 0)"/>
+    <     <use xlink:href="#DejaVuSans-72" transform="translate(4552.662109 0)"/>
+    <     <use xlink:href="#DejaVuSans-28" transform="translate(4593.775391 0)"/>
+    <     <use xlink:href="#DejaVuSans-73" transform="translate(4632.789062 0)"/>
+    <     <use xlink:href="#DejaVuSans-29" transform="translate(4684.888672 0)"/>
+    <     <use xlink:href="#DejaVuSans-20" transform="translate(4723.902344 0)"/>
+    <     <use xlink:href="#DejaVuSans-64" transform="translate(4755.689453 0)"/>
+    <     <use xlink:href="#DejaVuSans-65" transform="translate(4819.166016 0)"/>
+    <     <use xlink:href="#DejaVuSans-63" transform="translate(4880.689453 0)"/>
+    <     <use xlink:href="#DejaVuSans-6c" transform="translate(4935.669922 0)"/>
+    <     <use xlink:href="#DejaVuSans-61" transform="translate(4963.453125 0)"/>
+    <     <use xlink:href="#DejaVuSans-72" transform="translate(5024.732422 0)"/>
+    <     <use xlink:href="#DejaVuSans-65" transform="translate(5063.595703 0)"/>
+    <     <use xlink:href="#DejaVuSans-64" transform="translate(5125.119141 0)"/>
+    <     <use xlink:href="#DejaVuSans-20" transform="translate(5188.595703 0)"/>
+    <     <use xlink:href="#DejaVuSans-61" transform="translate(5220.382812 0)"/>
+    <     <use xlink:href="#DejaVuSans-6e" transform="translate(5281.662109 0)"/>
+    <     <use xlink:href="#DejaVuSans-64" transform="translate(5345.041016 0)"/>
+FAIL: committed figures/paper differs from a fresh build:
+    diff -r /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/paper/INDEX.md /c/Users/user/Desktop/theoria/.worktrees/v23-figures-sources-absent/figures/.verify/A/paper/INDEX.md
+    34c34
+    < * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd`
+    ---
+    > * CSV `figures/csv/fig06_concept_timeline.csv` sha256 `63c70e37953425480db8ee4ad6d563ba2c8d9b46ddc2e78a7864ef3986c6dcb9`
+    39,48c39,48
+    < | `figures/paper/light/figure1_concept_timeline.pdf` | `1f36e3996c07927cb145242d5686b6bfd5bc2aa1b92ec356baae55a77fc69f16` |
+    < | `figures/paper/light/figure1_concept_timeline.png` | `d5770f6f6cae48a27872779adc8b45b084479a87049210f03ccf8e330cb9eeb9` |
+    < | `figures/paper/light/figure1_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    < | `figures/paper/dark/figure1_concept_timeline.pdf` | `81ec9684724b233fd7a3170508f6ff7b06dca3b0d02baf7d7596f9f7ecb23c69` |
+    < | `figures/paper/dark/figure1_concept_timeline.png` | `15e52b5d2abb12df9097b956a6651e6d707283e21145227ace559a7660fc2022` |
+    < | `figures/paper/dark/figure1_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    < | `figures/out/light/fig06_concept_timeline.svg` | `4bc09fe1e73ed8a26a2f5b0e51c3674a4855c7d2dc2795eb0be84670275e46bf` |
+    < | `figures/out/light/fig06_concept_timeline.png` | `0f0b9fc8f89ec5189dfda1f2203c8e7eb3bbc4a0d3509f4f5518ba9eea4547ac` |
+    < | `figures/out/dark/fig06_concept_timeline.svg` | `5dd55b20c418094ef22698ad4b42f664d10d7551128f9e38068c18491e98d5ea` |
+    < | `figures/out/dark/fig06_concept_timeline.png` | `833f3b602281e790d96a9c30336d739b36905eee1311425f13cb474bbe29fb5c` |
+    ---
+    > | `figures/paper/light/figure1_concept_timeline.pdf` | `15cce1f7c9257f5589803f6dc3a272cb5c3262b51f79c81723d6b21605bf381a` |
+    > | `figures/paper/light/figure1_concept_timeline.png` | `fb987f73a92b26f5de741b6730261d0c3543a9181bdd9c265fe9b4633b34f8e4` |
+    > | `figures/paper/light/figure1_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    > | `figures/paper/dark/figure1_concept_timeline.pdf` | `cdb31d5b0bc690b4b389ddd17bd1888881882683f300220e85a0d9275c5a8b90` |
+    > | `figures/paper/dark/figure1_concept_timeline.png` | `61683cbc160b0a0d7cd757e28d78cc47b311817c09b28c9dc48813b55c35698f` |
+    > | `figures/paper/dark/figure1_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    > | `figures/out/light/fig06_concept_timeline.svg` | `c89c6a3eac8907a2de86072c1115dfd735ff334fe33ec44b75a4eb6ae29f2f6a` |
+    > | `figures/out/light/fig06_concept_timeline.png` | `af291c7f67f83b0ada2badd73f6dcc9f4681ad74f3195d3fd2323458e9a6272a` |
+    > | `figures/out/dark/fig06_concept_timeline.svg` | `e723c22a6710c84efbd716fa6b768eb94ac0eab78511af6b17ada8daea087b87` |
+    > | `figures/out/dark/fig06_concept_timeline.png` | `95efb5372b0badce1bfbf64ac0a73dd3f078e2568e65dabf9d5344f7ca89156d` |
+    176,185c176,185
+    < | `figures/paper/light/figure6_bill_shape.pdf` | `e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205` |
+    < | `figures/paper/light/figure6_bill_shape.png` | `9a363acc6074688d30bb5fd23efc15c7b68763b68c7a77870405f925d5cf6461` |
+    < | `figures/paper/light/figure6_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
+    < | `figures/paper/dark/figure6_bill_shape.pdf` | `6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f` |
+    < | `figures/paper/dark/figure6_bill_shape.png` | `557407aa4474378738e6c8e1bc9fb3919afb96de391c06d0ab58d5891ef6559c` |
+    < | `figures/paper/dark/figure6_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
+    < | `figures/out/light/fig02_bill_shape.svg` | `6cd1bd20e47b1f57a609553714273b8a76c2c4a627a6e6d7ad384f6a4af7796c` |
+    < | `figures/out/light/fig02_bill_shape.png` | `5d0d54f5a8f24c4d676e6e94a82b644d93757e8d5794bb27882156c1a4c9ff2e` |
+    < | `figures/out/dark/fig02_bill_shape.svg` | `4a3fc454cda8f89a67db4a9f0ae65b5dadb9c057aa1ed16363d60249f4c03be8` |
+    < | `figures/out/dark/fig02_bill_shape.png` | `a501bf5a9dfe97f68861c42be2e2b856b39088ac1663de6f821f3e220445a989` |
+    ---
+    > | `figures/paper/light/figure6_bill_shape.pdf` | `0c90e1d37cf4d510443cb941f2849b519b72839082129e3fcd855b2e766ea870` |
+
+== 7. no figure reads an undeclared path ==
+ok  (every read goes through sources.py)
+
+== 8. coverage: everything on disk reaches the figure ==
+ok  (negative control fires)
+ok  (COVERAGE-NAMED: partial theoria run directory, not a failure: preflight-20260728T012031Z (has MANIFEST.json; missing cost_curve.json) -- manifest states 0 model calls and $0.00 coverage ok: 4 billing theoria run(s), 12 non-billing partial directory(ies) named above, and 14 roll-up run_id(s) found by walking the tree; every cost-bearing run drawn or explained, every outcome on disk on the plate, every shape absence carrying its reason. )
+== 9. the cross-arm cost claim reconciles, and the check is shown refusing ==
+ok  (negative control fires: planted cost and action mismatches both refused)
+ok  ( AGREE(known-defect) 78  UNCORROBORATED 21)
+      KNOWN DEFECT RESET_IN_DENOMINATOR: 78 run(s) -- capability_spectrum.actions +1; counts the successful RESET as an action; proxy/SCORING.md:60-62 says total_actions counts successful non-RESET commands
+
+== 10. every publication artefact exists ==
+checked 6 paper figures -> 36 artefacts + 6 captions + index
+
+== 11. the paper's SVG is the plate the pipeline built ==
+
+== 12. the index's digests match the files on disk ==
+ok  (checked 6 figures, every digest recomputed)
+
+== 13. every figure reaches a reader, and the check is shown refusing ==
+FAIL: the citation gate's negative control did not fire:
+    Traceback (most recent call last):
+      File "C:\Users\user\Desktop\theoria\.worktrees\v23-figures-sources-absent\figures\check_figure_citations.py", line 93, in <module>
+        @dataclass(frozen=True)
+         ^^^^^^^^^
+    NameError: name 'dataclass' is not defined
+FAIL: a figure this pipeline builds is cited nowhere and declared nowhere:
+    Traceback (most recent call last):
+      File "C:\Users\user\Desktop\theoria\.worktrees\v23-figures-sources-absent\figures\check_figure_citations.py", line 93, in <module>
+        @dataclass(frozen=True)
+         ^^^^^^^^^
+    NameError: name 'dataclass' is not defined
+
+== 14. the manifest's own claims, re-derived from outside sources.py ==
+FAIL: the committed manifest's claims do not survive re-derivation:
+      refused: a [tracked] line relabelled [untracked] (the A14 defect)
+               check_tracking.7ovx1lux.sha256:5: baseline-arms/BUDGET_REPORT.md is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+      refused: a digest corrupted in its first byte
+               check_tracking.f17414ei.sha256:5: baseline-arms/BUDGET_REPORT.md
+      refused: a present file recorded absent
+               check_tracking.kzusvp9i.sha256:5: baseline-arms/BUDGET_REPORT.md is recorded [absent-optional] with the ABSENT sentinel, and it is on disk. A figure is drawing this file's absence while the file is there.
+      refused: an unknown status nobody is checking
+               check_tracking.kvy401wr.sha256:5: unknown status [probably-fine] for baseline-arms/BUDGET_REPORT.md
+      refused: a [tracked] line for a path that is not on disk
+               check_tracking.wrko4tv5.sha256:5: no/such/file.json is recorded [tracked] but is not on disk; a manifest line for a file that is not there is not a hash, it is a hope.
+      refused: an absent-status line carrying a real digest
+               check_tracking.12g2skgv.sha256:5: no/such/file.json is recorded [absent-optional] but carries a digest (5678a00b92df...) instead of the ABSENT sentinel.
+      refused: a path spelled with backslashes
+               check_tracking.avm1zefy.sha256:5: path 'baseline-arms\\BUDGET_REPORT.md' uses backslash separators; repo-relative paths use '/'. Left undiagnosed this becomes a false 'git does not track it' about a file git tracks.
+      refused: the manifest truncated to a single source line
+               check_tracking.26fju8db.sha256 carries 1 source line(s); this probe was written against 61. Lines can only be added by declaring a source, so fewer than the floor means the manifest lost claims -- and a probe that audits what is left and calls that green is how a truncated file passes.
+      refused: a [tracked] line for figures/.verify/A.log, which is on disk and not committed (the forward direction of the A14 defect)
+               check_tracking.rkgt7w75.sha256:5: figures/.verify/A.log is recorded [tracked] and is not committed at HEAD. This build is not reproducible from a clean checkout.
+    negative control fires on all 9 planted defects
+    SOURCES.sha256: 16 problem(s)
+      SOURCES.sha256:13: baseline-arms/out/shards/ledger.a7-g50t.jsonl is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+      SOURCES.sha256:14: baseline-arms/out/shards/ledger.a7-sk48.jsonl is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+      SOURCES.sha256:15: baseline-arms/out/shards/ledger.a7-tn36.jsonl is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+      SOURCES.sha256:16: baseline-arms/out/shards/ledger.a7recheck.jsonl is recorded [untracked] and is committed at HEAD. The declaration in sources.py has fallen behind the tree; gate 4 cannot see this, because both sides of gate 4 read that same declaration.
+
+VERIFY: red.

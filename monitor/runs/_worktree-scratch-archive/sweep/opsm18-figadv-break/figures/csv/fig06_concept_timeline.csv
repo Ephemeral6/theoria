@@ -1,0 +1,120 @@
+lane,order,milestone,commit_sha,commit_ts,event_kind,concept,item_id,verdict,label,delta_bits,delta_bits_baseline,trigger,engine,evidence
+Button,1,M2,,,proposed,Button,L-02,accept,1 candidate row(s),,,,zero_space,275/27X
+Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,L-02,accept,accept,,,,,
+Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,L-02,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Button,4,M4,,,certified,Button,L-02,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Button,5,M5,,,variant-deleted,Button,L-02,accept,Button is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Button,1,M2,,,proposed,Button,O-01,accept,1 candidate row(s),,,,mdl_segmenter,276/276
+Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-01,accept,accept,,,,,
+Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-01,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Button,4,M4,,,certified,Button,O-01,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Button,5,M5,,,variant-deleted,Button,O-01,accept,Button is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Button,1,M2,,,no-proposal-ABSENT,Button,O-04,admitted anyway,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,O-04,admitted anyway,admitted anyway,,,,,
+Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,O-04,admitted anyway,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Button,4,M4,,,certified,Button,O-04,admitted anyway,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Button,5,M5,,,variant-deleted,Button,O-04,admitted anyway,Button is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Button,1,M2,,,proposed,Button,R-03,accept,1 candidate row(s),,,,cegis_miner,1/1
+Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-03,accept,accept,,,,,
+Button,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Button,R-03,accept,written into theory.dsl,-5,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Button,4,M4,,,certified,Button,R-03,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Button,5,M5,,,variant-deleted,Button,R-03,accept,Button is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Button,1,M2,,,no-proposal-ABSENT,Button,R-05,"reject, probe-pending",no candidate row: this entry adjudicates something the stream did not propose,,,,,
+Button,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Button,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+Button,4,M4,,,obligation-open,Button,R-05,"reject, probe-pending",entered as a theorem with probe: pending -- the probe is designable and unrunnable on this instance,,,the latch is already pressed by the time the probe could run,,
+Button,6,M6,,,settled-by-score,Button,R-05,"reject, probe-pending",233/236 pairs agree; the 3 misses are the ones this entry named,,,,,233/236
+Door,1,M2,,,proposed,Door,L-02,accept,1 candidate row(s),,,,zero_space,275/275
+Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,L-02,accept,accept,,,,,
+Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,L-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Door,4,M4,,,certified,Door,L-02,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Door,5,M5,,,variant-deleted,Door,L-02,accept,Door is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Door,1,M2,,,proposed,Door,O-02,accept,1 candidate row(s),,,,mdl_segmenter,100/276
+Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-02,accept,accept,,,,,
+Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,O-02,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Door,4,M4,,,certified,Door,O-02,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Door,5,M5,,,variant-deleted,Door,O-02,accept,Door is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Door,1,M2,,,no-proposal-ABSENT,Door,O-04,admitted anyway,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,O-04,admitted anyway,admitted anyway,,,,,
+Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,O-04,admitted anyway,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Door,4,M4,,,certified,Door,O-04,admitted anyway,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Door,5,M5,,,variant-deleted,Door,O-04,admitted anyway,Door is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Door,1,M2,,,proposed,Door,R-04,accept,1 candidate row(s),,,,cegis_miner,1/1
+Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,R-04,accept,accept,,,,,
+Door,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Door,R-04,accept,written into theory.dsl,-1,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Door,4,M4,,,certified,Door,R-04,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Door,5,M5,,,variant-deleted,Door,R-04,accept,Door is absent from the a0-no-button account,,,,,a0-no-button: Cart
+Door,1,M2,,,no-proposal-ABSENT,Door,R-05,"reject, probe-pending",no candidate row: this entry adjudicates something the stream did not propose,,,,,
+Door,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Door,R-05,"reject, probe-pending","reject, probe-pending",,,,,
+Door,4,M4,,,obligation-open,Door,R-05,"reject, probe-pending",entered as a theorem with probe: pending -- the probe is designable and unrunnable on this instance,,,the latch is already pressed by the time the probe could run,,
+Door,6,M6,,,settled-by-score,Door,R-05,"reject, probe-pending",233/236 pairs agree; the 3 misses are the ones this entry named,,,,,233/236
+Cart,1,M2,,,proposed,Cart,L-01,accept,1 candidate row(s),,,,zero_space,275/275
+Cart,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Cart,L-01,accept,accept,,,,,
+Cart,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Cart,L-01,accept,written into theory.dsl,2125,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Cart,4,M4,,,certified,Cart,L-01,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Cart,5,M5,,,variant-carried,Cart,L-01,accept,Cart is present in the a0-no-button account,,,,,a0-no-button: Cart
+Cart,1,M2,,,proposed,Cart,O-03,accept,1 candidate row(s),,,,mdl_segmenter,276/276
+Cart,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Cart,O-03,accept,accept,,,,,
+Cart,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Cart,O-03,accept,written into theory.dsl,2125,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Cart,4,M4,,,certified,Cart,O-03,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Cart,5,M5,,,variant-carried,Cart,O-03,accept,Cart is present in the a0-no-button account,,,,,a0-no-button: Cart
+Cart,1,M2,,,proposed,Cart,R-01,accept,"5 candidate row(s), 1 of them lifted",,,,cegis_miner,212/212 frontier 3
+Cart,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Cart,R-01,accept,accept,,,,,
+Cart,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Cart,R-01,accept,written into theory.dsl,2125,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Cart,4,M4,,,certified,Cart,R-01,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Cart,5,M5,,,variant-carried,Cart,R-01,accept,Cart is present in the a0-no-button account,,,,,a0-no-button: Cart
+Cart,1,M2,,,proposed,Cart,R-02,accept,1 candidate row(s),,,,cegis_miner,2/2 frontier 2
+Cart,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,Cart,R-02,accept,accept,,,,,"tie broken on length, 14 vs 18 bits"
+Cart,3,M3,848d683,2026-07-27T17:02:02Z,admitted,Cart,R-02,accept,written into theory.dsl,2125,"responsibility-complete (concept_accounts.json, a0-base)",,,
+Cart,4,M4,,,certified,Cart,R-02,accept,cheap layer and Lean both green on the first run,,,no certify->theorize iteration: nothing came back,,
+Cart,5,M5,,,variant-carried,Cart,R-02,accept,Cart is present in the a0-no-button account,,,,,a0-no-button: Cart
+unadmitted,1,M2,,,no-proposal-ABSENT,,L-03,not read,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+unadmitted,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,L-03,not read,not read,,,,,
+unadmitted,1,M2,,,proposed,,R-06,entailed,2 candidate row(s),,,,cegis_miner,130/130
+unadmitted,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,R-06,entailed,entailed,,,,,
+unadmitted,1,M2,,,proposed,,R-07,entailed,"15 candidate row(s), 3 of them lifted",,,,cegis_miner,609/609 frontier 6
+unadmitted,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,R-07,entailed,entailed,,,,,
+unadmitted,1,M2,,,no-proposal-ABSENT,,R-08,"not represented, logged",no candidate row: this entry adjudicates something the stream did not propose,,,,,
+unadmitted,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,R-08,"not represented, logged","not represented, logged",,,,,
+probes,1,M2,,,proposed,,P-01,hypothetical tier only,1 candidate row(s),,,,cegis_miner,2/2 frontier 2
+probes,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,P-01,hypothetical tier only,hypothetical tier only,,,,,
+probes,1,M2,,,proposed,,P-02,no split anywhere,"9 candidate row(s), 2 of them lifted",,,,cegis_miner,263/263 frontier 3
+probes,2,M3,848d683,2026-07-27T17:02:02Z,adjudicated,,P-02,no split anywhere,no split anywhere,,,,,
+probes,1,M2,,,proposed,,P-03,,1 candidate row(s),,,,cegis_miner,10/10 frontier 6
+probes,2,M3,848d683,2026-07-27T17:02:02Z,verdict-absent-ABSENT,,P-03,,the log records no bold verdict for this entry,,,,,
+ledger,1,M2,,,no-proposal-ABSENT,,E-01,worked-around,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-01,worked-around,expressivity gap logged (worked-around),,,,,worked-around
+ledger,1,M2,,,no-proposal-ABSENT,,E-02,worked-around,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-02,worked-around,expressivity gap logged (worked-around),,,,,worked-around
+ledger,1,M2,,,no-proposal-ABSENT,,E-03,worked-around,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-03,worked-around,expressivity gap logged (worked-around),,,,,worked-around
+ledger,1,M2,,,no-proposal-ABSENT,,E-04,worked-around,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-04,worked-around,expressivity gap logged (worked-around),,,,,worked-around
+ledger,1,M2,,,no-proposal-ABSENT,,E-05,worked-around,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-05,worked-around,expressivity gap logged (worked-around),,,,,worked-around
+ledger,1,M2,,,no-proposal-ABSENT,,E-06,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-06,discharged,expressivity gap logged (discharged),,,,,discharged
+ledger,7,post-M6,672044a,2026-07-28T02:24:29Z,ledger-edited,,E-06,discharged,theory-compiler: close E-06 by using the second method it already had,,,,,
+ledger,1,M2,,,no-proposal-ABSENT,,E-07,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-07,discharged,expressivity gap logged (discharged),,,,,discharged
+ledger,7,post-M6,406d69f,2026-07-28T01:20:16Z,ledger-edited,,E-07,discharged,"theory-compiler: discharge the `conflict` obligation, and E-07 in the process",,,,,
+ledger,7,post-M6,85da550,2026-07-28T01:33:12Z,ledger-edited,,E-07,discharged,theory-compiler: close E-07 by giving the manual somewhere to say it,,,,,
+ledger,1,M2,,,no-proposal-ABSENT,,E-08,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-08,discharged,expressivity gap logged (discharged),,,,,discharged
+ledger,1,M2,,,no-proposal-ABSENT,,E-09,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-09,discharged,expressivity gap logged (discharged),,,,,discharged
+Button,2,M3,,,compression-account-log,Button,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 29, baseline 12",-17,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,
+Cart,2,M3,,,compression-account-log,Cart,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 2169, baseline 5136",2967,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,
+Door,2,M3,,,compression-account-log,Door,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 25, baseline 12",-13,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,
+Button,2,M3,,,compression-account-json,Button,O-04,admitted anyway,"concept_accounts.json a0-base: with 25 bits, without 20",-5,"responsibility-complete (concept_accounts.json, a0-base)",a law names it (invariant door_latch) and the invariant language has no pixel-level paraphrase,,mandatory
+Cart,2,M3,,,compression-account-json,Cart,O-04,admitted anyway,"concept_accounts.json a0-base: with 2165 bits, without 4290",2125,"responsibility-complete (concept_accounts.json, a0-base)",a law names it (invariant cart_unique) and the invariant language has no pixel-level paraphrase,,mandatory
+Door,2,M3,,,compression-account-json,Door,O-04,admitted anyway,"concept_accounts.json a0-base: with 21 bits, without 20",-1,"responsibility-complete (concept_accounts.json, a0-base)",a law names it (invariant door_latch) and the invariant language has no pixel-level paraphrase,,mandatory
+manual-revisions,2,M3,848d683,2026-07-27T17:02:02Z,manual-revision,,REV-01,,"the whole manual as it now stands: 3 objects, 7 rules, 2 invariants, 1 pending theorem",,,one pass over all 28 candidates plus the board map,,
+manual-revisions,5,M5,,,manual-revision,,REV-02,,"`theory_no_button.dsl` — the base manual with every Button/Door-dependent clause deleted, plus `right_room_locked` and `unsolvable_no_button`",,,"the plan returned UNSAT on the no-Button variant, and constraint 6 forbids stopping at a bare UNSAT",,
+compiler-defects,,,,,compiler-defect-ABSENT,,DEF-01,,"rules re-read their guards against the partially-updated state, so `press_left` recoloured the Button and `door_opens_left` then found colour 8 and silently did not fire",,,no milestone recorded in the log,gen_python_a0,"the Door never opened in the generated `step`; caught by inspection, then pinned by `test_simultaneous_rule_semantics`"
+compiler-defects,,,,,compiler-defect-ABSENT,,DEF-02,,"the Door's cell got no PDDL subtype, so `press`'s `?d - doorcell` parameter had an empty domain and grounded to nothing",,,no milestone recorded in the log,gen_pddl_a0,`fd_adapter` reported UNSAT on an instance that is plainly solvable
+compiler-defects,,,,,compiler-defect-ABSENT,,DEF-03,,`engine-rig` grew a native `split_by_color` switch mid-sprint and the monkeypatched operator stopped matching its signature,,,no milestone recorded in the log,segment_operators,`TypeError` on the variant run
+round-0,1,M2,,,stream-census,,KIND-invariant,,"log declares 2, stream holds 2",,,,,2
+round-0,1,M2,,,stream-census,,KIND-object_hypothesis,,"log declares 3, stream holds 3",,,,,3
+round-0,1,M2,,,stream-census,,KIND-plan,,"log declares 0, stream holds 1",,,"reported, not reconciled",,1
+round-0,1,M2,,,stream-census,,KIND-probe_design,,"log declares 0, stream holds 0",,,,,0
+round-0,1,M2,,,stream-census,,KIND-rule_hypothesis,,"log declares 23, stream holds 23",,,,,23

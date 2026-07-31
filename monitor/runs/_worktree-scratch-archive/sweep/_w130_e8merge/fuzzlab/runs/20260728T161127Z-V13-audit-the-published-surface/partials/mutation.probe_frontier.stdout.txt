@@ -1,0 +1,24 @@
+probe_frontier   20 mutants over 40 worlds
+  pf-partition-merge-two-classes   unsound      eval=34   inert=6    killed by partition_matches_truth
+  pf-partition-move-one-hypothesis unsound      eval=34   inert=6    killed by partition_matches_truth
+  pf-partition-drop-one-hypothesis incomplete   eval=40   inert=0    killed by partition_matches_truth
+  pf-partition-relabel-class       unsound      eval=40   inert=0    killed by partition_matches_truth
+  pf-entropy-shift-1e-16           unsound      eval=31   inert=9    SURVIVED
+  pf-entropy-shift-1e-12           unsound      eval=40   inert=0    SURVIVED
+  pf-entropy-shift-1e-9            unsound      eval=40   inert=0    killed by entropy_matches_bruteforce
+  pf-entropy-shift-2e-9            unsound      eval=40   inert=0    killed by entropy_matches_bruteforce
+  pf-entropy-shift-1e-6            unsound      eval=40   inert=0    killed by entropy_matches_bruteforce
+  pf-entropy-shift-1e-3            unsound      eval=40   inert=0    killed by entropy_matches_bruteforce
+  pf-rank-swap-adjacent            degraded     eval=40   inert=0    killed by ranking_is_sound
+  pf-rank-best-to-last             degraded     eval=40   inert=0    killed by ranking_is_sound
+  pf-rank-drop-action              incomplete   eval=40   inert=0    killed by ranking_is_sound
+  pf-splits-collapse-partition     unsound      eval=34   inert=6    killed by splits_flag_is_honest
+  pf-splits-fabricate              unsound      eval=12   inert=28   killed by splits_flag_is_honest
+  pf-flatten-reported-costs        inconsistent eval=35   inert=5    killed by costs_are_the_world's
+  pf-zero-cost-value-is-zero       unsound      eval=11   inert=29   killed by costs_are_the_world's
+  pf-scale-reported-costs          inconsistent eval=40   inert=0    killed by costs_are_the_world's
+  pf-probevalue-partition-relabel  unsound      eval=40   inert=0    SURVIVED
+  pf-probevalue-partition-move     unsound      eval=28   inert=12   SURVIVED
+
+wrote C:\Users\user\Desktop\theoria\.worktrees\v13-audit-the-published-surface\fuzzlab\out\mutation.probe_frontier.json
+mutants: 20   survivors: 4

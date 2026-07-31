@@ -1,0 +1,273 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 42,
+    "injective": true,
+    "states": 42
+  },
+  "grid": [
+    5,
+    7
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "single_armed_tile",
+      "armed_tile_under_agent",
+      "tile_state_is_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 42,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 5 x 7",
+      "states_checked": 42,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "single_armed_tile",
+      "statement": "at most one fragile tile is armed at any instant",
+      "states_checked": 42,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "armed_tile_under_agent",
+      "statement": "an armed fragile tile's cell is the agent's cell",
+      "states_checked": 42,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "tile_state_is_monotone",
+      "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again",
+      "status": "holds",
+      "transitions_checked": 168,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "collapsed": 3,
+    "floor": 0,
+    "fragile": 2,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": true,
+        "measured": 2,
+        "re_witnessable": true,
+        "reversible": false,
+        "rule": "cross_fragile",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_collapsed",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 14,
+    "reachable_states": 42,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_collapsed": {
+        "firing_states": 11,
+        "firing_transitions": 12,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 42,
+        "firing_transitions": 80,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "cross_fragile": {
+        "firing_states": 8,
+        "firing_transitions": 8,
+        "max_witnesses": 2,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 39,
+        "firing_transitions": 68,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 4,
+    "rules_single_witness": [],
+    "rules_total": 4
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_collapsed",
+      "blocked_by_wall",
+      "cross_fragile",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_collapsed",
+      "blocked_by_wall",
+      "cross_fragile",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "cross_fragile",
+      "re_witnessable": true,
+      "reversible": false,
+      "then": "the agent moves onto the tile and the tile arms.  The tile does not collapse on this step: the collapse happens later, in settlement, on the first step at which the agent is no longer standing there \u2014 so in the trace the tile changes to the collapsed colour one frame after the crossing, not in the frame of the crossing itself",
+      "when": "act=D and the target cell holds an intact fragile tile",
+      "why": "one witness per tile, so the count is the number of tiles \u2014 2 here"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_collapsed",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a collapsed fragile tile"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 13,
+    "goal": [
+      1,
+      5
+    ],
+    "optimal_length": 4,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 42,
+    "solvable": true,
+    "world_id": "t1-fragile-bridge"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "collapsed": 3,
+      "fragile": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          3
+        ],
+        "kind": "fragile",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          3
+        ],
+        "kind": "fragile",
+        "props": {}
+      }
+    ],
+    "families": [
+      "consumable"
+    ],
+    "flags": {},
+    "goal": [
+      1,
+      5
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#######",
+      "#.....#",
+      "#.#.#.#",
+      "#.....#",
+      "#######"
+    ],
+    "notes": "Two one-shot crossings and two routes. Cross the wrong one and the other still gets you there; cross both and you are stranded. The collapse lands one frame *after* the agent leaves, which is the inductively interesting bit.",
+    "seed": 109,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t1-fragile-bridge"
+  },
+  "world_id": "t1-fragile-bridge"
+}

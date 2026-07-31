@@ -1,0 +1,177 @@
+{
+  "authority": "INC-004 ruling 2026-07-28, option (b): a self-built world isomorphic to DC22's failure structure.  No upstream DC22 artifact was read; the isomorphism argument cites only the structural description already printed in Theoria \u00a71.3.",
+  "beats": [
+    {
+      "beat": "M0",
+      "claim": "the pipeline induces a complete manual from the sweep, and it is certified, provable and solvable",
+      "detail": {
+        "history_proposes_a_jump": false,
+        "plan": "SAT",
+        "plan_length": 18,
+        "sweep_proposes_a_jump": true,
+        "world_agrees": true
+      },
+      "evidence": [
+        "artifacts/engines_diff.json",
+        "artifacts/certify_generated.json",
+        "artifacts/plan_generated.json"
+      ],
+      "name": "\u4eea\u5668 \u00b7 the complete manual",
+      "status": "pass"
+    },
+    {
+      "beat": "M5",
+      "claim": "the holed manual replays the play record at 100%, its planner returns UNSAT, and Lean signs an axiom-free `unsolvable` \u2014 which the world contradicts",
+      "detail": {
+        "false_of_the_world": true,
+        "lean_axioms": [
+          {
+            "axioms": [],
+            "name": "unsolvable"
+          }
+        ],
+        "lean_green": true,
+        "plan": "UNSAT",
+        "replay": 184,
+        "replay_green": true,
+        "replay_on_full_sweep_green": false
+      },
+      "evidence": [
+        "artifacts/exhibit_report.json",
+        "theory/generated_holed/theory.lean"
+      ],
+      "name": "\u5c55\u54c1 \u00b7 the theorem that is false of the world",
+      "status": "pass"
+    },
+    {
+      "beat": "L1",
+      "claim": "a solved episode contradicts the machine-checked theorem",
+      "detail": {
+        "episode_length": 18,
+        "win_frames": [
+          18
+        ]
+      },
+      "evidence": [
+        "artifacts/refutation.json",
+        "artifacts/solved_episode.jsonl"
+      ],
+      "name": "\u6253\u8138 \u00b7 refutation",
+      "status": "pass"
+    },
+    {
+      "beat": "L2",
+      "claim": "\u00a71.4's three-way narrows the error to one place on the witness path",
+      "detail": {
+        "action": "DOWN",
+        "checks": {
+          "mispredicted_step": true,
+          "misread_board": false,
+          "wrong_goal_test": false
+        },
+        "culprits": [
+          "mispredicted_step"
+        ],
+        "diagnosis": "missing rule, not wrong rule",
+        "located_at": 11,
+        "mover_at": [
+          6,
+          4
+        ]
+      },
+      "evidence": [
+        "artifacts/locate_report.json"
+      ],
+      "name": "\u5b9a\u4f4d \u00b7 localisation",
+      "status": "pass"
+    },
+    {
+      "beat": "L3",
+      "claim": "predictions written first, executed through frames, results banked",
+      "detail": {
+        "designed": 5,
+        "executed": 4,
+        "not_separable": 1,
+        "refuted": 4,
+        "trace_grew": "184 -> 196 frames"
+      },
+      "evidence": [
+        "artifacts/probes.jsonl",
+        "artifacts/probe_report.json",
+        "artifacts/probed_trace.jsonl"
+      ],
+      "name": "\u6233\u63a2 \u00b7 probe",
+      "status": "pass"
+    },
+    {
+      "beat": "L4",
+      "claim": "the manual is rewritten from the probe record, and the grown evidence re-proposes the rule that was added",
+      "detail": {
+        "re_derivable_from_grown_evidence": true
+      },
+      "evidence": [
+        "theory/theory_repaired.dsl",
+        "artifacts/engines_diff_probed.json"
+      ],
+      "name": "\u4fee\u8ba2 \u00b7 revision",
+      "status": "pass"
+    },
+    {
+      "beat": "L5",
+      "claim": "the refuted certificate dies under the repaired step, and a true one takes its place",
+      "detail": {
+        "latch_lean_green": true,
+        "new_lean_axioms": [
+          {
+            "axioms": [],
+            "name": "unsolvable"
+          }
+        ],
+        "new_lean_green": true,
+        "new_theorem": "pocket_unreachable",
+        "stale_died": true,
+        "stale_first_error": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v11-negative-control-census\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+        "true_of_the_world": true
+      },
+      "evidence": [
+        "artifacts/repair_report.json",
+        "theory/generated_repaired_stale/theory.lean",
+        "theory/generated_repaired/theory.lean"
+      ],
+      "name": "\u91cd\u8bc1 \u00b7 re-proof",
+      "status": "pass"
+    },
+    {
+      "beat": "L6",
+      "claim": "the repaired manual plans, and the world agrees",
+      "detail": {
+        "execution_mismatches": [],
+        "length": 18,
+        "manual_agrees": true,
+        "status": "SAT",
+        "world_agrees": true
+      },
+      "evidence": [
+        "artifacts/plan_repaired.json"
+      ],
+      "name": "\u89e3\u51fa \u00b7 solved",
+      "status": "pass"
+    }
+  ],
+  "green": true,
+  "summary": {
+    "absent": 0,
+    "fail": 0,
+    "pass": 8,
+    "total": 8
+  },
+  "traces": {
+    "history_omits": [
+      "cart=(6,4) pressed=1 act=DOWN"
+    ],
+    "history_trace": "163/164",
+    "portal_transition": 183,
+    "raw_trace": "220/220"
+  },
+  "world": "a2-base"
+}

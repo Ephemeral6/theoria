@@ -1,0 +1,348 @@
+﻿{
+  "by_class": {
+    "loopback": {
+      "bypass_attempts": 0,
+      "env_forwarded": 54,
+      "env_meta": 12,
+      "env_status": {
+        "200": 54
+      },
+      "env_step": 42,
+      "ledgers": 4,
+      "model_call": 0,
+      "model_status": {}
+    },
+    "offline": {
+      "bypass_attempts": 0,
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {
+        "None": 51
+      },
+      "env_step": 51,
+      "ledgers": 3,
+      "model_call": 0,
+      "model_status": {}
+    },
+    "real": {
+      "bypass_attempts": 0,
+      "env_forwarded": 220,
+      "env_meta": 33,
+      "env_status": {
+        "200": 31,
+        "400": 165,
+        "404": 24
+      },
+      "env_step": 187,
+      "ledgers": 9,
+      "model_call": 7,
+      "model_status": {
+        "200": 6,
+        "500": 1
+      }
+    },
+    "undecidable": {
+      "bypass_attempts": 66,
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {},
+      "env_step": 0,
+      "ledgers": 1,
+      "model_call": 65,
+      "model_status": {
+        "401": 65
+      }
+    }
+  },
+  "headline": {
+    "env_forwarded_all": 274,
+    "env_forwarded_real": 220,
+    "model_call_401": 65,
+    "model_call_all": 72,
+    "model_call_success_through_a_proxy": null
+  },
+  "marker_audit": {
+    "canon_readable": true,
+    "names_present_in_canon": [],
+    "names_searched": [
+      "mode",
+      "live",
+      "dry_run",
+      "synthetic",
+      "fixture",
+      "env_upstream"
+    ],
+    "registered_live_marker": null
+  },
+  "per_file": [
+    {
+      "bypass_attempts": 0,
+      "class": "offline",
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {
+        "None": 13
+      },
+      "env_step": 13,
+      "model_call": 0,
+      "model_status": {},
+      "path": "ablation-arm/artifacts/a0-base/episode.jsonl",
+      "records": 15,
+      "upstream_declared": "offline: self-built world, no HTTP"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "offline",
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {
+        "None": 19
+      },
+      "env_step": 19,
+      "model_call": 0,
+      "model_status": {},
+      "path": "ablation-arm/artifacts/a2-base/episode.jsonl",
+      "records": 21,
+      "upstream_declared": "offline: self-built world, no HTTP"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "offline",
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {
+        "None": 19
+      },
+      "env_step": 19,
+      "model_call": 0,
+      "model_status": {},
+      "path": "ablation-arm/artifacts/a2-charitable/episode.jsonl",
+      "records": 21,
+      "upstream_declared": "offline: self-built world, no HTTP"
+    },
+    {
+      "bypass_attempts": 66,
+      "class": "undecidable",
+      "env_forwarded": 0,
+      "env_meta": 0,
+      "env_status": {},
+      "env_step": 0,
+      "model_call": 65,
+      "model_status": {
+        "401": 65
+      },
+      "path": "theoria-arm/evidence/model-proxy-401.jsonl",
+      "records": 131,
+      "upstream_declared": null
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 86,
+      "env_meta": 1,
+      "env_status": {
+        "200": 7,
+        "400": 79
+      },
+      "env_step": 85,
+      "model_call": 1,
+      "model_status": {
+        "200": 1
+      },
+      "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl",
+      "records": 88,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 8,
+      "env_meta": 8,
+      "env_status": {
+        "404": 8
+      },
+      "env_step": 0,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl",
+      "records": 10,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 10,
+      "env_meta": 10,
+      "env_status": {
+        "200": 1,
+        "404": 9
+      },
+      "env_step": 0,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl",
+      "records": 12,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 45,
+      "env_meta": 1,
+      "env_status": {
+        "200": 8,
+        "400": 37
+      },
+      "env_step": 44,
+      "model_call": 1,
+      "model_status": {
+        "500": 1
+      },
+      "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl",
+      "records": 47,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 2,
+      "env_meta": 2,
+      "env_status": {
+        "200": 1,
+        "404": 1
+      },
+      "env_step": 0,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl",
+      "records": 4,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 41,
+      "env_meta": 1,
+      "env_status": {
+        "200": 9,
+        "400": 32
+      },
+      "env_step": 40,
+      "model_call": 5,
+      "model_status": {
+        "200": 5
+      },
+      "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl",
+      "records": 47,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 6,
+      "env_meta": 6,
+      "env_status": {
+        "200": 1,
+        "404": 5
+      },
+      "env_step": 0,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/ledger.jsonl",
+      "records": 8,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "loopback",
+      "env_forwarded": 9,
+      "env_meta": 2,
+      "env_status": {
+        "200": 9
+      },
+      "env_step": 7,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T235841Z-leg01/ledger.jsonl",
+      "records": 11,
+      "upstream_declared": "http://127.0.0.1:61945"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "loopback",
+      "env_forwarded": 9,
+      "env_meta": 2,
+      "env_status": {
+        "200": 9
+      },
+      "env_step": 7,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T235842Z-leg02/ledger.jsonl",
+      "records": 11,
+      "upstream_declared": "http://127.0.0.1:61945"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "loopback",
+      "env_forwarded": 9,
+      "env_meta": 2,
+      "env_status": {
+        "200": 9
+      },
+      "env_step": 7,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/20260728T235843Z-leg01/ledger.jsonl",
+      "records": 11,
+      "upstream_declared": "http://127.0.0.1:61945"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "loopback",
+      "env_forwarded": 27,
+      "env_meta": 6,
+      "env_status": {
+        "200": 27
+      },
+      "env_step": 21,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/a3-gate-mock/ledger.jsonl",
+      "records": 33,
+      "upstream_declared": "http://127.0.0.1:55064"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 1,
+      "env_meta": 1,
+      "env_status": {
+        "200": 1
+      },
+      "env_step": 0,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl",
+      "records": 2,
+      "upstream_declared": "https://three.arcprize.org"
+    },
+    {
+      "bypass_attempts": 0,
+      "class": "real",
+      "env_forwarded": 21,
+      "env_meta": 3,
+      "env_status": {
+        "200": 3,
+        "400": 17,
+        "404": 1
+      },
+      "env_step": 18,
+      "model_call": 0,
+      "model_status": {},
+      "path": "theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl",
+      "records": 23,
+      "upstream_declared": "https://three.arcprize.org"
+    }
+  ]
+}

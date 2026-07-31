@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "ea92a46",
+  "branch": "agent/s25-probe-the-merge-queue",
+  "lane": "infra",
+  "prompt_id": "S25-probe-the-merge-queue",
+  "state": "items 1/2/4 delivered; item 2 extended after finding the probe blind to never-pushed branches; item 3: s11 half deliberately not done (charter -- proposal in inbox 20260729T0222Z), v5 half re-diagnosed -- the ticket said ModuleNotFoundError but that was fixed by gate_env hours earlier and this tip does not import battery; real blocker is an add/add conflict in battery/verify.py caused by S14 gating eleven territories at once",
+  "territory": "monitor",
+  "utc": "2026-07-29T06:05:00Z"
+}

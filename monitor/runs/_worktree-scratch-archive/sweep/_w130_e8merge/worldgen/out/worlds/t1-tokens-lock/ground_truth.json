@@ -1,0 +1,309 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 50,
+    "injective": true,
+    "states": 50
+  },
+  "grid": [
+    5,
+    9
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "token_count",
+      "collection_is_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 50,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 5 x 9",
+      "states_checked": 50,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "token_count",
+      "statement": "the number of cells showing colour 2 equals the number of tokens not yet collected",
+      "states_checked": 50,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "collection_is_monotone",
+      "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
+      "status": "holds",
+      "transitions_checked": 200,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "floor": 0,
+    "lock": 3,
+    "token": 2,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": true,
+        "measured": 3,
+        "re_witnessable": true,
+        "reversible": false,
+        "rule": "collect_token",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_lock",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_lock",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 6,
+    "reachable_states": 50,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_lock": {
+        "firing_states": 3,
+        "firing_transitions": 3,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 50,
+        "firing_transitions": 100,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "collect_token": {
+        "firing_states": 7,
+        "firing_transitions": 7,
+        "max_witnesses": 3,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 50,
+        "firing_transitions": 88,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_lock": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 5,
+    "rules_single_witness": [],
+    "rules_total": 5
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_lock",
+      "blocked_by_wall",
+      "collect_token",
+      "walk",
+      "walk_through_lock"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_lock",
+      "blocked_by_wall",
+      "collect_token",
+      "walk",
+      "walk_through_lock"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "collect_token",
+      "re_witnessable": true,
+      "reversible": false,
+      "then": "that token becomes collected \u2014 it stops being drawn and the global collected count rises by one \u2014 and the agent takes its cell",
+      "when": "act=D and the target cell holds an uncollected token",
+      "why": "one witness per token, so the count is the number of tokens \u2014 3 here"
+    },
+    {
+      "name": "walk_through_lock",
+      "reversible": true,
+      "then": "the agent moves onto the lock's cell",
+      "when": "act=D and the target cell holds a lock whose k is at most the global number of tokens collected so far \u2014 the count is shared by every lock, not kept per lock"
+    },
+    {
+      "name": "blocked_by_lock",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a lock whose k exceeds the global number of tokens collected so far"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 16,
+    "goal": [
+      3,
+      7
+    ],
+    "optimal_length": 8,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 50,
+    "solvable": true,
+    "world_id": "t1-tokens-lock"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "lock": 3,
+      "token": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          3
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          1,
+          5
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          1
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "lock",
+        "props": {
+          "k": 3
+        }
+      }
+    ],
+    "families": [
+      "count_lock"
+    ],
+    "flags": {},
+    "goal": [
+      3,
+      7
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#########",
+      "#.......#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "Collect three, then the lock opens. Monotone by construction: every `collect_token` has exactly one witness, and the lock never re-closes.",
+    "seed": 108,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t1-tokens-lock"
+  },
+  "world_id": "t1-tokens-lock"
+}

@@ -1,0 +1,215 @@
+{
+  "canon": {
+    "additive_safe": true,
+    "arms": [
+      "bare_cc",
+      "mock_arm",
+      "probe",
+      "replay",
+      "schema_repro",
+      "theoria"
+    ],
+    "auxiliary_required": {
+      "env_meta": [
+        "http"
+      ],
+      "guard_block": [
+        "path",
+        "rule"
+      ],
+      "incident": [
+        "detail",
+        "kind"
+      ],
+      "run_end": [
+        "outcome"
+      ],
+      "run_start": [
+        "game_id"
+      ]
+    },
+    "banned_spellings": {
+      "attempt": "http.attempts",
+      "available_actions": "no canonical field; it belongs in the env_meta response body, not on a step",
+      "cost": "`usage` verbatim plus a `pricing_ref`, and nothing else: a dollar figure is usage x a versioned price table, computed on demand by proxy/cost.py. An append-only file that recorded a price would be wrong the day the price changed, and could not be corrected (LEDGER_FORMAT.md \u00a74, \u00a75; D-004)",
+      "cost_usd": "`usage` verbatim plus a `pricing_ref`, and nothing else: a dollar figure is usage x a versioned price table, computed on demand by proxy/cost.py. An append-only file that recorded a price would be wrong the day the price changed, and could not be corrected (LEDGER_FORMAT.md \u00a74, \u00a75; D-004)",
+      "duration_ms": "http.elapsed_ms",
+      "failed": "http.status and guard.decision -- 'failed' conflates a refusal with a server error",
+      "frame": "frames (always a list -- one command can return several)",
+      "frames_returned": "n_frames",
+      "http_status": "http.status",
+      "http_tries": "http.attempts",
+      "is_error": "http.status",
+      "price_usd": "`usage` verbatim plus a `pricing_ref`, and nothing else: a dollar figure is usage x a versioned price table, computed on demand by proxy/cost.py. An append-only file that recorded a price would be wrong the day the price changed, and could not be corrected (LEDGER_FORMAT.md \u00a74, \u00a75; D-004)",
+      "prompt_chars": "no canonical field; the whole request is recorded",
+      "reason": "guard.reason on env_step; free on auxiliaries",
+      "score_pct": "nothing: the score is produced by the frozen scorer from this file, not written into it",
+      "timestamp": "ts (ISO-8601 UTC, millisecond precision)",
+      "total_cost_usd": "`usage` verbatim plus a `pricing_ref`, and nothing else: a dollar figure is usage x a versioned price table, computed on demand by proxy/cost.py. An append-only file that recorded a price would be wrong the day the price changed, and could not be corrected (LEDGER_FORMAT.md \u00a74, \u00a75; D-004)",
+      "win_levels": "levels_completed"
+    },
+    "closed_shapes": {
+      "env_step": {
+        "fields": [
+          "action",
+          "card_id",
+          "frame_hash",
+          "frames",
+          "game_id",
+          "guard",
+          "guid",
+          "http",
+          "level",
+          "level_boundary",
+          "levels_completed",
+          "n_frames",
+          "response",
+          "score",
+          "state",
+          "step_idx",
+          "variant"
+        ],
+        "required": [
+          "action",
+          "frame_hash",
+          "frames",
+          "game_id",
+          "guard",
+          "http",
+          "level",
+          "level_boundary",
+          "n_frames",
+          "step_idx"
+        ]
+      },
+      "model_call": {
+        "fields": [
+          "beat",
+          "call_idx",
+          "game_id",
+          "http",
+          "label",
+          "model",
+          "pricing_ref",
+          "provider",
+          "proxied",
+          "proxy_gap",
+          "request",
+          "response",
+          "step_idx",
+          "transport",
+          "usage"
+        ],
+        "required": [
+          "call_idx",
+          "http",
+          "model",
+          "provider",
+          "request",
+          "response",
+          "usage"
+        ]
+      }
+    },
+    "envelope": [
+      "arm",
+      "event",
+      "prev",
+      "run_id",
+      "seq",
+      "ts",
+      "v"
+    ],
+    "events": [
+      "env_meta",
+      "env_step",
+      "guard_block",
+      "incident",
+      "model_call",
+      "run_end",
+      "run_start"
+    ],
+    "incident_kinds": [
+      "bypass_attempt",
+      "credential_in_body",
+      "credential_reflected",
+      "ledger_unreadable_line",
+      "nondeterminism",
+      "redirect_refused",
+      "replay_mismatch",
+      "score_mismatch",
+      "score_unreconciled",
+      "scorer_drift",
+      "sealed_pile_in_prompt",
+      "sealed_pile_request",
+      "spend_gate_refused",
+      "variant_degenerate"
+    ],
+    "ledger_version": "1.0",
+    "shapes": {
+      "env_step": {
+        "fields": [
+          "action",
+          "card_id",
+          "frame_hash",
+          "frames",
+          "game_id",
+          "guard",
+          "guid",
+          "http",
+          "level",
+          "level_boundary",
+          "levels_completed",
+          "n_frames",
+          "response",
+          "score",
+          "state",
+          "step_idx",
+          "variant"
+        ],
+        "required": [
+          "action",
+          "frame_hash",
+          "frames",
+          "game_id",
+          "guard",
+          "http",
+          "level",
+          "level_boundary",
+          "n_frames",
+          "step_idx"
+        ]
+      },
+      "model_call": {
+        "fields": [
+          "beat",
+          "call_idx",
+          "game_id",
+          "http",
+          "label",
+          "model",
+          "pricing_ref",
+          "provider",
+          "proxied",
+          "proxy_gap",
+          "request",
+          "response",
+          "step_idx",
+          "transport",
+          "usage"
+        ],
+        "required": [
+          "call_idx",
+          "http",
+          "model",
+          "provider",
+          "request",
+          "response",
+          "usage"
+        ]
+      }
+    }
+  },
+  "fingerprint": "sha256:188706860c457bcb3e5a9aaebde840356592e377b8dcda4c6442ce7a3c68ba51",
+  "note": "The shared ledger contract, pinned. Regenerate with `python -m proxy.tools.contract --update`, and read proxy/CONTRACT_CHANGES.md before you do -- a diff here that narrows what the proxies accept is a breaking change for every track that imports proxy/ as a library."
+}

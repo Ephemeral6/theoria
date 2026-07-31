@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "solvable",
+  "justification": "A plan that visits every switch and then the goal is constructed directly from the board's shape, with no search: take the switches in column order and chain shortest hops between them, then cross the bridge at (4,2) and walk row 5 to the goal. The plan that construction yields costs 416 commands and the budget is 456, so the budget is not an obstacle and the level's 2^120 states are irrelevant to saying so. The cost is stated for the plan actually shipped in the key rather than for the tidier corridor sweep it is easy to describe -- that one runs along row 2 and costs 418, also inside the budget, but it is not this item's witness and quoting its number here would be quoting an arithmetic that belongs to a different plan.",
+  "notes": "The near-twin of the spindle's budget item: the same operator, arithmetic that goes the other way.",
+  "operators": [
+    {
+      "limit": 456,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "a2var-iii7-lattice-roomy"
+}

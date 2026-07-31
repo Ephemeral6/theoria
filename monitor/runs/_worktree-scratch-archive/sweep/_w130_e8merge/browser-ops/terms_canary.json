@@ -1,0 +1,165 @@
+{
+  "_what": "条款漂移基线。ToS §11 明写条款可随时改且无义务通知，而本仓已有至少四份结论押在这几页上（ACCESS_CHECK 第 6/8 项、TERMS.md、Phase 4 释出清单的两栏切分）。这份文件让『它们还是不是我们读过的那一版』变成可判定的问题，而不是一次重读。",
+  "_method": {
+    "extract": "document.querySelector('main').innerText",
+    "normalise": "replace(/\\s+/g,' ').trim()",
+    "hash": "FNV-1a 64-bit over the normalised text, hex, 16 chars. 用 FNV 而不是 sha256 是因为它能在页面里同步算完；这是漂移信号，不是密码学承诺。",
+    "raw_len": "未归一化的 innerText.length，单独记，因为 TERMS.md 引用的字数是这个口径",
+    "anchors": "语义锚点——本仓某条结论所依赖的那句话是否仍在页面上。哈希会因导航栏改版而变，锚点不会；两者一起看才分得清『改版』与『改条款』"
+  },
+  "_procedure": "每次核查：逐页取 fnv1a64 + raw_len + anchors，与本文件比对。哈希变而锚点全 true = 排版/无关内容变动，记一笔即可；任一锚点变 false = 我们的某条结论失去依据，立即落 inbox 提案并通知 arc-recon（ACCESS_CHECK 第 6/8 项是下游）。last_updated 变 = ToS 实质改版，最高优先级。",
+  "_cadence": "按天，不按周期。每两小时刷一次官方条款没有意义（cycle 3 的 TO-MONITOR 已就此请示，未裁决前按天自持）。",
+  "baseline_utc": "2026-07-28T12:28Z",
+  "checks": [
+    {
+      "id": "tos",
+      "url": "https://arcprize.org/terms",
+      "why_it_matters": "Phase 4 释出清单里『ARC 的内容需书面许可』那一栏的唯一依据；也是自动化访问那条未决问题的出处",
+      "last_updated": "June 03, 2024",
+      "raw_len": 35206,
+      "norm_len": 35124,
+      "fnv1a64": "4370730efed5e7e5",
+      "anchors": {
+        "ip_as_is": true,
+        "no_republish": true,
+        "sys_retrieve": true,
+        "no_automated": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "4370730efed5e7e5",
+      "chunk_hashes_v1": {
+        "chunk_chars": 2000,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "a6649dd08eeaa2f9",
+          "e82fd81f2f5a259c",
+          "1d9bd915b176b84d",
+          "4757859ae860a886",
+          "01b5ffeade546ee4",
+          "2bcbaabc2fdfeaa3",
+          "47b23a05fa06c6e7",
+          "cc6cf1ba656832d0",
+          "5d716ea0de605358",
+          "f4fbdb5efab31144",
+          "993885f240c004fb",
+          "99ef1be91f676f54",
+          "07b7da7123efc903",
+          "9d2821033017a163",
+          "d5adc677a072c743",
+          "52c752f4dba1cc7c",
+          "f4ab9e1db4d68b03",
+          "3544208960e995ad"
+        ]
+      }
+    },
+    {
+      "id": "testing_policy",
+      "url": "https://arcprize.org/policy",
+      "why_it_matters": "ACCESS_CHECK 第 8 项结案的决定性文件；释出清单『我们自己的分数明文允许』那一栏全靠它。它只挂在页脚，第一轮就是这样被漏掉的",
+      "raw_len": 20924,
+      "norm_len": 20806,
+      "fnv1a64": "b8f98f52c80f91db",
+      "anchors": {
+        "free_to_test": true,
+        "three_disclosures": true,
+        "invite_repro": true,
+        "replays_any_task": true,
+        "tools_opt_in": true,
+        "public_demo_harder": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "b8f98f52c80f91db",
+      "chunk_hashes_v1": {
+        "chunk_chars": 2000,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "cddf1a8d2ff424b9",
+          "90c71a5c6981d05c",
+          "6b0e82c589a9efe8",
+          "f63d5a1c3fbab8fa",
+          "c39ca773e242c38b",
+          "4630446c1323b377",
+          "7366b549cb69a5eb",
+          "c98a07a910405b4d",
+          "b40853831a321bd4",
+          "5306e6f64f1f0f51",
+          "cea603d5bbcbd95b"
+        ]
+      }
+    },
+    {
+      "id": "rate_limits",
+      "url": "https://docs.arcprize.org/rate_limits",
+      "why_it_matters": "600 RPM 与『无总量配额』是 INC-BA-003 阻塞项改写的依据",
+      "rpm": "600",
+      "norm_len": 1364,
+      "fnv1a64": "6313205d368881e9",
+      "anchors": {
+        "free_preview": true,
+        "no_sla": true,
+        "err_429": true,
+        "increase_subject": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "0eefa5686cb9b930",
+      "norm_len_2026-07-29T11:11Z": 1301,
+      "chunk_hashes_v1": {
+        "chunk_chars": 200,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "3c7e426fe035e727",
+          "aeb6729e78b32f46",
+          "9601e77adbe8cd1f",
+          "cfc4b3369ee47be7",
+          "247d3d6fe2701bb4",
+          "ceaca8ff8e93a0e3",
+          "d928d891e91baeb6"
+        ]
+      }
+    },
+    {
+      "id": "local_vs_online",
+      "url": "https://docs.arcprize.org/local-vs-online",
+      "why_it_matters": "本地模式无 key、无速率限制这条改变整个经济口径；也是待裁决提案 A 的出处",
+      "norm_len": 1379,
+      "fnv1a64": "d7a9ceff336d1752",
+      "anchors": {
+        "no_rate_limits_local": true,
+        "no_key_local": true,
+        "capped_600": true,
+        "fps": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "372433b444f7198d",
+      "norm_len_2026-07-29T11:11Z": 1342,
+      "chunk_hashes_v1": {
+        "chunk_chars": 200,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "a0b1813e5decc0e0",
+          "e32a5d065c8c4cd0",
+          "7058b80c024afd03",
+          "7e418ea015a868b7",
+          "6a9705043a49c08a",
+          "10beac37b60b0a80",
+          "fc6cd0291220772b"
+        ]
+      }
+    }
+  ],
+  "history": [
+    {
+      "utc": "2026-07-28T12:28Z",
+      "verdict": "BASELINE",
+      "note": "首次建基线。同时是一次真实的复核：ToS 与 Testing Policy 的 raw_len（35206 / 20924）与 6 小时前 TERMS.md 记录的字数逐字相等，全部 14 个语义锚点为真——这几页自本轨道首次读取以来未改。"
+    },
+    {
+      "utc": "2026-07-28T19:44Z",
+      "verdict": "NO-DRIFT",
+      "note": "第二次巡检（基线后 +7h16m）。四页哈希与基线逐位相等，ToS last_updated 仍是 June 03, 2024，18 个语义锚点全部为真；ToS 与 Testing Policy 的 raw_len 仍是 35206 / 20924。订正上一条的一个数：基线那条写『14 个锚点』是漏数了 local_vs_online 的 4 个，实际是 18；『全部为真』这个结论不变。旧条目按追加式纪律不改，订正记在这里。"
+    },
+    {
+      "utc": "2026-07-29T11:11Z",
+      "verdict": "DRIFT (cosmetic scope)",
+      "note": "第三次巡检。两个 arcprize.org 页（ToS / Testing Policy）哈希与 raw_len 逐位不变；**两个 docs.arcprize.org 页都变了**：rate_limits 6313205d368881e9→0eefa5686cb9b930（归一化字数 1364→1301，−63），local-vs-online d7a9ceff336d1752→372433b444f7198d（1379→1342，−37）。**18 个语义锚点全部仍为真，600 RPM 与本地模式三条声明逐字仍在**，所以本仓没有任何结论失去依据。变化范围判为装饰性/页面外壳，但**无法证实**——这正是本轮给 canary 加分块哈希的原因，见 _chunk_hashes_why。两页同向变短且同为 Mintlify 托管，倾向于平台侧改版而非 ARC 改条款，但这是推测，不是证据。"
+    }
+  ],
+  "_a_correction_worth_recording": "首次归一化后的字数（35124 / 20806）比 TERMS.md 记的（35206 / 20924）短，看着像漂移，其实是本文件引入的空白归一化所致。为免后人误判，raw_len 与 norm_len 两个口径都记，并已用 raw_len 复核过：没有漂移。这正是『看着像信号的其实是量具变了』那一类，登记在此。",
+  "_chunk_hashes_why": "cycle 12 新增。上一版只存整页哈希，结果第一次真漂移发生时它只能说『变了』，说不出变在哪——两个 docs 页各短了 63 和 37 个字符，而我无法定位，因为文本没存也不该存（存 ARC 的正文进被跟踪文件，正是 TERMS.md §2.2 自己判定需要书面许可的那件事）。分块哈希是折中：把归一化正文按定长切块逐块哈希，下次能指出是第几块变了，而哈希不可重构出正文。与 arc-recon 存帧哈希不存帧是同一条原理。大页用 2000 字符块（定位到节），小页用 200 字符块（定位到句群）。"
+}

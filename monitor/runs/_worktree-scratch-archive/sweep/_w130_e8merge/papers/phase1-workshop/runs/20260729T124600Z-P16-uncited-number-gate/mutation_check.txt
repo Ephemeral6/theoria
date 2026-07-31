@@ -1,0 +1,23 @@
+  [ok ] digit vocabulary: spelled-out numerals: caught
+  [ok ] structural class: metric/claim ids: caught
+  [ok ] structural class: grid coordinates: caught
+  [ok ] backticks stop hiding a digit: caught
+  [ok ] fenced code is scanned as prose: caught
+  [ok ] a citation leaks across a heading: caught
+  [ok ] the abstract exemption widens to everything: caught
+  [ok ] stale rulings stop gating: caught
+  [ok ] a ratio cites itself: caught
+  [ok ] an invented filename counts as a citation: caught
+  [ok ] the anchor floor stops holding: caught
+  [ok ] an unclosed fence stops being an error: caught
+  [ok ] a line anchor hides a path from check B: caught
+  [ok ] a ruling may silence several blocks: caught
+  [ok ] a unit turns a measurement into a name: caught
+  [ok ] leading-dot decimals go invisible: caught
+  [ok ] the binary-label exemption widens back: caught
+  [ok ] frame-index eats numbers after contractions: caught
+  [ok ] a heading is never scanned: caught
+  [ok ] a heading's own number becomes a quantity: caught
+  [ok ] fractions and multipliers stop being quantities: caught
+
+mutation_check: PASS -- 21/21 caught

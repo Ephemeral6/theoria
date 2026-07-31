@@ -1,0 +1,296 @@
+{
+ "games": [
+  "g50t-5849a774",
+  "sk48-d8078629"
+ ],
+ "legs": [
+  {
+   "carried": null,
+   "game_id": "g50t-5849a774",
+   "outcome": "budget_exhausted",
+   "rows": 2,
+   "seeded": false,
+   "slug": "20260729T000151Z-leg01",
+   "usd": 0.0
+  },
+  {
+   "carried": {
+    "carried": {},
+    "empty": true,
+    "seed_from": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T000151Z-leg01\\books",
+    "skipped": [
+     {
+      "file": "theory.dsl",
+      "why": "not present"
+     },
+     {
+      "file": "playbook.dsl",
+      "why": "not present"
+     }
+    ]
+   },
+   "game_id": "g50t-5849a774",
+   "outcome": "budget_exhausted",
+   "rows": 2,
+   "seeded": true,
+   "slug": "20260729T000152Z-leg02",
+   "usd": 0.0
+  },
+  {
+   "carried": null,
+   "game_id": "sk48-d8078629",
+   "outcome": "budget_exhausted",
+   "rows": 2,
+   "seeded": false,
+   "slug": "20260729T000152Z-leg01",
+   "usd": 0.0
+  }
+ ],
+ "prompt_id": "A3-campaign-devpile",
+ "reading": "campaign_turn is the axis for C2's \u524d\u91cd\u540e\u8f7b claim. The front-load index over it is E2 in battery/metrics/economy.py and is deliberately not recomputed here. A leg with rows 0 and an error spent money and produced no series; it is not the same as a campaign with fewer legs.",
+ "rows": [
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 1,
+   "elapsed_s": null,
+   "game_id": "g50t-5849a774",
+   "http_commands": 6,
+   "leg_index": 1,
+   "leg_slug": "20260729T000151Z-leg01",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": false,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 2,
+   "elapsed_s": 0.0,
+   "game_id": "g50t-5849a774",
+   "http_commands": 1,
+   "leg_index": 1,
+   "leg_slug": "20260729T000151Z-leg01",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": false,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 1,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": 0.049
+  },
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 3,
+   "elapsed_s": null,
+   "game_id": "g50t-5849a774",
+   "http_commands": 6,
+   "leg_index": 2,
+   "leg_slug": "20260729T000152Z-leg02",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": true,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 4,
+   "elapsed_s": 0.0,
+   "game_id": "g50t-5849a774",
+   "http_commands": 1,
+   "leg_index": 2,
+   "leg_slug": "20260729T000152Z-leg02",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": true,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 1,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": 0.059
+  },
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 5,
+   "elapsed_s": null,
+   "game_id": "sk48-d8078629",
+   "http_commands": 6,
+   "leg_index": 1,
+   "leg_slug": "20260729T000152Z-leg01",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": false,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  },
+  {
+   "actions_before": 5,
+   "actions_before_recorded": 5,
+   "actions_taken": 1,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 6,
+   "elapsed_s": 0.0,
+   "game_id": "sk48-d8078629",
+   "http_commands": 1,
+   "leg_index": 1,
+   "leg_slug": "20260729T000152Z-leg01",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": false,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 1,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": 0.069
+  }
+ ],
+ "schema": "theoria-campaign-series/v1",
+ "totals": {
+  "legs_recorded": 3,
+  "legs_with_rows": 3,
+  "level_boundaries": 0,
+  "turns": 6,
+  "usd": 0.0
+ },
+ "utc": "2026-07-29T00:01:53Z"
+}

@@ -1,0 +1,44 @@
+{
+  "prompt_id": "E8-ic3-scale",
+  "branch": "agent/e8-ic3-scale",
+  "base_commit": "4ef47a1de3cbab1be9f79a3741afc00fa7401448",
+  "utc": "2026-07-29T16:00:00Z",
+  "worker": "W-130",
+  "kind": "follow-up",
+  "why": "E8-ic3-scale was delivered by W-1660 on this branch and logged DONE at 2026-07-29T12:16:28Z, then reappeared on the board and was claimed three more times (W-1671, --help, W-130). This run does not redo the measurement. It (a) independently verifies the delivered branch, (b) closes the deliverable's own stated gap 6 -- ENGINE_TABLE.md's ic3_pdr row still says the E8 ladder does not exist -- which could only be done after master's engine_table generator was in the tree, and (c) reports the board resurrection to monitor.",
+  "steps": [
+    {
+      "utc": "2026-07-29T16:15:00Z",
+      "step": "board-forensics",
+      "finding": "The re-issue is spurious, not a re-open. The reissued item file is byte-identical to the done copy (blob 2f773ec47c3b215ae126b29b6f5f6dd1aee110b5 = HEAD:monitor/board/items/E8-ic3-scale.md = monitor/board/done/E8-ic3-scale.W-1660.md). board.py moves items with os.rename in the working tree only and nobody commits the move, so HEAD still lists E8 as an available item; `git log --all -- monitor/board/done/E8-ic3-scale.W-1660.md` returns zero commits. A pull --rebase/reset/ff-pull sequence at 10:18-10:29Z re-materialised items/E8-ic3-scale.md and rolled back board.log, erasing the CLAIM..W-1660 line; the 12:16Z DONE then freed the engine-rig territory and the resurrected item became claimable. Second necessary condition: board.py candidates() (:139,:148) uses done_ids() only to resolve deps and never skips an item whose own id is already done.",
+      "consequence": "This item is not new work. Scope becomes: independently verify the delivered branch, land it, and close the gaps the deliverable itself states.",
+      "reported_to_monitor": "monitor/inbox/20260729T161500Z-W-130-e8-was-never-reopened-the-board-never-committed-that-it-closed.md"
+    },
+    {
+      "utc": "2026-07-29T16:40:00Z",
+      "step": "adversarial-acceptance-audit",
+      "verdict": "'fully delivered' is REFUTED. The machinery is real -- 235 tests pass, `document --check` exits 0, `ic3bounds.verify` exits 0 on both run dirs, all 19 MANIFEST sha256s verify, worldgen is import-only, and the sealed pile is untouched (no sealed game id appears anywhere in the diff). What fails is coverage and document/artifact drift.",
+      "gaps": [
+        "1 (blocking) Axis C, one of the three required axes, has boundary:null, no failure of any kind, and zero recheck verdicts -- its `recheck` column is the module constant axis_compose.py:120 rendered unconditionally, not a measurement. Its author withdraws it.",
+        "2 lp_reach.json -- the artifact the whole paper-sentence section rests on -- is produced by no code in the repo, is absent from verify.py AXIS_FILES and document.py SOURCES, carries no provenance.command, and appears in no reproduce command.",
+        "3 Factual error on a false premise: IC3_BOUNDS.md:406-409 claims n=8 is the only rung of 'axis A's six' where IC3 alone gets there, excusing n=5/n=11 as unmeasured against LP. The artifact records lp_verdict infeasible at both; GF(2) misses_n is [5,8,11]; the shipped ladder is 10 rungs, not 6. The IC3-only set is three of ten. Same stale denominator at :443-444.",
+        "4 axis_size_budget900/axis_size.json still asserts 'max_levels=64 did not bind', the exact claim IC3_BOUNDS.md:100-105 says the harness no longer makes. verify.py does not compare detail strings.",
+        "5 The headline 'factor of six to eight' is in no artifact and no table; the pointer at :240-241 sends the reader to a table reading 10.2x/13.2x.",
+        "6 Axis B also reached no boundary (boundary:null, 26/26 invariants, m=4096 in 56 s) and the document never says so.",
+        "7 17 of 43 rungs carry no independent-recheck verdict (axis A 1, axis B 16, axis C 6); the only observed non-recheckable certificate is on `onehot`, an encoding the harness invented.",
+        "8 axis A n=9 and n=11 were rechecked against in-memory rulesets with no committed case in recheck/cases/.",
+        "9 Stale prose from the superseded 6-rung ladder survives at :142-144.",
+        "10 The reproduce block documents a path that is not the published one and omits the 900 s row entirely.",
+        "11 Universal assertions without machine proof: generalise 'cannot fail' (the justification for not tabulating one of the three required failure modes), tautologies_dropped 'structurally zero', and the LP infeasibility algebra chain (disclosed as hand algebra under Theoria constraint 6).",
+        "12 document.py docstring and RUN_STATE.md say 'two authored tables', IC3_BOUNDS.md says exactly one."
+      ],
+      "scope_decision": "Close 1,2,3,4,5,6,9,10,12 and the LP half of 11 on three parallel branches; land the branch (it conflicts with master in recheck/, which is why it never merged); then fix ENGINE_TABLE.md's ic3_pdr row, which is the deliverable's own stated gap 6 and could only be done after master's generator was in the tree. Gaps 7 and 8 are scoped explicitly at the end.",
+      "fanout": {
+        "agent/e8-lp-reach": "gaps 2, 3, and the LP half of 11",
+        "agent/e8-axis-c": "gap 1",
+        "agent/e8-integrity": "gaps 4, 5, 6, 9, 10, 12",
+        "_w130_e8merge": "the master merge, resolving the recheck/ conflicts as a union"
+      }
+    }
+  ]
+}

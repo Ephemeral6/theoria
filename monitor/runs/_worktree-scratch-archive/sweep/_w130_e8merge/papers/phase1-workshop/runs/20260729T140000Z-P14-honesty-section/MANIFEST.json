@@ -1,0 +1,30 @@
+{
+  "prompt_id": "P14-honesty-section",
+  "branch": "agent/p14-honesty-section-res2",
+  "base_commit": "b05e1c9",
+  "utc": "2026-07-29T14:00:00Z",
+  "agent": "RES-2",
+  "note": "branch name carries a -res2 suffix: agent/p14-honesty-section already existed on an unrelated tip. origin/master was merged at 32f078c before the section was written, and every source claim was re-checked against that tree.",
+  "files": [
+    {
+      "path": "inputs-verbatim/SURVEY-empty-as-negative.md",
+      "sha256": "0fc173e0e85ccfdcbe145961b4d46bba834f7e47f272052ab5add698967e706e",
+      "origin": "untracked file at .worktrees/e11-engine-crosscheck-deep/engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/, branch agent/e11-engine-crosscheck-deep @ 6ee0466; byte-identical at copy time and re-confirmed against the original 2026-07-29T14:45Z, still untracked there"
+    },
+    {
+      "path": "inputs-verbatim/SURVEY-environment-as-semantics.md",
+      "sha256": "478743cec9a6aca073217bf0b9ad47deddfed87912194fd54298ecbd68ba7510",
+      "origin": "as above"
+    },
+    {
+      "path": "inputs-verbatim/SURVEY-solver-status.md",
+      "sha256": "2ad087a1c25c5ac2de6d9482a7f2ae4999893dff96c98c51fe983b26ac25abbe",
+      "origin": "as above"
+    },
+    {
+      "path": "inputs-verbatim/SURVEY-success-as-truth.md",
+      "sha256": "0e6ce79cc515332946d180d6b2e4e84139f98d416083f2d20576bb70b295449d",
+      "origin": "as above"
+    }
+  ]
+}

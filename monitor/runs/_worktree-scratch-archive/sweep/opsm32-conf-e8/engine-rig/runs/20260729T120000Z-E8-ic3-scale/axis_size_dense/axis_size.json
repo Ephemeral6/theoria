@@ -1,0 +1,949 @@
+{
+  "axis": "size",
+  "axis_letter": "A",
+  "question": "where does IC3 stop, as the state space grows and nothing else about the question changes?",
+  "family": "peg-1d",
+  "ladder": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "budget_seconds": 300.0,
+  "complete": true,
+  "stopped_early": null,
+  "anchor": {
+    "n": 4,
+    "milestone": "M9",
+    "cnf_text": "(!pos1 | pos2) & (pos1 | !pos2)",
+    "coverage": "8/16",
+    "n_clauses": 2,
+    "n_literals": 4,
+    "converged_at_frame": 2,
+    "checked": "ic3bounds.axis_size.check_anchor, which raises AnchorDrift",
+    "trap": "build_graph(goal_states=None) means ALL single-peg finals and gives a different invariant at n=4 (4 clauses, 3/16) -- the ladder passes its goal explicitly for this reason"
+  },
+  "determinism": {
+    "deterministic_half": "Re-derived exactly by a verify pass: verdict, clause and literal counts, frame of convergence, the engine's counters, the rendered CNF, the coverage fraction.",
+    "timing_half": "Presence and ordering only, never equality. A wall clock is a statement about one machine on one afternoon.",
+    "carve_out": "A `timeout` row is flagged machine_dependent: its verdict is a property of this budget on this hardware, and only the verdict and the budget are comparable."
+  },
+  "no_generalisation_failure_mode": "pdr.generalise always terminates and always returns a clause -- worst case the full negated cube it was handed. There is therefore no such failure category in this engine, and none is tabulated. The same information is carried continuously by n_literals, widest_clause and literal_saturation (mean clause width over the variable count; 1.0 means nothing was generalised).",
+  "recheck": {
+    "column": "steps[].recheck",
+    "question": "does an independent checker's recheck of this step's invariant pass?",
+    "checker": "recheck/ -- it imports nothing from engines/ and re-derives the transition relation by grounding the rules over the product of the declared domains",
+    "ruleset_source": "recheck.build_cases, a second transcription of the same geometry, tied to this one only through interop.peg1d",
+    "taxonomy": {
+      "0": "ACCEPT -- the three conditions hold on the emitted predicate",
+      "1": "REJECT -- an independent checker refuses the engine's invariant",
+      "2": "would-not-load -- the rule set or certificate never became an object to check (a peg board of n >= 20 exceeds recheck.ruleset.MAX_STATES = 1000000). This is the honest reading of an uncheckable certificate",
+      "3": "INCONSISTENT -- the conditions hold and the goal is reachable anyway; a defect in the rechecker, escalated rather than rounded to a pass",
+      "4": "rechecker-crashed -- the recheck itself failed, kept separate from REJECT because Python's own status for a crash is 1",
+      "n/a": "n/a \u2014 no invariant -- the rung produced no invariant, so there is nothing for an independent checker to check. Not a pass."
+    },
+    "pass_means": "ACCEPT *and* both state counts agree. ACCEPT alone is not a pass: on peg-6 a one-literal weakening is ACCEPTed while denoting 27 states instead of 30, so a column recording only the verdict would be green about the wrong object.",
+    "cross_check": "the engine counts the invariant over 2^n boolean tuples (engines.ic3_pdr.check.verify); the rechecker counts the emitted predicate over the product of the declared domains. Two enumerations, two encodings, one set of states -- and the row carries both numbers, not their agreement alone.",
+    "no_invariant": "a rung that timed out, hit the level cap or was refused reads 'n/a \u2014 no invariant'. There is no invariant on such a row, so there is nothing to check and nothing to pass.",
+    "when_it_was_computed": "in the parent, after the budgeted child exited. It consumes none of the rung's budget and appears in no timing; the invariant crosses the process boundary as cnf_text and is read back, re-rendered and compared with the recorded string character for character before it is used."
+  },
+  "recheck_findings": [],
+  "vacuity": {
+    "threshold": 0.9,
+    "rows": [
+      {
+        "n": 4,
+        "n_states": 16,
+        "coverage_ratio": 0.5,
+        "near_vacuous": false,
+        "states_excluded": 8,
+        "literal_saturation": 0.5
+      },
+      {
+        "n": 5,
+        "n_states": 32,
+        "coverage_ratio": 0.75,
+        "near_vacuous": false,
+        "states_excluded": 8,
+        "literal_saturation": 0.6
+      },
+      {
+        "n": 6,
+        "n_states": 64,
+        "coverage_ratio": 0.46875,
+        "near_vacuous": false,
+        "states_excluded": 34,
+        "literal_saturation": 0.541667
+      },
+      {
+        "n": 7,
+        "n_states": 128,
+        "coverage_ratio": 0.765625,
+        "near_vacuous": false,
+        "states_excluded": 30,
+        "literal_saturation": 0.607143
+      },
+      {
+        "n": 8,
+        "n_states": 256,
+        "coverage_ratio": 0.6875,
+        "near_vacuous": false,
+        "states_excluded": 80,
+        "literal_saturation": 0.590909
+      },
+      {
+        "n": 9,
+        "n_states": 512,
+        "coverage_ratio": 0.875,
+        "near_vacuous": false,
+        "states_excluded": 64,
+        "literal_saturation": 0.654321
+      },
+      {
+        "n": 10,
+        "n_states": 1024,
+        "coverage_ratio": 0.748047,
+        "near_vacuous": false,
+        "states_excluded": 258,
+        "literal_saturation": 0.6
+      },
+      {
+        "n": 11,
+        "n_states": 2048,
+        "coverage_ratio": 0.932617,
+        "near_vacuous": true,
+        "states_excluded": 138,
+        "literal_saturation": 0.688312
+      },
+      {
+        "n": 12,
+        "n_states": 4096,
+        "coverage_ratio": 0.846191,
+        "near_vacuous": false,
+        "states_excluded": 630,
+        "literal_saturation": 0.617816
+      },
+      {
+        "n": 13,
+        "n_states": 8192,
+        "coverage_ratio": 0.949707,
+        "near_vacuous": true,
+        "states_excluded": 412,
+        "literal_saturation": 0.665385
+      },
+      {
+        "n": 14,
+        "n_states": 16384,
+        "coverage_ratio": null,
+        "near_vacuous": null,
+        "states_excluded": null,
+        "literal_saturation": null
+      }
+    ],
+    "first_near_vacuous": {
+      "n": 11,
+      "n_states": 2048,
+      "coverage_ratio": 0.932617,
+      "near_vacuous": true,
+      "states_excluded": 138,
+      "literal_saturation": 0.688312
+    },
+    "largest_non_vacuous": {
+      "n": 12,
+      "n_states": 4096,
+      "coverage_ratio": 0.846191,
+      "near_vacuous": false,
+      "states_excluded": 630,
+      "literal_saturation": 0.617816
+    },
+    "read_it_as": "the boundary a reader who wants an ADJUDICABLE invariant should use. `boundary` above is the boundary for a reader who wants any verdict at all, and on this family the two are not the same rung.",
+    "saturation": {
+      "what": "literal_saturation climbing toward 1.0 is IC3 degrading into state enumeration (see harness.py).",
+      "monotone_overall": false,
+      "monotone_on_even_boards": true,
+      "monotone_on_odd_boards": false,
+      "parity_note": "odd boards sit systematically above even ones. That is the same parity effect that made the original every-other ladder report the near-vacuity onset two rungs late."
+    }
+  },
+  "boundary": {
+    "n": 14,
+    "label": "n=14",
+    "n_states": 16384,
+    "verdict": "timeout",
+    "machine_dependent": true,
+    "budget_seconds": 300.0,
+    "largest_answered_n": 13,
+    "detail": "killed after 300.0s of wall clock by this harness, on this machine. This is a statement about the budget and the hardware, NOT about the problem: a longer budget or a faster machine may finish it. Nothing is claimed about whether max_levels=64 would have bound -- a killed child reports no frame, so that is not knowable from this row, and an earlier version of this message asserted it anyway."
+  },
+  "escalations": [],
+  "steps": [
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=4",
+        "n": 4,
+        "initial": "0111",
+        "goal_states": [
+          "0100"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 16,
+        "n_satisfying": 8,
+        "coverage": "8/16",
+        "coverage_ratio": 0.5,
+        "near_vacuous": false,
+        "n_clauses": 2,
+        "n_literals": 4,
+        "widest_clause": 2,
+        "narrowest_clause": 2,
+        "cube_limit": 4,
+        "literal_saturation": 0.5,
+        "converged_at_frame": 2,
+        "states_blocked": 6,
+        "literals_dropped": 15,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | pos2) & (pos1 | !pos2)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.075015,
+        "ic3_seconds": 0.00053,
+        "check_seconds": 1.8e-05,
+        "build_seconds": 0.000707
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg4-0111",
+        "ruleset_source": "recheck/cases/peg4-0111.rules.json",
+        "certificate": "peg4-0111-ic3-invariant",
+        "engine_n_states": 16,
+        "engine_n_satisfying": 8,
+        "recheck_n_states": 16,
+        "recheck_n_satisfying": 8,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "8 of 16 states, counted over 2^4 boolean tuples by the engine and over the product of peg4-0111's declared domains by the rechecker | all three conditions hold over 16 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=5",
+        "n": 5,
+        "initial": "01111",
+        "goal_states": [
+          "01000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 32,
+        "n_satisfying": 24,
+        "coverage": "24/32",
+        "coverage_ratio": 0.75,
+        "near_vacuous": false,
+        "n_clauses": 2,
+        "n_literals": 6,
+        "widest_clause": 3,
+        "narrowest_clause": 3,
+        "cube_limit": 5,
+        "literal_saturation": 0.6,
+        "converged_at_frame": 4,
+        "states_blocked": 6,
+        "literals_dropped": 16,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | pos2 | pos4) & (!pos2 | !pos3 | pos4)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.087297,
+        "ic3_seconds": 0.002264,
+        "check_seconds": 3.5e-05,
+        "build_seconds": 0.000949
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg5-01111",
+        "ruleset_source": "recheck/cases/peg5-01111.rules.json",
+        "certificate": "peg5-01111-ic3-invariant",
+        "engine_n_states": 32,
+        "engine_n_satisfying": 24,
+        "recheck_n_states": 32,
+        "recheck_n_satisfying": 24,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "24 of 32 states, counted over 2^5 boolean tuples by the engine and over the product of peg5-01111's declared domains by the rechecker | all three conditions hold over 32 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=6",
+        "n": 6,
+        "initial": "011111",
+        "goal_states": [
+          "010000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 64,
+        "n_satisfying": 30,
+        "coverage": "30/64",
+        "coverage_ratio": 0.46875,
+        "near_vacuous": false,
+        "n_clauses": 8,
+        "n_literals": 26,
+        "widest_clause": 4,
+        "narrowest_clause": 3,
+        "cube_limit": 6,
+        "literal_saturation": 0.541667,
+        "converged_at_frame": 7,
+        "states_blocked": 34,
+        "literals_dropped": 117,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos0 | !pos1 | pos5) & (!pos0 | !pos2 | !pos4) & (!pos0 | pos3 | !pos4) & (!pos2 | !pos3 | pos4) & (!pos2 | !pos3 | pos5) & (!pos2 | pos3 | !pos4) & (!pos1 | pos2 | pos3 | pos5) & (!pos1 | !pos3 | pos4 | !pos5)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.112941,
+        "ic3_seconds": 0.038274,
+        "check_seconds": 0.000132,
+        "build_seconds": 0.001689
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg6-011111",
+        "ruleset_source": "recheck/cases/peg6-011111.rules.json",
+        "certificate": "peg6-011111-ic3-invariant",
+        "engine_n_states": 64,
+        "engine_n_satisfying": 30,
+        "recheck_n_states": 64,
+        "recheck_n_satisfying": 30,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "30 of 64 states, counted over 2^6 boolean tuples by the engine and over the product of peg6-011111's declared domains by the rechecker | all three conditions hold over 64 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=7",
+        "n": 7,
+        "initial": "0111111",
+        "goal_states": [
+          "0100000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 128,
+        "n_satisfying": 98,
+        "coverage": "98/128",
+        "coverage_ratio": 0.765625,
+        "near_vacuous": false,
+        "n_clauses": 4,
+        "n_literals": 17,
+        "widest_clause": 6,
+        "narrowest_clause": 3,
+        "cube_limit": 7,
+        "literal_saturation": 0.607143,
+        "converged_at_frame": 5,
+        "states_blocked": 12,
+        "literals_dropped": 39,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos4 | !pos5 | pos6) & (!pos1 | !pos3 | pos4 | pos6) & (!pos2 | !pos3 | pos4 | pos6) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.109104,
+        "ic3_seconds": 0.029176,
+        "check_seconds": 0.000171,
+        "build_seconds": 0.003505
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg7-0111111",
+        "ruleset_source": "recheck/cases/peg7-0111111.rules.json",
+        "certificate": "peg7-0111111-ic3-invariant",
+        "engine_n_states": 128,
+        "engine_n_satisfying": 98,
+        "recheck_n_states": 128,
+        "recheck_n_satisfying": 98,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "98 of 128 states, counted over 2^7 boolean tuples by the engine and over the product of peg7-0111111's declared domains by the rechecker | all three conditions hold over 128 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=8",
+        "n": 8,
+        "initial": "01111111",
+        "goal_states": [
+          "01000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 256,
+        "n_satisfying": 176,
+        "coverage": "176/256",
+        "coverage_ratio": 0.6875,
+        "near_vacuous": false,
+        "n_clauses": 11,
+        "n_literals": 52,
+        "widest_clause": 7,
+        "narrowest_clause": 4,
+        "cube_limit": 8,
+        "literal_saturation": 0.590909,
+        "converged_at_frame": 8,
+        "states_blocked": 78,
+        "literals_dropped": 312,
+        "clauses_dropped": 1,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | !pos2 | !pos3 | pos7) & (!pos1 | !pos4 | !pos5 | pos7) & (!pos1 | !pos4 | pos5 | !pos6) & (!pos2 | !pos4 | !pos5 | pos7) & (!pos2 | !pos4 | pos5 | !pos6) & (!pos1 | !pos2 | !pos3 | pos5 | !pos6) & (!pos1 | !pos2 | pos3 | !pos4 | !pos6) & (!pos1 | !pos3 | pos4 | pos5 | pos7) & (!pos1 | !pos3 | !pos5 | pos6 | !pos7) & (!pos2 | !pos3 | pos4 | pos5 | pos7) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 0.699931,
+        "ic3_seconds": 0.611379,
+        "check_seconds": 0.000726,
+        "build_seconds": 0.009955
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg8-01111111",
+        "ruleset_source": "recheck/cases/peg8-01111111.rules.json",
+        "certificate": "peg8-01111111-ic3-invariant",
+        "engine_n_states": 256,
+        "engine_n_satisfying": 176,
+        "recheck_n_states": 256,
+        "recheck_n_satisfying": 176,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "176 of 256 states, counted over 2^8 boolean tuples by the engine and over the product of peg8-01111111's declared domains by the rechecker | all three conditions hold over 256 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=9",
+        "n": 9,
+        "initial": "011111111",
+        "goal_states": [
+          "010000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 512,
+        "n_satisfying": 448,
+        "coverage": "448/512",
+        "coverage_ratio": 0.875,
+        "near_vacuous": false,
+        "n_clauses": 9,
+        "n_literals": 53,
+        "widest_clause": 8,
+        "narrowest_clause": 5,
+        "cube_limit": 9,
+        "literal_saturation": 0.654321,
+        "converged_at_frame": 10,
+        "states_blocked": 49,
+        "literals_dropped": 161,
+        "clauses_dropped": 2,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | !pos3 | !pos5 | !pos7 | pos8) & (!pos1 | !pos3 | !pos6 | !pos7 | pos8) & (!pos1 | !pos4 | !pos6 | !pos7 | pos8) & (!pos2 | !pos4 | !pos6 | !pos7 | pos8) & (!pos1 | !pos3 | pos4 | pos6 | pos7 | pos8) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos8) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos8) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 1.070254,
+        "ic3_seconds": 0.967603,
+        "check_seconds": 0.001383,
+        "build_seconds": 0.022913
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg9-011111111",
+        "ruleset_source": "recheck.build_cases.peg_ruleset('011111111', 9, '010000000') -- no committed case at this size",
+        "certificate": "peg9-011111111-ic3-invariant",
+        "engine_n_states": 512,
+        "engine_n_satisfying": 448,
+        "recheck_n_states": 512,
+        "recheck_n_satisfying": 448,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "448 of 512 states, counted over 2^9 boolean tuples by the engine and over the product of peg9-011111111's declared domains by the rechecker | all three conditions hold over 512 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=10",
+        "n": 10,
+        "initial": "0111111111",
+        "goal_states": [
+          "0100000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 1024,
+        "n_satisfying": 766,
+        "coverage": "766/1024",
+        "coverage_ratio": 0.748047,
+        "near_vacuous": false,
+        "n_clauses": 20,
+        "n_literals": 120,
+        "widest_clause": 9,
+        "narrowest_clause": 4,
+        "cube_limit": 10,
+        "literal_saturation": 0.6,
+        "converged_at_frame": 9,
+        "states_blocked": 149,
+        "literals_dropped": 697,
+        "clauses_dropped": 6,
+        "counterexample_length": null,
+        "cnf_text": "(!pos4 | !pos6 | !pos7 | pos9) & (!pos4 | !pos6 | pos7 | !pos8) & (!pos1 | !pos3 | !pos6 | !pos7 | pos9) & (!pos1 | !pos3 | !pos6 | pos7 | !pos8) & (!pos2 | !pos3 | !pos6 | !pos7 | pos9) & (!pos2 | !pos3 | !pos6 | pos7 | !pos8) & (!pos1 | !pos3 | !pos4 | !pos5 | !pos7 | pos9) & (!pos1 | !pos3 | !pos4 | !pos5 | pos7 | !pos8) & (!pos1 | !pos3 | !pos4 | pos5 | !pos6 | !pos8) & (!pos1 | !pos3 | !pos5 | pos6 | pos7 | pos9) & (!pos1 | !pos3 | !pos5 | !pos7 | pos8 | !pos9) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | pos7 | !pos8) & (!pos2 | !pos3 | !pos4 | pos5 | !pos6 | !pos8) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos9) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | pos8) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 9.093352,
+        "ic3_seconds": 8.945736,
+        "check_seconds": 0.005538,
+        "build_seconds": 0.060995
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg10-0111111111",
+        "ruleset_source": "recheck/cases/peg10-0111111111.rules.json",
+        "certificate": "peg10-0111111111-ic3-invariant",
+        "engine_n_states": 1024,
+        "engine_n_satisfying": 766,
+        "recheck_n_states": 1024,
+        "recheck_n_satisfying": 766,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "766 of 1024 states, counted over 2^10 boolean tuples by the engine and over the product of peg10-0111111111's declared domains by the rechecker | all three conditions hold over 1024 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=11",
+        "n": 11,
+        "initial": "01111111111",
+        "goal_states": [
+          "01000000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 2048,
+        "n_satisfying": 1910,
+        "coverage": "1910/2048",
+        "coverage_ratio": 0.932617,
+        "near_vacuous": true,
+        "n_clauses": 14,
+        "n_literals": 106,
+        "widest_clause": 10,
+        "narrowest_clause": 6,
+        "cube_limit": 11,
+        "literal_saturation": 0.688312,
+        "converged_at_frame": 14,
+        "states_blocked": 112,
+        "literals_dropped": 422,
+        "clauses_dropped": 0,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | !pos2 | !pos6 | !pos8 | !pos9 | pos10) & (!pos1 | !pos4 | !pos6 | !pos8 | !pos9 | pos10) & (!pos2 | !pos4 | !pos6 | !pos8 | !pos9 | pos10) & (!pos1 | !pos2 | !pos4 | !pos5 | !pos7 | pos8 | pos10) & (!pos1 | !pos2 | !pos4 | !pos5 | !pos8 | !pos9 | pos10) & (!pos1 | !pos2 | !pos6 | !pos7 | pos8 | pos9 | pos10) & (!pos1 | !pos4 | !pos6 | !pos7 | pos8 | pos9 | pos10) & (!pos2 | !pos4 | !pos6 | !pos7 | pos8 | pos9 | pos10) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10) & (!pos1 | !pos2 | !pos3 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 15.180894,
+        "ic3_seconds": 14.904429,
+        "check_seconds": 0.009431,
+        "build_seconds": 0.167739
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg11-01111111111",
+        "ruleset_source": "recheck.build_cases.peg_ruleset('01111111111', 11, '01000000000') -- no committed case at this size",
+        "certificate": "peg11-01111111111-ic3-invariant",
+        "engine_n_states": 2048,
+        "engine_n_satisfying": 1910,
+        "recheck_n_states": 2048,
+        "recheck_n_satisfying": 1910,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "1910 of 2048 states, counted over 2^11 boolean tuples by the engine and over the product of peg11-01111111111's declared domains by the rechecker | all three conditions hold over 2048 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=12",
+        "n": 12,
+        "initial": "011111111111",
+        "goal_states": [
+          "010000000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 4096,
+        "n_satisfying": 3466,
+        "coverage": "3466/4096",
+        "coverage_ratio": 0.846191,
+        "near_vacuous": false,
+        "n_clauses": 29,
+        "n_literals": 215,
+        "widest_clause": 11,
+        "narrowest_clause": 5,
+        "cube_limit": 12,
+        "literal_saturation": 0.617816,
+        "converged_at_frame": 12,
+        "states_blocked": 253,
+        "literals_dropped": 1343,
+        "clauses_dropped": 13,
+        "counterexample_length": null,
+        "cnf_text": "(!pos4 | !pos6 | !pos8 | !pos9 | pos11) & (!pos4 | !pos6 | !pos8 | pos9 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos8 | !pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos8 | pos9 | !pos10) & (!pos1 | !pos3 | !pos6 | !pos8 | !pos9 | pos11) & (!pos1 | !pos3 | !pos6 | !pos8 | pos9 | !pos10) & (!pos2 | !pos3 | !pos6 | !pos8 | !pos9 | pos11) & (!pos2 | !pos3 | !pos6 | !pos8 | pos9 | !pos10) & (!pos4 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | !pos9 | pos11) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | pos9 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos6 | pos7 | !pos8 | !pos10) & (!pos1 | !pos3 | !pos5 | !pos7 | !pos9 | pos10 | !pos11) & (!pos1 | !pos3 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos8 | !pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos8 | pos9 | !pos10) & (!pos2 | !pos3 | !pos6 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos4 | !pos5 | !pos7 | pos8 | pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | !pos9 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | pos9 | !pos10) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | pos7 | !pos8 | !pos10) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos7 | pos8 | pos9 | pos11) & (!pos1 | !pos3 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos2 | !pos3 | !pos4 | !pos5 | !pos6 | !pos7 | !pos8 | !pos9 | pos10) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 104.985271,
+        "ic3_seconds": 104.33622,
+        "check_seconds": 0.034969,
+        "build_seconds": 0.493023
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg12-011111111111",
+        "ruleset_source": "recheck/cases/peg12-011111111111.rules.json",
+        "certificate": "peg12-011111111111-ic3-invariant",
+        "engine_n_states": 4096,
+        "engine_n_satisfying": 3466,
+        "recheck_n_states": 4096,
+        "recheck_n_satisfying": 3466,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "3466 of 4096 states, counted over 2^12 boolean tuples by the engine and over the product of peg12-011111111111's declared domains by the rechecker | all three conditions hold over 4096 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=13",
+        "n": 13,
+        "initial": "0111111111111",
+        "goal_states": [
+          "0100000000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "invariant",
+        "machine_dependent": false,
+        "escalate": false,
+        "n_states": 8192,
+        "n_satisfying": 7780,
+        "coverage": "7780/8192",
+        "coverage_ratio": 0.949707,
+        "near_vacuous": true,
+        "n_clauses": 20,
+        "n_literals": 173,
+        "widest_clause": 12,
+        "narrowest_clause": 7,
+        "cube_limit": 13,
+        "literal_saturation": 0.665385,
+        "converged_at_frame": 20,
+        "states_blocked": 242,
+        "literals_dropped": 1120,
+        "clauses_dropped": 3,
+        "counterexample_length": null,
+        "cnf_text": "(!pos1 | !pos3 | !pos5 | !pos8 | !pos9 | pos10 | pos12) & (!pos1 | !pos3 | !pos5 | !pos8 | !pos10 | !pos11 | pos12) & (!pos1 | !pos3 | !pos6 | !pos8 | !pos9 | pos10 | pos12) & (!pos1 | !pos3 | !pos6 | !pos8 | !pos10 | !pos11 | pos12) & (!pos1 | !pos4 | !pos6 | !pos8 | !pos9 | pos10 | pos12) & (!pos1 | !pos4 | !pos6 | !pos8 | !pos10 | !pos11 | pos12) & (!pos2 | !pos4 | !pos6 | !pos8 | !pos9 | pos10 | pos12) & (!pos2 | !pos4 | !pos6 | !pos8 | !pos10 | !pos11 | pos12) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | !pos9 | pos10 | pos12) & (!pos1 | !pos3 | !pos5 | !pos6 | !pos7 | !pos10 | !pos11 | pos12) & (!pos1 | !pos3 | !pos6 | !pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | !pos4 | !pos6 | !pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos2 | !pos4 | !pos6 | !pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | !pos3 | !pos4 | !pos5 | !pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | !pos3 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos2 | !pos4 | !pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos2 | !pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12) & (!pos1 | pos2 | pos3 | pos4 | pos5 | pos6 | pos7 | pos8 | pos9 | pos10 | pos11 | pos12)",
+        "checker_conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true
+        },
+        "detail": null
+      },
+      "timing": {
+        "wall_seconds": 225.117252,
+        "ic3_seconds": 223.562263,
+        "check_seconds": 0.052836,
+        "build_seconds": 1.333338
+      },
+      "recheck": {
+        "status": "ACCEPT",
+        "exit_code": 0,
+        "ruleset": "peg13-0111111111111",
+        "ruleset_source": "recheck/cases/peg13-0111111111111.rules.json",
+        "certificate": "peg13-0111111111111-ic3-invariant",
+        "engine_n_states": 8192,
+        "engine_n_satisfying": 7780,
+        "recheck_n_states": 8192,
+        "recheck_n_satisfying": 7780,
+        "counts_agree": true,
+        "agrees_with_recorded_row": true,
+        "conditions": {
+          "goal_break": true,
+          "inv_closed": true,
+          "inv_init": true,
+          "predicate_wellformed": true,
+          "ruleset_binding": true
+        },
+        "finding": false,
+        "detail": "7780 of 8192 states, counted over 2^13 boolean tuples by the engine and over the product of peg13-0111111111111's declared domains by the rechecker | all three conditions hold over 8192 states, and an independent search agrees the goal is unreachable"
+      }
+    },
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=14",
+        "n": 14,
+        "initial": "01111111111111",
+        "goal_states": [
+          "01000000000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 300.0,
+      "deterministic": {
+        "verdict": "timeout",
+        "machine_dependent": true,
+        "escalate": false,
+        "n_states": 16384,
+        "n_satisfying": null,
+        "coverage": null,
+        "coverage_ratio": null,
+        "near_vacuous": null,
+        "n_clauses": null,
+        "n_literals": null,
+        "widest_clause": null,
+        "narrowest_clause": null,
+        "cube_limit": 14,
+        "literal_saturation": null,
+        "converged_at_frame": null,
+        "states_blocked": null,
+        "literals_dropped": null,
+        "clauses_dropped": null,
+        "counterexample_length": null,
+        "cnf_text": null,
+        "checker_conditions": null,
+        "detail": "killed after 300.0s of wall clock by this harness, on this machine. This is a statement about the budget and the hardware, NOT about the problem: a longer budget or a faster machine may finish it. Nothing is claimed about whether max_levels=64 would have bound -- a killed child reports no frame, so that is not knowable from this row, and an earlier version of this message asserted it anyway."
+      },
+      "timing": {
+        "wall_seconds": 300.011559,
+        "ic3_seconds": null,
+        "check_seconds": null,
+        "build_seconds": null
+      },
+      "recheck": {
+        "status": "n/a \u2014 no invariant",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the rung's verdict is 'timeout', so no invariant exists and an independent checker has nothing to check. This row is not a pass and must not be read as one."
+      }
+    }
+  ],
+  "provenance": {
+    "prompt_id": "E8-ic3-bounds",
+    "branch": "agent/e8-ic3-scale",
+    "base_commit": "df5b4b72a7fd07f775997389d70070ca864defb2",
+    "utc": "2026-07-29T12:00:13Z",
+    "command": "python -m ic3bounds --out runs/20260729T120000Z-E8-ic3-scale/axis_size_dense --axis size --timeout 300",
+    "host": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.13",
+      "machine": "AMD64"
+    }
+  }
+}

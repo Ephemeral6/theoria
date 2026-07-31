@@ -1,0 +1,25 @@
+{
+  "bound": 0,
+  "claim": "unsolvable",
+  "comment": "I(s) := potential(s) <= 0, where potential sums w over the occupied positions. The pagoda obligation is that no legal move raises the potential and that every goal state exceeds the bound.",
+  "kind": "potential_bound",
+  "name": "peg4-1110-pagoda",
+  "occupied": 1,
+  "produced_by": "engines/lp_potential (M6), exported by interop/certificate_export.py",
+  "provenance": {
+    "document": "engine-rig/interop/certificates/pagoda_4_1110_to_0100.json",
+    "solved_by": "engines/lp_potential, exact rationals scaled to integers by the LCM of their denominators",
+    "transcribed": "weights and bound only; the move set, the state space and the goal are re-derived from the rule set"
+  },
+  "ruleset": {
+    "name": "peg4-1110",
+    "sha256": "c7224d00fbfbd7cc5105accf11aacf1ebcb8e4b8d12595e502186820238152b2"
+  },
+  "schema": "engine-rig/recheck/certificate-v1",
+  "weights": {
+    "pos0": -1,
+    "pos1": 1,
+    "pos2": 0,
+    "pos3": 1
+  }
+}

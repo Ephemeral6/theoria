@@ -1,0 +1,14 @@
+{
+  "v": "1.0",
+  "pool": "theoria-shared-2026-07",
+  "usd_ceiling": 214.9,
+  "action_ceiling": 24000,
+  "ledger": "proxy/var/spend_gate.jsonl",
+  "default_ttl_seconds": 3600,
+  "lock_timeout_seconds": 30.0,
+  "provenance": {
+    "usd_ceiling": "Not new authority. $50 (BUDGET_REPORT.md G1, approved as P-7) + $164.9 (the other session's stop-loss ceiling, CEILING_FACTOR 1.6 x $103) = $214.90 -- which is exactly the worst-case combined exposure INC-BA-003 computed and could not bound. The two numbers were already approved separately; this file is the first place their sum is a ceiling rather than an accident.",
+    "action_ceiling": "~24,000 outbound ARC requests, the combined figure in INC-BA-003's shared-resource table. One unit = one outbound ARC HTTP request through the environment proxy, which is the quantity the proxy can actually count and the one the 600 rpm rate limit is charged against. It is NOT the scorecard's successful-action count (BUDGET_REPORT.md 4.1).",
+    "raising_it": "A human act. Edit this file, say why here, and append the change to PARTNER_SYNC.md. Every run records this file's sha256 in its run_start, so a run that drew on a widened pool is identifiable after the fact."
+  }
+}

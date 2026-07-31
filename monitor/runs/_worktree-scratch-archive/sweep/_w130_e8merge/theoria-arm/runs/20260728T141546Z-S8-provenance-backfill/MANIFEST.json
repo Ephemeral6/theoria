@@ -1,0 +1,19 @@
+{
+ "prompt_id": "S8-provenance-backfill",
+ "slug": "20260728T141546Z-S8-provenance-backfill",
+ "branch": "agent/s8-provenance-backfill",
+ "base_commit": "6beb2e68683abb3e685573f61f62dcc9790630b4",
+ "utc": "2026-07-28T14:15:46Z",
+ "worker": "W-1412",
+ "arm": "theoria",
+ "kind": "process record, not an experiment",
+ "note": "This run spent no quota, made no model call and touched no network. It is the archive-repair pass that gave this arm's other runs their manifests. Nothing here is a measurement; the measurements are in the runs it repaired.",
+ "quota": {"actions": 0, "http_commands": 0, "model_calls": 0, "usd": 0.0},
+ "outputs": [
+  "RUN_STATE.md",
+  "armversion_scan.json",
+  "backfill_report.json",
+  "classification.json",
+  "verify.txt"
+ ]
+}

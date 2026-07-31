@@ -1,0 +1,70 @@
+== zero_space baseline ==
+   {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '13.1', 'S2_local': '92.9', 'S2_global_laws': 1680}
+
+M1  split.random_transition_split returns overlapping train/test
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '13.1', 'S2_local': '92.9', 'S2_global_laws': 1680}
+   moved  : NOTHING MOVED
+   run.py exit code: 0 -> SURVIVES run.py
+
+M2  zsh.fit ignores `train`, fits on all 60 transitions
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '100.0', 'S2_local': '100.0', 'S2_global_laws': 1140}
+   moved  : {'S2_global': ('13.1', '100.0'), 'S2_local': ('92.9', '100.0'), 'S2_global_laws': (1680, 1140)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M3  zsh.fit sneaks ONE held-out difference into the fit
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '100.0', 'S2_local': '100.0', 'S2_global_laws': 1140}
+   moved  : {'S2_global': ('13.1', '100.0'), 'S2_local': ('92.9', '100.0'), 'S2_global_laws': (1680, 1140)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M4  zsh.score re-checks the TRAIN transitions
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '100.0', 'S2_local': '100.0', 'S2_global_laws': 1680}
+   moved  : {'S2_global': ('13.1', '100.0'), 'S2_local': ('92.9', '100.0')}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M5  fit_matches_engine always returns True
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '13.1', 'S2_local': '92.9', 'S2_global_laws': 1680}
+   moved  : NOTHING MOVED
+   run.py exit code: 0 -> SURVIVES run.py
+
+M6  leave_one_operation_out trains on everything
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '100.0', 'S2_global': '100.0', 'S2_local': '100.0', 'S2_global_laws': 1140}
+   moved  : {'S2_global': ('13.1', '100.0'), 'S2_local': ('92.9', '100.0'), 'S2_global_laws': (1680, 1140)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M7  parityworld.build drops the coverage guarantee
+   result : {'EXIT': 0, 'gate_failures': 0, 'S1_global': '99.4', 'S2_global': '13.5', 'S2_local': '92.9', 'S2_global_laws': 1684}
+   moved  : {'S1_global': ('100.0', '99.4'), 'S2_global': ('13.1', '13.5'), 'S2_global_laws': (1680, 1684)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M8  parityworld.build leaves an operation unwitnessed
+   result : {'EXIT': 3, 'why': "AssertionError('not every operation is witnessed in 3782875192')"}
+   moved  : {'EXIT': (0, 3), 'why': (None, "AssertionError('not every operation is witnessed in 3782875192')")}
+   run.py exit code: 3 -> CAUGHT
+
+== lp_potential baseline (n in (4, 5)) ==
+   {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 266, 'silent': 84, 'inv_rate': '31.6', 'false': 14, 'gate_let_through': 0, 'heldout_violations': 154}
+
+M9  peg.graph_minus_geometry deletes nothing
+   result : {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 198, 'silent': 152, 'inv_rate': '100.0', 'false': 0, 'gate_let_through': 198, 'heldout_violations': 0}
+   moved  : {'certs': (266, 198), 'silent': (84, 152), 'inv_rate': ('31.6', '100.0'), 'false': (14, 0), 'gate_let_through': (0, 198), 'heldout_violations': (154, 0)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M10 peg.matches_fixture_peg4 always passes
+   result : {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 266, 'silent': 84, 'inv_rate': '31.6', 'false': 14, 'gate_let_through': 0, 'heldout_violations': 154}
+   moved  : NOTHING MOVED
+   run.py exit code: 0 -> SURVIVES run.py
+
+M11 _admissibility_on_heldout skips the violating states
+   result : {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 266, 'silent': 84, 'inv_rate': '31.6', 'false': 14, 'gate_let_through': 0, 'heldout_violations': 0}
+   moved  : {'heldout_violations': (154, 0)}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M12 held-out inv_closed scored with `< 0` instead of `<= 0`
+   result : {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 266, 'silent': 84, 'inv_rate': '27.1', 'false': 14, 'gate_let_through': 0, 'heldout_violations': 154}
+   moved  : {'inv_rate': ('31.6', '27.1')}
+   run.py exit code: 0 -> SURVIVES run.py
+
+M13 emit gate handed the reduced graph (the caller's real evidence)
+   result : {'EXIT': 0, 'fixture_gate_ok': True, 'certs': 266, 'silent': 84, 'inv_rate': '31.6', 'false': 14, 'gate_let_through': 266, 'heldout_violations': 154}
+   moved  : {'gate_let_through': (0, 266)}
+   run.py exit code: 0 -> SURVIVES run.py

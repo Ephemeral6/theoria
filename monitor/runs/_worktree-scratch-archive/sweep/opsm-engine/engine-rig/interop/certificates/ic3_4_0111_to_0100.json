@@ -1,0 +1,78 @@
+{
+  "claim": "unsolvable_0111_to_0100",
+  "cnf": [
+    [
+      [
+        "pos1",
+        false
+      ],
+      [
+        "pos2",
+        true
+      ]
+    ],
+    [
+      [
+        "pos1",
+        true
+      ],
+      [
+        "pos2",
+        false
+      ]
+    ]
+  ],
+  "conclusion": "no goal state is reachable from 0111",
+  "goal_states": [
+    "0100"
+  ],
+  "initial_state": "0111",
+  "invariant": "I(s) := (!pos1 | pos2) & (pos1 | !pos2)",
+  "n_clauses": 2,
+  "n_pos": 4,
+  "n_satisfying": 8,
+  "n_states": 16,
+  "obligations": {
+    "goal_break": {
+      "holds": true,
+      "statement": "no goal state satisfies the invariant",
+      "witnesses": [
+        {
+          "goal_state": "0100",
+          "holds": true,
+          "satisfies_invariant": false
+        }
+      ]
+    },
+    "inv_closed": {
+      "checked_over": "all states satisfying the invariant, reachable or not, over the full 2^n space",
+      "holds": true,
+      "n_checked": 4,
+      "statement": "every legal move from a state satisfying the invariant lands on a state satisfying it",
+      "witnesses": []
+    },
+    "inv_init": {
+      "holds": true,
+      "statement": "the invariant holds at 0111"
+    }
+  },
+  "produced_by": "engine-rig/engines/ic3_pdr",
+  "producer_check": {
+    "checked_by": "engines.ic3_pdr.check.verify -- shares no code with the search",
+    "conditions": {
+      "goal_break": true,
+      "inv_closed": true,
+      "inv_init": true
+    },
+    "n_satisfying": 8,
+    "n_states": 16
+  },
+  "schema": "ic3_pdr/inductive_invariant_certificate@1",
+  "variables": [
+    "pos0",
+    "pos1",
+    "pos2",
+    "pos3"
+  ],
+  "verified": true
+}

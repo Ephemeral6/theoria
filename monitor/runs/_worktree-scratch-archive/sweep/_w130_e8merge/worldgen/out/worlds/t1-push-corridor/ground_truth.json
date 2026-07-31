@@ -1,0 +1,255 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 15,
+    "injective": true,
+    "states": 15
+  },
+  "grid": [
+    5,
+    6
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "block_count",
+      "blocks_disjoint"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 15,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 5 x 6",
+      "states_checked": 15,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 15,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 15,
+      "status": "holds",
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": 1,
+        "re_witnessable": false,
+        "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 2,
+    "reachable_states": 15,
+    "reversibility_score": 0.75,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 1,
+        "firing_transitions": 1,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 15,
+        "firing_transitions": 32,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 1,
+        "firing_transitions": 1,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "walk": {
+        "firing_states": 15,
+        "firing_transitions": 26,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [
+      "push"
+    ],
+    "rules_total": 4
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_block",
+      "blocked_by_wall",
+      "push",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_block",
+      "blocked_by_wall",
+      "push",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 8,
+    "goal": [
+      3,
+      4
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 15,
+    "solvable": true,
+    "world_id": "t1-push-corridor"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          3
+        ],
+        "kind": "block",
+        "props": {}
+      }
+    ],
+    "families": [
+      "push"
+    ],
+    "flags": {},
+    "goal": [
+      3,
+      4
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "######",
+      "#....#",
+      "#.####",
+      "#....#",
+      "######"
+    ],
+    "notes": "The block can be shoved exactly once before it meets the wall, and the agent can never reach its far side. Identical rule, one witness. This is the A0 vs A0\u2032 contrast with the mechanism held fixed and only the geometry moved.",
+    "seed": 103,
+    "tier": 1,
+    "variant_delta": "same mechanism, dead-end corridor instead of an open room",
+    "variant_of": "t1-push-open",
+    "world_id": "t1-push-corridor"
+  },
+  "world_id": "t1-push-corridor"
+}

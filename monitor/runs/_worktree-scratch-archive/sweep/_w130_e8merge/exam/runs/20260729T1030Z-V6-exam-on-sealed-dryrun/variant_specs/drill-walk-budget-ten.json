@@ -1,0 +1,14 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "solvable",
+  "justification": "One command more than walk-budget-nine, which is the whole content: the Manhattan bound of 10 is achieved, not merely approached, because column 1 and row 5 are both clear. The ten-command route is the witness. This is the tight side of the boundary, and it is here so that a budget argument cannot be waved at any budget -- a framework that answers unsolvable whenever it sees a step_limit fails this item.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "limit": 10,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "drill-walk-budget-ten"
+}

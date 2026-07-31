@@ -1,0 +1,96 @@
+{
+  "actions": [
+    "(push-left c6-7 c6-6)",
+    "(press-down c6-6 c7-6 c3-1)",
+    "(push-up c6-6 c5-6)",
+    "(push-up c5-6 c4-6)",
+    "(push-up c4-6 c3-6)",
+    "(push-up c3-6 c2-6)",
+    "(teleport-b-up c2-6 c1-6 c4-1)",
+    "(push-up c4-1 c3-1)",
+    "(push-up c3-1 c2-1)",
+    "(push-up c2-1 c1-1)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "left",
+    "down",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up"
+  ],
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway/domain.pddl",
+  "green": true,
+  "length": 10,
+  "manual_final_cell": [
+    1,
+    1
+  ],
+  "manual_reaches_goal": true,
+  "manual_trail": [
+    [
+      6,
+      7
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "name": "a3-l2-oneway",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway/problem.pddl",
+  "status": "SAT",
+  "world_actions": [
+    "LEFT",
+    "DOWN",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP"
+  ]
+}

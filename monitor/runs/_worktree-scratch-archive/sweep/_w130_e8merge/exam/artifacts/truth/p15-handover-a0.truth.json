@@ -1,0 +1,617 @@
+{
+  "items": [
+    {
+      "item_id": "hv-step-01",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:yard"
+      ],
+      "truth": {
+        "next_box": [
+          4,
+          4
+        ],
+        "next_player": [
+          0,
+          2
+        ],
+        "rule": "blocked_wall"
+      }
+    },
+    {
+      "item_id": "hv-step-02",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:yard"
+      ],
+      "truth": {
+        "next_box": [
+          3,
+          3
+        ],
+        "next_player": [
+          1,
+          0
+        ],
+        "rule": "walk"
+      }
+    },
+    {
+      "item_id": "hv-step-03",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ],
+      "truth": {
+        "next_box": [
+          3,
+          1
+        ],
+        "next_player": [
+          1,
+          1
+        ],
+        "rule": "push2"
+      }
+    },
+    {
+      "item_id": "hv-step-04",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          2,
+          1
+        ],
+        "next_player": [
+          2,
+          3
+        ],
+        "rule": "push2"
+      }
+    },
+    {
+      "item_id": "hv-step-05",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          2,
+          2
+        ],
+        "next_player": [
+          1,
+          4
+        ],
+        "rule": "walk"
+      }
+    },
+    {
+      "item_id": "hv-step-06",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ],
+      "truth": {
+        "next_box": [
+          2,
+          3
+        ],
+        "next_player": [
+          3,
+          3
+        ],
+        "rule": "blocked_box_landing"
+      }
+    },
+    {
+      "item_id": "hv-step-07",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ],
+      "truth": {
+        "next_box": [
+          2,
+          3
+        ],
+        "next_player": [
+          2,
+          4
+        ],
+        "rule": "blocked_box_crossing"
+      }
+    },
+    {
+      "item_id": "hv-step-08",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          2,
+          1
+        ],
+        "next_player": [
+          2,
+          2
+        ],
+        "rule": "blocked_box_landing"
+      }
+    },
+    {
+      "item_id": "hv-step-09",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          3,
+          3
+        ],
+        "next_player": [
+          3,
+          4
+        ],
+        "rule": "blocked_box_landing"
+      }
+    },
+    {
+      "item_id": "hv-step-10",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          0,
+          0
+        ],
+        "next_player": [
+          2,
+          5
+        ],
+        "rule": "blocked_wall"
+      }
+    },
+    {
+      "item_id": "hv-step-11",
+      "points": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ],
+      "truth": {
+        "next_box": [
+          1,
+          2
+        ],
+        "next_player": [
+          1,
+          3
+        ],
+        "rule": "blocked_box_crossing"
+      }
+    },
+    {
+      "item_id": "hv-name-01",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-02",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "world_law"
+      }
+    },
+    {
+      "item_id": "hv-name-03",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-04",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-05",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-06",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "world_law"
+      }
+    },
+    {
+      "item_id": "hv-name-07",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-08",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "world_law"
+      }
+    },
+    {
+      "item_id": "hv-name-09",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "world_law"
+      }
+    },
+    {
+      "item_id": "hv-name-10",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "world_law"
+      }
+    },
+    {
+      "item_id": "hv-name-11",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-name-12",
+      "points": 1.0,
+      "rubric_id": "handover.name_class",
+      "tags": [
+        "level_data_vs_world_law"
+      ],
+      "truth": {
+        "class": "level_data"
+      }
+    },
+    {
+      "item_id": "hv-opt-01",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:pinch"
+      ],
+      "truth": {
+        "distance": 7,
+        "optimal_actions": [
+          "UP",
+          "RIGHT"
+        ]
+      }
+    },
+    {
+      "item_id": "hv-opt-02",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:yard"
+      ],
+      "truth": {
+        "distance": 5,
+        "optimal_actions": [
+          "LEFT"
+        ]
+      }
+    },
+    {
+      "item_id": "hv-opt-03",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ],
+      "truth": {
+        "distance": 8,
+        "optimal_actions": [
+          "UP",
+          "DOWN"
+        ]
+      }
+    },
+    {
+      "item_id": "hv-opt-04",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ],
+      "truth": {
+        "distance": 5,
+        "optimal_actions": [
+          "DOWN",
+          "LEFT"
+        ]
+      }
+    },
+    {
+      "item_id": "hv-opt-05",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ],
+      "truth": {
+        "distance": 3,
+        "optimal_actions": [
+          "LEFT"
+        ]
+      }
+    },
+    {
+      "item_id": "hv-opt-06",
+      "points": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "tags": [
+        "optimal_action",
+        "level:pinch"
+      ],
+      "truth": {
+        "distance": 5,
+        "optimal_actions": [
+          "DOWN"
+        ]
+      }
+    }
+  ],
+  "notes": {
+    "author_baseline": {
+      "awarded": 46.0,
+      "by_family": {
+        "level_data_vs_world_law": {
+          "awarded": 12.0,
+          "fraction": 1.0,
+          "n": 12,
+          "possible": 12.0
+        },
+        "optimal_action": {
+          "awarded": 12.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 12.0
+        },
+        "step_semantics": {
+          "awarded": 22.0,
+          "fraction": 1.0,
+          "n": 11,
+          "possible": 22.0
+        }
+      },
+      "compile_refusal": null,
+      "form": "compiled",
+      "fraction": 1.0,
+      "note": "The author is the manual, executed. `pipeline.gen_exec.compile_module` is tried first, so that the baseline runs a form compiled from theory.dsl at this moment; when it raises, the checked-in compiled form a0-spike/artifacts/theory_exec.py is loaded instead and its three geometry constants are rebound per level. Both paths execute the same deliverable and neither consults the world's oracle or the answer key.",
+      "possible": 46.0,
+      "wrong": []
+    },
+    "families": {
+      "level_data_vs_world_law": {
+        "n": 12,
+        "points_each": 1.0
+      },
+      "optimal_action": {
+        "n": 6,
+        "points_each": 2.0
+      },
+      "step_semantics": {
+        "n": 11,
+        "points_each": 2.0
+      }
+    },
+    "levels": {
+      "corridor": {
+        "height": 5,
+        "start_box": [
+          2,
+          3
+        ],
+        "start_player": [
+          2,
+          4
+        ],
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "pinch": {
+        "height": 6,
+        "start_box": [
+          3,
+          5
+        ],
+        "start_player": [
+          1,
+          4
+        ],
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "yard": {
+        "height": 7,
+        "start_box": [
+          3,
+          1
+        ],
+        "start_player": [
+          1,
+          0
+        ],
+        "target": [
+          5,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "width": 6
+      }
+    },
+    "rule_coverage": {
+      "blocked_box_crossing": 2,
+      "blocked_box_landing": 3,
+      "blocked_wall": 2,
+      "push2": 2,
+      "walk": 2
+    },
+    "tiers": [
+      "tier1_manual",
+      "tier2_manual_playbook"
+    ]
+  },
+  "paper_id": "p15-handover-a0",
+  "question_type": "handover",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+  "schema": "exam/v0.1"
+}

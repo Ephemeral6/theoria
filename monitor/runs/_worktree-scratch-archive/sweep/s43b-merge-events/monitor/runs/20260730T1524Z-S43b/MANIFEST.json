@@ -1,0 +1,46 @@
+{
+  "prompt_id": "S43b",
+  "parent_item": "S43-S43-three-guards-reverted",
+  "branch": "agent/s43b-merge-events-dead",
+  "base_commit": "8a5a83f923a28454cebbf3b9669389bf72a8b6dc",
+  "utc": "2026-07-30T15:24:00Z",
+  "author": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_cost_usd": 0.0,
+  "sealed_pile_contact": false,
+  "what": "The merge 6b953a60 that landed S43 dropped TWO call sites out of monitor/reflex.py while keeping both definitions. One (merge_events) costs only evidence; the other (the FLEET_PAUSE hiring gate) costs behaviour -- master declares the fleet paused and reflex.py keeps hiring workers. Plus two unit tests of sweep() launch accounting that were reading the real tracked monitor/FLEET_PAUSE out of the checkout, and a third passing vacuously at launches==0.",
+  "measured": {
+    "master_reds_before": [
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_the_ci_merge_step_is_not_reimplemented_anywhere",
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_a_declined_launch_is_not_counted_and_not_staggered",
+      "monitor/tests/test_standing_reflex_no_third_value.py::test_a_running_launch_is_both_counted_and_reported_started"
+    ],
+    "master_defect_with_no_red_at_all": "monitor/reflex.py hires generic workers with no pause check; monitor/FLEET_PAUSE's own body promises it does not. No test in monitor/tests touched FLEET_PAUSE or paused() before this commit (grep: no matches).",
+    "master_reds_not_addressed_here": [
+      "monitor/tests/test_scan_failure_exit.py::test_a_blinded_conflict_probe_does_not_report_green",
+      "monitor/tests/test_scan_no_third_value.py::test_a_deleted_append_only_file_is_a_risk",
+      "monitor/tests/test_scan_no_third_value.py::test_all_files_present_still_reads_green"
+    ],
+    "vacuous_pass_found": "test_a_launch_the_scheduler_accepted_is_counted_even_if_its_health_is_unknown was green at launches==0 (0 <= MAX_STANDING, staggers==launches==0)",
+    "file_before_after": "3 failed / 15 passed on pristine origin/master@8a5a83f9 -> 20 passed after (2 tests added)",
+    "negative_controls": [
+      "delete only the PAUSE monkeypatch line: 3 FAILED, and the formerly-vacuous test now stops at the new `launches > 0` assertion instead of passing",
+      "run the delivered test file against unmodified master code: test_reflex_hiring_is_gated_by_the_pause_switch is RED (it catches the B1 production defect nothing else caught)",
+      "regress standing.paused() to `return False` on master: test_the_pause_switch_actually_stops_the_standing_sweep is RED (first coverage of that half of the predicate)"
+    ],
+    "equivalence_check": "the inlined block extracted mechanically from master's main() vs merge_events(r), compared over 16 stdouts x 7 stderrs x 4 return codes = 448 inputs: 0 differences (adversarial reviewer's measurement, not an argument from reading)"
+  },
+  "corrections_from_adversarial_review": [
+    "the first draft blamed the merge 6b953a60 for the ci_merge red; 954eb44c made it directly on the mainline (5 reds), and the merge healed 2 of them. Attribution corrected.",
+    "the first draft said merge_events is uncalled; it is production-dead but test-live -- two tests are green against a function main() never invokes.",
+    "the first draft said the real paused() predicate is still under test; only its False branch was. Both branches are covered now.",
+    "three line citations did not resolve: :429 -> 393 (now :401), scan.py:545 -> :538, scan.py:537-544 -> 530-537."
+  ],
+  "files": [
+    "monitor/reflex.py",
+    "monitor/tests/test_standing_reflex_no_third_value.py",
+    "monitor/runs/20260730T1524Z-S43b/MANIFEST.json",
+    "monitor/runs/20260730T1524Z-S43b/RUN_STATE.md"
+  ]
+}

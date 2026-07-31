@@ -1,0 +1,296 @@
+granularity=para      wordnums=off  units= 359  flagged=  36  (digit-bearing 36, word-only 0)
+granularity=para      wordnums=on   units= 359  flagged=  67  (digit-bearing 36, word-only 31)
+granularity=row       wordnums=off  units= 440  flagged=  70  (digit-bearing 70, word-only 0)
+granularity=row       wordnums=on   units= 440  flagged= 101  (digit-bearing 70, word-only 31)
+granularity=row+item  wordnums=off  units= 560  flagged=  96  (digit-bearing 96, word-only 0)
+granularity=row+item  wordnums=on   units= 560  flagged= 142  (digit-bearing 96, word-only 46)
+
+=== dump: granularity=row+item wordnums=off ===
+
+01_intro.md:128 [para] nums=['17'] words=[]
+    What survives all five is narrower than the headline and still worth having: a register whose entries are executable, and whose `succeeded` is read ba
+
+01_intro.md:194 [para] nums=['2', '2'] words=[]
+    Be precise about what was named, because the precision is the whole argument. R-05 names three **directions** — `press_up`, `press_down`, `press_right
+
+03_a0.md:50 [para] nums=['152'] words=[]
+    **`zero_space` recovered the Button↔Door dependency as a conservation law.** Handed 152 anonymous indicator bits, with no vocabulary for buttons or do
+
+03_a0.md:66 [para] nums=['275'] words=[]
+    The rule says *when* it happens; the law says *that it held on every one of the 275 transitions*. The distinction matters and §12.1's own table forbid
+
+03_a0.md:115 [row] nums=['40'] words=[]
+    | explorer | exhaustive | **truncated at 40 %** of the exhaustive walk |
+
+03_a0.md:116 [row] nums=['233', '236', '99', '107', '228', '47'] words=[]
+    | state-action coverage | 233/236 = **99 %** | 107/228 = **47 %** |
+
+03_a0.md:118 [row] nums=['233', '236', '98.73', '228', '228', '100'] words=[]
+    | accuracy vs ground truth | 233/236 = **98.73 %** | **228/228 = 100 %** |
+
+03_a0.md:119 [row] nums=['0', '13'] words=[]
+    | executable probes emitted | **0** | **13** |
+
+03_a0.md:120 [row] nums=['1', '0'] words=[]
+    | rules left untested by the trace | 1 (unprobeable) | **0** |
+
+03_a0.md:195 [para] nums=['2', '4', '2', '3'] words=[]
+    Two other mechanisms caught the seeded clause. The Lean transcription refused it as an internal inconsistency, before the world was consulted: > `Aren
+
+03_a0.md:201 [para] nums=['2', '3', '2', '3', '2', '4', '2', '3'] words=[]
+    (`prime_report.json`, `run_b.certify_lean`.) The coverage probe caught it empirically: `push_onto_crate` has 2 firing states and neither is in the tra
+
+03_a0.md:229 [para] nums=['6', '341', '6'] words=[]
+    T-10 injected single-rule variants and measured detection latency. Latency tracks *firing frequency*, not the size of the change: `ghost` (walls stop 
+
+05_a2.md:27 [row] nums=['9', '9'] words=[]
+    | the world | DC22, a sealed public game | a self-built 9×9 pushing world |
+
+05_a2.md:30 [row] nums=['175', '184'] words=[]
+    | the history | 175 frames of play, coverage unknown | 184 frames, **exhaustive over its strata but one pair** |
+
+05_a2.md:60 [para] nums=['0'] words=[]
+    `history_trace = raw_trace[0 .. portal_transition]`, the cut index found from the frames' geometry as the single non-adjacent Cart move (ibid., `cut_r
+
+05_a2.md:69 [row] nums=['184', '184', '0'] words=[]
+    | "不欠任何一帧" | `certify_cheap` on the play record | 184/184, 0 anomalies |
+
+05_a2.md:70 [row] nums=['175', '175'] words=[]
+    | 模型重放 175/175 全对 (compressed) | the miner on the history proposes **no** jump | `history_proposes_a_jump: false` |
+
+05_a2.md:72 [row] nums=['18'] words=[]
+    | "而这一关人类可解" | an 18-action episode ends with `win: true` | refuted |
+
+05_a2.md:95 [row] nums=['184', '14 904', '0'] words=[]
+    | certify, cheap | **GREEN** — 184 frames, 14 904 pixels, **0 anomalies** |
+
+05_a2.md:97 [row] nums=['21', '0', '1'] words=[]
+    | certificate | `zero_space` → 21-cell occupancy law → 0/1 pagoda weight |
+
+05_a2.md:98 [row] nums=['4.9'] words=[]
+    | certify, expensive | **GREEN** — Lean 4.9.0, `decide` only, no `sorry` |
+
+05_a2.md:202 [row] nums=['2', '7', '7', '1'] words=[]
+    | goal | the goal cell (2,7) | the sealed pocket (7,1) |
+
+05_a2.md:203 [row] nums=['0', '1', '0', '21', '0', '1', '0', '35'] words=[]
+    | invariant | 0/1 pagoda weight, 0 on **21** cells | 0/1 pagoda weight, 0 on **35** cells |
+
+05_a2.md:208 [row] nums=['18', '0', '55'] words=[]
+    | **true of the world** | **NO** — 18-action witness | **YES** — 0 of 55 reachable states |
+
+05_a2.md:217 [item] nums=['2', '7'] words=[]
+    * **`def Goal`** — `s.cart == Cell.c10`, the goal cell (2,7), against
+
+05_a2.md:218 [para] nums=['7', '1'] words=[]
+    `s.cart == Cell.c34`, the sealed pocket (7,1). The two theorems are about different goals;
+
+06_a3_transfer.md:47 [row] nums=['347', '11', '0.032'] words=[]
+    | world frames | 347 | **11** | 0.032 |
+
+06_a3_transfer.md:48 [row] nums=['346', '10', '0.029'] words=[]
+    | world actions | 346 | **10** | **0.029** |
+
+06_a3_transfer.md:49 [row] nums=['1', '0', '0'] words=[]
+    | engine stages | 1 | **0** | 0 |
+
+06_a3_transfer.md:50 [row] nums=['35', '0', '0'] words=[]
+    | candidates adjudicated | 35 | **0** | 0 |
+
+06_a3_transfer.md:51 [row] nums=['5', '0', '0'] words=[]
+    | theorize rounds | 5 | **0** | 0 |
+
+06_a3_transfer.md:52 [row] nums=['33', '0', '0'] words=[]
+    | DSL clauses written | 33 | **0** | 0 |
+
+06_a3_transfer.md:53 [row] nums=['1', '3', '1', '1', '3', '1', '1'] words=[]
+    | compile / certify / plan runs | 1 / 3 / 1 | 1 / 3 / 1 | 1 |
+
+06_a3_transfer.md:106 [para] nums=['63', '34'] words=[]
+    unsolvable; reachable states drop from 63 to 34.
+
+06_a3_transfer.md:108 [para] nums=['15'] words=[]
+    cell. The level stays solvable, in 15 steps.
+
+06_a3_transfer.md:117 [row] nums=['0', '0', '0', '0'] words=[]
+    | static certify (frame 0, 0 actions) | **green**, 0 anomalies | **green**, 0 anomalies |
+
+06_a3_transfer.md:118 [row] nums=['10', '10'] words=[]
+    | plan | SAT, length 10 — the same plan | SAT, length 10 — the same plan |
+
+06_a3_transfer.md:119 [row] nums=['10', '10'] words=[]
+    | execute | 10 actions, no win | 10 actions, no win |
+
+06_a3_transfer.md:120 [row] nums=['13', '8', '891'] words=[]
+    | replay certify | **red**: 13 anomalies, 8 of 891 pixels unexplained | **red**: same figures |
+
+06_a3_transfer.md:154 [para] nums=['5', '1', '40'] words=[]
+    The blind arm also spent 5 theorize rounds to the cold start's 1, and the report records that two of those five — 40 % of its adjudication budget — we
+
+06_a3_transfer.md:171 [item] nums=['100'] words=[]
+    3. **100 % sweep coverage is not realistic**, so the cold-start column is an
+
+06_a3_transfer.md:179 [item] nums=['62', '63'] words=[]
+    5. **Scale** — 62 and 63 reachable states, with `decide` enumerating the whole
+
+07_battery.md:64 [row] nums=['1.000', '0.794', '1.015', '4', '8'] words=[]
+    | P1 | planning | +1.000 | 0.794 / 1.015 | yes | reference | **4 of 8** |
+
+07_battery.md:65 [row] nums=['1.000', '0.155', '0.008', '4', '8'] words=[]
+    | P2 | planning | +1.000 | −0.155 / 0.008 | yes | reference | **4 of 8** |
+
+07_battery.md:66 [row] nums=['0.875', '0.249', '0.054', '4', '8'] words=[]
+    | E4 | economy | −0.875 | 0.249 / 0.054 | yes | reference | **4 of 8** |
+
+07_battery.md:67 [row] nums=['0.625', '0.278', '0.085', '8', '8'] words=[]
+    | X1 | exploration | −0.625 | 0.278 / 0.085 | yes | reference | 8 of 8 |
+
+07_battery.md:68 [row] nums=['0.625', '0.093', '0.011', '8', '8'] words=[]
+    | X4 | exploration | −0.625 | 0.093 / 0.011 | yes | reference | 8 of 8 |
+
+07_battery.md:69 [row] nums=['0.562', '0.015', '0.007', '8', '8'] words=[]
+    | **X3** | exploration | **−0.562** | 0.015 / **−0.007** | **no** | reference | 8 of 8 |
+
+07_battery.md:70 [row] nums=['0.375', '0.130', '0.001', '8', '8'] words=[]
+    | P3 | planning | −0.375 | 0.130 / 0.001 | yes | **main** | 8 of 8 |
+
+07_battery.md:71 [row] nums=['0.188', '0.975', '0.941', '8', '8'] words=[]
+    | X2 | exploration | −0.188 | 0.975 / 0.941 | **no** | reference | 8 of 8 |
+
+07_battery.md:113 [para] nums=['4', '1', '16', '0.562', '0.188'] words=[]
+    A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the table's −0.562 and −0.188 print three decimals onto a quantity with
+
+07_battery.md:318 [para] nums=['1.0', '12', '0.083'] words=[]
+    1.0 was not a floor: one action against a 12-step plan scored 0.083, better than any solved run can score. `Step.won` was populated by the adapters an
+
+07_battery.md:321 [item] nums=['1.000'] words=[]
+    * **K2 scored 1.000 over a held-out set of one pair.** Defence attempted and
+
+07_battery.md:324 [para] nums=['1.000'] words=[]
+    beats declared closed, with zero environment actions and no clause changed, scored 1.000. Closed by requiring the episode to show evidence.
+
+07_battery.md:429 [item] nums=['105', '105'] words=[]
+    4. **The poverty certificate rejected nothing.** It passed 105 of 105 attacks in
+
+07_battery.md:430 [para] nums=['112', '112'] words=[]
+    the blind phase and 112 of 112 in the delivered artefact, so it has no measured selectivity on the only data it has seen; it was written by the round'
+
+07_battery.md:447 [item] nums=['37', '38'] words=[]
+    6. **"37 of 38" is not thirty-seven findings, and the round says so in a section
+
+07_battery.md:448 [para] nums=['37'] words=[]
+    heading**: 这不是 37 个独立发现. One label-swapping convention satisfies X1, X2, X4, X5 and X6 at once — five metrics, one hole — and the report collapses the
+
+07_battery.md:527 [para] nums=['5'] words=[]
+    Retired is not deleted, only excluded from being counted as a separate finding; and the two K-only clusters — {K10, K8} and {K14, K5, K7}, three retir
+
+07_battery.md:535 [para] nums=['257', '703', '64'] words=[]
+    A cluster count near the metric count is not reassuring, and the artefact refuses to let it read as thirty independent findings: **257 of 703 metric p
+
+07_battery.md:551 [row] nums=['4', '6', '0.05'] words=[]
+    | **Statistical power** | unchanged since v0: 4 paired games, and 6 non-tied pairs is the floor for p < 0.05 |
+
+07_battery.md:596 [para] nums=['67', '0.229', '0.250', '53', '67', '1', '0.875'] words=[]
+    One thing this section deliberately does **not** do with that fact, because the temptation is obvious and the evidence refuses it: it does not pair th
+
+07_battery.md:615 [para] nums=['67'] words=[]
+    The difference worth reporting is that the bill shape's distribution rests on 67 runs and the capability column rests on none.
+
+08_exam.md:38 [para] nums=['7', '47', '49', '96'] words=[]
+    The held-out rubric's refusal of per-cell credit is worth quoting, because it is the kind of scoring choice that silently manufactures a result: > on 
+
+08_exam.md:65 [item] nums=['1.00', '0.15'] words=[]
+    * the held-out **memoriser** scores 1.00 on the replay half and 0.15 on the
+
+08_exam.md:66 [para] nums=['0.85', '5', '5', '0', '5'] words=[]
+    held-out half — a gap of 0.85 — and on the over-sampled `blocked_crossing` class it goes 5/5 to 0/5;
+
+08_exam.md:68 [item] nums=['1.0', '0.0'] words=[]
+    * the verdict **bluffer** posts sensitivity 1.0 with specificity 0.0, which is
+
+08_exam.md:77 [para] nums=['46.0', '46.0', '1', '2'] words=[]
+    **Only one paper has been sat by a real subject.** Two fresh subagent readers, given a bundle and a sheet and nothing else, each scored 46.0/46.0 on t
+
+08_exam.md:95 [para] nums=['0.000'] words=[]
+    The exam has no cost instrument, so the quantity the framework actually predicts was not measured. We report the tier difference as **unmeasured**: th
+
+08_exam.md:117 [para] nums=['3.0', '2.0', '17', '17', '47.5'] words=[]
+    **Two real leaks shipped, and the cheater found both.** The verdict paper's `points` field encoded the answer — 3.0 for solvable, 2.0 for unsolvable —
+
+08_exam.md:124 [para] nums=['3', '4'] words=[]
+    The reason the static checks missed them is the most transferable thing in this section: > `answer_labels` was an *optional* hook on each paper module
+
+08_exam.md:153 [item] nums=['1'] words=[]
+    * **n = 1 per handover tier**, on a saturated sheet. Nothing here supports a
+
+09_preflight.md:123 [para] nums=['08', '42', '01', '20'] words=[]
+    wired keyword-only into the forwarder so that a caller who forgets it gets a `TypeError` rather than a line in the next incident report, and is tested
+
+09_preflight.md:195 [para] nums=['116 470', '0.436763', '83.6', '0.52', '8.3', '1.35'] words=[]
+    **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis` identifies 116 470 cache-creation tokens written at the one-hour multip
+
+10_adjudication.md:33 [row] nums=['60', '3'] words=[]
+    | solver status read as an answer | `SURVEY-solver-status.md` | ~60 points | 3 |
+
+10_adjudication.md:34 [row] nums=['40', '8'] words=[]
+    | empty result read as a negative | `SURVEY-empty-as-negative.md` | ~40 points | 8 |
+
+10_adjudication.md:35 [row] nums=['240', '37'] words=[]
+    | environment fact read as semantics | `SURVEY-environment-as-semantics.md` | ~240 points | 37 |
+
+10_adjudication.md:36 [row] nums=['105', '8'] words=[]
+    | success signal read as truth | `SURVEY-success-as-truth.md` | ~105 points | 8 |
+
+10_adjudication.md:38 [para] nums=['340', '56'] words=[]
+    **No total is published here, and no rate.** The obvious headline — around 340 points examined, 56 judged unsafe — does not survive, and neither does 
+
+10_adjudication.md:57 [para] nums=['60', '51', '274', '376', '11', '367', '374', '10'] words=[]
+    Second, **the passes' own arithmetic does not close.** `SURVEY-solver-status.md:16` states a scan surface of ~60 points and then names more than seven
+
+10_adjudication.md:70 [para] nums=['45', '97', '105', '8'] words=[]
+    Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate exit-code readings" that reached the work items and the digests appe
+
+10_adjudication.md:83 [para] nums=['340', '48', '85', '56', '85', '56'] words=[]
+    An earlier draft of this section replaced the disputed 340 / 48 with an enumerated 85 / 56 and called that the countable figure. It is not: the 85 omi
+
+10_adjudication.md:189 [item] nums=['51'] words=[]
+    * `SURVEY-solver-status.md:274-376` names **51 table rows** that read a solver
+
+10_adjudication.md:190 [para] nums=['11', '10'] words=[]
+    status correctly, plus **11 backticked paths** across 10 files in its prose.
+
+10_adjudication.md:191 [item] nums=['28'] words=[]
+    * `SURVEY-environment-as-semantics.md:138-230` names **28 distinct Python sites**
+
+10_adjudication.md:192 [para] nums=['20', '113', '134'] words=[]
+    as exemplars, and grades cap handling in a further 20-row table at `:113-134`.
+
+10_adjudication.md:193 [item] nums=['8', '7'] words=[]
+    * `SURVEY-success-as-truth.md:43-79` names **8** exemplars — and files **7 more**
+
+10_adjudication.md:194 [para] nums=['7'] words=[]
+    separately, under a heading warning that verified-but-not-independent is *the category most easily misread as safe*. Two of those 7 are defects this s
+
+10_adjudication.md:199 [item] nums=['6'] words=[]
+    * `SURVEY-empty-as-negative.md:30-58` names **6**.
+
+10_adjudication.md:350 [item] nums=['13.1'] words=[]
+    * `zero_space` — leave-one-operation-out: a global hit rate of **13.1 %** across
+
+10_adjudication.md:351 [para] nums=['1680', '92.9'] words=[]
+    1680 laws on withheld operations, against 92.9 % cell-local.
+
+10_adjudication.md:352 [item] nums=['289', '26.4', '1408'] words=[]
+    * `lp_potential` — leave-one-geometry-out across 289 instances: **26.4 % of 1408
+
+10_adjudication.md:353 [para] nums=['58'] words=[]
+    certificates** still satisfy their closure condition on the withheld geometry, and **58 are outright false** against brute-force ground truth.
+
+10_adjudication.md:370 [item] nums=['13.1'] words=[]
+    3. **13.1 % is a dial, not a constant, and the table says so.** An equally
+
+10_adjudication.md:371 [para] nums=['35.3', '2.0', '66.7', '100.0'] words=[]
+    defensible one-fifth training split lands at **35.3 %**, and leaving two operations out at **2.0 %**. The table attributes the gap to the corpus's lin
+
+11_limitations.md:75 [item] nums=['21'] words=[]
+    * **INC-BA-001.** The sealed pile is no longer 21 games at `never_audited`. While

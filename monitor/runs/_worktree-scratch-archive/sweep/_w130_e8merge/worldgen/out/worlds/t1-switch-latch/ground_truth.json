@@ -1,0 +1,377 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 26,
+    "injective": true,
+    "states": 26
+  },
+  "grid": [
+    6,
+    7
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "door_presence_tracks_net",
+      "latch_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 6 x 7",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "door_presence_tracks_net",
+      "statement": "a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "latch_monotone",
+      "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
+      "status": "holds",
+      "transitions_checked": 104,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "door": 4,
+    "floor": 0,
+    "switch": 2,
+    "switch_on": 3,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": false,
+        "measured": 1,
+        "re_witnessable": false,
+        "reversible": false,
+        "rule": "press_latch",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "latch_already_set",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_toggle_would_shut_door",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_door",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "door_mirrors_net",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 2,
+    "reachable_states": 26,
+    "reversibility_score": 0.8333,
+    "rules": {
+      "blocked_by_door": {
+        "firing_states": 3,
+        "firing_transitions": 3,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 20,
+        "firing_transitions": 32,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "latch_already_set": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "press_latch": {
+        "firing_states": 1,
+        "firing_transitions": 1,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "walk": {
+        "firing_states": 26,
+        "firing_transitions": 62,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_door": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 5,
+    "rules_single_witness": [
+      "press_latch"
+    ],
+    "rules_total": 6
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [
+      "door_mirrors_net"
+    ],
+    "declared": [
+      "blocked_by_door",
+      "blocked_by_wall",
+      "blocked_toggle_would_shut_door",
+      "door_mirrors_net",
+      "latch_already_set",
+      "press_latch",
+      "walk",
+      "walk_through_door"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_toggle_would_shut_door"
+    ],
+    "fired": [
+      "blocked_by_door",
+      "blocked_by_wall",
+      "latch_already_set",
+      "press_latch",
+      "walk",
+      "walk_through_door"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "press_latch",
+      "reversible": false,
+      "then": "that switch's bit becomes 1, permanently, and the agent stays where it is",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is 0"
+    },
+    {
+      "clause": true,
+      "name": "latch_already_set",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a switch in latch mode whose bit is already 1"
+    },
+    {
+      "clause": true,
+      "name": "blocked_toggle_would_shut_door",
+      "reversible": true,
+      "then": "nothing changes \u2014 the switch visibly refuses to flip",
+      "when": "act=D and the target cell holds a switch whose flip would leave the door the agent is standing on impassable",
+      "why": "without it the agent ends up inside a solid cell, the door's own `door_presence_tracks_net` invariant fails, and the agent (painted last) erases the closed door's colour, so two states render alike"
+    },
+    {
+      "name": "walk_through_door",
+      "reversible": true,
+      "then": "the agent enters the door's cell",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit matches its polarity"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_door",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a door whose net's aggregate bit does not match its polarity"
+    },
+    {
+      "cascade": true,
+      "name": "door_mirrors_net",
+      "reversible": true,
+      "then": "N is on iff any switch on N shows 1 (an OR network); the door is passable and undrawn iff N's aggregate bit matches P, and impassable and drawn otherwise",
+      "when": "at every instant, for a door on net N with polarity P"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 16,
+    "goal": [
+      4,
+      5
+    ],
+    "optimal_length": 9,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "LEFT",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN"
+    ],
+    "reachable_states": 26,
+    "solvable": true,
+    "world_id": "t1-switch-latch"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      2
+    ],
+    "colors": {
+      "door": 4,
+      "switch": 2,
+      "switch_on": 3
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      },
+      {
+        "cell": [
+          4,
+          1
+        ],
+        "kind": "switch",
+        "props": {
+          "mode": "latch",
+          "net": "a"
+        }
+      },
+      {
+        "cell": [
+          4,
+          2
+        ],
+        "kind": "door",
+        "props": {
+          "net": "a",
+          "polarity": "open_when_on"
+        }
+      }
+    ],
+    "families": [
+      "switch_door"
+    ],
+    "flags": {},
+    "goal": [
+      4,
+      5
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#######",
+      "#...#.#",
+      "#...#.#",
+      "#.....#",
+      "#...#.#",
+      "#######"
+    ],
+    "notes": "Byte-identical geometry to `t1-switch-toggle`; only `mode` differs. This is A0's Button against A0\u2032's Switch, isolated.",
+    "seed": 105,
+    "tier": 1,
+    "variant_delta": "the switch is a latch: it sets once and never clears",
+    "variant_of": "t1-switch-toggle",
+    "world_id": "t1-switch-latch"
+  },
+  "world_id": "t1-switch-latch"
+}

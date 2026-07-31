@@ -1,0 +1,87 @@
+{
+  "prompt_id": "R3-release-classifier-defaults",
+  "branch": "agent/r3-release-classifier-defaults",
+  "base_commit": "7852ef305bc7c12254a9f15e9362db79b9813529",
+  "utc": "2026-07-29T16:12:45Z",
+  "what": "Classification distribution of every tracked file before and after the two enumerate.py fixes in R3-release-classifier-defaults, plus the counterfactual that measures defect 1 (a latent default that does not fire on the current cut file).",
+  "tracked_files_enumerated": 5980,
+  "counts": {
+    "before": {
+      "A": 5671,
+      "B": 61,
+      "C": 247,
+      "D": 1,
+      "?": 0
+    },
+    "after": {
+      "A": 5671,
+      "B": 61,
+      "C": 244,
+      "D": 1,
+      "?": 3
+    },
+    "defect1_counterfactual": {
+      "A": 5955,
+      "B": 24,
+      "C": 0,
+      "D": 1,
+      "?": 0
+    }
+  },
+  "moves": {
+    "defect-1 (counterfactual, id list empty)": {
+      "B->A": 37,
+      "C->A": 247,
+      "bytes_into_A": 92599886
+    },
+    "defect-3 (measured, this tree)": {
+      "C->?": 3
+    }
+  },
+  "exit_codes": {
+    "enumerate.main --dry-run --mode verify: before": 0,
+    "enumerate.main --dry-run --mode verify: after": 1,
+    "checklist over before rows": 0,
+    "checklist over after rows": 1
+  },
+  "pytest": {
+    "release/tests before": 46,
+    "release/tests after": 57,
+    "note": "a second agent added 14 tests to test_unreadable_is_not_clean.py in this same worktree while this work was in flight; 46 is the correct pre-change baseline, measured with the new test file moved aside. 11 of the 57 are new here."
+  },
+  "code_under_measurement": {
+    "release/check_redlines.py": "dd8a60d88920c4d9a6f35ce6c7c8e7b98e8870e9a8f65aa57bb176bc2bf8b277",
+    "release/enumerate.py (fixed)": "2c86c63809ebf025ff68a8dfe71a7051ffa68d9b33686346279925446ff667d3",
+    "release/enumerate.py (base 7852ef3)": "e7a082128bdb4ebd8de7f98feb5cea2488440933fd2095bcdf6d7d53412fd346"
+  },
+  "not_done": [
+    "release/MANIFEST.jsonl was NOT regenerated. It is already stale by ~4,030 rows against the current tree (1,950 rows on disk vs 5,980 tracked files), so regenerating it is a separate change, and it cascades: BUNDLE.jsonl and FRAME_HASHES.jsonl go stale, and a needs_human row with no entry in bundle.RECIPES fails test_every_withheld_file_has_a_hash_and_a_recipe. checklist.py therefore still exits 0 against the manifest on disk; it exits 1 against the rows the fixed enumerator produces, which is shown above.",
+    "Defect 2 of the board item was not in this work order and was not looked at."
+  ],
+  "files": [
+    {
+      "path": "snapshot.py",
+      "sha256": "d1d4fea294378dee0571b7bdbe52bab332eb4ff8c28da8708c2c6337cb79ad81"
+    },
+    {
+      "path": "before.jsonl",
+      "sha256": "ad3cc457339568c984acfa3537f62d8187d6de0d2ebd721e15a238f51d9cb761"
+    },
+    {
+      "path": "after.jsonl",
+      "sha256": "b960c7f632f3bd14c709fc71f0cef30f2ad4969538eb219e78d10d6ad23ffd5f"
+    },
+    {
+      "path": "defect1_counterfactual.jsonl",
+      "sha256": "50ecfff34f6187cf1520c5b9a8ee02b1252ca0b0d7ee0fadddf795f063cd1045"
+    },
+    {
+      "path": "MOVED.tsv",
+      "sha256": "738eae122c9aa191b1bcaea6481d6e038c430a1e04f6a705d8dbb331ff07afa2"
+    },
+    {
+      "path": "DISTRIBUTION.md",
+      "sha256": "e906fc1f05dc2c70a1cecd04cfa50245f56c928c4d5f8fc15648dfaebb21f47c"
+    }
+  ]
+}

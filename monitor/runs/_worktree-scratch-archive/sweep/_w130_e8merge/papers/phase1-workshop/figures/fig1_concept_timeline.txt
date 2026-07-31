@@ -1,0 +1,69 @@
+FIGURE 1 - concept-birth timeline, A0
+source: cold-start-a0/THEORIZE_LOG.md
+------------------------------------------------------------------------------
+
+ADJUDICATIONS (engines propose, the LLM decides; one line per decision)
+
+  O-01  object        accept                 `obj0`, colour 7 → **accept**, named `Button`
+  O-02  object        accept                 `obj1`, colour 5 → **accept**, named `Door`
+  O-03  object        accept                 `obj2`, colour 6 → **accept**, named `Cart`
+  O-04  object        admitted anyway        The compression account does not justify Button or Door — **admitted a
+  R-01  rule          accept                 `obj2_step_{UP,DOWN,LEFT,RIGHT}` → **accept** as `push_{up,down,left,r
+  R-02  rule          accept                 `obj2_jump_DOWN` → **accept** as `teleport_down`
+  R-03  rule          accept                 `obj0_recolor8_LEFT` → **accept** as `press_left`
+  R-04  rule          accept                 `obj1_vanish_LEFT` → **accept** as `door_opens_left`
+  R-05  rule          reject, probe-pending  Direction generality of `press_left` / `door_opens_left` → **reject, p
+  R-06  rule          entailed               `obj0_still_LEFT`, `obj1_still_LEFT` → **entailed**
+  R-07  rule          entailed               `obj{0,1,2}_still_*`, all directions, and the lifted `obj{0,1,2}_still
+  R-08  rule          not represented, logged Blocked-by-what → **not represented, logged**
+  L-01  law           accept                 `(#6) mod 2 = 1` over 37 of the 38 arena cells → **accept** as `cart_u
+  L-02  law           accept                 `[cell(3,2) is 8] + [cell(4,5) is 5] mod 2 = 1` → **accept** as `door_
+  L-03  law           not read               The 113 `cell_local` laws → **not read**
+  P-01  probe         see body               `obj2_jump_DOWN` — separable, **hypothetical tier only**
+  P-02  probe         see body               `obj2_step_{UP,DOWN,LEFT,RIGHT}`, `obj2_still_{UP,LEFT,RIGHT}` — **no 
+  P-03  probe         see body               `obj2_still_DOWN` — separable, hypothetical tier, 6 hypotheses → 2 cla
+
+REVISIONS OF THE MANUAL
+
+  rev 1  [M3]  trigger: one pass over all 28 candidates plus the board map
+          change: the whole manual as it now stands: 3 objects, 7 rules, 2 invariants, 1 pending theorem
+  rev 2  [M5]  trigger: the plan returned UNSAT on the no-Button variant, and constraint 6 forbids stopping at a bare UNSAT
+          change: `theory_no_button.dsl` — the base manual with every Button/Door-dependent clause deleted, plus `right_room_locked` and `unsolvable_no_button`
+
+  revisions driven by certify: 0
+
+THE ITERATIONS THAT DID HAPPEN - in the compiler, not the manual
+
+  1. `gen_python_a0`
+     rules re-read their guards against the partially-updated state, so `press_left` recoloured the Button and `door_opens_left` then found colour 8 and silently did not fire
+     surfaced by: the Door never opened in the generated `step`; caught by inspection, then pinned by `test_simultaneous_rule_semantics`
+  2. `gen_pddl_a0`
+     the Door's cell got no PDDL subtype, so `press`'s `?d - doorcell` parameter had an empty domain and grounded to nothing
+     surfaced by: `fd_adapter` reported UNSAT on an instance that is plainly solvable
+  3. `segment_operators`
+     `engine-rig` grew a native `split_by_color` switch mid-sprint and the monkeypatched operator stopped matching its signature
+     surfaced by: `TypeError` on the variant run
+
+WHAT THE WORLD SAID THAT THE GRAMMAR COULD NOT (expressivity ledger)
+
+  E-01   wanted: negation in a guard (`!clear(strip(D))`)
+         cost  : none in the end
+  E-02   wanted: direction-lifted rules (`act=push(Cart, ?dir)`)
+         cost  : manual is 3 clauses longer than the engine's own account; the lifted 212/212 evidence is split across four rules that each look weaker than it is
+  E-03   wanted: a frame axiom / default clause
+         cost  : **the most important semantic fact about `step` is not in the DSL at all**
+  E-04   wanted: declaring a board landmark (`portal_exit`, the goal cell)
+         cost  : the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data
+  E-05   wanted: a weight function over cells for a pagoda invariant
+         cost  : same as E-04
+  E-06   wanted: a proof method for goals no linear pagoda covers
+         cost  : see below
+  E-07   wanted: saying that two live instances of one type never share a cell
+         cost  : see below
+  E-08   wanted: a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate
+         cost  : the rung below it is a quantifier and it is deliberately not taken
+  E-09   wanted: putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar
+         cost  : 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression
+
+------------------------------------------------------------------------------
+The A0 manual was revised zero times by certify: both certify layers went green against revision 1. The iterations that did happen were in the compiler, not in the manual.

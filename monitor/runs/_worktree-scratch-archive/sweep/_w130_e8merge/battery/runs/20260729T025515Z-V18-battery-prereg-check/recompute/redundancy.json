@@ -1,0 +1,5642 @@
+{
+  "by_family": {
+    "economy": [
+      "E1",
+      "E2",
+      "E3",
+      "E4",
+      "E5",
+      "E6",
+      "E7"
+    ],
+    "epistemic": [
+      "K1",
+      "K10",
+      "K11",
+      "K12",
+      "K13",
+      "K14",
+      "K2",
+      "K3",
+      "K4",
+      "K5",
+      "K6",
+      "K7",
+      "K8",
+      "K9"
+    ],
+    "exploration": [
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6"
+    ],
+    "mechanism": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6"
+    ],
+    "planning": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5"
+    ]
+  },
+  "clusters": [
+    {
+      "coverage": {
+        "E1": 38
+      },
+      "cross_family": false,
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E1"
+      ],
+      "representative": "E1",
+      "representatives_by_family": {
+        "economy": "E1"
+      }
+    },
+    {
+      "coverage": {
+        "E2": 28
+      },
+      "cross_family": false,
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E2"
+      ],
+      "representative": "E2",
+      "representatives_by_family": {
+        "economy": "E2"
+      }
+    },
+    {
+      "coverage": {
+        "E3": 28
+      },
+      "cross_family": false,
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E3"
+      ],
+      "representative": "E3",
+      "representatives_by_family": {
+        "economy": "E3"
+      }
+    },
+    {
+      "coverage": {
+        "E4": 30,
+        "E7": 30
+      },
+      "cross_family": false,
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E4",
+        "E7"
+      ],
+      "representative": "E4",
+      "representatives_by_family": {
+        "economy": "E4"
+      }
+    },
+    {
+      "coverage": {
+        "E5": 38
+      },
+      "cross_family": false,
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E5"
+      ],
+      "representative": "E5",
+      "representatives_by_family": {
+        "economy": "E5"
+      }
+    },
+    {
+      "coverage": {
+        "E6": 36,
+        "P5": 47
+      },
+      "cross_family": true,
+      "families": [
+        "economy",
+        "planning"
+      ],
+      "members": [
+        "E6",
+        "P5"
+      ],
+      "representative": "P5",
+      "representatives_by_family": {
+        "economy": "E6",
+        "planning": "P5"
+      },
+      "warning": "this cluster spans 2 families (economy, planning). A correlation across a family boundary is evidence about the sample, not about the metrics -- these families are answering different questions and Theoria.md organises the battery by family for that reason. No metric here is absorbed across the boundary: each family keeps its own representative."
+    },
+    {
+      "coverage": {
+        "K1": 6
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K1"
+      ],
+      "representative": "K1",
+      "representatives_by_family": {
+        "epistemic": "K1"
+      }
+    },
+    {
+      "coverage": {
+        "K10": 6,
+        "K8": 5
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K10",
+        "K8"
+      ],
+      "representative": "K10",
+      "representatives_by_family": {
+        "epistemic": "K10"
+      }
+    },
+    {
+      "coverage": {
+        "K11": 6
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K11"
+      ],
+      "representative": "K11",
+      "representatives_by_family": {
+        "epistemic": "K11"
+      }
+    },
+    {
+      "coverage": {
+        "K12": 2
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K12"
+      ],
+      "representative": "K12",
+      "representatives_by_family": {
+        "epistemic": "K12"
+      }
+    },
+    {
+      "coverage": {
+        "K13": 2
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K13"
+      ],
+      "representative": "K13",
+      "representatives_by_family": {
+        "epistemic": "K13"
+      }
+    },
+    {
+      "coverage": {
+        "K14": 5,
+        "K5": 6,
+        "K7": 5
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K14",
+        "K5",
+        "K7"
+      ],
+      "representative": "K5",
+      "representatives_by_family": {
+        "epistemic": "K5"
+      }
+    },
+    {
+      "coverage": {
+        "K2": 2
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K2"
+      ],
+      "representative": "K2",
+      "representatives_by_family": {
+        "epistemic": "K2"
+      }
+    },
+    {
+      "coverage": {
+        "K3": 6
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K3"
+      ],
+      "representative": "K3",
+      "representatives_by_family": {
+        "epistemic": "K3"
+      }
+    },
+    {
+      "coverage": {
+        "K4": 6
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K4"
+      ],
+      "representative": "K4",
+      "representatives_by_family": {
+        "epistemic": "K4"
+      }
+    },
+    {
+      "coverage": {
+        "K6": 5,
+        "X1": 38
+      },
+      "cross_family": true,
+      "families": [
+        "epistemic",
+        "exploration"
+      ],
+      "members": [
+        "K6",
+        "X1"
+      ],
+      "representative": "X1",
+      "representatives_by_family": {
+        "epistemic": "K6",
+        "exploration": "X1"
+      },
+      "warning": "this cluster spans 2 families (epistemic, exploration). A correlation across a family boundary is evidence about the sample, not about the metrics -- these families are answering different questions and Theoria.md organises the battery by family for that reason. No metric here is absorbed across the boundary: each family keeps its own representative."
+    },
+    {
+      "coverage": {
+        "K9": 2
+      },
+      "cross_family": false,
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K9"
+      ],
+      "representative": "K9",
+      "representatives_by_family": {
+        "epistemic": "K9"
+      }
+    },
+    {
+      "coverage": {
+        "M1": 6
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M1"
+      ],
+      "representative": "M1",
+      "representatives_by_family": {
+        "mechanism": "M1"
+      }
+    },
+    {
+      "coverage": {
+        "M2": 6
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M2"
+      ],
+      "representative": "M2",
+      "representatives_by_family": {
+        "mechanism": "M2"
+      }
+    },
+    {
+      "coverage": {
+        "M3": 0
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M3"
+      ],
+      "representative": "M3",
+      "representatives_by_family": {
+        "mechanism": "M3"
+      }
+    },
+    {
+      "coverage": {
+        "M4": 2
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M4"
+      ],
+      "representative": "M4",
+      "representatives_by_family": {
+        "mechanism": "M4"
+      }
+    },
+    {
+      "coverage": {
+        "M5": 2
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M5"
+      ],
+      "representative": "M5",
+      "representatives_by_family": {
+        "mechanism": "M5"
+      }
+    },
+    {
+      "coverage": {
+        "M6": 2
+      },
+      "cross_family": false,
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M6"
+      ],
+      "representative": "M6",
+      "representatives_by_family": {
+        "mechanism": "M6"
+      }
+    },
+    {
+      "coverage": {
+        "P1": 39
+      },
+      "cross_family": false,
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P1"
+      ],
+      "representative": "P1",
+      "representatives_by_family": {
+        "planning": "P1"
+      }
+    },
+    {
+      "coverage": {
+        "P2": 30
+      },
+      "cross_family": false,
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P2"
+      ],
+      "representative": "P2",
+      "representatives_by_family": {
+        "planning": "P2"
+      }
+    },
+    {
+      "coverage": {
+        "P3": 36
+      },
+      "cross_family": false,
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P3"
+      ],
+      "representative": "P3",
+      "representatives_by_family": {
+        "planning": "P3"
+      }
+    },
+    {
+      "coverage": {
+        "P4": 1
+      },
+      "cross_family": false,
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P4"
+      ],
+      "representative": "P4",
+      "representatives_by_family": {
+        "planning": "P4"
+      }
+    },
+    {
+      "coverage": {
+        "X2": 38
+      },
+      "cross_family": false,
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X2"
+      ],
+      "representative": "X2",
+      "representatives_by_family": {
+        "exploration": "X2"
+      }
+    },
+    {
+      "coverage": {
+        "X3": 32
+      },
+      "cross_family": false,
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X3"
+      ],
+      "representative": "X3",
+      "representatives_by_family": {
+        "exploration": "X3"
+      }
+    },
+    {
+      "coverage": {
+        "X4": 38
+      },
+      "cross_family": false,
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X4"
+      ],
+      "representative": "X4",
+      "representatives_by_family": {
+        "exploration": "X4"
+      }
+    },
+    {
+      "coverage": {
+        "X5": 47
+      },
+      "cross_family": false,
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X5"
+      ],
+      "representative": "X5",
+      "representatives_by_family": {
+        "exploration": "X5"
+      }
+    },
+    {
+      "coverage": {
+        "X6": 25
+      },
+      "cross_family": false,
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X6"
+      ],
+      "representative": "X6",
+      "representatives_by_family": {
+        "exploration": "X6"
+      }
+    }
+  ],
+  "coverage_note": "257 of 703 metric pairs share enough runs to correlate at all. A cluster count near the metric count reflects thin data, not twenty independent findings.",
+  "cross_family_clusters": [
+    [
+      "E6",
+      "P5"
+    ],
+    [
+      "K6",
+      "X1"
+    ]
+  ],
+  "eliminated": [
+    {
+      "coverage": 30,
+      "family": "economy",
+      "metric": "E7",
+      "reason": "clusters with E4 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); E4 carries 30 usable values against this metric's 30, so it represents the group for the economy family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 30,
+      "represented_by": "E4",
+      "rho_with_representative": 0.979864285,
+      "shared_runs": 30
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K14",
+      "reason": "clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K5",
+      "rho_with_representative": -1.0,
+      "shared_runs": 5
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K7",
+      "reason": "clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K5",
+      "rho_with_representative": 1.0,
+      "shared_runs": 5
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K8",
+      "reason": "clusters with K10 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K10 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K10",
+      "rho_with_representative": -0.968245837,
+      "shared_runs": 5
+    }
+  ],
+  "matrix": [
+    {
+      "a": "E1",
+      "b": "E2",
+      "reason": null,
+      "rho": 0.335522715,
+      "shared_runs": 28
+    },
+    {
+      "a": "E1",
+      "b": "E3",
+      "reason": null,
+      "rho": -0.238903884,
+      "shared_runs": 28
+    },
+    {
+      "a": "E1",
+      "b": "E4",
+      "reason": null,
+      "rho": 0.245828699,
+      "shared_runs": 30
+    },
+    {
+      "a": "E1",
+      "b": "E5",
+      "reason": null,
+      "rho": 0.5367108,
+      "shared_runs": 38
+    },
+    {
+      "a": "E1",
+      "b": "E6",
+      "reason": null,
+      "rho": -0.397677406,
+      "shared_runs": 36
+    },
+    {
+      "a": "E1",
+      "b": "E7",
+      "reason": null,
+      "rho": 0.230726445,
+      "shared_runs": 30
+    },
+    {
+      "a": "E1",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "P1",
+      "reason": null,
+      "rho": -0.195444485,
+      "shared_runs": 38
+    },
+    {
+      "a": "E1",
+      "b": "P2",
+      "reason": null,
+      "rho": 0.110765743,
+      "shared_runs": 30
+    },
+    {
+      "a": "E1",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.011161037,
+      "shared_runs": 30
+    },
+    {
+      "a": "E1",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E1",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.051556593,
+      "shared_runs": 38
+    },
+    {
+      "a": "E1",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.210326015,
+      "shared_runs": 32
+    },
+    {
+      "a": "E1",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.242868926,
+      "shared_runs": 32
+    },
+    {
+      "a": "E1",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.110785243,
+      "shared_runs": 26
+    },
+    {
+      "a": "E1",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.052142161,
+      "shared_runs": 32
+    },
+    {
+      "a": "E1",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.518653528,
+      "shared_runs": 38
+    },
+    {
+      "a": "E1",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.295085116,
+      "shared_runs": 25
+    },
+    {
+      "a": "E2",
+      "b": "E3",
+      "reason": null,
+      "rho": -0.091371278,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "E4",
+      "reason": null,
+      "rho": -0.102353585,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "E5",
+      "reason": null,
+      "rho": 0.390804598,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "E6",
+      "reason": null,
+      "rho": -0.069032749,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "E7",
+      "reason": null,
+      "rho": -0.112221159,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "P1",
+      "reason": null,
+      "rho": 0.128297652,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "P2",
+      "reason": null,
+      "rho": -0.304815872,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.472642965,
+      "shared_runs": 26
+    },
+    {
+      "a": "E2",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E2",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.122299766,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.191490726,
+      "shared_runs": 26
+    },
+    {
+      "a": "E2",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.39804215,
+      "shared_runs": 26
+    },
+    {
+      "a": "E2",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.543854829,
+      "shared_runs": 26
+    },
+    {
+      "a": "E2",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.459197095,
+      "shared_runs": 26
+    },
+    {
+      "a": "E2",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.290068043,
+      "shared_runs": 28
+    },
+    {
+      "a": "E2",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.345432243,
+      "shared_runs": 22
+    },
+    {
+      "a": "E3",
+      "b": "E4",
+      "reason": null,
+      "rho": 0.091371278,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "E5",
+      "reason": null,
+      "rho": 0.004946853,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "E6",
+      "reason": null,
+      "rho": 0.151774007,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "E7",
+      "reason": null,
+      "rho": 0.079160475,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "P1",
+      "reason": null,
+      "rho": -0.069960989,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "P2",
+      "reason": null,
+      "rho": -0.050788245,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.006364021,
+      "shared_runs": 26
+    },
+    {
+      "a": "E3",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E3",
+      "b": "P5",
+      "reason": null,
+      "rho": 0.111148353,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.2250418,
+      "shared_runs": 26
+    },
+    {
+      "a": "E3",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.136053315,
+      "shared_runs": 26
+    },
+    {
+      "a": "E3",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.145207276,
+      "shared_runs": 26
+    },
+    {
+      "a": "E3",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.164478624,
+      "shared_runs": 26
+    },
+    {
+      "a": "E3",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.044941815,
+      "shared_runs": 28
+    },
+    {
+      "a": "E3",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.232628686,
+      "shared_runs": 22
+    },
+    {
+      "a": "E4",
+      "b": "E5",
+      "reason": null,
+      "rho": -0.213793103,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "E6",
+      "reason": null,
+      "rho": -0.442264017,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "E7",
+      "reason": null,
+      "rho": 0.979864285,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "P1",
+      "reason": null,
+      "rho": 0.421113414,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "P2",
+      "reason": null,
+      "rho": 0.347544334,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.126777856,
+      "shared_runs": 28
+    },
+    {
+      "a": "E4",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E4",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.443928752,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.21386517,
+      "shared_runs": 28
+    },
+    {
+      "a": "E4",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.178785219,
+      "shared_runs": 28
+    },
+    {
+      "a": "E4",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.062617746,
+      "shared_runs": 26
+    },
+    {
+      "a": "E4",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.013793545,
+      "shared_runs": 28
+    },
+    {
+      "a": "E4",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.322358612,
+      "shared_runs": 30
+    },
+    {
+      "a": "E4",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.492269956,
+      "shared_runs": 23
+    },
+    {
+      "a": "E5",
+      "b": "E6",
+      "reason": null,
+      "rho": 0.218606293,
+      "shared_runs": 36
+    },
+    {
+      "a": "E5",
+      "b": "E7",
+      "reason": null,
+      "rho": -0.230503951,
+      "shared_runs": 30
+    },
+    {
+      "a": "E5",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "P1",
+      "reason": null,
+      "rho": -0.621798943,
+      "shared_runs": 38
+    },
+    {
+      "a": "E5",
+      "b": "P2",
+      "reason": null,
+      "rho": -0.206284379,
+      "shared_runs": 30
+    },
+    {
+      "a": "E5",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.045614672,
+      "shared_runs": 30
+    },
+    {
+      "a": "E5",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E5",
+      "b": "P5",
+      "reason": null,
+      "rho": 0.379190429,
+      "shared_runs": 38
+    },
+    {
+      "a": "E5",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.193367212,
+      "shared_runs": 32
+    },
+    {
+      "a": "E5",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.148531409,
+      "shared_runs": 32
+    },
+    {
+      "a": "E5",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.062617746,
+      "shared_runs": 26
+    },
+    {
+      "a": "E5",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.106318235,
+      "shared_runs": 32
+    },
+    {
+      "a": "E5",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.094695163,
+      "shared_runs": 38
+    },
+    {
+      "a": "E5",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.548329805,
+      "shared_runs": 25
+    },
+    {
+      "a": "E6",
+      "b": "E7",
+      "reason": null,
+      "rho": -0.442536611,
+      "shared_runs": 30
+    },
+    {
+      "a": "E6",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "P1",
+      "reason": null,
+      "rho": -0.696542606,
+      "shared_runs": 36
+    },
+    {
+      "a": "E6",
+      "b": "P2",
+      "reason": null,
+      "rho": -0.382263043,
+      "shared_runs": 30
+    },
+    {
+      "a": "E6",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.118660248,
+      "shared_runs": 30
+    },
+    {
+      "a": "E6",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E6",
+      "b": "P5",
+      "reason": null,
+      "rho": 0.919448723,
+      "shared_runs": 36
+    },
+    {
+      "a": "E6",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.112099332,
+      "shared_runs": 32
+    },
+    {
+      "a": "E6",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.05492252,
+      "shared_runs": 32
+    },
+    {
+      "a": "E6",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.15815024,
+      "shared_runs": 26
+    },
+    {
+      "a": "E6",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.000929288,
+      "shared_runs": 32
+    },
+    {
+      "a": "E6",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.633786736,
+      "shared_runs": 36
+    },
+    {
+      "a": "E6",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.414318843,
+      "shared_runs": 25
+    },
+    {
+      "a": "E7",
+      "b": "K1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K10",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K11",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "P1",
+      "reason": null,
+      "rho": 0.407768841,
+      "shared_runs": 30
+    },
+    {
+      "a": "E7",
+      "b": "P2",
+      "reason": null,
+      "rho": 0.359692343,
+      "shared_runs": 30
+    },
+    {
+      "a": "E7",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.170017635,
+      "shared_runs": 28
+    },
+    {
+      "a": "E7",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "E7",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.432571145,
+      "shared_runs": 30
+    },
+    {
+      "a": "E7",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.221826775,
+      "shared_runs": 28
+    },
+    {
+      "a": "E7",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.198260037,
+      "shared_runs": 28
+    },
+    {
+      "a": "E7",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.09326979,
+      "shared_runs": 26
+    },
+    {
+      "a": "E7",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.04910502,
+      "shared_runs": 28
+    },
+    {
+      "a": "E7",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.3145476,
+      "shared_runs": 30
+    },
+    {
+      "a": "E7",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.523208887,
+      "shared_runs": 23
+    },
+    {
+      "a": "K1",
+      "b": "K10",
+      "reason": null,
+      "rho": -0.282842712,
+      "shared_runs": 6
+    },
+    {
+      "a": "K1",
+      "b": "K11",
+      "reason": null,
+      "rho": -0.695608344,
+      "shared_runs": 6
+    },
+    {
+      "a": "K1",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "K14",
+      "reason": null,
+      "rho": 0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "K3",
+      "reason": null,
+      "rho": 0.141421356,
+      "shared_runs": 6
+    },
+    {
+      "a": "K1",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "K1",
+      "b": "K5",
+      "reason": null,
+      "rho": -0.309838668,
+      "shared_runs": 6
+    },
+    {
+      "a": "K1",
+      "b": "K6",
+      "reason": null,
+      "rho": -0.353553391,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "K7",
+      "reason": null,
+      "rho": -0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "K8",
+      "reason": null,
+      "rho": 0.612372436,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "M2",
+      "reason": null,
+      "rho": -0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K1",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K1",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K1",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K1",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K1",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.353553391,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K1",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K10",
+      "b": "K11",
+      "reason": null,
+      "rho": -0.131165167,
+      "shared_runs": 6
+    },
+    {
+      "a": "K10",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "K14",
+      "reason": null,
+      "rho": 0.790569415,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "K3",
+      "reason": null,
+      "rho": -0.416666667,
+      "shared_runs": 6
+    },
+    {
+      "a": "K10",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "K10",
+      "b": "K5",
+      "reason": null,
+      "rho": -0.821583836,
+      "shared_runs": 6
+    },
+    {
+      "a": "K10",
+      "b": "K6",
+      "reason": null,
+      "rho": 0.894427191,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "K7",
+      "reason": null,
+      "rho": -0.790569415,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "K8",
+      "reason": null,
+      "rho": -0.968245837,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "M1",
+      "reason": null,
+      "rho": -0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.395284708,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K10",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K10",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K10",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K10",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K10",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.894427191,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K10",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K11",
+      "b": "K12",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "K14",
+      "reason": null,
+      "rho": -0.395284708,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "K3",
+      "reason": null,
+      "rho": -0.098373875,
+      "shared_runs": 6
+    },
+    {
+      "a": "K11",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "K11",
+      "b": "K5",
+      "reason": null,
+      "rho": 0.574736966,
+      "shared_runs": 6
+    },
+    {
+      "a": "K11",
+      "b": "K6",
+      "reason": null,
+      "rho": 0.111803399,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "K7",
+      "reason": null,
+      "rho": 0.395284708,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "K8",
+      "reason": null,
+      "rho": -0.322748612,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.447213595,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.395284708,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K11",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K11",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K11",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K11",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.447213595,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K11",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.335410197,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K11",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "K13",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K12",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K12",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K12",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "K14",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K13",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K13",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K13",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K14",
+      "b": "K2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K14",
+      "b": "K3",
+      "reason": null,
+      "rho": -0.790569415,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K5",
+      "reason": null,
+      "rho": -1.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K6",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K7",
+      "reason": null,
+      "rho": -1.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K8",
+      "reason": null,
+      "rho": -0.612372436,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K14",
+      "b": "M1",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K14",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K14",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K14",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K14",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K14",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K14",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K14",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K14",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K2",
+      "b": "K3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K2",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K2",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K2",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K2",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K2",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K2",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K2",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K2",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K3",
+      "b": "K4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "K3",
+      "b": "K5",
+      "reason": null,
+      "rho": 0.273861279,
+      "shared_runs": 6
+    },
+    {
+      "a": "K3",
+      "b": "K6",
+      "reason": null,
+      "rho": -0.670820393,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "K7",
+      "reason": null,
+      "rho": 0.790569415,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "K8",
+      "reason": null,
+      "rho": 0.645497224,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K3",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.894427191,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K3",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K3",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K3",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K3",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K3",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K3",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.894427191,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K3",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.447213595,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.223606798,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.447213595,
+      "shared_runs": 5
+    },
+    {
+      "a": "K3",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K4",
+      "b": "K5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "K4",
+      "b": "K6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "K7",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "K8",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K4",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K4",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K4",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K4",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K4",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K4",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K4",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K4",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K4",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K5",
+      "b": "K6",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "K7",
+      "reason": null,
+      "rho": 1.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "K8",
+      "reason": null,
+      "rho": 0.612372436,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K5",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "M2",
+      "reason": null,
+      "rho": -0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K5",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K5",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K5",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K5",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K5",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K5",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K5",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K5",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K6",
+      "b": "K7",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "K8",
+      "reason": null,
+      "rho": -0.866025404,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K6",
+      "b": "M1",
+      "reason": null,
+      "rho": -0.4,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K6",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K6",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K6",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K6",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K6",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K6",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.8,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K6",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.9,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.7,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.5,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.5,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K6",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K7",
+      "b": "K8",
+      "reason": null,
+      "rho": 0.612372436,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K7",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "M2",
+      "reason": null,
+      "rho": -0.25,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K7",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K7",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K7",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K7",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K7",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K7",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K7",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.707106781,
+      "shared_runs": 5
+    },
+    {
+      "a": "K7",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K8",
+      "b": "K9",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K8",
+      "b": "M1",
+      "reason": null,
+      "rho": 0.577350269,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "M2",
+      "reason": null,
+      "rho": -0.40824829,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K8",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K8",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K8",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "K8",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K8",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K8",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.577350269,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K8",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.866025404,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.577350269,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.577350269,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.577350269,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.0,
+      "shared_runs": 5
+    },
+    {
+      "a": "K8",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "M1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "M2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "K9",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "K9",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M1",
+      "b": "M2",
+      "reason": null,
+      "rho": 0.130930734,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M1",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M1",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M1",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M1",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M1",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M1",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.085714286,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M1",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.257142857,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.371428571,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.257142857,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.257142857,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.771428571,
+      "shared_runs": 6
+    },
+    {
+      "a": "M1",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M2",
+      "b": "M3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M2",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M2",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M2",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M2",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M2",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M2",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.130930734,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M2",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.392792202,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.392792202,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.130930734,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.130930734,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.130930734,
+      "shared_runs": 6
+    },
+    {
+      "a": "M2",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "M4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M3",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M4",
+      "b": "M5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "M4",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "M4",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M4",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M4",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M4",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M4",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M5",
+      "b": "M6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 2
+    },
+    {
+      "a": "M5",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M5",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M5",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M5",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M5",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M6",
+      "b": "P1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M6",
+      "b": "P2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M6",
+      "b": "P3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "M6",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "M6",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "P1",
+      "b": "P2",
+      "reason": null,
+      "rho": 0.2363949,
+      "shared_runs": 30
+    },
+    {
+      "a": "P1",
+      "b": "P3",
+      "reason": null,
+      "rho": -0.228300265,
+      "shared_runs": 30
+    },
+    {
+      "a": "P1",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "P1",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.797245466,
+      "shared_runs": 39
+    },
+    {
+      "a": "P1",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.073019987,
+      "shared_runs": 32
+    },
+    {
+      "a": "P1",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.271295246,
+      "shared_runs": 32
+    },
+    {
+      "a": "P1",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.256034284,
+      "shared_runs": 26
+    },
+    {
+      "a": "P1",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.178938807,
+      "shared_runs": 32
+    },
+    {
+      "a": "P1",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.35431331,
+      "shared_runs": 39
+    },
+    {
+      "a": "P1",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.49734554,
+      "shared_runs": 25
+    },
+    {
+      "a": "P2",
+      "b": "P3",
+      "reason": null,
+      "rho": 0.194592293,
+      "shared_runs": 28
+    },
+    {
+      "a": "P2",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "P2",
+      "b": "P5",
+      "reason": null,
+      "rho": -0.304069544,
+      "shared_runs": 30
+    },
+    {
+      "a": "P2",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.297900024,
+      "shared_runs": 28
+    },
+    {
+      "a": "P2",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.39810109,
+      "shared_runs": 28
+    },
+    {
+      "a": "P2",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.522530822,
+      "shared_runs": 26
+    },
+    {
+      "a": "P2",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.158297413,
+      "shared_runs": 28
+    },
+    {
+      "a": "P2",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.100881159,
+      "shared_runs": 30
+    },
+    {
+      "a": "P2",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.336389493,
+      "shared_runs": 23
+    },
+    {
+      "a": "P3",
+      "b": "P4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P3",
+      "b": "P5",
+      "reason": null,
+      "rho": 0.200186248,
+      "shared_runs": 36
+    },
+    {
+      "a": "P3",
+      "b": "X1",
+      "reason": null,
+      "rho": 0.716210291,
+      "shared_runs": 36
+    },
+    {
+      "a": "P3",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.670678498,
+      "shared_runs": 36
+    },
+    {
+      "a": "P3",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.802443606,
+      "shared_runs": 32
+    },
+    {
+      "a": "P3",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.817519516,
+      "shared_runs": 36
+    },
+    {
+      "a": "P3",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.350507716,
+      "shared_runs": 36
+    },
+    {
+      "a": "P3",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.159363799,
+      "shared_runs": 21
+    },
+    {
+      "a": "P4",
+      "b": "P5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X1",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X2",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X3",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X4",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X5",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 1
+    },
+    {
+      "a": "P4",
+      "b": "X6",
+      "reason": "fewer than 4 shared runs",
+      "rho": null,
+      "shared_runs": 0
+    },
+    {
+      "a": "P5",
+      "b": "X1",
+      "reason": null,
+      "rho": -0.042148877,
+      "shared_runs": 38
+    },
+    {
+      "a": "P5",
+      "b": "X2",
+      "reason": null,
+      "rho": 0.014349705,
+      "shared_runs": 38
+    },
+    {
+      "a": "P5",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.001300796,
+      "shared_runs": 32
+    },
+    {
+      "a": "P5",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.188594032,
+      "shared_runs": 38
+    },
+    {
+      "a": "P5",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.43776322,
+      "shared_runs": 47
+    },
+    {
+      "a": "P5",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.478143374,
+      "shared_runs": 25
+    },
+    {
+      "a": "X1",
+      "b": "X2",
+      "reason": null,
+      "rho": -0.789387623,
+      "shared_runs": 38
+    },
+    {
+      "a": "X1",
+      "b": "X3",
+      "reason": null,
+      "rho": 0.805946237,
+      "shared_runs": 32
+    },
+    {
+      "a": "X1",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.872628082,
+      "shared_runs": 38
+    },
+    {
+      "a": "X1",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.157044716,
+      "shared_runs": 38
+    },
+    {
+      "a": "X1",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.098045494,
+      "shared_runs": 22
+    },
+    {
+      "a": "X2",
+      "b": "X3",
+      "reason": null,
+      "rho": -0.886521936,
+      "shared_runs": 32
+    },
+    {
+      "a": "X2",
+      "b": "X4",
+      "reason": null,
+      "rho": -0.636010868,
+      "shared_runs": 38
+    },
+    {
+      "a": "X2",
+      "b": "X5",
+      "reason": null,
+      "rho": 0.054724129,
+      "shared_runs": 38
+    },
+    {
+      "a": "X2",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.289254501,
+      "shared_runs": 22
+    },
+    {
+      "a": "X3",
+      "b": "X4",
+      "reason": null,
+      "rho": 0.79476726,
+      "shared_runs": 32
+    },
+    {
+      "a": "X3",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.218560359,
+      "shared_runs": 32
+    },
+    {
+      "a": "X3",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.034095037,
+      "shared_runs": 20
+    },
+    {
+      "a": "X4",
+      "b": "X5",
+      "reason": null,
+      "rho": -0.413106613,
+      "shared_runs": 38
+    },
+    {
+      "a": "X4",
+      "b": "X6",
+      "reason": null,
+      "rho": -0.044739206,
+      "shared_runs": 22
+    },
+    {
+      "a": "X5",
+      "b": "X6",
+      "reason": null,
+      "rho": 0.315140896,
+      "shared_runs": 25
+    }
+  ],
+  "method": "Spearman rank correlation; single-linkage clustering at |rho| >= 0.9, transitive by construction so the result does not depend on the order metrics arrive in",
+  "min_shared_runs": 4,
+  "n_clusters": 32,
+  "n_eliminated": 4,
+  "n_metrics": 38,
+  "n_pairs": 703,
+  "n_pairs_measured": 257,
+  "n_pairs_unmeasurable": 446,
+  "representatives": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "K1",
+    "K10",
+    "K11",
+    "K12",
+    "K13",
+    "K2",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K9",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6"
+  ],
+  "strong_pairs": [
+    {
+      "a": "E4",
+      "b": "E7",
+      "rho": 0.979864285
+    },
+    {
+      "a": "E6",
+      "b": "P5",
+      "rho": 0.919448723
+    },
+    {
+      "a": "K10",
+      "b": "K8",
+      "rho": -0.968245837
+    },
+    {
+      "a": "K14",
+      "b": "K5",
+      "rho": -1.0
+    },
+    {
+      "a": "K14",
+      "b": "K7",
+      "rho": -1.0
+    },
+    {
+      "a": "K5",
+      "b": "K7",
+      "rho": 1.0
+    },
+    {
+      "a": "K6",
+      "b": "X1",
+      "rho": 0.9
+    }
+  ],
+  "threshold": 0.9
+}

@@ -1,0 +1,466 @@
+"""Reflex layer (upgrade #1): everything that needs no judgment, every 5 min.
+
+Registered as a Windows scheduled task; zero tokens. The monitor session
+keeps only judgment (prompts, adjudication, spec updates). Steps:
+
+    1. reap        — kill sessions whose branch reached origin
+    2. quota check — flip to hold on limit signatures
+    3. revive      — relaunch lost sessions (three-strikes rule)
+    4. ci merge    — deterministic merge-on-delivery (test-gated)
+    5. light refresh — regenerate the dashboard from the tree
+
+All state changes go through the same files the monitor uses (registry,
+loop_state, quota_state), so the monitor's next heartbeat sees everything.
+The reflex never commits to git and never authors or edits prompts.
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+import childio  # noqa: E402  (per-child decoding, see its docstring)
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+LOCK = os.path.join(HERE, "reflex.lock")
+RLOG = os.path.join(HERE, "reflex.log")
+LOOP = os.path.join(HERE, "loop_state.json")
+PAUSE = os.path.join(HERE, "FLEET_PAUSE")
+MAX_DEATHS = 3
+WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
+                    # now (memory admission, 45s stagger, orphan sweep, quota
+                    # gate), so worker supply no longer waits for a human.
+# 补员的内存门槛。8 这个总量数是机器崩过一次之后拍的，而那次崩溃的原因是
+# **并发数**（约二十个会话同时起），不是总量。`standing.py` 已改成
+# 「余量 + 每会话开销」，这里跟上——两处判据对同一件事给不同答案时，
+# reflex 整夜记 `worker-hold:low-memory(7.5GB)` 而补员一次也没触发过。
+HEADROOM_GB = 3.0        # 不动用的余量
+PER_SESSION_GB = 0.6     # 单个会话的保守估计（实测 0.42–0.52）
+MIN_FREE_GB = HEADROOM_GB + PER_SESSION_GB
+
+
+def rlog(msg):
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    with open(RLOG, "a", encoding="utf-8") as fh:
+        fh.write("%s %s\n" % (stamp, msg))
+
+
+def run(args, timeout=2400):
+    """Everything this file runs is Python -- dispatch, board, quota -- so UTF-8.
+
+    It was the host locale, cp936, and the children print Chinese. That is the
+    same mismatch that reported eight live workers as dead, sitting in the one
+    module whose job is deciding which workers are dead. `errors="replace"`
+    matters more than the codec: a reaper that raises while decoding its child
+    is a reaper that did not run, and nothing downstream would say so.
+
+    The single `schtasks` call in this file uses `run_console` instead.
+    """
+    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace", timeout=timeout)
+
+
+def run_console(args, timeout=2400):
+    """Windows console built-ins emit the console code page, not UTF-8."""
+    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
+                          encoding=childio._CONSOLE, errors="replace",
+                          timeout=timeout)
+
+
+def load_loop():
+    if os.path.exists(LOOP):
+        return json.load(open(LOOP, encoding="utf-8"))
+    return {}
+
+
+def save_loop(state):
+    tmp = LOOP + ".tmp"
+    json.dump(state, open(tmp, "w", encoding="utf-8"),
+              ensure_ascii=False, indent=2)
+    os.replace(tmp, LOOP)
+
+
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
+
+
+def scan_events(run_scan):
+    """What the dashboard-refresh step reports, given a way to run scan.py.
+
+    S30 put this guard in; 873d62ee deleted it along with five siblings, and it
+    is the one **no test was watching** -- which is exactly why it stayed dead
+    for 72 commits while the three grep-tested siblings at least went red. Its
+    absence has a measured cost: on 2026-07-30 scan.py hung, the 600s timeout
+    propagated out of `main()`, `finally` dropped the lock, and reflex.log went
+    silent from 08:32:21Z for 131 minutes while merge.log kept ticking. A dead
+    heartbeat is the loudest possible failure and it still said nothing, because
+    the thing that would have spoken was the line that had been deleted.
+
+    Extracted into a function for the same reason `merge_events` was (ADV-2/D12):
+    inline in `main()` it is unreachable from a test, and `main()` cannot be
+    driven in a test because that tick launches paid sessions. `run_scan` is a
+    zero-arg callable returning a CompletedProcess.
+    """
+    try:
+        scan_rc = run_scan().returncode
+    except subprocess.TimeoutExpired:
+        scan_rc = "timeout(600s)"
+    except Exception as exc:                    # noqa: BLE001 -- reported
+        scan_rc = "%s: %s" % (type(exc).__name__, exc)
+    if scan_rc == 0:
+        return []
+    # Deliberately does not change reflex's own exit code: the other four duties
+    # in this cycle may all have succeeded, and failing the scheduled task for a
+    # dashboard refresh would make *reflex* look dead. The signal lives in the
+    # heartbeat line instead, where it reads differently from `quiet` -- which
+    # was the whole point.
+    return ["SCAN FAILED (rc=%s) -- the board should have been rewritten as a "
+            "red failure page; if it was not, the failure exit is down too"
+            % scan_rc]
+
+
+def main():
+    if os.path.exists(LOCK):
+        if time.time() - os.path.getmtime(LOCK) < 1500:
+            return 0            # previous reflex still at work
+        os.remove(LOCK)
+    open(LOCK, "w").write(str(os.getpid()))
+    try:
+        events = []
+
+        # 0. launch queue — the monitor never spawns sessions itself anymore:
+        # anything spawned from its tool shell gets silently killed (proven
+        # by runner-level deaths with no EXIT stamp). The monitor appends ids
+        # to dispatch_queue.json; we launch them here, under Task Scheduler
+        # lineage, where processes actually survive.
+        qpath = os.path.join(HERE, "dispatch_queue.json")
+        if os.path.exists(qpath):
+            try:
+                queue = json.load(open(qpath, encoding="utf-8"))
+            except Exception:
+                queue = []
+            launched_q = 0
+            for pid_str in queue:
+                if launched_q:
+                    time.sleep(45)
+                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                         "--only", pid_str, "--force"])
+                if "launched" in r.stdout:
+                    events.append("queue-launch:%s" % pid_str)
+                    launched_q += 1
+                else:
+                    events.append("queue-skip:%s" % pid_str)
+            os.remove(qpath)
+
+        # 0c. sweep orphaned board claims — a worker killed by the quota or a
+        # crash leaves its claim hanging, so the board thinks the work is in
+        # progress and the territory stays locked against everyone else.
+        # `--include-standing` since S21. Standing sessions were exempt because
+        # nothing could tell a dead App session from a busy one; `board.py` now
+        # can, and requires all three of a stale heartbeat, an unanswered
+        # URGENT, and two full cycles of silence before it will free anything.
+        # Three researchers died to a session limit on 2026-07-29 and six items
+        # -- including the campaign mainline -- stayed locked for two hours
+        # because this ran without it.
+        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep",
+                  "--include-standing"])
+        events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
+                   if "freed from" in l]
+        # S28 sibling of the ci_merge blind spot: a sweep that crashed prints no
+        # "freed from" lines, which is the same observation as a sweep that
+        # found nothing to free -- and this one decides whether dead sessions'
+        # claims go back on the board.
+        if sw.returncode != 0:
+            events.append("sweep:EXIT-%d" % sw.returncode)
+        # A standing release is reported separately and by name. It is a much
+        # bigger event than reaping a one-shot worker -- it says a researcher
+        # is gone -- and folding the two into one `sweep:` line would bury the
+        # louder one under the routine one.
+        for line in sw.stdout.splitlines():
+            if "freed from" in line and "RES-" in line:
+                events.append("STANDING-DEAD:%s" % line.split()[0])
+                rlog("standing session released a claim: %s" % line.strip())
+
+        # 0d. dashboard server — the logon task could not be registered
+        # (needs admin), so reflex keeps the port alive itself. Without this
+        # the page dies at every reboot and the user has to notice.
+        try:
+            import socket
+            s = socket.socket()
+            s.settimeout(1)
+            dead = s.connect_ex(("127.0.0.1", 8787)) != 0
+            s.close()
+        except Exception:
+            dead = True
+        if dead:
+            # 两个毛病叠在一起，让页面死了很久而日志一直说「已重启」：
+            # 经 `cmd /c start` 起服务在本机根本不生效（实测端口始终关着），
+            # 而且**无论成没成都追加 `serve:restarted`**——重启成功与失败
+            # 写出同一行。这条自动机制因此隐形失效，而它存在的理由正是
+            # 「页面死了没人发现」。起完等三秒再探一次端口。
+            try:
+                subprocess.Popen([sys.executable, "-m", "http.server",
+                                  "8787", "--bind", "127.0.0.1"],
+                                 cwd=HERE,
+                                 stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL,
+                                 creationflags=0x00000008 | 0x01000000)
+            except Exception as exc:
+                events.append("serve:spawn-FAILED:%s" % type(exc).__name__)
+            else:
+                time.sleep(3)
+                probe = socket.socket()
+                probe.settimeout(2)
+                up = probe.connect_ex(("127.0.0.1", 8787)) == 0
+                probe.close()
+                events.append("serve:restarted" if up
+                              else "serve:restart-FAILED(port still shut)")
+
+        # 1. reap
+        reap = run([sys.executable, os.path.join(HERE, "dispatch.py"), "--reap"])
+        killed = [l for l in reap.stdout.splitlines() if "killed" in l]
+        events += ["reap:" + l.split()[0] for l in killed]
+        # S28 sibling: `.stdout` used to be taken off the call inline, so the
+        # return code was not merely ignored, it was unrecoverable -- a reaper
+        # that died read exactly like a reaper with nothing to reap.
+        if reap.returncode != 0:
+            events.append("reap:EXIT-%d" % reap.returncode)
+
+        # 2. quota
+        q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
+        # The hold had no exit: nothing ever called resume, so a session-limit
+        # at 09:35 kept the fleet frozen long after its 20:20 reset (OPS-M
+        # cycle 5). Every tick in hold now probes the window and lifts it.
+        if q.returncode == 2:
+            # `--if-due` and not a bare ping: this loop runs every five minutes
+            # and each ping is a real haiku call, so an unthrottled probe spent
+            # the quota it was waiting to get back, twelve times an hour, for
+            # the length of the outage. Exit 3 means "not due, nothing spent".
+            probe = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "ping", "--if-due"], timeout=180)
+            if probe.returncode == 3:
+                events.append("quota:probe-throttled")
+            elif probe.returncode == 0:
+                # `resume` reuses this ping's answer rather than buying it
+                # again; it is the same measurement seconds apart.
+                r = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "resume"], timeout=1800)
+                events.append("quota:RESUMED(auto)")
+                rlog("quota: window reopened on its own -> automatic resume, "
+                     "no human in the loop: %s"
+                     % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
+                q = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "check"])
+        # 退出码 2 是「窗口关着」，0 是「窗口开着」，**其它一律是「没问出来」**。
+        # 旧写法 `== 2` 把 1（未捕获的 traceback、截断的 quota_state.json）
+        # 塌成「窗口开着」，重新放开这一跳最贵的两条分支；而 stderr 被捕获后丢弃，
+        # 失败的检查与干净的检查在 reflex.log 里逐字节相同。
+        hold = q.returncode != 0
+        if q.returncode not in (0, 2):
+            first = ((q.stderr or "").strip().splitlines() or [""])[0]
+            events.append("quota:CHECK-FAILED(%d) %s"
+                          % (q.returncode, first[:120]))
+        if hold:
+            events.append("quota:HOLD")
+
+        # 0b. worker headcount — long-lived workers claim their own items from
+        # the board, so the monitor controls only the population, never the
+        # per-item dispatch. Target scales with what the board still holds.
+        # S28: `except Exception: avail, claimed = 0, 0` made a crashed board
+        # query indistinguishable from an empty board -- and `if not hold and
+        # avail:` then skipped the whole refill loop without a word. Measured:
+        # a raising `candidates()` yielded avail=0 in silence
+        # (EVIDENCE-3-standing-reflex.md).
+        try:
+            import board as board_mod
+            avail = len(board_mod.candidates())
+            claimed = len(board_mod.claimed_map())
+        except Exception as exc:                # noqa: BLE001 -- reported
+            # Refill needs a headcount target derived from board depth, and the
+            # depth is exactly what could not be read, so skipping stays the
+            # right action. The change is that it is now on the record: a
+            # sentinel nobody reads would be this same bug with a new number.
+            avail, claimed = 0, 0
+            events.append("BOARD-QUERY-FAILED:%s(refill-skipped)"
+                          % type(exc).__name__)
+        if os.path.exists(PAUSE):
+            # 暂停期间只停**招人**：sweep、配额、合并、仪表盘照跑，
+            # 它们不花额度，而停掉它们只会让盘面在暂停期间烂掉。
+            #
+            # 954eb44c 加了这道门，`6b953a60`（合并 S43 那一次）把它删了，
+            # 只留下 29 行那个 `PAUSE` 常量——与同一次合并对 `merge_events`
+            # 做的事一模一样：定义取自一边，使用点取自另一边。
+            # 区别在于那一处只丢了证据，这一处丢的是行为：
+            # `monitor/FLEET_PAUSE` 自己写着「reflex.py 不再补通用工人」，
+            # 而从那次合并起到本提交为止，那句话在 master 上是假的。
+            events.append("PAUSED:no-hiring")
+        elif not hold and avail:
+            reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
+            reg = (json.load(open(reg_path, encoding="utf-8"))
+                   if os.path.exists(reg_path) else {})
+            live_workers = 0
+            for wid, entry in reg.items():
+                if not wid.startswith("W-") or entry.get("reaped"):
+                    continue
+                st = run_console(["schtasks", "/Query", "/TN",
+                          "TheoriaAgent-%s" % wid, "/FO", "LIST"])
+                # 中文控制台印的是「正在运行」，英文的 "Running" 一次也不会命中，
+                # 于是 live_workers **恒为 0**，补员循环每一跳都按满员上限拉人。
+                # 这仓库已经为 GBK/UTF-8 付过五次账；两个词都认，别只认一个。
+                if st.returncode == 0 and ("Running" in st.stdout
+                                           or "正在运行" in st.stdout):
+                    live_workers += 1
+            # 读不到内存就当作**没有**内存，不是当作 99 GB。
+            # 旧写法初始值 99 + `except: pass`，任何一种读数失败都让门大开、
+            # 一次放进七个工人；而这道门唯一能发的事件（worker-hold:low-memory）
+            # 按构造在读数失败时不可能发出——今天读数失败与一台健康的 99GB 机器
+            # 产生逐字节相同的日志。`standing.py` 的同一处测量失败时返回 0.0，
+            # 两个方向相反的默认值，能一次拉七个的那个反而是 fail-open 的。
+            free_gb = 0.0
+            try:
+                out = run(["powershell", "-NoProfile", "-Command",
+                           "(Get-CimInstance Win32_OperatingSystem)."
+                           "FreePhysicalMemory"]).stdout.strip()
+                free_gb = int(out) / 1048576.0
+            except Exception as exc:
+                events.append("mem-unreadable:%s" % type(exc).__name__)
+            if free_gb < MIN_FREE_GB:
+                events.append("worker-hold:low-memory(%.1fGB)" % free_gb)
+                target = live_workers          # spawn nothing
+            else:
+                target = min(WORKER_MAX, max(1, avail))
+            for i in range(target - live_workers):
+                wid = "W-%d" % (int(time.time()) % 100000 + i)
+                if i:
+                    time.sleep(20)
+                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                         "--worker", wid])
+                events.append("worker-spawn:%s" % wid
+                              if "started" in r.stdout else
+                              "worker-fail:%s" % wid)
+
+        # 3. revive (skip in hold)
+        if not hold:
+            reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
+            reg = (json.load(open(reg_path, encoding="utf-8"))
+                   if os.path.exists(reg_path) else {})
+            state = load_loop()
+            deaths = state.get("death_counts", {})
+            # S28 sibling, and the worst of the three: `.stdout.lower()` used to
+            # be taken off the call inline, so a git failure produced an empty
+            # string rather than an error -- and an empty `remote` is not a
+            # neutral value here. Every `in remote` test below goes False, so
+            # every dead session reads as "never delivered", so the loop
+            # **revives sessions that had already finished**. The silent failure
+            # direction is the one that spends real API money.
+            _remote = run(["git", "branch", "-r", "--list", "origin/agent/*",
+                           "--format=%(refname:short)"])
+            if _remote.returncode != 0:
+                events.append("revive:GIT-EXIT-%d(loop-skipped)"
+                              % _remote.returncode)
+            else:
+                remote = _remote.stdout.lower()
+                revived = 0
+                for pid_str, entry in sorted(reg.items()):
+                    if pid_str.startswith(("M-", "A-", "B-", "R-")):
+                        continue        # ops run in the user's app now
+                    if entry.get("reaped") not in ("exited",
+                                                   "killed-permission-wall"):
+                        continue
+                    slug = (pid_str.lower().replace("-", "")
+                            if len(pid_str) <= 4 else pid_str.lower())
+                    if "agent/%s" % slug in remote:
+                        continue        # it delivered; nothing to revive
+                    n = deaths.get(pid_str, 0)
+                    if n >= MAX_DEATHS:
+                        events.append("three-strikes:%s" % pid_str)
+                        continue
+                    if revived:
+                        time.sleep(45)   # stagger is law
+                    r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                             "--only", pid_str])
+                    if "launched" in r.stdout:
+                        deaths[pid_str] = n + 1
+                        revived += 1
+                        events.append("revive:%s(#%d)" % (pid_str, n + 1))
+                if revived or deaths != state.get("death_counts", {}):
+                    state["death_counts"] = deaths
+                    save_loop(state)
+
+        # 4. ci merge — runs even under quota hold: it spends zero tokens
+        # (git + pytest only), and a worker's proposal caught it being
+        # stopped by a budget it cannot possibly consume.
+        if True:
+            r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
+                    timeout=3600)
+            events += merge_events(r)
+
+        # 4b. supply alarm — authoring items needs judgment, so reflex cannot
+        # refill the board itself; what it can do is make a dry board loud
+        # instead of silent. Idle agents look identical to busy ones.
+        # S28: this alarm was wrapped in `except Exception: pass`, which is the
+        # sharpest form of the bug -- a broken board is **quieter than an empty
+        # one**, because an empty one at least emits SUPPLY-LOW:0 and a broken
+        # one emitted nothing at all. Measured before the fix: a raising
+        # `candidates()` produced events=[] (EVIDENCE-3-standing-reflex.md).
+        try:
+            import board as board_mod
+            depth = len(board_mod.candidates())
+            if depth <= 2:
+                events.append("SUPPLY-LOW:%d" % depth)
+        except Exception as exc:                # noqa: BLE001 -- reported
+            events.append("SUPPLY-UNKNOWN:%s" % type(exc).__name__)
+
+        # 5. light dashboard refresh
+        #
+        # S30: the return code used to be thrown away -- not even bound. A scan
+        # that crashed therefore left the board frozen on the previous numbers
+        # while this line logged the cycle as `quiet`, which is the same
+        # sentence a healthy idle cycle writes. The two must not be the same
+        # sentence.
+        #
+        # A timeout raises rather than returning, and it used to take the whole
+        # reflex cycle down with it -- so it is caught in `scan_events` and
+        # turned into an event, not into silence and not into a dead heartbeat.
+        events += scan_events(
+            lambda: run([sys.executable, os.path.join(HERE, "scan.py")],
+                        timeout=600))
+
+        rlog(" | ".join(events) if events else "quiet")
+        return 0
+    finally:
+        try:
+            os.remove(LOCK)
+        except OSError:
+            pass
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

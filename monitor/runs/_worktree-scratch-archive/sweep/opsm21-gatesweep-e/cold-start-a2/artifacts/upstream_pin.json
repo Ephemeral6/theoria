@@ -1,0 +1,29 @@
+{
+  "missing": [],
+  "repo_head_when_pinned": "a197b39fb5414a2abf9aa2f06cdcdc9957033439",
+  "sha256": {
+    "_bootstrap.py": "5d6deffed5285118a7f62205db27b12ec3f59e0bd64ef8157dc8791a2457d9c4",
+    "certify/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "certify/lean_check.py": "35057e1a63bffaa89234d57bdfd47ed4b63b40afda2685b6b5b5cd38b0f7e7bf",
+    "certify/replay.py": "6c8bbd876975503932cdfe4cd44f802f70fa591c07450ef8030f0983b518e238",
+    "compile/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "compile/compile_a0.py": "49f6fb17a68fe0c694786a06fe9fc89bb1a7a98f94de02610b5c7e22a0e54a6a",
+    "compile/dialect.py": "bdfdb7aec771d0c69d0558a13d24af19d1d2798b44dd55a637c79d3e0c2c7d35",
+    "compile/gen_lean_a0.py": "56c19486a55b6b327b6641b60e039875e0b33ccd4ef9ee53912cbc875d5a552b",
+    "compile/gen_pddl_a0.py": "f1bb920f3850a8fbde3d9fffe4b3e939e4974e80f43a2d97afb0335673df5d34",
+    "compile/gen_python_a0.py": "0ca4d1bde6db6fbed0246445d409dabf9d24be00afa43f20044385d1ab6c9212",
+    "compile/problem.py": "79067daf91ac9867e74563c4a3b612634e2a5ef8c629feaa04cd45fc61e5a687",
+    "pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pipeline/atoms_a0.py": "d566afb9f29c6d27c3635a3dfd50595a311e4d25ab94e83140a19d4a8a38071a",
+    "pipeline/board.py": "0fc2ae316861ac81af6fd862af09fce179f6351a70be537300b3394927820ebe",
+    "pipeline/concept_account.py": "5c82f8854c1a745be1ebc6bcf202f5e2c4c513af8149b69945735c39d637fe36",
+    "pipeline/engines_stage.py": "7edcfc14a28aeea53cf707efee93c9bf4458d247df322cb6ac50d7067d594585",
+    "pipeline/multi_miner.py": "b5d7f6165c2a8e8e6271906b5b72a395478c2bf322d2c9ae6e43803ad57da88f",
+    "pipeline/segment_operators.py": "98f9e27c626ea469fd7064293d3510f0f0fa8906be2c250050876a260e5065f6",
+    "world/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "world/a0_world.py": "379cdf9e9085f8f0dad013dccc5ae507b5a390e6eb6c0452c5db5f66d05c2de7",
+    "world/explorer.py": "d5cf131ec7067b1743a1c6a9bba8bc4c4623009d5d78f0b3300f275d931ba63f",
+    "world/ground_truth.py": "e99f8ec8c3be9f9654d5e39d68e9e7672b088698abe15804254ea479dd81241a"
+  },
+  "why": "A2 imports these files from cold-start-a0 and never writes to that tree.  It had uncommitted work in flight from another session while A2 was built, so the exhibit records which bytes it was compiled by.  A changed hash here means A2's results must be regenerated before they are quoted."
+}

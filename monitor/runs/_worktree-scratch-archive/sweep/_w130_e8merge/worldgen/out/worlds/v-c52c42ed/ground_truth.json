@@ -1,0 +1,261 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 26,
+    "injective": true,
+    "states": 26
+  },
+  "grid": [
+    8,
+    9
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "agent_conserved",
+      "mouths_static"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 8 x 9",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "agent_conserved",
+      "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "mouths_static",
+      "statement": "each of the 1 portal mouth(s) shows colour 2 unless the agent is standing on it",
+      "states_checked": 26,
+      "status": "holds",
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "floor": 0,
+    "portal": 2,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 the rule is re-witnessable iff the agent can walk back to the mouth",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 the rule is re-witnessable iff the agent can walk back to the mouth",
+        "rule": "teleport_oneway",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_portal_exit",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 2,
+    "reachable_states": 26,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_wall": {
+        "firing_states": 26,
+        "firing_transitions": 54,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "teleport_oneway": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 26,
+        "firing_transitions": 48,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [],
+    "rules_total": 3
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_wall",
+      "blocked_portal_exit",
+      "teleport_oneway",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_portal_exit"
+    ],
+    "fired": [
+      "blocked_by_wall",
+      "teleport_oneway",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "teleport_oneway",
+      "reversible": "conditional \u2014 the rule is re-witnessable iff the agent can walk back to the mouth",
+      "then": "the agent is placed on the dest cell; nothing else changes",
+      "when": "act=D and the target cell holds a one-way portal whose dest cell is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_portal_exit",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a portal whose landing cell is a wall, out of bounds, or occupied"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 26,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 10,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 26,
+    "solvable": true,
+    "world_id": "v-c52c42ed"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "portal": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "portal",
+        "props": {
+          "dest": [
+            6,
+            2
+          ],
+          "mode": "oneway"
+        }
+      }
+    ],
+    "families": [
+      "portal"
+    ],
+    "flags": {},
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": null,
+    "layout": [
+      "#########",
+      "#.......#",
+      "#.#####.#",
+      "#.#...#.#",
+      "#.#.###.#",
+      "#.#.#.#.#",
+      "#...#...#",
+      "#########"
+    ],
+    "notes": "",
+    "seed": 0,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "v-c52c42ed"
+  },
+  "world_id": "v-c52c42ed"
+}

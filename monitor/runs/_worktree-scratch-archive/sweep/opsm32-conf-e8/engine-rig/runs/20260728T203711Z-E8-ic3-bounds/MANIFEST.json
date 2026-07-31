@@ -1,0 +1,19 @@
+{
+  "prompt_id": "E8-ic3-bounds",
+  "branch": "agent/e8-ic3-scale",
+  "base_commit": "a4d2ef2b2481491841fb5160de7dd8ee51f67481",
+  "utc": "2026-07-28T20:55:39Z",
+  "command": "python -m ic3bounds --out runs/20260728T203711Z-E8-ic3-bounds --axis size --timeout 300",
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13",
+    "machine": "AMD64"
+  },
+  "note": "written by ic3bounds because this directory had no manifest yet; other agents write here too and may extend it.",
+  "files": [
+    {
+      "path": "axis_size.json",
+      "sha256": "171abe7ec0eba9b38de09e43452821ce85bb3cc0a19ffab1f0941ca6b39c5411"
+    }
+  ]
+}

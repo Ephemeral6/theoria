@@ -1,0 +1,85 @@
+{
+  "cycle": 39,
+  "utc": "2026-07-29T16:02Z",
+  "last_audited_commit": "7faed8c7",
+  "range_this_cycle": "eade0703..7faed8c7 (67 commits, 241 files). NOTE: the range GREW UNDER ME -- at 15:46Z it was 3 commits, by 15:55Z it was 67 (OPS-M's cycle-17 merge wave landed mid-audit). Pin a HEAD sha at the start of the cycle and audit to it; do not re-resolve HEAD twice in one cycle or the two halves of the audit will not describe the same tree.",
+  "mode": "incremental",
+  "push_this_cycle": "commit bcfe3c83 (10 files, all mine). **master push blocked, and I did not force it.** `git push origin master` -> behind by 2; `git merge origin/master` -> 'Merge with strategy ort failed', because the ROOT INDEX holds ~83 staged paths belonging to three other territories (baseline-arms/, monitor/board/, .gitattributes) that some other session has in flight. Path overlap between the incoming commits and those dirty paths was 0, so nothing of mine conflicts -- but concluding the merge would mean touching an index that is not mine, and that is a red line. Published off-machine instead as `opsa/c39-liveness-signals` (verified with git ls-remote), following OPS-M's `opsm/m16-*` convention. **Next life: check whether bcfe3c83 became an ancestor of origin/master; at cycle 37 the same situation resolved itself when another session's pull carried the commit up. If it did not, the branch is there and needs no rescue work.**",
+  "launch_path_this_life": "**Claude App**, launched by the user (PID 36220, parent = Claude desktop app 30392, created 14:02Z). FIRST life in five not to be headless. Proved by process ancestry, not by the launch words -- which, as every previous life recorded, look identical either way.",
+  "the_twin_this_cycle": "**Two OPS-A were live simultaneously.** standing.py started a headless one (PID 19140 `_runner.py OPS-A`, claude child 24552, account b) at 15:45:48Z -- 27 seconds before my first tool call, and still running at 15:57Z. It is not proof the guard failed (it could not see me yet: an App session is invisible to occupied() until it writes its first heartbeat), but it is the exposure that report 1 is about. Both of us write monitor/audit/state.json and ops-status/OPS-A.json; if this file looks like it lost content, that is the race, and the DRIFT reports are unique filenames and cannot be lost the same way.",
+  "channel": "bus.py read OPS-A -> NO-NEW-MESSAGES (5th cycle running). mailbox ALL.md still 5 OPEN items, all 07-28 broadcasts already receipted here. Reported this cycle with bus.py say (landed; Bash stdout renders GBK, the file is fine UTF-8).",
+  "covered": {
+    "red lines (whole-tree, not just range)": "clean. 0 hits of the key value across 6021 tracked files; .env untracked and matched by .gitignore:3. Sealed ids in 67 commits of added lines: only ls20-9607627b, in arc-recon/sealed.py, contamination.py and test_sealed_audit_negatives.py -- the sealed-audit guard's own source and its negative tests. Enumeration, not contact (standing ruling: an exam over the sealed pile must be able to name it). append-only, by the probe's own criterion (--first-parent): PARTNER_SYNC 1 deletion (= the adjudicated 63ef0bf1 baseline), incidents/contamination_log/PREDICTIONS 0/0/0.",
+    "A13 (sealed audit reads wrong fields)": "RESOLVED -- 1050b001 is now an ancestor of 7faed8c7, merged as bcfc1b93. Cycle 38 flagged it as not-yet-in-master; it landed in this range.",
+    "cycle 38's live prediction": "**FIRED, and it falsified itself as a criterion** -- report 2. accounts.log now has two `LIMITED a` lines 25 minutes apart (15:27:08Z, 15:52:09Z) and a.limits_seen=2, exactly the predicted signature, while `grep -rl ROTATED --include='*.log' .` is still 0 across the whole tree. So the signature is produced by the limit detector, not by the rotator. Withdrawn as a test; replaced with a two-condition one (ROTATED in a real log AND a quota_state.history entry whose `from` is neither log-scan nor hand-made).",
+    "the account pool": "the SELECTION half keeps working and is now visible: after a was recorded limited at 15:27Z, the 15:45Z launches (RES-1, then OPS-A) both landed on b; b.launches went 0 -> 5 and b.last_launch_pid is 'OPS-A'. quota.py is byte-unchanged across this range too -- now 138 commits without a touch, with :386's registry write-back still after the early return and _rotate_on_limit still at zero tests and zero executions.",
+    "operational fact worth carrying": "both accounts hit their session limit within two hours (b 14:03Z->15:00Z, a 15:27Z->17:10Z). a is shut until 17:10Z; until then b is the only open account, and standing.py keeps launching every 15 minutes."
+  },
+  "reports_this_cycle": [
+    "DRIFT-20260729T1557Z-ops-liveness-signals-declared-but-not-wired.md (high) -- STANDING_OPS = {OPS-A, OPS-M} are exactly the two ids nothing writes a .lock for (prompts/ops/RES-*.md:31 orders it for researchers; no OPS contract mentions it; OPS-A.lock was 0 bytes and 90 minutes stale across two cycles), while standing.py:192-198 asserts the lock is contract-refreshed and 'the only signal that crosses launch paths'. wake_at is the same shape: HOSTED.md orders it fleet-wide, its only consumer scan.py:846 hardcodes ('RES-1'..'RES-4'), and standing.py -- the module that spends money on a relaunch -- never reads it. Demonstrated at 15:45:48Z: a second OPS-A started four minutes before the previous one's published wake_at. Honest limit stated in the report: that relaunch was factually correct (the old session was already dead by 15:32:18Z per standing.log's own change of skip reason), which is precisely the point -- the decision had nothing to do with wake_at; it came out right because a 20-minute staleness window happened to expire first. LOCK_FRESH_MIN=20 < the contract's 30-minute sleep, so every compliant sleep passes through a window that looks dead.",
+    "DRIFT-20260729T1557Z-predicted-rotator-signature-fired-without-the-rotator.md (medium) -- see above. Filed mostly because the defective criterion was MY OWN, and because it is the dual of the S13 rule the fleet already adopted: every new gate needs an input that turns it red, and every new criterion needs an input that must NOT turn it green."
+  ],
+  "self_correction": [
+    "**I nearly reported the stray .env copies (.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env) as an exposure**, because `git check-ignore -v` attributed them to `.git/info/exclude:11` -- a LOCAL, uncommitted ignore rule that would not exist in a fresh clone. Falsified in one command: `git check-ignore -v some/other/dir/.env` -> `.gitignore:3:.env`. A gitignore pattern with no slash matches the basename at ANY depth, so the tracked .gitignore covers them regardless of info/exclude. Killed before writing.",
+    "**I nearly reported 12 append-only deletions on PARTNER_SYNC.md.** My query used --follow without --first-parent; 11 of the 12 are branch-side commits that never published anything. The probe's criterion (scan.py probe_append_only, --first-parent, BASELINE={'PARTNER_SYNC.md':1}) gives exactly 1, the adjudicated one. The rule OPS-A itself wrote down -- 'on a branch it is still a draft' -- is the thing that kills this finding. Killed before writing.",
+    "**I nearly reported `grep -rl ROTATED monitor/` = 6 as 'the rotator ran'.** Four of the six are quota.py (the source that prints the string), ACCOUNTS.md, and my own previous life's report and state.json. Third cycle in a row that the answer was 'you are looking at yourself'. Only `*.log` hits are execution evidence: 0."
+  ],
+  "pending_on_monitor": [
+    "**NEW, report 1**: make occupied() read `wake_at` (one branch, covers both launch paths), and ship it with a negative sample -- an expired wake_at must return None, or it becomes another door that only ever says allow.",
+    "**NEW, report 1**: either add 'refresh your lock every cycle' to monitor/ops/OPS-A.md and OPS-M.md (RES prompts have the sentence ready to copy), or correct standing.py:192-198's docstring. The current state is the worst one: docs claim a signal, code reads it, nobody writes it.",
+    "**NEW, report 1**: scan.py:_self_driving's hardcoded ('RES-1'..'RES-4') means OPS-* can never be reported as 'said it would wake and did not'.",
+    "**NEW, report 1**: align the contract's wording with the headless reality -- _runner.py runs one `claude -p`; the turn ends and the process dies, so 'sleep 30 minutes and go back to step 1' is not a path that exists there. Continuity is reincarnation from state.json, which the runner's own comments say plainly.",
+    "**unchanged, now 138 commits old: move the registry write-back before quota.py:386's early return.** Still the single highest-value edit outstanding.",
+    "three negative samples for the rotator (still zero tests, and now demonstrably zero executions -- report 2 removes the 'it already worked in production' argument for the second time)",
+    "a code entry point for hand corrections to quota/accounts state, so `pool-rotation`-shaped entries have an origin",
+    "cycle 22's six future-dated runs: still unfixed. V17's MANIFEST.utc goes green on its own at 18:00Z today without anyone fixing it -- **if probe_provenance is built after that moment it finds 3 instances, not 4.**",
+    "one sentence in CLAUDE.md/PARTNER_SYNC saying the PARTNER_SYNC header stamp is human-readable only and the commit time is authoritative (120 of 187 headers are ahead of their commit)",
+    "a0-spike/verify.sh is dead (absent, 10 references, one in monitor/METHOD.md) -- pending since cycle 35",
+    "**the sleep/staleness number for one role is now written in SIX places with six values**: ops/OPS-A.md 30min, prompts/ops/OPS-A.md 60min, AUDITOR.md 3600s, scan.py:486 90min, scan.py:946 120min, standing.py LOCK_FRESH_MIN 20min. The 20 < 30 pair is structural, not cosmetic.",
+    "four OPS prompts + monitor/ops/*.md still order mailbox writes that FLEET.md retired; scan.py counts TO-MONITOR in the retired channel and never clears on reply",
+    "probe_needs_human still hands the user prompts/ops/RES-*.md, the path the reorg retired",
+    "scan.py -> use dispatch.pid_alive (4th unguarded copy); loop_state.json in_flight entries with no exit path; append_only should key exemptions by SHA/reachability, not by count",
+    "monitor/audit/HEARTBEAT was last written at cycle 37 -- cycle 38 skipped it while writing everything else. Minor, but it is the file AUDITOR.md names as the no-drift signal.",
+    "older, still open: probe_merge_queue; flag() first_seen/count + backoff; probe_a1_state can never go green; ast criterion as a meta-probe; the 03:57Z rule's second half (probe overrides handwritten status) is STILL only in the mailbox, not in code; probe_provenance field checks; verify_gates scope to monitor/prompts/**"
+  ],
+  "method_notes": [
+    "**pin HEAD at the start of the cycle.** This cycle the range went 3 -> 67 commits in nine minutes because a merge wave landed while I was booting. Two `git log` calls in one cycle can describe two different trees.",
+    "**recursive grep from the repo root times out (~120s+)** -- .worktrees and runs/ are huge. Use the ripgrep-backed search tool with a glob (`--include='*.log'` scoped), or scope to one directory. I lost one command to this again.",
+    "**to prove a code branch never executed, grep its print string across every `*.log` in the tree** -- and then check whether your hits are the source file, the docs, or your own previous report. All three happened this cycle.",
+    "**a marker present in a state file but in no source file means that file was hand-edited.** Cheapest integrity check I have.",
+    "**`git check-ignore -v` tells you WHICH rule matched, and it may be a local one.** `.git/info/exclude` is not committed. Before concluding a file is only locally ignored, test an equivalent path that the local rule cannot cover.",
+    "**append-only questions must use --first-parent**: branch-side edits published nothing, and that is the ruling OPS-A itself argued for.",
+    "**I may not read dispatch logs, but I may count them** (`grep -rl` / `-rc`) and I may read process metadata (schtasks, Win32_Process). standing.log is monitor's own log, not a session transcript.",
+    "read Chinese files with the file-reading tool; Bash stdout renders GBK here, the files are fine UTF-8. Same for bus.py output -- redirect and read the file, or read bus/OPS-A/out.jsonl.",
+    "judging a session alive: `Get-CimInstance Win32_Process` with CreationDate beats every file timestamp. mtime measures arrival, not writing.",
+    "push rejected (behind N): git pull --rebase --autostash origin master -- but check `git status --short | grep -v '^??'` first; if any monitor/*.py or another territory's source is dirty, do NOT use --autostash. **This cycle the root index had ~100 staged paths across three territories and the index mtime kept moving; do not touch the index beyond `git add` of my own four paths.**"
+  ],
+  "next_cycle_focus": [
+    "**did occupied() get a wake_at branch, and did it ship with the expired-wake_at negative sample** (report 1's first suggestion)",
+    "**quota.py:386 registry write-back** -- 138 commits unchanged",
+    "**live prediction, REPLACED (the old one falsified itself, see report 2)**: the rotator has genuinely run only when BOTH hold -- `grep -rl ROTATED --include='*.log' .` is non-zero AND quota_state.history gains an entry whose `from` is neither `log-scan` nor a hand-written value. Either alone is not evidence.",
+    "**live prediction, carried**: verify-lab/runs/20260729T180000Z-V17's MANIFEST.utc stops being 'in the future' at 18:00Z today without being fixed.",
+    "**new live prediction**: if nothing writes OPS-A.lock by contract, the lock I refreshed at 15:59Z this cycle will be the newest one on disk next cycle too -- i.e. its mtime will still be 15:59Z, proving the refresh is a per-life private habit and not a fleet property.",
+    "the content dimension of the delivered directories (do their claimed numbers have artifacts) -- owed since cycle 31, one slice done at cycle 38",
+    "incremental start 7faed8c7"
+  ],
+  "superseded": [
+    "cycle 38's live prediction ('two same-account LIMITED lines inside an hour means the rotator fired') -- withdrawn this cycle: the signature appeared with the rotator at zero executions.",
+    "cycle 37's 'b has never run a session so it cannot have hit a limit' -- withdrawn at cycle 38.",
+    "cycle 36's 'MAX_STANDING is the only thing preventing an OPS-A twin' -- withdrawn cycle 37; `agent in live` is a real guard for the HEADLESS path only, which report 1 now makes precise.",
+    "cycle 35's 'OPS-A runs only in the Claude App' -- false since standing.py's STANDING_OPS. (And this cycle it ran in both at once.)"
+  ],
+  "vindicated": [
+    "cycle 38's 'the pool's first real rotation was not the rotator' -- confirmed a second time, with a second set of launches.",
+    "the S13 rule ('every new gate ships with an input that turns it red') -- report 2 is its dual and the fleet may want both written down.",
+    "cycle 22's 'a wrong anchor is worse than no anchor, because it looks usable'."
+  ],
+  "handoff": {
+    "this file is the handoff": "If I vanish, a new session cold-starts from this file alone and needs to ask nobody.",
+    "launch words": "monitor/prompts/ops/OPS-A.md (what standing.py dispatches) + monitor/ops/OPS-A.md (contract, re-read every cycle) + monitor/AUDITOR.md (8 drift dimensions) + monitor/CHARTER.md + monitor/bus/HOSTED.md.",
+    "each cycle": "python monitor/bus.py read OPS-A -> mailbox OPEN items -> PIN HEAD -> incremental audit from last_audited_commit to the pinned sha -> write monitor/audit/HEARTBEAT + monitor/audit/state.json + monitor/ops-status/OPS-A.json (+ touch OPS-A.lock) -> commit+push (add ONLY monitor/audit, monitor/ops-status/OPS-A.*, monitor/bus/OPS-A, own mailbox) -> sleep 1800.",
+    "red line, unchanged": "write only monitor/audit/ + my own status files + my own mailbox. Never edit monitor/*.py, however obvious the one-line fix looks (report 1 contains a one-line fix; I did not apply it). Never read a dispatch log's contents -- count them instead.",
+    "fan-out": "OPS-A.md orders subagent fan-out and adversarial review of every conclusion. This harness forbids calling subagents unless the user asks, and the user's launch words did not. Reported at cycle 9, still true at 39. Substitute: falsify each finding myself before writing it (three killed this cycle, listed above) and put the reproducing command in every report. **Do not count my reports as adversarially reviewed.**"
+  },
+  "self_correction_rule": "Before reporting 'X is missing / X is broken / there are two of X', spend one command proving you are not looking at yourself, at a second copy elsewhere in the file, at a path that never executes, at a gate belonging to a different phase, at a relative path resolved against the wrong root, or at a branch-side commit that published nothing. Cycles 36-39 caught thirteen of these before they left the session."
+}

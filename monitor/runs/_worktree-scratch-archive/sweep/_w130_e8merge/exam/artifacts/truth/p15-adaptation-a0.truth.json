@@ -1,0 +1,1243 @@
+{
+  "items": [
+    {
+      "item_id": "v-a0-01.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-01"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-01.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-01"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 32,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-01.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-01"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-01.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-01"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 28,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-01.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-01"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 6,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-01.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-01"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 32,
+          "crossing_LEFT": 18,
+          "crossing_RIGHT": 28,
+          "crossing_UP": 6,
+          "match": 18
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-01.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-01"
+      ],
+      "truth": {
+        "labels": [
+          "chg-box-crosses-blocked",
+          "chg-box-travel-3"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-01.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-01"
+      ],
+      "truth": {
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "label": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_crossing",
+          "blocked_box_landing",
+          "push2"
+        ],
+        "verdict": "unsolvable"
+      }
+    },
+    {
+      "item_id": "v-a0-01.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-01"
+      ],
+      "truth": {
+        "budget_actions": 321,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 533
+      }
+    },
+    {
+      "item_id": "v-a0-01.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-01"
+      ],
+      "truth": {
+        "budget_actions": 1481,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 44
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-02"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-02"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 56,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-02"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 60,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-02"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-02"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-02.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-02"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-02.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-02"
+      ],
+      "truth": {
+        "labels": [
+          "chg-box-travel-1"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-02.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-02"
+      ],
+      "truth": {
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "label": "solvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "verdict": "solvable"
+      }
+    },
+    {
+      "item_id": "v-a0-02.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-02"
+      ],
+      "truth": {
+        "budget_actions": 551,
+        "exact_on_heldout": true,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 0
+      }
+    },
+    {
+      "item_id": "v-a0-02.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-02"
+      ],
+      "truth": {
+        "budget_actions": 3661,
+        "exact_on_heldout": true,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 0
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-03"
+      ],
+      "truth": {
+        "detected": false,
+        "index": null,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-03"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 32,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-03"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-03"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 28,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-03"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 6,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-03.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-03"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 32,
+          "crossing_LEFT": 18,
+          "crossing_RIGHT": 28,
+          "crossing_UP": 6,
+          "match": null
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-03.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-03"
+      ],
+      "truth": {
+        "labels": [
+          "chg-box-crosses-blocked"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-03.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-03"
+      ],
+      "truth": {
+        "claims_now_false": [],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "label": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_crossing",
+          "push2"
+        ],
+        "verdict": "unsolvable"
+      }
+    },
+    {
+      "item_id": "v-a0-03.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-03"
+      ],
+      "truth": {
+        "budget_actions": 341,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 284
+      }
+    },
+    {
+      "item_id": "v-a0-03.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-03"
+      ],
+      "truth": {
+        "budget_actions": 1753,
+        "exact_on_heldout": true,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 0
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-04"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-04"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 56,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-04"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 60,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-04"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-04"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-04.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-04"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-04.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-04"
+      ],
+      "truth": {
+        "labels": [
+          "chg-box-travel-3"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-04.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-04"
+      ],
+      "truth": {
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "label": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "verdict": "unsolvable"
+      }
+    },
+    {
+      "item_id": "v-a0-04.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-04"
+      ],
+      "truth": {
+        "budget_actions": 321,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 533
+      }
+    },
+    {
+      "item_id": "v-a0-04.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-04"
+      ],
+      "truth": {
+        "budget_actions": 1478,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 52
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-05"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 18,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-05"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 56,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-05"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 60,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-05"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-05"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 50,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-05.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-05"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-05.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-05"
+      ],
+      "truth": {
+        "labels": [
+          "chg-box-travel-1"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-05.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-05"
+      ],
+      "truth": {
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "label": "solvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "verdict": "solvable"
+      }
+    },
+    {
+      "item_id": "v-a0-05.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-05"
+      ],
+      "truth": {
+        "budget_actions": 551,
+        "exact_on_heldout": true,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 0
+      }
+    },
+    {
+      "item_id": "v-a0-05.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-05"
+      ],
+      "truth": {
+        "budget_actions": 3661,
+        "exact_on_heldout": true,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 0
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.match",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-06"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 6,
+        "level": "match"
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.crossing_DOWN",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-06"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 28,
+        "level": "crossing_DOWN"
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.crossing_LEFT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-06"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 6,
+        "level": "crossing_LEFT"
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.crossing_RIGHT",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-06"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 58,
+        "level": "crossing_RIGHT"
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.crossing_UP",
+      "points": 1.0,
+      "rubric_id": "adapt.detect.v1",
+      "tags": [
+        "detect",
+        "single_level",
+        "v-a0-06"
+      ],
+      "truth": {
+        "detected": true,
+        "index": 12,
+        "level": "crossing_UP"
+      }
+    },
+    {
+      "item_id": "v-a0-06.detect.across",
+      "points": 3.0,
+      "rubric_id": "adapt.detect_cross.v1",
+      "tags": [
+        "detect",
+        "across_levels",
+        "v-a0-06"
+      ],
+      "truth": {
+        "per_level": {
+          "crossing_DOWN": 28,
+          "crossing_LEFT": 6,
+          "crossing_RIGHT": 58,
+          "crossing_UP": 12,
+          "match": 6
+        }
+      }
+    },
+    {
+      "item_id": "v-a0-06.describe",
+      "points": 3.0,
+      "rubric_id": "adapt.describe.v1",
+      "tags": [
+        "describe",
+        "v-a0-06"
+      ],
+      "truth": {
+        "labels": [
+          "chg-actor-enters-blocked"
+        ]
+      }
+    },
+    {
+      "item_id": "v-a0-06.collateral",
+      "points": 10.0,
+      "rubric_id": "adapt.collateral.v1",
+      "tags": [
+        "collateral",
+        "v-a0-06"
+      ],
+      "truth": {
+        "claims_now_false": [],
+        "claims_to_reexamine": [],
+        "label": "unsolvable",
+        "rules_falsified": [
+          "blocked_wall",
+          "walk"
+        ],
+        "verdict": "unsolvable"
+      }
+    },
+    {
+      "item_id": "v-a0-06.repair.narrow",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_narrow",
+        "v-a0-06"
+      ],
+      "truth": {
+        "budget_actions": 308,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 1041
+      }
+    },
+    {
+      "item_id": "v-a0-06.repair.wide",
+      "points": 1.5,
+      "rubric_id": "adapt.repair.v1",
+      "tags": [
+        "repair",
+        "budget_wide",
+        "v-a0-06"
+      ],
+      "truth": {
+        "budget_actions": 1721,
+        "exact_on_heldout": false,
+        "heldout_checks": 7920,
+        "heldout_mispredictions": 51
+      }
+    }
+  ],
+  "notes": {
+    "build": {
+      "heldout_walls": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          2
+        ]
+      ],
+      "old_theory_predictor": "sokoban2.step under base Rules; see the module docstring for why the compiled form of theory.dsl is not used and how the substitution is checked",
+      "per_class": 4,
+      "stream_cap": 640
+    },
+    "variant_table": [
+      {
+        "change_labels": [
+          "chg-box-crosses-blocked",
+          "chg-box-travel-3"
+        ],
+        "changed_fields": {
+          "push_distance": 3,
+          "require_crossing_free": false
+        },
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "first_divergence": {
+          "crossing_DOWN": 32,
+          "crossing_LEFT": 18,
+          "crossing_RIGHT": 28,
+          "crossing_UP": 6,
+          "match": 18
+        },
+        "grid_reason": "two cells are crossed and the crossing rule is gone, so the guard change is observable rather than vacuous -- the only cell of the product where both changes have witnesses in the same transition",
+        "minimal_explanation": "push3+nocross",
+        "mismatch_verdict": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_crossing",
+          "blocked_box_landing",
+          "push2"
+        ],
+        "transparent_name": "push3+nocross",
+        "variant": "v-a0-01",
+        "verdict_flipped": false
+      },
+      {
+        "change_labels": [
+          "chg-box-travel-1"
+        ],
+        "changed_fields": {
+          "push_distance": 1
+        },
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "first_divergence": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        },
+        "grid_reason": "one field of Rules, taken from the grid",
+        "minimal_explanation": "push1",
+        "mismatch_verdict": "solvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "transparent_name": "push1",
+        "variant": "v-a0-02",
+        "verdict_flipped": true
+      },
+      {
+        "change_labels": [
+          "chg-box-crosses-blocked"
+        ],
+        "changed_fields": {
+          "require_crossing_free": false
+        },
+        "claims_now_false": [],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "first_divergence": {
+          "crossing_DOWN": 32,
+          "crossing_LEFT": 18,
+          "crossing_RIGHT": 28,
+          "crossing_UP": 6,
+          "match": null
+        },
+        "grid_reason": "one field of Rules, taken from the grid",
+        "minimal_explanation": "push2+nocross",
+        "mismatch_verdict": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_crossing",
+          "push2"
+        ],
+        "transparent_name": "push2+nocross",
+        "variant": "v-a0-03",
+        "verdict_flipped": false
+      },
+      {
+        "change_labels": [
+          "chg-box-travel-3"
+        ],
+        "changed_fields": {
+          "push_distance": 3
+        },
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "first_divergence": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        },
+        "grid_reason": "one field of Rules, taken from the grid",
+        "minimal_explanation": "push3",
+        "mismatch_verdict": "unsolvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "transparent_name": "push3",
+        "variant": "v-a0-04",
+        "verdict_flipped": false
+      },
+      {
+        "change_labels": [
+          "chg-box-travel-1"
+        ],
+        "changed_fields": {
+          "push_distance": 1,
+          "require_crossing_free": false
+        },
+        "claims_now_false": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "claims_to_reexamine": [
+          "box_col_parity",
+          "box_parity",
+          "box_row_parity",
+          "unsolvable_mismatch"
+        ],
+        "first_divergence": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        },
+        "grid_reason": "the same pair with the travel distance shortened instead, which makes the crossing rule govern nothing at all: this variant is observationally identical to the single change and its describe truth says so",
+        "minimal_explanation": "push1",
+        "mismatch_verdict": "solvable",
+        "rules_falsified": [
+          "blocked_box_landing",
+          "push2"
+        ],
+        "transparent_name": "push1+nocross",
+        "variant": "v-a0-05",
+        "verdict_flipped": true
+      },
+      {
+        "change_labels": [
+          "chg-actor-enters-blocked"
+        ],
+        "changed_fields": {
+          "walls_block_player": false
+        },
+        "claims_now_false": [],
+        "claims_to_reexamine": [],
+        "first_divergence": {
+          "crossing_DOWN": 28,
+          "crossing_LEFT": 6,
+          "crossing_RIGHT": 58,
+          "crossing_UP": 12,
+          "match": 6
+        },
+        "grid_reason": "one field of Rules, taken from the grid",
+        "minimal_explanation": "push2+ghost",
+        "mismatch_verdict": "unsolvable",
+        "rules_falsified": [
+          "blocked_wall",
+          "walk"
+        ],
+        "transparent_name": "push2+ghost",
+        "variant": "v-a0-06",
+        "verdict_flipped": false
+      }
+    ]
+  },
+  "paper_id": "p15-adaptation-a0",
+  "question_type": "adaptation",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+  "schema": "exam/v0.1"
+}

@@ -1,0 +1,85 @@
+{
+  "campaign_seed": "0x00005eedc1e4f002",
+  "engine_rig_head": "863e899d",
+  "engines": [
+    {
+      "elapsed_s": 0.17,
+      "engine": "lp_potential",
+      "family": "jumpgraph",
+      "generator_errors": [],
+      "invariant_worlds_evaluated": {
+        "certificate_implies_unreachable": 5,
+        "heuristic_is_admissible": 5,
+        "infinite_means_unreachable": 5,
+        "three_conditions_hold": 5
+      },
+      "invariant_worlds_unavailable": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "invariants": [
+        "certificate_implies_unreachable",
+        "heuristic_is_admissible",
+        "infinite_means_unreachable",
+        "three_conditions_hold"
+      ],
+      "n_invariants": 4,
+      "raised": 0,
+      "skipped": 28,
+      "skips_by_cause": {
+        "certificate_implies_unreachable": {
+          "no_certificate": 7
+        },
+        "heuristic_is_admissible": {
+          "no_certificate": 7
+        },
+        "infinite_means_unreachable": {
+          "no_certificate": 7
+        },
+        "three_conditions_hold": {
+          "no_certificate": 7
+        }
+      },
+      "skips_by_cause_class": {
+        "certificate_implies_unreachable": {
+          "declined": 7
+        },
+        "heuristic_is_admissible": {
+          "declined": 7
+        },
+        "infinite_means_unreachable": {
+          "declined": 7
+        },
+        "three_conditions_hold": {
+          "declined": 7
+        }
+      },
+      "unavailable": 0,
+      "violated": 0,
+      "worlds_checked": 12,
+      "worlds_generated": 12,
+      "worlds_requested": 12
+    }
+  ],
+  "prompt_id": "E4-property-fuzz",
+  "raises_by_invariant": {},
+  "skips_by_cause": {
+    "declined.lp_potential.certificate_implies_unreachable.no_certificate": 7,
+    "declined.lp_potential.heuristic_is_admissible.no_certificate": 7,
+    "declined.lp_potential.infinite_means_unreachable.no_certificate": 7,
+    "declined.lp_potential.three_conditions_hold.no_certificate": 7
+  },
+  "totals": {
+    "generator_errors": 0,
+    "invariants": 4,
+    "raised": 0,
+    "skipped": 28,
+    "unavailable": 0,
+    "violated": 0,
+    "worlds_checked": 12
+  },
+  "violations_by_invariant": {},
+  "worlds_per_engine": 12
+}

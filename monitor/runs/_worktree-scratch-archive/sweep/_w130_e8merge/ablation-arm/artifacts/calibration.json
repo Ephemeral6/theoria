@@ -1,0 +1,669 @@
+{
+  "a0_table": {
+    "differing_on": [
+      "certificate · a0-base (invariants)",
+      "certificate · a0-no-button (the impossibility theorem)",
+      "settled_by · a0-no-button"
+    ],
+    "n_differing": 3,
+    "n_identical": 14,
+    "n_not_comparable": 2,
+    "n_rows": 19,
+    "not_comparable_on": [
+      "theorize rounds · a0",
+      "theorize rounds owed after the run · a0-base"
+    ],
+    "reading": "On A0 the two arms agree on every quantity a benchmark would score -- verdict, plan, plan length, replay to the pixel, behavioural and held-out accuracy -- and differ only on whether there is a certificate behind the verdict. That is E1's testimony and it is the finding, not a disappointment: it is what makes A2 load-bearing.",
+    "rows": [
+      {
+        "ablated_arm": "yes -- plan SAT, world_reaches_goal=True",
+        "comparable": true,
+        "full_arm": "yes -- plan SAT, world_reaches_goal=True",
+        "note": "the closest analogue of an ARC score on a self-built world: did the arm actually reach the goal in the world, not in its own model. This arm's episode was also executed against the world and banked: outcome WIN over 13 frames (artifacts/a0-base/episode.jsonl)",
+        "quantity": "score · a0-base level solved",
+        "same": true,
+        "source": "plan_generated.json | artifacts/a0-base/{plan,run_report}.json"
+      },
+      {
+        "ablated_arm": 12,
+        "comparable": true,
+        "full_arm": 12,
+        "note": "same planner, same rung (stub-bfs)",
+        "quantity": "score · a0-base plan length",
+        "same": true,
+        "source": "plan_generated.json | artifacts/a0-base/plan.json"
+      },
+      {
+        "ablated_arm": 0.987288,
+        "comparable": true,
+        "full_arm": 0.987288,
+        "note": "233/236 state-action pairs over 59 reachable states",
+        "quantity": "score · behavioural accuracy vs ground truth (a0-base)",
+        "same": true,
+        "source": "score_vs_truth.json | computed here with the SAME scorer (cold-start-a0/certify/score_vs_truth.behavioural)"
+      },
+      {
+        "ablated_arm": 0.0,
+        "comparable": true,
+        "full_arm": 0.0,
+        "note": "3 pairs the explorer could never cover; both arms miss all of them, which is A0's known latch limit and not an ablation effect",
+        "quantity": "score · held-out accuracy (a0-base)",
+        "same": true,
+        "source": "score_vs_truth.json | computed here with the same scorer"
+      },
+      {
+        "ablated_arm": 1.0,
+        "comparable": true,
+        "full_arm": 1.0,
+        "note": "",
+        "quantity": "score · behavioural accuracy (a0-no-button)",
+        "same": true,
+        "source": "score_vs_truth.json | computed here with the same scorer"
+      },
+      {
+        "ablated_arm": "UNSAT / unsolvable",
+        "comparable": true,
+        "full_arm": "UNSAT / unsolvable",
+        "note": "and both are CORRECT: the Door is the only opening in the dividing wall, and the only rule that removes it (door_opens_left) tests for the But...",
+        "quantity": "score · a0-no-button verdict",
+        "same": true,
+        "source": "plan_generated_no_button.json | artifacts/a0-no-button/plan.json"
+      },
+      {
+        "ablated_arm": 276,
+        "comparable": true,
+        "full_arm": 276,
+        "note": "",
+        "quantity": "replay accuracy · a0-base · frames",
+        "same": true,
+        "source": "certify_cheap_raw_trace.json | artifacts/a0-base/run_report.json"
+      },
+      {
+        "ablated_arm": 22356,
+        "comparable": true,
+        "full_arm": 22356,
+        "note": "P-1's pre-registered number, DESIGN.md §8",
+        "quantity": "replay accuracy · a0-base · pixels checked",
+        "same": true,
+        "source": "certify_cheap_raw_trace.json | artifacts/a0-base/run_report.json"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 0,
+        "note": "",
+        "quantity": "replay accuracy · a0-base · pixels unexplained",
+        "same": true,
+        "source": "certify_cheap_raw_trace.json | artifacts/a0-base/run_report.json"
+      },
+      {
+        "ablated_arm": true,
+        "comparable": true,
+        "full_arm": true,
+        "note": "",
+        "quantity": "replay accuracy · a0-base · green",
+        "same": true,
+        "source": "certify_cheap_raw_trace.json | artifacts/a0-base/run_report.json"
+      },
+      {
+        "ablated_arm": 112,
+        "comparable": true,
+        "full_arm": 112,
+        "note": "",
+        "quantity": "replay accuracy · a0-no-button · frames",
+        "same": true,
+        "source": "unsolvable_report.json:certify_cheap | artifacts/a0-no-button/run_report.json"
+      },
+      {
+        "ablated_arm": 9072,
+        "comparable": true,
+        "full_arm": 9072,
+        "note": "",
+        "quantity": "replay accuracy · a0-no-button · pixels checked",
+        "same": true,
+        "source": "unsolvable_report.json:certify_cheap | artifacts/a0-no-button/run_report.json"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 0,
+        "note": "",
+        "quantity": "replay accuracy · a0-no-button · pixels unexplained",
+        "same": true,
+        "source": "unsolvable_report.json:certify_cheap | artifacts/a0-no-button/run_report.json"
+      },
+      {
+        "ablated_arm": true,
+        "comparable": true,
+        "full_arm": true,
+        "note": "",
+        "quantity": "replay accuracy · a0-no-button · green",
+        "same": true,
+        "source": "unsolvable_report.json:certify_cheap | artifacts/a0-no-button/run_report.json"
+      },
+      {
+        "ablated_arm": "NOT_COMPARABLE",
+        "comparable": false,
+        "full_arm": "1 pass, 0 revisions",
+        "note": "**This arm never theorized.** `build_theory.py` derives its manuals by mechanically downgrading the full arm's DSL (cold-start-a0/theory/theory.dsl -> theory/a0_base.dsl; laws demoted, theorems deleted; both sha256s in DOWNGRADE_REPORT.json). That is deliberate -- a re-theorized manual would be a second difference and Theoria.md:280 says a second difference makes the first unattributable -- and it is exactly why the number is not comparable. The full arm's own figure is also weak: A0_REPORT.md §6.1 records that the theorize->certify inner loop never ran on A0 either, so even the full arm's `1 pass, 0 revisions` measures a cold start rather than a loop. On A2 the full arm's loop does run, and that row is in `a2_fork` where it belongs.",
+        "quantity": "theorize rounds · a0",
+        "same": null,
+        "source": "cold-start-a0/A0_REPORT.md §6.1 | theory/DOWNGRADE_REPORT.json"
+      },
+      {
+        "ablated_arm": false,
+        "comparable": false,
+        "full_arm": "NOT_MEASURED",
+        "note": "what IS comparable is whether the run ended owing a theorize turn. The full arm's cold start records no equivalent field, so its cell is not measured rather than False.",
+        "quantity": "theorize rounds owed after the run · a0-base",
+        "same": null,
+        "source": "artifacts/a0-base/run_report.json:beats.theorize"
+      },
+      {
+        "ablated_arm": "none -- expensive layer not run (C-2)",
+        "comparable": true,
+        "full_arm": [
+          {
+            "axioms": [],
+            "name": "inv_all"
+          }
+        ],
+        "note": "the full arm's `#print axioms` comes back empty, i.e. `inv_all` is proved from nothing but the manual. This arm has no such column.",
+        "quantity": "certificate · a0-base (invariants)",
+        "same": false,
+        "source": "certify_lean_generated_theory_lean.json | artifacts/a0-base/run_report.json:beats.certify"
+      },
+      {
+        "ablated_arm": null,
+        "comparable": true,
+        "full_arm": [
+          {
+            "axioms": [],
+            "name": "unsolvable"
+          }
+        ],
+        "note": "same verdict, and the full arm's is signed. C-4 settles this arm's UNSAT bare: certificate_owed=False, directed_probes_scheduled=0",
+        "quantity": "certificate · a0-no-button (the impossibility theorem)",
+        "same": false,
+        "source": "unsolvable_report.json:theorem | artifacts/a0-no-button/plan.json"
+      },
+      {
+        "ablated_arm": "search",
+        "comparable": true,
+        "full_arm": "proof (Lean, axiom-free) + probe passed over 5 `depends:` clauses",
+        "note": "`Theoria.md:259` class (i) says the question here is the REASON, not the verdict: 证书,还是\"我搜过了没有\". One arm has the certificate, the other has \"I searched and did not find one\".",
+        "quantity": "settled_by · a0-no-button",
+        "same": false,
+        "source": "unsolvable_report.json:theorem | artifacts/a0-no-button/plan.json"
+      }
+    ]
+  },
+  "a2_fork": {
+    "constructive_ground": "column c5 is solid wall from r1 to r7 and rows r0/r8 are solid, so the right room touches nothing; every rule left in this manual moves the Cart to an adjacent cell, so the goal cell (2,7) is unreachable under the manual.  Known before anything is run — which is what Theoria Phase 1 layer 2 demands of a variant, and what makes the theorem's falseness a property of the manual rather than of the prover.",
+    "e1_vs_e2_inside_this_arm": {
+      "indistinguishable": true,
+      "n_decision_fields": 10,
+      "n_identical": 10,
+      "reading": "E1 is a TRUE impossibility and E2 is a FALSE one. Every decision-carrying field this arm records is identical across the two. The full arm separates them: on E1 the theorem survives its probes and is archived proved; on E2 the theorem is refuted by a witness, localised, probed, repaired and re-planned to SAT. Same two inputs, one arm sorts them and one cannot."
+    },
+    "holds": true,
+    "identical_up_to_the_fork": [
+      {
+        "ablated_arm": "theory/a2_holed.dsl (same manual, laws section demoted)",
+        "comparable": true,
+        "full_arm": "theory_holed.dsl (teleport rule missing)",
+        "note": "",
+        "quantity": "manual",
+        "same": false,
+        "source": "exhibit_report.json:manual | theory/DOWNGRADE_REPORT.json"
+      },
+      {
+        "ablated_arm": "history_trace.jsonl",
+        "comparable": true,
+        "full_arm": "history_trace.jsonl",
+        "note": "",
+        "quantity": "evidence",
+        "same": true,
+        "source": "exhibit_report.json:evidence | artifacts/a2-holed/run_report.json"
+      },
+      {
+        "ablated_arm": true,
+        "comparable": true,
+        "full_arm": true,
+        "note": "",
+        "quantity": "cheap layer green on its own evidence",
+        "same": true,
+        "source": "exhibit_report.json:certify_cheap | run_report.json"
+      },
+      {
+        "ablated_arm": "184 / 14904",
+        "comparable": true,
+        "full_arm": "184 / 14904",
+        "note": "",
+        "quantity": "cheap layer frames / pixels",
+        "same": true,
+        "source": "same, P-1's pre-registered A2 number"
+      },
+      {
+        "ablated_arm": "UNSAT",
+        "comparable": true,
+        "full_arm": "UNSAT",
+        "note": "",
+        "quantity": "planner",
+        "same": true,
+        "source": "plan_holed.json | artifacts/a2-holed/plan.json"
+      },
+      {
+        "ablated_arm": true,
+        "comparable": true,
+        "full_arm": true,
+        "note": "witness length 18",
+        "quantity": "is the world really solvable",
+        "same": true,
+        "source": "exhibit_report.json:world_says -- the referee's copy, held by neither arm"
+      }
+    ],
+    "the_demonstration": "`ablation-arm/artifacts/a2-holed/run_report.json` together with `ablation-arm/artifacts/exhibits.json:E2` is the artefact. Both are regenerated by `python ablation-arm/run_arm.py && python ablation-arm/run_exhibits.py`, and `bash ablation-arm/verify.sh` asserts P-6 over them. This file puts the full arm's column beside them.",
+    "the_fork": [
+      {
+        "ablated_arm": "no -- C-4 settles it bare (certificate_owed=False)",
+        "comparable": true,
+        "full_arm": "yes -- constraint 6: a certificate is owed",
+        "note": "",
+        "quantity": "does an obligation arise from the UNSAT",
+        "same": false,
+        "source": "plan_holed.json:note | artifacts/a2-holed/plan.json"
+      },
+      {
+        "ablated_arm": null,
+        "comparable": true,
+        "full_arm": "right_room_locked",
+        "note": "the full arm names the claim, so the claim can be wrong out loud",
+        "quantity": "theorem stated",
+        "same": false,
+        "source": "exhibit_report.json:theorem | this arm generates no Lean at all"
+      },
+      {
+        "ablated_arm": "n/a -- no Lean form is generated (C-1)",
+        "comparable": true,
+        "full_arm": "yes -- `#print axioms` [{\"axioms\": [], \"name\": \"unsolvable\"}], i.e. proved from the manual alone",
+        "note": "**the theorem type-checks and is FALSE of the world.** That is the point: proof did not prevent the false claim, it made the false claim REFUTABLE.",
+        "quantity": "theorem machine-checked",
+        "same": false,
+        "source": "exhibit_report.json:certify_lean"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 4,
+        "note": "constraint 7 probes exactly these; with no theorem there is nothing to probe -- DESIGN.md §6 shadow 1",
+        "quantity": "`depends:` clauses the theorem rests on",
+        "same": false,
+        "source": "exhibit_report.json:theorem.depends"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 5,
+        "note": "5 designed, 4 executable, 1 not separable, 4 refuted",
+        "quantity": "directed probes scheduled",
+        "same": false,
+        "source": "probe_report.json | artifacts/a2-holed/plan.json"
+      },
+      {
+        "ablated_arm": false,
+        "comparable": true,
+        "full_arm": true,
+        "note": "the ablated arm has nothing to refute: it never made a claim, it only archived a search result",
+        "quantity": "was the false theorem refuted",
+        "same": false,
+        "source": "refutation.json | artifacts/a2-holed/run_report.json"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": false,
+        "full_arm": "NOT_MEASURED",
+        "note": "the full arm has no surprise-bus field -- `surprise.py` is this arm's construction (DESIGN.md §7.3), built so BOTH arms could share one scheduling rule. Only one arm has been instrumented with it, so this cell is not measured rather than 0.",
+        "quantity": "surprises on the bus",
+        "same": null,
+        "source": "artifacts/a2-holed/run_report.json:beats.loop_gate"
+      },
+      {
+        "ablated_arm": false,
+        "comparable": true,
+        "full_arm": true,
+        "note": "the full arm's loop is recorded turning: M0, M5, L1, L2, L3, L4, L5, L6",
+        "quantity": "loop turns",
+        "same": false,
+        "source": "loop_ledger.json beats L1..L5 all `pass` | run_report.json"
+      },
+      {
+        "ablated_arm": "not scheduled (but see charity_control: the machinery works)",
+        "comparable": true,
+        "full_arm": [
+          "mispredicted_step"
+        ],
+        "note": "handed the counterexample for free, THIS ARM localises identically. What was cut is the thing that goes and gets the counterexample, not the ability to use one.",
+        "quantity": "localisation performed",
+        "same": false,
+        "source": "locate_report.json | artifacts/exhibits.json:E2.charity_control"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 12,
+        "note": "free offline; in the wild every one of these is an API call",
+        "quantity": "world steps spent on repair",
+        "same": false,
+        "source": "loop_ledger.json L3 `trace_grew: 184 -> 196 frames`"
+      },
+      {
+        "ablated_arm": "unsolvable -- archived, settled=True",
+        "comparable": true,
+        "full_arm": "solvable -- repaired manual plans SAT in 18 and the world agrees (True)",
+        "note": "",
+        "quantity": "final verdict on a solvable level",
+        "same": false,
+        "source": "plan_repaired.json | artifacts/a2-holed/plan.json"
+      },
+      {
+        "ablated_arm": false,
+        "comparable": true,
+        "full_arm": true,
+        "note": "`Theoria.md:259` class (iii): 敢说'不可解'的框架必须在这里闭嘴",
+        "quantity": "final verdict is TRUE of the world",
+        "same": false,
+        "source": "the world is solvable in 18 moves"
+      }
+    ],
+    "the_sweep_neither_arm_had": {
+      "ablated_arm_anomalies": 44,
+      "ablated_arm_green": false,
+      "full_arm_anomalies": 44,
+      "full_arm_green": false,
+      "reaches_the_bus": false,
+      "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+      "why_not": "a surprise the arm could not have had is not a surprise. Both arms read the same 184-frame record; the 248-frame sweep is the referee's, and it goes red at the same frame for both. Reported as the size of the gap, never as a trigger."
+    },
+    "what_it_is": "an unreachability theorem that type-checks and is false of the world. `exhibit_report.json:exhibit_is_false_of_the_world` = True, and its falseness is a property of the MANUAL rather than of the prover -- upstream states the constructive ground before anything runs.",
+    "world": "a2-holed"
+  },
+  "api_calls": 0,
+  "cost": {
+    "P4_this_arm_is_cheaper_not_dearer": true,
+    "lean_runs": {
+      "a0-base": {
+        "available": true,
+        "bytes": 70259,
+        "file": "cold-start-a0/theory/generated/theory.lean",
+        "output": [
+          "'inv_all' does not depend on any axioms"
+        ],
+        "ran_on": "a copy in a temp directory, not the upstream file",
+        "returncode": 0,
+        "seconds": 2.108
+      },
+      "a0-no-button": {
+        "available": true,
+        "bytes": 9950,
+        "file": "cold-start-a0/theory/generated_no_button/theory.lean",
+        "output": [
+          "'unsolvable' does not depend on any axioms"
+        ],
+        "ran_on": "a copy in a temp directory, not the upstream file",
+        "returncode": 0,
+        "seconds": 0.555
+      },
+      "a2-holed": {
+        "available": true,
+        "bytes": 69564,
+        "file": "cold-start-a2/theory/generated_holed/theory.lean",
+        "output": [
+          "'unsolvable' does not depend on any axioms"
+        ],
+        "ran_on": "a copy in a temp directory, not the upstream file",
+        "returncode": 0,
+        "seconds": 1.74
+      }
+    },
+    "reading": "P-4 holds in every unit that could be measured, and it holds trivially: the cut removes work and adds none. DESIGN.md §8 gave P-4 the power to kill a claim of the mother framework -- if the ablated arm were both cheaper and equally right, C5's '理解省' half would have to be withdrawn. It is cheaper. It is equally right on A0. It is WRONG on A2, and that is what saves the claim: the saving is real and it is paid for in the only currency that matters, the ability to tell a true theorem from a false one.",
+    "rows": [
+      {
+        "ablated_arm": "NOT_MEASURED",
+        "comparable": false,
+        "full_arm": "NOT_MEASURED",
+        "note": "neither arm spent a dollar on A0 or A2. Both cold starts are offline; `proxy/var/` holds no ledger for either; and this arm is offline by construction (`ledger_abl.py:9`). `$0 vs $0` is true and carries no information, so dollars are reported as not measured rather than as a tie. The full arm's only metered spending is in `theoria-arm/runs/` on live ARC games, which is a different world with no ablated counterpart.",
+        "quantity": "cost · dollars",
+        "same": null,
+        "source": "proxy/var/ is empty for both arms"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 0,
+        "note": "both arms made zero model calls on these runs. For the full arm that is a property of the *replay* of a cold start whose theorize beat was performed once by hand, not a property of the arm; for this arm it is constructive. Recorded because a reader will look for it, and flagged because the equality is an artefact of how the comparison had to be set up.",
+        "quantity": "cost · model calls",
+        "same": true,
+        "source": "both cold starts are offline replays"
+      },
+      {
+        "ablated_arm": 0.0,
+        "comparable": true,
+        "full_arm": 4.403,
+        "note": "WALL CLOCK -- the one non-deterministic number in this report. What is deterministic is that the ablated side is zero by construction, not by luck.",
+        "quantity": "cost · certification fuel (Lean wall-clock seconds, 3 worlds)",
+        "same": false,
+        "source": "measured here on copies | this arm never generates Lean (C-1)"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 149773,
+        "note": "byte-exact and deterministic",
+        "quantity": "cost · proof-artefact bytes (3 worlds)",
+        "same": false,
+        "source": "cold-start-a{0,2}/theory/generated*/theory.lean | no .lean under ablation-arm/artifacts/ (found 0)"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 12,
+        "note": "5 probes designed, 4 executed. In the wild each is an API call.",
+        "quantity": "cost · world steps spent on directed probes (a2-holed)",
+        "same": false,
+        "source": "loop_ledger.json L3 | artifacts/a2-holed/plan.json"
+      },
+      {
+        "ablated_arm": 0,
+        "comparable": true,
+        "full_arm": 8,
+        "note": "the ablated arm's repair beats are present and never reached: the bus is empty, so the gate does not open",
+        "quantity": "cost · repair beats executed (a2-holed)",
+        "same": false,
+        "source": "loop_ledger.json:beats | artifacts/a2-holed/run_report.json"
+      }
+    ],
+    "strictly_cheaper_on": [
+      "cost · certification fuel (Lean wall-clock seconds, 3 worlds)",
+      "cost · proof-artefact bytes (3 worlds)",
+      "cost · world steps spent on directed probes (a2-holed)",
+      "cost · repair beats executed (a2-holed)"
+    ],
+    "units": {
+      "certification_fuel_seconds": {
+        "status": "measured here",
+        "why": "the expensive certify layer is the cut (C-2), so the fuel it burns is the cost the incision removes. Lean 4 is installed and the full arm's `theory.lean` files are on disk, so this is measured rather than inferred. Wall clock, so it is the one non-deterministic field in this report and is marked as such; what is deterministic and load-bearing is that one side is zero *by construction* and the other is not."
+      },
+      "model_calls": {
+        "status": "measured, and equal at zero",
+        "why": "both arms made zero model calls on these runs. For the full arm that is a property of the *replay* of a cold start whose theorize beat was performed once by hand, not a property of the arm; for this arm it is constructive. Recorded because a reader will look for it, and flagged because the equality is an artefact of how the comparison had to be set up."
+      },
+      "proof_artefact_bytes": {
+        "status": "measured here",
+        "why": "byte-exact, deterministic, and needs no interpretation: the full arm emits a Lean formalisation per world and this arm emits none, because `compile_abl` never calls `generate_lean` (C-1). This is the cheapest honest proxy for the size of the obligation."
+      },
+      "usd": {
+        "status": "NOT_MEASURED",
+        "why": "neither arm spent a dollar on A0 or A2. Both cold starts are offline; `proxy/var/` holds no ledger for either; and this arm is offline by construction (`ledger_abl.py:9`). `$0 vs $0` is true and carries no information, so dollars are reported as not measured rather than as a tie. The full arm's only metered spending is in `theoria-arm/runs/` on live ARC games, which is a different world with no ablated counterpart."
+      },
+      "world_interactions": {
+        "status": "measured here",
+        "why": "the currency that transfers to the wild. Offline these are free; in Phase 3 every one of them is an API call against a live game, so a difference here is a difference in the bill that Theoria.md C5 is about. The full arm's A2 repair loop spends world steps on directed probes; this arm spends none, because the obligation that schedules them was cut."
+      }
+    }
+  },
+  "limits": [
+    "Two self-built offline worlds, zero API contact, zero sealed-pile contact. This calibrates a MECHANISM, not an effect size on ARC (DESIGN.md §10 item 5).",
+    "The two arms share a manual by design, so score and replay equality is partly constructive and says nothing about induction.",
+    "The full arm's A0 cold start never ran its inner loop either (A0_REPORT.md §6.1), so 'theorize rounds' has no comparable pair on A0. The A2 fork is where the full arm's loop actually turns.",
+    "Lean seconds are wall clock and will differ run to run; the load-bearing half of that row is the constructive zero."
+  ],
+  "not_comparable": [
+    {
+      "quantity": "theorize rounds · a0",
+      "why": "**This arm never theorized.** `build_theory.py` derives its manuals by mechanically downgrading the full arm's DSL (cold-start-a0/theory/theory.dsl -> theory/a0_base.dsl; laws demoted, theorems deleted; both sha256s in DOWNGRADE_REPORT.json). That is deliberate -- a re-theorized manual would be a second difference and Theoria.md:280 says a second difference makes the first unattributable -- and it is exactly why the number is not comparable. The full arm's own figure is also weak: A0_REPORT.md §6.1 records that the theorize->certify inner loop never ran on A0 either, so even the full arm's `1 pass, 0 revisions` measures a cold start rather than a loop. On A2 the full arm's loop does run, and that row is in `a2_fork` where it belongs."
+    },
+    {
+      "quantity": "theorize rounds owed after the run · a0-base",
+      "why": "what IS comparable is whether the run ended owing a theorize turn. The full arm's cold start records no equivalent field, so its cell is not measured rather than False."
+    },
+    {
+      "quantity": "surprises on the bus",
+      "why": "the full arm has no surprise-bus field -- `surprise.py` is this arm's construction (DESIGN.md §7.3), built so BOTH arms could share one scheduling rule. Only one arm has been instrumented with it, so this cell is not measured rather than 0."
+    },
+    {
+      "quantity": "cost · dollars",
+      "why": "neither arm spent a dollar on A0 or A2. Both cold starts are offline; `proxy/var/` holds no ledger for either; and this arm is offline by construction (`ledger_abl.py:9`). `$0 vs $0` is true and carries no information, so dollars are reported as not measured rather than as a tie. The full arm's only metered spending is in `theoria-arm/runs/` on live ARC games, which is a different world with no ablated counterpart."
+    }
+  ],
+  "offline": true,
+  "predictions": [
+    {
+      "claim": "replay accuracy byte-equal to the full arm",
+      "evidence": {
+        "replay accuracy · a0-base · frames": [
+          276,
+          276
+        ],
+        "replay accuracy · a0-base · green": [
+          true,
+          true
+        ],
+        "replay accuracy · a0-base · pixels checked": [
+          22356,
+          22356
+        ],
+        "replay accuracy · a0-base · pixels unexplained": [
+          0,
+          0
+        ],
+        "replay accuracy · a0-no-button · frames": [
+          112,
+          112
+        ],
+        "replay accuracy · a0-no-button · green": [
+          true,
+          true
+        ],
+        "replay accuracy · a0-no-button · pixels checked": [
+          9072,
+          9072
+        ],
+        "replay accuracy · a0-no-button · pixels unexplained": [
+          0,
+          0
+        ]
+      },
+      "holds": true,
+      "name": "P-1",
+      "settled_by": "A4b-ablation-calibrate"
+    },
+    {
+      "caveat": "equal, but partly BY CONSTRUCTION: both arms hold the same manual, because this arm was handed a downgrade of the full arm's DSL rather than theorizing its own. What P-2 therefore establishes is that the incision did not damage the representation layer -- which is what it was pre-registered to test -- and NOT that this arm induces as good a manual. Anyone quoting these numbers as 'the ablated arm learns as well' is misquoting them.",
+      "claim": "behavioural / held-out accuracy equal to the full arm",
+      "evidence": {
+        "score · behavioural accuracy (a0-no-button)": [
+          1.0,
+          1.0
+        ],
+        "score · behavioural accuracy vs ground truth (a0-base)": [
+          0.987288,
+          0.987288
+        ],
+        "score · held-out accuracy (a0-base)": [
+          0.0,
+          0.0
+        ]
+      },
+      "holds": true,
+      "name": "P-2",
+      "settled_by": "A4b-ablation-calibrate"
+    },
+    {
+      "claim": "this arm is cheaper, not dearer",
+      "evidence": {
+        "dearer_on": [],
+        "strictly_cheaper_on": [
+          "cost · certification fuel (Lean wall-clock seconds, 3 worlds)",
+          "cost · proof-artefact bytes (3 worlds)",
+          "cost · world steps spent on directed probes (a2-holed)",
+          "cost · repair beats executed (a2-holed)"
+        ]
+      },
+      "holds": true,
+      "name": "P-4",
+      "settled_by": "A4b-ablation-calibrate"
+    },
+    {
+      "claim": "the A0 verdict is identical to the full arm's, word for word",
+      "evidence": {
+        "a0-base plan length": [
+          12,
+          12
+        ],
+        "a0-no-button": [
+          "UNSAT / unsolvable",
+          "UNSAT / unsolvable"
+        ]
+      },
+      "holds": true,
+      "name": "P-5(identical)",
+      "settled_by": "A4b-ablation-calibrate"
+    },
+    {
+      "claim": "A4a asserted that this arm believes A2's false theorem. A4b adds what the full arm does at the same point, so the contrast is in one table.",
+      "evidence": {
+        "ablated": "UNSAT settled bare, bus empty, archived",
+        "full": "theorem proved axiom-free, refuted by witness, localised, probed, repaired, re-planned SAT/18"
+      },
+      "holds": true,
+      "name": "P-6(full-arm column)",
+      "settled_by": "A4b-ablation-calibrate"
+    }
+  ],
+  "predictions_hold": true,
+  "prompt_id": "A4b-ablation-calibrate",
+  "sources": {
+    "cold-start-a0/artifacts/certify_cheap_raw_trace.json": "3dda0c3c205845a360f6d9c6aeae571aa8eb6262d169635d37f81ab52c21f14b",
+    "cold-start-a0/artifacts/certify_lean_generated_theory_lean.json": "1b3327ef448482ee3e5736644de5c516b60cc38dab79652a73d2a42aba49f14d",
+    "cold-start-a0/artifacts/plan_generated.json": "79e6e4ae48365425307cd93c12842db69641619717acea601c453dfaa7653172",
+    "cold-start-a0/artifacts/plan_generated_no_button.json": "c76e4930053eb3d7573975f94fab543c7a28db560f8c51b0cd85611d03ce0f62",
+    "cold-start-a0/artifacts/score_vs_truth.json": "8bf2e036afc9e951af6ced93e920c395a49af45dae21878aedd34d3ad1babadd",
+    "cold-start-a0/artifacts/trace_summary.json": "fd86d2239c8351d6170fe192db52675e77d3e1bd9a18edbbebbb8544dc4acc45",
+    "cold-start-a0/artifacts/unsolvable_report.json": "a636dcb0db80a8faaba480a4c5132c946c918e5c5c2ba5e7d83fba2201287ccb",
+    "cold-start-a0/theory/generated/theory.lean": "5100972f272986723a367bf894428efd4041d719c33dd3b336e72918c4ffdb65",
+    "cold-start-a0/theory/generated_no_button/theory.lean": "e73a105a0e573ff68f802df9b3f2d24b2ac638fc223b1ae88e91564504e4ca10",
+    "cold-start-a2/artifacts/exhibit_report.json": "905c6a214ebe5d56a7efc82fd1ed971f7f64e8fb5144a12e5b14aaad1f4f35e1",
+    "cold-start-a2/artifacts/locate_report.json": "8001a7b6b3d8251986b5802ae7e8b2bc465268a863888d8ca6dd90d5cde00da9",
+    "cold-start-a2/artifacts/loop_ledger.json": "8d711fabcc40aae2e67838c5c91a11192c1c946fd9c89bf2149d1f0c1e878eb6",
+    "cold-start-a2/artifacts/plan_repaired.json": "8583e7a74eedc1c05d17c0f4cbed79dc3a79cb31112d2da2aedae60071330f15",
+    "cold-start-a2/artifacts/probe_report.json": "5f48e19b116267afbf6bc60f16def91c1dbcd2b8998f1e3bbe10bde6f3336270",
+    "cold-start-a2/artifacts/refutation.json": "3030e7bd3b1e707f3b46da8e131b88a65896113fd47937d2eeedb9d07575feb8",
+    "cold-start-a2/artifacts/repair_report.json": "246b741529c990b7bb2b8a7f4e89922e889a6dc6109a9eb1891124f62bc2f8b6",
+    "cold-start-a2/theory/generated_holed/theory.lean": "9bdebadcb6865f7b10c9fb061b7a0f85fcc49d96ddb007902cb4fab3b150407a"
+  },
+  "upstream_files_changed": [],
+  "upstream_trees_hashed": 514,
+  "upstream_unchanged": true,
+  "what": "A4b -- the ablation arm calibrated against the full arm"
+}

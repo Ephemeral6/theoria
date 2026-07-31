@@ -1,0 +1,13 @@
+{
+  "prompt_id": "P5-release",
+  "branch": "agent/p5-release",
+  "base_commit": "398144e",
+  "utc": "2026-07-28T14:00:00Z",
+  "worker": "RES-2",
+  "lane": "paper",
+  "territory": "release",
+  "status": "plan-only",
+  "spend": {"api_calls": 0, "model_calls": 0, "usd": 0.0, "network": false},
+  "sealed_pile_contact": "none",
+  "note": "release/ was greenfield. release/PLAN.md written before any enumerator code; the licence filter (R2) is recorded as a precondition on the manifest rather than a follow-up, because building the manifest first would mean committing one that lists frame data as releasable."
+}

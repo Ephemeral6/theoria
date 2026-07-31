@@ -1,0 +1,23 @@
+{
+  "calibrated": true,
+  "calibration_failures": [],
+  "marked": [],
+  "provenance": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ]
+  },
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
+}

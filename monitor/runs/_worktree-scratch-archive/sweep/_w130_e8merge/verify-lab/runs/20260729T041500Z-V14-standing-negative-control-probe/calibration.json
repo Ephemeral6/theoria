@@ -1,0 +1,3673 @@
+{
+  "granularity_conflicts": [
+    "ablation-arm/run_arm.py",
+    "arc-recon/client.py",
+    "arc-recon/contamination.py",
+    "arc-recon/precheck.py",
+    "exam/verify.py",
+    "proxy/spend_gate.py",
+    "worldgen/build.py",
+    "worldgen/qc/run_qc.py"
+  ],
+  "matrices": {
+    "A": {
+      "harsh": {
+        "FN": 14,
+        "FP": 13,
+        "TN": 38,
+        "TP": 32,
+        "accuracy": 0.7216,
+        "false_negative_rate": 0.3043,
+        "false_positive_rate": 0.2549,
+        "n": 97,
+        "precision": 0.7111,
+        "recall": 0.6957
+      },
+      "strict": {
+        "FN": 22,
+        "FP": 4,
+        "TN": 30,
+        "TP": 41,
+        "accuracy": 0.732,
+        "false_negative_rate": 0.3492,
+        "false_positive_rate": 0.1176,
+        "n": 97,
+        "precision": 0.9111,
+        "recall": 0.6508
+      },
+      "three_way": {
+        "no": {
+          "absent": 30,
+          "present": 4
+        },
+        "partial": {
+          "absent": 8,
+          "present": 9
+        },
+        "yes": {
+          "absent": 14,
+          "present": 32
+        }
+      }
+    },
+    "A-": {
+      "harsh": {
+        "FN": 15,
+        "FP": 11,
+        "TN": 40,
+        "TP": 31,
+        "accuracy": 0.732,
+        "false_negative_rate": 0.3261,
+        "false_positive_rate": 0.2157,
+        "n": 97,
+        "precision": 0.7381,
+        "recall": 0.6739
+      },
+      "strict": {
+        "FN": 24,
+        "FP": 3,
+        "TN": 31,
+        "TP": 39,
+        "accuracy": 0.7216,
+        "false_negative_rate": 0.381,
+        "false_positive_rate": 0.0882,
+        "n": 97,
+        "precision": 0.9286,
+        "recall": 0.619
+      },
+      "three_way": {
+        "no": {
+          "absent": 31,
+          "present": 3
+        },
+        "partial": {
+          "absent": 9,
+          "present": 8
+        },
+        "yes": {
+          "absent": 15,
+          "present": 31
+        }
+      }
+    },
+    "A-B": {
+      "harsh": {
+        "FN": 12,
+        "FP": 12,
+        "TN": 39,
+        "TP": 34,
+        "accuracy": 0.7526,
+        "false_negative_rate": 0.2609,
+        "false_positive_rate": 0.2353,
+        "n": 97,
+        "precision": 0.7391,
+        "recall": 0.7391
+      },
+      "strict": {
+        "FN": 20,
+        "FP": 3,
+        "TN": 31,
+        "TP": 43,
+        "accuracy": 0.7629,
+        "false_negative_rate": 0.3175,
+        "false_positive_rate": 0.0882,
+        "n": 97,
+        "precision": 0.9348,
+        "recall": 0.6825
+      },
+      "three_way": {
+        "no": {
+          "absent": 31,
+          "present": 3
+        },
+        "partial": {
+          "absent": 8,
+          "present": 9
+        },
+        "yes": {
+          "absent": 12,
+          "present": 34
+        }
+      }
+    },
+    "AB": {
+      "harsh": {
+        "FN": 11,
+        "FP": 14,
+        "TN": 37,
+        "TP": 35,
+        "accuracy": 0.7423,
+        "false_negative_rate": 0.2391,
+        "false_positive_rate": 0.2745,
+        "n": 97,
+        "precision": 0.7143,
+        "recall": 0.7609
+      },
+      "strict": {
+        "FN": 18,
+        "FP": 4,
+        "TN": 30,
+        "TP": 45,
+        "accuracy": 0.7732,
+        "false_negative_rate": 0.2857,
+        "false_positive_rate": 0.1176,
+        "n": 97,
+        "precision": 0.9184,
+        "recall": 0.7143
+      },
+      "three_way": {
+        "no": {
+          "absent": 30,
+          "present": 4
+        },
+        "partial": {
+          "absent": 7,
+          "present": 10
+        },
+        "yes": {
+          "absent": 11,
+          "present": 35
+        }
+      }
+    },
+    "B": {
+      "harsh": {
+        "FN": 42,
+        "FP": 1,
+        "TN": 50,
+        "TP": 4,
+        "accuracy": 0.5567,
+        "false_negative_rate": 0.913,
+        "false_positive_rate": 0.0196,
+        "n": 97,
+        "precision": 0.8,
+        "recall": 0.087
+      },
+      "strict": {
+        "FN": 58,
+        "FP": 0,
+        "TN": 34,
+        "TP": 5,
+        "accuracy": 0.4021,
+        "false_negative_rate": 0.9206,
+        "false_positive_rate": 0.0,
+        "n": 97,
+        "precision": 1.0,
+        "recall": 0.0794
+      },
+      "three_way": {
+        "no": {
+          "absent": 34,
+          "present": 0
+        },
+        "partial": {
+          "absent": 16,
+          "present": 1
+        },
+        "yes": {
+          "absent": 42,
+          "present": 4
+        }
+      }
+    },
+    "N": {
+      "harsh": {
+        "FN": 19,
+        "FP": 11,
+        "TN": 40,
+        "TP": 27,
+        "accuracy": 0.6907,
+        "false_negative_rate": 0.413,
+        "false_positive_rate": 0.2157,
+        "n": 97,
+        "precision": 0.7105,
+        "recall": 0.587
+      },
+      "strict": {
+        "FN": 28,
+        "FP": 3,
+        "TN": 31,
+        "TP": 35,
+        "accuracy": 0.6804,
+        "false_negative_rate": 0.4444,
+        "false_positive_rate": 0.0882,
+        "n": 97,
+        "precision": 0.9211,
+        "recall": 0.5556
+      },
+      "three_way": {
+        "no": {
+          "absent": 31,
+          "present": 3
+        },
+        "partial": {
+          "absent": 9,
+          "present": 8
+        },
+        "yes": {
+          "absent": 19,
+          "present": 27
+        }
+      }
+    }
+  },
+  "matrices_no_granularity_conflict": {
+    "A": {
+      "harsh": {
+        "FN": 14,
+        "FP": 8,
+        "TN": 34,
+        "TP": 25,
+        "accuracy": 0.7284,
+        "false_negative_rate": 0.359,
+        "false_positive_rate": 0.1905,
+        "n": 81,
+        "precision": 0.7576,
+        "recall": 0.641
+      },
+      "strict": {
+        "FN": 20,
+        "FP": 1,
+        "TN": 28,
+        "TP": 32,
+        "accuracy": 0.7407,
+        "false_negative_rate": 0.3846,
+        "false_positive_rate": 0.0345,
+        "n": 81,
+        "precision": 0.9697,
+        "recall": 0.6154
+      },
+      "three_way": {
+        "no": {
+          "absent": 28,
+          "present": 1
+        },
+        "partial": {
+          "absent": 6,
+          "present": 7
+        },
+        "yes": {
+          "absent": 14,
+          "present": 25
+        }
+      }
+    },
+    "A-": {
+      "harsh": {
+        "FN": 15,
+        "FP": 6,
+        "TN": 36,
+        "TP": 24,
+        "accuracy": 0.7407,
+        "false_negative_rate": 0.3846,
+        "false_positive_rate": 0.1429,
+        "n": 81,
+        "precision": 0.8,
+        "recall": 0.6154
+      },
+      "strict": {
+        "FN": 22,
+        "FP": 0,
+        "TN": 29,
+        "TP": 30,
+        "accuracy": 0.7284,
+        "false_negative_rate": 0.4231,
+        "false_positive_rate": 0.0,
+        "n": 81,
+        "precision": 1.0,
+        "recall": 0.5769
+      },
+      "three_way": {
+        "no": {
+          "absent": 29,
+          "present": 0
+        },
+        "partial": {
+          "absent": 7,
+          "present": 6
+        },
+        "yes": {
+          "absent": 15,
+          "present": 24
+        }
+      }
+    },
+    "A-B": {
+      "harsh": {
+        "FN": 12,
+        "FP": 7,
+        "TN": 35,
+        "TP": 27,
+        "accuracy": 0.7654,
+        "false_negative_rate": 0.3077,
+        "false_positive_rate": 0.1667,
+        "n": 81,
+        "precision": 0.7941,
+        "recall": 0.6923
+      },
+      "strict": {
+        "FN": 18,
+        "FP": 0,
+        "TN": 29,
+        "TP": 34,
+        "accuracy": 0.7778,
+        "false_negative_rate": 0.3462,
+        "false_positive_rate": 0.0,
+        "n": 81,
+        "precision": 1.0,
+        "recall": 0.6538
+      },
+      "three_way": {
+        "no": {
+          "absent": 29,
+          "present": 0
+        },
+        "partial": {
+          "absent": 6,
+          "present": 7
+        },
+        "yes": {
+          "absent": 12,
+          "present": 27
+        }
+      }
+    },
+    "AB": {
+      "harsh": {
+        "FN": 11,
+        "FP": 9,
+        "TN": 33,
+        "TP": 28,
+        "accuracy": 0.7531,
+        "false_negative_rate": 0.2821,
+        "false_positive_rate": 0.2143,
+        "n": 81,
+        "precision": 0.7568,
+        "recall": 0.7179
+      },
+      "strict": {
+        "FN": 16,
+        "FP": 1,
+        "TN": 28,
+        "TP": 36,
+        "accuracy": 0.7901,
+        "false_negative_rate": 0.3077,
+        "false_positive_rate": 0.0345,
+        "n": 81,
+        "precision": 0.973,
+        "recall": 0.6923
+      },
+      "three_way": {
+        "no": {
+          "absent": 28,
+          "present": 1
+        },
+        "partial": {
+          "absent": 5,
+          "present": 8
+        },
+        "yes": {
+          "absent": 11,
+          "present": 28
+        }
+      }
+    },
+    "B": {
+      "harsh": {
+        "FN": 35,
+        "FP": 1,
+        "TN": 41,
+        "TP": 4,
+        "accuracy": 0.5556,
+        "false_negative_rate": 0.8974,
+        "false_positive_rate": 0.0238,
+        "n": 81,
+        "precision": 0.8,
+        "recall": 0.1026
+      },
+      "strict": {
+        "FN": 47,
+        "FP": 0,
+        "TN": 29,
+        "TP": 5,
+        "accuracy": 0.4198,
+        "false_negative_rate": 0.9038,
+        "false_positive_rate": 0.0,
+        "n": 81,
+        "precision": 1.0,
+        "recall": 0.0962
+      },
+      "three_way": {
+        "no": {
+          "absent": 29,
+          "present": 0
+        },
+        "partial": {
+          "absent": 12,
+          "present": 1
+        },
+        "yes": {
+          "absent": 35,
+          "present": 4
+        }
+      }
+    },
+    "N": {
+      "harsh": {
+        "FN": 18,
+        "FP": 7,
+        "TN": 35,
+        "TP": 21,
+        "accuracy": 0.6914,
+        "false_negative_rate": 0.4615,
+        "false_positive_rate": 0.1667,
+        "n": 81,
+        "precision": 0.75,
+        "recall": 0.5385
+      },
+      "strict": {
+        "FN": 24,
+        "FP": 0,
+        "TN": 29,
+        "TP": 28,
+        "accuracy": 0.7037,
+        "false_negative_rate": 0.4615,
+        "false_positive_rate": 0.0,
+        "n": 81,
+        "precision": 1.0,
+        "recall": 0.5385
+      },
+      "three_way": {
+        "no": {
+          "absent": 29,
+          "present": 0
+        },
+        "partial": {
+          "absent": 6,
+          "present": 7
+        },
+        "yes": {
+          "absent": 18,
+          "present": 21
+        }
+      }
+    }
+  },
+  "out_of_scope": [
+    {
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/runs/20260728T102343Z-c7/verify.sh`",
+      "evidence": "`set -eu` + 第 3 段 heredoc `sys.exit(1 if bad else 0)`。实测逐段：pytest exit 0；`probe_mentions` 7 行 ok exit 0；第 3 段 10 份说明书全编译 + 负控 `a0-spike/theory/theory.dsl` `refused as expected: expected a direction from [...]` exit 0。负控是脚本自带的（`:72-83`：该说明书必须编译失败，否则 `bad += 1`）",
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "has_negctl": "是(实测)",
+      "path": "theory-compiler/runs/20260728T102343Z-c7/verify.sh",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler",
+      "why_out_of_scope": "shell entry point; this criterion parses Python"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`fuzzlab/tests/test_battery.py::test_short_campaign_finds_no_violation`",
+      "evidence": "23 条不变式唯一的判决点（每引擎 25 世界）。用注入故障证过 `check()` 会吐 `violated`，但仓库里没有任何注入故障的构造",
+      "exit_honest": "是",
+      "gold": "no",
+      "has_negctl": "否(实测+读码)",
+      "path": "fuzzlab/tests/test_battery.py",
+      "strength": "混合",
+      "territory": "worldgen/fuzzlab",
+      "why_out_of_scope": "the entry point is itself a test file"
+    },
+    {
+      "can_fail": "是",
+      "entry": "`fuzzlab/tests/test_oracles.py`",
+      "evidence": "真负控，但是给 oracle 的不是给不变式的：`:98`、`:121/:127/:140/:146`、`:167`、`:43`。证明「坏输入进 oracle 必须被拒」，不证明「坏引擎进不变式必须响」",
+      "exit_honest": "是",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": "fuzzlab/tests/test_oracles.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab",
+      "why_out_of_scope": "the entry point is itself a test file"
+    },
+    {
+      "can_fail": "是",
+      "entry": "`fuzzlab/tests/test_battery.py::test_distinct_indices_give_distinct_worlds`",
+      "evidence": "反重言测试：注释直说「a generator that ignored its seed would pass everything else」。是生成器的负控，不是不变式的",
+      "exit_honest": "是",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": "fuzzlab/tests/test_battery.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab",
+      "why_out_of_scope": "the entry point is itself a test file"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`figures/verify.sh`",
+      "evidence": "实跑 `bash figures/verify.sh` → 第 1 关 fig06 抛 `ValueError: THEORIZE_LOG.md: entry ids do not match the declared set. unexpected=['E-08']`，印 `FAIL: build pass A did not complete`，exit 1。九关中只有第 8 关自带负控（第 0、2、3、4、6、7 关零可执行负控；第 1、5、7 关只有意外/假阳性触发史）",
+      "exit_honest": "是(实测)",
+      "gold": "partial",
+      "has_negctl": "部分(实测)",
+      "path": "figures/verify.sh",
+      "strength": "实测",
+      "territory": "figures/release",
+      "why_out_of_scope": "shell entry point; this criterion parses Python"
+    },
+    {
+      "can_fail": "是(读码)",
+      "entry": "`proxy/verify_spend.sh`",
+      "evidence": "`fail=1; exit \"$fail\"`。内部三条 grep 式检查（无 off switch / 无绕过 socket）没有植入违例的负控；同一断言在 `proxy/tests/test_spend_gate.py:419,426` 再断一次，但只在干净仓库上跑通。未跑：会调用 `baseline-arms/harness/ledger.py`",
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "has_negctl": "部分(读码)",
+      "path": "proxy/verify_spend.sh",
+      "strength": "读码",
+      "territory": "proxy/arc-recon",
+      "why_out_of_scope": "shell entry point; this criterion parses Python"
+    },
+    {
+      "can_fail": "是(读码)",
+      "entry": "`arc-recon/verify.sh`（arc-recon 绿灯）",
+      "evidence": "`fail=1; exit \"$fail\"`。`arc-recon/verify.sh:53` 那一步的标签写着「pile cut, claim set and the sealed-contact audit」，但它调用的 `contamination.py` 只让切分哈希决定退出码",
+      "exit_honest": "部分(实测)",
+      "gold": "partial",
+      "has_negctl": "部分",
+      "path": "arc-recon/verify.sh",
+      "strength": "混合",
+      "territory": "proxy/arc-recon",
+      "why_out_of_scope": "shell entry point; this criterion parses Python"
+    },
+    {
+      "can_fail": "是(实测走绿；红路径读码 `verify.py:361`)",
+      "entry": "`ablation-arm/verify.sh` → `ablation-arm/verify.py`（完工闸）",
+      "evidence": "实测 `python ablation-arm/verify.py` → `GREEN` EXIT=0，五 stage 全 ok。负控 `ablation-arm/tests/test_verify.py:54-70`（4 组参数篡改 `run_all.json` 断言指定断言必须变红）、`:73`（字段缺失不得被读成闸门想要的值）",
+      "exit_honest": "是(读码+实测绿)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": "ablation-arm/verify.sh",
+      "strength": "混合",
+      "territory": "arms",
+      "why_out_of_scope": "shell entry point; this criterion parses Python"
+    }
+  ],
+  "resolved": [
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`engine-rig/tools/validate_candidates.py`",
+      "evidence": [
+        {
+          "lineno": 282,
+          "target": "engine-rig/tools/validate_candidates.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_validator_rejects_malformed_rows",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 289,
+          "target": "engine-rig/tools/validate_candidates.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_validator_reports_bad_json_and_blank_lines",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "engine-rig/tools/validate_candidates.py",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`engine-rig/tools/run_all.py`",
+      "evidence": [
+        {
+          "lineno": 317,
+          "target": "engine-rig/tools/run_all.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_cli_refuses_to_append_to_an_existing_file",
+          "why": "assert <exit code> == 2"
+        }
+      ],
+      "exit_honest": "是(实测/读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "engine-rig/tools/run_all.py",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`engine-rig/bench/__main__.py`（`python -m bench`）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "engine-rig/bench/__main__.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`engine-rig/bench/verify.py`",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "engine-rig/bench/verify.py",
+      "strength": "实测",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "部分(实测)",
+      "entry": "`engine-rig/tools/p13_fd_dividend.py`",
+      "evidence": [],
+      "exit_honest": "否(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "engine-rig/tools/p13_fd_dividend.py",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`engine-rig/fixtures/generate_all.py`（+cart_world/pair_flip/peg4/sokoban）",
+      "evidence": [],
+      "exit_honest": "不适用",
+      "gold": "n/a",
+      "granularity_conflict": false,
+      "has_negctl": "不适用",
+      "path": "engine-rig/fixtures/generate_all.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "present",
+      "AB": "present",
+      "B": "present",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/verify_c4.py`",
+      "evidence": [
+        {
+          "lineno": 93,
+          "target": "theory-compiler/tools/verify_c4.py",
+          "test_file": "theory-compiler/tools/verify_c4.py",
+          "test_func": "control_source",
+          "why": "in-tree self-test (raise)"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "theory-compiler/tools/verify_c4.py",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/verify_c8.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "theory-compiler/tools/verify_c8.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/probe_mentions.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "theory-compiler/tools/probe_mentions.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`theory-compiler/tools/validate_candidates_v02.py`",
+      "evidence": [
+        {
+          "lineno": 115,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_a_blank_line_is_a_malformed_stream",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 277,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_no_arguments_prints_a_usage_line",
+          "why": "assert <exit code> == 2"
+        },
+        {
+          "lineno": 281,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_a_mistyped_flag_is_refused_rather_than_ignored",
+          "why": "assert <exit code> == 2"
+        },
+        {
+          "lineno": 295,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_a_bad_file_exits_one",
+          "why": "assert <exit code> == 1"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "theory-compiler/tools/validate_candidates_v02.py",
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`theory-compiler/tools/refresh_manifest.py --check`",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "theory-compiler/tools/refresh_manifest.py",
+      "strength": "实测",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/transcribe_deadlock_certificates.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/build_handover_packages.py --check`",
+      "evidence": [
+        {
+          "lineno": 199,
+          "target": "theory-compiler/tools/build_handover_packages.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_one_board_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "theory-compiler/tools/build_handover_packages.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`theory-compiler/tools/handover_exam.py mark`",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "theory-compiler/tools/handover_exam.py",
+      "strength": "实测",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/conftest.py`（`THEORIA_REQUIRE_LEAN=1`）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "theory-compiler/conftest.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/tools/build_deadlock_lean.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "theory-compiler/tools/build_deadlock_lean.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler/src/theory_compiler/handover.py`（`python -m theory_compiler.handover`）",
+      "evidence": [
+        {
+          "lineno": 177,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_no_plan_is_shipped",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 199,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_one_board_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 208,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_an_undefined_primitive_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 230,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_an_undeclared_event_meaning_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "部分(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "theory-compiler/src/theory_compiler/handover.py",
+      "strength": "读码",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`exam/verify.py`（五阶段总闸）",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "partial",
+      "granularity_conflict": true,
+      "has_negctl": "部分(读码)",
+      "path": "exam/verify.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`exam/tools/build_papers.py`（漏题闸）",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测+读码)",
+      "path": "exam/tools/build_papers.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`exam/leakage.py::check_paper`（四检合一）",
+      "evidence": [
+        {
+          "lineno": 76,
+          "target": "exam/leakage.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_leak_probe_fires_on_a_planted_answer",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 85,
+          "target": "exam/leakage.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_structural_check_catches_an_unprobed_leak",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 96,
+          "target": "exam/leakage.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_short_probes_are_refused_rather_than_checked",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 101,
+          "target": "exam/leakage.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_an_item_with_no_probe_is_not_assumed_innocent",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "exam/leakage.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`exam/tools/run_exam.py --calibrate`（判卷器标定闸）",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "exam/tools/run_exam.py",
+      "strength": "实测",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "present",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`exam/grading/calibration.py::assert_calibrated`",
+      "evidence": [
+        {
+          "lineno": 103,
+          "target": "exam/grading/calibration.py",
+          "test_file": "exam/tests/test_selftest.py",
+          "test_func": "test_a_marker_that_truncates_partial_credit_fails_only_the_new_check",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 153,
+          "target": "exam/grading/calibration.py",
+          "test_file": "exam/grading/calibration.py",
+          "test_func": "calibrate_one",
+          "why": "in-tree self-test (problems.append)"
+        },
+        {
+          "lineno": 326,
+          "target": "exam/grading/calibration.py",
+          "test_file": "exam/grading/calibration.py",
+          "test_func": "assert_calibrated",
+          "why": "in-tree self-test (raise)"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "exam/grading/calibration.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`exam/tools/run_selftest.py`（变异体+故障注入）",
+      "evidence": [],
+      "exit_honest": "部分(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测+读码)",
+      "path": "exam/tools/run_selftest.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`exam/grading/selftest.py`（变异体电池 / FAULTS）",
+      "evidence": [
+        {
+          "lineno": 86,
+          "target": "exam/grading/selftest.py",
+          "test_file": "exam/tests/test_selftest.py",
+          "test_func": "test_a_marker_that_pays_for_silence_fails_drop_exact",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 96,
+          "target": "exam/grading/selftest.py",
+          "test_file": "exam/tests/test_selftest.py",
+          "test_func": "test_a_marker_that_accepts_anything_fails_transplant_and_garbage",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 103,
+          "target": "exam/grading/selftest.py",
+          "test_file": "exam/tests/test_selftest.py",
+          "test_func": "test_a_marker_that_truncates_partial_credit_fails_only_the_new_check",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 123,
+          "target": "exam/grading/selftest.py",
+          "test_file": "exam/tests/test_selftest.py",
+          "test_func": "test_an_order_dependent_marker_fails_the_key_order_mutant",
+          "why": "assert not <verdict>"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "exam/grading/selftest.py",
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "present",
+      "AB": "present",
+      "B": "present",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`exam/tools/run_matrix.py`（20 世界判卷矩阵）",
+      "evidence": [
+        {
+          "lineno": 130,
+          "target": "exam/tools/run_matrix.py",
+          "test_file": "exam/tools/run_matrix.py",
+          "test_func": "calibrate",
+          "why": "in-tree self-test (problems.append)"
+        }
+      ],
+      "exit_honest": "否(实测)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(实测)",
+      "path": "exam/tools/run_matrix.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`exam/guard.py`（零网络 / 封存堆 / 合成世界）",
+      "evidence": [
+        {
+          "lineno": 139,
+          "target": "exam/guard.py",
+          "test_file": "exam/tests/test_adaptation.py",
+          "test_func": "test_the_world_is_synthetic_and_neither_pile_is_touched",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 212,
+          "target": "exam/guard.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_no_network_makes_sockets_raise",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 226,
+          "target": "exam/guard.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_a_sealed_game_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 236,
+          "target": "exam/guard.py",
+          "test_file": "exam/tests/test_core.py",
+          "test_func": "test_a_dev_game_needs_an_explicit_decision",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "exam/guard.py",
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "部分(读码)",
+      "entry": "`exam/tools/archive_run.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "exam/tools/archive_run.py",
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`exam/verify.py::_determinism`（两解释器字节一致）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": true,
+      "has_negctl": "否",
+      "path": "exam/verify.py",
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "部分(实测)",
+      "entry": "`battery/run_battery.py`",
+      "evidence": [
+        {
+          "lineno": 61,
+          "target": "battery/run_battery.py",
+          "test_file": "battery/tests/test_determinism.py",
+          "test_func": "test_artefacts_carry_no_wall_clock",
+          "why": "assert <planted bad thing> not in <output>"
+        }
+      ],
+      "exit_honest": "部分(实测)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(实测)",
+      "path": "battery/run_battery.py",
+      "strength": "实测",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`battery/guard.py`（封存堆 + 切分完整性）",
+      "evidence": [
+        {
+          "lineno": 174,
+          "target": "battery/guard.py",
+          "test_file": "battery/tests/test_adapter_schema_traces.py",
+          "test_func": "test_the_score_in_a_directory_name_never_reaches_the_run_id",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 206,
+          "target": "battery/guard.py",
+          "test_file": "battery/tests/test_adapter_schema_traces.py",
+          "test_func": "test_the_guardrail_refuses_a_sealed_game",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 23,
+          "target": "battery/guard.py",
+          "test_file": "battery/tests/test_adapters.py",
+          "test_func": "test_a_sealed_game_is_refused_before_a_frame_is_read",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 38,
+          "target": "battery/guard.py",
+          "test_file": "battery/tests/test_guard.py",
+          "test_func": "test_sealed_full_id_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测+读码)",
+      "path": "battery/guard.py",
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`battery/docs.py`（`__main__`）",
+      "evidence": [],
+      "exit_honest": "不适用",
+      "gold": "n/a",
+      "granularity_conflict": false,
+      "has_negctl": "不适用",
+      "path": "battery/docs.py",
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`worldgen/verify.py`",
+      "evidence": [],
+      "exit_honest": "部分(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(实测)",
+      "path": "worldgen/verify.py",
+      "strength": "混合",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`worldgen/build.py --check`（出厂闸 `gate_failures`）",
+      "evidence": [
+        {
+          "lineno": 49,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_each_gate_can_fail_on_its_own",
+          "why": "assert <complaint> in <findings>"
+        },
+        {
+          "lineno": 57,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_every_gate_fails_together",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(读码)",
+      "path": "worldgen/build.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`worldgen/build.py::check_determinism`",
+      "evidence": [
+        {
+          "lineno": 49,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_each_gate_can_fail_on_its_own",
+          "why": "assert <complaint> in <findings>"
+        },
+        {
+          "lineno": 57,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_every_gate_fails_together",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": true,
+      "has_negctl": "否(读码)",
+      "path": "worldgen/build.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`worldgen/mutate.py::mutation_gate_failures`（MUTATION GATE）",
+      "evidence": [
+        {
+          "lineno": 190,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_a_mutants_open_files_carry_no_label_that_names_the_edit",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 323,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_with_a_stale_from_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 331,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_an_undeclared_prop_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 338,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_a_missing_entity_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "worldgen/mutate.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`worldgen/qc/run_qc.py`（三世界 QC 闸）",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "no",
+      "granularity_conflict": true,
+      "has_negctl": "否(读码)",
+      "path": "worldgen/qc/run_qc.py",
+      "strength": "混合",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`worldgen/qc/run_qc.py --mutants`（预注册变异体套件）",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "partial",
+      "granularity_conflict": true,
+      "has_negctl": "部分(实测)",
+      "path": "worldgen/qc/run_qc.py",
+      "strength": "实测",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "—",
+      "entry": "`worldgen/qc/diagnose_miner.py`",
+      "evidence": [],
+      "exit_honest": "—",
+      "gold": "n/a",
+      "granularity_conflict": false,
+      "has_negctl": "—",
+      "path": "worldgen/qc/diagnose_miner.py",
+      "strength": "—",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`fuzzlab/verify.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "fuzzlab/verify.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`fuzzlab/campaign.py`",
+      "evidence": [],
+      "exit_honest": "部分(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "fuzzlab/campaign.py",
+      "strength": "混合",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`fuzzlab/minimize.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "fuzzlab/minimize.py",
+      "strength": "读码",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`figures/build_all.py`",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "figures/build_all.py",
+      "strength": "混合",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "present",
+      "AB": "present",
+      "B": "present",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`figures/check_coverage.py`（默认）",
+      "evidence": [
+        {
+          "lineno": 230,
+          "target": "figures/check_coverage.py",
+          "test_file": "figures/check_coverage.py",
+          "test_func": "self_test",
+          "why": "in-tree self-test (problems.append)"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "figures/check_coverage.py",
+      "strength": "混合",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "present",
+      "AB": "present",
+      "B": "present",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`figures/check_coverage.py --self-test`",
+      "evidence": [
+        {
+          "lineno": 230,
+          "target": "figures/check_coverage.py",
+          "test_file": "figures/check_coverage.py",
+          "test_func": "self_test",
+          "why": "in-tree self-test (problems.append)"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测，它本身就是负控)",
+      "path": "figures/check_coverage.py",
+      "strength": "混合",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`figures/manifest.py`",
+      "evidence": [],
+      "exit_honest": "不适用",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "figures/manifest.py",
+      "strength": "读码",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`release/check_redlines.py`（`--mode generate` 默认 / `verify`）",
+      "evidence": [],
+      "exit_honest": "是(读码+实测绿路径)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "release/check_redlines.py",
+      "strength": "混合",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`release/enumerate.py --dry-run`",
+      "evidence": [],
+      "exit_honest": "是(读码；本树未触发红路径)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "release/enumerate.py",
+      "strength": "读码",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`release/checklist.py --dry-run`",
+      "evidence": [],
+      "exit_honest": "不适用（永远绿）",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "release/checklist.py",
+      "strength": "读码",
+      "territory": "figures/release"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(实测)",
+      "entry": "`release/reproduce.py`（默认 / `--all` / `--list` / `--dry-run`）",
+      "evidence": [],
+      "exit_honest": "否(实测)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "release/reproduce.py",
+      "strength": "实测",
+      "territory": "figures/release"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/guard.py` SealedPileGuard（封存护栏）",
+      "evidence": [
+        {
+          "lineno": 19,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_guard.py",
+          "test_func": "test_an_edited_cut_fails_closed",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 29,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_guard.py",
+          "test_func": "test_sealed_games_are_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 644,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red31_a_mangled_cut_fails_closed",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（库；代理侧映射 403）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/guard.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/guard.py` `load_piles` 切分完整性（钉死 sha256）",
+      "evidence": [
+        {
+          "lineno": 19,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_guard.py",
+          "test_func": "test_an_edited_cut_fails_closed",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 29,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_guard.py",
+          "test_func": "test_sealed_games_are_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 644,
+          "target": "proxy/guard.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red31_a_mangled_cut_fails_closed",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（raise `PilesIntegrityError`）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/guard.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/env_proxy.py` 请求闸（403 + `guard_block` + incident + 空帧 env_step）",
+      "evidence": [
+        {
+          "lineno": 242,
+          "target": "proxy/env_proxy.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red02_a_redirect_is_visible_in_the_record",
+          "why": "assert <findings>"
+        },
+        {
+          "lineno": 307,
+          "target": "proxy/env_proxy.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red07_arm_supplied_routing_headers_are_not_honoured",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 320,
+          "target": "proxy/env_proxy.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red08_an_unknown_proxy_internal_path_is_never_forwarded",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 337,
+          "target": "proxy/env_proxy.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red09_a_credential_header_on_a_proxy_internal_is_still_an_incident",
+          "why": "assert <findings>"
+        }
+      ],
+      "exit_honest": "不适用（HTTP 403，非进程）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/env_proxy.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/model_proxy.py` 提示词里的封存 ID",
+      "evidence": [
+        {
+          "lineno": 393,
+          "target": "proxy/model_proxy.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red12_a_reflected_key_does_not_reach_the_arm_from_the_model_proxy",
+          "why": "assert <planted bad thing> not in <output>"
+        }
+      ],
+      "exit_honest": "不适用",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/model_proxy.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/mock/arm_mock.py` `assert_sealed`（arm 持凭证即拒启动）",
+      "evidence": [
+        {
+          "lineno": 52,
+          "target": "proxy/mock/arm_mock.py",
+          "test_file": "proxy/tests/test_seal.py",
+          "test_func": "test_an_arm_that_can_see_a_credential_refuses_to_start",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（raise `NotSealedError`）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/mock/arm_mock.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/redact.py` Vault / `scrub_outbound`（密钥密封）",
+      "evidence": [
+        {
+          "lineno": 92,
+          "target": "proxy/redact.py",
+          "test_file": "proxy/tests/test_ledger.py",
+          "test_func": "test_a_secret_cannot_reach_the_file",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 447,
+          "target": "proxy/redact.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red16_a_uuid_shaped_key_in_a_body_raises_an_incident",
+          "why": "assert <findings>"
+        },
+        {
+          "lineno": 462,
+          "target": "proxy/redact.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red17_a_secret_used_as_an_object_key_is_scrubbed",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 474,
+          "target": "proxy/redact.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red18_a_split_or_encoded_secret_is_scrubbed",
+          "why": "assert <planted bad thing> not in <output>"
+        }
+      ],
+      "exit_honest": "不适用",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/redact.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/ledger.py` + `proxy/canon.py` 写入端拒绝（非规范字段 / 成本禁令 / frame_hash）",
+      "evidence": [
+        {
+          "lineno": 25,
+          "target": "proxy/ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_an_undefined_field_on_env_step_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 32,
+          "target": "proxy/ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_an_undefined_field_on_model_call_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 47,
+          "target": "proxy/ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_an_auxiliary_still_needs_its_required_keys",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 53,
+          "target": "proxy/ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_a_caller_may_not_set_an_envelope_field",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（raise，且不落盘）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/ledger.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/tools/validate_ledger.py`（账本校验）",
+      "evidence": [
+        {
+          "lineno": 137,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_forged_frame_hash",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 152,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_duplicated_seq",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 159,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_level_field_that_does_not_recompute",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 855,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red39_duplicate_seq_is_detected_on_the_audit_path",
+          "why": "assert ... == 'FAIL'"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/tools/validate_ledger.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/reconcile.py`（对账义务）",
+      "evidence": [
+        {
+          "lineno": 177,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_reconciliation_catches_a_disagreement",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 772,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red35_a_second_run_end_cannot_whitewash_a_mismatch",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 791,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red36_non_integer_levels_do_not_vanish_from_the_derivation",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 803,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red37_a_boolean_level_count_is_not_accepted_as_a_number",
+          "why": "assert ... == 'FAIL'"
+        }
+      ],
+      "exit_honest": "部分(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/reconcile.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/replay.py`（replay 审计）",
+      "evidence": [
+        {
+          "lineno": 140,
+          "target": "proxy/replay.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_a_tampered_ledger_makes_the_replay_fail",
+          "why": "assert ... == 'FAIL'"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/replay.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/tools/replay_spotcheck.py`",
+      "evidence": [
+        {
+          "lineno": 198,
+          "target": "proxy/tools/replay_spotcheck.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_one_disagreeing_frame_fails_the_spot_check",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 216,
+          "target": "proxy/tools/replay_spotcheck.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_one_session_alone_proves_nothing",
+          "why": "assert ... == 'INSUFFICIENT'"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "proxy/tools/replay_spotcheck.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`proxy/spend_gate.py` SpendGate（花费闸 / 配额闸，reserve+check+record）",
+      "evidence": [
+        {
+          "lineno": 50,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_the_check_reads_another_campaigns_spend",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 67,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_a_second_campaign_cannot_reserve_headroom_the_first_is_holding",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 87,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_the_action_ceiling_is_global_too",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 98,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_releasing_gives_the_unspent_remainder_back",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（raise `SpendGateTripped` / `Unavailable` / `NoReservation`）",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(实测)",
+      "path": "proxy/spend_gate.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "否(读码)",
+      "entry": "`proxy/spend_gate.py` `__main__`（池子报表）",
+      "evidence": [
+        {
+          "lineno": 50,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_the_check_reads_another_campaigns_spend",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 67,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_a_second_campaign_cannot_reserve_headroom_the_first_is_holding",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 87,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_the_action_ceiling_is_global_too",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 98,
+          "target": "proxy/spend_gate.py",
+          "test_file": "proxy/tests/test_spend_gate.py",
+          "test_func": "test_releasing_gives_the_unspent_remainder_back",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "否",
+      "gold": "no",
+      "granularity_conflict": true,
+      "has_negctl": "否",
+      "path": "proxy/spend_gate.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "部分(读码)",
+      "entry": "`proxy/tools/upgrade_ledger.py`",
+      "evidence": [
+        {
+          "lineno": 75,
+          "target": "proxy/tools/upgrade_ledger.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_a_failed_step_keeps_its_status_and_its_reason",
+          "why": "assert <exit code> == 400"
+        },
+        {
+          "lineno": 148,
+          "target": "proxy/tools/upgrade_ledger.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_the_migrator_refuses_a_record_it_does_not_understand",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 153,
+          "target": "proxy/tools/upgrade_ledger.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_the_migrator_refuses_to_double_lift",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "部分",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "proxy/tools/upgrade_ledger.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`proxy/cost.py`、`proxy/runner.py`",
+      "evidence": [],
+      "exit_honest": "不适用（非闸门）",
+      "gold": "n/a",
+      "granularity_conflict": false,
+      "has_negctl": "不适用",
+      "path": "proxy/cost.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/precheck.py` `assert_playable`（封存护栏）",
+      "evidence": [
+        {
+          "lineno": 246,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 124,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_sealed_games_are_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 132,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_replay_refuses_a_sealed_target_before_spending",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/precheck.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/canary.py` `compare`（漂移仪表）",
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 142,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_without_truncation_the_same_prefix_would_read_incomplete",
+          "why": "assert ... == 'INCOMPLETE'"
+        },
+        {
+          "lineno": 159,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_plan_longer_than_the_spec_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 246,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（库）",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/canary.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/canary.py check-freeze`",
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 142,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_without_truncation_the_same_prefix_would_read_incomplete",
+          "why": "assert ... == 'INCOMPLETE'"
+        },
+        {
+          "lineno": 159,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_plan_longer_than_the_spec_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 246,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/canary.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/canary.py` `INVOCATION_CAP`（配额闸）",
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 142,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_without_truncation_the_same_prefix_would_read_incomplete",
+          "why": "assert ... == 'INCOMPLETE'"
+        },
+        {
+          "lineno": 159,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_plan_longer_than_the_spec_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 246,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/canary.py",
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/canary_schedule.py`（排程 + 闸门映射）",
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 127,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_an_unknown_mode_is_an_error_not_a_default",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 246,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 341,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_gate_that_refuses_stops_the_sweep",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/canary_schedule.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码)",
+      "entry": "`arc-recon/contamination.py` `verify_piles_hash`",
+      "evidence": [
+        {
+          "lineno": 354,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_typo_in_the_claim_state_does_not_land_a_game_in_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 368,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_missing_claim_state_on_a_leaked_game_is_not_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 378,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_materially_leaked_game_cannot_sit_in_the_claim_set_quietly",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 419,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_sealed_id_in_a_request_is_a_touch",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": true,
+      "has_negctl": "部分（只在好文件上跑通）",
+      "path": "arc-recon/contamination.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/contamination.py` `sealed_api_contacts`（封存接触审计）",
+      "evidence": [
+        {
+          "lineno": 354,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_typo_in_the_claim_state_does_not_land_a_game_in_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 368,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_missing_claim_state_on_a_leaked_game_is_not_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 378,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_materially_leaked_game_cannot_sit_in_the_claim_set_quietly",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 419,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_sealed_id_in_a_request_is_a_touch",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "否(实测)",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/contamination.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/contamination.py` `claim_set` 的 `needs_adjudication`",
+      "evidence": [
+        {
+          "lineno": 354,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_typo_in_the_claim_state_does_not_land_a_game_in_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 368,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_missing_claim_state_on_a_leaked_game_is_not_clean",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 378,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_materially_leaked_game_cannot_sit_in_the_claim_set_quietly",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 419,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_sealed_id_in_a_request_is_a_touch",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "否(实测)",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/contamination.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`arc-recon/redact_ledger.py --check`（凭证/cookie 值落盘检查）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "arc-recon/redact_ledger.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "部分(读码)",
+      "entry": "`arc-recon/client.py` 密钥密封（`_record` 里 `X-API-Key`→`<redacted>`）",
+      "evidence": [
+        {
+          "lineno": 429,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_an_explicit_env_path_is_never_second_guessed",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 248,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_cookies_can_be_turned_off_to_reproduce_the_old_transport",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 276,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_cookie_values_never_survive_name_extraction",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 446,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_transport_failure_still_leaves_exactly_one_ledger_row",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用",
+      "gold": "no",
+      "granularity_conflict": true,
+      "has_negctl": "否",
+      "path": "arc-recon/client.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(实测)",
+      "entry": "`arc-recon/client.py` `load_api_key`（缺失即拒）",
+      "evidence": [
+        {
+          "lineno": 429,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_an_explicit_env_path_is_never_second_guessed",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 248,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_cookies_can_be_turned_off_to_reproduce_the_old_transport",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 276,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_cookie_values_never_survive_name_extraction",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 446,
+          "target": "arc-recon/client.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_transport_failure_still_leaves_exactly_one_ledger_row",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "不适用（raise）",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(实测)",
+      "path": "arc-recon/client.py",
+      "strength": "实测",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`arc-recon/cut_piles.py`（拒绝二次切分）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "arc-recon/cut_piles.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "部分(读码)",
+      "entry": "`arc-recon/precheck.py` `main`",
+      "evidence": [
+        {
+          "lineno": 246,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 124,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_sealed_games_are_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 132,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_replay_refuses_a_sealed_target_before_spending",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "否(读码)",
+      "gold": "n/a",
+      "granularity_conflict": true,
+      "has_negctl": "不适用",
+      "path": "arc-recon/precheck.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`arc-recon/recon.py`、`arc-recon/probe_stickiness.py`、`arc-recon/precheck_resume.py`",
+      "evidence": [],
+      "exit_honest": "不适用（采集脚本，非闸门）",
+      "gold": "n/a",
+      "granularity_conflict": false,
+      "has_negctl": "不适用",
+      "path": "arc-recon/recon.py",
+      "strength": "读码",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "A": "present",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`theoria-arm/harness/run.py`（`python -m harness.run`）",
+      "evidence": [
+        {
+          "lineno": 687,
+          "target": "theoria-arm/harness/run.py",
+          "test_file": "theoria-arm/tests/test_arm.py",
+          "test_func": "test_the_shell_turns_end_to_end_against_the_mock",
+          "why": "assert <planted bad thing> not in <output>"
+        }
+      ],
+      "exit_honest": "否(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "theoria-arm/harness/run.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "否(读码)",
+      "entry": "`theoria-arm/armtools/archive.py`（收工闸：对账 + 约束 8 + 成本双算 + 封存检查）",
+      "evidence": [
+        {
+          "lineno": 611,
+          "target": "theoria-arm/armtools/archive.py",
+          "test_file": "theoria-arm/tests/test_arm.py",
+          "test_func": "test_the_bootstrap_theorize_is_named_not_smuggled",
+          "why": "assert not <verdict>"
+        }
+      ],
+      "exit_honest": "否(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "theoria-arm/armtools/archive.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码)",
+      "entry": "`theoria-arm/armtools/preflight.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "theoria-arm/armtools/preflight.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`theoria-arm/armtools/salvage.py` / `theoria-arm/armtools/timeline.py`",
+      "evidence": [],
+      "exit_honest": "否(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "theoria-arm/armtools/salvage.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `build_theory.py:340`)",
+      "entry": "`ablation-arm/build_theory.py --check`（生成物 vs 上游重切）",
+      "evidence": [
+        {
+          "lineno": 28,
+          "target": "ablation-arm/build_theory.py",
+          "test_file": "ablation-arm/tests/test_build_and_determinism.py",
+          "test_func": "test_the_check_notices_a_hand_edit",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 48,
+          "target": "ablation-arm/build_theory.py",
+          "test_file": "ablation-arm/tests/test_build_and_determinism.py",
+          "test_func": "test_the_check_notices_a_proof_marker_put_back",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "ablation-arm/build_theory.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `run_arm.py:714`)",
+      "entry": "`ablation-arm/run_arm.py`（预注册像素数 + 上游只读钉）",
+      "evidence": [
+        {
+          "lineno": 84,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_a_wrong_trace_turns_the_run_red_rather_than_plausible",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 104,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_the_sweep_is_reported_and_never_reaches_the_bus",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": true,
+      "has_negctl": "是(读码)",
+      "path": "ablation-arm/run_arm.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `run_arm.py:678`)",
+      "entry": "`ablation-arm/run_arm.py --twice`（两轮复跑比对）",
+      "evidence": [
+        {
+          "lineno": 84,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_a_wrong_trace_turns_the_run_red_rather_than_plausible",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 104,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_the_sweep_is_reported_and_never_reaches_the_bus",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": true,
+      "has_negctl": "部分(读码)",
+      "path": "ablation-arm/run_arm.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(实测)",
+      "entry": "`ablation-arm/run_exhibits.py`",
+      "evidence": [],
+      "exit_honest": "否(实测，且是刻意的)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码，双向钉住)",
+      "path": "ablation-arm/run_exhibits.py",
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码 `audit_cells.py:236` / `:280`)",
+      "entry": "`baseline-arms/harness/audit_cells.py`（逐格账本审计 + 封存检查）",
+      "evidence": [],
+      "exit_honest": "是(实测走绿+读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "baseline-arms/harness/audit_cells.py",
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `audit_pool.py:284`)",
+      "entry": "`baseline-arms/harness/audit_pool.py`（花费池对账）",
+      "evidence": [
+        {
+          "lineno": 61,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_a_short_action_count_is_caught",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 76,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_an_inflated_action_count_is_caught_too",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 101,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_disagreeing_dollars_are_caught",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 111,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_an_unpriced_call_is_reported_as_a_ceiling_not_a_mismatch",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "baseline-arms/harness/audit_pool.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `merge_ledger.py:91`)",
+      "entry": "`baseline-arms/harness/merge_ledger.py --check`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "baseline-arms/harness/merge_ledger.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "present",
+      "A-": "present",
+      "A-B": "present",
+      "AB": "present",
+      "B": "absent",
+      "N": "present",
+      "can_fail": "是(读码 `run_campaign.py:487`)",
+      "entry": "`baseline-arms/harness/run_campaign.py --gate-only`（战役闸）",
+      "evidence": [
+        {
+          "lineno": 148,
+          "target": "baseline-arms/harness/run_campaign.py",
+          "test_file": "baseline-arms/tests/test_spend_binding.py",
+          "test_func": "test_consecutive_and_cumulative_are_different_verdicts",
+          "why": "assert <planted bad thing> not in <output>"
+        },
+        {
+          "lineno": 253,
+          "target": "baseline-arms/harness/run_campaign.py",
+          "test_file": "baseline-arms/tests/test_spend_binding.py",
+          "test_func": "test_a_barrier_with_no_remediation_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "exit_honest": "是(读码，红=退出码 3)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "baseline-arms/harness/run_campaign.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `transport_ab.py:72` `raise SystemExit(str)` → 退出 1)",
+      "entry": "`baseline-arms/harness/transport_ab.py::assert_not_frozen`（跨轨冻结闸）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "baseline-arms/harness/transport_ab.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码，拒跑路径 `return 2`)",
+      "entry": "`baseline-arms/harness/campaign.py` / `run_campaign.py`（活体战役）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "baseline-arms/harness/campaign.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测走绿；红路径读码 `run_all.py:97`)",
+      "entry": "`cold-start-a0/run_all.py`（九步 + schema 校验）",
+      "evidence": [],
+      "exit_honest": "是(读码+实测绿)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "cold-start-a0/run_all.py",
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(读码)",
+      "entry": "`cold-start-a0/certify/score_vs_truth.py`（M6 对裁判打分）",
+      "evidence": [],
+      "exit_honest": "否(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否",
+      "path": "cold-start-a0/certify/score_vs_truth.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `:211` `:225`；缺 FD 时 `sys.exit(12)`)",
+      "entry": "`cold-start-a0/certify/fd_conformance.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "cold-start-a0/certify/fd_conformance.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测走绿；红路径读码 `run_all.py:105`)",
+      "entry": "`cold-start-a2/run_all.py`（13 步 + schema 校验）",
+      "evidence": [],
+      "exit_honest": "是(读码+实测绿)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "cold-start-a2/run_all.py",
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `:79`)",
+      "entry": "`cold-start-a2/tools/verify_readonly.py`（上游树只读）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "cold-start-a2/tools/verify_readonly.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "否(实测)",
+      "entry": "`cold-start-a3/run_all.py`（七段，含第 5 段负控）",
+      "evidence": [],
+      "exit_honest": "否(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是（负控本身存在）",
+      "path": "cold-start-a3/run_all.py",
+      "strength": "实测",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `negctl.py:153`)",
+      "entry": "`cold-start-a3/a3pipeline/negctl.py`（两组负控本体）",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是（它就是负控）",
+      "path": "cold-start-a3/a3pipeline/negctl.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `:89`)",
+      "entry": "`cold-start-a3/tools/verify_readonly.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "no",
+      "granularity_conflict": false,
+      "has_negctl": "否(读码)",
+      "path": "cold-start-a3/tools/verify_readonly.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `run_a0.py:262`)",
+      "entry": "`a0-spike/pipeline/run_a0.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是(读码)",
+      "path": "a0-spike/pipeline/run_a0.py",
+      "strength": "读码",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(实测)",
+      "entry": "`a0-spike/runs/20260728T040057Z-c2/make_manifest.py --verify`",
+      "evidence": [],
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "granularity_conflict": false,
+      "has_negctl": "是（实测演示 + 文档记载曾真抓到 7/19）",
+      "path": "a0-spike/runs/20260728T040057Z-c2/make_manifest.py",
+      "strength": "实测",
+      "territory": "arms"
+    },
+    {
+      "A": "absent",
+      "A-": "absent",
+      "A-B": "absent",
+      "AB": "absent",
+      "B": "absent",
+      "N": "absent",
+      "can_fail": "是(读码 `:467`；未知事件 `raise SystemExit` `:97`)",
+      "entry": "`a0-spike/probes/semantics_probe.py`",
+      "evidence": [],
+      "exit_honest": "是(读码)",
+      "gold": "partial",
+      "granularity_conflict": false,
+      "has_negctl": "部分(读码)",
+      "path": "a0-spike/probes/semantics_probe.py",
+      "strength": "读码",
+      "territory": "arms"
+    }
+  ],
+  "rows_total": 127,
+  "unresolvable": [
+    {
+      "can_fail": "是(读码)",
+      "entry": "`engine-rig` `python -m pytest`（150+ 例）",
+      "evidence": "实测 exit 0，9 skipped。负控：`engine-rig/tests/test_fd_ladder.py:59-96` 假 FD（`FAKE_FD_MODE` = exhausted/structurally_unsat/translate_unsat/incomplete/crash）为预注册变异体，`:267-330` 六例断言每种坏行为必须被识别或硬报错",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(实测)",
+      "path": null,
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "can_fail": "是(读码)",
+      "entry": "`theory-compiler` `python -m pytest`（364 例）",
+      "evidence": "实测 exit 0，364 passed 1 skipped（lean 在场，Lean 编译真跑了 100s）。负控：`theory-compiler/tests/test_gen_lean_deadlock.py:140-175` `TestEmissionIsRead` 四个预注册变异体各须让发射器抛 `DeadlockLeanError`；`tests/test_conflict.py:386` 自称「负对照：这道检查必须有能力失败」",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(实测)",
+      "path": null,
+      "strength": "混合",
+      "territory": "engine-rig/theory-compiler"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`pytest exam/tests`（287 项）",
+      "evidence": "实跑 287 passed / 97.83s。`exam/tests/test_worldgen_papers.py:92` 与 `:238` 都自称 \"the negative control\"",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`pytest battery/tests`（214 项）",
+      "evidence": "实跑 214 passed / 0.99s。`battery/tests/test_metrics.py` 全是手算已知输入→已知输出；`battery/audit/exploits/*` + `test_exploits_*.py` 造出专门骗某个 metric 的合成 run 并断言确实被骗到",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "exam/battery"
+    },
+    {
+      "can_fail": "是(读码)",
+      "entry": "`battery/metrics/*`（判分正确性）",
+      "evidence": "metric 本身不退出；闸是 `battery/tests/test_metrics.py` 的手算值 + `battery/audit/exploits` 的对抗样本。`Value.status` 是数据不是退出码",
+      "exit_honest": "不适用",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "can_fail": "否(读码)",
+      "entry": "`battery/audit/{gaming,validation,discriminate,contrast,redundancy}.py`",
+      "evidence": "全是报告器，无 raise、无退出码。`validation_material.json` 说「21 个 metric 无控制臂验证」、`discrimination.json` 说 `underpowered` —— 都只是 JSON 字段",
+      "exit_honest": "不适用",
+      "gold": "n/a",
+      "has_negctl": "不适用",
+      "path": null,
+      "strength": "读码",
+      "territory": "exam/battery"
+    },
+    {
+      "can_fail": "—",
+      "entry": "battery 的「一条命令总闸」",
+      "evidence": "不存在。`exam/` 有 `verify.py`，`figures/` 有 `verify.sh`，`battery/` 两者都没有；README 只列了三条互不汇总的命令",
+      "exit_honest": "—",
+      "gold": "n/a",
+      "has_negctl": "—",
+      "path": null,
+      "strength": "—",
+      "territory": "exam/battery"
+    },
+    {
+      "can_fail": "是(实测，全绿)",
+      "entry": "`worldgen/tests` pytest（425 项，verify 的 gating 阶段）",
+      "evidence": "真负控只有三处：`worldgen/tests/test_build_gate.py`（双向）、`test_mutate.py:527`（贴错标签）、`test_gravity_landing.py:65`（negative half）。其余是正向断言",
+      "exit_honest": "是",
+      "gold": "partial",
+      "has_negctl": "部分(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "worldgen/fuzzlab"
+    },
+    {
+      "can_fail": "不适用",
+      "entry": "`release/bundle.py --check`",
+      "evidence": "该文件不存在。全仓 `find . -iname \"*bundle*\"` 只命中 `exam/handover_bundles/`；`release/` 里只有 `check_redlines.py`、`enumerate.py`、`checklist.py`、`reproduce.py`",
+      "exit_honest": "不适用",
+      "gold": "n/a",
+      "has_negctl": "不适用",
+      "path": null,
+      "strength": "—",
+      "territory": "figures/release"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`proxy/scoring/`（冻结计分器 S-0..S-12 + 自哈希）",
+      "evidence": "`proxy/scoring/__init__.py` 全 PASS→0 否则 1。负控 `proxy/tests/test_scoring.py:36`（改过的计分器拒绝计分）、`:161,168,178,185,194,201,211,219,227,242,253,270`",
+      "exit_honest": "是(读码)",
+      "gold": "yes",
+      "has_negctl": "是(实测)",
+      "path": null,
+      "strength": "混合",
+      "territory": "proxy/arc-recon"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`theoria-arm` pytest（`tests/test_arm.py`，51 项，纯离线）",
+      "evidence": "实测 51 passed，EXIT=0。负控 `theoria-arm/tests/test_arm.py:31`（`pytest.raises(arc.ShortIdRefused)`）、`:137`（脏账本必须判违约束 8）、`:145`（无意外的 model_call 必须判违规）",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`baseline-arms` pytest（75 项，全部用 `tmp_path` 私有花费池）",
+      "evidence": "实测 75 passed，EXIT=0。`baseline-arms/tests/conftest.py` 明确不碰真实 `proxy/var/spend_gate.jsonl`",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`cold-start-a0` pytest（56 项）",
+      "evidence": "56 passed，EXIT=0",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`cold-start-a2` pytest（44 项）",
+      "evidence": "44 passed，EXIT=0",
+      "exit_honest": "是(实测)",
+      "gold": "partial",
+      "has_negctl": "部分(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`cold-start-a3` pytest（47 项）",
+      "evidence": "47 passed。`cold-start-a3/tests/test_transfer.py:211` 断言两组负控都被抓且都没宣称胜利；`tests/test_world.py:101` `test_the_shipped_traces_are_byte_stable`",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    },
+    {
+      "can_fail": "是(实测)",
+      "entry": "`a0-spike` pytest（44 项）",
+      "evidence": "44 passed，EXIT=0",
+      "exit_honest": "是(实测)",
+      "gold": "yes",
+      "has_negctl": "是(读码)",
+      "path": null,
+      "strength": "混合",
+      "territory": "arms"
+    }
+  ]
+}

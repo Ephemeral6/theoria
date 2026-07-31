@@ -1,0 +1,104 @@
+{
+  "prompt_id": "E8-ic3-scale",
+  "branch": "agent/e8-ic3-scale",
+  "base_commit": "4260081f0ddf5e3ff2a4789aefafffa5faa5923f",
+  "utc": "2026-07-29T12:00:00Z",
+  "worker": "W-1660",
+  "territory": "engine-rig",
+  "status": "complete",
+  "inherits": {
+    "run": "runs/20260728T203711Z-E8-ic3-bounds",
+    "what": "axis A (size) and axis C (compose) were measured by a previous session and salvaged verbatim in commit 4260081f. This run does not re-measure them; it audits them, adds the third axis (predicate count), and writes the named deliverable.",
+    "gaps_at_start": [
+      "engine-rig/IC3_BOUNDS.md -- the item's named deliverable -- does not exist",
+      "axis B (predicate count) has no module and no results file",
+      "ic3bounds/__main__.py has AXES = (\"size\",) so axis C cannot be re-run through the documented entry point",
+      "the salvaged code has never been reviewed, and the salvage commit says so"
+    ]
+  },
+  "files": [
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "3d055c100522f1ec8cce1f36fbd65a21184700f20d055692f83d72e2f7d93932"
+    },
+    {
+      "path": "axis_compose.json",
+      "sha256": "2c6dbf4ed84635b9d955f3114ee01579de8aa18685ed4c25204d00f6839ce974"
+    },
+    {
+      "path": "axis_predicates.json",
+      "sha256": "02a98e6e085c5cd93fb1818c702eec014cf2e158a8b9e5262a4873aa4cb6146d"
+    },
+    {
+      "path": "axis_size_budget900/MANIFEST.json",
+      "sha256": "07f257e8fa196e0f483bfc8a3851eecab723e2befb3b4a3ae945b2d32d26d427"
+    },
+    {
+      "path": "axis_size_budget900/axis_size.json",
+      "sha256": "e372387266c3047565c74a66aba19391e24c7e8100bd24e0625d6bd8d97cf641"
+    },
+    {
+      "path": "axis_size_dense/MANIFEST.json",
+      "sha256": "e3749e3e3da2f6ed5553c397afc5a686c897613b5561c75a456cc9d7432e91d5"
+    },
+    {
+      "path": "axis_size_dense/axis_size.json",
+      "sha256": "dbb891aba7b5e1cf0b422a0919930a8f1f4931c26a4bc1e1654b97b8a3202969"
+    },
+    {
+      "path": "engine-rig/IC3_BOUNDS.md",
+      "sha256": "c62bf761a855781169a917deaeb077e3dfaca315694d4bcc827c948b2ac84fe1"
+    },
+    {
+      "path": "engine-rig/ic3bounds/__main__.py",
+      "sha256": "47bd7fb6463de25daedf3d09dffa2ec2e2883b514f0b0d4ab7203e2c506e3123"
+    },
+    {
+      "path": "engine-rig/ic3bounds/axis_compose.py",
+      "sha256": "1c27091c7ab9a0b235a3478d611b797eaf9397d37d7c467d25f68d6f242bf3e2"
+    },
+    {
+      "path": "engine-rig/ic3bounds/axis_predicates.py",
+      "sha256": "1a43b9dab0bc0193e6d8f73ac9087168691a0e434af3e62e2a56b3a19e377d55"
+    },
+    {
+      "path": "engine-rig/ic3bounds/axis_size.py",
+      "sha256": "725cfb485a7324cfa36215465c93f2417871bbf3c264e8da9f7a95c2183ebdf9"
+    },
+    {
+      "path": "engine-rig/ic3bounds/document.py",
+      "sha256": "b5b67056b50e5a7fccc4ff41c2de802956513d125f30361c46b40d35d22962ae"
+    },
+    {
+      "path": "engine-rig/ic3bounds/harness.py",
+      "sha256": "431baecc8c300caba081bfa3a4261748cafdbec3e897be50d19f930e9c18ddc5"
+    },
+    {
+      "path": "engine-rig/ic3bounds/reencode.py",
+      "sha256": "5e7a3e7c0eb46644bb02c977bef818fecb63a1024b2a17eec6fe59d2edfad353"
+    },
+    {
+      "path": "engine-rig/ic3bounds/verify.py",
+      "sha256": "c2f4a01f73be0455a40738280b84404448a4458fbb443e622df6c66f87347980"
+    },
+    {
+      "path": "engine-rig/tests/test_ic3bounds_axis_predicates.py",
+      "sha256": "5fb9d5db4bbc43bc551d7f8f43ab292905e71a88eaf0a9ad8d05beedc9edd350"
+    },
+    {
+      "path": "engine-rig/tests/test_ic3bounds_reencode.py",
+      "sha256": "b6cadffb99542ced68a18bd965ac800bae13c084e0610c3eb51a33a4db598061"
+    },
+    {
+      "path": "lp_reach.json",
+      "sha256": "ef2c5f05bc83de3f5fa970f1767f5af061d924db319b85f28df9cc9103a7aaa3"
+    }
+  ],
+  "head_commit": "df5b4b72a7fd07f775997389d70070ca864defb2",
+  "note": "the run stdout is not an artefact and is not committed: it is CRLF on this platform, engine-rig/.gitattributes pins LF, and every line of it is derivable from axis_predicates.json.",
+  "suite": "engine-rig pytest: all pass",
+  "gates": {
+    "verify": "python -m ic3bounds.verify <the three run dirs> -> exit 0",
+    "document": "python -m ic3bounds.document --check -> exit 0"
+  }
+}

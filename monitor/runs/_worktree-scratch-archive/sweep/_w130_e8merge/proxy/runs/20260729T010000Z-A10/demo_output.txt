@@ -1,0 +1,51 @@
+====================================================================
+BEFORE -- the shared ledger as this item found it
+====================================================================
+  reading: C:\Users\user\Desktop\theoria\proxy\var\ledger.jsonl
+  (main checkout, not this worktree -- proxy/var is gitignored)
+{
+  "records": 107,
+  "by_arm": {
+    "mock_arm": 74,
+    "replay": 33
+  },
+  "distinct_seq": 107,
+  "duplicate_seq": 0,
+  "real_arm_records": 0
+}
+
+  real-arm records: 0   <-- the defect A10 was raised for
+
+====================================================================
+AFTER -- three arms, three processes, one ledger
+====================================================================
+  worker pids: [35884, 41288, 2148] (distinct: 3)
+{
+  "records": 42,
+  "by_arm": {
+    "bare_cc": 14,
+    "schema_repro": 14,
+    "theoria": 14
+  },
+  "distinct_seq": 42,
+  "duplicate_seq": 0,
+  "real_arm_records": 42
+}
+
+  verify_chain rc=0
+  C:\Users\user\AppData\Local\Temp\tmp6umtuho3\ledger.jsonl: PASS
+    lines 42  chained 42  unchained 0
+    head  sha256:109d3392830b576d940d938c9c90d40e36a5472ea5ad0479134a1aa9e7d96a8a  last_seq 42
+
+  VERDICT: PASS
+
+-- note on reproducibility ------------------------------------------
+The chain head differs between runs of this demo, and that is correct,
+not drift: `prev` is the sha256 of the previous line's bytes, and those
+bytes include that line's wall-clock `ts`. LEDGER_FORMAT.md says `ts` is
+not part of any hash *or comparison*; the first half is loose -- `ts` is
+inside the hashed bytes, one record later. That asymmetry is exactly what
+broke ablation-arm's determinism check when the chain landed (fixed there
+by naming `prev` a derived clock field and paying for it with a chain
+verdict). What IS stable here is the verdict: 42 records, 3 arms, 0
+duplicate seq, chain PASS.

@@ -1,0 +1,1114 @@
+{
+  "instructions": "You are a fresh reader of one framework's deliverable. You have been given a\nbundle of documents and this sheet, and nothing else: no repository, no source\ncode beyond what the bundle contains, no history of earlier play, no\nconversation. Everything you need is either in the bundle or in the item.\n\nThe world is a grid world. The bundle tells you how it behaves. This sheet tells\nyou, per item, the geometry of one board and (where relevant) where the Player\nand the Box are standing.\n\nThree kinds of question appear, distinguished by each item's `kind` field.\n\n  kind = \"step_semantics\"\n      One action is taken from the given situation. Say what the situation is\n      afterwards and which rule of the manual accounts for it.\n      Answer grammar, exactly:\n          player=(row,col); box=(row,col); rule=<name>\n      All three fields, in any order, separated by semicolons. `<name>` must be\n      one of: walk | push2 | blocked_wall | blocked_box_crossing | blocked_box_landing\n\n  kind = \"name_class\"\n      A name is defined for you. Say whether it is something each board supplies\n      (answer `level_data`) or something the world fixes once for every board\n      (answer `world_law`).\n      Answer grammar, exactly one word: level_data | world_law\n\n  kind = \"optimal_action\"\n      Name one action that begins a shortest sequence putting the Box on the\n      target cell. Where several actions do, any of them is accepted.\n      Answer grammar, exactly one word: UP | DOWN | LEFT | RIGHT\n\nAny item may instead be answered `abstain`. An abstention scores nothing and is\nrecorded as an abstention, not as a wrong answer; a guess is recorded as a wrong\nanswer. An answer that is not a sentence of the grammar above scores nothing and\nthe parse failure is recorded.\n\nSubmit a single JSON object mapping every item_id on this sheet to its answer\nstring. P=Player  B=Box  #=wall  T=target cell  .=empty. Row 0 is the top row, column 0 the left column. If two of these share a cell the earlier letter is drawn, so the target is still the cell named in `target` even when it is not visible.",
+  "items": [
+    {
+      "action": "DOWN",
+      "board": [
+        "..P...",
+        "..#...",
+        "....#.",
+        "#.....",
+        "..#.B.",
+        ".T..#.",
+        "......"
+      ],
+      "item_id": "hv-step-01",
+      "kind": "step_semantics",
+      "level": {
+        "height": 7,
+        "level_id": "yard",
+        "target": [
+          5,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action DOWN. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          4,
+          4
+        ],
+        "player": [
+          0,
+          2
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:yard"
+      ]
+    },
+    {
+      "action": "DOWN",
+      "board": [
+        "P.....",
+        "..#...",
+        "....#.",
+        "#..B..",
+        "..#...",
+        ".T..#.",
+        "......"
+      ],
+      "item_id": "hv-step-02",
+      "kind": "step_semantics",
+      "level": {
+        "height": 7,
+        "level_id": "yard",
+        "target": [
+          5,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action DOWN. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          3,
+          3
+        ],
+        "player": [
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:yard"
+      ]
+    },
+    {
+      "action": "DOWN",
+      "board": [
+        ".P.#..",
+        ".B....",
+        "..#...",
+        "....#.",
+        ".#....",
+        ".....T"
+      ],
+      "item_id": "hv-step-03",
+      "kind": "step_semantics",
+      "level": {
+        "height": 6,
+        "level_id": "pinch",
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action DOWN. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          1,
+          1
+        ],
+        "player": [
+          0,
+          1
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".......",
+        ".#...#.",
+        ".T.BP..",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-step-04",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          2,
+          4
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "action": "UP",
+      "board": [
+        ".......",
+        ".#...#.",
+        ".TB.P..",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-step-05",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action UP. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          2,
+          2
+        ],
+        "player": [
+          2,
+          4
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "action": "UP",
+      "board": [
+        "...#..",
+        "......",
+        "..#B..",
+        "...P#.",
+        ".#....",
+        ".....T"
+      ],
+      "item_id": "hv-step-06",
+      "kind": "step_semantics",
+      "level": {
+        "height": 6,
+        "level_id": "pinch",
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action UP. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          3,
+          3
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        "...#..",
+        "......",
+        "..#BP.",
+        "....#.",
+        ".#....",
+        ".....T"
+      ],
+      "item_id": "hv-step-07",
+      "kind": "step_semantics",
+      "level": {
+        "height": 6,
+        "level_id": "pinch",
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          2,
+          4
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:pinch"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".......",
+        ".#...#.",
+        ".BP....",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-step-08",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          2,
+          1
+        ],
+        "player": [
+          2,
+          2
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".......",
+        ".#...#.",
+        ".T.....",
+        ".#.BP#.",
+        "......."
+      ],
+      "item_id": "hv-step-09",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          3,
+          3
+        ],
+        "player": [
+          3,
+          4
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "action": "UP",
+      "board": [
+        "B......",
+        ".#...#.",
+        ".T...P.",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-step-10",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action UP. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          0,
+          0
+        ],
+        "player": [
+          2,
+          5
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".......",
+        ".#BP.#.",
+        ".T.....",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-step-11",
+      "kind": "step_semantics",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the rule that accounts for it.",
+      "state": {
+        "box": [
+          1,
+          2
+        ],
+        "player": [
+          1,
+          3
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:corridor"
+      ]
+    },
+    {
+      "definition": "that `Box.pos.row mod 2` is 1, the way the laws section spells it out",
+      "item_id": "hv-name-01",
+      "kind": "name_class",
+      "name": "box_row_parity_value",
+      "points": 1.0,
+      "prompt": "Is `box_row_parity_value` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "that `Box.pos.row mod 2` never changes, whatever is done",
+      "item_id": "hv-name-02",
+      "kind": "name_class",
+      "name": "box_row_parity",
+      "points": 1.0,
+      "prompt": "Is `box_row_parity` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cell the Box must end up on for the goal clause to hold",
+      "item_id": "hv-name-03",
+      "kind": "name_class",
+      "name": "target_cell",
+      "points": 1.0,
+      "prompt": "Is `target_cell` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cells the Box can be made to occupy by some sequence of actions",
+      "item_id": "hv-name-04",
+      "kind": "name_class",
+      "name": "reachable_box_cells",
+      "points": 1.0,
+      "prompt": "Is `reachable_box_cells` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cell the Box occupies before any action has been taken",
+      "item_id": "hv-name-05",
+      "kind": "name_class",
+      "name": "box_start",
+      "points": 1.0,
+      "prompt": "Is `box_start` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "how many cells the Box travels along when it is being pushed",
+      "item_id": "hv-name-06",
+      "kind": "name_class",
+      "name": "push_distance",
+      "points": 1.0,
+      "prompt": "Is `push_distance` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "how many rows the board has and how many columns it has",
+      "item_id": "hv-name-07",
+      "kind": "name_class",
+      "name": "board_shape",
+      "points": 1.0,
+      "prompt": "Is `board_shape` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "that the goal is the Box standing on the target cell, whichever cell that is",
+      "item_id": "hv-name-08",
+      "kind": "name_class",
+      "name": "goal_form",
+      "points": 1.0,
+      "prompt": "Is `goal_form` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "that a push needs the crossed cell free as well as the landing cell",
+      "item_id": "hv-name-09",
+      "kind": "name_class",
+      "name": "crossing_rule",
+      "points": 1.0,
+      "prompt": "Is `crossing_rule` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "how many cells the Player travels along when it is walking",
+      "item_id": "hv-name-10",
+      "kind": "name_class",
+      "name": "walk_distance",
+      "points": 1.0,
+      "prompt": "Is `walk_distance` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cells of the board that are walls, whichever cells those are",
+      "item_id": "hv-name-11",
+      "kind": "name_class",
+      "name": "wall_cells",
+      "points": 1.0,
+      "prompt": "Is `wall_cells` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cell the Player occupies before any action has been taken",
+      "item_id": "hv-name-12",
+      "kind": "name_class",
+      "name": "player_start",
+      "points": 1.0,
+      "prompt": "Is `player_start` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "board": [
+        "...#..",
+        ".....B",
+        "..#P..",
+        "....#.",
+        ".#....",
+        ".....T"
+      ],
+      "item_id": "hv-opt-01",
+      "kind": "optimal_action",
+      "level": {
+        "height": 6,
+        "level_id": "pinch",
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          1,
+          5
+        ],
+        "player": [
+          2,
+          3
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:pinch"
+      ]
+    },
+    {
+      "board": [
+        "...P..",
+        ".B#...",
+        "....#.",
+        "#.....",
+        "..#...",
+        ".T..#.",
+        "......"
+      ],
+      "item_id": "hv-opt-02",
+      "kind": "optimal_action",
+      "level": {
+        "height": 7,
+        "level_id": "yard",
+        "target": [
+          5,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          1,
+          1
+        ],
+        "player": [
+          0,
+          3
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:yard"
+      ]
+    },
+    {
+      "board": [
+        ".......",
+        ".#...#.",
+        ".T.B...",
+        "P#...#.",
+        "......."
+      ],
+      "item_id": "hv-opt-03",
+      "kind": "optimal_action",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          3,
+          0
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ]
+    },
+    {
+      "board": [
+        "......P",
+        ".#...#.",
+        ".T.B...",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-opt-04",
+      "kind": "optimal_action",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          0,
+          6
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ]
+    },
+    {
+      "board": [
+        ".......",
+        ".#...#.",
+        ".T.B..P",
+        ".#...#.",
+        "......."
+      ],
+      "item_id": "hv-opt-05",
+      "kind": "optimal_action",
+      "level": {
+        "height": 5,
+        "level_id": "corridor",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          2,
+          3
+        ],
+        "player": [
+          2,
+          6
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:corridor"
+      ]
+    },
+    {
+      "board": [
+        "...#..",
+        "......",
+        ".P#...",
+        "....#.",
+        ".#....",
+        "...B.T"
+      ],
+      "item_id": "hv-opt-06",
+      "kind": "optimal_action",
+      "level": {
+        "height": 6,
+        "level_id": "pinch",
+        "target": [
+          5,
+          5
+        ],
+        "walls": [
+          [
+            0,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "Name one action that begins a shortest sequence of actions ending with the Box on the target cell.",
+      "state": {
+        "box": [
+          5,
+          3
+        ],
+        "player": [
+          2,
+          1
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:pinch"
+      ]
+    }
+  ],
+  "n_items": 29,
+  "paper_id": "p15-handover-a0",
+  "question_type": "handover",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+  "rubric_module_digest": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+  "schema": "exam/v0.1",
+  "total_points": 46.0,
+  "world": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ],
+    "world_id": "a0"
+  }
+}

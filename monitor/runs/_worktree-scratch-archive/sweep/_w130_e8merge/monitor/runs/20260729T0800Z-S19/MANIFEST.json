@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "d9888b3",
+  "branch": "agent/s19-session-liveness",
+  "lane": "infra",
+  "prompt_id": "S19-session-liveness",
+  "state": "both halves delivered: wake_at separates scheduled sleep from a session that never woke (and a missing heartbeat stops reading green); unacked instructions are redelivered across the session boundary, using the acks already in out.jsonl rather than a new cursor format",
+  "territory": "monitor",
+  "utc": "2026-07-29T08:00:00Z"
+}

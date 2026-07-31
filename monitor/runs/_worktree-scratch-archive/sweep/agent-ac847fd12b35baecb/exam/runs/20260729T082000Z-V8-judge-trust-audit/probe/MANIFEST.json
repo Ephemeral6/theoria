@@ -1,0 +1,38 @@
+{
+  "base_commit": "c7a464c5d654a70e669de8cb3743b99bffb0fa82",
+  "branch": "worktree-agent-ac847fd12b35baecb",
+  "files": [
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/detail.py",
+      "sha256": "b2f48c91e46b1c1ea79d13f5630a84c0e373695c266f8f64b4b78a1849aac066"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/disc_handbuilt.py",
+      "sha256": "ca7ad6c6dd7ca4fcc6073b479225068c4c24bc74f93a4cd3a3b2770a9338b058"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/handbuilt_discrimination.json",
+      "sha256": "6dbde3245a876f54d01af2fdae0f4216bc53ae7a1797be55f410ada2ca2a17b6"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/manifest_write.py",
+      "sha256": "e53e454c7cb650b55b8675f2ed5f8a942643e57d621d9889a596b781216bc84d"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/pairs.py",
+      "sha256": "8409938b21cceba9b2a75d4158906ab710f6a544aed477f5cefbe8f8db072017"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/report.py",
+      "sha256": "1021b5b0c77293e7401c1656a7d4677fd9779a627f4972d684e671819fd79d0e"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/why.py",
+      "sha256": "dfb77457d8ed3aeb149f61b9896a987ef6577c1b203ea0ce68d4db0ac8b4f476"
+    }
+  ],
+  "prompt_id": "V8-judge-trust-audit-item2-handbuilt-discrimination",
+  "rerun": "python <this dir>/disc_handbuilt.py && python <this dir>/report.py",
+  "utc": "2026-07-29T08:20:00Z",
+  "what": "per-item discrimination (oracle/memoriser/bluffer, null excluded) over the five hand-built exam papers: heldout, handover, adaptation, verdict, handover_auto"
+}

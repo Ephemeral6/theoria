@@ -1,0 +1,124 @@
+{
+  "id": "cs03",
+  "title": "A true theorem that is false",
+  "figure": "Theoria.md:416 -- 图 5 DC22 案例 (the type-checked theorem that is false of the world, and its repair loop)",
+  "prose": "../03-a-theorem-true-and-false.md",
+  "claim": "Two Lean files with the same generator, the same tactic, the same empty axiom list, both green. One is false of the world. The instrument cannot tell them apart, and it is not supposed to be able to -- Theoria 1.10a's two-layer truth regime as two files a referee can diff.",
+  "relation_to_existing_figure": "papers/phase1-workshop/figures/data/fig3_loop_ledger.json carries the eight-beat ledger for the workshop paper. This file adds the file-pair comparison and the diff audit; it does not restate the ledger.",
+
+  "authority": {
+    "incident": "INC-004",
+    "ruled": "2026-07-28",
+    "option": "b",
+    "text": "A2 is fulfilled by a self-built world isomorphic to DC22's failure structure (a pushing world with a teleport rule; hole introduced by deleting that rule from an otherwise-certified manual). The isomorphism argument may cite only the structural description already printed in Theoria §1.3 -- no upstream DC22 artifact is ever read.",
+    "source": "cold-start-a2/A2_REPORT.md:22-26",
+    "what_is_lost": "No claim about DC22 itself is available or made. Anything this project later says about DC22 must carry INC-004's design_document_disclosed caveat. (cold-start-a2/A2_REPORT.md:43-46)"
+  },
+
+  "the_exhibit": {
+    "manual": "cold-start-a2/theory/theory_holed.dsl",
+    "control": "cold-start-a2/theory/theory.dsl",
+    "deleted_rule": "rule teleport_down [ev: t183 cov: 1/1] when act=push(Cart, down) and colored(below(Cart), 3) then jumped(Cart, portal_exit)",
+    "deleted_rule_source": "cold-start-a2/theory/theory.dsl:51-52",
+    "gates": [
+      {"gate": "certify, cheap", "result": "GREEN", "frames": 184, "pixels_checked": 14904, "pixels_unexplained": 0, "anomaly_kinds": []},
+      {"gate": "plan (fd_adapter)", "result": "UNSAT"},
+      {"gate": "certificate", "result": "zero_space -> 21-cell occupancy law -> 0/1 pagoda weight"},
+      {"gate": "certify, expensive", "result": "GREEN", "lean": "4.9.0", "tactic": "decide", "sorries": [], "returncode": 0},
+      {"gate": "#print axioms unsolvable", "result": "[]"}
+    ],
+    "gates_source": "cold-start-a2/A2_REPORT.md:81-87, cold-start-a2/artifacts/exhibit_report.json",
+    "theorem_source": "cold-start-a2/theory/generated_holed/theory.lean:784-791",
+    "states_enumerated": 148,
+    "and_yet": {"world_reaches_goal_in": 18, "final_win": true, "win_frames": [18], "source": "cold-start-a2/artifacts/refutation.json"}
+  },
+
+  "the_bound_on_the_claim": {
+    "note": "The hole is invisible relative to the evidence its theorizer had. It is not invisible.",
+    "same_manual_on_full_sweep": {
+      "green": false,
+      "frames": 248,
+      "anomalies": 44,
+      "anomaly_kinds": ["goal_mismatch", "render_mismatch", "unowned_pixel"],
+      "unexplained_pixels": 128,
+      "pixels_checked": 20088,
+      "first_anomaly": {"t": 184, "cell": [6, 4], "kind": "render_mismatch", "manual": 6, "world": 0}
+    },
+    "source": "cold-start-a2/A2_REPORT.md:112-118, cold-start-a2/artifacts/exhibit_report.json key certify_cheap_vs_full_sweep",
+    "strengthening_over_dc22": {
+      "detail": "The play record covers 163 of the 164 reachable (state, action) pairs with the Cart in the left room, and omits exactly the pair that fires the deleted rule. The defect survives near-total evidence; it is not a coverage failure.",
+      "source": "cold-start-a2/A2_REPORT.md:53-58"
+    }
+  },
+
+  "the_six_beats": [
+    {"beat": 1, "name": "打脸", "english": "refutation", "claim": "the theorem is false", "evidence": "artifacts/refutation.json", "result": "18 actions, win on frame 18"},
+    {"beat": 2, "name": "定位", "english": "locate", "claim": "Theoria 1.4's three-way narrows it", "evidence": "artifacts/locate_report.json", "result": "misread_board false, wrong_goal_test false, mispredicted_step true at t=11", "detail": {"t": 11, "mover_at": [6, 4], "action": "DOWN", "rules_that_fired": [], "manual_predicts": [6, 4], "world_shows": [7, 6], "diagnosis": "missing rule, not a wrong one -- no rule in the manual moves the mover more than one cell"}},
+    {"beat": 3, "name": "戳探", "english": "probe", "claim": "predictions first, then execute", "evidence": "artifacts/probes.jsonl", "result": "5 designed, 4 run, 1 recorded unrunnable", "detail": {"P-01": "the located transition; three hypotheses on the record first, including the holed manual's own 'stays'; observed a jump to (7,6)", "P-02.1-3": "the wall ring around the pocket, run before L-05 is proved", "P-03": "R-05's frontier; status not_separable_in_this_world, tier hypothetical, 1.0 bits"}},
+    {"beat": 4, "name": "修订", "english": "revise", "claim": "rewritten from the probe record", "evidence": "cold-start-a2/theory/theory_repaired.dsl", "result": "re-derivable from grown evidence; probed_trace grows 184 -> 196 frames"},
+    {"beat": 5, "name": "重证", "english": "re-prove", "claim": "the old certificate dies, a true one replaces it", "evidence": "artifacts/repair_report.json", "result": "Lean RED then GREEN", "detail": {"corpse": "cold-start-a2/theory/generated_repaired_stale/theory.lean:767-769 -- inv_closed fails, tactic 'decide' proved that the proposition ... is false", "replacement": "pocket_unreachable, same weight shape, same tactic, same empty axiom list"}},
+    {"beat": 6, "name": "解出", "english": "solve", "claim": "plan, and the world agrees", "evidence": "artifacts/plan_repaired.json", "result": "SAT in 18 actions, execution_mismatches []", "detail": {"certify_cheap_frames": 196, "pixels_checked": 15876, "same_length_as_worlds_own_shortest": true}}
+  ],
+  "six_beats_source": "cold-start-a2/A2_REPORT.md:129-136",
+
+  "the_two_lean_files": {
+    "source": "cold-start-a2/A2_REPORT.md:169-178",
+    "rows": [
+      {"property": "theorem", "holed": "unsolvable", "repaired": "unsolvable", "same": true},
+      {"property": "goal", "holed": "the goal cell (2,7)", "repaired": "the sealed pocket (7,1)", "same": false},
+      {"property": "invariant", "holed": "0/1 pagoda weight, 0 on 21 cells", "repaired": "0/1 pagoda weight, 0 on 35 cells", "same": false},
+      {"property": "tactic", "holed": "decide", "repaired": "decide", "same": true},
+      {"property": "Mathlib", "holed": "none", "repaired": "none", "same": true},
+      {"property": "#print axioms", "holed": "[]", "repaired": "[]", "same": true},
+      {"property": "status", "holed": "GREEN", "repaired": "GREEN", "same": true},
+      {"property": "true of the world", "holed": "NO -- 18-action witness", "repaired": "YES -- 0 of 55 reachable states", "same": false}
+    ],
+    "reading": "They differ in their weight table and in nothing else. The generator, the tactic, the dependency surface and the axiom list are identical. The instrument cannot tell them apart, and it is not supposed to be able to.",
+    "two_layer_regime": {"source": "Theoria.md:51, Theoria.md:193"}
+  },
+
+  "region_widening": {
+    "note": "What keeps the true theorem honest.",
+    "engine_proposed_cells": 22,
+    "engine_proposal_not_closed_under_repaired_step": true,
+    "adopted_cells": 35,
+    "how": "the manual's own reachability closure, computed by running theory.py",
+    "source": "cold-start-a2/THEORIZE_LOG.md:149-155"
+  },
+
+  "diff_audit": {
+    "finding": "cold-start-a2/A2_REPORT.md:69-71 says 'Nothing else differs; diff the files and the deletion is the whole diff.' That is true of the manual's rule content and false of the file's bytes.",
+    "additional_deltas": [
+      {"what": "the jumped event dropped from the event line", "from": "cold-start-a2/theory/theory.dsl:31", "to": "cold-start-a2/theory/theory_holed.dsl:60"},
+      {"what": "the four push rules re-counted", "from_values": "56/56, 51/51, 39/39, 43/43", "to_values": "38/38, 39/39, 32/32, 35/35", "from": "cold-start-a2/theory/theory.dsl:34-43", "to": "cold-start-a2/theory/theory_holed.dsl:63-72"},
+      {"what": "the Cart's compression account re-priced", "from_values": 1891, "to_values": 1433, "from": "cold-start-a2/theory/theory.dsl:21", "to": "cold-start-a2/theory/theory_holed.dsl:50"},
+      {"what": "the pending theorem swapped", "from_values": "teleport_is_colour_triggered", "to_values": "right_room_locked", "from": "cold-start-a2/theory/theory.dsl:66", "to": "cold-start-a2/theory/theory_holed.dsl:87"},
+      {"what": "header commentary rewritten (a 33-line rationale block added to the holed file)"}
+    ],
+    "verdict": "Every one of those deltas is what an honest re-derivation on the shorter evidence should produce -- the holed theorizer saw 184 frames, not the 248-frame sweep. The methodology is right; only the sentence is loose.",
+    "recommendation": "tighten the sentence upstream to 'the rule-set diff is exactly one rule'"
+  },
+
+  "was_the_repair_remembered": {
+    "source": "cold-start-a2/A2_REPORT.md:190-206",
+    "checks": [
+      "the repair was written from probes.jsonl, whose P-01 record contains the holed manual's own prediction, written before the action and refuted by the outcome",
+      "re-running the miner on probed_trace.jsonl proposes a jump effect again (artifacts/engines_diff_probed.json)",
+      "agreement with the control is asserted as a test -- test_the_repair_agrees_with_the_control_on_that_rule compares the two when clauses byte-for-byte"
+    ],
+    "not_claimed": "that the repaired manual is uniquely determined; P-03 says the opposite, on the record"
+  },
+
+  "defects_found_in_the_borrowed_instrument": [
+    {"id": "D-A2-006", "what": "the PDDL backend cannot ground a teleport", "detail": "gen_pddl_a0 emits a cell object only for cells in the derived arena; a Portal entry never is, so teleport-down's ?p - markedcell parameter has no inhabitant and the planner returns UNSAT on a manual containing the teleport rule. A0's bug was latent and returned a correct answer by luck.", "source": "cold-start-a2/A2_REPORT.md:221-230"},
+    {"id": "D-A2-007", "what": "lean_check destroys the diagnostic when there is one", "detail": "it decodes the toolchain's output with the process locale; Lean's error messages contain U+2019, the box is GBK, and the reader raises exactly when a proof fails. A0 never had a red Lean file; A2 has one on purpose.", "source": "cold-start-a2/A2_REPORT.md:232-235"}
+  ],
+
+  "caveats": [
+    "Nothing about DC22 itself. (cold-start-a2/A2_REPORT.md:43-46, :270)",
+    "Nothing about whether an LLM would have written these manuals -- the theorize step is done by hand, as in A0. A2 tests the instrument and the loop, not the theorizer. (cold-start-a2/A2_REPORT.md:271-273)",
+    "Nothing about scale: 55 reachable states, 148 in the Lean enumeration, decide over the whole space. (cold-start-a2/A2_REPORT.md:274-276)",
+    "fd_adapter is the bundled BFS stub, not Fast Downward -- optimal for unit costs, so SAT/UNSAT and plan length are sound here. Since re-checked: all seven generated cold-start domains, A2's base/holed/repaired among them, agree between the stub and real Fast Downward, 7 of 7. (cold-start-a2/A2_REPORT.md:277-279, engine-rig/STATUS.md:103-107)",
+    "The ?dir-parameterised rules are not used: the miner's better manual, one obj1_step at 189/189, cannot be compiled. (cold-start-a2/A2_REPORT.md:280-283)"
+  ]
+}

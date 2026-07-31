@@ -1,0 +1,121 @@
+{
+  "id": "cs01",
+  "title": "The birth of a concept: Button and Door",
+  "figure": "Theoria.md:416 -- 图 6 概念诞生时间线 (a concept from evidence to admission, timestamped)",
+  "prose": "../01-birth-of-a-concept.md",
+  "claim": "Two of the framework's own admission criteria disagree on the first cold start. Compression (Theoria 1.8 / constraint 5) says reject the Button and the Door; full-frame responsibility (constraint 2) says they must exist or frame 0 fails. Responsibility won, and the compression account was later re-based rather than overruled.",
+
+  "timeline": [
+    {
+      "step": 1,
+      "stage": "board extraction",
+      "when": "before any engine ran",
+      "event": "43 static cells, 38 dynamic, background colour 0; cell (4,5) is the one cell in the divider the board refuses to explain",
+      "source": "cold-start-a0/THEORIZE_LOG.md:36-56"
+    },
+    {
+      "step": 2,
+      "stage": "segmentation",
+      "when": "M2",
+      "event": "two operators priced; uniform-colour wins on script length",
+      "operator_comparison": [
+        {"operator": "connected_components(4)", "script_bits": 6511, "tracks": 90, "events": 332},
+        {"operator": "connected_components(4)+uniform_color", "script_bits": 4423, "tracks": 3, "events": 216, "accepted": true}
+      ],
+      "source": "cold-start-a0/THEORIZE_LOG.md:77-86"
+    },
+    {
+      "step": 3,
+      "stage": "object hypotheses",
+      "when": "M2",
+      "event": "three tracks; obj0 present in 276 frames, obj1 in 100, obj2 in 276; 214 move events (all obj2), 1 recolor (obj0), 1 vanish (obj1)",
+      "source": "cold-start-a0/THEORIZE_LOG.md:65-73"
+    },
+    {
+      "step": 4,
+      "stage": "adjudication O-04",
+      "when": "M3",
+      "event": "compression account comes back negative for Button and Door; admitted anyway on constraint 2",
+      "source": "cold-start-a0/THEORIZE_LOG.md:88-117"
+    },
+    {
+      "step": 5,
+      "stage": "rules R-03 / R-04",
+      "when": "M3",
+      "event": "press_left and door_opens_left, coverage 1/1 each, identical guard, both witnessed at transition 99",
+      "source": "cold-start-a0/THEORIZE_LOG.md:190-215"
+    },
+    {
+      "step": 6,
+      "stage": "law L-02",
+      "when": "M3",
+      "event": "zero_space returns the Button-Door dependency as a GF(2) conservation law with 275 transitions of support",
+      "source": "cold-start-a0/THEORIZE_LOG.md:298-313"
+    },
+    {
+      "step": 7,
+      "stage": "manual revision 1",
+      "when": "M3",
+      "event": "one pass over all 28 candidates plus the board map produces the whole manual: 3 objects, 7 rules, 2 invariants, 1 pending theorem",
+      "source": "cold-start-a0/THEORIZE_LOG.md:476-478"
+    },
+    {
+      "step": 8,
+      "stage": "framework correction",
+      "when": "after M6, addendum item 3",
+      "event": "compression re-based against a responsibility-complete alternative; Button -17 -> -5, Door -13 -> -1, all three objects mandatory on expressibility",
+      "source": "cold-start-a0/A0_REPORT.md:241"
+    }
+  ],
+
+  "first_seen_to_first_use": {
+    "unit": "transitions",
+    "note": "Theoria.md:94 asks 首见到首用隔了几步. Both concepts are visible from frame 0 (the Button in all 276 frames); each has exactly one event, at transition 99, out of 275.",
+    "Button": {"first_frame": 0, "first_event_transition": 99, "events_in_trace": 1, "trace_transitions": 275},
+    "Door": {"first_frame": 0, "first_event_transition": 99, "events_in_trace": 1, "trace_transitions": 275, "frames_present": 100},
+    "Cart": {"first_frame": 0, "first_event_transition": 0, "events_in_trace": 214, "trace_transitions": 275},
+    "source": "cold-start-a0/theory/theory.dsl:20-22, cold-start-a0/THEORIZE_LOG.md:65-67"
+  },
+
+  "compression_accounts": {
+    "note": "Two accountings of the same three objects. The pixel baseline is what the log adjudicated against; the responsibility-complete baseline is the correction A0_REPORT recommended and the artefact now carries.",
+    "pixel_baseline": {
+      "source": "cold-start-a0/THEORIZE_LOG.md:92-96",
+      "rows": [
+        {"object": "Cart", "declaration_bits": 21, "script_bits": 2169, "baseline_bits": 5136, "account_bits": 2967},
+        {"object": "Button", "declaration_bits": 21, "script_bits": 29, "baseline_bits": 12, "account_bits": -17},
+        {"object": "Door", "declaration_bits": 21, "script_bits": 25, "baseline_bits": 12, "account_bits": -13}
+      ]
+    },
+    "responsibility_complete_baseline": {
+      "source": "cold-start-a0/artifacts/concept_accounts.json key a0-base; written into cold-start-a0/theory/theory.dsl:20-22",
+      "rows": [
+        {"object": "Cart", "script_with_bits": 2165, "script_without_bits": 4290, "account_bits": 2125, "verdict": "mandatory", "manual_bytes_at_risk": 736},
+        {"object": "Button", "script_with_bits": 25, "script_without_bits": 20, "account_bits": -5, "verdict": "mandatory", "manual_bytes_at_risk": 258},
+        {"object": "Door", "script_with_bits": 21, "script_without_bits": 20, "account_bits": -1, "verdict": "mandatory", "manual_bytes_at_risk": 263}
+      ],
+      "reason_field": "a law names it (invariant door_latch / cart_unique) and the invariant language has no pixel-level paraphrase"
+    },
+    "unreconciled": "The per-object script bits differ by exactly 4 between the two tables (2169/29/25 vs 2165/25/21). The two are different accountings and neither report claims they should agree, but the uniform 4-bit offset is not explained anywhere on the tree."
+  },
+
+  "reproductions": [
+    {"world": "A0", "baseline": "pixel", "cart": 2967, "second": {"name": "Button", "bits": -17}, "third": {"name": "Door", "bits": -13}, "resolution": "admitted on constraint 2", "source": "cold-start-a0/THEORIZE_LOG.md:92-96"},
+    {"world": "A0", "baseline": "responsibility-complete", "cart": 2125, "second": {"name": "Button", "bits": -5}, "third": {"name": "Door", "bits": -1}, "resolution": "all three mandatory", "source": "cold-start-a0/artifacts/concept_accounts.json"},
+    {"world": "A0-prime", "baseline": "responsibility-complete", "cart": 1698, "second": {"name": "Switch", "bits": -13}, "third": {"name": "Door", "bits": -9}, "resolution": "all three mandatory", "source": "cold-start-a0/prime/THEORIZE_LOG.md:43-47"},
+    {"world": "A2", "baseline": "responsibility-complete", "cart": 1891, "second": {"name": "Button", "bits": -5}, "third": {"name": "Door", "bits": -1}, "resolution": "admitted on responsibility", "source": "cold-start-a2/THEORIZE_LOG.md:38-47"}
+  ],
+
+  "framework_criteria_in_collision": {
+    "says_reject": {"criterion": "concept admission by compression", "text": "一个概念入册的资格 = 它让说明书变短", "source": "Theoria.md:94", "constraint": {"n": 5, "text": "无证据/无收益不入册", "source": "Theoria.md:243"}},
+    "says_admit": {"criterion": "full-frame responsibility", "text": "每个像素要么属棋盘、要么属某个对象,说明书没解释的像素就是意外", "source": "Theoria.md:226", "constraint": {"n": 2, "text": "规划前全史重放——升级为双重对账(转移重放 + 渲染一致性,全帧责任制)", "source": "Theoria.md:240"}},
+    "winner": "constraint 2",
+    "why": "the two pixels (3,2) and (4,5) change, so the board cannot own them; unowned pixels are an anomaly at frame 0; and the Door's rule cannot be stated without the Button in the vocabulary"
+  },
+
+  "caveats": [
+    "The seal has a hole: one instance built the A0 world at M1 and adjudicated it at M3 (cold-start-a0/THEORIZE_LOG.md:11-19).",
+    "A2's theorize step was done by hand, so the reproduction is of the criterion collision, not of an independent theorizer (cold-start-a2/A2_REPORT.md:271-273).",
+    "Every world here has fewer than 60 reachable states; the corrected baseline is not validated at scale."
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "certify_cheap": {
+    "anomaly_kinds": [],
+    "frames": 184,
+    "green": true,
+    "pixels_checked": 14904,
+    "pixels_unexplained": 0,
+    "transitions": 183
+  },
+  "certify_cheap_vs_full_sweep": {
+    "anomalies": 44,
+    "anomaly_kinds": [
+      "goal_mismatch",
+      "render_mismatch",
+      "unowned_pixel"
+    ],
+    "first_anomaly": {
+      "cell": [
+        6,
+        4
+      ],
+      "kind": "render_mismatch",
+      "manual": 6,
+      "t": 184,
+      "world": 0
+    },
+    "frames": 248,
+    "green": false,
+    "reading": "the holed manual is green on the play record and red on the sweep; the hole is invisible to the evidence its theorizer had, which is exactly Theoria \u00a71.3's claim and exactly its limit"
+  },
+  "certify_lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "unsolvable"
+      }
+    ],
+    "errors": [],
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "returncode": 0,
+    "sorries": []
+  },
+  "compiled": {
+    "domain.pddl": 1611,
+    "pddl_cells_added": [],
+    "problem.json": 2476,
+    "problem.pddl": 3672,
+    "theory.lean": 64789,
+    "theory.md": 2622,
+    "theory.py": 7831
+  },
+  "constructive_ground": "column c5 is solid wall from r1 to r7 and rows r0/r8 are solid, so the right room touches nothing; every rule left in this manual moves the Cart to an adjacent cell, so the goal cell (2,7) is unreachable under the manual.  Known before anything is run \u2014 which is what Theoria Phase 1 layer 2 demands of a variant, and what makes the theorem's falseness a property of the manual rather than of the prover.",
+  "evidence": "history_trace.jsonl",
+  "exhibit_green": true,
+  "exhibit_is_false_of_the_world": true,
+  "manual": "theory_holed.dsl",
+  "plan": {
+    "backend": null,
+    "domain": "theory\\generated_holed\\domain.pddl",
+    "name": "holed",
+    "note": "no plan exists under this manual \u2014 constraint 6 forbids stopping here; a certificate is owed",
+    "problem": "theory\\generated_holed\\problem.pddl",
+    "status": "UNSAT"
+  },
+  "theorem": {
+    "axioms": [
+      {
+        "axioms": [],
+        "name": "unsolvable"
+      }
+    ],
+    "depends": [
+      "push_up",
+      "push_down",
+      "push_left",
+      "push_right"
+    ],
+    "explanation": "\u5c0f\u8f66\u6c38\u8fdc\u5230\u4e0d\u4e86\u53f3\u8fb9\u90a3\u4e2a\u623f\u95f4\uff1a\u7b2c 5 \u5217\u4ece\u7b2c 1 \u884c\u5230\u7b2c 7 \u884c\u662f\u5b8c\u6574\u7684\u5899\uff0c\u800c\u8bf4\u660e\u4e66\u91cc\u7684\u6bcf\u4e00\u6761\u89c4\u5219\u90fd\u53ea\u8ba9\u5c0f\u8f66\u8d70\u5230\u76f8\u90bb\u683c\uff0c\u6240\u4ee5\u76ee\u6807\u683c (2,7) \u4e0d\u53ef\u8fbe",
+    "lean_target": "unsolvable",
+    "name": "right_room_locked"
+  },
+  "world_says": {
+    "goal_reachable": true,
+    "note": "the referee's copy; the refutation loop is M6 and it re-derives this by execution rather than by reading it from here",
+    "witness_length": 18
+  },
+  "zero_space": {
+    "arena": 37,
+    "difference_rank": 21,
+    "in_recovered_space": true,
+    "region": [
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ]
+    ],
+    "region_size": 21,
+    "rendering": "(6@1 + 6@2 + 6@5 + 6@6 + 6@7 + 6@8 + 6@11 + 6@12 + 6@13 + 6@14 + 6@17 + 6@18 + 6@19 + 6@20 + 6@23 + 6@24 + 6@25 + 6@26 + 6@29 + 6@30 + 6@31) mod 2 = 1",
+    "space_dimension": 127,
+    "value": 1
+  }
+}

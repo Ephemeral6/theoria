@@ -1,0 +1,1307 @@
+{
+  "papers": [
+    {
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\cheater\\p15-heldout-a0.brief.txt",
+      "cheater_brief_sha256": "fdc4d33924be265b5269518f90cbf18c25bbd5756bd9beaa1d3d7d945c6007cf",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\truth\\p15-heldout-a0.truth.json",
+      "key_sha256": "0fce7706e9f094d38a62fd9c5c1e831b6c22a9dbfe1b2d38d443f546516d94a4",
+      "leakage": {
+        "label_sets_checked": [
+          "event",
+          "level_name"
+        ],
+        "metadata_fields_checked": [
+          "points",
+          "tags",
+          "kind",
+          "item_id"
+        ],
+        "metadata_multiplicity": {
+          "event": {
+            "cuts": [
+              "tags:a0h-000|a0h-001|a0h-003|a0h-006|a0h-008|a0h-015|a0h-018|a0h-021|a0h-022|a0h-024|a0h-025|a0h-030|a0h-032|a0h-033|a0h-035|a0h-036|a0h-038|a0h-039|a0h-040|a0h-041|a0h-044|a0h-047|a0h-048|a0h-049|a0h-051|a0h-052|a0h-054|a0h-055|a0h-056|a0h-058|a0h-059|a0h-060|a0h-061|a0h-063|a0h-064|a0h-066|a0h-071|a0h-072|a0h-073|a0h-077"
+            ],
+            "cuts_tried_in_label_set": 1,
+            "group_power": [
+              {
+                "best_k": null,
+                "best_p_fire": null,
+                "can_fire_at_all": false,
+                "n": 80,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "level_name": {
+            "cuts": [
+              "tags:a0h-000|a0h-001|a0h-003|a0h-006|a0h-008|a0h-015|a0h-018|a0h-021|a0h-022|a0h-024|a0h-025|a0h-030|a0h-032|a0h-033|a0h-035|a0h-036|a0h-038|a0h-039|a0h-040|a0h-041|a0h-044|a0h-047|a0h-048|a0h-049|a0h-051|a0h-052|a0h-054|a0h-055|a0h-056|a0h-058|a0h-059|a0h-060|a0h-061|a0h-063|a0h-064|a0h-066|a0h-071|a0h-072|a0h-073|a0h-077"
+            ],
+            "cuts_tried_in_label_set": 1,
+            "group_power": [
+              {
+                "best_k": null,
+                "best_p_fire": null,
+                "can_fire_at_all": false,
+                "n": 80,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          }
+        },
+        "metadata_unscored": {
+          "event": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 2,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "absent",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 80
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 80
+            }
+          ],
+          "level_name": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 2,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "absent",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 80
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 80
+            }
+          ]
+        },
+        "n_items": 80,
+        "paper_id": "p15-heldout-a0",
+        "positional_derived": {
+          "event": {
+            "chance_baseline": 0.4,
+            "chance_label": "\"push\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"blocked_crossing\"": [
+                "a0h-004",
+                "a0h-010",
+                "a0h-012",
+                "a0h-021"
+              ],
+              "\"blocked_edge\"": [
+                "a0h-002",
+                "a0h-014",
+                "a0h-028",
+                "a0h-039"
+              ],
+              "\"blocked_landing\"": [
+                "a0h-000",
+                "a0h-007",
+                "a0h-008",
+                "a0h-020"
+              ],
+              "\"blocked_wall\"": [
+                "a0h-005",
+                "a0h-009",
+                "a0h-016",
+                "a0h-030"
+              ],
+              "\"move\"": [
+                "a0h-001",
+                "a0h-006",
+                "a0h-013",
+                "a0h-017"
+              ],
+              "\"push\"": [
+                "a0h-003",
+                "a0h-011",
+                "a0h-015",
+                "a0h-019"
+              ]
+            },
+            "label_counts": {
+              "\"blocked_crossing\"": 10,
+              "\"blocked_edge\"": 8,
+              "\"blocked_landing\"": 10,
+              "\"blocked_wall\"": 8,
+              "\"move\"": 12,
+              "\"push\"": 32
+            },
+            "n": 80,
+            "order_runs": 62,
+            "order_runs_max": 80,
+            "sheet_length_mean_by_answer": {
+              "\"blocked_crossing\"": 258.8,
+              "\"blocked_edge\"": 259.375,
+              "\"blocked_landing\"": 258.7,
+              "\"blocked_wall\"": 260.125,
+              "\"move\"": 258.75,
+              "\"push\"": 258.75
+            }
+          },
+          "level_name": {
+            "chance_baseline": 0.2625,
+            "chance_label": "\"crossing_DOWN\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"crossing_DOWN\"": [
+                "a0h-001",
+                "a0h-004",
+                "a0h-005",
+                "a0h-015"
+              ],
+              "\"crossing_LEFT\"": [
+                "a0h-000",
+                "a0h-003",
+                "a0h-006",
+                "a0h-009"
+              ],
+              "\"crossing_RIGHT\"": [
+                "a0h-011",
+                "a0h-018",
+                "a0h-020",
+                "a0h-023"
+              ],
+              "\"crossing_UP\"": [
+                "a0h-002",
+                "a0h-008",
+                "a0h-012",
+                "a0h-013"
+              ],
+              "\"match\"": [
+                "a0h-007",
+                "a0h-024",
+                "a0h-026",
+                "a0h-033"
+              ]
+            },
+            "label_counts": {
+              "\"crossing_DOWN\"": 21,
+              "\"crossing_LEFT\"": 16,
+              "\"crossing_RIGHT\"": 16,
+              "\"crossing_UP\"": 16,
+              "\"match\"": 11
+            },
+            "n": 80,
+            "order_runs": 60,
+            "order_runs_max": 80,
+            "sheet_length_mean_by_answer": {
+              "\"crossing_DOWN\"": 260.143,
+              "\"crossing_LEFT\"": 259.812,
+              "\"crossing_RIGHT\"": 259.25,
+              "\"crossing_UP\"": 259.438,
+              "\"match\"": 254.273
+            }
+          }
+        },
+        "probe_hits": 0,
+        "probes_declared": 363,
+        "sheet_bytes": 26908,
+        "structural_hits": 0
+      },
+      "n_items": 80,
+      "paper_id": "p15-heldout-a0",
+      "question_type": "heldout",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\papers\\p15-heldout-a0.paper.json",
+      "sheet_sha256": "182066a2d5a5a7158bce52ffa53fce7697512a37891d5b0818f34a6a1a7ac05a",
+      "total_points": 80.0
+    },
+    {
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\cheater\\p15-handover-a0.brief.txt",
+      "cheater_brief_sha256": "c73d2ffadc99abffdac45223145aaecccfcdb1b7a991dd5de64858ef9c88f3ab",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\truth\\p15-handover-a0.truth.json",
+      "key_sha256": "efb2745ab5ad35fd2e917f05f9b603d92c6f19d9f8199cc4e507484281cc8368",
+      "leakage": {
+        "label_sets_checked": [
+          "rule"
+        ],
+        "metadata_fields_checked": [
+          "points",
+          "tags",
+          "kind",
+          "item_id"
+        ],
+        "metadata_multiplicity": {
+          "rule": {
+            "cuts": [
+              "tags:hv-step-01|hv-step-02",
+              "tags:hv-step-01|hv-step-02|hv-step-03|hv-step-06|hv-step-07",
+              "tags:hv-step-01|hv-step-02|hv-step-04|hv-step-05|hv-step-08|hv-step-09|hv-step-10|hv-step-11"
+            ],
+            "cuts_tried_in_label_set": 3,
+            "group_power": [
+              {
+                "best_k": null,
+                "best_p_fire": null,
+                "can_fire_at_all": false,
+                "n": 11,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          }
+        },
+        "metadata_unscored": {
+          "rule": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "constant_tokens": 3,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 3,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 11
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            }
+          ]
+        },
+        "n_items": 29,
+        "paper_id": "p15-handover-a0",
+        "positional_derived": {
+          "rule": {
+            "chance_baseline": 0.272727,
+            "chance_label": "\"blocked_box_landing\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"blocked_box_crossing\"": [
+                "hv-step-07",
+                "hv-step-11"
+              ],
+              "\"blocked_box_landing\"": [
+                "hv-step-06",
+                "hv-step-08",
+                "hv-step-09"
+              ],
+              "\"blocked_wall\"": [
+                "hv-step-01",
+                "hv-step-10"
+              ],
+              "\"push2\"": [
+                "hv-step-03",
+                "hv-step-04"
+              ],
+              "\"walk\"": [
+                "hv-step-02",
+                "hv-step-05"
+              ]
+            },
+            "label_counts": {
+              "\"blocked_box_crossing\"": 2,
+              "\"blocked_box_landing\"": 3,
+              "\"blocked_wall\"": 2,
+              "\"push2\"": 2,
+              "\"walk\"": 2
+            },
+            "n": 11,
+            "order_runs": 9,
+            "order_runs_max": 11,
+            "sheet_length_mean_by_answer": {
+              "\"blocked_box_crossing\"": 356.5,
+              "\"blocked_box_landing\"": 355.0,
+              "\"blocked_wall\"": 361.5,
+              "\"push2\"": 356.5,
+              "\"walk\"": 361.5
+            }
+          }
+        },
+        "probe_hits": 0,
+        "probes_declared": 58,
+        "sheet_bytes": 13598,
+        "structural_hits": 0
+      },
+      "n_items": 29,
+      "paper_id": "p15-handover-a0",
+      "question_type": "handover",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\papers\\p15-handover-a0.paper.json",
+      "sheet_sha256": "51681ccfe1a96b5d8c296c1c380c1ed96b8bf7302ddff1a736425ff11878ed20",
+      "total_points": 46.0
+    },
+    {
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\cheater\\p15-adaptation-a0.brief.txt",
+      "cheater_brief_sha256": "445e77778b4ccbe47c00bef7592812e883f035ff916b166442047a3089cd3491",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\truth\\p15-adaptation-a0.truth.json",
+      "key_sha256": "45d177097b3af89340a7909f981ee6a8d0ae44992a10685620dca02192909911",
+      "leakage": {
+        "label_sets_checked": [
+          "exact_on_heldout",
+          "label",
+          "verdict"
+        ],
+        "metadata_fields_checked": [
+          "points",
+          "tags",
+          "kind",
+          "item_id"
+        ],
+        "metadata_multiplicity": {
+          "exact_on_heldout": {
+            "cuts": [
+              "item_id:v-a0-01.repair.narrow|v-a0-02.repair.narrow|v-a0-03.repair.narrow|v-a0-04.repair.narrow|v-a0-05.repair.narrow|v-a0-06.repair.narrow",
+              "tags:v-a0-01.repair.narrow|v-a0-02.repair.narrow|v-a0-03.repair.narrow|v-a0-04.repair.narrow|v-a0-05.repair.narrow|v-a0-06.repair.narrow"
+            ],
+            "cuts_tried_in_label_set": 2,
+            "group_power": [
+              {
+                "best_k": 5,
+                "best_p_fire": 0.00126263,
+                "can_fire_at_all": true,
+                "n": 12,
+                "untestable_at_alpha": false
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.030073
+          },
+          "label": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": 2,
+                "best_p_fire": 0.0666667,
+                "can_fire_at_all": true,
+                "n": 6,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "verdict": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": 2,
+                "best_p_fire": 0.0666667,
+                "can_fire_at_all": true,
+                "n": 6,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          }
+        },
+        "metadata_unscored": {
+          "exact_on_heldout": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "tags",
+              "scored_values": 0,
+              "singleton_values": 12
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 2,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 12
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 2,
+              "single_holder_tokens": 0
+            }
+          ],
+          "label": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "tags",
+              "scored_values": 0,
+              "singleton_values": 6
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 6
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            }
+          ],
+          "verdict": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "tags",
+              "scored_values": 0,
+              "singleton_values": 6
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 6
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            }
+          ]
+        },
+        "n_items": 60,
+        "paper_id": "p15-adaptation-a0",
+        "positional_derived": {
+          "exact_on_heldout": {
+            "chance_baseline": 0.583333,
+            "chance_label": "false",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "false": [
+                "v-a0-01.repair.narrow",
+                "v-a0-01.repair.wide",
+                "v-a0-03.repair.narrow",
+                "v-a0-04.repair.narrow"
+              ],
+              "true": [
+                "v-a0-02.repair.narrow",
+                "v-a0-02.repair.wide",
+                "v-a0-03.repair.wide",
+                "v-a0-05.repair.narrow"
+              ]
+            },
+            "label_counts": {
+              "false": 7,
+              "true": 5
+            },
+            "n": 12,
+            "order_runs": 7,
+            "order_runs_max": 12,
+            "sheet_length_mean_by_answer": {
+              "false": 1043.429,
+              "true": 1058.0
+            }
+          },
+          "label": {
+            "chance_baseline": 0.666667,
+            "chance_label": "\"unsolvable\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"solvable\"": [
+                "v-a0-02.collateral",
+                "v-a0-05.collateral"
+              ],
+              "\"unsolvable\"": [
+                "v-a0-01.collateral",
+                "v-a0-03.collateral",
+                "v-a0-04.collateral",
+                "v-a0-06.collateral"
+              ]
+            },
+            "label_counts": {
+              "\"solvable\"": 2,
+              "\"unsolvable\"": 4
+            },
+            "n": 6,
+            "order_runs": 5,
+            "order_runs_max": 6,
+            "sheet_length_mean_by_answer": {
+              "\"solvable\"": 957.0,
+              "\"unsolvable\"": 957.0
+            }
+          },
+          "verdict": {
+            "chance_baseline": 0.666667,
+            "chance_label": "\"unsolvable\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"solvable\"": [
+                "v-a0-02.collateral",
+                "v-a0-05.collateral"
+              ],
+              "\"unsolvable\"": [
+                "v-a0-01.collateral",
+                "v-a0-03.collateral",
+                "v-a0-04.collateral",
+                "v-a0-06.collateral"
+              ]
+            },
+            "label_counts": {
+              "\"solvable\"": 2,
+              "\"unsolvable\"": 4
+            },
+            "n": 6,
+            "order_runs": 5,
+            "order_runs_max": 6,
+            "sheet_length_mean_by_answer": {
+              "\"solvable\"": 957.0,
+              "\"unsolvable\"": 957.0
+            }
+          }
+        },
+        "probe_hits": 0,
+        "probes_declared": 1284,
+        "sheet_bytes": 382268,
+        "structural_hits": 0
+      },
+      "n_items": 60,
+      "paper_id": "p15-adaptation-a0",
+      "question_type": "adaptation",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\papers\\p15-adaptation-a0.paper.json",
+      "sheet_sha256": "b52ddbc8ed3d333fdff8358d7215387417adaf4986e257768c89463fd27a8ff2",
+      "total_points": 144.0
+    },
+    {
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\cheater\\p15-verdict-a2.brief.txt",
+      "cheater_brief_sha256": "1d4b2b90701fe7e5c9d1860241c4e10d167b6c24475bbf7fd2073d1a1c878b45",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\truth\\p15-verdict-a2.truth.json",
+      "key_sha256": "5f3d431ac0a140f4a35944f6e23b2fa6142dec1beb017b0b6085090cc19ce8bc",
+      "leakage": {
+        "label_sets_checked": [
+          "board_size_class",
+          "class",
+          "search_credible",
+          "witness_length",
+          "witness_source"
+        ],
+        "metadata_fields_checked": [
+          "points",
+          "tags",
+          "kind",
+          "item_id"
+        ],
+        "metadata_multiplicity": {
+          "board_size_class": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": 7,
+                "best_p_fire": 5.14192e-05,
+                "can_fire_at_all": true,
+                "n": 17,
+                "untestable_at_alpha": false
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "class": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": null,
+                "best_p_fire": null,
+                "can_fire_at_all": false,
+                "n": 17,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "search_credible": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": 7,
+                "best_p_fire": 5.14192e-05,
+                "can_fire_at_all": true,
+                "n": 17,
+                "untestable_at_alpha": false
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "witness_length": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": null,
+                "best_p_fire": null,
+                "can_fire_at_all": false,
+                "n": 8,
+                "untestable_at_alpha": true
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          },
+          "witness_source": {
+            "cuts": [],
+            "cuts_tried_in_label_set": 0,
+            "group_power": [
+              {
+                "best_k": 3,
+                "best_p_fire": 0.0178571,
+                "can_fire_at_all": true,
+                "n": 8,
+                "untestable_at_alpha": false
+              }
+            ],
+            "p_fire_familywise_in_label_set": 0.0
+          }
+        },
+        "metadata_unscored": {
+          "board_size_class": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "tags",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 17
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 17
+            }
+          ],
+          "class": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "tags",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 17
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 17
+            }
+          ],
+          "search_credible": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "tags",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 17
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 17
+            }
+          ],
+          "witness_length": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "tags",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 8
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 8
+            }
+          ],
+          "witness_source": [
+            {
+              "declined": "constant",
+              "field": "points",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "points",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "tags",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 2,
+              "declined": "single-holder tokens are not scorable",
+              "field": "tags",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "declined": "constant",
+              "field": "kind",
+              "scored_values": 0
+            },
+            {
+              "constant_tokens": 1,
+              "declined": "single-holder tokens are not scorable",
+              "field": "kind",
+              "scored_tokens": 0,
+              "single_holder_tokens": 0
+            },
+            {
+              "field": "item_id",
+              "scored_values": 0,
+              "singleton_values": 8
+            },
+            {
+              "constant_tokens": 0,
+              "declined": "single-holder tokens are not scorable",
+              "field": "item_id",
+              "scored_tokens": 0,
+              "single_holder_tokens": 8
+            }
+          ]
+        },
+        "n_items": 17,
+        "paper_id": "p15-verdict-a2",
+        "positional_derived": {
+          "board_size_class": {
+            "chance_baseline": 0.588235,
+            "chance_label": "\"small\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"large\"": [
+                "vq-0ffc3cd33f",
+                "vq-2986ed8ffc",
+                "vq-6150a6eeb7",
+                "vq-6bab2f307c"
+              ],
+              "\"small\"": [
+                "vq-1015eb0bb1",
+                "vq-17af763cab",
+                "vq-1881c8c383",
+                "vq-82f568ca11"
+              ]
+            },
+            "label_counts": {
+              "\"large\"": 7,
+              "\"small\"": 10
+            },
+            "n": 17,
+            "order_runs": 7,
+            "order_runs_max": 17,
+            "sheet_length_mean_by_answer": {
+              "\"large\"": 1126.286,
+              "\"small\"": 754.3
+            }
+          },
+          "class": {
+            "chance_baseline": 0.470588,
+            "chance_label": "\"solvable_hard\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"large_unsolvable\"": [
+                "vq-2986ed8ffc",
+                "vq-6150a6eeb7",
+                "vq-721d09813c",
+                "vq-ee54166153"
+              ],
+              "\"small_unsolvable\"": [
+                "vq-1015eb0bb1",
+                "vq-17af763cab",
+                "vq-82f568ca11",
+                "vq-8ff1c690ad"
+              ],
+              "\"solvable_hard\"": [
+                "vq-0ffc3cd33f",
+                "vq-1881c8c383",
+                "vq-6bab2f307c",
+                "vq-8c4f14b152"
+              ]
+            },
+            "label_counts": {
+              "\"large_unsolvable\"": 4,
+              "\"small_unsolvable\"": 5,
+              "\"solvable_hard\"": 8
+            },
+            "n": 17,
+            "order_runs": 14,
+            "order_runs_max": 17,
+            "sheet_length_mean_by_answer": {
+              "\"large_unsolvable\"": 1152.25,
+              "\"small_unsolvable\"": 682.4,
+              "\"solvable_hard\"": 925.75
+            }
+          },
+          "search_credible": {
+            "chance_baseline": 0.588235,
+            "chance_label": "true",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "false": [
+                "vq-0ffc3cd33f",
+                "vq-2986ed8ffc",
+                "vq-6150a6eeb7",
+                "vq-6bab2f307c"
+              ],
+              "true": [
+                "vq-1015eb0bb1",
+                "vq-17af763cab",
+                "vq-1881c8c383",
+                "vq-82f568ca11"
+              ]
+            },
+            "label_counts": {
+              "false": 7,
+              "true": 10
+            },
+            "n": 17,
+            "order_runs": 7,
+            "order_runs_max": 17,
+            "sheet_length_mean_by_answer": {
+              "false": 1126.286,
+              "true": 754.3
+            }
+          },
+          "witness_length": {
+            "chance_baseline": 0.5,
+            "chance_label": "18",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "18": [
+                "vq-1881c8c383",
+                "vq-abe007cdfa",
+                "vq-c480b494f3",
+                "vq-e6ae49645d"
+              ],
+              "416": [
+                "vq-0ffc3cd33f",
+                "vq-6bab2f307c",
+                "vq-8c4f14b152"
+              ],
+              "98": [
+                "vq-9e0aefdf80"
+              ]
+            },
+            "label_counts": {
+              "18": 4,
+              "416": 3,
+              "98": 1
+            },
+            "n": 8,
+            "order_runs": 6,
+            "order_runs_max": 8,
+            "sheet_length_mean_by_answer": {
+              "18": 842.5,
+              "416": 1091.667,
+              "98": 761.0
+            }
+          },
+          "witness_source": {
+            "chance_baseline": 0.625,
+            "chance_label": "\"search\"",
+            "clustered_by_answer": false,
+            "example_ids_by_answer": {
+              "\"construction\"": [
+                "vq-0ffc3cd33f",
+                "vq-6bab2f307c",
+                "vq-8c4f14b152"
+              ],
+              "\"search\"": [
+                "vq-1881c8c383",
+                "vq-9e0aefdf80",
+                "vq-abe007cdfa",
+                "vq-c480b494f3"
+              ]
+            },
+            "label_counts": {
+              "\"construction\"": 3,
+              "\"search\"": 5
+            },
+            "n": 8,
+            "order_runs": 5,
+            "order_runs_max": 8,
+            "sheet_length_mean_by_answer": {
+              "\"construction\"": 1091.667,
+              "\"search\"": 826.2
+            }
+          }
+        },
+        "probe_hits": 0,
+        "probes_declared": 85,
+        "sheet_bytes": 20204,
+        "structural_hits": 0
+      },
+      "n_items": 17,
+      "paper_id": "p15-verdict-a2",
+      "question_type": "verdict",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v26-handover-leak-ruling\\exam\\artifacts\\papers\\p15-verdict-a2.paper.json",
+      "sheet_sha256": "2e7e46f5970faff66055a1bb8c9ba0dc366b13062e6a5849110ea34984ce94ca",
+      "total_points": 34.0
+    }
+  ],
+  "provenance": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ]
+  },
+  "rubric_manifest": {
+    "modules": {
+      "exam.grading.rubrics_adaptation": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e",
+      "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+      "exam.grading.rubrics_handover_auto": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
+      "exam.grading.rubrics_heldout": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
+      "exam.grading.rubrics_verdict": "dc696acc094082392311fd7c838c3342927c38fcec60b7dabac4583e6f860bb3"
+    },
+    "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+    "rubrics": {
+      "adapt.collateral.v1": "falsified manual rules, claims to re-examine, claims now false, and the standing verdict on `mismatch`; raises silently_wrong when the old verdict is kept on a variant where it flipped",
+      "adapt.describe.v1": "the minimal set of rule-change labels consistent with the observations; set equality against CHANGE_LABELS",
+      "adapt.detect.v1": "first observation at which the old theory mispredicts on one level; graded with episode-sized tolerance bands, no credit for a false alarm on a level where the change is undetectable",
+      "adapt.detect_cross.v1": "the per-level map of first divergences for one variant; mean of the per-level bands, so a uniform guess cannot ride the majority answer",
+      "adapt.repair.v1": "the action budget a stated re-mining protocol spends and whether the re-mined theory is exact on a held-out board",
+      "handover.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover.optimal_action": "An action lying on some shortest solution from the given state; the whole optimal set is accepted, not one tie-break.",
+      "handover.step_semantics": "One transition of the A0 manual: the next Player cell, the next Box cell and the rule that fired, all three or nothing.",
+      "handover_auto.counterexample": "A legal situation at which a claim the manual marks proven is false, checked by recomputing the claim there.",
+      "handover_auto.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover_auto.optimal_action": "Half the points for an action on some shortest solution (or `none` when there is no solution), half for the length of that shortest solution.",
+      "handover_auto.rule_justification": "The subset of the offered clauses the claim's truth depends on; hits pay, spurious citations cost the same, exact set for full marks.",
+      "handover_auto.step_semantics": "One transition of the A0 manual: next Player cell, next Box cell and the rule that fired, all three or nothing. Same marking as handover.step_semantics, new items.",
+      "heldout.frame_exact": "held-out prediction: the predicted frame must equal the true frame cell for cell. No partial credit -- a cells-correct score on a 7x7 board is ~96% for returning the input unchanged, so it would measure board size rather than theory. Abstention is recorded and scores zero.",
+      "verdict.a2.claim_and_certificate": "Half the points for the verdict, half for the reason. On an unsolvable level the reason is a certificate this rubric verifies against the board (full) or a credible exhaustive search (partial); on a solvable one it is a witness plan this rubric replays."
+    }
+  }
+}

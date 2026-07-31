@@ -1,0 +1,532 @@
+{
+  "arm": "a3_l2_rewired",
+  "bill": {
+    "arm": "a3_l2_rewired",
+    "carries_books": true,
+    "cost_to_first_plan": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    },
+    "counts": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 3,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 10,
+      "world_frames": 11
+    },
+    "events": [
+      {
+        "amount": 1,
+        "line": "world_frames",
+        "running_total": 1,
+        "seq": 0,
+        "why": "the carrying arm's entire observation"
+      },
+      {
+        "amount": 1,
+        "line": "compile_runs",
+        "running_total": 1,
+        "seq": 1,
+        "why": "the carried domain + the rebuilt problem"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 1,
+        "seq": 2,
+        "why": "render/responsibility check on frame 0"
+      },
+      {
+        "amount": 1,
+        "line": "plan_runs",
+        "running_total": 1,
+        "seq": 3,
+        "why": "fd_adapter.solve on a3-l2-rewired"
+      },
+      {
+        "amount": 10,
+        "line": "world_actions",
+        "running_total": 10,
+        "seq": 4,
+        "why": "executing the plan"
+      },
+      {
+        "amount": 10,
+        "line": "world_frames",
+        "running_total": 11,
+        "seq": 5,
+        "why": "frames returned by the execution (frame 0 already charged)"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 2,
+        "seq": 6,
+        "why": "replay the execution under the manual"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 3,
+        "seq": 7,
+        "why": "Lean on the carried domain, new instance"
+      }
+    ],
+    "level": "a3-l2-rewired",
+    "note": "carries a carrypack onto a level it has never seen"
+  },
+  "certify_lean": {
+    "available": true,
+    "axiom_reports": [],
+    "errors": [],
+    "file": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired/theory.lean",
+    "green": false,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 1,
+    "sorries": []
+  },
+  "certify_replay": {
+    "anomaly_count": 13,
+    "anomaly_kinds": [
+      "goal_mismatch",
+      "render_mismatch",
+      "unowned_pixel"
+    ],
+    "frames": 11,
+    "green": false,
+    "pixels_checked": 891,
+    "pixels_unexplained": 8,
+    "trace": "a3_l2_rewired_execution.jsonl",
+    "transitions": 10
+  },
+  "certify_static": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 1,
+    "green": true,
+    "pixels_checked": 81,
+    "pixels_unexplained": 0,
+    "trace": "a3_l2_rewired_frame0_trace.jsonl",
+    "transitions": 0
+  },
+  "compiled": {
+    "domain.pddl": 4491,
+    "dsl": "runs/20260728T1800Z-A6-transfer-protocol/packs/a3-v1/domain.dsl",
+    "forms_emitted": [
+      "lean",
+      "markdown",
+      "pddl",
+      "python"
+    ],
+    "forms_emitted_unauthorised": [],
+    "forms_withheld": {},
+    "goal_bound": [
+      1,
+      1
+    ],
+    "lean_invariant": "supplied builder",
+    "mover": "Cart",
+    "pddl_cells_added": [
+      [
+        1,
+        6
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "problem": "a3-l2-rewired",
+    "problem.json": 2517,
+    "problem.pddl": 3700,
+    "theory.lean": 60603,
+    "theory.md": 5380,
+    "theory.py": 13891
+  },
+  "execution": {
+    "actions": [
+      "LEFT",
+      "DOWN",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP"
+    ],
+    "actions_spent": 10,
+    "level": "a3-l2-rewired",
+    "plan_length": 10,
+    "win": false
+  },
+  "first_mismatch": {
+    "cell": [
+      4,
+      1
+    ],
+    "kind": "render_mismatch",
+    "manual": 6,
+    "t": 7,
+    "world": 0
+  },
+  "level": "a3-l2-rewired",
+  "outcome": "replay_mismatch",
+  "pack": "a3-v1",
+  "pack_check": {
+    "books": {
+      "books": {
+        "domain": {
+          "actual": "db11cabaa510182257eacbbcd32ac648908c835de756cf285aa777b1c73d56db",
+          "match": true,
+          "recorded": "db11cabaa510182257eacbbcd32ac648908c835de756cf285aa777b1c73d56db"
+        },
+        "playbook": {
+          "actual": "c27024d6aa529a8503444ce3bd4158683636ca5c565f3843ee0eed0159e1ed30",
+          "match": true,
+          "recorded": "c27024d6aa529a8503444ce3bd4158683636ca5c565f3843ee0eed0159e1ed30"
+        }
+      },
+      "match": true
+    },
+    "fingerprint": {
+      "added": [],
+      "current_interpreter": "python3.13",
+      "current_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "detail": {},
+      "drifted": [],
+      "interpreter_changed": false,
+      "match": true,
+      "recorded_interpreter": "python3.13",
+      "recorded_sha256": "c038d2ac1040c36bef4fc96feb9a08e58eb042e9a7f529513507f564d45bf38b",
+      "removed": []
+    },
+    "on_drift": "refuse"
+  },
+  "pddl_workarounds": {
+    "cells_added": [
+      [
+        1,
+        6
+      ],
+      [
+        5,
+        1
+      ]
+    ],
+    "landmarks": {
+      "entry_cells": {
+        "exit_a": [
+          [
+            5,
+            1
+          ]
+        ],
+        "exit_b": [
+          [
+            1,
+            6
+          ]
+        ]
+      },
+      "entry_colour": {
+        "exit_a": 3,
+        "exit_b": 4
+      },
+      "exit_cells": {
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ]
+      },
+      "facts_added": 4,
+      "jump_actions": 8,
+      "landmarks": [
+        "exit_a",
+        "exit_b"
+      ],
+      "predicates": [
+        "entry-exit-a",
+        "entry-exit-b",
+        "exit-exit-a",
+        "exit-exit-b"
+      ]
+    },
+    "pushables": {
+      "note": "no push cascades",
+      "pushables": 0
+    }
+  },
+  "plan": {
+    "actions": [
+      "(push-left c6-7 c6-6)",
+      "(press-down c6-6 c7-6 c3-1)",
+      "(push-up c6-6 c5-6)",
+      "(push-up c5-6 c4-6)",
+      "(push-up c4-6 c3-6)",
+      "(push-up c3-6 c2-6)",
+      "(teleport-b-up c2-6 c1-6 c4-1)",
+      "(push-up c4-1 c3-1)",
+      "(push-up c3-1 c2-1)",
+      "(push-up c2-1 c1-1)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "left",
+      "down",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired/domain.pddl",
+    "green": true,
+    "length": 10,
+    "manual_final_cell": [
+      1,
+      1
+    ],
+    "manual_reaches_goal": true,
+    "manual_trail": [
+      [
+        6,
+        7
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "name": "a3-l2-rewired",
+    "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired/problem.pddl",
+    "status": "SAT",
+    "world_actions": [
+      "LEFT",
+      "DOWN",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP"
+    ]
+  },
+  "protocol": "a6carry/1",
+  "provenance": {
+    "background_route": "border_excluded",
+    "counts": {
+      "arena_cells": 35,
+      "background": 0,
+      "board_non_background_cells": 46,
+      "grid": [
+        9,
+        9
+      ],
+      "object_cells": {
+        "Cart": [
+          6,
+          7
+        ],
+        "Door": [
+          3,
+          1
+        ],
+        "Switch": [
+          7,
+          6
+        ]
+      },
+      "object_names": [
+        "Cart",
+        "Door",
+        "Switch"
+      ],
+      "objects": 3
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_frame",
+      "background": "derived_from_frame",
+      "board": "derived_from_frame",
+      "goal_cell": "supplied",
+      "height": "derived_from_frame",
+      "landmarks": "supplied",
+      "name": "supplied",
+      "objects": "derived_from_frame",
+      "width": "derived_from_frame"
+    },
+    "inputs_read": {
+      "actions": 0,
+      "frames": 1
+    },
+    "pack_requires_digest": {
+      "guard_colours": [
+        3,
+        4,
+        7,
+        8
+      ],
+      "landmarks": [
+        "exit_a",
+        "exit_b"
+      ],
+      "objects": [
+        "Cart",
+        "Door",
+        "Switch"
+      ]
+    },
+    "preflight": {
+      "colours_present": {
+        "0": 32,
+        "1": 44,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1
+      },
+      "dormant_guard_colours": [
+        8
+      ],
+      "dormant_rules": [
+        "door_closes_down",
+        "door_closes_up",
+        "unpress_down",
+        "unpress_up"
+      ],
+      "green": true,
+      "grid": [
+        9,
+        9
+      ],
+      "guard_colours": [
+        3,
+        4,
+        7,
+        8
+      ],
+      "note": "a dormant guard colour is not a defect: the level does not present that mechanism and the rules guarding on it never fire.  A missing *object* is a refusal, because the manual is then about a world this level is not.",
+      "objects": {
+        "Cart": {
+          "cells": [
+            [
+              6,
+              7
+            ]
+          ],
+          "colours": [
+            6
+          ],
+          "count": 1
+        },
+        "Door": {
+          "cells": [
+            [
+              3,
+              1
+            ]
+          ],
+          "colours": [
+            5
+          ],
+          "count": 1
+        },
+        "Switch": {
+          "cells": [
+            [
+              7,
+              6
+            ]
+          ],
+          "colours": [
+            7,
+            8
+          ],
+          "count": 1
+        }
+      },
+      "refusals": []
+    },
+    "route": "frame",
+    "source": "runs/20260728T1800Z-A6-transfer-protocol/artifacts/a3_l2_rewired_frame0.json",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        1,
+        1
+      ],
+      "landmarks": {
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ]
+      },
+      "name": "a3-l2-rewired"
+    }
+  },
+  "theorize_triggered": true
+}

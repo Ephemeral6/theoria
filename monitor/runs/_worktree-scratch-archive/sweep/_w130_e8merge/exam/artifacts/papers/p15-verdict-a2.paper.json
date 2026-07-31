@@ -1,0 +1,873 @@
+{
+  "instructions": "You are handed a level of a self-built pushing world (the A2 family) after a\nwrapper has been applied to it. Decide whether it is solvable, and justify it.\n\nTHE WORLD\n  The cart moves one cell per command in the command's direction. A wall or the\n  board edge blocks it and nothing moves. Stepping into B presses the button:\n  the button latches and the door D vanishes in the SAME transition, and the\n  cart does not move. D is impassable until then. Entering P teleports the cart\n  to X; the cart never rests on P. Stepping onto s latches that switch for good.\n  You win on the frame where the cart is on G (and, where the item says so, all\n  switches are latched, and the score clears the stated threshold).\n\nTHE WRAPPER\n  Each item states its own: which commands survive (`commands`), which commands\n  are relabelled before they reach the world (`relabelled`), the command budget\n  (`budget`, null for none), and the hazard cells (`hazards`, drawn as `!`) on\n  which the episode is declared lost.\n\nYOUR ANSWER, per item\n  {\"claim\": \"unsolvable\", \"certificate\": {...}}   -- see the grammar below\n  {\"claim\": \"unsolvable\", \"reason\": \"exhaustive_search\"}\n  {\"claim\": \"solvable\",   \"witness\": [\"UP\", \"RIGHT\", ...]}\n  {\"claim\": \"abstain\"}\n\n  Half the points are the claim. The other half are the reason, and the reason\n  is checked: a certificate is verified against the board, a witness plan is\n  replayed. A correct claim with an unverifiable reason scores the claim only.\n  \"exhaustive_search\" is paid at 0.4 of the reason where the space is small\n  enough for that to be true, and at nothing where it is not.\n\nTHE CERTIFICATE GRAMMAR (closed -- an unlisted kind or an extra field is refused)\n\n  {\"kind\": \"invariant\", \"invariant\": NAME, \"initial_value\": V, \"goal_value\": W}\n      NAME is \"cart_row\", \"cart_col\" or \"cart_region\".\n      cart_row / cart_col: V and W are the start's and goal's row / column. The\n        checker verifies that every surviving command has a row (column) delta\n        of a single sign -- teleport jumps included -- and that the goal is on\n        the wrong side.\n      cart_region: V and W are the connected components' canonical\n        representatives, written [row, col] -- the lexicographically smallest\n        cell of the component, in the graph that joins two cells whenever some\n        surviving command steps between them (teleport edges included, doors\n        treated as open, switch state ignored).\n\n  {\"kind\": \"cut_set\", \"cells\": [[r, c], ...]}\n      Every listed cell must be a declared hazard, and deleting all of them must\n      disconnect the goal from the start in that same graph.\n\n  {\"kind\": \"counting\", \"bound\": N, \"limit\": M}\n      M is the item's budget; N is a lower bound on the commands required. The\n      checker recomputes its own lower bound and refuses N above it, and refuses\n      the argument unless M < N.\n",
+  "items": [
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#..#..#",
+          "#....#.G#",
+          "#....#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-1881c8c383",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S...........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##.###########################################################",
+          "#...........................................................G#",
+          "#.........!.........!.........!..............................#",
+          "##############################################################"
+        ],
+        "legend": {
+          "!": "hazard: the episode is declared lost on the frame in which the cart stands here",
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          20
+        ],
+        [
+          6,
+          30
+        ]
+      ],
+      "item_id": "vq-0ffc3cd33f",
+      "kind": "verdict",
+      "level_id": "lattice",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##########################################################################################################################################################################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S......................................................................................................................................................................................................G#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##########################################################################################################################################################################################################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": 150,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-ee54166153",
+      "kind": "verdict",
+      "level_id": "spindle",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#..#..#",
+          "#....#.G#",
+          "#....#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-c480b494f3",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#GS..........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##############################################################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-2986ed8ffc",
+      "kind": "verdict",
+      "level_id": "orchard",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "###########",
+          "#....#....#",
+          "#....#....#",
+          "#S...!...G#",
+          "#....#....#",
+          "#....#....#",
+          "###########"
+        ],
+        "legend": {
+          "!": "hazard: the episode is declared lost on the frame in which the cart stands here",
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [
+        [
+          3,
+          5
+        ]
+      ],
+      "item_id": "vq-82f568ca11",
+      "kind": "verdict",
+      "level_id": "cistern",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#S......#",
+          "#.......#",
+          "#########",
+          "#......G#",
+          "#.......#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-9725fbebf0",
+      "kind": "verdict",
+      "level_id": "quarry",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {
+        "LEFT": "RIGHT",
+        "RIGHT": "LEFT"
+      },
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#..#..#",
+          "#....#.G#",
+          "#....#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-17af763cab",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#####################",
+          "#S..................#",
+          "###################.#",
+          "#...................#",
+          "#.###################",
+          "#...................#",
+          "###################.#",
+          "#...................#",
+          "#.###################",
+          "#..................G#",
+          "#####################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-9e0aefdf80",
+      "kind": "verdict",
+      "level_id": "meander",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {
+        "LEFT": "RIGHT",
+        "RIGHT": "LEFT"
+      },
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#.....G.#",
+          "#.#####.#",
+          "#.......#",
+          "#.#####.#",
+          "#...S...#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-1015eb0bb1",
+      "kind": "verdict",
+      "level_id": "updraft",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S...........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##.###########################################################",
+          "#...........................................................G#",
+          "#............................................................#",
+          "##############################################################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": 456,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-6bab2f307c",
+      "kind": "verdict",
+      "level_id": "lattice",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S...........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##############################################################",
+          "#...........................................................G#",
+          "#............................................................#",
+          "##############################################################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-721d09813c",
+      "kind": "verdict",
+      "level_id": "gantry",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {
+        "LEFT": "RIGHT",
+        "RIGHT": "LEFT"
+      },
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S...........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##.###########################################################",
+          "#...........................................................G#",
+          "#............................................................#",
+          "##############################################################"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-8c4f14b152",
+      "kind": "verdict",
+      "level_id": "lattice",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {
+        "LEFT": "RIGHT",
+        "RIGHT": "LEFT"
+      },
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "##############################################################",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "#S...........................................................#",
+          "#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#",
+          "##!###########################################################",
+          "#...........................................................G#",
+          "#............................................................#",
+          "##############################################################"
+        ],
+        "legend": {
+          "!": "hazard: the episode is declared lost on the frame in which the cart stands here",
+          "#": "wall",
+          ".": "floor",
+          "G": "the goal cell",
+          "S": "the cart's start",
+          "s": "latching switch (stepping on it latches it, for good)"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [
+        [
+          4,
+          2
+        ]
+      ],
+      "item_id": "vq-6150a6eeb7",
+      "kind": "verdict",
+      "level_id": "lattice",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": true,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#!!#..#",
+          "#....#.G#",
+          "#..!.#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "!": "hazard: the episode is declared lost on the frame in which the cart stands here",
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": null,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "item_id": "vq-e6ae49645d",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#..#..#",
+          "#....#.G#",
+          "#....#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": 7,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-8ff1c690ad",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    },
+    {
+      "board": {
+        "grid": [
+          "#########",
+          "#B#..#..#",
+          "#....#.G#",
+          "#....#..#",
+          "#....#..#",
+          "#S...#..#",
+          "##..D#..#",
+          "#.##P#X.#",
+          "#########"
+        ],
+        "legend": {
+          "#": "wall",
+          ".": "floor",
+          "B": "button (pressing it opens the door, in the same transition; the cart does not move)",
+          "D": "door (impassable until the button is pressed)",
+          "G": "the goal cell",
+          "P": "teleport entry (entering it moves the cart to X; the cart never rests on P)",
+          "S": "the cart's start",
+          "X": "teleport exit"
+        }
+      },
+      "budget": 60,
+      "commands": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ],
+      "hazards": [],
+      "item_id": "vq-abe007cdfa",
+      "kind": "verdict",
+      "level_id": "atrium",
+      "objective": "drive the cart onto G",
+      "points": 2.0,
+      "question": "Is this level solvable? Answer `solvable` or `unsolvable`, and justify it as the instructions require.",
+      "relabelled": {},
+      "tags": [
+        "verdict",
+        "a2-family"
+      ],
+      "win_requires": {
+        "all_switches_latched": false,
+        "cart_on_goal": true,
+        "score_at_least": 1
+      },
+      "world": "a2"
+    }
+  ],
+  "n_items": 17,
+  "paper_id": "p15-verdict-a2",
+  "question_type": "verdict",
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+  "rubric_module_digest": "dc696acc094082392311fd7c838c3342927c38fcec60b7dabac4583e6f860bb3",
+  "schema": "exam/v0.1",
+  "total_points": 34.0,
+  "world": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ]
+  }
+}

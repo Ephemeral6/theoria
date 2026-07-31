@@ -1,0 +1,17 @@
+{
+  "prompt_id": "V26-fuzzlab-readme-points-at-the-smoke-run",
+  "branch": "agent/v26-fuzzlab-readme-points-at-the-smoke-run",
+  "base_commit": "8a5a83f923a28454cebbf3b9669389bf72a8b6dc",
+  "utc": "2026-07-30T16:01:20Z",
+  "worker": "W-1710",
+  "territory": "fuzzlab",
+  "goal": [
+    "README and paper cite the real 500-world run, not out/campaign.json (60-world smoke)",
+    "recompute the real run and compare digit-for-digit with the cited numbers",
+    "verify.py turns red when a published artifact is below its declared scale",
+    "negative sample: the smoke artifact in the main-result position must turn the gate red"
+  ],
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "files": []
+}

@@ -1,0 +1,3058 @@
+{
+  "what": "independent verification of the two ipdb and four lmcut counterexamples to DEADLOCK_CLAIM.md's '0-3 expansions on an admissible heuristic'",
+  "fast_downward": "24.06+ rev 7120aa0",
+  "utc": "2026-07-28T18:22:47Z",
+  "pinned_patterns": [
+    {
+      "instance": "far9",
+      "config": "sys1",
+      "search": "astar(cpdbs(patterns=systematic(1)))",
+      "expanded_base": 289,
+      "expanded_guarded": 289,
+      "delta": 0,
+      "h_init_base": "9",
+      "h_init_guarded": "9",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        18,
+        16
+      ],
+      "expanded_until_last_jump": [
+        220,
+        220
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.sys1.base.log",
+        "logs\\far9.sys1.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "sys2",
+      "search": "astar(cpdbs(patterns=systematic(2)))",
+      "expanded_base": 180,
+      "expanded_guarded": 180,
+      "delta": 0,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        15,
+        14
+      ],
+      "expanded_until_last_jump": [
+        134,
+        134
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.sys2.base.log",
+        "logs\\far9.sys2.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "sys3",
+      "search": "astar(cpdbs(patterns=systematic(3)))",
+      "expanded_base": 76,
+      "expanded_guarded": 75,
+      "delta": -1,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        3
+      ],
+      "expanded_until_last_jump": [
+        63,
+        63
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.sys3.base.log",
+        "logs\\far9.sys3.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-default",
+      "search": "astar(ipdb())",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-default.base.log",
+        "logs\\far9.ipdb-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed0",
+      "search": "astar(ipdb(random_seed=0))",
+      "expanded_base": 76,
+      "expanded_guarded": 76,
+      "delta": 0,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        3
+      ],
+      "expanded_until_last_jump": [
+        63,
+        63
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed0.base.log",
+        "logs\\far9.ipdb-seed0.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed1",
+      "search": "astar(ipdb(random_seed=1))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed1.base.log",
+        "logs\\far9.ipdb-seed1.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed2",
+      "search": "astar(ipdb(random_seed=2))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed2.base.log",
+        "logs\\far9.ipdb-seed2.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed3",
+      "search": "astar(ipdb(random_seed=3))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed3.base.log",
+        "logs\\far9.ipdb-seed3.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed7",
+      "search": "astar(ipdb(random_seed=7))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed7.base.log",
+        "logs\\far9.ipdb-seed7.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed11",
+      "search": "astar(ipdb(random_seed=11))",
+      "expanded_base": 76,
+      "expanded_guarded": 76,
+      "delta": 0,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        3
+      ],
+      "expanded_until_last_jump": [
+        63,
+        63
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed11.base.log",
+        "logs\\far9.ipdb-seed11.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed42",
+      "search": "astar(ipdb(random_seed=42))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed42.base.log",
+        "logs\\far9.ipdb-seed42.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "ipdb-seed1234",
+      "search": "astar(ipdb(random_seed=1234))",
+      "expanded_base": 78,
+      "expanded_guarded": 30,
+      "delta": -48,
+      "h_init_base": "22",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        2
+      ],
+      "expanded_until_last_jump": [
+        62,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.ipdb-seed1234.base.log",
+        "logs\\far9.ipdb-seed1234.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "sys1",
+      "search": "astar(cpdbs(patterns=systematic(1)))",
+      "expanded_base": 630,
+      "expanded_guarded": 630,
+      "delta": 0,
+      "h_init_base": "4",
+      "h_init_guarded": "4",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        28
+      ],
+      "expanded_until_last_jump": [
+        629,
+        629
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.sys1.base.log",
+        "logs\\swap-passage.sys1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "sys2",
+      "search": "astar(cpdbs(patterns=systematic(2)))",
+      "expanded_base": 630,
+      "expanded_guarded": 630,
+      "delta": 0,
+      "h_init_base": "7",
+      "h_init_guarded": "7",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        28
+      ],
+      "expanded_until_last_jump": [
+        628,
+        628
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.sys2.base.log",
+        "logs\\swap-passage.sys2.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "sys3",
+      "search": "astar(cpdbs(patterns=systematic(3)))",
+      "expanded_base": 630,
+      "expanded_guarded": 630,
+      "delta": 0,
+      "h_init_base": "9",
+      "h_init_guarded": "9",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        28
+      ],
+      "expanded_until_last_jump": [
+        629,
+        629
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.sys3.base.log",
+        "logs\\swap-passage.sys3.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-default",
+      "search": "astar(ipdb())",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-default.base.log",
+        "logs\\swap-passage.ipdb-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed0",
+      "search": "astar(ipdb(random_seed=0))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed0.base.log",
+        "logs\\swap-passage.ipdb-seed0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed1",
+      "search": "astar(ipdb(random_seed=1))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed1.base.log",
+        "logs\\swap-passage.ipdb-seed1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed2",
+      "search": "astar(ipdb(random_seed=2))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed2.base.log",
+        "logs\\swap-passage.ipdb-seed2.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed3",
+      "search": "astar(ipdb(random_seed=3))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed3.base.log",
+        "logs\\swap-passage.ipdb-seed3.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed7",
+      "search": "astar(ipdb(random_seed=7))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed7.base.log",
+        "logs\\swap-passage.ipdb-seed7.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed11",
+      "search": "astar(ipdb(random_seed=11))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed11.base.log",
+        "logs\\swap-passage.ipdb-seed11.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed42",
+      "search": "astar(ipdb(random_seed=42))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed42.base.log",
+        "logs\\swap-passage.ipdb-seed42.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "ipdb-seed1234",
+      "search": "astar(ipdb(random_seed=1234))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.ipdb-seed1234.base.log",
+        "logs\\swap-passage.ipdb-seed1234.guarded.log"
+      ]
+    }
+  ],
+  "swap_fixed_pattern_sweep": [
+    {
+      "tag": "boxes",
+      "n_patterns": 1,
+      "h_init": [
+        "4",
+        "4"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "boxes+player",
+      "n_patterns": 1,
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "boxes+1clear",
+      "n_patterns": 22,
+      "h_init": [
+        "4",
+        "4"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "boxes+player+1clear",
+      "n_patterns": 22,
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "boxes+2clear",
+      "n_patterns": 231,
+      "h_init": [
+        "4",
+        "4"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "boxes+player+2clear",
+      "n_patterns": 231,
+      "h_init": [
+        "13",
+        "13"
+      ],
+      "expanded": [
+        582,
+        582
+      ]
+    },
+    {
+      "tag": "boxes+player+3clear",
+      "n_patterns": 1540,
+      "h_init": [
+        "15",
+        "15"
+      ],
+      "expanded": [
+        494,
+        494
+      ]
+    },
+    {
+      "tag": "all-vars",
+      "n_patterns": 1,
+      "h_init": [
+        null,
+        null
+      ],
+      "expanded": [
+        null,
+        null
+      ]
+    }
+  ],
+  "swap_random_large_patterns": [
+    {
+      "tag": "big6-00",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c46",
+        "clear:c48",
+        "clear:c45",
+        "clear:c26",
+        "clear:c29",
+        "clear:c27"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        606,
+        606
+      ]
+    },
+    {
+      "tag": "big6-01",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c25",
+        "clear:c59",
+        "clear:c27",
+        "clear:c28",
+        "clear:c49",
+        "clear:c19"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-02",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c47",
+        "clear:c36",
+        "clear:c56",
+        "clear:c58",
+        "clear:c38",
+        "clear:c26"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-03",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c16",
+        "clear:c18",
+        "clear:c46",
+        "clear:c15",
+        "clear:c49"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-04",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c48",
+        "clear:c29",
+        "clear:c49",
+        "clear:c38",
+        "clear:c46",
+        "clear:c27"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big6-05",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c47",
+        "clear:c56",
+        "clear:c58",
+        "clear:c55",
+        "clear:c48",
+        "clear:c49"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-06",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c18",
+        "clear:c57",
+        "clear:c48",
+        "clear:c16",
+        "clear:c55"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-07",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c58",
+        "clear:c16",
+        "clear:c25",
+        "clear:c47",
+        "clear:c28",
+        "clear:c57"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-08",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c29",
+        "clear:c58",
+        "clear:c47",
+        "clear:c55",
+        "clear:c56",
+        "clear:c38"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-09",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c15",
+        "clear:c45",
+        "clear:c29",
+        "clear:c58",
+        "clear:c28",
+        "clear:c36"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-10",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c49",
+        "clear:c15",
+        "clear:c55",
+        "clear:c38",
+        "clear:c29",
+        "clear:c17"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big6-11",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c46",
+        "clear:c58",
+        "clear:c55",
+        "clear:c25",
+        "clear:c15",
+        "clear:c56"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-00",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c48",
+        "clear:c56",
+        "clear:c18",
+        "clear:c49",
+        "clear:c47",
+        "clear:c17",
+        "clear:c27"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-01",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c56",
+        "clear:c59",
+        "clear:c48",
+        "clear:c55",
+        "clear:c28",
+        "clear:c57",
+        "clear:c29"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-02",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c58",
+        "clear:c49",
+        "clear:c36",
+        "clear:c27",
+        "clear:c38",
+        "clear:c16",
+        "clear:c25"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-03",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c17",
+        "clear:c49",
+        "clear:c48",
+        "clear:c28",
+        "clear:c25",
+        "clear:c38",
+        "clear:c46"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big7-04",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c45",
+        "clear:c46",
+        "clear:c29",
+        "clear:c16",
+        "clear:c36",
+        "clear:c56",
+        "clear:c48"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big7-05",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c27",
+        "clear:c46",
+        "clear:c58",
+        "clear:c55",
+        "clear:c56",
+        "clear:c59",
+        "clear:c57"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-06",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c36",
+        "clear:c26",
+        "clear:c49",
+        "clear:c28",
+        "clear:c57",
+        "clear:c47",
+        "clear:c25"
+      ],
+      "h_init": [
+        "13",
+        "13"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big7-07",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c25",
+        "clear:c49",
+        "clear:c29",
+        "clear:c19",
+        "clear:c36",
+        "clear:c18",
+        "clear:c26"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-08",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c26",
+        "clear:c19",
+        "clear:c48",
+        "clear:c27",
+        "clear:c55",
+        "clear:c56",
+        "clear:c18"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-09",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c16",
+        "clear:c55",
+        "clear:c27",
+        "clear:c38",
+        "clear:c26",
+        "clear:c19",
+        "clear:c29"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big7-10",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c58",
+        "clear:c45",
+        "clear:c46",
+        "clear:c55",
+        "clear:c36",
+        "clear:c48"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big7-11",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c25",
+        "clear:c47",
+        "clear:c38",
+        "clear:c19",
+        "clear:c46",
+        "clear:c55",
+        "clear:c36"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-00",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c16",
+        "clear:c45",
+        "clear:c49",
+        "clear:c17",
+        "clear:c56",
+        "clear:c38",
+        "clear:c59",
+        "clear:c58"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-01",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c17",
+        "clear:c48",
+        "clear:c16",
+        "clear:c15",
+        "clear:c28",
+        "clear:c26",
+        "clear:c36",
+        "clear:c18"
+      ],
+      "h_init": [
+        "13",
+        "13"
+      ],
+      "expanded": [
+        584,
+        584
+      ]
+    },
+    {
+      "tag": "big8-02",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c58",
+        "clear:c27",
+        "clear:c25",
+        "clear:c29",
+        "clear:c45",
+        "clear:c19",
+        "clear:c16",
+        "clear:c38"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-03",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c27",
+        "clear:c56",
+        "clear:c49",
+        "clear:c29",
+        "clear:c47",
+        "clear:c46",
+        "clear:c16",
+        "clear:c58"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-04",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c27",
+        "clear:c26",
+        "clear:c55",
+        "clear:c47",
+        "clear:c16",
+        "clear:c17",
+        "clear:c19",
+        "clear:c45"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-05",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c55",
+        "clear:c28",
+        "clear:c27",
+        "clear:c59",
+        "clear:c38",
+        "clear:c29",
+        "clear:c49",
+        "clear:c17"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-06",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c38",
+        "clear:c47",
+        "clear:c56",
+        "clear:c48",
+        "clear:c16",
+        "clear:c55",
+        "clear:c57",
+        "clear:c15"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-07",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c47",
+        "clear:c55",
+        "clear:c18",
+        "clear:c28",
+        "clear:c19",
+        "clear:c45",
+        "clear:c16",
+        "clear:c58"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-08",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c58",
+        "clear:c17",
+        "clear:c28",
+        "clear:c56",
+        "clear:c55",
+        "clear:c19",
+        "clear:c29",
+        "clear:c49"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-09",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c48",
+        "clear:c36",
+        "clear:c17",
+        "clear:c25",
+        "clear:c28",
+        "clear:c59",
+        "clear:c19",
+        "clear:c29"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-10",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c49",
+        "clear:c26",
+        "clear:c17",
+        "clear:c29",
+        "clear:c45",
+        "clear:c16",
+        "clear:c56",
+        "clear:c57"
+      ],
+      "h_init": [
+        "9",
+        "9"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    },
+    {
+      "tag": "big8-11",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c59",
+        "clear:c18",
+        "clear:c27",
+        "clear:c15",
+        "clear:c28",
+        "clear:c38",
+        "clear:c36",
+        "clear:c16"
+      ],
+      "h_init": [
+        "11",
+        "11"
+      ],
+      "expanded": [
+        630,
+        630
+      ]
+    }
+  ],
+  "swap_winning_pattern": {
+    "tag": "winning-pattern",
+    "n_patterns": 1,
+    "base": {
+      "search": "astar(cpdbs(patterns=manual_patterns([[23,24,22,19,18,13,12,20,21,17,11]])))",
+      "domain": "fixtures\\data\\sokoban_domain.pddl",
+      "problem": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a5\\swap\\swap-passage.pddl",
+      "returncode": 12,
+      "log": "logs\\swap.sweep.winning-pattern.base.log",
+      "initial_h": "infinity",
+      "plan_length": null,
+      "operators": 132,
+      "variables": 25,
+      "unsolvable_msg": true,
+      "translate_unsolvable": false,
+      "expanded": 0,
+      "generated": 0,
+      "evaluated": 1,
+      "reopened": 0,
+      "dead_ends": 0,
+      "expanded_until_last_jump": null,
+      "reopened_until_last_jump": null,
+      "evaluated_until_last_jump": null,
+      "hc_iterations": null,
+      "hc_patterns": null,
+      "hc_pdb_size": null,
+      "cpdbs_patterns": 1,
+      "cpdbs_pdb_size": 2725888,
+      "sys_patterns": null
+    },
+    "guarded": {
+      "search": "astar(cpdbs(patterns=manual_patterns([[23,24,22,19,18,17,16,20,21,11,9]])))",
+      "domain": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a5\\swap\\singleton\\sokoban_guarded_singleton_domain.pddl",
+      "problem": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a5\\swap\\singleton\\swap-passage_guarded_singleton.pddl",
+      "returncode": 12,
+      "log": "logs\\swap.sweep.winning-pattern.guarded.log",
+      "initial_h": "infinity",
+      "plan_length": null,
+      "operators": 116,
+      "variables": 25,
+      "unsolvable_msg": true,
+      "translate_unsolvable": false,
+      "expanded": 0,
+      "generated": 0,
+      "evaluated": 1,
+      "reopened": 0,
+      "dead_ends": 0,
+      "expanded_until_last_jump": null,
+      "reopened_until_last_jump": null,
+      "evaluated_until_last_jump": null,
+      "hc_iterations": null,
+      "hc_patterns": null,
+      "hc_pdb_size": null,
+      "cpdbs_patterns": 1,
+      "cpdbs_pdb_size": 1103872,
+      "sys_patterns": null
+    },
+    "pattern_names": [
+      "box:b1",
+      "box:b2",
+      "player",
+      "clear:c28",
+      "clear:c26",
+      "clear:c38",
+      "clear:c36",
+      "clear:c46",
+      "clear:c48",
+      "clear:c47",
+      "clear:c27"
+    ]
+  },
+  "swap_ipdb_budget_ladder": [
+    {
+      "instance": "swap-passage",
+      "config": "budget-tiny-s0",
+      "search": "astar(ipdb(pdb_max_size=50000,collection_max_size=200000,max_time=30,random_seed=0))",
+      "expanded_base": 606,
+      "expanded_guarded": 562,
+      "delta": -44,
+      "h_init_base": "13",
+      "h_init_guarded": "15",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        26
+      ],
+      "expanded_until_last_jump": [
+        605,
+        561
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-tiny-s0.base.log",
+        "logs\\swap-passage.budget-tiny-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-tiny-s1",
+      "search": "astar(ipdb(pdb_max_size=50000,collection_max_size=200000,max_time=30,random_seed=1))",
+      "expanded_base": 606,
+      "expanded_guarded": 562,
+      "delta": -44,
+      "h_init_base": "13",
+      "h_init_guarded": "15",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        26
+      ],
+      "expanded_until_last_jump": [
+        602,
+        561
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-tiny-s1.base.log",
+        "logs\\swap-passage.budget-tiny-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-tiny-s42",
+      "search": "astar(ipdb(pdb_max_size=50000,collection_max_size=200000,max_time=30,random_seed=42))",
+      "expanded_base": 606,
+      "expanded_guarded": 562,
+      "delta": -44,
+      "h_init_base": "13",
+      "h_init_guarded": "15",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        48,
+        26
+      ],
+      "expanded_until_last_jump": [
+        605,
+        561
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-tiny-s42.base.log",
+        "logs\\swap-passage.budget-tiny-s42.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-small-s0",
+      "search": "astar(ipdb(pdb_max_size=200000,collection_max_size=1000000,max_time=30,random_seed=0))",
+      "expanded_base": 562,
+      "expanded_guarded": 494,
+      "delta": -68,
+      "h_init_base": "17",
+      "h_init_guarded": "23",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        46,
+        24
+      ],
+      "expanded_until_last_jump": [
+        561,
+        493
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-small-s0.base.log",
+        "logs\\swap-passage.budget-small-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-small-s1",
+      "search": "astar(ipdb(pdb_max_size=200000,collection_max_size=1000000,max_time=30,random_seed=1))",
+      "expanded_base": 562,
+      "expanded_guarded": 494,
+      "delta": -68,
+      "h_init_base": "17",
+      "h_init_guarded": "23",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        46,
+        24
+      ],
+      "expanded_until_last_jump": [
+        561,
+        493
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-small-s1.base.log",
+        "logs\\swap-passage.budget-small-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-small-s42",
+      "search": "astar(ipdb(pdb_max_size=200000,collection_max_size=1000000,max_time=30,random_seed=42))",
+      "expanded_base": 562,
+      "expanded_guarded": 494,
+      "delta": -68,
+      "h_init_base": "17",
+      "h_init_guarded": "23",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        46,
+        24
+      ],
+      "expanded_until_last_jump": [
+        561,
+        493
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-small-s42.base.log",
+        "logs\\swap-passage.budget-small-s42.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-default-s0",
+      "search": "astar(ipdb(max_time=30,random_seed=0))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-default-s0.base.log",
+        "logs\\swap-passage.budget-default-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-default-s1",
+      "search": "astar(ipdb(max_time=30,random_seed=1))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-default-s1.base.log",
+        "logs\\swap-passage.budget-default-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-default-s42",
+      "search": "astar(ipdb(max_time=30,random_seed=42))",
+      "expanded_base": 454,
+      "expanded_guarded": 0,
+      "delta": -454,
+      "h_init_base": "37",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        40,
+        0
+      ],
+      "expanded_until_last_jump": [
+        449,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-default-s42.base.log",
+        "logs\\swap-passage.budget-default-s42.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-big-s0",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=0))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-big-s0.base.log",
+        "logs\\swap-passage.budget-big-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-big-s1",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=1))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-big-s1.base.log",
+        "logs\\swap-passage.budget-big-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-big-s42",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=42))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-big-s42.base.log",
+        "logs\\swap-passage.budget-big-s42.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-huge-s0",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=60000000,max_time=300,random_seed=0))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-huge-s0.base.log",
+        "logs\\swap-passage.budget-huge-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-huge-s1",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=60000000,max_time=300,random_seed=1))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-huge-s1.base.log",
+        "logs\\swap-passage.budget-huge-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "swap-passage",
+      "config": "budget-huge-s42",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=60000000,max_time=300,random_seed=42))",
+      "expanded_base": 0,
+      "expanded_guarded": 0,
+      "delta": 0,
+      "h_init_base": "infinity",
+      "h_init_guarded": "infinity",
+      "translator_operators": [
+        132,
+        116
+      ],
+      "dead_ends": [
+        0,
+        0
+      ],
+      "expanded_until_last_jump": [
+        null,
+        null
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\swap-passage.budget-huge-s42.base.log",
+        "logs\\swap-passage.budget-huge-s42.guarded.log"
+      ]
+    }
+  ],
+  "far9_ipdb_budget_ladder": [
+    {
+      "instance": "far9",
+      "config": "budget-bigger-s0",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=0))",
+      "expanded_base": 76,
+      "expanded_guarded": 76,
+      "delta": 0,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        3
+      ],
+      "expanded_until_last_jump": [
+        63,
+        63
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-bigger-s0.base.log",
+        "logs\\far9.budget-bigger-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "budget-bigger-s1",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=1))",
+      "expanded_base": 27,
+      "expanded_guarded": 27,
+      "delta": 0,
+      "h_init_base": "26",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        2,
+        2
+      ],
+      "expanded_until_last_jump": [
+        0,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-bigger-s1.base.log",
+        "logs\\far9.budget-bigger-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "budget-bigger-s42",
+      "search": "astar(ipdb(pdb_max_size=8000000,collection_max_size=40000000,max_time=120,random_seed=42))",
+      "expanded_base": 30,
+      "expanded_guarded": 30,
+      "delta": 0,
+      "h_init_base": "26",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        3,
+        2
+      ],
+      "expanded_until_last_jump": [
+        0,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-bigger-s42.base.log",
+        "logs\\far9.budget-bigger-s42.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "budget-biggest-s0",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=100000000,max_time=300,random_seed=0))",
+      "expanded_base": 76,
+      "expanded_guarded": 76,
+      "delta": 0,
+      "h_init_base": "22",
+      "h_init_guarded": "22",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        4,
+        3
+      ],
+      "expanded_until_last_jump": [
+        63,
+        63
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-biggest-s0.base.log",
+        "logs\\far9.budget-biggest-s0.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "budget-biggest-s1",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=100000000,max_time=300,random_seed=1))",
+      "expanded_base": 27,
+      "expanded_guarded": 27,
+      "delta": 0,
+      "h_init_base": "26",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        2,
+        2
+      ],
+      "expanded_until_last_jump": [
+        0,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-biggest-s1.base.log",
+        "logs\\far9.budget-biggest-s1.guarded.log"
+      ]
+    },
+    {
+      "instance": "far9",
+      "config": "budget-biggest-s42",
+      "search": "astar(ipdb(pdb_max_size=20000000,collection_max_size=100000000,max_time=300,random_seed=42))",
+      "expanded_base": 30,
+      "expanded_guarded": 30,
+      "delta": 0,
+      "h_init_base": "26",
+      "h_init_guarded": "26",
+      "translator_operators": [
+        792,
+        776
+      ],
+      "dead_ends": [
+        3,
+        2
+      ],
+      "expanded_until_last_jump": [
+        0,
+        0
+      ],
+      "distinct_states_below_Cstar": [
+        null,
+        null
+      ],
+      "logs": [
+        "logs\\far9.budget-biggest-s42.base.log",
+        "logs\\far9.budget-biggest-s42.guarded.log"
+      ]
+    }
+  ],
+  "lmcut_rows": [
+    {
+      "instance": "three-far8",
+      "config": "astar-default",
+      "search": "astar(lmcut())",
+      "expanded_base": 9175,
+      "expanded_guarded": 9048,
+      "delta": -127,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        419,
+        363
+      ],
+      "expanded_until_last_jump": [
+        8552,
+        8424
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8321
+      ],
+      "logs": [
+        "logs\\three-far8.astar-default.base.log",
+        "logs\\three-far8.astar-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "three-far8",
+      "config": "tb-h",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),lmcut()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 9175,
+      "expanded_guarded": 9048,
+      "delta": -127,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        419,
+        363
+      ],
+      "expanded_until_last_jump": [
+        8552,
+        8424
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8321
+      ],
+      "logs": [
+        "logs\\three-far8.tb-h.base.log",
+        "logs\\three-far8.tb-h.guarded.log"
+      ]
+    },
+    {
+      "instance": "three-far8",
+      "config": "tb-g",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),g()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 13512,
+      "expanded_guarded": 13400,
+      "delta": -112,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        635,
+        557
+      ],
+      "expanded_until_last_jump": [
+        8461,
+        8351
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8321
+      ],
+      "logs": [
+        "logs\\three-far8.tb-g.base.log",
+        "logs\\three-far8.tb-g.guarded.log"
+      ]
+    },
+    {
+      "instance": "three-far8",
+      "config": "tb-f-only",
+      "search": "eager(tiebreaking([sum([g(),lmcut()])]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 13548,
+      "expanded_guarded": 13434,
+      "delta": -114,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        635,
+        557
+      ],
+      "expanded_until_last_jump": [
+        8484,
+        8376
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8321
+      ],
+      "logs": [
+        "logs\\three-far8.tb-f-only.base.log",
+        "logs\\three-far8.tb-f-only.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0021",
+      "config": "astar-default",
+      "search": "astar(lmcut())",
+      "expanded_base": 701,
+      "expanded_guarded": 690,
+      "delta": -11,
+      "h_init_base": "15",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        132,
+        114
+      ],
+      "dead_ends": [
+        59,
+        28
+      ],
+      "expanded_until_last_jump": [
+        696,
+        685
+      ],
+      "distinct_states_below_Cstar": [
+        695,
+        683
+      ],
+      "logs": [
+        "logs\\hunt0021.astar-default.base.log",
+        "logs\\hunt0021.astar-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0021",
+      "config": "tb-h",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),lmcut()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 701,
+      "expanded_guarded": 690,
+      "delta": -11,
+      "h_init_base": "15",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        132,
+        114
+      ],
+      "dead_ends": [
+        59,
+        28
+      ],
+      "expanded_until_last_jump": [
+        696,
+        685
+      ],
+      "distinct_states_below_Cstar": [
+        695,
+        683
+      ],
+      "logs": [
+        "logs\\hunt0021.tb-h.base.log",
+        "logs\\hunt0021.tb-h.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0021",
+      "config": "tb-g",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),g()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 750,
+      "expanded_guarded": 745,
+      "delta": -5,
+      "h_init_base": "15",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        132,
+        114
+      ],
+      "dead_ends": [
+        62,
+        29
+      ],
+      "expanded_until_last_jump": [
+        696,
+        684
+      ],
+      "distinct_states_below_Cstar": [
+        695,
+        683
+      ],
+      "logs": [
+        "logs\\hunt0021.tb-g.base.log",
+        "logs\\hunt0021.tb-g.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0021",
+      "config": "tb-f-only",
+      "search": "eager(tiebreaking([sum([g(),lmcut()])]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 749,
+      "expanded_guarded": 744,
+      "delta": -5,
+      "h_init_base": "15",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        132,
+        114
+      ],
+      "dead_ends": [
+        62,
+        29
+      ],
+      "expanded_until_last_jump": [
+        696,
+        684
+      ],
+      "distinct_states_below_Cstar": [
+        695,
+        683
+      ],
+      "logs": [
+        "logs\\hunt0021.tb-f-only.base.log",
+        "logs\\hunt0021.tb-f-only.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0037",
+      "config": "astar-default",
+      "search": "astar(lmcut())",
+      "expanded_base": 193,
+      "expanded_guarded": 178,
+      "delta": -15,
+      "h_init_base": "18",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        268,
+        258
+      ],
+      "dead_ends": [
+        15,
+        4
+      ],
+      "expanded_until_last_jump": [
+        162,
+        154
+      ],
+      "distinct_states_below_Cstar": [
+        162,
+        154
+      ],
+      "logs": [
+        "logs\\hunt0037.astar-default.base.log",
+        "logs\\hunt0037.astar-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0037",
+      "config": "tb-h",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),lmcut()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 193,
+      "expanded_guarded": 178,
+      "delta": -15,
+      "h_init_base": "18",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        268,
+        258
+      ],
+      "dead_ends": [
+        15,
+        4
+      ],
+      "expanded_until_last_jump": [
+        162,
+        154
+      ],
+      "distinct_states_below_Cstar": [
+        162,
+        154
+      ],
+      "logs": [
+        "logs\\hunt0037.tb-h.base.log",
+        "logs\\hunt0037.tb-h.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0037",
+      "config": "tb-g",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),g()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 221,
+      "expanded_guarded": 206,
+      "delta": -15,
+      "h_init_base": "18",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        268,
+        258
+      ],
+      "dead_ends": [
+        15,
+        4
+      ],
+      "expanded_until_last_jump": [
+        162,
+        154
+      ],
+      "distinct_states_below_Cstar": [
+        162,
+        154
+      ],
+      "logs": [
+        "logs\\hunt0037.tb-g.base.log",
+        "logs\\hunt0037.tb-g.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0037",
+      "config": "tb-f-only",
+      "search": "eager(tiebreaking([sum([g(),lmcut()])]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 221,
+      "expanded_guarded": 206,
+      "delta": -15,
+      "h_init_base": "18",
+      "h_init_guarded": "18",
+      "translator_operators": [
+        268,
+        258
+      ],
+      "dead_ends": [
+        15,
+        4
+      ],
+      "expanded_until_last_jump": [
+        162,
+        154
+      ],
+      "distinct_states_below_Cstar": [
+        162,
+        154
+      ],
+      "logs": [
+        "logs\\hunt0037.tb-f-only.base.log",
+        "logs\\hunt0037.tb-f-only.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0070",
+      "config": "astar-default",
+      "search": "astar(lmcut())",
+      "expanded_base": 122,
+      "expanded_guarded": 117,
+      "delta": -5,
+      "h_init_base": "14",
+      "h_init_guarded": "14",
+      "translator_operators": [
+        260,
+        238
+      ],
+      "dead_ends": [
+        13,
+        11
+      ],
+      "expanded_until_last_jump": [
+        113,
+        108
+      ],
+      "distinct_states_below_Cstar": [
+        113,
+        108
+      ],
+      "logs": [
+        "logs\\hunt0070.astar-default.base.log",
+        "logs\\hunt0070.astar-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0070",
+      "config": "tb-h",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),lmcut()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 122,
+      "expanded_guarded": 117,
+      "delta": -5,
+      "h_init_base": "14",
+      "h_init_guarded": "14",
+      "translator_operators": [
+        260,
+        238
+      ],
+      "dead_ends": [
+        13,
+        11
+      ],
+      "expanded_until_last_jump": [
+        113,
+        108
+      ],
+      "distinct_states_below_Cstar": [
+        113,
+        108
+      ],
+      "logs": [
+        "logs\\hunt0070.tb-h.base.log",
+        "logs\\hunt0070.tb-h.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0070",
+      "config": "tb-g",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),g()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 178,
+      "expanded_guarded": 176,
+      "delta": -2,
+      "h_init_base": "14",
+      "h_init_guarded": "14",
+      "translator_operators": [
+        260,
+        238
+      ],
+      "dead_ends": [
+        22,
+        19
+      ],
+      "expanded_until_last_jump": [
+        113,
+        108
+      ],
+      "distinct_states_below_Cstar": [
+        113,
+        108
+      ],
+      "logs": [
+        "logs\\hunt0070.tb-g.base.log",
+        "logs\\hunt0070.tb-g.guarded.log"
+      ]
+    },
+    {
+      "instance": "hunt0070",
+      "config": "tb-f-only",
+      "search": "eager(tiebreaking([sum([g(),lmcut()])]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 178,
+      "expanded_guarded": 176,
+      "delta": -2,
+      "h_init_base": "14",
+      "h_init_guarded": "14",
+      "translator_operators": [
+        260,
+        238
+      ],
+      "dead_ends": [
+        22,
+        19
+      ],
+      "expanded_until_last_jump": [
+        113,
+        108
+      ],
+      "distinct_states_below_Cstar": [
+        113,
+        108
+      ],
+      "logs": [
+        "logs\\hunt0070.tb-f-only.base.log",
+        "logs\\hunt0070.tb-f-only.guarded.log"
+      ]
+    }
+  ],
+  "three_far8_rebuilt": [
+    {
+      "instance": "three-far8-v2",
+      "config": "astar-default",
+      "search": "astar(lmcut())",
+      "expanded_base": 9175,
+      "expanded_guarded": 9022,
+      "delta": -153,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        419,
+        365
+      ],
+      "expanded_until_last_jump": [
+        8552,
+        8405
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8298
+      ],
+      "logs": [
+        "logs\\three-far8-v2.astar-default.base.log",
+        "logs\\three-far8-v2.astar-default.guarded.log"
+      ]
+    },
+    {
+      "instance": "three-far8-v2",
+      "config": "tb-g",
+      "search": "eager(tiebreaking([sum([g(),lmcut()]),g()]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 13512,
+      "expanded_guarded": 13383,
+      "delta": -129,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        635,
+        560
+      ],
+      "expanded_until_last_jump": [
+        8461,
+        8330
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8298
+      ],
+      "logs": [
+        "logs\\three-far8-v2.tb-g.base.log",
+        "logs\\three-far8-v2.tb-g.guarded.log"
+      ]
+    },
+    {
+      "instance": "three-far8-v2",
+      "config": "tb-f-only",
+      "search": "eager(tiebreaking([sum([g(),lmcut()])]),reopen_closed=true,f_eval=sum([g(),lmcut()]))",
+      "expanded_base": 13548,
+      "expanded_guarded": 13415,
+      "delta": -133,
+      "h_init_base": "27",
+      "h_init_guarded": "27",
+      "translator_operators": [
+        800,
+        776
+      ],
+      "dead_ends": [
+        635,
+        560
+      ],
+      "expanded_until_last_jump": [
+        8484,
+        8350
+      ],
+      "distinct_states_below_Cstar": [
+        8428,
+        8298
+      ],
+      "logs": [
+        "logs\\three-far8-v2.tb-f-only.base.log",
+        "logs\\three-far8-v2.tb-f-only.guarded.log"
+      ]
+    }
+  ],
+  "three_far8_provenance": {
+    "n_theorems": 132,
+    "regen_base": "88f15f48d7dcc1e8",
+    "disk_base": "88f15f48d7dcc1e8",
+    "regen_guard": "d0dee99fa2531b53",
+    "disk_guard": "5db5a090cc856cd1",
+    "base_matches_disk": true,
+    "guard_matches_disk": false
+  },
+  "dead_sets": [
+    {
+      "boxes": 2,
+      "cells": 21,
+      "expand_goals": false,
+      "instance": "hunt0021",
+      "n_goal_states": 2,
+      "n_pair_theorems": 7,
+      "n_reachable": 7185,
+      "n_relaxation_dead": 5686,
+      "n_relaxation_dead_outside_theorems": 2057,
+      "n_relaxation_dead_outside_truly_dead": 0,
+      "n_singleton_theorems": 11,
+      "n_theorem_dead": 3629,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorem_dead_outside_truly_dead": 0,
+      "n_theorems": 18,
+      "n_truly_dead": 5704,
+      "n_truly_dead_outside_relaxation": 18,
+      "relaxation_dead_equals_truly_dead": false,
+      "static_goal_ok": true,
+      "theorem_kinds": [
+        "deleting_actions_blocked",
+        "no_deleting_action"
+      ],
+      "witness_states": [],
+      "witness_theorems": []
+    },
+    {
+      "boxes": 2,
+      "cells": 46,
+      "expand_goals": false,
+      "instance": "hunt0037",
+      "n_goal_states": 4,
+      "n_pair_theorems": 8,
+      "n_reachable": 13808,
+      "n_relaxation_dead": 9008,
+      "n_relaxation_dead_outside_theorems": 3819,
+      "n_relaxation_dead_outside_truly_dead": 0,
+      "n_singleton_theorems": 6,
+      "n_theorem_dead": 5189,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorem_dead_outside_truly_dead": 0,
+      "n_theorems": 14,
+      "n_truly_dead": 9008,
+      "n_truly_dead_outside_relaxation": 0,
+      "relaxation_dead_equals_truly_dead": true,
+      "static_goal_ok": true,
+      "theorem_kinds": [
+        "deleting_actions_blocked",
+        "no_deleting_action"
+      ],
+      "witness_states": [],
+      "witness_theorems": []
+    },
+    {
+      "boxes": 2,
+      "cells": 33,
+      "expand_goals": false,
+      "instance": "hunt0070",
+      "n_goal_states": 4,
+      "n_pair_theorems": 16,
+      "n_reachable": 32691,
+      "n_relaxation_dead": 24348,
+      "n_relaxation_dead_outside_theorems": 12880,
+      "n_relaxation_dead_outside_truly_dead": 0,
+      "n_singleton_theorems": 12,
+      "n_theorem_dead": 11468,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorem_dead_outside_truly_dead": 0,
+      "n_theorems": 28,
+      "n_truly_dead": 24348,
+      "n_truly_dead_outside_relaxation": 0,
+      "relaxation_dead_equals_truly_dead": true,
+      "static_goal_ok": true,
+      "theorem_kinds": [
+        "deleting_actions_blocked",
+        "no_deleting_action"
+      ],
+      "witness_states": [],
+      "witness_theorems": []
+    },
+    {
+      "instance": "three-far8",
+      "n_theorems": 132,
+      "skipped": "over 400000 states"
+    },
+    {
+      "boxes": 2,
+      "cells": 22,
+      "expand_goals": false,
+      "instance": "swap-passage",
+      "n_goal_states": 0,
+      "n_pair_theorems": 8,
+      "n_reachable": 7974,
+      "n_relaxation_dead": 7344,
+      "n_relaxation_dead_outside_theorems": 2320,
+      "n_relaxation_dead_outside_truly_dead": 0,
+      "n_singleton_theorems": 16,
+      "n_theorem_dead": 5024,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_theorem_dead_outside_truly_dead": 0,
+      "n_theorems": 24,
+      "n_truly_dead": 7974,
+      "n_truly_dead_outside_relaxation": 630,
+      "relaxation_dead_equals_truly_dead": false,
+      "static_goal_ok": true,
+      "theorem_kinds": [
+        "deleting_actions_blocked",
+        "no_deleting_action"
+      ],
+      "witness_states": [],
+      "witness_theorems": []
+    }
+  ]
+}

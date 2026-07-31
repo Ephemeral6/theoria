@@ -1,0 +1,179 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 24,
+    "injective": true,
+    "states": 24
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape"
+    ],
+    "unverified": [],
+    "violated": []
+  },
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 24,
+      "status": "holds",
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 24,
+      "status": "holds",
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 1,
+    "reachable_states": 24,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_wall": {
+        "firing_states": 24,
+        "firing_transitions": 48,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 24,
+        "firing_transitions": 48,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 2,
+    "rules_single_witness": [],
+    "rules_total": 2
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_wall",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_wall",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 24,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 10,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 24,
+    "solvable": true,
+    "world_id": "t1-walk-maze"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {},
+    "entities": [],
+    "families": [],
+    "flags": {},
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#########",
+      "#...#...#",
+      "#.#.#.#.#",
+      "#.#...#.#",
+      "#.#####.#",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "No mechanism at all: `walk` and `blocked_by_wall` only. The floor of the catalogue, and the control every other world is read against.",
+    "seed": 101,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t1-walk-maze"
+  },
+  "world_id": "t1-walk-maze"
+}

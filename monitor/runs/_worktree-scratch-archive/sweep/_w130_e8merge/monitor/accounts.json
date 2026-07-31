@@ -1,0 +1,15 @@
+{
+  "_why": "两个 Claude Max 20x 订阅轮着用。这里只有配置目录路径与标签，没有任何凭据——凭据留在各自的 CLAUDE_CONFIG_DIR 里，那些目录不在仓库内，也不许进仓库。运行态在 accounts_state.json。",
+  "accounts": {
+    "a": {
+      "label": "max20-a",
+      "config_dir": "~/.claude-accounts/a",
+      "note": "研究员与 ops 的主场账号"
+    },
+    "b": {
+      "label": "max20-b",
+      "config_dir": "~/.claude-accounts/b",
+      "note": "通用工人的主场账号"
+    }
+  }
+}

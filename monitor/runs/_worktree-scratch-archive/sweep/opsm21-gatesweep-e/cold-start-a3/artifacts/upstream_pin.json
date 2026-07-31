@@ -1,0 +1,28 @@
+{
+  "files": {
+    "CONTRACTS/candidates_schema.md": "2006cd073090672b37a315d86d2caacbdbf92e00346279bdc5c69623f1b15221",
+    "CONTRACTS/dsl_grammar_v0.2.md": "fb1c7f74f69de2b6399f720cb745373c3abce84458669e87a07e22defc3968e7",
+    "cold-start-a0/certify/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cold-start-a0/certify/lean_check.py": "35057e1a63bffaa89234d57bdfd47ed4b63b40afda2685b6b5b5cd38b0f7e7bf",
+    "cold-start-a0/certify/replay.py": "6c8bbd876975503932cdfe4cd44f802f70fa591c07450ef8030f0983b518e238",
+    "cold-start-a0/compile/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cold-start-a0/compile/compile_a0.py": "49f6fb17a68fe0c694786a06fe9fc89bb1a7a98f94de02610b5c7e22a0e54a6a",
+    "cold-start-a0/compile/dialect.py": "bdfdb7aec771d0c69d0558a13d24af19d1d2798b44dd55a637c79d3e0c2c7d35",
+    "cold-start-a0/compile/gen_lean_a0.py": "56c19486a55b6b327b6641b60e039875e0b33ccd4ef9ee53912cbc875d5a552b",
+    "cold-start-a0/compile/gen_pddl_a0.py": "f1bb920f3850a8fbde3d9fffe4b3e939e4974e80f43a2d97afb0335673df5d34",
+    "cold-start-a0/compile/gen_python_a0.py": "0ca4d1bde6db6fbed0246445d409dabf9d24be00afa43f20044385d1ab6c9212",
+    "cold-start-a0/compile/problem.py": "79067daf91ac9867e74563c4a3b612634e2a5ef8c629feaa04cd45fc61e5a687",
+    "cold-start-a0/pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cold-start-a0/pipeline/atoms_a0.py": "d566afb9f29c6d27c3635a3dfd50595a311e4d25ab94e83140a19d4a8a38071a",
+    "cold-start-a0/pipeline/board.py": "0fc2ae316861ac81af6fd862af09fce179f6351a70be537300b3394927820ebe",
+    "cold-start-a0/pipeline/concept_account.py": "5c82f8854c1a745be1ebc6bcf202f5e2c4c513af8149b69945735c39d637fe36",
+    "cold-start-a0/pipeline/engines_stage.py": "7edcfc14a28aeea53cf707efee93c9bf4458d247df322cb6ac50d7067d594585",
+    "cold-start-a0/pipeline/multi_miner.py": "b5d7f6165c2a8e8e6271906b5b72a395478c2bf322d2c9ae6e43803ad57da88f",
+    "cold-start-a0/pipeline/reidentify.py": "ec3a32c02a6d51ad46a8b9c0d90ee05a5d8b547c91ab71be8e9a12d3b54f5084",
+    "cold-start-a0/pipeline/segment_operators.py": "98f9e27c626ea469fd7064293d3510f0f0fa8906be2c250050876a260e5065f6",
+    "engine-rig/common/candidates.py": "34868b1135b9ff2854156bc1960ead01963bca093905a4bf8fea2c966fdc78cc",
+    "engine-rig/tools/validate_candidates.py": "c4791d53674b56950c603c75ca7caa5e4a63a9c295698c2932b329a15eb0dfc4"
+  },
+  "missing": [],
+  "note": "Every file outside cold-start-a3 that A3's results depend on. Two other sessions work this repo concurrently; a silent change upstream would otherwise silently change these numbers."
+}

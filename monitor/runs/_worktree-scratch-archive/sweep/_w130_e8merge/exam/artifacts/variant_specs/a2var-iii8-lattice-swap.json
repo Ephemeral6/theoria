@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "solvable",
+  "justification": "Relabelling LEFT and RIGHT is a bijection on the alphabet and its own inverse, so it maps winning sequences to winning sequences one for one. So it is enough that the base level is solvable, and it is: this board requires every one of its 120 switches latched AS WELL AS the cart on the goal, and the corridor sweep that dips into all 120 from row 2 and then crosses the open bridge at (4,2) does both. Reaching the goal is not winning here -- the 62-command walk straight to the goal loses -- which is why the switches are named rather than left implicit. The board is the same board as the sealed gantry item, which is the trap: the separator row is what decides these, not the size of the state space.",
+  "notes": "Same operator as the sealed gantry item, opposite answer.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    },
+    {
+      "from": "RIGHT",
+      "op": "remap_action",
+      "to": "LEFT"
+    }
+  ],
+  "variant_id": "a2var-iii8-lattice-swap"
+}

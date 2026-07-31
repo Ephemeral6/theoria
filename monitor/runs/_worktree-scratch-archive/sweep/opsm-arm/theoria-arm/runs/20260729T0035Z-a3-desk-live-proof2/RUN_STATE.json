@@ -1,0 +1,111 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 0,
+  "actions_ok": 12,
+  "ceiling_actions": 12,
+  "ceiling_commands": 300,
+  "commands_sent": 13,
+  "http_amplification": 1.083,
+  "probe_actions": 4,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [
+   "theorize"
+  ],
+  "calls": 4,
+  "cli_cost_usd": 0.393156,
+  "cost_ceiling_usd": 1.5,
+  "model": "claude-haiku-4-5-20251001",
+  "spend_gate": {
+   "action_cap": 105,
+   "actions_charged": 0,
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+   "caps": {
+    "action_cap": 105,
+    "arithmetic": {
+     "action_cap": 105,
+     "action_cap_hard_bound": 900,
+     "actions_budget": 12,
+     "arm_attempts_capped_by_commands_ceiling": false,
+     "arm_attempts_planned": 35,
+     "commands_ceiling": 300,
+     "cost_ceiling_usd": 1.5,
+     "env_max_attempts": 3,
+     "fixed_commands": 3,
+     "http_per_command": 1.75,
+     "model_call_ceiling_usd": 4.0,
+     "retry_safety": 1.5,
+     "ttl_seconds": 3600.0,
+     "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+     "usd_cap": 5.5,
+     "wall_clock_s": 1500.0
+    },
+    "ttl_seconds": 3600.0,
+    "usd_cap": 5.5
+   },
+   "model_call_ceiling_usd": 4.0,
+   "model_calls_charged": 4,
+   "pool": {
+    "action_ceiling": 24000,
+    "gate_version": "1.0",
+    "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+    "ledger_path": "../../proxy/var/spend_gate.jsonl",
+    "policy_path": "proxy/spend_policy.json",
+    "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+    "pool": "theoria-shared-2026-07",
+    "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+    "usd_ceiling": 214.9
+   },
+   "released": false,
+   "renewals": 0,
+   "reservation_id": "res-d9f50ec3c0ba4a9d",
+   "tripped": {
+    "message": "1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+    "rule": "UNPRICED_SPEND"
+   },
+   "unpriced_calls": 1,
+   "usd_cap": 5.5,
+   "usd_charged": 4.393156
+  },
+  "unpriced_calls": 1,
+  "usage_total": {
+   "cache_creation_input_tokens": 38563,
+   "cache_read_input_tokens": 0,
+   "input_tokens": 27,
+   "output_tokens": 58945
+  }
+ },
+ "elapsed_s": 632.3,
+ "levels": {
+  "boundaries": 0,
+  "events": [],
+  "level": 1,
+  "levels_completed": 0,
+  "starts": [
+   0
+  ]
+ },
+ "outcome": "budget_exhausted",
+ "steps": 13,
+ "stopped_because": "action budget spent",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 8
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 4,
+   "proof_failure": 0,
+   "render_mismatch": 1,
+   "replay_mismatch": 3,
+   "search_timeout": 0
+  },
+  "total": 8,
+  "unhandled": 2
+ }
+}

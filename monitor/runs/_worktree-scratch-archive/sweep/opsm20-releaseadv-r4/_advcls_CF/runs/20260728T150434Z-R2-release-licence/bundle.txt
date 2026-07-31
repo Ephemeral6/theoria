@@ -1,0 +1,5 @@
+ships:      1930 files
+held back:  20 files
+   needs-written-permission     19
+   not-releasable               1
+wrote release\BUNDLE.jsonl and release\FRAME_HASHES.jsonl

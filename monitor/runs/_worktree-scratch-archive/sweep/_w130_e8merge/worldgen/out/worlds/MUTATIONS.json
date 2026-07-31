@@ -1,0 +1,4632 @@
+{
+  "claim_dependencies": {
+    "t1-cycler-gate": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "color_reads_phase": "color_cycle",
+        "grid_shape": "world",
+        "phase_in_range": "color_cycle"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "color_reads_phase": [
+          "advance_cycler",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "phase_in_range": [
+          "advance_cycler",
+          "walk",
+          "walk_through_cycler"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "advance_cycler": false,
+        "blocked_by_wall": false,
+        "walk": true,
+        "walk_through_cycler": true
+      },
+      "rule_writes_slice_of": {
+        "advance_cycler": [
+          "color_cycle"
+        ],
+        "blocked_by_wall": [],
+        "walk": [],
+        "walk_through_cycler": []
+      },
+      "rules_declared_by": {
+        "color_cycle": [
+          "advance_cycler",
+          "walk_through_cycler"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t1-portal-oneway": {
+      "claim_owner": {
+        "agent_conserved": "portal",
+        "agent_unique": "world",
+        "grid_shape": "world",
+        "mouths_static": "portal"
+      },
+      "claims": {
+        "agent_conserved": [
+          "blocked_portal_exit",
+          "teleport_oneway",
+          "walk"
+        ],
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "mouths_static": [
+          "blocked_portal_exit",
+          "teleport_oneway",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_wall": false,
+        "teleport_oneway": true,
+        "walk": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_wall": [],
+        "teleport_oneway": [],
+        "walk": []
+      },
+      "rules_declared_by": {
+        "portal": [
+          "blocked_portal_exit",
+          "teleport_oneway"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t1-switch-latch": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "door_presence_tracks_net": "switch_door",
+        "grid_shape": "world",
+        "latch_monotone": "switch_door"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "door_presence_tracks_net": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "latch_already_set",
+          "press_latch",
+          "walk",
+          "walk_through_door"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "latch_monotone": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "latch_already_set",
+          "press_latch",
+          "walk",
+          "walk_through_door"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_door": false,
+        "blocked_by_wall": false,
+        "latch_already_set": false,
+        "press_latch": false,
+        "walk": true,
+        "walk_through_door": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_door": [],
+        "blocked_by_wall": [],
+        "latch_already_set": [],
+        "press_latch": [
+          "switch_door"
+        ],
+        "walk": [],
+        "walk_through_door": []
+      },
+      "rules_declared_by": {
+        "switch_door": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "latch_already_set",
+          "press_latch",
+          "walk_through_door"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t1-switch-toggle": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "door_presence_tracks_net": "switch_door",
+        "grid_shape": "world"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "door_presence_tracks_net": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "toggle_switch",
+          "walk",
+          "walk_through_door"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_door": false,
+        "blocked_by_wall": false,
+        "blocked_toggle_would_shut_door": false,
+        "toggle_switch": false,
+        "walk": true,
+        "walk_through_door": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_door": [],
+        "blocked_by_wall": [],
+        "blocked_toggle_would_shut_door": [],
+        "toggle_switch": [
+          "switch_door"
+        ],
+        "walk": [],
+        "walk_through_door": []
+      },
+      "rules_declared_by": {
+        "switch_door": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "toggle_switch",
+          "walk_through_door"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t1-tokens-lock": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "collection_is_monotone": "count_lock",
+        "grid_shape": "world",
+        "token_count": "count_lock"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "collection_is_monotone": [
+          "blocked_by_lock",
+          "collect_token",
+          "walk",
+          "walk_through_lock"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "token_count": [
+          "blocked_by_lock",
+          "collect_token",
+          "walk",
+          "walk_through_lock"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_lock": false,
+        "blocked_by_wall": false,
+        "collect_token": true,
+        "walk": true,
+        "walk_through_lock": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_lock": [],
+        "blocked_by_wall": [],
+        "collect_token": [
+          "count_lock"
+        ],
+        "walk": [],
+        "walk_through_lock": []
+      },
+      "rules_declared_by": {
+        "count_lock": [
+          "blocked_by_lock",
+          "collect_token",
+          "walk_through_lock"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t1-walk-maze": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "grid_shape": "world"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_wall": false,
+        "walk": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_wall": [],
+        "walk": []
+      },
+      "rules_declared_by": {
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t2-portal-pair": {
+      "claim_owner": {
+        "agent_conserved": "portal",
+        "agent_unique": "world",
+        "grid_shape": "world",
+        "mouths_static": "portal"
+      },
+      "claims": {
+        "agent_conserved": [
+          "blocked_portal_exit",
+          "teleport_twoway",
+          "walk"
+        ],
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "mouths_static": [
+          "blocked_portal_exit",
+          "teleport_twoway",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_wall": false,
+        "teleport_twoway": true,
+        "walk": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_wall": [],
+        "teleport_twoway": [],
+        "walk": []
+      },
+      "rules_declared_by": {
+        "portal": [
+          "blocked_portal_exit",
+          "teleport_twoway"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t2-switch-push": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "block_count": "push",
+        "blocks_disjoint": "push",
+        "door_presence_tracks_net": "switch_door",
+        "grid_shape": "world"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "block_count": [
+          "blocked_by_block",
+          "push",
+          "walk",
+          "walk_through_door"
+        ],
+        "blocks_disjoint": [
+          "blocked_by_block",
+          "push",
+          "walk",
+          "walk_through_door"
+        ],
+        "door_presence_tracks_net": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "push",
+          "toggle_switch",
+          "walk",
+          "walk_through_door"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_block": false,
+        "blocked_by_door": false,
+        "blocked_by_wall": false,
+        "push": true,
+        "toggle_switch": false,
+        "walk": true,
+        "walk_through_door": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_block": [],
+        "blocked_by_door": [],
+        "blocked_by_wall": [],
+        "push": [
+          "push"
+        ],
+        "toggle_switch": [
+          "switch_door"
+        ],
+        "walk": [],
+        "walk_through_door": []
+      },
+      "rules_declared_by": {
+        "push": [
+          "blocked_by_block",
+          "push"
+        ],
+        "switch_door": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "toggle_switch",
+          "walk_through_door"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t2-unsolvable-nodoor": {
+      "claim_owner": {
+        "agent_unique": "world",
+        "door_presence_tracks_net": "switch_door",
+        "grid_shape": "world"
+      },
+      "claims": {
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "door_presence_tracks_net": [
+          "blocked_by_door",
+          "door_mirrors_net",
+          "walk"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_door": false,
+        "blocked_by_wall": false,
+        "walk": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_door": [],
+        "blocked_by_wall": [],
+        "walk": []
+      },
+      "rules_declared_by": {
+        "switch_door": [
+          "blocked_by_door",
+          "door_mirrors_net"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t3-cycler-portal-lock": {
+      "claim_owner": {
+        "agent_conserved": "portal",
+        "agent_unique": "world",
+        "collection_is_monotone": "count_lock",
+        "color_reads_phase": "color_cycle",
+        "grid_shape": "world",
+        "mouths_static": "portal",
+        "phase_in_range": "color_cycle",
+        "token_count": "count_lock"
+      },
+      "claims": {
+        "agent_conserved": [
+          "blocked_portal_exit",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "collection_is_monotone": [
+          "blocked_by_lock",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "color_reads_phase": [
+          "advance_cycler",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "mouths_static": [
+          "blocked_portal_exit",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "phase_in_range": [
+          "advance_cycler",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "token_count": [
+          "blocked_by_lock",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "advance_cycler": false,
+        "blocked_by_lock": false,
+        "blocked_by_wall": false,
+        "collect_token": true,
+        "teleport_twoway": true,
+        "walk": true,
+        "walk_through_cycler": true,
+        "walk_through_lock": true
+      },
+      "rule_writes_slice_of": {
+        "advance_cycler": [
+          "color_cycle"
+        ],
+        "blocked_by_lock": [],
+        "blocked_by_wall": [],
+        "collect_token": [
+          "count_lock"
+        ],
+        "teleport_twoway": [],
+        "walk": [],
+        "walk_through_cycler": [],
+        "walk_through_lock": []
+      },
+      "rules_declared_by": {
+        "color_cycle": [
+          "advance_cycler",
+          "walk_through_cycler"
+        ],
+        "count_lock": [
+          "blocked_by_lock",
+          "collect_token",
+          "walk_through_lock"
+        ],
+        "portal": [
+          "blocked_portal_exit",
+          "teleport_twoway"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    },
+    "t3-full-house": {
+      "claim_owner": {
+        "agent_conserved": "portal",
+        "agent_unique": "world",
+        "block_count": "push",
+        "blocks_disjoint": "push",
+        "door_presence_tracks_net": "switch_door",
+        "grid_shape": "world",
+        "mouths_static": "portal"
+      },
+      "claims": {
+        "agent_conserved": [
+          "blocked_portal_exit",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ],
+        "agent_unique": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "block_count": [
+          "blocked_by_block",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ],
+        "blocks_disjoint": [
+          "blocked_by_block",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ],
+        "door_presence_tracks_net": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "push",
+          "teleport_twoway",
+          "toggle_switch",
+          "walk",
+          "walk_through_door"
+        ],
+        "grid_shape": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "mouths_static": [
+          "blocked_portal_exit",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ]
+      },
+      "method": "slice writes measured on the reachable graph; the same-declarer edge structural; the agent-brush edge stated (see claim_dependencies.__doc__). Over-approximating on purpose \u2014 a spurious edge costs a reader one check, a missing one costs a wrong answer.",
+      "rule_moves_agent": {
+        "blocked_by_block": false,
+        "blocked_by_door": false,
+        "blocked_by_wall": false,
+        "push": true,
+        "teleport_twoway": true,
+        "toggle_switch": false,
+        "walk": true,
+        "walk_through_door": true
+      },
+      "rule_writes_slice_of": {
+        "blocked_by_block": [],
+        "blocked_by_door": [],
+        "blocked_by_wall": [],
+        "push": [
+          "push"
+        ],
+        "teleport_twoway": [],
+        "toggle_switch": [
+          "switch_door"
+        ],
+        "walk": [],
+        "walk_through_door": []
+      },
+      "rules_declared_by": {
+        "portal": [
+          "blocked_portal_exit",
+          "teleport_twoway"
+        ],
+        "push": [
+          "blocked_by_block",
+          "push"
+        ],
+        "switch_door": [
+          "blocked_by_door",
+          "blocked_toggle_would_shut_door",
+          "door_mirrors_net",
+          "toggle_switch",
+          "walk_through_door"
+        ],
+        "world": [
+          "blocked_by_wall",
+          "walk"
+        ]
+      }
+    }
+  },
+  "knobs": [
+    {
+      "domain": "toggle | latch",
+      "governs": "whether the bit can be cleared again, i.e. whether the mechanism is reversible at all",
+      "kind": "switch",
+      "mechanism": "switch_door",
+      "prop": "mode",
+      "reads": "worldgen/mechanisms/switch_door.py:132",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": [
+        "toggle",
+        "latch"
+      ]
+    },
+    {
+      "domain": "open_when_on | open_when_off",
+      "governs": "the guard relating the door's passability to its net's aggregate bit",
+      "kind": "door",
+      "mechanism": "switch_door",
+      "prop": "polarity",
+      "reads": "worldgen/mechanisms/switch_door.py:91",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": [
+        "open_when_on",
+        "open_when_off"
+      ]
+    },
+    {
+      "domain": "any label; a net with no switch on it is never on",
+      "governs": "which switches drive this door",
+      "kind": "door",
+      "mechanism": "switch_door",
+      "prop": "net",
+      "reads": "worldgen/mechanisms/switch_door.py:89",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "any label",
+      "governs": "which doors this switch drives",
+      "kind": "switch",
+      "mechanism": "switch_door",
+      "prop": "net",
+      "reads": "worldgen/mechanisms/switch_door.py:84",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "1..(number of tokens in the world)",
+      "governs": "the threshold guard: how many tokens must be collected before the lock is passable",
+      "kind": "lock",
+      "mechanism": "count_lock",
+      "prop": "k",
+      "reads": "worldgen/mechanisms/count_lock.py:63",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "0..k-1",
+      "governs": "which phase of the cycle is the passable one",
+      "kind": "cycler",
+      "mechanism": "color_cycle",
+      "prop": "open_phase",
+      "reads": "worldgen/mechanisms/color_cycle.py:72",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "0..k-1",
+      "governs": "the starting phase, hence `(open_phase - phase0) % k` \u2014 the number of advances available before the gate is open and the rule stops firing",
+      "kind": "cycler",
+      "mechanism": "color_cycle",
+      "prop": "phase0",
+      "reads": "worldgen/mechanisms/color_cycle.py:76",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "oneway | twoway | paired",
+      "governs": "where the mouth delivers the agent, and whether the effect mentions the direction of travel",
+      "kind": "portal",
+      "mechanism": "portal",
+      "prop": "mode",
+      "reads": "worldgen/mechanisms/portal.py:98",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": [
+        "oneway",
+        "twoway",
+        "paired"
+      ]
+    },
+    {
+      "domain": "any floor cell",
+      "governs": "the exit of a one-way portal",
+      "kind": "portal",
+      "mechanism": "portal",
+      "prop": "dest",
+      "reads": "worldgen/mechanisms/portal.py:101",
+      "scope": "entity",
+      "unexercisable": "",
+      "values": []
+    },
+    {
+      "domain": "any label; exactly two mouths must carry each",
+      "governs": "which mouth is the exit of which",
+      "kind": "portal",
+      "mechanism": "portal",
+      "prop": "pair",
+      "reads": "worldgen/mechanisms/portal.py:74",
+      "scope": "entity",
+      "unexercisable": "every catalogue world has exactly one pair, so the only edit the validator admits is relabelling both mouths \u2014 a gauge transformation that provably changes nothing. Re-pairing needs a world with four mouths, which the factory does not build. The exit of a paired portal is moved here by `move_entity` on the partner mouth instead.",
+      "values": []
+    },
+    {
+      "domain": "UP | DOWN | LEFT | RIGHT",
+      "governs": "one command the world refuses outright, before the grid is consulted",
+      "kind": "",
+      "mechanism": "-",
+      "prop": "forbidden_action",
+      "reads": "worldgen/core/world.py:FORBIDDEN_RULE",
+      "scope": "world",
+      "unexercisable": "",
+      "values": [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+      ]
+    }
+  ],
+  "mutations": [
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-1383db02",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t2-portal-pair",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_conserved",
+          "agent_unique",
+          "grid_shape",
+          "mouths_static"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              2,
+              1
+            ],
+            "base_rule": "teleport_twoway",
+            "mutant_rule": "teleport_twoway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              2
+            ],
+            "base_rule": "teleport_twoway",
+            "mutant_rule": "teleport_twoway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              7
+            ],
+            "base_rule": "teleport_twoway",
+            "mutant_rule": "walk",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "teleport_twoway",
+            "mutant_rule": "teleport_twoway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              5
+            ],
+            "base_rule": "walk",
+            "mutant_rule": "teleport_twoway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              4,
+              6
+            ],
+            "base_rule": "teleport_twoway",
+            "mutant_rule": "walk",
+            "same_successor": false,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": 3,
+          "mutant": 6
+        },
+        "reachable_states": {
+          "base": 24,
+          "mutant": 24
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "teleport_twoway",
+            "count": 3,
+            "mutant_rule": "teleport_twoway"
+          },
+          {
+            "base_rule": "teleport_twoway",
+            "count": 3,
+            "mutant_rule": "walk"
+          },
+          {
+            "base_rule": "walk",
+            "count": 2,
+            "mutant_rule": "teleport_twoway"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "teleport_twoway",
+            "count": 3,
+            "mutant_rule": "teleport_twoway"
+          },
+          {
+            "base_rule": "teleport_twoway",
+            "count": 3,
+            "mutant_rule": "walk"
+          },
+          {
+            "base_rule": "walk",
+            "count": 2,
+            "mutant_rule": "teleport_twoway"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "teleport_twoway",
+          "walk"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 0,
+        "earliest_witness": [],
+        "first_divergent_rules": {
+          "base": null,
+          "mutant": null
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 1,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 0,
+            "n_actions": 0,
+            "note": "the initial frame already differs"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 0,
+            "n_actions": 0,
+            "note": "the initial frame already differs"
+          }
+        }
+      },
+      "edit_family": "move_portal_exit",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The other kind of exit move: for a two-way pair the exit *is* the partner mouth, and a mouth is drawn. This one gives itself away in the first frame, which is what makes it the control against the two invisible ones above \u2014 same family, opposite end of the detection range.",
+      "leak_probes": [
+        "move_portal_exit",
+        "solvable",
+        "t2-portal-pair",
+        "t2-portal-pair::mouth(4,7)->(5,5)"
+      ],
+      "operators": [
+        {
+          "from": [
+            4,
+            7
+          ],
+          "kind": "portal",
+          "op": "move_entity",
+          "to": [
+            5,
+            5
+          ]
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 88,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 3,
+        "classes_witnessable_in_mutant": 3,
+        "divergent_observations": 8,
+        "divergent_share": 0.083333,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 9,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t2-portal-pair::mouth(4,7)->(5,5)",
+      "variant_id": "v-1383db02"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-29ace70e",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-tokens-lock",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "collection_is_monotone",
+          "token_count"
+        ],
+        "divergence_examples": [
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "blocked_by_lock",
+            "mutant_rule": "walk_through_lock",
+            "same_successor": false,
+            "vars": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              5
+            ],
+            "base_rule": "blocked_by_lock",
+            "mutant_rule": "walk_through_lock",
+            "same_successor": false,
+            "vars": [
+              1,
+              1,
+              0
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 8,
+          "mutant": 8
+        },
+        "reachable_states": {
+          "base": 50,
+          "mutant": 60
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "blocked_by_lock",
+            "count": 4,
+            "mutant_rule": "walk_through_lock"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "blocked_by_lock",
+            "count": 2,
+            "mutant_rule": "walk_through_lock"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "blocked_by_lock",
+          "walk_through_lock"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "RIGHT",
+          "RIGHT",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "first_divergent_rules": {
+          "base": "collect_token",
+          "mutant": "collect_token"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 9,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 4,
+            "n_actions": 8
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 22,
+            "n_actions": 50
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The threshold guard, moved by one. What gives it away is not bumping the lock but the lock **disappearing**: a lock is drawn while it is shut and not drawn once the count reaches k, so at the second token the two worlds' frames differ from across the board \u2014 measured `earliest_actions: 4`, on a straight walk that never goes near the lock's row. (An earlier version of this sentence claimed the opposite, that the edit stayed invisible until the agent stood next to the lock; an adversarial review replayed the witness and refuted it. The variant is still worth carrying \u2014 it is a guard whose value no frame states \u2014 but it is not the late-detection instance it was chosen to be.)",
+      "leak_probes": [
+        "change_guard",
+        "k",
+        "solvable",
+        "t1-tokens-lock",
+        "t1-tokens-lock::lock.k=2"
+      ],
+      "operators": [
+        {
+          "cell": [
+            3,
+            4
+          ],
+          "from": 3,
+          "kind": "lock",
+          "op": "set_prop",
+          "prop": "k",
+          "to": 2
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 198,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 2,
+        "divergent_share": 0.01,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 9,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-tokens-lock::lock.k=2",
+      "variant_id": "v-29ace70e"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-379c937f",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t3-full-house",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {
+          "latch_monotone": [
+            "blocked_by_door",
+            "blocked_toggle_would_shut_door",
+            "door_mirrors_net",
+            "latch_already_set",
+            "press_latch",
+            "push",
+            "teleport_twoway",
+            "walk",
+            "walk_through_door"
+          ]
+        },
+        "claims_added": [
+          "latch_monotone"
+        ],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "door_presence_tracks_net",
+          "latch_monotone"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              11,
+              0
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              11,
+              1
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              12,
+              0
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              12,
+              1
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              13,
+              0
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              13,
+              1
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 6,
+          "mutant": 6
+        },
+        "reachable_states": {
+          "base": 2654,
+          "mutant": 2654
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 0.8889
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "toggle_switch",
+            "count": 93,
+            "mutant_rule": "latch_already_set"
+          },
+          {
+            "base_rule": "toggle_switch",
+            "count": 93,
+            "mutant_rule": "press_latch"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "toggle_switch",
+            "count": 93,
+            "mutant_rule": "latch_already_set"
+          },
+          {
+            "base_rule": "toggle_switch",
+            "count": 93,
+            "mutant_rule": "press_latch"
+          }
+        ],
+        "rule_witness_changes": {
+          "latch_already_set": {
+            "base": null,
+            "mutant": -1
+          },
+          "press_latch": {
+            "base": null,
+            "mutant": 1
+          },
+          "toggle_switch": {
+            "base": -1,
+            "mutant": null
+          }
+        },
+        "rules_falsified": [
+          "latch_already_set",
+          "press_latch",
+          "toggle_switch"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 8,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "UP",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "toggle_switch",
+          "mutant": "latch_already_set"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 30,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 6,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 61,
+            "n_actions": 220
+          }
+        }
+      },
+      "edit_family": "reversible_to_irreversible",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The same edit inside three interacting families and the largest world in the catalogue, 2654 states. What it buys over `v-efe43df1` is **detection latency, not collateral**: the two have identical collateral blocks (same three rules falsified, same claim added, same single claim to re-examine, and the reachable set does not shrink \u2014 nothing becomes unreachable when the door stops re-shutting), while the earliest witness is 8 actions against 5, the longest in the corpus. A draft of this said 'every claim about reaching cells behind it changes with it'; the descriptor says one claim does.",
+      "leak_probes": [
+        "mode",
+        "reversible_to_irreversible",
+        "solvable",
+        "t3-full-house",
+        "t3-full-house::switch.mode=latch"
+      ],
+      "operators": [
+        {
+          "cell": [
+            6,
+            1
+          ],
+          "from": "toggle",
+          "kind": "switch",
+          "op": "set_prop",
+          "prop": "mode",
+          "to": "latch"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 10430,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 2,
+        "classes_witnessable_in_mutant": 2,
+        "divergent_observations": 186,
+        "divergent_share": 0.017521,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 8,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t3-full-house::switch.mode=latch",
+      "variant_id": "v-379c937f"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-57cfb2b4",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t2-unsolvable-nodoor",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "unsolvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "door_presence_tracks_net"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              2
+            ],
+            "base_rule": "blocked_by_door",
+            "mutant_rule": "walk_through_door",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "blocked_by_door",
+            "mutant_rule": "walk_through_door",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "blocked_by_door",
+            "mutant_rule": "walk_through_door",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              4,
+              3
+            ],
+            "base_rule": "blocked_by_door",
+            "mutant_rule": "walk_through_door",
+            "same_successor": false,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": null,
+          "mutant": 6
+        },
+        "reachable_states": {
+          "base": 11,
+          "mutant": 17
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "blocked_by_door",
+            "count": 5,
+            "mutant_rule": "walk_through_door"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "blocked_by_door",
+            "count": 4,
+            "mutant_rule": "walk_through_door"
+          }
+        ],
+        "rule_witness_changes": {
+          "blocked_by_door": {
+            "base": -1,
+            "mutant": null
+          },
+          "walk_through_door": {
+            "base": null,
+            "mutant": -1
+          }
+        },
+        "rules_falsified": [
+          "blocked_by_door",
+          "walk_through_door"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": true
+      },
+      "detection": {
+        "earliest_actions": 0,
+        "earliest_witness": [],
+        "first_divergent_rules": {
+          "base": null,
+          "mutant": null
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 1,
+        "search_complete": true,
+        "streams": {
+          "base_raw_trace": {
+            "complete": true,
+            "index": 0,
+            "n_actions": 0,
+            "note": "the initial frame already differs"
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The same guard inverted on both of the world's doors \u2014 two operators, because the world has two doors and inverting one would leave a pair that differ in a rule nobody edited. On a net that has no switch on it: The net is off forever, so the doors that never opened are now never shut, and the world whose entire purpose was to ship an unsolvability certificate becomes solvable. Visible in the first frame \u2014 the doors are simply absent \u2014 which is the low end of the detection range.",
+      "leak_probes": [
+        "change_guard",
+        "polarity",
+        "solvable",
+        "t2-unsolvable-nodoor",
+        "t2-unsolvable-nodoor::door.polarity=open_when_off",
+        "unsolvable"
+      ],
+      "operators": [
+        {
+          "cell": [
+            3,
+            4
+          ],
+          "from": "open_when_on",
+          "kind": "door",
+          "op": "set_prop",
+          "prop": "polarity",
+          "to": "open_when_off"
+        },
+        {
+          "cell": [
+            4,
+            2
+          ],
+          "from": "open_when_on",
+          "kind": "door",
+          "op": "set_prop",
+          "prop": "polarity",
+          "to": "open_when_off"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 40,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 4,
+        "divergent_share": 0.090909,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 3,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t2-unsolvable-nodoor::door.polarity=open_when_off",
+      "variant_id": "v-57cfb2b4"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-659c9594",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-cycler-gate",
+      "changes": {
+        "initial_state": true,
+        "transition_function": false
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [],
+        "divergence_examples": [],
+        "optimal_length": {
+          "base": 5,
+          "mutant": 5
+        },
+        "reachable_states": {
+          "base": 58,
+          "mutant": 39
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 0.75
+        },
+        "rule_pairs_backward": [],
+        "rule_pairs_forward": [],
+        "rule_witness_changes": {
+          "advance_cycler": {
+            "base": 2,
+            "mutant": 1
+          }
+        },
+        "rules_falsified": [],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 0,
+        "earliest_witness": [],
+        "first_divergent_rules": {
+          "base": null,
+          "mutant": null
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 1,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 0,
+            "n_actions": 0,
+            "note": "the initial frame already differs"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 0,
+            "n_actions": 0,
+            "note": "the initial frame already differs"
+          }
+        }
+      },
+      "edit_family": "reversible_to_irreversible",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "`mechanisms/color_cycle.py` names this configuration in advance: a cycler starting one step short of its open phase fires `advance_cycler` once and never again, because passing through does not advance the phase. The group is still of order k and destroys nothing, and the rule still becomes single-witness \u2014 the two axes coming apart, produced deliberately. Note what the descriptor measures and this sentence must not overstate: the transition function is **unchanged**. Nothing is falsified and there is nothing to repair; what moved is where the world starts, and the consequence is that a trajectory can no longer obtain the second witness. `changes.transition_function` is false here and true for the other two in this family, which is the distinction an adaptation item has to keep.",
+      "leak_probes": [
+        "phase0",
+        "reversible_to_irreversible",
+        "solvable",
+        "t1-cycler-gate",
+        "t1-cycler-gate::cycler.phase0=1"
+      ],
+      "operators": [
+        {
+          "cell": [
+            2,
+            4
+          ],
+          "from": null,
+          "kind": "cycler",
+          "op": "set_prop",
+          "prop": "phase0",
+          "to": 1
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 232,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 0,
+        "classes_witnessable_in_mutant": 0,
+        "divergent_observations": 0,
+        "divergent_share": 0.0,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 0,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-cycler-gate::cycler.phase0=1",
+      "variant_id": "v-659c9594"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-7048ee5e",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-walk-maze",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_unique",
+          "grid_shape"
+        ],
+        "divergence_examples": [
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              1
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              2
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              3
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              5
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              6
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              7
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": 10,
+          "mutant": 10
+        },
+        "reachable_states": {
+          "base": 24,
+          "mutant": 17
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "blocked_by_wall",
+            "count": 9,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 8,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "blocked_by_wall",
+            "count": 12,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 12,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_witness_changes": {
+          "action_forbidden": {
+            "base": null,
+            "mutant": -1
+          }
+        },
+        "rules_falsified": [
+          "action_forbidden",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 2,
+        "earliest_witness": [
+          "DOWN",
+          "UP"
+        ],
+        "first_divergent_rules": {
+          "base": "walk",
+          "mutant": "action_forbidden"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 2,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 10,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 10,
+            "n_actions": 40
+          }
+        }
+      },
+      "edit_family": "forbid_action",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The control world, so the edit is isolated from every mechanism: nothing but movement exists here, and the maze's only route to the goal descends. Refusing UP cannot be seen until the agent stands somewhere UP would have moved it, which is not the start cell.",
+      "leak_probes": [
+        "UP",
+        "forbid_action",
+        "solvable",
+        "t1-walk-maze",
+        "t1-walk-maze::forbid(UP)"
+      ],
+      "operators": [
+        {
+          "action": "UP",
+          "op": "forbid_action"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 72,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 2,
+        "classes_witnessable_in_mutant": 2,
+        "divergent_observations": 24,
+        "divergent_share": 0.25,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 3,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-walk-maze::forbid(UP)",
+      "variant_id": "v-7048ee5e"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-707a64ad",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-switch-toggle",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "door_presence_tracks_net"
+        ],
+        "divergence_examples": [
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "walk_through_door",
+            "mutant_rule": "blocked_by_door",
+            "same_successor": false,
+            "vars": [
+              1
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              5
+            ],
+            "base_rule": "walk_through_door",
+            "mutant_rule": "blocked_by_door",
+            "same_successor": false,
+            "vars": [
+              1
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 9,
+          "mutant": null
+        },
+        "reachable_states": {
+          "base": 26,
+          "mutant": 21
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "walk_through_door",
+            "count": 1,
+            "mutant_rule": "blocked_by_door"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "walk_through_door",
+            "count": 2,
+            "mutant_rule": "blocked_by_door"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "blocked_by_door",
+          "walk_through_door"
+        ],
+        "verdict": "unsolvable",
+        "verdict_flipped": true
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "LEFT",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "toggle_switch",
+          "mutant": "toggle_switch"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 8,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 4,
+            "n_actions": 9
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 5,
+            "n_actions": 40
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The guard that says *which* switch a door answers to. The door in the divider now listens to a net no switch drives, so it never opens and the world is unwinnable \u2014 while the second door, still on net `a`, keeps opening and shutting exactly as before. Nothing in any frame distinguishes the two boards until the switch is thrown, which is what makes this the solvable/unsolvable near-twin a verdict paper needs.",
+      "leak_probes": [
+        "change_guard",
+        "net",
+        "solvable",
+        "t1-switch-toggle",
+        "t1-switch-toggle::door(3,4).net=b",
+        "unsolvable"
+      ],
+      "operators": [
+        {
+          "cell": [
+            3,
+            4
+          ],
+          "from": "a",
+          "kind": "door",
+          "op": "set_prop",
+          "prop": "net",
+          "to": "b"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 102,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 2,
+        "divergent_share": 0.019231,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 7,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-switch-toggle::door(3,4).net=b",
+      "variant_id": "v-707a64ad"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-a3446614",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-portal-oneway",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_conserved",
+          "mouths_static"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "teleport_oneway",
+            "mutant_rule": "teleport_oneway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              6,
+              1
+            ],
+            "base_rule": "teleport_oneway",
+            "mutant_rule": "teleport_oneway",
+            "same_successor": false,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": 10,
+          "mutant": 10
+        },
+        "reachable_states": {
+          "base": 26,
+          "mutant": 26
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "teleport_oneway",
+            "count": 2,
+            "mutant_rule": "teleport_oneway"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "teleport_oneway",
+            "count": 2,
+            "mutant_rule": "teleport_oneway"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "teleport_oneway"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "teleport_oneway",
+          "mutant": "teleport_oneway"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 6,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 10,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 4,
+            "n_actions": 10
+          }
+        }
+      },
+      "edit_family": "move_portal_exit",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The exit moved two cells inside the same pocket. A one-way portal's destination is unmarked floor, so no frame anywhere in the world differs until the mouth is entered, and the whole detection latency is the walk to the mouth. Nothing about the edit is visible before that and everything about it is visible at that step.",
+      "leak_probes": [
+        "dest",
+        "move_portal_exit",
+        "solvable",
+        "t1-portal-oneway",
+        "t1-portal-oneway::portal.dest=(3,5)"
+      ],
+      "operators": [
+        {
+          "cell": [
+            5,
+            1
+          ],
+          "from": [
+            3,
+            3
+          ],
+          "kind": "portal",
+          "op": "set_prop",
+          "prop": "dest",
+          "to": [
+            3,
+            5
+          ]
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 102,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 2,
+        "divergent_share": 0.019231,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 4,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-portal-oneway::portal.dest=(3,5)",
+      "variant_id": "v-a3446614"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-ab7a7d57",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t2-switch-push",
+      "changes": {
+        "initial_state": false,
+        "transition_function": false
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [],
+        "divergence_examples": [],
+        "optimal_length": {
+          "base": 8,
+          "mutant": 8
+        },
+        "reachable_states": {
+          "base": 175,
+          "mutant": 175
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [],
+        "rule_pairs_forward": [],
+        "rule_witness_changes": {},
+        "rules_falsified": [],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": null,
+        "earliest_witness": null,
+        "first_divergent_rules": {
+          "base": null,
+          "mutant": null
+        },
+        "note": "observationally equivalent: no action sequence distinguishes the two worlds",
+        "observationally_equivalent": true,
+        "pairs_explored": 175,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 8,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": false,
+            "index": null,
+            "n_actions": 190,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "A net is a label and both ends of it moved. State it precisely, because a draft of this sentence said 'the rule table genuinely changed' and `truth.rule_table` returns byte-identical tables for the two: what changed is the **world description** \u2014 which label the guard `door_mirrors_net` reads \u2014 and nothing else, not the table, not the transition function, not any frame. `net` is a real knob and `v-707a64ad` proves it by moving one end of the same one and making a world unwinnable; this is the one edit of it with no observable content. That is what an undetectable variant has to be. A paper with none of them rewards claiming a detection, and an examinee reporting a latency for a change it cannot have observed would score like one that measured \u2014 which is the constraint `exam.papers.adaptation.build()` enforces on the A0 paper, met here in advance rather than discovered when somebody writes the worldgen one.",
+      "leak_probes": [
+        "change_guard",
+        "net",
+        "solvable",
+        "t2-switch-push",
+        "t2-switch-push::net a->b (relabel, both ends)"
+      ],
+      "operators": [
+        {
+          "cell": [
+            5,
+            1
+          ],
+          "from": "a",
+          "kind": "switch",
+          "op": "set_prop",
+          "prop": "net",
+          "to": "b"
+        },
+        {
+          "cell": [
+            3,
+            4
+          ],
+          "from": "a",
+          "kind": "door",
+          "op": "set_prop",
+          "prop": "net",
+          "to": "b"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 700,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 0,
+        "classes_witnessable_in_mutant": 0,
+        "divergent_observations": 0,
+        "divergent_share": 0.0,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 0,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t2-switch-push::net a->b (relabel, both ends)",
+      "variant_id": "v-ab7a7d57"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-bd2babb4",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t3-cycler-portal-lock",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_conserved",
+          "collection_is_monotone",
+          "color_reads_phase",
+          "mouths_static",
+          "phase_in_range",
+          "token_count"
+        ],
+        "divergence_examples": [
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              1
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              1
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              0,
+              1
+            ]
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              1
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              1,
+              0
+            ]
+          },
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              1
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              0,
+              0
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "advance_cycler",
+            "same_successor": false,
+            "vars": [
+              1,
+              0,
+              1
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 5,
+          "mutant": 5
+        },
+        "reachable_states": {
+          "base": 262,
+          "mutant": 387
+        },
+        "reversibility_score": {
+          "base": 0.875,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "advance_cycler",
+            "count": 8,
+            "mutant_rule": "walk_through_cycler"
+          },
+          {
+            "base_rule": "walk_through_cycler",
+            "count": 6,
+            "mutant_rule": "advance_cycler"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "walk_through_cycler",
+            "count": 8,
+            "mutant_rule": "advance_cycler"
+          }
+        ],
+        "rule_witness_changes": {
+          "advance_cycler": {
+            "base": 1,
+            "mutant": 2
+          }
+        },
+        "rules_falsified": [
+          "advance_cycler",
+          "walk_through_cycler"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "RIGHT",
+          "RIGHT"
+        ],
+        "first_divergent_rules": {
+          "base": "walk_through_cycler",
+          "mutant": "advance_cycler"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 7,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 5,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 108,
+            "n_actions": 160
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "Which colour is the passable one, moved one step round the cycle. The gate now needs two bumps instead of one, so the colour a reader learned to walk into is the colour that now refuses \u2014 a guard change that inverts a learned association rather than deleting it.",
+      "leak_probes": [
+        "change_guard",
+        "open_phase",
+        "solvable",
+        "t3-cycler-portal-lock",
+        "t3-cycler-portal-lock::cycler.open_phase=2"
+      ],
+      "operators": [
+        {
+          "cell": [
+            3,
+            2
+          ],
+          "from": 1,
+          "kind": "cycler",
+          "op": "set_prop",
+          "prop": "open_phase",
+          "to": 2
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 1040,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 2,
+        "classes_witnessable_in_mutant": 2,
+        "divergent_observations": 8,
+        "divergent_share": 0.007634,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 5,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t3-cycler-portal-lock::cycler.open_phase=2",
+      "variant_id": "v-bd2babb4"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-c52c42ed",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-portal-oneway",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_conserved",
+          "mouths_static"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "teleport_oneway",
+            "mutant_rule": "teleport_oneway",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "UP",
+            "agent": [
+              6,
+              1
+            ],
+            "base_rule": "teleport_oneway",
+            "mutant_rule": "teleport_oneway",
+            "same_successor": false,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": 10,
+          "mutant": 10
+        },
+        "reachable_states": {
+          "base": 26,
+          "mutant": 26
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "teleport_oneway",
+            "count": 2,
+            "mutant_rule": "teleport_oneway"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "teleport_oneway",
+            "count": 2,
+            "mutant_rule": "teleport_oneway"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "teleport_oneway"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "teleport_oneway",
+          "mutant": "teleport_oneway"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 6,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 10,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 4,
+            "n_actions": 10
+          }
+        }
+      },
+      "edit_family": "move_portal_exit",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The exit moved out of the pocket and next to the mouth, so the teleport becomes a one-cell hop. It was chosen to isolate *how far* the exit moved from *whether* it moved, and on the published numbers **it does not**: this variant and the one above agree on every field \u2014 earliest_actions 4, one rule falsified, 2 divergent observations, budget 4, 26 reachable states, optimal length 10. The latency is the walk to the mouth and the walk is the same. The two differ only in *where the agent lands*, which is in `divergence_examples` and in nothing the descriptor summarises. Kept, because a pair that is identical on the summary and different in the witness is itself a thing a scoring pass should not confuse; not kept as the contrast it was meant to be.",
+      "leak_probes": [
+        "dest",
+        "move_portal_exit",
+        "solvable",
+        "t1-portal-oneway",
+        "t1-portal-oneway::portal.dest=(6,2)"
+      ],
+      "operators": [
+        {
+          "cell": [
+            5,
+            1
+          ],
+          "from": [
+            3,
+            3
+          ],
+          "kind": "portal",
+          "op": "set_prop",
+          "prop": "dest",
+          "to": [
+            6,
+            2
+          ]
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 102,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 2,
+        "divergent_share": 0.019231,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 4,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-portal-oneway::portal.dest=(6,2)",
+      "variant_id": "v-c52c42ed"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-ce732813",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-walk-maze",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_unique",
+          "grid_shape"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              1
+            ],
+            "base_rule": "walk",
+            "mutant_rule": "action_forbidden",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              2
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              3
+            ],
+            "base_rule": "walk",
+            "mutant_rule": "action_forbidden",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              5
+            ],
+            "base_rule": "walk",
+            "mutant_rule": "action_forbidden",
+            "same_successor": false,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              6
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": []
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              7
+            ],
+            "base_rule": "walk",
+            "mutant_rule": "action_forbidden",
+            "same_successor": false,
+            "vars": []
+          }
+        ],
+        "optimal_length": {
+          "base": 10,
+          "mutant": null
+        },
+        "reachable_states": {
+          "base": 24,
+          "mutant": 3
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "blocked_by_wall",
+            "count": 1,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 2,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "blocked_by_wall",
+            "count": 12,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 12,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_witness_changes": {
+          "action_forbidden": {
+            "base": null,
+            "mutant": -1
+          }
+        },
+        "rules_falsified": [
+          "action_forbidden",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "verdict": "unsolvable",
+        "verdict_flipped": true
+      },
+      "detection": {
+        "earliest_actions": 1,
+        "earliest_witness": [
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "walk",
+          "mutant": "action_forbidden"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 1,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 1,
+            "n_actions": 10
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 1,
+            "n_actions": 40
+          }
+        }
+      },
+      "edit_family": "forbid_action",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The same board and the same family as the edit above, one action along, and the verdict flips: the goal sits on the bottom row and every route to it descends, so refusing DOWN makes the world unwinnable. Two mutants of one base whose boards are indistinguishable and whose answers are opposite \u2014 GAPS.md asks for exactly this shape, so that board identity carries no signal.",
+      "leak_probes": [
+        "DOWN",
+        "forbid_action",
+        "solvable",
+        "t1-walk-maze",
+        "t1-walk-maze::forbid(DOWN)",
+        "unsolvable"
+      ],
+      "operators": [
+        {
+          "action": "DOWN",
+          "op": "forbid_action"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 72,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 2,
+        "classes_witnessable_in_mutant": 2,
+        "divergent_observations": 24,
+        "divergent_share": 0.25,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 3,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-walk-maze::forbid(DOWN)",
+      "variant_id": "v-ce732813"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-d2c2b1b9",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-switch-latch",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "door_presence_tracks_net",
+          "latch_monotone"
+        ],
+        "divergence_examples": [
+          {
+            "action": "RIGHT",
+            "agent": [
+              3,
+              3
+            ],
+            "base_rule": "walk_through_door",
+            "mutant_rule": "blocked_by_door",
+            "same_successor": false,
+            "vars": [
+              1
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              3,
+              5
+            ],
+            "base_rule": "walk_through_door",
+            "mutant_rule": "blocked_by_door",
+            "same_successor": false,
+            "vars": [
+              1
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 9,
+          "mutant": null
+        },
+        "reachable_states": {
+          "base": 26,
+          "mutant": 21
+        },
+        "reversibility_score": {
+          "base": 0.8333,
+          "mutant": 0.8333
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "walk_through_door",
+            "count": 1,
+            "mutant_rule": "blocked_by_door"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "walk_through_door",
+            "count": 2,
+            "mutant_rule": "blocked_by_door"
+          }
+        ],
+        "rule_witness_changes": {},
+        "rules_falsified": [
+          "blocked_by_door",
+          "walk_through_door"
+        ],
+        "verdict": "unsolvable",
+        "verdict_flipped": true
+      },
+      "detection": {
+        "earliest_actions": 4,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "LEFT",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "press_latch",
+          "mutant": "press_latch"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 8,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": true,
+            "index": 4,
+            "n_actions": 9
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 5,
+            "n_actions": 30
+          }
+        }
+      },
+      "edit_family": "change_guard",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "The same guard edit on the latch half of the catalogue's existing variant pair, so the corpus carries the unsolvable twin of both switch worlds and an examinee cannot infer the verdict from the switch's mode.",
+      "leak_probes": [
+        "change_guard",
+        "net",
+        "solvable",
+        "t1-switch-latch",
+        "t1-switch-latch::door(3,4).net=b",
+        "unsolvable"
+      ],
+      "operators": [
+        {
+          "cell": [
+            3,
+            4
+          ],
+          "from": "a",
+          "kind": "door",
+          "op": "set_prop",
+          "prop": "net",
+          "to": "b"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 102,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 1,
+        "classes_witnessable_in_mutant": 1,
+        "divergent_observations": 2,
+        "divergent_share": 0.019231,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 7,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t1-switch-latch::door(3,4).net=b",
+      "variant_id": "v-d2c2b1b9"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-eb4c5810",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t1-cycler-gate",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {},
+        "claims_added": [],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "agent_unique",
+          "color_reads_phase",
+          "grid_shape",
+          "phase_in_range"
+        ],
+        "divergence_examples": [
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              1
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              0
+            ]
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              1
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              1
+            ]
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              1
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              2
+            ]
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              2
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              0
+            ]
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              2
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              1
+            ]
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              2
+            ],
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "same_successor": true,
+            "vars": [
+              2
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 5,
+          "mutant": 5
+        },
+        "reachable_states": {
+          "base": 58,
+          "mutant": 41
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 1.0
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "advance_cycler",
+            "count": 2,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 38,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk_through_cycler",
+            "count": 1,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "advance_cycler",
+            "count": 2,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "blocked_by_wall",
+            "count": 15,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk",
+            "count": 40,
+            "mutant_rule": "action_forbidden"
+          },
+          {
+            "base_rule": "walk_through_cycler",
+            "count": 1,
+            "mutant_rule": "action_forbidden"
+          }
+        ],
+        "rule_witness_changes": {
+          "action_forbidden": {
+            "base": null,
+            "mutant": -1
+          }
+        },
+        "rules_falsified": [
+          "action_forbidden",
+          "advance_cycler",
+          "blocked_by_wall",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 1,
+        "earliest_witness": [
+          "UP"
+        ],
+        "first_divergent_rules": {
+          "base": "walk",
+          "mutant": "action_forbidden"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 1,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 5,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 11,
+            "n_actions": 70
+          }
+        }
+      },
+      "edit_family": "forbid_action",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "An open room: the goal sits below and right of the start, so UP is never on a shortest path and the optimal length is 5 either way. `costs nothing` would be the wrong summary and a draft used it \u2014 the same descriptor records the corpus's largest `divergent_share` (0.25), the reachable set falling 58 \u2192 41, and a divergence class that exists in the base and can never be witnessed in the mutant at all. An edit can leave the objective untouched and still be most of what there is to learn about the world.",
+      "leak_probes": [
+        "UP",
+        "forbid_action",
+        "solvable",
+        "t1-cycler-gate",
+        "t1-cycler-gate::forbid(UP)"
+      ],
+      "operators": [
+        {
+          "action": "UP",
+          "op": "forbid_action"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 174,
+        "bound": "no single walk witnesses every class in this world; `greedy_actions_before_stall` is what the greedy walk spent before it ran out of reachable sites, and bounds nothing",
+        "classes_only_in_base": [
+          {
+            "base_rule": "blocked_by_wall",
+            "mutant_rule": "action_forbidden",
+            "sites_in_base": 15
+          }
+        ],
+        "classes_total": 4,
+        "classes_witnessable_in_mutant": 3,
+        "divergent_observations": 58,
+        "divergent_share": 0.25,
+        "greedy_actions_before_stall": 5,
+        "greedy_witness_budget": null,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": [
+          {
+            "base_rule": "walk_through_cycler",
+            "mutant_rule": "action_forbidden"
+          }
+        ]
+      },
+      "transparent_name": "t1-cycler-gate::forbid(UP)",
+      "variant_id": "v-eb4c5810"
+    },
+    {
+      "artifacts": {
+        "dir": "worldgen/out/worlds/v-efe43df1",
+        "open": [
+          "spec.json",
+          "raw_trace.jsonl"
+        ],
+        "scoring_only": [
+          "ground_truth.json",
+          "GROUND_TRUTH.md",
+          "coverage.json",
+          "reversibility.json"
+        ]
+      },
+      "base_world_id": "t2-switch-push",
+      "changes": {
+        "initial_state": false,
+        "transition_function": true
+      },
+      "collateral": {
+        "base_verdict": "solvable",
+        "claim_dependencies_added": {
+          "latch_monotone": [
+            "blocked_by_door",
+            "blocked_toggle_would_shut_door",
+            "door_mirrors_net",
+            "latch_already_set",
+            "press_latch",
+            "push",
+            "walk",
+            "walk_through_door"
+          ]
+        },
+        "claims_added": [
+          "latch_monotone"
+        ],
+        "claims_now_false": [],
+        "claims_removed": [],
+        "claims_to_reexamine": [
+          "door_presence_tracks_net",
+          "latch_monotone"
+        ],
+        "divergence_examples": [
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              29,
+              0
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              29,
+              1
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              30,
+              0
+            ]
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              1
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              30,
+              1
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              5,
+              2
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "press_latch",
+            "same_successor": true,
+            "vars": [
+              28,
+              0
+            ]
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              5,
+              2
+            ],
+            "base_rule": "toggle_switch",
+            "mutant_rule": "latch_already_set",
+            "same_successor": false,
+            "vars": [
+              28,
+              1
+            ]
+          }
+        ],
+        "optimal_length": {
+          "base": 8,
+          "mutant": 8
+        },
+        "reachable_states": {
+          "base": 175,
+          "mutant": 134
+        },
+        "reversibility_score": {
+          "base": 1.0,
+          "mutant": 0.875
+        },
+        "rule_pairs_backward": [
+          {
+            "base_rule": "toggle_switch",
+            "count": 6,
+            "mutant_rule": "latch_already_set"
+          },
+          {
+            "base_rule": "toggle_switch",
+            "count": 4,
+            "mutant_rule": "press_latch"
+          }
+        ],
+        "rule_pairs_forward": [
+          {
+            "base_rule": "toggle_switch",
+            "count": 6,
+            "mutant_rule": "latch_already_set"
+          },
+          {
+            "base_rule": "toggle_switch",
+            "count": 6,
+            "mutant_rule": "press_latch"
+          }
+        ],
+        "rule_witness_changes": {
+          "latch_already_set": {
+            "base": null,
+            "mutant": -1
+          },
+          "press_latch": {
+            "base": null,
+            "mutant": 1
+          },
+          "toggle_switch": {
+            "base": -1,
+            "mutant": null
+          }
+        },
+        "rules_falsified": [
+          "latch_already_set",
+          "press_latch",
+          "toggle_switch"
+        ],
+        "verdict": "solvable",
+        "verdict_flipped": false
+      },
+      "detection": {
+        "earliest_actions": 5,
+        "earliest_witness": [
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "first_divergent_rules": {
+          "base": "toggle_switch",
+          "mutant": "latch_already_set"
+        },
+        "note": null,
+        "observationally_equivalent": false,
+        "pairs_explored": 9,
+        "search_complete": true,
+        "streams": {
+          "base_optimal_plan": {
+            "complete": false,
+            "index": null,
+            "n_actions": 8,
+            "note": "the stream ended without showing the difference; this is a fact about the stream, not about the edit"
+          },
+          "base_raw_trace": {
+            "complete": true,
+            "index": 5,
+            "n_actions": 190
+          }
+        }
+      },
+      "edit_family": "reversible_to_irreversible",
+      "edit_family_agrees": true,
+      "edit_family_problems": [],
+      "justification": "A0\u2032's central comparison, applied to a world that also contains a block: the switch sets once and never clears, so `toggle_switch` is replaced by a rule with exactly one witness in the life of the world.",
+      "leak_probes": [
+        "mode",
+        "reversible_to_irreversible",
+        "solvable",
+        "t2-switch-push",
+        "t2-switch-push::switch.mode=latch"
+      ],
+      "operators": [
+        {
+          "cell": [
+            5,
+            1
+          ],
+          "from": "toggle",
+          "kind": "switch",
+          "op": "set_prop",
+          "prop": "mode",
+          "to": "latch"
+        }
+      ],
+      "repair": {
+        "agreeing_observations": 688,
+        "bound": "upper bound on the optimal witness budget (greedy); lower bound on a miner's repair budget (witnessing is not separating)",
+        "classes_only_in_base": [],
+        "classes_total": 2,
+        "classes_witnessable_in_mutant": 2,
+        "divergent_observations": 12,
+        "divergent_share": 0.017143,
+        "greedy_actions_before_stall": null,
+        "greedy_witness_budget": 5,
+        "miner_blocked_on": "engine-rig's miner represents a two-object sokoban percept and cannot express mechanism state; see exam/runs/20260728T090621Z-V2-exam-on-worldgen/GAPS.md. A repair score against a miner that cannot represent the state is not a measurement, so this is null rather than approximated.",
+        "miner_measured": null,
+        "stalled_on": []
+      },
+      "transparent_name": "t2-switch-push::switch.mode=latch",
+      "variant_id": "v-efe43df1"
+    }
+  ],
+  "prompt_id": "C6-worldgen-mutate",
+  "read_licence": "scoring-only \u2014 this file names the edit, which is the answer to every adaptation item built on it",
+  "roster": {
+    "prompt_id": "C6-worldgen-mutate",
+    "totals": {
+      "claim_disagreements": [],
+      "frame_collisions": [],
+      "invariant_failures": [],
+      "invariant_unverified": [],
+      "invariant_verdict_mismatch": [],
+      "mean_reversibility": 0.9565,
+      "rule_correspondence_failures": [],
+      "solvability_intent_failures": [],
+      "tiers": {
+        "1": 9,
+        "2": 4,
+        "3": 2
+      },
+      "unsolvable": [
+        "v-707a64ad",
+        "v-ce732813",
+        "v-d2c2b1b9"
+      ],
+      "variant_pairs": [],
+      "worlds": 15
+    },
+    "worlds": [
+      {
+        "budget": 40,
+        "claim_disagreements": [],
+        "coverage": "38/96",
+        "coverage_fraction": 0.3958,
+        "declared_never_fires": [],
+        "distinct_frames": 24,
+        "dormant_clauses": [
+          "blocked_portal_exit"
+        ],
+        "entities": 2,
+        "families": [
+          "portal"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          7,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 6,
+        "reachable_states": 24,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_wall",
+          "walk"
+        ],
+        "solvable": true,
+        "tier": 2,
+        "trace_frames": 41,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-1383db02"
+      },
+      {
+        "budget": 50,
+        "claim_disagreements": [],
+        "coverage": "43/240",
+        "coverage_fraction": 0.1792,
+        "declared_never_fires": [],
+        "distinct_frames": 60,
+        "dormant_clauses": [],
+        "entities": 4,
+        "families": [
+          "count_lock"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          5,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 8,
+        "reachable_states": 60,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_lock",
+          "blocked_by_wall",
+          "collect_token",
+          "walk",
+          "walk_through_lock"
+        ],
+        "rules_re_witnessable": 5,
+        "rules_single_witness": [],
+        "rules_total": 5,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_lock",
+          "blocked_by_wall",
+          "collect_token",
+          "walk",
+          "walk_through_lock"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 51,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-29ace70e"
+      },
+      {
+        "budget": 190,
+        "claim_disagreements": [],
+        "coverage": "187/10616",
+        "coverage_fraction": 0.0176,
+        "declared_never_fires": [],
+        "distinct_frames": 2654,
+        "dormant_clauses": [
+          "blocked_portal_exit",
+          "blocked_toggle_would_shut_door"
+        ],
+        "entities": 5,
+        "families": [
+          "portal",
+          "push",
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          9,
+          10
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 6,
+        "reachable_states": 2654,
+        "reversibility_score": 0.8889,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "latch_already_set",
+          "press_latch",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ],
+        "rules_re_witnessable": 8,
+        "rules_single_witness": [
+          "press_latch"
+        ],
+        "rules_total": 9,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "latch_already_set",
+          "press_latch",
+          "push",
+          "teleport_twoway",
+          "walk",
+          "walk_through_door"
+        ],
+        "solvable": true,
+        "tier": 3,
+        "trace_frames": 191,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": true,
+        "world_id": "v-379c937f"
+      },
+      {
+        "budget": 30,
+        "claim_disagreements": [],
+        "coverage": "30/68",
+        "coverage_fraction": 0.4412,
+        "declared_never_fires": [],
+        "distinct_frames": 17,
+        "dormant_clauses": [
+          "blocked_by_door"
+        ],
+        "entities": 2,
+        "families": [
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          6,
+          7
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 6,
+        "reachable_states": 17,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_wall",
+          "walk",
+          "walk_through_door"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_wall",
+          "walk",
+          "walk_through_door"
+        ],
+        "solvable": true,
+        "tier": 2,
+        "trace_frames": 31,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-57cfb2b4"
+      },
+      {
+        "budget": 50,
+        "claim_disagreements": [],
+        "coverage": "49/156",
+        "coverage_fraction": 0.3141,
+        "declared_never_fires": [],
+        "distinct_frames": 39,
+        "dormant_clauses": [],
+        "entities": 1,
+        "families": [
+          "color_cycle"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          6,
+          7
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 5,
+        "reachable_states": 39,
+        "reversibility_score": 0.75,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "advance_cycler",
+          "blocked_by_wall",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [
+          "advance_cycler"
+        ],
+        "rules_total": 4,
+        "rules_with_uncovered_pairs": [
+          "advance_cycler",
+          "blocked_by_wall",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 51,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": true,
+        "world_id": "v-659c9594"
+      },
+      {
+        "budget": 10,
+        "claim_disagreements": [],
+        "coverage": "10/68",
+        "coverage_fraction": 0.1471,
+        "declared_never_fires": [],
+        "distinct_frames": 17,
+        "dormant_clauses": [],
+        "entities": 0,
+        "families": [],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          7,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 10,
+        "reachable_states": 17,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "action_forbidden",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "action_forbidden",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 11,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-7048ee5e"
+      },
+      {
+        "budget": 30,
+        "claim_disagreements": [],
+        "coverage": "30/84",
+        "coverage_fraction": 0.3571,
+        "declared_never_fires": [],
+        "distinct_frames": 21,
+        "dormant_clauses": [],
+        "entities": 3,
+        "families": [
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          6,
+          7
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": null,
+        "reachable_states": 21,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_door",
+          "blocked_by_wall",
+          "blocked_toggle_would_shut_door",
+          "walk",
+          "walk_through_door"
+        ],
+        "rules_re_witnessable": 6,
+        "rules_single_witness": [],
+        "rules_total": 6,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_door",
+          "blocked_by_wall",
+          "blocked_toggle_would_shut_door",
+          "walk",
+          "walk_through_door"
+        ],
+        "solvable": false,
+        "tier": 1,
+        "trace_frames": 31,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-707a64ad"
+      },
+      {
+        "budget": 10,
+        "claim_disagreements": [],
+        "coverage": "10/104",
+        "coverage_fraction": 0.0962,
+        "declared_never_fires": [],
+        "distinct_frames": 26,
+        "dormant_clauses": [
+          "blocked_portal_exit"
+        ],
+        "entities": 1,
+        "families": [
+          "portal"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          8,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 10,
+        "reachable_states": 26,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_wall",
+          "teleport_oneway",
+          "walk"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_wall",
+          "teleport_oneway",
+          "walk"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 11,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-a3446614"
+      },
+      {
+        "budget": 190,
+        "claim_disagreements": [],
+        "coverage": "156/700",
+        "coverage_fraction": 0.2229,
+        "declared_never_fires": [],
+        "distinct_frames": 175,
+        "dormant_clauses": [
+          "blocked_toggle_would_shut_door"
+        ],
+        "entities": 3,
+        "families": [
+          "push",
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          7,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 8,
+        "reachable_states": 175,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "push",
+          "toggle_switch",
+          "walk",
+          "walk_through_door"
+        ],
+        "rules_re_witnessable": 7,
+        "rules_single_witness": [],
+        "rules_total": 7,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "push",
+          "toggle_switch",
+          "walk",
+          "walk_through_door"
+        ],
+        "solvable": true,
+        "tier": 2,
+        "trace_frames": 191,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": true,
+        "world_id": "v-ab7a7d57"
+      },
+      {
+        "budget": 190,
+        "claim_disagreements": [],
+        "coverage": "186/1548",
+        "coverage_fraction": 0.1202,
+        "declared_never_fires": [],
+        "distinct_frames": 387,
+        "dormant_clauses": [
+          "blocked_portal_exit"
+        ],
+        "entities": 6,
+        "families": [
+          "color_cycle",
+          "count_lock",
+          "portal"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          8,
+          10
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 5,
+        "reachable_states": 387,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "advance_cycler",
+          "blocked_by_lock",
+          "blocked_by_wall",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "rules_re_witnessable": 8,
+        "rules_single_witness": [],
+        "rules_total": 8,
+        "rules_with_uncovered_pairs": [
+          "advance_cycler",
+          "blocked_by_lock",
+          "blocked_by_wall",
+          "collect_token",
+          "teleport_twoway",
+          "walk",
+          "walk_through_cycler",
+          "walk_through_lock"
+        ],
+        "solvable": true,
+        "tier": 3,
+        "trace_frames": 191,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": true,
+        "world_id": "v-bd2babb4"
+      },
+      {
+        "budget": 10,
+        "claim_disagreements": [],
+        "coverage": "10/104",
+        "coverage_fraction": 0.0962,
+        "declared_never_fires": [],
+        "distinct_frames": 26,
+        "dormant_clauses": [
+          "blocked_portal_exit"
+        ],
+        "entities": 1,
+        "families": [
+          "portal"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          8,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 10,
+        "reachable_states": 26,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_wall",
+          "teleport_oneway",
+          "walk"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_wall",
+          "teleport_oneway",
+          "walk"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 11,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-c52c42ed"
+      },
+      {
+        "budget": 10,
+        "claim_disagreements": [],
+        "coverage": "9/12",
+        "coverage_fraction": 0.75,
+        "declared_never_fires": [],
+        "distinct_frames": 3,
+        "dormant_clauses": [],
+        "entities": 0,
+        "families": [],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          7,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": null,
+        "reachable_states": 3,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_wall"
+        ],
+        "rules_re_witnessable": 3,
+        "rules_single_witness": [],
+        "rules_total": 3,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_wall"
+        ],
+        "solvable": false,
+        "tier": 1,
+        "trace_frames": 11,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-ce732813"
+      },
+      {
+        "budget": 20,
+        "claim_disagreements": [],
+        "coverage": "19/84",
+        "coverage_fraction": 0.2262,
+        "declared_never_fires": [],
+        "distinct_frames": 21,
+        "dormant_clauses": [
+          "blocked_toggle_would_shut_door"
+        ],
+        "entities": 3,
+        "families": [
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          6,
+          7
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": null,
+        "reachable_states": 21,
+        "reversibility_score": 0.8333,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_door",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "rules_re_witnessable": 5,
+        "rules_single_witness": [
+          "press_latch"
+        ],
+        "rules_total": 6,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_door",
+          "blocked_by_wall",
+          "walk"
+        ],
+        "solvable": false,
+        "tier": 1,
+        "trace_frames": 21,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-d2c2b1b9"
+      },
+      {
+        "budget": 10,
+        "claim_disagreements": [],
+        "coverage": "10/164",
+        "coverage_fraction": 0.061,
+        "declared_never_fires": [],
+        "distinct_frames": 41,
+        "dormant_clauses": [],
+        "entities": 1,
+        "families": [
+          "color_cycle"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          6,
+          7
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 5,
+        "reachable_states": 41,
+        "reversibility_score": 1.0,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "action_forbidden",
+          "advance_cycler",
+          "blocked_by_wall",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "rules_re_witnessable": 5,
+        "rules_single_witness": [],
+        "rules_total": 5,
+        "rules_with_uncovered_pairs": [
+          "action_forbidden",
+          "advance_cycler",
+          "blocked_by_wall",
+          "walk",
+          "walk_through_cycler"
+        ],
+        "solvable": true,
+        "tier": 1,
+        "trace_frames": 11,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": false,
+        "world_id": "v-eb4c5810"
+      },
+      {
+        "budget": 110,
+        "claim_disagreements": [],
+        "coverage": "99/536",
+        "coverage_fraction": 0.1847,
+        "declared_never_fires": [],
+        "distinct_frames": 134,
+        "dormant_clauses": [
+          "blocked_toggle_would_shut_door"
+        ],
+        "entities": 3,
+        "families": [
+          "push",
+          "switch_door"
+        ],
+        "fired_undeclared": [],
+        "frame_determines_state": true,
+        "grid": [
+          7,
+          9
+        ],
+        "intended_solvable": null,
+        "invariants_all_hold": true,
+        "invariants_unverified": [],
+        "invariants_violated": [],
+        "optimal_length": 8,
+        "reachable_states": 134,
+        "reversibility_score": 0.875,
+        "rule_correspondence_agrees": true,
+        "rules_never_witnessed": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "latch_already_set",
+          "press_latch",
+          "push",
+          "walk",
+          "walk_through_door"
+        ],
+        "rules_re_witnessable": 7,
+        "rules_single_witness": [
+          "press_latch"
+        ],
+        "rules_total": 8,
+        "rules_with_uncovered_pairs": [
+          "blocked_by_block",
+          "blocked_by_door",
+          "blocked_by_wall",
+          "latch_already_set",
+          "press_latch",
+          "push",
+          "walk",
+          "walk_through_door"
+        ],
+        "solvable": true,
+        "tier": 2,
+        "trace_frames": 111,
+        "variant_delta": "",
+        "variant_of": null,
+        "win_in_trace": true,
+        "world_id": "v-efe43df1"
+      }
+    ]
+  },
+  "schema_version": "worldgen/mutations/v0.2",
+  "totals": {
+    "bases": [
+      "t1-cycler-gate",
+      "t1-portal-oneway",
+      "t1-switch-latch",
+      "t1-switch-toggle",
+      "t1-tokens-lock",
+      "t1-walk-maze",
+      "t2-portal-pair",
+      "t2-switch-push",
+      "t2-unsolvable-nodoor",
+      "t3-cycler-portal-lock",
+      "t3-full-house"
+    ],
+    "by_family": {
+      "change_guard": [
+        "v-29ace70e",
+        "v-57cfb2b4",
+        "v-707a64ad",
+        "v-ab7a7d57",
+        "v-bd2babb4",
+        "v-d2c2b1b9"
+      ],
+      "forbid_action": [
+        "v-7048ee5e",
+        "v-ce732813",
+        "v-eb4c5810"
+      ],
+      "move_portal_exit": [
+        "v-1383db02",
+        "v-a3446614",
+        "v-c52c42ed"
+      ],
+      "reversible_to_irreversible": [
+        "v-379c937f",
+        "v-659c9594",
+        "v-efe43df1"
+      ]
+    },
+    "detection_range": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      2,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      5,
+      8
+    ],
+    "edit_family_disagreements": [],
+    "mutations": 15,
+    "observationally_equivalent": [
+      "v-ab7a7d57"
+    ],
+    "repair_walk_stalls": [
+      "v-eb4c5810"
+    ],
+    "unsolvable": [
+      "v-707a64ad",
+      "v-ce732813",
+      "v-d2c2b1b9"
+    ],
+    "verdict_flips": [
+      "v-57cfb2b4",
+      "v-707a64ad",
+      "v-ce732813",
+      "v-d2c2b1b9"
+    ]
+  }
+}

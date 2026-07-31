@@ -1,0 +1,49 @@
+{
+  "prompt_id": "P5-R4-ruling-path-for-undetermined",
+  "branch": "agent/r4-ruling-path",
+  "base_commit": "e8d95c53683390ecf28260a19d35fe02412fbedb",
+  "branched_from": "agent/r3-release-classifier-defaults, not master -- R4 builds directly on classify() as R3 leaves it, and R3 is not merged yet. Flagged rather than hidden.",
+  "utc": "2026-07-29T18:35:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "release",
+  "what": "needs_human had no exit: a ? row could only be cleared by editing code, so the gate was red forever for any binary figure rendering a per-game label. R4 adds a hash-pinned, append-only human ruling path so the red means 'red until somebody rules' instead of 'red until somebody gives up'.",
+  "api_spend_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "rulings_signed": 0,
+  "why_zero": "A ruling is a signature. monitor/CHARTER.md routes anything needing human identity to needs_human. The agent that built the mechanism is the last party who should sign the rulings that turn its own gate green. Evidence and ready-to-sign lines are in release/RULINGS_PROPOSED.md; release/verify.sh stays RED.",
+  "undetermined_rows": [
+    {
+      "path": "figures/paper/dark/figure6_bill_shape.pdf",
+      "sha256": "ca805a75bbd858d040003484a91be3f8160b1a4771fd8efe8c63cbab50e60fcc",
+      "size": 257076,
+      "proposed_class": "C"
+    },
+    {
+      "path": "figures/paper/light/figure6_bill_shape.pdf",
+      "sha256": "d4397dd8307a2647b4139c19d8720658ccbac6f871ba5c2141988fe8280564dc",
+      "size": 257901,
+      "proposed_class": "C"
+    },
+    {
+      "path": "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/pytest-baseline.txt",
+      "sha256": "764359440f0d4444ab9aa554856460b4cdd4fcc86d6a4cd1d1b7817a1aab455a",
+      "size": 3051,
+      "proposed_class": "C"
+    }
+  ],
+  "evidence_verified_independently": {
+    "pdf": "ids appear as PDF text-drawing operators at plot coordinates: 'BT /F1 6.5 Tf 0 0 Td [ (ar25-0c556536) ] TJ ET' -- axis tick labels",
+    "svg_twin": "the parseable sibling carries the same four ids as '<g id=\"text_41\"><!-- ar25-0c556536 -->' and is classified C by the machine",
+    "png_twin": "class A because rasterising destroys the text; zero ids present as bytes",
+    "pytest_log": "the one dev-pile id is a source constant inside captured pytest output: 'game = \"g50t-5849a774\"'; 45 non-empty lines, none beginning with '{'",
+    "note": "recomputed here rather than taken from the review that reported it"
+  },
+  "files": [
+    "release/enumerate.py",
+    "release/RULINGS.jsonl",
+    "release/RULINGS_PROPOSED.md",
+    "release/tests/test_rulings.py",
+    "release/runs/20260729T1835Z-R4/RUN_STATE.md"
+  ]
+}

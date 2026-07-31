@@ -1,0 +1,18 @@
+{
+ "prompt_id": "V8-judge-trust-audit-item-1-marker-calibration",
+ "branch": "agent/v8-judge-trust-audit",
+ "base_commit": "a7b5d44bd772b9c7ea0ea21ce599c7a97ea79a87",
+ "utc": "2026-07-29T08:20:00Z",
+ "what": "Calibrate every paper's marker with fakes of known score: the oracle (known full marks) and 100+ says-nothing tokens (known zero), through exam/grading/mark.py::mark via exam/grading/selftest.py's own _oracle_setup/_mark helpers.",
+ "papers": ["heldout", "handover", "adaptation", "verdict", "handover_auto"],
+ "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+ "protocol_digest": "3310f827f807856f01dd0490baa659952bef48323a84b5f095c81578ee1ecf6b",
+ "files": [
+  {"path": "probe/calib.py", "role": "oracle + 59 named tokens, per-rubric breakdown"},
+  {"path": "probe/calib.json", "role": "raw output of calib.py"},
+  {"path": "probe/trace.py", "role": "item-level trace of every paid fake"},
+  {"path": "probe/sweep.py", "role": "wider token sweep (ints, floats, strings, dicts, containers), paid tokens only"}
+ ],
+ "no_tracked_file_modified": true,
+ "network": "none"
+}

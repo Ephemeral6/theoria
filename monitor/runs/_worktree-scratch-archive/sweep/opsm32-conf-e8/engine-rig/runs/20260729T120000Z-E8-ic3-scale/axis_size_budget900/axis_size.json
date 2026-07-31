@@ -1,0 +1,149 @@
+{
+  "axis": "size",
+  "axis_letter": "A",
+  "question": "where does IC3 stop, as the state space grows and nothing else about the question changes?",
+  "family": "peg-1d",
+  "ladder": [
+    14
+  ],
+  "budget_seconds": 900.0,
+  "complete": true,
+  "stopped_early": null,
+  "anchor": {
+    "n": 4,
+    "milestone": "M9",
+    "cnf_text": "(!pos1 | pos2) & (pos1 | !pos2)",
+    "coverage": "8/16",
+    "n_clauses": 2,
+    "n_literals": 4,
+    "converged_at_frame": 2,
+    "checked": "ic3bounds.axis_size.check_anchor, which raises AnchorDrift",
+    "trap": "build_graph(goal_states=None) means ALL single-peg finals and gives a different invariant at n=4 (4 clauses, 3/16) -- the ladder passes its goal explicitly for this reason"
+  },
+  "determinism": {
+    "deterministic_half": "Re-derived exactly by a verify pass: verdict, clause and literal counts, frame of convergence, the engine's counters, the rendered CNF, the coverage fraction.",
+    "timing_half": "Presence and ordering only, never equality. A wall clock is a statement about one machine on one afternoon.",
+    "carve_out": "A `timeout` row is flagged machine_dependent: its verdict is a property of this budget on this hardware, and only the verdict and the budget are comparable."
+  },
+  "no_generalisation_failure_mode": "pdr.generalise always terminates and always returns a clause -- worst case the full negated cube it was handed. There is therefore no such failure category in this engine, and none is tabulated. The same information is carried continuously by n_literals, widest_clause and literal_saturation (mean clause width over the variable count; 1.0 means nothing was generalised).",
+  "recheck": {
+    "column": "steps[].recheck",
+    "question": "does an independent checker's recheck of this step's invariant pass?",
+    "checker": "recheck/ -- it imports nothing from engines/ and re-derives the transition relation by grounding the rules over the product of the declared domains",
+    "ruleset_source": "recheck.build_cases, a second transcription of the same geometry, tied to this one only through interop.peg1d",
+    "taxonomy": {
+      "0": "ACCEPT -- the three conditions hold on the emitted predicate",
+      "1": "REJECT -- an independent checker refuses the engine's invariant",
+      "2": "would-not-load -- the rule set or certificate never became an object to check (a peg board of n >= 20 exceeds recheck.ruleset.MAX_STATES = 1000000). This is the honest reading of an uncheckable certificate",
+      "3": "INCONSISTENT -- the conditions hold and the goal is reachable anyway; a defect in the rechecker, escalated rather than rounded to a pass",
+      "4": "rechecker-crashed -- the recheck itself failed, kept separate from REJECT because Python's own status for a crash is 1",
+      "n/a": "n/a \u2014 no invariant -- the rung produced no invariant, so there is nothing for an independent checker to check. Not a pass."
+    },
+    "pass_means": "ACCEPT *and* both state counts agree. ACCEPT alone is not a pass: on peg-6 a one-literal weakening is ACCEPTed while denoting 27 states instead of 30, so a column recording only the verdict would be green about the wrong object.",
+    "cross_check": "the engine counts the invariant over 2^n boolean tuples (engines.ic3_pdr.check.verify); the rechecker counts the emitted predicate over the product of the declared domains. Two enumerations, two encodings, one set of states -- and the row carries both numbers, not their agreement alone.",
+    "no_invariant": "a rung that timed out, hit the level cap or was refused reads 'n/a \u2014 no invariant'. There is no invariant on such a row, so there is nothing to check and nothing to pass.",
+    "when_it_was_computed": "in the parent, after the budgeted child exited. It consumes none of the rung's budget and appears in no timing; the invariant crosses the process boundary as cnf_text and is read back, re-rendered and compared with the recorded string character for character before it is used."
+  },
+  "recheck_findings": [],
+  "vacuity": {
+    "threshold": 0.9,
+    "rows": [
+      {
+        "n": 14,
+        "n_states": 16384,
+        "coverage_ratio": null,
+        "near_vacuous": null,
+        "states_excluded": null,
+        "literal_saturation": null
+      }
+    ],
+    "first_near_vacuous": null,
+    "largest_non_vacuous": null,
+    "read_it_as": "the boundary a reader who wants an ADJUDICABLE invariant should use. `boundary` above is the boundary for a reader who wants any verdict at all, and on this family the two are not the same rung.",
+    "saturation_note": "literal_saturation climbing toward 1.0 is IC3 degrading into state enumeration (see harness.py). It is monotone across this ladder."
+  },
+  "boundary": {
+    "n": 14,
+    "label": "n=14",
+    "n_states": 16384,
+    "verdict": "timeout",
+    "machine_dependent": true,
+    "budget_seconds": 900.0,
+    "largest_answered_n": null,
+    "detail": "killed after 900.0s of wall clock by this harness, on this machine. This is a statement about the budget and the hardware, NOT about the problem: the engine has no timeout of its own, max_levels=64 did not bind, and a longer budget or a faster machine may finish it."
+  },
+  "escalations": [],
+  "steps": [
+    {
+      "spec": {
+        "axis": "size",
+        "label": "n=14",
+        "n": 14,
+        "initial": "01111111111111",
+        "goal_states": [
+          "01000000000000"
+        ],
+        "max_levels": 64
+      },
+      "budget_seconds": 900.0,
+      "deterministic": {
+        "verdict": "timeout",
+        "machine_dependent": true,
+        "escalate": false,
+        "n_states": 16384,
+        "n_satisfying": null,
+        "coverage": null,
+        "coverage_ratio": null,
+        "near_vacuous": null,
+        "n_clauses": null,
+        "n_literals": null,
+        "widest_clause": null,
+        "narrowest_clause": null,
+        "cube_limit": 14,
+        "literal_saturation": null,
+        "converged_at_frame": null,
+        "states_blocked": null,
+        "literals_dropped": null,
+        "clauses_dropped": null,
+        "counterexample_length": null,
+        "cnf_text": null,
+        "checker_conditions": null,
+        "detail": "killed after 900.0s of wall clock by this harness, on this machine. This is a statement about the budget and the hardware, NOT about the problem: the engine has no timeout of its own, max_levels=64 did not bind, and a longer budget or a faster machine may finish it."
+      },
+      "timing": {
+        "wall_seconds": 900.026521,
+        "ic3_seconds": null,
+        "check_seconds": null,
+        "build_seconds": null
+      },
+      "recheck": {
+        "status": "n/a \u2014 no invariant",
+        "exit_code": null,
+        "ruleset": null,
+        "ruleset_source": null,
+        "certificate": null,
+        "engine_n_states": null,
+        "engine_n_satisfying": null,
+        "recheck_n_states": null,
+        "recheck_n_satisfying": null,
+        "counts_agree": null,
+        "agrees_with_recorded_row": null,
+        "conditions": null,
+        "finding": false,
+        "detail": "the rung's verdict is 'timeout', so no invariant exists and an independent checker has nothing to check. This row is not a pass and must not be read as one."
+      }
+    }
+  ],
+  "provenance": {
+    "prompt_id": "E8-ic3-bounds",
+    "branch": "agent/e8-ic3-scale",
+    "base_commit": "df5b4b72a7fd07f775997389d70070ca864defb2",
+    "utc": "2026-07-29T11:29:54Z",
+    "command": "python -m ic3bounds --out runs/20260729T120000Z-E8-ic3-scale/axis_size_budget900 --axis size --timeout 900 --only 14",
+    "host": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.13",
+      "machine": "AMD64"
+    }
+  }
+}

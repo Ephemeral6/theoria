@@ -1,0 +1,75 @@
+
+== red-line negative controls
+................................................................FF.....  [100%]
+================================== FAILURES ===================================
+_ test_the_undetermined_evidence_does_not_invent_a_json_parser_that_never_ran _
+
+repo = WindowsPath('C:/Users/user/AppData/Local/Temp/pytest-of-user/pytest-2857/test_the_undetermined_evidence0/tree')
+
+    def test_the_undetermined_evidence_does_not_invent_a_json_parser_that_never_ran(repo):
+        """THE defect. `enumerate.py:307`, the `?` branch's evidence string.
+    
+        This file never reaches a JSON parser: `json_shaped` calls it structured
+        because its bytes will not decode as text at all, and `read_json_records`
+        then fails on the same `open(encoding="utf-8-sig")`. The row that came out
+        said "could not be parsed as JSON", which sends a reader hunting for a
+        malformed record in a file that has no records in it and no malformed
+        anything -- only two bytes from the wrong codepage.
+        """
+        _add(repo, "release/runs/pytest-baseline.txt", _mojibake_baseline(_dev_id()))
+    
+        row = {r["path"]: r for r in enum.build(enum._tracked())}[
+            "release/runs/pytest-baseline.txt"]
+    
+>       assert row["class"] == "?", row
+E       AssertionError: {'class': 'C', 'class_name': 'derived-statistics', 'evidence': 'names ARC game(s) ar25-0c556536 in source or prose; ids used as constants, guards or narrative carry no environment payload', 'path': 'release/runs/pytest-baseline.txt', ...}
+E       assert 'C' == '?'
+E         
+E         - ?
+E         + C
+
+tests\test_unreadable_is_not_clean.py:676: AssertionError
+___ test_a_decode_failure_and_a_parse_failure_do_not_get_the_same_sentence ____
+
+repo = WindowsPath('C:/Users/user/AppData/Local/Temp/pytest-of-user/pytest-2857/test_a_decode_failure_and_a_pa0/tree')
+
+    def test_a_decode_failure_and_a_parse_failure_do_not_get_the_same_sentence(repo):
+        """The two ways a structured file goes unread, in one tree, side by side.
+    
+        Under the flat phrase these two rows were **character-for-character
+        identical** -- same class, same verdict, same evidence -- for a file with a
+        bad byte and a file with a bad record, which are different problems with
+        different remedies. One is a re-encode, the other is a broken writer.
+    
+        The third file is the positive control: a stream that parses must still be
+        read and ruled on, or the reasons above are just two spellings of a gate that
+        reddens at everything.
+        """
+        dev = _dev_id()
+        _add(repo, "release/runs/pytest-baseline.txt", _mojibake_baseline(dev))
+        _add(repo, "arm/session.log",
+             json.dumps({"game_id": dev, "frame": [[1]]}) + "\n"
+             + json.dumps({"game_id": dev, "frame": [[2]]}) + "\n"
+             + '{"game_id": "' + dev + '", "frame": [[3]],,,}\n')
+        _add(repo, "arm/good.jsonl",
+             json.dumps({"game_id": dev, "frame": [[4]]}) + "\n"
+             + json.dumps({"game_id": dev, "frame": [[5]]}) + "\n")
+    
+        rows = {r["path"]: r for r in enum.build(enum._tracked())}
+        undecodable = rows["release/runs/pytest-baseline.txt"]
+        unparseable = rows["arm/session.log"]
+    
+>       assert undecodable["class"] == unparseable["class"] == "?", (undecodable, unparseable)
+E       AssertionError: ({'class': 'C', 'class_name': 'derived-statistics', 'evidence': 'names ARC game(s) ar25-0c556536 in source or prose; i...ine 1 column 45 (char 44), so whether it carries environment payload is undetermined', 'path': 'arm/session.log', ...})
+E       assert 'C' == '?'
+E         
+E         - ?
+E         + C
+
+tests\test_unreadable_is_not_clean.py:711: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_unreadable_is_not_clean.py::test_the_undetermined_evidence_does_not_invent_a_json_parser_that_never_ran
+FAILED tests/test_unreadable_is_not_clean.py::test_a_decode_failure_and_a_parse_failure_do_not_get_the_same_sentence
+-- FAILED (exit 1)
+
+== red lines clear, and every tracked file was actually read (--mode generate)

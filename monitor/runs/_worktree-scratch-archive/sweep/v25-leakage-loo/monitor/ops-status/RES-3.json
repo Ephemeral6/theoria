@@ -1,0 +1,1 @@
+{"id": "RES-3", "utc": "2026-07-29T20:32:34Z", "cycle": 72, "state": "working", "note": "cycle 72 (restored monotonicity: a merge rolled this file back to cycle 50; last real was 71). Resuming V2-V25 in .worktrees/v25-leakage-loo: leakage.py modified + test_leakage_multiplicity.py uncommitted."}

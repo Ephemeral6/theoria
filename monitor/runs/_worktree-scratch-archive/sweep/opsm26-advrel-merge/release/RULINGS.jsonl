@@ -1,0 +1,31 @@
+# release/RULINGS.jsonl -- human rulings on files the classifier abstained from.
+#
+# APPEND-ONLY. One JSON object per line. Comment lines (#) and blank lines are
+# skipped; every other line must carry all six fields:
+#
+#   {"path": "...", "sha256": "...", "class": "A|B|C",
+#    "ruled_by": "<a human>", "utc": "...", "reason": "..."}
+#
+# Three rules the loader enforces, each of which is the point:
+#
+#   1. A ruling applies ONLY to a row the classifier left as `?`. It settles an
+#      abstention; it is not an override. A signed override beside a classifier
+#      would make the classifier's answer optional, which is worse than the
+#      permissive defaults R3 removed -- because it would look deliberate.
+#      Class `D` is therefore unreachable from here: `D` is decided.
+#   2. The ruling is keyed on the CONTENT HASH, not the path. A ruling says
+#      "I looked at these bytes." Keyed on the path it would silently carry to
+#      whatever the file becomes next, and a person's signature would end up
+#      attached to bytes they never saw.
+#   3. A ruling whose path matches and whose hash does not is STALE and is
+#      reported, not ignored. "Nobody has ruled" and "somebody ruled on the
+#      previous version" are different situations.
+#
+# This file is deliberately EMPTY of rulings. Three files currently sit at `?`
+# and the evidence for each is worked out in RULINGS_PROPOSED.md -- but a ruling
+# is a signature, and monitor/CHARTER.md routes anything needing human identity
+# to needs_human rather than to the agent that built the mechanism. The gate
+# stays red until somebody signs. That is the whole design working, not a gap.
+{"path": "figures/paper/dark/figure6_bill_shape.pdf", "sha256": "6d258de8a0b40738c534af438a183ac54f1cd2925575344a832107812b87e01f", "class": "B", "ruled_by": "OPSM26-ADVERSARIAL-PROBE-NOT-A-SIGNATURE", "utc": "2026-07-30T00:00:00Z", "reason": "PROBE ONLY, MUST BE REVERTED. Deliberately ruled B (needs-written-permission, WITHHELD) which is STRICTER than master's class C. This is not a licence opinion; it exists to test whether clearing the ? rows makes the gate green."}
+{"path": "figures/paper/light/figure6_bill_shape.pdf", "sha256": "e33eb18ff006a6742b5a4b1b37399e9a5fafc6ba6de471a23d3efeb6ba899205", "class": "B", "ruled_by": "OPSM26-ADVERSARIAL-PROBE-NOT-A-SIGNATURE", "utc": "2026-07-30T00:00:00Z", "reason": "PROBE ONLY, MUST BE REVERTED. Stricter than master's class C. Not a licence opinion."}
+{"path": "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/pytest-baseline.txt", "sha256": "764359440f0d4444ab9aa554856460b4cdd4fcc86d6a4cd1d1b7817a1aab455a", "class": "B", "ruled_by": "OPSM26-ADVERSARIAL-PROBE-NOT-A-SIGNATURE", "utc": "2026-07-30T00:00:00Z", "reason": "PROBE ONLY, MUST BE REVERTED. Stricter than master's class C. Not a licence opinion."}
