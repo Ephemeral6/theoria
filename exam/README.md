@@ -111,7 +111,7 @@ are mixed across boards so board identity carries no signal.
 * **(ii) large-space unsolvable** — **naive** enumeration is out of reach and
   the bound is computed rather than asserted (2⁶⁰ to 2¹²⁰ configurations). Not
   "no exhaustive method is feasible here": every shipped item of this class is
-  settled by an exhaustive computation over at most 600 nodes in at most 5 ms, so
+  settled by an exhaustive computation over at most 600 nodes, so
   the item is scored on **selecting a method that is not naive enumeration**, and
   the design document's "only invariant reasoning can answer" is withdrawn.
   D-EX-028.

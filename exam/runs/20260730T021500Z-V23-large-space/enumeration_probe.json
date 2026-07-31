@@ -1,145 +1,23 @@
 {
   "deterministic": {
     "cap": 200000,
+    "coverage": {
+      "contrast_class": "small_unsolvable",
+      "contrast_rows": 5,
+      "criterion_b_failures": [],
+      "criterion_b_records_by_class": {
+        "large_unsolvable": 4,
+        "solvable_hard": 3
+      },
+      "criterion_b_records_expected": 7,
+      "criterion_b_records_holding": 7,
+      "criterion_b_records_measured": 7,
+      "criterion_b_records_probed": 7,
+      "source": "exam.papers.verdict.build(), filtered on truth['state_space']['naive_enumeration_feasible'] is False -- the same filter and count as test_class_ii_levels_actually_truncate_the_enumerator",
+      "superseded_coverage": "four of seven (ii1-ii4 only); the three solvable_hard records iii6/iii7/iii8 were absent -- round five F5-14",
+      "unmeasured": []
+    },
     "items": [
-      {
-        "builder": "_small_space",
-        "builder_enumerates": true,
-        "cap": 200000,
-        "class": "small_unsolvable",
-        "commands": [
-          "UP",
-          "LEFT",
-          "RIGHT"
-        ],
-        "dippable_switches": 0,
-        "hazards": [],
-        "hit_cap": false,
-        "item": "i1",
-        "level_id": "atrium",
-        "positional_states": 24,
-        "solution_found": false,
-        "solution_length": null,
-        "states_visited": 24,
-        "step_limit": null,
-        "subset_lower_bound_2_pow_m": 1,
-        "subset_lower_bound_m": 0,
-        "switches": 0,
-        "truncated": false,
-        "variant_id": "a2var-i1-atrium-nodown"
-      },
-      {
-        "builder": "_small_space",
-        "builder_enumerates": true,
-        "cap": 200000,
-        "class": "small_unsolvable",
-        "commands": [
-          "DOWN",
-          "LEFT",
-          "RIGHT"
-        ],
-        "dippable_switches": 0,
-        "hazards": [],
-        "hit_cap": false,
-        "item": "i2",
-        "level_id": "updraft",
-        "positional_states": 7,
-        "solution_found": false,
-        "solution_length": null,
-        "states_visited": 7,
-        "step_limit": null,
-        "subset_lower_bound_2_pow_m": 1,
-        "subset_lower_bound_m": 0,
-        "switches": 0,
-        "truncated": false,
-        "variant_id": "a2var-i2-updraft-noup"
-      },
-      {
-        "builder": "_small_space",
-        "builder_enumerates": true,
-        "cap": 200000,
-        "class": "small_unsolvable",
-        "commands": [
-          "UP",
-          "DOWN",
-          "LEFT",
-          "RIGHT"
-        ],
-        "dippable_switches": 0,
-        "hazards": [
-          [
-            3,
-            5
-          ]
-        ],
-        "hit_cap": false,
-        "item": "i3",
-        "level_id": "cistern",
-        "positional_states": 20,
-        "solution_found": false,
-        "solution_length": null,
-        "states_visited": 20,
-        "step_limit": null,
-        "subset_lower_bound_2_pow_m": 1,
-        "subset_lower_bound_m": 0,
-        "switches": 0,
-        "truncated": false,
-        "variant_id": "a2var-i3-cistern-cut"
-      },
-      {
-        "builder": "_small_space",
-        "builder_enumerates": true,
-        "cap": 200000,
-        "class": "small_unsolvable",
-        "commands": [
-          "UP",
-          "DOWN",
-          "LEFT",
-          "RIGHT"
-        ],
-        "dippable_switches": 0,
-        "hazards": [],
-        "hit_cap": false,
-        "item": "i4",
-        "level_id": "atrium",
-        "positional_states": 55,
-        "solution_found": false,
-        "solution_length": null,
-        "states_visited": 31,
-        "step_limit": 7,
-        "subset_lower_bound_2_pow_m": 1,
-        "subset_lower_bound_m": 0,
-        "switches": 0,
-        "truncated": false,
-        "variant_id": "a2var-i4-atrium-budget"
-      },
-      {
-        "builder": "_small_space",
-        "builder_enumerates": true,
-        "cap": 200000,
-        "class": "small_unsolvable",
-        "commands": [
-          "UP",
-          "DOWN",
-          "LEFT",
-          "RIGHT"
-        ],
-        "dippable_switches": 0,
-        "hazards": [],
-        "hit_cap": false,
-        "item": "i5",
-        "level_id": "quarry",
-        "positional_states": 14,
-        "solution_found": false,
-        "solution_length": null,
-        "states_visited": 14,
-        "step_limit": null,
-        "subset_lower_bound_2_pow_m": 1,
-        "subset_lower_bound_m": 0,
-        "switches": 0,
-        "truncated": false,
-        "variant_id": "a2var-i5-quarry-swap"
-      },
       {
         "builder": "_large_space",
         "builder_enumerates": false,
@@ -151,12 +29,31 @@
           "LEFT",
           "RIGHT"
         ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
         "dippable_switches": 120,
         "hazards": [],
         "hit_cap": true,
         "item": "ii1",
+        "item_id": "vq-721d09813c",
         "level_id": "gantry",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
         "positional_states": 180,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1329227995784915872903807060280344576,
+          "m": 120,
+          "naive_enumeration_feasible": false,
+          "positional_states": 180,
+          "truncated": null
+        },
         "solution_found": false,
         "solution_length": null,
         "states_visited": 200000,
@@ -165,6 +62,7 @@
         "subset_lower_bound_m": 120,
         "switches": 120,
         "truncated": true,
+        "unmeasured_reason": null,
         "variant_id": "a2var-ii1-gantry-sealed"
       },
       {
@@ -178,6 +76,13 @@
           "LEFT",
           "RIGHT"
         ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
         "dippable_switches": 120,
         "hazards": [
           [
@@ -187,8 +92,20 @@
         ],
         "hit_cap": true,
         "item": "ii2",
+        "item_id": "vq-6150a6eeb7",
         "level_id": "lattice",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
         "positional_states": 180,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1329227995784915872903807060280344576,
+          "m": 120,
+          "naive_enumeration_feasible": false,
+          "positional_states": 180,
+          "truncated": null
+        },
         "solution_found": false,
         "solution_length": null,
         "states_visited": 200000,
@@ -197,6 +114,7 @@
         "subset_lower_bound_m": 120,
         "switches": 120,
         "truncated": true,
+        "unmeasured_reason": null,
         "variant_id": "a2var-ii2-lattice-bridge"
       },
       {
@@ -210,12 +128,31 @@
           "LEFT",
           "RIGHT"
         ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
         "dippable_switches": 400,
         "hazards": [],
         "hit_cap": true,
         "item": "ii3",
+        "item_id": "vq-ee54166153",
         "level_id": "spindle",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
         "positional_states": 600,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1152921504606846976,
+          "m": 60,
+          "naive_enumeration_feasible": false,
+          "positional_states": 600,
+          "truncated": null
+        },
         "solution_found": false,
         "solution_length": null,
         "states_visited": 200000,
@@ -224,6 +161,7 @@
         "subset_lower_bound_m": 60,
         "switches": 400,
         "truncated": true,
+        "unmeasured_reason": null,
         "variant_id": "a2var-ii3-spindle-budget"
       },
       {
@@ -236,12 +174,31 @@
           "DOWN",
           "RIGHT"
         ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
         "dippable_switches": 118,
         "hazards": [],
         "hit_cap": true,
         "item": "ii4",
+        "item_id": "vq-2986ed8ffc",
         "level_id": "orchard",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
         "positional_states": 177,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 332306998946228968225951765070086144,
+          "m": 118,
+          "naive_enumeration_feasible": false,
+          "positional_states": 177,
+          "truncated": null
+        },
         "solution_found": false,
         "solution_length": null,
         "states_visited": 200000,
@@ -250,13 +207,407 @@
         "subset_lower_bound_m": 118,
         "switches": 120,
         "truncated": true,
+        "unmeasured_reason": null,
         "variant_id": "a2var-ii4-orchard-noleft"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "solvable_hard",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
+        "dippable_switches": 120,
+        "hazards": [
+          [
+            6,
+            10
+          ],
+          [
+            6,
+            20
+          ],
+          [
+            6,
+            30
+          ]
+        ],
+        "hit_cap": true,
+        "item": "iii6",
+        "item_id": "vq-0ffc3cd33f",
+        "level_id": "lattice",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 298,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1329227995784915872903807060280344576,
+          "m": 120,
+          "naive_enumeration_feasible": false,
+          "positional_states": 298,
+          "truncated": null
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+        "subset_lower_bound_m": 120,
+        "switches": 120,
+        "truncated": true,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-iii6-lattice-safe"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "solvable_hard",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
+        "dippable_switches": 120,
+        "hazards": [],
+        "hit_cap": true,
+        "item": "iii7",
+        "item_id": "vq-6bab2f307c",
+        "level_id": "lattice",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 301,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1329227995784915872903807060280344576,
+          "m": 120,
+          "naive_enumeration_feasible": false,
+          "positional_states": 301,
+          "truncated": null
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": 456,
+        "subset_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+        "subset_lower_bound_m": 120,
+        "switches": 120,
+        "truncated": true,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-iii7-lattice-roomy"
+      },
+      {
+        "builder": "_large_space",
+        "builder_enumerates": false,
+        "cap": 200000,
+        "class": "solvable_hard",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": true,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": true,
+          "truncated": true
+        },
+        "criterion_b_holds": true,
+        "dippable_switches": 120,
+        "hazards": [],
+        "hit_cap": true,
+        "item": "iii8",
+        "item_id": "vq-8c4f14b152",
+        "level_id": "lattice",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 301,
+        "shipped_record": {
+          "enumerated": null,
+          "enumeration_attempted": false,
+          "lower_bound": 1329227995784915872903807060280344576,
+          "m": 120,
+          "naive_enumeration_feasible": false,
+          "positional_states": 301,
+          "truncated": null
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 200000,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1329227995784915872903807060280344576,
+        "subset_lower_bound_m": 120,
+        "switches": 120,
+        "truncated": true,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-iii8-lattice-swap"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": false,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": false,
+          "truncated": false
+        },
+        "criterion_b_holds": null,
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i1",
+        "item_id": "vq-17af763cab",
+        "level_id": "atrium",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 24,
+        "shipped_record": {
+          "enumerated": 24,
+          "enumeration_attempted": true,
+          "lower_bound": 24,
+          "m": null,
+          "naive_enumeration_feasible": true,
+          "positional_states": 24,
+          "truncated": false
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 24,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-i1-atrium-nodown"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": false,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": false,
+          "truncated": false
+        },
+        "criterion_b_holds": null,
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i2",
+        "item_id": "vq-1015eb0bb1",
+        "level_id": "updraft",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 7,
+        "shipped_record": {
+          "enumerated": 7,
+          "enumeration_attempted": true,
+          "lower_bound": 7,
+          "m": null,
+          "naive_enumeration_feasible": true,
+          "positional_states": 7,
+          "truncated": false
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 7,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-i2-updraft-noup"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": false,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": false,
+          "truncated": false
+        },
+        "criterion_b_holds": null,
+        "dippable_switches": 0,
+        "hazards": [
+          [
+            3,
+            5
+          ]
+        ],
+        "hit_cap": false,
+        "item": "i3",
+        "item_id": "vq-82f568ca11",
+        "level_id": "cistern",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 20,
+        "shipped_record": {
+          "enumerated": 20,
+          "enumeration_attempted": true,
+          "lower_bound": 20,
+          "m": null,
+          "naive_enumeration_feasible": true,
+          "positional_states": 20,
+          "truncated": false
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 20,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-i3-cistern-cut"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": false,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": false,
+          "truncated": false
+        },
+        "criterion_b_holds": null,
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i4",
+        "item_id": "vq-8ff1c690ad",
+        "level_id": "atrium",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 55,
+        "shipped_record": {
+          "enumerated": 31,
+          "enumeration_attempted": true,
+          "lower_bound": 31,
+          "m": null,
+          "naive_enumeration_feasible": true,
+          "positional_states": 55,
+          "truncated": false
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 31,
+        "step_limit": 7,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-i4-atrium-budget"
+      },
+      {
+        "builder": "_small_space",
+        "builder_enumerates": true,
+        "cap": 200000,
+        "class": "small_unsolvable",
+        "commands": [
+          "UP",
+          "DOWN",
+          "LEFT",
+          "RIGHT"
+        ],
+        "criterion_b_applies": false,
+        "criterion_b_conjuncts": {
+          "no_solution_inside_cap": true,
+          "states_reached_cap": false,
+          "truncated": false
+        },
+        "criterion_b_holds": null,
+        "dippable_switches": 0,
+        "hazards": [],
+        "hit_cap": false,
+        "item": "i5",
+        "item_id": "vq-9725fbebf0",
+        "level_id": "quarry",
+        "measured": true,
+        "measurement_bound": "rubrics_verdict.MAX_ENUMERATION",
+        "positional_states": 14,
+        "shipped_record": {
+          "enumerated": 14,
+          "enumeration_attempted": true,
+          "lower_bound": 14,
+          "m": null,
+          "naive_enumeration_feasible": true,
+          "positional_states": 14,
+          "truncated": false
+        },
+        "solution_found": false,
+        "solution_length": null,
+        "states_visited": 14,
+        "step_limit": null,
+        "subset_lower_bound_2_pow_m": 1,
+        "subset_lower_bound_m": 0,
+        "switches": 0,
+        "truncated": false,
+        "unmeasured_reason": null,
+        "variant_id": "a2var-i5-quarry-swap"
       }
     ],
     "large_space_threshold": 1000000000000,
-    "note": "`_large_space()` (verdict.py:767) writes exhaustive_feasible=False, enumerated=null, truncated=false onto every class (ii) record without calling enumerate_states. This file is that call, made at the shipped cap on the shipped levels. `truncated` here is measured; in the shipped record it is a constant."
+    "note": "`exam/papers/verdict.py`'s `_large_space()` writes naive_enumeration_feasible=false, enumeration_attempted=false, enumerated=null and truncated=null onto every record it builds without calling enumerate_states. This file is that call, made at the shipped cap on the shipped levels, so `truncated` here is measured where in the shipped record it is a constant. Scope: all seven records `_large_space` writes, not the four class (ii) ones. `_large_space` is also called by the three `solvable_hard` lattice items iii6/iii7/iii8, and until this widening they had no criterion-(b) artefact -- their evidence was `test_class_ii_levels_actually_truncate_the_enumerator` alone, which is why CRITERION.md's provenance map carried the annotation 'four of the seven records it speaks for' (round five F5-14). The rows are no longer a literal list of reconstructed levels: `build()` is called and its items are filtered on `state_space.naive_enumeration_feasible is False`, so the levels probed are the shipped `truth.level_blob`s and the row set cannot fall behind the builder. Every enumeration is capped at `rubrics_verdict.MAX_ENUMERATION`; a record that could not be measured would appear with `measured: false` and an `unmeasured_reason` rather than be dropped, and `deterministic.status` states the outcome in one line. Anchored by symbol: this note first read `verdict.py:767`, which was `def _large_space` exactly at base commit 415556f8 and is 130 lines off by 824b9fb4, and it named `exhaustive_feasible=False` and `truncated=false` -- the two fields D-EX-028 renamed and nulled in this same run. So for several commits this artefact contradicted the rename its own run shipped, while being row 1 of CRITERION.md's provenance map.",
+    "status": "OK: criterion (b) measured and holding on all 7 records that claim it"
   },
-  "deterministic_sha256": "f70fdb809bd0ba0d48e853c55a4b2942a7361f6d3c202a19a3c334637ca1816f",
+  "deterministic_sha256": "4abe483e6b782639609890ec898c8a30804a5cef7846d01f5e91ef450a301adf",
   "timings_nondeterministic": {
     "i1": {
       "enumerate_states_seconds": 0.0,
@@ -284,24 +635,39 @@
       "subset_lower_bound_seconds": 0.0
     },
     "ii1": {
-      "enumerate_states_seconds": 0.809,
+      "enumerate_states_seconds": 0.895,
       "positional_states_seconds": 0.0,
       "subset_lower_bound_seconds": 0.002
     },
     "ii2": {
-      "enumerate_states_seconds": 0.848,
+      "enumerate_states_seconds": 0.779,
       "positional_states_seconds": 0.0,
       "subset_lower_bound_seconds": 0.002
     },
     "ii3": {
-      "enumerate_states_seconds": 0.521,
+      "enumerate_states_seconds": 0.515,
       "positional_states_seconds": 0.001,
       "subset_lower_bound_seconds": 0.005
     },
     "ii4": {
-      "enumerate_states_seconds": 0.832,
+      "enumerate_states_seconds": 0.933,
       "positional_states_seconds": 0.0,
-      "subset_lower_bound_seconds": 0.001
+      "subset_lower_bound_seconds": 0.002
+    },
+    "iii6": {
+      "enumerate_states_seconds": 1.019,
+      "positional_states_seconds": 0.001,
+      "subset_lower_bound_seconds": 0.004
+    },
+    "iii7": {
+      "enumerate_states_seconds": 0.975,
+      "positional_states_seconds": 0.001,
+      "subset_lower_bound_seconds": 0.003
+    },
+    "iii8": {
+      "enumerate_states_seconds": 1.035,
+      "positional_states_seconds": 0.001,
+      "subset_lower_bound_seconds": 0.003
     }
   }
 }

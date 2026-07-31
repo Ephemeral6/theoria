@@ -982,7 +982,7 @@ it would be false.
 
 The field asserted that no exhaustive method is feasible on the board. Every
 shipped class (ii) item is settled by an exhaustive computation over at most 600
-nodes in at most 5 ms, against bounds of 1.15e18 to 1.33e36
+nodes, against bounds of 1.15e18 to 1.33e36
 (`crux_quotient_settles.json`): ii1 by components of `relaxed_edges` on 300
 nodes; ii2 by the same pass with the cut cell deleted; ii3 by a relaxed distance
 of 199 against a budget of 150; ii4 by observing the surviving column deltas are
@@ -1116,8 +1116,10 @@ compiler exists anywhere in the repo; `zero_space` re-checks only against the
 sample it was handed; `cegis_miner` and `mdl_segmenter` mine candidates, never
 verdicts. **No shipped engine can find a certificate for a class (ii) level at
 shipped size.** What does walk the path is `rubrics_verdict.check_certificate`,
-purpose-built for this world, single-digit milliseconds per item ("<=3.1 ms"
-as first written restated one observation as a bound; see D-EX-029), with zero connection to
+purpose-built for this world, single-digit milliseconds per item ("<=3.1 ms" was
+withdrawn as one observation restated as a bound, then reinstated as a bound over
+the four committed rows of `probe_answer_key.json`; see D-EX-029 as superseded on
+that point by D-EX-030), with zero connection to
 `engine-rig` -- so "engines propose, the LLM adjudicates" has no engine on this
 path today. Not fixed: it is an engine-rig change, and requested in
 `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md` rather than
@@ -1204,6 +1206,10 @@ still published "past the cap of ...", a false sentence about the arithmetic
 printed beside it. `_large_space` now asserts the ordering. Mutation-tested:
 disabling the assertion DID NOT RAISE.
 
+*That sentence is wrong about the mechanism, and the code is the right half: the
+gate asserts a property of each bound (`lower_bound <= MAX_ENUMERATION` raises),
+not the ordering of the two constants. Superseded by D-EX-030.*
+
 ### D-EX-028 rejected a bare threshold and then shipped one as its only gate
 
 This is the substantive amendment. D-EX-028 rejects "a reachable-state count over
@@ -1255,6 +1261,102 @@ That restates one wall-clock observation as a bound, and a timing is not a bound
 reruns give 3.06 ms and 3.66 ms, and those are prose observations with no
 committed artefact either. The defensible claim is the order of magnitude. Every
 timing in this ticket is machine-dependent and nothing gates on one.
+
+*This subsection is superseded on the count of samples by D-EX-030 below: there
+are four committed measurements, not one observation.*
+
+---
+
+## D-EX-030 — two sentences this record still held after the documents had moved
+
+V6-V23, fifth adversarial round; findings F5-1, F5-2 and F5-10 in
+`runs/20260730T021500Z-V23-large-space/adversarial/round5-findings.md`. Both
+corrections below supersede published text in **D-EX-029**, which is left standing
+and corrected here rather than rewritten.
+
+### `_large_space` does not assert the constants' ordering — supersedes D-EX-029
+
+D-EX-029, on the refusal message that was true only by a coincidence of two
+constants, closes: "`_large_space` now asserts the ordering." It does not, and the
+code is right where this record was wrong. The gate that entry added asserts a
+property of each *bound*, per item — `lower_bound <= MAX_ENUMERATION` raises — and
+its own comment says why that was chosen over an ordering check: the ordering is
+not stated anywhere as a requirement, and either constant can be moved by someone
+who never reads the function. The effect is the same (raise the cap past the
+threshold and the affected item is refused instead of publishing a false "past the
+cap of ...") but the mechanism is not, and a summary of a guard must not claim more
+than the guard.
+
+The same sentence shipped inside `verdict.py`'s own `LARGE_SPACE_THRESHOLD`
+comment, 800 lines above the guard it mischaracterised, for two rounds after
+`CRITERION.md` withdrew it — alongside the withdrawn "any threshold in
+`(256, 1.15e18]` … robust across ~16 orders" (F5-1). Both are now gone from the
+source, and that comment states what the audit set does *not* establish. The
+lesson, recorded because this ticket produced it three times: a correction written
+into a run document is not landed until it is landed in every file that carries the
+sentence, and the file that carries it most often is the code.
+
+### "<=3.1 ms per item" is a bound over four committed samples — supersedes D-EX-029
+
+D-EX-029's "Correction to this entry's own neighbourhood" withdrew that figure on
+the ground that it "restates one wall-clock observation as a bound". That is wrong
+on the count. `probe_answer_key.json` records
+`check_certificate_seconds` for four items — `0.00306`, `1e-05`, `0.00075`,
+`0.00149`, as the artefact stores them — maximum 3.06 ms, so 3.1 ms bounds all
+four. Four committed
+measurements in an artefact, not one number in prose. `CRITERION.md` restored the
+figure on that basis and this record was left holding the withdrawal, so for one
+commit the run document and the decision record disagreed about a single number —
+the exact defect D-EX-029 records against `~6e36`, in the opposite direction.
+
+What is **not** claimed: that 3.1 ms is machine-independent. It is a bound over the
+four committed samples on the machine that produced them. A prose-only rerun of the
+same check gave 3.66 ms, and the repo's evidence-precedence rule (artefact over
+prose) ranks evidence *for* a claim — it is not a licence to discard a
+counter-observation *against* one, which is a different move and is noted as such.
+So both halves stand: 3.1 ms is sourced and recheckable as a bound over
+`probe_answer_key.json`'s four rows, and "single-digit milliseconds" is what
+survives a change of machine. Every timing in this ticket is machine-dependent and
+no gate reads one.
+
+D-EX-028's closing survey and D-EX-029's correction subsection are superseded on
+this point by this entry.
+
+### Correction to D-EX-030's own second subsection: the reruns exceed 3.1 ms
+
+The subsection above was written before the reruns existed, and it is now wrong in
+the one direction that matters — it says "3.1 ms bounds all four" and then treats
+3.1 ms as the sourced, recheckable figure, with "single-digit milliseconds" as the
+weaker fallback for a change of machine. The reruns invert that. Four fresh
+processes replicating `probe_answer_key.py`'s measurement order gave ii3 at
+**0.00348, 0.00360, 0.00369 and 0.00364 s**, and a regeneration of
+`probe_answer_key.json` in the V23 worktree recorded **0.00313**. Every one of the
+five exceeds 3.1 ms, on the same machine — not a different one. The earlier
+prose-only 3.66 ms was not an outlier; it was the first sight of the real spread.
+
+So the honest statement is the fallback, and there is no longer a stronger one
+behind it. **What survives is "single-digit milliseconds".** 3.1 ms remains a true
+maximum over the four rows `probe_answer_key.json` happens to have committed, and
+that is all it is: a property of one recorded run, not a bound on the check. It
+must not be quoted as a bound, which is what the subsection above does.
+
+Two things worth keeping from how this went wrong. First, the subsection was
+written to correct a withdrawal that was itself wrong on the count — D-EX-029 had
+called four committed samples "one wall-clock observation" — and in correcting the
+count it inherited the claim, restating a maximum over four rows as a bound without
+asking whether the check reproduces near it. Being right about the arithmetic is not
+being right about the claim. Second, the evidence-precedence note in that subsection
+is exactly the reasoning that let 3.1 ms stand: artefact-over-prose was invoked to
+rank the four committed rows above a prose 3.66 ms, and the rule really does not
+license discarding a counter-observation — the subsection says so and then does it
+anyway, by keeping the figure the counter-observation refutes. Writing down the
+right rule is not applying it.
+
+`≤3.1 ms` was struck from all four files that carried it in the same cycle as this
+entry: `exam/papers/verdict.py`'s `naive_enumeration_feasible` comment, two places
+in this file, `exam/STATUS.md` entry 27, and the V23 run's `CRITERION.md` headline.
+The 600-node figure carries that argument on its own and is structural. No gate in
+this territory reads a timing, and none should be added.
 
 ## D-EX-031 — a tracked generated artefact may not record where its builder stood
 

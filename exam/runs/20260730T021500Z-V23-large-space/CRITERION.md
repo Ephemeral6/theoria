@@ -13,7 +13,7 @@ assertion nobody can check — so it is replaced by the full map:
 
 | section | artefact |
 |---|---|
-| the ruling, criterion (b) | `enumeration_probe.json` |
+| the ruling, criterion (b) | `enumeration_probe.json` — **all seven records it speaks for, and holding on all seven.** F5-14 said four of seven: `deterministic.items` held nine rows, i1-i5 and ii1-ii4, and the three `solvable_hard` records that also carry `naive_enumeration_feasible: False` were absent, their (b) evidence being the test alone. The probe was widened rather than the map annotated — it now calls `V.build()` and filters on `state_space.naive_enumeration_feasible is False`, so the row set cannot fall behind the builder, and iii6 / iii7 / iii8 are measured: all three truncate at `MAX_ENUMERATION` with no solution found inside the cap. That last conjunct is the load-bearing one for them, because they *are* solvable — a plan found inside the cap would have meant the naive method works there and the record's refusal was unfounded. `coverage.superseded_coverage` records what this row used to say. **F5-13 is untouched and still stands**: the shipped record itself still carries `enumeration_attempted: False` / `truncated: None`, so "both conditions are recorded as measurements" remains false *of the record*, even though (b) is now measured in two independent places |
 | the crux table (what class (ii) may not claim) | `crux_quotient_settles.json` |
 | the duplicate-switch overstatement | `repro_duplicate_switch.json` |
 | work item 2, the growth law | `growth_curve.json` |
@@ -32,11 +32,19 @@ each is labelled where it occurs rather than blended into the measured ones:
 *extrapolations* (the corridor-60 edge count, and 2^m at k=60 — carried from a
 measured factor, sound only as far as the closed form is exact), and *wall-clock
 observations recorded in `RUN_STATE.md` prose with no committed artefact* (the
-enumeration reruns, the certificate-checking times, the 758-of-1024 latch-mask
-count). Under this repo's own precedence rule — JSON artefacts beat prose
+enumeration reruns, the certificate-checking **reruns**, the 758-of-1024
+latch-mask count, and the reviewer's 1,034-rung sweep over interior `start_col`).
+Under this repo's own precedence rule — JSON artefacts beat prose
 reports — that second kind is the weakest evidence in the document, and none of
 it is gated on. It is named rather than removed because the reruns' value is the
 *spread* they establish, not any single figure.
+
+Two round-five corrections to that list. It said "the certificate-checking
+times", which was wrong in a way round four then over-corrected in the opposite
+direction: the four committed `check_certificate_seconds` values *are* in
+`probe_answer_key.json`, exactly as the map says, and it is only the **reruns** of
+that measurement that are prose-only. And the 1,034-rung sweep is new to this
+list — see the round-five paragraph below, and work item 4.
 
 **All timings are machine-dependent.** No claim here rests on one, and
 `enumeration_sweep.json` in particular does not reproduce rung-for-rung by
@@ -49,10 +57,26 @@ at all — they come from `exam/tests/test_verdict.py`, so the evidence is a pas
 assertion rather than an emitted artefact, which is a legitimate kind of evidence
 but a different one, and `0.01 s` is asserted nowhere even there (it appears only
 in a test docstring). The reviewer's own 1,034 rungs likewise had no artefact and
-appeared in no exception list. Both are now rows. The lesson is not that the map
+appeared in no exception list. Work item 4's numbers are now row 9 of the map. The
+lesson is not that the map
 was sloppy — it is that **a completeness claim over a document that is still being
 edited is a claim with a short shelf life**, and the only durable form of it is
 the per-number question: which committed file emits this, and can I open it?
+
+**Round five: that paragraph said "Both are now rows", and one of the two was
+not** — which makes a round-four correction to a completeness claim itself
+incomplete, in the paragraph that concludes such claims have a short shelf life.
+At the commit round four's correction shipped in, `grep -n "1,034"` over this
+document returned two lines: this paragraph, and the sweep
+paragraph in work item 4. The map has ten rows and none of them is the sweep, and
+it was in no exception list either. It cannot become a map row, because nothing
+emits it: no file anywhere in this run directory contains the figure, and the only
+record of the sweep is one paragraph of `RUN_STATE.md`. So it is now in the
+exception list above, which is where a prose-only number belongs — and that is the
+correction, not a row. Round five also found the criterion-(b) map row overstated
+(it covered four of seven records; `e4b25676` then widened the probe to all seven
+rather than annotating the map, and it holds on all seven), which is the fourth
+widening of a completeness claim in this document and the second in the map.
 
 ## The four candidate criteria, ranked
 
@@ -104,6 +128,28 @@ that was chosen over an ordering check — "the ordering is not stated anywhere 
 a requirement and either constant can be moved by someone who never reads this
 function". A summary of a guard should not claim more than the guard.
 
+**Round five: both of the corrections above landed in this document and not in the
+file they are about.** As of round five, the comment at `LARGE_SPACE_THRESHOLD`'s
+own definition in `exam/papers/verdict.py` still carried the withdrawn sentence —
+"any threshold in (256, 1.15e18] labels the same seven records and refuses both
+negative controls, so the choice is robust across ~16 orders rather than
+knife-edge" — unmarked, in the same paragraph as the `> MAX_ENUMERATION` argument
+this section credits it with; and it still said "`_large_space` now asserts the
+ordering rather than trusting it", which is the round-three prose the paragraph
+above calls wrong, 800 lines above the comment quoted here as the authority
+against it. So "the constant now carries its argument at its definition" was true
+of what that comment adds and false of what it retains, and a withdrawn claim was
+still shipping in tracked source while this document said the opposite about that
+source. That comment has since been rewritten at its own definition — it now says
+outright that `_large_space` does *not* assert the ordering, and replaces the sweep
+sentence with the measurement that refuted it, that both controls are refused at
+every threshold tested down to `T = 2` and so cannot distinguish 10^12 from 2
+(D-EX-029, D-EX-030). Recorded rather than quietly closed, because the failure mode
+is the general one: a correction written into the document that describes a file is
+not a correction to the file, and this section had been asserting the opposite
+about that file for two rounds. A document should not claim more than the file it
+points at, for the same reason a summary should not claim more than the guard.
+
 **(b) our own enumerator truncating at its cap.** Admissible, but only in one
 direction and only if it is actually run. It is circular as evidence *about the
 level* — we chose the enumerator, and a weaker enumerator would "prove" more
@@ -134,11 +180,20 @@ before that objection is even reached. On these boards the strong solvers do not
 time out — **they win in milliseconds**, because the 120 switches are monotone
 and gate no geometry, which is precisely the structure every standard technique
 eliminates for free. Adopting (d) would not merely be inadmissible; it would be
-*false*.
+*false*. (**That last claim is argued, not measured, and is labelled here because
+round five's per-number sweep did not reach it.** No solver was run on these
+boards: no artefact in this run emits a solver time on a class (ii) level, and
+work item 3 below establishes that no shipped engine can even construct the input.
+What is measured is the *quotient* — the 300- and 600-node graphs of the crux
+table — which is why the argument is credible; but "they win in milliseconds" is
+an inference from the monotone structure, not an observation, and is the same kind
+of claim as the 758-of-1024 count. The same sentence ships in `exam/STATUS.md`
+unlabelled.)
 
 ## The ruling: (c) ∧ (b), and the claim narrows to match
 
-An item is class (ii) when **both** hold, and both are recorded as measurements:
+An item is class (ii) when **both** hold — and they are established differently,
+which round five had to force this section to say:
 
 1. **(c)** a constructive lower bound of 2^m distinct reachable states, with its
    premises checked *at the point of claim* — that the m dips lie on one
@@ -146,13 +201,36 @@ An item is class (ii) when **both** hold, and both are recorded as measurements:
    latch bits (D-EX-028, this run). A bound whose premises are checked three
    call frames later is not a bound; see below.
 2. **(b)** the reference enumerator, the one whose termination *defines*
-   `naive_enumeration_feasible: True` for class (i), measured to truncate at the
-   shipped cap on this level. Measured, not assumed.
+   `naive_enumeration_feasible: True` for class (i), truncating at the shipped cap
+   on this level — derived from (c) in the record, and measured in the suite.
 
 Condition 2 was previously not merely unmeasured but **counterfactually
 recorded**: `_large_space` hardcoded `"truncated": False`, which is literally
 true only because no enumeration was ever attempted, and reads as though one ran
 and came back clean.
+
+**Round five: this section said "both are recorded as measurements", and the
+record says the opposite about (b).** Read the seven records in
+`exam/artifacts/truth/p15-verdict-a2.truth.json` whose
+`state_space.naive_enumeration_feasible` is `false` — m = 120, 60, 118, 120, 120,
+120, 120, being the four class (ii) items plus the three `solvable_hard` ones —
+and every one carries `enumeration_attempted: false` and `truncated: null`. Nor
+does the builder ever test (b): `_large_space` applies exactly two gates,
+`lower_bound < LARGE_SPACE_THRESHOLD` and `lower_bound <= MAX_ENUMERATION`, **both
+functions of `lower_bound` alone**, so the conjunction the code enforces is
+threshold ∧ cap over one quantity, not (c) ∧ (b). In the record (b) is *derived*
+from (c), and the record says so outright — `enumeration_refused_because` gives
+the derivation and names the test that checks its premise.
+
+So the honest form is: (c) measured at the point of claim; (b) derived there and
+measured elsewhere — by `test_class_ii_levels_actually_truncate_the_enumerator`,
+which asserts `len(items) == 7` and runs the enumerator at the shipped cap against
+all seven, and by `enumeration_probe.json` for all seven. That is a real check
+and it is not the same thing as "recorded as a measurement". This is the
+criterion-vs-code gap in its surviving form: the earlier record was
+*counterfactual* (`"truncated": False`) and is now *honest* (`null` beside
+`enumeration_attempted: false`), but the prose describing it did not narrow when
+the record did.
 
 ## What class (ii) may NOT claim, and this is the substantive change
 
@@ -161,9 +239,10 @@ and came back clean.
 The field asserts that no exhaustive method is feasible on this board. That is
 false, and `crux_quotient_settles.json` in this run measures by how much. Every
 shipped class (ii) item is settled by an exhaustive computation over a graph of
-at most 600 nodes, in at most 5 milliseconds:
+**at most 600 nodes** — which is the structural half of the claim, and the half
+that reproduces exactly:
 
-| item | claimed lower bound | what settles it | graph nodes | seconds |
+| item | claimed lower bound | what settles it | graph nodes | seconds (one run, this machine) |
 |---|---|---|---|---|
 | ii1 | 1.33e36 | components of `relaxed_edges`; start and goal separate | 300 | 0.0010 |
 | ii2 | 1.33e36 | the same pass with the cut cell (4,2) deleted | 300 | 0.0001 |
@@ -177,8 +256,29 @@ that actually settles it (`settled_by_budget: true`, `settled_by_partition:
 false`) — not at all. Earlier drafts printed the `0.0016` here, which is the
 components pass, i.e. the one this document elsewhere takes pains to say did
 *not* settle ii3: a number from the right artefact attached to the wrong
-mechanism, which is this ticket's own defect shape in a table cell. The `≤5 ms`
-headline is unaffected — ii3's largest recorded timing is 0.0047 s.
+mechanism, which is this ticket's own defect shape in a table cell. ii3's largest
+committed timing is 0.0047 s, and that is `compute_lower_bound` — not the budget
+check either.
+
+**Round five: the "in at most 5 milliseconds" half of the headline is withdrawn,
+and this document's opening caveat is the reason.** That caveat says "all timings
+are machine-dependent — no claim here rests on one", and this was a claim resting
+on one. `crux_quotient_settles.py` is deterministic in everything but
+`timing_seconds`: re-running it four times in this worktree left every other field
+byte-identical to the committed artefact, and across those four runs ii3's largest
+timing came back **0.0048, 0.0049, 0.0047 and 0.0050 s** against the committed
+0.0047, while round five's own rerun recorded **0.0051**. The figure straddles the
+threshold it was written as, so "at most 5 milliseconds" is false on some reruns of
+the same script on the same machine — and substituting a fresher millisecond count
+would only move the rot. What survives is the 600 nodes and the four distinct
+mechanisms, both structural and both byte-reproducible, plus the order of
+magnitude: single-digit milliseconds, measured on this machine, gating nothing.
+Round five found the same "at most 5 ms" sentence in three further places —
+`RUN_STATE.md`, `exam/STATUS.md`, and inside `verdict.py`'s
+`naive_enumeration_feasible` comment, i.e. in tracked source. `RUN_STATE.md` has
+since been narrowed to "single-digit milliseconds"; the other two are not this
+document's to edit and the correction is owed in each, which is the same
+document-corrected-but-not-the-file pattern recorded under criterion (a) above.
 
 The four mechanisms are *different*, which matters: an earlier draft of the
 probe assumed all four fell to the same components pass and the measurement
@@ -229,7 +329,18 @@ originally carried were measured against the base commit and had rotted ~58
 lines by the time `verdict.py` grew in the same commit that cited them, then
 ~107 after the fixes below — which is board items P21 and P22's standing
 finding, that an anchor into a file its own commit edits will rot again. The
-seven call sites and `_self_check` are both greppable by name.) Measured
+seven call sites and `_self_check` are both greppable by name. **Round five found
+that this fix had been applied to this document only.** `repro_duplicate_switch.json`
+— a committed artefact of this same run, and row 3 of the provenance map above —
+was still publishing the pre-fix anchors in its `wellformed_runs_at` field: nine
+`verdict.py` line numbers for `_self_check`, `wellformed_problems()` and the seven
+`_large_space()` call sites, every one wrong at HEAD, with the same strings
+duplicated in `repro_duplicate_switch.py`. The *ordering* claim they carried — that
+all seven call sites sit above `_self_check` — held throughout; only the numbers
+were wrong, which is why a symbol-anchored statement of the same fact loses
+nothing. That pair has since been re-anchored by symbol by its owner. The
+generalisable part: de-numbering the prose and leaving the artefacts numbered
+fixes the citation a reader checks and not the one a machine publishes.) Measured
 consequence: a
 `comb_open` whose switch list repeats one cell 60 times produced a lower bound
 of 2^60 = 1.15e18 on a board with **359** reachable states, an overstatement of
@@ -274,7 +385,8 @@ Two further corrections to this run's own earlier notes, recorded because they
 changed decisions. Enumerating k=1..9 is expensive, not the 2.3 s first noted —
 which is part of why the shipped ladder stops at 6. The cost is **not a single
 number and this document previously gave one that matched nothing**: it said
-"~128 s", while `growth_curve.json` records `total_seconds: 122.247` — **for the
+"~128 s", while `growth_curve.json`'s `timings_seconds.total_seconds` was
+`122.247` in the run committed with it — **for the
 whole script, not for k=1..9**. Summing that file's own per-rung timings, the
 k≤9 rungs come to ~104.6 s; the balance is orchard's k=10 and k=11 (2.322 s and
 13.484 s) plus the budget probe. Attributing 122.247 to "enumerating k=1..9"
@@ -284,8 +396,8 @@ The only figure here with a committed artefact behind it is that 122.247 s. A
 reviewer's rerun on the same machine gave 153.24 s, and the k≤6 cost — written
 "2.6 s" — has no committed artefact **for the same quantity**: the per-rung timings for k≤6 sum to
 **0.629 s**, while the 2.918 s rerun is whole-script wall-clock including the
-budget probe — a different measurement, ~4.6× the figure for the thing named, and
-round three did not distinguish them. **Those
+budget probe — a different measurement, between four and five times the figure for
+the thing named, and round three did not distinguish them. **Those
 rerun numbers are recorded in `RUN_STATE.md` prose and nowhere else**, which under
 this repo's own precedence rule (JSON artefacts beat prose reports) makes them
 weaker evidence than the 122.247, not stronger. Naming them is still worth it,
@@ -293,10 +405,38 @@ because what they establish is not a value but a *spread*: the same computation 
 the same machine varies by ~25%, so no single wall-clock number is a property of
 the artefact, and correcting "128" to "122.247" while presenting it as the cost
 would repeat the original error with a better-sourced number. Read the cost as
-"about two minutes, machine-dependent"; nothing gates on it. And k=6 is
-not merely the cheap choice: gantry at k=7 is 229,376 states, past the shipped
-cap, so 6 is the largest rung that can be enumerated to completion under
-`MAX_ENUMERATION` at all.
+"about two minutes, machine-dependent"; nothing gates on it.
+
+**Round five: 122.247 is one run's value too, and every timing quoted in this
+paragraph is read from `growth_curve.json`'s `timings_seconds`, not from a
+property of the script.** A regeneration of the same script in this worktree
+recorded `total_seconds: 143.786`, with the k≤9 per-rung sum at 122.185 and the
+k≤6 sum at 0.670 — so three samples of the same computation on this machine are
+122.247, 143.786 and 153.24, and the ~25% spread above is now measured over three
+rather than argued from two. Any of these values quoted as *the* cost will rot on
+the next regeneration; read them as the runs they came from. What does not move is
+the **decomposition**, which is the only load-bearing claim here: in both artefact
+runs `total_seconds` equals the k≤9 per-rung sum plus orchard's k=10 and k=11 plus
+the budget probe, to within 0.04 s. That is what makes "122.247 s to enumerate
+k=1..9" wrong regardless of the numbers — it names a quantity the field does not
+measure.
+
+And k=6 is not merely the cheap choice: gantry at k=7 is 229,376 states, past the
+shipped cap, so 6 is the largest rung at which **all four families** complete under
+`MAX_ENUMERATION`.
+
+**Round five corrected that last sentence, which read "the largest rung that can be
+enumerated to completion under `MAX_ENUMERATION` at all" and was refuted by the
+artefact quoted beside it.** orchard's rows in `growth_curve.json` are 10,920 at
+k=7, 43,688 at k=8 and **174,760 at k=9** — all three under the 200,000 cap; k=10
+at 699,048 is the first that passes it. gantry, lattice and spindle share 229,376
+at k=7 and do pass it. So the cap stops three families at 6 and orchard at 9, and
+"at all" overstated the ladder's reason by three rungs. (Those rungs were
+nonetheless enumerated in this run: `growth_curve.json`'s own `enumeration_cap` is
+`1000000000` and it records 200,000 separately as `marker_cap_for_reference`. The
+shipped cap bounds what a class (i) item may be graded on, not what this probe was
+allowed to spend — which is why the ladder's stopping point is a choice about
+parity with class (i), not a wall.)
 
 ## Work item 3: the invariant path exists; no *engine* can walk it
 
@@ -313,9 +453,10 @@ implies **~6e36 edges**. The arithmetic, from `probe_lp_interface.json`'s
 (Round three of this document said `~4e36` and called the `~6e36` it replaced
 "stated without showing the arithmetic". Both halves of that were wrong. `~4e36`
 is the extrapolated *state* count — `2,796,200 × 4^50 = 3.55e36` — wearing the
-word "edges", off by exactly the `edges/states = 1.7500` that the same artefact
-measures at every rung; and the figure it displaced was one multiplication from a
-committed column. `exam/DECISIONS.md` never stopped saying `~6e36` and was right
+word "edges", off by the edges-to-states ratio of the one rung the arithmetic
+uses, `4,893,348 / 2,796,200 = 1.7499993` at corridor 10; and the figure it
+displaced was one multiplication from a committed column. `exam/DECISIONS.md`
+never stopped saying `~6e36` and was right
 throughout, so for one commit the run document and the decision record disagreed,
 with the decision record holding the correct value. The ×4.0 is measured, the
 extrapolation to 60 is an assertion, and they are still two different kinds of
@@ -323,25 +464,110 @@ claim — but that was never a licence to get the assertion's arithmetic wrong.)
 
 The input cannot be constructed, so `solve` is never entered.
 
+**Round five: the parenthetical above first named that factor "`edges/states =
+1.7500`, which the same artefact measures at every rung", and that was this
+document's own rounding read back as a measurement.** `probe_lp_interface.json` has
+no `edges/states` field at all — the ratio is derived — and derived across its nine
+`E_comb` rows it *rises* toward 7/4 from below: 1.7000 at corridor 2, then 1.7381,
+1.7471, 1.7493, 1.7498, 1.7499542, 1.7499886, 1.7499971, and 1.7499993 at corridor
+10. It is 1.7500 to four decimal places at the last four rungs, 1.70 at the first,
+and exactly 1.75 at none — so the correction is that the arithmetic uses one rung's
+ratio, not a constant the artefact measures. "At every rung", in the passage whose
+whole subject is distinguishing measured from asserted, is that passage's own
+defect.
+
 But there is a prior obstacle that no amount of memory would fix. `lp_potential`
 is a peg-solitaire engine: its move algebra is `row[dst]+=1; row[src]-=1;
 row[over]-=1`, so **every expressible transition has coefficient sum −1**.
 `probe_lp_interface.json`'s `D_coefficient_sums` is the distinct-value set
 `[-1.0]`, computed over the engine's own moves.
 
-Two honest qualifications a reviewer had to supply, both about this paragraph
-rather than about the conclusion. Earlier drafts said this was "verified
-exhaustively over all role assignments at **n_pos=5**"; no such run is in the
-artefact, whose `n_pos` values run 10, 15 … 50, and the figure 5 appears nowhere —
-so the *exhaustiveness* is unsourced even though the coefficient sum is measured.
-And the A2 side of the comparison — a cart move has sum 0, or +1 when it latches —
-is recorded in `D_verdict` as the Python literals `a2_plain_move: 0` and
-`a2_latching_move: 1`, **printed as if measured while only the `lp_potential` side
-is computed**. The claim is independently true (`engine-rig`'s `potential.py`
-confirms the move algebra), so the conclusion stands: no assignment expresses an
-A2 transition at any size. But the artefact measures one half of a two-sided
-comparison and presents both halves in one voice, which is the same shape this
-ticket keeps finding. There is no A2→`lp_potential` adapter in the repo, and the adapter a
+Both sides of that comparison are now enumerated, and the route here is worth
+recording because two rounds of correction got it wrong in opposite directions.
+
+**The exhaustiveness was sourced all along; round four's withdrawal of it is
+itself withdrawn (round five).** Earlier drafts said this was "verified
+exhaustively over all role assignments at **n_pos=5**". Round four could find no
+`5` in the artefact — whose `n_pos` values run 10, 15 … 50 — and withdrew the
+exhaustiveness as unsourced. But `n_pos` is probe B and E's rung parameter, and the
+exhaustive loop is in probe D over the LP row width `n`, which is `n = 5` in the
+committed generator: three nested `range(n)` loops over `(src, over, dst)`, `5^3` =
+125 role assignments, every one of which lands on the same coefficient sum, −1.
+Round four
+conflated two different `n`s and withdrew a true claim.
+
+*Corrected in round six:* the clause that stood here — "only the *label* `n_pos=5`
+was wrong" — is itself wrong, and it is the third correction on this one sentence.
+`n_pos` is **not** merely a label for the row width; it *is* the row width.
+`potential.py` does `n = int(graph["n_pos"])` and builds every move row as
+`[0.0] * (2 * n)`, indexing it by `move.src`/`move.over`/`move.dst`. So "all role
+assignments at `n_pos=5`" was accurate as written, and the three files still
+carrying that wording — `exam/DECISIONS.md`, `exam/STATUS.md` and
+`invariant_path_probe.md` — are **correct and must not be "fixed"**. What was
+wrong was only my reason for conceding it: I read `n_pos` as belonging to probes B
+and E alone, because those are where it varies, and did not check that probe D's
+`n` reaches the LP through the same key. A round that corrects a correct thing
+costs twice — once in the edit, once in the three files a later reader would have
+been told to bring into line.
+
+Neither round would have had to read the generator if the artefact had
+carried the loop's own parameters, so it now does: `D_role_assignments` is
+`{"n": 5, "assignments": 125}`, beside the `D_coefficient_sums` of `[-1.0]` that
+loop produces.
+
+**The A2 side was a hand-written literal, and the fix took two attempts (round
+five).** A cart move has coefficient sum 0, or +1 when it latches — and that was
+once written into `D_verdict` as the Python literals `a2_plain_move: 0` and
+`a2_latching_move: 1`, printed as if measured while only the `lp_potential` side
+was computed: one half of a two-sided comparison, both halves in one voice. The
+first replacement measured it by enumerating the *shipped* 20-corridor comb — 40
+latch bits, ~4.4e13 states — an enumeration that cannot terminate, over a board of
+exactly the size this ticket's thesis says cannot be enumerated, and the artefact
+was left carrying the literals' values from a run that never happened. The second
+replacement is the one that shipped: the A2 side is enumerated over nine small
+levels chosen to cover every branch of `Level.step`, under a bound that raises
+rather than truncating. `D_verdict` now records it as measurements —
+`a2_coefficient_sum_by_kind` and `a2_transitions_by_kind` (a plain move and a
+blocked transition sum to 0, a latching move and a button press to +1),
+`a2_coefficient_sums_measured` of `[0, 1]` over `a2_transitions_enumerated` =
+51,880 transitions across `a2_states_enumerated` = 12,970 states,
+`a2_step_branches_covered` listing all six branches, `a2_enumeration_bound` =
+200,000, and `a2_shipped_level_enumerated: false` — the last field being the honest
+part: the shipped size was *not* enumerated, and the step from these levels to
+every size is the monotonicity argument, not a sweep.
+
+*Corrected in round six.* This paragraph read **five** levels, **51,164**
+transitions and **12,791** states. Those are exactly the sums over the first five
+rows of `a2_levels` — the artefact's state before `9cf779a3` added `updraft`,
+`cistern`, `quarry` and `meander`. The paragraph carrying them was written in
+`824b9fb4`, which is a *later* commit than the one that moved the artefact, so
+this is not lag: it described the world as it had been, after it had changed, and
+`RUN_STATE.md` carried the right numbers the whole time. Two documents of the same
+run disagreed about a measurement neither of them produced.
+
+**And two of the sums above are thinner than this sentence reads.**
+`D_verdict.a2_thin_coverage` records what the branch counts actually were: the
+portal branch was taken **once** in 51,880 transitions and the button branch
+once, doors twice each. The guard that makes a per-kind sum meaningful — every
+transition of a kind must agree, or the sum is an average wearing a constant's
+clothes — **cannot fire at n = 1**, because a single observation has nothing to
+disagree with. So "a button press to +1" is a single measurement, not a confirmed
+constant, and `a2_step_branches_covered` "listing all six branches" is true of the
+list and weak as evidence. It is not closable by measurement here: `atrium` is the
+only level in the shipped family carrying a button, a door or a portal, and adding
+four fresh geometries moved the rare branches not at all. What carries the general
+claim is monotonicity, which is a property of the code (`step` never returns
+`False` for `pressed`; `_latched_at` is `|=`) rather than of this sample — and
+`bits >= 0` holds identically given the loop's own assertions, so no sample size
+could have produced the −1 that would matter. The conclusion is untouched by the
+thinness; the *evidence for the intermediate constants* is what is thin, and this
+paragraph previously stated them unqualified while the artefact qualified them. Against `lp_potential`'s
+invariant −1 — which `engine-rig`'s own `potential.py` independently confirms, one
+LP row per `Move` built as `row[move.dst] += 1.0`, `row[move.src] -= 1.0`,
+`row[move.over] -= 1.0` — no measured A2 sum matches, so the conclusion stands and
+is now sourced on both sides: no assignment expresses an A2 transition at any size.
+
+There is no A2→`lp_potential` adapter in the repo, and the adapter a
 reader would naturally write **fails silently**: encoding a comb level and
 running it anyway returns `certified` at every size, including at corridor 4
 where the level is *solvable* — a clean unreachability proof for a reachable
@@ -357,20 +583,35 @@ class (ii) level at shipped size.**
 
 What *does* walk the invariant path is `exam/grading/rubrics_verdict.
 check_certificate` — purpose-built for this world, machine-checking each
-reference certificate in **≤3.1 ms**, which `probe_answer_key.json` records per
-item as `check_certificate_seconds`: 0.00306, 0.00149, 0.00075, 0.00001. The
-bound is satisfied by all four and sourced — with zero connection to
-`engine-rig`.
+reference certificate in **single-digit milliseconds**, which
+`probe_answer_key.json` records per item as `check_certificate_seconds`: 0.00306,
+0.00149, 0.00075, 1e-05. Those four are sourced, and the order of magnitude is
+what they establish — with zero connection to `engine-rig`.
 
-(Round three called this "one wall-clock observation restated as a bound" and
-replaced it with "single-digit milliseconds". That was wrong twice: the figure is
-a true bound over four committed measurements, and the replacement contradicted
-this document's own provenance map, which names `probe_answer_key.json` as the
-source of the certificate timings 250 lines above a caveat listing those same
-timings among the numbers with no committed artefact. Two claims about one number
-in the document whose subject is provenance. Restored, with the four values
-printed so the bound can be rechecked rather than trusted. The 3.66 ms rerun is
-prose-only and is not what the bound rests on.) So the
+(**This one number has now been written three ways across three rounds, and round
+five settles which of them may be a headline.** Round three called `≤3.1 ms` "one
+wall-clock observation restated as a bound" and replaced it with "single-digit
+milliseconds"; round four called that wrong twice and restored `≤3.1 ms`. Round
+four was right that the four values *are* in `probe_answer_key.json` — so this
+document's caveat listing "the certificate-checking times" among the numbers with
+no committed artefact did contradict its own provenance map, and that ambiguity is
+fixed at the caveat, which now says *reruns*. Where round four went wrong is the
+word "bound". 3.06 ms is the **maximum over those four rows**, and that is all a
+set of four samples can be; it is not a bound on the operation, and round five
+measured the operation exceeding it. Re-running `check_certificate` over the same
+four committed certificates in four fresh processes, in the measurement order
+`probe_answer_key.py` uses, put the ii3 certificate at **0.00348, 0.00360, 0.00369
+and 0.00364 s** — every one past 3.1 ms — and a regeneration of
+`probe_answer_key.json` in this worktree recorded **0.00313** for the same field.
+The prose-only 3.66 ms rerun that round four set aside is therefore reproduced
+rather than anomalous, and the counter-observation it represents was the thing to
+follow: the repo's precedence rule ranks evidence *for* a claim and is not a
+licence to discard evidence *against* one. So the headline reverts to the order of
+magnitude, with the four rows printed beside it, which is the form
+`exam/DECISIONS.md` says survives a change of machine — this document and the
+decision record now say the same thing about the same number, which is the point.
+`≤3.1 ms` remains true and recheckable as a *maximum over `probe_answer_key.json`'s
+four rows*, and nothing here or anywhere gates on it.) So the
 honest form of the framework's claim is: the levels really are past naive
 enumeration, and a cheap machine-checkable invariant path really does exist, but
 it is the exam's own checker and not an engine. "Engines propose, the LLM
@@ -405,7 +646,11 @@ for the other.
 This run shipped two adversarial probes against its own cost model — 147 KB,
 `adversarial/attack_barbell.json` and `adversarial/attack_straddle.json`, 347
 sweep rows between them — and an independent reviewer swept 1,034 more rungs over
-interior `start_col` with binding budgets. Both probes' summary field reads
+interior `start_col` with binding budgets. **That 1,034 has no artefact**: nothing
+in this run directory emits it and the only record is a paragraph of
+`RUN_STATE.md`, so it is one of the prose-only figures in the exception list at the
+top (round five added it there, and nothing below rests on it). Both probes'
+summary field reads
 `unsound_rows: 0`, and round three quoted that as "all of them returned zero
 unsound rows".
 
@@ -413,7 +658,8 @@ unsound rows".
 section.** `attack_straddle.json` records **21 of its 147 `all_rows` with
 `bound_is_sound: false`** (max `overstatement` 2.62) and **3 of 63
 `control_rows`** (max 1.31). `unsound_rows: 0` comes from a filter that drops
-`truncated` rows (`attack_straddle.py:81-84`), and all 21 are truncated with
+`truncated` rows (`attack_straddle.py:81-83`; the same filter is repeated at 84-86
+for the controls, which is what round five's off-by-one note was about), and all 21 are truncated with
 `measured_states: 200000` — so on those rows the predicate was comparing the bound
 against *the cap*, not against a count. `attack_barbell.py:86` handles the same
 situation differently again, setting `bound_is_sound` to `None` (71 such rows).
@@ -483,4 +729,9 @@ does not merely happen to lack one. `DRILL.json`'s
 is requested in
 `monitor/inbox/20260730T071500Z-RES-3-two-findings-that-say-filed-but-are-not-on-the-board.md`
 rather than done. (Written "filed" first; no such ticket existed, and checking
-cost one `ls`.)
+cost one `ls`. Round five ran that `ls` again and the citation failed a second
+time — the file existed only as an untracked working-tree file in the main
+worktree, in no commit on any ref, so a paragraph about the difference between
+"filed" and a real file cited one that was not. It is now tracked on this branch,
+so the citation resolves; the lesson is that a citation to a file is a claim about
+`git ls-files`, not about the disk.)

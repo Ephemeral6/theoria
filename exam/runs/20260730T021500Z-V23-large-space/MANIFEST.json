@@ -1,103 +1,147 @@
 {
-  "agent": "RES-3",
-  "base_commit": "415556f8",
-  "branch": "agent/v6-v23-large-space-verdict-gap",
-  "files": [
-    {
-      "path": "CRITERION.md",
-      "sha256": "5c46ab1c98b43db56236e6cb31be5872958be5967d8b02e9866cb1e66c97fe85"
-    },
-    {
-      "path": "RUN_STATE.md",
-      "sha256": "27fefe3ea2290af934bbc29ffb3829b54e17a522d0c1999aaac9549240cdb23e"
-    },
-    {
-      "path": "adversarial/attack_barbell.json",
-      "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
-    },
-    {
-      "path": "adversarial/attack_barbell.py",
-      "sha256": "b73d3c7df38920a771d022ad9ed17ad185c841293ab1fa0da4662ef1013370be"
-    },
-    {
-      "path": "adversarial/attack_straddle.json",
-      "sha256": "47b2d7732fb6ed9f2059fa996c2e53a57808c543b947c3b8376b88acfda2ef50"
-    },
-    {
-      "path": "adversarial/attack_straddle.py",
-      "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
-    },
-    {
-      "path": "crux_quotient_settles.json",
-      "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
-    },
-    {
-      "path": "crux_quotient_settles.py",
-      "sha256": "3320d616a28cea895d9b382de6f684b0c05008a4ee027050653e8121ff907eec"
-    },
-    {
-      "path": "enumeration_probe.json",
-      "sha256": "64d3b5cf56177b8cab2a3298cdf3ab505ee15a029b9fa0180b7d5f8c4cec6ad6"
-    },
-    {
-      "path": "enumeration_probe.py",
-      "sha256": "c5dd9011f361be3bc44b700c5d0421897073df64b28fd46182d1c185cb8f429b"
-    },
-    {
-      "path": "enumeration_sweep.json",
-      "sha256": "a8bd823b95f24ffa107f541fcedb72d3be12b37949596796ca42a29062129ae9"
-    },
-    {
-      "path": "enumeration_sweep.py",
-      "sha256": "68fd4659f0b6b08cb7d7afe4d9dde06453484b062915e1dfc3101243c5720a00"
-    },
-    {
-      "path": "growth_curve.json",
-      "sha256": "c5567722e25b7e69a454b93a7ca8c800b7237c5386fa2093ae6b476f957e2b0b"
-    },
-    {
-      "path": "growth_curve.py",
-      "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
-    },
-    {
-      "path": "invariant_path_probe.md",
-      "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
-    },
-    {
-      "path": "probe_answer_key.json",
-      "sha256": "62822c7251c94b7bcdea09d81832b03d3d8d093879eddae40e2525cb088566e4"
-    },
-    {
-      "path": "probe_answer_key.py",
-      "sha256": "577dbcec748b0af81a283536dfea330123d18748774cae3b1957eed543697743"
-    },
-    {
-      "path": "probe_lp_interface.json",
-      "sha256": "dfaad64570f480aeaac69b91c82497f1fd008859c4ddf7fe78e869b4b81e3ba8"
-    },
-    {
-      "path": "probe_lp_interface.py",
-      "sha256": "4c67db44db8a46bcea62fc0b063d4cd74d96c09c8391fbfc21c8b13b8572e7f1"
-    },
-    {
-      "path": "probe_lp_soundness.json",
-      "sha256": "721703674502b7570db62c93d1aa42cae564dc0c403cd4c34aaf0d4c76a87ebd"
-    },
-    {
-      "path": "probe_lp_soundness.py",
-      "sha256": "fc8247abbddb79cc921112be481057ce82467b79f66336c4b584c381a6a2e74e"
-    },
-    {
-      "path": "repro_duplicate_switch.json",
-      "sha256": "ecc8e2b9d1b1a3679175cc731a11382814465c676816538171524db5051c250c"
-    },
-    {
-      "path": "repro_duplicate_switch.py",
-      "sha256": "6e900ca5012c3eecf37abc0773e5b983375e2003393b4a588c54d524d60d9c45"
-    }
-  ],
-  "note": "growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned by their own internal stable_sha256 over the deterministic fields; the whole-file sha here moves per run. __pycache__ is excluded: byte-unstable and not an artefact.",
-  "prompt_id": "V6-V23-large-space-verdict-gap",
-  "territory": "exam",
-  "utc": "2026-07-30T02:15:00Z"
+ "agent": "RES-3",
+ "base_commit": "415556f8",
+ "branch": "agent/v6-v23-large-space-verdict-gap",
+ "files": [
+  {
+   "path": "CRITERION.md",
+   "sha256": "e4e151a2f5511965f371afa9ffb2f135575c3e1c4a02aa81902c1ddd58c4e49e"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "31b4b0dcaac872c9effeb44166e68ebcebeb14646a8e535cdd9cf9fbb0614d3d"
+  },
+  {
+   "path": "_survey_manifests.py",
+   "sha256": "c2e5a704af04b38d7459ea6f7ff01eb2ec9f712a8ba8653e90b4f4aeb26193dd"
+  },
+  {
+   "path": "_survey_stale_kinds.py",
+   "sha256": "7807ee5a1f61c0b1cbe111f080d79c21d66720b770ce2f380f1d089a19dbfafc"
+  },
+  {
+   "path": "adversarial/attack_barbell.json",
+   "sha256": "c8b384a56d2118c5dd45aa868a39f0faf937cfc91f2bf8b980e61ec5a558a34e"
+  },
+  {
+   "path": "adversarial/attack_barbell.py",
+   "sha256": "b73d3c7df38920a771d022ad9ed17ad185c841293ab1fa0da4662ef1013370be"
+  },
+  {
+   "path": "adversarial/attack_straddle.json",
+   "sha256": "47b2d7732fb6ed9f2059fa996c2e53a57808c543b947c3b8376b88acfda2ef50"
+  },
+  {
+   "path": "adversarial/attack_straddle.py",
+   "sha256": "a7d6710d55301470c0472b6a895411ef5ab3017ac3b2dd3f7ff19dff0a8e5aae"
+  },
+  {
+   "path": "adversarial/review-round3.md",
+   "sha256": "effc9cd88c3128f20c5e2d734b816d918aa6feebe671261056c615ee6aa4834a"
+  },
+  {
+   "path": "adversarial/round5-findings.md",
+   "sha256": "592deff13b044718ec1c76996b1d990139881fb899ca220cd14c937763c341c7"
+  },
+  {
+   "path": "adversarial/round6-findings.md",
+   "sha256": "75d002a4ffa4303b205b63d3170e1665e9d265fdf8f0755907818570f3558119"
+  },
+  {
+   "path": "crux_quotient_settles.json",
+   "sha256": "ea9ef0e2b60c49dbc2313a4eca8879bf902667439cad91967523e43fe095d818"
+  },
+  {
+   "path": "crux_quotient_settles.py",
+   "sha256": "3320d616a28cea895d9b382de6f684b0c05008a4ee027050653e8121ff907eec"
+  },
+  {
+   "path": "enumeration_probe.json",
+   "sha256": "25ab00c683150b21bc8c3ad25ed9188ca3e34f6a41299fea0e52812aa1fe51ca"
+  },
+  {
+   "path": "enumeration_probe.py",
+   "sha256": "435c6561707697f76cedcfa5aec69ac7675d3f3c5b561516202ca0f60a6c669c"
+  },
+  {
+   "path": "enumeration_sweep.json",
+   "sha256": "a8bd823b95f24ffa107f541fcedb72d3be12b37949596796ca42a29062129ae9"
+  },
+  {
+   "path": "enumeration_sweep.py",
+   "sha256": "68fd4659f0b6b08cb7d7afe4d9dde06453484b062915e1dfc3101243c5720a00"
+  },
+  {
+   "path": "growth_curve.json",
+   "sha256": "c5567722e25b7e69a454b93a7ca8c800b7237c5386fa2093ae6b476f957e2b0b"
+  },
+  {
+   "path": "growth_curve.py",
+   "sha256": "6be228b9897200851d0cef352261dc5efcb288a7f3910f5c23c45b23c7d6d08c"
+  },
+  {
+   "path": "handover/README.md",
+   "sha256": "4ca1408c7b9c00d47e779fc5eac61a027f5a2c88540092601bea668431861805"
+  },
+  {
+   "path": "handover/V2-V25-prep-the-negative-control-is-not-what-it-looks-like.md",
+   "sha256": "e5cb0d7a624bf0a7a1e57c890e962599c9b7655553bb3dddbf366045349436a7"
+  },
+  {
+   "path": "handover/V27-prep-artefact-scan.md",
+   "sha256": "7442912c52a9af2deb026c9906c4d4098563f7a5ade62365c2eddf533e4a3cbc"
+  },
+  {
+   "path": "handover/V28-ready-to-supply-calibration-shares-input.md",
+   "sha256": "4d0d45f78028b5acfb53cab4012f6a29ece1533692b6863418dfa79612755c21"
+  },
+  {
+   "path": "handover/V6-V23-recon-and-two-lenses.md",
+   "sha256": "6b094a713f6a7def4c6131d66a1f53c0a34e9c50828c3b7f40535809f6ace4fc"
+  },
+  {
+   "path": "invariant_path_probe.md",
+   "sha256": "5d7999a1e56f0ae12383309c5fa93c37185501e96ac6fc07854a3712d77c1cd5"
+  },
+  {
+   "path": "probe_answer_key.json",
+   "sha256": "89be31d7e7dcdd4b9e7452ff4c67f3cea392f18e9dca165980c804a20366c8a7"
+  },
+  {
+   "path": "probe_answer_key.py",
+   "sha256": "577dbcec748b0af81a283536dfea330123d18748774cae3b1957eed543697743"
+  },
+  {
+   "path": "probe_lp_interface.json",
+   "sha256": "4abd034c7ad20597f0ae9e08637aab18096cf370a76b4d5e2fadba754b922847"
+  },
+  {
+   "path": "probe_lp_interface.py",
+   "sha256": "3eeb0aac98fee21769ca0b4086bdc62275ec870ceefd9348068eaac618d26fb0"
+  },
+  {
+   "path": "probe_lp_soundness.json",
+   "sha256": "721703674502b7570db62c93d1aa42cae564dc0c403cd4c34aaf0d4c76a87ebd"
+  },
+  {
+   "path": "probe_lp_soundness.py",
+   "sha256": "fc8247abbddb79cc921112be481057ce82467b79f66336c4b584c381a6a2e74e"
+  },
+  {
+   "path": "repro_duplicate_switch.json",
+   "sha256": "1143f4b79c7b180b4cb50838c79b8bb1d40dea01544a4b78c9b1c5e765bd6660"
+  },
+  {
+   "path": "repro_duplicate_switch.py",
+   "sha256": "2bdf22b99892db380506c39954b2f489f8940a41f39180424972417725cc3c0a"
+  },
+  {
+   "path": "verify_round5_against_index.py",
+   "sha256": "a2101d99a86c5bd162464c6e237370efff7b62e8c7427a953b4222789d98bd96"
+  }
+ ],
+ "note": "Hashes are over the bytes published at the commit that carries this manifest, and must be re-stamped in any commit that touches a listed file. They pin what was published; they are NOT a reproducibility check, and for four files they cannot be one. growth_curve.json and enumeration_probe.json carry wall-clock timings and are pinned internally by growth_curve.json's `stable_sha256` and enumeration_probe.json's `deterministic_sha256` over their deterministic fields -- both of those reproduce; the whole-file sha here moves per run. crux_quotient_settles.json and probe_answer_key.json have no such internal hash and their `timing_seconds` / `MEASURED.*_seconds` fields move per run too; probe_lp_interface.json says so in its own generator's docstring (B, C and E record their own cost). enumeration_sweep.json is time- and memory-budget driven and reproduces nothing numeric. Re-verified 2026-07-30 after round five: 17 of the then 23 entries matched and 6 did not, every one of the 6 because a later commit (722b6e8e, b43427f0, 9cf779a3, 08820583, 0154c8f1) moved the file without re-stamping the manifest. BASELINE-cycle94.md is tracked in this directory but deliberately unlisted: it is a different concurrent session's cycle log, not an artefact of this run. __pycache__ is excluded: byte-unstable and not an artefact. Two helper scripts in this directory are also unlisted and the reason is different: `restamp_manifest.py` regenerates this file, so listing it would make the manifest a hash of its own generator, The exclusion list is one name, not two: `_survey_manifests.py` was excluded until cycle 107 on the false ground that it produced nothing this run claims, when the run cites its 36-stale-hash census as evidence and its sibling `_survey_stale_kinds.py` was listed throughout. The exclusion lives in that script's `EXCLUDED_NAMES` and are asserted by `exam/tests/test_run_manifest_v23.py`, so the escape hatch is a stated list rather than a silent one. Hashes are over the bytes git publishes, not the working copy: cycle 106 found those two things had diverged for two files and the stamper now refuses a CRLF working copy.",
+ "prompt_id": "V6-V23-large-space-verdict-gap",
+ "territory": "exam",
+ "utc": "2026-07-30T02:15:00Z"
 }

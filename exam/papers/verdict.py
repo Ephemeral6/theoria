@@ -19,11 +19,14 @@ together:
         by the level, not by us -- the builder computes the largest m the step
         budget allows and refuses to ship an item whose bound is below 10^12.
   (iii) **solvable but hard.**  The false-positive trap.  The truth carries a
-        witness plan that was *computed and replayed*, not asserted, and the
-        items are weighted (3 points against 2) so that a `bluffer` who answers
-        "unsolvable" everywhere has perfect sensitivity, zero specificity, and a
-        bad score.  That calibration is asserted in the tests; it is the thing
-        that proves the rubric is not scoring confidence.
+        witness plan that was *computed and replayed*, not asserted, and a
+        `bluffer` who answers "unsolvable" everywhere has perfect sensitivity,
+        zero specificity, and a bad score -- 9 of 34, on *uniform* weights.  The
+        weights are not what buys that: they were 3 against 2 and are now 2 and 2
+        (see `POINTS_SOLVABLE`), because `points` is on the sheet and the
+        weighting leaked the class, while the anti-bluffer property never rested
+        on it.  That calibration is asserted in the tests; it is the thing that
+        proves the rubric is not scoring confidence.
 
 **This is the dress rehearsal Phase 4 needs.**  Theoria.md Phase 4 has a timing
 problem it solves by ordering: constructing a justified unsolvable variant of a
@@ -95,12 +98,20 @@ REPO_ROOT = os.path.dirname(HERE)
 #: only `> MAX_ENUMERATION`: past the cap, the naive enumerator provably cannot
 #: terminate, which is the whole and only claim the class makes. 10^12 is that
 #: with about seven orders of headroom, so raising the cap by any plausible factor
-#: does not silently reclassify an item -- and `_large_space` now asserts the
-#: ordering rather than trusting it. Measured margins: every shipped class (ii)
-#: item clears this by 6 to 24 orders (smallest bound 2^60 = 1.15e18), and any
-#: threshold in (256, 1.15e18] labels the same seven records and refuses both
-#: negative controls, so the choice is robust across ~16 orders rather than
-#: knife-edge. The constant is a floor with margin, not a measurement.
+#: does not silently reclassify an item. The ordering of the two constants is not
+#: what makes that safe, and `_large_space` does not assert the ordering: its
+#: second gate asserts a property of each *bound* instead -- `lower_bound <=
+#: MAX_ENUMERATION` raises -- so a cap raised past this threshold refuses the
+#: affected item rather than publishing a false "past the cap of ..." beside it.
+#: Why that was chosen over an ordering check is written at the gate itself.
+#:
+#: Measured margin: every shipped class (ii) item clears this by 6 to 24 orders
+#: (smallest bound 2^60 = 1.15e18). That is the margin and nothing more -- no
+#: sweep over this audit set defends the constant, because both negative controls
+#: are refused at every threshold tested down to T = 2 (the refusal migrates to
+#: the cap gate), so these cases cannot distinguish 10^12 from 2 and do not
+#: constrain the number from below at all. The defence is the argument above: a
+#: floor with margin, not a measurement and not a sweep (D-EX-029, D-EX-030).
 LARGE_SPACE_THRESHOLD = 10 ** 12
 
 #: A board is "small" if a human can hold it; the split is what `memoriser` is
@@ -911,8 +922,14 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
     return {
         # NOT `exhaustive_feasible`. The old name claimed no exhaustive method
         # is feasible here, and that is false: every shipped class (ii) item is
-        # settled by an exhaustive computation over at most 600 nodes in at most
-        # 5 ms, against these bounds of 1e18-1e36. What is true is the narrower
+        # settled by an exhaustive computation over at most 600 nodes, against
+        # these bounds of 1e18-1e36. The node count is the load-bearing half and
+        # it is structural. "In at most 5 ms" stood here too and is struck: four
+        # reruns of the crux script put ii3's maximum at 0.0048 / 0.0049 / 0.0047
+        # / 0.0050 s against a committed 0.0047, and round five measured 0.0051 --
+        # so the figure is exceeded on rerun on this machine, never mind another
+        # one. Nothing here or downstream gates on a timing, and 600 nodes
+        # against 1e18 does not need one. What is true is the narrower
         # statement -- the *naive* method, forward enumeration over the full
         # (cart, button, latch mask) state, which is the method class (i) is
         # graded on, cannot terminate here. D-EX-028.
@@ -1560,7 +1577,9 @@ def reference_answers(paper: Paper, key_doc: Optional[Dict[str, Any]] = None,
 
     `bluffer` is the one that matters: it says "unsolvable" to everything, with
     no certificate, and the tests assert it scores sensitivity 1.0, specificity
-    0.0 and under a quarter of the paper.  That triple is the calibration that
+    0.0 and under `BLUFFER_CEILING` = 0.30 of the paper (9 of 34 on the uniform
+    weights; it was 9 of 42, under a quarter, while the solvable items were worth
+    3 against 2).  That triple is the calibration that
     proves the rubric is scoring reasoning rather than confidence -- Theoria.md
     1.11's "灵敏度与特异度一起打分", made into an assertion.
     """

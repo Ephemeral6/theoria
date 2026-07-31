@@ -2,9 +2,9 @@
   "papers": [
     {
       "cheater_brief_path": "exam/artifacts/cheater/p15-heldout-a0.brief.txt",
-      "cheater_brief_sha256": "cee19c15c253c66c7339ffb01a2286bf103b97c77b4ea8f174cae2d774ba29b7",
+      "cheater_brief_sha256": "0a03ddd3b30e68c0315e81a8defb2fc3880f6250c2d42f29ecbfcfea57d7b1d5",
       "key_path": "exam/artifacts/truth/p15-heldout-a0.truth.json",
-      "key_sha256": "24a5706e9a87a60484052d2cbdec98df222440c754995cb46948f83b310dd172",
+      "key_sha256": "201523952c39b0fa543b3dd3a2619c5a8fc199ff0f9f61216a3db50c86365ccb",
       "leakage": {
         "label_sets_checked": [
           "event",
@@ -270,16 +270,16 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
       "sheet_path": "exam/artifacts/papers/p15-heldout-a0.paper.json",
-      "sheet_sha256": "22e6bacbe23100824849a72c74cff823f35603ec3d98dc2208380c9e7fb45a70",
+      "sheet_sha256": "66ee2d1fe6b9f4ea4fe4dccdf25158428e1bac7736d000dee4ac55170ab1a7b5",
       "total_points": 80.0
     },
     {
       "cheater_brief_path": "exam/artifacts/cheater/p15-handover-a0.brief.txt",
-      "cheater_brief_sha256": "6f28396a6630867d035cf7d3cb2e8cac2f5d8165f3003c772ab2a59bbbfea768",
+      "cheater_brief_sha256": "3b0390bce7cb902c5611981f3879d750f6edf0dc92eeee230a99268506812178",
       "key_path": "exam/artifacts/truth/p15-handover-a0.truth.json",
-      "key_sha256": "0f95bd904b757e3d5dc2a0cbbacb9fb2532bbf64a540237d23efa63d44619801",
+      "key_sha256": "6d7497eacdbbb300199791426c9dfbf3c75b1985a71012a69ec5e81655875f00",
       "leakage": {
         "label_sets_checked": [
           "rule"
@@ -414,16 +414,16 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
       "sheet_path": "exam/artifacts/papers/p15-handover-a0.paper.json",
-      "sheet_sha256": "70bd11c2874ebafcae3d0351ef2b0426019f1498809db21ec45e747d225700b3",
+      "sheet_sha256": "94cb565c124d397c1dbf7a5b6121ac57c53c6014d62486a112b5d58382792ae4",
       "total_points": 46.0
     },
     {
       "cheater_brief_path": "exam/artifacts/cheater/p15-adaptation-a0.brief.txt",
-      "cheater_brief_sha256": "b67f5b849cc72929116b176f7aea50e10b404849a82b7a435dffdab12d217402",
+      "cheater_brief_sha256": "976cb4254c91e150d124ae0095845ad80195ed84b323e7fafebed8cf1587946d",
       "key_path": "exam/artifacts/truth/p15-adaptation-a0.truth.json",
-      "key_sha256": "0c4611b6aea11d6ff2de4028e08888d5b2e69d9ffc26d8ed95d8dab1d1b72557",
+      "key_sha256": "b5853177ed64bc5695da52b455c72776dc10223ce58bc0b42448268c48bfdf41",
       "leakage": {
         "label_sets_checked": [
           "exact_on_heldout",
@@ -733,16 +733,16 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
       "sheet_path": "exam/artifacts/papers/p15-adaptation-a0.paper.json",
-      "sheet_sha256": "f61ac65b29d700bbfe721a8f51534d643d46b687e8f0979b4bb8013ff676c56e",
+      "sheet_sha256": "6f25d34f59609a00c3071cd81206f251636393361844627c06576b0b670d922d",
       "total_points": 144.0
     },
     {
       "cheater_brief_path": "exam/artifacts/cheater/p15-verdict-a2.brief.txt",
-      "cheater_brief_sha256": "a57823516b8e25ca24c302a8c75927d40ad665e1cdaf602f3f7222390b9a5a99",
+      "cheater_brief_sha256": "8140dd9e9389b0179cfb6d5a323dc26df453f61c230f8c14e69c32ae4430bb8c",
       "key_path": "exam/artifacts/truth/p15-verdict-a2.truth.json",
-      "key_sha256": "1dd56b8d93323e9f764ae72807fd2e9577a75675e63a4cbe9e3b5167f11c1f17",
+      "key_sha256": "83a0cecda7391ef8c77ce8fe3549f5abc1756d8efb7f245a9bb33dea740c2afa",
       "leakage": {
         "label_sets_checked": [
           "board_size_class",
@@ -1254,9 +1254,9 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+      "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
       "sheet_path": "exam/artifacts/papers/p15-verdict-a2.paper.json",
-      "sheet_sha256": "5cc9bff3860f1257978debe3a3f1957bf6d405e9482ce5b3788a8a21461b90ee",
+      "sheet_sha256": "dc5be16e19c084c5c9f570af5087a31f6eb9e4f8c46a407c9373516e1d591aa0",
       "total_points": 34.0
     }
   ],
@@ -1283,9 +1283,9 @@
       "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
       "exam.grading.rubrics_handover_auto": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
       "exam.grading.rubrics_heldout": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
-      "exam.grading.rubrics_verdict": "055f4a0592e895359cbbe097396ec328ea9ecfbf24f81182f5d20632f86a8602"
+      "exam.grading.rubrics_verdict": "b22cd98c7a11b024bd4f2fc925393352cbb7e0530474d805dc7fa76811e4b9fb"
     },
-    "rubric_digest": "7a1cfd1a1aa3363f007587939c58d7fec1454b5afb509bfaac2ece32fadbc588",
+    "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d",
     "rubrics": {
       "adapt.collateral.v1": "falsified manual rules, claims to re-examine, claims now false, and the standing verdict on `mismatch`; raises silently_wrong when the old verdict is kept on a variant where it flipped",
       "adapt.describe.v1": "the minimal set of rule-change labels consistent with the observations; set equality against CHANGE_LABELS",
