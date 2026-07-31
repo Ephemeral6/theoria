@@ -468,6 +468,41 @@ def committed_envelope_drift(fresh_path):
             % os.path.relpath(newest, HERE).replace(os.sep, "/"))
 
 
+def committed_gate_drift():
+    """Does the committed `out/campaign_gate.json` still say what the recorded
+    cells say today?
+
+    Reported, not fatal, and for the same reason as the envelope drift above --
+    but this one guards something sharper. This file is the *standing verdict of
+    a money gate*, and the docstring at the top of this module explains that the
+    gate is verified as a committed artefact rather than regenerated, because
+    regenerating it writes into the working tree and appends to a ledger. That
+    is the right call and it has a hole in it: a committed GREEN whose cells now
+    evaluate RED is invisible to every check here, and `gate_path`'s own
+    docstring names an invisible RED as the thing the design exists to prevent.
+
+    So: re-evaluate in memory, compare the state only, and say so. Nothing is
+    written, no ledger is touched, and the verdict is not overruled -- a real
+    disagreement belongs to whoever owns the campaign, not to whichever branch
+    happened to run this.
+    """
+    try:
+        sys.path.insert(0, HERE)
+        from harness import run_campaign as rc
+        with open(GATE_JSON, encoding="utf-8") as fh:
+            committed = json.load(fh)
+        fresh = rc.evaluate_gate(rc.load_cells(rc.CAMPAIGN_NAME))
+    except Exception as exc:                       # noqa: BLE001 -- a note, not a gate
+        return "could not re-evaluate the campaign gate: %s" % exc
+    if committed.get("state") == fresh["state"]:
+        return None
+    return ("out/campaign_gate.json says %r but the recorded cells now evaluate "
+            "%r (%s) -- the standing verdict and a fresh evaluation disagree; "
+            "this needs an adjudication, not a regeneration"
+            % (committed.get("state"), fresh["state"],
+               "; ".join(fresh["tripped"]) or "nothing tripped"))
+
+
 def check_cost_artefacts(problems):
     """Every artefact that cost money is still where the register says it is.
 
@@ -594,6 +629,9 @@ def main():
                 drift = committed_envelope_drift(env_out)
                 if drift:
                     print("   note  %s" % drift)
+            gate_drift = committed_gate_drift()
+            if gate_drift:
+                print("   note  %s" % gate_drift)
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
 

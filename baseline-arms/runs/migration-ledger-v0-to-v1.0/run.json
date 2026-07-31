@@ -1,0 +1,124 @@
+{
+  "campaign": "f16-ledger-canon",
+  "counts": {
+    "env_step": 335,
+    "model_call": 321,
+    "unknown": 0
+  },
+  "evidence": [
+    {
+      "bytes": 6854,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/report.json",
+      "sha256": "sha256:fd02348753d81ed872ebdd6d6d3f54a399b9017d77180528ba71b2d84ec642f4",
+      "stability": "fixed",
+      "tracked": true
+    },
+    {
+      "bytes": 5087005,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
+      "sha256": "sha256:ae765beff4d8941f6411010c6e2be047036df61c8c0985d6dc04d52be94a84a9",
+      "stability": "fixed",
+      "tracked": true
+    },
+    {
+      "bytes": 53792,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
+      "sha256": "sha256:920901af9208ebe5dd67dbf78ca610c293663d00938163d6bafafd4e49b1771f",
+      "stability": "fixed",
+      "tracked": true
+    }
+  ],
+  "finding": "F-16",
+  "id": "migration-ledger-v0-to-v1.0",
+  "joins": {
+    "probe_log": {
+      "bytes": 1383911,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:394b7cf371d820df0bcb3ace4dc2a42153f31bf10a302ae6bc621c39635aac00"
+    },
+    "run_summaries": [
+      {
+        "bytes": 6203,
+        "path": "baseline-arms/out/campaign_cells.jsonl",
+        "sha256": "sha256:f320014da003bb4e4f7bc1fca5e8fae5209cb9da6dd835170fcfba8d1d835d68"
+      },
+      {
+        "bytes": 2273,
+        "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+        "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a"
+      },
+      {
+        "bytes": 2302,
+        "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+        "sha256": "sha256:079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8"
+      },
+      {
+        "bytes": 783,
+        "path": "baseline-arms/out/pilot_g50t_sonnet_rerun.json",
+        "sha256": "sha256:45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30"
+      },
+      {
+        "bytes": 2295,
+        "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+        "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5"
+      },
+      {
+        "bytes": 796,
+        "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
+        "sha256": "sha256:3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf"
+      },
+      {
+        "bytes": 2259,
+        "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+        "sha256": "sha256:130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e"
+      }
+    ]
+  },
+  "kind": "migration",
+  "migrator": "baseline-arms/migrate_ledger/1.1.0",
+  "outcome": "complete",
+  "produced": [
+    {
+      "bytes": 5087005,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
+      "records": 656,
+      "sha256": "sha256:ae765beff4d8941f6411010c6e2be047036df61c8c0985d6dc04d52be94a84a9"
+    },
+    {
+      "bytes": 53792,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
+      "records": 321,
+      "sha256": "sha256:920901af9208ebe5dd67dbf78ca610c293663d00938163d6bafafd4e49b1771f"
+    }
+  ],
+  "prompt_id": "P-12",
+  "records": 656,
+  "seed": null,
+  "seed_note": "a migration has no seed; it is a pure function of its inputs. `source` pins the ledger it read and `joins` pins the probe log and run summaries it joined against -- all three, because the output is a function of all three and an earlier version of this note claimed the first one pinned the whole thing",
+  "source": {
+    "bytes": 5641570,
+    "path": "baseline-arms/ledger.jsonl",
+    "records": 656,
+    "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71"
+  },
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "cost_usd": 0.0
+  },
+  "target_format": "1.0",
+  "unfillable_fields": {
+    "card_id": 18,
+    "frames/frame_hash": 121,
+    "guid": 20,
+    "http.elapsed_ms": 335,
+    "http.method/path/status/request_sha256": 321,
+    "http.request_sha256": 335,
+    "http.stream": 321,
+    "pricing_ref": 321,
+    "request": 321,
+    "response": 321,
+    "score": 335
+  },
+  "warnings": []
+}
