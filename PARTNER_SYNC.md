@@ -1825,3 +1825,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：theory-compiler tests/test_ic3_certificate.py 24 passed；CONTRACTS verify 绿。
 阻塞：无。
 下一步：deadlock_certificate_v0.1.md 与 pagoda_certificate_v0.1.md 的会签状态同批核对。
+## [cleanup] 2026-07-31T06:15:00Z CLEANUP-records-campaign
+状态：舰队已暂停，主会话执行一次性清理战役，顺序为：24 条未合并分支分诊 → 合并队列顺序清空 → 四类根修（PDDL 后端 A；臂侧封印；记录——钱门例外登记簿补登 #3–#8、CLAUDE.md 的 piles digest 标注订正（`3feca53e…` 是内容摘要、字面文件哈希是 `d3140eff…`）与三节陈旧内容、本段；battery 陈旧产物与发布卫生）→ 工作树清理 → 终验。本段同时照录主线 append-only 的既往违例与裁决：已发布段落被原地改写已裁 4 次（第 4 次 = exam V6-V23 段），裁决为「诚实订正、规矩不可知——从分支上无法查证段落是否已发布」而非违纪（monitor/audit/DRIFT-20260729T0056Z 及 OPS-A cycle 50 附录），probe_append_only 基线保持 1；本盘 master 当前 first-parent 删除合计 3 > 基线 1、探针读 risk，是已裁历史的余像，不是新违例。本战役对本文件只追加、不改写（preserve/agent-v26 的原地改写已按此规矩转为追加落地，见 V-V26-corrections-append 段）。
+测试：记录性条目，无代码。所引数字逐笔从 baseline-arms/STATUS.md、BUDGET_REPORT.md §0/§2/§12/§13/§14、runs/20260729T100000Z-a14/RECONCILIATION.md 复核；piles 两个摘要均已在盘上复算（内容摘要口径复现 `3feca53e…`，字面哈希 `d3140eff…`）。
+阻塞：none。既裁药方 ①（ci_merge 不重复合并未变动分支）与 ②（收工清单加 git merge-base --is-ancestor）仍未落地，归监控，不在本战役范围。
+下一步：battery 可见化与发布卫生根修落地后终验、清理 356 个 worktree、出健康报告。
