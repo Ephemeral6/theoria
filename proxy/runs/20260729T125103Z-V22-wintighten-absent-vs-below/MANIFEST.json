@@ -1,4 +1,19 @@
 {
+  "adversarial_review": {
+    "acknowledged_not_fixed": [
+      "F2 -- redact.py fails the guard open; ticketed"
+    ],
+    "changed_code": [
+      "F1",
+      "F3",
+      "F4",
+      "F5",
+      "F8"
+    ],
+    "findings": 8,
+    "note": "F1 and F2 were HIGH. F1 was a real defect in this change and is fixed; F2 is upstream of it and is disclosed rather than papered over.",
+    "report": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/ADVERSARIAL.md"
+  },
   "base_commit": "9bc8c8806840a1b0942df6dbb17bd5e5e999ed5e",
   "branch": "agent/v22-wintighten-absent-vs-below",
   "contract_change": "C-006 (additive): INCIDENT_KINDS gains variant_degenerate",
@@ -6,15 +21,19 @@
   "files": [
     {
       "path": "proxy/variants.py",
-      "sha256": "sha256:3285c7197cf17801974f37cd87c7d8b5f5f0899b3c4313a56f5dd9e45f470880"
+      "sha256": "sha256:6aa0a2fac07e7b8c1d7207d76de2fd52537943dce12b88f27b02ebeb445744ec"
     },
     {
       "path": "proxy/env_proxy.py",
-      "sha256": "sha256:95bef50255129ed5210da47f9895853a56507b0fdf790a7f68a1c8603be45606"
+      "sha256": "sha256:01b619b4df2eae79c8252aad2c4dd0a2250c2ca3b9aebed6a8f292bafb06e9b5"
     },
     {
       "path": "proxy/ledger.py",
       "sha256": "sha256:5e9503e8ff548ad96b5734c5dfa458a31a14f38bf2074f5a922cd0cace246b90"
+    },
+    {
+      "path": "proxy/runner.py",
+      "sha256": "sha256:798a5dc6aa054837075aca0ff4f7ce832cf765ddabf1af9117411a39c53458f0"
     },
     {
       "path": "proxy/canon_contract.json",
@@ -26,19 +45,19 @@
     },
     {
       "path": "proxy/tools/check_variant_degeneracy.py",
-      "sha256": "sha256:5f948696acbf685969532f28a44b6df3b6ecda2f9712689bb4074d9ce0d9c1dd"
+      "sha256": "sha256:522e94f0ea52b254d96b911004b10d619dc3090850e355acc58ad0886794a30e"
     },
     {
       "path": "proxy/verify.py",
-      "sha256": "sha256:4119c7dacfdf431824819ca69f9f39e4befa73a7d86f07cdd6114f53b0bdc395"
+      "sha256": "sha256:b2489ac53790d0cff0efe85d32a38abe6598fd8402e3f55ac799f3c63a70aa64"
     },
     {
       "path": "proxy/tests/test_variant_degeneracy.py",
-      "sha256": "sha256:c125e676789ca8c97021a559a47079dd4719faeeb9e14fdece95c82ebdf7e41b"
+      "sha256": "sha256:195b10142ec4cb15ce9bfd54c3d9110511c8084ccc6f27abf3578732e04e84c3"
     },
     {
       "path": "proxy/DECISIONS.md",
-      "sha256": "sha256:ed7b170f745d6b05d7bdd39e5117d1d7fade43c05b054ea870d43b9d060add3b"
+      "sha256": "sha256:da5233fa51a057af3365f1d6f7767b6507fe9587408bbc77f440a64f028be8f3"
     },
     {
       "path": "proxy/CONTRACT_CHANGES.md",
@@ -58,19 +77,23 @@
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/RUN_STATE.md",
-      "sha256": "sha256:90d2f4000ab741addc3584ad354aa0f493fc604ba7e82cc8390780b3b5a1a844"
+      "sha256": "sha256:90b571854b41a221dfb6912b9449b33534ff9288f0dfc68cbb041767f6e05d42"
+    },
+    {
+      "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/ADVERSARIAL.md",
+      "sha256": "sha256:dc88077f8d154e0982c606a2ffbae88bdc65fefaab6f3706d473fc8930179c95"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/mutants.py",
-      "sha256": "sha256:5e281f46db018db0d35bb20b8826dd3661705e4ffe9e249024d9a0da4efcdadc"
+      "sha256": "sha256:2473e6e1329590fc04924f54a51e15c5b1967e3e7a5e924f012931dd0ac679a2"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/mutants.json",
-      "sha256": "sha256:bfb9e76a62cafdd92243cc71d626ca8d20ddc304c3787e4a222b87c172d1342b"
+      "sha256": "sha256:9d787c9d2d16844d1550a11441b7e782e5fb19964273fae33b44c63b695ea338"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/mutants.txt",
-      "sha256": "sha256:d43544647bd7dba9e412ed906788fb3f39cba916c70ef3209a59b10414b7f952"
+      "sha256": "sha256:36d041f342ab0b1159d0b0f47625b3f1bd29b8c8bbfbc2478da9f94b8d9ae69b"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/collect_evidence.py",
@@ -78,43 +101,49 @@
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/rung5_red.py",
-      "sha256": "sha256:daf17095f9973b2db97d4a70784a2e7e9a5e52b1e137c4f50db986592dfe385a"
+      "sha256": "sha256:8e9f007d2463cbaab96079fe412719cc18f5397e72774d08c54f7a2565c590ff"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/pytest.txt",
-      "sha256": "sha256:40830e11c265cf7fac33f8261ef61bb6efe2b54dfec15ff3c676f6636e6f2b60"
+      "sha256": "sha256:61ab99385619a16f760d4cb6592b19c4490400097947502b02d5e39b6d3142ec"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-scoreless.txt",
-      "sha256": "sha256:b825db3900195a9b034f3a668157474090e345fb86af3e2b719f07fa4f1d2ea5"
+      "sha256": "sha256:b010ec7ddf643c18c7abd955202a0bc56d3311d6d1db3d7c2a1d4dca83806f0d"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-scoreless-unmarked.txt",
-      "sha256": "sha256:3b93456732c736ea675f48ffc3a42868e051d3ee933af033397d36818abeebbe"
+      "sha256": "sha256:73a456e779607f75a7c77197ef663120544a7a74199a5610c1566ae9aa78ed2e"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-scoring.txt",
-      "sha256": "sha256:4f89903d386e7aad944799f9c45785afd639e5af76924e49083b5a733f057697"
+      "sha256": "sha256:2283c73df7f1b8f4449ec02a1963033bffddc0263a2e88bbdc2612b45ba813bc"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-scoring-forged.txt",
-      "sha256": "sha256:d725451971d557ea28c6b31ef8d587d3b6fc19a894c5a2d62f42b06d9bb1956a"
+      "sha256": "sha256:040695d9d4de77da8267a0d5926fdc4721e7530e095ac0e8459aaf7bdb0b1651"
     },
     {
       "path": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/evidence-rung5-red.txt",
-      "sha256": "sha256:a4a43dfe9886bf87803634a2482bf75db569fdfe5b2cd69037146544dec7693d"
+      "sha256": "sha256:cf079702fec456fa24ea3eb7873b0cf9a87f1017c95fb5aaea09cf30f2c2c26e"
     }
   ],
-  "head_at_manifest": "a92215d6ee55fcc325217c37e6884487d511c53f",
+  "head_at_manifest": "c725fc628cdb15736ba349625726b72eaf85e7b7",
   "mutation": {
-    "control": "M00 (no mutation) survives; a failing control makes the harness print harness-invalid and refuse to report kill counts",
+    "control": "M00 (no mutation) SURVIVED; a failing control makes the harness print harness-invalid and refuse to report kill counts",
+    "expected_survivors": [
+      "M14",
+      "M33"
+    ],
     "harness": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below/mutants.py",
-    "killed": 24,
-    "mutants": 25,
-    "note": "the harness's first run reported 25/25 kills and every one was false -- the copied tree was missing arc-recon/data/piles.json. See RUN_STATE.md.",
+    "killed": 31,
+    "mutants": 33,
+    "note": "the harness's first run reported 25/25 kills and every one was false -- the copied tree was missing arc-recon/data/piles.json. Widening the test surface to the whole suite then failed the control a second time (no git repo in the temp tree). Both are recorded in RUN_STATE.md rather than quietly re-run.",
     "survived": [
-      "M14"
-    ]
+      "M14",
+      "M33"
+    ],
+    "test_surface": "the whole proxy suite, per PREREGISTRATION P4"
   },
   "network": "none -- offline mocks only; no API key read, no socket off loopback",
   "preregistration_commit": "4fa378dea133f9e2a930914247666f17520bd3fc",
@@ -127,7 +156,8 @@
   "tests": {
     "command": "python -m pytest proxy -q",
     "exit": 0,
-    "note": "output in pytest.txt"
+    "note": "output in pytest.txt",
+    "passed": 349
   },
   "utc": "2026-07-29T12:51:03Z"
 }
