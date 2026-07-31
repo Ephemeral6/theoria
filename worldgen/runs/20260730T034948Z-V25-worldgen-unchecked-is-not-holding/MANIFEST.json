@@ -1,0 +1,9 @@
+{
+  "prompt_id": "V25-worldgen-unchecked-is-not-holding",
+  "branch": "agent/v25-worldgen-unchecked-is-not-holding",
+  "base_commit": "3b2a5873d615f54b25b0e6b1ccd8e4365a851484",
+  "utc": "20260730T034948Z",
+  "cell": "C2",
+  "territory": "worldgen",
+  "worker": "W-1693"
+}

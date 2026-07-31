@@ -1,0 +1,9 @@
+﻿{
+  "prompt_id": "V25-worldgen-unchecked-is-not-holding",
+  "branch": "agent/v25-worldgen-unchecked-is-not-holding",
+  "base_commit": "45b1529ddf4a3172fde5ea121d46e3214b009d01",
+  "utc": "2026-07-31T00:00:00Z",
+  "worker": "W-1681",
+  "continues": "worldgen/runs/20260730T034948Z-V25-worldgen-unchecked-is-not-holding (W-1693, req 1)",
+  "scope": "reqs 2/3/4 + same-family optimistic-default sweep"
+}
