@@ -362,7 +362,7 @@ sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
-sha256:940c7495eff83259255176bdecdad51ecebc2c6ea383b9c86900b8322fa0a2d7  battery/artifacts_live/live_arm_readings.json
+sha256:ddea53526788f6590d512f3213cb59b0bea057d38e5d4aa8313274a1dafc0b4b  battery/artifacts_live/live_arm_readings.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -897,3 +897,5 @@ ground truth）—— 都是如实报告，不是缺陷。
 因此 §2.2 由 48 → 50 个文件、§2.4 由 22 → 23 个、§2.6 由 8 → 9 份，相应
 `freeze:*` 块按 `python -m battery.freeze` 重渲。**冻结基线与七份冻结读数
 一个字节未动**（`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。
+
+**Amendment 2026-08-01 (readings refresh, live arm):** `battery/artifacts_live/live_arm_readings.json` re-derived after the r3 leg's harvest entered the archive (a new live run changes the recompute by design; rung 7 catches the stale copy). Blocks re-authored block-by-block via `freeze.render_blocks()` — changed: readings. No frozen code or predictions moved.

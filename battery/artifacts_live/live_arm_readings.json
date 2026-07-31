@@ -40,116 +40,138 @@
       "E1": {
         "by_status": {
           "not-applicable": 3,
-          "ok": 1
+          "ok": 3
         },
         "direction": "neutral",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 9.556852
+          "20260731T1310Z-A3-level2-carried-r2": 9.556852,
+          "20260731T1430Z-A3-level2-carried-r3": 13.439862,
+          "20260731T1500Z-A3-sk48-carried-l1": 9.175606
         }
       },
       "E2": {
         "by_status": {
-          "insufficient-data": 1,
-          "not-applicable": 3
+          "insufficient-data": 2,
+          "not-applicable": 3,
+          "ok": 1
         },
         "direction": "higher",
-        "measured": {}
+        "measured": {
+          "20260731T1430Z-A3-level2-carried-r3": 0.255664307
+        }
       },
       "E3": {
         "by_status": {
-          "insufficient-data": 1,
-          "not-applicable": 3
-        },
-        "direction": "lower",
-        "measured": {}
-      },
-      "E4": {
-        "by_status": {
+          "insufficient-data": 2,
           "not-applicable": 3,
           "ok": 1
         },
         "direction": "lower",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 0.367445724
+          "20260731T1430Z-A3-level2-carried-r3": 1.0
+        }
+      },
+      "E4": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 3
+        },
+        "direction": "lower",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 0.367445724,
+          "20260731T1430Z-A3-level2-carried-r3": 2.5884e-05,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.004424855
         }
       },
       "E5": {
         "by_status": {
           "not-applicable": 3,
-          "ok": 1
+          "ok": 3
         },
         "direction": "lower",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 0.682632286
+          "20260731T1310Z-A3-level2-carried-r2": 0.682632286,
+          "20260731T1430Z-A3-level2-carried-r3": 0.395290059,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.509755889
         }
       },
       "E6": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "neutral",
         "measured": {
           "20260729T004020Z-leg01": 1.0,
           "20260729T105729Z-leg01": 1.0,
           "20260731T1240Z-A3-level2-carried": 1.0,
-          "20260731T1310Z-A3-level2-carried-r2": 1.0
+          "20260731T1310Z-A3-level2-carried-r2": 1.0,
+          "20260731T1430Z-A3-level2-carried-r3": 1.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 1.0
         }
       },
       "E7": {
         "by_status": {
           "not-applicable": 3,
-          "ok": 1
+          "ok": 3
         },
         "direction": "lower",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 0.180047219
+          "20260731T1310Z-A3-level2-carried-r2": 0.180047219,
+          "20260731T1430Z-A3-level2-carried-r3": 0.001128362,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.026564791
         }
       }
     },
     "epistemic": {
       "K1": {
         "by_status": {
+          "insufficient-data": 1,
           "not-applicable": 2,
-          "ok": 2
+          "ok": 3
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.2,
-          "20260731T1310Z-A3-level2-carried-r2": 0.692307692
+          "20260731T1310Z-A3-level2-carried-r2": 0.692307692,
+          "20260731T1430Z-A3-level2-carried-r3": 1.0
         }
       },
       "K10": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 6.0,
-          "20260731T1310Z-A3-level2-carried-r2": 7.0
+          "20260731T1310Z-A3-level2-carried-r2": 7.0,
+          "20260731T1430Z-A3-level2-carried-r3": 12.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 20.0
         }
       },
       "K11": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "neutral",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 3.0,
-          "20260731T1310Z-A3-level2-carried-r2": 11.0
+          "20260731T1310Z-A3-level2-carried-r2": 11.0,
+          "20260731T1430Z-A3-level2-carried-r3": 17.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 14.0
         }
       },
       "K12": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "higher",
         "measured": {}
       },
       "K13": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "lower",
         "measured": {}
@@ -157,17 +179,19 @@
       "K14": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 9.0,
-          "20260731T1310Z-A3-level2-carried-r2": 3.0
+          "20260731T1310Z-A3-level2-carried-r2": 3.0,
+          "20260731T1430Z-A3-level2-carried-r3": 3.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 8.0
         }
       },
       "K2": {
         "by_status": {
-          "insufficient-data": 2,
+          "insufficient-data": 4,
           "not-applicable": 2
         },
         "direction": "higher",
@@ -176,193 +200,219 @@
       "K3": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 25.0,
-          "20260731T1310Z-A3-level2-carried-r2": 28.0
+          "20260731T1310Z-A3-level2-carried-r2": 28.0,
+          "20260731T1430Z-A3-level2-carried-r3": 37.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 40.0
         }
       },
       "K4": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 1.0,
-          "20260731T1310Z-A3-level2-carried-r2": 1.0
+          "20260731T1310Z-A3-level2-carried-r2": 1.0,
+          "20260731T1430Z-A3-level2-carried-r3": 1.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 1.0
         }
       },
       "K5": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 3.0,
-          "20260731T1310Z-A3-level2-carried-r2": 4.0
+          "20260731T1310Z-A3-level2-carried-r2": 4.0,
+          "20260731T1430Z-A3-level2-carried-r3": 4.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 6.0
         }
       },
       "K6": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 24.0,
-          "20260731T1310Z-A3-level2-carried-r2": 19.25
+          "20260731T1310Z-A3-level2-carried-r2": 19.25,
+          "20260731T1430Z-A3-level2-carried-r3": 21.75,
+          "20260731T1500Z-A3-sk48-carried-l1": 12.5
         }
       },
       "K7": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "neutral",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.0
+          "20260731T1310Z-A3-level2-carried-r2": 0.0,
+          "20260731T1430Z-A3-level2-carried-r3": 0.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.0
         }
       },
       "K8": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 0.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.888888889
+          "20260731T1310Z-A3-level2-carried-r2": 0.888888889,
+          "20260731T1430Z-A3-level2-carried-r3": 0.965517241,
+          "20260731T1500Z-A3-sk48-carried-l1": 1.0
         }
       },
       "K9": {
         "by_status": {
           "not-applicable": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260731T1240Z-A3-level2-carried": 24.0,
-          "20260731T1310Z-A3-level2-carried-r2": 34.0
+          "20260731T1310Z-A3-level2-carried-r2": 34.0,
+          "20260731T1430Z-A3-level2-carried-r3": 40.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 51.0
         }
       }
     },
     "exploration": {
       "X1": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "lower",
         "measured": {
           "20260729T004020Z-leg01": 0.2,
           "20260729T105729Z-leg01": 0.166666667,
           "20260731T1240Z-A3-level2-carried": 0.166666667,
-          "20260731T1310Z-A3-level2-carried-r2": 0.214285714
+          "20260731T1310Z-A3-level2-carried-r2": 0.214285714,
+          "20260731T1430Z-A3-level2-carried-r3": 0.088235294,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.222222222
         }
       },
       "X2": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "higher",
         "measured": {
           "20260729T004020Z-leg01": 1.0,
           "20260729T105729Z-leg01": 1.0,
           "20260731T1240Z-A3-level2-carried": 1.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.928571429
+          "20260731T1310Z-A3-level2-carried-r2": 0.928571429,
+          "20260731T1430Z-A3-level2-carried-r3": 0.970588235,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.833333333
         }
       },
       "X3": {
         "by_status": {
           "insufficient-data": 2,
-          "ok": 2
+          "ok": 4
         },
         "direction": "higher",
         "measured": {
           "20260729T004020Z-leg01": 0.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.333333333
+          "20260731T1310Z-A3-level2-carried-r2": 0.333333333,
+          "20260731T1430Z-A3-level2-carried-r3": 0.125,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.5
         }
       },
       "X4": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "lower",
         "measured": {
           "20260729T004020Z-leg01": 0.1,
           "20260729T105729Z-leg01": 0.166666667,
           "20260731T1240Z-A3-level2-carried": 0.166666667,
-          "20260731T1310Z-A3-level2-carried-r2": 0.071428571
+          "20260731T1310Z-A3-level2-carried-r2": 0.071428571,
+          "20260731T1430Z-A3-level2-carried-r3": 0.029411765,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.055555556
         }
       },
       "X5": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "neutral",
         "measured": {
           "20260729T004020Z-leg01": 8.0,
           "20260729T105729Z-leg01": 5.0,
           "20260731T1240Z-A3-level2-carried": 5.0,
-          "20260731T1310Z-A3-level2-carried-r2": 11.0
+          "20260731T1310Z-A3-level2-carried-r2": 11.0,
+          "20260731T1430Z-A3-level2-carried-r3": 31.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 14.0
         }
       },
       "X6": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "higher",
         "measured": {
           "20260729T004020Z-leg01": 0.0,
           "20260729T105729Z-leg01": 0.0,
           "20260731T1240Z-A3-level2-carried": 0.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.0
+          "20260731T1310Z-A3-level2-carried-r2": 0.0,
+          "20260731T1430Z-A3-level2-carried-r3": 0.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.0
         }
       }
     },
     "mechanism": {
       "M1": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "lower",
         "measured": {}
       },
       "M2": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "higher",
         "measured": {}
       },
       "M3": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "lower",
         "measured": {}
       },
       "M4": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "lower",
         "measured": {}
       },
       "M5": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "higher",
         "measured": {}
       },
       "M6": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "neutral",
         "measured": {}
@@ -372,58 +422,67 @@
       "P1": {
         "by_status": {
           "not-applicable": 3,
-          "ok": 1
+          "ok": 3
         },
         "direction": "higher",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 2.8
+          "20260731T1310Z-A3-level2-carried-r2": 2.8,
+          "20260731T1430Z-A3-level2-carried-r3": 4.25,
+          "20260731T1500Z-A3-sk48-carried-l1": 2.571428571
         }
       },
       "P2": {
         "by_status": {
           "not-applicable": 3,
-          "ok": 1
+          "ok": 3
         },
         "direction": "higher",
         "measured": {
-          "20260731T1310Z-A3-level2-carried-r2": 0.5
+          "20260731T1310Z-A3-level2-carried-r2": 0.5,
+          "20260731T1430Z-A3-level2-carried-r3": 0.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.416666667
         }
       },
       "P3": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "lower",
         "measured": {
           "20260729T004020Z-leg01": 0.0,
           "20260729T105729Z-leg01": 0.0,
           "20260731T1240Z-A3-level2-carried": 0.0,
-          "20260731T1310Z-A3-level2-carried-r2": 0.0
+          "20260731T1310Z-A3-level2-carried-r2": 0.0,
+          "20260731T1430Z-A3-level2-carried-r3": 0.0,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.25
         }
       },
       "P4": {
         "by_status": {
-          "not-applicable": 4
+          "not-applicable": 6
         },
         "direction": "lower",
         "measured": {}
       },
       "P5": {
         "by_status": {
-          "ok": 4
+          "ok": 6
         },
         "direction": "neutral",
         "measured": {
           "20260729T004020Z-leg01": 0.903846154,
           "20260729T105729Z-leg01": 0.823529412,
           "20260731T1240Z-A3-level2-carried": 0.9,
-          "20260731T1310Z-A3-level2-carried-r2": 0.858585859
+          "20260731T1310Z-A3-level2-carried-r2": 0.858585859,
+          "20260731T1430Z-A3-level2-carried-r3": 0.854700855,
+          "20260731T1500Z-A3-sk48-carried-l1": 0.866666667
         }
       }
     }
   },
   "games": [
-    "g50t-5849a774"
+    "g50t-5849a774",
+    "sk48-d8078629"
   ],
   "inputs": {
     "20260729T004020Z-leg01": {
@@ -459,11 +518,30 @@
       "probes.jsonl": "sha256:a5e3489580159f06b46ee883d4e74fbe9794a2f0f8373072a2ef8989d3f23bac",
       "surprises.jsonl": "sha256:b95449691b03e197826060bf8db29c03d69c2acb81fe8e7e08105709a8de1584",
       "turns.json": "sha256:4fb833f6661927ad19c468a488ac4cd4183b8db2b89f85de123bd1b1598656b4"
+    },
+    "20260731T1430Z-A3-level2-carried-r3": {
+      "books/playbook.dsl": "sha256:8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16",
+      "books/theory.dsl": "sha256:8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090",
+      "certify.json": "sha256:0529786ac3f1388b8654b24b9df52e7b263026101c6a500e4add0f29c8d2ef4f",
+      "curves.json": "sha256:9b51f42a3a4f24728a99a82c09d08711fd3e93c081ccaa2bf16b9fa42ae13d73",
+      "ledger.jsonl": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3",
+      "probes.jsonl": "sha256:329f84017959006e572c1b85c24f2ae7edc97a8e1235f4a0bf8d00eb280ccab3",
+      "surprises.jsonl": "sha256:12eec8ca24ce366e3600e2652f8c3bbc80828cc126b5a76809704959d3dace0b",
+      "turns.json": "sha256:74018a8760a20606358437dc87c197e278396aecf4c73bdf1ea31bc5cb27ebce"
+    },
+    "20260731T1500Z-A3-sk48-carried-l1": {
+      "books/playbook.dsl": "sha256:257514da96311feae20955ef03e20d8c320a1de1cdcf43d16afb22b0604031d1",
+      "books/theory.dsl": "sha256:3760181f8a67c2c6dcb61e5d275ff06abc10c37f917b98082754ad7c4ff6bb4e",
+      "ledger.jsonl": "sha256:748f57abfadfab2d8a2d3728059031378f06488d671cdf73a2a30a1d85a68b8e",
+      "probes.jsonl": "sha256:c417448b458b138a99fa574235eddc4aa7ded8990b7872fcb0ce3def3b6b4fbb",
+      "surprises.jsonl": "sha256:59598728eac172ebb4947d458fa5f0c19ee6f68ca53c19d32177cf4370bba233"
     }
   },
   "measured_by_family": {
     "economy": [
       "E1",
+      "E2",
+      "E3",
       "E4",
       "E5",
       "E6",
@@ -498,9 +576,9 @@
       "P5"
     ]
   },
-  "n_games": 1,
-  "n_measured_cells": 62,
-  "n_runs": 4,
+  "n_games": 2,
+  "n_measured_cells": 115,
+  "n_runs": 6,
   "piles": [
     "dev"
   ],
@@ -1559,6 +1637,596 @@
       "source": "theoria-arm-live",
       "steps": 99,
       "turns": 5
+    },
+    "20260731T1430Z-A3-level2-carried-r3": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 200,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 8
+          },
+          "value": 13.439862
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "billed_calls": 8,
+            "head_turns": 2.0,
+            "turns": 8
+          },
+          "value": 0.255664307
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 8,
+            "turns": 8
+          },
+          "value": 1.0
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.988623,
+            "r2_quadratic": 0.988649,
+            "turns": 8
+          },
+          "value": 2.5884e-05
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 34,
+            "total_usd": 13.439862
+          },
+          "value": 0.395290059
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 234,
+            "on_failed_steps": 1.0,
+            "steps": 234
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 74613,
+            "last_chars": 101632,
+            "r2_linear": 0.982591,
+            "r2_quadratic": 0.98372,
+            "turns": 8
+          },
+          "value": 0.001128362
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 29,
+            "pairs": 29
+          },
+          "value": 1.0
+        },
+        "K10": {
+          "status": "ok",
+          "value": 12.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 17.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "mean": 21.75,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 37.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 22,
+            "min_witnesses": 1,
+            "unannotated": 37
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 51,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 21.75
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 29,
+            "executable": 28
+          },
+          "value": 0.965517241
+        },
+        "K9": {
+          "status": "ok",
+          "value": 40.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 34,
+            "calls": 8
+          },
+          "value": 4.25
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 4.25,
+            "second_rate": 4.25
+          },
+          "value": 0.0
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 32
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 200,
+            "steps": 234
+          },
+          "value": 0.854700855
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 31,
+            "observed": 34
+          },
+          "value": 0.088235294
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 33,
+            "transitions": 34
+          },
+          "value": 0.970588235
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 0.875,
+            "transitions": 34
+          },
+          "value": 0.125
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 34
+          },
+          "value": 0.029411765
+        },
+        "X5": {
+          "status": "ok",
+          "value": 31.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 200
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 8,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1430Z-A3-level2-carried-r3",
+        "carried_books": true,
+        "certify_records": 8,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 234,
+        "ledger_complete": true,
+        "ledger_cost_usd": 13.439862,
+        "ledger_run_id": "r-41e482ba348b4a3a",
+        "levels_completed": 0,
+        "model_calls": 8,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260731T1430Z-A3-level2-carried-r3",
+        "surprises": {
+          "probe_refutation": 28,
+          "replay_mismatch": 1
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 0,
+          "ledger_calls": 8,
+          "source": "unjoined: curves.json counts 7 billed call(s), the ledger has 8"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 234,
+      "turns": 8
+    },
+    "20260731T1500Z-A3-sk48-carried-l1": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 117,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 7
+          },
+          "value": 9.175606
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.730757,
+            "r2_quadratic": 0.735182,
+            "turns": 7
+          },
+          "value": 0.004424855
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 18,
+            "total_usd": 9.175606
+          },
+          "value": 0.509755889
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 135,
+            "on_failed_steps": 1.0,
+            "steps": 135
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 77616,
+            "last_chars": 86711,
+            "r2_linear": 0.691547,
+            "r2_quadratic": 0.718111,
+            "turns": 7
+          },
+          "value": 0.026564791
+        },
+        "K1": {
+          "reason": "no replay score recorded for this run",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K10": {
+          "status": "ok",
+          "value": 20.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 14.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 22,
+            "concepts": 6,
+            "mean": 12.5,
+            "worst_concept": "Rail"
+          },
+          "value": 8.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 40.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 8,
+            "min_witnesses": 1,
+            "unannotated": 40
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 6.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 22,
+            "concepts": 6,
+            "worst": 8
+          },
+          "value": 12.5
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 6
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 12,
+            "executable": 12
+          },
+          "value": 1.0
+        },
+        "K9": {
+          "status": "ok",
+          "value": 51.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 18,
+            "calls": 7
+          },
+          "value": 2.571428571
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 2.333333,
+            "second_rate": 2.75
+          },
+          "value": 0.416666667
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 4,
+            "windows": 16
+          },
+          "value": 0.25
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 117,
+            "steps": 135
+          },
+          "value": 0.866666667
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 14,
+            "observed": 18
+          },
+          "value": 0.222222222
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 15,
+            "transitions": 18
+          },
+          "value": 0.833333333
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 0.5,
+            "transitions": 18
+          },
+          "value": 0.5
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 18
+          },
+          "value": 0.055555556
+        },
+        "X5": {
+          "status": "ok",
+          "value": 14.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 117
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 7,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:sk48-d8078629:20260731T1500Z-A3-sk48-carried-l1",
+        "carried_books": true,
+        "certify_records": null,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 135,
+        "ledger_complete": false,
+        "ledger_cost_usd": 9.175606,
+        "ledger_run_id": "r-b85a42dd9a894853",
+        "levels_completed": null,
+        "model_calls": 7,
+        "outcome": null,
+        "slug": "20260731T1500Z-A3-sk48-carried-l1",
+        "surprises": {
+          "probe_refutation": 8,
+          "replay_mismatch": 7
+        },
+        "turn_join": {
+          "join_confidence": null,
+          "joined_calls": 0,
+          "ledger_calls": 7,
+          "source": "unjoined: no turn_series.json and no curves.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 135,
+      "turns": 7
     }
   },
   "runs_root": "theoria-arm/runs",
