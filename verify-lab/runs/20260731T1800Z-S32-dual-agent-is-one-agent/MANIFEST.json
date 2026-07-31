@@ -1,0 +1,59 @@
+{
+  "api_calls": 0,
+  "base_commit": "6fabcc7ea957931b7676ddbdf7587e128b947e73",
+  "branch": "cleanup2/S32-dual-agent",
+  "cell": "S32",
+  "files": [
+    {
+      "path": "verify-lab/DUAL_PROXY.md",
+      "sha256": "b1dc17856a9237afc395807487cb4aa242e40d2b778f55af06247ff977fadd6b"
+    },
+    {
+      "path": "verify-lab/dualagent/count.py",
+      "sha256": "dd40a2631054350915279f36dc271a44d5e11656e2b14eab55164fbc8fe9fdce"
+    },
+    {
+      "path": "verify-lab/dualagent/tests/test_count.py",
+      "sha256": "8f8aa502440e6a558dff6f68a837e2439e31ba6a478ddc017175cf4d108af3b7"
+    },
+    {
+      "path": "verify-lab/runs/20260731T1800Z-S32-dual-agent-is-one-agent/census.json",
+      "sha256": "f94f6188475aa88179079e9c4e89eb3ecad9ef7db13f3bc6cadc3c70026bc8c9"
+    },
+    {
+      "path": "verify-lab/runs/20260731T1800Z-S32-dual-agent-is-one-agent/fixture-snapshot.json",
+      "sha256": "410c37ddb9928ccc9862ada3de85d3679e61376dc84d3c758ac10beedeeb57c6"
+    },
+    {
+      "path": "verify-lab/runs/20260731T1800Z-S32-dual-agent-is-one-agent/pytest.stdout.txt",
+      "sha256": "38ccac2b2bd18580bc153c7ba8b5420ea4e9f37f8a4e7e5f903202b6cb0194c4"
+    },
+    {
+      "path": "verify-lab/runs/20260731T1800Z-S32-dual-agent-is-one-agent/RUN_STATE.md",
+      "sha256": "d78bdca49513c78992dc20cc25416dfd9ce84bf68d1afc7db474bf2a10d0860e"
+    }
+  ],
+  "gate": {
+    "cmd": "python -m pytest verify-lab -q",
+    "master_baseline": "33 passed",
+    "result": "44 passed"
+  },
+  "headline": {
+    "env_proxy_requests_fixture": 85,
+    "env_proxy_requests_live": 924,
+    "env_proxy_requests_total": 1009,
+    "model_proxy_401": 65,
+    "model_proxy_bypass_attempts": 66,
+    "model_proxy_fixture_succeeded_untracked": 32,
+    "model_proxy_model_calls": 65,
+    "model_proxy_records": 131,
+    "model_proxy_succeeded": 0
+  },
+  "prompt": "monitor/board/claimed/S32-dual-agent-is-one-agent.W-1800.md",
+  "prompt_id": "S32-dual-agent-is-one-agent.W-1800",
+  "sealed_pile_contact": false,
+  "spend_usd": 0.0,
+  "territory": "verify-lab",
+  "utc": "2026-07-31T18:00:00Z",
+  "verdict": "b"
+}
