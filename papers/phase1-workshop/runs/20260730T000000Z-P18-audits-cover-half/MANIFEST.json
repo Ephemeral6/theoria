@@ -1,116 +1,183 @@
 {
-  "prompt_id": "P18-audits-cover-half-the-paper",
-  "branch": "agent/p18-audits-cover-half-the-paper",
-  "base_commit": "50e106179323e1af3a2e1b5c82a35fd3d232c552",
-  "utc": "2026-07-30T00:00:00Z",
-  "worker": "W-1690",
-  "continued_by": "RES-3",
-  "baseline_gate": "papers/verify.py green: verify_paper 6/6, 184 tests passed",
-  "paper_at_start": {
-    "sha256": "6b633fcc35ae612f20f4028eb45aaca1b6ed86a24eb1304af555c46228325376",
-    "bytes": 237872,
-    "lines": 3729
+ "base_commit": "50e106179323e1af3a2e1b5c82a35fd3d232c552",
+ "baseline_gate": "papers/verify.py green: verify_paper 6/6, 184 tests passed",
+ "baseline_gate_note": "`baseline_gate` records the state at the run's START and is left as written: verify_paper 6/6, 184 tests passed. It was being read as a current gate state, which it never was.",
+ "branch": "agent/p18-audits-cover-half-the-paper",
+ "citation_axis_coverage": "COMPLETE as of 2026-07-30 cycle 94. Five slices cover PAPER.md L1-3729 with no gap: A 1-908, B 909-1668, C 1669-2520, D1 2521-3197, D2 3198-3729 -- every boundary now written out, because the two the cover claim turns on (D1/D2 and the D1|D2 seam) were previously elided to '2521-...' and '...-3729'. Each slice's paper_lines field above carries the same range as that slice file's own declared scope, and the D1|D2 seam was re-derived from the section offsets: PAPER L2521 is §9's heading, L3194 the last line of sections/10_adjudication.md, L3195-3197 the separator (blank, '---', blank), L3198 §11's heading, L3729 the last line of sections/12_related.md. 332 enumerated rows total (66+57+70+73+66), each carrying a PAPER.md line, a section-file line, the artefact cited, and the value actually found there. Row counts emitted by count_rows.py, not asserted.",
+ "citation_slices": [
+  {
+   "bytes": 70908,
+   "counts_corrected_vs_stub": "Pass A's four counts (69/62/7/0) confirmed. Pass B findings 8 -> 12, claims checked ~95 -> ~125; Pass C 9 -> 8; Pass D 14/4 -> 25/5. One of the stub's three load-bearing findings WITHDRAWN: the 38-metric five-family split verifies field for field in capability_spectrum.json (38 cards; epistemic 14 / economy 7 / mechanism 6 / exploration 6 / planning 5).",
+   "data_rows": 59,
+   "file": "citecheck-A-abstract-to-s3.md",
+   "lines": 810,
+   "paper_lines": "1-908",
+   "range": "Abstract-§3",
+   "rows": 66,
+   "sha256": "ce23f2a53ee52cedf9f662364f2d6b547eed25b5b0ff113a793f13602e141454",
+   "slice": "A",
+   "state": "complete"
   },
-  "citation_slices": [
-    {
-      "slice": "A",
-      "range": "Abstract-§3",
-      "paper_lines": "1-908",
-      "file": "citecheck-A-abstract-to-s3.md",
-      "state": "complete",
-      "sha256": "ce23f2a53ee52cedf9f662364f2d6b547eed25b5b0ff113a793f13602e141454",
-      "bytes": 70908,
-      "lines": 810,
-      "counts_corrected_vs_stub": "Pass A's four counts (69/62/7/0) confirmed. Pass B findings 8 -> 12, claims checked ~95 -> ~125; Pass C 9 -> 8; Pass D 14/4 -> 25/5. One of the stub's three load-bearing findings WITHDRAWN: the 38-metric five-family split verifies field for field in capability_spectrum.json (38 cards; epistemic 14 / economy 7 / mechanism 6 / exploration 6 / planning 5).",
-      "rows": 66,
-      "data_rows": 59
-    },
-    {
-      "slice": "B",
-      "range": "§4-§6",
-      "paper_lines": "909-1668",
-      "file": "citecheck-B-s4-to-s6.md",
-      "state": "complete",
-      "sha256": "e9434905a03a3d7fca8e4cddeda1c74bb569bb47e3ad6bb289eb6ba58ab99224",
-      "bytes": 48343,
-      "lines": 536,
-      "rows": 57,
-      "data_rows": 50
-    },
-    {
-      "slice": "C",
-      "range": "§7-§8",
-      "paper_lines": "1669-2520",
-      "file": "citecheck-C-s7-to-s8.md",
-      "state": "complete",
-      "sha256": "f75e5289982122f063af9cb882bfd18ff77ffcc7f41635f1435c581767fd002e",
-      "bytes": 69933,
-      "lines": 784,
-      "rows": 70,
-      "data_rows": 62,
-      "counts_corrected_vs_stub": "Pass A's five counts were all correct and are confirmed (56 citations: 53 as written, 1 under a section-implied base, 2 after brace expansion, 0 broken). The other three were all wrong: Pass B findings 6 -> 10, Pass C 7 -> 11, Pass D 21 checked / 4 inexact -> 31 / 6. The stub's '~185 claims checked' is not reproducible from any enumeration; the rewrite's ~150 is the sum of its itemised rows."
-    },
-    {
-      "slice": "D1",
-      "range": "§9-§10",
-      "paper_lines": "2521-3197",
-      "file": "citecheck-D1-s9-to-s10.md",
-      "state": "complete",
-      "sha256": "ff9066e1b03155dc412acbb8a03702bfb3e058a87ba08bb978e9dffb8ace80ef",
-      "bytes": 58103,
-      "lines": 607,
-      "rows": 73,
-      "data_rows": 64
-    },
-    {
-      "slice": "D2",
-      "range": "§11-§12",
-      "paper_lines": "3198-3729",
-      "file": "citecheck-D2-s11-to-s12.md",
-      "state": "complete",
-      "sha256": "225be86e1544944ba82478bb5039602b5c93417511c668d5feb3488eb2462e48",
-      "bytes": 54642,
-      "lines": 706,
-      "rows": 66,
-      "data_rows": 58
-    }
+  {
+   "bytes": 48343,
+   "data_rows": 50,
+   "file": "citecheck-B-s4-to-s6.md",
+   "lines": 536,
+   "paper_lines": "909-1668",
+   "range": "§4-§6",
+   "rows": 57,
+   "sha256": "e9434905a03a3d7fca8e4cddeda1c74bb569bb47e3ad6bb289eb6ba58ab99224",
+   "slice": "B",
+   "state": "complete"
+  },
+  {
+   "bytes": 69933,
+   "counts_corrected_vs_stub": "Pass A's five counts were all correct and are confirmed (56 citations: 53 as written, 1 under a section-implied base, 2 after brace expansion, 0 broken). The other three were all wrong: Pass B findings 6 -> 10, Pass C 7 -> 11, Pass D 21 checked / 4 inexact -> 31 / 6. The stub's '~185 claims checked' is not reproducible from any enumeration; the rewrite's ~150 is the sum of its itemised rows.",
+   "data_rows": 62,
+   "file": "citecheck-C-s7-to-s8.md",
+   "lines": 784,
+   "paper_lines": "1669-2520",
+   "range": "§7-§8",
+   "rows": 70,
+   "sha256": "f75e5289982122f063af9cb882bfd18ff77ffcc7f41635f1435c581767fd002e",
+   "slice": "C",
+   "state": "complete"
+  },
+  {
+   "bytes": 58103,
+   "data_rows": 64,
+   "file": "citecheck-D1-s9-to-s10.md",
+   "lines": 607,
+   "paper_lines": "2521-3197",
+   "range": "§9-§10",
+   "rows": 73,
+   "sha256": "ff9066e1b03155dc412acbb8a03702bfb3e058a87ba08bb978e9dffb8ace80ef",
+   "slice": "D1",
+   "state": "complete"
+  },
+  {
+   "bytes": 54642,
+   "data_rows": 58,
+   "file": "citecheck-D2-s11-to-s12.md",
+   "lines": 706,
+   "paper_lines": "3198-3729",
+   "range": "§11-§12",
+   "rows": 66,
+   "sha256": "225be86e1544944ba82478bb5039602b5c93417511c668d5feb3488eb2462e48",
+   "slice": "D2",
+   "state": "complete"
+  }
+ ],
+ "completeness_check": "'complete' above is a checked property, not an inference from file size -- which is the distinction this whole run is about. Each slice marked complete was verified to carry all four pass sections (A/B/C/D), a limits section, and enumerated table rows. B calls its limits section 'What this audit could NOT check' and D1/D2 call theirs 'What I could NOT check, and why'; the heading differs, the section is present in all four. STUB-MARKER GREP, restated because the flat negative this field used to assert ('No slice marked complete contains a \"report in progress\", \"filled in below\", TODO or TBD marker') is contradicted by the grep it names: two hits exist, and neither marks unfinished work. (1) citecheck-A-abstract-to-s3.md:806 -- 'slice B records that slice C ends at line 43 with \"*(report in progress)*\"', a retrospective quotation about another slice's former stub state, in a paragraph whose point is that A's own counts are enumerated. (2) citecheck-D2-s11-to-s12.md:89 -- the string '[bib: TODO]' inside 'Zero [bib: TODO] markers remain in the slice', i.e. the marker name appears only as the thing reported absent (0 occurrences of 'bib: TODO' in PAPER.md and sections/; the 65 bib keys cited by §12 all resolve in references.bib). No other hit of any of the four markers exists in any slice. CITECHECK-2026-07-30.md was the more accurate document on this point, because it explained the mentions where this field denied them; a check whose stated method is a grep and whose stated result contradicts that grep is worse than no check. The two stubs were caught by exactly this check. The row counts are now emitted by count_rows.py under the stated rule rather than asserted.",
+ "continued_by": "RES-3",
+ "files": [
+  {
+   "path": "CLOSING-PLAN.md",
+   "sha256": "f76f87c9b767878ade25e48a4046f5fe69064e168e0ce965af4d74d624dfce35"
+  },
+  {
+   "path": "COVERAGE.md",
+   "sha256": "51fba76be241b333ce1692932a85f77141de10e8a34b8de88f733ff3ea529878"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "13aba3c5dd341d26b34f6e1a01b9aba5df5f9754ad989dc9d37b6970fc199a5c"
+  },
+  {
+   "path": "adversarial-locator-review.md",
+   "sha256": "4fe647fcb988ff16bd892aedb4e546eec98b59788356d25569fa36b91b8cdba0"
+  },
+  {
+   "path": "citecheck-A-abstract-to-s3.md",
+   "sha256": "ce23f2a53ee52cedf9f662364f2d6b547eed25b5b0ff113a793f13602e141454"
+  },
+  {
+   "path": "citecheck-B-s4-to-s6.md",
+   "sha256": "e9434905a03a3d7fca8e4cddeda1c74bb569bb47e3ad6bb289eb6ba58ab99224"
+  },
+  {
+   "path": "citecheck-C-s7-to-s8.md",
+   "sha256": "f75e5289982122f063af9cb882bfd18ff77ffcc7f41635f1435c581767fd002e"
+  },
+  {
+   "path": "citecheck-D1-s9-to-s10.md",
+   "sha256": "ff9066e1b03155dc412acbb8a03702bfb3e058a87ba08bb978e9dffb8ace80ef"
+  },
+  {
+   "path": "citecheck-D2-s11-to-s12.md",
+   "sha256": "225be86e1544944ba82478bb5039602b5c93417511c668d5feb3488eb2462e48"
+  },
+  {
+   "path": "count_rows.py",
+   "sha256": "d9b15f5bc7bfb1393a4f30da0eecdf6270d5b2e5ec75458982677037eb855739"
+  },
+  {
+   "path": "delta-old-vs-new.md",
+   "sha256": "147cd8db752a64117e2a294d597ddb96a14c79f4726ccb39652e59f937245127"
+  },
+  {
+   "path": "row-sample-audit-C.md",
+   "sha256": "a138612d3e4e726eebddb0b0a9123913215bf2740cdd817abae5460b8a2aa7d5"
+  },
+  {
+   "path": "row-sample-audit.md",
+   "sha256": "48f9ececce1bc0312e3fd03280b00c25459fb22ee85f40a8c16afd7ad6f6b020"
+  },
+  {
+   "path": "section-8-4-evidence-check.md",
+   "sha256": "fa2ccc864af20f7d9da90efde99a0bbd907470838622e6837aa55225ad4c21a9"
+  }
+ ],
+ "final_gate": {
+  "G AUDITSTAMP": "PASS -- this run's own gate is green",
+  "papers/verify.py": "RED (1 problem)",
+  "pytest": "274 passed, 1 xfailed",
+  "queue_state": "blocked in ci_merge since 2026-07-30T12:42:07Z, 2 attempts, monitor/ci/CONFLICT-origin_agent_p18-audits-cover-half-the-paper.md. Escalated in monitor/inbox/20260730T1545Z-RES-3-a-gate-that-caught-a-real-defect-is-indistinguishable-from-a-broken-branch.md",
+  "verify_paper": "FAIL (1/7) -- E UNCITED",
+  "why_red": "`sections/08_exam.md`'s six-bullet block. The red is produced by the locator check this run ADDED, and what it catches is real: one bullet quotes a sentence attributed to `exam/` that exists in no file, on no branch, at no commit. Fixing it means editing paper body text, which monitor/CHARTER.md reserves to RES-2, so it is handed over rather than applied. Fix package: section-8-4-evidence-check.md in this directory."
+ },
+ "paper_at_start": {
+  "bytes": 237872,
+  "lines": 3729,
+  "sha256": "6b633fcc35ae612f20f4028eb45aaca1b6ed86a24eb1304af555c46228325376"
+ },
+ "prompt_id": "P18-audits-cover-half-the-paper",
+ "reconciliation": {
+  "file": "delta-old-vs-new.md",
+  "per_source_totals": {
+   "CITECHECK.md": 66,
+   "REVIEW.md": 54,
+   "review-d-adversarial.md": 19
+  },
+  "purpose": "work item 2 -- per-finding reconciliation of the three stale audits against the paper as it is now",
+  "sources": [
+   "CITECHECK.md",
+   "REVIEW.md",
+   "runs/20260728T173000Z-P12-paper-multi-review/review-d-adversarial.md"
   ],
-  "slice_state_note": "All five slices are now complete; there is no stub left in this run. This field previously read 'A and C are recorded here as stubs on purpose', and before that the run carried three stubs that read as finished. The original point is why the field is corrected rather than deleted: each stub carried a full summary table of per-pass counts with no pass sections behind it, which is the defect this run was commissioned to fix -- a count nobody can check. Recording stub state in the manifest rather than only in prose is what stopped the successor CITECHECK being stamped over one.",
-  "reconciliation": {
-    "file": "delta-old-vs-new.md",
-    "purpose": "work item 2 -- per-finding reconciliation of the three stale audits against the paper as it is now",
-    "state": "complete -- 447 lines, 47321 bytes, 139 findings each resolved to a verdict and an anchor in the current PAPER.md or an explicit 'no longer present'. Zero rows are 'unverifiable'.",
-    "sources": [
-      "CITECHECK.md",
-      "REVIEW.md",
-      "runs/20260728T173000Z-P12-paper-multi-review/review-d-adversarial.md"
-    ],
-    "verdicts": {
-      "fixed": 96,
-      "partly-fixed": 8,
-      "still-open": 11,
-      "moved": 7,
-      "superseded": 3,
-      "adjudicated": 3,
-      "withdrawn": 2,
-      "not-a-defect": 9,
-      "unverifiable": 0,
-      "total": 139,
-      "open_in_some_form": 26
-    },
-    "per_source_totals": {
-      "CITECHECK.md": 66,
-      "REVIEW.md": 54,
-      "review-d-adversarial.md": 19
-    },
-    "stub_header_was_wrong": "The stub's own header asserted HEAD 50e10617 (actually 0096a2c3) and that 'there is no 91244-byte state in the history of the file'. There is: commit 080f05da, PAPER.md at 1534 lines / 91244 bytes / sha256 112058bf8d63a34ef42468270466d4beadd7d3d96062465fff7ee7bf1af3c5f6 -- re-measured independently by RES-3 out of git rather than taken from the sub-audit. It is the same commit OPEN_ITEMS.md credits with closing four of REVIEW's six blocking issues, so the assertion was not only false but false about the most load-bearing revision in the range. Withdrawn, and the full blob history is given in its place.",
-    "two_source_audits_had_wrong_arithmetic": "The 2 'withdrawn' rows are findings that were wrong when written, not findings later repaired. The headline diff was re-run: 52 changed lines / 7 hunks / 791 vs 789 / 28 weight-table lines. CITECHECK's '70 diff lines' reproduces under no reading of the diff; REVIEW's 'only 14 of them are the weight table' confused table entries with lines. Both audits' substantive points stand and are fixed; the current paper gets the arithmetic right at L1378-1379.",
-    "the_rule_was_weakened_not_only_satisfied": "CITECHECK tested that every citation is repo-relative. verify_paper.py's gate F now tests that every citation is unambiguous. Those are different rules: A-7/8/9/17 are unambiguous bare filenames, so the gate reports green over findings that remain true. A green gate is evidence about the rule the gate implements, not about the rule the audit tested."
-  },
-  "stub_census": "Three of this run's deliverables were stubs that read as finished: citecheck A (Pass A only, B/C/D counted but never enumerated), citecheck C (summary table, then 'report in progress'), and delta-old-vs-new (header, then an empty table). All three are recorded here rather than only in prose, because the defect P18 was commissioned to fix is a coverage claim nobody could check, and it turned up three times inside P18's own output.",
-  "completeness_check": "'complete' above is a checked property, not an inference from file size -- which is the distinction this whole run is about. Each slice marked complete was verified to carry all four pass sections (A/B/C/D), a limits section, and enumerated table rows. B calls its limits section 'What this audit could NOT check' and D1/D2 call theirs 'What I could NOT check, and why'; the heading differs, the section is present in all four. STUB-MARKER GREP, restated because the flat negative this field used to assert ('No slice marked complete contains a \"report in progress\", \"filled in below\", TODO or TBD marker') is contradicted by the grep it names: two hits exist, and neither marks unfinished work. (1) citecheck-A-abstract-to-s3.md:806 -- 'slice B records that slice C ends at line 43 with \"*(report in progress)*\"', a retrospective quotation about another slice's former stub state, in a paragraph whose point is that A's own counts are enumerated. (2) citecheck-D2-s11-to-s12.md:89 -- the string '[bib: TODO]' inside 'Zero [bib: TODO] markers remain in the slice', i.e. the marker name appears only as the thing reported absent (0 occurrences of 'bib: TODO' in PAPER.md and sections/; the 65 bib keys cited by §12 all resolve in references.bib). No other hit of any of the four markers exists in any slice. CITECHECK-2026-07-30.md was the more accurate document on this point, because it explained the mentions where this field denied them; a check whose stated method is a grep and whose stated result contradicts that grep is worse than no check. The two stubs were caught by exactly this check. The row counts are now emitted by count_rows.py under the stated rule rather than asserted.",
-  "row_counting_rule": "count_rows.py is the executable form of this count; run it, do not trust the numbers beside it. RULE: a row is a line whose stripped form starts with '|', excluding lines inside ``` fences (those are examples of table syntax, not rows of this audit) and excluding GFM separator lines '|---|---|' (punctuation). Header rows ARE counted -- a choice, not a discovery: it is the rule under which two of the four original numbers reproduce, so it changes the fewest recorded figures. data_rows (header excluded, one per table) is recorded alongside for the other convention. The point is that the convention is written down, not which won.",
-  "row_counts_were_wrong": "CORRECTED. The previous completeness_check asserted 'A 73 rows, B 57, D1 73, D2 65' as the checked property behind 'complete'. Re-derived: THREE different counting rules produced those four numbers. Under the single stated rule the true counts are A 66, B 57, D1 73, D2 66 -- B and D1 reproduce exactly, D2 was off by one, and A's 73 was the raw count of every pipe-prefixed line INCLUDING separator rows (A has 7 tables, and 66 + 7 = 73). An independent sampler drew 31 rows across the four slices weighted toward load-bearing and confirmed-correct ones and found 31 of 31 hold, 0 wrong, 0 unverifiable, with no cross-slice disagreement -- so the rows are sound and this was bookkeeping. But it sat in the artefact that establishes 'complete', which is this run's own defect class one level up: a count nobody could re-derive.",
-  "stale_prose_about_slice_A": "citecheck-B's closing paragraph still says slice A 'ends after Pass A (77 lines)'. That was true when B was written and is now false -- A is 810 lines with all four passes. Not edited: B is an audit record, and rewriting the evidence to match the present is the move this territory has receipts against. Recorded here instead, which is where a reader checking A's state actually looks.",
-  "citation_axis_coverage": "COMPLETE as of 2026-07-30 cycle 94. Five slices cover PAPER.md L1-3729 with no gap: A 1-908, B 909-1668, C 1669-2520, D1 2521-3197, D2 3198-3729 -- every boundary now written out, because the two the cover claim turns on (D1/D2 and the D1|D2 seam) were previously elided to '2521-...' and '...-3729'. Each slice's paper_lines field above carries the same range as that slice file's own declared scope, and the D1|D2 seam was re-derived from the section offsets: PAPER L2521 is §9's heading, L3194 the last line of sections/10_adjudication.md, L3195-3197 the separator (blank, '---', blank), L3198 §11's heading, L3729 the last line of sections/12_related.md. 332 enumerated rows total (66+57+70+73+66), each carrying a PAPER.md line, a section-file line, the artefact cited, and the value actually found there. Row counts emitted by count_rows.py, not asserted."
+  "state": "complete -- 447 lines, 47321 bytes, 139 findings each resolved to a verdict and an anchor in the current PAPER.md or an explicit 'no longer present'. Zero rows are 'unverifiable'.",
+  "stub_header_was_wrong": "The stub's own header asserted HEAD 50e10617 (actually 0096a2c3) and that 'there is no 91244-byte state in the history of the file'. There is: commit 080f05da, PAPER.md at 1534 lines / 91244 bytes / sha256 112058bf8d63a34ef42468270466d4beadd7d3d96062465fff7ee7bf1af3c5f6 -- re-measured independently by RES-3 out of git rather than taken from the sub-audit. It is the same commit OPEN_ITEMS.md credits with closing four of REVIEW's six blocking issues, so the assertion was not only false but false about the most load-bearing revision in the range. Withdrawn, and the full blob history is given in its place.",
+  "the_rule_was_weakened_not_only_satisfied": "CITECHECK tested that every citation is repo-relative. verify_paper.py's gate F now tests that every citation is unambiguous. Those are different rules: A-7/8/9/17 are unambiguous bare filenames, so the gate reports green over findings that remain true. A green gate is evidence about the rule the gate implements, not about the rule the audit tested.",
+  "two_source_audits_had_wrong_arithmetic": "The 2 'withdrawn' rows are findings that were wrong when written, not findings later repaired. The headline diff was re-run: 52 changed lines / 7 hunks / 791 vs 789 / 28 weight-table lines. CITECHECK's '70 diff lines' reproduces under no reading of the diff; REVIEW's 'only 14 of them are the weight table' confused table entries with lines. Both audits' substantive points stand and are fixed; the current paper gets the arithmetic right at L1378-1379.",
+  "verdicts": {
+   "adjudicated": 3,
+   "fixed": 96,
+   "moved": 7,
+   "not-a-defect": 9,
+   "open_in_some_form": 26,
+   "partly-fixed": 8,
+   "still-open": 11,
+   "superseded": 3,
+   "total": 139,
+   "unverifiable": 0,
+   "withdrawn": 2
+  }
+ },
+ "row_counting_rule": "count_rows.py is the executable form of this count; run it, do not trust the numbers beside it. RULE: a row is a line whose stripped form starts with '|', excluding lines inside ``` fences (those are examples of table syntax, not rows of this audit) and excluding GFM separator lines '|---|---|' (punctuation). Header rows ARE counted -- a choice, not a discovery: it is the rule under which two of the four original numbers reproduce, so it changes the fewest recorded figures. data_rows (header excluded, one per table) is recorded alongside for the other convention. The point is that the convention is written down, not which won.",
+ "row_counts_were_wrong": "CORRECTED. The previous completeness_check asserted 'A 73 rows, B 57, D1 73, D2 65' as the checked property behind 'complete'. Re-derived: THREE different counting rules produced those four numbers. Under the single stated rule the true counts are A 66, B 57, D1 73, D2 66 -- B and D1 reproduce exactly, D2 was off by one, and A's 73 was the raw count of every pipe-prefixed line INCLUDING separator rows (A has 7 tables, and 66 + 7 = 73). An independent sampler drew 31 rows across the four slices weighted toward load-bearing and confirmed-correct ones and found 31 of 31 hold, 0 wrong, 0 unverifiable, with no cross-slice disagreement -- so the rows are sound and this was bookkeeping. But it sat in the artefact that establishes 'complete', which is this run's own defect class one level up: a count nobody could re-derive.",
+ "slice_state_note": "All five slices are now complete; there is no stub left in this run. This field previously read 'A and C are recorded here as stubs on purpose', and before that the run carried three stubs that read as finished. The original point is why the field is corrected rather than deleted: each stub carried a full summary table of per-pass counts with no pass sections behind it, which is the defect this run was commissioned to fix -- a count nobody can check. Recording stub state in the manifest rather than only in prose is what stopped the successor CITECHECK being stamped over one.",
+ "stale_prose_about_slice_A": "citecheck-B's closing paragraph still says slice A 'ends after Pass A (77 lines)'. That was true when B was written and is now false -- A is 810 lines with all four passes. Not edited: B is an audit record, and rewriting the evidence to match the present is the move this territory has receipts against. Recorded here instead, which is where a reader checking A's state actually looks.",
+ "stub_census": "Three of this run's deliverables were stubs that read as finished: citecheck A (Pass A only, B/C/D counted but never enumerated), citecheck C (summary table, then 'report in progress'), and delta-old-vs-new (header, then an empty table). All three are recorded here rather than only in prose, because the defect P18 was commissioned to fix is a coverage claim nobody could check, and it turned up three times inside P18's own output.",
+ "utc": "2026-07-30T00:00:00Z",
+ "worker": "W-1690"
 }

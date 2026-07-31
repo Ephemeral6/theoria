@@ -119,3 +119,191 @@ paper body text is RES-2's exclusive remit** (`monitor/CHARTER.md`), so they are
 handed over rather than applied. Six are blocking, including a self-contradictory
 abstract — the item asked for those kill shots and they are found and located;
 what is out of bounds is only the editing.
+
+## 2026-07-30, RES-3 cycle 105 — the ruling that checks the rulings
+
+### Recovered, not redone
+
+The previous session died with 265 uncommitted lines in `verify_paper.py` and no
+run record of them. They were found in the working tree, not reconstructed. This
+section is written after the fact for that reason, which is itself the argument
+for writing as you go: the reasoning behind those lines had to be re-derived from
+the diff, and one of the two things it turned on (why the fixture below must put
+the list directly under a heading) was not recoverable from the code at all.
+
+### What it does
+
+`locator_findings()` scores the one part of a ruling that is a fact rather than a
+judgement. A ruling exempts a block from check E or F on the strength of a prose
+justification, and several justifications say "cited one block above". Whether
+§8.4's bullets *ought* to need a path is a call somebody has to make; whether the
+handover reports are one block above is not — it is true or false, and it was
+false. The function parses the distance, resolves the target block, and checks the
+named artefact is in it. An invalid ruling is dropped **before** the scan rather
+than merely reported, so its block reports UNCITED. Reporting alone would have
+left the block silent, which is the whole defect.
+
+It also reports a ruling that states a distance and names no artefact. That is not
+pedantry: "cited one block above (one report per tier, both named there)" names
+nothing a check can look for, and both entries written that way were wrong.
+
+### Measured, because it decides whether this ships
+
+| | check E | verify_paper |
+|---|---|---|
+| without the change | PASS | **PASS 7/7** |
+| with it | FAIL | **FAIL 1/7** |
+
+Confirmed by stashing the change and re-running, not by reading the code. **This
+turns a green territory red**, and it lands anyway, because the green was false:
+§8.4's 18-line six-bullet list cites no artefact anywhere in it and was exempted
+whole by a ruling whose one factual assertion was untrue. `BROAD` could not see
+it — merging makes six bullets one block, so the ruling matched exactly one block
+and looked well-scoped. A false green is worse than a red gate.
+
+The red is **true and deliberate**, in the sense S29 separates: the territory is
+genuinely uncited there, the gate is not misfiring. It is announced on the bus so
+a merge-queue triager does not spend a cycle re-deriving it.
+
+### The fix is not mine to make
+
+Closing it means citing or re-wording paper body text, which `monitor/CHARTER.md`
+reserves to RES-2. Handed over rather than applied — the same boundary this run
+already recorded for the referee pass's 13 findings.
+
+### `test_locator_gate.py` — new, 15 cases
+
+The mechanism shipped with no test; the agent that wrote it died before running
+one. Controls for both shapes that actually occurred (locator points at the wrong
+block; locator names nothing), for the quiet cases that must stay quiet (a true
+locator, a ruling with no distance at all, a stale anchor that the STALE rule
+owns), and for the wiring — that an invalid ruling's block really does get scored
+rather than merely complained about.
+
+Two facts about `_blocks` are load-bearing in the fixture and both were got wrong
+on the first attempt, which is worth recording because they are invisible in the
+source:
+
+* **A list is merged into the prose chunk above it.** The first fixture put a
+  paragraph between the heading and the bullets; the two fused, the ruled block
+  stopped being the list, and four tests failed. The real §8.4 list is its own
+  block only because a heading terminates the chunk.
+* **A heading is a block.** So "one block above" the §8.4 list resolves to the
+  §8.4 heading, which cites nothing — verbatim the shipped defect.
+
+The last test runs `locator_findings` over the *live* `ADJUDICATED_UNCITED` and
+`ADJUDICATED_BARE` and asserts it is empty. It passes, which is the evidence that
+all three false locators are now corrected or withdrawn. It is also the test that
+keeps catching the next one: a locator decays with the prose around it, silently
+and by default. "Four lines above" became fifteen when the paragraph above grew,
+while the block it meant never moved — which is why locators here are
+block-relative now.
+
+**Suite: 274 passed, 1 xfailed** (259 + 15).
+
+(This read "270 passed, 1 xfailed (259 + 11)" and both numbers were wrong in the same direction: `test_locator_gate.py` collects **15**, not 11 -- 14 `def test_`, the last of them (`test_every_shipped_ruling_states_a_true_locator`) parametrised over `ADJUDICATED_UNCITED` and `ADJUDICATED_BARE` -- and the suite is 274. The heading above said 11 too, and so did the cycle-105 heartbeat: three places, in this run's own documents. **A first version of this correction said the PARTNER_SYNC paragraph was a fourth, and it is not** -- `f5b39196` reads "`test_locator_gate.py` 15 条" and has been right since it was written. That inverts the point rather than softening it: the board-facing record was correct and the run's own narrative was not, so anyone checking the number against the published paragraph would have found the truth, and nobody did. A correction written without opening the file it accuses is the same move as the miscount it corrects, one turn later. The closing line further down this file already said 274; a document disagreeing with itself about its own test count is the cheapest possible instance of the thing this run is about, and it survived because nothing recomputed it.)
+
+### The §8.4 evidence check, and the gate that does not exist
+
+`section-8-4-evidence-check.md` in this directory. All three assertions in the
+withdrawal comment hold, and it found a fourth stale bullet the comment never
+named. The serious one is not staleness:
+
+**§8.4 carries a fabricated quotation.** "In the directory's own words: *the leaks
+that remain are the ones nobody has looked for yet*" — that sentence exists in no
+file under `exam/`, on no branch, at no commit. Verified independently rather than
+taken on report: repo-wide it appears only in the paper itself and in the audit
+reports discussing it, and its earliest appearance anywhere is `579d0385`, the
+very commit that wrote the bullet attributing it to the directory. Slice C's
+row-sample audit had already flagged it, which is corroboration and not a second
+source. The real sentence it approximates (`exam/STATUS.md`, "a cheater pass is a
+sample, not a proof") says something materially different and is itself inside the
+struck-through version of that weakness.
+
+**No gate can see this, and the reason generalises.** Check E scores a block on
+whether it carries a resolvable artefact path, and it only looks at blocks
+asserting a *quantity*. A fabricated quotation contains no digit, so it never
+enters E's scan surface at all; F only adjudicates ambiguous bare filenames. The
+paper can therefore attribute a sentence to a source that never contained it and
+go green on all seven checks. That is a hole of a different shape from the one
+this run has been closing: not "the ruling exempting this block is false" but
+"nothing ever looked at this block".
+
+A second shape came out of the same four bullets. Two of them were **true when
+written** — the paper bullet landed 2026-07-28 17:41, `exam/STATUS.md` struck the
+sentence at 19:31, and `08_exam.md` was edited twice more the next day without
+anyone refreshing them. So the defect is not authorship but decay, and it is
+silent: no edit to either file announces that the other has moved.
+
+Both belong in one item — a quotation check keyed on attribution rather than on
+digits, plus a rule that a citation of text now inside `~~...~~` (or of an entry
+marked `Closed by` / `Superseded by`) goes red. Written up as **V28** and
+deliberately *not* filed yet: `board.py assign` refused it at the three-item
+self-supply cap, and the cap is right — my two outstanding self-supplied items
+(V2, V27) are both territory-blocked behind this very branch's claim on `exam`,
+so the way to file V28 is to deliver, not to stockpile. Recorded here so the cap
+does not cost the finding.
+
+Boundary: everything above is a handover. The fix to all four bullets is body
+text, which `monitor/CHARTER.md` reserves to RES-2; the six-bullet citation table
+in the evidence check names a real tracked artefact for every bullet except the
+fabricated quotation, where the fix is deletion.
+
+### Adversarial review of the mechanism, and three fixes
+
+`adversarial-locator-review.md` in this directory. Nine defects, and the exercise
+was worth more than the code it audited: the mechanism was written in one pass by
+a session that died before running it once.
+
+**D1 (HIGH), fixed.** `_ruling_paths()` harvested every backticked path in the
+whole justification and `locator_findings()` accepted the target block if **any**
+of them was in it. So a ruling's contrasts and its own `(Corrected …)` notes
+supplied decoys — and a correction note by construction describes what is at the
+*wrong* place. The reviewer demonstrated it with one word changed in a shipped
+entry: `08_exam.md`'s "0.000" ruling, `two blocks above` → `one block above`,
+passes on `Theoria.md`, which its own note names as the only citation in the block
+one above. **The note written to document the bug was concealing it.** The more
+careful a ruling's prose, the more decoys it supplied — the mechanism was weakest
+exactly where the writing was most conscientious.
+
+Fixed by cutting correction notes and reading only the locator's own sentence. Now
+flagged; the unmutated ruling still passes. Both directions are pinned in
+`test_locator_gate.py`, with the mutation as the case.
+
+**D5 (MEDIUM/HIGH false positive), fixed.** A `lines` locator on the check-E path
+was measured from the block's *first* line rather than the anchor's. A writer
+counting lines counts from the sentence being ruled on, so a **true** "six lines
+above" was dropped and told the reader it ran off the end of a seven-line section
+— a correct ruling killed, with a false reason. `anchor_line` is now the anchor's
+own line: the last line from which the anchor is still reachable is the line it
+starts on. `03_a0.md`'s live two-line locator still passes.
+
+**D9, fixed.** `check_bare()` never got the guard `check_uncited()` was given, so a
+LOCATOR-invalid ruling was reported twice and the second reason — "is ruled and no
+longer appears" — was **false**: the token does still appear. A gate that prints a
+false reason for a true finding teaches the reader to stop believing its reasons.
+
+### Not fixed, and named rather than left implied
+
+None is live on the current tables; each is a real hole and none should be
+inferred from a green run. **D2**: the origin block is the first block containing
+the anchor, while `scan_uncited` silences the first *quantitative* one, so a
+locator can be validated against a different block than the one exempted — latent,
+and `07_battery.md` is one line from triggering it. **D3**: artefact matching is
+naked substring, so `STATUS.md` is satisfied by `engine-rig/STATUS.md`. **D4**: an
+unparsed phrasing ("the previous block", "just above") is a **silent** pass — the
+vocabulary is `RULING_LOCATOR`'s and nothing distinguishes "checked and true" from
+"not understood". That is the same shape as the defect this whole mechanism
+exists for, one level up. **D6**: a merged block's line span is understated
+because merges swallow the blank line. **D7**: check F's raw line scan includes
+code-fence interiors that `_blocks()` excludes. **D8**: only the first locator in
+a justification is parsed. **D10**: `stale` is un-deduplicated, so the "N ruled, M
+stale rulings" summary can double-count.
+
+The reviewer's verdict is the honest one and is adopted verbatim: **safe as an
+improvement, not as a guarantee.** It is live on 5 of 13 rulings, which the
+function's docstring overstated.
+
+**Gate: FAIL (1/7), E UNCITED — unchanged and intended.** Exit code read directly
+rather than through a pipe (`$?` after a pipe reads `tail`, which is how a red
+gate reads green). **Suite: 274 passed, 1 xfailed.**
