@@ -541,6 +541,32 @@ def test_probe_hypotheses_include_one_ablation_per_rule(tmp_path):
     assert any(i.startswith("without_") for i in ids)
 
 
+def test_a_forall_schema_is_one_hypothesis_not_one_per_instance(tmp_path):
+    """`forall ?p in Ring` grounds to one rule per instance. Ablating each
+    separately would be seventy near-identical hypotheses and seventy times the
+    work; the manual's claim is the schema."""
+    store = _ring_store()
+    books = Books(str(tmp_path))
+    books.write(theory=RING_THEORY)
+    books.write_problem(problem_from_frames(
+        store, theorize._objects_from_theory(RING_THEORY)))
+    assert books.compile_all()["ok"]
+    namespace, error = books.load_predictor()
+    assert namespace is not None, error
+
+    assert len(namespace["RULES"]) == 4                # four ground rules ...
+    hypotheses = probe_beat.build_hypotheses(namespace)
+    ablations = [h for h in hypotheses if h.id.startswith("without_")]
+    assert [h.id for h in ablations] == ["without_shift"]   # ... one hypothesis
+    assert "4 ground instances" in ablations[0].description
+
+    # And suppressing the schema really does suppress every instance of it.
+    state = namespace["initial_state"]()
+    action = ("key", 2)
+    assert ablations[0].predict(state, action) != hypotheses[0].predict(state, action)
+    assert ablations[0].predict(state, action) == hypotheses[1].predict(state, action)
+
+
 # ----------------------------------------------------------------- the reply
 def test_the_evidence_gate_waits_for_a_batch_but_never_cancels_a_call():
     """A surprise triggers theorize; it does not make another pass over the

@@ -66,19 +66,34 @@ def build_hypotheses(namespace: Dict[str, Any]):
 
     if fired is not None:
         # `RULES` is a list of (name, guard_fn, effect_fn, objects) tuples.
+        #
+        # Ablate by SCHEMA, not by ground rule. `forall ?p in Ring` grounds to
+        # one rule per instance -- `shift__Ring_r8c14`, `shift__Ring_r8c15`, …
+        # -- and ablating each separately would make seventy near-identical
+        # hypotheses, seventy times the work, to answer a question nobody
+        # asked. The manual's claim is the schema; "does `shift` fire at all"
+        # is the hypothesis worth an action, so all of a schema's ground rules
+        # are suppressed together.
+        schemas: Dict[str, List[str]] = {}
         for entry in rules:
             name = entry[0] if isinstance(entry, (tuple, list)) else str(entry)
+            schemas.setdefault(name.split("__")[0], []).append(name)
 
-            def ablated(state, action, _name=name):
+        for base, members in sorted(schemas.items()):
+            group = frozenset(members)
+
+            def ablated(state, action, _group=group):
                 try:
-                    if _name in (fired(state, action) or []):
+                    if _group & set(fired(state, action) or []):
                         return _observation(render(state))
                     return _observation(render(step(state, action)))
                 except Exception:                      # noqa: BLE001
                     return "error"
             hypotheses.append(Hypothesis(
-                id="without_%s" % name, predict=ablated,
-                description="the manual with rule %r removed" % name))
+                id="without_%s" % base, predict=ablated,
+                description=("the manual with rule %r removed (%d ground "
+                             "instance%s)" % (base, len(members),
+                                              "" if len(members) == 1 else "s"))))
     return hypotheses
 
 
