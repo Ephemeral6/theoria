@@ -44,7 +44,27 @@ PHASES = [
                 "clause": "Phase 1 · 自下而上五层 (3)",
                 "status": "green",
                 "note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 "
-                        "usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。",
+                        "usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。\n\n"
+                        "【正式裁决·Phase-1 收尾 2026-07-31】本项按**改定义后已清偿**"
+                        "（redefined-and-discharged）结案，规矩同 p3-gate-exception：如实"
+                        "登记，不粉饰。**史实**（S32 复算的分母，verify-lab/DUAL_PROXY.md，"
+                        "每轮由 dualagent/count.py 重算）：环境代理 924 条真实端点腿在账"
+                        "（1009 条代理腿中，其余 85 条打回环夹具）；模型代理 65 条 "
+                        "model_call **全部 401（65-of-65）**，**0 条 2xx**——模型代理"
+                        "从未载过一条真实流量，S32 判 (b)。**(a) 当下不可达，且非工程"
+                        "缺陷**：DUAL_PROXY §4 六步清单第 1 步要求 .env 里有 "
+                        "ANTHROPIC_API_KEY，而 .env 只有 ARC_API_KEY——补它是所有者出资"
+                        "动作，任何代理不得代办；第 2 步要换掉 theoria-arm D-P8-002 "
+                        "特意选定的 claude -p 订阅传输，等于为凑数而弱化既定设计。"
+                        "**改定义**：本项的实质是『provider usage 逐字入账』，这一点经 "
+                        "CLI 包络已达成——usage 块逐字写入 run 账本，每条 model_call 标 "
+                        "proxied:false 并带 proxy_gap 注明原因（D-P8-002），无人能把它"
+                        "误读成代理流量；账面上明写的损失照旧：request 是臂发给 CLI 的"
+                        "提示词而非 CLI 发给上游的 /v1/messages 体，入token构成不可由"
+                        "此账本得出结论。**留权**：模型代理仍是任何未来 API 传输臂的"
+                        "**强制通路**；DUAL_PROXY §4 六步清单为常设升级路径，触发条件"
+                        "是所有者决定出资配 API key，届时 count.py 的 "
+                        "model_proxy_succeeded 转非零并须同一 commit 改判本条。",
                 "blocks": ["c2"],
             },
             {

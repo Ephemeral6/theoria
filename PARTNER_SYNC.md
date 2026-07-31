@@ -1872,3 +1872,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`monitor/verify.py` **GREEN，退出 0**，四段全 ok（tests / board states disjoint / real run / artifact fields）；`pytest stage took 183.5s (budget 300s, ceiling 2400s)`，**≤300 秒硬指标达成**，闸门总墙钟 236.9 秒。套件本身 460.8s → **182.8s（-60.3%）**，改后 `--durations=20` 里唯一超过 4.6 秒的就是那个共享夹具的 58.91 秒 setup。新增 30 条测试（`test_reflex_heartbeat.py` 17、`test_gate_budget.py` 8+，含四条阴性对照：安静的健康机绿、**忙碌的健康机绿**、阈值边界不提前触发、被 git 重新打过 mtime 的陈旧日志仍判红）。**未**断言活仓报绿：本机 `TheoriaReflex` 此刻 `Disabled`，诚实读数就是 risk（末行 2026-07-31T01:54:33Z，锁不存在），要求它报绿等于要求机器说谎。零 API、零花费、零封存堆接触、无凭据值。
 阻塞：none（对本次交付而言）。遗留、已写进 DECISIONS 而**未做**：`ExecutionTimeLimit` 仍是 PT72H，所以「进程活着但卡死」这一格仍无自动接管路径，只有探针点名 pid 叫人——这是本工单能诚实交付的边界，改计划任务是改「恢复舰队的那个东西」，前置条件是闸门成本先降下来。
 下一步：闸门成本降下来之后重测一次常态轮次时长，若稳定落在 30 分钟以内，再评估把 `ExecutionTimeLimit` 收到一个真会开火的值；`probe_reflex_heartbeat` 在健康机器上跑满一天，确认它确实平时是绿的，再谈把它接进任何自动动作。
+
+## [monitor] 2026-07-31T15:36Z p1-model-proxy-adjudication
+状态：Phase-1「模型代理」项正式裁决落账（monitor/spec.py `p1-proxy-model` 注记，循 p3-gate-exception 的登记先例）：按**改定义后已清偿**结案。史实逐字引 S32 分母（verify-lab/DUAL_PROXY.md，count.py 每轮重算）：环境代理 **924** 条真实端点腿 / 模型代理 **65-of-65 全 401** / **0 条 2xx**——模型代理零真实流量，S32 判 (b)。(a) 当下不可达且非工程缺陷：DUAL_PROXY §4 第 1 步要 .env 有 ANTHROPIC_API_KEY（现只有 ARC_API_KEY，本次以变量名核验、未读值），补它是所有者出资动作；第 2 步要换掉 D-P8-002 特意选定的 claude -p 订阅传输，属为凑数弱化设计。改定义的实质：『provider usage 逐字入账』经 CLI 包络已达成，每条 model_call 标 proxied:false 带 proxy_gap。留权：模型代理仍是任何未来 API 传输臂的强制通路，§4 六步清单为常设升级路径，触发条件是所有者出资决定。
+测试：worktree 内 `python -m pytest monitor/tests`：**525 passed, 2 xfailed in 155.52s**；spec 导入自检通过（p1 items: 16）。改动仅 spec.py 一条注记字符串 + 本段，无行为变更。零 API 调用、零花费、零封存堆接触、无凭据值（.env 仅以名核验）。
+阻塞：none。(a) 的门槛不是阻塞而是所有者决策点：出资配 API key 才启动 DUAL_PROXY §4 的 2–6 步（其中 2、4 是 theoria-arm 的活，3 触 proxy/）。
+下一步：若所有者拍板出资，按 §4 顺序派单且 model_proxy_succeeded 转非零须与改判同 commit；否则本项封存，论文用 DUAL_PROXY §3 的三句话原文。
