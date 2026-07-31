@@ -1,0 +1,94 @@
+{
+  "budget_actions": 40,
+  "deltas": {
+    "off_frontier_probes": -37,
+    "probes_fired": -35,
+    "probes_refused": 6,
+    "surprises_total": -32,
+    "theorize_rounds": -32
+  },
+  "note": "Same world, same seed, same budget. The only difference is ProbeEconomyConfig.enabled.",
+  "off": {
+    "actions_spent": 40,
+    "economy": {
+      "config": {
+        "carry_refutations": true,
+        "max_per_generation": 4,
+        "min_bits": 0.0,
+        "off_frontier_stop": 3,
+        "suppress_repeats": true
+      },
+      "consecutive_off_frontier": 40,
+      "enabled": false,
+      "generations": 0,
+      "probes_allowed": 40,
+      "probes_refused": 0,
+      "refusal_reasons": {},
+      "retired_hypotheses": []
+    },
+    "explorations": 0,
+    "explorations_after_gate_refusal": 0,
+    "explorations_after_no_split": 0,
+    "final_rule_count": 6,
+    "off_frontier_probes": 40,
+    "probe_economy_enabled": false,
+    "probes_fired": 40,
+    "probes_refused": 0,
+    "surprises_by_kind": {
+      "execution_mismatch": 0,
+      "heuristic_miss": 0,
+      "probe_refutation": 40,
+      "proof_failure": 0,
+      "render_mismatch": 0,
+      "replay_mismatch": 0,
+      "search_timeout": 0
+    },
+    "surprises_total": 40,
+    "theorize_rounds": 40
+  },
+  "on": {
+    "actions_spent": 40,
+    "economy": {
+      "config": {
+        "carry_refutations": true,
+        "max_per_generation": 4,
+        "min_bits": 0.0,
+        "off_frontier_stop": 3,
+        "suppress_repeats": true
+      },
+      "consecutive_off_frontier": 0,
+      "enabled": true,
+      "generations": 2,
+      "probes_allowed": 5,
+      "probes_refused": 6,
+      "refusal_reasons": {
+        "probe class retired: 3 consecutive probes landed off the fro": 6
+      },
+      "retired_hypotheses": [
+        "inert",
+        "without_latch",
+        "without_move"
+      ]
+    },
+    "explorations": 35,
+    "explorations_after_gate_refusal": 6,
+    "explorations_after_no_split": 29,
+    "final_rule_count": 2,
+    "off_frontier_probes": 3,
+    "probe_economy_enabled": true,
+    "probes_fired": 5,
+    "probes_refused": 6,
+    "surprises_by_kind": {
+      "execution_mismatch": 0,
+      "heuristic_miss": 0,
+      "probe_refutation": 3,
+      "proof_failure": 0,
+      "render_mismatch": 0,
+      "replay_mismatch": 5,
+      "search_timeout": 0
+    },
+    "surprises_total": 8,
+    "theorize_rounds": 8
+  },
+  "seed": 20260801
+}

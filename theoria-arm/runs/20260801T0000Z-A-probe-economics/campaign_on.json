@@ -1,0 +1,44 @@
+{
+  "actions_spent": 40,
+  "economy": {
+    "config": {
+      "carry_refutations": true,
+      "max_per_generation": 4,
+      "min_bits": 0.0,
+      "off_frontier_stop": 3,
+      "suppress_repeats": true
+    },
+    "consecutive_off_frontier": 0,
+    "enabled": true,
+    "generations": 2,
+    "probes_allowed": 5,
+    "probes_refused": 6,
+    "refusal_reasons": {
+      "probe class retired: 3 consecutive probes landed off the fro": 6
+    },
+    "retired_hypotheses": [
+      "inert",
+      "without_latch",
+      "without_move"
+    ]
+  },
+  "explorations": 35,
+  "explorations_after_gate_refusal": 6,
+  "explorations_after_no_split": 29,
+  "final_rule_count": 2,
+  "off_frontier_probes": 3,
+  "probe_economy_enabled": true,
+  "probes_fired": 5,
+  "probes_refused": 6,
+  "surprises_by_kind": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 3,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 5,
+    "search_timeout": 0
+  },
+  "surprises_total": 8,
+  "theorize_rounds": 8
+}

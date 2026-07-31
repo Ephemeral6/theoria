@@ -1,0 +1,166 @@
+{
+  "prompt_id": "A-probe-economics",
+  "branch": "ep/probe-econ",
+  "base_commit": "21a724ed774ae2002feceff0174b916451f0496f",
+  "utc": "2026-08-01T00:00:00Z",
+  "territory": "theoria-arm",
+  "lane": "framework-change",
+  "classification": {
+    "kind": "framework-change-preparation",
+    "archive_material": true,
+    "why": "candidate change A for the next Phase-3 round: measured offline, implemented behind a default-off switch, not yet run live"
+  },
+  "what": "Probe economics. Measured information gain per probe across the four live legs of 2026-07-31: 56 probes designed, 52 completed, and the hypothesis frontier never shrank once -- zero monotone drops in any leg. 47 of the 52 completed probes landed OFF the frontier (survived == []), meaning the observation matched no hypothesis at all, so the 0.5436-1.0000 bits priced at design time were never realisable. 18 of the 56 designs repeated an experiment already run byte for byte. The existing gate (entropy_bits > 0) said no zero times in four legs. Implemented ProbeEconomy: carry refutations forward so the frontier can shrink, suppress repeat experiments, retire the probe class after 3 consecutive off-frontier results, cap firings per frontier generation. Default off.",
+  "measurement": {
+    "probes_designed": 56,
+    "probes_completed": 52,
+    "frontier_monotone_drops": 0,
+    "off_frontier_results": 47,
+    "off_frontier_rate_of_completed": 0.9038,
+    "repeat_experiments": 18,
+    "repeat_rate_of_designed": 0.3214,
+    "predicted_bits_min": 0.5435644432,
+    "predicted_bits_median": 0.8812908992,
+    "predicted_bits_max": 1.0,
+    "realised_frontier_shrink_bits": 0.0,
+    "source_legs": [
+      "theoria-arm/runs/20260731T1240Z-A3-level2-carried",
+      "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2",
+      "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3",
+      "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1"
+    ]
+  },
+  "switch": {
+    "default": "off -- ProbeEconomyConfig().enabled is False and reproduces 2026-07-31 behaviour",
+    "env": "THEORIA_PROBE_ECONOMY=1 (positive whitelist; anything unrecognised stays off)",
+    "explicit": "TheoriaArm(..., probe_economy=ProbeEconomyConfig(enabled=True)) -- beats the environment",
+    "overrides": [
+      "THEORIA_PROBE_OFF_FRONTIER_STOP",
+      "THEORIA_PROBE_MAX_PER_GENERATION",
+      "THEORIA_PROBE_MIN_BITS"
+    ],
+    "artefact": "every leg writes probe_economy.json whether or not the change is on"
+  },
+  "mock_campaign": {
+    "budget_actions": 40,
+    "off": {
+      "probes_fired": 40,
+      "probes_refused": 0,
+      "off_frontier_probes": 40,
+      "theorize_rounds": 40,
+      "surprises_total": 40,
+      "surprises_by_kind": {
+        "replay_mismatch": 0,
+        "render_mismatch": 0,
+        "proof_failure": 0,
+        "probe_refutation": 40,
+        "execution_mismatch": 0,
+        "search_timeout": 0,
+        "heuristic_miss": 0
+      }
+    },
+    "on": {
+      "probes_fired": 5,
+      "probes_refused": 6,
+      "explorations_after_no_split": 29,
+      "off_frontier_probes": 3,
+      "theorize_rounds": 8,
+      "surprises_total": 8,
+      "surprises_by_kind": {
+        "replay_mismatch": 5,
+        "render_mismatch": 0,
+        "proof_failure": 0,
+        "probe_refutation": 3,
+        "execution_mismatch": 0,
+        "search_timeout": 0,
+        "heuristic_miss": 0
+      }
+    }
+  },
+  "gate_replay_on_the_real_legs": {
+    "note": "a counterfactual for the gate, not for the run: a real leg would have diverged after the first refusal",
+    "off_fired_refused": [
+      56,
+      0
+    ],
+    "on_fired_refused": [
+      22,
+      34
+    ]
+  },
+  "changed": [
+    "theoria-arm/inner/probe.py -- ProbeEconomyConfig, ProbeEconomy, design(economy=...)",
+    "theoria-arm/inner/loop.py -- constructor arg, the gate before _send, the result fed back, probe_economy.json",
+    "theoria-arm/tests/test_probe_economy.py -- new, 29 tests",
+    "theoria-arm/runs/20260801T0000Z-A-probe-economics/ -- this directory"
+  ],
+  "tests": {
+    "new": "tests/test_probe_economy.py -- 29 passed",
+    "negative_controls": "every refusal rule has a test that watches it say no (repeat suppression, off-frontier stop, per-generation cap, collapsed frontier, bits floor) and a paired test that watches it stay silent with the change off",
+    "suite": "python -m pytest -q -- see RESULTS below",
+    "verify": "python verify.py",
+    "rule_bite_pin": "test_every_rule_that_is_on_is_a_rule_that_bites pins which rule refuses on the real-leg replay: off_frontier_stop 19, repeat 12, cap 3, min_bits 0 -- so a rule that is on but dead goes red"
+  },
+  "known_failure_not_caused_by_this_change": {
+    "test": "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive",
+    "detail": "claude-opus-5: recorded rate $0.0030474/s is below the worst rate in the archive, $0.0042222/s",
+    "proof": "reproduced with this branch's tracked changes stashed; the test reads runs/*/desk_log.json and harness/spend.py, neither of which this change touches. It is archive drift from today's live legs and belongs to whoever owns the spend constants."
+  },
+  "determinism": "measure_legs.py and mock_campaign.py were each run twice; all six generated artefacts hashed identically both times",
+  "sealed_pile_contact": "none -- no sealed game id appears in any file in this directory or in any changed source file",
+  "spend": "none -- no ARC action, no model call, no network, no spend_gate reservation",
+  "did_not_do": [
+    "did not implement change B or C -- the round's discipline is one change at a time",
+    "did not edit engine-rig/engines/probe_frontier -- another territory; the frontier is filtered on the theoria-arm side before the engine sees it",
+    "did not run anything live",
+    "did not push, merge, or touch master",
+    "did not set a non-zero min_bits default -- no probe in the measurement would have been cut by one, and a knob defaulted to look busy is not a measurement"
+  ],
+  "files": [
+    {
+      "path": "COMPARISON.json",
+      "sha256": "0d6a802a95ab9ca6c8d0658f889536fc70dab3749bf61db78131badd37d45408",
+      "bytes": 2408
+    },
+    {
+      "path": "MEASUREMENT.json",
+      "sha256": "0144b7edf89a4ce9d9333828412b28b0250e84888c2f910fcb69e7c0fcccd410",
+      "bytes": 3267
+    },
+    {
+      "path": "README.md",
+      "sha256": "b72cd096a59e8d7c6f5c114eb7e250ba7de86f75685860458bf02eaa210877d7",
+      "bytes": 10411
+    },
+    {
+      "path": "campaign_off.json",
+      "sha256": "aa1a81400c266581f40cd20ba0f5c7f68bfc726902ec62b9eef99e879476434e",
+      "bytes": 896
+    },
+    {
+      "path": "campaign_on.json",
+      "sha256": "28456d45647258ed43a1bd082592e7812c37bb9568aeae338a33d371cca7525b",
+      "bytes": 1030
+    },
+    {
+      "path": "leg_off/probes.jsonl",
+      "sha256": "cbf0afe5e8e826451a9198bd8f64f6918f200fcd48f4fdabfb4226eb8c6fce97",
+      "bytes": 103950
+    },
+    {
+      "path": "leg_on/probes.jsonl",
+      "sha256": "bdbf6cdc09c3ca6f4db32ae7dbfddd2fa7e6bf03c91a0448821985054bc301e4",
+      "bytes": 65983
+    },
+    {
+      "path": "measure_legs.py",
+      "sha256": "3c5bb1139a3ee3f4d2d3d37cbf22fb92ccd892ea42182d7cba7472b199a03927",
+      "bytes": 7005
+    },
+    {
+      "path": "mock_campaign.py",
+      "sha256": "e44d1d8849767bec950c7c9bb02fe7dd9b5ce1f29639f78fbc225e3f82b9d721",
+      "bytes": 13388
+    }
+  ]
+}
