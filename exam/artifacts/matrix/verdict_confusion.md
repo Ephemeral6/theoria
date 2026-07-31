@@ -1,6 +1,6 @@
 # verdict — sensitivity / specificity, split by class
 
-paper `p15-verdict-a2`, positive class `unsolvable`, rubric digest `f01dbeb2b6c6`
+paper `p15-verdict-a2`, positive class `unsolvable`, rubric digest `26a518d99d99`
 
 Sizes: `large_unsolvable` 4, `small_unsolvable` 5, `solvable_hard` 8
 
@@ -10,6 +10,9 @@ Sizes: `large_unsolvable` 4, `small_unsolvable` 5, `solvable_hard` 8
 | `null` | 0.0000 | -- (0/9) | -- (0/8) | -- (0/4) | -- (0/3) | -- (0/5) | -- (0/5) | -- (0/4) | -- | -- (0/5) | -- | -- | -- (0/8) |
 | `memoriser` | 0.5882 | 1.000 (5/9) | 1.000 (5/8) | -- (0/4) | -- (0/3) | 1.000 (5/5) | 1.000 (5/5) | -- (0/4) | -- | 1.000 (5/5) | -- | -- | 1.000 (5/8) |
 | `bluffer` | 0.2647 | 1.000 (9/9) | 0.000 (8/8) | 1.000 (4/4) | 0.000 (3/3) | 1.000 (5/5) | 0.000 (5/5) | 1.000 (4/4) | -- | 1.000 (5/5) | -- | -- | 0.000 (8/8) |
+| `denier` | 0.2353 | 0.000 (9/9) | 1.000 (8/8) | 0.000 (4/4) | 1.000 (3/3) | 0.000 (5/5) | 1.000 (5/5) | 0.000 (4/4) | -- | 0.000 (5/5) | -- | -- | 1.000 (8/8) |
+| `abstainer` | 0.0000 | -- (0/9) | -- (0/8) | -- (0/4) | -- (0/3) | -- (0/5) | -- (0/5) | -- (0/4) | -- | -- (0/5) | -- | -- | -- (0/8) |
+| `overclaimer` | 0.3529 | 1.000 (9/9) | 0.375 (8/8) | 1.000 (4/4) | 0.667 (3/3) | 1.000 (5/5) | 0.200 (5/5) | 1.000 (4/4) | -- | 1.000 (5/5) | -- | -- | 0.375 (8/8) |
 | `cheater-v4` | 0.5000 | 1.000 (9/9) | 1.000 (8/8) | 1.000 (4/4) | 1.000 (3/3) | 1.000 (5/5) | 1.000 (5/5) | 1.000 (4/4) | -- | 1.000 (5/5) | -- | -- | 1.000 (8/8) |
 
 Each cell is `rate (answered / class size)`. **The rate alone is not a reading**: abstentions are kept out of the denominator, so an arm that abstains on everything it cannot do scores 1.000 on what is left.
@@ -21,5 +24,6 @@ Each cell is `rate (answered / class size)`. **The rate alone is not a reading**
 ## Examinees this matrix cannot tell apart
 
 * **`cheater-v4`, `oracle`** — every cell identical, scores 0.5000, 1.0000.
+* **`abstainer`, `null`** — every cell identical, scores 0.0000, 0.0000.
 
 A pair of rates is not an instrument on its own. Where two examinees collide here, the thing that separates them is the score — which on this paper means the certificate half of the rubric, not the claim half.

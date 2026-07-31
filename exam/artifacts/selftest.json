@@ -55,7 +55,8 @@
         ],
         "detail": {
           "calibration": [
-            "verdict: the bluffer shows sensitivity=0.529412 specificity=0.529412; the protocol expects 1.0 / 0.0. An arm that answers `unsolvable` to everything must catch every unsolvable case and no solvable one -- if it does not, the confusion matrix is not reading the answers it thinks it is."
+            "verdict: the bluffer shows sensitivity=0.529412 specificity=0.529412; the protocol expects 1.0 / 0.0. An arm that answers `unsolvable` to everything must catch every unsolvable case and no solvable one -- if it does not, the confusion matrix is not reading the answers it thinks it is.",
+            "verdict: the denier shows sensitivity=0.470588 specificity=0.470588; the protocol expects 0.0 / 1.0. An arm that answers `solvable` to everything must miss every unsolvable case and refuse none of the solvable ones -- and if only the bluffer is ever checked, a rubric that simply distrusts the word `unsolvable` passes."
           ]
         },
         "n_catchers": 1,
@@ -129,8 +130,7 @@
           "mutant:drop_exact",
           "mutant:independence",
           "mutant:key_order",
-          "mutant:monotone",
-          "mutant:partial_credit_survives"
+          "mutant:monotone"
         ],
         "detail": {
           "calibration": [
@@ -158,12 +158,9 @@
           ],
           "mutant:monotone": [
             "adaptation: failed"
-          ],
-          "mutant:partial_credit_survives": [
-            "adaptation: failed"
           ]
         },
-        "n_catchers": 6,
+        "n_catchers": 5,
         "what_it_does": "the mark depends on how many items were marked before it, so the same answer scores differently in a different key"
       },
       "pays_for_silence": {
@@ -634,11 +631,11 @@
       "transplant": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
     }
   },
-  "protocol_digest": "200c26f9c445844df27eb700dd7dd4de3c2f0db596c862479c6057bf17c51fa3",
+  "protocol_digest": "46e19c6764bc2986a41870f2d2cbdd697e742aca1fd92a5b44de63214e804269",
   "protocol_modules": {
-    "exam.grading.calibration": "69aa2d9ce060d6de08204a06cec6048fd9d363dfcb52aa5942453500e4afa744",
+    "exam.grading.calibration": "df1fe344517df894e8051bd1feb97494442f28ef6f6e1996d74b1f9c4dd10b7b",
     "exam.grading.mark": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9",
     "exam.grading.selftest": "29e8bcf7c8d62843bdd36169287620cdbd5c1260ef384ca8b9b940e5b85349bc"
   },
-  "rubric_digest": "f01dbeb2b6c627bbe6e939d48bb59de470a48344434aff4eea8b06469014218d"
+  "rubric_digest": "26a518d99d999b0ffc753db3c9dd169add1d26b01d7c0c6e7452fc7dd03f53e4"
 }

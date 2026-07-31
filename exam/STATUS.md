@@ -23,6 +23,11 @@ and what it cannot do. The last section is the one to read first.
 | marker self-test: 7 mutants, 8 injected faults, detection matrix (V4) | done |
 | sensitivity/specificity matrix, split by verdict class (V4) | done |
 | `verify.py`: one command for the whole territory (V4) | done |
+| endpoint 2: 弃权计错 layer, three floors, three-valued adjudication (EP) | done |
+| endpoint 2: pre-registration, arms × classes, checked against the paper (EP) | done |
+| endpoint 2: seven negative controls, leave-one-out per floor (EP) | done |
+| `check_withdrawn_claims`: a withdrawn claim cannot grow back (EP) | done |
+| endpoint 2: cross-arm paired test over ⟨m⟩ games | **not exam's** — freeze, ⟨m⟩ needs_human |
 
 Tests: **287 passed** (253 inherited + 34 new). The line above this one said "157 passed, 1 skipped" until
 V4-exam-selftest; V2-exam-on-worldgen had added 96 tests without updating it, and
@@ -442,7 +447,8 @@ accepts), which is why nothing had noticed. One transition function now, plus
 
 **The class (ii) bound was unsound off the comb, and a shipped constructor
 reaches it.** `comb_open(30)` under `observation_loss` on the corridor gives
-`m = 60`, a claimed 2^60, `exhaustive_feasible: False` — and **29,791** actual
+`m = 60`, a claimed 2^60, `exhaustive_feasible: False` (the old name of the
+field; renamed by D-EX-028) — and **29,791** actual
 reachable states. `build()` would have shipped it as class (ii). The bound
 checked each dip in isolation and never checked the lane walked between dips.
 D-EX-021.
@@ -616,7 +622,8 @@ holds across `PYTHONHASHSEED` 7 and 99.
     > own §V6-V23 section further down, `exam/README.md`'s class (ii) bullet,
     > `exam/grading/rubrics_verdict.py`'s `search_not_credible` comment -- which
     > is tracked source sitting beside the string an examinee is graded by --
-    > and, worst, `exam/DECISIONS.md`'s own `exhaustive_feasible: False` section,
+    > and, worst, `exam/DECISIONS.md`'s own `exhaustive_feasible: False` section
+    > (the old name of the field),
     > the durable record the strike is supposed to be recorded in. Four
     > survivors, not zero; the count was wrong in both directions. All four are
     > struck now. The claim cost one `grep`, and a sentence
@@ -625,7 +632,7 @@ holds across `PYTHONHASHSEED` 7 and 99.
     > the same defect.
 
     The class therefore measures **method selection under an apparent search
-    barrier**, not "only invariant reasoning can answer". Making the class mean
+    barrier**; the stronger sentence is withdrawn. Making the class mean
     what its name says still needs switches that gate geometry — a different
     world family and a different paper — but that is now a scoping note rather
     than an unanswered question.

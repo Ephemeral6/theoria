@@ -1192,7 +1192,8 @@ def test_the_subset_bound_refuses_a_board_it_does_not_fit():
 
     A shipped constructor (`comb_open`) plus a shipped operator
     (`observation_loss` on the corridor) produced m=60, a claimed 2^60, and
-    `exhaustive_feasible: False` on a level with 29,791 reachable states. The
+    `exhaustive_feasible: False` (the old name of the field, D-EX-028) on a
+    level with 29,791 reachable states. The
     bound counted each dip in isolation and never checked the lane walked
     between dips. D-EX-021.
     """

@@ -1,0 +1,65 @@
+{
+  "answers": {
+    "vq-0ffc3cd33f": {
+      "claim": "solvable"
+    },
+    "vq-1015eb0bb1": {
+      "claim": "solvable"
+    },
+    "vq-17af763cab": {
+      "claim": "solvable"
+    },
+    "vq-1881c8c383": {
+      "claim": "solvable"
+    },
+    "vq-2986ed8ffc": {
+      "claim": "solvable"
+    },
+    "vq-6150a6eeb7": {
+      "claim": "solvable"
+    },
+    "vq-6bab2f307c": {
+      "claim": "solvable"
+    },
+    "vq-721d09813c": {
+      "claim": "solvable"
+    },
+    "vq-82f568ca11": {
+      "claim": "solvable"
+    },
+    "vq-8c4f14b152": {
+      "claim": "solvable"
+    },
+    "vq-8ff1c690ad": {
+      "claim": "solvable"
+    },
+    "vq-9725fbebf0": {
+      "claim": "solvable"
+    },
+    "vq-9e0aefdf80": {
+      "claim": "solvable"
+    },
+    "vq-abe007cdfa": {
+      "claim": "solvable"
+    },
+    "vq-c480b494f3": {
+      "claim": "solvable"
+    },
+    "vq-e6ae49645d": {
+      "claim": "solvable"
+    },
+    "vq-ee54166153": {
+      "claim": "solvable"
+    }
+  },
+  "capabilities": [
+    "answers"
+  ],
+  "examinee_id": "control-denier",
+  "meta": {
+    "control": "denier",
+    "note": "a synthetic negative control for endpoint 2, not an arm"
+  },
+  "paper_id": "p15-verdict-a2",
+  "schema": "exam/v0.1"
+}

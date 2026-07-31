@@ -69,6 +69,12 @@ PRODUCERS: Sequence[Tuple[str, Sequence[str]]] = (
     # and a quick run writes the file without one, so the cheap variant would
     # report drift that is only its own missing half.
     ("run_selftest", ("-m", "exam.tools.run_selftest")),
+    # Endpoint 2's pre-registration and its control transcripts. It reads the
+    # key and the answers directory and writes `prereg/` and
+    # `endpoint_controls/`, so it belongs on the same redirect as the rest: a
+    # pre-registration that could be rebuilt into a different document without
+    # the gate noticing would be a pre-registration in name only.
+    ("build_prereg", ("-m", "exam.tools.build_prereg")),
 )
 
 

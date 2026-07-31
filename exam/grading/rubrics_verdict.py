@@ -8,8 +8,13 @@ each one is for:
         reason* (a missing edge).  What is being examined here is therefore the
         reason, not the verdict: a certificate, or "I searched and found
         nothing".
-  (ii)  large-space unsolvable -- exhaustive search is out of reach and only
-        invariant reasoning answers.  Our home ground.
+  (ii)  large-space unsolvable -- *naive* enumeration is out of reach: forward
+        enumeration over the full (cart, button, latch mask) state, which is the
+        method (i) is graded on, cannot terminate.  What the item scores is the
+        selection of a method that is not that one.  The stronger sentence this
+        line used to carry -- exhaustive search out of reach, only invariant
+        reasoning answers -- is withdrawn: every shipped item of this class is
+        settled by an exhaustive computation over at most 600 nodes.  D-EX-028.
   (iii) solvable but hard -- the false-positive trap.  A framework with a taste
         for unsolvability proofs has to shut up here.
 

@@ -1475,3 +1475,121 @@ and every one reproduces byte for byte, `rubric_digest` `f01dbeb2b6c6`. The
 staleness was a property of the lagging branches, and merging them fixed it
 before this ticket ran — which is exactly the state the old verify could not tell
 apart from drift, and the new one can.
+
+## D-EX-033 — the third primary endpoint had a statistic and no executable protocol
+
+EP, 2026-08-01. Measurements in `runs/20260801T0000Z-EP-endpoint2-prereg/`.
+
+`Theoria.md:373` names 判决题准确率(含特异度) as one of three primary endpoints.
+`freeze/STATS_RULES.md` §2 pre-registers the *statistic* — BA from the confusion
+half, a specificity floor, the ⟨m⟩ selection rule, a gaming audit. What did not
+exist anywhere was a scoring rule tied to code by more than a line number, a
+directional prediction per arm per class, or an implementation of §2's own two
+rulings. Both of those rulings are registered as launch blockers
+(`freeze/launch_blockers.json` 9.15 and 9.16) and both were `unimplemented`.
+
+### 弃权计错 is a layer, not an edit — and the reason is that both sides are right
+
+§2.2 rules that an abstention counts as wrong and names `mark.confusion()` as
+the implementation. `mark.confusion()` does the opposite, in three places
+(abstained / unanswered / unreadable each `continue` out of the tally), and
+D-EX-015 records that as **the right call** — which it is, for a marker: an
+abstention is not a wrong answer. The two are both correct and cannot both be
+executed on one number, so neither was changed. `exam/endpoint.py:abstain_as_wrong`
+converts a confusion cell rather than the marker, keeps the observed rates
+beside the converted ones, and prints the arithmetic that connects them.
+
+The consequence that matters is not the rates, it is the **order**: after
+conversion `tp+fn` and `tn+fp` equal the class sizes, so neither rate is ever
+`None`, so `specificity < ⟨S_min⟩` has a total order. Before it, an arm that
+abstained on every class-(iii) item made the pre-registered veto not false but
+*undefined* — measured, not argued: the expression raises `TypeError`. A
+one-vote veto that cannot be evaluated is not a veto.
+
+**Coverage is read before the conversion.** Conversion fills every denominator
+by construction; a coverage read afterwards is 1.0 on every arm including one
+that submitted nothing. That single ordering is what lets the memoriser be told
+from ground truth.
+
+### The floor that had never cast a vote
+
+Three floors: specificity (不成立), class (ii) coverage (**不可结论**, never
+不成立 — silence is not refutation), and BA > 0.5. The third is not a chosen
+constant: always-`unsolvable` scores (1.0, 0.0) and always-`solvable` scores
+(0.0, 1.0), both averaging one half, so a strict inequality above 0.5 is the
+weakest statement that an arm is not a constant. That is also why the two
+constant controls are a **matched pair** — a gate that had only ever seen the
+bluffer cannot be told apart from one that distrusts the word `unsolvable`.
+
+`prereg.floor_leave_one_out()` disables each floor and re-judges every control,
+and on its first run it **refuted this file's draft**: with `bluffer`,
+`abstainer` and `null` on the sheet, removing `S_min` changed no verdict,
+because all three fail the BA floor too. The floor `STATS_RULES.md` §2.2 calls a
+一票否决 had never been observed to cast one. `overclaimer` was then constructed
+to be the case only `S_min` refuses — `unsolvable` everywhere but three solvable
+items: sensitivity 1.000, specificity 0.375, BA 0.688, full class-(ii) coverage.
+Each floor now catches exactly one control alone, and the table is recomputed on
+every verify run rather than asserted.
+
+### What the gate credits that it should not, stated rather than hidden
+
+`cheater-v4` — a real transcript, a reader handed the sheet and nothing else —
+is **credited**, and is identical to `oracle` in every gated number. The only
+column that separates them is `certified_share`, 0.000 against 1.000, and §2.2
+demotes exactly that column to exploratory *while citing 这里考的是理由 as its
+reason for choosing the scalar*. exam reports the number on every transcript and
+does not gate on it: a territory that legislated around a frozen document from
+inside itself would be doing the thing this whole apparatus exists to prevent.
+Requested through `monitor/inbox/`, with the measurement attached.
+
+### The withdrawn claim was still shipping in a generated artefact
+
+D-EX-028 withdrew 唯不变量推理能答 on 2026-07-30. On 2026-08-01 it was still in
+`grading/confusion_matrix.py`'s `class_meaning`, which is **written into
+`artifacts/matrix/verdict_confusion.json` and rendered into the `.md` beside
+it** — so the last place the withdrawn sentence survived was the version a
+reader quotes, three cycles after the decision log said otherwise. Also in two
+module docstrings (`papers/verdict.py`, `grading/rubrics_verdict.py`).
+
+`tools/check_withdrawn_claims.py` is the gate, and it is scoped by two rulings
+that the first version got wrong and the measurement corrected: a hit within two
+lines of a withdrawal marker is **acquitted** (the first version reported 63
+hits, nearly all of them records of the withdrawal, including `README.md`'s own
+announcement of it), and `exam/runs/**` is **exempt** (the V23 archive quotes
+the withdrawn field name on nearly every page because that is what it was
+investigating; demanding it be rewritten would be asking for the record to be
+falsified).
+
+**A consequence worth naming: the rubric digest moved.** The digest is over
+rubric *source*, so correcting a false sentence in a docstring changes it —
+`f01dbeb2b6c6` to `26a518d99d99` — and every artefact was rebuilt. That is the
+digest working, not a defect: the graded text changed, and a digest that ignored
+prose would let the rubric's own description of what it measures drift free of
+the rubric.
+
+### Class (ii): why the stronger claim cannot be bought back
+
+Asked to either construct items whose state space genuinely defeats exhaustive
+search or re-scope honestly, this ticket found the withdrawal already made in
+D-EX-028 and made two things checkable instead — that it reached the artefacts
+(above), and *why* the gap cannot be closed from inside this paper:
+
+1. **构造性依据 and a genuine search barrier pull against each other.**
+   Theoria.md:289 requires the truth to follow from construction. A variant
+   whose unsolvability we know by construction has a short proof by definition,
+   and a short proof in a checkable grammar is a cheap decision procedure for
+   that instance. All nine unsolvable items carry one — `invariant`, `cut_set`,
+   `counting` — and checking any of them is polynomial in the board.
+2. **Every wrapper-legal operator is monotone.** `forbid_action`,
+   `remap_action`, `step_limit`, `observation_loss`, `win_tighten` remove
+   behaviour; none makes a latched switch un-latch. A monotone world is exactly
+   the structure relaxations settle for free, which is why the quotient settles
+   all four items. Building a level whose relaxation returns *unknown* needs a
+   non-monotone dynamic — a toggle, a consumable, a door that re-closes — and no
+   wrapper can introduce one, because the hosted environment owns the dynamics
+   (Theoria.md Phase 1, 包裹合法集).
+
+So the honest scope is the one shipped, and closing it is an environment-proxy
+change rather than a paper change. Written into
+`artifacts/prereg/verdict_class_inventory.md` next to the per-item constructive
+justifications, so the next reader meets the argument where the items are.

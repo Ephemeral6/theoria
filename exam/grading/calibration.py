@@ -398,6 +398,34 @@ def _type_specific(question_type: str, results: Dict[str, Any], *,
                 "one -- if it does not, the confusion matrix is not reading the "
                 "answers it thinks it is." % (sens, spec))
 
+        # The mirror control. `bluffer` has been on this gate since P-15 and it
+        # is checked one direction only: always-`unsolvable` must show (1.0,
+        # 0.0). A check that has only ever been run against the arm that
+        # over-claims cannot tell a rubric that scores the pair from one that
+        # punishes the word `unsolvable`. `denier` answers `solvable` to
+        # everything and must show the transpose, (0.0, 1.0) -- same rubric,
+        # same paper, opposite sign. Both land on BA 0.5, which is where
+        # `exam/endpoint.py`'s BA floor comes from.
+        if paper is not None and key_doc is not None:
+            module = module_for("verdict")
+            denier = mark(key_doc, Submission(
+                examinee_id="fake-denier", paper_id=key_doc["paper_id"],
+                answers=module.reference_answers(paper, key_doc, "denier"),
+                capabilities=("answers",), meta={"fake": "denier"}),
+                axes_fn=axes_fn)
+            denier_conf = denier.axes.get("confusion", {})
+            pair = (denier_conf.get("sensitivity"),
+                    denier_conf.get("specificity"))
+            checks["denier_pair"] = list(pair)
+            if pair != (0.0, 1.0):
+                failures.append(
+                    "verdict: the denier shows sensitivity=%s specificity=%s; "
+                    "the protocol expects 0.0 / 1.0. An arm that answers "
+                    "`solvable` to everything must miss every unsolvable case "
+                    "and refuse none of the solvable ones -- and if only the "
+                    "bluffer is ever checked, a rubric that simply distrusts "
+                    "the word `unsolvable` passes." % pair)
+
         # The pair, per board-size stratum, and not only pooled. The class split
         # cannot state it -- the three classes partition the paper by answer, so
         # one denominator is empty in every class cell -- and pooled is where
