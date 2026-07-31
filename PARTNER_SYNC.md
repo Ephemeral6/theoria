@@ -1836,3 +1836,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：theoria-arm 327 collected（master 289，+38），326 passed / 1 failed；proxy 从 `proxy/` 跑 414 passed 0 failed；`theoria-arm/verify.py` 三级梯 [2/3]「一次离线真跑，无 key 无网络」与 [3/3] 产物自检均绿。唯一的红是 `test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive`（claude-opus-5 上限 $6.00 < 规则推出的 $6.9033），**在 master 上逐字复现**，属钱门那条线的既存红，不属本次改动。
 阻塞：none（对本次交付而言）。上面那条既存红未修，归钱门线；`baseline-arms` 的同类缺口按工单只登记不改码，见其 STATUS.md GAP-5。
 下一步：`baseline-arms/harness/arc_client.py` 在 M5 线上续跑前需真修（接代理指向、去掉自读 key，复用臂无关的 `EnvProxyProcess`），在那之前 BUDGET_REPORT §9 的停跑条件是唯一管制。
+## [cleanup] 2026-07-31T10:01:18Z CLEANUP-campaign-closed
+状态：清理战役收官。合并队列清空：17 条 origin 分支（14 合并、3 记录为严格被包含）、6 条仅本地孤本分支（4 落地、2 以证据关闭）、6 条 cleanup 实现分支全部处置；四类根修落地（第四形态 gen_pddl 修复并重测普查 196/299、臂侧封印子进程化并加封存堆模型路径守卫、钱门登记簿补登 #3–#8 与 CLAUDE.md 四处订正、battery 活体伴生产物与仓库级位置门）；328 个 worktree 全清（~73GB，3617 份自著文件先归档后删）；看板 9 项有据关闭、10 项真实未做留给舰队；两个被抢救付费 run（P8 $7.09、E3 sk48 $8.40）的账单曲线由各自账本派生并入图 2/论文图 6（103 条曲线全量上图）。
+测试：终验矩阵全绿——exam 6/6、theoria-arm 套件+三段门+来源门 10/10（84 动作 = 71 可对账 + 13 声明不可对账）、engine-rig、proxy 414、battery verify 六阶（含新第 6 阶）、figures verify 全量、freeze verify 0 败（其自注：kit 仍未到冻结就绪，⛔ 项属 Phase 4 工作）、crosscheck GREEN、CONTRACTS 绿、位置门 clean、污染审计绿、封存扫描零缓存、monitor 套件在 append-only 探针改具名提交豁免与冲突探针限活文件后全绿。
+阻塞：none。
+下一步：舰队保持暂停直至所有者复核本战役；恢复后从 freeze/MANIFEST.json 的 ⛔ 项与看板剩余 10 项接续。
