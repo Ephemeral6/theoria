@@ -1,0 +1,12 @@
+{
+  "migrator": "proxy.tools.upgrade_ledger",
+  "migrator_version": "1.0.0",
+  "out": "C:/Users/user/AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/ff99b612-ea76-4b96-a9fb-46eaf4bc98b4/scratchpad/p1r2/canon.a7up-opus-g50t.jsonl",
+  "out_sha256": "sha256:7dac28bbc2ec0c5e467382bd7302e6970173b08e81eed3c8637b0400732d6370",
+  "records_in": 61,
+  "records_out": 63,
+  "runs": 1,
+  "runs_with_scorecard": 1,
+  "source": "C:/Users/user/AppData/Local/Temp/claude/C--Users-user-Desktop-theoria/ff99b612-ea76-4b96-a9fb-46eaf4bc98b4/scratchpad/p1r2/ledger.a7up-opus-g50t.jsonl",
+  "source_sha256": "sha256:b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5"
+}

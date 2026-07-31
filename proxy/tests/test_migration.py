@@ -11,7 +11,8 @@ import json
 import pytest
 
 from proxy.ledger import frame_hash, read_ledger
-from proxy.tools.replay_spotcheck import sessions_from_canon, spotcheck
+from proxy.tools.replay_spotcheck import (sessions_from_canon,
+                                          sessions_from_recon, spotcheck)
 from proxy.tools.upgrade_ledger import UnknownDialect, lift, upgrade_file
 from proxy.tools.validate_ledger import validate_records
 
@@ -239,3 +240,98 @@ def test_the_spot_check_reads_a_canonical_ledger(tmp_path):
     report = spotcheck(sessions_from_canon(path, GAME), GAME)
     assert report["verdict"] == "PASS"
     assert report["n_sessions"] == 2 and report["steps_compared"] == 2
+
+
+# -- the recon adapter's pass splitting ------------------------------------
+
+def _recon_row(name, note, status=200, frame=None):
+    url = "https://three.arcprize.org/api/cmd/" + name
+    body = None if frame is None else {"frame": frame}
+    return {"url": url, "note": note, "status": status,
+            "request_body": {"game_id": GAME}, "response_body": body}
+
+
+def _write_recon(tmp_path, rows):
+    path = str(tmp_path / "recon.jsonl")
+    with open(path, "w", encoding="utf-8", newline="") as fh:
+        for row in rows:
+            fh.write(json.dumps(row, sort_keys=True) + "\n")
+    return path
+
+
+def test_a_single_pass_label_keeps_its_plain_name(tmp_path):
+    """The ar25 shape: one successful RESET per label. The archived ar25
+    spot check named these `recon/run-a`, and that must not move."""
+    path = _write_recon(tmp_path, [
+        _recon_row("RESET", "precheck RESET %s run-a attempt 0" % GAME,
+                   frame=[[[1]]]),
+        _recon_row("ACTION1", "precheck ACTION1 #0 %s run-a attempt 0" % GAME,
+                   frame=[[[2]]]),
+    ])
+    sessions = sessions_from_recon(path, GAME)
+    assert sorted(sessions) == ["recon/run-a"]
+    assert [s["action"] for s in sessions["recon/run-a"]] == ["RESET", "ACTION1"]
+
+
+def test_each_successful_reset_opens_a_new_pass(tmp_path):
+    """The g50t shape: aborted passes and a later partial pass share one
+    label. Folding them into one session would stack two RESETs at position
+    0 and interleave two sweeps -- a fabricated disagreement. Split, each
+    pass is a clean replay of the opening."""
+    path = _write_recon(tmp_path, [
+        # pass 1: RESET succeeded, the first action then failed -- aborted.
+        _recon_row("RESET", "precheck RESET %s run-a attempt 3" % GAME,
+                   frame=[[[1]]]),
+        _recon_row("ACTION1", "precheck ACTION1 #0 %s run-a attempt 0" % GAME,
+                   status=400),
+        # pass 2: a complete short sweep.
+        _recon_row("RESET", "precheck RESET %s run-a attempt 0 (full id)" % GAME,
+                   frame=[[[1]]]),
+        _recon_row("ACTION1", "precheck ACTION1 #0 %s run-a attempt 1 (full id)" % GAME,
+                   frame=[[[2]]]),
+        _recon_row("ACTION2", "precheck ACTION2 #1 %s run-a attempt 0 (full id)" % GAME,
+                   frame=[[[3]]]),
+    ])
+    sessions = sessions_from_recon(path, GAME)
+    assert sorted(sessions) == ["recon/run-a", "recon/run-a#2"]
+    assert [s["action"] for s in sessions["recon/run-a"]] == ["RESET"]
+    assert [s["action"] for s in sessions["recon/run-a#2"]] == [
+        "RESET", "ACTION1", "ACTION2"]
+    # And the two passes agree at position 0, so together they are evidence.
+    report = spotcheck(sessions, GAME)
+    assert report["verdict"] == "PASS" and report["steps_compared"] == 1
+
+
+def test_a_session_is_truncated_at_a_step_idx_hole():
+    """A session whose record has holes (the g50t precheck's short-id rows
+    fail the game filter, leaving step_idx 0,1,2,6,7,8) must not slide its
+    later steps into the gap: the step at step_idx 6 is not the fourth
+    command, and comparing it there would fabricate a disagreement."""
+    from proxy.tools.replay_spotcheck import clean_prefix
+    steps = _session(["h0", "h1", "h2", "h6", "h7"])
+    steps[3]["step_idx"] = 6
+    steps[4]["step_idx"] = 7
+    assert [s["frame_hash"] for s in clean_prefix(steps)] == ["h0", "h1", "h2"]
+
+
+def test_a_hole_would_otherwise_read_as_a_disagreement():
+    """The negative control for the contiguity rule: with the hole collapsed
+    by position, the same two honest sessions would FAIL."""
+    a = _session(["h0", "h1", "h2", "h3"])
+    b = _session(["h0", "h1", "h2", "hX"])   # hX really sits at step_idx 6
+    b[3]["step_idx"] = 6
+    report = spotcheck({"a": a, "b": b}, GAME)
+    assert report["verdict"] == "PASS"
+    assert report["steps_compared"] == 3
+
+
+def test_an_action_with_no_successful_reset_is_dropped(tmp_path):
+    """An action that no successful RESET precedes has no history to sit in.
+    Attaching it anywhere would invent one."""
+    path = _write_recon(tmp_path, [
+        _recon_row("RESET", "precheck RESET %s run-b attempt 0" % GAME,
+                   status=400),
+        _recon_row("ACTION1", "precheck ACTION1 #0 %s run-b attempt 1" % GAME,
+                   frame=[[[2]]]),
+    ])
+    assert sessions_from_recon(path, GAME) == {}
