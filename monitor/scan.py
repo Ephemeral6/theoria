@@ -570,8 +570,16 @@ def probe_append_only():
     # paragraph that had never reached master, which publishes nothing.
     # The line the rule actually draws: once it is on the mainline it is
     # frozen; on a branch, fix it until it is right.
-    BASELINE = {"PARTNER_SYNC.md": 1}
+    # 2026-07-31（清理战役）：豁免从「行数预算」改为「具名提交」。行数预算
+    # 在任何仓库都放过前 N 行删除——包括测试的合成仓库——并会吸收未来的
+    # 真违例，直到预算用完；具名提交只豁免已裁决的那几次，新删除零容忍。
+    # 已裁决两笔：63ef0bf1（1 行，同窗口自我订正，裁于 2026-07-28）；
+    # dd6d2180（2 行，exam V6-V23 段经合并原地改写上主线，裁为「诚实订正、
+    # 规矩当时不可知」而非违纪——monitor/audit/DRIFT-20260729T0056Z 及
+    # OPS-A cycle 50 附录）。裁决在而机器豁免没跟上，探针此前生而红。
+    ADJUDICATED = {"PARTNER_SYNC.md": ("63ef0bf1", "dd6d2180")}
     offenders = []
+    total_adjudicated = 0
     # S28：`if not exists(path): continue` 之后仍然把 `len(watched)` 报成
     # 「已核查干净」——**而删除恰恰是这条规则的最大违反**。实测：把
     # battery/PREDICTIONS.md 当作不存在，这个探针照旧返回
@@ -619,11 +627,15 @@ def probe_append_only():
             return {"status": "missing",
                     "detail": "问不出 %s 的删除历史（git 没有返回结果），"
                               "本轮无法断言 append-only 完好。" % path}
-        dels, cur = 0, ""
+        dels, cur, adjudicated = 0, "", 0
+        pardons = ADJUDICATED.get(path, ())
         for line in out.splitlines():
             parts = line.split("	")
             if len(parts) == 3 and parts[1].isdigit():
-                dels += int(parts[1])
+                if any(cur.startswith(h) or h.startswith(cur) for h in pardons if cur):
+                    adjudicated += int(parts[1])
+                else:
+                    dels += int(parts[1])
             elif line.strip():
                 cur = line.strip()
         # 本分支自己的贡献：`merge-base(anchor, HEAD)..HEAD` 的净删除。
@@ -645,21 +657,25 @@ def probe_append_only():
                     parts = line.split("	")
                     if len(parts) == 3 and parts[1].isdigit():
                         own += int(parts[1])
-        allowed = BASELINE.get(path, 0)
-        if dels + own > allowed:
-            offenders.append("%s（已发布删除 %d 行 + 本分支净删除 %d 行，"
-                             "超出已裁决豁免 %d 行）" % (path, dels, own, allowed))
-    if offenders:
+        if dels + own > 0:
+            offenders.append("%s（已发布删除 %d 行 + 本分支净删除 %d 行；"
+                             "另有 %d 行属已裁决提交、不计）"
+                             % (path, dels, own, adjudicated))
+        total_adjudicated += adjudicated
+    exempt = total_adjudicated
+    # 两类违反可以并存；哪一类都不许把另一类挤出 detail（2026-07-31：
+    # 删除计数超线时，被删掉的整个文件曾经无名可寻——而整文件消失是这条
+    # 规则能被违反的最彻底的方式）。
+    if offenders or absent:
+        parts = []
+        if absent:
+            parts.append("追加式文件**不存在**：%s（已核查 %d/%d 件）"
+                         % ("、".join(absent), checked, len(watched)))
+        if offenders:
+            parts.append("追加式文件出现删除：" + "； ".join(offenders))
         return {"status": "risk",
-                "detail": "追加式文件出现删除：" + "； ".join(offenders) +
+                "detail": "。".join(parts) +
                           "。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。"}
-    exempt = sum(BASELINE.values())
-    if absent:
-        # 整个文件不见了，是这条规则能被违反的最彻底的方式。
-        return {"status": "risk",
-                "detail": "追加式文件**不存在**：%s。已核查 %d/%d 件，"
-                          "其余无新增删除——但缺失的那几件无法断言。"
-                          % ("、".join(absent), checked, len(watched))}
     return {"status": "green",
             "detail": "已核查 %d/%d 个追加式文件，无新增删除"
                       "（%d 行历史删除已裁决豁免：同窗口自我订正）。"
