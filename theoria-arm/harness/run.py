@@ -13,10 +13,35 @@ show up on a live run:
 * `run_game`'s CLI always builds the mock arm. A real custom arm has to come in
   through `arm_factory`, so the entry point has to be Python either way.
 
-Nothing here is a copy of `proxy/`: `EnvProxy`, `Ledger`, `RunLedger` and
-`SealedPileGuard` are imported and used as a library. The ledger this arm
+Nothing here is a copy of `proxy/`: `Ledger`, `RunLedger` and `SealedPileGuard`
+are imported and used as a library, and the environment proxy is `proxy/`'s own
+`python -m proxy.env_proxy` started as a child process. The ledger this arm
 writes is therefore produced by the frozen writer, with the frozen redaction,
 and satisfies `LEDGER_FORMAT.md` by construction rather than by imitation.
+
+## The credential is not in this process
+
+This module used to build an `EnvProxyConfig` here, in `Run.__init__`. That
+constructor's second statement reads `ARC_API_KEY` out of `.env`, so the live
+credential was resident in the arm's own interpreter -- at `run._cfg.api_key`
+and in the process-wide `VAULT` -- alongside the inner loop, the engines and
+every line of model-facing code. `Theoria.md` Phase 1 says the opposite in so
+many words (臂进程摸不到环境凭据), and A11 measured the gap with a sentinel key
+rather than arguing about it.
+
+So the proxy is a **child process** now (`harness/proxy_process.py`). This
+process passes it a run id, an upstream, a ledger path and a reservation id;
+the child reads the key itself and this one never holds it. `env_key` below is
+retained only for stubs -- the mock ARC needs *something* injected so a test
+can tell the proxy's header from an arm-supplied one -- and it travels to the
+child under a **different variable name**, so a stub run cannot fall back to
+the real credential.
+
+What that costs: about a second of child startup per run, and the ledger now
+has two writers. Both are paid for. `proxy/ledger.py` takes a cross-process
+lock on a sidecar file and re-reads the tail inside it, so one hash chain with
+two writers is exactly as sound as one with one; `tests/test_seal_process.py`
+verifies a real two-writer run's chain rather than assuming it.
 
 ## The claim on the shared pool
 
@@ -52,12 +77,12 @@ if __package__ in (None, ""):
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
-from proxy.env_proxy import EnvProxy, EnvProxyConfig
 from proxy.guard import SealedPileGuard
 from proxy.ledger import Ledger, RunLedger, canonical
 from proxy.paths import UPSTREAM_ARC
 
 from harness import spend as spend_mod
+from harness.proxy_process import EnvProxyProcess
 
 ARM = "theoria"                                       # registered in ledger.ARMS
 
@@ -140,39 +165,50 @@ class Run:
         # written under. `ModelDesk.binding()` raises when it is absent.
         self.run.spend_binding = self.spend
 
+        self.env_upstream = env_upstream.rstrip("/")
+
         try:
             # The proxy's own envelope stays short: it covers 5xx/429/transport,
             # which are genuinely transient in seconds. The 400 wave, which is
             # transient in *minutes*, is the arm's job (harness/arc.py).
             #
-            # `campaign` + `spend_reservation` are passed, so the env proxy
-            # charges ARC actions against *this* claim instead of taking a
-            # second, auto-named one -- and `spend_reservation_owned` stays
-            # False there, so it will not release a claim the desk is still
+            # `campaign` + `reservation` are passed, so the env proxy charges
+            # ARC actions against *this* claim instead of taking a second,
+            # auto-named one -- and the child treats an attached claim as one it
+            # does not own, so it will not release a claim the desk is still
             # spending under.
-            self._cfg = EnvProxyConfig(
-                run_id=self.run_id, arm=ARM, upstream=env_upstream,
-                api_key=env_key, require_key=require_key,
-                ledger=self.ledger, run=self.run, guard=self.guard,
+            #
+            # Built here rather than in `__enter__` so that a construction
+            # failure still hits the release below, and so that `env_key` -- a
+            # stub, never the real credential -- is held by the supervisor
+            # rather than by this object. `start()` drops it once the child has
+            # it.
+            self.proxy = EnvProxyProcess(
+                run_id=self.run_id, arm=ARM, upstream=self.env_upstream,
+                ledger_path=self.ledger_path,
+                campaign=self.campaign,
+                reservation=self.spend.reservation,
+                spend_gate=self.spend.gate,
                 max_attempts=env_max_attempts,
-                campaign=self.campaign, spend_gate=self.spend.gate,
-                spend_reservation=self.spend.reservation)
+                env_key=env_key, require_key=require_key,
+                work_dir=self.dir)
         except BaseException:
             # A `Run` that never gets built must not leave a claim on the
             # shared pool for the lease's whole duration.
             self.spend.release("run construction failed")
             raise
 
-        self.proxy: Optional[EnvProxy] = None
+        self.started: bool = False
         self.started_at: Optional[float] = None
 
     # -- lifecycle ---------------------------------------------------------
     def __enter__(self) -> "Run":
         try:
-            self.proxy = EnvProxy(self._cfg).start()
+            self.proxy.start()
         except BaseException:
             self.spend.release("proxy failed to start")
             raise
+        self.started = True
         self.started_at = time.time()
         return self
 
@@ -191,7 +227,7 @@ class Run:
 
     @property
     def env_base(self) -> str:
-        assert self.proxy is not None, "the run is not started"
+        assert self.started, "the run is not started"
         return self.proxy.base_url
 
     # -- the record --------------------------------------------------------
@@ -200,7 +236,7 @@ class Run:
             game_id=self.game_id,
             env_base=self.env_base,
             model_base=None,
-            env_upstream=self._cfg.upstream,
+            env_upstream=self.env_upstream,
             guard=self.guard.fingerprint(),
             variant=None,
             arm_version=_bootstrap.arm_version(),
@@ -214,7 +250,7 @@ class Run:
 
     def end_record(self, **fields: Any) -> None:
         self.run.run_end(
-            env_proxy=self.proxy.summary() if self.proxy else None,
+            env_proxy=self.proxy.summary() if self.started else None,
             elapsed_s=round(time.time() - (self.started_at or time.time()), 1),
             **fields,
         )
@@ -226,7 +262,7 @@ class Run:
             "game_id": self.game_id,
             "slug": self.slug,
             "ledger": os.path.abspath(self.ledger_path),
-            "env_proxy": self.proxy.summary() if self.proxy else None,
+            "env_proxy": self.proxy.summary() if self.started else None,
             "arm_version": _bootstrap.arm_version(),
             "spend": self.spend.describe(),
             "summary": summary,

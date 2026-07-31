@@ -63,6 +63,58 @@ def test_the_arm_has_no_path_to_the_game_credential():
     assert "three.arcprize.org" not in source
 
 
+def test_the_run_assembler_has_no_path_to_the_game_credential_either():
+    """`harness/run.py` escaped the check above for as long as it was true of
+    everything else.
+
+    The key read did not appear in this file; it appeared two frames down, in
+    `EnvProxyConfig.__init__`, which `Run.__init__` used to call. So the arm's
+    assembler passed a source scan while putting the live credential in the
+    arm's own interpreter for the whole run. The environment proxy is a child
+    process now, so the scan is finally meaningful here -- and it is written
+    down so that reverting to an in-process proxy goes red instead of going
+    quiet.
+
+    `read_secret` is the name that matters: it is the only door a secret comes
+    through (`proxy/redact.py`), so a module that cannot reach it cannot hold
+    one, whatever it does with environment variables.
+    """
+    code = _executable_source(os.path.join(ARM, "harness", "run.py"))
+    for forbidden in ("read_secret", "load_api_key", "EnvProxyConfig",
+                      "X-API-Key", "x-api-key", "Authorization"):
+        assert forbidden not in code, forbidden
+
+    # The supervisor is the only thing between this file and a key, and it does
+    # not read one either: it names a variable for the *child* to read.
+    supervisor = _executable_source(os.path.join(ARM, "harness",
+                                                 "proxy_process.py"))
+    for forbidden in ("read_secret", "load_api_key", "ARC_API_KEY"):
+        assert forbidden not in supervisor, forbidden
+
+
+def _executable_source(path: str) -> str:
+    """A module's code with every comment and string literal removed.
+
+    The older scan in this file drops lines that *start* with `#` or a quote,
+    which is enough for `harness/arc.py` and not enough for a module whose
+    docstring explains the very thing being forbidden: the two tests above and
+    below are about `EnvProxyConfig` not being constructed, and both files say
+    the words "EnvProxyConfig" and "read_secret" in prose several times.
+    Tokenising asks the question the line filter was approximating.
+    """
+    import io                                          # noqa: PLC0415
+    import tokenize                                    # noqa: PLC0415
+
+    with open(path, "rb") as fh:
+        raw = fh.read()
+    kept = []
+    for token in tokenize.tokenize(io.BytesIO(raw).readline):
+        if token.type in (tokenize.COMMENT, tokenize.STRING):
+            continue
+        kept.append(token.string)
+    return "\n".join(kept)
+
+
 def test_the_desk_env_drops_the_game_credential():
     """Kept as a cheap tripwire; the real assertion moved and is stronger.
 
@@ -1227,8 +1279,9 @@ def test_a_campaign_leg_slug_carries_no_game(tmp_path):
     assert slug.endswith("-leg01")
 
 
+@pytest.mark.parametrize("breach", ["AnonymityBreach", "SealedPileBreach"])
 def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failure(
-        tmp_path):
+        tmp_path, breach):
     """The defect this fix introduced, caught before it shipped.
 
     `_main_loop` wraps theorize in `except Exception` so a desk that times out
@@ -1242,14 +1295,28 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
     `Theoria.md:353`. The breach has to reach the caller, exactly as
     `CostCeilingReached` does.
 
+    `SealedPileBreach` is the second parameter and it is not redundant. It is a
+    *subclass*, so the loop's `except (AnonymityBreach, CredentialBreach):
+    raise` covers it today by inheritance and nothing says so out loud -- a
+    later hand that made it a sibling of `AnonymityBreach`, which is the
+    obvious refactor for two things that are "different incidents", would drop
+    the stricter of the two into the broad `except Exception` handler below.
+    The leg would then keep playing and keep spending after a *sealed* game had
+    reached model context, which is the one failure in this file that no repeat
+    run undoes. Cheap to pin, expensive to discover.
+
     Driven through the real loop rather than asserted against the source: the
     whole point is which handler catches it, and reading the file cannot tell
     you that.
     """
+    import harness.modelcall as modelcall               # noqa: PLC0415
     from harness.modelcall import AnonymityBreach       # noqa: PLC0415
     from harness.run import FIXTURE_RUNS_DIR, play      # noqa: PLC0415
     from inner.loop import TheoriaArm                   # noqa: PLC0415
     from proxy.mock.arc_mock import DEFAULT_KEY, MockArc    # noqa: PLC0415
+
+    raised = getattr(modelcall, breach)
+    assert issubclass(raised, AnonymityBreach)
 
     game = "g50t-5849a774"
     seen = {}
@@ -1260,7 +1327,7 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
 
         def boom(*a, **kw):
             seen["called"] = seen.get("called", 0) + 1
-            raise AnonymityBreach("the prompt carries 'g50t'")
+            raise raised("the prompt carries a game id")
 
         arm.desk.call = boom
         # Force theorize to be reached: offline skips it, so re-arm the flag
@@ -1270,7 +1337,7 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
         return arm
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
-        with pytest.raises(AnonymityBreach):
+        with pytest.raises(raised):
             # Not `runs/`: D-S8-018. This run cost nothing and proves nothing
             # about the world, and left in the archive it trips
             # `verify_provenance`'s first check on the *next* invocation of the
