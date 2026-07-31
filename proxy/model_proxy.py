@@ -20,13 +20,16 @@ Run it standalone:
 """
 
 import argparse
+import hmac
 import json
+import os
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import forward as fwd
+from .cli_transport import TOKEN_ENV
 from .cost import DEFAULT_TABLE, PriceTable
 from .ledger import Ledger, RunLedger, sha256
 from .paths import LEDGER_PATH, UPSTREAM_MODEL
@@ -43,6 +46,26 @@ PASSTHROUGH_REQUEST_HEADERS = ("content-type", "accept", "anthropic-version",
 CREDENTIAL_HEADERS = ("x-api-key", "authorization", "api-key")
 
 
+def _presented_token(headers) -> Optional[str]:
+    """The client's own token, whichever of the two shapes it arrived in.
+
+    The vendor CLI sends `x-api-key` when its config directory holds no stored
+    OAuth credentials and `Authorization: Bearer …` when it does, so both have
+    to be read to tell "the desk we minted a token for" from "something else
+    that found the port".
+    """
+    direct = headers.get("x-api-key") or headers.get("api-key")
+    if direct:
+        return direct.strip()
+    bearer = headers.get("authorization")
+    if bearer:
+        value = bearer.strip()
+        if value.lower().startswith("bearer "):
+            return value[7:].strip()
+        return value
+    return None
+
+
 class ModelProxyConfig:
     def __init__(self, *, run_id: str, arm: str,
                  upstream: str = UPSTREAM_MODEL,
@@ -56,6 +79,8 @@ class ModelProxyConfig:
                  pricing_table: str = DEFAULT_TABLE,
                  game_id: Optional[str] = None,
                  guard: Optional[SealedPileGuard] = None,
+                 client_token: Optional[str] = None,
+                 require_client_token: bool = False,
                  campaign: Optional[str] = None,
                  spend_gate: Optional[SpendGate] = None,
                  spend_reservation: Optional[Reservation] = None,
@@ -86,7 +111,43 @@ class ModelProxyConfig:
         # The sealed-pile guard reads model traffic too. The cut's rule 2
         # counts *reading about* a sealed game as contamination, and a prompt
         # that names one teaches the model exactly that (RED-32).
-        self.guard = guard if guard is not None else SealedPileGuard()
+        #
+        # `unknown_policy="allow"` on THIS path, and only this path (D-P12-001).
+        # The environment proxy can afford to fail closed on an unregistered id
+        # because its requests *address* a game: one id, deliberately named. A
+        # model request is free text, and `_GAME_ID`'s shape -- two to six
+        # alphanumerics, a hyphen, eight hex digits -- is hit by ordinary prose
+        # constantly. Measured rather than assumed: the first real `claude -p`
+        # request ever put through this proxy was refused 403 `unknown_game` on
+        # a date-shaped token inside the CLI's own system prompt, before the
+        # missing provider key could even become the problem. Nothing is given
+        # up: the sealed set is a fixed enumeration, so an id that is not in the
+        # register is not a sealed game, and `deny` bought a 403 on every
+        # request while catching none.
+        self.guard = guard if guard is not None else SealedPileGuard(
+            unknown_policy="allow")
+
+        # The token the desk presents to prove it is the desk.
+        #
+        # `None` is the historical behaviour and stays the default: any client
+        # that can reach the port is served, and a credential it supplies is
+        # recorded as a `bypass_attempt` and stripped. Set it, and the proxy
+        # authenticates its client -- which is what makes the CLI route in
+        # `cli_transport.py` a *capability* rather than an open loopback port.
+        #
+        # It is not a provider credential and is deliberately NOT registered
+        # with `redact.VAULT`: the vault's job is to keep secrets out of
+        # ledgers and out of subprocess environments, and this token's whole
+        # purpose is to be put into a subprocess environment. It buys nothing
+        # anywhere but this process's port.
+        self.client_token = (client_token if client_token is not None
+                             else os.environ.get(TOKEN_ENV) or None)
+        self.require_client_token = require_client_token
+        if self.require_client_token and not self.client_token:
+            raise ValueError(
+                "require_client_token is set but no client token was given and "
+                "%s is unset; refusing to start a proxy that would advertise "
+                "authentication it cannot perform" % TOKEN_ENV)
         try:
             self.pricing = PriceTable.load(pricing_table)
         except KeyError:
@@ -173,18 +234,79 @@ class _Handler(BaseHTTPRequestHandler):
                     self.server.summary()).encode())                # type: ignore[attr-defined]
             return self._respond(404, b'{"error":"no such proxy endpoint"}')
 
+        # -- who is calling -------------------------------------------------
+        # When a client token is configured the proxy authenticates its caller
+        # before anything else. Without it the port is an open relay to a
+        # funded provider key for every process on the machine -- which was
+        # tolerable only for as long as no funded key existed.
+        presented = _presented_token(self.headers)
+        minted = self.cfg.client_token
+        # `compare_digest` rather than `==`: the comparison is over a secret
+        # and a value an untrusted caller controls, which is the textbook shape
+        # for a timing oracle. It costs nothing to not have one.
+        is_minted = bool(minted and presented
+                         and hmac.compare_digest(presented, minted))
+        if minted and not is_minted:
+            self.cfg.run.incident(
+                "bypass_attempt",
+                "a client reached the model proxy without the token this run "
+                "minted for its desk; the request was refused before it could "
+                "be forwarded on the injected provider credential",
+                path=path, presented_a_credential=bool(presented),
+                surface="model_proxy")
+            return self._respond(401, json.dumps({
+                "error": "refused by the model proxy",
+                "rule": "client_token_required",
+                "detail": "this proxy authenticates its client. Start the desk "
+                          "through proxy.cli_transport.DeskTransport, or pass "
+                          "the run's minted token as x-api-key."}).encode())
+
         for name in CREDENTIAL_HEADERS:
-            if self.headers.get(name):
-                self.cfg.run.incident(
-                    "bypass_attempt",
-                    "the arm supplied its own %s header to the model proxy" % name,
-                    path=path, header=name)
+            value = self.headers.get(name)
+            if not value:
+                continue
+            # The minted token is not a bypass attempt -- it is the desk saying
+            # who it is. Recording it as one would bury the real signal under
+            # one incident per call, which is how a real bypass gets ignored.
+            # Only the header that actually carried the token is exempted: a
+            # request presenting the token in `x-api-key` **and** something
+            # else in `authorization` is still a bypass attempt in the second
+            # header, and that is the interesting case.
+            stripped = value.strip()
+            if is_minted and stripped in (presented, "Bearer " + presented,
+                                          "bearer " + presented):
+                continue
+            self.cfg.run.incident(
+                "bypass_attempt",
+                "the arm supplied its own %s header to the model proxy" % name,
+                path=path, header=name)
 
         # The arm may declare which env_step this call is deciding. It is the
         # only thing an arm gets to add to the ledger, and it is metadata, not
         # content -- the battery needs a per-turn axis for cost.
         verdict = self.cfg.guard.check_request(path, query, body, raw=raw,
                                                headers=self.headers)
+        # A *development*-pile id in a prompt is refused here as well, which
+        # `SealedPileGuard.verdict` does not do on its own (D-P12-002). The
+        # guard's verdict answers "may this game be played"; dev games may.
+        # Theoria.md:353's 硬规 is a different question and a stricter one --
+        # 游戏 ID 永不进模型上下文 -- and it is about every id, not the sealed
+        # ones only. `theoria-arm`'s `ModelDesk._screen_the_pile` already
+        # enforces it arm-side; enforcing it here too is what makes it a
+        # property of the recorded path rather than of one caller's discipline.
+        if verdict["decision"] == "allow":
+            dev = [g for g in verdict.get("game_ids_seen", [])
+                   if self.cfg.guard.classify(g) == "dev"]
+            if dev:
+                verdict = {
+                    "decision": "deny", "rule": "game_id_in_prompt",
+                    "game_id": dev[0], "game_ids_seen": verdict["game_ids_seen"],
+                    "cut_sha256": self.cfg.guard.piles_sha256,
+                    "reason": "this model request names %s, a development-pile "
+                              "game id. Theoria.md:353 硬规: 游戏 ID 永不进模型"
+                              "上下文, 全程匿名化. The run is inadmissible as "
+                              "evidence, but no exam was contaminated."
+                              % ", ".join(sorted(set(dev)))}
         if verdict["decision"] == "deny":
             self.cfg.run.guard_block(
                 game_id=verdict.get("game_id"), rule=verdict.get("rule"),
@@ -429,7 +551,12 @@ class ModelProxy:
                 "provider": self.cfg.provider, "upstream": self.cfg.upstream,
                 "calls": state.calls, "errors": state.errors,
                 "pricing": self.cfg.pricing.reference() if self.cfg.pricing else None,
-                "key_injected": bool(self.cfg.api_key)}
+                "key_injected": bool(self.cfg.api_key),
+                # Presence, never the value. A run report that says the client
+                # leg was authenticated is the difference between "the desk
+                # spoke through the proxy" and "something on this machine did".
+                "client_authenticated": bool(self.cfg.client_token),
+                "guard": self.cfg.guard.fingerprint()}
 
     def start(self) -> "ModelProxy":
         self._thread = threading.Thread(target=self.httpd.serve_forever,

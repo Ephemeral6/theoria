@@ -890,3 +890,84 @@ everything here; fixing it means changing `redact.py`'s contract, which is its
 own decision and its own ticket. What is owed and paid here is that the guard
 being downstream of it is written down (`RUN_STATE.md`, and the filed ticket)
 rather than left for the next person to discover.
+
+## D-P12-001 · The model proxy's guard allows an unregistered id; the environment proxy's does not
+
+`SealedPileGuard`'s `unknown_policy` defaults to `deny` and that is right for
+the environment proxy: its requests *address* a game, one id, named on purpose,
+and an id outside the register is something the cut did not authorise. The
+model proxy inherited the default and it is wrong there, measurably rather than
+arguably.
+
+`guard._GAME_ID` matches two-to-six alphanumerics, a hyphen, and eight hex
+digits. Free text hits that constantly. The first real `claude -p` request ever
+put through `ModelProxy` was refused **403 `unknown_game`** on `code-20250219`,
+a token inside the CLI's own system prompt — before the missing provider key
+could even become the problem. So `deny` on this path bought a 403 on every
+request and caught nothing: the sealed pile is a fixed enumeration, so an id
+that is not in the register is not a sealed game, and no amount of failing
+closed on unknowns makes a sealed one more likely to be caught.
+
+`theoria-arm`'s `ModelDesk._screen_the_pile` had already written the reasoning
+down — "the proxy's request path can afford `unknown_policy = deny` because a
+request names one game deliberately; a 20,000-character prompt is not that" —
+and applied it only to its own screen. This is the same sentence, applied where
+it was pointing.
+
+The obvious objection is that a guard was loosened, and the answer is what a
+guard is *for*. This one refuses two things: a sealed id, and an id outside the
+cut. The first is the property Phase 1 rests on and is untouched — and, as of
+P-12, demonstrated rather than asserted, which it had never been on this path
+(`DUAL_PROXY.md` §4 step 3). The second is a widening rule for a surface that
+is not addressed by id at all.
+
+## D-P12-002 · A development-pile id in a prompt is refused at the proxy too
+
+`SealedPileGuard.verdict` returns *allowed* for a dev game, correctly: it
+answers "may this game be played", and the four dev games may. Theoria.md:353's
+硬规 is a different and stricter question — **游戏 ID 永不进模型上下文,全程匿名化**
+— and it is about every id, not the sealed ones only.
+
+So the model proxy asks the second question itself rather than borrowing the
+answer to the first. `verdict()` is left alone: it is shared with the
+environment proxy, where refusing a dev id would refuse the whole development
+pile, which is the pile we play.
+
+The reason it is at the proxy and not only at the arm is the same reason the
+proxies exist at all. `ModelDesk._screen_the_pile` already enforces this, and
+that makes it a property of one caller's discipline. Enforced here it is a
+property of the recorded path, which is the only kind of property Phase 1's
+sealing claim can be built out of. Two independent screens is the intended
+shape, not duplication.
+
+## D-P12-003 · The model proxy authenticates its client, when it is told to
+
+`ModelProxyConfig` gains `client_token`. Unset — the default, and every
+existing caller — the behaviour is unchanged: any client that can reach the
+port is served, and a credential it supplies is recorded as a `bypass_attempt`
+and stripped. Set, the proxy requires the caller to present that exact token
+(`x-api-key` or `Authorization: Bearer`), compares it with
+`hmac.compare_digest`, and answers **401 `client_token_required`** otherwise —
+before `_forward` and therefore before the injected provider key can be spent.
+
+The reason it is now worth having: the whole point of P-12 is to make the model
+proxy carry a funded key. An unauthenticated loopback port in front of a funded
+key is an open relay to that key for every process on the machine. That was
+tolerable exactly as long as the key did not exist, which is the condition this
+work is trying to remove.
+
+Two consequences of the design, both deliberate:
+
+* **The token is not registered with `redact.VAULT`.** The vault keeps
+  credentials out of ledgers and out of subprocess environments; this token's
+  entire purpose is to be put into a subprocess environment. Registering it
+  would make `theoria-arm/harness/modelcall.py`'s by-value environment scan
+  raise `CredentialBreach` on the one variable the transport must set. It is a
+  loopback capability, not a credential — it buys nothing anywhere but the port
+  that minted it, and it wears the prefix `theoria-local-` so that a reader
+  finding one in a log can decide that in ten seconds.
+* **Presenting the minted token is not a `bypass_attempt`.** It is the desk
+  saying who it is. Recording it as an attempted bypass would put one incident
+  on every call and bury the signal the record exists to carry — which is how a
+  real bypass gets ignored. A *second* credential header carrying something
+  else is still recorded, which is the interesting case.

@@ -372,6 +372,33 @@ cache-read count is a **structural zero** and not a small number; comparing it
 with a proxied arm's ~10⁸ compares a transport property with a framework
 property (INC-TA-005). The field is what lets a battery notice before it does.
 
+**`transport` and `proxied` are two questions, and P-12 stopped the answers
+being the same answer.** Every ledger written before 2026-08-01 has
+`transport: "claude-code-cli"` exactly when it has `proxied: false`, because
+the CLI route was the unproxied route: `harness/modelcall.py` writes the record
+itself and `http.forwarded` is `false`. A reader could get away with treating
+one as a synonym for the other, and at least one would have.
+
+It is no longer true. `proxy/cli_transport.py` puts the same subprocess
+*behind* the model proxy — the CLI honours `ANTHROPIC_BASE_URL`, and pointed at
+a credential-free `CLAUDE_CONFIG_DIR` it presents a locally-minted token the
+proxy strips and replaces (measured in
+`runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md`; the whole path is tested
+against a loopback provider, and only a funded provider key is still missing).
+A record from that route is written by `model_proxy` with `http.forwarded:
+true`, so it is a **proxy-observed record of a CLI transport**:
+
+| | `transport` | `proxied` | who wrote the record |
+|---|---|---|---|
+| the arm's own subprocess | `claude-code-cli` | `false` | `harness/modelcall.py` |
+| the same subprocess, behind the proxy | `claude-code-cli-via-model-proxy` | `true` | `proxy/model_proxy.py` |
+| a direct `/v1/messages` client | whatever it says | `true` | `proxy/model_proxy.py` |
+
+So a cost comparison must keep reading `transport` — the caching argument above
+is about the CLI and survives the route change intact — and a *completeness*
+claim must keep reading `proxied`. Collapsing them was always a coincidence of
+this repository's history; from here it is a bug.
+
 **These five fields spent $2.695 getting here.** §4 was closed after P-8 landed,
 on a commit the arm that writes them never touched, and the closure refused the
 first live call's record after the provider had already been paid. That is

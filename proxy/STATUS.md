@@ -1,11 +1,90 @@
 # `/proxy/` — status
 
+**P-12 delivered: the model proxy has carried a real `claude -p` request, end
+to end, into the ledger. Against a loopback provider — no network, no spend —
+but with the actual vendor binary at the near end, the real `ModelProxy` in the
+middle, and a `model_call` at status 200 with the provider's `usage` verbatim
+at the far end. `DUAL_PROXY.md` §4's step 2 said that route was structurally
+impossible; it is not, and the reason it looked impossible is now measured
+rather than reasoned.** 442 tests pass. Nothing here has spent a dollar or
+reached the internet.
+
+## P-12 — two blockers, not one
+
+`verify-lab/DUAL_PROXY.md` rules the model proxy **(b)**: built, never
+validated on real traffic, 65 of 65 model calls at HTTP 401. That verdict is
+still right and this cell did not move it. What moved is the size of the gap
+behind it. The full measurement is
+`runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md`; the three results:
+
+1. **`claude -p` is an HTTP client, not a wall.** It honours
+   `ANTHROPIC_BASE_URL` — one `POST /v1/messages?beta=true`, `stream: true` —
+   and parses a hand-written provider-shaped SSE reply into a complete result
+   envelope with `usage` and `total_cost_usd` intact.
+2. **Which credential it presents is decided by `CLAUDE_CONFIG_DIR`.** With the
+   operator's ordinary config directory visible it sends its stored OAuth
+   bearer and ignores both `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` —
+   which is what produced the archived 401s. Pointed at a config directory
+   holding no stored credentials it sends `x-api-key: <ANTHROPIC_API_KEY>` and
+   no `Authorization` at all. So `ANTHROPIC_API_KEY` on the *client* leg does
+   not have to be a funded key; it has to be a token the proxy recognises, and
+   the funded key stays where the design always put it — injected by the proxy,
+   on the far side. `proxy/cli_transport.py:DeskTransport` is that route.
+3. **A second blocker the 401s were hiding.** The first real CLI request ever
+   put through `ModelProxy` was refused **403 by our own guard** —
+   `unknown_game` on `code-20250219`, a date-shaped token inside the CLI's own
+   system prompt. `_GAME_ID` matches two-to-six alphanumerics, a hyphen and
+   eight hex digits, and `ModelProxyConfig` had inherited the environment
+   proxy's `unknown_policy="deny"`. **A funded key would not have moved it by
+   an inch**, and nobody could have found it, because nobody had ever got past
+   the 401 to look. That is the general lesson worth keeping: "the only missing
+   piece is X" is a prediction until X is removed.
+
+What changed here (D-P12-001/002/003, announced as C-007 in
+`CONTRACT_CHANGES.md` — it changes the guard's verdict semantics, which §4's
+detector cannot see, so the fingerprint is byte-identical before and after):
+
+| | |
+|---|---|
+| the model proxy's default guard | `unknown_policy="allow"` **on this path only**. Nothing detectable is lost: the sealed set is a fixed enumeration, so an id outside the register is not a sealed game, and `deny` bought a 403 on every request while catching none |
+| a **development**-pile id in a prompt | refused `game_id_in_prompt`, 403. `verdict()` allows it — it answers "may this game be played" — and Theoria.md:353's 硬规 is the stricter question about every id. The arm's `ModelDesk._screen_the_pile` already enforced it; enforcing it here makes it a property of the recorded path rather than of one caller |
+| `ModelProxyConfig.client_token` | optional, off by default, byte-for-byte the old behaviour when unset. Set, the proxy 401s an unauthenticated caller *before* `_forward` — because an unauthenticated loopback port in front of a funded key is an open relay to that key |
+| `proxy/cli_transport.py` | new: mints the token, builds the desk's environment, owns the credential-free `CLAUDE_CONFIG_DIR`. `describe()` never returns the token's value |
+| `tests/test_cli_transport.py` | 16 tests. Fifteen run always, against a stub carrying the request shape recorded from the real binary; the sixteenth runs the binary and skips when it is absent, on the same footing as `engine-rig`'s FD toolchain |
+
+**`DUAL_PROXY.md` §4 step 3 is closed here.** The sealed-pile refusal on the
+model path was asserted and is now demonstrated:
+`test_a_planted_sealed_id_is_refused_by_the_proxys_own_guard` plants an id read
+out of the cut at test time — never written into a tracked file — and requires
+403, `surface: "model_proxy"`, a `guard_block`, a `sealed_pile_in_prompt`
+incident, and zero forwarded calls.
+
+**What P-12 does not do, stated plainly.** It does not make the verdict (a).
+The model proxy has still never carried a completed request to a *real*
+provider, and this cell did not spend a cent to find out otherwise. Step 1 — a
+funded `ANTHROPIC_API_KEY` in `.env` — is untouched and is an owner action no
+agent may take. Step 2 is now possible but **not adopted**:
+`theoria-arm/harness/modelcall.py` still pops `ANTHROPIC_BASE_URL` and still
+writes `proxied: false`, which is another territory's file; the proposal is in
+`monitor/inbox/`. Steps 4, 5 and 6 remain open and belong to theoria-arm and
+verify-lab.
+
+One thing found in passing that is a finding about the *arm*, not about this
+directory: with the ordinary config directory visible, a `claude -p` subprocess
+hands the operator's real OAuth bearer to whatever `ANTHROPIC_BASE_URL` names.
+`modelcall.py:SCRUBBED_FROM_DESK_ENV` pops that variable, and A11's comment on
+it — "a silently redirected desk is worse than a broken one" — now has a
+measurement under it. Any caller that sets the variable deliberately must set
+`CLAUDE_CONFIG_DIR` in the same breath; `DeskTransport` does both or neither,
+which is why it is a context manager and not a dict.
+
+## S15 — the chain
+
 **S15 delivered: the ledger is a hash chain — each record carries the digest of
 the line before it, `tools/verify_chain.py` re-derives the whole chain, and
 editing a landed record is now detectable. The half that is not done is the one
 that matters most: publishing the head outside the file is still discipline, not
-a gate (see RED-40).** 323 tests pass. Nothing here has spent a dollar or
-reached the internet.
+a gate (see RED-40).** 323 tests passed at S15; the count above is current.
 
 Previously: S9 made the canon additive-safe, made canonical the five fields P-8
 was already writing, and stopped a change that narrows the shared contract from

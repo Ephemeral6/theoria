@@ -1,0 +1,61 @@
+{
+  "api_calls": 0,
+  "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
+  "branch": "p12/model-proxy",
+  "contract_fingerprint": "sha256:188706860c457bcb3e5a9aaebde840356592e377b8dcda4c6442ce7a3c68ba51",
+  "files": [
+    {
+      "path": "monitor/inbox/2026-08-01T0000Z-P12-proxy-to-theoria-arm-the-cli-can-go-through-the-model-proxy.md",
+      "sha256": "sha256:62eeb27b1e2e712c1cd46e739d91583e48f82a4ee08423d7c55405e3fa245d3f"
+    },
+    {
+      "path": "proxy/CONTRACT_CHANGES.md",
+      "sha256": "sha256:dcabfffefc311966e2cdd48364db9c0011a4ec3935e8de550599233500ad7518"
+    },
+    {
+      "path": "proxy/DECISIONS.md",
+      "sha256": "sha256:b452ecb3e2f37613eaa13bb7e47d6ccd3c40af0c6176428b58f9fc25dd45fdd8"
+    },
+    {
+      "path": "proxy/LEDGER_FORMAT.md",
+      "sha256": "sha256:cf9904a3dc02d119912f85136c9e3c99197adaa0e8c87c53a7b5a9bccc5230cd"
+    },
+    {
+      "path": "proxy/STATUS.md",
+      "sha256": "sha256:b6c83c9348994c10eaffb4265de79aff1aa5b19617a0fde41d84dcfd8ee45e8f"
+    },
+    {
+      "path": "proxy/cli_transport.py",
+      "sha256": "sha256:3d398429c48ce7845ccbdd9d751353dabc00f4b9962fc0fee8848ecd8c3de737"
+    },
+    {
+      "path": "proxy/model_proxy.py",
+      "sha256": "sha256:48441f9f44c2d0371f7dbafeb078358f87f8fee69390643351c56a951e88c260"
+    },
+    {
+      "path": "proxy/runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md",
+      "sha256": "sha256:bbb8e2538f4a874b4f63cda8a3fa797d002b88a1f94a0da248bb51192df126c4"
+    },
+    {
+      "path": "proxy/runs/20260801T0000Z-P12-model-proxy-cli/RUN_STATE.md",
+      "sha256": "sha256:e21ca578bff58bcd7e7a5fbc04119144226d088ce40d356285ec72198c298213"
+    },
+    {
+      "path": "proxy/tests/test_cli_transport.py",
+      "sha256": "sha256:3d2bd55fef5779707b5305a271f434d5b7b776f80c994c827a6626d24b5b9bfa"
+    }
+  ],
+  "gate": {
+    "command": "cd proxy && python -m pytest",
+    "exit": 0,
+    "result": "442 passed"
+  },
+  "network": "none - every far end is a loopback fixture",
+  "prompt": "close Phase 1 acceptance item 模型代理: implement every step of verify-lab/DUAL_PROXY.md §4's checklist that does not require a paid credential",
+  "prompt_id": "P-12-model-proxy",
+  "sealed_pile_contact": "none",
+  "seed": null,
+  "spend_usd": 0.0,
+  "territory": "proxy",
+  "utc": "2026-08-01T00:00:00Z"
+}

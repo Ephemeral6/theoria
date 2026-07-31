@@ -206,6 +206,34 @@ Append-only. Newest last.
 | C-004 | 2026-07-28 | the pinned contract gains `events`/`arms`/`incident_kinds`; `validate_file`'s report gains `notices`; `frozen.json`'s `arc_v1` entry gains `depends_on` | additive | n/a |
 | C-005 | 2026-07-29 | `canon.ENVELOPE` gains `prev`, the ledger's hash chain link (S15, D-029): the writer owns it and **a caller that sets it is now refused** | tightening | no — see below |
 | C-006 | 2026-07-29 | `INCIDENT_KINDS` gains `variant_degenerate`; `win_tighten`'s `applied` record gains `reason`, `degenerate`, `occurrence` and (once per session) `note` (V22, D-032) | additive | n/a |
+| C-007 | 2026-08-01 | **`model_proxy` request semantics** (P-12, D-P12-001/002/003): its default guard becomes `unknown_policy="allow"`; a **development**-pile id in a model request is refused `game_id_in_prompt`; `ModelProxyConfig` gains an optional `client_token` that, when set, makes an unauthenticated caller 401 | widening + tightening — see below | this file; `runs/20260801T0000Z-P12-model-proxy-cli/FINDING.md` |
+
+C-007 is §6's third bullet arriving in person: it changes **the guard's verdict
+semantics**, which §2's rule covers by its own terms and which §4's detector
+cannot see — `python -m proxy.tools.contract --fingerprint` is byte-identical
+before and after, because none of `canon.describe()` or `ledger.py`'s three
+registries moved. So the announcement is this row and nothing else is watching.
+
+Its three parts have different signs and are listed separately for that reason:
+
+* **`unknown_policy="allow"` is a widening.** The model proxy accepts more than
+  it did. It also accepted, measurably, *nothing*: the first real `claude -p`
+  request through it was refused `unknown_game` on a date-shaped token in the
+  CLI's own system prompt, and any prompt long enough to be worth sending
+  contains one. Nothing detectable is lost — the sealed set is a fixed
+  enumeration, so an id outside the register is not a sealed game.
+* **The dev-pile refusal is a tightening**, and it is landed without the §3
+  wait. The window §3 exists to protect is a window for callers who would
+  break, and the set of them is empty by construction: before this change the
+  same path refused *every* request that reached it, including these. A
+  tightening that can only affect requests that were already refused has nobody
+  to warn. (It is also the narrower reading of a rule the arm already enforces
+  — `ModelDesk._screen_the_pile` — so a caller surprised by it is a caller
+  whose own screen was already going to raise.)
+* **`client_token` is additive.** Unset is the default and is byte-for-byte the
+  previous behaviour, including recording a client-supplied credential as a
+  `bypass_attempt`; `tests/test_cli_transport.py::test_no_token_configured_is_the_old_behaviour_exactly`
+  is the pin.
 
 C-005 is the first change this document caught rather than governed, and the
 honest reading is that it was not announced. It landed on the mainline with S15
