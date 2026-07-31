@@ -1,0 +1,48 @@
+{
+ "base_commit": "1026a6a9e46edcb5f7b44813419859b513247f4c",
+ "branch": "cleanup2/arm3",
+ "cell": "A16",
+ "delivered": [
+  "harness/campaign.py",
+  "tests/test_launch_gate_wired.py"
+ ],
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "99a1adb3da353167eb4279c43751502b208f24e49e2f082f3f1f530119a8dc68"
+  }
+ ],
+ "lane": "campaign",
+ "measured": {
+  "correction_made_before_delivery": "this cell's RUN_STATE.md first recorded five outstanding rows. That was a truncation read as a measurement -- `head -40` on the gate's JSON cuts off inside 9.17, and the last row I saw was recorded as the last row there is. Same rule as runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT section 3: a number that can be asked for directly must not be counted out of truncated output. No code was affected -- the refusal computes its row list at runtime and never read that file.",
+  "defect_found_while_wiring": "subprocess.run(text=True) decodes with the locale codec (GBK here) and STATS_RULES.md is Chinese prose with U+27E8 placeholders; the gate reconfigures its own stdout to UTF-8 for exactly that reason. UnicodeDecodeError landed in subprocess's reader thread and handed the caller an empty stdout -- still a refusal, but with the wrong reason on every sealed launch. Fixed with encoding='utf-8', errors='replace'.",
+  "note_on_the_item_text": "the item names 9.2/9.11/9.14, which was S4's state; 9.11 has since cleared and seven more rows have appeared. The refusal reads its row numbers out of the verdict rather than from a constant, which is why this drift costs nothing.",
+  "real_gate_verdict_today": "blocked (exit 1)",
+  "rows_cleared_today": [
+   "9.11"
+  ],
+  "rows_declared_today": 11,
+  "rows_outstanding_today": [
+   "9.2",
+   "9.14",
+   "9.15",
+   "9.16",
+   "9.17",
+   "9.18",
+   "9.19",
+   "9.20",
+   "9.21",
+   "9.22"
+  ]
+ },
+ "prompt_id": "A16-A16-launch-gate-wired",
+ "sealed_pile_contact": "none",
+ "spend": {
+  "api_calls": 0,
+  "note": "entirely offline: no ARC API call, no model call, no network",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-07-31T10:50:12Z",
+ "what": "freeze/launch_gate.py wired into the sealed-pile launch path in harness/campaign.py, ordered before assert_dev_pile so the wire is reachable and therefore testable. Exit 1 and exit 2 refuse alike, as do four other ways of not saying yes. Negative control run BOTH ways: a synthesised registry driving the real launch_gate.gate() over the real STATS_RULES.md reports clear and must LAUNCH; the real state reports blocked and must REFUSE."
+}

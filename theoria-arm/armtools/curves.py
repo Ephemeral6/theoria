@@ -55,6 +55,16 @@ A turn issues many commands -- RESET, retries, failed actions -- and on this
 arm the ratio has been as high as 146:3. The invariant is that the curves
 *account for* every command, not that they are indexed by one.
 
+And an equality alone is not enough, because `0 == 0` satisfies it. A leg that
+never took a turn would otherwise write a syntactically perfect file whose
+every series is empty and every total is zero -- and a zero in a cost curve
+reads as "this leg was cheap", not as "this leg did not happen". So zero rows
+is refused outright, with both numbers in the message, because the two causes
+are not equally serious: nothing played, versus the join lost every row a
+ledger full of commands should have produced. `theoria-arm/verify.py` opens by
+naming this failure mode with the same example, `figures/verify.sh` printing
+"ok" when both of its builds produced nothing at all.
+
 ## Format
 
 `curves.json` next to `turn_series.json` and `cost_curve.json`, plus one file

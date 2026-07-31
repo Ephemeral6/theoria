@@ -1,0 +1,67 @@
+{
+ "base_commit": "1026a6a9e46edcb5f7b44813419859b513247f4c",
+ "branch": "cleanup2/arm3",
+ "cell": "A17",
+ "delivered": [
+  "armtools/armversion.py",
+  "tests/test_armversion_read_set.py"
+ ],
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "a4be4fdfab9362db65112cbcc2b0e7620e6d543e48abb14de16bf9651f13d41c"
+  },
+  {
+   "path": "gates.txt",
+   "sha256": "9149129d955cfd24149f3a58f935fc07c9d22b798ddcb3e1a553a77ee2931878"
+  },
+  {
+   "path": "measurement.json",
+   "sha256": "4514c8c4d50fa2fa204ed5196acd318ac6d8bacf2914efb8ad1064428916cb2d"
+  },
+  {
+   "path": "probe_ref_set_bite.py",
+   "sha256": "83366caeae152e54cb6388451df2ff2ffdaadb96cb3189e529d9f6c5416b96b1"
+  }
+ ],
+ "lane": "campaign",
+ "measured": {
+  "archived_manifests_whose_bytes_move_on_one_extra_commit": "8 of 8",
+  "archived_verdicts_identical_under_all_three_read_sets": true,
+  "commits_only_via_tags": 0,
+  "correction_to_20260730T1200Z": "that write-up named other worktrees' detached HEADs as a main contributor to the scan input. Measured here: --all minus branches/remotes/tags/HEAD is exactly 7 = stash 3 + refs/original 4, and no worktree HEAD is among them.",
+  "read_sets": {
+   "--all": {
+    "arm_versions": 68,
+    "commits": 1425
+   },
+   "--branches --remotes HEAD": {
+    "arm_versions": 68,
+    "commits": 1418
+   },
+   "HEAD": {
+    "arm_versions": 66,
+    "commits": 1394
+   }
+  },
+  "the_seven_commits_--all_adds": "refs/stash (3) + refs/original/ (4)",
+  "these_commit_counts_drift": "re-scanned later the same session the chosen set read 1420, not 1418, without a commit of mine -- another session pushed. The arm-version count did not move (68) so no verdict changed, but a commit count is a reading about the repository right now and must always be cited with the measurement it came from. Which is, of course, the item's own point.",
+  "triggers_constructible": {
+   "plain_branch": true,
+   "tag_on_a_reachable_commit": false,
+   "tag_on_duplicate_subtree": true,
+   "tag_on_unique_subtree": true
+  }
+ },
+ "not_done": "no tag, branch or stash was created in this repository and no ref was deleted; the only refs created live in a throwaway git init fixture in a temp directory. `python -m armtools.backfill --all` was never run. The per-manifest declared-ref-set migration is deliberately deferred: this change was chosen partly because it rewrites nothing.",
+ "prompt_id": "A3-A17-armversion-reads-all-refs",
+ "sealed_pile_contact": "none",
+ "spend": {
+  "api_calls": 0,
+  "note": "entirely offline: no ARC API call, no model call, no network",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-07-31T10:50:12Z",
+ "what": "armversion.scan()'s read set measured first, then declared. Three of four attempted triggers fire in a real git fixture; the bite is 8 of 8 archived manifests moving bytes under check 8. DEFAULT_REFS = (--branches, --remotes, HEAD), argued against HEAD-only and against origin/master first-parent on measurement rather than taste. No archive manifest was rewritten."
+}

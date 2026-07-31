@@ -75,6 +75,12 @@ T3 是本节最值钱的一条：**这件事从来不只关于 tag，是关于�
 | `--branches --remotes HEAD` | 1418 | **68** |
 | 仅 `HEAD` | 1394 | 66 |
 
+**这三个提交数是会漂的，而那正是本条目的内容。** 同一轮里晚些时候再扫一次，
+选定集从 1418 变成 1420——我一个提交都没做，是别的会话往共享仓库里落了东西。
+`arm version` 数没变（68），所以裁决没动；但「提交数」这个读数本身依赖
+「此刻谁推了什么」，把它当常量引用是错的，引用时必须带上是哪一次测量
+（此处一律指 `measurement.json`）。
+
 `--all` 多出来的 7 个提交，逐个点名（`rev-list A --not B` 直接问，不做减法）：
 `refs/stash` 3 个 + `refs/original/refs/heads/agent/a3-campaign-devpile` 4 个。
 非 heads/tags/remotes 的引用本仓库总共就这两条。

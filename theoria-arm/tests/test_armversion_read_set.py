@@ -251,7 +251,6 @@ def test_stash_is_outside_the_read_set(repo):
     members leaves it out by construction rather than by argument.)
     """
     work = repo["work"]
-    (os.path.join(work, "theoria-arm", "mod.py"))
     with open(os.path.join(work, "theoria-arm", "mod.py"), "w",
               encoding="utf-8", newline="\n") as fh:
         fh.write("V = 4242\n")
