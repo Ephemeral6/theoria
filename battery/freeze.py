@@ -116,6 +116,7 @@ CODE = [
     "battery/audit/gaming.py",
     "battery/audit/redundancy.py",
     "battery/audit/live_arm.py",
+    "battery/audit/live_economy.py",
     "battery/audit/live_tiers.py",
     "battery/audit/stats.py",
     "battery/audit/validation.py",
@@ -178,6 +179,7 @@ SUITE = [
     "battery/tests/test_exploits_mechanism_epistemic.py",
     "battery/tests/test_freeze.py",
     "battery/tests/test_guard.py",
+    "battery/tests/test_live_economy.py",
     "battery/tests/test_live_tiers.py",
     "battery/tests/test_metrics.py",
     "battery/tests/test_theoria_live.py",
@@ -208,6 +210,7 @@ READINGS = [
     "battery/artifacts/validation_material.json",
     "battery/artifacts_live/gaming_audit.live.json",
     "battery/artifacts_live/live_arm_readings.json",
+    "battery/artifacts_live/live_economy.json",
 ]
 
 PREREG = "battery/PREDICTIONS.md"

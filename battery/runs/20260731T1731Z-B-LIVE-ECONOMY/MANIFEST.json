@@ -1,0 +1,88 @@
+{
+  "api_calls": 0,
+  "base_commit": "73760dc8",
+  "branch": "p12/battery-live-arm",
+  "cell": "B-LIVE-ECONOMY",
+  "delivered": [
+    "battery/audit/live_economy.py",
+    "battery/tests/test_live_economy.py",
+    "battery/artifacts_live/live_economy.json",
+    "battery/artifacts_live/live_arm_readings.json",
+    "battery/freeze.py",
+    "battery/verify.py",
+    "battery/BATTERY_V1.md",
+    "battery/STATUS.md",
+    "monitor/inbox/20260731T1731Z-battery-to-theoria-arm-curves-shortfall.md"
+  ],
+  "files": [
+    {
+      "path": "battery/audit/live_economy.py",
+      "sha256": "e2d2aac6cab99c41c0dbaae47ebca97300a91bff33662c39f1349b8a5e08ece2"
+    },
+    {
+      "path": "battery/tests/test_live_economy.py",
+      "sha256": "958afd39bf5194723aa61d24d156ef390a5affc969ffcf0af5aac17e0370ad15"
+    },
+    {
+      "path": "battery/artifacts_live/live_economy.json",
+      "sha256": "2755b70389e6c5cd926c73923f4f25a883a230ac1dff469916a6f56042355cd5"
+    },
+    {
+      "path": "battery/artifacts_live/live_arm_readings.json",
+      "sha256": "1a2d7fc4c75f252849c90eea096c0a0854a9050f8cd8c50cd025dc84eedd8fe6"
+    },
+    {
+      "path": "battery/freeze.py",
+      "sha256": "68deddf28dc05e03b5c8f25450362dc2442090dc4d941c7a03249f7995b96bde"
+    },
+    {
+      "path": "battery/verify.py",
+      "sha256": "02c1b68e5496f45004b87b115f9232cd621b922c246aad6fa1bb8d30cae7336b"
+    },
+    {
+      "path": "battery/BATTERY_V1.md",
+      "sha256": "e3c79f7b88c4cb2c0eec8ec27ac6ec542fc60f320a30812c805e389bee04fa9d"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "ebd4efbccc3694b92c771d5faf5bf76964c039a0dd3f6961b6348ac9ede9bb6c"
+    },
+    {
+      "path": "monitor/inbox/20260731T1731Z-battery-to-theoria-arm-curves-shortfall.md",
+      "sha256": "f24a5250bd0894a9a763d9615a948e92afac2ceb4141dd5d24f9535e61c358d2"
+    }
+  ],
+  "gates": {
+    "freeze_check": "empty",
+    "suite": "430 passed",
+    "verify": "battery: green -- freeze, suite, one real run, artefact fields, separation claim, live tiers, live-arm readings, live-arm economy"
+  },
+  "inputs_read_only": [
+    "theoria-arm/runs",
+    "arc-recon/data/piles.json"
+  ],
+  "model_calls": 0,
+  "offline": true,
+  "prompt_id": "p12/battery-live-arm",
+  "readings": {
+    "E2_frontload_index_r3": 0.255664307,
+    "E3_convergence_point_r3": 1.0,
+    "E5_usd_per_action_r2": 0.682632286,
+    "E5_usd_per_action_r3": 0.395290059,
+    "economy_absences_as_zero": 0,
+    "economy_absences_with_reason": 22,
+    "games": [
+      "g50t-5849a774",
+      "sk48-d8078629"
+    ],
+    "legs_with_E2_E3": 1,
+    "legs_with_exact_turn_axis": 3,
+    "live_legs": 6,
+    "measured_cells_all_families": 116
+  },
+  "run_id": "20260731T1731Z-B-LIVE-ECONOMY",
+  "spend_usd": 0.0,
+  "territory": "battery",
+  "utc": "2026-07-31T17:31Z",
+  "what": "the live Theoria arm ingested as its own arm label, every metric family recomputed over it, and the economy family read on two turn axes with absence recorded as absence"
+}

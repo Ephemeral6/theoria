@@ -16,7 +16,7 @@ Rung 4 was added by V22, after a cell whose maximum attainable score was zero
 was carried elsewhere as 60%.  Rungs 1-3 were green the whole time and would
 have stayed green: nothing in them reads a sentence.
 
-Three rungs sit on top of those four.  The freeze rung (printed first) checks
+Four rungs sit on top of those four.  The freeze rung (printed first) checks
 the tree still matches BATTERY_V1.md.  The live-tier rung checks the committed
 `battery/artifacts_live/gaming_audit.live.json` against an in-process
 recompute and against the frozen baseline it pins: the frozen
@@ -30,7 +30,11 @@ The live-arm rung (printed last) holds the second `artifacts_live/` companion,
 must match an in-process recompute over the live Theoria arm's committed leg
 archives, every leg it read must be development-pile, and the epistemic and
 economy families must each carry at least one measured cell — an empty
-reading is not a pass, per this module's own doctrine.
+reading is not a pass, per this module's own doctrine.  The economy rung
+(printed last) does the same for `live_economy.json`, and adds the one check
+the others cannot make: a cell whose status is not `ok` must not carry a
+number, because zero in a cost curve reads as "cheap" rather than as "did not
+happen".
 
 Rung 3 is the one that is usually missing.  A green suite says the metrics do
 what their author thought; it does not say the recompute ran, and it does not
@@ -157,7 +161,7 @@ def fail(problems, message):
 
 
 def rung_freeze(problems):
-    """[1/7] the freeze record: BATTERY_V1.md still describes this tree.
+    """[1/8] the freeze record: BATTERY_V1.md still describes this tree.
 
     The suite runs this same check (`test_freeze.py`), but the gate does not
     trust the suite to have been collected: one `addopts` line in `pytest.ini`
@@ -166,7 +170,7 @@ def rung_freeze(problems):
     hold on two independent paths -- V5's adversarial pass demonstrated the
     single-path version being disarmed six different ways.
     """
-    print("[1/7] the freeze record")
+    print("[1/8] the freeze record")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery import freeze
@@ -190,7 +194,7 @@ MIN_TESTS_PASSED = 300
 
 
 def rung_tests(problems):
-    print("[2/7] suite")
+    print("[2/8] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -224,7 +228,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_dir):
-    print("[3/7] one real run -- the whole spectrum recomputed from the "
+    print("[3/8] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -253,7 +257,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[4/7] artefact self-check")
+    print("[4/8] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -357,7 +361,7 @@ def rung_artifact_fields(problems, out_dir):
 
 
 def rung_separation_claim(problems):
-    """[5/7] the documents state the true separation count, and cannot go stale.
+    """[5/8] the documents state the true separation count, and cannot go stale.
 
     Added by V22.  Process 1's headline number is **zero** -- no metric
     separates the specified gradient -- and the way that number went wrong was
@@ -383,7 +387,7 @@ def rung_separation_claim(problems):
     somebody rewrites it.  A gate that could only catch the claim going too
     high would let it rot in the other direction.
     """
-    print("[5/7] the separation claim in the committed documents")
+    print("[5/8] the separation claim in the committed documents")
     path = os.path.join(SHIPPED, "discrimination_arms.json")
     if not os.path.exists(path):
         fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
@@ -472,7 +476,7 @@ def rung_separation_claim(problems):
 
 def rung_live_tiers(problems, live_path=None, frozen_path=None,
                     status_path=None):
-    """[6/7] the live-tier companion tracks the code, and the freeze holds.
+    """[6/8] the live-tier companion tracks the code, and the freeze holds.
 
     The frozen `battery/artifacts/gaming_audit.json` names nine main-table
     metrics; the live `tier_of()` demotes all of them (B17, then V9).
@@ -495,7 +499,7 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
       the way rung 5 pins STATUS_CLAIM, so the sentence must track the
       artefact rather than merely having once been written.
     """
-    print("[6/7] the live-tier companion artefact")
+    print("[6/8] the live-tier companion artefact")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_tiers
@@ -578,7 +582,7 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
 
 
 def rung_live_arm(problems, live_path=None, runs_root=None):
-    """[7/7] the live-arm readings companion is current, dev-pile, and non-empty.
+    """[7/8] the live-arm readings companion is current, dev-pile, and non-empty.
 
     `battery/artifacts_live/live_arm_readings.json` is the frozen instrument
     pointed at the live Theoria arm's committed leg archives — measurement-only
@@ -596,7 +600,7 @@ def rung_live_arm(problems, live_path=None, runs_root=None):
       reading is not a pass (module docstring), and those two families are
       what the live material exists to feed.
     """
-    print("[7/7] the live-arm readings companion")
+    print("[7/8] the live-arm readings companion")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_arm
@@ -657,6 +661,120 @@ def rung_live_arm(problems, live_path=None, runs_root=None):
                  fresh.get("n_measured_cells", 0),
                  len(measured.get("epistemic") or []),
                  len(measured.get("economy") or [])))
+
+
+def rung_live_economy(problems, live_path=None, runs_root=None):
+    """[8/8] the economy companion: current, axis-labelled, absence-not-zero.
+
+    `battery/artifacts_live/live_economy.json` is the economy family read on
+    the live arm's legs over two turn axes — the adapter's reading of record
+    and the archive's exact `bill_shape.json` join.  It exists because the
+    front-load index is a Phase 4 primary endpoint and a fallback axis and an
+    exact axis produce E2/E3 values that look identical in a table.  Four ways
+    it can rot, all RED:
+
+    * the committed companion differs from an in-process recompute — the leg
+      archives moved (a new leg landed, a harvest grew a ledger) without the
+      reading being regenerated;
+    * a leg outside the development pile got in — re-read from the committed
+      rows, not trusted to the generator, the same way rung 7 does it;
+    * a non-`ok` cell carries a number — the doctrine this artefact exists
+      for.  Zero in a cost curve reads as "cheap", not as "did not happen";
+    * every leg's exact axis was refused *and* nothing is measured — a file
+      of pure absence is structurally perfect and says nothing, which is this
+      gate's own stated failure mode.
+
+    What is REPORTED and not gated: the three-way money disagreements
+    (ledger / `bill_shape.json` / `curves.json`).  They are facts about the
+    producer's artefacts, they live in another territory, and a rung that is
+    red for someone else's file is a rung this territory cannot clear.
+    """
+    print("[8/8] the live-arm economy companion")
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.audit import live_economy
+    from battery.guard import load_piles
+
+    live_path = live_path or live_economy.DEFAULT_OUT
+    before = len(problems)
+
+    if not os.path.exists(live_path):
+        fail(problems, "%s is absent; the live-arm economy readings have no "
+                       "committed form to check. Generate it: python -m "
+                       "battery.audit.live_economy" % live_path)
+        return
+    with open(live_path, encoding="utf-8") as fh:
+        try:
+            committed = json.load(fh)
+        except json.JSONDecodeError as exc:
+            fail(problems, "committed live_economy.json is not JSON: %s" % exc)
+            return
+
+    # (i) staleness.
+    fresh = live_economy.build(runs_root)
+    if committed != fresh:
+        changed = sorted(
+            set(k for k in set(committed) | set(fresh)
+                if committed.get(k) != fresh.get(k)))
+        fail(problems, "committed live_economy.json differs from an "
+                       "in-process recompute (top-level keys that moved: %s). "
+                       "The leg archives moved without the reading -- "
+                       "regenerate and commit: python -m "
+                       "battery.audit.live_economy"
+             % (", ".join(changed) or "byte-level only"))
+
+    # (ii) the pile, re-read from the committed rows rather than trusted.
+    piles = load_piles()
+    for run_id in sorted(committed.get("legs") or {}):
+        row = (committed["legs"] or {})[run_id]
+        game = row.get("game_id")
+        if row.get("pile") != "dev" or piles.classify(game or "") != "dev":
+            fail(problems, "economy leg %r reads game %r with pile %r -- "
+                           "every live leg the battery reads must be "
+                           "development-pile, and this one is not"
+                 % (run_id, game, row.get("pile")))
+
+    # (iii) absence is absence.  Read off the committed file, because that is
+    # the artefact a reader opens.
+    for run_id in sorted(committed.get("legs") or {}):
+        row = (committed["legs"] or {})[run_id]
+        for column in ("economy_of_record", "economy_on_exact_axis"):
+            cells = row.get(column) or {}
+            for mid in sorted(cells):
+                cell = cells[mid] or {}
+                if cell.get("status") != "ok" and cell.get("value") is not None:
+                    fail(problems,
+                         "%s/%s/%s is %r and still carries the value %r. An "
+                         "absent metric may not be a zero -- that is the one "
+                         "reading this artefact exists to prevent."
+                         % (run_id, column, mid, cell.get("status"),
+                            cell.get("value")))
+
+    # (iv) an empty reading is not a pass.
+    measured = fresh.get("measured_by_metric") or {}
+    if not any(measured.values()):
+        fail(problems, "the economy companion carries no measured cell on any "
+                       "leg -- a file of pure absence is structurally perfect "
+                       "and says nothing")
+
+    # Reported, never fatal: another territory's artefacts disagreeing.
+    disagreeing = fresh.get("legs_with_disagreements") or []
+    if disagreeing:
+        print("   note  three-way money disagreement on %d leg(s) (reported, "
+              "not gated -- theoria-arm owns these producers):"
+              % len(disagreeing))
+        for run_id in disagreeing:
+            for line in fresh["legs"][run_id]["reconciliation"][
+                    "disagreements"]:
+                print("         %s: %s" % (run_id, line))
+
+    if len(problems) == before:
+        axes = fresh.get("legs_with_axis") or {}
+        print("   ok    %d live leg(s); exact axis on %d, refused on %d; "
+              "E2/E3 measured on %d leg(s); %d absence(s) with reasons"
+              % (fresh.get("n_legs", 0), len(axes.get("exact") or []),
+                 sum(len(v) for k, v in axes.items() if k != "exact"),
+                 len(measured.get("E2") or []), len(fresh.get("absences") or [])))
 
 
 def _non_tied(entry):
@@ -747,13 +865,15 @@ def main():
     rung_separation_claim(problems)
     rung_live_tiers(problems)
     rung_live_arm(problems)
+    rung_live_economy(problems)
 
     print()
     if problems:
         print("battery: RED (%d problem(s))" % len(problems))
         return 1
     print("battery: green -- freeze, suite, one real run, artefact "
-          "fields, separation claim, live tiers, live-arm readings")
+          "fields, separation claim, live tiers, live-arm readings, "
+          "live-arm economy")
     return 0
 
 
