@@ -362,7 +362,7 @@ sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
-sha256:ddea53526788f6590d512f3213cb59b0bea057d38e5d4aa8313274a1dafc0b4b  battery/artifacts_live/live_arm_readings.json
+sha256:1a2d7fc4c75f252849c90eea096c0a0854a9050f8cd8c50cd025dc84eedd8fe6  battery/artifacts_live/live_arm_readings.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -899,3 +899,13 @@ ground truth）—— 都是如实报告，不是缺陷。
 一个字节未动**（`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。
 
 **Amendment 2026-08-01 (readings refresh, live arm):** `battery/artifacts_live/live_arm_readings.json` re-derived after the r3 leg's harvest entered the archive (a new live run changes the recompute by design; rung 7 catches the stale copy). Blocks re-authored block-by-block via `freeze.render_blocks()` — changed: readings. No frozen code or predictions moved.
+
+**Amendment 2026-08-01 (readings refresh, sk48 leg l1):** the sk48 leg
+(`theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1`) landed on master at
+`73760dc8` *after* the 2026-08-01 refresh above, and the readings companion was
+not re-derived with it — so `battery` shipped **red on rung 7** on the mainline
+until this commit. `battery/artifacts_live/live_arm_readings.json` re-derived
+(`python -m battery.audit.live_arm`): 6 live legs, 116 measured cells. Readings
+block hash updated in place; **no frozen code, artefact or prediction moved**
+(`gaming_audit.json` still `191c0ee8cf2c…`). The staleness is not a defect of
+the archive — rung 7 exists to make exactly this visible, and it did.
