@@ -4,7 +4,7 @@
 python -m exam.verify
 ```
 
-Five stages, and each answers a different question:
+Stages, and each answers a different question:
 
 | stage | question |
 |---|---|
@@ -13,7 +13,20 @@ Five stages, and each answers a different question:
 | `run_exam --calibrate` | does the marker still reproduce four known scores before it marks anything? |
 | `run_selftest` | does the marker behave correctly *between* its endpoints, and does every injected fault still get caught? |
 | `artefact_locations` | does any tracked artefact record where its builder stood? |
+| `artifacts_match_committed` | is what is committed under `exam/artifacts/` what this code produces? |
 | `determinism` | do two builds in fresh interpreters produce byte-identical sheets? |
+
+**The producers write to a shadow tree, not to `exam/artifacts/`.**  For weeks
+this file printed GREEN without ever comparing a build against a committed
+artefact, and the reason was structural rather than an oversight: `build_papers`
+overwrote the tracked artefacts in place as stage one, so by the time any later
+stage could have asked the question, the evidence was gone.  Verify now seeds a
+temporary copy of `exam/artifacts`, points every producer at it through
+`EXAM_ARTIFACTS_DIR`, and leaves the tracked tree untouched for the whole run;
+`artifacts_match_committed` then compares the two.  A mismatch is red and stays
+red -- adopting a rebuild means running `python -m exam.tools.build_papers`
+yourself and committing the diff with the reason, because a gate that quietly
+adopted what it found would erase the finding, which is how this went unseen.
 
 `artefact_locations` covers a dimension `determinism` cannot see by
 construction. The determinism stage compares two in-process builds' sheet
@@ -38,19 +51,24 @@ measurements.
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
-from typing import List, Sequence, Tuple
+import tempfile
+from typing import Dict, List, Optional, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
+if REPO not in sys.path:            # `python exam/verify.py`, not just `-m`
+    sys.path.insert(0, REPO)
 
 
-def _run(label: str, argv: Sequence[str], *, gates: bool = True) -> Tuple[str, int, bool]:
+def _run(label: str, argv: Sequence[str], *, gates: bool = True,
+         env: Optional[Dict[str, str]] = None) -> Tuple[str, int, bool]:
     print("\n" + "=" * 78)
     print("== %s%s" % (label, "" if gates else "   (reported, does not gate)"))
     print("=" * 78, flush=True)
-    result = subprocess.run(list(argv), cwd=REPO)
+    result = subprocess.run(list(argv), cwd=REPO, env=env)
     return label, result.returncode, gates
 
 
@@ -90,15 +108,37 @@ def _determinism() -> Tuple[str, int, bool]:
 
 def main(argv: List[str] | None = None) -> int:
     py = sys.executable
-    stages = [
-        _run("build_papers", [py, "-m", "exam.tools.build_papers"]),
-        _run("pytest", [py, "-m", "pytest", "exam/tests", "-q"]),
-        _run("run_exam --calibrate", [py, "-m", "exam.tools.run_exam", "--calibrate"]),
-        _run("run_selftest", [py, "-m", "exam.tools.run_selftest"]),
-        _run("artefact_locations",
-             [py, "-m", "exam.tools.check_artefact_locations"]),
-        _determinism(),
-    ]
+    from exam.tools import check_artifacts_match as match
+
+    tmp = tempfile.mkdtemp(prefix="exam-verify-")
+    shadow = os.path.join(tmp, "artifacts")
+    match.seed_shadow(shadow)
+    # Seeded as a copy rather than empty: the producers read as well as write
+    # -- `run_exam` marks the submissions under `answers/` against the keys
+    # under `truth/` -- so an empty tree would be a different run, not a
+    # cleaner one.
+    build_env = dict(os.environ, EXAM_ARTIFACTS_DIR=shadow)
+    print("producers write to a shadow tree; exam/artifacts is not touched")
+    print("  EXAM_ARTIFACTS_DIR=%s" % shadow)
+
+    try:
+        stages = [
+            _run("build_papers", [py, "-m", "exam.tools.build_papers"],
+                 env=build_env),
+            _run("pytest", [py, "-m", "pytest", "exam/tests", "-q"]),
+            _run("run_exam --calibrate", [py, "-m", "exam.tools.run_exam",
+                                          "--calibrate"], env=build_env),
+            _run("run_selftest", [py, "-m", "exam.tools.run_selftest"],
+                 env=build_env),
+            _run("artefact_locations",
+                 [py, "-m", "exam.tools.check_artefact_locations"]),
+            _run("artifacts_match_committed",
+                 [py, "-m", "exam.tools.check_artifacts_match",
+                  "--built", shadow]),
+            _determinism(),
+        ]
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
     print("\n" + "=" * 78)
     print("== summary")
@@ -106,7 +146,7 @@ def main(argv: List[str] | None = None) -> int:
     failed = []
     for label, code, gates in stages:
         state = "ok" if code == 0 else "FAILED(%d)" % code
-        print("  %-22s %s%s" % (label, state, "" if gates else "  [reported]"))
+        print("  %-26s %s%s" % (label, state, "" if gates else "  [reported]"))
         if code != 0 and gates:
             failed.append(label)
     if failed:

@@ -31,8 +31,9 @@ from exam import guard                                              # noqa: E402
 from exam.grading.calibration import assert_calibrated, calibrate_all  # noqa: E402
 from exam.grading.mark import mark                                  # noqa: E402
 from exam.grading.registry import digest                            # noqa: E402
-from exam.model import (ANSWERS_DIR, ARTIFACTS, Submission, read_json,  # noqa: E402
-                        report_path, truth_path, write_json)
+from exam.model import (ANSWERS_DIR, ARTIFACTS, Submission,  # noqa: E402
+                        artifact_rel, read_json, report_path, truth_path,
+                        write_json)
 from exam.papers import BUILDERS, module_for                        # noqa: E402
 
 CALIBRATION_PATH = os.path.join(ARTIFACTS, "calibration.json")
@@ -61,7 +62,11 @@ def mark_submission(submission: Submission) -> Dict[str, Any]:
     return {"paper_id": submission.paper_id, "examinee_id": submission.examinee_id,
             "question_type": question_type, "fraction": report.fraction,
             "awarded": report.awarded, "possible": report.possible,
-            "axes": report.axes, "report_path": path}
+            # Repo-relative, like every other path an artefact records: this one
+            # reaches `exam_summary.json`, which is tracked.  It has been empty
+            # in every committed summary so far, so the absolute path never
+            # shipped -- one marked submission was all it would have taken.
+            "axes": report.axes, "report_path": artifact_rel(path)}
 
 
 def run(*, calibrate_only: bool = False,
