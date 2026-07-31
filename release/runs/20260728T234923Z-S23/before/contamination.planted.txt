@@ -22,7 +22,7 @@
   12 games still never_audited
   ledger audit: arc-recon/data/recon_ledger.jsonl            0 calls, sealed ADDRESSED: NONE
   ledger audit: baseline-arms/ledger.jsonl                 560 calls, sealed ADDRESSED: NONE
-  ledger audit: baseline-arms/probe_log.jsonl             1955 calls, sealed ADDRESSED: NONE
+  ledger audit: baseline-arms/probe_log.jsonl             1956 calls, sealed ADDRESSED: NONE
   sealed pile 21 -> claim set 19  (quarantined: ft09-0d8bbf25, ls20-9607627b)
   of which 6 carry a sensitivity caveat: dc22-fdcac232, ka59-38d34dbb, lf52-271a04aa, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44
   NEEDS ADJUDICATION (excluded from `clean`): bp35-0a0ad940

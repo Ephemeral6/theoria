@@ -74,11 +74,36 @@ import check_redlines as redlines  # noqa: E402
 MANIFEST = os.path.join(_HERE, "MANIFEST.jsonl")
 
 #: Environment payload: the fields that make a record *material from* a game.
-PAYLOAD_KEYS = ("frame", "frames", "action_input", "available_actions")
+#:
+#: **Derived, never re-typed.** This was a four-field literal
+#: (`frame, frames, action_input, available_actions`) beside
+#: `check_redlines.PAYLOAD_MARKERS`, which declares eight. An adversarial review
+#: of this very change caught the consequence: widening the constant in
+#: `check_redlines` and leaving the literal here reproduced, one level up, the
+#: defect this work order is named after -- **the guard went into one of the two
+#: readers.** Eleven files carrying `scorecard` or `state` bodies stayed class C
+#: under the positive sentence "no record pairs an id with environment payload",
+#: and one of them (`theoria-arm/runs/20260728T235841Z-leg01/run.json`) is a
+#: literal ARC scorecard response, `card_id` and `guid` and all.
+#:
+#: `enumerate.py`'s own docstring had already named `scorecard` as class-B
+#: payload; only the literal disagreed.
+PAYLOAD_KEYS = redlines.PAYLOAD_FIELDS
 
 #: Markers of an API transaction log, independent of game id -- a probe log of
 #: requests is a compilation of retrieved data even where a record names no game.
 API_TRANSACTION_MARKERS = (b'"X-API-Key"', b"arcprize.org/api", b'"kind": "arc_api_call"')
+
+#: Human rulings on files the classifier abstained from. Append-only, one JSON
+#: object per line: `path`, `sha256`, `class`, `ruled_by`, `utc`, `reason`.
+#:
+#: This exists because before it, a `?` row could only be cleared by **editing
+#: code**. R3's adversarial review put the consequence plainly: a gate that is
+#: red forever for a whole class of file (any binary figure rendering a per-game
+#: label) is a gate the next person switches off, and the true reds go with it.
+#: A ruling path makes the red mean *red until someone rules* instead of *red
+#: until someone gives up*.
+RULINGS = os.path.join(_HERE, "RULINGS.jsonl")
 
 #: Upstream third-party payload, by the only thing that identifies it: where the
 #: upstream dropped it. This IS a path, and it is the one place a path is right:
@@ -116,13 +141,88 @@ def _sha256(path: str) -> tuple[str, int]:
     return h.hexdigest(), size
 
 
+class PileCutUnreadable(RuntimeError):
+    """The cut file is not the shape this reader expects, so nothing was read.
+
+    Raised, never warned. Every classification below `classify`'s first branch is
+    a statement about which ARC games a file names, and with no ids to look for
+    the only statement it can make is "none" -- for every file, in the permissive
+    direction. A classifier that cannot read its own id list must not produce a
+    verdict at all.
+    """
+
+
+def _cut_pile(piles: dict, *keys: str) -> list[str]:
+    """One pile out of the cut file, as game ids. Same reader as `check_sealed`.
+
+    Entries are strings today and may be objects tomorrow; both spellings are
+    accepted, and an entry that yields no id is dropped here so the caller's
+    count comparison sees the shortfall.
+    """
+    entries: list = []
+    for key in keys:
+        if key in piles:
+            entries = piles[key] or []
+            break
+    ids = [g if isinstance(g, str) else g.get("game_id", "") for g in entries]
+    return [g for g in ids if g]
+
+
 def _arc_game_ids() -> list[str]:
-    with open(_abs("arc-recon/data/piles.json"), encoding="utf-8") as fh:
+    """Every ARC game id in the cut. Refuses rather than returning a short list.
+
+    This used to be `piles.get("strata", {})` and a comprehension, and the
+    combination has no failure mode: a missing or renamed key is swallowed into
+    an empty dict, the comprehension over an empty dict is a legal empty list,
+    and `classify` then finds no game id in any file and falls through to
+    **class A / releasable** with the evidence "no ARC game id appears in this
+    file" -- a positive claim, on a tree nothing was searched for. Measured on
+    this repository at base 7852ef3: 37 files B -> A and 247 files C -> A, all
+    of them into the class that ships.
+
+    `check_redlines.check_sealed` already carries this guard, and the comment
+    beside it records what the missing version did: it "scanned 2817 files with
+    an empty id list and then printed `Both red lines clear`". The guard went
+    into one of the two id readers and not the other, which is the drift this
+    package keeps paying for -- so this one is written to the same shape.
+
+    The cross-check is between two independent statements the cut file makes
+    about itself: `strata` partitions the public set by tag family, and
+    `dev_pile` / `sealed_pile` partition the same set by the cut. They must
+    describe the same games. Comparing the *sets* rather than only the counts is
+    deliberate -- a renamed id keeps the count and changes the answer.
+    """
+    with open(_abs(redlines.PILES), encoding="utf-8") as fh:
         piles = json.load(fh)
+
+    dev = _cut_pile(piles, "dev", "dev_pile")
+    sealed = _cut_pile(piles, "sealed", "sealed_pile")
+    if not dev or not sealed:
+        raise PileCutUnreadable(
+            f"{redlines.PILES} yielded {len(dev)} development and {len(sealed)} sealed "
+            "game id(s); the cut this enumerator classifies against is unreadable, so NO "
+            "file has been classified. This is a refusal, not a finding: with an empty id "
+            "list every tracked file classifies as A / releasable on the evidence that no "
+            "ARC game id appears in it."
+        )
+
     ids: list[str] = []
     for family in piles.get("strata", {}).values():
-        ids.extend(family)
-    return sorted(set(ids))
+        ids.extend(g if isinstance(g, str) else g.get("game_id", "") for g in family)
+    ids = sorted({g for g in ids if g})
+
+    cut = sorted(set(dev) | set(sealed))
+    if len(ids) != len(dev) + len(sealed) or ids != cut:
+        raise PileCutUnreadable(
+            f"{redlines.PILES} is not the shape this reader expects: its strata yield "
+            f"{len(ids)} game id(s) while the cut declares {len(dev)} development + "
+            f"{len(sealed)} sealed = {len(dev) + len(sealed)}"
+            + (f" (differing on {', '.join(sorted(set(ids) ^ set(cut)))})"
+               if set(ids) ^ set(cut) else "")
+            + ". The id list this enumerator classifies against DID NOT LOAD, and every "
+            "file it would have ruled on is unclassified rather than releasable."
+        )
+    return ids
 
 
 def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
@@ -143,7 +243,20 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
     # withheld from a release on the grounds that they mention the header they
     # exist to set. Mention is not material; that distinction has now been the
     # answer three times in this directory.
-    if rel.endswith((".json", ".jsonl")):
+    #
+    # `json_shaped`, not `rel.endswith((".json", ".jsonl"))`. The suffix test was
+    # this enumerator's third wrong answer and it is the one that reads as an
+    # assertion: identical bytes were class B named `.jsonl` and class C named
+    # `.log`, and the class C branch does not merely decline to rule -- it states
+    # that the ids in the file are "constants, guards or narrative" carrying "no
+    # environment payload", about a file no parser had opened. `check_redlines`
+    # grew `json_shaped` to close exactly this hole, and its docstring says the
+    # judgement now lives in one place and "both files call it". This file was the
+    # one that did not, so the sentence was true of the module and false of the
+    # package.
+    structured, jsonl = redlines.json_shaped(rel, blob)
+
+    if structured:
         for marker in API_TRANSACTION_MARKERS:
             if marker in blob:
                 return {
@@ -153,23 +266,57 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
                     "ToS 4 regardless of which games it names",
                 }
 
+    # A *negative* conclusion from a byte scan is only worth the encoding it was
+    # run over. `g.encode()` builds a UTF-8 needle, and in a UTF-16 file every
+    # character carries an interleaved NUL, so no id can ever match -- and the
+    # branch below then prints "no ARC game id appears in this file", which is
+    # this work order's title sentence, about a comparison that was blind.
+    # Demonstrated on five records of `{"game_id": "<dev id>", "frame": [[...]]}`
+    # written as UTF-16: class A, releasable, on that exact evidence string.
+    #
+    # `check_redlines` grew `unsearchable_encoding` for this and wired it into
+    # its own two scans. This file did not call it -- the same "true of the
+    # module, false of the package" split as defect 3, in the same function,
+    # three lines away. An adversarial review of this change found it.
+    #
+    # Order matters: the API-transaction scan above stays where it is, because a
+    # marker that *matched* is a positive finding and blindness cannot make a
+    # match false. Only the absence conclusion has to be withheld.
+    blind = redlines.unsearchable_encoding(blob)
+    if blind:
+        return {
+            "class": "?",
+            "evidence": f"{blind}, so the UTF-8 byte scan that decides which ARC games "
+            "this file names could not see its text -- whether it names any is undetermined",
+        }
+
     named = sorted(g for g in game_ids if g.encode() in blob)
     if not named:
         return {"class": "A", "evidence": "no ARC game id appears in this file"}
 
-    if not rel.endswith((".json", ".jsonl")):
+    if not structured:
         return {
             "class": "C",
             "evidence": f"names ARC game(s) {', '.join(named)} in source or prose; ids used as "
             "constants, guards or narrative carry no environment payload",
         }
 
-    verdict = _records_pairing(_abs(rel), named, rel.endswith(".jsonl"))
+    verdict, why = _records_pairing(_abs(rel), named, jsonl)
     if verdict is None:
+        # `why` comes from `redlines.read_json_records`, which knows which of
+        # several things went wrong. It used to be discarded here and replaced
+        # with the flat phrase "could not be parsed as JSON" -- which was wrong
+        # for every row it was actually printed over. All three `?` rows on this
+        # tree take the *first* early return in `json_shaped`
+        # (`blob.decode("utf-8-sig")` raises), so nothing was ever handed to a
+        # JSON parser; `pytest-baseline.txt` holds 45 lines of which none begins
+        # with `{`, and its only defect is three mojibake byte pairs. A gate that
+        # misnames its own reason is the disease this work order is about, so it
+        # does not get to have it.
         return {
             "class": "?",
-            "evidence": f"names ARC game(s) {', '.join(named)} but could not be parsed as "
-            "JSON, so whether it carries environment payload is undetermined",
+            "evidence": f"names ARC game(s) {', '.join(named)} but {why}, so whether it "
+            "carries environment payload is undetermined",
         }
     if verdict:
         return {
@@ -202,8 +349,16 @@ def _is_payload(value) -> bool:
     return isinstance(value, (list, dict)) and bool(value)
 
 
-def _records_pairing(path: str, named: list[str], jsonl: bool) -> int | None:
-    """Count of records pairing an ARC id with payload; ``None`` if unparseable.
+def _records_pairing(path: str, named: list[str], jsonl: bool) -> tuple[int | None, str | None]:
+    """``(count, None)`` of records pairing an ARC id with payload, or ``(None, why)``.
+
+    The reason travels with the refusal, as it already did in
+    `check_redlines._records_pairing_sealed_with_payload`. Returning a bare
+    `None` let the caller substitute a reason of its own invention -- it printed
+    "could not be parsed as JSON" over three files that never reached a JSON
+    parser, because `json_shaped` had already refused them at
+    `blob.decode("utf-8-sig")`. Misnaming the reason a gate went red is how the
+    gate gets cleared by someone fixing the wrong thing.
 
     The `None` was already right here when `check_redlines` was still answering
     the same question with `[]`. What was wrong is that it was right *separately*
@@ -217,17 +372,53 @@ def _records_pairing(path: str, named: list[str], jsonl: bool) -> int | None:
     lazy generator unwound on a malformed line thousands of records in, throwing
     away every count already made.
     """
-    records, _why = redlines.read_json_records(path, jsonl)
+    records, why = redlines.read_json_records(path, jsonl)
     if records is None:
-        return None
+        return None, why
     n = 0
     for rec in records:
-        blob = json.dumps(rec)
+        blob = json.dumps(rec, default=str)
         if not any(g in blob for g in named):
             continue
-        if any(_is_payload(d.get(k)) for d in redlines._walk(rec) for k in PAYLOAD_KEYS):
+        if _pairs_in_scope(rec, named):
             n += 1
-    return n
+    return n, None
+
+
+def _pairs_in_scope(rec, named: list[str]) -> bool:
+    """Does this record pair an id with payload *the record ties to that id*?
+
+    The old test was `any(g in json.dumps(rec))` and then a payload field
+    **anywhere beneath the record**. That is co-occurrence with an extra step,
+    and `check_redlines._pairings` was rewritten on this same branch to stop
+    doing exactly it -- with the reason written down: record-level pairing reads
+    as record-by-record only while records are small, and a whole-document
+    `.json` parses as exactly ONE record, at which point "record by record"
+    degrades into "somewhere in this file". Leaving the loose version here would
+    have been the third pair of drifting readers this work order produced.
+
+    So the scope comes from `redlines._walk_scoped`: an id owns a payload field
+    when it is named in that node's own scalar fields or an ancestor's, or when
+    it is **inside the payload value itself** (a scorecard keyed by game id names
+    no sibling `game_id`).
+
+    What deliberately does **not** come from `check_redlines` is the fill test.
+    `_filled` there counts `False` and `"a sentence"` as present, because
+    `"full_reset": false` is a real command sent to a real game and the sealed
+    red line must see it. Here the question is a licence class, and
+    `battery/artifacts/capability_spectrum.json` carries a `frame` field holding
+    a *sampling* frame described in prose. Two different questions, two
+    justified answers -- and the difference is written down here so that the
+    next person to notice it finds a reason rather than a drift.
+    """
+    for node, in_scope in redlines._walk_scoped(rec, named):
+        for field in PAYLOAD_KEYS:
+            value = node.get(field)
+            if not _is_payload(value):
+                continue
+            if in_scope or any(g in json.dumps(value, default=str) for g in named):
+                return True
+    return False
 
 
 def _review_note(rel: str, blob: bytes, cls: str) -> str | None:
@@ -259,8 +450,93 @@ def _review_note(rel: str, blob: bytes, cls: str) -> str | None:
     )
 
 
-def build(paths: list[str]) -> list[dict]:
+#: The builtin, bound once under a name this module cannot shadow. See the call
+#: site in `load_rulings` for why.
+_numbered = enumerate
+
+
+class RulingRefused(RuntimeError):
+    """A line in `RULINGS.jsonl` is not a ruling this enumerator will honour.
+
+    Raised, never skipped. A malformed ruling that is quietly ignored is
+    indistinguishable from one that was never written, and the whole point of
+    the file is that somebody's name is on a decision.
+    """
+
+
+#: Classes a human may rule a `?` row into. `D` is absent on purpose: an
+#: undetermined file cannot be ruled *into* not-releasable by this path either,
+#: because `D` is decided by provenance (`UPSTREAM_PAYLOAD_PREFIX`) and a ruling
+#: that could reach it would be a second, competing definition of the class.
+RULEABLE_CLASSES = ("A", "B", "C")
+
+RULING_FIELDS = ("path", "sha256", "class", "ruled_by", "utc", "reason")
+
+
+def load_rulings(path: str | None = None) -> dict[tuple[str, str], dict]:
+    """`{(path, sha256): ruling}`. Missing file is an empty mapping, not an error.
+
+    **Keyed on the content hash, not on the path**, and that is the whole
+    design. A ruling says "I looked at *these bytes* and this is their licence
+    class". Keyed on the path, the same ruling would silently carry over to
+    whatever the file becomes next -- a figure regenerated with different data,
+    a log overwritten by a later run -- and a human's signature would end up
+    attached to bytes they never saw. That is the exact shape this lane exists
+    to catch: an assurance that outlives the thing it was about.
+
+    A ruling whose path matches and whose hash does not is therefore **stale,
+    not applicable**. It is reported (see `stale_rulings`) rather than dropped,
+    because "nobody has ruled on this" and "somebody ruled on the old version"
+    are different situations and only one of them is one signature away from
+    resolved.
+    """
+    src = path or RULINGS
+    out: dict[tuple[str, str], dict] = {}
+    if not os.path.exists(src):
+        return out
+    # `_numbered`, not the builtin, because this module is *named* `enumerate`.
+    # It resolves correctly today only because the module never binds its own
+    # name, and one `import enumerate` anywhere in this file -- or a test doing
+    # `enum.enumerate = ...` -- would turn a line counter into a self-reference.
+    # A gate whose error messages point at the wrong line is a gate that sends
+    # the next person to fix the wrong thing.
+    with open(src, encoding="utf-8") as fh:
+        for n, line in _numbered(fh, 1):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise RulingRefused(
+                    "%s line %d is not JSON (%s). A rulings file that cannot be "
+                    "read whole cannot be trusted in part." % (src, n, exc)) from exc
+            missing = [k for k in RULING_FIELDS if not rec.get(k)]
+            if missing:
+                raise RulingRefused(
+                    "%s line %d is missing %s. Every field is required: a ruling "
+                    "without `ruled_by` or `reason` is an unsigned override, which "
+                    "is what this file exists to replace."
+                    % (src, n, ", ".join(missing)))
+            if rec["class"] not in RULEABLE_CLASSES:
+                raise RulingRefused(
+                    "%s line %d rules class %r; a human may rule only into %s. "
+                    "D is decided by provenance and `?` is not a ruling."
+                    % (src, n, rec["class"], "/".join(RULEABLE_CLASSES)))
+            key = (rec["path"], rec["sha256"])
+            if key in out:
+                raise RulingRefused(
+                    "%s line %d rules on bytes already ruled on at this path. "
+                    "The file is append-only; supersede by ruling on the NEW "
+                    "hash, not by re-ruling the old one." % (src, n))
+            out[key] = rec
+    return out
+
+
+def build(paths: list[str], rulings: dict | None = None) -> list[dict]:
     game_ids = _arc_game_ids()
+    if rulings is None:
+        rulings = load_rulings()
     rows: list[dict] = []
     for rel in paths:
         p = _abs(rel)
@@ -290,7 +566,10 @@ def build(paths: list[str]) -> list[dict]:
                     "verdict": CLASSES["?"][1],
                     "evidence": f"tracked, but this enumerator could not read it ({why}); "
                     "its licence class is undetermined. It is listed rather than dropped "
-                    "because a file missing from the manifest is a file nobody rules on.",
+                    "because a file missing from the manifest is a file nobody rules on. "
+                    "No ruling can settle this row: the bytes could not be read, so there "
+                    "is no content hash to rule against. Make the file readable, or stop "
+                    "tracking it.",
                 }
             )
             continue
@@ -313,8 +592,107 @@ def build(paths: list[str]) -> list[dict]:
         review = _review_note(rel, blob, verdict["class"])
         if review:
             row["review"] = review
+        _apply_ruling(row, rulings)
         rows.append(row)
     return rows
+
+
+def _apply_ruling(row: dict, rulings: dict) -> None:
+    """Let a human ruling settle a `?` row. Mutates `row` in place.
+
+    Three refusals are as much the point as the one acceptance:
+
+    * **Only `?` rows.** A ruling speaks exactly where the machine abstained. If
+      it could reach a decided row it would be an override, and an override path
+      beside a classifier is a way to make the classifier's answer optional --
+      which is worse than the permissive defaults R3 removed, because it would
+      be signed. This is also what makes class `D` structurally unreachable
+      here: `D` is decided, so no ruling ever meets it.
+    * **Hash must match.** A ruling recorded against different bytes is stale,
+      and stale is not "absent" -- `stale_rulings` reports it so somebody can
+      look again at bytes nobody has seen.
+    * **The evidence keeps saying what the machine could not do.** The ruling is
+      appended to the original evidence rather than replacing it. A row that
+      reads only "ruled class C by X" hides the fact that no parser ever opened
+      the file, and the next reader would have no idea a human was standing in
+      for a measurement.
+    """
+    if row["class"] != "?":
+        return
+    if row["sha256"] is None:
+        # A file `read_bytes` could not open gets `sha256: None`, so no ruling
+        # can ever key it. That is the right answer -- you cannot sign for bytes
+        # you were unable to read -- but it is only the right answer if it is
+        # *said*, and it was not: the row looked exactly like a ruleable one and
+        # the next person to write a ruling for it would have watched the ruling
+        # do nothing, with no explanation anywhere. Now the row says so.
+        row["evidence"] += (" No ruling can settle this row: the bytes could not "
+                            "be read, so there is no content hash to rule against. "
+                            "Make the file readable, or stop tracking it.")
+        return
+    ruling = rulings.get((row["path"], row["sha256"]))
+    if ruling is None:
+        return
+    name, disposition = CLASSES[ruling["class"]]
+    row["class"] = ruling["class"]
+    row["class_name"] = name
+    row["verdict"] = disposition
+    row["ruled_by"] = ruling["ruled_by"]
+    row["ruled_utc"] = ruling["utc"]
+    row["evidence"] = (
+        "%s -- RULED class %s by %s at %s: %s (the machine did not determine "
+        "this; a human did, against sha256 %s)"
+        % (row["evidence"], ruling["class"], ruling["ruled_by"], ruling["utc"],
+           ruling["reason"], row["sha256"][:12]))
+
+
+def stale_rulings(rows: list[dict], rulings: dict) -> list[str]:
+    """Every ruling that matched nothing, and why it matched nothing.
+
+    Reported, not applied and not silently dropped. "Nobody has ruled on this"
+    and "somebody ruled on the version before this one" are different
+    situations, and only the second is one signature away from resolved.
+
+    Three ways a ruling can miss, and the first version of this function
+    reported only the first -- which meant the two silent ones were exactly the
+    mistakes a person would make by hand:
+
+    * **the bytes changed** -- path still tracked, different hash;
+    * **the path is gone** -- the file was deleted or renamed, and the ruling
+      quietly evaporated. This is the same situation the function exists for,
+      one step further along;
+    * **the path never existed** -- a typo. A mistyped *hash* was caught by the
+      first case; a mistyped *path* matched nothing, was reported nowhere, and
+      left the gate red for a reason the operator was never told.
+
+    A signature that fails to land has to make a noise. That is the whole
+    argument for this file existing rather than an allow-list.
+    """
+    by_path: dict[str, str | None] = {r["path"]: r["sha256"] for r in rows}
+    out = []
+    for (path, sha), ruling in sorted(rulings.items()):
+        if path not in by_path:
+            out.append(
+                "%s: ruled class %s by %s, but no such file is tracked. Either it "
+                "was deleted or renamed after the ruling, or the path is a typo. "
+                "The ruling applies to nothing."
+                % (path, ruling["class"], ruling["ruled_by"]))
+            continue
+        current = by_path[path]
+        if current is None:
+            out.append(
+                "%s: ruled class %s by %s against sha256 %s, but this enumerator "
+                "cannot read the file, so it has no hash to match. The ruling "
+                "applies to nothing."
+                % (path, ruling["class"], ruling["ruled_by"], sha[:12]))
+            continue
+        if current != sha:
+            out.append(
+                "%s: ruled class %s by %s against sha256 %s, but the file is now "
+                "%s. The ruling does NOT apply -- it was about bytes that are no "
+                "longer there."
+                % (path, ruling["class"], ruling["ruled_by"], sha[:12], current[:12]))
+    return out
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -357,7 +735,24 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(f"red lines clear over {len(paths)} tracked files")
 
-    rows = build(paths)
+    rulings = load_rulings()
+    rows = build(paths, rulings)
+
+    # Printed before the distribution, because it changes how the distribution
+    # should be read: a class C row that got there by ruling is not the same
+    # fact as one the classifier reached, and a reader who does not know which
+    # is which is being handed a tidier number than the evidence supports.
+    ruled = [r for r in rows if r.get("ruled_by")]
+    if ruled:
+        print("  note %d file(s) carry a human ruling where this enumerator "
+              "abstained:" % len(ruled))
+        for r in ruled:
+            print("  note     %s -> class %s by %s"
+                  % (r["path"], r["class"], r["ruled_by"]))
+    stale = stale_rulings(rows, rulings)
+    for line in stale:
+        print("  note STALE RULING %s" % line)
+
     counts: dict[str, int] = {}
     bytes_by: dict[str, int] = {}
     for r in rows:
