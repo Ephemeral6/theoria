@@ -147,6 +147,30 @@
   }
  },
 
+ "gate_outputs": {
+  "cd theoria-arm && python -m pytest -q": {
+   "verbatim_tail": [
+    "FAILED tests/test_arm.py::test_the_archive_stays_accountable - AssertionError...",
+    "FAILED tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive",
+    "2 failed, 476 passed in 503.60s (0:08:23)"
+   ],
+   "reading": "both failures are the pre-existing pair, unchanged in identity and detail from the pristine base_commit run. 476 passed includes this branch's 30 new tests."
+  },
+  "cd theoria-arm && python verify.py": {
+   "verbatim": [
+    "[1/3] suite",
+    "   FAIL  suite red (exit 1)",
+    "[2/3] one real run -- the whole arm, offline against proxy/mock",
+    "   ok    game g50t-5849a774, budget 6 actions, no key, no network",
+    "[3/3] artefact self-check",
+    "",
+    "theoria-arm: RED (1 problem(s))"
+   ],
+   "reading": "RED, and the one problem is rung 1 -- the same suite, so the same two pre-existing failures. Rung 2 is the load-bearing one for this change and it is green: the whole arm ran end to end offline against proxy/mock with the new code in place. Rung 3 raised nothing. verify.py is RED at base_commit 21a724ed for the same reason and would be RED there with none of this branch present.",
+   "not_claimed_green": "this gate is reported red. A branch that renamed its own gate's verdict would be worth less than the change it carries."
+  }
+ },
+
  "sealed_pile_contact": "none. This branch names no game id at all; the census and the bench read only prompt text lengths and usage blocks, and the bench's world is synthetic.",
  "spend": "none. No ARC action, no live model call, no credential read. Every desk in this branch is a scripted double.",
  "did_not_do": [
