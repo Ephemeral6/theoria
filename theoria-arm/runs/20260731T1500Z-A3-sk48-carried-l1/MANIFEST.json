@@ -25,12 +25,12 @@
   "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
   "retired_by_kind": {},
   "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
-  "surprises": 19,
+  "surprises": 20,
   "surprises_by_kind": {
-   "probe_refutation": 10,
+   "probe_refutation": 11,
    "replay_mismatch": 9
   },
-  "surprises_licensing_a_call": 19,
+  "surprises_licensing_a_call": 20,
   "surprises_retired": 0
  },
  "cost": {
@@ -79,7 +79,7 @@
   },
   "verdict": "the price table and the provider's own arithmetic DISAGREE by -2.1% -- a finding about proxy/pricing/pricing_v1.json (or about which usage keys it knows how to price), not about the run"
  },
- "elapsed_s": null,
+ "elapsed_s": 6735.6,
  "files": [
   {
    "path": "CARRIED.json",
@@ -87,11 +87,11 @@
   },
   {
    "path": "RUN_STATE.json",
-   "sha256": "3a298e69450738bda198f8f6b146df8b202cf5877ee39cdcc6c6e1a96ced0797"
+   "sha256": "10b29f7e492dda26b9f028e284e0da37088bc29c45e1b2bc7b6c690229380c9f"
   },
   {
    "path": "bill_shape.json",
-   "sha256": "c9545ed6051da5faff7099ffc80e2ff54218f2d034fe70bd7ad3a14a7fd40d7b"
+   "sha256": "f3a64bb7a1cc18fab433ed59542139e2f36b79fb9de8a000182e283c64eb4809"
   },
   {
    "path": "books/CARRIED.json",
@@ -326,12 +326,32 @@
    "sha256": "7e51ce0aeb056fa8ed2aa249dbb465ed55810b34dc122fd7c2a8e206143f6d49"
   },
   {
+   "path": "books/snapshots/rev19-before-theorize/playbook.dsl",
+   "sha256": "746e1406a1bf7917b6d43c60c7a934e9f6c95dfd9284af79bb7ac4f74720228f"
+  },
+  {
+   "path": "books/snapshots/rev19-before-theorize/problem.json",
+   "sha256": "62894c3ed2ade49bd6877b5022c427a1d7d972d4716a65eb1ce4f5ade95aedca"
+  },
+  {
+   "path": "books/snapshots/rev19-before-theorize/theory.dsl",
+   "sha256": "7e51ce0aeb056fa8ed2aa249dbb465ed55810b34dc122fd7c2a8e206143f6d49"
+  },
+  {
    "path": "books/theory.dsl",
    "sha256": "7e51ce0aeb056fa8ed2aa249dbb465ed55810b34dc122fd7c2a8e206143f6d49"
   },
   {
    "path": "candidates.jsonl",
-   "sha256": "ed37e89a8ab8aacd286b6e498d100aebb0cd8fa273e10c8e1230dbcc8497f108"
+   "sha256": "b8045b658fa9967c967779b4274fd5d73b132dc5125021ce31b261bf9ed5c5e4"
+  },
+  {
+   "path": "certify.json",
+   "sha256": "d8d0859e1a571e8c490d97a33f22072ec6e91feb12fa9717631302cd25c31bc1"
+  },
+  {
+   "path": "commit.json",
+   "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
   },
   {
    "path": "curves.json",
@@ -378,12 +398,20 @@
    "sha256": "8f0b0755594dcb56acbdf16617c852d22816f555aa8efc60dce9d2da9a8c2489"
   },
   {
+   "path": "desk_failures.json",
+   "sha256": "b68662fd825f44016fe6a599252fe937d6a7831e001548030bdcea6257c369f7"
+  },
+  {
    "path": "desk_log.json",
    "sha256": "12447c0c279330d44f2278318fc07341d4da2a6298c48dce3d0f2add34a0521f"
   },
   {
+   "path": "engines_online.json",
+   "sha256": "758d770af14c4eb205cadd4054bc470f020be5b94a5b2575e0e7a09edcaeffc5"
+  },
+  {
    "path": "engines_online.jsonl",
-   "sha256": "b4b3db91b05212a524d42ecdaac410f0a4f5350a7ae57e1654eb037a52dff4d2"
+   "sha256": "999e2095aff35f61f8f6fe6c430c4fdf8860a69e54bebb55f1913ef81430c9fe"
   },
   {
    "path": "env_proxy.log",
@@ -391,23 +419,43 @@
   },
   {
    "path": "ledger.jsonl",
-   "sha256": "c26614b5fe7a2b1e5792ba45dc18ba71fbaa6ceb51762f41b78fe73ffd25f0dd"
+   "sha256": "88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e"
   },
   {
    "path": "ledger.jsonl.lock",
    "sha256": "72dfcfb0c470ac255cde83fb8fe38de8a128188e03ea5ba5b2a93adbea1062fa"
   },
   {
+   "path": "levels.jsonl",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "plan.json",
+   "sha256": "274cff14cab7bff1c4bb55c4ed23adbc424717b339be6c6679bf01a7667df303"
+  },
+  {
    "path": "probes.jsonl",
-   "sha256": "2e10a9281c932ff38738886fbccd0e78c2de0d01fd874d6de821cb1d0e294739"
+   "sha256": "0b0654cd8895ba0d0d0a73b8c9a5db8bd08fa8adbfcbe870567e8e47960bbed7"
+  },
+  {
+   "path": "run.json",
+   "sha256": "508238e885455936fdcc1756218126e474f4c02cf6144ce4fa57f2e7d99d5b68"
   },
   {
    "path": "surprises.jsonl",
-   "sha256": "fd3d2671370f644ad07104eb2b576eea56dd602faba6d5eebc6b71d79a8e09dd"
+   "sha256": "097210d25c551274e3ab8ecad3867b4e9a4e4adca8527b5246a7579475b43bb4"
+  },
+  {
+   "path": "theorize.json",
+   "sha256": "a801a8c86dd1b0c4c2fb5602b6eb9be1479c164aa76d3ec14949c4d0a4582ad4"
   },
   {
    "path": "transfer.json",
-   "sha256": "988bc676141207b59f26c88890be64bff463f9b9585d8629509dd475a0946d40"
+   "sha256": "b1e375da27c877097019d9e311fcba404fad2489aaa0d5b7f7015b9d7b0a9cc0"
+  },
+  {
+   "path": "turns.json",
+   "sha256": "b2bc67473ad09f6f40e9acebfa8a5f89b1665b73cd93ecf04bad2b725fa4f5b9"
   }
  ],
  "game_id": "sk48-d8078629",
@@ -423,13 +471,18 @@
  "ledger": {
   "format": "LEDGER_FORMAT v1.0",
   "path": "ledger.jsonl",
-  "records": 365,
-  "records_this_run": 365
+  "records": 372,
+  "records_this_run": 372
  },
  "note_at_run_start": null,
- "outcome": null,
- "parent_run": null,
- "prompt_id": "A3-campaign-devpile",
+ "outcome": "spend_gate_tripped",
+ "parent_run": {
+  "card_id": "67403494-f0f4-4459-8298-a2d7b45b5cab",
+  "parent_run_id_from_scorecard_opaque": "r-b85a42dd9a894853",
+  "parent_slug_from_naming": null,
+  "prompt_id_from_scorecard_opaque": "A3-campaign-level2"
+ },
+ "prompt_id": "A3-campaign-level2",
  "provenance": {
   "arm_version_lookup": {
    "arm_sha256": "aa56f54766d274dc661b5c77ac3a1e5beb695e42d3132336b7e9bf8fa62555a1",
@@ -456,7 +509,7 @@
    "arm_version": "ledger run_start.arm_version",
    "game_id": "ledger run_start.game_id",
    "guard": "ledger run_start.guard",
-   "prompt_id": "the `prompt_id` field of `run_start.spend_gate.campaign`. NOTE this is a DECLARATION, not an observation: the field is filled from `harness/run.py`'s module-level PROMPT_ID unless a caller passes `prompt_id=`. It ranks below opaque.prompt_id for exactly that reason and is used only when no card carries one",
+   "prompt_id": "scorecard opaque.prompt_id, read back from the API",
    "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
    "run_id": "ledger run_start.run_id",
    "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
@@ -473,20 +526,18 @@
    }
   ],
   "mode": "backfill",
-  "notes": [
-   {
-    "field": "run.json / summary",
-    "why": "this run never reached `_finish()`, so no `run.json` was written. `outcome` and `elapsed_s` are taken from the ledger's `run_end` record instead, which carries them; `budget` and `world` were only ever in the summary and are absent. Nothing required by CLAUDE.md is affected."
-   }
-  ],
+  "notes": [],
   "prompt_id_of_the_backfill": "S8-provenance-backfill",
   "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
   "status": "incomplete",
   "tool": "armtools/backfill.py"
  },
  "quota": {
+  "agree": true,
   "billed_actions_from_ledger": 21,
-  "billed_actions_from_scorecard": null,
+  "billed_actions_from_scorecard": [
+   21
+  ],
   "env_steps": 177,
   "model_calls": 9,
   "resets": 1
@@ -502,29 +553,103 @@
   "successful_actions": 21
  },
  "run_id": "r-b85a42dd9a894853",
- "scorecard": {
-  "card_id": "67403494-f0f4-4459-8298-a2d7b45b5cab",
-  "note": "this run opened this scorecard and no run in the archive ever closed it. The API auto-closes an open card about fifteen minutes after the last action and a closed card 404s on read (ACCESS_CHECK \u00a73), so the API-side action total is unobtainable by construction, not merely unread -- no salvage can recover it. The ledger's 21 billed action(s) are the only record.",
-  "status": "opened_never_closed",
-  "total_actions": null
- },
- "scorecards_opened_and_never_closed": [
-  "67403494-f0f4-4459-8298-a2d7b45b5cab"
+ "scorecards_opened_and_never_closed": [],
+ "scorecards_recovered": [
+  {
+   "card_id": "67403494-f0f4-4459-8298-a2d7b45b5cab",
+   "environments": [
+    {
+     "actions": 21,
+     "completed": false,
+     "id": "sk48-d8078629",
+     "level_count": 8,
+     "levels_completed": 0,
+     "resets": 0,
+     "runs": [
+      {
+       "actions": 21,
+       "completed": false,
+       "guid": "66d6f010-f2d0-4163-bb37-461fd06d54f7",
+       "level_actions": [
+        21,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "level_baseline_actions": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+       ],
+       "level_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+       ],
+       "levels_completed": 0,
+       "resets": 0,
+       "score": 0.0,
+       "state": "NOT_FINISHED"
+      }
+     ],
+     "score": 0.0
+    }
+   ],
+   "opaque": {
+    "prompt_id": "A3-campaign-level2",
+    "run_id": "r-b85a42dd9a894853"
+   },
+   "score": 0.0,
+   "tags": [
+    "sk48",
+    "carried",
+    "W-1800",
+    "phase3-accel",
+    "agent"
+   ],
+   "tags_scores": [
+    {
+     "actions": 21,
+     "id": "keyboard_click",
+     "levels_completed": 0,
+     "number_of_environments": 1,
+     "number_of_levels": 8,
+     "score": 0.0
+    }
+   ],
+   "total_actions": 21,
+   "total_environments": 1,
+   "total_environments_completed": 0,
+   "total_levels": 8,
+   "total_levels_completed": 0
+  }
  ],
- "scorecards_opened_and_never_closed_note": "this run opened a scorecard and no run -- this one or any other in the archive -- ever closed it. The API's own count of what it was billed was therefore never read back, and cannot be, offline. The ledger's own count stands unconfirmed; see `quota`.",
- "scorecards_recovered": [],
  "sealing": {
   "by_kind": {
-   "credential_in_body": 177
+   "credential_in_body": 180
   },
   "bypass_attempts": 0,
-  "credential_in_body": 177,
+  "credential_in_body": 180,
   "cut_integrity": true,
   "game_ids_anywhere_in_the_records": [
    "sk48-d8078629"
   ],
   "guard_blocks": 0,
-  "incidents": 177,
+  "incidents": 180,
   "redacted_markers": 0,
   "sealed_game_ids_found": [],
   "sealed_pile_requests": 0,

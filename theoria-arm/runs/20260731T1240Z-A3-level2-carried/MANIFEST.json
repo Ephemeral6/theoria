@@ -246,7 +246,12 @@
    "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
    "verdict": "no_match",
    "window": {
-    "first_commit_after": null,
+    "first_commit_after": {
+     "arm_sha256": "1f1143cf8633eaee7474f3013f1801cfec79cc4d59e0f7b836c7d1d75abc8c9e",
+     "commit": "3b94c90d51a36b8a8f463a5dc3fe0c698ac94369",
+     "files": 54,
+     "unix": 1785506239
+    },
     "last_commit_before": {
      "arm_sha256": "1f1143cf8633eaee7474f3013f1801cfec79cc4d59e0f7b836c7d1d75abc8c9e",
      "commit": "2d12b966aa88f6473e46d2c48e2624c45acabcfc",
