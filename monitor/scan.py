@@ -1493,9 +1493,83 @@ def probe_orphan_commits():
     return {"status": st["status"], "detail": st["detail"]}
 
 
+def probe_master_tree():
+    """写入落在 master 的共享工作树上，而不是分支的 worktree 上（S39）。
+
+    今天两例，都不报错：RES-2 自报一例，RES-4 在 S38 里 `cd` 没生效于整串命令，
+    把 `monitor/scan.py` 写进了仓库根。更早还有一例已经进了历史——
+    `worldgen/out/qc/t2-lock-fragile/candidates.jsonl` 最后一次被
+    `1bd7eea2 "On master: autostash"` 碰过，扫走它的机制就写在提交标题里。
+
+    为什么此前没有任何一处看它：master 的树**天天脏**（板、心跳、总线、ci
+    有两百来条未提交状态），所以「树必须干净」这条规则等于天天红，也就等于没有。
+    `collect_metrics` 确实记了 `m["dirty"]`，但全仓库没有一处读它，而且它不分辨
+    ——判据必须按**路径**分，不能按人分：监控自己、`board.py`、`bus.py` 必须在
+    那棵树上写。
+
+    判据与三档（fleet-state / miswrite / unfiled）都在 `master_tree_guard.py`
+    里，那里有完整推导。这里只把它接进页面。
+
+    钩子那一半单独报：只观察不拦截的闸门，会变成 2026-07-30 漂移审计点名的
+    「在 git 里是绿的、在生产里根本不存在」那七条之一。所以树干净但钩子没装
+    时报 `partial`，而不是绿。
+    """
+    try:
+        sys.path.insert(0, HERE)
+        import master_tree_guard as mtg
+        # Resolve the MAIN tree rather than judging whatever tree `scan.py`
+        # happens to sit in. `ci_merge` copies the repo into a throwaway
+        # worktree and runs `verify.py` from there, so `ROOT` is not always the
+        # shared tree -- and "is there source sitting on master's tree" has one
+        # answer no matter where you ask it from. `git worktree list` resolves
+        # this from any worktree and covers `.claude/worktrees/` too (S36).
+        main = mtg.main_worktree(ROOT)
+        result = mtg.report(main)
+        hooked = mtg.hook_installed(main)
+    except Exception as exc:                    # noqa: BLE001
+        # 探针自己崩了**不是**绿（crash-is-not-a-finding，本仓库第四遍）。
+        return {"status": "missing",
+                "detail": "共享工作树闸门跑不起来（%s: %s）；本轮无法断言"
+                          "没有源码写在 master 的树上。"
+                          % (type(exc).__name__, exc)}
+
+    hook_note = "提交钩子已装" if hooked else (
+        "提交钩子**未装**（`python monitor/master_tree_guard.py install-hook`）"
+        "——本探针只观察，拦不住任何一次提交")
+
+    # 三个数是**同一个总数的划分**，不是叠加：total = fleet + unfiled + miswrites。
+    # 初版写成「%d 条脏路径全是舰队活状态，另有 %d 条未跟踪未归档」，把已经算在
+    # total 里的琥珀又加了一遍，于是在实测上说出「153 条全是活状态，另有 9 条」
+    # ——真相是 141/9/3。对抗性复核抓到的。
+    if result["red"]:
+        findings = (result["miswrite_paths"] + result["unfiled_paths"])[:4]
+        names = "、".join(e["path"] for e in findings)
+        n = result["miswrites"] + result["unfiled"]
+        more = "" if n <= 4 else "等 %d 条" % n
+        return {"status": "risk",
+                "detail": "master 的共享树上有 **%d 条**不属于舰队活状态的脏路径"
+                          "（被跟踪源文件 %d，未跟踪未归档 %d；另 %d 条是正常活状态，"
+                          "共 %d）：%s%s。留在这里，一次 `git add -A` 会把它裹走，"
+                          "一次 `git checkout --` 会把它抹掉，两个方向都不报错——"
+                          "本仓已有一个提交就叫 “On master: autostash”。（%s）"
+                          % (n, result["miswrites"], result["unfiled"],
+                             result["fleet_state"], result["total"],
+                             names, more, hook_note)}
+
+    if not hooked:
+        return {"status": "partial",
+                "detail": "master 的共享树上没有误写：%d 条脏路径全部是舰队活状态。"
+                          "但%s。" % (result["total"], hook_note)}
+
+    return {"status": "green",
+            "detail": "master 的共享树干净：%d 条脏路径全部是舰队活状态，"
+                      "%s。" % (result["total"], hook_note)}
+
+
 PROBES = {
     "accounts": probe_accounts,
     "standing": probe_standing,
+    "master_tree": probe_master_tree,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
     "offline_done": lambda: _offline_done(),
