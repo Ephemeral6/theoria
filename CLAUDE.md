@@ -40,10 +40,17 @@ makes that effectively irreversible.
 If you need a new secret, add it to `.env` and document the *variable name* in
 `.env.example`.
 
-## Two independent tracks
+## Territories (formerly "two independent tracks")
 
-Two Claude Code instances work this repo concurrently and do **not** communicate.
-They are mutually visible only through git history and `PARTNER_SYNC.md`.
+The repo began as two non-communicating Claude Code tracks
+(`theory-compiler` and `engine-rig`), mutually visible only through git
+history and `PARTNER_SYNC.md`. It has since grown into a fleet: each
+top-level directory is a territory with an owner. Territories as of
+2026-07-31 also include `proxy/`, `battery/`, `exam/`, `figures/`,
+`papers/`, `release/`, `freeze/`, `crosscheck/`, `a2_crosscheck/`, the
+arms (`baseline-arms/`, `theoria-arm/`, `ablation-arm/`), the rigs
+(`fuzzlab/`, `verify-lab/`, `worldgen/`, `fleetkit/`, `fleet-study/`) and
+the cold starts (`cold-start-a2/`, `cold-start-a3/`).
 
 | Track | Directory | Scope |
 |---|---|---|
@@ -57,15 +64,23 @@ cut. Read it before doing anything that touches the live API.
 theory-compiler track's and is off limits to engine-rig** -- it had uncommitted
 work in flight, which is why a second directory exists rather than one shared one.
 
-**Stay inside your own directory.** Do not edit the other track's files. Shared
-surfaces are `/CONTRACTS/` and `PARTNER_SYNC.md`.
+**Stay inside your own territory.** Do not edit another territory's files.
+Shared surfaces are `/CONTRACTS/` and `PARTNER_SYNC.md`; cross-territory
+requests go through `PARTNER_SYNC.md` or `monitor/inbox/`, never direct
+edits.
 
 ## Frozen contracts — `/CONTRACTS/`
 
 | File | Status |
 |---|---|
-| `candidates_schema.md` | frozen v0.1. Neither track may modify it. |
-| `dsl_grammar_v0.1.md` | owned by the theory-compiler track. |
+| `candidates_schema.md` | **frozen v0.1 — the only candidates contract in force.** Neither track may modify it. |
+| `candidates_schema_v0.2.md` | draft, awaiting engine-rig countersign; until then v0.1 governs. |
+| `dsl_grammar_v0.1.md` | frozen; owned by the theory-compiler track. |
+| `dsl_grammar_v0.2.md` / `dsl_grammar_v0.3.md` | final; theory-compiler sole owner (no countersign required). |
+| `pagoda_certificate_v0.1.md` | landed by C13, written from existing code on both ends. |
+| `deadlock_certificate_v0.1.md` | draft, awaiting engine-rig countersign. |
+| `ic3_certificate_v0.1.md` | **countersigned 2026-07-31** (engine-rig; emitting half landed by E8). |
+| `verify.py` | the contracts' completion gate — frozen specs must agree with the code. |
 
 `candidates.jsonl` is **append-only**, and `status` is always `"candidate"` —
 engines never adjudicate. `engine-rig/tools/validate_candidates.py` is the
@@ -96,16 +111,19 @@ is why the line is written down.) Format:
 
 ## engine-rig — current state
 
-All eight milestones are done and tagged (`engine-rig-m1-fixtures` …
-`engine-rig-m8-integration`). Six engines: `mdl_segmenter`, `cegis_miner`,
-`zero_space`, `lp_potential`, `fd_adapter`, `probe_frontier`. 150 tests pass, 1
-skipped. Everything runs offline against self-generated synthetic fixtures — no
+All nine milestones are done and tagged (`engine-rig-m1-fixtures` …
+`engine-rig-m9-deadlock-ic3-probe`). Eight engines: `mdl_segmenter`,
+`cegis_miner`, `zero_space`, `lp_potential`, `fd_adapter`, `probe_frontier`,
+`deadlock_carver`, `ic3_pdr`. Suite as measured 2026-07-31: 584 passed, 27
+skipped, 0 failed (skip count is environment-dependent, e.g. the gitignored
+FD toolchain — re-run for your machine's numbers rather than trusting this
+line). Everything runs offline against self-generated synthetic fixtures — no
 LLM calls, no game API, no network.
 
 ```bash
 cd engine-rig && python -m pytest              # the suite
 cd engine-rig && python -m fixtures.generate_all   # regenerate fixtures (byte-stable)
-cd engine-rig && python -m tools.run_all --force   # all six engines end to end
+cd engine-rig && python -m tools.run_all --force   # all eight engines end to end
 ```
 
 Design calls and their reasons: `engine-rig/DECISIONS.md`. Milestone state and
@@ -124,9 +142,18 @@ Two standing caveats worth knowing before you build on it:
 
 ## The pile cut — binding on both tracks
 
-`arc-recon/data/piles.json` (sha256 `3feca53e…41bbc19a`) splits the 25 public
+`arc-recon/data/piles.json` splits the 25 public
 games into a **development pile of 4** (`ar25-0c556536`, `g50t-5849a774`,
-`sk48-d8078629`, `tn36-ef4dde99`) and a **sealed pile of 21**.
+`sk48-d8078629`, `tn36-ef4dde99`) and a **sealed pile of 21**. The cut's
+guard fingerprint is the file's own `sha256` field: `3feca53e…41bbc19a`.
+That value is a **content digest, not the file's hash** — sha256 over the
+JSON document with the `sha256` key removed, serialised canonically
+(`json.dumps(doc, sort_keys=True, separators=(",", ":"))`). Recompute it
+that way (`arc-recon/cut_piles.py` is the reference implementation); hashing
+the raw bytes gives `d3140eff…4dd5b8c9` instead, which moves on any
+reformatting. Every existing reference to `3feca53e…` means the content
+digest. If a recompute mismatches, the cut itself changed — that is an
+incident, not a checksum nit.
 
 Do not play, inspect, or read about a sealed game — including upstream released
 artifacts belonging to it, since reading those teaches the mechanics just as well

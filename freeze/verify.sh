@@ -164,8 +164,12 @@ echo
 
 # ----------------------------------------- 7. the <n> arithmetic still holds
 echo "[7] re-run the <n> evidence (the number in STATS_RULES.md §5 must not rot)"
-SRC="$HERE/../../baseline-arms/out/campaign"
-[ -d "$SRC" ] || SRC="C:/Users/user/Desktop/theoria/baseline-arms/out/campaign"
+# `$HERE` is `freeze/`, so the repo root is one `..` and not two. The old form
+# climbed to the repo's *parent*, never found the directory, and fell through to
+# a hardcoded absolute path -- which meant the fallback was load-bearing on the
+# one machine that has it, and stage [7] was skipped everywhere else while
+# reporting the skip as gap 13-a. The relative path is now the only path.
+SRC="$HERE/../baseline-arms/out/campaign"
 if [ ! -d "$SRC" ]; then
   note "envelope data not found at $SRC -- cannot re-verify <n>"
   note "this is itself the finding recorded as MANIFEST_DRAFT.md gap 13-a"
@@ -1726,6 +1730,28 @@ else
   bad "negative control could not be built: the 终点三 row is not where stage [17] expects it in tier_conj.py"
 fi
 rm -rf "$tc_tmp"
+echo
+
+# --------------------------------- 18. no artefact records where it was built
+echo "[18] no tracked artefact records where its builder stood"
+# The freeze kit is what a Phase 4 manifest publishes, so a value that can only
+# be true on one machine reaching this point reaches the release. `freeze/`'s own
+# entry in the scan is `VARIANCE_BASIS.md`, and it is exempt for a reason worth
+# knowing: the absolute path in it is the *finding* -- the sentence records that
+# runs/2026-07-28T1200Z-p22/envelope_stats.py hardcoded one. Deleting the path
+# would delete the report and leave the defect.
+#
+# Also `[7]` above: its relative candidate was `$HERE/../../baseline-arms/...`,
+# one `..` too many, so it never resolved and the hardcoded absolute fallback
+# beneath it was the path that actually ran. The relative form is now the only
+# form, which is why this stage can be honest about the rest of the tree.
+if python "$HERE/../tools/check_locations.py" >/tmp/_loc.$$ 2>&1; then
+  ok "$(head -1 /tmp/_loc.$$)"
+else
+  bad "tracked artefacts name a machine without an exemption:"
+  sed 's/^/        /' /tmp/_loc.$$
+fi
+rm -f /tmp/_loc.$$
 echo
 
 # ------------------------------------------------------------------ verdict

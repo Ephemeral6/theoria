@@ -96,8 +96,25 @@ step "no checklist item rests on an unclassified file" python checklist.py --dry
 # that is not re-checked decays into a story. This replays BOTH versions over the
 # planted negative samples and asserts the before/after verdicts are still what
 # the run report says they were.
+#
+# Until 2026-07-31 this step also *rewrote* `before/` and `after/` on every green
+# run: the gate overwriting the archive it exists to read, which corrupted the
+# record twice. It now writes to an untracked `current/` and compares. A green
+# run leaves the run directory byte-identical.
 step "the S23 before/after archive still reproduces" \
     python runs/20260728T234923Z-S23/replicate.py
+
+# No tracked artefact may record where its builder stood. Wired here because
+# `release/` is the choke point: the manifest publishes every tracked file, so a
+# machine-specific path that reaches this gate reaches the release. Exemptions
+# live in `tools/locations_allowlist.json`, pinned by sha256 (artefacts) or
+# named and dated (write-once run directories) -- never by a silent glob.
+#
+# Its own negative controls run first, for the reason at the top of this file.
+step "the location scanner has been seen red" \
+    python -m pytest ../tools/tests -q
+step "no tracked artefact records where its builder stood" \
+    python ../tools/check_locations.py
 
 echo
 if [ "$fail" -eq 0 ]; then

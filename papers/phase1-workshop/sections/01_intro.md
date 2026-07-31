@@ -275,7 +275,15 @@ Scoped to what was actually run:
    107/228 = 47 % of its own state-action pairs. The two worlds differ in
    mechanism, rule count, state count and explorer budget at once, and §3.3 shows
    the outcome is entailed by the construction rather than discovered by it
-   (`cold-start-a0/A0_REPORT.md` §8).
+   (`cold-start-a0/A0_REPORT.md` §8). The planning form in that enumeration is
+   the one this list has to qualify: every plan in this paper ran over PDDL from
+   a world-specific generator (`cold-start-a0/compile/gen_pddl_a0.py` and its
+   per-world drivers), while the framework's general backend compiled **0 of
+   303** actions to usable PDDL until it was repaired on 2026-07-31 — **196 of
+   299** semantically non-empty after, the other 103 declared refusals
+   (`crosscheck/FOUR_FORMS_TRUTH.md`;
+   `crosscheck/runs/20260731T061500Z-C14-after-the-repair/out/census.md`).
+   §11.3 carries the full account, including what the census did not measure.
 4. **A machine-checked impossibility whose invariant weights crossed a data
    boundary.** The impossibility is the machine-checked object — a Lean theorem
    with an empty axiom list (§4.2) — and the certificate is what crossed. The

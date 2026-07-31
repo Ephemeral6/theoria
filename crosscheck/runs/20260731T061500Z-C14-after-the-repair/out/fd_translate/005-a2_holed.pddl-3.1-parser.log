@@ -1,0 +1,3 @@
+returncode: 1
+
+pddl.exceptions.PDDLValidationError: types ['object'] of term Variable(o) are not in available types {'button', 'cart', 'door', 'cell'}

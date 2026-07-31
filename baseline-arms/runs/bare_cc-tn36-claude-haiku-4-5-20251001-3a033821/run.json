@@ -1,0 +1,81 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "b675648c-797a-49d6-b1ab-14f518ac730d",
+  "ended": "2026-07-27T17:13:33Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2259,
+      "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+      "sha256": "sha256:130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e",
+      "stability": "fixed",
+      "tracked": true
+    },
+    {
+      "bytes": 5641570,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:c98c2bfb28902a97dd4531facf071f605ff51710ba60346f8341353d16a1fd71",
+      "stability": "append_only",
+      "tracked": true
+    },
+    {
+      "bytes": 1389481,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:c40c33cde39dea3075ad60fe8c5af29c7ee6e806ad47246e41b0976b3cb6a6ee",
+      "stability": "append_only",
+      "tracked": true
+    }
+  ],
+  "game_id": "tn36-ef4dde99",
+  "id": "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 21,
+    "model_call": 20,
+    "other": 0
+  },
+  "model": "claude-haiku-4-5-20251001",
+  "outcome": "budget_exhausted",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 7,
+    "actions_ok": 13,
+    "cost_usd": 0.4557195000000001,
+    "http_calls_gameplay": 94,
+    "levels_completed": 0,
+    "model_calls": 20,
+    "wall_seconds": 709.4
+  },
+  "started": "2026-07-27T17:01:44Z",
+  "summary": {
+    "actions_failed": 7,
+    "actions_ok": 13,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 120154,
+    "cache_read_tokens": 430365,
+    "card_id": "b675648c-797a-49d6-b1ab-14f518ac730d",
+    "cost_usd": 0.4557195000000001,
+    "ended": "2026-07-27T17:13:33Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "tn36-ef4dde99",
+    "http_amplification": 7.23,
+    "http_calls_gameplay": 94,
+    "input_tokens": 200,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 20,
+    "outcome": "budget_exhausted",
+    "output_tokens": 34435,
+    "reset_attempts": 6,
+    "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+    "started": "2026-07-27T17:01:44Z",
+    "wall_seconds": 709.4,
+    "win_levels": 7
+  },
+  "superseded_by_rerun": false
+}

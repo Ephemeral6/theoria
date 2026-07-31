@@ -1,5 +1,5 @@
 {
-  "bundle_digest": "9c1c5b35eb6138734f557b1e76581a5134c42cd4e99c783b3f1b348f8e38cc9a",
+  "bundle_digest": "e4b8c20715e20294da301778b319b822b4c765929ffe37ccc23783a72539fcfa",
   "compile_warnings": [
     "base: problem 'a0-base' locates ['portal_exit'], which theory.dsl never declares as a landmark. Add `landmark <name>` to word_table so a reader of the manual alone can tell it is level data (E-04).",
     "no-button: problem 'a0-no-button' locates ['portal_exit'], which theory.dsl never declares as a landmark. Add `landmark <name>` to word_table so a reader of the manual alone can tell it is level data (E-04)."
@@ -18,16 +18,19 @@
   },
   "files": {
     "GLOSSARY.md": "02fb318b9f38906c2b6fe29b827b93fdddcb4cd7d8d306e5a918b659b66ac44d",
-    "README.md": "3349828ba0af8bd1e88bcbdd7887d3eb0b60828197da56f98c6429707d830532",
+    "README.md": "81d6f78e9f984970d3683d3c6f512f7f733df32b0bd257202f71ccdb894605e7",
     "SEAL.md": "86179c386482d825672b2f365518f711e97b84bfede985756d288779d900b841",
     "levels/base/BOARD.md": "4fbfd1c41ce9c04cece8c38a3394234a2e79fe0362cc2ef2515f89c939deb78b",
     "levels/base/LEVEL.json": "6e602b0c81fe6aef5dca9dcfee0c83c4b2ada1d2717b2bde4b2f48710a2d6a0b",
     "levels/base/Level.lean": "4c23d58a60f6782aa8f0fca2bd29929712e41b00199db4e66557c9ea46ac6445",
     "levels/base/predictor.py": "ebcddc904d99f2d1b7a16be41e651104dc2d47b5f813ac0b6cae74659ad15da6",
+    "levels/base/problem.pddl": "e445970d7dff6a58bf6390ab3c46ad739bf8cd84630e0deeaa19647f199f87f2",
     "levels/no-button/BOARD.md": "f563ef3cf80c4c65bdf4eed87e1b48be6cee0f7fe1b83d439cddbfbfd526c224",
     "levels/no-button/LEVEL.json": "be02792e1929483c282a23a0bc76c70ff0b7e8996ed08c4ac672168bff0367a0",
     "levels/no-button/Level.lean": "caa94b5da6248a5a6dea8f42a498c2945cb40c531e6f6a03a665973d4c217502",
     "levels/no-button/predictor.py": "5ebe58a991994f018025e09c9ba7b8facf857d1b529920eb5e95b72ad126315f",
+    "levels/no-button/problem.pddl": "bc977c9935943d8bac3d01d54331c38a0ab09f6486f80e27eb4f8df947f941a1",
+    "manual/DOMAIN.pddl": "5ccd00b33e4e13ca29b21596ef558790d9c6d9c4af6e027cdb73e674b8fa8ebe",
     "manual/MANUAL.dsl": "79f4bad84adb1eca40d2ac6a87905ec3dcc006d702b25b457bbb3013df8cdf0d",
     "manual/MANUAL.md": "22ac738fc64cd3d35780128f52ab4347f7a71793ef4b61dd2bf3dc16b95237c3",
     "manual/PRIMITIVES.md": "14ef723950e4f6efff2819fd53d54c8ca91d944481f3a76f2d24676d4ee37173",
@@ -42,12 +45,10 @@
       "status": "generated"
     },
     "planning_domain": {
-      "status": "refused",
-      "why": "StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'"
+      "status": "generated"
     },
     "planning_problem": {
-      "status": "refused",
-      "why": "base: StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'; no-button: StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'"
+      "status": "generated"
     },
     "proof": {
       "status": "generated"
@@ -59,8 +60,7 @@
         "status": "generated"
       },
       "planning_problem": {
-        "status": "refused",
-        "why": "StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'"
+        "status": "generated"
       },
       "proof": {
         "status": "generated"
@@ -71,8 +71,7 @@
         "status": "generated"
       },
       "planning_problem": {
-        "status": "refused",
-        "why": "StripsError: action 'push-up' mentions undeclared predicate 'adjacent-above'"
+        "status": "generated"
       },
       "proof": {
         "status": "generated"

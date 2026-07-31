@@ -97,20 +97,13 @@ PROSE_SUFFIXES: tuple[str, ...] = (".md", ".tex")
 #:
 #: Delete an entry the moment its figure is cited -- the gate will tell you, and
 #: fail, if you forget.
-NOT_CITED_ON_PURPOSE: dict[str, str] = {
-    "fig02_bill_shape": (
-        "pending a citation decision (paper author): the cost/bill panel has no home "
-        "section yet -- section 6's cost discussion cites numbers, not the plate"
-    ),
-    "fig03_capability_spectrum": (
-        "pending a citation decision (paper author): the battery's capability spectrum "
-        "is a Phase-4 artefact and the workshop paper stops at Phase 1"
-    ),
-    "fig04_a3_transfer": (
-        "pending a citation decision (paper author): A3 transfer has no section in the "
-        "workshop paper's outline; cite it or retire the plate"
-    ),
-}
+# Empty on 2026-07-31, and that is a finding of this gate's own staleness rule:
+# the three plates declared "pending a citation decision" (fig02_bill_shape,
+# fig03_capability_spectrum, fig04_a3_transfer) are all cited by
+# papers/phase1-workshop/REVIEW-2026-07-30.md, and a declaration that no longer
+# describes the tree is a false statement in a gate. The mechanism stays: a
+# figure that loses its last citation goes back in here, with a reason.
+NOT_CITED_ON_PURPOSE: dict[str, str] = {}
 
 
 def paper_files() -> list[str]:

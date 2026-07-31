@@ -207,8 +207,62 @@ inside the loop, from a wrong manual — and one of those bugs manufactured a
 *false* UNSAT, which under constraint 6 would have triggered a certificate
 obligation for a theorem that is false. §10 is the systematic form of that
 observation: a census of every place a tool's failure state is read as a fact
-about the world. The four-co-derived-forms design is meant
-to make that drift visible; here it took a human reading the plan output.
+about the world. The four-co-derived-forms design is meant to make that drift
+visible; here it took a human reading the plan output — and on the fourth form
+the mechanism was, for most of this project's life, not weak but inoperative.
+The next paragraph is the census that established that, and the repair it
+forced.
+
+**The general PDDL backend produced nothing usable until 2026-07-31.** A
+crosscheck census dated 2026-07-30 measured
+`theory_compiler.generators.gen_pddl` — the backend on both documented compile
+paths from the two books, behind the live arm's handbook and both handover
+packages — at **0 of 303** actions compiling to PDDL that is both well-formed
+and semantically non-empty, a zero that survives every slicing of the
+denominator and is confirmed by an independent planner: Fast Downward's
+translator accepted only domains whose actions assert nothing
+(`crosscheck/FOUR_FORMS_TRUTH.md`; the frozen record is
+`crosscheck/runs/20260730T120005Z-C14-four-forms-is-three-and-a-half/`). An
+empty form cannot disagree with anything, so on that form the visibility this
+design promises did not exist. Three scope clauses keep the finding its right
+size. First, **no planning number in this paper ran through that backend**:
+every plan here was produced over PDDL from the world-specific generator
+`cold-start-a0/compile/gen_pddl_a0.py` and its per-world drivers — hand-fitted
+to this family of worlds, and carrying its own recorded defects (§5.8, §6.6) —
+and
+`crosscheck/runs/20260730T120005Z-C14-four-forms-is-three-and-a-half/out/TWO_BACKENDS.md`
+maps each planning artefact to its generator, so the empirical planning claims
+above stand or fall with backend defects recorded in their own sections, not
+with this zero. That provenance statement is about how the data was made, and
+the later repair does not change it. Second, the census measured **the PDDL
+form only**: nothing in it verifies the Lean, Python or Markdown forms, and
+"three of four forms verified" is a sentence this work has not earned — the
+lesson of the zero is that *emitted* is not *valid*, and asserting the other
+three unmeasured forms would repeat the error being corrected. Third, the
+repair landed and was measured with the same instrument: `gen_pddl` was
+repaired on 2026-07-31, and the re-run census counts **196 of 299** actions
+semantically non-empty, with the other **103 as declared refusals** — 34
+theories whose guards use geometry or arithmetic the grammar cannot yet
+express, refused with a written reason rather than emitted empty under a green
+light (`crosscheck/runs/20260731T061500Z-C14-after-the-repair/out/census.md`).
+The census's own methodological caveat carries over to the 196: its bar is a
+ceiling on correctness, not a floor on brokenness — an action can be non-empty
+and well-formed and still ground to nothing or invert a guard — so that count
+is of forms passing the bar, not of forms verified correct
+(`crosscheck/FOUR_FORMS_TRUTH.md` §3).
+The A0 manual's generated planning form now grounds every schema and solves
+its level in the 12 steps the world is known to need, pinned as a test
+(`theory-compiler/tests/test_e2e_rehearsal.py`); the handover packages were
+rebuilt the same day, `a0-cart` with all five files of its four forms
+generated and `a0-sokoban2` with its planning form a declared refusal whose
+reason is printed on the package's own cover
+(`theory-compiler/handover_packages/a0-cart/README.md`,
+`theory-compiler/handover_packages/a0-sokoban2/README.md`); and the failure
+shape the census caught is guarded in code — the generator parses its own
+output before shipping, and the live arm's `theoria-arm/inner/books.py` keys
+its green on the planning and prose forms too, turning red on an undeclared
+PDDL failure. The pre-repair record stays frozen, because the zero is what
+forced the repair.
 
 ### 11.4 What the battery cannot yet certify
 

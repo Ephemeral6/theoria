@@ -1,0 +1,449 @@
+{
+  "diff_vs_frozen": [
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "E2"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "E3"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "K11"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "K12"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "K7"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "M3"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "M6"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "P3"
+    },
+    {
+      "frozen": "main",
+      "live": "reference",
+      "metric": "P4"
+    }
+  ],
+  "frozen_artifact": "battery/artifacts/gaming_audit.json",
+  "frozen_main": [
+    "E2",
+    "E3",
+    "K11",
+    "K12",
+    "K7",
+    "M3",
+    "M6",
+    "P3",
+    "P4"
+  ],
+  "frozen_sha256": "sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce",
+  "main": [],
+  "metrics": {
+    "E1": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "cache-flag",
+        "claim": "E1 = 6.0 vs 0.60 with the same 50k-token context every turn; prompt caching is on in one run and off in the other",
+        "target": null,
+        "value": 6.0
+      }
+    },
+    "E2": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "batched-turn-label",
+        "claim": "E2 = 0.973 with spend that never front-loads at all -- 30 equal calls are simply all labelled turn=0, so the bucketing does the work",
+        "target": 0.95,
+        "value": 0.973387097
+      }
+    },
+    "E3": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "batched-turn-label",
+        "claim": "E3 = 0.0244 on a perfectly flat spend profile -- all 400 calls cost exactly $1.00; 360 of them are merely labelled turn=0",
+        "target": 0.05,
+        "value": 0.024390244
+      }
+    },
+    "E4": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "compaction-sawtooth",
+        "claim": "E4 ~ 0.0 on a 20k-100k sawtooth: periodic compaction defeats both fits equally",
+        "target": 0.001,
+        "value": 0.0
+      }
+    },
+    "E5": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "step-spam",
+        "claim": "E5 = 0.000025 on a realistic $5.00 bill, purely by emitting 200000 cycling no-op actions",
+        "target": 0.001,
+        "value": 2.5e-05
+      }
+    },
+    "E6": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "partial-logging",
+        "claim": "E6 = 3000.0 vs 2.0 from a single annotated step out of a thousand",
+        "target": null,
+        "value": 3000.0
+      }
+    },
+    "E7": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "compaction-sawtooth",
+        "claim": "E7 ~ 0.0 on a periodic 50k-320k prompt sawtooth",
+        "target": 0.001,
+        "value": 0.0
+      }
+    },
+    "K1": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "hollow",
+        "claim": "K1 = 1.0 from a Theory carrying two integers and a run with no steps",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "K10": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "counter",
+        "claim": "K10 = 1000000 'machine-checked proofs' declared by an integer, with proven=False everywhere (there are no clauses at all)",
+        "target": 100.0,
+        "value": 1000000.0
+      }
+    },
+    "K11": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "bookkeeping",
+        "claim": "K11 = 1000 vs 1 for the same ten concepts; only the write granularity of the manual differs",
+        "target": null,
+        "value": 1000.0
+      }
+    },
+    "K12": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "clause-tag",
+        "claim": "K12 = 1.0 (6/6 beats closed) on a repair episode that spent zero environment actions; the evidence guard is satisfied by the string 'c0'",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "K13": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "empty-repair",
+        "claim": "K13 = 0.0 from a Repair with no beats, no detection, no changed clause",
+        "target": 0.001,
+        "value": 0.0
+      }
+    },
+    "K14": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "censor",
+        "claim": "K14 = 4096 bits over a manual of 512 concepts, 511 of which carry no compression account at all (support reports concepts=1)",
+        "target": 1000.0,
+        "value": 4096.0
+      }
+    },
+    "K2": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "frame-string",
+        "claim": "K2 = 1.0 on 1 held-out pair; the sampling-frame guard is satisfied by any truthy string",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "K3": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "duplicates",
+        "claim": "K3 = 250 from 250 byte-identical clauses (same name, same kind)",
+        "target": 100.0,
+        "value": 250.0
+      }
+    },
+    "K4": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "single-annotated",
+        "claim": "K4 = 1.0 computed over 1 clause while 200 clauses carry no coverage at all",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "K5": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "alphabet",
+        "claim": "K5 = 140 from 140 Concept records that carry a name and nothing else",
+        "target": 100.0,
+        "value": 140.0
+      }
+    },
+    "K6": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "mean-hides",
+        "claim": "K6 = 399808.0 bits/concept while 24 of the 25 concepts have negative gain",
+        "target": 1000.0,
+        "value": 399808.0
+      }
+    },
+    "K7": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "sign",
+        "claim": "K7 = 1000 vs 0 on two manuals with the identical 1000 concepts; only the sign of a declared integer differs",
+        "target": null,
+        "value": 1000.0
+      }
+    },
+    "K8": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "one-probe",
+        "claim": "K8 = 1.0 from a theory that designed exactly one probe and ran it",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "K9": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "counter",
+        "claim": "K9 = 100000 from a theory whose every other field is empty: no concepts, no clauses, no revisions",
+        "target": 100.0,
+        "value": 100000.0
+      }
+    },
+    "M1": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "survivorship",
+        "claim": "M1 = 0.0 (perfect) on a run that used 1 of 100 mechanisms; M2 = 0.01 on the same run",
+        "target": 0.001,
+        "value": 0.0
+      }
+    },
+    "M2": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "single",
+        "claim": "M2 = 1.0 from a one-element denominator",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "M3": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "—",
+        "claim": "withheld, not survived: the metric refused every attack because it answers nothing at all",
+        "target": null,
+        "value": null
+      }
+    },
+    "M4": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "instant",
+        "claim": "M4 = 0.0 from one self-reported detection_actions=0",
+        "target": 0.001,
+        "value": 0.0
+      }
+    },
+    "M5": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "one-detected",
+        "claim": "M5 = 1.0 from a single boolean the scored arm sets itself",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "M6": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "dial",
+        "claim": "M6 = 1.0 vs 0.05 -- a factor of 20 -- from two runs identical except for two integers",
+        "target": null,
+        "value": 1.0
+      }
+    },
+    "P1": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "failure-free-by-omission",
+        "claim": "P1 = 60.0 even though every model call is marked is_error=True",
+        "target": 50.0,
+        "value": 60.0
+      }
+    },
+    "P2": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "boundary-lie",
+        "claim": "P2 = 200.0 because the half-way boundary is read off a self-reported step_idx",
+        "target": 10.0,
+        "value": 200.0
+      }
+    },
+    "P3": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "counter-keys",
+        "claim": "P3 = 0.0 while the agent repeats one no-op action 500 times",
+        "target": 0.05,
+        "value": 0.0
+      }
+    },
+    "P4": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "failed-steps-are-free",
+        "claim": "P4 = 0.05 after 10000 failed actions, against an honest optimal of 20",
+        "target": 1.0,
+        "value": 0.05
+      }
+    },
+    "P5": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "flag-only",
+        "claim": "P5 = 1.0 vs 0.005 on runs with identical actions and identical state keys",
+        "target": null,
+        "value": 1.0
+      }
+    },
+    "X1": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "counter-in-key",
+        "claim": "X1 = 0.0 while the board hash is literally constant across all 300 steps",
+        "target": 0.05,
+        "value": 0.0
+      }
+    },
+    "X2": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "failed-curtain",
+        "claim": "X2 = 1.0 on a 300-step run of which 297 steps were rejected spam",
+        "target": 0.95,
+        "value": 1.0
+      }
+    },
+    "X3": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "explore-then-jam",
+        "claim": "X3 = 1.0 for a run that dies in an infinite loop over its whole second half",
+        "target": 0.9,
+        "value": 1.0
+      }
+    },
+    "X4": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "dilute-the-stall",
+        "claim": "X4 = 0.04 for a run that ends in a real 50-step dead stall",
+        "target": 0.05,
+        "value": 0.04
+      }
+    },
+    "X5": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "label-dial",
+        "claim": "X5 = 500 vs 1 from two runs that take the identical 500 actions",
+        "target": null,
+        "value": 500.0
+      }
+    },
+    "X6": {
+      "tier": "reference",
+      "v9_demotion": {
+        "attack": "round-robin",
+        "claim": "X6 = 1.0 on 200 consecutive failures with a fresh action name each time",
+        "target": 0.95,
+        "value": 1.0
+      }
+    }
+  },
+  "n_diverging": 9,
+  "reference": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "K1",
+    "K10",
+    "K11",
+    "K12",
+    "K13",
+    "K14",
+    "K2",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K7",
+    "K8",
+    "K9",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6"
+  ],
+  "what": "per-metric live tier from battery.audit.gaming.tier_of (V9 blind round consulted first; V9 only demotes), with the V9 demotion evidence per PREREG_V9 R3 and the divergence against the frozen 2026-07-28 baseline, which PREREG_V9 §5 forbids rewriting. No timestamp on purpose: for a fixed tree this file is byte-reproducible."
+}

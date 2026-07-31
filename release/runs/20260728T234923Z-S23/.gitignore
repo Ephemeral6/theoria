@@ -1,0 +1,5 @@
+# This run directory is a write-once archive. `replicate.py` writes THIS
+# run's output here instead of into `before/`/`after/`, then compares. The
+# comparison is the product; the output is scratch.
+current/
+unexpected/

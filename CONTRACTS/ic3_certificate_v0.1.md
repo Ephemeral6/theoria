@@ -1,6 +1,6 @@
 # ic3_certificate_v0.1.md
 
-**Version:** 0.1 · **Status:** 草案，等 `engine-rig` 会签。
+**Version:** 0.1 · **Status:** 已会签（engine-rig，2026-07-31，见 PARTNER_SYNC）。
 **发射端未实现，且不由本轨道实现** —— 见《谁写哪一半》。
 
 **Schema id:** `ic3_pdr/inductive_invariant_certificate@1`
@@ -110,7 +110,7 @@
 
 | 半边 | 归属 | 状态 |
 |---|---|---|
-| **发射**：`ic3_pdr` 把收敛的不变式写成上面这份 JSON，落到 `engine-rig/interop/certificates/` | **`engine-rig`** | **未实现** |
+| **发射**：`ic3_pdr` 把收敛的不变式写成上面这份 JSON，落到 `engine-rig/interop/certificates/` | **`engine-rig`** | **完成**（E8，`interop/certificate_export.py`；首件 `ic3_4_0111_to_0100.json`，三条义务消费端重算通过） |
 | **消费**：读取、三条义务重算、编译成 Lean | `theory-compiler` | 完成 |
 
 **本轨道没有、也不会往 `engine-rig/` 里写一个字。** CLAUDE.md 把领地划得很清楚，

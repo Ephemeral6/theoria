@@ -196,10 +196,18 @@ class Books:
         result["forms"]["markdown"] = self._gen_markdown(ast, result)
         if problem is not None:
             result["forms"]["python"] = self._gen_python(ast, problem, result)
-        result["forms"]["pddl"] = self._gen_pddl(ast, result)
+        result["forms"]["pddl"] = self._gen_pddl(ast, problem, result)
         result["forms"]["lean"] = self._gen_lean(ast, problem, result)
 
-        result["ok"] = bool(result["forms"].get("python"))
+        # `ok` used to read the python form alone, so a PDDL failure was
+        # silent: the handbook's planning form could be garbage under a green
+        # light (C14's census found exactly that — 0 usable actions, every
+        # compile reported ok). A *declared* refusal (`UnsupportedClause`,
+        # recorded under `refusals`) is still a result and does not turn the
+        # light red; anything else that stops a form is a failure and does.
+        result["ok"] = (bool(result["forms"].get("python"))
+                        and "pddl" not in result["errors"]
+                        and "markdown" not in result["errors"])
         result["_ast"] = ast
         result["_problem"] = problem
         return result
@@ -225,12 +233,25 @@ class Books:
             result["errors"]["python"] = "%s: %s" % (type(exc).__name__, exc)
             return None
 
-    def _gen_pddl(self, ast, result) -> Optional[List[str]]:
+    def _gen_pddl(self, ast, problem, result) -> Optional[List[str]]:
+        """The planning form, compiled against the level like the others.
+
+        The problem instance travels: without it `generate_pddl` emits a
+        placeholder board — every object on cell-0-0, no walls — and a reader
+        of `problem.pddl` could not tell it from the real one. A refusal
+        (`UnsupportedClause`) is a result, recorded under `refusals`, not an
+        error: the backend is saying which clause the planning form cannot
+        carry, which is the expressivity ledger writing itself.
+        """
         from theory_compiler.generators.gen_pddl import generate_pddl          # noqa: PLC0415
+        from theory_compiler.generators.gen_python import UnsupportedClause    # noqa: PLC0415
         try:
-            domain, problem_text = generate_pddl(ast)
+            domain, problem_text = generate_pddl(ast, problem=problem)
             return [self._out("domain.pddl", domain),
                     self._out("problem.pddl", problem_text)]
+        except UnsupportedClause as exc:
+            result.setdefault("refusals", {})["pddl"] = str(exc)
+            return None
         except Exception as exc:                       # noqa: BLE001
             result["errors"]["pddl"] = "%s: %s" % (type(exc).__name__, exc)
             return None

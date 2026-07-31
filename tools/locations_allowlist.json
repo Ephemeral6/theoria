@@ -1,0 +1,654 @@
+{
+ "_": "Exemptions for tools/check_locations.py. Nothing here is a licence to add a new absolute path; each entry says why one particular file that ALREADY has one is not going to be fixed. Artefact entries are pinned by sha256, so a regeneration that is still dirty loses the exemption and comes back red. Run entries are dated and counted, so a write-once archive that gains an absolute path after it was signed off comes back red too.",
+ "_runs_note": "Every run directory below is captured tool output or a write-once provenance record: Fast Downward logs naming the .worktrees path and the gitignored .toolchain binary, session transcripts, MANIFEST files written at run time. The recording location is part of the record; scrubbing it falsifies captured output, and regeneration would need untracked toolchains and would change the measured numbers. What is exposed is an account name, not a secret. Listed one directory at a time and dated, so that a NEW run directory carrying an absolute path is a red gate rather than a silent inheritance.",
+ "artefacts": [
+  {
+   "path": "a0-spike/artifacts/a0_report.json",
+   "sha256": "602188b3b9358ac0c5c339f6b310fc972875cd3724db0103b2a6be1dce71a092",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "battery/artifacts/capability_spectrum.json",
+   "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "provenance.schema_traces.root is the resolved absolute path of an untracked payload. Doubly frozen: the artefact is inside the PREREG_V9 freeze (battery/PREREG_V9.md:165 -- battery/artifacts/ is not rewritten), and its generator battery/run_battery.py is inside the BATTERY_V1 code freeze, which refuses an edit without a new freeze version (battery/freeze.py, battery/tests/test_freeze.py). Fixing the generator is therefore a BATTERY_V2 decision, not a hygiene edit -- attempted and reverted on 2026-07-31. The artefact is also irreproducible from a clean tree (built from 95 runs including untracked inputs; a clean-tree recompute sees ~41-48)."
+  },
+  {
+   "path": "cold-start-a0/artifacts/certify_lean_generated_theory_lean.json",
+   "sha256": "1b3327ef448482ee3e5736644de5c516b60cc38dab79652a73d2a42aba49f14d",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a0/artifacts/fd_real.json",
+   "sha256": "82521659d3e98b9429a1b856dd3b9dcb2c1915af6ffdf322f9012262204ac971",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "records which Fast Downward build produced the conformance plans. .toolchain/ is gitignored by design, so regenerating needs a build this checkout does not have, and cold-start-a0 belongs to the theory-compiler track (CLAUDE.md: stay inside your own directory)."
+  },
+  {
+   "path": "cold-start-a2/artifacts/certify_generated.json",
+   "sha256": "b0211fd18c4367030ec50eba9b9c22989b4a5ba568d9d66b6545e5e7151ebfb0",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a2/artifacts/exhibit_report.json",
+   "sha256": "905c6a214ebe5d56a7efc82fd1ed971f7f64e8fb5144a12e5b14aaad1f4f35e1",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a2/artifacts/loop_ledger.json",
+   "sha256": "8d711fabcc40aae2e67838c5c91a11192c1c946fd9c89bf2149d1f0c1e878eb6",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "a declared source of figure 5 (figures/sources.py). Regenerating cascades into SOURCES.sha256, the CSV audit layer, the captions and the paper SVGs, for zero informational gain -- and the path sits inside a captured stale_first_error string, i.e. inside evidence."
+  },
+  {
+   "path": "cold-start-a2/artifacts/repair_report.json",
+   "sha256": "246b741529c990b7bb2b8a7f4e89922e889a6dc6109a9eb1891124f62bc2f8b6",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/arm_l1_cold_start.json",
+   "sha256": "6350acca9fdbef51edf5410275426733e75d4ce1d993d83db45db8697a03c15f",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/arm_l2_from_scratch.json",
+   "sha256": "2b8ecdf78061b6efa89d961a15f0d861f936884f3a3eae7a3f5d42a110f43581",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/arm_l2_transfer.json",
+   "sha256": "0edff539620e01d68c30e59820a0f686f632bc1ec193077967b00318cd913a0c",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/arm_l2neg.json",
+   "sha256": "e795de549831e0a06c266c60c05fdbca6d44c32ba874aef1775a6da8460176c7",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/arm_l2rew.json",
+   "sha256": "689e187b09d9b4b7b6dc38f6aed3f7748a0e6108260f10defcfead829e2b162c",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/certify_generated_l1.json",
+   "sha256": "7758af556907d240a3a0137ba96f303e1e6d0e8a10ec37cc538b54f6aff8dd85",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "cold-start-a3/artifacts/run_l1.json",
+   "sha256": "1deef1f79abf8d37bd914a0eb24c3399388b5f140fc2a00406bc6d972bd87475",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "captured Lean toolchain output: the absolute path is inside a compiler message this repository did not write. Rewriting it would falsify a third party's words about what it did, and the artefact is evidence in a certification claim. Regenerating needs an elan toolchain that is gitignored by design."
+  },
+  {
+   "path": "freeze/VARIANCE_BASIS.md",
+   "sha256": "943b0655f7a0744d59247e050424dab5ad349d7d8e8fccc7d84c0ef64bab3a56",
+   "dated": "2026-07-31",
+   "pattern": "windows absolute path",
+   "reason": "the sentence IS the finding: it records that freeze/runs/2026-07-28T1200Z-p22/envelope_stats.py hardcodes an absolute path, and names the path so a reader can check. Scrubbing it would delete the defect report and leave the defect."
+  }
+ ],
+ "runs": [
+  {
+   "dir": "ablation-arm/runs/2026-07-29T1400Z-A15-ablation-calibration-uncommitted",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline",
+   "dated": "2026-07-31",
+   "files": 7,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "baseline-arms/runs/20260728T103135Z-a7",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "baseline-arms/runs/20260729T100000Z-a14",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "baseline-arms/runs/MANIFEST.json",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-opus-5-6a39afc2",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-g50t-claude-sonnet-5-733ed586",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-sk48-claude-opus-5-ddd63c48",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-sk48-claude-sonnet-5-70d92713",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-opus-5-914490bf",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "baseline-arms/runs/bare_cc-tn36-claude-sonnet-5-21a1a163",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once paid run record; landed 2026-07-31 by the P12 selective merge, after this allowlist was generated"
+  },
+  {
+   "dir": "battery/runs/20260728T061147Z-v3",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "battery/runs/20260729T025515Z-V18-battery-prereg-check",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "cold-start-a3/runs/p-17",
+   "dated": "2026-07-31",
+   "files": 7,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "crosscheck/runs/20260730T045751Z-C14-four-forms-is-three-and-a-half",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "crosscheck/runs/20260730T120005Z-C14-four-forms-is-three-and-a-half",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench",
+   "dated": "2026-07-31",
+   "files": 159,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/20260728T141724Z-E5-cert-recheck",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/20260728T150713Z-E7-deadlock-claim-audit",
+   "dated": "2026-07-31",
+   "files": 1249,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/20260728T191530Z-E6-engine-dividend",
+   "dated": "2026-07-31",
+   "files": 193,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/20260729T044500Z-E15-solver-status-bit",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "engine-rig/runs/p13-fd-real",
+   "dated": "2026-07-31",
+   "files": 9,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/20260728T151000Z-V7-exam-stress-fanout",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/20260728T202540Z-V11-handover-auto-r2",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/20260730T021500Z-V23-large-space",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/20260730T1640Z-V27-manifest-absolute-paths",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "exam/runs/p15-rehearsal-01",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "figures/runs/20260728T034857Z-p21",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "figures/runs/20260729T1030Z-V20-diag",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "fleet-study/runs/20260728T233850Z-S17",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "freeze/runs/2026-07-28T1200Z-p22",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "freeze/runs/20260729T2040Z-S4-freeze-complete",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "fuzzlab/runs/20260728T161127Z-V13-audit-the-published-surface",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "fuzzlab/runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/20260729T124600Z-P16-uncited-number-gate",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/20260729T181500Z-P18-certificate-verb-ruling",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/20260730T000000Z-P18-audits-cover-half",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "papers/phase1-workshop/runs/P-16.json",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "proxy/runs/20260729T010000Z-A10",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "proxy/runs/20260729T125103Z-V22-wintighten-absent-vs-below",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "proxy/runs/20260730T034733Z-S31-a10-said-done-prove-it",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "proxy/runs/20260730T043824Z-S31-a10-said-done-prove-it",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "proxy/runs/p9-shell-harden",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T015354Z-g50t-first-contact",
+   "dated": "2026-07-31",
+   "files": 7,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T025503Z-g50t-e08-fixed",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile",
+   "dated": "2026-07-31",
+   "files": 7,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T235841Z-leg01",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T235842Z-leg02",
+   "dated": "2026-07-31",
+   "files": 4,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260728T235843Z-leg01",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T0030Z-a3-desk-live-proof",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2",
+   "dated": "2026-07-31",
+   "files": 4,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T004020Z-leg01",
+   "dated": "2026-07-31",
+   "files": 4,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T004020Z-leg01-salvage",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding",
+   "dated": "2026-07-31",
+   "files": 5,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T105653Z-leg01",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T105729Z-leg01",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260729T2040Z-A3-unpriced",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260730T1230Z-A3-ADVERSARIAL-TRIAGE",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/20260730T1400Z-A3-H3-SCOPE",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/a3-gate-mock",
+   "dated": "2026-07-31",
+   "files": 3,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/campaign-a3-g50t",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theoria-arm/runs/preflight-20260728T012057Z",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "theory-compiler/runs/20260728T102343Z-c7",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "verify-lab/runs/20260728T152000Z-V11-negative-control-census",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict",
+   "dated": "2026-07-31",
+   "files": 2,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller",
+   "dated": "2026-07-31",
+   "files": 1,
+   "reason": "write-once provenance record"
+  },
+  {
+   "dir": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true",
+   "dated": "2026-07-31",
+   "files": 6,
+   "reason": "write-once provenance record"
+  }
+ ]
+}

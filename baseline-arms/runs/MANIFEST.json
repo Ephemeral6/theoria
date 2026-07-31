@@ -1,0 +1,546 @@
+{
+  "counts": {
+    "by_kind": {
+      "excluded": 1,
+      "fetch": 1,
+      "migration": 1,
+      "run": 43
+    },
+    "by_outcome": {
+      "api_unusable": 8,
+      "budget_exhausted": 20,
+      "gave_up": 2,
+      "model_error": 5,
+      "no_reset_window": 1,
+      "no_summary": 7
+    },
+    "dead_runs": 14,
+    "total": 46
+  },
+  "entries": [
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "s1-full-run-not-archived",
+      "kind": "excluded",
+      "model": null,
+      "outcome": null,
+      "path": "runs/s1-full-run-not-archived/run.json",
+      "prompt_id": null
+    },
+    {
+      "cost_usd": 0.0,
+      "game_id": null,
+      "id": "fetch-schema-traces-path-a",
+      "kind": "fetch",
+      "model": null,
+      "outcome": "complete",
+      "path": "runs/fetch-schema-traces-path-a/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.0,
+      "game_id": null,
+      "id": "migration-ledger-v0-to-v1.0",
+      "kind": "migration",
+      "model": null,
+      "outcome": "complete",
+      "path": "runs/migration-ledger-v0-to-v1.0/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.5984182999999998,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.45078270000000004,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.4557195000000001,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-3a033821/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.4420823,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-42306405",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-42306405/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.08226570000000001,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-sonnet-5-fe359600",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "model_error",
+      "path": "runs/bare_cc-ar25-claude-sonnet-5-fe359600/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.18255929999999998,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-sonnet-5-3345f981",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "model_error",
+      "path": "runs/bare_cc-g50t-claude-sonnet-5-3345f981/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.1813323,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-sonnet-5-3f3ac227",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "model_error",
+      "path": "runs/bare_cc-tn36-claude-sonnet-5-3f3ac227/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 1.300445,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-opus-5-2f8b6919",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-ar25-claude-opus-5-2f8b6919/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 1.4917540000000002,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-opus-5-f60e48af",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-opus-5-f60e48af/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.750876,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-opus-5-96d23ad9",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-opus-5-96d23ad9/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.10029869999999999,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-sonnet-5-95c42cfd",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "model_error",
+      "path": "runs/bare_cc-sk48-claude-sonnet-5-95c42cfd/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 1.5623339999999997,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-opus-5-42705d3c",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-opus-5-42705d3c/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 1.6357593,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-sonnet-5-ddabe772",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-sonnet-5-ddabe772/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.6080658,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-sonnet-5-9022a076",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "model_error",
+      "path": "runs/bare_cc-sk48-claude-sonnet-5-9022a076/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 1.0021635000000002,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.7959840000000001,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.7293955000000001,
+      "game_id": "ar25-0c556536",
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": 0.6620339999999998,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": 1.0167754999999998,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": 0.0,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "no_reset_window",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f/run.json",
+      "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": 1.1468159999999998,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.127674,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.0675,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-d706111e/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.389694,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-64c11385",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-64c11385/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.3440570000000003,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.3137889999999997,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.0126804999999999,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "gave_up",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.0948499999999999,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "gave_up",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.039319,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 3.441054,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-opus-5-6a39afc2",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-opus-5-6a39afc2/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 3.604284,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-opus-5-ddd63c48",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-opus-5-ddd63c48/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.1306729999999998,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-opus-5-914490bf",
+      "kind": "run",
+      "model": "claude-opus-5",
+      "outcome": "api_unusable",
+      "path": "runs/bare_cc-tn36-claude-opus-5-914490bf/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 3.9981785999999997,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-sonnet-5-733ed586",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-sonnet-5-733ed586/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 4.1174278,
+      "game_id": "sk48-d8078629",
+      "id": "bare_cc-sk48-claude-sonnet-5-70d92713",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-sk48-claude-sonnet-5-70d92713/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 3.5416061999999995,
+      "game_id": "tn36-ef4dde99",
+      "id": "bare_cc-tn36-claude-sonnet-5-21a1a163",
+      "kind": "run",
+      "model": "claude-sonnet-5",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-tn36-claude-sonnet-5-21a1a163/run.json",
+      "prompt_id": "retro:unattributed"
+    },
+    {
+      "cost_usd": 1.3595460000000001,
+      "game_id": "g50t-5849a774",
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc",
+      "kind": "run",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "budget_exhausted",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc/run.json",
+      "prompt_id": "retro:unattributed"
+    }
+  ],
+  "entries_sha256": "sha256:f88accc33931fead05f894ae42e75543975786611ec753e7fdf3d188758ae9ad",
+  "files": [
+    "runs/s1-full-run-not-archived/run.json",
+    "runs/fetch-schema-traces-path-a/run.json",
+    "runs/migration-ledger-v0-to-v1.0/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-3a033821/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-42306405/run.json",
+    "runs/bare_cc-ar25-claude-sonnet-5-fe359600/run.json",
+    "runs/bare_cc-g50t-claude-sonnet-5-3345f981/run.json",
+    "runs/bare_cc-tn36-claude-sonnet-5-3f3ac227/run.json",
+    "runs/bare_cc-ar25-claude-opus-5-2f8b6919/run.json",
+    "runs/bare_cc-g50t-claude-opus-5-f60e48af/run.json",
+    "runs/bare_cc-tn36-claude-opus-5-96d23ad9/run.json",
+    "runs/bare_cc-sk48-claude-sonnet-5-95c42cfd/run.json",
+    "runs/bare_cc-sk48-claude-opus-5-42705d3c/run.json",
+    "runs/bare_cc-g50t-claude-sonnet-5-ddabe772/run.json",
+    "runs/bare_cc-sk48-claude-sonnet-5-9022a076/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-62129e6a/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-bff3fc18/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-fbc7c11f/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-63e7bdd8/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-bfcd3f8f/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-d706111e/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-64c11385/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-8b35a824/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-d671e3d4/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10/run.json",
+    "runs/bare_cc-g50t-claude-opus-5-6a39afc2/run.json",
+    "runs/bare_cc-sk48-claude-opus-5-ddd63c48/run.json",
+    "runs/bare_cc-tn36-claude-opus-5-914490bf/run.json",
+    "runs/bare_cc-g50t-claude-sonnet-5-733ed586/run.json",
+    "runs/bare_cc-sk48-claude-sonnet-5-70d92713/run.json",
+    "runs/bare_cc-tn36-claude-sonnet-5-21a1a163/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-7d3c6dcc/run.json"
+  ],
+  "generated_at": "2026-07-31T06:22:54Z",
+  "prompt_id": "P-12",
+  "provenance": {
+    "base_commit": "9b25129e004d57b19ac56cfb39a151f4399c3a9b",
+    "branch": "cleanup/p12-envelope-selective",
+    "tree_dirty": true,
+    "worktree": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\cleanup-p12"
+  },
+  "schema": "baseline-arms/runs/v1",
+  "seed_policy": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "totals": {
+    "actions_failed": 182,
+    "actions_ok": 573,
+    "cost_usd": 45.7782
+  }
+}
