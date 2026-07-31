@@ -1,0 +1,1567 @@
+{
+  "arm": "theoria",
+  "constraint": "readings, not confirmations. The frozen instrument (metric bodies, adapters' shared parsers, registry) is applied unchanged; the frozen artefacts under battery/artifacts/ are untouched; the live arm enters no frozen comparison. Folding it into run_battery.py's arm set or scoring it against the pre-registered orderings requires a new freeze version (BATTERY_V1.md §8).",
+  "excluded": [
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:61945' -- this leg played a local mock, not the live environment",
+      "slug": "20260728T235841Z-leg01"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:61945' -- this leg played a local mock, not the live environment",
+      "slug": "20260728T235842Z-leg02"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:61945' -- this leg played a local mock, not the live environment",
+      "slug": "20260728T235843Z-leg01"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:56379' -- this leg played a local mock, not the live environment",
+      "slug": "20260729T0030Z-a3-desk-live-proof"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:51931' -- this leg played a local mock, not the live environment",
+      "slug": "20260729T0035Z-a3-desk-live-proof2"
+    },
+    {
+      "reason": "refused: 0 env_step records in a 8-record ledger -- an empty leg is not a measurement",
+      "slug": "20260729T004020Z-leg01-salvage"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:53256' -- this leg played a local mock, not the live environment",
+      "slug": "20260729T105653Z-leg01"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:55064' -- this leg played a local mock, not the live environment",
+      "slug": "a3-gate-mock"
+    }
+  ],
+  "families": {
+    "economy": {
+      "E1": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 9.556852
+        }
+      },
+      "E2": {
+        "by_status": {
+          "insufficient-data": 1,
+          "not-applicable": 3
+        },
+        "direction": "higher",
+        "measured": {}
+      },
+      "E3": {
+        "by_status": {
+          "insufficient-data": 1,
+          "not-applicable": 3
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "E4": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "lower",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 0.367445724
+        }
+      },
+      "E5": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "lower",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 0.682632286
+        }
+      },
+      "E6": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260729T004020Z-leg01": 1.0,
+          "20260729T105729Z-leg01": 1.0,
+          "20260731T1240Z-A3-level2-carried": 1.0,
+          "20260731T1310Z-A3-level2-carried-r2": 1.0
+        }
+      },
+      "E7": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "lower",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 0.180047219
+        }
+      }
+    },
+    "epistemic": {
+      "K1": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 0.2,
+          "20260731T1310Z-A3-level2-carried-r2": 0.692307692
+        }
+      },
+      "K10": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 6.0,
+          "20260731T1310Z-A3-level2-carried-r2": 7.0
+        }
+      },
+      "K11": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 3.0,
+          "20260731T1310Z-A3-level2-carried-r2": 11.0
+        }
+      },
+      "K12": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "higher",
+        "measured": {}
+      },
+      "K13": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "K14": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 9.0,
+          "20260731T1310Z-A3-level2-carried-r2": 3.0
+        }
+      },
+      "K2": {
+        "by_status": {
+          "insufficient-data": 2,
+          "not-applicable": 2
+        },
+        "direction": "higher",
+        "measured": {}
+      },
+      "K3": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 25.0,
+          "20260731T1310Z-A3-level2-carried-r2": 28.0
+        }
+      },
+      "K4": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 1.0,
+          "20260731T1310Z-A3-level2-carried-r2": 1.0
+        }
+      },
+      "K5": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 3.0,
+          "20260731T1310Z-A3-level2-carried-r2": 4.0
+        }
+      },
+      "K6": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 24.0,
+          "20260731T1310Z-A3-level2-carried-r2": 19.25
+        }
+      },
+      "K7": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 0.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.0
+        }
+      },
+      "K8": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 0.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.888888889
+        }
+      },
+      "K9": {
+        "by_status": {
+          "not-applicable": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1240Z-A3-level2-carried": 24.0,
+          "20260731T1310Z-A3-level2-carried-r2": 34.0
+        }
+      }
+    },
+    "exploration": {
+      "X1": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "lower",
+        "measured": {
+          "20260729T004020Z-leg01": 0.2,
+          "20260729T105729Z-leg01": 0.166666667,
+          "20260731T1240Z-A3-level2-carried": 0.166666667,
+          "20260731T1310Z-A3-level2-carried-r2": 0.214285714
+        }
+      },
+      "X2": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "higher",
+        "measured": {
+          "20260729T004020Z-leg01": 1.0,
+          "20260729T105729Z-leg01": 1.0,
+          "20260731T1240Z-A3-level2-carried": 1.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.928571429
+        }
+      },
+      "X3": {
+        "by_status": {
+          "insufficient-data": 2,
+          "ok": 2
+        },
+        "direction": "higher",
+        "measured": {
+          "20260729T004020Z-leg01": 0.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.333333333
+        }
+      },
+      "X4": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "lower",
+        "measured": {
+          "20260729T004020Z-leg01": 0.1,
+          "20260729T105729Z-leg01": 0.166666667,
+          "20260731T1240Z-A3-level2-carried": 0.166666667,
+          "20260731T1310Z-A3-level2-carried-r2": 0.071428571
+        }
+      },
+      "X5": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260729T004020Z-leg01": 8.0,
+          "20260729T105729Z-leg01": 5.0,
+          "20260731T1240Z-A3-level2-carried": 5.0,
+          "20260731T1310Z-A3-level2-carried-r2": 11.0
+        }
+      },
+      "X6": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "higher",
+        "measured": {
+          "20260729T004020Z-leg01": 0.0,
+          "20260729T105729Z-leg01": 0.0,
+          "20260731T1240Z-A3-level2-carried": 0.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.0
+        }
+      }
+    },
+    "mechanism": {
+      "M1": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "M2": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "higher",
+        "measured": {}
+      },
+      "M3": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "M4": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "M5": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "higher",
+        "measured": {}
+      },
+      "M6": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "neutral",
+        "measured": {}
+      }
+    },
+    "planning": {
+      "P1": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 2.8
+        }
+      },
+      "P2": {
+        "by_status": {
+          "not-applicable": 3,
+          "ok": 1
+        },
+        "direction": "higher",
+        "measured": {
+          "20260731T1310Z-A3-level2-carried-r2": 0.5
+        }
+      },
+      "P3": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "lower",
+        "measured": {
+          "20260729T004020Z-leg01": 0.0,
+          "20260729T105729Z-leg01": 0.0,
+          "20260731T1240Z-A3-level2-carried": 0.0,
+          "20260731T1310Z-A3-level2-carried-r2": 0.0
+        }
+      },
+      "P4": {
+        "by_status": {
+          "not-applicable": 4
+        },
+        "direction": "lower",
+        "measured": {}
+      },
+      "P5": {
+        "by_status": {
+          "ok": 4
+        },
+        "direction": "neutral",
+        "measured": {
+          "20260729T004020Z-leg01": 0.903846154,
+          "20260729T105729Z-leg01": 0.823529412,
+          "20260731T1240Z-A3-level2-carried": 0.9,
+          "20260731T1310Z-A3-level2-carried-r2": 0.858585859
+        }
+      }
+    }
+  },
+  "games": [
+    "g50t-5849a774"
+  ],
+  "inputs": {
+    "20260729T004020Z-leg01": {
+      "certify.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "ledger.jsonl": "sha256:2c30879a8f5c08d780a8623f5b03e97db44c4a91708abf17e29f2f78039e1db6",
+      "surprises.jsonl": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "turn_series.json": "sha256:a7806448c860bc29e0ad2f8dae375ed2ca349e61846f4c0a29bf968809d9541c",
+      "turns.json": "sha256:e5133e5bf459b3a93c4fdbc0db1b8ad0828248cbf43402a9ae8cad31d4bbb690"
+    },
+    "20260729T105729Z-leg01": {
+      "certify.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "ledger.jsonl": "sha256:44d6df8ca92c5d2275b9efe6a2a99cd56fa3193044f73c4bb676ef894585a9c7",
+      "surprises.jsonl": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "turn_series.json": "sha256:53bd5d9d846c76ce3cbe21ffa702ea604d3710674fe5650ac503c6475eba8966",
+      "turns.json": "sha256:57f65ab0ff743260d915a85c141d1136dff37704894628eb6b874478504c8e54"
+    },
+    "20260731T1240Z-A3-level2-carried": {
+      "books/playbook.dsl": "sha256:860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e",
+      "books/theory.dsl": "sha256:bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f",
+      "certify.json": "sha256:d6bf0f735fa404dadd2a29def6b52b524158f0255ae9a60a1ea8e350b1a3a493",
+      "curves.json": "sha256:72b9234a05e8c57e4e2a266e46550ecb336c66b8433114cf167a94590c7ab11d",
+      "ledger.jsonl": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5",
+      "probes.jsonl": "sha256:cfb5125dbc330b2118c5ce450d6dc8ebbc0ef3c43aafe3674fc8331b236032f2",
+      "surprises.jsonl": "sha256:24a5e0ed68fb0248aca8761fcb6d6bfbca496efe830397ef3c84d39bb461d7ee",
+      "turns.json": "sha256:c0dbe9544a05a2b68d78b8e135cd6f0e63340e8b3510c4718bccedc15f229d65"
+    },
+    "20260731T1310Z-A3-level2-carried-r2": {
+      "books/playbook.dsl": "sha256:36888fc272c978da503f4c94d6b24429b69cc53d5233e3b2655ffe2ffde5d9b4",
+      "books/theory.dsl": "sha256:f073ce4a955261d2a6cf78a07d0cbc16a483eb2b80f5827008b167e6abb1d881",
+      "certify.json": "sha256:423c23721cf58cc57092c858009519759cc314b6cc3f8ed58fb1985d226009ab",
+      "curves.json": "sha256:325a9bcb5652491ef456437049e653cb83f7fd37cddc95c6d1f3aea4c2e3d821",
+      "ledger.jsonl": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c",
+      "probes.jsonl": "sha256:a5e3489580159f06b46ee883d4e74fbe9794a2f0f8373072a2ef8989d3f23bac",
+      "surprises.jsonl": "sha256:b95449691b03e197826060bf8db29c03d69c2acb81fe8e7e08105709a8de1584",
+      "turns.json": "sha256:4fb833f6661927ad19c468a488ac4cd4183b8db2b89f85de123bd1b1598656b4"
+    }
+  },
+  "measured_by_family": {
+    "economy": [
+      "E1",
+      "E4",
+      "E5",
+      "E6",
+      "E7"
+    ],
+    "epistemic": [
+      "K1",
+      "K10",
+      "K11",
+      "K14",
+      "K3",
+      "K4",
+      "K5",
+      "K6",
+      "K7",
+      "K8",
+      "K9"
+    ],
+    "exploration": [
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6"
+    ],
+    "mechanism": [],
+    "planning": [
+      "P1",
+      "P2",
+      "P3",
+      "P5"
+    ]
+  },
+  "n_games": 1,
+  "n_measured_cells": 62,
+  "n_runs": 4,
+  "piles": [
+    "dev"
+  ],
+  "runs": {
+    "20260729T004020Z-leg01": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 94,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 104,
+            "on_failed_steps": 1.0,
+            "steps": 104
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 8
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 94,
+            "steps": 104
+          },
+          "value": 0.903846154
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 8,
+            "observed": 10
+          },
+          "value": 0.2
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 10,
+            "transitions": 10
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 10
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 10
+          },
+          "value": 0.1
+        },
+        "X5": {
+          "status": "ok",
+          "value": 8.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 93
+          },
+          "value": 0.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "notes": {
+        "books": "absent -- this leg archived no books directory; the epistemic family is not-applicable, not zero",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T004020Z-leg01",
+        "carried_books": false,
+        "env_steps": 104,
+        "ledger_complete": true,
+        "ledger_cost_usd": 0,
+        "ledger_run_id": "r-6a6b85703f6f43e4",
+        "levels_completed": null,
+        "model_calls": 0,
+        "outcome": "budget_exhausted",
+        "slug": "20260729T004020Z-leg01",
+        "surprises": {},
+        "turn_join": {
+          "join_confidence": "exact",
+          "joined_calls": 0,
+          "ledger_calls": 0,
+          "source": "turn_series.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 104,
+      "turns": null
+    },
+    "20260729T105729Z-leg01": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 28,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 34,
+            "on_failed_steps": 1.0,
+            "steps": 34
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 4
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 28,
+            "steps": 34
+          },
+          "value": 0.823529412
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 5,
+            "observed": 6
+          },
+          "value": 0.166666667
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 6,
+            "transitions": 6
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 6
+          },
+          "value": 0.166666667
+        },
+        "X5": {
+          "status": "ok",
+          "value": 5.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 28
+          },
+          "value": 0.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "notes": {
+        "books": "absent -- this leg archived no books directory; the epistemic family is not-applicable, not zero",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T105729Z-leg01",
+        "carried_books": false,
+        "env_steps": 34,
+        "ledger_complete": true,
+        "ledger_cost_usd": 0,
+        "ledger_run_id": "r-6bb221f9a903447c",
+        "levels_completed": 0,
+        "model_calls": 0,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260729T105729Z-leg01",
+        "surprises": {},
+        "turn_join": {
+          "join_confidence": "exact",
+          "joined_calls": 0,
+          "ledger_calls": 0,
+          "source": "turn_series.json"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 34,
+      "turns": null
+    },
+    "20260731T1240Z-A3-level2-carried": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 54,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 60,
+            "on_failed_steps": 1.0,
+            "steps": 60
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 1,
+            "pairs": 5
+          },
+          "value": 0.2
+        },
+        "K10": {
+          "status": "ok",
+          "value": 6.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 39,
+            "concepts": 3,
+            "mean": 24.0,
+            "worst_concept": "Spent"
+          },
+          "value": 9.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 25.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 4,
+            "min_witnesses": 1,
+            "unannotated": 25
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 39,
+            "concepts": 3,
+            "worst": 9
+          },
+          "value": 24.0
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 3
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 1,
+            "executable": 0
+          },
+          "value": 0.0
+        },
+        "K9": {
+          "status": "ok",
+          "value": 24.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 4
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 54,
+            "steps": 60
+          },
+          "value": 0.9
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 5,
+            "observed": 6
+          },
+          "value": 0.166666667
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 6,
+            "transitions": 6
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 6
+          },
+          "value": 0.166666667
+        },
+        "X5": {
+          "status": "ok",
+          "value": 5.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 54
+          },
+          "value": 0.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1240Z-A3-level2-carried",
+        "carried_books": true,
+        "certify_records": 1,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 60,
+        "ledger_complete": true,
+        "ledger_cost_usd": 0,
+        "ledger_run_id": "r-a80a4383312d408d",
+        "levels_completed": 0,
+        "model_calls": 0,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260731T1240Z-A3-level2-carried",
+        "surprises": {
+          "replay_mismatch": 1
+        },
+        "turn_join": {
+          "join_confidence": "exact",
+          "joined_calls": 0,
+          "ledger_calls": 0,
+          "source": "unjoined: curves.json counts 0 billed call(s), the ledger has 0"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 60,
+      "turns": null
+    },
+    "20260731T1310Z-A3-level2-carried-r2": {
+      "arm": "theoria",
+      "campaign": "theoria-arm:A3-campaign-devpile",
+      "failed_steps": 85,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 5
+          },
+          "value": 9.556852
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.015323,
+            "r2_quadratic": 0.382769,
+            "turns": 5
+          },
+          "value": 0.367445724
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 9.556852
+          },
+          "value": 0.682632286
+        },
+        "E6": {
+          "status": "ok",
+          "support": {
+            "http_calls": 99,
+            "on_failed_steps": 1.0,
+            "steps": 99
+          },
+          "value": 1.0
+        },
+        "E7": {
+          "status": "ok",
+          "support": {
+            "first_chars": 59834,
+            "last_chars": 76236,
+            "r2_linear": 0.785529,
+            "r2_quadratic": 0.965576,
+            "turns": 5
+          },
+          "value": 0.180047219
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 9,
+            "pairs": 13
+          },
+          "value": 0.692307692
+        },
+        "K10": {
+          "status": "ok",
+          "value": 7.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 11.0
+        },
+        "K12": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K13": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K14": {
+          "status": "ok",
+          "support": {
+            "best": 41,
+            "concepts": 4,
+            "mean": 19.25,
+            "worst_concept": "Dark"
+          },
+          "value": 3.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 28.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 20,
+            "min_witnesses": 1,
+            "unannotated": 28
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 4.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 41,
+            "concepts": 4,
+            "worst": 3
+          },
+          "value": 19.25
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 4
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 9,
+            "executable": 8
+          },
+          "value": 0.888888889
+        },
+        "K9": {
+          "status": "ok",
+          "value": 34.0
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M4": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M5": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M6": {
+          "reason": "this arm records no repair episode; an arm with no manual cannot be refuted by one, so the absence is structural",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "calls": 5
+          },
+          "value": 2.8
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "proportional",
+            "first_rate": 2.5,
+            "second_rate": 3.0
+          },
+          "value": 0.5
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 12
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 85,
+            "steps": 99
+          },
+          "value": 0.858585859
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 11,
+            "observed": 14
+          },
+          "value": 0.214285714
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 13,
+            "transitions": 14
+          },
+          "value": 0.928571429
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 0.666667,
+            "transitions": 14
+          },
+          "value": 0.333333333
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 14
+          },
+          "value": 0.071428571
+        },
+        "X5": {
+          "status": "ok",
+          "value": 11.0
+        },
+        "X6": {
+          "status": "ok",
+          "support": {
+            "changed": 0,
+            "windows": 85
+          },
+          "value": 0.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 5,
+      "notes": {
+        "books": "books/theory.dsl + books/playbook.dsl",
+        "campaign_declared": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260731T1310Z-A3-level2-carried-r2",
+        "carried_books": true,
+        "certify_records": 5,
+        "concept_source": "word_table `compress:` annotations parsed from books/theory.dsl; no object palette exists for a live game, so first_seen_step is None throughout",
+        "env_steps": 99,
+        "ledger_complete": true,
+        "ledger_cost_usd": 9.556852,
+        "ledger_run_id": "r-70fa98dd8f4d4506",
+        "levels_completed": 0,
+        "model_calls": 5,
+        "outcome": "spend_gate_tripped",
+        "slug": "20260731T1310Z-A3-level2-carried-r2",
+        "surprises": {
+          "probe_refutation": 8,
+          "replay_mismatch": 4
+        },
+        "turn_join": {
+          "join_confidence": "degraded",
+          "joined_calls": 0,
+          "ledger_calls": 5,
+          "source": "unjoined: curves.json counts 4 billed call(s), the ledger has 5"
+        }
+      },
+      "pile": "dev",
+      "source": "theoria-arm-live",
+      "steps": 99,
+      "turns": 5
+    }
+  },
+  "runs_root": "theoria-arm/runs",
+  "source": "theoria-arm-live",
+  "what": "every registered battery metric evaluated on the live Theoria arm's committed leg archives (theoria-arm/runs/, A3 campaign), via battery.adapters.theoria_live. Measurement-only companion material: PREDICTIONS.md is frozen append-only under BATTERY_V1 freeze:prereg, PREREG_V9 §5 forbids rewriting the committed artefacts, and process 1's gradient (CC vs Schema) does not include this arm -- so nothing here settles a prediction, moves a tier, or enters a discrimination verdict. No timestamp on purpose: for a fixed tree this file is byte-reproducible."
+}

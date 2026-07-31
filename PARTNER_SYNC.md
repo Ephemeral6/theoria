@@ -1882,3 +1882,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`python -m pytest freeze/tests/test_u3.py -q` 29 passed（含冻结阴性对照 generated_l1_vacuous → vacuous；failing/sorry/classical 控制全红；a0-spike / cold-start-a0 / generated_l1 → attained）。freeze/verify.sh 现存 3 项 FAIL 在干净 master 上同样出现，非本单引入。
 阻塞：none。未碰 STATS_RULES.md / CLAIMS_TEXT.md / 活臂 run 目录 / .env；零封存堆接触。
 下一步：freeze 领地会签并把 u3.py 哈希进冻结包（§9.14/§9.2 开跑前置条件）；裁定声明性拒绝的缺格标签歧义；E1 现在可测，真正的障碍是臂在网格世界上的 Lean 形态拒绝，归 theoria-arm。
+## [battery] 2026-07-31T17:45:00Z live-arm-readings
+状态：活 Theoria 臂正式成为电池材料——`battery/adapters/theoria_live.py` 读 theoria-arm/runs/ 的已提交 A3 leg 归档（proxy 账本 + A8 curves.json / 归档 turn_series.json 的 join，从不重推），`battery/audit/live_arm.py` 把 38 条指标全部 evaluate 在 4 条真活 leg（全 g50t，dev 堆）上，落 `battery/artifacts_live/live_arm_readings.json`（62 个实测格：认识族 11 条 K1/K3–K11/K14，经济族 5 条 E1/E4/E5/E6/E7，另探索 6、计划 4；E2/E3 不足 8 turn 如实 insufficient-data）。走 live_tiers 增补的同一条冻结修订路：桶清单扩充、freeze:* 块重渲、BATTERY_V1.md 注日期增补段；被编辑的冻结文件只有 freeze.py 与 verify.py。按预注册文本裁定为**只测量、不确证**：PREDICTIONS.md 一字未碰（前缀+全文双摘要原样），battery/artifacts/ 七份冻结读数一字未碰（PREREG_V9 §5），run_battery.py 未接入（工序 1 梯度不含此臂）；mock 上游 rig leg 与零步 leg 点名拒绝，封存 id 直接抛异常。
+测试：`python -m pytest battery/tests -q` **410 passed**（+21，全在 test_theoria_live.py，负控照 test_freeze.py 样式）；`freeze.check()` 空；`python -m battery.verify` **green，7/7 级全 ok**（第 7 级新增：伴生产物过期红、非 dev 行红、认识/经济族空读数红）。零 API、零花费、零封存堆接触、无凭据值。
+阻塞：none。
+下一步：leg 归档再落新提交（r3、sk48-l1 收官后）时 `python -m battery.audit.live_arm` 重生成并提交伴生产物——第 7 级会在忘掉这步时变红；要把活臂升为确证材料（进判别/结算预测），走 BATTERY_V1.md §8 的 BATTERY_V2 新版本流程。

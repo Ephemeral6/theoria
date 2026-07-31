@@ -16,15 +16,21 @@ Rung 4 was added by V22, after a cell whose maximum attainable score was zero
 was carried elsewhere as 60%.  Rungs 1-3 were green the whole time and would
 have stayed green: nothing in them reads a sentence.
 
-Two rungs sit on top of those four.  The freeze rung (printed first) checks the
-tree still matches BATTERY_V1.md.  The live-tier rung (printed last) checks the
-committed `battery/artifacts_live/gaming_audit.live.json` against an in-process
+Three rungs sit on top of those four.  The freeze rung (printed first) checks
+the tree still matches BATTERY_V1.md.  The live-tier rung checks the committed
+`battery/artifacts_live/gaming_audit.live.json` against an in-process
 recompute and against the frozen baseline it pins: the frozen
 `battery/artifacts/gaming_audit.json` predates B17/V9 and still names nine
 main-table metrics the live code demotes, PREREG_V9 §5 forbids rewriting it,
 and the divergence is therefore a documented permanent fact — REPORTED
 exit-code-neutrally, while the things that can rot around it (a stale
 companion, a rewritten baseline, a vanished STATUS.md disclosure) are RED.
+The live-arm rung (printed last) holds the second `artifacts_live/` companion,
+`live_arm_readings.json`, to the same staleness contract: the committed file
+must match an in-process recompute over the live Theoria arm's committed leg
+archives, every leg it read must be development-pile, and the epistemic and
+economy families must each carry at least one measured cell — an empty
+reading is not a pass, per this module's own doctrine.
 
 Rung 3 is the one that is usually missing.  A green suite says the metrics do
 what their author thought; it does not say the recompute ran, and it does not
@@ -151,7 +157,7 @@ def fail(problems, message):
 
 
 def rung_freeze(problems):
-    """[1/6] the freeze record: BATTERY_V1.md still describes this tree.
+    """[1/7] the freeze record: BATTERY_V1.md still describes this tree.
 
     The suite runs this same check (`test_freeze.py`), but the gate does not
     trust the suite to have been collected: one `addopts` line in `pytest.ini`
@@ -160,7 +166,7 @@ def rung_freeze(problems):
     hold on two independent paths -- V5's adversarial pass demonstrated the
     single-path version being disarmed six different ways.
     """
-    print("[1/6] the freeze record")
+    print("[1/7] the freeze record")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery import freeze
@@ -184,7 +190,7 @@ MIN_TESTS_PASSED = 300
 
 
 def rung_tests(problems):
-    print("[2/6] suite")
+    print("[2/7] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -218,7 +224,7 @@ def rung_tests(problems):
 
 
 def rung_real_run(problems, out_dir):
-    print("[3/6] one real run -- the whole spectrum recomputed from the "
+    print("[3/7] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -247,7 +253,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[4/6] artefact self-check")
+    print("[4/7] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -351,7 +357,7 @@ def rung_artifact_fields(problems, out_dir):
 
 
 def rung_separation_claim(problems):
-    """[5/6] the documents state the true separation count, and cannot go stale.
+    """[5/7] the documents state the true separation count, and cannot go stale.
 
     Added by V22.  Process 1's headline number is **zero** -- no metric
     separates the specified gradient -- and the way that number went wrong was
@@ -377,7 +383,7 @@ def rung_separation_claim(problems):
     somebody rewrites it.  A gate that could only catch the claim going too
     high would let it rot in the other direction.
     """
-    print("[5/6] the separation claim in the committed documents")
+    print("[5/7] the separation claim in the committed documents")
     path = os.path.join(SHIPPED, "discrimination_arms.json")
     if not os.path.exists(path):
         fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
@@ -466,7 +472,7 @@ def rung_separation_claim(problems):
 
 def rung_live_tiers(problems, live_path=None, frozen_path=None,
                     status_path=None):
-    """[6/6] the live-tier companion tracks the code, and the freeze holds.
+    """[6/7] the live-tier companion tracks the code, and the freeze holds.
 
     The frozen `battery/artifacts/gaming_audit.json` names nine main-table
     metrics; the live `tier_of()` demotes all of them (B17, then V9).
@@ -489,7 +495,7 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
       the way rung 5 pins STATUS_CLAIM, so the sentence must track the
       artefact rather than merely having once been written.
     """
-    print("[6/6] the live-tier companion artefact")
+    print("[6/7] the live-tier companion artefact")
     if REPO not in sys.path:
         sys.path.insert(0, REPO)
     from battery.audit import live_tiers
@@ -569,6 +575,88 @@ def rung_live_tiers(problems, live_path=None, frozen_path=None,
     if len(problems) == before:
         print("   ok    companion matches the recompute; baseline pin holds; "
               "%d divergence(s) disclosed in STATUS.md" % len(diff))
+
+
+def rung_live_arm(problems, live_path=None, runs_root=None):
+    """[7/7] the live-arm readings companion is current, dev-pile, and non-empty.
+
+    `battery/artifacts_live/live_arm_readings.json` is the frozen instrument
+    pointed at the live Theoria arm's committed leg archives — measurement-only
+    material, per the constraint recorded inside the artefact itself (the
+    prereg is frozen, the frozen artefacts are not rewritten, and the arm is in
+    no frozen comparison).  Three ways it can rot, all RED:
+
+    * the committed companion differs from an in-process recompute — the leg
+      archives moved (a new leg landed, a ledger grew) without the reading
+      being regenerated, which is the staleness this file exists to prevent;
+    * a leg outside the development pile got in — the adapter's guard raises
+      on sealed ids, but the gate re-reads the committed file's own rows
+      rather than trusting the generator that wrote them;
+    * the epistemic or economy family carries no measured cell — an empty
+      reading is not a pass (module docstring), and those two families are
+      what the live material exists to feed.
+    """
+    print("[7/7] the live-arm readings companion")
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery.audit import live_arm
+    from battery.guard import load_piles
+
+    live_path = live_path or live_arm.DEFAULT_OUT
+    before = len(problems)
+
+    if not os.path.exists(live_path):
+        fail(problems, "%s is absent; the live-arm readings have no committed "
+                       "form to check. Generate it: python -m "
+                       "battery.audit.live_arm" % live_path)
+        return
+    with open(live_path, encoding="utf-8") as fh:
+        try:
+            committed = json.load(fh)
+        except json.JSONDecodeError as exc:
+            fail(problems, "committed live_arm_readings.json is not JSON: %s"
+                 % exc)
+            return
+
+    # (i) staleness: the committed companion against an in-process recompute.
+    fresh = live_arm.build(runs_root)
+    if committed != fresh:
+        changed = sorted(
+            set(k for k in set(committed) | set(fresh)
+                if committed.get(k) != fresh.get(k)))
+        fail(problems, "committed live_arm_readings.json differs from an "
+                       "in-process recompute (top-level keys that moved: %s). "
+                       "The leg archives moved without the reading -- "
+                       "regenerate and commit: python -m battery.audit.live_arm"
+             % (", ".join(changed) or "byte-level only"))
+
+    # (ii) the pile, re-read from the committed rows rather than trusted.
+    piles = load_piles()
+    for run_id in sorted(committed.get("runs") or {}):
+        row = (committed["runs"] or {})[run_id]
+        game = row.get("game_id")
+        if row.get("pile") != "dev" or piles.classify(game or "") != "dev":
+            fail(problems, "live-arm run %r reads game %r with pile %r -- "
+                           "every live leg the battery reads must be "
+                           "development-pile, and this one is not"
+                 % (run_id, game, row.get("pile")))
+
+    # (iii) an empty reading is not a pass.
+    measured = fresh.get("measured_by_family") or {}
+    for family in ("epistemic", "economy"):
+        if not measured.get(family):
+            fail(problems, "the live-arm companion carries no measured %s "
+                           "cell -- the two families this material exists to "
+                           "feed cannot both be empty and green" % family)
+
+    if len(problems) == before:
+        print("   ok    %d live leg(s) on %s; %d measured cell(s); "
+              "epistemic %d, economy %d metric(s) with live readings"
+              % (fresh.get("n_runs", 0),
+                 ", ".join(fresh.get("games") or []),
+                 fresh.get("n_measured_cells", 0),
+                 len(measured.get("epistemic") or []),
+                 len(measured.get("economy") or [])))
 
 
 def _non_tied(entry):
@@ -658,13 +746,14 @@ def main():
 
     rung_separation_claim(problems)
     rung_live_tiers(problems)
+    rung_live_arm(problems)
 
     print()
     if problems:
         print("battery: RED (%d problem(s))" % len(problems))
         return 1
     print("battery: green -- freeze, suite, one real run, artefact "
-          "fields, separation claim, live tiers")
+          "fields, separation claim, live tiers, live-arm readings")
     return 0
 
 

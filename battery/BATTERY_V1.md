@@ -215,6 +215,7 @@ sha256:8dbda3718f39618c190d344aeaa7a515335d7ab3268d83392567ec1ce8287f29  battery
 sha256:0ea7d8502fc60a062ccd976904ff4be8d2a1e1f6e4e67b6bc6cdc455ab50aeaa  battery/adapters/a2.py
 sha256:9a7bdc86fbe38098ef98b3c46c4b97d7afb6a5704564675ec0e3b9ce8b315697  battery/adapters/ledger_jsonl.py
 sha256:540cb3979b32210f63b57e4c144d4c7ac40cda255a474b1d4c4bb07b523284cb  battery/adapters/schema_traces.py
+sha256:a940f6fb589873b21a9166281f55562579426865c46b097c1590816b7613da65  battery/adapters/theoria_live.py
 sha256:efeee73d8d93a17b16603d262584c6788da86591defa30b5acc282860800a8c9  battery/audit/__init__.py
 sha256:628da2d7cee0871faaca4a07fd6be868698df817241fd371af0524fdb31bba99  battery/audit/contrast.py
 sha256:6ce5592cc5add65bcbc28e994ad4201d3afac3455a0dd67812dbc21ac045e46d  battery/audit/discriminate.py
@@ -223,6 +224,7 @@ sha256:ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427  battery
 sha256:dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e  battery/audit/exploits/exploration_planning.py
 sha256:08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e  battery/audit/exploits/mechanism_epistemic.py
 sha256:0ade8fbb241ff8f6971d73cb3566f0362ef0d960dd80b719999b4acdcbb4e6ad  battery/audit/gaming.py
+sha256:47334ff6e20ee8e1d2bc92423b323c98616c098469c2073e84d4ce3ccd679141  battery/audit/live_arm.py
 sha256:740eb1601196a37d7a1b439e01faffbe4b538b6cc410be9303637ad16b0d0492  battery/audit/live_tiers.py
 sha256:35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd  battery/audit/redundancy.py
 sha256:c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5  battery/audit/stats.py
@@ -323,6 +325,7 @@ sha256:5b17a09cba2ffb176698dcbffad3a58b7c31c2b31562be22350d6dc8e2d8c793  battery
 sha256:9c9d32c97323d05e714477bc733886f688cf41db115b448f16c0ae32c6b24215  battery/tests/test_guard.py
 sha256:74b8b440da5947f2b128d6746d08527ee9449176df27402ec3eeb8885c6e6831  battery/tests/test_live_tiers.py
 sha256:c7dd4fa9aa6bcdbd7fd1b0c9ae782fc4245dc877be656964d5191f919f85483f  battery/tests/test_metrics.py
+sha256:9f73b2e81991b5f8330c3c0c32d781a7e16c54bdf61f51799ff5d7bfe4e511e4  battery/tests/test_theoria_live.py
 sha256:ca5b597ca953a268d02006df377ceb60da734a2a0c77bb9f8c779868f295950c  battery/tests/test_v9_blinding.py
 sha256:c4e0c731981e835edfe94d7ed2973f6eed7e87ecfcc8303de8b3f01252e08982  battery/tests/test_v9_defences.py
 sha256:e771bb2b9d9dbe233302f4eed29a67afdc8dc577c87410cf967e8d488f091c08  battery/tests/test_v9_prereg.py
@@ -341,8 +344,8 @@ sha256:790102a0380ef449bfaf273fa6fa3b74f61d4c1045f286999c0a143df7beb7f5  battery
 ### 2.5 freeze —— 冻结机制自身（2 个文件）
 
 ```freeze:freeze
-sha256:d367952fdb961f9d8e6cba46e56adc9f178dff9679456173314cee0815275e1f  battery/freeze.py
-sha256:fe53c6455ff73ae1c73a0041fe4966f8d0605b074f4f26a1eb513225ee438baf  battery/verify.py
+sha256:dbc430c49d301d88f4e9f8cbbb8eb6863c1ec830405fa888ed2a1cc366401e58  battery/freeze.py
+sha256:9d3f9e267585fd67717415c0176a8727f80808f3b17f415d52e4ac31ea341a94  battery/verify.py
 ```
 
 收录它们，是为了让「悄悄把检查放松」这件事和「改一条指标」一样在 diff 里显形。
@@ -359,6 +362,7 @@ sha256:191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce  battery
 sha256:5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6  battery/artifacts/redundancy.json
 sha256:06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38  battery/artifacts/validation_material.json
 sha256:9ff3c5e78b7bd67cd6db8fb2dce5ae0fe852ce38e52ca9a2509f95fc1e0738c5  battery/artifacts_live/gaming_audit.live.json
+sha256:940c7495eff83259255176bdecdad51ecebc2c6ea383b9c86900b8322fa0a2d7  battery/artifacts_live/live_arm_readings.json
 ```
 
 产物是**读数**：Phase 4 的全部意义就是让电池去读它没读过的输入，因此拿产物当闸门会
@@ -839,3 +843,57 @@ python -m battery.verify   # 1) 冻结记录 2) battery/tests 3) 产物漂移（
 （`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。被编辑的冻结文件只有
 `freeze.py`（桶清单扩充）与 `verify.py`（新增一级）——即冻结机制自身；按 §2.5
 的口径，机制的改动本就要在 diff 里露面，这一段就是那个露面。
+
+---
+
+## 附：2026-07-31 增补（二）—— 活臂读数伴生产物（live-arm readings companion）
+
+活的 Theoria 臂（`theoria-arm/`，A3 战役）已有**已提交**的 leg 归档
+（`theoria-arm/runs/`，proxy 账本方言：`run_start` / `env_step` / `model_call` /
+`run_end`，外加 A8 的 `curves.json`、归档代码的 `turn_series.json`、两本书与
+certify 记录）。本增补把**冻结的仪器指向这批材料**，走的是本文件上一个增补
+（live tiers，2026-07-31）立下的同一条路：新模块、新测试、新 `artifacts_live/`
+读数、桶清单扩充、块重渲、注明日期的增补段 —— 被编辑的冻结文件仍然只有
+`freeze.py`（桶清单）与 `verify.py`（新增一级），即冻结机制自身。
+
+* 新增 `battery/adapters/theoria_live.py`（入 `code` 桶）：活臂 leg 归档方言的
+  提取器。成员资格按内容判定（账本自己的 `run_start` 声明 `arm: theoria` 且
+  `spend_gate.campaign` 以 `theoria-arm:A3-campaign` 开头）；mock 上游的 rig leg
+  被点名拒绝而不是沉默跳过；零步 leg 按 A8 自己的下限拒绝（成本曲线上的零读作
+  「便宜」，不读作「没发生」）；封存堆 id 直接抛异常（`battery.guard`，默认拒绝）。
+  turn 与钱的 join **读归档自己的产物**（`turn_series.json` 的 `call_idx`，或
+  `curves.json` 的逐 turn 计数在能对账时顺序指派），从不重推 —— E2 的输入不许有
+  第二个无标签的定义（A8 RUN_STATE 的原话）。两本书用与 A0/A2 **同一套**读取器
+  解析（`parse_dsl` / `parse_playbook` / `parse_word_table_accounts`）。
+* 新增 `battery/audit/live_arm.py`（入 `code` 桶）：把注册表 38 条指标全部
+  `evaluate` 在活 leg 上，产物 `battery/artifacts_live/live_arm_readings.json`
+  （入 `readings` 桶）无时间戳、无绝对路径，对固定的树逐字节可复现，并逐文件
+  钉住它读过的输入的 sha256；写进 `battery/artifacts/` 之内的目的地直接拒绝
+  （复用 `live_tiers.refuse_frozen_destination`，一个定义）。
+* `battery/verify.py` 增第 7 级：伴生产物与进程内重算不一致 → 红；committed 行
+  里出现非开发堆的局 → 红（闸门重读产物自己的行，不信任生成器）；认识族或
+  经济族一个实测格都没有 → 红（空结果不算过，本闸自己的教条）。
+* `battery/tests/test_theoria_live.py`（入 `suite` 桶）：21 条，正反两向，负控
+  照 `test_freeze.py` 的样式逐条见红（篡改的伴生产物、封存 id、mock leg、
+  零步 leg、冻结目录写入、缺失/坏 JSON 伴生产物）。
+
+**约束（按预注册文本裁定，只测量、不确证）**：`PREDICTIONS.md` 在
+`freeze:prereg` 下前缀与全文双重冻结 —— 冻结之后为活臂**新登记**方向预测需要
+新冻结版本（§3.1），本增补一个字都没碰它；`PREREG_V9.md` §5 不修改任何已提交
+产物，故活臂不并入 `battery/artifacts/` 的七份冻结读数；工序 1 的梯度是
+CC vs Schema（`audit/discriminate.py` 的 `CONTROL_ARMS`，冻结代码），活臂不是
+对照臂，把它接进 `run_battery.py` 就是就地改「改了就会动到已发布的数」的文件
+（§2.2 收录判据）—— 那是 §8 点名的犯规。所以活臂落地为**测量材料**：不结算
+任何预测、不动任何 tier、不进任何判别裁决。要把它变成确证材料，走 §8 的
+新版本流程（`BATTERY_V2.md`）。
+
+**读数（2026-07-31，4 条活 leg，全部 `g50t-5849a774`，62 个实测格）**：
+认识族 11 条有活读数（K1、K3–K11、K14；如 K1 replay 在 r2 上 9/13 = 0.692），
+经济族 5 条（E1、E4、E5、E6、E7；E1 在 r2 上 9.556852 USD 真金白银），另有
+探索族 6 条（X1–X6）、计划族 4 条（P1–P3、P5）。E2/E3 在现有 leg 长度下
+`insufficient-data`（不足 8 turn），机制族结构性 `not-applicable`（活局无
+ground truth）—— 都是如实报告，不是缺陷。
+
+因此 §2.2 由 48 → 50 个文件、§2.4 由 22 → 23 个、§2.6 由 8 → 9 份，相应
+`freeze:*` 块按 `python -m battery.freeze` 重渲。**冻结基线与七份冻结读数
+一个字节未动**（`gaming_audit.json` 仍是 `191c0ee8cf2c…`）。

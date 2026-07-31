@@ -1,0 +1,51 @@
+{
+  "base_commit": "f6a95719",
+  "branch": "closeout/live-arm-battery",
+  "cell": "LIVE-ARM-READINGS",
+  "delivered": [
+    "battery/adapters/theoria_live.py",
+    "battery/audit/live_arm.py",
+    "battery/tests/test_theoria_live.py",
+    "battery/artifacts_live/live_arm_readings.json",
+    "battery/freeze.py",
+    "battery/verify.py",
+    "battery/BATTERY_V1.md"
+  ],
+  "files": [
+    {
+      "path": "battery/adapters/theoria_live.py",
+      "sha256": "a940f6fb589873b21a9166281f55562579426865c46b097c1590816b7613da65"
+    },
+    {
+      "path": "battery/audit/live_arm.py",
+      "sha256": "47334ff6e20ee8e1d2bc92423b323c98616c098469c2073e84d4ce3ccd679141"
+    },
+    {
+      "path": "battery/tests/test_theoria_live.py",
+      "sha256": "9f73b2e81991b5f8330c3c0c32d781a7e16c54bdf61f51799ff5d7bfe4e511e4"
+    },
+    {
+      "path": "battery/artifacts_live/live_arm_readings.json",
+      "sha256": "940c7495eff83259255176bdecdad51ecebc2c6ea383b9c86900b8322fa0a2d7"
+    },
+    {
+      "path": "battery/freeze.py",
+      "sha256": "dbc430c49d301d88f4e9f8cbbb8eb6863c1ec830405fa888ed2a1cc366401e58"
+    },
+    {
+      "path": "battery/verify.py",
+      "sha256": "9d3f9e267585fd67717415c0176a8727f80808f3b17f415d52e4ac31ea341a94"
+    },
+    {
+      "path": "battery/BATTERY_V1.md",
+      "sha256": "2c1d6c3e0ed7633d6f607848d69b0e2fa86c1f81b88724449afa62177c203734"
+    }
+  ],
+  "gates": {
+    "freeze_check": "empty",
+    "suite": "410 passed",
+    "verify": "battery: green -- freeze, suite, one real run, artefact fields, separation claim, live tiers, live-arm readings"
+  },
+  "prompt_id": "closeout/live-arm-battery",
+  "utc": "2026-07-31T17:40:00Z"
+}

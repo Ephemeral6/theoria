@@ -105,6 +105,7 @@ CODE = [
     "battery/adapters/a2.py",
     "battery/adapters/ledger_jsonl.py",
     "battery/adapters/schema_traces.py",
+    "battery/adapters/theoria_live.py",
     # guardrail and driver
     "battery/guard.py",
     "battery/run_battery.py",
@@ -114,6 +115,7 @@ CODE = [
     "battery/audit/discriminate.py",
     "battery/audit/gaming.py",
     "battery/audit/redundancy.py",
+    "battery/audit/live_arm.py",
     "battery/audit/live_tiers.py",
     "battery/audit/stats.py",
     "battery/audit/validation.py",
@@ -178,6 +180,7 @@ SUITE = [
     "battery/tests/test_guard.py",
     "battery/tests/test_live_tiers.py",
     "battery/tests/test_metrics.py",
+    "battery/tests/test_theoria_live.py",
     "battery/tests/test_v9_blinding.py",
     "battery/tests/test_v9_defences.py",
     "battery/tests/test_v9_prereg.py",
@@ -204,6 +207,7 @@ READINGS = [
     "battery/artifacts/redundancy.json",
     "battery/artifacts/validation_material.json",
     "battery/artifacts_live/gaming_audit.live.json",
+    "battery/artifacts_live/live_arm_readings.json",
 ]
 
 PREREG = "battery/PREDICTIONS.md"
