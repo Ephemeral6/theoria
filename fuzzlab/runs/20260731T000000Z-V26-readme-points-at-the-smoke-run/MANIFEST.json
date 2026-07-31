@@ -1,0 +1,123 @@
+{
+  "api_calls": 0,
+  "base_commit": "6fabcc7ea957931b7676ddbdf7587e128b947e73",
+  "branch": "cleanup2/V26-fuzzlab",
+  "committed_artifacts_modified": [
+    "fuzzlab/README.md",
+    "fuzzlab/BUGS.md (appended)",
+    "fuzzlab/MUTATION.md (appended)",
+    "fuzzlab/verify.py"
+  ],
+  "committed_artifacts_restored": [
+    "fuzzlab/out/campaign.json",
+    "fuzzlab/out/findings.jsonl",
+    "fuzzlab/out/seeds.jsonl -- rewritten by verify.py stage 2 during each run, restored to committed bytes because engine-rig/tools/engine_table.py reads them"
+  ],
+  "delivered_outside_run_dir": [
+    {
+      "path": "fuzzlab/verify.py",
+      "sha256": "34a31a0a71b97ee4d4311ec92cf05fa5a7a52d5ebc046f22de66d6ef0bab4d79"
+    },
+    {
+      "path": "fuzzlab/tests/test_main_result_scale.py",
+      "sha256": "718fed554230f2b2558dd2d52ccdd1dcc8cfe8ebd32114c19f5d1565585c5d7d"
+    },
+    {
+      "path": "fuzzlab/README.md",
+      "sha256": "923ea91380f28d2f8b3685b2a5dd7c538d00d1f9a64d55ae9484612ae96dbb4a"
+    },
+    {
+      "path": "fuzzlab/out/README.md",
+      "sha256": "535f9163e59fe5c39c18655a78fe942b36035d69eb8636ae804709a31113420a"
+    },
+    {
+      "path": "fuzzlab/BUGS.md",
+      "sha256": "b03825a0ead6b508f51c660a56967c16377fae6416763baf13b5ad39610a5685"
+    },
+    {
+      "path": "fuzzlab/MUTATION.md",
+      "sha256": "87e95872784b3783777422ffa163385398423177fec8d10b800a16e96fb6b266"
+    },
+    {
+      "path": "monitor/inbox/20260731T000000Z-V26-engine-table-campaign-row-is-the-smoke.md",
+      "sha256": "d74ddccccad0626cd6cd9b57934e8433127e4e97556cf0d73bb9ffa91d1bbca2"
+    }
+  ],
+  "engine_rig_head_at_recompute": "6fabcc7e",
+  "engine_rig_modified": false,
+  "files": [
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "1ec25aae083808e223dfca5d65ed637dfc01913c03004349d840a0ae5e4daeac"
+    },
+    {
+      "path": "negative-control-smoke-in-main-slot.txt",
+      "sha256": "f8085961654dc8900f52db3175590b01ea8a914baefbc4acfdbf7e4efdbf82ba"
+    },
+    {
+      "path": "pytest.txt",
+      "sha256": "3ca63df1dde3ba9e2d2084a8facf905367fe65246c76bc33b3d06e0024ecdfa9"
+    },
+    {
+      "path": "recompute.stdout.txt",
+      "sha256": "92d5d59b2f83b82988f97ddb4b4c39f6d0b638a96cb0ed933811d6de346098f7"
+    },
+    {
+      "path": "sources_audit.py",
+      "sha256": "22627dd76b69c9d0e556f3d8d13128339fd4b65a920de71f566505246342372b"
+    },
+    {
+      "path": "sources_audit.txt",
+      "sha256": "283dbcc09c6d0a9d87ba4f26a92649b29c8d3bb6676ee96023804b19e15c7b05"
+    },
+    {
+      "path": "verify.txt",
+      "sha256": "f5a8fd408d815b1237c93fde7383c307eee6f88d61ed447077b56ce30bb00ad1"
+    },
+    {
+      "path": "recompute/campaign.json",
+      "sha256": "594dad2f382aa7f60a718448a8c71a1861f4a2500edf229edc4e04cbf5c6a772"
+    },
+    {
+      "path": "recompute/findings.jsonl",
+      "sha256": "daebd1d2d8251beff0582bbe9cf2019409208212545c5115858a7fc19e3c3426"
+    },
+    {
+      "path": "recompute/seeds.jsonl",
+      "sha256": "761379d7037f6ecb3b1f8338b6216e61d683a1fd9ee00d1db29a4f3efc2175b7"
+    }
+  ],
+  "gates": {
+    "fuzzlab_pytest": "140 passed",
+    "fuzzlab_verify": "green, exit 0",
+    "negative_control": "FUZZLAB_MAIN_RESULT=fuzzlab/out/campaign.json python -m fuzzlab.verify -> exit 1"
+  },
+  "hash_note": "sha256 over LF-normalised bytes, which is what git stores for this run directory",
+  "money_spent": 0,
+  "network": false,
+  "prompt": "monitor/board/claimed/V26-fuzzlab-readme-points-at-the-smoke-run.W-1800.md",
+  "prompt_id": "V26-fuzzlab-readme-points-at-the-smoke-run",
+  "recompute": {
+    "command": "python -m fuzzlab.campaign --worlds 500",
+    "identical_except": [
+      "engines[].elapsed_s",
+      "engine_rig_head",
+      "prompt_id"
+    ],
+    "reproduces": "runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/campaign.json",
+    "totals": {
+      "generator_errors": 0,
+      "invariants": 26,
+      "raised": 0,
+      "skipped": 1142,
+      "unavailable": 0,
+      "violated": 0,
+      "worlds_checked": 3000
+    }
+  },
+  "sealed_pile_contact": false,
+  "seed": "0x00005eedc1e4f002",
+  "territory": "fuzzlab",
+  "track": "engine-rig",
+  "utc": "2026-07-31T00:00:00Z"
+}

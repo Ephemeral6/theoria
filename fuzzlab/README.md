@@ -3,24 +3,64 @@
 500 randomly generated deterministic worlds per engine, ≥3 invariants each,
 judged by oracles that recompute the answer instead of asking the engine.
 
+## The main result, and where it actually is
+
+**3000 worlds (500 × 6 engines), 26 invariants, 0 violated, 0 raised, 1142
+skipped, 0 unavailable, campaign seed `0x00005eedc1e4f002`.**
+
+```
+fuzzlab/runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/campaign.json
+```
+
+That path is the artifact. Recomputed 2026-07-31 (V-26) from a fresh
+`python -m fuzzlab.campaign --worlds 500`: identical in every field except
+`elapsed_s` and `engine_rig_head` — so the numbers above are reproducible at
+today's engine-rig, not only at the head they were first measured on
+(`runs/20260731T000000Z-V26-readme-points-at-the-smoke-run/`).
+
+**`out/campaign.json` is a 60-world smoke and is not this result.** Until V-26
+the line below pointed a reader there for the raw campaign. It reports
+`violated: 0` exactly as convincingly, so a reader who went to check the
+3000-world claim would have checked a run fifty times smaller and come away
+satisfied — the check passes, and what it checked is not what was claimed. See
+[`out/README.md`](out/README.md).
+
+The pointer is now held by code as well as by prose: `verify.py` reads the
+artifact above and **goes red if its world count, invariant count or seed is
+below what this file claims**, with the 60-world smoke as the standing negative
+sample (`tests/test_main_result_scale.py`). A README drifts again; the gate does
+not.
+
+`runs/20260728T161127Z-V13-audit-the-published-surface/partials/campaign.500w.json`
+is the same 3000 worlds under the **pre-V-21 schema** — same seed, same totals,
+no `skips_by_cause` and no `unavailable`. It is superseded, and the gate rejects
+it as the main result on purpose: a schema that could not count the worlds a
+tool failed on cannot testify that there were none.
+
 ```bash
-python -m fuzzlab.verify                         # tests + smoke campaign + engine-rig's own suite
+python -m fuzzlab.verify                         # tests + smoke campaign + engine-rig's suite + the main-result scale gate
 python -m fuzzlab.campaign                       # the standing 500-world campaign
 python -m fuzzlab.campaign --engine zero_space --worlds 200
 python -m fuzzlab.minimize --engine cegis_miner --invariant frontier_guards_are_consistent
 python -m fuzzlab.minimize --replay 0x… --family gridworld --engine mdl_segmenter
 ```
 
-Results: [`BUGS.md`](BUGS.md). Raw: `out/campaign.json`, `out/seeds.jsonl`,
-`out/findings.jsonl`. Archived reproducers: `archive/`.
+Results: [`BUGS.md`](BUGS.md). Raw campaign: the run directory named above.
+Archived reproducers: `archive/`.
 
-**`out/` is a snapshot from whichever item last ran a campaign without `--out`,
-not a live artifact.** It currently predates V-21 and so carries neither
-`skips_by_cause` nor `invariant_worlds_unavailable`, and its `findings.jsonl`
-rows still keep `cause` inside `data`. A V-21-schema 500-world run is at
-`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/`. Regenerate
-`out/` deliberately or read the run directory; do not read `out/` as the current
-schema.
+**`out/` is a 60-world snapshot from whichever item last ran a campaign without
+`--out`, not a live artifact and not the main result.** It also predates V-21
+and so carries neither `skips_by_cause` nor `invariant_worlds_unavailable`, and
+its `findings.jsonl` rows still keep `cause` inside `data`. Regenerate `out/`
+deliberately or read the run directory; do not read `out/` as the current schema
+and do not read it as the campaign. Its scale is written down in
+[`out/README.md`](out/README.md) — the file itself cannot be renamed, because
+`engine-rig/tools/engine_table.py` resolves three paper numbers through
+`fuzzlab/out/campaign.json` by that name and fuzzlab does not edit engine-rig.
+Two of those three (`rig.campaign_worlds = 60`,
+`rig.campaign_violations = 0`) are the smoke's numbers standing in the paper
+table where the campaign's belong; reported to that territory in
+`monitor/inbox/20260731T000000Z-V26-engine-table-campaign-row-is-the-smoke.md`.
 
 ## The house rule
 

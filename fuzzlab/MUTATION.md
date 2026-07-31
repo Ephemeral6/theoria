@@ -733,3 +733,19 @@ classification machinery (`props/finding.py`, `campaign.py`, the catch itself)
 rather than an engine's answer, and the observable is "does the V-21 gate go
 red", not `expect_kill`. Results and survivors in `COUNTERFEITS.json` and that
 directory's `RUN_STATE.md`.
+
+---
+
+## V-26 note on the numbers quoted at the top of this file
+
+Line 3 quotes `BUGS.md`'s E-4 headline — "3000 worlds, six engines, 23
+invariants". The world count is right and still reproduces exactly (V-26
+recompute, 2026-07-31); the invariant count was superseded to **26** by V-13,
+and the skip count from 80 to **1142**. See `BUGS.md` § V-13 supersede and
+§ V-26.
+
+The sentence quoted in the blockquote below line 3 — that an invariant which can
+never fire and one that is satisfied produce the same line in
+`out/campaign.json` — is exactly the shape of V-26's finding one level up: a
+60-world smoke and a 3000-world campaign also produce the same line, and until
+V-26 nothing read the field that told them apart.

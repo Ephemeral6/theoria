@@ -609,3 +609,72 @@ found. The review also caught this item shipping, twice, the exact defect it
 exists to remove: three docstrings claiming "the suite fails on it" when only a
 25-world pytest run did, and a `minimize` help string documenting the inverse of
 what the code did.
+
+---
+
+# V-26 · the recompute, and the run the documents should have pointed at
+
+**Appended, not edited.** No number about any engine changed. What changed is
+which file the word "campaign" refers to.
+
+## S1 · the recompute reproduces the published result exactly
+
+`python -m fuzzlab.campaign --worlds 500`, run 2026-07-31 against engine-rig
+`6fabcc7e`, output in
+`runs/20260731T000000Z-V26-readme-points-at-the-smoke-run/recompute/`:
+
+| quantity | published | recompute |
+|---|---|---|
+| worlds | **3000** (500 × 6) | 3000 |
+| invariants | **26** | 26 |
+| violated | **0** | 0 |
+| raised | **0** | 0 |
+| skipped | **1142** | 1142 |
+| unavailable | **0** | 0 |
+| generator errors | **0** | 0 |
+| campaign seed | `0x00005eedc1e4f002` | `0x00005eedc1e4f002` |
+
+Field-by-field against
+`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/campaign.json`
+the two documents are **identical except `elapsed_s` and `engine_rig_head`** —
+including every per-invariant coverage number. The V-13 numbers were measured at
+engine-rig `68a8365` and the headline at the top of this file at `0b01f29`; they
+still hold at `6fabcc7e`, which is a stronger statement than either made.
+
+## S2 · the discrepancies, resolved toward the recompute
+
+| where | said | recompute | disposition |
+|---|---|---|---|
+| this file, headline (E-4/V-10) | 23 invariants, 80 skipped | **26**, **1142** | already superseded by § V-13; the headline is left as written per append-only, and this row is the second pointer to it |
+| `MUTATION.md` line 3 | "23 invariants" | **26** | same supersede; `MUTATION.md` is quoting the E-4 headline, not measuring |
+| `README.md` (pre-V-26) | raw campaign is `out/campaign.json` | that file is **360 worlds** | **wrong pointer, fixed** — README now names the V-21 run directory |
+| `engine-rig/ENGINE_TABLE.md` `rig.campaign_worlds` | `60`, sourced from `fuzzlab/out/campaign.json` | the campaign is 500/engine | **not ours to edit**; reported to engine-rig via `monitor/inbox/` |
+
+Nothing in the second column was a miscount. Every one of them is a document
+quoting an older or smaller run without saying so, which is the failure mode this
+item was opened for.
+
+## S3 · why the smoke was mistakable, and what now catches it
+
+`out/campaign.json` reports `violated: 0`, `raised: 0`, `generator_errors: 0`.
+So does the 3000-world run. The two artifacts are distinguishable only by
+`worlds_per_engine`, and nothing read that field. A reader following the README
+to verify "3000 worlds, zero violations" would have opened a 360-world file,
+found zero violations, and stopped — a passing check on the wrong object, which
+is worse than a failing one because it produces confidence.
+
+`verify.py` now reads the main result and goes red when `worlds_per_engine`,
+`totals.worlds_checked`, `totals.invariants` or `campaign_seed` falls short of
+what the documents claim, or when `totals.unavailable` is absent or non-zero.
+A **violation still does not make it red** — that is the campaign's product, and
+this gate is about scale and provenance, not about the reading.
+
+The negative sample is the point: `tests/test_main_result_scale.py` puts the
+unmodified 60-world `out/campaign.json` into the main slot and asserts the gate
+refuses it, by both routes the gate can be reached (direct call and the
+`FUZZLAB_MAIN_RESULT` override the command line resolves through). Two further
+controls: a 3000-world artifact under the pre-V-21 schema is refused too, because
+absent `unavailable` is not zero — a schema that could not count the worlds a
+tool failed on cannot testify that there were none; and a fabricated artifact
+carrying 7 violations is **accepted**, which pins the gate to scale rather than
+to green.

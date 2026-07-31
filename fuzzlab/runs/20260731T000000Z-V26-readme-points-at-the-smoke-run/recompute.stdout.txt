@@ -1,0 +1,20 @@
+campaign seed 0x00005eedc1e4f002, 500 worlds per engine, engine-rig 6fabcc7e
+
+mdl_segmenter   gridworld      4 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      2.0s
+cegis_miner     gridworld      6 inv   500 worlds  violated=0    raised=0    skipped=210   unavail=0    108.3s
+zero_space      parityworld    4 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      1.5s
+lp_potential    jumpgraph      4 inv   500 worlds  violated=0    raised=0    skipped=932   unavail=0     44.6s
+fd_adapter      blockworld     3 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      6.3s
+probe_frontier  hypset         5 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      0.2s
+
+{
+  "generator_errors": 0,
+  "invariants": 26,
+  "raised": 0,
+  "skipped": 1142,
+  "unavailable": 0,
+  "violated": 0,
+  "worlds_checked": 3000
+}
+
+-> runs\20260731T000000Z-V26-readme-points-at-the-smoke-run\recompute\campaign.json

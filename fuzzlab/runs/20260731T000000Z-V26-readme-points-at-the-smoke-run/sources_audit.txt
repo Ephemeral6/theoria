@@ -1,0 +1,35 @@
+entries by territory:
+  baseline-arms    24
+  battery          5
+  cold-start-a0    5
+  cold-start-a2    12
+  cold-start-a3    7
+  papers           1
+  theoria-arm      14
+
+fuzzlab entries: 0
+match 62, drifted 6, missing 0
+  DRIFT baseline-arms/out/pilot_ar25-0c556536.json
+        manifest e131df71040d620431fc400a9adaf0a56f789273da4a34e3d5568f642e68e69b
+        on disk  810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a
+        committed 810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a  (same as disk ！ committed drift, not a checkout effect)
+  DRIFT baseline-arms/out/pilot_g50t-5849a774.json
+        manifest 8b0eccdd5469e92ab5691b39c910eb33b6eec0cf31fd4eb2b5c7f69d85049528
+        on disk  079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8
+        committed 079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8  (same as disk ！ committed drift, not a checkout effect)
+  DRIFT baseline-arms/out/pilot_g50t_sonnet_rerun.json
+        manifest 7ab527441d1d41c5ac73df3c12b7d5854e230c579745949e63f08cf7d61a587e
+        on disk  45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30
+        committed 45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30  (same as disk ！ committed drift, not a checkout effect)
+  DRIFT baseline-arms/out/pilot_sk48-d8078629.json
+        manifest ef4ee535c42255535e34e83f203e6bc2edeaf8f6777f6ed9cececbac261d787f
+        on disk  e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5
+        committed e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5  (same as disk ！ committed drift, not a checkout effect)
+  DRIFT baseline-arms/out/pilot_sk48_sonnet_rerun.json
+        manifest e1e7765b5f8b47f84a962c17afef31e4cfa896ae1b38d5291b4d765595efc110
+        on disk  3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf
+        committed 3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf  (same as disk ！ committed drift, not a checkout effect)
+  DRIFT baseline-arms/out/pilot_tn36-ef4dde99.json
+        manifest 07efca60b84ebaf1c0696288004134ba11e9608c868cc34689d7fd6a2ec35bdb
+        on disk  130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e
+        committed 130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e  (same as disk ！ committed drift, not a checkout effect)
