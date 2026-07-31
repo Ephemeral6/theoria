@@ -1,0 +1,6 @@
+# crosscheck/verify.sh compares the committed generated PDDL against a fresh
+# re-run byte for byte (sha256). The census writes those files with newline="\n";
+# this machine has core.autocrlf=true, so without this pin git would hand back
+# CRLF on checkout and the verify would go RED on a clean clone while nothing
+# was actually wrong. Same reason as engine-rig/.gitattributes.
+* text eol=lf

@@ -1,0 +1,12 @@
+returncode: 31
+
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing domain
+	->Parsing axiom/action entry #1
+	->Parsing action #1
+	->Parsing action 'push-up'
+	->Parsing precondition
+	->Parsing condition
+Expected logical operator or predicate name
+Got: adjacent-above

@@ -1,0 +1,27 @@
+{
+  "prompt_id": "C14-four-forms-is-three-and-a-half",
+  "branch": "agent/c14-four-forms-is-three-and-a-half",
+  "base_commit": "cc7e414eb3bfde3325a50f9ce0e8dc896bda2b84",
+  "utc": "2026-07-30T12:00:05Z",
+  "worker": "W-1710",
+  "territory": "crosscheck",
+  "what": "Independent re-measurement and adversarial verification of the C14 census: how many DSL-expressible actions compile to semantically non-empty PDDL. Confirms or refutes the relayed 0/303 figure, registers the gap cross-track, and states the current truth value of the four-forms claim.",
+  "relay": {
+    "prior_run": "crosscheck/runs/20260730T045751Z-C14-four-forms-is-three-and-a-half",
+    "prior_worker": "W-1701",
+    "prior_base_commit": "1a86d67d1de0b6609a5205ea502ab41dae8677d5",
+    "status": "found uncommitted in .worktrees/c14-four-forms-is-three-and-a-half; kept, not discarded",
+    "why_trusted": "Re-ran crosscheck/tools/c14_pddl_census.py unchanged on cc7e414e, 56 commits after the prior base. Result reproduced exactly: summary block identical field for field, all 59 per-file records identical (modulo independent_checks, which embed absolute paths), and all 34 generated *.domain.pddl byte-identical. The tool is deterministic and the corpus did not move under it. Reproduction is necessary but not sufficient -- a tool can reproduce a wrong answer -- so the figure was additionally put through an adversarial classifier audit, a denominator audit, a hand ground-truth audit and a root-cause read; see out/ADVERSARIAL.md.",
+    "api_calls": 0
+  },
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "writes_only": ["crosscheck/"],
+  "reads_only": [
+    "theory-compiler/ (imported read-only, not modified -- other track)",
+    "cold-start-a0/, cold-start-a2/, cold-start-a3/, a0-spike/, ablation-arm/, theoria-arm/ (DSL corpus, read-only)",
+    "cold-start-a0/.toolchain/downward/ (Fast Downward 24.06+, machine-local, gitignored)",
+    "papers/, Theoria.md, CONTRACTS/ (claim sites, read-only)"
+  ],
+  "files": []
+}

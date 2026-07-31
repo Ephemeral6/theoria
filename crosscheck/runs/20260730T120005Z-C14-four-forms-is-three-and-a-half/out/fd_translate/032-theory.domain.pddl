@@ -1,0 +1,56 @@
+(define (domain theoria-domain)
+  (:requirements :strips :typing)
+
+  (:types cell player done token - object)
+    ; direction is implicit in action names
+
+  (:predicates
+    (at ?o - object ?c - cell)
+    (free ?c - cell)
+    (adjacent-up ?c1 - cell ?c2 - cell)
+    (adjacent-down ?c1 - cell ?c2 - cell)
+    (adjacent-left ?c1 - cell ?c2 - cell)
+    (adjacent-right ?c1 - cell ?c2 - cell)
+    (boundary-up ?c - cell)
+    (boundary-down ?c - cell)
+    (boundary-left ?c - cell)
+    (boundary-right ?c - cell)
+  )
+
+  (:action step-down-from-home
+    :parameters ()
+    :precondition (and
+    )
+    :effect (and
+      (and)
+    )
+  )
+
+  (:action key5-sends-ring-home
+    :parameters ()
+    :precondition (and
+    )
+    :effect (and
+      (and)
+    )
+  )
+
+  (:action key5-spends-token-a
+    :parameters ()
+    :precondition (and
+    )
+    :effect (and
+      (and)
+    )
+  )
+
+  (:action key5-lights-token-b
+    :parameters ()
+    :precondition (and
+    )
+    :effect (and
+      (and)
+    )
+  )
+
+)

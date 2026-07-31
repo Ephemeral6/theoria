@@ -1,0 +1,40 @@
+returncode: 1
+
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\__main__.py", line 37, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\main.py", line 695, in main
+    task = pddl_parser.open(
+        domain_filename=get_options().domain, task_filename=get_options().task)
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\pddl_file.py", line 39, in open
+    return parsing_functions.parse_task(domain_pddl, task_pddl)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 630, in parse_task
+    task_name, task_domain_name, task_requirements, objects, init, goal, \
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        use_metric = parse_task_pddl(context, task_pddl, type_dict,
+        ^^^^^^^^^^
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 796, in parse_task_pddl
+    yield parse_condition(context, goal[1], type_dict, predicate_dict, term_names)
+          ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 214, in parse_condition
+    condition = parse_condition_aux(
+        context, alist, False, type_dict, predicate_dict, term_names)
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 251, in parse_condition_aux
+    return parse_literal(context, alist, type_dict, predicate_dict, term_names, negated=negated)
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 306, in parse_literal
+    check_predicate_and_terms_existence(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        context, predicate_name, alist[1:],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        predicate_dict.keys(), term_names)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\Desktop\theoria\cold-start-a0\.toolchain\downward\builds\release\bin\translate\pddl_parser\parsing_functions.py", line 843, in check_predicate_and_terms_existence
+    if term not in valid_term_names:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
