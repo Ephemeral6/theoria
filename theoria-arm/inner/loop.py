@@ -44,9 +44,10 @@ from harness.modelcall import (AnonymityBreach, CostCeilingReached,
 from world.adapt import run_engines as adapt_run_engines
 from world.frames import FrameStore, Step, grid_hash
 
-from . import (certify, commit, plan as plan_beat, probe as probe_beat,
-               theorize, transfer)
+from . import (certify, commit, goal as goal_beat, plan as plan_beat,
+               probe as probe_beat, theorize, transfer)
 from .books import Books
+from .goal import GoalState
 from .levels import LevelLog
 from .surprise import Register
 
@@ -137,6 +138,18 @@ LEVEL_SIGNAL_UNKNOWN = True
 #: transient.
 MAX_LEVEL_ADVANCE_ATTEMPTS = 2
 
+#: Whether the arm knows it is exploring because it has no winning condition.
+#:
+#: Four live carried legs called `plan` 56 times and got `no_goal_declared` 56
+#: times, produced zero plans and executed zero commits, and none of that
+#: appears anywhere in a summary, a run state, a turn series or a scoreboard.
+#: `inner/goal.py` is the reading and the argument; this is the switch.
+#:
+#: `off` is today's behaviour byte for byte -- nothing observed, nothing
+#: written, nothing asked. It is the default because adopting a change is a
+#: separate decision from preparing one.
+DEFAULT_GOAL_PROTOCOL = goal_beat.DEFAULT_PROTOCOL
+
 
 def _forbidden_substrings(game_id: str) -> Tuple[str, ...]:
     """Every id that may not appear in a prompt this run sends.
@@ -197,6 +210,7 @@ class TheoriaArm:
                  seed_books: Optional[str] = None,
                  carry_source_game: Optional[str] = None,
                  tags: Optional[List[str]] = None,
+                 goal_protocol: str = DEFAULT_GOAL_PROTOCOL,
                  prompt_id: str = "P-8"):
         self.game_id = game_id
         self.offline = offline
@@ -224,6 +238,12 @@ class TheoriaArm:
         self.store = FrameStore()
         self.books = Books(os.path.join(self.dir, "books"), seed_from=seed_books)
         self.levels = LevelLog()
+        #: Validated in the constructor, so a typo is a refusal at launch and
+        #: not a silently-off protocol discovered at the end of a paid leg.
+        self.goal = GoalState(goal_protocol)
+        #: The ask waiting for the next theorize call to carry it. `None` most
+        #: of the time; never a call of its own (constraint 8).
+        self._goal_rider: Optional[str] = None
         self.register = Register()
         self.probes = probe_beat.ProbeLog(os.path.join(self.dir, "probes.jsonl"))
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
@@ -842,6 +862,7 @@ class TheoriaArm:
             record["predictor"] = "loaded" if namespace else error
 
             # 3. plan.
+            plan_report: Optional[Dict[str, Any]] = None
             if namespace is not None:
                 compiled = (self.theorize_reports[-1].get("_compiled")
                             if self.theorize_reports else None) or {}
@@ -854,10 +875,20 @@ class TheoriaArm:
                     reported=self._plan_gaps_reported,
                     token=_book_token(self.books.playbook))
 
-                if plan_report.get("status") == "sat" and plan_report.get("plan"):
-                    self._commit(namespace, plan_report, record)
-                    self.turns.append(record)
-                    continue
+            # 3b. the goal state. Read AFTER plan, so `plan_status` is this
+            #     turn's, and BEFORE the commit shortcut, so a planning turn is
+            #     observed too -- the whole point is that "planning" and
+            #     "exploring because there is no goal" become distinguishable,
+            #     which needs both to be measured by the same instrument.
+            self._observe_goal_state(record, turn, plan_report,
+                                     namespace is not None)
+
+            if (plan_report is not None
+                    and plan_report.get("status") == "sat"
+                    and plan_report.get("plan")):
+                self._commit(namespace, plan_report, record)
+                self.turns.append(record)
+                continue
 
             # 4. probe, or honest exploration.
             self._probe_or_explore(namespace, record)
@@ -904,6 +935,12 @@ class TheoriaArm:
             # that follows it fails. An engine sweep that fed nothing is still a
             # delivery, and E3's claim is about the deliveries.
             engines = self._dispatch_engines(label="theorize")
+            # The goal ask, if one is parked, rides on this call. Taken before
+            # the call so it is spent exactly once whatever the call does: a
+            # rider that survived a failed call would be re-sent forever.
+            rider, self._goal_rider = self._goal_rider, None
+            if rider:
+                record["goal_rider"] = "delivered"
             try:
                 report = theorize.run(
                     self.desk, self.books, self._level_store(),
@@ -912,6 +949,7 @@ class TheoriaArm:
                     certify_report=(self.certify_reports[-1]
                                     if self.certify_reports else None),
                     step_idx=len(self.store.steps),
+                    goal_rider=rider,
                     engines=engines)
             except CostCeilingReached:
                 raise                                  # the run's honest end
@@ -960,6 +998,15 @@ class TheoriaArm:
             record["theorize_rounds"] += 1
             record["theorize_calls"] = report.get("calls")
             record["theorize_ok"] = report.get("ok")
+            if rider:
+                # Read the answer off the manual the desk just wrote, whichever
+                # of the three answers it is. Done here, once, against the reply
+                # the rider actually rode on -- a later turn's manual would
+                # credit this ask with a change some other call made.
+                answered = self.goal.answer_proposal(
+                    theory_text=self.books.theory)
+                record["goal_rider"] = "answered: %s" % (answered or {}).get(
+                    "answered")
 
             certify_report = self._certify()
             record["certify"] = _certify_line(certify_report)
@@ -1041,6 +1088,54 @@ class TheoriaArm:
         self.certify_reports.append(report)
         certify.surprises_from(report, self.register)
         return report
+
+    def _observe_goal_state(self, record, turn, plan_report,
+                            has_predictor: bool) -> None:
+        """Beat 3b: name the state the arm is in with respect to winning.
+
+        On the `off` rung this returns without touching `record`, and that is
+        the whole of the default behaviour: the key is absent, not `null`, so
+        an artefact from a default run is byte-identical to one from before
+        this method existed.
+        """
+        if not self.goal.enabled:
+            return
+
+        # This level's world, not the run's -- the same segmentation
+        # `inner/levels.py` applies to certify, problem and roll-forward, for
+        # the same reason: distinct states pooled across a boundary counts two
+        # unrelated boards as one world, and the criterion here is a claim
+        # about how much NEW world has arrived under the manual being asked.
+        # Computed directly rather than through `store.summary()`: that builds
+        # the colour histogram and both cell partitions over every frame, which
+        # on a 64x64 board is thousands of cells per turn to read one integer.
+        distinct = len({grid_hash(g) for g in self._level_store().grids})
+        block = self.goal.observe(
+            turn=turn,
+            theory_text=self.books.theory,
+            plan_report=plan_report,
+            distinct_states=distinct,
+            actions_spent=self.budget.actions_ok,
+            has_predictor=has_predictor)
+        record["goal"] = block
+
+        if self.goal.protocol != "propose" or not block["proposal"]["due"]:
+            return
+
+        # Due. Book it and park the ask -- it does NOT call the desk. The rider
+        # is handed to whatever theorize call a surprise next pays for, so the
+        # model-call count is unchanged and `Register.audit`'s constraint-8
+        # arithmetic is untouched. If no surprise ever fires again, no ask is
+        # ever sent, and the booked proposal stays `answered: null` in the
+        # record saying exactly that.
+        entry = self.goal.record_proposal(
+            turn=turn, distinct_states=distinct,
+            reason="the criterion's four conjuncts all held")
+        self._goal_rider = goal_beat.prompt_rider(self.goal, entry, distinct)
+        block["proposal"]["booked"] = entry["proposal_idx"]
+        block["proposal"]["delivery"] = (
+            "parked for the next theorize call a surprise pays for; this beat "
+            "spends nothing and calls nothing")
 
     def _commit(self, namespace, plan_report, record) -> None:
         def send(action_id):
@@ -1215,6 +1310,15 @@ class TheoriaArm:
         return self.summary()
 
     def summary(self) -> Dict[str, Any]:
+        out = self._summary()
+        # Absent on the `off` rung, so a default run's `run.json` is
+        # byte-identical to one written before this existed. Present and
+        # complete on the other two -- including the zeros.
+        if self.goal.enabled:
+            out["goal"] = self.goal.summary()
+        return out
+
+    def _summary(self) -> Dict[str, Any]:
         return {
             "outcome": self.outcome,
             "stopped_because": self.stopped_because,
@@ -1285,6 +1389,8 @@ class TheoriaArm:
                  "elapsed_s": round(self._elapsed(), 1),
                  "outcome": self.outcome,
                  "stopped_because": self.stopped_because}
+        if self.goal.enabled:
+            state["goal"] = self.goal.summary()
         with open(path, "w", encoding="utf-8", newline="\n") as fh:
             json.dump(state, fh, indent=1, sort_keys=True)
             fh.write("\n")

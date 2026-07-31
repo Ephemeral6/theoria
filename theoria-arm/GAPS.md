@@ -287,3 +287,47 @@ and its cost tracks the **null-space dimension**, which is largest exactly when
 the transitions are too few to constrain the features and its own verdict is
 THIN. Benchmarks and the live numbers are in the run's `RUN_STATE.md`. It is
 engine-rig's territory; this is a report, not a request.
+
+## GAP A3-B-1 · Change B is prepared, not adopted, and nothing live has run under it
+
+`inner/goal.py` ships with the default rung `off`, which writes no key and
+changes no decision. Every claim about how `record` and `propose` behave is
+made from unit tests, from a `proxy/mock` run that makes no model call, and
+from real `plan()` reports over real compiled books — never from a live leg.
+Specifically not established:
+
+* that a **live** carried manual, on the `record` rung, would report
+  `exploring_no_goal` for a whole leg. The mock cannot show it: offline means
+  no desk call, so no compiled manual, so the honest mode is `no_manual`
+  throughout. The mode is exercised in unit tests and in the scoreboard
+  evidence, not by a loop that played a game.
+* that the rider changes anything. Whether a goal request riding on a paid
+  theorize call comes back as a goal clause, an argued refusal, or silence is
+  the three-way outcome `answer_proposal` records, and no live call has ever
+  carried one. The rider's text is written and tested; its effect is unknown.
+* that the criterion's constants are right. Four new distinct states and three
+  proposals per leg are judgement calls argued from what the two live manuals
+  said they were waiting for. Nothing has been run that would calibrate either,
+  and a criterion whose thresholds are guessed can be too slow as easily as too
+  fast.
+
+## GAP A3-B-2 · Naming the state is not the same as ending it
+
+Change B makes the arm know it is exploring, gives it a criterion for asking,
+and makes its record say so. It does **not** make the arm complete a level, and
+it does not establish that a goal would be signed if asked. The two live
+manuals declined to name one with arguments this ticket found good; the honest
+prediction is that a rider might well get a fourth and fifth refusal, and the
+record would then carry `declined_with_argument` twice instead of nothing at
+all. That is a better record and it is not a level.
+
+## GAP A3-B-3 · `verify_provenance` check 8 is red on any fresh worktree, for a reason unrelated to any of this
+
+Reproduced on a clean, unmodified `master` worktree before change B was
+touched: the four legs' `env_proxy.log` was written with CRLF in the main
+checkout, `theoria-arm/.gitattributes` pins `* text eol=lf`, so a fresh
+worktree normalises the file to LF and the `files[].sha256` recorded in each
+manifest no longer matches. 437 bytes and 4 CRLF in the main tree; 433 bytes
+and 0 in any worktree. Change B touches none of those files. Filed here rather
+than fixed, because the fix is a decision about four archived manifests and
+belongs to whoever owns them.

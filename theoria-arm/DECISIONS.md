@@ -825,3 +825,98 @@ game's `available_actions` — and it is the difference between a transfer
 experiment and a manual that cannot be tested on the game it was carried to.
 Recorded here as the next run's first requirement rather than implemented in the
 middle of a live run.
+
+## D-A3-B-001 · Goal-absence is a state, and it gets a rung ladder rather than a flag flip
+
+Change B's reading is in `inner/goal.py`'s docstring and in
+`runs/20260731T1740Z-A3-change-b-goal-state/RUN_STATE.md`. In one line: across
+the four live carried legs of 2026-07-31, `plan()` was called 56 times and
+returned `no_goal_declared` 56 times, `tiers` is `[]` in every one of them, and
+`commit.json` is `[]` in all four. The arm was not searching and losing. It was
+never searching.
+
+Three decisions come out of that, and each of them could have gone another way.
+
+**1. The fix goes above `plan`, not inside it.** `inner/plan.py` already reports
+this exactly right — its `no_goal_declared` detail says in so many words that
+this is a gap in the manual and not an unsolvability claim, which is
+constraint 6 observed. Nothing in that file is wrong. What is missing is that
+its output is a leaf: `inner/loop.py` compares it against `"sat"` and drops it,
+so no artefact anywhere accumulates it. Changing `plan` would have meant
+changing a beat that is behaving correctly in order to fix a recorder that is
+not.
+
+**2. No surprise of its own — and by the time this landed, none was needed.**
+The obvious wiring is to make goal-absence fire a surprise, because a surprise
+is the only thing in this loop that calls the desk. `inner/surprise.py` closes
+the set at seven and says in its own constructor that an eighth is a change to
+`Theoria.md` 1.10(d) rather than to a file, so an eighth was never on the table.
+
+While this branch was being written, a parallel session reached the same
+diagnosis from the same artefacts and answered it at the other end: commit
+`79b948a1` makes `plan.surprises_from` fire `heuristic_miss` on
+`no_goal_declared`, once per playbook token. This branch was rebased onto it
+rather than argued against it. Two consequences, both recorded rather than
+smoothed over.
+
+The claim "nothing ever asks for a goal" was true when this branch was cut and
+is **no longer true**. It is corrected here rather than quietly rewritten. What
+remains true is the recording half: after `79b948a1` a leg that never holds a
+goal still reports `levels_completed: 0` beside a plan history a reader must
+reconstruct from `plan.json` by hand, and the campaign scoreboard still cannot
+tell a campaign that searched and lost from one that never searched.
+
+And the one legitimate reuse of an existing kind is now spent. `heuristic_miss`
+is the computational family, whose book is the playbook, which is where a goal
+belongs — that is the reuse, and it is a fair one. Firing a *second* surprise
+for the same fact would call the desk twice for one gap. So the `propose` rung
+buys no model call at all: it parks a *rider* that travels on the next theorize
+call a surprise — `heuristic_miss` among them — has already paid for. The
+model-call count does not move, constraint 8 is untouched, and a leg where no
+further surprise fires simply never sends the ask, which the record shows as a
+booked proposal with `answered: null` rather than hiding.
+
+The two also differ on *when*. `79b948a1` keys its firing on the playbook token,
+so a rewritten playbook that still has no goal speaks up again whether or not
+any new world arrived to change the answer. `proposal_due`'s third conjunct is
+exactly the refusal for that case: distinct states, not revisions.
+
+**3. The default is `off`, and `off` means byte-identical.** The temptation is
+to make `record` the default: it changes no decision and spends nothing, so it
+looks free. It is not free — it adds a key to every turn record, to `run.json`
+and to `RUN_STATE.json`, and this arm's archive is byte-compared. Preparing a
+change and adopting it are separate acts with separate evidence, and this ticket
+only did the first. `off` therefore writes no key at all: absent, not `null`, so
+a default run's artefacts are indistinguishable from ones written before this
+module existed.
+
+**The criterion counts distinct states, not turns or dollars.** This is taken
+from what the two live manuals said they were waiting for, in their own words:
+one, that the goal could be stated only "after the body has once stood in the
+socket and those pixels have become dynamic"; the other, that "the objective
+lives in the twenty-nine rows I have never been shown". Both are claims about
+unseen *world*. A toggle pressed forty times produces forty frames and two
+states; re-asking the desk against evidence it has already refused on returns a
+differently-worded refusal at full price, which is the same failure
+`MIN_NEW_FRAMES_BETWEEN_THEORIZE` was introduced to stop. Four, and at most
+three asks per leg, are judgement — nothing has been run that calibrates either,
+and that is recorded as a gap rather than dressed up as a measurement.
+
+**A signed absence is not silence, and the record now separates them.** Both
+live manuals argued for having no goal and named a theorem for it. That is a
+position, and a defensible one — a goal true in the wrong states stops the
+planner at the first node. A manual with neither a goal nor an argument is a
+different thing entirely, and until now the two produced identical artefacts.
+The detector is deliberately narrow (the theorem's name must mention a goal
+*and* absence), because a broad one that fired on
+`theorem the_goal_is_probably_the_socket` would credit the manual with a
+position it never took.
+
+**What it costs.** `armtools/archive.py`'s `turn_series` rows gain three keys
+and `campaign_series`'s totals gain four. No archived manifest is disturbed:
+`turn_series.json` is not listed in the four legs' `files[]`, and check 8's
+re-derivation goes through `armtools/backfill.py`, which does not regenerate it.
+A run re-archived through `archive.build` after this change will write a
+different `turn_series.json` than it would have before, and that is the declared
+price — the same one `ARCHIVE_COST_FIELDS` names for a shape change, paid in the
+open rather than avoided by keeping a column the scoreboard needs out of it.
