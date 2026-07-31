@@ -1,0 +1,17 @@
+{
+  "canary_run": {
+    "card_id": "46a9c5dc-ec9c-468c-a0f0-0a4917cdbbe8",
+    "note": "S22 item (1) run 2 of 2: second cross-session full sweep, and end-to-end verification that settlement now charges actions (not http_calls) against the real gate. RES-1 cycle 43.",
+    "t": "2026-07-30T03:49:08Z",
+    "verdicts": {
+      "ar25-0c556536": "PASS",
+      "g50t-5849a774": "PASS",
+      "sk48-d8078629": "PASS",
+      "tn36-ef4dde99": "PASS"
+    }
+  },
+  "checked_utc": "2026-07-30T03:49:08Z",
+  "frozen": false,
+  "history": [],
+  "note": "Initialised OFFLINE from the last recorded replay in canary_runs.jsonl -- no API call was made, so checked_utc is that run's timestamp, not this command's. frozen:true is written by drift (canary.py replay) and only an owner decision clears it; history is in campaign_freeze_log.jsonl. Never delete this file."
+}

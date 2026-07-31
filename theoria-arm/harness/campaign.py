@@ -72,6 +72,7 @@ from typing import Any, Dict, List, Optional
 
 import _bootstrap                                      # noqa: F401  (sys.path)
 
+from harness import freeze_gate
 from harness import spend as spend_mod
 from harness.run import play
 from inner.loop import TheoriaArm
@@ -421,8 +422,26 @@ class Campaign:
         # `harness/run.py --pool` was added to prevent. A campaign is the one
         # caller that most needs a dry run and was the one that could not have
         # one.
-        # Two guards, in this order, both of them hard refusals before any
-        # money moves. `assert_launch_cleared` is a no-op for a development
+        # Three guards, in this order, all of them hard refusals before any
+        # money moves.
+        #
+        # The campaign-freeze gate runs first, and only for a campaign that
+        # will touch the real ARC. `env_upstream is None` is how every live
+        # campaign is constructed (`main()` always supplies a mock upstream
+        # under --mock), and `offline` rehearsals never play the world the
+        # canary watches -- drift in an environment a rehearsal does not
+        # touch cannot invalidate it, so the gate would be noise there.
+        # Refusal is a `CampaignStopped` like the other two, because the
+        # freeze names the reason and this module's callers already know how
+        # to read a stop.
+        if env_upstream is None and not offline:
+            try:
+                freeze_gate.assert_unfrozen()
+            except freeze_gate.CampaignFrozen as exc:
+                raise CampaignStopped(
+                    "campaign-freeze gate refused the launch: %s" % exc,
+                    {"freeze_path": freeze_gate.FREEZE_PATH})
+        # `assert_launch_cleared` is a no-op for a development
         # roster and is the §9 gate for a sealed one; `assert_dev_pile` is the
         # pile cut itself and refuses a sealed roster regardless. See
         # `assert_launch_cleared` for why the gate is first.

@@ -81,6 +81,7 @@ from proxy.guard import SealedPileGuard
 from proxy.ledger import Ledger, RunLedger, canonical
 from proxy.paths import UPSTREAM_ARC
 
+from harness import freeze_gate
 from harness import spend as spend_mod
 from harness.proxy_process import EnvProxyProcess
 
@@ -125,6 +126,19 @@ class Run:
                  expect_pool: Optional[Dict[str, Any]] = None,
                  ledger_path: Optional[str] = None,
                  runs_root: Optional[str] = None):
+        # -- the campaign-freeze gate, before anything exists ---------------
+        # First, before the ledger, before the claim on the shared pool,
+        # before the proxy child: a frozen environment is one the canary has
+        # observed behaving differently under an unchanged game_id, and a run
+        # that gets as far as reserving money against it has already treated
+        # a suspect world as a measurable one. Judged by the upstream, not by
+        # a flag: every path that will reach the real ARC comes through here
+        # with `UPSTREAM_ARC`, and every mock/offline path carries its own
+        # localhost upstream -- drift in a world a rehearsal never touches
+        # cannot invalidate the rehearsal.
+        if env_upstream.rstrip("/") == UPSTREAM_ARC.rstrip("/"):
+            freeze_gate.assert_unfrozen()
+
         self.game_id = game_id
         self.slug = slug
         self.run_id = run_id or new_run_id()
