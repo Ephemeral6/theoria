@@ -1,0 +1,54 @@
+{
+  "utc_of_write": "2026-07-30T13:05:00Z",
+  "selected_tests": "check_ten_asks_the_index or check_ten_rejects_a_path or check_ten_has_no_answer or check_ten_catches_a_dangling",
+  "arm": "theoria-arm",
+  "control": {
+    "pytest_exit": 0,
+    "pytest_last_line": "....                                                                     [100%]",
+    "green": true
+  },
+  "mutations": [
+    {
+      "id": "M1-back-to-exists",
+      "why": "the defect itself: ask the disk instead of the index",
+      "file": "armtools/verify_provenance.py",
+      "caught": true,
+      "pytest_exit": 1,
+      "pytest_last_line": "FAILED tests/test_files_in_clone.py::test_check_ten_asks_the_index_not_the_disk"
+    },
+    {
+      "id": "M2-shape-gate-open",
+      "why": "let absolute paths and `..` escapes back through",
+      "file": "armtools/backfill.py",
+      "caught": true,
+      "pytest_exit": 1,
+      "pytest_last_line": "FAILED tests/test_files_in_clone.py::test_check_ten_rejects_a_path_that_is_not_of_this_run"
+    },
+    {
+      "id": "M3-third-value-becomes-empty",
+      "why": "render `git could not be asked` as `this repository ships nothing`, the shape that made the reflex layer quiet",
+      "file": "armtools/backfill.py",
+      "caught": true,
+      "pytest_exit": 1,
+      "pytest_last_line": "FAILED tests/test_files_in_clone.py::test_check_ten_has_no_answer_rather_than_a_green_when_git_cannot_be_asked"
+    },
+    {
+      "id": "M4-tracked-and-present",
+      "why": "demand presence as well as tracking -- keeps the machine dependence and merely adds a condition",
+      "file": "armtools/verify_provenance.py",
+      "caught": true,
+      "pytest_exit": 1,
+      "pytest_last_line": "FAILED tests/test_files_in_clone.py::test_check_ten_asks_the_index_not_the_disk"
+    },
+    {
+      "id": "M5-stray-noted-not-failed",
+      "why": "detect the shape fault and decline to fail on it",
+      "file": "armtools/verify_provenance.py",
+      "caught": true,
+      "pytest_exit": 1,
+      "pytest_last_line": "FAILED tests/test_files_in_clone.py::test_check_ten_rejects_a_path_that_is_not_of_this_run"
+    }
+  ],
+  "survivors": [],
+  "note": "`caught: true` means the mutation broke at least one of the selected tests. Survivors are the interesting output: a mutation nothing notices names a property nothing pins."
+}

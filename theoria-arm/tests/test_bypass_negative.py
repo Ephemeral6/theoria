@@ -186,6 +186,25 @@ def dev_id() -> str:
     return sorted(_cut()["dev_pile"])[0]
 
 
+def _own_pool(tmp_path):
+    """A spend pool this file owns, so the fleet's shared one is not billed.
+
+    `Run` defaults `spend_gate=None`, which resolves to the *real* pool -- the
+    one every session shares. `harness.spend` refuses that reservation outright
+    from inside pytest now, so this is not merely good manners: without it the
+    positive control below cannot open its socket at all. Same helper as
+    `test_arm.py::_own_pool`; both exist because the two files may not import
+    each other.
+    """
+    from harness import run as run_mod                 # noqa: PLC0415
+    from proxy.spend_gate import SpendGate             # noqa: PLC0415
+
+    policy = run_mod._scratch_policy(str(tmp_path / "scratch-pool.jsonl"))
+    gate = SpendGate(policy)
+    return gate, {"pool": policy.pool,
+                  "ledger_abspath": os.path.abspath(policy.ledger_path)}
+
+
 def arm_run(upstream: InstrumentedUpstream, tmp_path, slug: str) -> Run:
     """A `Run` exactly as `harness.run.play` builds one, pointed at the stub.
 
@@ -193,11 +212,13 @@ def arm_run(upstream: InstrumentedUpstream, tmp_path, slug: str) -> Run:
     `SealedPileGuard()` constructed inside `Run.__init__` with no way for a
     caller to swap or disable it -- with only the upstream host replaced.
     """
+    gate, expect = _own_pool(tmp_path)
     return Run(dev_id(), slug,
                env_upstream=upstream.base_url,
                env_key=PROXY_KEY, require_key=False,
                env_max_attempts=1,
                runs_root=FIXTURE_RUNS_DIR,
+               spend_gate=gate, expect_pool=expect,
                ledger_path=str(tmp_path / "ledger.jsonl"))
 
 

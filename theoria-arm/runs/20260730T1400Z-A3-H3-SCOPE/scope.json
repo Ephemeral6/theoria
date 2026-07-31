@@ -1,0 +1,3088 @@
+{
+ "A_present_untracked_unignored": {
+  "count": 0,
+  "paths": []
+ },
+ "B_absent": {
+  "count": 3,
+  "excused_by_ignore": 3,
+  "paths": [
+   "20260728T012311Z-g50t-first-contact-aborted/trace.jsonl  [ignored=True]",
+   "20260728T014402Z-g50t-first-contact-aborted/trace.jsonl  [ignored=True]",
+   "20260728T015354Z-g50t-first-contact/trace.jsonl  [ignored=True]"
+  ],
+  "unexplained_dangling_today": 0
+ },
+ "C_ignored_but_present": {
+  "count": 1,
+  "paths": [
+   "20260729T105729Z-leg01/trace.jsonl"
+  ]
+ },
+ "D_tracked": {
+  "count": 103
+ },
+ "E_shapes": {
+  "absolute": {
+   "count": 0,
+   "paths": []
+  },
+  "directories": {
+   "count": 0,
+   "paths": []
+  },
+  "escapes_run_dir": {
+   "count": 0,
+   "paths": []
+  }
+ },
+ "F_convention_per_run": {
+  "20260728T012311Z-g50t-first-contact-aborted": {
+   "convention": {
+    "both": 0,
+    "neither": 1,
+    "repo_root": 0,
+    "run_dir": 14
+   },
+   "ignored": 1,
+   "kind": "aborted_experiment",
+   "listed": 15,
+   "present": 14,
+   "tracked": 14
+  },
+  "20260728T012311Z-g50t-first-contact-salvage": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "salvage",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "20260728T012311Z-g50t-first-contact-salvage2": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "salvage",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "20260728T014402Z-g50t-first-contact-aborted": {
+   "convention": {
+    "both": 0,
+    "neither": 1,
+    "repo_root": 0,
+    "run_dir": 8
+   },
+   "ignored": 1,
+   "kind": "aborted_experiment",
+   "listed": 9,
+   "present": 8,
+   "tracked": 8
+  },
+  "20260728T014402Z-g50t-first-contact-salvage": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "salvage",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "20260728T015354Z-g50t-first-contact": {
+   "convention": {
+    "both": 0,
+    "neither": 1,
+    "repo_root": 0,
+    "run_dir": 45
+   },
+   "ignored": 1,
+   "kind": "experiment",
+   "listed": 46,
+   "present": 45,
+   "tracked": 45
+  },
+  "20260728T015354Z-g50t-first-contact-salvage": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "salvage",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "20260729T004020Z-leg01": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 14
+   },
+   "ignored": 0,
+   "kind": "experiment",
+   "listed": 14,
+   "present": 14,
+   "tracked": 14
+  },
+  "20260729T004020Z-leg01-salvage": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "salvage",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "20260729T105729Z-leg01": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 15
+   },
+   "ignored": 1,
+   "kind": "experiment",
+   "listed": 15,
+   "present": 15,
+   "tracked": 14
+  },
+  "preflight-20260728T012031Z": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 1
+   },
+   "ignored": 0,
+   "kind": "preflight",
+   "listed": 1,
+   "present": 1,
+   "tracked": 1
+  },
+  "preflight-20260728T012057Z": {
+   "convention": {
+    "both": 0,
+    "neither": 0,
+    "repo_root": 0,
+    "run_dir": 2
+   },
+   "ignored": 0,
+   "kind": "preflight",
+   "listed": 2,
+   "present": 2,
+   "tracked": 2
+  }
+ },
+ "F_convention_totals": {
+  "both": 0,
+  "neither": 3,
+  "repo_root": 0,
+  "run_dir": 104
+ },
+ "F_runs_listing_repo_root_relative": {},
+ "G_newly_dangling_if_predicate_is_tracked_or_ignored": {
+  "count": 0,
+  "equals_A": true,
+  "passes_after": 107,
+  "passes_today": 107,
+  "paths": []
+ },
+ "H_out_of_scope_manifests": {
+  "absent": {
+   "count": 25,
+   "paths": [
+    "20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/adapt.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/run_a0.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/stages.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/tests/test_a0.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/RUN_STATE.md  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/inner/certify.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/inner/plan.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/.gitignore  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/ADVERSARIAL-VERBATIM.md  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/REPORT.md  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/negative_sample.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/_a0_negative.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/a0_report_rerun.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.stdout.txt  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-a0-spike.txt  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-theoria-arm.txt  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconcile.stdout.txt  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconciliation.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-bfs-plan.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-recertify.json  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/reconcile.py  [ignored=False]",
+    "20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/tests/test_arm.py  [ignored=False]",
+    "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/RUN_STATE.md  [ignored=False]",
+    "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/mutations.json  [ignored=False]"
+   ]
+  },
+  "convention_totals": {
+   "both": 0,
+   "neither": 2,
+   "repo_root": 23,
+   "run_dir": 29
+  },
+  "ignored": 0,
+  "listed_paths": 54,
+  "per_run": {
+   "20260728T141546Z-S8-provenance-backfill": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260728T152910Z-a3-desk-gate": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260728T152930Z-a3-turn-series": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 3
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 3,
+    "present": 3,
+    "tracked": 3
+   },
+   "20260728T210000Z-a3-level-boundary": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260728T233900Z-A3-campaign-devpile": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260728T235841Z-leg01": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260728T235842Z-leg02": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260728T235843Z-leg01": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260729T0030Z-a3-desk-live-proof": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260729T0035Z-a3-desk-live-proof2": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260729T003749Z-leg01": {
+    "kind": "empty",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260729T013000Z-A11": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T080000Z-E14-crash-is-not-a-finding": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 23,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 23,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T105653Z-leg01": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "20260729T125500Z-A3-provenance-repair": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T162000Z-A3-two-recorded-not-fixed": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T1745Z-A3-per-model-ceiling": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T2015Z-A3-unblock": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260729T2040Z-A3-unpriced": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 7
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 7,
+    "present": 7,
+    "tracked": 7
+   },
+   "20260730T0230Z-A3-MODEL-PATH-SEALING": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260730T0700Z-A3-COST-SHAPE-COUPLING": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260730T0855Z-A17-MEASUREMENT": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   },
+   "20260730T1020Z-A3-SEAL-CONJUNCT-ONE": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 4
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 4,
+    "present": 4,
+    "tracked": 4
+   },
+   "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 4
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 4,
+    "present": 4,
+    "tracked": 4
+   },
+   "20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 2
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 2,
+    "present": 2,
+    "tracked": 2
+   },
+   "20260730T1200Z-A17-THE-STASH-WAS-INNOCENT": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 3
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 3,
+    "present": 3,
+    "tracked": 3
+   },
+   "20260730T1230Z-A3-ADVERSARIAL-TRIAGE": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 2
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 2,
+    "present": 2,
+    "tracked": 2
+   },
+   "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT": {
+    "convention": {
+     "both": 0,
+     "neither": 2,
+     "repo_root": 0,
+     "run_dir": 1
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 3,
+    "present": 1,
+    "tracked": 0
+   },
+   "20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 3
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 3,
+    "present": 3,
+    "tracked": 3
+   },
+   "20260730T1400Z-A3-H3-SCOPE": {
+    "kind": "empty",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "a3-gate-mock": {
+    "kind": "mock",
+    "listed": 0,
+    "no_manifest": true
+   },
+   "campaign-a3-g50t": {
+    "convention": {
+     "both": 0,
+     "neither": 0,
+     "repo_root": 0,
+     "run_dir": 0
+    },
+    "ignored": 0,
+    "kind": "process_record",
+    "listed": 0,
+    "present": 0,
+    "tracked": 0
+   }
+  },
+  "present": 29,
+  "present_untracked_unignored": {
+   "count": 1,
+   "paths": [
+    "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/MANIFEST.json"
+   ]
+  },
+  "runs_listing_repo_root_relative": {
+   "20260729T080000Z-E14-crash-is-not-a-finding": 23
+  },
+  "runs_with_files": 10,
+  "tracked": 28
+ },
+ "archive_material_predicate": {
+  "fixture_globs": [
+   "pytest-*",
+   "dryrun-*",
+   "smoke*"
+  ],
+  "in_words": "there is no boolean expression -- `archive_material` is a per-branch literal in `classify()`. False for four kinds: `fixture` (slug matches FIXTURE_GLOBS), `process_record` (no ledger records but a MANIFEST.json), `empty` (no ledger records and no manifest), `mock` (every run_start names a loopback env_upstream). True for the remaining four: `salvage`, `preflight`, `aborted_experiment`, `experiment`. Equivalently: a run is archive material iff its ledger has records AND those records reached a non-loopback upstream AND the slug is not a fixture glob.",
+  "quoted_source_lines": {
+   "archive_material_branches": [
+    "def classify(slug: str, run_dir: str, records: List[Dict[str, Any]]) -> Dict[str, Any]:",
+    "    for glob in FIXTURE_GLOBS:",
+    "        if fnmatch.fnmatch(slug, glob):",
+    "            return {\"kind\": \"fixture\",",
+    "                    \"archive_material\": False,",
+    "    if not records:",
+    "        if os.path.exists(os.path.join(run_dir, \"MANIFEST.json\")):",
+    "            return {\"kind\": \"process_record\", \"archive_material\": False,",
+    "        return {\"kind\": \"empty\", \"archive_material\": False,",
+    "    if mock:",
+    "        return {\"kind\": \"mock\", \"archive_material\": False,",
+    "    if \"salvage\" in note or outcome == \"salvage\":",
+    "        return {\"kind\": \"salvage\", \"archive_material\": True,",
+    "    if \"pre-flight\" in note or \"preflight\" in note or slug.startswith(\"preflight-\"):",
+    "        return {\"kind\": \"preflight\", \"archive_material\": True,",
+    "    if aborted:",
+    "        return {\"kind\": \"aborted_experiment\", \"archive_material\": True,",
+    "    return {\"kind\": \"experiment\", \"archive_material\": True,"
+   ],
+   "classify_full_source": "def classify(slug: str, run_dir: str, records: List[Dict[str, Any]]) -> Dict[str, Any]:\n    \"\"\"What kind of thing is this directory? Decided from its contents.\"\"\"\n    for glob in FIXTURE_GLOBS:\n        if fnmatch.fnmatch(slug, glob):\n            return {\"kind\": \"fixture\",\n                    \"archive_material\": False,\n                    \"why\": (\"slug matches %r: a test or smoke leftover, not an \"\n                            \"experiment. It spent no quota and belongs outside \"\n                            \"`runs/` (`harness.run.FIXTURE_RUNS_DIR`).\" % glob)}\n\n    if not records:\n        if os.path.exists(os.path.join(run_dir, \"MANIFEST.json\")):\n            return {\"kind\": \"process_record\", \"archive_material\": False,\n                    \"why\": (\"no ledger, but a manifest: a tooling or repair \"\n                            \"pass that touched no environment. It has its own \"\n                            \"manifest and there is nothing to derive\")}\n        return {\"kind\": \"empty\", \"archive_material\": False,\n                \"why\": \"no ledger records: nothing happened here to account for\"}\n\n    mock = _mock_upstreams(records)\n    if mock:\n        return {\"kind\": \"mock\", \"archive_material\": False,\n                \"why\": (\"every run_start names a loopback env_upstream (%s): \"\n                        \"this ran against `proxy.mock.arc_mock`, reached no ARC \"\n                        \"API and spent no quota, so there is no billed action \"\n                        \"for the archive to account for. Not a `fixture` -- \"\n                        \"these are committed offline proofs that other run \"\n                        \"directories cite as evidence (see D-S8-018 and \"\n                        \"`runs/20260728T152910Z-a3-desk-gate/RUN_STATE.md`), \"\n                        \"and a fixture is a leftover nobody cites.\"\n                        % \", \".join(mock))}\n\n    start = _run_start(records)\n    note = (start.get(\"note\") or \"\").lower()\n    end = _run_end(records)\n    outcome = end.get(\"outcome\")\n    aborted = os.path.exists(os.path.join(run_dir, \"ABORTED.md\"))\n\n    if \"salvage\" in note or outcome == \"salvage\":\n        return {\"kind\": \"salvage\", \"archive_material\": True,\n                \"why\": (\"the run_start note or the run_end outcome says \"\n                        \"salvage: this run exists to close another run's \"\n                        \"orphaned scorecard, and carries that scorecard\")}\n    if \"pre-flight\" in note or \"preflight\" in note or slug.startswith(\"preflight-\"):\n        return {\"kind\": \"preflight\", \"archive_material\": True,\n                \"why\": (\"a pre-flight: the live chain exercised for zero billed \"\n                        \"actions. Cheap, but live, and part of the account\")}\n    if aborted:\n        return {\"kind\": \"aborted_experiment\", \"archive_material\": True,\n                \"why\": \"carries ABORTED.md: a live run stopped on a defect\"}\n    return {\"kind\": \"experiment\", \"archive_material\": True,\n            \"why\": \"a live run that reached its own end\"}\n",
+   "survey_row_assignment": [
+    "            \"archive_material\": kind[\"archive_material\"],"
+   ]
+  },
+  "where": "armtools/backfill.py::classify() -> dict, called by armtools/backfill.py::survey(); survey() copies kind['archive_material'] onto the row"
+ },
+ "measurement_integrity": {
+  "backfill_diff_deleted_lines": 0,
+  "check_10_observed_verdict": "`python -m armtools.verify_provenance` run at 20:49-20:55 local reported all ten checks PASS, check 10 with the post-fix detail string. Consistent with A=0 and G=0: the check was green before the fix and is green after it.",
+  "note": "While this measurement was being taken (2026-07-30 20:50-20:52 local) a concurrent session modified theoria-arm/armtools/backfill.py, theoria-arm/armtools/verify_provenance.py and theoria-arm/tests/test_files_in_clone.py in the working tree -- it appears to have implemented the very fix question G asks about (check 10's predicate becomes `paths_the_clone_ships` = `git ls-files` on the index, OR an ignore rule, plus a `path_is_inside_the_run` shape test and a third `unanswerable` verdict). This does NOT invalidate the numbers here: `git diff` on backfill.py is a single pure-addition hunk with zero deleted lines, so `survey`, `classify` and `_ignored_paths` -- the only backfill functions this script calls -- are byte-identical to HEAD. The numbers therefore describe both the committed code and the working tree.",
+  "survey_row_count_is_a_moving_target": "`runs/` gained two untracked directories during this session -- this scratch run and the concurrent session's 20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT. Both classify as not-archive-material (`empty` / `process_record`), so `rows_total` moved from 42 to 44 while `archive_material` stayed at 12 throughout. Every A-G count is over the 12 and is unaffected.",
+  "worktree_dirty_paths": [
+   " M theoria-arm/armtools/backfill.py",
+   " M theoria-arm/armtools/verify_provenance.py",
+   " M theoria-arm/tests/test_files_in_clone.py",
+   "?? theoria-arm/runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/",
+   "?? theoria-arm/runs/20260730T1400Z-A3-H3-SCOPE/"
+  ]
+ },
+ "meta": {
+  "head": "07a17a7c9206048658a17532069847b146fce30d",
+  "repo": "C:/Users/user/Desktop/theoria/.worktrees/a3-campaign-devpile",
+  "runs_root": "C:/Users/user/Desktop/theoria/.worktrees/a3-campaign-devpile/theoria-arm/runs",
+  "tracked_files_in_repo": 6699
+ },
+ "rows": [
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "ABORTED.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ABORTED.md",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "RUN_STATE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/RUN_STATE.json",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "SALVAGE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/SALVAGE.json",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/generated/domain.pddl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/generated/domain.pddl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/generated/problem.pddl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/generated/problem.pddl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/generated/theory.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/generated/theory.md",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/playbook.dsl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/problem.json",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "books/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/books/theory.dsl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "candidates.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/candidates.jsonl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "cost_curve.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "desk/call-001-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/desk/call-001-theorize-round1.md",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "neither",
+   "escapes": false,
+   "ignored": true,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "trace.jsonl",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/trace.jsonl",
+   "slug": "20260728T012311Z-g50t-first-contact-aborted",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "salvage",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "salvage",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage2",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "ABORTED.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ABORTED.md",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "RUN_STATE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/RUN_STATE.json",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "SALVAGE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/SALVAGE.json",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "candidates.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/candidates.jsonl",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "desk/call-001-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/desk/call-001-theorize-round1.md",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "desk_log.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/desk_log.json",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "surprises.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/surprises.jsonl",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "neither",
+   "escapes": false,
+   "ignored": true,
+   "is_dir": false,
+   "kind": "aborted_experiment",
+   "path": "trace.jsonl",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/trace.jsonl",
+   "slug": "20260728T014402Z-g50t-first-contact-aborted",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "salvage",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/ledger.jsonl",
+   "slug": "20260728T014402Z-g50t-first-contact-salvage",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "RUN_STATE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/RUN_STATE.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "SALVAGE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/SALVAGE.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/generated/domain.pddl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/generated/domain.pddl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/generated/problem.pddl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/generated/problem.pddl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/generated/theory.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/generated/theory.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/generated/theory.py",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/generated/theory.py",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev02-after-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev02-after-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev02-after-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev02-after-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev03-before-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev03-before-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev03-before-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev03-before-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev04-after-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev04-after-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev04-after-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev04-after-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev05-before-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev05-before-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev05-before-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev05-before-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev06-after-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev06-after-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev06-after-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev06-after-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev07-before-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev07-before-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev07-before-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev07-before-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev08-after-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev08-after-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev08-after-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev09-before-theorize/playbook.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/playbook.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev09-before-theorize/problem.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/problem.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/snapshots/rev09-before-theorize/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "books/theory.dsl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/theory.dsl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "candidates.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/candidates.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "certify_reconstructed.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/certify_reconstructed.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk/call-001-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk/call-001-theorize-round1.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk/call-002-theorize-round2.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk/call-002-theorize-round2.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk/call-003-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk/call-003-theorize-round1.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk/call-004-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk/call-004-theorize-round1.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk/call-005-theorize-round1.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk/call-005-theorize-round1.md",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk_log.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/desk_log.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/ledger.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "probes.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/probes.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "run.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "surprises.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/surprises.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "neither",
+   "escapes": false,
+   "ignored": true,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "trace.jsonl",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/trace.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "salvage",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/ledger.jsonl",
+   "slug": "20260728T015354Z-g50t-first-contact-salvage",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "RUN_STATE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/RUN_STATE.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "SALVAGE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/SALVAGE.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "certify.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/certify.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "commit.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/commit.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk_failures.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/desk_failures.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk_log.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/desk_log.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/ledger.jsonl",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "levels.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/levels.jsonl",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "plan.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/plan.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "run.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/run.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "surprises.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/surprises.jsonl",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "theorize.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/theorize.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "turn_series.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/turn_series.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "turns.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01/turns.json",
+   "slug": "20260729T004020Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "salvage",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T004020Z-leg01-salvage/ledger.jsonl",
+   "slug": "20260729T004020Z-leg01-salvage",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "RUN_STATE.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/RUN_STATE.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "candidates.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/candidates.jsonl",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "certify.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/certify.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "commit.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/commit.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk_failures.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/desk_failures.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "desk_log.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/desk_log.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/ledger.jsonl",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "levels.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/levels.jsonl",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "plan.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/plan.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "run.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/run.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "surprises.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/surprises.jsonl",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "theorize.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/theorize.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": true,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "trace.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/trace.jsonl",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "turn_series.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/turn_series.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "experiment",
+   "path": "turns.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T105729Z-leg01/turns.json",
+   "slug": "20260729T105729Z-leg01",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "preflight",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/preflight-20260728T012031Z/ledger.jsonl",
+   "slug": "preflight-20260728T012031Z",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "preflight",
+   "path": "ledger.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/preflight-20260728T012057Z/ledger.jsonl",
+   "slug": "preflight-20260728T012057Z",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": true,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "preflight",
+   "path": "run.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/preflight-20260728T012057Z/run.json",
+   "slug": "preflight-20260728T012057Z",
+   "tracked": true
+  }
+ ],
+ "shadow_rows": [
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "battery_check.g50t.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T152930Z-a3-turn-series/battery_check.g50t.json",
+   "slug": "20260728T152930Z-a3-turn-series",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "frontload_input.g50t.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T152930Z-a3-turn-series/frontload_input.g50t.json",
+   "slug": "20260728T152930Z-a3-turn-series",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "turn_series.g50t.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260728T152930Z-a3-turn-series/turn_series.g50t.json",
+   "slug": "20260728T152930Z-a3-turn-series",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/.gitignore",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/.gitignore",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/ADVERSARIAL-VERBATIM.md",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/ADVERSARIAL-VERBATIM.md",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/REPORT.md",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/REPORT.md",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/negative_sample.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/negative_sample.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/reconcile.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/reconcile.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/_a0_negative.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/_a0_negative.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/a0_report_rerun.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/a0_report_rerun.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.stdout.txt",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/negative_sample.stdout.txt",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-a0-spike.txt",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-a0-spike.txt",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-theoria-arm.txt",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/pytest-e14-theoria-arm.txt",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconcile.stdout.txt",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconcile.stdout.txt",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconciliation.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/reconciliation.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-bfs-plan.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-bfs-plan.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-recertify.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/raw/theoria-arm-recertify.json",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/inner/plan.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/inner/plan.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/inner/certify.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/inner/certify.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/tests/test_arm.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/tests/test_arm.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "theoria-arm/RUN_STATE.md",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/theoria-arm/RUN_STATE.md",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "a0-spike/pipeline/stages.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/stages.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "a0-spike/pipeline/run_a0.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/run_a0.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "a0-spike/pipeline/adapt.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/pipeline/adapt.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "repo_root",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "a0-spike/tests/test_a0.py",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/a0-spike/tests/test_a0.py",
+   "slug": "20260729T080000Z-E14-crash-is-not-a-finding",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-cli-aux-lines-call1.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-cli-aux-lines-call1.json",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-cli-result-envelopes.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-cli-result-envelopes.json",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-cli-transcripts-calls1-3.txt",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-cli-transcripts-calls1-3.txt",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-haiku-theorize-distribution.txt",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-haiku-theorize-distribution.txt",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-model-id-alias-gap.txt",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-model-id-alias-gap.txt",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-pool-totals-and-reconstruction.txt",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-pool-totals-and-reconstruction.txt",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "evidence-spend_gate-campaign-proof2.jsonl",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260729T2040Z-A3-unpriced/evidence-spend_gate-campaign-proof2.jsonl",
+   "slug": "20260729T2040Z-A3-unpriced",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/MANIFEST.json",
+   "slug": "20260730T1020Z-A3-SEAL-CONJUNCT-ONE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/RUN_STATE.md",
+   "slug": "20260730T1020Z-A3-SEAL-CONJUNCT-ONE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "probe_credential_residency.py",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/probe_credential_residency.py",
+   "slug": "20260730T1020Z-A3-SEAL-CONJUNCT-ONE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "residency_report.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/residency_report.json",
+   "slug": "20260730T1020Z-A3-SEAL-CONJUNCT-ONE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/MANIFEST.json",
+   "slug": "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/RUN_STATE.md",
+   "slug": "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "recheck_with_a_fixed_flatten.py",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/recheck_with_a_fixed_flatten.py",
+   "slug": "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "recheck_report.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY/recheck_report.json",
+   "slug": "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE/MANIFEST.json",
+   "slug": "20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE/RUN_STATE.md",
+   "slug": "20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT/MANIFEST.json",
+   "slug": "20260730T1200Z-A17-THE-STASH-WAS-INNOCENT",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT/RUN_STATE.md",
+   "slug": "20260730T1200Z-A17-THE-STASH-WAS-INNOCENT",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "remeasure.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1200Z-A17-THE-STASH-WAS-INNOCENT/remeasure.json",
+   "slug": "20260730T1200Z-A17-THE-STASH-WAS-INNOCENT",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1230Z-A3-ADVERSARIAL-TRIAGE/MANIFEST.json",
+   "slug": "20260730T1230Z-A3-ADVERSARIAL-TRIAGE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "TRIAGE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1230Z-A3-ADVERSARIAL-TRIAGE/TRIAGE.md",
+   "slug": "20260730T1230Z-A3-ADVERSARIAL-TRIAGE",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/MANIFEST.json",
+   "slug": "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "neither",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/RUN_STATE.md",
+   "slug": "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "neither",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "mutations.json",
+   "present": false,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT/mutations.json",
+   "slug": "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT",
+   "tracked": false
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "MANIFEST.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG/MANIFEST.json",
+   "slug": "20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "RUN_STATE.md",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG/RUN_STATE.md",
+   "slug": "20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG",
+   "tracked": true
+  },
+  {
+   "absolute": false,
+   "archive_material": false,
+   "convention": "run_dir",
+   "escapes": false,
+   "ignored": false,
+   "is_dir": false,
+   "kind": "process_record",
+   "path": "measurements.json",
+   "present": true,
+   "repo_rel_if_run_relative": "theoria-arm/runs/20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG/measurements.json",
+   "slug": "20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG",
+   "tracked": true
+  }
+ ],
+ "survey": {
+  "archive_material": 12,
+  "archive_material_slugs": [
+   "20260728T012311Z-g50t-first-contact-aborted",
+   "20260728T012311Z-g50t-first-contact-salvage",
+   "20260728T012311Z-g50t-first-contact-salvage2",
+   "20260728T014402Z-g50t-first-contact-aborted",
+   "20260728T014402Z-g50t-first-contact-salvage",
+   "20260728T015354Z-g50t-first-contact",
+   "20260728T015354Z-g50t-first-contact-salvage",
+   "20260729T004020Z-leg01",
+   "20260729T004020Z-leg01-salvage",
+   "20260729T105729Z-leg01",
+   "preflight-20260728T012031Z",
+   "preflight-20260728T012057Z"
+  ],
+  "by_kind": {
+   "aborted_experiment": 2,
+   "empty": 2,
+   "experiment": 3,
+   "mock": 7,
+   "preflight": 2,
+   "process_record": 23,
+   "salvage": 5
+  },
+  "caveat": "this measurement's own scratch directory '20260730T1400Z-A3-H3-SCOPE' is under runs/ and so appears as a survey row (kind `empty`, archive_material false). It does not affect any A-G count.",
+  "excluded": [
+   {
+    "kind": "process_record",
+    "slug": "20260728T141546Z-S8-provenance-backfill"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260728T152910Z-a3-desk-gate"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260728T152930Z-a3-turn-series"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260728T210000Z-a3-level-boundary"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260728T233900Z-A3-campaign-devpile"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260728T235841Z-leg01"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260728T235842Z-leg02"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260728T235843Z-leg01"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260729T0030Z-a3-desk-live-proof"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260729T0035Z-a3-desk-live-proof2"
+   },
+   {
+    "kind": "empty",
+    "slug": "20260729T003749Z-leg01"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T013000Z-A11"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T080000Z-E14-crash-is-not-a-finding"
+   },
+   {
+    "kind": "mock",
+    "slug": "20260729T105653Z-leg01"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T125500Z-A3-provenance-repair"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T162000Z-A3-two-recorded-not-fixed"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T1745Z-A3-per-model-ceiling"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T2015Z-A3-unblock"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260729T2040Z-A3-unpriced"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T0230Z-A3-MODEL-PATH-SEALING"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T0700Z-A3-COST-SHAPE-COUPLING"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T0855Z-A17-MEASUREMENT"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1020Z-A3-SEAL-CONJUNCT-ONE"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1050Z-A3-GUARD-BLIND-TO-EMPTY"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1130Z-A3-CHECK-TEN-WAS-DECORATIVE"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1200Z-A17-THE-STASH-WAS-INNOCENT"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1230Z-A3-ADVERSARIAL-TRIAGE"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1255Z-A3-H3-THE-CHECK-WAS-MACHINE-DEPENDENT"
+   },
+   {
+    "kind": "process_record",
+    "slug": "20260730T1310Z-A3-H1-THE-RECOMMENDED-FIX-IS-WRONG"
+   },
+   {
+    "kind": "empty",
+    "slug": "20260730T1400Z-A3-H3-SCOPE"
+   },
+   {
+    "kind": "mock",
+    "slug": "a3-gate-mock"
+   },
+   {
+    "kind": "process_record",
+    "slug": "campaign-a3-g50t"
+   }
+  ],
+  "not_archive_material": 32,
+  "rows_total": 44,
+  "rows_total_excluding_this_scratch_run": 43
+ },
+ "totals": {
+  "ignored": 4,
+  "listed_paths": 107,
+  "present": 104,
+  "runs_with_files": 12,
+  "tracked": 103
+ }
+}

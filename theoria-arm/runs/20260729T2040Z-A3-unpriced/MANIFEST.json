@@ -1,0 +1,79 @@
+{
+  "agent": "RES-1 subagent",
+  "base_commit": "994d35d25b4edc7be860ea427c952b87342bef6e",
+  "branch": "master",
+  "called_price_unpriced": false,
+  "files": [
+    {
+      "bytes": 3877,
+      "path": "evidence-cli-aux-lines-call1.json",
+      "sha256": "8b208f0deba310522479e07a9a329ca961c261ac82065a0b75d3a19a705ab32a"
+    },
+    {
+      "bytes": 1983,
+      "path": "evidence-cli-result-envelopes.json",
+      "sha256": "cab26db2aec2a99ff10494f0dd65281d9cb476ee92e0fe9ae9a8fb50ba9c1957"
+    },
+    {
+      "bytes": 6231,
+      "path": "evidence-cli-transcripts-calls1-3.txt",
+      "sha256": "74ae027cedc6d09f4075d9d1874ee8a511e819958b0e5dd9df60fb2805d641ef"
+    },
+    {
+      "bytes": 7672,
+      "path": "evidence-haiku-theorize-distribution.txt",
+      "sha256": "5f6c87743920a12af72ec2f1418d4ab4601a2c237500151f729ff07a413343ea"
+    },
+    {
+      "bytes": 2060,
+      "path": "evidence-model-id-alias-gap.txt",
+      "sha256": "86632e0fc6aa2adc39cb379418584f0a75ec84eda3f4405978f0a08dbd219e2f"
+    },
+    {
+      "bytes": 1648,
+      "path": "evidence-pool-totals-and-reconstruction.txt",
+      "sha256": "430d49037ba99c34463869045e38b9f0d7544b64a92a41fc1b102958eff7d8e4"
+    },
+    {
+      "bytes": 7832,
+      "path": "evidence-spend_gate-campaign-proof2.jsonl",
+      "sha256": "403761a78a7022127b4c8d5e356429b96e9dfe1f04a8a6791e63715c11820c03"
+    }
+  ],
+  "headline_findings": {
+    "alias_gap_is_real_and_singular": "claude-haiku-4-5-20251001 is the only model id in the repo absent from pricing_v1.json",
+    "date_suffixed_model_id_was_the_cause": false,
+    "lower_bound_vs_ceiling_contradiction": "verified",
+    "max_real_haiku_call_in_pool_usd": 0.146292,
+    "n_real_haiku_calls_in_pool": 305,
+    "placeholder_multiple_of_worst_real_call": 27.3,
+    "pool_price_correction_records": 0,
+    "pool_unpriced_calls": 1,
+    "pool_usd_spent_at_investigation": 36.142332,
+    "priced_siblings_usd": [
+      0.114256,
+      0.146292,
+      0.132608
+    ],
+    "true_cost_basis": "no claude -p session transcript exists for this call among 3381 scanned under ~/.claude/projects; desk calls 1-3 each have exactly one; 145 ms elapsed between pool seq 7417 and 7418",
+    "true_incremental_cost_usd": 0.0
+  },
+  "network_calls": 0,
+  "note": "FINDINGS.md could not be written: the agent harness refuses report .md files from a subagent. The narrative was returned to the parent agent (RES-1) as text; these evidence files are the machine-readable residue.",
+  "prompt_id": "A3-campaign-devpile",
+  "read_only": true,
+  "subject": {
+    "booked_usd": 4.0,
+    "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+    "ledger": "proxy/var/spend_gate.jsonl (gitignored runtime file)",
+    "pool": "theoria-shared-2026-07",
+    "reservation_id": "res-d9f50ec3c0ba4a9d",
+    "run_id": "r-96e128ffb1c64bad",
+    "seq": 7418,
+    "ts": "2026-07-29T00:36:50.506Z",
+    "unpriced": true
+  },
+  "title": "forensics on pool spend_gate.jsonl seq 7418, the single unpriced record blocking theoria-shared-2026-07",
+  "utc": "2026-07-29T20:52:06Z",
+  "wrote_to_any_ledger": false
+}

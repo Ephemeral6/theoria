@@ -89,10 +89,25 @@ GAME_USD = 60.0
 LEG_USD_CAP = 25.0
 ACTIONS_PER_LEVEL = 40
 
-#: `plan_caps` computes `usd_cap = cost_ceiling_usd + MODEL_CALL_CEILING_USD`,
-#: so the per-leg cost ceiling has to leave room for that last call to land on
-#: top of a full ceiling. 20 + 4 = 24, under the $25 per-reservation limit.
-LEG_COST_CEILING_USD = LEG_USD_CAP - spend_mod.MODEL_CALL_CEILING_USD - 1.0
+#: The model this campaign's desk runs. Named here because the leg's
+#: reservation is sized from it.
+CAMPAIGN_MODEL = "claude-opus-5"
+
+#: `plan_caps` computes `usd_cap = cost_ceiling_usd + <one model call>`, so the
+#: per-leg cost ceiling has to leave room for that last call to land on top of
+#: a full ceiling.
+#:
+#: Sized from the ceiling for the model actually in use, not from the flat
+#: `MODEL_CALL_CEILING_USD`. Those were the same number until the ceiling grew
+#: a model term; now opus-5 is $5.00, because at the observed $0.0024676/s a
+#: call that runs the full 1800s timeout costs $4.44 and the old $4.00 could
+#: not cover the one case it was charged for. Leaving this at 4 would size the
+#: reservation below what a single `check_model_call` can ask for, which shows
+#: up as a leg tripping near its own cap rather than as anything legible.
+#: 19 + 5 = 24, still under the $25 per-reservation limit.
+LEG_COST_CEILING_USD = (LEG_USD_CAP
+                        - spend_mod.model_call_ceiling_for(CAMPAIGN_MODEL)
+                        - 1.0)
 
 #: Legs in a row that may make no progress before the campaign gives up.
 ZERO_PROGRESS_LIMIT = 3
@@ -262,6 +277,40 @@ class Campaign:
         return min(LEG_COST_CEILING_USD,
                    max(0.0, self._game_headroom(game_id) - 1.0))
 
+    def _failed_leg_cost(self, game_id: str):
+        """What a leg that raised actually cost, asked of the authority.
+
+        The first version of this charged the leg's whole ceiling on the
+        reasoning that an upper bound errs safely. It does -- but it is wildly
+        wrong for the commonest failure by far, which is a leg that dies
+        *before it spends anything*: the first live attempt here failed on a
+        missing credential and was booked at $14.00 having made zero calls.
+        A ceiling charge on a leg that never started does not err safely, it
+        just makes the accounts fiction in the other direction.
+
+        The shared pool settles every model call as it happens and is keyed by
+        the leg's own campaign name, so it already knows the exact figure.
+        Ask it. Fall back to the ceiling only when it cannot answer, which is
+        the one case where an upper bound really is the best available.
+        """
+        in_flight = getattr(self, "_in_flight", None)
+        if in_flight:
+            try:
+                gate = self.spend_gate or spend_mod.SpendGate()
+                totals = gate.totals()
+                data = (totals.as_json() if hasattr(totals, "as_json")
+                        else dict(totals.__dict__))
+                entry = (data.get("campaigns") or {}).get(
+                    in_flight["campaign"])
+                if entry is not None:
+                    return float(entry.get("usd") or 0.0), "gate-settled"
+                # The pool knows every campaign that ever spent. Absent means
+                # this leg never reached a billable call.
+                return 0.0, "gate-settled-never-spent"
+            except Exception:                          # noqa: BLE001
+                pass
+        return self._leg_ceiling(game_id), "leg-ceiling-upper-bound"
+
     def _check_campaign_budget(self) -> None:
         """The ceiling that ends everything. Checked before a leg *and* after
         one: a campaign whose last leg overran, and which then ran out of games
@@ -352,6 +401,10 @@ class Campaign:
             gate=self.spend_gate)
         campaign_name = spend_mod.campaign_name(
             prompt_id=self.prompt_id, game_id=game_id, slug=slug)
+        # So the failure path can ask the gate what this leg actually cost
+        # instead of guessing. Set before `play()`, cleared by a clean return.
+        self._in_flight = {"campaign": campaign_name, "slug": slug,
+                           "ceiling": ceiling}
 
         def factory(env_base, run):
             return TheoriaArm(env_base=env_base, run=run, game_id=game_id,
@@ -479,17 +532,18 @@ class Campaign:
                 # direction that stops the campaign early rather than late, and
                 # labelled so nobody reads it as a measurement. The shared pool
                 # is unaffected either way -- it settled per call and is exact.
-                bound = self._leg_ceiling(game_id)
+                bound, source = self._failed_leg_cost(game_id)
                 self.legs.append({
                     "index": index, "game_id": game_id, "event": "leg_failed",
                     "error": "%s: %s" % (type(exc).__name__, exc),
                     "usd": bound,
                     "cost_accounting": {
                         "governing_usd": bound,
-                        "governing_source": "leg-ceiling-upper-bound",
-                        "why": "the leg raised before reporting a cost; this "
-                               "is the most it could have spent, not what it "
-                               "did spend",
+                        "governing_source": source,
+                        "why": "the leg raised before returning a summary; "
+                               "this figure comes from the shared pool where "
+                               "the pool could answer, and from the leg's "
+                               "ceiling where it could not",
                     },
                     "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 })
@@ -697,7 +751,7 @@ class Campaign:
         gets its own from `armtools.archive`, and that is the one the figure-2
         discovery rule looks for.
         """
-        return {
+        manifest = {
             "prompt_id": self.prompt_id,
             "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
             "base_commit": _git("rev-parse", "HEAD"),
@@ -716,18 +770,59 @@ class Campaign:
             "spent_usd": round(self.spent_usd, 6),
             "stopped": self.stopped,
         }
+        # A required field that is null must say so out loud. Without this the
+        # only signal is a `null` in a file nobody re-reads, and the campaign
+        # that produced one looked exactly like a campaign that did not.
+        missing = [k for k in ("prompt_id", "branch", "base_commit", "utc")
+                   if not manifest.get(k)]
+        if missing:
+            manifest["provenance_gap"] = {
+                "missing_required": missing,
+                "why": dict(_GIT_FAILURES) or "no reason was recorded",
+                "note": ("CLAUDE.md requires these four. This manifest is "
+                         "incomplete and any run reconstructed from it is "
+                         "unanchored -- treat the gap as a defect to chase, "
+                         "not as a field that happens to be empty."),
+            }
+        return manifest
+
+
+_GIT_FAILURES: Dict[str, str] = {}
 
 
 def _git(*args: str) -> Optional[str]:
+    """Best-effort git -- but never a *silent* None.
+
+    `branch` and `base_commit` are required manifest fields (CLAUDE.md), so a
+    None here is a hole in the provenance rather than a missing nicety. The
+    first version of this collapsed every failure into `None`, and that is how
+    the 2026-07-29 g50t campaign wrote a MANIFEST.json with both required
+    fields null without anything noticing: git was asked, git failed, and the
+    only trace of it was an absence. Re-running `_git` by hand afterwards
+    succeeded, so the failure was transient -- which is exactly the kind that
+    stays invisible when the reason is thrown away.
+
+    Falling back is still right; a campaign should not refuse to start because
+    git was slow. Losing the reason is the part that was wrong.
+    """
+    key = " ".join(args)
     try:
         import subprocess                              # noqa: PLC0415
         out = subprocess.run(("git",) + args, cwd=REPO, capture_output=True,
                              text=True, timeout=15)
-        return out.stdout.strip() or None
-    except Exception:                                  # noqa: BLE001
-        # A manifest missing its commit is worth more than a campaign that
-        # refused to start because git was slow.
+    except Exception as exc:                           # noqa: BLE001
+        _GIT_FAILURES[key] = "%s: %s" % (type(exc).__name__, exc)
         return None
+    value = out.stdout.strip()
+    if not value:
+        # A non-zero exit with an empty stdout looked identical to success
+        # under `out.stdout.strip() or None`. It is not: stderr says why.
+        _GIT_FAILURES[key] = (
+            "git exited %d with empty stdout; stderr: %s"
+            % (out.returncode, out.stderr.strip()[:200] or "(none)"))
+        return None
+    _GIT_FAILURES.pop(key, None)
+    return value
 
 
 # -- the entry point --------------------------------------------------------

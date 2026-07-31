@@ -23,8 +23,10 @@ What is checked, in the order the defect report asked for it:
      free headroom before anything is reserved.
 """
 
+import glob
 import json
 import os
+import re
 import sys
 
 import pytest
@@ -40,7 +42,7 @@ from proxy.spend_gate import SpendGate, SpendPolicy   # noqa: E402
 
 from harness import run as run_mod                    # noqa: E402
 from harness import spend as spend_mod                # noqa: E402
-from harness.modelcall import ModelDesk               # noqa: E402
+from harness.modelcall import ModelDesk, ModelError               # noqa: E402
 
 
 # ------------------------------------------------------------------ fixtures
@@ -473,15 +475,19 @@ def test_the_budget_is_computed_before_it_is_spent():
     """The arithmetic, worked, for the two shapes this arm actually runs."""
     twelve = spend_mod.plan_caps(actions=12, commands=2000,
                                  cost_ceiling_usd=20.0, require_headroom=False)
-    # 3 fixed + ceil(12 x 1.75 x 1.5) = 3 + 32 = 35 arm attempts; x3 = 105
-    assert twelve.arithmetic["arm_attempts_planned"] == 35
-    assert twelve.action_cap == 105
+    # 36 fixed + ceil(12 x 9.3 x 2.0) = 36 + 224 = 260 outbound requests.
+    # Was `3 + ceil(12 x 1.75 x 1.5) = 35 arm attempts; x3 = 105` until
+    # 2026-07-29; `runs/20260729T004020Z-leg01` is that 105, and it bound at 9
+    # of the 12 actions it was sized for. See `tests/test_cap_sizing.py` for why
+    # the constants moved and `harness/spend.py:plan_caps` for the derivation.
+    assert twelve.arithmetic["action_cap_planned"] == 260
+    assert twelve.action_cap == 260
     assert twelve.usd_cap == 24.0                     # $20 ceiling + one call
 
     live = spend_mod.plan_caps(actions=120, commands=2000,
                                cost_ceiling_usd=20.0, require_headroom=False)
-    # 3 + ceil(120 x 1.75 x 1.5) = 3 + 315 = 318; x3 = 954
-    assert live.action_cap == 954
+    # 36 + ceil(120 x 9.3 x 2.0) = 36 + 2232 = 2268
+    assert live.action_cap == 2268
     assert live.arithmetic["action_cap_hard_bound"] == 6000
 
 
@@ -535,7 +541,7 @@ def test_planning_refuses_when_the_pool_has_no_actions_left(tmp_path):
     with pytest.raises(spend_mod.InsufficientHeadroom) as exc:
         spend_mod.plan_caps(actions=120, commands=2000, cost_ceiling_usd=1.0,
                             gate=gate)
-    assert "954 actions requested > 40 free" in str(exc.value)
+    assert "2268 actions requested > 40 free" in str(exc.value)
 
 
 # ------------------------------------------------------------------- the lease
@@ -700,3 +706,275 @@ def test_the_guard_does_not_fire_on_an_ordinary_prompt(tmp_path, binding):
 def pool_of(binding):
     """The gate behind a binding, for asserting nothing was charged."""
     return binding.gate
+
+
+# ------------------------- 7. a raised call that still printed a price -------
+
+def test_a_timeout_that_printed_its_price_is_priced_not_blinded(binding, pool):
+    """The timeout is the dominant producer of blind rows, and it is also the
+    case most likely to have printed one: the CLI runs with
+    `--output-format json`, so a partial envelope carrying `total_cost_usd`
+    may be sitting in the buffer when the clock runs out.
+
+    The old code discarded `TimeoutExpired.stdout` outright, so the one call
+    that most needed a price threw away the only evidence that could supply
+    one -- and each such row then refuses every dollar in the shared pool, for
+    every session, until a human files a correction by hand. Salvaging it is
+    worth much more than the flag: `unpriced` is supposed to mean the recorded
+    figure is not the measured one, and here it is measured.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = json.dumps(
+        {"total_cost_usd": 0.137, "result": "",
+         "usage": {"input_tokens": 11, "output_tokens": 4096}})
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError, match="timed out"):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is False and last["usd"] == 0.137
+    assert last["detail"]["outcome"] == "raised_after_a_price"
+    assert d.unpriced_calls == 0
+
+
+def test_a_raised_call_that_printed_nothing_stays_blind(binding, pool):
+    """The negative control, and the actual 2026-07-29 incident.
+
+    That CLI printed nothing at all -- it raised 145ms after the previous call
+    settled, with an empty stdout, having never reached the provider. Salvage
+    must not invent a price for it: an empty buffer is not evidence of a free
+    call, and settling one at $0.00 would let the provider decide afterwards
+    whether it gets billed. Nothing to salvage stays nothing to salvage.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("unparseable CLI output: ")
+    err.partial_stdout = ""
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == spend_mod.MODEL_CALL_CEILING_USD
+    assert last["detail"]["outcome"] == "raised_before_a_price"
+
+
+def test_salvage_holds_partial_output_to_the_same_bar_as_a_whole_envelope(
+        binding, pool):
+    """A bare zero with no tokens behind it is the shape of a missing field,
+    and `price_of` already refuses to settle one. Salvage reuses `price_of`
+    rather than reimplementing the bar, so a truncated buffer cannot sneak a
+    $0.00 settlement past a check a complete envelope would have failed.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = json.dumps({"total_cost_usd": 0.0, "usage": {}})
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == spend_mod.MODEL_CALL_CEILING_USD
+
+
+def test_salvage_survives_a_truncated_json_buffer(binding, pool):
+    """Half a JSON document is the likeliest shape of a killed process's
+    stdout. It must fall through to blind rather than raising out of the
+    error path -- an exception thrown while handling an exception would lose
+    the original failure and leave the pool unrecorded.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = '{"total_cost_usd": 0.13, "usa'
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError, match="timed out"):
+        d.call("p", beat="theorize")
+
+    assert spends(pool)[-1]["unpriced"] is True
+
+
+# ------------------- 8. a test may not bill the pool the fleet shares --------
+
+def test_reserving_against_the_tracked_pool_from_pytest_is_refused(caps):
+    """The guard, tested from inside the thing it guards against.
+
+    2 817 of the shared pool's 4 775 actions -- 59% -- were written by pytest:
+    ten `...:pytest-*` campaigns over two days, from tests that called `play()`
+    without a `spend_gate` and got the default, which is the real pool. Every
+    one spent $0.00, so the dollar column stayed clean and nothing looked
+    wrong; what was being consumed was the action ceiling, and a headroom
+    number that is 59% fiction is not a margin.
+
+    This test does what those did -- ask for the default gate while under
+    pytest -- and requires a refusal. `_scratch_policy` is the escape and the
+    other tests in this file use it.
+    """
+    from proxy.spend_gate import SpendGate             # noqa: PLC0415
+
+    with pytest.raises(spend_mod.SpendGateError) as caught:
+        spend_mod.open_binding("theoria-arm:test:g50t-5849a774:would-pollute",
+                               caps, gate=SpendGate())
+
+    assert "pytest" in str(caught.value)
+    assert "scratch" in str(caught.value)
+
+
+def test_the_guard_leaves_a_scratch_pool_alone(tmp_path, caps):
+    """The negative control. A guard that also refuses the correct pattern
+    would just be read as noise and routed around, which is how the original
+    default came to be relied on.
+    """
+    gate = SpendGate(_policy(tmp_path / "scratch.jsonl"))
+    binding = spend_mod.open_binding(
+        "theoria-arm:test:g50t-5849a774:owns-its-pool", caps, gate=gate,
+        expect_pool={"pool": gate.policy.pool,
+                     "ledger_abspath": os.path.abspath(gate.ledger_path)})
+    assert binding is not None
+    binding.release("done")
+
+
+# --------------------- 9. the ceiling has to actually be a ceiling -----------
+
+def test_every_model_ceiling_covers_a_call_that_runs_to_the_timeout():
+    """`proxy/cost.py:93`: "a ceiling that is sometimes too low is not a
+    ceiling."
+
+    The flat $4.00 failed that standard in the single scenario that uses it.
+    The ceiling is what an unpriced call is charged, and a call becomes
+    unpriced by raising -- of which the commonest cause is the 1800s timeout.
+    At the observed opus-5 rate of $0.0028860/s a call that runs the full
+    timeout costs $5.19, so the number charged for it was $1.19 short of the
+    only case it existed to cover.
+
+    Asserted as arithmetic rather than as a remembered figure, so that moving
+    the timeout or re-measuring a rate re-checks the ceilings instead of
+    silently invalidating them.
+
+    **What this test does not do**, which is why the one below it exists: it
+    reads `OBSERVED_USD_PER_SECOND` as given. A rate constant that is itself too
+    low passes here and takes the ceiling down with it -- which is what happened
+    to opus-5 (rate 17% low, ceiling $0.96 below its own rule, both green here).
+    """
+    for model, rate in spend_mod.OBSERVED_USD_PER_SECOND.items():
+        implied = rate * spend_mod.MODEL_CALL_TIMEOUT_S
+        ceiling = spend_mod.model_call_ceiling_for(model)
+        assert ceiling >= implied, (
+            "%s: ceiling $%.4f is below the $%.4f a call running the full "
+            "%ds timeout would cost" % (model, ceiling, implied,
+                                        spend_mod.MODEL_CALL_TIMEOUT_S))
+
+
+def test_the_dated_model_id_the_cli_reports_resolves_to_a_ceiling():
+    """The CLI reports `claude-haiku-4-5-20251001`; the price table carries
+    only `claude-haiku-4-5`. That gap is why 5 797 recorded calls cannot be
+    priced by `proxy/cost.py`. Fixing the table belongs to another track, but
+    this arm must not inherit the gap: the dated id has to resolve here, and to
+    the same number as the bare one.
+    """
+    assert (spend_mod.model_call_ceiling_for("claude-haiku-4-5-20251001")
+            == spend_mod.model_call_ceiling_for("claude-haiku-4-5")
+            == 1.25)
+    # And an unknown model gets the most conservative number available, not the
+    # cheapest: no measurement is the case to be most careful about.
+    assert (spend_mod.model_call_ceiling_for("some-model-released-tomorrow")
+            == max(spend_mod.MODEL_CALL_CEILINGS_USD.values()))
+
+
+def _archive_worst_per_model():
+    """Worst rate and worst call per model, re-derived from every desk log.
+
+    Deliberately independent of `harness.spend`: it re-reads the archive rather
+    than trusting the constants, because trusting the constants is the failure
+    this exists to catch.
+    """
+    worst_rate, worst_call = {}, {}
+    for path in glob.glob(os.path.join(_bootstrap.path("runs"), "*",
+                                       "desk_log.json")):
+        with open(path, encoding="utf-8") as handle:
+            for record in json.load(handle):
+                if not isinstance(record, dict) or "cli_cost_usd" not in record:
+                    continue
+                model = re.sub(r"-\d{8}$", "", record["model"])
+                usd = float(record["cli_cost_usd"])
+                secs = record["elapsed_ms"] / 1000.0
+                worst_rate[model] = max(worst_rate.get(model, 0.0), usd / secs)
+                worst_call[model] = max(worst_call.get(model, 0.0), usd)
+    return worst_rate, worst_call
+
+
+def test_the_ceiling_table_still_covers_the_archive():
+    """Re-derive the sizing inputs from the logs; do not re-read the constants.
+
+    The test above checks the ceilings against `OBSERVED_USD_PER_SECOND`. That
+    catches a ceiling lowered under a correct rate, and nothing else -- a rate
+    constant that is itself too low sails through it, and drags the ceiling down
+    with it. Both happened at once on opus-5: the rate was taken as the worst
+    *call* divided by its own duration (the dearest call is a long one, so that
+    ratio is middling; the costliest second belongs to a shorter call), which
+    read 17% low, and the ceiling was set to $5.00 while `4 x $1.489011 = $5.96`
+    was already the binding half of the documented rule. Every existing test was
+    green throughout.
+
+    So this one goes back to the archive for both maximands. It is the only
+    check here that would have failed before the correction.
+    """
+    worst_rate, worst_call = _archive_worst_per_model()
+    assert worst_rate, "no desk logs in the archive: this test checked nothing"
+
+    for model, rate in sorted(worst_rate.items()):
+        recorded = spend_mod.OBSERVED_USD_PER_SECOND.get(model)
+        assert recorded is not None, (
+            "%s appears in the archive with no recorded rate" % model)
+        assert recorded >= rate, (
+            "%s: the recorded rate $%.7f/s is below the worst rate in the "
+            "archive, $%.7f/s. A rate that understates makes every ceiling "
+            "derived from it understate too." % (model, recorded, rate))
+
+        implied = max(rate * spend_mod.MODEL_CALL_TIMEOUT_S,
+                      4 * worst_call[model])
+        ceiling = spend_mod.model_call_ceiling_for(model)
+        assert ceiling >= implied, (
+            "%s: ceiling $%.2f is below $%.4f, which is what this table's own "
+            "stated rule -- max(timeout x rate, 4x worst call) -- produces from "
+            "the archive." % (model, ceiling, implied))
+
+
+def test_a_haiku_call_that_goes_unpriced_is_not_charged_the_opus_ceiling(
+        binding, pool):
+    """The row that blocked the whole fleet, as a test.
+
+    seq 7418 is a haiku call booked at $4.00 -- 27x its own settled siblings in
+    the same run ($0.114256 / $0.146292 / $0.132608). `price_unpriced` can only
+    add, so that overstatement is permanent. Charging the right tier is the
+    only point at which it can be prevented.
+    """
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=ModelError("claude -p timed out after 1800s"))
+    d.model = "claude-haiku-4-5-20251001"
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == 1.25, "a haiku call must not be charged opus money"
+    assert last["usd"] < 4.00

@@ -1,0 +1,31 @@
+{
+  "prompt_id": "A17-armversion-reads-all-refs",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "f3a3f8264d7c70e1f6f7f1626d0d9a24f8ab6c0b",
+  "utc": "2026-07-30T08:55:00Z",
+  "agent": "RES-1",
+  "cycle": 46,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "A17 的测量阶段（要求 1：先量别先修）。armversion.scan() 默认 rev-list --all，实测 67 个提交只经由 refs/stash 进入扫描，其中 4 个携带的 theoria-arm 子树在别处看不到——即 50 个 arm version 里有 4 个只因为存在一个 stash 而存在，而那两条 stash 是 git merge 的 autostash 自动建的。今天它没有咬到任何一份归档清单（--all 与 HEAD 在全部 12 份上裁决相同，与 OPS-M §8.7 一致），但裁决确实是引用集合的函数：leg01 在本地引用下 ambiguous/4、在 origin/master 下 no_match/0。",
+  "leg": "offline measurement -- 无修改，只测量",
+  "status": "measurement only; A17 尚未被认领（territory 被 A3 占着，board 判 territory-blocked，对作者本人也一样，已上总线）",
+  "inputs": [
+    "theoria-arm/armtools/armversion.py:125 scan(refs='--all') 与 :147 _git('rev-list', refs)",
+    "monitor/inbox/20260730T040758Z-opsm-a3-...md §8.7（比的是漂移集合相同；本轮补的是每份清单裁决相同）",
+    "monitor/board/items/A3-A17-armversion-reads-all-refs.md（自供条目）"
+  ],
+  "changed": [
+    "无 —— 本 leg 只新增本 run 目录下的 FINDINGS.md 与本清单"
+  ],
+  "tests": {
+    "suite": "未改代码，未新增测试；本 leg 的产出是测量表"
+  },
+  "sealed_pile_contact": "none",
+  "spend": "none -- 未调用 spend_gate.reserve()，无计费动作",
+  "did_not_do": [
+    "未建任何 git tag（会扰动别人正在跑的 provenance 测量，有先例）",
+    "未 git stash drop（会真的删掉 4 个 arm version，且那两条 stash 里是别人领地的内容）",
+    "未改任何被跟踪文件"
+  ]
+}

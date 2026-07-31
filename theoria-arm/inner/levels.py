@@ -60,10 +60,20 @@ class LevelLog:
         #: begins. Level 1 begins at the first step of the run.
         self.starts: List[int] = [0]
         self.completed = 0
+        #: Set when the counter reaches the game's last level: the game is won
+        #: and there is no level after this one.
+        self.finished = False
         #: RESETs spent probing for the next level after a `WIN` that the
         #: roster says is not the last one. Bounded so an arm that cannot
-        #: advance stops rather than spins.
+        #: advance stops rather than spins, and **reset on a successful
+        #: advance** -- it is a budget per boundary, not per run, and a
+        #: seven-level game has to cross six of them.
         self.advance_attempts = 0
+
+        #: What each RESET-after-WIN actually returned. This is the first thing
+        #: in the repository that will ever observe a level completion, so it
+        #: keeps the evidence whichever way the probe goes.
+        self.reset_probes: List[Dict[str, Any]] = []
 
     @property
     def level(self) -> int:
@@ -76,7 +86,8 @@ class LevelLog:
 
     def observe(self, *, levels_completed: Optional[int], step_idx: int,
                 action: str, turn: Optional[int] = None,
-                actions_spent: Optional[int] = None) -> Optional[Dict[str, Any]]:
+                actions_spent: Optional[int] = None,
+                final_level: Optional[int] = None) -> Optional[Dict[str, Any]]:
         """Called for every recorded step. Returns the event, or None.
 
         Only an *increase* is a boundary. The field is absent on failed
@@ -87,6 +98,14 @@ class LevelLog:
         if levels_completed is None:
             return None
         if levels_completed <= self.completed:
+            return None
+        if final_level is not None and levels_completed >= final_level:
+            # The game is won, not advanced. Count it, but do not open a level
+            # that does not exist: the caller's boundary handling drops the
+            # problem and the compiled forms, which on a winning run would
+            # delete exactly the artefacts that say how it was won.
+            self.completed = levels_completed
+            self.finished = True
             return None
 
         event = {
@@ -141,6 +160,8 @@ class LevelLog:
             "levels_completed": self.completed,
             "level": self.level,
             "boundaries": len(self.events),
+            "finished": self.finished,
             "starts": list(self.starts),
             "events": list(self.events),
+            "reset_probes": list(self.reset_probes),
         }

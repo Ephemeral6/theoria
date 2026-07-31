@@ -1,0 +1,40 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "1e29578a",
+  "utc": "2026-07-30T13:10:00Z",
+  "agent": "RES-1",
+  "cycle": 50,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "去修分诊表排第一的 H1。缺陷复验成立（一个未跟踪未忽略的 stray 仍会进 files[]，于是 check 8 在两台机器上给两个答案）；但对抗复核推荐的修法（改用 git ls-files）被测量否掉：build() 跑在产物被提交之前，git ls-files 对一个全新 run 返回空列表，而 verify.py 的 MIN_RUN_FILES 下限是 8。所以本轮不实现任何修法，交一份定型：缺陷的真实形状 + 两个候选设计 + 推荐顺序。H1 仍然开着。",
+  "leg": "offline -- 零 API、零花费、封存堆零接触；未改任何生产代码",
+  "inputs": [
+    "runs/20260730T1230Z-A3-ADVERSARIAL-TRIAGE/TRIAGE.md 的 H1",
+    "对抗复核（机器无关性视角）CLAIM 1a 及其推荐处方"
+  ],
+  "measured": {
+    "defect_reproduced": true,
+    "files_before": 14,
+    "files_after_a_stray_lands": 15,
+    "recommended_fix_git_ls_files_on_a_fresh_unstaged_run": [],
+    "same_run_after_git_add": ["certify.json", "ledger.jsonl", "turns.json"],
+    "why_the_recommendation_fails": "build() runs before the run's artefacts are committed, so git ls-files returns nothing for every new run; verify.py's MIN_RUN_FILES floor is 8"
+  },
+  "the_actual_shape": "一个函数服务于产物生命周期的两个时刻：build() 在提交之前（文件系统是唯一知道产物存在的来源），check 8 重导在提交之后（文件系统同时持有别人扔的东西）。从文件系统上『尚未 stage 的本 run 产物』与『某人的 .DS_Store』不可区分。缺陷在这里，不在用错 API。",
+  "candidate_designs": {
+    "D1": "check 8 不再重导 files[]，改由 check 10 独占。移除机器相关性而非搬家，files[] 语义不变。代价：check 8 的 byte-for-byte 说法要加显式例外，且必须写进检查的名字而不只是注释。前置：必须先修 H3，否则只是把机器相关性搬给一个判据是 os.path.exists 的检查。",
+    "D2": "files[] 每条记录 build 时的 tracked-ness。代价：新字段且是从 build 抄来的而非重导出来的 —— 正是 _files_the_clone_carries 的 docstring 用来拒绝『为被排除文件保留 sha256』的那条理由。",
+    "recommendation": "D1，但 H3 先做"
+  },
+  "lesson": "一份对抗复核报告的诊断很强，不代表它的处方被同样强度地检验过。诊断只需要一个反例，处方要在所有调用点上成立。",
+  "verified_in_two_trees": {
+    "worktree_that_made_the_artefacts": ".worktrees/a3-campaign-devpile -- 273 tests green, 10 checks OK, verify.py green",
+    "fresh_equivalent_clone": ".worktrees/res1c49-clone -- 273 tests green, 10 checks OK"
+  },
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "measurements.json"}
+  ]
+}

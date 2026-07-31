@@ -39,6 +39,82 @@ from harness.modelcall import call_field
 
 from proxy.ledger import read_ledger
 
+#: Every field this archive copies out of `proxy.cost.price_run()`, named here
+#: instead of being whatever that dict happens to hold on the day it runs.
+#:
+#: `costs()` used to embed the return value verbatim. `proxy/cost.py` is another
+#: territory's file, its return shape was never declared a contract, and the
+#: consequence was measured: commit `71b882c8` added three keys to it and
+#: thereby changed the bytes of **every** already-archived manifest that
+#: re-derives through `build()` -- 7 of 7 -- so `verify_provenance` check 8 went
+#: red for a whole territory fourteen hours after the branch it blocked was
+#: written. An archive whose bytes depend on an undeclared foreign shape is not
+#: an archive; it is a cache of someone else's refactor.
+#:
+#: The projection is the fix, but the *contents* of this tuple are a separate
+#: judgement and the harder one. Freezing it at the five keys the old manifests
+#: carry would have restored byte-stability without touching a single archived
+#: file -- and would have been wrong. `usd_total` is a **lower bound**
+#: (`proxy/cost.py:186`), and `unmeasured_calls` / `missing_usage_keys` are the
+#: only channels in this manifest that say why it is short.
+#: `figures/fig02_bill_shape.py:503` prints that total as "table recomputes
+#: ...", so dropping them would let this project's own bill figure present a
+#: floor as a total -- the exact defect S29 fixed one layer down, re-introduced
+#: one layer up to keep a gate green.
+#:
+#: `unpriced_usage_keys` is the odd one out and saying so is more useful than a
+#: tidy claim that all three are load-bearing: it is **redundant**, exactly equal
+#: to the `usage_keys_the_table_cannot_price` this function already computes for
+#: itself by calling `table.cost()` a second time (measured -- and `price_run`'s
+#: own docstring says this arm was the only reader that ever saw it). It is
+#: adopted anyway, for one reason: it arrives in the same diff as the other two,
+#: so it costs no additional migration, and a `from_price_table` that is a
+#: faithful copy of what the conversion reported is easier to reason about than
+#: one carrying a silent, undocumented subtraction. If it is ever dropped, the
+#: information survives in the sibling field -- which is not true of the other
+#: two, and that asymmetry is the whole point of writing this down.
+#:
+#: The keys are adopted, and the seven manifests written before they existed were
+#: migrated in a recorded pass
+#: (`runs/20260730T0700Z-A3-COST-SHAPE-COUPLING/`).
+#:
+#: Adding a key here is therefore a deliberate act with a price: the manifests
+#: on disk were written without it and must be migrated, in the open, with the
+#: diff shown. That price is the point. It is what keeps the shape of this
+#: archive a decision somebody made rather than a side effect of somebody
+#: else's commit. `tests/test_cost_shape.py` fails the moment `price_run`
+#: reports a key this tuple does not list, so the decision is forced at the
+#: moment of the change instead of surfacing as a red gate half a day later.
+ARCHIVE_COST_FIELDS = (
+    "model_calls",
+    "per_model",
+    "pricing",
+    "unpriced_models",
+    "usd_total",
+    "missing_usage_keys",
+    "unmeasured_calls",
+    "unpriced_usage_keys",
+)
+
+
+def _declared_cost(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """`raw` projected onto `ARCHIVE_COST_FIELDS`.
+
+    A key `price_run` did not return is left out rather than filled in with a
+    null: this archive records what the conversion said, and inventing a field
+    it never produced would be the same class of lie as the `or 0` that S29
+    removed from the layer below. Conversely a key it returns that this arm has
+    not declared is dropped -- silently here, loudly in
+    `tests/test_cost_shape.py`, which is where a shape change should be
+    argued out.
+
+    The failure dict (`{"error": ...}`) is passed through untouched: it has none
+    of these fields, and projecting it would erase the only thing it says.
+    """
+    if "error" in raw:
+        return raw
+    return {key: raw[key] for key in ARCHIVE_COST_FIELDS if key in raw}
+
 
 def reconcile(records: List[Dict[str, Any]], scorecard: Optional[Dict[str, Any]]
               ) -> Dict[str, Any]:
@@ -114,7 +190,7 @@ def costs(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         from proxy.cost import DEFAULT_TABLE, PriceTable, price_run   # noqa: PLC0415
         table = PriceTable.load(DEFAULT_TABLE)
         table_ref = table.reference()
-        table_cost = price_run(calls, table)
+        table_cost = _declared_cost(price_run(calls, table))
         for record in calls:
             line = table.cost(record.get("model", "?"), record.get("usage") or {})
             for key in (line.get("unpriced_usage_keys") or []):
@@ -285,13 +361,38 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     # surprise. Stating it this way makes the check strictly stronger than
     # "calls > 0 and surprises == 0", which a long run would pass trivially.
     bootstrap = 1 if calls else 0
-    unexplained = max(0, len(calls) - bootstrap - len(surprises))
+
+    # A retired surprise did not cause a model call, so it must not licence
+    # one. `handled_by` records who closed a surprise; anything closed with
+    # `"retired: ..."` was closed *without* theorizing -- today only by a level
+    # boundary. Counting those in the denominator raises the ceiling on
+    # unexplained calls by one apiece, which is a false negative in exactly the
+    # direction that hides a violation of the arm's central claim: three
+    # boundaries retiring two surprises each would buy six free unexplained
+    # model calls with `holds` still True.
+    #
+    # This was found by an adversarial review while the boundary still retired
+    # surprises. It no longer does (`DECISIONS.md` D-A3-003), so nothing on the
+    # live path reaches this today -- but `Register.retire_pending` still
+    # exists, and an audit that miscounts in the lenient direction is worth
+    # fixing whether or not today's code path trips it. The retired ones are
+    # reported rather than dropped: "how many surprises died at a boundary" is
+    # itself a datum.
+    def _retired(item):
+        return str(item.get("handled_by") or "").startswith("retired:")
+
+    retired = [s for s in surprises if _retired(s)]
+    licensing = [s for s in surprises if not _retired(s)]
+    unexplained = max(0, len(calls) - bootstrap - len(licensing))
 
     return {
         "model_calls": len(calls),
         "calls_by_beat": beats,
         "surprises": len(surprises),
+        "surprises_licensing_a_call": len(licensing),
+        "surprises_retired": len(retired),
         "surprises_by_kind": _histogram(s.get("kind") for s in surprises),
+        "retired_by_kind": _histogram(s.get("kind") for s in retired),
         "calls_at_forbidden_beats": illegal,
         "bootstrap_calls_allowed": bootstrap,
         "calls_beyond_bootstrap": max(0, len(calls) - bootstrap),
@@ -302,6 +403,12 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
             "exists yet for the world to contradict; it is counted as the one "
             "permitted bootstrap call and every later call must be covered by "
             "a surprise."),
+        "retired_note": (
+            "a surprise closed with handled_by='retired: ...' was closed "
+            "without theorizing, so it licences no model call and is excluded "
+            "from the denominator. It is still counted in `surprises` and in "
+            "`surprises_by_kind`, because the seven counts are a record of "
+            "what the world did, not of what was paid for."),
         "note": ("probe design spent no model call: the frontier is computed by "
                  "probe_frontier, which is exact on a deterministic world. "
                  "Constraint 8 permits a call there; this run did not need one."),

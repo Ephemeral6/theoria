@@ -1,0 +1,620 @@
+[
+ {
+  "actions_spent": 5,
+  "beat": "observe",
+  "detail": "opening sweep over [1, 2, 3, 4, 5]",
+  "turn": 0
+ },
+ {
+  "actions_before": 5,
+  "elapsed_s": 242.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 1
+ },
+ {
+  "actions_before": 6,
+  "elapsed_s": 289.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 2
+ },
+ {
+  "actions_before": 7,
+  "elapsed_s": 405.4,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 3
+ },
+ {
+  "actions_before": 8,
+  "elapsed_s": 429.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 4
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 472.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 5
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 676.3,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 6
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 875.0,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 7
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 1074.0,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 8
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 1272.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 9
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 1472.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 10
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 1670.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 11
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 1872.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 12
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 2071.3,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 13
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 2270.1,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 14
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 2469.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 15
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 2667.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 16
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 2866.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 17
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 3067.0,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 18
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 3268.1,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 19
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 3470.3,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 20
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 3670.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 21
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 3881.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 22
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 4083.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 23
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 4284.4,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 24
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 4485.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 25
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 4689.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 26
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 4889.1,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 27
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 5087.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 28
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 5288.0,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 29
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 5487.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 30
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 5686.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 31
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 5887.3,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 32
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 6086.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 33
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 6285.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 34
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 6485.1,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 35
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 6684.3,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 36
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 6883.4,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 37
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 7082.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 38
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 7284.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 39
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 7483.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 40
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 7682.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 41
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 7882.0,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 42
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 8081.1,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 43
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 8280.2,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 44
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 8479.6,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 45
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 8678.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 46
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 8877.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 2,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 47
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 9076.8,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 48
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 9276.7,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 49
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 9475.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 5,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 50
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 9674.9,
+  "predictor": "theory.py has not been generated",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 51
+ }
+]

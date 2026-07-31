@@ -1,0 +1,9 @@
+[1/3] suite
+   ok    242 tests collected, suite green
+[2/3] one real run -- the whole arm, offline against proxy/mock
+   ok    game g50t-5849a774, budget 6 actions, no key, no network
+[3/3] artefact self-check
+   ok    11 ledger records (7 env_steps), 13 run files, all 17 manifest fields, sealing clean, dev pile only
+
+theoria-arm: green -- suite, one offline run, artefact fields
+verify EXIT=0

@@ -1,0 +1,180 @@
+[
+ {
+  "actions_spent": 5,
+  "beat": "observe",
+  "detail": "opening sweep over [1, 2, 3, 4, 5]",
+  "turn": 0
+ },
+ {
+  "actions_before": 5,
+  "certify": {
+   "cheap_green": false,
+   "proof_layer_available": false,
+   "replay": "1/5 transitions replay exactly",
+   "replay_ok": false,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 1.0,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-01",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_move_down"
+   ]
+  },
+  "theorize": "stopped repairing after 2 rounds; going back for evidence",
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 2,
+  "turn": 1
+ },
+ {
+  "actions_before": 6,
+  "elapsed_s": 423.1,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-02",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_move_down"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 2
+ },
+ {
+  "actions_before": 7,
+  "elapsed_s": 423.2,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-03",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_move_down"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 3
+ },
+ {
+  "actions_before": 8,
+  "certify": {
+   "cheap_green": false,
+   "proof_layer_available": false,
+   "replay": "1/8 transitions replay exactly",
+   "replay_ok": false,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 423.3,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-04",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_move_down"
+   ]
+  },
+  "theorize": "the desk failed: ModelError: unparseable CLI output: ",
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 1,
+  "turn": 4
+ },
+ {
+  "actions_before": 9,
+  "elapsed_s": 631.7,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 5
+ },
+ {
+  "actions_before": 10,
+  "elapsed_s": 631.9,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 6
+ },
+ {
+  "actions_before": 11,
+  "elapsed_s": 632.0,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "no action separates the hypotheses; taking the least-tried legal action"
+  },
+  "theorize": "the desk failed: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "turn": 7
+ }
+]

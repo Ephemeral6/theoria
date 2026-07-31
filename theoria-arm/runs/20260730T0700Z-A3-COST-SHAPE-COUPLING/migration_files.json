@@ -1,0 +1,26 @@
+{
+ "refused": [],
+ "runs": [
+  {
+   "dropped_confirmed_ignored_by_git": [
+    "candidates.jsonl",
+    "trace.jsonl"
+   ],
+   "everything_outside_files_identical": true,
+   "ledger_sha256_after": "2c30879a8f5c08d780a8623f5b03e97db44c4a91708abf17e29f2f78039e1db6",
+   "ledger_sha256_before": "2c30879a8f5c08d780a8623f5b03e97db44c4a91708abf17e29f2f78039e1db6",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "71dc70a5f974e7667cb5bf58e5bc327fe376f77a300a0868f1849eb96aec3a8a",
+   "manifest_sha256_before": "b8524433d16a8733dff55ca602cd9038c82fef36981605766963dd61f137a3d0",
+   "paths_dropped": [
+    "candidates.jsonl",
+    "trace.jsonl"
+   ],
+   "paths_gained": [],
+   "safe": true,
+   "slug": "20260729T004020Z-leg01",
+   "surviving_entries_untouched": true
+  }
+ ],
+ "wrote": true
+}

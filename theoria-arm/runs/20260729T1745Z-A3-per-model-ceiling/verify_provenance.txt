@@ -1,0 +1,11 @@
+PASS  runs/ contains no test or smoke fixture                                         every directory under runs/ is archive material or a process record
+PASS  every run has a MANIFEST.json                                                   12 runs, 12 manifests
+PASS  prompt_id / branch / base_commit / utc are present or explicitly accounted for  every manifest either carries the four or names what it lost
+PASS  billed actions reconcile: ledgers vs closed scorecards                          ledgers say 32, the 6 closed scorecards say 32
+PASS  every run that spent actions can point at its scorecard                         each of the 12 runs that spent an action carries its scorecard or names the salvage holding it
+PASS  every scorecard opened and never closed is declared as such                     1 orphan(s), all declared in the manifest of the run that opened them
+PASS  no sealed-pile game appears anywhere in the archive                             every manifest's sealing check is clean
+PASS  re-deriving every manifest reproduces it byte for byte                          12 manifests, all byte-stable under re-derivation
+PASS  every recorded base_commit carries its verification verdict                     each base_commit is either derived from the recorded arm_version or carries a check that says it is not
+
+OK: 9 checks

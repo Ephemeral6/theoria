@@ -87,6 +87,8 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
+from proxy.redact import VAULT
+
 #: The CLI is started here, outside the repository, for baseline-arms' D-009
 #: reason: Claude Code walks parent directories looking for CLAUDE.md, and a
 #: desk started inside the repo would read Theoria.md, the pile cut, the other
@@ -95,6 +97,58 @@ from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 NEUTRAL_PARENT = tempfile.gettempdir()
 
 PROVIDER = "anthropic-claude-code-cli"
+
+#: Environment variables removed before the desk subprocess starts.
+#:
+#: `ARC_API_KEY` is the game credential: `CLAUDE.md` seals it inside the
+#: environment proxy, and the desk has no business holding it.
+#:
+#: The three `ANTHROPIC_*` names are the redirect surface, and they are here
+#: because A11 found the comment below the pop claimed to cover them and did
+#: not. `ANTHROPIC_BASE_URL` is exactly how the model proxy was wired when it
+#: was tried (see the module docstring), so it is a variable someone in this
+#: repo has genuinely exported; `ANTHROPIC_AUTH_TOKEN` and `ANTHROPIC_API_KEY`
+#: are the credentials that would make a redirected endpoint answer instead of
+#: refusing. Inheriting any of them turns a desk call into a request this
+#: ledger cannot see, while `total_cost_usd` still comes back in the CLI's
+#: envelope and the run still looks fully accounted for.
+#:
+#: The CLI authenticates with its own stored OAuth bearer, so removing these
+#: takes nothing away from it. If a future run genuinely needs to point the
+#: desk somewhere else, that is a recorded act -- pass it explicitly and write
+#: down where it went -- not something inherited from whatever shell happened
+#: to launch the arm.
+SCRUBBED_FROM_DESK_ENV = ("ARC_API_KEY", "ANTHROPIC_BASE_URL",
+                          "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_API_KEY")
+
+
+class CredentialBreach(RuntimeError):
+    """A registered secret was about to be handed to the desk subprocess.
+
+    Sibling of `AnonymityBreach`, and for its reason: this is a defect in the
+    harness, not something the loop can learn from by gathering more evidence.
+    `inner/loop.py` re-raises both rather than recording them as desk failures.
+
+    It exists because the scrub above is **by name**, and a name-based scrub is
+    blind to the value. `Theoria.md:305`'s Phase 1 line is a conjunction --
+    *no credential inside the arm* AND *egress bypassing the two proxies must
+    fail* -- and the first conjunct had no test anywhere in this arm. Measured
+    rather than argued (`runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/`): with a
+    sentinel key handed to a live `Run`, the credential is resident at
+    `run._cfg.api_key` and in the process-wide `VAULT`. So the first conjunct
+    is false at the process boundary, and whether that reading is the binding
+    one is the monitor's call, not this file's.
+
+    What is *not* the monitor's call is the consequence. `_invoke` builds the
+    desk's environment with `dict(os.environ)`, and `CLAUDE.md` documents
+    `set -a; . ./.env; set +a` as the way to load the key -- so the credential
+    being in this process's environment is the *documented* workflow, not a
+    hypothetical. Under any other variable name (`ARC_API_KEY_BACKUP`, a CI
+    runner's own convention, a `.env` copied to a second name) the four-name
+    pop misses it and the value goes to a subprocess this ledger does not
+    control. Whatever "inside the arm" turns out to mean, the credential
+    reaching the desk is a leak under every reading of it.
+    """
 
 
 def call_field(record: Dict[str, Any], name: str) -> Any:
@@ -271,6 +325,31 @@ class ModelDesk:
                 "it for a normal run and attaches it to the RunLedger.")
         return binding
 
+    def _salvage_price(self, exc: BaseException):
+        """A price out of a raised call's partial output, or None.
+
+        Deliberately narrow. It reuses `price_of`, so a partial envelope has to
+        clear exactly the same bar a complete one does -- a finite non-negative
+        `total_cost_usd`, and not a bare zero with no tokens behind it. Anything
+        less and this returns None and the call stays blind, which is the safe
+        direction: inventing a price here would settle a call the provider may
+        yet bill.
+
+        The 2026-07-29 blind row is the case this cannot help with and should
+        not pretend to: that CLI printed nothing at all, 145ms after the
+        previous call settled. Nothing to salvage is still nothing to salvage.
+        """
+        partial = getattr(exc, "partial_stdout", "")
+        if not partial or not partial.strip():
+            return None
+        try:
+            envelope = json.loads(partial)
+        except (json.JSONDecodeError, TypeError, ValueError):
+            return None
+        if not isinstance(envelope, dict):
+            return None
+        return self.price_of(envelope, envelope.get("usage") or {})
+
     @staticmethod
     def price_of(envelope: Dict[str, Any], usage: Dict[str, Any]):
         """What one envelope cost, or None if it cannot be trusted to say.
@@ -350,22 +429,40 @@ class ModelDesk:
         detail = {"arm": "theoria", "run_id": getattr(self.run, "run_id", None),
                   "beat": beat, "label": label, "model": model,
                   "transport": "claude-code-cli", "call": self.calls + 1}
-        binding.check_model_call()
+        binding.check_model_call(model=model)
 
         try:
             envelope, elapsed_ms, stderr = self._invoke(prompt, model)
-        except BaseException:
+        except BaseException as exc:
             # The subprocess may or may not have reached the provider -- a
             # timeout is exactly the case where it did and the answer was
-            # thrown away. Charged at its ceiling and flagged unpriced either
-            # way, because the alternative is assuming it cost nothing, which
-            # lets the provider decide whether it gets billed.
+            # thrown away. Charged at its ceiling and flagged unpriced when
+            # nothing says otherwise, because the alternative is assuming it
+            # cost nothing, which lets the provider decide whether it gets
+            # billed.
+            #
+            # But look first. A raised call may still have printed a partial
+            # envelope carrying `total_cost_usd`, and one blind row in the
+            # shared pool refuses every dollar for every session until someone
+            # files a correction by hand -- so a price that can be salvaged is
+            # worth far more than the flag is. When one is found the call is
+            # priced, not blind: the rule is that `unpriced` means the recorded
+            # figure is not the measured one, and here it is.
             self.calls += 1
-            self.unpriced_calls += 1
-            binding.record_model_call(
-                None, detail=dict(detail, outcome="raised_before_a_price",
-                                  why="the CLI raised before an envelope "
-                                      "carrying a price came back"))
+            salvaged = self._salvage_price(exc)
+            if salvaged is None:
+                self.unpriced_calls += 1
+                binding.record_model_call(
+                    None, detail=dict(detail, outcome="raised_before_a_price",
+                                      why="the CLI raised before an envelope "
+                                          "carrying a price came back"))
+            else:
+                self.cli_cost_usd += salvaged
+                binding.record_model_call(
+                    salvaged,
+                    detail=dict(detail, outcome="raised_after_a_price",
+                                why="the CLI raised, but its partial output "
+                                    "carried a usable total_cost_usd"))
             raise
 
         usage = envelope.get("usage") or {}
@@ -505,7 +602,32 @@ class ModelDesk:
         env = dict(os.environ)
         # The desk must not be able to reach the game credential, and must not
         # inherit a base URL that would send it somewhere unrecorded.
-        env.pop("ARC_API_KEY", None)
+        #
+        # The second half of that sentence was a comment and nothing else until
+        # A11 read it: only `ARC_API_KEY` was popped, and `ANTHROPIC_BASE_URL`
+        # was inherited from whatever launched the arm. One exported variable
+        # in the operator's shell would have redirected every desk call to an
+        # endpoint this ledger never sees -- and the run would still have
+        # produced a full, plausible, correctly-priced transcript, because the
+        # cost comes back in the CLI's own envelope. A silently redirected desk
+        # is worse than a broken one: nothing goes red.
+        for var in SCRUBBED_FROM_DESK_ENV:
+            env.pop(var, None)
+        # ... and then by value, because the four names above are a list of the
+        # ways we have already been bitten. `VAULT.scrub_text` returns a
+        # changed string exactly when the text contains a secret the process
+        # has registered, so this asks the question the name list cannot: is
+        # any value here the credential, whatever it is called? Popping first
+        # and raising second means a caller that swallows the exception still
+        # does not get a subprocess that can see the key.
+        leaked = sorted(k for k, v in env.items()
+                        if isinstance(v, str) and VAULT.scrub_text(v) != v)
+        for var in leaked:
+            env.pop(var, None)
+        if leaked:
+            raise CredentialBreach(
+                "a registered secret is in the desk environment under %s; "
+                "the name-based scrub does not cover it" % ", ".join(leaked))
 
         started = time.time()
         with tempfile.TemporaryDirectory(dir=NEUTRAL_PARENT) as cwd:
@@ -514,15 +636,28 @@ class ModelDesk:
                                       capture_output=True, text=True,
                                       encoding="utf-8", errors="replace",
                                       timeout=self.timeout)
-            except subprocess.TimeoutExpired:
-                raise ModelError("claude -p timed out after %ds" % self.timeout)
+            except subprocess.TimeoutExpired as exc:
+                # Keep whatever the CLI managed to print. The timeout is the
+                # dominant producer of unpriced rows, and the CLI runs with
+                # `--output-format json`, so a partial envelope carrying
+                # `total_cost_usd` is exactly what may be sitting in this
+                # buffer. Discarding it threw away the only evidence that
+                # could price the one call that most needs pricing.
+                partial = exc.stdout
+                if isinstance(partial, bytes):
+                    partial = partial.decode("utf-8", "replace")
+                err = ModelError("claude -p timed out after %ds" % self.timeout)
+                err.partial_stdout = partial or ""
+                raise err
         elapsed_ms = int((time.time() - started) * 1000)
 
         try:
             envelope = json.loads(proc.stdout)
         except json.JSONDecodeError:
-            raise ModelError("unparseable CLI output: %s"
+            err = ModelError("unparseable CLI output: %s"
                              % (proc.stdout or proc.stderr or "")[:400])
+            err.partial_stdout = proc.stdout or ""
+            raise err
         return envelope, elapsed_ms, proc.stderr
 
     def _write_transcript(self, entry: Dict[str, Any], prompt: str,

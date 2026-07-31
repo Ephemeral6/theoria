@@ -1,0 +1,36 @@
+{
+  "defect_reproduced": {
+    "consequence": "check 8 re-derives and byte-compares, so the same commit is green on the machine holding the stray and red in a clone -- the exact defect 46612a9c/6889b7e4 claim to have ended",
+    "files_after_dropping_a_stray": 15,
+    "files_before": 14,
+    "stray_entered_files": true,
+    "what": "an untracked, un-ignored file still enters files[]"
+  },
+  "recommended_fix_does_not_survive_contact": {
+    "after_git_add": {
+      "git_ls_files_sees": [
+        "certify.json",
+        "ledger.jsonl",
+        "turns.json"
+      ]
+    },
+    "fresh_run_artefacts_on_disk_nothing_staged": {
+      "git_ls_files_sees": [],
+      "os_walk_sees": [
+        "certify.json",
+        "ledger.jsonl",
+        "turns.json"
+      ]
+    },
+    "recommendation": "the adversarial report said: the correct implementation is `git ls-files`, not os.walk minus check-ignore",
+    "so": "git ls-files returns [] for every new run, and verify.py's MIN_RUN_FILES floor is 8 -- the manifest of a fresh run would list nothing, then drift the moment its artefacts are committed",
+    "why_it_fails": "build() runs BEFORE a run's artefacts are committed. Measured on a fresh repo:"
+  },
+  "the_actual_shape_of_the_defect": "one function serves two moments in an artefact's lifecycle. build() runs before the commit, where the filesystem is the only source that knows the artefacts exist. check 8 re-derives after the commit, where the filesystem also holds whatever else is lying around. The two callers need different answers and share one function.",
+  "two_candidate_designs_neither_implemented": {
+    "D1": "check 8 stops re-deriving files[]: compare manifest-minus-files byte for byte, and let check 10 own files[] entirely. Removes the machine-dependence from check 8 without changing what files[] means. Cost: check 8's 'byte for byte' claim gets an explicit exception, and check 10 must first be fixed (its predicate is os.path.exists, not clone membership -- H3).",
+    "D2": "files[] records tracked-ness per entry at build time, so a re-derivation can tell an unstaged artefact from a stray. Cost: a new field, and it is copied from the build rather than re-derived -- which is the same objection the docstring already raises against carrying sha256 for excluded files.",
+    "recommendation": "D1, but H3 first: routing files[] to a check whose predicate is os.path.exists moves the machine-dependence rather than removing it."
+  },
+  "utc": "2026-07-30T13:10:00Z"
+}

@@ -1,0 +1,31 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "41ad497cf122cb70e25387f6bfda202279aa7a97",
+  "utc": "2026-07-30T02:08:12Z",
+  "agent": "RES-1",
+  "cycle": 39,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "A11 的 F2/F3 —— 模型这条路完全不过封存护栏。把封存堆全体加进 desk 的 forbid_in_prompt（来源是冻结的切堆，不是字面表），并让 desk 子进程的环境清洗真的做它注释里说的事（ANTHROPIC_BASE_URL 一直在被继承）。",
+  "leg": "offline -- A3 的解封路径，不花钱、不碰真 API",
+  "inputs": [
+    "theoria-arm/runs/20260729T013000Z-A11/FINDINGS.md §4 F1/F2/F3 与 §5 的两行裁决",
+    "monitor/board/claimed/A3-campaign-devpile.RES-1.md 监控 2026-07-29 第二次裁决第 1 条",
+    "Theoria.md:353 第四条过拟合通道；CLAUDE.md 切堆纪律",
+    "proxy/guard.py SealedPileGuard（另一赛道的文件，只读不改）"
+  ],
+  "changed": [
+    "theoria-arm/inner/loop.py -- _forbidden_substrings()，封存堆全体 id + stem 进 forbid 表",
+    "theoria-arm/harness/modelcall.py -- SCRUBBED_FROM_DESK_ENV，四个变量",
+    "theoria-arm/tests/test_desk_sealing.py -- 新增，4 条，每条自带阳性对照",
+    "theoria-arm/tests/test_arm.py -- 把一条源码文本断言换成成员断言并写明它为什么弱"
+  ],
+  "tests": {
+    "suite": "247 collected, green",
+    "verify": "theoria-arm/verify.py -- green (suite / one offline run / artefact self-check)",
+    "mutation": "两处修复各自回退后，4 条新测试全部变红；见 RUN_STATE.md 的表"
+  },
+  "sealed_pile_contact": "none -- 只读 piles.json 的 id 列表用于构造禁止表；无 API 接触，无内容读取",
+  "spend": "none -- 本 leg 未调用 spend_gate.reserve()，未产生任何计费动作"
+}

@@ -64,9 +64,22 @@ def test_the_arm_has_no_path_to_the_game_credential():
 
 
 def test_the_desk_env_drops_the_game_credential():
-    source = open(os.path.join(ARM, "harness", "modelcall.py"),
-                  encoding="utf-8").read()
-    assert 'env.pop("ARC_API_KEY", None)' in source
+    """Kept as a cheap tripwire; the real assertion moved and is stronger.
+
+    This used to grep `modelcall.py` for the literal `env.pop("ARC_API_KEY",
+    None)`. A source-text assertion pins the spelling, not the behaviour: it
+    stayed green through the whole period in which the line above it promised
+    the desk could not "inherit a base URL that would send it somewhere
+    unrecorded" while `ANTHROPIC_BASE_URL` was inherited on every call (A11's
+    F3). It would equally have gone red on a rename that changed nothing.
+
+    `tests/test_desk_sealing.py` now asserts the outcome -- what is in the
+    environment dict actually handed to `subprocess.run` -- with a positive
+    control that an unrelated variable survives. What is left here is the
+    membership check, which is worth keeping only because it is free.
+    """
+    from harness.modelcall import SCRUBBED_FROM_DESK_ENV  # noqa: PLC0415
+    assert "ARC_API_KEY" in SCRUBBED_FROM_DESK_ENV
 
 
 # ------------------------------------------------------------------- budget
@@ -685,6 +698,24 @@ def test_the_colour_hint_is_read_off_the_object_declaration():
     assert found == {"Cart": 6, "Door": 5, "Ghost": None}
 
 
+
+def _own_pool(tmp_path):
+    """A spend pool this test owns, so the fleet's does not get billed.
+
+    `play()` defaults `spend_gate=None`, which resolves to the *real* pool --
+    the one every session shares and the one whose action ceiling decides
+    whether the sealed confirmation run can still afford to happen. Tests that
+    forgot this wrote 2 817 of its 4 775 actions. The dollars were $0.00, which
+    is why it went unnoticed for two days.
+    """
+    from harness import run as run_mod                 # noqa: PLC0415
+    from proxy.spend_gate import SpendGate             # noqa: PLC0415
+
+    policy = run_mod._scratch_policy(str(tmp_path / "scratch-pool.jsonl"))
+    gate = SpendGate(policy)
+    return gate, {"pool": policy.pool,
+                  "ledger_abspath": os.path.abspath(policy.ledger_path)}
+
 # --------------------------------------------------------- the whole shell
 def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
     """No key, no network, no model call, no quota -- and a full ledger."""
@@ -730,8 +761,10 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
     # Not `runs/`: that is the archive, and this run cost nothing and proves
     # nothing about the world. See `harness.run.FIXTURE_RUNS_DIR`.
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        gate, expect = _own_pool(tmp_path)
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       spend_gate=gate, expect_pool=expect,
                        runs_root=FIXTURE_RUNS_DIR,
                        ledger_path=ledger_path)
 
@@ -772,8 +805,10 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
                           budget_actions=4, offline=True)
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        gate, expect = _own_pool(tmp_path)
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       spend_gate=gate, expect_pool=expect,
                        runs_root=FIXTURE_RUNS_DIR,
                        ledger_path=str(tmp_path / "ledger.jsonl"))
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
@@ -854,18 +889,25 @@ def test_arm_version_does_not_depend_on_where_the_arm_is_checked_out(tmp_path):
 
 
 def test_the_archive_stays_accountable():
-    """`verify_provenance`'s nine checks, run as part of the suite.
+    """`verify_provenance`'s ten checks, run as part of the suite.
 
     The archive is the thing Phase 4 reads back to account for every ARC action
     this arm spent. A check that only runs when somebody remembers to run it is
     not a guarantee.
+
+    The count is asserted so that a check cannot quietly disappear -- a suite
+    that runs nine checks and a suite that runs eight both print green. It went
+    from nine to ten with check 10 ("every file a manifest lists is in the clone
+    or excluded by the repository's own rules"), which exists because check 8
+    dispatches and therefore cannot see a stale `files[]` in an `amend`
+    manifest.
     """
     from armtools import verify_provenance               # noqa: PLC0415
 
     checks = verify_provenance.run()
     assert not checks.failed, [
         "%s: %s" % (r["check"], r["detail"]) for r in checks.failed]
-    assert len(checks.rows) == 9
+    assert len(checks.rows) == 10
 
 
 # ------------------------------------------- E14: a crash is not a finding
@@ -1206,10 +1248,13 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
             # Not `runs/`: D-S8-018. This run cost nothing and proves nothing
             # about the world, and left in the archive it trips
             # `verify_provenance`'s first check on the *next* invocation of the
-            # suite -- which is how it was found.
+            # suite -- which is how it was found. The pool is private for the
+            # same reason, one ledger over: a test must not spend from the
+            # fleet's shared purse either.
+            gate, expect = _own_pool(tmp_path)
             play(game, "pytest-anon-" + os.path.basename(str(tmp_path)),
                  factory, env_upstream=mock.base_url, env_key=DEFAULT_KEY,
-                 require_key=False,
+                 require_key=False, spend_gate=gate, expect_pool=expect,
                  runs_root=FIXTURE_RUNS_DIR,
                  ledger_path=str(tmp_path / "ledger.jsonl"))
 

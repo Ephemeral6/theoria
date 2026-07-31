@@ -1,0 +1,101 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 0,
+  "actions_ok": 4,
+  "ceiling_actions": 4,
+  "ceiling_commands": 200,
+  "commands_sent": 5,
+  "http_amplification": 1.25,
+  "probe_actions": 0,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [],
+  "calls": 0,
+  "cli_cost_usd": 0.0,
+  "cost_ceiling_usd": 1.0,
+  "model": "claude-haiku-4-5-20251001",
+  "spend_gate": {
+   "action_cap": 42,
+   "actions_charged": 0,
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0030Z-a3-desk-live-proof",
+   "caps": {
+    "action_cap": 42,
+    "arithmetic": {
+     "action_cap": 42,
+     "action_cap_hard_bound": 600,
+     "actions_budget": 4,
+     "arm_attempts_capped_by_commands_ceiling": false,
+     "arm_attempts_planned": 14,
+     "commands_ceiling": 200,
+     "cost_ceiling_usd": 1.0,
+     "env_max_attempts": 3,
+     "fixed_commands": 3,
+     "http_per_command": 1.75,
+     "model_call_ceiling_usd": 4.0,
+     "retry_safety": 1.5,
+     "ttl_seconds": 3600.0,
+     "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+     "usd_cap": 5.0,
+     "wall_clock_s": 1200.0
+    },
+    "ttl_seconds": 3600.0,
+    "usd_cap": 5.0
+   },
+   "model_call_ceiling_usd": 4.0,
+   "model_calls_charged": 0,
+   "pool": {
+    "action_ceiling": 24000,
+    "gate_version": "1.0",
+    "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+    "ledger_path": "../../proxy/var/spend_gate.jsonl",
+    "policy_path": "proxy/spend_policy.json",
+    "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+    "pool": "theoria-shared-2026-07",
+    "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+    "usd_ceiling": 214.9
+   },
+   "released": false,
+   "renewals": 0,
+   "reservation_id": "res-05b977272c2743eb",
+   "tripped": null,
+   "unpriced_calls": 0,
+   "usd_cap": 5.0,
+   "usd_charged": 0.0
+  },
+  "unpriced_calls": 0,
+  "usage_total": {}
+ },
+ "elapsed_s": 1.0,
+ "levels": {
+  "boundaries": 0,
+  "events": [],
+  "level": 1,
+  "levels_completed": 0,
+  "starts": [
+   0
+  ]
+ },
+ "outcome": "budget_exhausted",
+ "steps": 5,
+ "stopped_because": "budget: action ceiling reached: 4/4 successful actions (0 held in the probe reserve)",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 0
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 0,
+   "search_timeout": 0
+  },
+  "total": 0,
+  "unhandled": 0
+ }
+}

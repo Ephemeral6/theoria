@@ -1,0 +1,46 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "6889b7e4b03df9dc7272440993e0ef0e865b8567",
+  "utc": "2026-07-30T08:30:00Z",
+  "agent": "RES-1",
+  "cycle": 45,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "把 A3 分支挂了 23.6 小时的那条 verify_provenance check 8 红修掉，三条成因都在本领地内：(a) archive.costs() 把 proxy.cost.price_run() 的返回字典逐字嵌进归档清单，proxy/cost.py 一改就弄坏每一份走 build() 的清单（7/7）；(b) build() 用裸 os.walk 构造 files[]，于是同一提交在造出产物的机器上绿、在克隆（=ci_merge 建的树）里红；(c) check 8 按 _is_backfilled 分流，amend 那条路从不读 files[]，于是四份清单列着不存在的 trace.jsonl 却全部放行。",
+  "leg": "offline -- A3 的解封路径，不花钱、不碰真 API",
+  "inputs": [
+    "monitor/inbox/20260730T040758Z-opsm-a3-the-arm-gate-is-red-on-clean-master-and-a3-cannot-fix-it.md 第八节（对抗复核后的处置）",
+    "71b882c8 的提交信息末段：作者预告了这条下游后果并点名 theoria-arm 是 RES-1 的领地",
+    "proxy/cost.py:186 price_run 的 docstring —— usd_total 是下界",
+    "figures/fig02_bill_shape.py:503 —— 把这个下界印成 'table recomputes ...'",
+    "monitor/audit/DRIFT-20260730T0704Z-a-gitignore-rule-that-was-already-false-when-it-merged.md（tracked vs ignored 的不对称）"
+  ],
+  "changed": [
+    "theoria-arm/armtools/archive.py -- ARCHIVE_COST_FIELDS + _declared_cost()，投影取代逐字嵌入",
+    "theoria-arm/armtools/backfill.py -- _files_the_clone_carries() / _ignored_paths() / _rule_file_is_in_the_repository()，遍历由仓库的排除规则驱动",
+    "theoria-arm/armtools/verify_provenance.py -- 新增 check 10（列出的路径要么在克隆里、要么被仓库规则解释）",
+    "theoria-arm/tests/test_cost_shape.py -- 新增 10 条",
+    "theoria-arm/tests/test_files_in_clone.py -- 新增 13 条",
+    "theoria-arm/tests/test_arm.py -- check 数从 9 改 10，并写明为什么",
+    "theoria-arm/runs/*/MANIFEST.json -- 7 份 cost 形状迁移 + leg01 的 files[] 迁移，两趟各有独立守卫"
+  ],
+  "migrations": {
+    "cost_shape": "migrate_cost_shape.py --write；7 份，每份 diff 恰好是三个 S29 键取中性值，7 个 ledger 哈希全部未变（migration.json）",
+    "files_in_clone": "migrate_files_in_clone.py --write；1 份（leg01），去掉 2 个被 git check-ignore 独立确认为排除的路径，files 之外的每个叶子逐一相同，存活条目连哈希逐字节相同（migration_files.json）",
+    "why_this_is_not_backfill_all": "两个脚本都逐个点名 slug、默认 --check、并在 diff 超出声明范围时拒绝写。verify_provenance 自己 check 2 建议的 'python -m armtools.backfill --all' 正是「改写归档去迎合监管它的检查」，本 leg 没有跑过它。"
+  },
+  "tests": {
+    "suite": "270 passed",
+    "verify": "theoria-arm/verify.py -- green",
+    "verify_provenance": "OK: 10 checks",
+    "fresh_tree": "在 .worktrees/res1c45-clone2（等价克隆，无机器本地产物）复跑：10 checks OK、270 passed —— 两棵树同一个答案，这是本 leg 的验收判据",
+    "mutation": "11 个突变全部被抓；M9 第一次活了下来（那条测试没走到 OSError 分支），补测试后才红 —— 见 RUN_STATE.md §4"
+  },
+  "sealed_pile_contact": "none -- 只读 piles.json 的 id 列表与 .gitignore 的路径；无 API 接触，无内容读取",
+  "spend": "none -- 本 leg 未调用 spend_gate.reserve()，未产生任何计费动作",
+  "still_open": [
+    "F1 臂进程持有活凭据 vs Theoria.md:305「臂内无任何凭据」—— A3 在线 leg 唯一剩下的闸门，p1-seal-test 属 Phase 1 验收单，改它是监控的裁量",
+    "架构层：from_price_table 是重导视图却住在不可变归档记录里，本 leg 只把耦合声明化。把账单挪出 MANIFEST.json 会动到 figures/ 与 papers/ 的读者，跨领地，已写 inbox 提案"
+  ]
+}

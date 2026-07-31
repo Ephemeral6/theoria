@@ -95,6 +95,7 @@ class Run:
                  env_max_attempts: int = 3,
                  caps: Optional[spend_mod.Caps] = None,
                  campaign: Optional[str] = None,
+                 prompt_id: Optional[str] = None,
                  spend_gate=None,
                  expect_pool: Optional[Dict[str, Any]] = None,
                  ledger_path: Optional[str] = None,
@@ -119,8 +120,16 @@ class Run:
         self.caps = caps if caps is not None else spend_mod.plan_caps(
             actions=120, commands=2000, cost_ceiling_usd=20.0,
             env_max_attempts=env_max_attempts, gate=spend_gate)
+        # One constant, not two.  `inner/loop.py` used to stamp its own literal
+        # "P-8" into every scorecard's `opaque` while this module stamped
+        # `PROMPT_ID` into every campaign string -- two hardcoded defaults in
+        # the same live path, free to disagree, and on 2026-07-29 they did:
+        # `runs/20260729T004020Z-leg01` and the salvage holding its own card
+        # ended up filed under different prompts.  The run declares it once
+        # here and everything downstream reads it from the run.
+        self.prompt_id = prompt_id or PROMPT_ID
         self.campaign = campaign or spend_mod.campaign_name(
-            prompt_id=PROMPT_ID, game_id=game_id, slug=slug)
+            prompt_id=self.prompt_id, game_id=game_id, slug=slug)
         self.spend = spend_mod.open_binding(
             self.campaign, self.caps, gate=spend_gate, expect_pool=expect_pool,
             holder={"run_id": self.run_id, "arm": ARM, "game_id": game_id,

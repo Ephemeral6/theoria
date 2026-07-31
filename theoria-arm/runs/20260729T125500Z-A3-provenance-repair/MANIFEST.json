@@ -1,0 +1,12 @@
+{
+ "base_commit": "88a06d81d7f631b2372bc82f53b397e6600a4725",
+ "branch": "agent/a3-campaign-devpile",
+ "clock_note": "Local time here is UTC+08; this dir is stamped in true UTC. Same caveat as 20260728T233900Z-A3-campaign-devpile.",
+ "cycle": 24,
+ "files": [],
+ "kind": "process_record",
+ "prompt_id": "A3-campaign-devpile",
+ "utc": "2026-07-29T12:55:00Z",
+ "why": "the theoria-arm merge gate had been red for three attempts on six provenance checks. This pass cleared all six and closed one orphaned scorecard against the live API for zero actions and zero dollars.",
+ "worker": "RES-1"
+}

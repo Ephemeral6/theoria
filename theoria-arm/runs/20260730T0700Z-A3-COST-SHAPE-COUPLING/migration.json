@@ -1,0 +1,125 @@
+{
+ "refused": [],
+ "runs": [
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "666621e02767ab970eb13b78afa5d9e57ff0717d3d6b3ff888b57ee877b1bb10",
+   "ledger_sha256_before": "666621e02767ab970eb13b78afa5d9e57ff0717d3d6b3ff888b57ee877b1bb10",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "86813679287b8a366fba71f11fc586e7ab1793cda4978ca5e4d646597c677083",
+   "manifest_sha256_before": "50d002817a14ffae85dc0e87feefd3be8141d926992f5dd68bb3eb52a596577b",
+   "manifest_sha256_on_disk_after_write": "86813679287b8a366fba71f11fc586e7ab1793cda4978ca5e4d646597c677083",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "dd48527af5312a07a36477819368d2d83e3ed4ce5ebf254588c66d1cf21098c1",
+   "ledger_sha256_before": "dd48527af5312a07a36477819368d2d83e3ed4ce5ebf254588c66d1cf21098c1",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "9c324d9c39f4c2711cb8158926e56cccbe5628273d99173f03ea7fc25eb39302",
+   "manifest_sha256_before": "ded651d45943bafe1bf42d69334f42585a07f2626cf2085202ca78615be19a3e",
+   "manifest_sha256_on_disk_after_write": "9c324d9c39f4c2711cb8158926e56cccbe5628273d99173f03ea7fc25eb39302",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage2"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "e8d1110b8c78d11ccb1ff6c4feb8d1f6664af737579a237dc82e4300c892f7a9",
+   "ledger_sha256_before": "e8d1110b8c78d11ccb1ff6c4feb8d1f6664af737579a237dc82e4300c892f7a9",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "d7529db5dbe74eea7e9d413eb8a767a66de788631f2f7fc67bb1cab7b95f9329",
+   "manifest_sha256_before": "954154e1cc8772aa83a0d2ff24bbc5545fd0da9e2dc24d85be8eae8c4a4f61e6",
+   "manifest_sha256_on_disk_after_write": "d7529db5dbe74eea7e9d413eb8a767a66de788631f2f7fc67bb1cab7b95f9329",
+   "slug": "20260728T014402Z-g50t-first-contact-salvage"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "c13bae5c6a5363b0383bfa9b5696d5ee6fa89d1db197d6ac0e9397065475e26c",
+   "ledger_sha256_before": "c13bae5c6a5363b0383bfa9b5696d5ee6fa89d1db197d6ac0e9397065475e26c",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "a985fae558e666cdff3b1d3e45b599c99a5435019fb16bbed0b860fef1310129",
+   "manifest_sha256_before": "f51ab15a93f9caec0caf6aababae49e06e0884cd4db7cb92e8a5aaf83062e407",
+   "manifest_sha256_on_disk_after_write": "a985fae558e666cdff3b1d3e45b599c99a5435019fb16bbed0b860fef1310129",
+   "slug": "20260728T015354Z-g50t-first-contact-salvage"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "2c30879a8f5c08d780a8623f5b03e97db44c4a91708abf17e29f2f78039e1db6",
+   "ledger_sha256_before": "2c30879a8f5c08d780a8623f5b03e97db44c4a91708abf17e29f2f78039e1db6",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "b8524433d16a8733dff55ca602cd9038c82fef36981605766963dd61f137a3d0",
+   "manifest_sha256_before": "6c5e232e1d952d80e13a5e2a2c93cb49ec036b86ec78a9cee06775b82f81803a",
+   "manifest_sha256_on_disk_after_write": "b8524433d16a8733dff55ca602cd9038c82fef36981605766963dd61f137a3d0",
+   "slug": "20260729T004020Z-leg01"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "9c08a593bdb1d2d2a463903d2ff02394bacfe357419639f1b09092911d74e8a7",
+   "ledger_sha256_before": "9c08a593bdb1d2d2a463903d2ff02394bacfe357419639f1b09092911d74e8a7",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "da6ef153d87187db784ec188e5d64ee24876f9e3eaf1ae450d6fbc6a6f9475f5",
+   "manifest_sha256_before": "77082e6dddacaea27e7cecd30ad6ac07dc01ecf8d172581336b667b8760d2218",
+   "manifest_sha256_on_disk_after_write": "da6ef153d87187db784ec188e5d64ee24876f9e3eaf1ae450d6fbc6a6f9475f5",
+   "slug": "20260729T004020Z-leg01-salvage"
+  },
+  {
+   "diff_is_exactly_the_three_s29_keys": true,
+   "leaves_added": {
+    "cost.from_price_table.missing_usage_keys": null,
+    "cost.from_price_table.unmeasured_calls": 0,
+    "cost.from_price_table.unpriced_usage_keys": null
+   },
+   "leaves_changed": {},
+   "leaves_removed": {},
+   "ledger_sha256_after": "54490a1c46a2a19a77326b5359c27ce9b64e2207608372996ea3550c340c44f5",
+   "ledger_sha256_before": "54490a1c46a2a19a77326b5359c27ce9b64e2207608372996ea3550c340c44f5",
+   "ledger_unchanged": true,
+   "manifest_sha256_after": "975e02820fbcdc758e928c8b2b6953aab3ae590bf355d064b2a633309612f6e8",
+   "manifest_sha256_before": "50b839a4c56c35d5afc3a28c8fd81631e31ed954f44aa31198e72e7ceb27402f",
+   "manifest_sha256_on_disk_after_write": "975e02820fbcdc758e928c8b2b6953aab3ae590bf355d064b2a633309612f6e8",
+   "slug": "preflight-20260728T012031Z"
+  }
+ ],
+ "wrote": true
+}

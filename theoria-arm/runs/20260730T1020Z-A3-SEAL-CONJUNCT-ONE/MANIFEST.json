@@ -1,0 +1,43 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "c7d3b3c560247e9855cad26ad5af63466a871130",
+  "utc": "2026-07-30T10:20:00Z",
+  "agent": "RES-1",
+  "cycle": 49,
+  "lane": "campaign",
+  "territory": "theoria-arm",
+  "what": "Theoria.md:305 Phase 1 验收单的密封测试是个合取：『臂内无任何凭据』AND『绕开双代理的出网必须失败』。右半有测试且绿（test_bypass_negative.py），左半在本臂里没有任何测试，而我在三世的心跳里三次把它写成阻塞、三次只拿读代码当证据。本轮把它变成测量，并把其中不需要裁决的那一半当场修掉。",
+  "leg": "offline -- 不花钱、不碰真 API、不读 .env",
+  "measured": {
+    "instrument": "runs/20260730T1020Z-A3-SEAL-CONJUNCT-ONE/probe_credential_residency.py",
+    "method": "把一个哨兵字符串（非真密钥、且刻意不长得像密钥以免测到 _KEYISH 探测器）经 Run(env_key=...) 交给一个活的 Run，在臂自己的进程里问三个问题",
+    "Q1_reachable_from_run_object_graph": true,
+    "Q1_paths": ["run._cfg.api_key"],
+    "Q1_note": "只报一条是 id() 去重的结果：run._cfg 与 run.proxy.cfg 是同一个对象，第二条路径被并进第一条。不要把 1 读成『只有一处』。",
+    "Q2_in_process_wide_vault": true,
+    "Q3_in_os_environ": false,
+    "conjunct_one_holds": false,
+    "exit_code": 1
+  },
+  "changed": [
+    "theoria-arm/harness/modelcall.py -- 新增 CredentialBreach；_invoke 在按名字弹掉四个变量之后，再用 VAULT.scrub_text(v) != v 按值扫一遍，命中先弹后抛",
+    "theoria-arm/inner/loop.py -- CredentialBreach 与 AnonymityBreach 一并 re-raise，不落进广义 except（否则会被记成一次桌子失败并继续花钱）",
+    "theoria-arm/tests/test_desk_sealing.py -- test_the_credential_cannot_reach_the_desk_under_a_name_nobody_listed，带正对照"
+  ],
+  "not_changed_and_why": {
+    "env_proxy_out_of_process": "让第一个合取项为真只有一条路：把 EnvProxy 移出臂进程。没做，两个理由。(1) 有真代价：EnvProxyConfig 收的是活对象（ledger/run/guard/spend_gate/spend_reservation），run.py 自己的注释说明共享 RunLedger 是为了让 step 与 call 计数器有单一来源；移出进程这个共享就断。这是『进程边界密封』与『计数器单一来源』的取舍，不是 bug 修复。(2) 跨领地：独立进程要么给 proxy/ 加入口（proxy 是别的领地，S31 在板上），要么在 theoria-arm 里重建一份 —— 后者正是 run.py docstring 明确拒绝过的『Nothing here is a copy of proxy/』。留给监控裁决，提案带取舍上 inbox。"
+  },
+  "tests": {
+    "command": "cd theoria-arm && python -m pytest -q",
+    "before": 271,
+    "after": 272,
+    "result": "272 passed"
+  },
+  "files": [
+    {"path": "MANIFEST.json"},
+    {"path": "RUN_STATE.md"},
+    {"path": "probe_credential_residency.py"},
+    {"path": "residency_report.json"}
+  ]
+}

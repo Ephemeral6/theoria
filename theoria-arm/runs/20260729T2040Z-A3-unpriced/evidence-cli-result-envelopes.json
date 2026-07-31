@@ -1,0 +1,36 @@
+##############################################################################
+# call1 C:/Users/user/.claude/projects/C--Users-user-AppData-Local-Temp-tmpl4x7bnzs/e74eec1b-46b8-4de3-8976-427cb15fa923.jsonl
+# total lines: 9
+line 1 type=queue-operation subtype=None uuid=None
+line 2 type=queue-operation subtype=None uuid=None
+line 3 type=user subtype=None uuid=66d7d90c
+line 4 type=last-prompt subtype=None uuid=None
+line 5 type=ai-title subtype=None uuid=None
+line 6 type=assistant subtype=None uuid=5ddec3f8
+line 7 type=assistant subtype=None uuid=068907bf
+line 8 type=last-prompt subtype=None uuid=None
+line 9 type=ai-title subtype=None uuid=None
+##############################################################################
+# call2 C:/Users/user/.claude/projects/C--Users-user-AppData-Local-Temp-tmpux7j-tp-/ae66d81e-0659-4ea0-9366-7391ea9b0ba4.jsonl
+# total lines: 9
+line 1 type=queue-operation subtype=None uuid=None
+line 2 type=queue-operation subtype=None uuid=None
+line 3 type=user subtype=None uuid=e3e19961
+line 4 type=last-prompt subtype=None uuid=None
+line 5 type=ai-title subtype=None uuid=None
+line 6 type=assistant subtype=None uuid=3c9387ea
+line 7 type=assistant subtype=None uuid=7914621d
+line 8 type=last-prompt subtype=None uuid=None
+line 9 type=ai-title subtype=None uuid=None
+##############################################################################
+# call3 C:/Users/user/.claude/projects/C--Users-user-AppData-Local-Temp-tmpqtj1cvte/907a526c-cde5-4a31-9c1f-976a7af6e13f.jsonl
+# total lines: 9
+line 1 type=queue-operation subtype=None uuid=None
+line 2 type=queue-operation subtype=None uuid=None
+line 3 type=user subtype=None uuid=8c7d2904
+line 4 type=last-prompt subtype=None uuid=None
+line 5 type=ai-title subtype=None uuid=None
+line 6 type=assistant subtype=None uuid=1c55424f
+line 7 type=assistant subtype=None uuid=c210c0f2
+line 8 type=last-prompt subtype=None uuid=None
+line 9 type=ai-title subtype=None uuid=None

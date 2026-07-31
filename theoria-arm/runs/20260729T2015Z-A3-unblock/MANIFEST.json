@@ -1,0 +1,9 @@
+{
+ "agent": "RES-1",
+ "base_commit": "b3ede869b11385611e0804de3e5a5df774cd8aa8",
+ "branch": "agent/a3-campaign-devpile",
+ "cycle": 21,
+ "prompt_id": "A3-campaign-devpile",
+ "purpose": "clear the single UNPRICED_SPEND row blocking every dollar spend in pool theoria-shared-2026-07",
+ "utc": "2026-07-29T20:15:00Z"
+}

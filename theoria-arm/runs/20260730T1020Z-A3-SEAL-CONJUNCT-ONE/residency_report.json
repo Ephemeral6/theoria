@@ -1,0 +1,19 @@
+{
+  "conjunct_one_holds": false,
+  "questions": {
+    "Q1_reachable_from_run_object_graph": {
+      "path_count": 1,
+      "paths": [
+        "run._cfg.api_key"
+      ],
+      "resident": true
+    },
+    "Q2_in_process_wide_vault": {
+      "resident": true
+    },
+    "Q3_in_os_environ": {
+      "resident": false
+    }
+  },
+  "sentinel_is_the_real_key": false
+}

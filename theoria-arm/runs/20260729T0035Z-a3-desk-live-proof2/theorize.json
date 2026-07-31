@@ -1,0 +1,922 @@
+[
+ {
+  "calls": 1,
+  "compiled": {
+   "errors": {
+    "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+   },
+   "forms": {
+    "lean": null,
+    "markdown": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.md",
+    "pddl": [
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\domain.pddl",
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\problem.pddl"
+    ],
+    "python": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.py"
+   },
+   "lean_state_estimate": null,
+   "ok": true,
+   "parsed": true,
+   "warnings": []
+  },
+  "engines": {
+   "cegis_miner": {
+    "engine": "cegis_miner",
+    "n_actions": 5,
+    "n_states": 6,
+    "refusals": [
+     "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture"
+    ],
+    "tracks": [
+     {
+      "ms": 0,
+      "refused": "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture",
+      "track_id": "obj0"
+     }
+    ],
+    "verdict": "no track satisfies the miner's precondition (exactly one move event per transition). The world does not narrate as one mover."
+   },
+   "dispatched": [
+    "mdl_segmenter",
+    "cegis_miner",
+    "zero_space"
+   ],
+   "mdl_segmenter": {
+    "background": 1,
+    "candidates": 1,
+    "chosen_operator": "connected_components(4)",
+    "chosen_split_by_color": false,
+    "engine": "mdl_segmenter",
+    "event_types": {
+     "recolor": 1
+    },
+    "n_frames": 6,
+    "tracks": [
+     {
+      "color": null,
+      "first_frame": 0,
+      "frames_present": 6,
+      "n_cells": 28,
+      "shape": [
+       6,
+       6
+      ],
+      "track_id": "obj0"
+     }
+    ],
+    "variants": [
+     {
+      "baseline_bits": 60,
+      "compression_ratio": 3.516667,
+      "events": 1,
+      "gain_bits": -151,
+      "ms": 0,
+      "script_bits": 211,
+      "split_by_color": false,
+      "tracks": 1
+     },
+     {
+      "baseline_bits": 60,
+      "compression_ratio": 6.75,
+      "events": 3,
+      "gain_bits": -345,
+      "ms": 0,
+      "script_bits": 405,
+      "split_by_color": true,
+      "tracks": 5
+     }
+    ],
+    "window": {
+     "box": null,
+     "covered": 1.0,
+     "dynamic_cells": 2,
+     "frame_cells": 64,
+     "full_frame": true,
+     "reason": "frame is 64 cells, no crop needed",
+     "window_cells": 64
+    }
+   },
+   "not_dispatched": {
+    "deadlock_carver": "needs a grounded PDDL task; same gate as fd_adapter",
+    "fd_adapter": "needs theory.pddl, which needs a manual; runs at plan, not at dispatch",
+    "ic3_pdr": "same graph requirement as lp_potential",
+    "lp_potential": "needs an explicit state graph with enumerated moves; none exists for a 64x64 world whose dynamics are unknown",
+    "probe_frontier": "needs a hypothesis frontier, which is theorize's output rather than its input; runs at probe"
+   },
+   "store": {
+    "actions_used": [
+     "ACTION1",
+     "ACTION2",
+     "ACTION3",
+     "ACTION4",
+     "ACTION5",
+     "RESET"
+    ],
+    "background": 1,
+    "cascade_lengths": [
+     1
+    ],
+    "cells_needing_an_owner": 2,
+    "colours_seen": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "constant_cells": 62,
+    "distinct_states": 2,
+    "dynamic_box": [
+     0,
+     0,
+     3,
+     2
+    ],
+    "dynamic_cells": 2,
+    "max_frames_in_one_command": 1,
+    "shape": [
+     8,
+     8
+    ],
+    "states": 6,
+    "steps": 6
+   },
+   "window": {
+    "box": null,
+    "covered": 1.0,
+    "dynamic_cells": 2,
+    "frame_cells": 64,
+    "full_frame": true,
+    "reason": "frame is 64 cells, no crop needed",
+    "window_cells": 64
+   },
+   "zero_space": {
+    "cap": 240,
+    "cells": [
+     [
+      1,
+      1
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "cells_dynamic": 2,
+    "cells_used": 2,
+    "colours": [
+     "c0",
+     "c2"
+    ],
+    "difference_rank": 1,
+    "engine": "zero_space",
+    "evidence_adequacy": {
+     "constrained_fraction": 0.25,
+     "difference_rank": 1,
+     "features": 4,
+     "space_dimension": 3,
+     "transitions": 5,
+     "verdict": "THIN: 5 transitions constrain rank 1 of 4 features, so the null space has dimension 3 and nearly every vector in it is a 'law' that is true over these states and unfalsified rather than confirmed. Treat every law below as a correlation awaiting a transition that could break it, not as a conservation law."
+    },
+    "features": 4,
+    "global_laws": [
+     {
+      "cells": [
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ]
+      ],
+      "support": [
+       "c0@0",
+       "c2@0",
+       "c0@1",
+       "c2@1"
+      ],
+      "value": 1
+     }
+    ],
+    "ms": 0,
+    "n_cell_local_laws": 2,
+    "n_features": 4,
+    "n_global_laws": 1,
+    "n_laws": 3,
+    "narrowed": false,
+    "space_dimension": 3
+   }
+  },
+  "log": [
+   {
+    "as": "Cart",
+    "id": "O-01",
+    "subject": "mdl_segmenter obj0: 1 dynamic object covering 2 cells",
+    "verdict": "accept",
+    "why": "Two dynamic cells (1,1) and (2,1) form a single entity trajectory: color-2 object moves downward at t2, consistent with a cart."
+   },
+   {
+    "id": "C-01",
+    "subject": "mdl_segmenter: 1 recolor event detected",
+    "verdict": "reject",
+    "why": "The value changes (1,1): 2\u21920 and (2,1): 0\u21922 represent one move event, not a recolor. Underlying board cell colors are revealed/occluded by movement, not changed."
+   },
+   {
+    "id": "R-01",
+    "subject": "move_down rule: act=key(2) causes downward Cart movement",
+    "verdict": "accept",
+    "why": "ACTION2 at t2 moved Cart from (1,1) to (2,1). Guard colored(below(Cart), 0) confirms the destination is a walkable path."
+   },
+   {
+    "id": "P-01",
+    "subject": "What do ACTION1, ACTION3, ACTION4, ACTION5 do?",
+    "verdict": "probe-pending",
+    "why": "Four actions produced no observable changes. Either they attempt blocked moves, or they control unmeasured state changes, or the puzzle is incomplete."
+   },
+   {
+    "id": "P-02",
+    "subject": "What is the winning goal?",
+    "verdict": "probe-pending",
+    "why": "No goal achieved yet. Landmarks at (5,3) and (6,6) suggest targets; their significance must be determined by testing Cart movement toward them."
+   },
+   {
+    "id": "E-01",
+    "subject": "cegis_miner refusal: recolor at t1",
+    "verdict": "probe-pending",
+    "why": "No cells changed at t1 (ACTION1). Possible off-by-one error in backend transition indexing, or latent state change invisible to frame diff."
+   }
+  ],
+  "ok": true,
+  "rounds": [
+   {
+    "attempt": 1,
+    "blocks": [
+     "LOG",
+     "PLAYBOOK",
+     "THEORY"
+    ],
+    "compile_errors": {
+     "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+    },
+    "compile_ok": true,
+    "landmarks": {
+     "item_3": [
+      6,
+      6
+     ],
+     "item_4": [
+      5,
+      3
+     ]
+    },
+    "log_entries": 6,
+    "objects_located": 1
+   }
+  ],
+  "snapshot_after": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev02-after-theorize",
+   "files": [
+    "theory.dsl",
+    "playbook.dsl",
+    "problem.json"
+   ],
+   "revision": 2,
+   "tag": "after-theorize"
+  },
+  "snapshot_before": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev01-before-theorize",
+   "files": [],
+   "revision": 1,
+   "tag": "before-theorize"
+  }
+ },
+ {
+  "calls": 1,
+  "compiled": {
+   "errors": {
+    "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+   },
+   "forms": {
+    "lean": null,
+    "markdown": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.md",
+    "pddl": [
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\domain.pddl",
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\problem.pddl"
+    ],
+    "python": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.py"
+   },
+   "lean_state_estimate": null,
+   "ok": true,
+   "parsed": true,
+   "warnings": []
+  },
+  "engines": {
+   "cegis_miner": {
+    "engine": "cegis_miner",
+    "n_actions": 5,
+    "n_states": 6,
+    "refusals": [
+     "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture"
+    ],
+    "tracks": [
+     {
+      "ms": 0,
+      "refused": "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture",
+      "track_id": "obj0"
+     }
+    ],
+    "verdict": "no track satisfies the miner's precondition (exactly one move event per transition). The world does not narrate as one mover."
+   },
+   "dispatched": [
+    "mdl_segmenter",
+    "cegis_miner",
+    "zero_space"
+   ],
+   "mdl_segmenter": {
+    "background": 1,
+    "candidates": 1,
+    "chosen_operator": "connected_components(4)",
+    "chosen_split_by_color": false,
+    "engine": "mdl_segmenter",
+    "event_types": {
+     "recolor": 1
+    },
+    "n_frames": 6,
+    "tracks": [
+     {
+      "color": null,
+      "first_frame": 0,
+      "frames_present": 6,
+      "n_cells": 28,
+      "shape": [
+       6,
+       6
+      ],
+      "track_id": "obj0"
+     }
+    ],
+    "variants": [
+     {
+      "baseline_bits": 60,
+      "compression_ratio": 3.516667,
+      "events": 1,
+      "gain_bits": -151,
+      "ms": 0,
+      "script_bits": 211,
+      "split_by_color": false,
+      "tracks": 1
+     },
+     {
+      "baseline_bits": 60,
+      "compression_ratio": 6.75,
+      "events": 3,
+      "gain_bits": -345,
+      "ms": 0,
+      "script_bits": 405,
+      "split_by_color": true,
+      "tracks": 5
+     }
+    ],
+    "window": {
+     "box": null,
+     "covered": 1.0,
+     "dynamic_cells": 2,
+     "frame_cells": 64,
+     "full_frame": true,
+     "reason": "frame is 64 cells, no crop needed",
+     "window_cells": 64
+    }
+   },
+   "not_dispatched": {
+    "deadlock_carver": "needs a grounded PDDL task; same gate as fd_adapter",
+    "fd_adapter": "needs theory.pddl, which needs a manual; runs at plan, not at dispatch",
+    "ic3_pdr": "same graph requirement as lp_potential",
+    "lp_potential": "needs an explicit state graph with enumerated moves; none exists for a 64x64 world whose dynamics are unknown",
+    "probe_frontier": "needs a hypothesis frontier, which is theorize's output rather than its input; runs at probe"
+   },
+   "store": {
+    "actions_used": [
+     "ACTION1",
+     "ACTION2",
+     "ACTION3",
+     "ACTION4",
+     "ACTION5",
+     "RESET"
+    ],
+    "background": 1,
+    "cascade_lengths": [
+     1
+    ],
+    "cells_needing_an_owner": 2,
+    "colours_seen": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "constant_cells": 62,
+    "distinct_states": 2,
+    "dynamic_box": [
+     0,
+     0,
+     3,
+     2
+    ],
+    "dynamic_cells": 2,
+    "max_frames_in_one_command": 1,
+    "shape": [
+     8,
+     8
+    ],
+    "states": 6,
+    "steps": 6
+   },
+   "window": {
+    "box": null,
+    "covered": 1.0,
+    "dynamic_cells": 2,
+    "frame_cells": 64,
+    "full_frame": true,
+    "reason": "frame is 64 cells, no crop needed",
+    "window_cells": 64
+   },
+   "zero_space": {
+    "cap": 240,
+    "cells": [
+     [
+      1,
+      1
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "cells_dynamic": 2,
+    "cells_used": 2,
+    "colours": [
+     "c0",
+     "c2"
+    ],
+    "difference_rank": 1,
+    "engine": "zero_space",
+    "evidence_adequacy": {
+     "constrained_fraction": 0.25,
+     "difference_rank": 1,
+     "features": 4,
+     "space_dimension": 3,
+     "transitions": 5,
+     "verdict": "THIN: 5 transitions constrain rank 1 of 4 features, so the null space has dimension 3 and nearly every vector in it is a 'law' that is true over these states and unfalsified rather than confirmed. Treat every law below as a correlation awaiting a transition that could break it, not as a conservation law."
+    },
+    "features": 4,
+    "global_laws": [
+     {
+      "cells": [
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ]
+      ],
+      "support": [
+       "c0@0",
+       "c2@0",
+       "c0@1",
+       "c2@1"
+      ],
+      "value": 1
+     }
+    ],
+    "ms": 0,
+    "n_cell_local_laws": 2,
+    "n_features": 4,
+    "n_global_laws": 1,
+    "n_laws": 3,
+    "narrowed": false,
+    "space_dimension": 3
+   }
+  },
+  "log": [
+   {
+    "as": "Floor",
+    "id": "O-01",
+    "subject": "Floor (colour 0)",
+    "verdict": "accept",
+    "why": "Colour 0 cells at t=0 (e.g., (2,1)) were unexplained, causing render_mismatch. Declaring Floor with arc-instances: all creates instances for every 0-cell, explaining both the initial frame and the cells that change when Cart moves."
+   },
+   {
+    "as": "Cart",
+    "id": "O-02",
+    "subject": "Cart (colour 2)",
+    "verdict": "accept",
+    "why": "Cart occupies (1,1) at t=0, moves to (2,1) at t=2 under ACTION2. The rule move_down correctly predicts this transition with evidence ev: t2 cov: 1/1."
+   },
+   {
+    "as": "Landmark_4",
+    "id": "O-03",
+    "subject": "Landmark at (5,3) colour 4",
+    "verdict": "accept",
+    "why": "Static object present in every frame at (5,3). Consistently coloured 4."
+   },
+   {
+    "as": "Landmark_3",
+    "id": "O-04",
+    "subject": "Landmark at (6,5) colour 3",
+    "verdict": "accept",
+    "why": "Static object present in every frame at (6,5), not (6,6) as the prior manual stated. Consistently coloured 3. Prior coordinate error corrected."
+   },
+   {
+    "id": "R-01",
+    "subject": "move_down rule",
+    "verdict": "accept",
+    "why": "Rule correctly predicts Cart's only observed movement. Fired at t2 when ACTION2 activates; condition colored(below(Cart), 0) is satisfied. Coverage 1/1; no rule clash."
+   },
+   {
+    "id": "L-01",
+    "subject": "floor_terrain theorem",
+    "verdict": "probe-pending",
+    "why": "Floor rendering model (overlaid by other objects) is inferred from transitions but not explicitly supported by DSL. Needs test to confirm Floor persists beneath Cart and is not actually removed."
+   },
+   {
+    "id": "L-02",
+    "subject": "single_action_moves theorem",
+    "verdict": "probe-passed",
+    "why": "Confirmed: only ACTION2 causes observable change across all 5 executed transitions. ACTION1, ACTION3-5 are consistently inert."
+   },
+   {
+    "id": "L-03",
+    "subject": "landmarks_role_unknown theorem",
+    "verdict": "probe-pending",
+    "why": "Landmarks exist but their purpose is not revealed by observed actions. Goal condition remains unidentified; no target state reached."
+   }
+  ],
+  "ok": true,
+  "rounds": [
+   {
+    "attempt": 1,
+    "blocks": [
+     "LOG",
+     "PLAYBOOK",
+     "THEORY"
+    ],
+    "compile_errors": {
+     "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+    },
+    "compile_ok": true,
+    "landmarks": {},
+    "log_entries": 8,
+    "objects_located": 4
+   }
+  ],
+  "snapshot_after": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev04-after-theorize",
+   "files": [
+    "theory.dsl",
+    "playbook.dsl",
+    "problem.json"
+   ],
+   "revision": 4,
+   "tag": "after-theorize"
+  },
+  "snapshot_before": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev03-before-theorize",
+   "files": [
+    "theory.dsl",
+    "playbook.dsl",
+    "problem.json"
+   ],
+   "revision": 3,
+   "tag": "before-theorize"
+  }
+ },
+ {
+  "calls": 1,
+  "compiled": {
+   "errors": {
+    "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+   },
+   "forms": {
+    "lean": null,
+    "markdown": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.md",
+    "pddl": [
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\domain.pddl",
+     "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\problem.pddl"
+    ],
+    "python": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\generated\\theory.py"
+   },
+   "lean_state_estimate": null,
+   "ok": true,
+   "parsed": true,
+   "warnings": []
+  },
+  "engines": {
+   "cegis_miner": {
+    "engine": "cegis_miner",
+    "n_actions": 8,
+    "n_states": 9,
+    "refusals": [
+     "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture"
+    ],
+    "tracks": [
+     {
+      "ms": 0,
+      "refused": "ValueError: transition 1 narrates ['recolor']; only move/none are mined on this fixture",
+      "track_id": "obj0"
+     }
+    ],
+    "verdict": "no track satisfies the miner's precondition (exactly one move event per transition). The world does not narrate as one mover."
+   },
+   "dispatched": [
+    "mdl_segmenter",
+    "cegis_miner",
+    "zero_space"
+   ],
+   "mdl_segmenter": {
+    "background": 1,
+    "candidates": 1,
+    "chosen_operator": "connected_components(4)",
+    "chosen_split_by_color": false,
+    "engine": "mdl_segmenter",
+    "event_types": {
+     "recolor": 4
+    },
+    "n_frames": 9,
+    "tracks": [
+     {
+      "color": null,
+      "first_frame": 0,
+      "frames_present": 9,
+      "n_cells": 28,
+      "shape": [
+       6,
+       6
+      ],
+      "track_id": "obj0"
+     }
+    ],
+    "variants": [
+     {
+      "baseline_bits": 144,
+      "compression_ratio": 1.861111,
+      "events": 4,
+      "gain_bits": -124,
+      "ms": 0,
+      "script_bits": 268,
+      "split_by_color": false,
+      "tracks": 1
+     },
+     {
+      "baseline_bits": 144,
+      "compression_ratio": 6.4375,
+      "events": 12,
+      "gain_bits": -783,
+      "ms": 0,
+      "script_bits": 927,
+      "split_by_color": true,
+      "tracks": 8
+     }
+    ],
+    "window": {
+     "box": null,
+     "covered": 1.0,
+     "dynamic_cells": 5,
+     "frame_cells": 64,
+     "full_frame": true,
+     "reason": "frame is 64 cells, no crop needed",
+     "window_cells": 64
+    }
+   },
+   "not_dispatched": {
+    "deadlock_carver": "needs a grounded PDDL task; same gate as fd_adapter",
+    "fd_adapter": "needs theory.pddl, which needs a manual; runs at plan, not at dispatch",
+    "ic3_pdr": "same graph requirement as lp_potential",
+    "lp_potential": "needs an explicit state graph with enumerated moves; none exists for a 64x64 world whose dynamics are unknown",
+    "probe_frontier": "needs a hypothesis frontier, which is theorize's output rather than its input; runs at probe"
+   },
+   "store": {
+    "actions_used": [
+     "ACTION1",
+     "ACTION2",
+     "ACTION3",
+     "ACTION4",
+     "ACTION5",
+     "RESET"
+    ],
+    "background": 1,
+    "cascade_lengths": [
+     1
+    ],
+    "cells_needing_an_owner": 5,
+    "colours_seen": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "constant_cells": 59,
+    "distinct_states": 5,
+    "dynamic_box": [
+     0,
+     0,
+     6,
+     2
+    ],
+    "dynamic_cells": 5,
+    "max_frames_in_one_command": 1,
+    "shape": [
+     8,
+     8
+    ],
+    "states": 9,
+    "steps": 9
+   },
+   "window": {
+    "box": null,
+    "covered": 1.0,
+    "dynamic_cells": 5,
+    "frame_cells": 64,
+    "full_frame": true,
+    "reason": "frame is 64 cells, no crop needed",
+    "window_cells": 64
+   },
+   "zero_space": {
+    "cap": 240,
+    "cells": [
+     [
+      1,
+      1
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      4,
+      1
+     ],
+     [
+      5,
+      1
+     ]
+    ],
+    "cells_dynamic": 5,
+    "cells_used": 5,
+    "colours": [
+     "c0",
+     "c2"
+    ],
+    "difference_rank": 4,
+    "engine": "zero_space",
+    "evidence_adequacy": {
+     "constrained_fraction": 0.4,
+     "difference_rank": 4,
+     "features": 10,
+     "space_dimension": 6,
+     "transitions": 8,
+     "verdict": "THIN: 8 transitions constrain rank 4 of 10 features, so the null space has dimension 6 and nearly every vector in it is a 'law' that is true over these states and unfalsified rather than confirmed. Treat every law below as a correlation awaiting a transition that could break it, not as a conservation law."
+    },
+    "features": 10,
+    "global_laws": [
+     {
+      "cells": [
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ],
+       [
+        3,
+        1
+       ],
+       [
+        4,
+        1
+       ],
+       [
+        5,
+        1
+       ]
+      ],
+      "support": [
+       "c0@0",
+       "c2@0",
+       "c0@1",
+       "c2@1",
+       "c0@2",
+       "c2@2",
+       "c0@3",
+       "c2@3",
+       "c0@4",
+       "c2@4"
+      ],
+      "value": 1
+     }
+    ],
+    "ms": 0,
+    "n_cell_local_laws": 5,
+    "n_features": 10,
+    "n_global_laws": 1,
+    "n_laws": 6,
+    "narrowed": false,
+    "space_dimension": 6
+   }
+  },
+  "log": [
+   {
+    "as": "Cart motion through column 1",
+    "id": "O-01",
+    "subject": "obj0 from mdl_segmenter (colour null, 28-cell track)",
+    "verdict": "accept",
+    "why": "The connected component of changes across all frames traces Cart moving down column 1 from t2\u2013t8 (4 consecutive ACTION2 steps)"
+   },
+   {
+    "id": "R-01",
+    "subject": "move_down evidence expansion",
+    "verdict": "accept",
+    "why": "move_down rule only cited t2; expanded to [ev: t2,t6,t7,t8 cov: 4/4] because same rule pattern (two adjacent cells swap 2\u21940) fires at every ACTION2 use in the log"
+   },
+   {
+    "id": "R-02",
+    "subject": "move_down guard condition",
+    "verdict": "probe-pending",
+    "why": "Guard `colored(below(Cart), 0)` should hold at all four transitions, but probe refutations P-01\u2013P-03 show the manual mispredicts after t2. Condition may be correct but rule may not account for some side effect or state not captured in objects"
+   },
+   {
+    "id": "L-01",
+    "subject": "replay_init_mismatch refutation",
+    "verdict": "probe-pending",
+    "why": "At t=1 replay, manual predicts (1,1)=1 (board) but observed is 0 (floor). Shown initial frame has (1,1)=0. If no rule changes (1,1) and ACTION1 matches no rules, prediction should match observation. Mismatch suggests frame initialization error, logging inconsistency, or rendering rule not expressed in word_table."
+   },
+   {
+    "id": "P-01",
+    "subject": "probe_refutation P-01, action=2 (ACTION2)",
+    "verdict": "probe-pending",
+    "why": "Manual mispredicts frame hash after ACTION2. Expected after move_down evidence expansion, but indicates either incomplete rule guard, missing rule, or cascading effect on cells beyond Cart's immediate motion"
+   },
+   {
+    "id": "P-02",
+    "subject": "probe_refutation P-02, action=2",
+    "verdict": "probe-pending",
+    "why": "Same as P-01; test at later frame. Suggests misprediction compounds across multiple ACTION2 applications"
+   },
+   {
+    "id": "P-03",
+    "subject": "probe_refutation P-03, action=2",
+    "verdict": "probe-pending",
+    "why": "Same as P-01 and P-02; third refutation at yet later frame. Pattern indicates systematic gap in rule coverage or guard logic"
+   }
+  ],
+  "ok": true,
+  "rounds": [
+   {
+    "attempt": 1,
+    "blocks": [
+     "LOG",
+     "PLAYBOOK",
+     "THEORY"
+    ],
+    "compile_errors": {
+     "lean": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph."
+    },
+    "compile_ok": true,
+    "landmarks": {},
+    "log_entries": 7,
+    "objects_located": 4
+   }
+  ],
+  "snapshot_after": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev06-after-theorize",
+   "files": [
+    "theory.dsl",
+    "playbook.dsl",
+    "problem.json"
+   ],
+   "revision": 6,
+   "tag": "after-theorize"
+  },
+  "snapshot_before": {
+   "dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T0035Z-a3-desk-live-proof2\\books\\snapshots\\rev05-before-theorize",
+   "files": [
+    "theory.dsl",
+    "playbook.dsl",
+    "problem.json"
+   ],
+   "revision": 5,
+   "tag": "before-theorize"
+  }
+ }
+]

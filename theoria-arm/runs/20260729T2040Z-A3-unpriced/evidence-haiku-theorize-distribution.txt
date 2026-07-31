@@ -1,0 +1,116 @@
+Every `spend` row in the pool that names a model: 506
+
+by model x transport x unpriced:
+   ('claude-haiku-4-5-20251001', 'claude-code-cli', False)    3
+   ('claude-haiku-4-5-20251001', 'claude-code-cli', True)     1
+   ('claude-haiku-4-5-20251001', None, False)                 302
+   ('claude-opus-5', None, False)                             70
+   ('claude-sonnet-5', None, False)                           102
+   ('mock-model-1', None, False)                              28
+
+by campaign (model-bearing rows only):
+   phase3-variance-envelope                                                 269
+   phase3-unit-price-remeasure                                              172
+   phase3-unit-price-recheck                                                30
+   mock_arm:r-45bad196843c4e7c                                              28
+   theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2 4
+   phase3-variance-envelope-smoke                                           3
+
+==========================================================================
+A) PRICED, real Claude Code CLI, model claude-haiku-4-5-20251001, beat=theorize
+  n = 3
+  min    $0.114256
+  median $0.132608
+  mean   $0.131052
+  max    $0.146292
+  sum    $0.393156
+  rows:
+    line 7266   $0.114256  beat=theorize     call=1   elapsed_ms=179764   usage_complete=True run=r-96e128ffb1c64bad
+    line 7330   $0.146292  beat=theorize     call=2   elapsed_ms=241344   usage_complete=True run=r-96e128ffb1c64bad
+    line 7417   $0.132608  beat=theorize     call=3   elapsed_ms=207993   usage_complete=True run=r-96e128ffb1c64bad
+
+==========================================================================
+B) PRICED, real CLI, claude-haiku-4-5-20251001, ANY beat
+  n = 3
+  min    $0.114256
+  median $0.132608
+  mean   $0.131052
+  max    $0.146292
+  sum    $0.393156
+  rows:
+    line 7266   $0.114256  beat=theorize     call=1   elapsed_ms=179764   usage_complete=True run=r-96e128ffb1c64bad
+    line 7330   $0.146292  beat=theorize     call=2   elapsed_ms=241344   usage_complete=True run=r-96e128ffb1c64bad
+    line 7417   $0.132608  beat=theorize     call=3   elapsed_ms=207993   usage_complete=True run=r-96e128ffb1c64bad
+
+==========================================================================
+C) UNPRICED rows naming a model (the placeholders)
+  n = 1
+  min    $4.000000
+  median $4.000000
+  mean   $4.000000
+  max    $4.000000
+  sum    $4.000000
+  rows:
+    line 7418   $4.000000  beat=theorize     call=4   elapsed_ms=None     usage_complete=None run=r-96e128ffb1c64bad
+
+==========================================================================
+D) any row whose model is a mock
+  n = 28
+  min    $0.000000
+  median $0.000000
+  mean   $0.000000
+  max    $0.000000
+  sum    $0.000000
+  rows:
+    line 3752   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3754   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3756   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3758   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3760   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3762   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3764   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3766   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3768   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3770   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3772   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3774   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3776   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3778   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3780   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3782   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3784   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3786   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3788   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3790   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3794   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3802   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3806   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3808   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3810   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3813   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3815   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+    line 3817   $0.000000  beat=None         call=None elapsed_ms=None     usage_complete=None run=r-45bad196843c4e7c
+
+
+==========================================================================
+E) the OTHER 302 haiku rows: claude-haiku-4-5-20251001 with no `transport` key
+   (these are baseline-arms `bare_cc` calls, a different desk shape)
+   distinct detail key sets:
+     ('is_error', 'model', 'run_id', 'step_idx')                            302
+   sample rows (first 4, verbatim detail):
+     line 444 usd=0.0 unpriced=False campaign=phase3-variance-envelope-smoke
+         {"is_error": true, "model": "claude-haiku-4-5-20251001", "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-29065be4", "step_idx": 1}
+     line 445 usd=0.0 unpriced=False campaign=phase3-variance-envelope-smoke
+         {"is_error": true, "model": "claude-haiku-4-5-20251001", "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-29065be4", "step_idx": 1}
+     line 446 usd=0.0 unpriced=False campaign=phase3-variance-envelope-smoke
+         {"is_error": true, "model": "claude-haiku-4-5-20251001", "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-29065be4", "step_idx": 1}
+     line 544 usd=0.027973 unpriced=False campaign=phase3-variance-envelope
+         {"is_error": false, "model": "claude-haiku-4-5-20251001", "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-d706111e", "step_idx": 1}
+   n = 302
+   min    $0.000000
+   median $0.036734
+   mean   $0.039390
+   max    $0.100124
+   sum    $11.895909
+   zero-dollar rows: 3 of 302
+   nonzero only: n=299 min $0.027048 median $0.036774 max $0.100124
