@@ -1,0 +1,68 @@
+{
+  "adversarial_review": {
+    "document_attacker": "15 factual defects; all corrected. Highest severity: 'separates' is not a verdict the code emits and `discriminating` is unreachable at n=4 by construction; U3 attainment has no implementation anywhere; E2's tier path is not the one REPORT_V2 narrates (logged as W-K).",
+    "mechanism_attacker": "6 attacks moved a published number with the gate green; all 6 closed except S6 (a neutered freeze.py), which is documented as an unfixable-in-territory limit in BATTERY_V1.md 8.2"
+  },
+  "base_commit": "7df12a39d1dbdcaff593c487694173adbf4acebc",
+  "baseline": {
+    "command": "python -m pytest battery/tests -q",
+    "tests": "214 passed"
+  },
+  "branch": "agent/v5-battery-freeze",
+  "delivered": {
+    "existing_battery_files_modified": 0,
+    "gate": "python -m battery.verify",
+    "gate_result": "PASS -- freeze ok (29 code + 3 docs + 16 suite + 2 freeze + prereg + cut), 237 passed, 7 readings match",
+    "record": "battery/BATTERY_V1.md",
+    "tests_added": 23,
+    "tests_after": 237,
+    "tests_before": 214
+  },
+  "files": [
+    {
+      "path": "battery/BATTERY_V1.md",
+      "sha256": "413f2a8c50539e83efa3c9b80a74bb684beb2761d2f2fe1b053aec7c7334e0b7"
+    },
+    {
+      "path": "battery/freeze.py",
+      "sha256": "2d3039da1f04f4cc6e00a5be0009d227b2c829cb8df2a4f168cd8c9535686ae5"
+    },
+    {
+      "path": "battery/verify.py",
+      "sha256": "b5435355164eee657b356eed923e9166c6d041ca4668f01c1cb79d5c7e2aeaa0"
+    },
+    {
+      "path": "battery/tests/test_freeze.py",
+      "sha256": "f27fef54e5a6c4f70ebe51a35e82e664f1ad2002ee6de2c98f9060cc4037e366"
+    }
+  ],
+  "frozen": {
+    "buckets": {
+      "code": 29,
+      "docs": 3,
+      "freeze": 2,
+      "readings": 7,
+      "suite": 16
+    },
+    "cut": "arc-recon/data/piles.json",
+    "cut_digest": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "gated": [
+      "code",
+      "docs",
+      "suite",
+      "freeze"
+    ],
+    "hash_rule": "sha256 over bytes with CRLF normalised to LF (proxy/scoring/__init__.py:64)",
+    "prereg": "battery/PREDICTIONS.md",
+    "prereg_sha256": "sha256:9614abf2054bccb0e57ff590df21946ebca53924b0d58311b10cf68975882453",
+    "recorded_not_gated": [
+      "readings"
+    ]
+  },
+  "goal": "Freeze the battery as BATTERY_V1.md: definitions + per-file sha256 of the computing code + per-metric direction predictions (PREDICTIONS.md snapshot hash registered) + anti-gaming audit verdicts. After the freeze, any metric change needs a new version, never an in-place edit.",
+  "not_frozen_by_design": "inputs and artifacts are recorded in BATTERY_V1.md section 6 but are not gate conditions: Phase 4 exists to point the instrument at inputs it has never read, so gating on input digests would fail by construction.",
+  "prompt_id": "V5-battery-freeze",
+  "territory": "battery",
+  "utc": "2026-07-28T19:01:03Z",
+  "worker": "W-252"
+}

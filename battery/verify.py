@@ -54,6 +54,7 @@ defect.  The run count of both is printed instead, as a note.
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -139,8 +140,41 @@ def fail(problems, message):
     problems.append(message)
 
 
+def rung_freeze(problems):
+    """[1/5] the freeze record: BATTERY_V1.md still describes this tree.
+
+    The suite runs this same check (`test_freeze.py`), but the gate does not
+    trust the suite to have been collected: one `addopts` line in `pytest.ini`
+    can deselect the objecting test, which is why rung 2 also refuses a
+    `deselected` tail.  Running the check in-process as well makes the freeze
+    hold on two independent paths -- V5's adversarial pass demonstrated the
+    single-path version being disarmed six different ways.
+    """
+    print("[1/5] the freeze record")
+    if REPO not in sys.path:
+        sys.path.insert(0, REPO)
+    from battery import freeze
+    fails = freeze.check()
+    if fails:
+        fail(problems, "the battery freeze does not hold (%d):\n  - %s"
+             % (len(fails), "\n  - ".join(fails)))
+        return
+    drift = freeze.readings_drift()
+    if drift:
+        print("   note  %d artefact(s) drifted from BATTERY_V1.md -- reported,"
+              " not gated (Phase 4 recomputes on unseen inputs by design): %s"
+              % (len(drift), ", ".join(drift)))
+    print("   ok    the tree matches BATTERY_V1.md")
+
+
+# The suite's pass-count floor.  375 tests pass on the tree this line was
+# written against; a tail below this means a block of tests silently vanished
+# even if nothing prints `deselected`.
+MIN_TESTS_PASSED = 300
+
+
 def rung_tests(problems):
-    print("[1/4] suite")
+    print("[2/5] suite")
     r = sh([sys.executable, "-m", "pytest", "battery/tests", "-q"])
     if r.returncode == 5:
         # pytest found nothing to run.  Read as green this would be one more
@@ -153,11 +187,28 @@ def rung_tests(problems):
         fail(problems, "suite red (exit %d)\n%s"
              % (r.returncode, (r.stdout + r.stderr)[-3000:]))
         return
-    print("   ok    %s" % (r.stdout.strip().splitlines() or ["(no output)"])[-1])
+    tail = (r.stdout.strip().splitlines() or ["(no output)"])[-1]
+    # A deselected or uncollected test is treated like a failing one.  The
+    # cheapest demonstrated way to disarm this gate was not a broken
+    # assertion but one `addopts = -k ...` line in pytest.ini (BATTERY_V1.md
+    # section 8.1), which exits 0 while every objecting test sits it out.
+    if "deselected" in r.stdout:
+        fail(problems, "the suite ran with tests deselected (%r) -- a "
+                       "deselected test and a failing test are the same "
+                       "verdict here; check pytest.ini for an `addopts` line"
+             % tail)
+        return
+    m = re.search(r"(\d+) passed", tail)
+    if not m or int(m.group(1)) < MIN_TESTS_PASSED:
+        fail(problems, "the suite tail says %r; the gate requires at least "
+                       "%d passing tests, so a green exit over a shrunken "
+                       "collection is still red" % (tail, MIN_TESTS_PASSED))
+        return
+    print("   ok    %s" % tail)
 
 
 def rung_real_run(problems, out_dir):
-    print("[2/4] one real run -- the whole spectrum recomputed from the "
+    print("[3/5] one real run -- the whole spectrum recomputed from the "
           "ledgers, offline")
     r = sh([sys.executable, "-m", "battery.run_battery", "--out", out_dir])
     if r.returncode != 0:
@@ -186,7 +237,7 @@ def _load(problems, out_dir, name):
 
 
 def rung_artifact_fields(problems, out_dir):
-    print("[3/4] artefact self-check")
+    print("[4/5] artefact self-check")
     loaded = {}
     for name in ARTEFACTS:
         doc = _load(problems, out_dir, name)
@@ -290,7 +341,7 @@ def rung_artifact_fields(problems, out_dir):
 
 
 def rung_separation_claim(problems):
-    """[4/4] the documents state the true separation count, and cannot go stale.
+    """[5/5] the documents state the true separation count, and cannot go stale.
 
     Added by V22.  Process 1's headline number is **zero** -- no metric
     separates the specified gradient -- and the way that number went wrong was
@@ -316,7 +367,7 @@ def rung_separation_claim(problems):
     somebody rewrites it.  A gate that could only catch the claim going too
     high would let it rot in the other direction.
     """
-    print("[4/4] the separation claim in the committed documents")
+    print("[5/5] the separation claim in the committed documents")
     path = os.path.join(SHIPPED, "discrimination_arms.json")
     if not os.path.exists(path):
         fail(problems, "battery/artifacts/discrimination_arms.json is absent; "
@@ -478,6 +529,7 @@ def main():
     try:
         out_dir = os.path.join(scratch, "artifacts")
         os.makedirs(out_dir)
+        rung_freeze(problems)
         rung_tests(problems)
         if rung_real_run(problems, out_dir):
             rung_artifact_fields(problems, out_dir)
@@ -493,8 +545,8 @@ def main():
     if problems:
         print("battery: RED (%d problem(s))" % len(problems))
         return 1
-    print("battery: green -- suite, one real run, artefact fields, "
-          "separation claim")
+    print("battery: green -- freeze, suite, one real run, artefact "
+          "fields, separation claim")
     return 0
 
 
