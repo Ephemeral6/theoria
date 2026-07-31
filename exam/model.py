@@ -31,11 +31,50 @@ from typing import Any, Callable, Dict, List, Optional, Sequence
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-ARTIFACTS = os.path.join(HERE, "artifacts")
+
+#: Where the builders write.  The tracked tree by default; a shadow tree when
+#: `EXAM_ARTIFACTS_DIR` is set.
+#:
+#: The redirect exists because `exam/verify.py` used to prove its case by
+#: destroying the evidence: `build_papers` overwrites in place, so by the time
+#: any stage could have asked "is what is committed what this code produces?",
+#: the committed bytes were gone from the working tree.  Verify now seeds a
+#: shadow copy of `exam/artifacts`, points every producer at it, and compares
+#: the shadow against the tracked tree, which stays untouched for the whole run.
+#: Adoption of a rebuild is then a separate, deliberate act -- running
+#: `python -m exam.tools.build_papers` with no redirect -- and never a side
+#: effect of asking whether a rebuild was needed.  V2/V25.
+ARTIFACTS = os.path.abspath(os.environ.get("EXAM_ARTIFACTS_DIR")
+                            or os.path.join(HERE, "artifacts"))
+#: The path an artefact records for itself, always, regardless of where the
+#: build ran.  `artifact_rel` below is the only thing that may produce one.
+ARTIFACTS_LABEL = "exam/artifacts"
 PAPERS_DIR = os.path.join(ARTIFACTS, "papers")
 TRUTH_DIR = os.path.join(ARTIFACTS, "truth")
 ANSWERS_DIR = os.path.join(ARTIFACTS, "answers")
 REPORTS_DIR = os.path.join(ARTIFACTS, "reports")
+
+
+def artifact_rel(path: str) -> str:
+    r"""The repo-relative name of an artefact, independent of where it was built.
+
+    A tracked generated artefact must not record where its builder stood (V27):
+    `build_manifest.json` once held twelve absolute paths naming whichever
+    worktree ran last, which is a merge-conflict generator between two branches
+    that agree, and `archive_run.py` carries the file into the provenance canon
+    and from there into a release manifest that publishes every tracked file.
+
+    Relative to `ARTIFACTS` rather than to `REPO`, then relabelled: under the
+    shadow-tree redirect a repo-relative path would come out as
+    `../../AppData/.../papers/x.json`, so the artefact would differ from its
+    committed twin for no reason but the redirect, and the match gate would
+    read that as drift.  Forward slashes, so the value is identical on both
+    platforms.
+    """
+    rel = os.path.relpath(os.path.abspath(path), ARTIFACTS).replace(os.sep, "/")
+    if rel.startswith("../"):
+        raise ExamError("not an artefact path: %r" % path)
+    return "%s/%s" % (ARTIFACTS_LABEL, rel)
 
 #: The four question types of Theoria.md 1.11.  Frozen: a fifth type is a
 #: change to the evaluation protocol, not a change to this file.

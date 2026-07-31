@@ -76,7 +76,8 @@ from ..grading.rubrics_verdict import (
     ACTIONS, DELTA, MAX_ENUMERATION, OPPOSITE, Level, check_certificate,
     enumerate_states, relaxed_distance, replay,
 )
-from ..model import ARTIFACTS, HERE, Item, Paper, canonical, sha256_text, write_json
+from ..model import (ARTIFACTS, HERE, Item, Paper, artifact_rel, canonical,
+                     sha256_text, write_json)
 
 PAPER_ID = "p15-verdict-a2"
 QUESTION_TYPE = "verdict"
@@ -84,7 +85,6 @@ WORLD_ID = "a2"
 RUBRIC_ID = "verdict.a2.claim_and_certificate"
 
 SPEC_DIR = os.path.join(ARTIFACTS, "variant_specs")
-REPO_ROOT = os.path.dirname(HERE)
 
 #: A class (ii) item whose demonstrated bound is under this is not a class (ii)
 #: item, it is a class (i) item with a big board.  `build()` refuses to ship one.
@@ -745,7 +745,11 @@ def _emit_spec(spec: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "variant_id": loaded.variant_id,
         "spec_sha256": loaded.sha256,
-        "spec_file": os.path.relpath(path, REPO_ROOT).replace(os.sep, "/"),
+        # `artifact_rel`, not `relpath(path, REPO_ROOT)`: this value is
+        # tracked inside the verdict answer key, and under the shadow-tree
+        # redirect a repo-relative path resolves to `../../AppData/...`,
+        # which would make every rebuild look like drift.  V2/V25.
+        "spec_file": artifact_rel(path),
         "spec_file_sha256": sha256_text(text),
         "operators": [op["op"] for op in loaded.operators],
     }

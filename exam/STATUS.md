@@ -1291,3 +1291,39 @@ network, zero sealed-pile contact.
     silent unsoundness toward "proved unsolvable" is the single worst failure
     this exam can have, and the next reader to reach for that engine will not
     find it out by running it. Filed for engine-rig, not fixed here.
+
+## V2/V25 — verify was green without ever comparing a build to what is committed
+
+Ruling: `DECISIONS.md` D-EX-032. Run:
+`exam/runs/20260731T1800Z-V2-artifacts-match-committed/`.
+
+`python exam/verify.py` printed GREEN for weeks while measuring something other
+than what a reader took it to mean. `build_papers` overwrites `exam/artifacts/`
+**in place** and ran as stage one, so the committed bytes were gone before any
+later stage could have compared against them; the determinism stage compares two
+*fresh* builds to each other in memory and opens no committed file. Nothing in
+the territory checked that the tracked sheets, keys, `calibration.json`,
+`exam_summary.json`, `selftest.json`, `matrix/` and `build_manifest.json` were
+produced by the code that ships beside them. Every number the papers quote out of
+`exam/artifacts/` rested on that.
+
+Now: `exam.model.ARTIFACTS` honours `EXAM_ARTIFACTS_DIR`; verify seeds a shadow
+copy, runs every producer against it, and **never writes into the tracked tree**;
+the `artifacts_match_committed` stage requires both that `exam/artifacts` equals
+HEAD and that every tracked artefact reproduces byte for byte. Mismatch is red,
+and the gate reports rather than adopts — adoption is running `build_papers`
+yourself and committing the diff with the reason.
+
+Measured on `6fabcc7e`: **41 tracked artefacts, all reproduce**; the producers
+rewrote 32 of them and none differs. So RES-3's step-2 ruling (stale artefacts,
+regenerate) had already been discharged by merging the branches that lagged
+`18a39417`; there is nothing left to regenerate, and that is now a gate output
+instead of an assumption.
+
+Two paths had to become location-independent before the gate could ever be green:
+`build_manifest.json` and the verdict key's 17 `spec_file` values were built with
+`os.path.relpath(path, REPO)`, which under the redirect resolves to
+`../../AppData/Local/Temp/...`. `_repo_rel` moved into `exam.model.artifact_rel`,
+relative to the artefact root, and `exam/papers/verdict.py` and
+`exam/tools/run_exam.py` use it too. D-EX-031's rule is unchanged and now has one
+implementation instead of three.

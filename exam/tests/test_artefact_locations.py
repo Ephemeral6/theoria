@@ -75,13 +75,20 @@ def test_a_repo_relative_path_is_not_a_finding():
 
 
 def test_build_papers_records_repo_relative_paths():
-    """The generator, not just the artefact: regenerating must stay clean."""
+    """The generator, not just the artefact: regenerating must stay clean.
+
+    The helper moved from `build_papers._repo_rel` to `exam.model.artifact_rel`
+    when `run_exam` and the verdict builder needed the same guarantee (V2/V25),
+    and it is now relative to the artefact root rather than the repo root -- so
+    a build redirected into a shadow tree records the same string a build in the
+    checkout does.
+    """
+    from exam.model import ARTIFACTS, artifact_rel
     from exam.tools import build_papers
     payload = build_papers.build_all(write=False)
     assert payload["papers"], "no papers built"
     # write=False emits no paths at all; the point is that the keys that DO
-    # carry paths are produced by _repo_rel, so check the helper directly
-    # against an absolute path under the repo.
-    absolute = os.path.join(REPO, "exam", "artifacts", "papers", "x.json")
-    assert build_papers._repo_rel(absolute) == "exam/artifacts/papers/x.json"
-    assert not os.path.isabs(build_papers._repo_rel(absolute))
+    # carry paths are produced by `artifact_rel`, so check the helper directly.
+    absolute = os.path.join(ARTIFACTS, "papers", "x.json")
+    assert artifact_rel(absolute) == "exam/artifacts/papers/x.json"
+    assert not os.path.isabs(artifact_rel(absolute))

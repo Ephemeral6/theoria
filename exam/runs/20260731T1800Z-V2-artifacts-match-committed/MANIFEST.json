@@ -1,0 +1,23 @@
+{
+ "agent": "cleanup2-worker",
+ "base_commit": "6fabcc7ea957931b7676ddbdf7587e128b947e73",
+ "branch": "cleanup2/v2exam",
+ "files": [
+  {
+   "path": "GATE-OUTPUT.md",
+   "sha256": "7c9e4c9911e489d21fdf0298a622aa5a516c536250c6c77804ed5693f4783f6b"
+  },
+  {
+   "path": "NEGATIVE-SAMPLE.md",
+   "sha256": "168e371205b2acf9935bf0d8b1dd3e3349dc16ea4a791acf584dcc9bd302ad94"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "1ae3c278dfd4812c8dd0279068a4688ab9e0046fc61a5d840347bcd4ece432d8"
+  }
+ ],
+ "note": "Hashes are over the bytes git publishes, not the working copy -- V6-V23 cycle 107/108 found those two can differ silently under an eol=lf pin and that git diff's stdout cannot show it. Stamped by stamp_manifest.py, never by hand.",
+ "prompt_id": "V2-V25-verify-does-not-check-what-is-committed.W-1800",
+ "territory": "exam",
+ "utc": "2026-07-31T18:00:00Z"
+}
