@@ -344,11 +344,56 @@ def _bfs_search(namespace: Dict[str, Any], node_cap: int, deadline_s: float,
     return entry
 
 
-def surprises_from(report: Dict[str, Any], register) -> List[Any]:
+def surprises_from(report: Dict[str, Any], register, *,
+                   reported: Optional[set] = None,
+                   token: Optional[str] = None) -> List[Any]:
+    """Turn a plan verdict into the surprises that should reach the desk.
+
+    **`no_goal_declared` was silent, and that is why nothing was ever won.**
+    Across all four live legs of 2026-07-31 the planner returned
+    `no_goal_declared` on *every* turn -- 29/29 on
+    `20260731T1430Z-A3-level2-carried-r3` -- so `plan(...)["status"]` was never
+    `"sat"`, `_commit` was never entered, and not one of the 33 actions that leg
+    spent was an attempt to win. The arm probed, theorized, probed, theorized,
+    and never played. Meanwhile this function fired nothing, so across eight
+    desk calls costing $13.44 the model was never once told that its playbook
+    declares no goal and that planning is therefore dead on arrival.
+
+    It is a `heuristic_miss`: computational family, and the computational family
+    is the one whose book is the **playbook**, which is exactly where the goal
+    is missing. No eighth surprise is invented -- `Theoria.md` 1.10(d) fixes the
+    seven and `inner/surprise.py` refuses any other name.
+
+    **Fired once per playbook revision, not once per turn.** A surprise is the
+    only thing that calls the desk; a gap that fires every turn would call the
+    desk every turn to be told the same thing. `reported` is a set the caller
+    owns and `token` identifies the playbook the gap was found in, so the
+    second turn with an unchanged playbook is silent and the first turn after a
+    rewrite that still has no goal speaks up again.
+    """
     fired = []
     if report.get("status") == "search_timeout":
         fired.append(register.fire(
             "search_timeout",
             report.get("detail", "the planner ran out of nodes"),
             payload={"expansions": report.get("expansions")}))
+
+    if report.get("status") == "no_goal_declared":
+        key = ("no_goal_declared", token)
+        if reported is None or key not in reported:
+            if reported is not None:
+                reported.add(key)
+            fired.append(register.fire(
+                "heuristic_miss",
+                report.get("detail", "no goal is declared")
+                + " Until a `goal` is stated the plan tier cannot return "
+                  "`sat`, `commit` never runs, and every action this arm "
+                  "spends is a probe rather than an attempt to win. Declaring "
+                  "the winning condition is the highest-value edit available "
+                  "to the playbook.",
+                payload={"status": "no_goal_declared",
+                         "consequence": "plan never returns sat; commit never "
+                                        "runs; no level can be completed",
+                         "book_to_edit": "playbook.dsl",
+                         "playbook_token": token}))
     return fired

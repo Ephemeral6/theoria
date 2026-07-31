@@ -1,0 +1,89 @@
+{
+ "base_commit": "73760dc85fb693ea7833e36d8e815982e38e55cd",
+ "branch": "p12/arm-diag",
+ "cell": "P12",
+ "delivered": [
+  "inner/probe.py",
+  "inner/plan.py",
+  "inner/loop.py",
+  "tests/test_probe_economics.py",
+  "tests/test_probe_guard_in_the_loop.py"
+ ],
+ "files": [
+  {
+   "path": "../../inner/loop.py",
+   "sha256": "62b4df6bc28954b89f00087d4853fa99a8d52a180455eb7915a096f0d782fd5d"
+  },
+  {
+   "path": "../../inner/plan.py",
+   "sha256": "9356e70678351ed914f4f66850b5fe0aa165c2e668f5d38dcab45faf040c7289"
+  },
+  {
+   "path": "../../inner/probe.py",
+   "sha256": "0d1657fb840346adafddb51999feebf60b1f3492a230e5afcc7f18a1d7fbc342"
+  },
+  {
+   "path": "../../tests/test_probe_economics.py",
+   "sha256": "aa8dbef7ee7410bb75471a9cd69c071ad580593610e6aee6bce031866a8ad5db"
+  },
+  {
+   "path": "../../tests/test_probe_guard_in_the_loop.py",
+   "sha256": "bb12f77fce5abc0a7745d6bec98afe86902b17cf49898f8eeafd5680ca75fda7"
+  },
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "eb2177c1afd83f7f18e7666e8e44d9972e4f51353cad56a1c0ba18d1f96c566f"
+  },
+  {
+   "path": "make_manifest.py",
+   "sha256": "95d7431649fb8b2c3218e867aa396f692adb7811693e1818b5438a4d1b1698ab"
+  },
+  {
+   "path": "mock_campaign_after.json",
+   "sha256": "e0ed9f7d97e89b6d487eeb23589c223583bda98be413722d60fdddd24fc8ea32"
+  },
+  {
+   "path": "mock_campaign_before.json",
+   "sha256": "0988f470ff2ad36914a22a40893f4dfb849b4aa3393b5dfb85b9084c7ea83d1c"
+  },
+  {
+   "path": "probe_replay.json",
+   "sha256": "aa988bdf3a3f173ff86947a9c81fba6084fd722cf1a379197f001d035ee63dc9"
+  },
+  {
+   "path": "replay_live_probes.py",
+   "sha256": "9c16aea8827f0ac8e930b034ae38c4189f85d889938f975e3202bd0f3ff3196d"
+  }
+ ],
+ "lane": "arm",
+ "measured": {
+  "claimed_bits": 43.167,
+  "committed_actions_across_all_four_legs": 0,
+  "distinct_experiments": 38,
+  "legs_diagnosed": [
+   "20260731T1240Z-A3-level2-carried",
+   "20260731T1310Z-A3-level2-carried-r2",
+   "20260731T1430Z-A3-level2-carried-r3",
+   "20260731T1500Z-A3-sk48-carried-l1"
+  ],
+  "levels_completed_across_all_four_legs": 0,
+  "mock_campaign_delta": "none: byte-identical before and after. --mock implies offline, offline skips theorize, and with no manual the probe and plan beats are never reached. The specified gate cannot see this change; replay_live_probes.py is the instrument that can.",
+  "plan_status_on_every_turn_of_r3": "no_goal_declared (29/29)",
+  "probes_kept_under_the_new_guards": 31,
+  "probes_refused_as_repeats": 16,
+  "probes_refused_on_a_vacuous_streak": 5,
+  "probes_resolved": 52,
+  "probes_vacuous": 47,
+  "realised_bits": 2.714
+ },
+ "prompt_id": "P12-theoria-arm-probe-economics",
+ "sealed_pile_contact": "none",
+ "spend": {
+  "api_calls": 0,
+  "note": "entirely offline: no ARC API call, no model call, no network. The four legs are read-only inputs.",
+  "usd": 0.0
+ },
+ "territory": "theoria-arm",
+ "utc": "2026-08-01T02:00:00Z",
+ "what": "diagnosis of why four live legs and ~$35 completed zero levels, plus the cheap-and-certain half of the fix: no_goal_declared becomes a heuristic_miss surprise so the desk is told planning is dead; probe results carry realised information gain beside the design's claim and name a vacuous frontier; and three refusals stop the arm buying an action for a question it has already asked or cannot answer."
+}
