@@ -109,7 +109,6 @@ def evidence_brief(store: FrameStore, engines: Dict[str, Any],
         lines.extend(rows)
     else:
         for t, step in enumerate(labelled[:max_steps]):
-            before = grids[t - 1] if t > 0 else None
             lines.append(_command_row(t, step, grids[t - 1] if t > 0 else None))
         if len(labelled) > max_steps:
             lines.append("- ... %d more" % (len(labelled) - max_steps))
