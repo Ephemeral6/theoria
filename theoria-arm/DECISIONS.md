@@ -463,7 +463,15 @@ levels.
 
 ## D-E3-001 · The manual travels; the level instance never does
 
-`--carry-books` copies `theory.dsl` and `playbook.dsl` and refuses to copy
+> Ported 2026-07-31: the flag is spelled `--seed-books` on master (the E3
+> spelling still works as an alias, because it is in the archived run records),
+> and the copy itself is done once, by `Books(seed_from=...)`. Master had
+> independently built the same carry for the level boundary; two writers for one
+> carry is a provenance record that can disagree with itself, so
+> `transfer.carry` now adorns that record rather than making a second one.
+> Nothing below changes about *what* travels.
+
+`--seed-books` copies `theory.dsl` and `playbook.dsl` and refuses to copy
 `problem.json`. That is not tidiness — it is the whole content of the transfer
 claim. `inner/books.py` already draws the domain/problem split by arithmetic:
 the manual is the domain, and the level is computed from the frames of the game

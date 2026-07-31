@@ -73,7 +73,7 @@ cd theoria-arm && python -m armtools.spend_check \
 ```bash
 cd theoria-arm && python -m harness.run --game sk48-d8078629 --budget 120 \
     --cost-ceiling 18 --prompt-id E3-engines-online \
-    --carry-books runs/<the first run>/books --carry-source-game g50t-5849a774 \
+    --seed-books runs/<the first run>/books --carry-source-game g50t-5849a774 \
     --slug "$(date -u +%Y%m%dT%H%M%SZ)-sk48-carried"
 ```
 

@@ -5,6 +5,20 @@ base commit `e182c95`. The previous milestone, P-8 (first online contact), is
 recorded below and unchanged. This file is the state of the track; the reasons
 live in `DECISIONS.md` and the per-run account in `runs/<slug>/MANIFEST.json`.
 
+> **Read the E3 section as of 2026-07-28, not as of today.** It was written on a
+> branch 993 commits behind and ported onto master on 2026-07-31. Master carried
+> work E3 could not have known about, and two of E3's statements are false of the
+> arm you are reading:
+>
+> * **the shared spend gate exists** and is mandatory — see GAPS.md GAP E3-2's
+>   closing note. E3 recorded it as absent, correctly, on its own commit.
+> * **the game id never enters a prompt.** `ModelDesk(forbid_in_prompt=...)`
+>   enforces Theoria.md:353 for the played id *and every sealed one*, checked
+>   before the subprocess starts. E3 predates it.
+>
+> Everything E3 says about what its two paid legs did is unchanged and still
+> true: those runs happened on that commit, under those conditions.
+
 ---
 
 ## E3 — carrying the books to sk48

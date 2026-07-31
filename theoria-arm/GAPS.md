@@ -253,6 +253,20 @@ S3's stated premise has since been refuted by browser-ops — ARC has no quota a
 all, a key's only permission dimension is the game set — so the contention that
 remains is the model bill, which is the whole of E3's $18.
 
+> **Closed 2026-07-31, when this work was ported onto master.** The gate exists.
+> `proxy/spend_gate.py` and `theoria-arm/harness/spend.py` landed with
+> A3-campaign-devpile: every desk call now brackets itself with a reservation on
+> the shared pool, and `ModelDesk.binding()` **raises** `NoSpendBinding` rather
+> than permitting an ungated call, so an unbracketed desk call is no longer a
+> degraded mode of this arm — it is impossible. INC-BA-003 is the incident that
+> made the case: the single live g50t run spent $6.317658 while the pool's
+> report showed this arm's campaigns at $0.00, which is the sentence above
+> measured rather than predicted.
+>
+> The gap paragraph is **kept, not rewritten**. E3's two paid legs really did
+> spend ~$8.40 outside any pool's sight, and this is the only place in the
+> repository that says so. What changed is the code, not what happened.
+
 ## GAP E3-3 · The bill's basis was wrong by 2.1×, and the projection is superseded by its own run
 
 `BUDGET_PLAN.json` projected from P-8's measured $1.2635 per desk call that $18
