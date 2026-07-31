@@ -1,0 +1,47 @@
+{
+  "adapter_honesty_violations": 0,
+  "adjudication": {
+    "conclusion": "5 of 6 arm-side replay_mismatch records sit at positions where the live environment returned the identical frame_hash across independent sessions; the remaining 1 lie past the point where the sessions diverge (prefix divergence) and carry no cross-session evidence either way. Structurally the verdict is the same for all 6: certify.py compares the manual's prediction against a single recorded observation, so a replay_mismatch is a statement about the theory, not about environment determinism",
+    "records_whose_position_the_environment_reproduced_bit_exactly": 5,
+    "replay_mismatch_records": 6
+  },
+  "ar25_live_depth": "the S31 live session is RESET-only: it participates at position 0 only (16 of the 388 pairwise comparisons involve it); positions 1-8 are archive-era sessions agreeing with each other (the P-9 result reproduced)",
+  "combined_ar25": {
+    "disagreements": 0,
+    "n_sessions": 17,
+    "pairwise_comparisons": 388,
+    "steps_compared": 9,
+    "verdict": "PASS"
+  },
+  "combined_g50t": {
+    "disagreements": 0,
+    "n_sessions": 29,
+    "pairwise_comparisons": 1304,
+    "steps_compared": 6,
+    "verdict": "PASS"
+  },
+  "integrity": {
+    "hash_mismatches": 0,
+    "steps_with_frames": 1315
+  },
+  "live_g50t": {
+    "disagreements": 0,
+    "n_sessions": 3,
+    "pairwise_comparisons": 22,
+    "steps_compared": 10,
+    "verdict": "PASS"
+  },
+  "pinned_inputs_all_match": true,
+  "regression": {
+    "ar25": true,
+    "g50t": true
+  },
+  "s31_excerpt_lines": 4,
+  "sk48_supplement": {
+    "disagreements": 0,
+    "n_sessions": 5,
+    "pairwise_comparisons": 34,
+    "steps_compared": 5,
+    "verdict": "PASS"
+  }
+}

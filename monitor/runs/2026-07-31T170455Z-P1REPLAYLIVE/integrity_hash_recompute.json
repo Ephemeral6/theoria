@@ -1,0 +1,66 @@
+{
+  "files": {
+    "canon.a7-g50t.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 93
+    },
+    "canon.a7up-opus-g50t.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 31
+    },
+    "canon.a7up-sonnet-g50t.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 31
+    },
+    "canon.ar25.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 445
+    },
+    "canon.g50t.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 555
+    },
+    "ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 64
+    },
+    "theoria-arm/runs/20260728T072604Z-E3-sk48-carried/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 10
+    },
+    "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 31
+    },
+    "theoria-arm/runs/20260731T1240Z-A3-level2-carried/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 6
+    },
+    "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 14
+    },
+    "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 34
+    },
+    "theoria-arm/runs/preflight-20260728T074237Z/ledger.jsonl": {
+      "examples": [],
+      "hash_mismatches": 0,
+      "steps_with_frames": 1
+    }
+  },
+  "total_hash_mismatches": 0,
+  "total_steps_with_frames": 1315
+}

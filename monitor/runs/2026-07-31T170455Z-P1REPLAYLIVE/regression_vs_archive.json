@@ -1,0 +1,154 @@
+{
+  "ar25": {
+    "archived": {
+      "disagreements": 0,
+      "n_sessions": 16,
+      "pairwise_comparisons": 372,
+      "steps_compared": 9,
+      "verdict": "PASS"
+    },
+    "match": true,
+    "reproduced": {
+      "disagreements": 0,
+      "n_sessions": 16,
+      "pairwise_comparisons": 372,
+      "steps_compared": 9,
+      "verdict": "PASS"
+    }
+  },
+  "canon_digests": {
+    "a7-g50t": "sha256:f7247b234af027181c1bd61ccd2434699c81f6a0a1c90a4dcf082aa5f225d72a",
+    "a7up-opus-g50t": "sha256:d897adea1ed7da6090c1ccdd5b9654aac62243271e1f20ef0f0526dce56bdf12",
+    "a7up-sonnet-g50t": "sha256:15ac61a41118c35ea35bdecbad44622cae02a3cf5d3336cd96e0aa4c616bc09e",
+    "ar25": "sha256:2db1598e622fbc764c942211790065994fe6752ecacc6717ef7dfb4760e28424",
+    "g50t": "sha256:67111b3924f75b50a9237e1d03764f17d8ee41170dd2f0a394135faade16b8d8"
+  },
+  "g50t": {
+    "archived": {
+      "disagreements": 0,
+      "n_sessions": 26,
+      "pairwise_comparisons": 971,
+      "steps_compared": 6,
+      "verdict": "PASS"
+    },
+    "match": true,
+    "reproduced": {
+      "disagreements": 0,
+      "n_sessions": 26,
+      "pairwise_comparisons": 971,
+      "steps_compared": 6,
+      "verdict": "PASS"
+    }
+  },
+  "pinned_digest_comparison": {
+    "canon_drift_cause": "upgrade_ledger embeds the invocation source path in lifted.source, so canon digests are path-dependent and carry no cross-run integrity value; with inputs matching byte-for-byte, canon digest drift does NOT mean the shards moved -- the session-level regression is the authority",
+    "canons": {
+      "a7-g50t": {
+        "match": false,
+        "ours": "sha256:f7247b234af027181c1bd61ccd2434699c81f6a0a1c90a4dcf082aa5f225d72a",
+        "pinned": {
+          "pinned_in": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2",
+          "sha256": "sha256:0954b40be786fe06c74c1e604cf11d18f5a3837e98d6ecc38404a400d3399b63"
+        }
+      },
+      "a7up-opus-g50t": {
+        "match": false,
+        "ours": "sha256:d897adea1ed7da6090c1ccdd5b9654aac62243271e1f20ef0f0526dce56bdf12",
+        "pinned": {
+          "pinned_in": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2",
+          "sha256": "sha256:7dac28bbc2ec0c5e467382bd7302e6970173b08e81eed3c8637b0400732d6370"
+        }
+      },
+      "a7up-sonnet-g50t": {
+        "match": false,
+        "ours": "sha256:15ac61a41118c35ea35bdecbad44622cae02a3cf5d3336cd96e0aa4c616bc09e",
+        "pinned": {
+          "pinned_in": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2",
+          "sha256": "sha256:b9d481ad266fa2ce89ffca4de1efbd29733268bc8ca55779e6b45b99e82fadc8"
+        }
+      },
+      "ar25": {
+        "match": false,
+        "ours": "sha256:2db1598e622fbc764c942211790065994fe6752ecacc6717ef7dfb4760e28424",
+        "pinned": {
+          "pinned_in": "proxy/runs/p9-shell-harden",
+          "sha256": "sha256:c30d47d24d27c57c7f5b2d9613db72ca18eb29f5ee9a8c0fc8a1364773257b11"
+        }
+      },
+      "g50t": {
+        "match": false,
+        "ours": "sha256:67111b3924f75b50a9237e1d03764f17d8ee41170dd2f0a394135faade16b8d8",
+        "pinned": {
+          "pinned_in": "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2",
+          "sha256": "sha256:b845841263af1a08dbee39bdfe2fc861ae65edd2d3bb2541362da438b83b2d67"
+        }
+      }
+    },
+    "inputs": {
+      "baseline-arms/out/shards/ledger.a7-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:0ed50729f2027487d6fa8e4b38c4b934c2e73a8a46b0f7da3165e2be25a542ae"
+        }
+      },
+      "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:b91bd475049b8c1dd3969a10c587af57561d8d4788ffd17536f461c9578e53b5"
+        }
+      },
+      "baseline-arms/out/shards/ledger.a7up-sonnet-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:89adeb35a84a32762911946676c6cad422ac3feda9b913628b65b300b1a721e1"
+        }
+      },
+      "baseline-arms/out/shards/ledger.ar25.jsonl": {
+        "match": true,
+        "ours": "sha256:a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9",
+        "pinned": {
+          "proxy/runs/p9-shell-harden": "sha256:a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+        }
+      },
+      "baseline-arms/out/shards/ledger.g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5"
+        }
+      },
+      "baseline-arms/out/shards/probe_log.a7-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:528d4a21e0e031880c6398dfa6d198eadc597bdc210eb271f7b5d99f25124221",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:528d4a21e0e031880c6398dfa6d198eadc597bdc210eb271f7b5d99f25124221"
+        }
+      },
+      "baseline-arms/out/shards/probe_log.a7up-opus-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:e1f3776dd837de1cfc33d8d0839b228a294b0850c0ad73323496383a5b935d87",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:e1f3776dd837de1cfc33d8d0839b228a294b0850c0ad73323496383a5b935d87"
+        }
+      },
+      "baseline-arms/out/shards/probe_log.a7up-sonnet-g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:466a921d504d94bbdcc062ca8589653d01e8deff5c1bd0bd05f167a90018bfdc",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:466a921d504d94bbdcc062ca8589653d01e8deff5c1bd0bd05f167a90018bfdc"
+        }
+      },
+      "baseline-arms/out/shards/probe_log.g50t.jsonl": {
+        "match": true,
+        "ours": "sha256:b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899",
+        "pinned": {
+          "proxy/runs/20260731T154336Z-P1-replay-spotcheck-2": "sha256:b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899"
+        }
+      }
+    },
+    "inputs_all_match": true
+  }
+}

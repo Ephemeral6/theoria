@@ -79,9 +79,26 @@ PHASES = [
                 "id": "p1-variant",
                 "label": "变体注入层（包裹合法集 + 构造性依据）",
                 "clause": "Phase 1 · 自下而上五层 (2)",
-                "status": "partial",
-                "note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与"
-                        "考卷出题流程未接。",
+                "status": "green",
+                "note": "改判 2026-07-31（closeout/p1-replay-live 全板扫，留痕 "
+                        "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/）。条款三问俱清："
+                        "包裹合法集冻结且默认拒绝（proxy/variants.py:43-45,108-114，"
+                        "五算子白名单，集外算子拒载并给理由）；构造性依据装载即强制"
+                        "（:94-100，无依据或 <40 字符拒载）且经独立验证——exam 密封演练"
+                        "出题→判卷→归档全回路，构造真值对穷举 oracle 10/10 一致"
+                        "（exam/SEALED_DRILL.md；proxy 4 + exam 17 + 演练 10 份规格全带"
+                        "依据，verdict.py 经 proxy 校验器注册并对象/文件双哈希）；"
+                        "规格文件+哈希入账（Variant.reference→每条 env_step、"
+                        "fingerprint→run_start，proxy/LEDGER_FORMAT.md:201,440，"
+                        "test_e2e.py 钉死）。D-032 追加 win_tighten 退化记账与读取工具。"
+                        "42+53 测试绿。与 p1-proxy-model 的 0/65 不同类：本层有端到端"
+                        "账本证明与 oracle 交叉验证。残差如实：win_tighten 对无分游戏"
+                        "是废除而非收紧（先决条件已写，D-032）；observation_loss 只作用"
+                        "frames[-1]，对帧突发响应是到达即失真，其上的割集论证不健全"
+                        "（对 ARC 是活风险，开发堆最长 113 帧）；构造真值仅在 2 世界 "
+                        "10 变体上验证过；从未改写过真实 ARC 流量（所有 run.json "
+                        "variant: null）——条款不要求活用，Theoria.md:372 将封存局变体"
+                        "构造明令排进 Phase 4。",
             },
             {
                 "id": "p1-runner",
@@ -96,8 +113,24 @@ PHASES = [
                 "label": "冻结打分器接入 + 账本分数与 scorecard 对账",
                 "clause": "Phase 1 · 自下而上五层 (5)、验收单",
                 "status": "partial",
-                "note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径"
-                        "（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。",
+                "note": "注记重写 2026-07-31（closeout/p1-replay-live 全板扫+监审复算；"
+                        "原注『冻结打分器本体未接 → P-9』已失实）。已成的一半：打分器"
+                        "本体已冻结（proxy/scoring/ + frozen.json 自校验哈希记录，漂移"
+                        "即拒评，指纹入 run_start/run.json；freeze/MANIFEST_DRAFT.md:87 "
+                        "称其为全库唯一逐字节自校验冻结件）；对账相等处处成立——monitor "
+                        "复算 37 run 过冻结打分器 --all：**26 PASS、0 FAIL、11 "
+                        "UNDETERMINED**（含 4 条 theoria 真腿全 PASS——两臂通吃的实证；"
+                        "UNDETERMINED 全为 D-015 类丢卡，卡关后不可再取，只可说『留卡"
+                        "的全过』不可说比例；留痕 score_corpus.json，--no-incident "
+                        "--no-artifact 防账本变异，DELIVERY_RULING §5 有六条重复 "
+                        "incident 前车之鉴）。未成的一半（留 partial 的理由）：『跑完"
+                        "一局即打分』从未在活局执行——无臂 harness 在 run_end 调 "
+                        "score_run，唯一经 proxy/runner.py 的活局在 run_end 前崩"
+                        "（S31）；事后批扫正是 Theoria.md:371 禁的口径。接线缺口归 "
+                        "DELIVERY_RULING.md §4（两行 open·unassigned，与 p1-same-shell "
+                        "同源）；ablation 臂无活账本（D-AB-004），通吃至多 2/3 臂。"
+                        "若所有者裁『一台冻结打分器读遍各臂账本+有卡处处相等』即为"
+                        "达成，本项可绿——此收窄须明判，不得静默（S32 先例）。",
             },
             {
                 "id": "p1-determinism",
@@ -112,21 +145,56 @@ PHASES = [
                 "id": "p1-access",
                 "label": "接入核查各项已入账",
                 "clause": "Phase 1 · 一件接入核查",
-                "status": "partial",
-                "note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、"
-                        "首帧跨会话可复现、金丝雀基线；**帧缓存与释出许可条款已由 OPS-B 查实**"
-                        "（browser-ops/TERMS.md §2）：本地缓存/落盘是官方设计的一部分，无需额外"
-                        "许可；**再释出需书面许可且默认禁止**（ToS 原文 without our express prior "
-                        "written permission）。未结：全量跨会话残留、速率配额的官方口径。"
+                "status": "green",
+                "note": "改判 2026-07-31（closeout/p1-replay-live 全板扫；W-1250 inbox "
+                        "2026-07-28 早已提议，一直未执行）。八行核查全部已入账"
+                        "（arc-recon/ACCESS_CHECK.md:9-20，README:159-199 为索引），原注"
+                        "两个未结项均在注记写下之后关闭：**全量跨会话残留**——2026-07-30 "
+                        "两次 full 剖面扫（canary_runs.jsonl 末两条：20/20 帧、四局全 "
+                        "PASS，对照 2026-07-28 另一会话封存的期望；commit e0db135f，"
+                        "S22 item 1）；**速率配额官方口径**——600 RPM 原文两处在案"
+                        "（ACCESS_CHECK.md:233-236 引 docs.arcprize.org/rate_limits；"
+                        "browser-ops/TERMS.md:31 逐字），配额则产品无此概念"
+                        "（TERMS.md §7.5 登录面板实证：无配额/用量/计费界面），"
+                        "rate_budget.py 预算峰值 432/600 rpm 经 arc-recon/verify.sh "
+                        "复算，实测 60.88/62.02 rpm。残差如实带上：429 退避曲线"
+                        "文档有、实测无（3736 请求 0 次 429；client/canary 均不处理 "
+                        "429；故意触限 = 花费+账号风险，不主动买）；残留仪器深 "
+                        "6/3/6/5 步，step 7 起的残留在一切仪器之外；ar25 预检 "
+                        "run_a/run_b 墙钟重叠，测的是并发隔离非顺序隔离；『失败不计费』"
+                        "是我方 19 样本归纳非官方承诺；ToS §3(3) 自动化函件未发"
+                        "（browser-ops/LETTER-TO-ARC-draft.md，所有者动作）；金丝雀"
+                        "日程从未安装（schtasks 无任务，所有者动作——第 2 行的依据是"
+                        "八次一致复放而非常设仪器）。",
             },
             {
                 "id": "p1-cascade",
                 "label": "级联语义已裁决",
                 "clause": "Phase 1 · 一件轨迹作业",
-                "status": "partial",
-                "note": "结构上已裁决：API 返回帧列表，step 必须建模『动作→帧序列』。"
-                        "但『它是否真的会超过 1 帧』仍未观测；"
-                        "而 A0 的 D-A0-004 反向选了『一动作一帧』，两者需要合流。",
+                "status": "green",
+                "note": "改判 2026-07-31（closeout/p1-replay-live 全板扫；W-1250 inbox "
+                        "2026-07-28 早已提议，一直未执行）。原注三句全部失实：裁决在盘上"
+                        "——arc-recon/CASCADE_RULING.md（2026-07-28，S5 收口件，"
+                        "PARTNER_SYNC:649 布告，board done）：**渲染突发而非内部 tick**"
+                        "（板级量化在 4、批内恒定增量两个签名均指离 tick），step 冻结为 "
+                        "S→A→S、S=frames[-1]（Frozen，改判仅凭 incident），theory.pddl "
+                        "无需 derived predicates，帧弃置显式强制（n_frames 必录）。"
+                        "『是否超过 1 帧』在原注写下前一天就已观测（precheck.json "
+                        "2026-07-27 max_frames_per_action=7）；今日树上四开发局实测 "
+                        "494 个多帧批（g50t 287、sk48 207；最长 113 帧已入 tracked "
+                        "ledger.g50t.jsonl:752；ar25/tn36 在线全单帧），真在线正典账本"
+                        "复证：r2/r3 腿 ACTION2/5 返回 7/9 帧、sk48-l1 腿 2 帧。与 "
+                        "D-A0-004 无冲突需合流：cascade 是 per-world 事实"
+                        "（dsl_grammar_v0.2:335-340），A0 自建世界与 ARC 各判各的"
+                        "（CASCADE_RULING §114-129 明文处理；a0-spike THEORIZE_LOG "
+                        "T-11c 以 47040 对照独立同判 single_frame）；前身 "
+                        "cascade/VERDICT.md 留取代横幅未静默改写。cascade/verify.sh "
+                        "本收口离线复跑 PASS（27 步/4 局/0 未发现账本）。残差如实："
+                        "G-1 tick 判据从未直测（§3 是两个反向签名非 tick 之测）；"
+                        "G-2 全部真在线步仍在 level 0，批长随关卡变化不可答；G-3 113 帧"
+                        "批只点过数未逐格读；§5 反驳计数器是 Phase 3 必做而未实现"
+                        "（theoria-arm 领地，已派单）；grammar_card.py:25 值对理由错"
+                        "（按后端能力立 per-world 事实，两次在案仍未修）。",
             },
             {
                 "id": "p1-cut",
@@ -206,9 +274,23 @@ PHASES = [
                 "id": "p1-replay-audit",
                 "label": "复放抽检 2 局，环境侧逐比特一致",
                 "clause": "Phase 1 验收单",
-                "status": "partial",
-                "note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据"
-                        "迁入正典格式后执行 → P-9。",
+                "status": "green",
+                "note": "改判 2026-07-31（closeout/p1-replay-live，留痕 monitor/runs/"
+                        "2026-07-31T170455Z-P1REPLAYLIVE/）。两局档案抽检在盘上：ar25 "
+                        "16 局/9 位/372 对/0 失配（P-9，proxy/runs/p9-shell-harden/"
+                        "replay_spotcheck_ar25.json）、g50t 26 局/6 位/971 对/0"
+                        "（proxy/runs/20260731T154336Z-P1-replay-spotcheck-2/）。本次收口"
+                        "把 S31 起的真在线正典账本并入同一仪器：g50t 三条 theoria 真臂腿"
+                        "（A3 level2-carried r1/r2/r3）活腿互比 10 位/22 对/0，与档案合比 "
+                        "29 局/1304 对/0；ar25 S31 真臂 RESET（proxy/var 账本，摘录入留痕 "
+                        "evidence/）与档案合比 17 局/388 对/0——活证据仅位 0 一帧，如实"
+                        "注明；附 sk48 补充 5 局/34 对/0（S31 前真腿，不计入两局）。"
+                        "1315 个带帧步 frame_hash 从存储帧重算 0 不符；两份档案报告经"
+                        "重建正典逐位复现（回归 match；正典摘要漂移系 upgrade_ledger "
+                        "路径依赖，输入钉子 9/9 吻合，已派单修复）。臂侧 replay_mismatch"
+                        "（theoria-arm/inner/certify.py：手册预测对单次观测）与本项无涉，"
+                        "6 条中 5 条恰在环境跨局逐比特复现的位置上。抽检为开局共享前缀"
+                        "而非全轨迹；对抗复核三员通过（留痕 NOTES.md）。",
             },
             {
                 "id": "p1-same-shell",
@@ -247,18 +329,50 @@ PHASES = [
                 "label": "电池四道工序（区分力 / 方向预注册 / 去冗余 / 抗游戏审计）",
                 "clause": "Phase 2 · 电池自身要先受审",
                 "status": "partial",
-                "note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 "
-                        "Schema 路 A 材料与更多 CC 轨迹。",
+                "note": "注记重写 2026-07-31（closeout/p1-replay-live 全板扫；原注"
+                        "『区分力仍等路 A 材料与更多 CC 轨迹』双重失实：路 A 2026-07-27 "
+                        "已拉取且已被电池消化——B11 Schema 臂接入、B12 在 Theoria.md "
+                        "指定梯度 CC vs Schema 上按局配对执行；S1 战役已把 CC 材料 13 "
+                        "倍化并被消化，且同 4 局再多 CC 轨迹统计功效为零——"
+                        "discriminate.py 每局折一数，只有新局加对）。四道工序全部已执行"
+                        "且机器闸门化：预注册 PREDICTIONS.md 冻结 append-only"
+                        "（prefix-sha256，freeze 级强制）；去冗余 B10/B13"
+                        "（redundancy.json，一族一代表）；抗游戏 B14 38 exploits → B16 "
+                        "V9 盲测 105 攻击（37/38 可游戏）→ B17 对抗复审主表 0/38，V24 "
+                        "钉住盲化步 sha 9892d23c；区分力 B9/B12 执行——结果 0/38 可分，"
+                        "且这是设计天花板非测量失败：4 局配对最小可达 p=0.125"
+                        "（audit/stats.py:166），预注册在先于回算（PREDICTIONS.md:"
+                        "385-387）。留 partial 的理由（Theoria.md:325：分不开已知差异"
+                        "的指标没资格测未知差异）：工序 1 的通过判定在 4 局开发堆上"
+                        "结构性不可达，须 ≥6 局非平局配对（现实 12–17 局）= Phase 4 "
+                        "封存堆开局，人间闸门的花费决定（W-13 在案）；预注册确认候选"
+                        "今日仅 E4 与 P3。verify 7 级含分离声明真伪门与活臂门；活臂"
+                        "读数已到 6 真腿/115 格（measurement-only，不入判别）。",
             },
             {
                 "id": "p2-material",
                 "label": "材料：CC 基线轨迹 / Schema 复现桶 / 上游 artifacts（限开发堆）",
                 "clause": "Phase 2 · 材料",
                 "status": "partial",
-                "note": "裸 CC 开发堆轨迹开始产生（sk48 大量、g50t 少量，见 "
-                        "baseline-arms/TOUCHED_GAMES.md）；Theoria 侧有 A0/A0′ 离线轨迹。"
-                        "Schema 复现桶不可能（GAP-1），替代是路 A：上游释出的开发堆 "
-                        "4 局轨迹直读（Theoria.md:311 许可），尚未拉取。",
+                "note": "注记重写 2026-07-31（closeout/p1-replay-live 全板扫；原注两处"
+                        "失实：『路 A 尚未拉取』——2026-07-27T18:31Z 已拉，"
+                        "baseline-arms/SCHEMA_PATH_A.md 收据在案：165 文件/87.7MB 限"
+                        "开发堆 4 局，885 个封存局文件经正向白名单默认拒绝"
+                        "（fetch_schema_traces.py + 19 例测试），payload gitignored 仅 "
+                        "MANIFEST 入库，且已被电池消化（B11/B12）；『sk48 大量/g50t "
+                        "少量』——那是 M1 探针表，TOUCHED_GAMES.md 其后已录 "
+                        "M4/M5/P-12/S1：四局全 trajectories_reviewed，S1 战役 48 "
+                        "episode/1453 动作/$48.39）。三类材料现况：CC 基线成体量；"
+                        "上游 artifacts 已拉且受控；Theoria 活轨迹已存在并被电池读取"
+                        "（6 真腿/115 格，theoria-arm/runs/ 已提交 A3 legs——本注记"
+                        "开始把它计入第三类材料）。留 partial 的理由：标签点名的 "
+                        "Schema 复现桶永久不可能（GAP-1：上游从未释出 harness 代码，"
+                        "baseline-arms/STATUS.md:335 复核仍立），Theoria.md:311 认可的"
+                        "替代（上游轨迹直读）已交付并消化——按 S32『不改定义结案』"
+                        "先例，标签字面未清则不绿；若所有者裁定替代即清偿，随判随绿。"
+                        "两条已记录的可选网络残项归 baseline-arms：score_trajectories"
+                        ".py 未取（SCHEMA_PATH_A §2.2 须另行论证）、上游许可未宣"
+                        "（Phase 4 引用/再释出前须结，§7.1）。",
             },
         ],
     },

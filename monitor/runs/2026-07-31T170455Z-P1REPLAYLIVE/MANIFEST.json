@@ -1,0 +1,169 @@
+{
+  "artifacts": {
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/NOTES.md": {
+      "bytes": 1768,
+      "sha256": "5721d99a5e0d082a8087f2e01ab47dabf325377372bb1efd0e27905449c5b733"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/RUN_STATE.md": {
+      "bytes": 8216,
+      "sha256": "7464a5feca3461ab06a754d24a145e3cfef335b12a4861f32aabd78f6e448748"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/adapter_honesty.json": {
+      "bytes": 2350,
+      "sha256": "8a84c41edcb7386e7928181d3cf88ab64c3fc122c3a20f634cd403475ba83723"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/adjudication_r3_replay_mismatch.json": {
+      "bytes": 3516,
+      "sha256": "5ba52a7ef1fa2223c74364f00d0b675f1e5b77a687ffb1efcbac985bd66f00e2"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/evidence/s31_ar25_ledger_excerpt.jsonl": {
+      "bytes": 12480,
+      "sha256": "6a5a1b623bc375ad9a5a8e34153e0689f806b122df07c36874fe2ba66a803880"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/inputs.json": {
+      "bytes": 5087,
+      "sha256": "11278a2711226ce64235f2b31e50a1dc05e48c69340e73fa829f468e7e0cc01c"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/integrity_hash_recompute.json": {
+      "bytes": 1741,
+      "sha256": "523857853f9c552584ea3fc3cc5a55c52b13d3a1063a08db78d7e6432ec76f32"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/regression_vs_archive.json": {
+      "bytes": 6459,
+      "sha256": "fcba58475bdda1ca92c0b6dcd3bf36ca4eee997a8e3bddeef97cfc0c82359851"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/replay_spotcheck_combined_ar25.json": {
+      "bytes": 3443,
+      "sha256": "fd1373c9c0df287f55df84e2e1b9cc740677d4ed29a1357242f849cb62c4775a"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/replay_spotcheck_combined_g50t.json": {
+      "bytes": 3247,
+      "sha256": "2ef1f037376fc6a98d61eeaf90e50a4ed3239db381097cf86df42df60167a3b3"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/replay_spotcheck_live_g50t.json": {
+      "bytes": 2483,
+      "sha256": "4b33b4ae841233632029dd47bffc856e8e55639d24f5b15327a4de5566e51d77"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/replay_spotcheck_sk48_supplement.json": {
+      "bytes": 1698,
+      "sha256": "40e950e3269dbe957e47d880b422b84e29b1e729b976c7ed9797248c07162aeb"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/results.json": {
+      "bytes": 2171,
+      "sha256": "c6ab4f03ce5a9bd754d496fa7c614aafd2aab32f304140b7ec25b1bd8bc37a8b"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/score_corpus.json": {
+      "bytes": 176156,
+      "sha256": "59233a3ae00a46c4c764a358bee97b18368e2cd1e6fc41b96ecfb6af6cf4bcaa"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/score_corpus.py": {
+      "bytes": 2924,
+      "sha256": "a7e4c384ff414f7b3e3210ee32e77a37fc213c0317815075dcf4fdc000338db0"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/spotcheck_live.py": {
+      "bytes": 26368,
+      "sha256": "71a77c8b901d2d42028cc04f6a21140a0a54066ee14977903adc52eff2431de1"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/summary.json": {
+      "bytes": 1722,
+      "sha256": "3461df0a0d400e390a7f0f36b3fd57f530b629ae2f8639340d30ee2effb6040a"
+    },
+    "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE/verify.sh": {
+      "bytes": 2820,
+      "sha256": "d3859ab26457d89ec8158a64bf6d5ebaeaaa735671f853567a25b7a8c3bebfef"
+    },
+    "monitor/spec.py": {
+      "bytes": 113475,
+      "sha256": "e77968efabb941d614d8f55bc0d0a16418a5298348eb7b188472035ecc797fc4"
+    },
+    "monitor/state.json": {
+      "bytes": 216463,
+      "sha256": "0496d2c18c77222f96097bb7c9b125f7a07d56b493605bbb4bfabc1e22e3a5dc"
+    }
+  },
+  "base_commit": "d854632b919eb291cf7f7f685087147cbe4db9ac",
+  "branch": "closeout/p1-replay-live",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "P1REPLAYLIVE",
+  "results": {
+    "spotcheck": {
+      "adjudication": {
+        "environment_reproduced_positions": 5,
+        "replay_mismatch_records": 6
+      },
+      "after_adversarial_fixes": {
+        "adapter_honesty_violations": 0,
+        "adjudication_conclusion": "5 of 6 at environment-reproduced positions; 1 past prefix divergence, no cross-session evidence either way",
+        "ar25_live_depth": "S31 RESET-only, position 0, 16/388 pairwise",
+        "canon_digests_drift": "5/5, path-dependence of upgrade_ledger, not shard movement",
+        "overall": "PASS",
+        "pinned_inputs_all_match": true
+      },
+      "combined_ar25": {
+        "disagreements": 0,
+        "pairwise": 388,
+        "positions": 9,
+        "sessions": 17,
+        "verdict": "PASS"
+      },
+      "combined_g50t": {
+        "disagreements": 0,
+        "pairwise": 1304,
+        "positions": 6,
+        "sessions": 29,
+        "verdict": "PASS"
+      },
+      "integrity": {
+        "hash_mismatches": 0,
+        "steps_with_frames": 1315
+      },
+      "live_g50t": {
+        "disagreements": 0,
+        "pairwise": 22,
+        "positions": 10,
+        "sessions": 3,
+        "verdict": "PASS"
+      },
+      "regression_ar25_match": true,
+      "regression_g50t_match": true,
+      "s31_excerpt_lines": 4,
+      "sk48_supplement": {
+        "disagreements": 0,
+        "pairwise": 34,
+        "positions": 5,
+        "sessions": 5,
+        "verdict": "PASS"
+      }
+    },
+    "sweep": {
+      "board_changes": {
+        "p1-access": "partial->green",
+        "p1-cascade": "partial->green",
+        "p1-replay-audit": "partial->green",
+        "p1-scorer": "partial, note rewritten",
+        "p1-variant": "partial->green",
+        "p2-audit": "partial, note rewritten",
+        "p2-material": "partial, note rewritten"
+      },
+      "cascade_verify_sh": "PASS (27 steps / 4 games / 31 ledger entries / 22 actions / 0 undiscovered ledgers)",
+      "scorer_corpus": {
+        "fail": 0,
+        "pass": 26,
+        "runs": 37,
+        "theoria_live_legs_pass": 4,
+        "undetermined_lost_cards": 11
+      },
+      "unblocked_by_nothing_still_partial": [
+        "p1-proxy-model (owner funding)",
+        "p1-seal-test (right conjunct, D-P8-002 + GAP-5)",
+        "p1-same-shell (DELIVERY_RULING s4 wiring, open-unassigned)"
+      ]
+    }
+  },
+  "run_dir": "monitor/runs/2026-07-31T170455Z-P1REPLAYLIVE",
+  "seed": null,
+  "t": "2026-07-31T18:19:11Z",
+  "tests": "monitor suite 525 passed, 2 xfailed, exit 0 (offline); spotcheck OVERALL PASS; score corpus 26 PASS / 0 FAIL / 11 UNDETERMINED; cascade verify.sh PASS; ticket verify.sh 7/7 green",
+  "title": "P1REPLAYLIVE: live-ledger replay spot check + Phase 1/2 board sweep (12/16 green)"
+}
