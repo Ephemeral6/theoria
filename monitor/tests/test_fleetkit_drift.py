@@ -17,26 +17,45 @@ executed rather than read):
 
 The absent COSMETIC class is the whole point. Nothing here differs only in
 wording -- every non-identical function returns a different answer for a
-constructible input. And TWO of the divergent functions are byte-identical
-source (`stale_lanes`, `territories_busy`): they diverge through a module
+constructible input. And TWO of the divergent functions were byte-identical
+source (`stale_lanes`, `territories_busy`): they diverged through a module
 global. Reading the two files side by side scores them "same". That is why this
 had to be a check and not a review.
+
+WHERE IT STANDS AFTER S42 (fleetkit territory, branch
+`agent/s42-fleetkit-three-lies`). Three of the defects below are fixed in
+fleetkit and their entries here have moved or gone, which is this file working
+as designed rather than a regression:
+
+  * `cmd_sweep` reads `task_prefix` from `fleet.json` instead of an unassigned
+    `_PREFIX = ""`, and refuses (exit 3) when it cannot read one. Its entry
+    survives as `stale`, not `defect`.
+  * `LANE_OWNER` and `stale_lanes` are deleted, so lane OWNERSHIP is gone from
+    fleetkit and lane-tagged items are listed and claimable by anybody.
+    `stale_lanes` is no longer a shared function and its entry is deleted; the
+    shared count is therefore 17, not 18.
+  * `cmd_list` gained a `withheld` section, so no item on the board can be
+    absent from the output any more.
+
+`territories_busy` is still the byte-identical-yet-divergent case, now through
+`meta` alone rather than through `meta` and `LANE_OWNER`.
 
 WHY "DELIBERATE SIMPLIFICATION" IS NOT AVAILABLE AS AN ANSWER. The fork base
 had exactly 18 top-level functions and fleetkit has exactly those 18 -- nothing
 was dropped on purpose. The 18 functions monitor has and fleetkit lacks all
 landed AFTER the fork (S21, S27, S28, S29, S34, S35, S35a; 7 commits against
 fleetkit's 1). So the divergence is not a simplification, it is a stale
-snapshot, and several of its consequences are outright defects:
+snapshot, and several of its consequences were outright defects:
 
-  * `_PREFIX = ""` is never assigned, so fleetkit's `cmd_sweep` judges every
-    worker dead and frees LIVE claims -- `fleetkit/KNOWN_TRAPS.md` entry 1 word
-    for word, latent in the kit that ships the warning.
-  * `LANE_OWNER = {}` makes any item carrying a `lane:` field invisible to
-    `list` and unclaimable by any documented command, with no exit at all.
+  * `_PREFIX = ""` was never assigned, so fleetkit's `cmd_sweep` judged every
+    worker dead and freed LIVE claims -- `fleetkit/KNOWN_TRAPS.md` entry 1 word
+    for word, latent in the kit that ships the warning. (Fixed by S42.)
+  * `LANE_OWNER = {}` made any item carrying a `lane:` field invisible to
+    `list` and unclaimable by a plain claim, with no exit at all. (Fixed by
+    S42, by deleting lane ownership rather than inventing a data source for
+    it.)
   * `meta()`'s regex uses `\\s*` where monitor uses `[ \\t]*`, so an empty front
-    matter field silently takes its value from the NEXT LINE -- which drops
-    items into the hole above without anyone having written a lane.
+    matter field silently takes its value from the NEXT LINE. **Still open.**
 
 Documenting those as intended behaviour would be documenting bugs as features.
 So the answer to S40 requirement 2 is TRACK, and this file is the mechanism.
@@ -86,12 +105,18 @@ FLEETKIT_BOARD = os.path.join(REPO, "fleetkit", "fleetkit", "board.py")
 #: `defect`     -- fleetkit's version is WRONG, measurably, and the divergence
 #:                 is the bug. These must not be closed by copying monitor
 #:                 blindly; see the follow-up item.
-#: The two whose source is BYTE-IDENTICAL and which diverge anyway, through
-#: the LANE_OWNER global. They are declared like the rest, but exempted from
+#: Those whose source is BYTE-IDENTICAL and which diverge anyway, through a
+#: module-level difference no text comparison can see. They are declared like
+#: the rest, but exempted from
 #: `test_declared_entries_still_describe_a_real_divergence`, which compares
 #: source: by construction their source already matches, so that test would
 #: demand their removal and delete the record of the subtlest finding here.
-GLOBAL_ONLY: frozenset[str] = frozenset({"stale_lanes", "territories_busy"})
+#:
+#: S40 measured two. `stale_lanes` diverged through `LANE_OWNER`, and S42
+#: deleted both from fleetkit, so it is no longer a shared function at all.
+#: `territories_busy` remains: identical source, divergent behaviour, through
+#: `meta`.
+GLOBAL_ONLY: frozenset[str] = frozenset({"territories_busy"})
 
 DECLARED: dict[str, tuple[str, str]] = {
     "heartbeat_age": (
@@ -101,14 +126,12 @@ DECLARED: dict[str, tuple[str, str]] = {
         "with a fresh .lock gives monitor 0, fleetkit 60 -- which flips "
         "stale_lanes at STALE_MIN=45.",
     ),
-    "stale_lanes": (
-        "defect",
-        "Source is BYTE-IDENTICAL; it diverges through the LANE_OWNER global. "
-        "fleetkit's LANE_OWNER is {} and is never assigned anywhere in the "
-        "package, so this function can only ever return set(). A 13-line body "
-        "with a 6-line docstring narrating a real outage, which is a constant "
-        "function. This is the case a side-by-side read scores as 'same'.",
-    ),
+    # `stale_lanes` was here, verdict `defect`: byte-identical source that
+    # could only ever return set(), because the LANE_OWNER it iterated was
+    # never assigned. S42 deleted LANE_OWNER and stale_lanes from fleetkit, so
+    # the function is not shared any more and the entry is gone rather than
+    # left behind. See `test_lane_ownership_is_gone_from_fleetkit` below, which
+    # is what remains watching that decision.
     "meta": (
         "defect",
         "monitor's field regex is r'^%s:[ \\t]*(\\S+)', fleetkit's is "
@@ -122,20 +145,29 @@ DECLARED: dict[str, tuple[str, str]] = {
         "defect",
         "Source is BYTE-IDENTICAL; inherits meta()'s regex defect. An item "
         "with an empty territory: line gives monitor {'?': X} and fleetkit "
-        "{'deps:': X}, so a DIFFERENT item is excluded from candidates().",
+        "{'deps:': X}, so a DIFFERENT item is excluded from candidates(). "
+        "After S42 this is the only remaining case of identical source with "
+        "divergent behaviour, and the one any side-by-side read still misses.",
     ),
     "candidates": (
         "stale",
         "Missing S34's `if iid in ready: continue`, so fleetkit re-offers "
         "delivered work whenever items/X.md and done/X.*.md both exist -- the "
-        "ordinary post-merge state. Also inherits stale_lanes.",
+        "ordinary post-merge state. Since S42 it also diverges deliberately: "
+        "fleetkit has no lane reservation (a lane narrows a worker, it never "
+        "widens one, so lane-tagged items are ordinary work), and its "
+        "spend: api guard is unconditional where monitor's is written "
+        "`not lane and ...`. Do NOT close this one by copying monitor.",
     ),
     "cmd_list": (
         "stale",
-        "Missing the territory-blocked section (S28) and the unreachable "
-        "section (S35). Measured: a territory-blocked item's id appears "
-        "NOWHERE in fleetkit's entire output. That is verbatim the S28 "
-        "incident -- 11 items on the board, 8 mentioned nowhere.",
+        "Missing S35's unreachable section, and the sections do not "
+        "correspond: monitor prints reserved / territory-blocked / "
+        "unreachable, fleetkit prints one `withheld` section with a reason per "
+        "item. S42 closed the part that mattered -- the S28 incident was 11 "
+        "items on the board and 8 mentioned nowhere, and fleetkit now names "
+        "every item in items/ under exactly one heading, printing "
+        "'reason unknown' rather than omitting anything it cannot explain.",
     ),
     "cmd_claim": (
         "defect",
@@ -155,14 +187,21 @@ DECLARED: dict[str, tuple[str, str]] = {
         "hands the item straight back to the same worker.",
     ),
     "cmd_sweep": (
-        "defect",
-        "_PREFIX = '' is never assigned in the package, so the liveness test "
-        "is always false, `live` is always empty, and every W-* claim reads as "
-        "orphaned. Measured with a synthetic schtasks CSV: monitor frees only "
-        "the Ready worker, fleetkit frees the Running one too. KNOWN_TRAPS.md "
-        "entry 1, reproduced by the kit that ships it. config.py:78-83 "
-        "validates task_prefix as non-empty for exactly this reason and "
-        "board.py never reads config.",
+        "stale",
+        "S40 measured this as a defect: _PREFIX = '' was never assigned, so "
+        "the liveness test was always false, `live` always empty, and every "
+        "W-* claim read as orphaned -- with a synthetic schtasks CSV, monitor "
+        "freed only the Ready worker and fleetkit freed the Running one too. "
+        "S42 fixed it, and the remaining divergence is of three other kinds. "
+        "EXTRACTION: fleetkit reads task_prefix from fleet.json where monitor "
+        "hardcodes 'TheoriaAgent-', and decodes schtasks with "
+        "locale.getpreferredencoding where monitor hardcodes gbk. FIX BEYOND "
+        "monitor: fleetkit refuses to sweep (exit 3) when the prefix is "
+        "unreadable or the schtasks query failed, because not knowing whether "
+        "a worker is alive is not the same as knowing it is dead; monitor "
+        "still treats a failed query as an empty task table. STALE: fleetkit "
+        "lacks include_standing/standing_verdict and S34's `if iid in "
+        "done_ids(): continue`, so it can still re-offer delivered work.",
     ),
     "main": (
         "stale",
@@ -267,69 +306,112 @@ def test_the_measured_divergence_count_is_pinned():
     shared = set(mon) & set(kit)
     divergent = {n for n in shared if mon[n] != kit[n]}
 
-    assert len(shared) == 18, f"shared function count moved: {len(shared)}"
+    assert len(shared) == 17, (
+        f"shared function count moved: {len(shared)}. S40 measured 18; S42 "
+        "deleted stale_lanes from fleetkit along with the LANE_OWNER it "
+        "iterated, which is a deliberate removal, not drift."
+    )
     assert len(divergent) == 8, (
         f"divergent-by-source count moved: {len(divergent)}. This counts only "
-        "SOURCE differences. The behavioural total is 10: stale_lanes and "
-        "territories_busy are byte-identical and diverge through the "
-        "LANE_OWNER global, which no text comparison can see."
+        "SOURCE differences. The behavioural total is 9: territories_busy is "
+        "byte-identical and diverges through meta, which no text comparison "
+        "can see."
     )
-    assert len(divergent | GLOBAL_ONLY) == 10
+    assert len(divergent | GLOBAL_ONLY) == 9
     assert set(DECLARED) == divergent | GLOBAL_ONLY, (
         "DECLARED must name exactly the divergences, no more and no fewer"
     )
 
 
-def test_the_two_globals_that_diverge_without_a_source_difference():
+def test_the_function_that_diverges_without_any_source_difference():
     """The finding this whole file exists for.
 
-    `stale_lanes` and `territories_busy` are byte-identical in both files and
-    still give different answers. Any drift check that compares only source
-    text will score them 'same' forever -- including this one, which is why the
-    fact is asserted here rather than left to be rediscovered.
+    `territories_busy` is byte-identical in both files and still gives
+    different answers, through `meta`. Any drift check that compares only
+    source text will score it 'same' forever -- including this one, which is
+    why the fact is asserted here rather than left to be rediscovered.
+
+    S40 found two such functions. `stale_lanes` was the other, and it diverged
+    through `LANE_OWNER`; S42 deleted both from fleetkit, so one remains.
     """
     mon, kit = _both()
 
-    assert mon["stale_lanes"] == kit["stale_lanes"], (
-        "stale_lanes source diverged; the LANE_OWNER note below may be stale"
+    assert mon["territories_busy"] == kit["territories_busy"], (
+        "territories_busy source diverged; its DECLARED entry says the "
+        "divergence is behavioural only, and that claim now needs re-measuring"
     )
-    assert mon["territories_busy"] == kit["territories_busy"]
-
-    kit_src = _read(FLEETKIT_BOARD)
-    assert "LANE_OWNER = {}" in kit_src, (
-        "fleetkit's LANE_OWNER is no longer the empty literal -- if it is now "
-        "populated, re-measure: stale_lanes and territories_busy may have "
-        "stopped diverging, and their DECLARED entries would need removing."
+    assert mon["meta"] != kit["meta"], (
+        "meta stopped diverging, so territories_busy may have stopped too -- "
+        "re-measure before trusting either entry"
     )
 
 
-def test_the_false_docstring_is_still_there_and_still_false():
-    """Requirement 3, as far as this territory can carry it.
+def test_lane_ownership_is_gone_from_fleetkit():
+    """S40 requirement 3, now settled -- and still watched.
 
-    The fix belongs to whoever holds the `fleetkit` territory. What monitor can
-    do is refuse to let the claim be forgotten: fleetkit says LANE_OWNER is
-    "Filled from fleet.json at import", and it is not -- there is no
-    assignment anywhere in the package, `fleet.json` exists nowhere in the
-    repo, `board.py` imports config and never references it, and
-    FleetConfig.lanes is a List[str] which cannot express a lane->owner map.
-    False twice over: the mechanism does not exist and the data source could
-    not supply it.
+    S40 left a test here asserting that fleetkit's LANE_OWNER docstring was
+    still present and still false ("Filled from fleet.json at import": no
+    assignment anywhere in the package, no `fleet.json` in the repo, and
+    `FleetConfig.lanes: List[str]` unable to express a lane->owner map at all).
+    That test was designed to go red the moment somebody fixed it. S42 did, by
+    deleting the claim rather than inventing a data source for it, so this is
+    the same watchpost pointed at the new state.
 
-    This test goes red when somebody fixes it, which is the point -- at that
-    moment this test and the DECLARED entries are what need updating.
+    Coming back is not forbidden -- but it costs a data source. Anyone who
+    reintroduces LANE_OWNER has to make `FleetConfig` able to express it, and
+    this test is what will ask for that.
     """
     kit_src = _read(FLEETKIT_BOARD)
 
-    assert "Filled from fleet.json at import" in kit_src, (
-        "the docstring changed -- if LANE_OWNER is now really populated, "
-        "delete this test and re-measure the two functions that diverge "
-        "through it"
+    assert "Filled from fleet.json at import" not in kit_src, (
+        "the false docstring is back in fleetkit/board.py"
     )
-    body = kit_src.split("LANE_OWNER = {}")[0]
-    assert "LANE_OWNER" not in body.split("#:")[0], "sanity: no earlier binding"
-    after = kit_src.split("LANE_OWNER = {}", 1)[1]
-    for mutation in ("LANE_OWNER =", "LANE_OWNER.update", "LANE_OWNER.setdefault"):
-        assert mutation not in after, f"LANE_OWNER is now written via {mutation}"
+    bound = [n.id
+             for node in ast.parse(kit_src).body if isinstance(node, ast.Assign)
+             for n in node.targets if isinstance(n, ast.Name)]
+    assert "LANE_OWNER" not in bound, (
+        "LANE_OWNER is back in fleetkit. If it is real this time, it needs a "
+        "source: check that FleetConfig.lanes is no longer a List[str], "
+        "re-measure stale_lanes and territories_busy, and update DECLARED."
+    )
+    assert "def stale_lanes" not in kit_src, (
+        "stale_lanes is back. It existed only to unfreeze a lane whose owner "
+        "had gone quiet; with no owners there is nothing to unfreeze, and "
+        "reintroducing it means reintroducing ownership."
+    )
+
+
+def test_fleetkits_sweep_reads_a_prefix_instead_of_shipping_an_empty_one():
+    """S40's most damaging finding, and the assertion that it stays fixed.
+
+    `_PREFIX = ""` was a module global nothing in the package ever assigned, so
+    the liveness test in `cmd_sweep` was constantly false and every `W-*` claim
+    read as an orphan -- the board took work off workers that were still
+    running. `config.py` validated `task_prefix` as non-empty for exactly this
+    reason while `board.py` never opened config at all.
+
+    This is asserted from monitor rather than left to fleetkit's own suite
+    because the whole point of S40 is that fleetkit's suite did not look.
+    """
+    kit_src = _read(FLEETKIT_BOARD)
+
+    # Assignments, not mentions: board.py's docstrings name `_PREFIX` when they
+    # explain what went wrong, and a check that cannot tell a binding from a
+    # sentence about a binding would forbid saying so.
+    bound = [n.id
+             for node in ast.parse(kit_src).body if isinstance(node, ast.Assign)
+             for n in node.targets if isinstance(n, ast.Name)]
+    assert "_PREFIX" not in bound, (
+        "a module-level prefix literal is back in fleetkit/board.py. The "
+        "prefix must be read from fleet.json at the point of use; a literal "
+        "is KNOWN_TRAPS.md entry 1 with the fuse already lit."
+    )
+    assert "def task_prefix" in kit_src, "fleetkit lost its config-backed prefix"
+    assert "SWEEP-REFUSED" in kit_src, (
+        "fleetkit's sweep no longer refuses when it cannot read a prefix. Not "
+        "knowing whether a worker is alive is a third answer, and freeing the "
+        "claim is the one thing it must not mean."
+    )
 
 
 # --------------------------------------------------------------------------

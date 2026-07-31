@@ -22,9 +22,43 @@ python -m fleetkit bus say W-1 "..."
 
 | module | lines | status |
 |---|---|---|
-| `config.py` | ~150 | new — the whole project-specific surface |
-| `board.py` | ~360 | ported: atomic claim, territory exclusivity, lanes, sweep |
-| `bus.py` | ~190 | ported: acknowledgement, urgent interruption, cursors |
+| `config.py` | ~160 | new — the whole project-specific surface |
+| `__main__.py` | ~105 | new in S42 — the `python -m fleetkit` front door above |
+| `board.py` | ~435 | ported: atomic claim, territory exclusivity, sweep, lane *filtering*. Lane **ownership** was removed rather than ported — see below. |
+| `bus.py` | ~195 | ported: acknowledgement, urgent interruption, cursors |
+
+### What that row used to say, and why it was wrong
+
+It said `ported: atomic claim, territory exclusivity, lanes, sweep`, and S40
+measured two of those four as not working:
+
+* **sweep** freed the claims of workers that were still running. Liveness was
+  decided by matching scheduled-task names against `_PREFIX`, a module global
+  that nothing in the package ever assigned — so the test was constantly false,
+  nothing ever entered the live set, and every `W-*` claim read as an orphan.
+  That is [`KNOWN_TRAPS.md`](KNOWN_TRAPS.md) entry 1 word for word, latent in
+  the package that ships the warning, while `config.py` validated a
+  `task_prefix` no code opened. `board.py` now reads it from `fleet.json` at
+  the point of use, and **refuses to sweep** (exit 3) when it cannot — not
+  knowing whether a worker is alive is not the same as knowing it is dead.
+* **lanes** did not partition the board; it hid parts of it. `LANE_OWNER`
+  claimed in a comment to be "Filled from `fleet.json` at import" and was
+  filled by nothing, from a file that did not exist, into a shape
+  `FleetConfig.lanes: List[str]` cannot hold. A `lane:` item was therefore in
+  no section of `list`, and had no exit but editing the file by hand.
+
+Lane ownership is **deleted, not repaired**. Repairing it meant growing the
+config schema to buy a reservation feature no caller asked for. What remains is
+what `lanes: List[str]` already describes — "lanes a standing agent can be
+restricted to": `--lane X` narrows what a worker will take and can never widen
+it, and every lane-tagged item is listed and claimable by anyone. A consequence
+worth naming: the `spend: api` guard used to be skipped whenever a worker
+passed `--lane`, so a worker's own word about itself was acting as
+authorisation. It is no longer lane-conditional.
+
+`list` now also prints a `withheld` section, so every item in `items/` appears
+under exactly one heading with a reason. Unclaimable is fine; unclaimable and
+unmentioned is how a board with eleven items on it reads as empty.
 
 **Not yet ported**, and named so the gap is not mistaken for a decision:
 `dispatch.py`, `reflex.py`, `quota.py`, `assign.py`, `ci_merge.py` — about
@@ -55,6 +89,12 @@ counts only if it runs."*
 `fleet.json`, two items, two workers claiming and delivering, the board log
 checked, plus territory exclusivity proven both ways (a second worker is
 refused, and the refusal lifts when the first delivers).
+
+`verify.py` drives the same acceptance through the commands this README
+documents, rather than around them. Until S42 it called `config.write_default()`
+in-process, and stayed green for every run in which `python -m fleetkit init`
+— line 13 above — died with `No module named fleetkit.__main__`. A gate that
+reaches around the front door cannot see the front door break.
 
 **With one substitution, stated rather than glossed:** the two workers are
 processes, not language models. They are real OS processes running the real
