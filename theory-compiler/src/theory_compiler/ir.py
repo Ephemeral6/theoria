@@ -30,7 +30,7 @@ from .parser.ast_nodes import (
 )
 from .parser.expand import expand_theory
 from .problem import Instance, ProblemSpec, check_against_theory
-from .writes import WriteSets
+from .writes import WriteSets, WritesError, written_names
 
 
 class IRError(Exception):
@@ -276,6 +276,100 @@ def _provenance(path: str) -> str:
     return parts[-1]
 
 
+def _check_write_targets(rules: Sequence[RuleDecl], problem: ProblemSpec,
+                         ast: TheoryAST, writes: WriteSets) -> List[str]:
+    """What a rule's event writes must be a thing this manual can own.
+
+    GAP R2-2. `theoria-arm` filed *"a cell that never varies gets no instance,
+    so no rule can name it"* as a grammar hole. It is not one — the grammar
+    states the law fine as soon as an instance is seated
+    (`runs/20260801T1200Z-R2-2-board-cell-expressivity/SEATING.json`, levels L2
+    and L3, same manual byte for byte). What made it *look* like a grammar hole
+    is this compiler, and this is the check that was missing.
+
+    Three cases, and they are not the same defect wearing three hats.
+
+    **A cell term — error.** `recolored(leftof(?s), 1)` denotes a location, and
+    a location is not a thing a manual owns. `gen_python` and `gen_lean` already
+    refuse it; `gen_markdown` renders it as fluent prose (*"then leftof(?s)'s
+    colour becomes 1"*) because nothing on that path ever asks what the rule
+    writes. Raising here is what puts the fourth form under the same rule as the
+    other three.
+
+    **A declared landmark — error, and this is R2-2's trap.** A landmark is a
+    `NameRef`, so `WriteSets.of_rule` accepted it; the declaration and
+    `gen_python`'s compiled effect both said `{edge}`, so
+    `check_backend_agreement` accepted it too. The emitted effect was
+    `state.edge_color = 1`: an assignment onto a plain dataclass with no such
+    field, which therefore **succeeds**, is absent from `State.key()`, and is
+    read by nothing. `render` rebuilds the frame from `BOARD`, a compile-time
+    constant, so the cell never moves. Measured — the rule is in `RULES`,
+    `fired()` reports it firing, and `s0.key() == s1.key()`. Strictly worse than
+    a refusal: a refusal sends the author to the repair, this sent them away
+    believing the language could not say it. No level can make it right, because
+    a landmark is *declared* to be a cell, so it is an error and not a warning.
+
+    **An instance this level does not seat — warning.** Different situation,
+    same symptom, and conflating them would be the easy mistake.
+    `theory.dsl` is the **domain**: it travels between levels (`problem.py`).
+    `a0-cart`'s `press_left` writes `Button`, and the `no-button` level is
+    entitled to have no button — the rule simply cannot fire there. Erroring
+    would delete a legitimate level from a checked-in handover package. It is
+    still compiled to the same do-nothing assignment, so it is reported rather
+    than tolerated, and `tests/test_writes.py` pins the count: v0.3 §5's own
+    precedent is that a shortfall is carried as a measured number, because a
+    declaration nobody verifies reads exactly like a verified one.
+
+    Ranges only over rules whose write set **resolves**. An event in neither the
+    manual's `writes { ... }` nor v0.3's default table stays a warning here and
+    a refusal at the point of use, exactly as v0.3 §7 describes; widening that
+    would replace a good diagnostic with a worse one, which is why it was
+    written that way.
+    """
+    seated = {i.name for i in problem.instances}
+    declared_landmarks = {lm.name for lm in ast.word_table.landmarks}
+    out: List[str] = []
+    for rule in rules:
+        try:
+            names = written_names(rule, writes)
+        except WritesError as exc:
+            raise IRError(str(exc)) from exc
+        if names is None:
+            continue
+        for name in names:
+            if name.startswith("?"):
+                # Unreachable today: `build_ir` grounds first and already
+                # refuses a rule with a variable left in it. Skipped explicitly
+                # so that reordering those two passes produces no check at all
+                # rather than a warning naming `?a` as an unseated instance.
+                continue
+            if name in seated:
+                continue
+            if name in declared_landmarks or name in problem.landmarks:
+                raise IRError(
+                    "rule %r writes %r, which this manual declares as a "
+                    "`landmark` — a *cell*, not an object. An event writes "
+                    "objects. The frame is drawn by painting instances onto "
+                    "the level's board, so a cell no instance stands on renders "
+                    "the board's colour on every step and an event aimed at it "
+                    "compiles to an assignment nothing reads: before this check "
+                    "the rule fired and the frame never changed. Repair: have "
+                    "the level seat an instance on that cell and write the rule "
+                    "over the instance. If the cell has never varied and the "
+                    "level therefore seats nothing there, that is a "
+                    "segmentation question and not a grammar one — see "
+                    "theory-compiler/runs/"
+                    "20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md."
+                    % (rule.name, name))
+            out.append(
+                "rule %r writes %r, which problem %r seats no instance of. The "
+                "manual is the domain and travels between levels, so this is "
+                "legal and the rule cannot fire here; but its effect still "
+                "compiles to an assignment nothing reads. Reported rather than "
+                "refused (R2-2)." % (rule.name, name, problem.name))
+    return out
+
+
 def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
              check_conflicts: bool = True) -> WorldIR:
     """`certificate` is optional and is the **only** way weights enter without
@@ -340,6 +434,7 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
                             and any("`weights %s " % n in w for n in filled))]
 
     writes = WriteSets(ast)
+    warnings.extend(_check_write_targets(rules, problem, ast, writes))
 
     # v0.3, ledger X-1. A write set that arrived from the published default
     # table rather than from this manual is a per-world fact taken from a

@@ -1,0 +1,88 @@
+== S1-bound-object-target
+   the shape the arm actually writes: quantify over the type, recolour the bound variable. Correct, and it can only ever name a cell that has already varied.
+   parser        compiles
+   gen_python    compiles
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  compiles
+   gen_lean      compiles
+   predictor     ran; (0,5) reads 9 after key(2) -> DOES NOT BURN
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 9, 1, 1]   only the edge moved: False
+   rules fired   ['edge_advance__Spent_6', 'edge_advance__Spent_7']
+
+== S2-cell-term-target
+   recolour a CELL TERM: `leftof(?s)` denotes the virgin cell exactly. This is the sentence GAP R2-2 says cannot be written.
+   parser        compiles
+   gen_python    REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_lean      REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+== S3-landmark-target
+   recolour a declared LANDMARK. Landmarks are cells and the level locates them, so `edge` names the board cell (0,5) with no instance needed.
+   parser        compiles
+   gen_python    REFUSED  IRError: rule 'edge_advance' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  REFUSED  IRError: rule 'edge_advance' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_lean      REFUSED  IRError: rule 'edge_advance' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+== S4-landmark-guard-object-target
+   control: a landmark in the GUARD and an object in the effect. This is what r3's thirteen panel rules do with `spawn_probe`.
+   parser        compiles
+   gen_python    compiles
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  compiles
+   gen_lean      compiles
+   predictor     ran; (0,5) reads 9 after key(2) -> DOES NOT BURN
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 9, 1, 1]   only the edge moved: False
+   rules fired   ['edge_advance__Spent_6', 'edge_advance__Spent_7']
+
+== S5-appeared-on-cell-term
+   a different event, same question: can any event's first argument be a cell term rather than an object name?
+   parser        compiles
+   gen_python    REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of appeared, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of appeared, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_lean      REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of appeared, which is not an object name (FuncCall(name='leftof', args=[NameRef(name='Spent_6')])). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+== S6-moved-onto-board-cell
+   sidestep the colour: MOVE an existing instance onto the virgin cell instead of recolouring it.
+   parser        compiles
+   gen_python    compiles
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  compiles
+   gen_lean      compiles
+   predictor     ran; (0,5) reads 1 after key(2) -> BURNS
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 1, 9, 1]   only the edge moved: False
+   rules fired   ['edge_advance__Spent_6']
+
+== S7-forall-over-domain-not-type
+   bind over a declared VALUE domain rather than an object type, so the rule is not tied to seated instances.
+   parser        compiles
+   gen_python    REFUSED  IRError: rule 'edge_advance_up' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  REFUSED  IRError: rule 'edge_advance_up' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_lean      REFUSED  IRError: rule 'edge_advance_up' writes 'edge', which this manual declares as a `landmark` ！ a *cell*, not an object. An event writes objects. The frame is drawn by painting instances onto the level's board, so a cell no instance stands on renders the board's colour on every step and an event aimed at it compiles to an assignment nothing reads: before this check the rule fired and the frame never changed. Repair: have the level seat an instance on that cell and write the rule over the instance. If the cell has never varied and the level therefore seats nothing there, that is a segmentation question and not a grammar one ！ see theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+== S8-field-access-target
+   name the target the long way: `?s.pos` is a cell, so is the effect argument allowed to be one?
+   parser        compiles
+   gen_python    REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FieldAccess(obj='Spent_6', field_name='pos')). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FieldAccess(obj='Spent_6', field_name='pos')). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+   gen_lean      REFUSED  IRError: rule 'edge_advance__Spent_6' writes argument 0 of recolored, which is not an object name (FieldAccess(obj='Spent_6', field_name='pos')). An event writes objects; a cell term such as `leftof(?x)` denotes a *location*, and a location is not a thing this manual owns. If the cell needs to change, something has to stand on it: seat an instance there and write the rule over that instance. See theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+== S9-second-type-on-same-colour
+   the workaround r3 rejects in prose: declare a SECOND type on colour 9 and hope the arm seats an instance on the virgin cell. Compiled here with the level supplying no instance of it, which is the honest case.
+   parser        compiles
+   gen_python    compiles
+   gen_pddl      REFUSED  UnsupportedClause: act=key(...): argument NumberLit(value=2) is not a name; a type-quantified schema must be grounded before this backend can read it
+   gen_markdown  compiles
+   gen_lean      compiles
+   predictor     ran; (0,5) reads 9 after key(2) -> DOES NOT BURN
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 9, 1, 1]   only the edge moved: False
+   rules fired   []
+

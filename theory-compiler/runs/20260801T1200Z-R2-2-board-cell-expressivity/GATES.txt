@@ -1,0 +1,59 @@
+=== cd theory-compiler && python -m pytest -q ===
+........................................................................ [ 19%]
+...............................................s........................ [ 38%]
+........................................................................ [ 57%]
+........................................................................ [ 76%]
+........................................................................ [ 95%]
+................                                                         [100%]
+375 passed, 1 skipped in 26.62s
+
+=== cd theory-compiler && python -m tools.verify_c8 ===
+== 1. the track's suite ==
+PASS pytest
+     375 passed, 1 skipped in 26.75s
+== 2-4. the packages ==
+PASS a0-cart rebuilds byte-for-byte
+PASS a0-cart manifest digests
+PASS a0-cart context scan
+PASS a0-sokoban2 rebuilds byte-for-byte
+PASS a0-sokoban2 manifest digests
+PASS a0-sokoban2 context scan
+== 5-6. the acceptance ==
+PASS a0-cart sheet rebuilds identically
+PASS a0-cart reader made no wrong answer
+PASS a0-cart report still reproduces
+     a0-cart: 24/24 right, {"name_class": {"abstain": 0, "right": 12, "unanswered": 0, "unparsed": 0, "wrong": 0}, "optimal_action": {"abstain": 0, "right": 2, "unanswered": 0, "unparsed": 0, "wrong": 0}, "step_semantics": {"abstain": 0, "right": 10, "unanswered": 0, "unparsed": 0, "wrong": 0}}
+PASS a0-sokoban2 sheet rebuilds identically
+PASS a0-sokoban2 reader made no wrong answer
+PASS a0-sokoban2 report still reproduces
+     a0-sokoban2: 29/29 right, {"name_class": {"abstain": 0, "right": 16, "unanswered": 0, "unparsed": 0, "wrong": 0}, "optimal_action": {"abstain": 0, "right": 4, "unanswered": 0, "unparsed": 0, "wrong": 0}, "step_semantics": {"abstain": 0, "right": 9, "unanswered": 0, "unparsed": 0, "wrong": 0}}
+
+all checks pass
+(exit 0)
+
+=== python CONTRACTS/verify.py ===
+[1/3] the contract documents
+   ok    8 contract document(s); candidates_schema declares 7 keys
+[2/3] the spec and its executable form say the same thing
+   ok    7 keys, identical on both sides; status pinned in both
+[3/3] the executable form accepts the real stream and rejects a broken one
+   ok    44 reference rows accepted; a forged status is rejected
+
+CONTRACTS: green -- the frozen spec and its executable form agree, and the validator has been seen to say no
+(exit 0)
+
+=== negative control: both checks removed, expect red ===
+    (ir._check_write_targets and gen_markdown._check_effects_are_writable
+     each replaced with `pass`; restored immediately after)
+tests\test_write_targets.py:254: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_write_targets.py::test_writing_a_landmark_is_refused_by_the_ir
+FAILED tests/test_write_targets.py::test_writing_a_landmark_is_refused_by_every_ir_driven_form[build_ir]
+FAILED tests/test_write_targets.py::test_writing_a_landmark_is_refused_by_every_ir_driven_form[gen_python]
+FAILED tests/test_write_targets.py::test_writing_a_landmark_is_refused_by_every_ir_driven_form[gen_lean]
+FAILED tests/test_write_targets.py::test_writing_a_landmark_is_refused_by_the_prose_form_too
+FAILED tests/test_write_targets.py::test_writing_a_cell_term_is_refused_by_the_ir_and_by_the_prose_form[  rule edge_advance forall ?p in Bar\n    when act=key(2) and colored(?p, 1) and colored(leftof(?p), 9) then recolored(leftof(?p), 1)\n-leftof]
+FAILED tests/test_write_targets.py::test_writing_a_cell_term_is_refused_by_the_ir_and_by_the_prose_form[  rule edge_advance forall ?p in Bar\n    when act=key(2) and colored(?p, 1) then recolored(?p.pos, 1)\n-pos]
+FAILED tests/test_write_targets.py::test_an_unseated_instance_warns_rather_than_refusing
+FAILED tests/test_write_targets.py::test_the_a0_cart_no_button_level_is_the_real_instance_of_that_warning
+9 failed, 3 passed in 0.26s

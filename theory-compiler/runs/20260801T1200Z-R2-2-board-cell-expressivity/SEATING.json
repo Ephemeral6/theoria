@@ -1,0 +1,135 @@
+{
+  "manual": "semantics:\n  frame persist\n  conflict exclusive\n  cascade single_frame\n\nword_table:\n  board\n  object Bar { pos: Coord, color: Int }   # arc-colour: 9/1\n\nevents:\n  event recolored(o, c)\n\nrules:\n  rule edge_advance forall ?p in Bar\n    when act=key(2) and colored(?p, 9) and colored(rightof(?p), 1) then recolored(?p, 1)\n\ngoal:\n  goal count(Bar, color = 1) = 8\n",
+  "question": "is R2-2 a grammar hole or an instance-seating hole?",
+  "results": [
+    {
+      "compiles": true,
+      "edge_advanced": false,
+      "error": null,
+      "fired": [],
+      "ground_rules": [
+        "edge_advance__Bar_6",
+        "edge_advance__Bar_7"
+      ],
+      "level": "L1-varied-only",
+      "only_the_edge_moved": false,
+      "row_after": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1
+      ],
+      "row_before": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1
+      ],
+      "seated": [
+        6,
+        7
+      ],
+      "why": "what the arm actually builds: an instance only where a cell has already varied, i.e. the two burned cells"
+    },
+    {
+      "compiles": true,
+      "edge_advanced": true,
+      "error": null,
+      "fired": [
+        "edge_advance__Bar_5"
+      ],
+      "ground_rules": [
+        "edge_advance__Bar_5",
+        "edge_advance__Bar_6",
+        "edge_advance__Bar_7"
+      ],
+      "level": "L2-varied-plus-edge",
+      "only_the_edge_moved": true,
+      "row_after": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1,
+        1
+      ],
+      "row_before": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1
+      ],
+      "seated": [
+        5,
+        6,
+        7
+      ],
+      "why": "the arm's seating plus ONE instance on the next virgin cell"
+    },
+    {
+      "compiles": true,
+      "edge_advanced": true,
+      "error": null,
+      "fired": [
+        "edge_advance__Bar_5"
+      ],
+      "ground_rules": [
+        "edge_advance__Bar_0",
+        "edge_advance__Bar_1",
+        "edge_advance__Bar_2",
+        "edge_advance__Bar_3",
+        "edge_advance__Bar_4",
+        "edge_advance__Bar_5",
+        "edge_advance__Bar_6",
+        "edge_advance__Bar_7"
+      ],
+      "level": "L3-every-cell",
+      "only_the_edge_moved": true,
+      "row_after": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1,
+        1
+      ],
+      "row_before": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9,
+        1,
+        1
+      ],
+      "seated": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "why": "an instance on every cell of the bar, varied or not"
+    }
+  ]
+}

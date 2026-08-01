@@ -1,0 +1,24 @@
+== L1-varied-only  (instances on cols [6, 7])
+   what the arm actually builds: an instance only where a cell has already varied, i.e. the two burned cells
+   ground rules  ['edge_advance__Bar_6', 'edge_advance__Bar_7']
+   fired         []
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 9, 1, 1]
+   edge advanced False   only the edge moved False
+
+== L2-varied-plus-edge  (instances on cols [5, 6, 7])
+   the arm's seating plus ONE instance on the next virgin cell
+   ground rules  ['edge_advance__Bar_5', 'edge_advance__Bar_6', 'edge_advance__Bar_7']
+   fired         ['edge_advance__Bar_5']
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 1, 1, 1]
+   edge advanced True   only the edge moved True
+
+== L3-every-cell  (instances on cols [0, 1, 2, 3, 4, 5, 6, 7])
+   an instance on every cell of the bar, varied or not
+   ground rules  ['edge_advance__Bar_0', 'edge_advance__Bar_1', 'edge_advance__Bar_2', 'edge_advance__Bar_3', 'edge_advance__Bar_4', 'edge_advance__Bar_5', 'edge_advance__Bar_6', 'edge_advance__Bar_7']
+   fired         ['edge_advance__Bar_5']
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 1, 1, 1]
+   edge advanced True   only the edge moved True
+

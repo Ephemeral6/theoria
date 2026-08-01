@@ -14,6 +14,53 @@ from ..parser.ast_nodes import (
     FuncCall, NameRef, NumberLit, TupleLit, FieldAccess,
     Comparison, BinOp,
 )
+from ..writes import WriteSets, WritesError, written_names
+
+
+class UnrenderableRule(Exception):
+    """A rule whose effect names something no form can write. Refused, not prosed."""
+
+
+def _check_effects_are_writable(ast: TheoryAST) -> None:
+    """Refuse a rule whose event writes a cell rather than an object.
+
+    GAP R2-2, and the reason this lives in the *Markdown* backend rather than
+    only in `build_ir`. `theory.md` is one of the four co-derived forms and it
+    is the one a human actually reads; it is also the only form that can be
+    produced without an IR, so before this check `generate_markdown(ast)` would
+    render `recolored(leftof(?s), 1)` as the confident sentence *"then
+    leftof(?s)'s colour becomes 1"* while `gen_python` and `gen_lean` both
+    refused the same manual outright. Measured, in
+    `runs/20260801T1200Z-R2-2-board-cell-expressivity/PROBE.json`.
+
+    A prose form is allowed to be prose. It is not allowed to be the only form
+    that says the manual means something.
+
+    Both facts this needs are in the manual alone — whether the written argument
+    is a name, and whether that name is a declared `landmark` — so the check
+    costs no level and applies on the bare path. It raises and never renders, so
+    output stays byte-identical for every manual that passes it.
+    """
+    if not (ast.rules and ast.rules.rules):
+        return
+    landmarks = {lm.name for lm in ast.word_table.landmarks} if ast.word_table \
+        else set()
+    writes = WriteSets(ast)
+    for rule in ast.rules.rules:
+        try:
+            names = written_names(rule, writes)
+        except WritesError as exc:
+            raise UnrenderableRule(str(exc)) from exc
+        for name in names or ():
+            if name in landmarks:
+                raise UnrenderableRule(
+                    "rule %r writes %r, which this manual declares as a "
+                    "`landmark` — a cell, not an object. Rendering it as prose "
+                    "would make theory.md the only form claiming this rule does "
+                    "anything: the predictor compiles it to an assignment "
+                    "nothing reads. See theory-compiler/runs/"
+                    "20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md."
+                    % (rule.name, name))
 
 
 def generate_markdown(ast: TheoryAST, ir=None) -> str:
@@ -29,6 +76,7 @@ def generate_markdown(ast: TheoryAST, ir=None) -> str:
 
     Output is byte-identical to the previous behaviour when `ir` is omitted.
     """
+    _check_effects_are_writable(ast)
     sections = []
 
     sections.append("# World Description\n")

@@ -1,0 +1,53 @@
+========================================================================
+AS SHIPPED (2026-08-01 onward)
+========================================================================
+   IRError
+   rule 'edge_burns' writes 'edge', which this manual declares as a
+   `landmark` ¡ª a *cell*, not an object. An event writes objects. The
+   frame is drawn by painting instances onto the level's board, so a
+   cell no instance stands on renders the board's colour on every step
+   and an event aimed at it compiles to an assignment nothing reads:
+   before this check the rule fired and the frame never changed.
+   Repair: have the level seat an instance on that cell and write the
+   rule over the instance. If the cell has never varied and the level
+   therefore seats nothing there, that is a segmentation question and
+   not a grammar one ¡ª see
+   theory-compiler/runs/20260801T1200Z-R2-2-board-cell-expressivity/FINDING.md.
+
+========================================================================
+BEFORE THE CHECK (the defect, with ir._check_write_targets disabled)
+========================================================================
+the manual says: when key(2) and cell (0,5) reads 9, it becomes 1
+
+`writes(edge_burns)` per CONTRACTS/dsl_grammar_v0.3.md section 1:
+   ['edge']
+   -- `edge` is a LANDMARK, not an object instance. The definition
+      says `the set of object instances whose observations the event
+      assigns`, and nothing checks that the name is one.
+
+the compiled effect:
+   def _effect_edge_burns(state):
+       state.edge_color = 1
+
+the State dataclass it assigns into:
+   """One field per instance per observation the word table names."""
+   Spent_6_pos: object = (0, 6)
+   Spent_6_color: object = 1
+   Spent_7_pos: object = (0, 7)
+   Spent_7_color: object = 1
+   -- there is no `edge_color` field. `State` is a plain dataclass,
+      so the assignment SUCCEEDS and creates an attribute nothing
+      reads. `key()` does not include it, so two states differing
+      only in it compare equal.
+
+and `render` rebuilds the board fresh every call:
+   grid = [list(row) for row in BOARD]
+   -- BOARD is a compile-time constant of the level. A cell no
+      instance stands on renders BOARD's colour, always.
+
+run it:
+   rules fired   ['edge_burns']
+   row before    [9, 9, 9, 9, 9, 9, 1, 1]
+   row after     [9, 9, 9, 9, 9, 9, 1, 1]
+   states equal  True
+   the leaked attribute: state.edge_color = 1
