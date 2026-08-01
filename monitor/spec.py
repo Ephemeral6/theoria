@@ -72,7 +72,19 @@ PHASES = [
                         "入token构成不可由此账本得出结论。**留权**：模型代理仍是任何"
                         "未来 API 传输臂的**强制通路**；六步清单为常设升级路径，触发"
                         "条件是所有者决定出资配 API key，届时 count.py 的 "
-                        "model_proxy_succeeded 转非零并须同一 commit 改判本条。",
+                        "model_proxy_succeeded 转非零并须同一 commit 改判本条。\n\n"
+                        "【所有者裁决·2026-08-01】决策点已答复。所有者在线原话："
+                        "『我这个全部都走的claude账号额度，剩下四个继续推』——即不另配 "
+                        "ANTHROPIC_API_KEY，模型调用走 Claude 订阅额度（正是 D-P8-002 "
+                        "的 claude -p 订阅传输），此为所有者认可的常态运行事实而非"
+                        "临时缺口。依 P1READJ（2026-07-31T15:53Z）下一步既定分支执行"
+                        "『否则本项封存』：**本项封存**（closeout/p1-owner-ruling，"
+                        "留痕 monitor/runs/2026-08-01T023624Z-P1PUSH4/）——DUAL_PROXY "
+                        "§4 六步单转休眠档（非删除：所有者若日后改判出资，原样复活并"
+                        "按原文与改判同 commit）；论文用 DUAL_PROXY §3 三句话原文"
+                        "（verify-lab/DUAL_PROXY.md:122-134）。板色保持 partial："
+                        "封存≠达成，Theoria.md:290 的设计原文未改，本条不再是开放"
+                        "决策点而是已裁的诚实披露。",
                 "blocks": ["c2"],
             },
             {

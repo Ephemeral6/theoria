@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "monitor/board/items/A18-scorer-at-run-end.md": {
+      "bytes": 1699,
+      "sha256": "eb7b39ea0c2e174a430f54f763531fe54be0e1a7268816d195ee515d4b6c8ac9"
+    },
+    "monitor/board/items/A19-bare-cc-seal-split.md": {
+      "bytes": 1175,
+      "sha256": "d56ebbee04ef1d6430586e2adb4dc553020b79aad8a001519f43fc29c764d1c9"
+    },
+    "monitor/board/items/A20-model-side-bypass-negative.md": {
+      "bytes": 1416,
+      "sha256": "ed0003bc5bde9bbade72ea59a0fee7c94d6625c53b41103a1c180a988ef845e9"
+    },
+    "monitor/board/items/A21-ablation-arm-name.md": {
+      "bytes": 1181,
+      "sha256": "96c401de25c71ac3af20220e9e6546ee65762fe67b05820667aacc308448151f"
+    },
+    "monitor/runs/2026-08-01T023624Z-P1PUSH4/NOTES.md": {
+      "bytes": 141,
+      "sha256": "3a71425e16b083524a929cd1ca2d87fb0f9afa4ca886aa90d6e880150a4774f8"
+    },
+    "monitor/runs/2026-08-01T023624Z-P1PUSH4/RUN_STATE.md": {
+      "bytes": 3381,
+      "sha256": "217f93e09a0b36aea60ab3c0b944a6207ee323042a83e026358a29feedf7ee49"
+    },
+    "monitor/runs/2026-08-01T023624Z-P1PUSH4/results.json": {
+      "bytes": 409,
+      "sha256": "71511fab370df9135afbfa08ca71e77587371e6c8acbb97da594d43afa89dd6b"
+    },
+    "monitor/spec.py": {
+      "bytes": 115941,
+      "sha256": "8d2d6d64c2996e47e4b779df3daf30b6ac77bc727575d2b4f7c377193fb510bf"
+    },
+    "monitor/state.json": {
+      "bytes": 221402,
+      "sha256": "ebe7e7e366859cbcae28a7411fd813f7cbe0f0ce6ad1322bb71b9b28f3b7fca4"
+    }
+  },
+  "base_commit": "aa2e2cc15ac47c5781d4bf7c5e23276a57463346",
+  "branch": "closeout/p1-owner-ruling",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "P1PUSH4",
+  "results": {
+    "push4": {
+      "board_items": [
+        "A18-scorer-at-run-end",
+        "A19-bare-cc-seal-split",
+        "A20-model-side-bypass-negative",
+        "A21-ablation-arm-name"
+      ],
+      "owner_ruling": "subscription quota only, no ANTHROPIC_API_KEY; p1-proxy-model sealed per P1READJ else-branch",
+      "scan": "exit 0, Phase 1: 12/16 green (unchanged, expected)",
+      "suite": "525 passed, 2 xfailed, exit 0"
+    }
+  },
+  "run_dir": "monitor/runs/2026-08-01T023624Z-P1PUSH4",
+  "seed": null,
+  "t": "2026-08-01T02:43:18Z",
+  "tests": "monitor suite 525 passed, 2 xfailed, exit 0; scan exit 0 Phase 1: 12/16 green",
+  "title": "P1PUSH4: owner ruling recorded (proxy-model sealed) + four push tickets on the board"
+}
