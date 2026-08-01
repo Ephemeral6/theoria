@@ -1,0 +1,117 @@
+{
+ "arm": "theoria",
+ "base_commit": "af138a0d2302b85f193b9a65f57aadb65c55f95a",
+ "branch": "r2/arm-refusal",
+ "changed_paths": [
+  "heoria-arm/armtools/archive.py",
+  "theoria-arm/harness/spend.py",
+  "monitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
+  "theoria-arm/armtools/refusal.py",
+  "theoria-arm/runs/20260801T0400Z-R2-refusal-classification/",
+  "theoria-arm/tests/test_refusal_classification.py"
+ ],
+ "cross_territory": "monitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
+ "did_not_do": [
+  "no live run, no API call, no model call, no spend",
+  "did not touch theoria-arm/runs/*R1* (a live round was writing there)",
+  "did not touch harness/run.py's argument block",
+  "did not edit proxy/ (read-only territory); the ask went to monitor/inbox/",
+  "did not change the value of OUTBOUND_PER_ACTION"
+ ],
+ "files": [
+  {
+   "bytes": 6310,
+   "path": "RUN_STATE.md",
+   "sha256": "sha256:f1830fec9e317a25aba6f4be6823789fb6ed057b00a8ffb83f19bb44bf8ae0c0"
+  },
+  {
+   "bytes": 2580,
+   "path": "live_legs_accounting.jsonl",
+   "sha256": "sha256:a8f7e8ab23849d1d04dba63c844cdfb2cd0757e5303db0f2ce0ec39ef94dbec5"
+  },
+  {
+   "bytes": 8649,
+   "path": "make_manifest.py",
+   "sha256": "sha256:6ad0b452b574bd0c222af5da3773255ef6df00b98a9f4f2550502f0dbd09c145"
+  },
+  {
+   "bytes": 2562,
+   "path": "outbound_per_action_derivation.json",
+   "sha256": "sha256:9fea71f8c13f0d27346ac5222f1656a62d20326f298c843fe0c64632d03a7a39"
+  }
+ ],
+ "hypotheses_killed": {
+  "malformed_game_id": "closing scorecard lists the game with level_count 7, a guid and 5 actions",
+  "missing_session_token": "refusals after step_idx 10 carry the same guid as the interleaved successes",
+  "race_with_scorecard_open": "scorecard/open returned 200 two seconds before the first refusal",
+  "sent_before_reset": "step_idx 0 is a RESET, and it is refused"
+ },
+ "implemented": [
+  "armtools/refusal.py -- signature, total 6-way classifier, outbound accounting, derive_outbound_per_action()",
+  "armtools/archive.py:reconcile() -- emits `outcomes` and `outbound` under opt-in outcomes=True; http_amplification unchanged",
+  "harness/spend.py -- OUTBOUND_PER_ACTION_REGIME + _DECOMPOSITION, carried into every plan's arithmetic",
+  "tests/test_refusal_classification.py -- 22 tests"
+ ],
+ "kind": "offline analysis of existing ledgers; no run, no spend",
+ "lane": "R2",
+ "measurement": {
+  "env_steps": 570,
+  "outbound_per_action_pooled": 7.917,
+  "outbound_per_action_productive": 1.0,
+  "refusal_rate_per_leg": [
+   0.9,
+   0.859,
+   0.855,
+   0.876
+  ],
+  "refusals_per_successful_action": 6.86,
+  "scorecard_actions_agree_on_all_four_legs": true,
+  "success": 76,
+  "successful_actions": 72,
+  "upstream_failure": 0,
+  "upstream_transient": 494,
+  "wall_clock_s": 15048,
+  "wall_clock_s_inside_refusals": 595,
+  "wall_clock_share_inside_refusals": 0.04
+ },
+ "negative_controls": {
+  "cases": [
+   "message names a different game -> upstream_failure",
+   "404 VALIDATION_ERROR 'scorecard ... not found' -> upstream_failure",
+   "status 500 -> upstream_failure",
+   "unanchored 'the game X not found today' -> upstream_failure",
+   "refusal that returned frames -> upstream_failure",
+   "response null -> unrecorded, not failure and not weather",
+   "unforwarded 403 guard denial -> guard_refused, 0 outbound",
+   "transient_share moves 0.9 -> 0.0 on a real-failure ledger"
+  ],
+  "how": "the signature's conjuncts are removed one at a time from a real refused row and the answer must stop being upstream_transient",
+  "mutation_check": "the classifier was deliberately broken (game-id conjunct dropped, message pattern unanchored) and 8 tests failed; then restored and all 22 pass. A check never seen to say no has not been shown to check anything."
+ },
+ "prompt_id": "R2-arm-refusal-wave",
+ "question": "494 of 570 live env_step rows across the four 2026-07-31 legs are 400 SERVER_ERROR 'game <id> not found'. Client defect, or expected?",
+ "residual_gaps": [
+  "upstream_failure is 0 across every ledger this arm has: the classifier has never said 'real failure' on real data",
+  "3 of the 4 legs behind 9.3 carry response:null on every row, so 149 of its 251 outbound requests are unattributable (counted as `unrecorded`, not as failures)",
+  "the retry storm itself is not stopped -- that fix is in proxy/, which is read-only from here; filed to monitor/inbox/",
+  "step_idx still counts attempts; renumbering would rewrite a field's meaning in published manifests",
+  "the 07-31 rate is measured on two development-pile games only (g50t, sk48)",
+  "the split is NOT in MANIFEST.json: extending reconcile() unconditionally turned verify_provenance check 9 red (it re-derives every published manifest byte for byte, and manifests embed reconciliation:reconcile(...)), so 25 drifted. Landing it there is a migration over ~25 records of real spend, not a bug fix. Made opt-in instead."
+ ],
+ "sealed_pile_contact": "none. The only game ids read are g50t-5849a774 and sk48-d8078629, both development pile.",
+ "seed": null,
+ "seed_note": "nothing here draws a random number: the classifier is a pure function of ledger rows and the derivation is a sum over them. Re-running reproduces byte-for-byte.",
+ "sizing_effect": {
+  "constant": "harness/spend.py:OUTBOUND_PER_ACTION",
+  "re_derived_blended_all_live_legs": 8.091,
+  "re_derived_productive": 1.081,
+  "regime_declared": "blended",
+  "reservation_if_sized_on_productive": 685,
+  "reservation_per_300_action_leg": 5616,
+  "value": 9.3,
+  "value_changed": false,
+  "why_not_changed": "under-reserving cost 20260729T004020Z-leg01 its run; release() returns an unspent hold, so over-reserving costs only headroom"
+ },
+ "utc": "2026-08-01T04:00:00Z",
+ "verdict": "EXPECTED. The refused request is byte-identical to the one that succeeds (same request_sha256, final_url, card_id, guid); the upstream labels it SERVER_ERROR itself; the closed scorecard confirms it charged for the 200s only. The defect is that the ledger recorded it identically to a real failure."
+}
