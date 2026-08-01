@@ -334,6 +334,23 @@ class Rule:
 
     ``floor`` is how many members were on disk when this rule was written and
     checked. Finding fewer stops the build. Finding *more* is the point.
+
+    ``alternates`` names, per member, the other filenames that satisfy the same
+    **role**. It exists because P8's promise -- a run that lands enters the
+    figure with no code edit -- was true only for as long as the arm kept
+    spelling its cost artefact the same way. On 2026-08-01 it did not: seven
+    billing legs were on disk, tracked, committed, and invisible, because
+    ``theoria-arm`` had renamed ``cost_curve.json`` to ``bill_shape.json`` and
+    the rule required a filename rather than a role. A rename is not a new
+    family, and a family declared by one filename is a hand-written tuple with
+    extra steps.
+
+    Resolution is **first declared, first present**, never newest-on-disk: which
+    file a build reads must not depend on mtime, and a run carrying both must
+    produce the same figure today and next month. ``fig02`` cross-checks the two
+    when both are there rather than trusting the alternation -- on the single
+    run that carries both, they agree to the cent, and that agreement is what
+    licences the alternation at all.
     """
 
     name: str
@@ -352,10 +369,21 @@ class Rule:
     #: the fact that the input was ever expected.
     expected: tuple[str, ...] = ()
     expected_note: str = ""
+    #: ``((member, (alternative, ...)), ...)`` -- a tuple, not a dict, because
+    #: ``Rule`` is frozen and hashable and because declaration order *is* the
+    #: resolution order.
+    alternates: tuple[tuple[str, tuple[str, ...]], ...] = ()
 
     @property
     def abs_root(self) -> str:
         return os.path.join(REPO_ROOT, *self.root.split("/"))
+
+    def candidates(self, member: str) -> tuple[str, ...]:
+        """Filenames that satisfy ``member``'s role, in resolution order."""
+        for name, alts in self.alternates:
+            if name == member:
+                return (member, *alts)
+        return (member,)
 
 
 #: The three families fig02 reads. Each replaces a hand-maintained tuple that
@@ -370,12 +398,32 @@ DISCOVERY: tuple[Rule, ...] = (
         figures=("fig02_bill_shape",),
         what="a theoria-arm run: per-desk-call cost, and the manifest carrying "
         "arm/game_id/outcome and the arm's own cost reconciliation",
-        floor=4,
-        floor_note="4 of the 9 directories under theoria-arm/runs/ carried both a "
-        "cost_curve.json and a MANIFEST.json on 2026-07-28. The other five are "
-        "salvage and preflight directories with neither; they are skipped by the "
-        "members rule, not by being absent from a list. Fewer than 4 means the arm "
-        "lost a run and the bill would silently understate what it cost.",
+        # V24 (2026-08-01). `bill_shape.json` is the same role under a new name.
+        # The arm stopped writing `cost_curve.json` after 20260729T105729Z-leg01
+        # and started writing `bill_shape.json`; ten run directories carry the
+        # new name, seven of them billing legs of the current generation
+        # (r2, r3, sk48-carried-l1, and the four R1/R1b legs), together
+        # USD 85.60 that this figure was not drawing and its coverage probe
+        # could see only as "a manifest claims spend and no curve stands beside
+        # it". Adding the alternative is the whole fix; the two dialects are
+        # read apart in fig02 because their record shapes differ.
+        #
+        # `cost_curve.json` is declared first, so the one directory carrying
+        # both (20260728T083400Z-E3-sk48-carried-v2) keeps the file it has
+        # always been drawn from and no published number moves. That the choice
+        # is *safe* is measured, not assumed: on that directory the two files
+        # agree on every step_idx and to the cent (USD 8.404868 either way), and
+        # fig02 re-checks it on every build rather than citing this comment.
+        alternates=(("cost_curve.json", ("bill_shape.json",)),),
+        floor=16,
+        floor_note="16 directories under theoria-arm/runs/ carry a MANIFEST.json beside "
+        "a cost curve under either accepted name on 2026-08-01: 7 with cost_curve.json "
+        "(4 of which were the whole family on 2026-07-28), 10 with bill_shape.json, one "
+        "of them both. The rest are salvage, preflight and ordinary work-run directories "
+        "with no curve at all; they are skipped by the members rule, not by being absent "
+        "from a list. Fewer than 16 means the arm lost a run and the bill would silently "
+        "understate what it cost -- which is exactly what a floor of 4 let happen for "
+        "three days while seven billing legs sat on disk untouched.",
     ),
     Rule(
         name="pilot_rollup",
@@ -668,12 +716,30 @@ def _discover(rule: Rule) -> tuple[Source, ...]:
             # a cost column silently becomes wrong. An untracked member is the
             # same problem wearing a different hat: it is there on this machine
             # and not on a clean checkout.
-            if not all(
-                usable(f"{rule.root}/{entry}/{m}", os.path.join(abs_entry, m))
-                for m in rule.members
-            ):
-                continue
+            #
+            # A member's *role* may be satisfied by more than one filename (see
+            # `Rule.alternates`). Resolution is first-declared-first-present, so
+            # it depends on the declaration and on what is on disk, and on
+            # nothing else -- not on mtime, not on listdir order.
+            # Every present candidate is declared, not only the winning one. A
+            # run carrying both spellings has both hashed into SOURCES.sha256,
+            # which is what lets fig02 compare them without reaching past this
+            # registry for a raw path -- and reaching past the registry is the
+            # defect everywhere else in this directory.
+            resolved: list[str] = []
+            satisfied = 0
             for member in rule.members:
+                present = [
+                    name
+                    for name in rule.candidates(member)
+                    if usable(f"{rule.root}/{entry}/{name}", os.path.join(abs_entry, name))
+                ]
+                if present:
+                    satisfied += 1
+                resolved.extend(present)
+            if satisfied != len(rule.members):
+                continue
+            for member in resolved:
                 rel = f"{rule.root}/{entry}/{member}"
                 seen_paths.add(rel)
                 found.append(
@@ -771,6 +837,25 @@ def discovered_groups(name: str) -> list[tuple[str, dict[str, Source]]]:
         entry, member = src.path[len(r.root) + 1 :].split("/", 1)
         groups.setdefault(entry, {})[member] = src
     return sorted(groups.items())
+
+
+def resolve_member(name: str, members: dict[str, Source], member: str) -> tuple[str, Source]:
+    """``(filename, Source)`` for ``member``'s role in one discovered group.
+
+    First declared, first present -- the same order ``_discover`` used, stated
+    once so a caller cannot invent a second one. Raises rather than returning
+    ``None``: a group reached this function only because discovery satisfied the
+    role, so an empty answer would mean the two disagree, and that is a bug in
+    this module, not a data condition a figure should paper over.
+    """
+    r = rule(name)
+    for candidate in r.candidates(member):
+        if candidate in members:
+            return candidate, members[candidate]
+    raise KeyError(
+        f"rule {name!r} discovered a group with none of {r.candidates(member)} for "
+        f"member {member!r}; discovery and resolution disagree"
+    )
 
 
 def untracked_inclusions() -> list[str]:
