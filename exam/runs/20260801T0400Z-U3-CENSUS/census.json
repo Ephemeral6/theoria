@@ -1,0 +1,3123 @@
+{
+ "bookless_claimants": {
+  "attained": 0,
+  "count": 15,
+  "labels": {
+   "declared_refusal": 6,
+   "no_evidence": 8,
+   "no_proof_layer": 1
+  },
+  "note": "Runs that reached the certify stage and emitted no Lean development. Reported separately and NEVER folded into the book rate: a run with no book fails U3 for a different reason than a book that proves a tautology, and folding them would let 'the arm stopped writing manuals' raise the attainment rate.",
+  "rows": [
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null
+    },
+    "evidence": {
+     "cheap_green": false,
+     "kind": "arm_transfer",
+     "source": "<repo>\\theoria-arm\\runs\\20260728T072604Z-E3-sk48-carried\\transfer.json"
+    },
+    "flags": {},
+    "game": null,
+    "label": "no_proof_layer",
+    "run": "theoria-arm/runs/20260728T072604Z-E3-sk48-carried",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "sk48-d8078629",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260728T083400Z-E3-sk48-carried-v2",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260728T235841Z-leg01\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260728T235841Z-leg01",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260728T235842Z-leg02\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260728T235842Z-leg02",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260728T235843Z-leg01\\certify.json"
+    },
+    "flags": {},
+    "game": "sk48-d8078629",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260728T235843Z-leg01",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260729T0030Z-a3-desk-live-proof\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260729T0030Z-a3-desk-live-proof",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "g50t-5849a774",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260729T0035Z-a3-desk-live-proof2",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260729T004020Z-leg01\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260729T004020Z-leg01",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260729T105653Z-leg01\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260729T105653Z-leg01",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\20260729T105729Z-leg01\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/20260729T105729Z-leg01",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "g50t-5849a774",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260731T1240Z-A3-level2-carried",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "g50t-5849a774",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260731T1310Z-A3-level2-carried-r2",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "g50t-5849a774",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260731T1430Z-A3-level2-carried-r3",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "a_compiles": null,
+     "b_axioms": null,
+     "c_nonvacuous": null,
+     "note": "no theorem was produced; strict reading of §1.2 (see module docstring, item 1)"
+    },
+    "evidence": {
+     "cheap_green": false,
+     "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+     "kind": "arm_certify",
+     "proof_layer_available": false,
+     "source": "certify record"
+    },
+    "flags": {
+     "gap_candidate_g": true
+    },
+    "game": "sk48-d8078629",
+    "label": "declared_refusal",
+    "run": "theoria-arm/runs/20260731T1500Z-A3-sk48-carried-l1",
+    "verdict": "not_attained"
+   },
+   {
+    "criteria": {
+     "note": "certify.json is empty — the certify stage left no records"
+    },
+    "evidence": {
+     "kind": "arm_certify",
+     "source": "<repo>\\theoria-arm\\runs\\a3-gate-mock\\certify.json"
+    },
+    "flags": {},
+    "game": "g50t-5849a774",
+    "label": "no_evidence",
+    "run": "theoria-arm/runs/a3-gate-mock",
+    "verdict": "not_attained"
+   }
+  ]
+ },
+ "by_territory": {
+  "a0-spike": {
+   "attained": 1,
+   "books": 1
+  },
+  "cold-start-a0": {
+   "attained": 2,
+   "books": 3
+  },
+  "cold-start-a2": {
+   "attained": 3,
+   "books": 4
+  },
+  "cold-start-a3": {
+   "attained": 8,
+   "books": 9
+  },
+  "theory-compiler": {
+   "attained": 0,
+   "books": 7
+  }
+ },
+ "excluded": [
+  {
+   "path": "a0-spike/pipeline/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "a0-spike/world/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "battery/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "cold-start-a2/a2world/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "engine-rig/common/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "engine-rig/engines/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "engine-rig/engines/cegis_miner/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "engine-rig/engines/mdl_segmenter/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "engine-rig/engines/zero_space/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/grading/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/papers/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/runs/20260730T021500Z-V23-large-space/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/tests/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "exam/tools/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "freeze/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "freeze/tests/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "monitor/runs/_worktree-scratch-archive",
+   "reason": "archived byte-copies of other territories' trees; counting them double-counts books already counted at their real home"
+  },
+  {
+   "path": "proxy/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "theory-compiler/src/theory_compiler/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "theory-compiler/src/theory_compiler/parser/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "worldgen/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "worldgen/core/__pycache__",
+   "reason": "build cache"
+  },
+  {
+   "path": "worldgen/mechanisms/__pycache__",
+   "reason": "build cache"
+  }
+ ],
+ "kind_coverage": {
+  "kinds": {
+   "invariant": {
+    "c_ok": 41,
+    "examples": [
+     "a0-spike/artifacts::inv_closed",
+     "a0-spike/artifacts::inv_init",
+     "cold-start-a0/prime/theory/generated::inv_all",
+     "cold-start-a0/prime/theory/generated::inv_closed"
+    ],
+    "no_check_implemented": false,
+    "theorems": 50
+   },
+   "unknown": {
+    "c_ok": 0,
+    "examples": [
+     "a0-spike/artifacts::drow_dcol_cases",
+     "theory-compiler/handover_packages/a0-cart/levels/base::goal_is_reachable",
+     "theory-compiler/handover_packages/a0-cart/levels/base::reachable_closed",
+     "theory-compiler/handover_packages/a0-cart/levels/no-button::reachable_closed"
+    ],
+    "no_check_implemented": true,
+    "theorems": 24
+   },
+   "unsolvable": {
+    "c_ok": 0,
+    "examples": [
+     "a0-spike/artifacts::goal_break",
+     "a0-spike/artifacts::unsolvable",
+     "cold-start-a0/theory/generated_no_button::goal_break",
+     "cold-start-a0/theory/generated_no_button::unsolvable"
+    ],
+    "no_check_implemented": false,
+    "theorems": 14
+   }
+  },
+  "kinds_that_can_never_attain": [
+   "unknown"
+  ],
+  "note": "A kind in `kinds_that_can_never_attain` has no implemented §1.2.1 (c) check in freeze/u3.py, so every theorem of that kind fails closed and its development is labelled `vacuous` no matter what it proves. Reporting that as `vacuous` conflates 'proved a tautology' with 'we have no checker for this shape'."
+ },
+ "labels": {
+  "discharged": 14,
+  "failing_obligation": 1,
+  "vacuous": 9
+ },
+ "lean_available": true,
+ "probe": false,
+ "root": "C:/Users/user/Desktop/theoria/.worktrees/u3-exam-audit",
+ "rows": [
+  {
+   "census_route": "u3.eval_lean_source:A0.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "drow_dcol_cases": true,
+     "goal_break": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "drow_dcol_cases": false,
+     "goal_break": false,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "drow_dcol_cases: constancy probe not run (static scan only)",
+     "goal_break: constancy probe not run (static scan only)",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "drow_dcol_cases": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [
+        "propext",
+        "Quot.sound"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\a0-spike\\artifacts\\A0.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "discharged",
+   "lean_files": [
+    "A0.lean"
+   ],
+   "run": "a0-spike/artifacts",
+   "territory": "a0-spike",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": false,
+     "inv_closed": false,
+     "inv_init": false
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_init: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\prime\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "vacuous",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a0/prime/theory/generated",
+   "territory": "cold-start-a0",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a0/theory/generated",
+   "territory": "cold-start-a0",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": false,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "goal_break: constancy probe not run (static scan only)",
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a0\\theory\\generated_no_button\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a0/theory/generated_no_button",
+   "territory": "cold-start-a0",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a2/theory/generated",
+   "territory": "cold-start-a2",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": false,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "goal_break: constancy probe not run (static scan only)",
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_holed\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a2/theory/generated_holed",
+   "territory": "cold-start-a2",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": false,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "goal_break: constancy probe not run (static scan only)",
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_repaired\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean",
+    "theory_latch.lean"
+   ],
+   "run": "cold-start-a2/theory/generated_repaired",
+   "territory": "cold-start-a2",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": false,
+    "b_axioms": null,
+    "c_nonvacuous": null
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean",
+    "stderr_tail": "olour := ButtonColour.v7, doorPresent := DoorPresent.yes } Dir.down) = true\n\ncase mk.c31.v8.no.down\n⊢ I { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.no } = true →\n    I (step { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.no } Dir.down) = true\n\ncase mk.c31.v8.yes.down\n⊢ I { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.yes } = true →\n    I (step { cart := Cell.c31, buttonColour := ButtonColour.v8, doorPresent := DoorPresent.yes } Dir.down) = true\n'unsolvable' depends on axioms: [sorryAx]\n'inv_init' does not depend on any axioms\n'inv_closed' depends on axioms: [sorryAx]\n'inv_all' depends on axioms: [sorryAx]\n'goal_break' does not depend on any axioms\n'unsolvable' depends on axioms: [sorryAx]\n"
+   },
+   "flags": {},
+   "game": null,
+   "label": "failing_obligation",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a2/theory/generated_repaired_stale",
+   "territory": "cold-start-a2",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_oneway\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_positive\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_positive",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\runs\\20260728T1800Z-A6-transfer-protocol\\generated\\a3_l2_rewired\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l1\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l1",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": false,
+     "inv_closed": false,
+     "inv_init": false
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_init: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "invariant is constant `true` — D-A3-007 class, fails §1.2.1 (two-witness)"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l1_vacuous\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "vacuous",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l1_vacuous",
+   "territory": "cold-start-a3",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l2",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2_scratch\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l2_scratch",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2neg\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l2neg",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.evaluate",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_nonvacuous": {
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true
+    },
+    "c_residuals": [
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_all: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_closed: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only",
+     "inv_init: constancy probe not run (static scan only)",
+     "inv_init: full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+    ],
+    "per_theorem": {
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": true,
+       "residuals": [
+        "constancy probe not run (static scan only)",
+        "full §1.2.1 two-witness check deferred (§9.2 residual): non-constancy established statically only"
+       ],
+       "why": "invariant not constant"
+      },
+      "kind": "invariant"
+     }
+    }
+   },
+   "discovery_route": "theory.lean",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\cold-start-a3\\theory\\generated_l2rew\\theory.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "game": null,
+   "label": "discharged",
+   "lean_files": [
+    "theory.lean"
+   ],
+   "run": "cold-start-a3/theory/generated_l2rew",
+   "territory": "cold-start-a3",
+   "verdict": "attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:Level.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": false,
+     "reachable_closed": false
+    },
+    "c_residuals": [
+     "goal_is_reachable: constancy probe not run (static scan only)",
+     "reachable_closed: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\base\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "Level.lean"
+   ],
+   "run": "theory-compiler/handover_packages/a0-cart/levels/base",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:Level.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "no_goal_state": true,
+     "reachable_closed": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "no_goal_state": false,
+     "reachable_closed": false,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "no_goal_state: constancy probe not run (static scan only)",
+     "reachable_closed: constancy probe not run (static scan only)",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "no_goal_state": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": false,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['a_inv_at_init', 'c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": false,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['a_inv_at_init', 'c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-cart\\levels\\no-button\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "Level.lean"
+   ],
+   "run": "theory-compiler/handover_packages/a0-cart/levels/no-button",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:Level.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": false,
+     "reachable_closed": false
+    },
+    "c_residuals": [
+     "goal_is_reachable: constancy probe not run (static scan only)",
+     "reachable_closed: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\crossing-up\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "Level.lean"
+   ],
+   "run": "theory-compiler/handover_packages/a0-sokoban2/levels/crossing-up",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:Level.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_is_reachable": true,
+     "reachable_closed": true
+    },
+    "c_nonvacuous": {
+     "goal_is_reachable": false,
+     "reachable_closed": false
+    },
+    "c_residuals": [
+     "goal_is_reachable: constancy probe not run (static scan only)",
+     "reachable_closed: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_is_reachable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "reachable_closed": {
+      "b": {
+       "axioms": [
+        "propext"
+       ],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\handover_packages\\a0-sokoban2\\levels\\match\\Level.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "Level.lean"
+   ],
+   "run": "theory-compiler/handover_packages/a0-sokoban2/levels/match",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:TheoriaLean.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "goal_break": true,
+     "inv_all": true,
+     "inv_closed": true,
+     "inv_init": true,
+     "unsolvable": true
+    },
+    "c_nonvacuous": {
+     "goal_break": false,
+     "inv_all": false,
+     "inv_closed": false,
+     "inv_init": false,
+     "unsolvable": false
+    },
+    "c_residuals": [
+     "goal_break: constancy probe not run (static scan only)",
+     "inv_all: constancy probe not run (static scan only)",
+     "inv_closed: constancy probe not run (static scan only)",
+     "inv_init: constancy probe not run (static scan only)",
+     "unsolvable: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "goal_break": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "inv_all": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no `def I` found to check"
+      },
+      "kind": "invariant"
+     },
+     "inv_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no `def I` found to check"
+      },
+      "kind": "invariant"
+     },
+     "inv_init": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no `def I` found to check"
+      },
+      "kind": "invariant"
+     },
+     "unsolvable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": true,
+        "b_goals_excluded": true,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\lean\\TheoriaLean.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "TheoriaLean.lean"
+   ],
+   "run": "theory-compiler/lean",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:corner.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": true,
+     "no_goal_pinned": true,
+     "pat_no_goal": true,
+     "pat_pins": true,
+     "pat_witness": true
+    },
+    "c_nonvacuous": {
+     "closed_pinned": false,
+     "dead": false,
+     "dead_closed": false,
+     "dead_persists": false,
+     "level_is_winnable": false,
+     "no_goal_pinned": false,
+     "pat_no_goal": false,
+     "pat_pins": false,
+     "pat_witness": false
+    },
+    "c_residuals": [
+     "closed_pinned: constancy probe not run (static scan only)",
+     "dead: constancy probe not run (static scan only)",
+     "dead_closed: constancy probe not run (static scan only)",
+     "dead_persists: constancy probe not run (static scan only)",
+     "level_is_winnable: constancy probe not run (static scan only)",
+     "no_goal_pinned: constancy probe not run (static scan only)",
+     "pat_no_goal: constancy probe not run (static scan only)",
+     "pat_pins: constancy probe not run (static scan only)",
+     "pat_witness: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "closed_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead_persists": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "level_is_winnable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "no_goal_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": false,
+        "b_goals_excluded": false,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['a_inv_at_init', 'b_goals_excluded', 'c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "pat_no_goal": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "pat_pins": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "pat_witness": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean\\corner.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "corner.lean",
+    "pair.lean"
+   ],
+   "run": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  },
+  {
+   "census_route": "u3.eval_lean_source:Deadlock_corner.lean",
+   "criteria": {
+    "a_compiles": true,
+    "b_axioms": {
+     "closed_pinned": true,
+     "dead": true,
+     "dead_closed": true,
+     "dead_persists": true,
+     "level_is_winnable": true,
+     "no_goal_pinned": true,
+     "pat_no_goal": true,
+     "pat_pins": true,
+     "pat_witness": true
+    },
+    "c_nonvacuous": {
+     "closed_pinned": false,
+     "dead": false,
+     "dead_closed": false,
+     "dead_persists": false,
+     "level_is_winnable": false,
+     "no_goal_pinned": false,
+     "pat_no_goal": false,
+     "pat_pins": false,
+     "pat_witness": false
+    },
+    "c_residuals": [
+     "closed_pinned: constancy probe not run (static scan only)",
+     "dead: constancy probe not run (static scan only)",
+     "dead_closed: constancy probe not run (static scan only)",
+     "dead_persists: constancy probe not run (static scan only)",
+     "level_is_winnable: constancy probe not run (static scan only)",
+     "no_goal_pinned: constancy probe not run (static scan only)",
+     "pat_no_goal: constancy probe not run (static scan only)",
+     "pat_pins: constancy probe not run (static scan only)",
+     "pat_witness: constancy probe not run (static scan only)"
+    ],
+    "per_theorem": {
+     "closed_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead_closed": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "dead_persists": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "level_is_winnable": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "no_goal_pinned": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "sub_checks": {
+        "a_inv_at_init": false,
+        "b_goals_excluded": false,
+        "c_init_has_action": false,
+        "d_goal_nonempty": false
+       },
+       "why": "missing sub-check: ['a_inv_at_init', 'b_goals_excluded', 'c_init_has_action', 'd_goal_nonempty']"
+      },
+      "kind": "unsolvable"
+     },
+     "pat_no_goal": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "pat_pins": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     },
+     "pat_witness": {
+      "b": {
+       "axioms": [],
+       "classical_choice_needed": false,
+       "never_allowed": [],
+       "ok": true,
+       "outside_whitelist": []
+      },
+      "c": {
+       "ok": false,
+       "residuals": [
+        "constancy probe not run (static scan only)"
+       ],
+       "why": "no executable §1.2.1 check implemented for kind `unknown` — fails closed"
+      },
+      "kind": "unknown"
+     }
+    }
+   },
+   "discovery_route": "non-standard-name",
+   "evidence": {
+    "kind": "lean_source_live",
+    "source": "<repo>\\theory-compiler\\runs\\20260728T080019Z-C4-deadlock-lean\\verify\\Deadlock_corner.lean"
+   },
+   "flags": {
+    "classical_choice_needed": false
+   },
+   "label": "vacuous",
+   "lean_files": [
+    "Control_corner.lean",
+    "Control_pair.lean",
+    "Deadlock_corner.lean",
+    "Deadlock_pair.lean",
+    "Ic3_algebraic.lean",
+    "Ic3_computational.lean"
+   ],
+   "run": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify",
+   "territory": "theory-compiler",
+   "verdict": "not_attained"
+  }
+ ],
+ "summary": {
+  "attained_paths": [
+   "a0-spike/artifacts",
+   "cold-start-a0/theory/generated",
+   "cold-start-a0/theory/generated_no_button",
+   "cold-start-a2/theory/generated",
+   "cold-start-a2/theory/generated_holed",
+   "cold-start-a2/theory/generated_repaired",
+   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_oneway",
+   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_positive",
+   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired",
+   "cold-start-a3/theory/generated_l1",
+   "cold-start-a3/theory/generated_l2",
+   "cold-start-a3/theory/generated_l2_scratch",
+   "cold-start-a3/theory/generated_l2neg",
+   "cold-start-a3/theory/generated_l2rew"
+  ],
+  "denominator": 24,
+  "denominator_meaning": "Every Lean development on disk, one row per directory.  This is an ENGINEERING denominator -- it says what the repo contains.  It is NOT STATS_RULES.md §1.2's denominator.",
+  "not_the_frozen_endpoint": "STATS_RULES.md §1.2: the U3 attainment rate's denominator is fixed at 19 sealed games (12 at the clean layer), with no exclusions and no cap.  Nothing on disk today is a sealed game, so the frozen rate is not computable from this census and this census does not claim to compute it.",
+  "numerator": 14,
+  "rate": 0.5833333333333334
+ }
+}

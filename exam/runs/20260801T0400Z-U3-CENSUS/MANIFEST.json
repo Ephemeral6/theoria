@@ -1,0 +1,55 @@
+{
+ "prompt_id": "ep/u3-exam-audit",
+ "prompt": "Implement U3 (E1, primary endpoint one). Premise was stale: freeze/u3.py already implements it (6c4a0bb2, merged 5adf4fcd). Built the missing half instead -- discovery/enumeration -- and audited the adjudicator against the frozen text.",
+ "branch": "ep/u3-exam-audit",
+ "base_commit": "21a724ed",
+ "utc": "2026-08-01T04:00:00Z",
+ "seed": null,
+ "territory": "exam",
+ "adjudicator": {
+  "module": "freeze/u3.py",
+  "sha256": "6b3fadc2e5293b81c75cef79154e49a41898da0a2e565bf1cb80a07d2cd78371",
+  "note": "every verdict in census.json is this module's return value; the census contains no second opinion"
+ },
+ "toolchain": {
+  "lean": "4.9.0 x86_64-w64-windows-gnu 8f9843a4a5fe"
+ },
+ "census": {
+  "books": "14/24 attained",
+  "bookless_claimants": "15 runs, 0 attained",
+  "probe": false,
+  "wall_clock": "4m47s",
+  "byte_reproducible": true,
+  "denominator_warning": "NOT STATS_RULES.md 1.2's rate. 1.2's denominator is 19 sealed games (12 clean); nothing on disk today is a sealed game."
+ },
+ "findings": [
+  "F1: u3.classify_theorem is a prefix name-matcher; prune/unknown kinds fail closed and are LABELLED `vacuous`, conflating 'no checker for this shape' with 'proved a tautology'. The C4 sokoban deadlock development -- named by STATS_RULES.md:123 as the paradigm U3 theorem -- compiles with an empty axiom set and reads `vacuous`.",
+  "F2: the `unsolvable` (c) check has a 0/14 yes-rate on this repo; all 14 attainments came through invariant-kind theorems.",
+  "F3: a book-only census flatters itself -- the four live legs have certify.json and no .lean; reported in a separate denominator.",
+  "D1: u3.evaluate only looks for <dir>/theory.lean; Level.lean books read as no_evidence (4 handover packages).",
+  "D2: u3.expand_targets descends one level; 3 nested books unreachable."
+ ],
+ "sealed_pile_contact": "none",
+ "files": [
+  {
+   "path": "exam/u3_census.py",
+   "sha256": "c87e673dcddf9a659401e7cf5523a52aef9693b1985294491a9f11da731a15cf"
+  },
+  {
+   "path": "exam/tests/test_u3_census.py",
+   "sha256": "ff806ed7be65173c1c607bd4f9be24e5d3912ded7c446c170113780d2af6cb6b"
+  },
+  {
+   "path": "exam/runs/20260801T0400Z-U3-CENSUS/census.json",
+   "sha256": "5b5b2515460e82dab2c16f058a517dc0a8968018007e1e9f9b7f27457f2233a5"
+  },
+  {
+   "path": "exam/runs/20260801T0400Z-U3-CENSUS/census.md",
+   "sha256": "105c71a0052af46f02c4873a1fa7f342f4a3d51c4b74ee5a107bacee4ab0a7cc"
+  },
+  {
+   "path": "exam/runs/20260801T0400Z-U3-CENSUS/RUN_STATE.md",
+   "sha256": "e6f6cdafbb7b3a5f324b4f501f9bcea449b32742c76d0795845c48c1df82d286"
+  }
+ ]
+}
