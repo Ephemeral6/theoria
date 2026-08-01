@@ -50,6 +50,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 OUT = os.path.join(HERE, "MANIFEST.json")
+BUDGET_TABLE = os.path.join(HERE, "BUDGET_TABLE.json")
 
 #: The thirteen, verbatim from `Theoria.md:368`, each mapped to the paths that
 #: *are* that thing today.  A path that does not exist is recorded as absent
@@ -369,6 +370,143 @@ ENDPOINTS = {
 }
 
 
+#: Items whose readiness is held hostage by the programme's balance.
+#:
+#: 2026-08-01.  `freeze/BUDGET_TABLE.json` recomputes `remaining_measured_usd`
+#: from the ledgers and it is **negative**: the programme has already spent past
+#: the ceiling written in `proxy/spend_policy.json`.  Item 12 is the 预算表 --
+#: the frozen record of what the campaign is allowed to spend -- and a budget
+#: table cannot honestly read `ready` while the thing it budgets is overdrawn.
+#:
+#: This is written as a DERIVED hold rather than as a word in `ITEMS[11]["note"]`
+#: for one reason: the three ⟨…⟩ placeholders that block item 12 today are
+#: fillable in an afternoon.  If the only thing standing between item 12 and
+#: `ready` were prose, filling them would flip the item green while the balance
+#: was still under water, and the manifest would then publish a ready budget for
+#: an overdrawn programme.  A hold that reads the number cannot be cleared by
+#: writing a sentence.
+#:
+#: The hold does NOT repair the money and does not pretend to.  Whether to stop,
+#: raise the ceiling, or write off the overrun is the owner's ruling; this only
+#: refuses to let the manifest be silent about it while the ruling is pending.
+BUDGET_HOLD_ITEMS = (12,)
+
+
+def budget_state(path=None):
+    """The programme's balance, read from `freeze/BUDGET_TABLE.json`.
+
+    Read from the **tracked, frozen** table and not from the live ledger.  That
+    is deliberate and it is a trade:
+
+      * `proxy/var/spend_gate.jsonl` is gitignored, so a manifest derived from it
+        would not reproduce on any other checkout -- and `--verify` would go red
+        for a tree that is in fact identical, which is the exact failure this
+        whole module exists to avoid (see the header).
+      * the price is that the number here is only as fresh as the last
+        regeneration of the budget table.  `verify.sh` stage [15b] is the
+        instrument for that, and on 2026-08-01 it is RED: the ledgers have moved
+        past the frozen table.
+
+    So the frozen `remaining_measured_usd` is a **floor on the overspend, not the
+    overspend** -- the live number is worse, never better, as long as [15b] is
+    red for a balance that moved.  `reading` says so in the manifest rather than
+    leaving a reader to infer it.
+    """
+    path = path or BUDGET_TABLE
+    if not os.path.exists(path):
+        return {
+            "source": "freeze/BUDGET_TABLE.json",
+            "present": False,
+            "over_ceiling": None,
+            "reading": "the budget table is not in this checkout, so the "
+                       "manifest cannot say whether the programme is over its "
+                       "ceiling. ABSENCE, not zero: no hold is applied and that "
+                       "is not evidence there is nothing to hold.",
+        }
+    with open(path, "r", encoding="utf-8") as handle:
+        table = json.load(handle)
+    balance = table.get("balance", {})
+    remaining = balance.get("remaining_measured_usd")
+    over = (remaining is not None) and (remaining < 0)
+    return {
+        "source": "freeze/BUDGET_TABLE.json",
+        "present": True,
+        "ceiling_usd": balance.get("ceiling_usd"),
+        "programme_measured_usd": balance.get("programme_measured_usd"),
+        "remaining_measured_usd": remaining,
+        "remaining_nominal_usd": balance.get("remaining_nominal_usd"),
+        "over_ceiling": over,
+        "reading": (
+            "as frozen. `verify.sh` stage [15b] re-derives this table from the "
+            "ledgers and is the only thing that can say whether it is stale; "
+            "while [15b] is red for a moved balance, the number here is a FLOOR "
+            "on the overspend, not the overspend."),
+        "consequence": (
+            "item(s) %s may not read `ready` while `remaining_measured_usd` is "
+            "negative -- see `BUDGET_HOLD_ITEMS` in freeze/build_manifest.py. "
+            "The hold records the overrun; it does not repair it, and the "
+            "ruling on what to do about the money is the owner's."
+            % ", ".join(str(n) for n in BUDGET_HOLD_ITEMS)),
+    }
+
+
+def _budget_sentence(budget, held):
+    """The money, in the verdict, in the reader's first paragraph."""
+    if budget.get("over_ceiling") is None:
+        return ("The budget table is absent from this checkout, so this "
+                "manifest cannot say whether the programme is over its "
+                "ceiling -- that is an absence, not a zero.")
+    if not budget["over_ceiling"]:
+        return ("The programme's measured balance is $%s remaining against a "
+                "$%s ceiling, so no item is held on the money."
+                % (budget["remaining_measured_usd"], budget["ceiling_usd"]))
+    return ("And the money: the programme has already spent $%s against a $%s "
+            "ceiling, i.e. $%s remaining -- a NEGATIVE balance, and a floor on "
+            "it rather than the figure, because stage [15b] says the ledgers "
+            "have moved past this table. Item(s) %s are therefore held at "
+            "`blocked` regardless of what their prose says; a 预算表 that reads "
+            "`ready` for an overdrawn programme is worse than one that reads "
+            "blocked. Nothing here repairs the overrun -- the ruling on the "
+            "money is the owner's and is pending."
+            % (budget["programme_measured_usd"], budget["ceiling_usd"],
+               budget["remaining_measured_usd"],
+               ", ".join(str(n) for n in held) or "(none)"))
+
+
+def apply_budget_hold(entries, budget):
+    """Force `BUDGET_HOLD_ITEMS` to `blocked` while the programme is overdrawn.
+
+    Mutates `entries` in place and returns the list of items held, so a caller
+    (and a test) can see the hold fire and see it *not* fire.  When the balance
+    is not negative the function is a no-op -- which is the property the negative
+    control checks, because a hold that fires unconditionally is not a hold, it
+    is a hardcoded `blocked`.
+    """
+    held = []
+    if not budget.get("over_ceiling"):
+        return held
+    for entry in entries:
+        if entry["n"] not in BUDGET_HOLD_ITEMS:
+            continue
+        declared = entry["status"]
+        entry["status"] = "blocked"
+        entry["budget_hold"] = {
+            "held": True,
+            "declared_status": declared,
+            "why": ("the programme's measured balance is $%s against a $%s "
+                    "ceiling (`freeze/BUDGET_TABLE.json`), so remaining is "
+                    "$%s. A 预算表 that reads `ready` for an overdrawn "
+                    "programme is a false record in the direction that "
+                    "flatters. This hold clears when the number does, not "
+                    "when the prose does."
+                    % (budget.get("programme_measured_usd"),
+                       budget.get("ceiling_usd"),
+                       budget.get("remaining_measured_usd"))),
+        }
+        held.append(entry["n"])
+    return held
+
+
 def git(*args):
     result = subprocess.run(("git",) + args, cwd=REPO, capture_output=True,
                             text=True)
@@ -479,8 +617,13 @@ def build():
             "paths": paths, "absent": missing,
         })
 
+    budget = budget_state()
+    held = apply_budget_hold(entries, budget)
+    budget["items_held"] = held
+
     ready = sum(1 for e in entries if e["status"] == "ready")
     return {
+        "budget": budget,
         "endpoints": ENDPOINTS,
         "format": "theoria/freeze-manifest/1",
         "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
@@ -495,6 +638,7 @@ def build():
             "partial": sum(1 for e in entries if e["status"] == "partial"),
             "blocked": sum(1 for e in entries if e["status"] == "blocked"),
             "absent_paths": sorted(p for e in entries for p in e["absent"]),
+            "budget_held_items": held,
             "freeze_ready": ready == len(ITEMS),
             "statement": (
                 "%d of the %d freeze-list items are ready. The campaign may not "
@@ -506,19 +650,130 @@ def build():
                 "confirmatory claim (slot 3, the front-loading index paired "
                 "difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), "
                 "and %d of them can be computed today. Holm's divisor stays %d. "
-                "See `endpoints`."
+                "See `endpoints`. %s"
                 % (ready, len(ITEMS), ENDPOINTS["in_confirmatory_family"],
-                   ENDPOINTS["computable_today"], ENDPOINTS["family_divisor"])),
+                   ENDPOINTS["computable_today"], ENDPOINTS["family_divisor"],
+                   _budget_sentence(budget, held))),
         },
         "entries": entries,
     }
+
+
+def _selftest():
+    """Negative controls for the budget hold.
+
+    A hold that has never been seen to *not* fire is indistinguishable from the
+    word `blocked` typed into ITEMS, and a hold that has never been seen to fire
+    against a `ready` declaration has not been shown to override anything.  Both
+    directions are checked here, plus the absence case, plus a positive control
+    on the real table.  A control that cannot be built is reported as a FAILURE,
+    never as a skip.
+    """
+    import tempfile
+
+    results = []
+
+    def check(name, condition):
+        # `condition` arrives as a zero-argument callable so a mutant that
+        # removes a key produces a red control rather than a traceback.  A
+        # crash is not a verdict: it tells a reader the harness broke, not that
+        # the guarantee failed, and the two must not look alike.
+        try:
+            verdict = bool(condition() if callable(condition) else condition)
+            note = ""
+        except Exception as exc:                              # pragma: no cover
+            verdict, note = False, "  [raised %s: %s]" % (type(exc).__name__, exc)
+        results.append((name, verdict))
+        print("%s %s%s" % ("PASS" if verdict else "FAIL", name, note))
+
+    def table(remaining):
+        handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False,
+                                             encoding="utf-8", newline="\n")
+        json.dump({"balance": {"ceiling_usd": 214.9,
+                               "programme_measured_usd": 214.9 - remaining,
+                               "remaining_measured_usd": remaining,
+                               "remaining_nominal_usd": remaining}}, handle)
+        handle.close()
+        return handle.name
+
+    def entries(status):
+        return [{"n": 12, "name": "预算表", "status": status},
+                {"n": 13, "name": "每格重复数 ⟨n⟩", "status": "ready"}]
+
+    # positive control -- the real table on disk, unmutated
+    real = budget_state()
+    check("positive control: the real freeze/BUDGET_TABLE.json parses and "
+          "yields a verdict (present=%s, over_ceiling=%s, remaining=%s)"
+          % (real.get("present"), real.get("over_ceiling"),
+             real.get("remaining_measured_usd")),
+          lambda: real.get("present") is True and real.get("over_ceiling") is not None)
+
+    # the hold fires against a `ready` declaration
+    over = budget_state(table(-35.1687))
+    rows = entries("ready")
+    held = apply_budget_hold(rows, over)
+    check("control fires: a NEGATIVE balance overrides a declared `ready` on "
+          "item 12 -> blocked",
+          lambda: held == [12] and rows[0]["status"] == "blocked")
+
+    # ... and says so, rather than blocking silently
+    check("control fires: the override records what it overrode and why",
+          lambda: rows[0].get("budget_hold", {}).get("declared_status") == "ready"
+          and "214.9" in rows[0].get("budget_hold", {}).get("why", ""))
+
+    # the hold does NOT fire on a healthy balance -- the direction that matters
+    under = budget_state(table(12.34))
+    rows = entries("ready")
+    held = apply_budget_hold(rows, under)
+    check("control fires: a POSITIVE balance holds nothing (a hold that always "
+          "fires is a hardcoded `blocked`, not a hold)",
+          lambda: held == [] and rows[0]["status"] == "ready"
+          and "budget_hold" not in rows[0])
+
+    # exact zero is not negative -- the boundary is stated, not guessed
+    zero = budget_state(table(0.0))
+    rows = entries("ready")
+    check("control fires: remaining == 0 is not over-ceiling (the boundary is "
+          "`< 0`, and it is checked rather than assumed)",
+          lambda: zero["over_ceiling"] is False
+          and apply_budget_hold(rows, zero) == [])
+
+    # only the named items are held
+    rows = entries("ready")
+    apply_budget_hold(rows, over)
+    check("control fires: item 13 is untouched -- the hold is keyed on "
+          "BUDGET_HOLD_ITEMS, not applied to the whole list",
+          lambda: rows[1]["status"] == "ready" and "budget_hold" not in rows[1])
+
+    # absence is recorded as absence
+    gone = budget_state(os.path.join(HERE, "NO_SUCH_BUDGET_TABLE.json"))
+    check("control fires: a missing budget table reads over_ceiling=None and "
+          "holds nothing -- ABSENCE, not zero",
+          lambda: gone["present"] is False and gone["over_ceiling"] is None
+          and apply_budget_hold(entries("ready"), gone) == [])
+
+    # the verdict sentence must carry the number, not just a mood
+    sentence = _budget_sentence(over, [12])
+    check("control fires: the verdict sentence quotes the negative balance "
+          "verbatim (a paraphrase would let the number rot)",
+          lambda: "-35.1687" in sentence and "214.9" in sentence
+          and "NEGATIVE" in sentence)
+
+    bad_count = sum(1 for _, ok in results if not ok)
+    print("%d/%d" % (len(results) - bad_count, len(results)))
+    return 1 if bad_count else 0
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--verify", action="store_true",
                         help="exit 1 if MANIFEST.json no longer describes the tree")
+    parser.add_argument("--selftest", action="store_true",
+                        help="run the budget-hold negative controls and exit")
     args = parser.parse_args()
+
+    if args.selftest:
+        return _selftest()
 
     manifest = build()
     text = json.dumps(manifest, indent=2, sort_keys=True,

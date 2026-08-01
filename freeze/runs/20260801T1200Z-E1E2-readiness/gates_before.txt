@@ -1,0 +1,160 @@
+==============================================================
+ freeze/verify.sh -- P-22 freeze-kit completeness check
+==============================================================
+
+[0] the four drafts exist
+[32m  PASS  MANIFEST_DRAFT.md[0m
+[32m  PASS  STATS_RULES.md[0m
+[32m  PASS  CLAIMS_TEXT.md[0m
+[32m  PASS  PENDING_FIVE.md[0m
+
+[1] Theoria.md:368 -- all 13 items have a section in MANIFEST_DRAFT.md
+[32m  PASS  item 1 内环代码[0m
+[32m  PASS  item 2 DSL 语法版本[0m
+[32m  PASS  item 3 生成器[0m
+[32m  PASS  item 4 提示词[0m
+[32m  PASS  item 5 引擎清单与版本[0m
+[32m  PASS  item 6 戳探策略[0m
+[32m  PASS  item 7 规划器配置[0m
+[32m  PASS  item 8 指标电池 v1[0m
+[32m  PASS  item 9 变体算子库[0m
+[32m  PASS  item 10 统计裁决规则[0m
+[32m  PASS  item 11 claim 逐字文本与双结局[0m
+[32m  PASS  item 12 预算表[0m
+[32m  PASS  item 13 每格重复数[0m
+
+[2] MANIFEST_DRAFT.md overview table has exactly 13 numbered rows
+[32m  PASS  13 rows[0m
+
+[3] no item is silently absent (every ⛔ is spelled out in prose)
+[33m  NOTE  19 blocking gap(s) recorded -- draft is complete, freeze is NOT ready[0m
+        49:| 5 | 引擎清单与版本 | ⚠ 清单已写，**八个包零版本串** | `freeze/ENGINE_MANIFEST.md`（生成物，`build_engine_manifest.py --verify` 盯住）+ `engine-rig/ENGINE_TABLE.md`；版本串缺口 ⛔ 5-b |
+        57:| 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，依据**已可哈希**；13-d 脆、⛔ 13-f 无产出判据 | `freeze/STATS_RULES.md` §5 + §5.7 + `n_feasibility.py`；依据 `baseline-arms/out/campaign/`（`9307f139`）+ A7 包络 + `freeze/VARIANCE_BASIS.md` |
+        233:## 5. 引擎清单与版本 ⛔ —— 清单不存在，需现写
+        413:## 12. 预算表 ⛔ —— 缺
+
+[4] STATS_RULES.md -- three primary endpoints + the <n> ruling
+[32m  PASS  ^## 1\. 主终点一[0m
+[32m  PASS  ^## 2\. 主终点二[0m
+[32m  PASS  ^## 3\. 主终点三[0m
+[32m  PASS  ^## 5\. ⟨n⟩[0m
+[32m  PASS  <n> is ruled (n = 2)[0m
+[32m  PASS  anti-gaming audit present (9 sections)[0m
+
+[5] CLAIMS_TEXT.md -- C1..C5 each carry BOTH outcomes
+[32m  PASS  C1 has both outcomes[0m
+[32m  PASS  C2 has both outcomes[0m
+[32m  PASS  C3 has both outcomes[0m
+[32m  PASS  C4 has both outcomes[0m
+[32m  PASS  C5 has both outcomes[0m
+
+[6] PENDING_FIVE.md -- all five items present and classified
+[32m  PASS  pending 一[0m
+[32m  PASS  pending 二[0m
+[32m  PASS  pending 三[0m
+[32m  PASS  pending 四[0m
+[32m  PASS  pending 五[0m
+[32m  PASS  needs_human items are marked[0m
+
+[7] re-run the <n> evidence (the number in STATS_RULES.md §5 must not rot)
+        episodes=48  negbinom obs/pred=1.014  infra-death=0.979  U3-wins=0
+        provenance=OK
+[32m  PASS  provenance matches STATS_RULES.md 5.2 (S1 baseline-parity, pre-envelope, episode_limit_hit)[0m
+[32m  PASS  variance still explained by the abort rule (obs/pred=1.014)[0m
+[32m  PASS  infrastructure mortality still high (0.979) -- n=2 argument holds[0m
+[32m  PASS  endpoint floor effect intact (0 episodes reached a level)[0m
+
+[8] 19-vs-21: no frozen draft uses 21 as an analysis-unit count
+[32m  PASS  no unexplained 21 in the four drafts (16 allowlisted, each with a reason)[0m
+[32m  PASS  STATS_RULES.md still carries the n=19 tier[0m
+[32m  PASS  STATS_RULES.md still carries the n=12 tier[0m
+[32m  PASS  freeze/tiers.py --verify (claim set still 21/19/12, no script hardcodes it)[0m
+
+[9] the ⟨m⟩ exam-subset rule draws from the claim-set 19, never the sealed 21
+[32m  PASS  rule selects no quarantined game at any m in 1..19 (quarantined: ft09-0d8bbf25, ls20-9607627b)[0m
+[32m  PASS  negative control holds: the old sealed-pile rule selects ft09-0d8bbf25 at m>=5, ls20-9607627b at m>=9[0m
+[32m  PASS  STATS_RULES.md: 1 draw clause(s), every one sourced from claim_set[0m
+[32m  PASS  PENDING_FIVE.md: 1 draw clause(s), every one sourced from claim_set[0m
+[32m  PASS  the ⟨m⟩ bound reads m ≤ 19 in 2 place(s)[0m
+[32m  PASS  the published order table matches the rule, all 19 rows[0m
+[32m  PASS  prefix exposure disclosure is present and current (M-EXPOSURE: prefix5=3/5 prefix10=6/10)[0m
+
+[10] U3 criterion (b): CLAIMS_TEXT.md and STATS_RULES.md state one rule
+[32m  PASS  C1's three verbatim blocks (成立版/不成立版/不可结论版) are each audited, and the criterion they state is the G1 whitelist, not the empty axiom set[0m
+[32m  PASS  the whitelist is closed: 放行 = propext, Quot.sound, and no axiom outside the frozen set is named anywhere in the two files[0m
+[32m  PASS  §9.2 is a launch blocker (non-triviality check (criterion c))[0m
+[32m  PASS  §9.14 is a launch blocker (U3 has no implementation)[0m
+[32m  PASS  negative control fires: restoring 空公理集 in C1 turns this stage red[0m
+[32m  PASS  negative control 6 fires: C1's 不可结论版 block is audited despite the trailing prose on its heading (planting 公理集为空 in it turns this stage red)[0m
+
+[11] the §9 launch blockers have an executable gate
+[32m  PASS  launch_gate.py --selftest: 12/12 cases, both directions[0m
+[33m  NOTE  launch gate is BLOCKED: 10 §9 launch blocker(s) outstanding -- the sealed campaign must not spend yet (this is a note, not a failure: the draft is complete, the kit is not ready)[0m
+        §9.2   U3「非平凡定理」判据 (c) 的可执行检查
+        §9.14  **U3 达成率本身没有任何计算代码**
+        §9.15  **「弃权计错」与它点名的实现方向相反**
+        §9.16  **判决题 BA 分不出 `memoriser` 与真值**
+        §9.17  **⟨R⟩ 未定死且不在封印内**
+        §9.18  **`api_unusable` 是臂可以自己制造的，而 d 收它**
+        §9.19  **d 不可计算**（「该局是否取得过一次有效尝试」在树上没有定义）
+        §9.20  **g 不可计算、可被臂拧，而它是「不成立」的唯一否决键**
+        §9.21  **配对终点的剔除数是臂能自己抬高的，而抬高它能把「不成立」换成「不可结论」**
+        §9.22  **§4.1.0 的剔除上限有两个不等价的边界，而在 ⟨m⟩ = 16 上它们给出相反的裁决**
+
+[12] MANIFEST.json still describes this tree
+[32m  PASS  build_manifest.py --verify: the hash table matches the tree it pins[0m
+
+[13] cell yield vs <n>, and the floors are sealed (STATS_RULES.md 5.7)
+[32m  PASS  n_feasibility.py --verify: 5.7's thresholds recompute, both measurements land where the section says, floors seal intact[0m
+[32m  PASS  negative control fires: editing the pre-registered floor 14 -> 10 turns this stage red[0m
+
+[14] every gap in the kit names who fixes it, where, and how it clears
+[32m  PASS  residuals.py --verify: every gap carries an owner, a landing path and a clearing condition[0m
+
+[15] the other two generated artefacts still describe their sources
+[32m  PASS  build_engine_manifest.py --verify: ENGINE_MANIFEST.md still pins the tree it describes[0m
+[32m  PASS  negative control fires: zeroing one pinned hash in a copy of ENGINE_MANIFEST.md turns this stage red[0m
+[31m  FAIL  BUDGET_TABLE.{json,md} no longer recompute from the ledgers -- regenerate and read the diff[0m
+        DRIFT: freeze/BUDGET_TABLE.json no longer describes this tree.
+               sections that moved: balance, pool, tracked_theoria, verdict
+               `pool`/`balance` moved => THE BALANCE MOVED. A frozen
+               budget table with a stale balance is the failure this
+               gate exists to catch. Regenerate and re-read it.
+        DRIFT: the generated block in freeze/BUDGET_TABLE.md is stale or was hand-edited.
+[33m  NOTE  negative control not run: the relocated copy does not reproduce 15b's own verdict, so a red from it would prove nothing about the real budget table[0m
+[32m  PASS  citation section-anchoring: 9 controls and live anchors pass (a needle in a NEIGHBOURING section is drift, a renamed heading is missing-section)[0m
+
+[16] one endpoint, one wording: each pinned rule is STATED in both files
+[32m  PASS  E1 (U3 attainment rate): defining sentence, scalar, unit, test, direction and pass line are each STATED in both files[0m
+[32m  PASS  E2 (adjudication-question accuracy): defining sentence, scalar, unit, test, direction and pass line are each STATED in both files[0m
+[32m  PASS  E3 (front-loading index paired difference): defining sentence, scalar, unit, test, direction and pass line are each STATED in both files[0m
+[32m  PASS  negative control fires: mutating the BA formula in C4 ((灵敏度 + 特异度)/2 -> (灵敏度 + 特异度)/3) turns probe E2/scalar red[0m
+[32m  PASS  negative control fires: mutating the U3 denominator in C1's 成立版 (⟨X_obs/19⟩ -> ⟨X_obs/21⟩) turns probe E1/unit red[0m
+[32m  PASS  negative control fires: mutating C4's pointer at the two-tier ruling (§4.4.3 -> §4.4.9) turns probe E2/conj red[0m
+[32m  PASS  negative control fires: mutating C2's pointer at the two-tier ruling (same mutation, other probe) (§4.4.3 -> §4.4.9) turns probe E3/conj red[0m
+[32m  PASS  negative control fires: mutating the evaluable-pair symbol in C2's 成立版, back to the taken ⟨k⟩ (可评的 ⟨v⟩ 对 -> 可评的 ⟨k⟩ 对) turns probe */vsym red[0m
+[32m  PASS  negative control fires: mutating the Holm family size invariant in C1 (family 恒为三个主终点 -> family 恒为两个主终点) turns probe */family red[0m
+[33m  NOTE  one-endpoint-one-wording: 0 hard divergence(s), 0 soft, over 56 checks -- a green means each pinned rule is STATED in both files, NOT that the two files agree (see WHAT IT CANNOT DO in this stage's header, and endpoints/WORDING_AUDIT.md for the ranked list)[0m
+
+[17] §4.4 two-tier ruling for the paired endpoints (E2/E3) recomputes
+[32m  PASS  tier_conj.py --verify: §4.4.2's power table, §4.4.3's verdict table and §9.22's boundary claim all match the arithmetic[0m
+[32m  PASS  negative control fires: putting the first draft's wrong p (0.0078 -> 0.0039) back into the prose table turns this stage red[0m
+
+[18] no tracked artefact records where its builder stood
+[31m  FAIL  tracked artefacts name a machine without an exemption:[0m
+        locations: 330 artefact file(s), 5582 run file(s) scanned; 16 artefact finding(s), 1926 run finding(s)
+                   16 artefact exemption(s) and 109 dated run-dir exemption(s) on file
+        
+        2 violation(s):
+          run       theoria-arm/runs/20260801T001851Z-R1b-g50t-a             23 file(s) record an absolute path and this run directory is not in the dated allowlist
+          run       theoria-arm/runs/20260801T001851Z-R1b-sk48-b             7 file(s) record an absolute path and this run directory is not in the dated allowlist
+        
+        An artefact violation is fixed at the generator, then regenerated -- generated files are never hand-edited. A run violation is fixed either by fixing whatever wrote the path (if the run is still being produced) or by adding a dated entry to tools/locations_allowlist.json saying why this write-once record is allowed to name a machine. Deleting the pattern from a captured log is not one of the options: it falsifies a third party's output.
+
+[19] the §3.0 withdrawal of the front-load endpoint is intact, at its price
+[32m  PASS  e2_withdrawal.py --verify: the §3.0 withdrawal is stated in both files, the Holm divisor is still 3, all three C2 blocks carry the identity sentence, §8 carries no exception, and the surviving axis defect is disclosed[0m
+[32m  PASS  e2_withdrawal.py --selftest: 8/8 controls, every one demonstrated to fire[0m
+
+==============================================================
+[31m DRAFT INCOMPLETE -- 2 check(s) failed[0m
+==============================================================
