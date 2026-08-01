@@ -1,0 +1,49 @@
+{
+ "breakages": {
+  "BA_floor_not_strict": {
+   "exit": 1,
+   "failed": [
+    "C bluffer (always `unsolvable`) scores badly on SPECIFICITY",
+    "D denier (never says `unsolvable`) scores badly on SENSITIVITY",
+    "CD2 the two are not killed by the same rule"
+   ],
+   "stderr_tail": [],
+   "verdict": "FAILED"
+  },
+  "S_min_cannot_fire": {
+   "exit": 1,
+   "failed": [
+    "C bluffer (always `unsolvable`) scores badly on SPECIFICITY",
+    "D denier (never says `unsolvable`) scores badly on SENSITIVITY",
+    "CD2 the two are not killed by the same rule"
+   ],
+   "stderr_tail": [],
+   "verdict": "FAILED"
+  },
+  "_restored": {
+   "exit": 0,
+   "failed": [],
+   "stderr_tail": [],
+   "verdict": "ACCEPTED"
+  },
+  "fourth_class_shipped": {
+   "exit": 1,
+   "failed": [
+    "A1 exactly three classes",
+    "A2 the shipped mix is the pre-registered mix"
+   ],
+   "stderr_tail": [],
+   "verdict": "FAILED"
+  },
+  "one_basis_blanked": {
+   "exit": 1,
+   "failed": [
+    "A3 every item carries a construction basis",
+    "A4 the shortest basis is not a gesture"
+   ],
+   "stderr_tail": [],
+   "verdict": "FAILED"
+  }
+ },
+ "breakages_the_audit_missed": []
+}

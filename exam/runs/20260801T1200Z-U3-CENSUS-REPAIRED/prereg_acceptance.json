@@ -1,0 +1,258 @@
+{
+ "conditions": [
+  {
+   "condition": "A1 exactly three classes",
+   "detail": "paper classes ['large_unsolvable', 'small_unsolvable', 'solvable_hard']; inventory classes ['large_unsolvable', 'small_unsolvable', 'solvable_hard']",
+   "numbers": {
+    "classes": [
+     "large_unsolvable",
+     "small_unsolvable",
+     "solvable_hard"
+    ],
+    "counts": {
+     "large_unsolvable": 4,
+     "small_unsolvable": 5,
+     "solvable_hard": 8
+    },
+    "declared_mix": {
+     "large_unsolvable": 4,
+     "small_unsolvable": 5,
+     "solvable_hard": 8
+    }
+   },
+   "pass": true
+  },
+  {
+   "condition": "A2 the shipped mix is the pre-registered mix",
+   "detail": "counts {'large_unsolvable': 4, 'small_unsolvable': 5, 'solvable_hard': 8} vs pre-registered {'small_unsolvable': 5, 'large_unsolvable': 4, 'solvable_hard': 8}",
+   "numbers": {
+    "counts": {
+     "large_unsolvable": 4,
+     "small_unsolvable": 5,
+     "solvable_hard": 8
+    },
+    "prereg": {
+     "large_unsolvable": 4,
+     "small_unsolvable": 5,
+     "solvable_hard": 8
+    }
+   },
+   "pass": true
+  },
+  {
+   "condition": "A3 every item carries a construction basis",
+   "detail": "items with no justification: none; items absent from the inventory: none",
+   "numbers": {
+    "items": 17,
+    "with_basis": 17
+   },
+   "pass": true
+  },
+  {
+   "condition": "A4 the shortest basis is not a gesture",
+   "detail": "shortest justification is 364 chars (vq-1881c8c383)",
+   "numbers": {
+    "shortest": [
+     [
+      364,
+      "vq-1881c8c383"
+     ],
+     [
+      387,
+      "vq-abe007cdfa"
+     ],
+     [
+      391,
+      "vq-1015eb0bb1"
+     ]
+    ]
+   },
+   "pass": true
+  },
+  {
+   "condition": "B1 both rates are defined on every control",
+   "detail": "after 弃权计错 no denominator is empty, so neither rate is None",
+   "numbers": {
+    "abstainer": {
+     "sens": "0.000",
+     "spec": "0.000"
+    },
+    "bluffer": {
+     "sens": "1.000",
+     "spec": "0.000"
+    },
+    "denier": {
+     "sens": "0.000",
+     "spec": "1.000"
+    },
+    "memoriser": {
+     "sens": "0.556",
+     "spec": "0.625"
+    },
+    "null": {
+     "sens": "0.000",
+     "spec": "0.000"
+    },
+    "oracle": {
+     "sens": "1.000",
+     "spec": "1.000"
+    },
+    "overclaimer": {
+     "sens": "1.000",
+     "spec": "0.375"
+    }
+   },
+   "pass": true
+  },
+  {
+   "condition": "B2 BA is derived from the two, not reported alone",
+   "detail": "BA == (sens + spec) / 2 recomputed for every control",
+   "numbers": {
+    "abstainer": {
+     "ba_recomputed": "0.000",
+     "ba_reported": "0.000"
+    },
+    "bluffer": {
+     "ba_recomputed": "0.500",
+     "ba_reported": "0.500"
+    },
+    "denier": {
+     "ba_recomputed": "0.500",
+     "ba_reported": "0.500"
+    },
+    "memoriser": {
+     "ba_recomputed": "0.590",
+     "ba_reported": "0.590"
+    },
+    "null": {
+     "ba_recomputed": "0.000",
+     "ba_reported": "0.000"
+    },
+    "oracle": {
+     "ba_recomputed": "1.000",
+     "ba_reported": "1.000"
+    },
+    "overclaimer": {
+     "ba_recomputed": "0.688",
+     "ba_reported": "0.688"
+    }
+   },
+   "pass": true
+  },
+  {
+   "condition": "C bluffer (always `unsolvable`) scores badly on SPECIFICITY",
+   "detail": "spec 0.000 < S_min 0.5, while sens is 1.000 — it is refused for the right reason, not by being bad at everything",
+   "numbers": {
+    "ba": "0.500",
+    "reasons": [
+     "specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.5"
+    ],
+    "sens": "1.000",
+    "spec": "0.000",
+    "verdict": "不成立"
+   },
+   "pass": true
+  },
+  {
+   "condition": "D denier (never says `unsolvable`) scores badly on SENSITIVITY",
+   "detail": "sens 0.000, spec 1.000 — the transpose of C, refused on the BA floor because §2.2 writes no sensitivity floor",
+   "numbers": {
+    "ba": "0.500",
+    "reasons": [
+     "BA 0.5000 <= 0.50, which is exactly what a constant answer scores: always-`unsolvable` gives (1.0, 0.0) and always-`solvable` gives (0.0, 1.0), both BA 0.5"
+    ],
+    "sens": "0.000",
+    "spec": "1.000",
+    "verdict": "不成立"
+   },
+   "pass": true
+  },
+  {
+   "condition": "CD the pair is a transpose, not one number printed twice",
+   "detail": "bluffer (sens, spec) = (1.000, 0.000); denier = (0.000, 1.000)",
+   "numbers": null,
+   "pass": true
+  },
+  {
+   "condition": "CD2 the two are not killed by the same rule",
+   "detail": "bluffer refused by ['specificity 0.0000 < S_min 0.50 -- 一票否决 (STATS_RULES.md 2.2), independent of BA 0.5']; denier refused by ['BA 0.5000 <= 0.50, which is exactly what a constant answer scores: always-`unsolvable` gives (1.0, 0.0) and always-`solvable` gives (0.0, 1.0), both BA 0.5']",
+   "numbers": null,
+   "pass": true
+  }
+ ],
+ "control_table": [
+  {
+   "balanced_accuracy": "1.000",
+   "certified_share": "1.000",
+   "coverage_positive": "1.000",
+   "examinee": "oracle",
+   "sensitivity": "1.000",
+   "specificity": "1.000",
+   "verdict": "成立"
+  },
+  {
+   "balanced_accuracy": "0.500",
+   "certified_share": "0.000",
+   "coverage_positive": "1.000",
+   "examinee": "bluffer",
+   "sensitivity": "1.000",
+   "specificity": "0.000",
+   "verdict": "不成立"
+  },
+  {
+   "balanced_accuracy": "0.500",
+   "certified_share": "None",
+   "coverage_positive": "1.000",
+   "examinee": "denier",
+   "sensitivity": "0.000",
+   "specificity": "1.000",
+   "verdict": "不成立"
+  },
+  {
+   "balanced_accuracy": "0.688",
+   "certified_share": "0.000",
+   "coverage_positive": "1.000",
+   "examinee": "overclaimer",
+   "sensitivity": "1.000",
+   "specificity": "0.375",
+   "verdict": "不成立"
+  },
+  {
+   "balanced_accuracy": "0.000",
+   "certified_share": "None",
+   "coverage_positive": "0.000",
+   "examinee": "abstainer",
+   "sensitivity": "0.000",
+   "specificity": "0.000",
+   "verdict": "不成立"
+  },
+  {
+   "balanced_accuracy": "0.590",
+   "certified_share": "1.000",
+   "coverage_positive": "0.000",
+   "examinee": "memoriser",
+   "sensitivity": "0.556",
+   "specificity": "0.625",
+   "verdict": "不可结论"
+  },
+  {
+   "balanced_accuracy": "0.000",
+   "certified_share": "None",
+   "coverage_positive": "0.000",
+   "examinee": "null",
+   "sensitivity": "0.000",
+   "specificity": "0.000",
+   "verdict": "不成立"
+  }
+ ],
+ "document": "exam/PREREG_VERDICT.md",
+ "failed_conditions": [],
+ "floors": {
+  "BA": "> 0.5 strict",
+  "C_min": 0.5,
+  "S_min": 0.5
+ },
+ "n_items": 17,
+ "paper": "p15-verdict-a2",
+ "verdict": "ACCEPTED"
+}
