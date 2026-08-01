@@ -35,6 +35,7 @@ if __package__ in (None, ""):
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
+from armtools import refusal
 from harness.modelcall import call_field
 
 from inner import goal as goal_beat
@@ -117,8 +118,8 @@ def _declared_cost(raw: Dict[str, Any]) -> Dict[str, Any]:
     return {key: raw[key] for key in ARCHIVE_COST_FIELDS if key in raw}
 
 
-def reconcile(records: List[Dict[str, Any]], scorecard: Optional[Dict[str, Any]]
-              ) -> Dict[str, Any]:
+def reconcile(records: List[Dict[str, Any]], scorecard: Optional[Dict[str, Any]],
+              *, outcomes: bool = False) -> Dict[str, Any]:
     steps = [r for r in records if r.get("event") == "env_step"]
     ok = [r for r in steps if (r.get("http") or {}).get("status") == 200]
     actions_ok = [r for r in ok if r.get("action", {}).get("name") != "RESET"]
@@ -135,6 +136,24 @@ def reconcile(records: List[Dict[str, Any]], scorecard: Optional[Dict[str, Any]]
                                if actions_ok else None),
         "levels_completed_from_ledger": max(levels) if levels else None,
     }
+
+    # What the non-200 rows *were*. `http_amplification` above averages over an
+    # undifferentiated mass: a leg spent retrying the documented
+    # `400 SERVER_ERROR / game <id> not found` wave and a leg spent failing for
+    # real produce the same number, and 87% of this arm's live commands are the
+    # former. `armtools/refusal.py` carries the signature and the evidence.
+    #
+    # **Opt-in, and it has to be.** `verify_provenance` check 9 re-derives every
+    # published `MANIFEST.json` and compares it byte for byte, and manifests
+    # embed `reconciliation: reconcile(...)`. Any new key here therefore makes
+    # every manifest this arm has ever written fail to reproduce -- which is the
+    # check working, not a nuisance. Adding the split to the manifest is a
+    # migration (re-derive and amend ~25 records of real spend), not a bug fix,
+    # and it is not smuggled in under one. Default off keeps re-derivation
+    # exact; callers that want the split ask for it.
+    if outcomes:
+        out["outcomes"] = refusal.partition(records)
+        out["outbound"] = refusal.outbound_accounting(records)
 
     if not scores:
         out["score_reconciliation"] = "unavailable"

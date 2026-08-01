@@ -107,6 +107,7 @@ __all__ = [
     "MODEL_CALL_CEILING_USD", "HTTP_PER_COMMAND", "RETRY_SAFETY",
     "FIXED_COMMANDS", "DEFAULT_ENV_MAX_ATTEMPTS",
     "OUTBOUND_PER_ACTION", "OUTBOUND_TAIL_SAFETY", "FIXED_OUTBOUND",
+    "OUTBOUND_PER_ACTION_REGIME", "OUTBOUND_PER_ACTION_DECOMPOSITION",
     "ENV_OUTBOUND_PER_ARM_COMMAND",
 ]
 
@@ -530,7 +531,58 @@ OUTBOUND_PER_ACTION_PROVENANCE = (
     "env_step records with http.forwarded=true; denominator is env_step records "
     "with an ACTION name and status 200. Cross-checked against "
     "proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg "
-    "both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556.")
+    "both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556. "
+    "REGIME: this is a blended number, not a transport number -- see "
+    "OUTBOUND_PER_ACTION_REGIME.")
+
+#: What regime `OUTBOUND_PER_ACTION` is a measurement *of*.
+#:
+#: The comment above already suspected this: "if that wave is an upstream
+#: pathology rather than the steady state, the true ratio for a healthy session
+#: is nearer 1.1". `armtools/refusal.py` settled it from the records. The wave
+#: is `400 SERVER_ERROR / game <id> not found`, it is the upstream's own
+#: transient. Over every forwarded command this arm has ever sent (1462) it is
+#: 63.1% of all of them, and 79.3% of the 1164 whose outcome the ledger
+#: actually recorded.
+#: The request that gets refused is **byte-identical** to the one that succeeds
+#: moments later -- same `request_sha256`, same URL, same session -- so nothing
+#: this arm sends causes it and nothing this arm changes will avoid it.
+#:
+#: Re-derived across all eight live legs with `refusal.derive_outbound_per_action`:
+#:
+#:     blended     8.091   801 forwarded ACTION requests / 99 successful ACTIONs
+#:     productive  1.081   the same legs with the wave subtracted
+#:     decomposable    5 of 8 legs
+#:
+#: **The value is not moved to either number, deliberately.** Moving it to
+#: `productive` would size reservations for a transport that does not exist
+#: while the wave is running, and under-reserving is what cost
+#: `20260729T004020Z-leg01` its run; `release()` returns an unspent hold, so
+#: over-reserving costs only headroom. Moving it to the re-derived `blended`
+#: 8.091 would *lower* the reservation on evidence that is better but still
+#: entirely hostage to how the upstream feels that day. 9.3 stands, and what
+#: changes is that it now says which of the two things it is, and that a test
+#: re-derives it from the ledgers rather than trusting this comment.
+#:
+#: The honest gap: three of the four legs behind 9.3 predate the proxy
+#: recording response bodies (`response: null` on every row, 200s included), so
+#: for 149 of its 251 outbound requests the split is not derivable at all. The
+#: constant is defensible; its decomposition rests on one of its four legs.
+OUTBOUND_PER_ACTION_REGIME = "blended"
+
+#: The split, re-derived from the ledgers rather than asserted here.
+#: `tests/test_refusal_classification.py` recomputes it and fails if it drifts.
+OUTBOUND_PER_ACTION_DECOMPOSITION = {
+    "blended": 8.091,
+    "productive": 1.081,
+    "legs": 8,
+    "decomposable_legs": 5,
+    "outbound_action_forwarded": 801,
+    "successful_actions": 99,
+    "transient_share_of_classifiable": 0.846,
+    "derivation": ("armtools.refusal.derive_outbound_per_action over every leg "
+                   "under runs/ whose env_upstream is three.arcprize.org"),
+}
 
 #: Slack over `OUTBOUND_PER_ACTION`, sized from the observed dispersion rather
 #: than chosen.
@@ -749,6 +801,12 @@ def plan_caps(*, actions: int, commands: int,
         "outbound_per_action": OUTBOUND_PER_ACTION,
         "outbound_per_action_is_validated": OUTBOUND_PER_ACTION_IS_VALIDATED,
         "outbound_per_action_provenance": OUTBOUND_PER_ACTION_PROVENANCE,
+        # Which regime the sizing constant measures. Every reservation now
+        # carries the fact that 9.3 is a blend dominated by an upstream
+        # transient, so a plan cannot be read as a statement about this arm's
+        # transport without the plan saying otherwise.
+        "outbound_per_action_regime": OUTBOUND_PER_ACTION_REGIME,
+        "outbound_per_action_decomposition": OUTBOUND_PER_ACTION_DECOMPOSITION,
         "outbound_tail_safety": OUTBOUND_TAIL_SAFETY,
         "fixed_outbound": FIXED_OUTBOUND,
         "action_cap_planned": planned,
