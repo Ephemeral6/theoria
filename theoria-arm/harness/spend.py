@@ -266,7 +266,8 @@ OBSERVED_USD_PER_SECOND = {
 #: The worst single settled call per model, the other half of the sizing rule.
 #: Same runs and same script as `OBSERVED_USD_PER_SECOND`.
 OBSERVED_WORST_CALL_USD = {
-    "claude-opus-5": 2.861150,      # 20260731T1430Z-A3-level2-carried-r3
+    "claude-opus-5": 3.539843,      # 20260801T001851Z-R1b-g50t-a
+                                    # (was 2.861150, r3; 1.742637, E3 sk48)
                                     # (was 1.742637, E3 sk48-carried-v2)
     "claude-haiku-4-5": 0.146292,
 }
@@ -337,13 +338,17 @@ MODEL_CALL_CEILINGS_USD = {
     # independently before this merge joined them.)
     # 2026-07-31, second growth: the four live carried legs pushed the
     # worst opus call to $2.8611 and the rate to $0.0042222/s.
-    "claude-opus-5":  12.00,       # max(1800 x 0.0042222, 4 x 2.861100) = 11.44
+    # Third growth, 2026-08-01: the R1b legs pushed the worst opus call to
+    # $3.5398, so 4 x worst = $14.16 and $12.00 stopped covering its own
+    # archive. The ladder so far: 6.00 -> 7.00 -> 12.00 -> 15.00, each step
+    # forced by a measurement, never by a guess.
+    "claude-opus-5":  15.00,       # max(1800 x 0.0042223, 4 x 3.539843) = 14.16
     "claude-haiku-4-5": 1.25,      # max(1800 x 0.0006376, 4 x 0.146292) = 1.15
     # not measured here: opus-5 x output-price ratio x 1.25 throughput margin
-    "claude-opus-4-8": 12.00,      # same list price as opus-5, same family
-    "claude-fable-5": 30.00,       # output $50/M -> 12.00 x 2.0 x 1.25
-    "claude-mythos-5": 30.00,
-    "claude-sonnet-5": 9.00,       # output $15/M -> 12.00 x 0.6 x 1.25
+    "claude-opus-4-8": 15.00,      # same list price as opus-5, same family
+    "claude-fable-5": 37.50,       # output $50/M -> 15.00 x 2.0 x 1.25
+    "claude-mythos-5": 37.50,
+    "claude-sonnet-5": 11.25,      # output $15/M -> 15.00 x 0.6 x 1.25
 }
 
 

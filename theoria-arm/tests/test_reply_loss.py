@@ -150,7 +150,7 @@ def test_every_reply_the_arm_accepted_begins_with_the_marker():
                 leg["leg"], row["transcript"])
 
 
-def test_the_archive_still_holds_the_eleven_lost_replies():
+def test_the_archive_still_holds_the_thirteen_lost_replies():
     """The measurement, pinned.
 
     This number is a fact about files that are committed, so it does not drift
@@ -159,13 +159,19 @@ def test_the_archive_still_holds_the_eleven_lost_replies():
     say so in the diff rather than watch a green suite.
     """
     report = replyloss.sweep(RUNS)
-    assert report["counts"]["lost_continuation"] == 11, report["counts"]
+    # 11 -> 13 on 2026-08-01: the two R1b legs each lost one more reply.
+    # The dollars did NOT move ($31.05 both times) while the share fell
+    # 0.286 -> 0.258, so the two new losses are attributed no cost at
+    # all. A lost reply that cost nothing is either genuinely free or
+    # unattributed, and this census cannot tell which -- named here so
+    # the next reader does not read the flat dollar figure as good news.
+    assert report["counts"]["lost_continuation"] == 13, report["counts"]
     assert report["counts"]["provider_refusal"] == 24, report["counts"]
     assert report["counts"]["empty"] == 1, report["counts"]
     # $31.05 of $108.54. Compared loosely so a re-priced archive does not fail
     # here for a rounding reason -- the point is the order of magnitude.
     assert 30.0 < report["usd_lost_to_lost_continuation"] < 32.0
-    assert 0.25 < report["share_of_desk_spend_lost"] < 0.32
+    assert 0.24 < report["share_of_desk_spend_lost"] < 0.32
 
 
 def test_a_leg_with_no_transcripts_says_so_rather_than_reporting_zero():
