@@ -184,6 +184,39 @@ def _gated_run(root):
     return b.write()
 
 
+def _gate_tripped_run(root):
+    """A leg killed by the spend gate *inside* a turn it had already paid for.
+
+    The shape of `20260731T1310Z-A3-level2-carried-r2` and `...-r3`. Three
+    turns finish and are recorded; then a fourth opens, spends the desk call
+    that takes the pool over its cap, and dies on the next ARC command --
+    before `inner/loop.py` reaches the `self.turns.append(record)` at the
+    bottom of the loop body. So the ledger bills two calls and `turns.json`
+    accounts for one, and the missing turn issued no environment command at
+    all, which is why every command-based check on such a leg balanced
+    perfectly while the money did not.
+    """
+    b = _Builder(root)
+    b.turns = [
+        {"turn": 0, "beat": "observe", "detail": "opening sweep over [1,2]",
+         "actions_spent": 2},
+        {"turn": 1, "actions_before": 2, "elapsed_s": 10.0,
+         "theorize_rounds": 1},
+        {"turn": 2, "actions_before": 3, "elapsed_s": 20.0,
+         "theorize": "skipped: not enough new transitions"},
+    ]
+    b.step("RESET", 1)
+    b.step("ACTION1", 2)
+    b.step("ACTION2", 3)
+    b.call(20, step_idx=3, usd=1.0)
+    b.step("ACTION3", 30)
+    # Turn 3. Billed, then refused, then nothing: no further env_step, and no
+    # record in turns.json.
+    b.call(40, step_idx=4, usd=9.0)
+    b.surprise("proof_failure", 42)
+    return b.write()
+
+
 def _silent_run(root):
     """A run that never called a model. The division-by-zero edge."""
     b = _Builder(root)
@@ -575,3 +608,174 @@ def test_the_turn_spine_sees_theorize_on_the_new_shape():
     invocations = _invocations([_call(0), _call(1, step_idx=1)])
     assert [i["beat"] for i in invocations] == ["theorize", "theorize"]
     assert all(i["beat"] is not None for i in invocations)
+
+
+# -- the turn that was billed and never written down ------------------------
+
+def test_a_billed_call_whose_turn_was_never_recorded_becomes_a_row(tmp_path):
+    """The defect this section exists for, stated as a property.
+
+    `inner/loop.py` appends a turn's record only after the turn's last ARC
+    command, and the spend gate raises on that command. The turn is therefore
+    billed and absent from `turns.json`, and the spine's dealing loop left its
+    invocation in an `unclaimed` queue -- reported, then dropped. Dropping it
+    removed the leg's single most expensive call from the series, from
+    `curves.json`, from figure 2 and from C2.
+
+    A cost with no turn number is recorded. A cost that vanishes is not.
+    """
+    doc = archive.turn_series(_gate_tripped_run(tmp_path / "gated-out"))
+
+    orphan = [r for r in doc["rows"] if r["turn_record_missing"]]
+    assert len(orphan) == 1, "the unrecorded turn is one row, not none and not two"
+    row = orphan[0]
+    assert row["model_calls"] == 1
+    assert row["usd"] == pytest.approx(9.0)
+    assert row["turn"] == 3, "the number continues the recorded sequence"
+    assert row["step_idx"] == 4
+    assert "spend gate" in row["turn_record_missing_why"]
+
+    # And it is the *only* row that claims to be one.
+    assert [r["turn_record_missing"] for r in doc["rows"]] == [
+        False, False, False, True]
+
+
+def test_the_money_reconciles_once_the_unrecorded_turn_is_carried(tmp_path):
+    """$9 of a $10 leg was the missing call. Every axis must close."""
+    doc = archive.turn_series(_gate_tripped_run(tmp_path / "gated-money"))
+    recon = doc["reconciliation"]
+
+    assert recon["usd"]["sum_over_turns"] == pytest.approx(10.0)
+    assert recon["usd"]["reconciles"] is True
+    assert recon["model_calls"] == {"sum_over_turns": 2, "in_ledger": 2,
+                                    "reconciles": True}
+    assert doc["totals"]["usd"] == pytest.approx(10.0)
+
+
+def test_an_unrecorded_turn_owns_no_environment_command(tmp_path):
+    """It cannot: the leg died before it sent one.
+
+    And the recorded turns must keep every command they had -- trading the hole
+    in the money for a hole in the command count would only move the defect,
+    and `armtools/curves.py`'s first equality would then refuse the file.
+    """
+    doc = archive.turn_series(_gate_tripped_run(tmp_path / "gated-cmd"))
+    orphan = [r for r in doc["rows"] if r["turn_record_missing"]][0]
+
+    assert orphan["http_commands"] == 0
+    assert orphan["actions_taken"] == 0
+    assert sum(r["http_commands"] for r in doc["rows"]) == 4
+    assert doc["reconciliation"]["actions"]["reconciles"] is True
+
+
+def test_carrying_the_lost_turn_does_not_launder_the_confidence(tmp_path):
+    """The row is the archive's reconstruction, not the run's record.
+
+    Making the money add up must not upgrade the join's own claim about
+    itself. `degraded` is the honest label and the check that lowered it is
+    still emitted, now saying that what it found was kept rather than dropped.
+    """
+    doc = archive.turn_series(_gate_tripped_run(tmp_path / "gated-conf"))
+
+    assert doc["join"]["join_confidence"] == "degraded"
+    claimed = [c for c in doc["join"]["checks"]
+               if c["check"].startswith("every billed theorize invocation")][0]
+    assert claimed["ok"] is False
+    assert claimed["unclaimed"] == [[1]]
+    assert claimed["unclaimed_are_recorded_anyway"] is True
+    assert len(doc["join"]["turns_with_no_record_of_their_own"]) == 1
+
+
+def test_a_surprise_that_fired_in_the_lost_turn_lands_in_it(tmp_path):
+    """The final turn's window is open-ended, and the final turn is now the
+    unrecorded one. A surprise that fired after the last recorded command
+    belongs to the turn that was still running, not to the one that ended."""
+    doc = archive.turn_series(_gate_tripped_run(tmp_path / "gated-surprise"))
+    orphan = [r for r in doc["rows"] if r["turn_record_missing"]][0]
+
+    assert orphan["surprise_counts"]["proof_failure"] == 1
+    assert doc["reconciliation"]["surprises"]["reconciles"] is True
+
+
+@pytest.mark.parametrize("slug,calls,usd", [
+    ("20260731T1310Z-A3-level2-carried-r2", 5, 9.556852),
+    ("20260731T1430Z-A3-level2-carried-r3", 8, 13.439862),
+])
+def test_the_real_gate_tripped_legs_account_for_every_billed_call(slug, calls,
+                                                                  usd):
+    """The two legs the defect was found on, not a model of them.
+
+    Before this fix r2's series carried 4 of 5 calls and $7.926367 of
+    $9.556852; r3 carried 7 of 8 and $11.761053 of $13.439862.
+    """
+    run_dir = _bootstrap.path("runs", slug)
+    if not os.path.exists(os.path.join(run_dir, "ledger.jsonl")):
+        pytest.skip("%s is not in this checkout" % slug)
+    doc = archive.turn_series(run_dir)
+
+    assert doc["reconciliation"]["model_calls"] == {
+        "sum_over_turns": calls, "in_ledger": calls, "reconciles": True}
+    assert doc["totals"]["usd"] == pytest.approx(usd)
+    assert doc["reconciliation"]["usd"]["reconciles"] is True
+    assert len(doc["join"]["turns_with_no_record_of_their_own"]) == 1
+
+
+# -- the same fact, recorded at the source ----------------------------------
+
+def test_the_loop_adopts_the_turn_it_died_inside(tmp_path):
+    """`inner/loop.py`'s half of the fix, on the method that does it.
+
+    The archive can reconstruct the lost turn, but a reconstruction is a
+    `degraded` join carrying a turn number the run never wrote. The loop parks
+    the open turn and `_save_all` adopts it, so a future leg records its own.
+    """
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+
+    class _Stub:
+        turns = None
+        stopped_because = "SpendGateTripped: at $9.5569 of its $16.0000 cap"
+
+    stub = _Stub()
+    stub.turns = [{"turn": 1, "theorize_rounds": 1}]
+    stub._turn_in_flight = {"turn": 2, "actions_before": 3,
+                            "theorize_rounds": 1}
+
+    TheoriaArm._adopt_the_turn_in_flight(stub)
+
+    assert len(stub.turns) == 2
+    assert stub.turns[-1]["turn"] == 2
+    assert "16.0000" in stub.turns[-1]["turn_aborted"]
+    assert stub._turn_in_flight is None
+
+
+def test_adoption_never_writes_a_turn_twice(tmp_path):
+    """`_save_all` runs on every exit path, including the ones that already
+    appended. A second copy of a completed turn would double its cost."""
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+
+    class _Stub:
+        stopped_because = "budget"
+
+    stub = _Stub()
+    record = {"turn": 2, "theorize_rounds": 1}
+    stub.turns = [{"turn": 1}, record]
+    stub._turn_in_flight = record
+
+    TheoriaArm._adopt_the_turn_in_flight(stub)
+
+    assert stub.turns == [{"turn": 1}, {"turn": 2, "theorize_rounds": 1}]
+    assert "turn_aborted" not in record
+
+
+def test_adoption_is_a_no_op_when_no_turn_was_open():
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+
+    class _Stub:
+        stopped_because = ""
+
+    stub = _Stub()
+    stub.turns = [{"turn": 1}]
+    stub._turn_in_flight = None
+
+    TheoriaArm._adopt_the_turn_in_flight(stub)
+    assert stub.turns == [{"turn": 1}]

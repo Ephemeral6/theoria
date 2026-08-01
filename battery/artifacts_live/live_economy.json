@@ -159,14 +159,7 @@
   "axis_sensitivity": {
     "cells_that_moved": [],
     "note": "E1, E4, E5, E6 and E7 are computed per billed call or per step and cannot move with the turn axis; only E2 and E3 can. An empty `cells_that_moved` therefore means the adapter's fallback axis and the archive's exact axis agree on every computable cell -- which is a result about this material, not a property of the code. Read it beside `turn_counts_that_moved`: a leg whose axis changed length but stayed under the 8-turn floor returns the same `insufficient-data` from both axes, and that agreement is arithmetic rather than corroboration.",
-    "turn_counts_that_moved": [
-      {
-        "exact_turns": 3,
-        "leg": "20260731T1310Z-A3-level2-carried-r2",
-        "of_record_source": "unjoined: curves.json counts 4 billed call(s), the ledger has 5",
-        "of_record_turns": 5
-      }
-    ]
+    "turn_counts_that_moved": []
   },
   "constraint": "readings, not confirmations -- the same constraint battery/audit/live_arm.py records. PREDICTIONS.md is frozen prefix-and-whole under BATTERY_V1 freeze:prereg, PREREG_V9 §5 forbids rewriting the committed artefacts, and process 1's gradient (CC vs Schema) does not contain this arm. Nothing here settles a prediction, moves a tier, or enters a discrimination verdict.",
   "excluded": [
@@ -201,6 +194,10 @@
     {
       "reason": "refused: env_upstream is 'http://127.0.0.1:55064' -- this leg played a local mock, not the live environment",
       "slug": "a3-gate-mock"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:55971' -- this leg played a local mock, not the live environment",
+      "slug": "audit-smoke"
     }
   ],
   "games": [
@@ -218,22 +215,22 @@
     },
     "20260731T1240Z-A3-level2-carried": {
       "bill_shape.json": "sha256:4aba99ae23415dd5754dbb9ad4a566cd4bed4c7c233a53d5941d97db89043dbd",
-      "curves.json": "sha256:72b9234a05e8c57e4e2a266e46550ecb336c66b8433114cf167a94590c7ab11d",
+      "curves.json": "sha256:d0e4047a00cfbcc24d0f51fc0323841bc182a4f7df531e44b7d5047058ac0b87",
       "ledger.jsonl": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5"
     },
     "20260731T1310Z-A3-level2-carried-r2": {
       "bill_shape.json": "sha256:1125955273187dc6d5eba7a6e577fccbd7de21b7c955c4d109a666a3f4894a46",
-      "curves.json": "sha256:325a9bcb5652491ef456437049e653cb83f7fd37cddc95c6d1f3aea4c2e3d821",
+      "curves.json": "sha256:80210517306cda62181c1874056b53f3d5fcff5ca35e1ea8ecc3ba95da69f5fc",
       "ledger.jsonl": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c"
     },
     "20260731T1430Z-A3-level2-carried-r3": {
       "bill_shape.json": "sha256:20262f685f1ed9f6248191343ff044d9a6d81c8c9ecc6d56401cca7d93daa4d1",
-      "curves.json": "sha256:9b51f42a3a4f24728a99a82c09d08711fd3e93c081ccaa2bf16b9fa42ae13d73",
+      "curves.json": "sha256:61fac46b6941b09da130d51daefacc7cdde0cff8d2d765a5c2280f134ac5a543",
       "ledger.jsonl": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3"
     },
     "20260731T1500Z-A3-sk48-carried-l1": {
       "bill_shape.json": "sha256:f3a64bb7a1cc18fab433ed59542139e2f36b79fb9de8a000182e283c64eb4809",
-      "curves.json": "sha256:b3cc75bad0f5f4a393cba53f3a1c6cb0b1ae3086c954191d4f233edb4eca3c73",
+      "curves.json": "sha256:84e968a6a73ecd9b8013550ff57b489e0da76fa197d5d0525217525669209d38",
       "ledger.jsonl": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e"
     }
   },
@@ -489,9 +486,9 @@
     "20260731T1310Z-A3-level2-carried-r2": {
       "adapter_turn_join": {
         "join_confidence": "degraded",
-        "joined_calls": 0,
+        "joined_calls": 5,
         "ledger_calls": 5,
-        "source": "unjoined: curves.json counts 4 billed call(s), the ledger has 5"
+        "source": "curves.json"
       },
       "billed_calls": 5,
       "campaign": "theoria-arm:A3-campaign-devpile",
@@ -627,7 +624,7 @@
       "outcome": "spend_gate_tripped",
       "pile": "dev",
       "reconciliation": {
-        "all_three_agree": false,
+        "all_three_agree": true,
         "bill_shape": {
           "billed_calls": 5,
           "declared_total_usd": 9.556852,
@@ -635,17 +632,14 @@
           "usd": 9.556852
         },
         "curves": {
-          "billed_calls": 4,
-          "declared_total_usd": 7.926367,
+          "billed_calls": 5,
+          "declared_total_usd": 9.556852,
           "join_confidence": "degraded",
           "present": true,
-          "turn_rows": 10,
-          "usd": 7.926367
+          "turn_rows": 11,
+          "usd": 9.556852
         },
-        "disagreements": [
-          "curves.json accounts for 4 billed call(s) over 10 turn row(s); the proxy ledger bills 5",
-          "curves.json totals 7.926367 USD over its turn rows; the proxy ledger totals 9.556852 USD (difference 1.630485)"
-        ],
+        "disagreements": [],
         "ledger": {
           "billed_calls": 5,
           "usd": 9.556852
@@ -675,32 +669,20 @@
       ],
       "turn_cost_curve_of_record": [
         {
-          "share_cumulative": 0.155684633,
-          "turn": 0,
-          "usd": 1.487855,
-          "usd_cumulative": 1.487855
-        },
-        {
           "share_cumulative": 0.329694234,
           "turn": 1,
-          "usd": 1.662984,
+          "usd": 3.150839,
           "usd_cumulative": 3.150839
         },
         {
-          "share_cumulative": 0.62907629,
-          "turn": 2,
-          "usd": 2.86115,
-          "usd_cumulative": 6.011989
-        },
-        {
           "share_cumulative": 0.829390996,
-          "turn": 3,
-          "usd": 1.914378,
+          "turn": 5,
+          "usd": 4.775528,
           "usd_cumulative": 7.926367
         },
         {
           "share_cumulative": 1.0,
-          "turn": 4,
+          "turn": 9,
           "usd": 1.630485,
           "usd_cumulative": 9.556852
         }
@@ -709,9 +691,9 @@
     "20260731T1430Z-A3-level2-carried-r3": {
       "adapter_turn_join": {
         "join_confidence": "degraded",
-        "joined_calls": 0,
+        "joined_calls": 8,
         "ledger_calls": 8,
-        "source": "unjoined: curves.json counts 7 billed call(s), the ledger has 8"
+        "source": "curves.json"
       },
       "billed_calls": 8,
       "campaign": "theoria-arm:A3-campaign-devpile",
@@ -866,7 +848,7 @@
       "outcome": "spend_gate_tripped",
       "pile": "dev",
       "reconciliation": {
-        "all_three_agree": false,
+        "all_three_agree": true,
         "bill_shape": {
           "billed_calls": 8,
           "declared_total_usd": 13.439862,
@@ -874,17 +856,14 @@
           "usd": 13.439862
         },
         "curves": {
-          "billed_calls": 7,
-          "declared_total_usd": 11.761053,
+          "billed_calls": 8,
+          "declared_total_usd": 13.439862,
           "join_confidence": "degraded",
           "present": true,
-          "turn_rows": 30,
-          "usd": 11.761053
+          "turn_rows": 31,
+          "usd": 13.439862
         },
-        "disagreements": [
-          "curves.json accounts for 7 billed call(s) over 30 turn row(s); the proxy ledger bills 8",
-          "curves.json totals 11.761053 USD over its turn rows; the proxy ledger totals 13.439862 USD (difference 1.678809)"
-        ],
+        "disagreements": [],
         "ledger": {
           "billed_calls": 8,
           "usd": 13.439862
@@ -945,49 +924,49 @@
       "turn_cost_curve_of_record": [
         {
           "share_cumulative": 0.115685042,
-          "turn": 0,
+          "turn": 1,
           "usd": 1.554791,
           "usd_cumulative": 1.554791
         },
         {
           "share_cumulative": 0.255664307,
-          "turn": 1,
+          "turn": 5,
           "usd": 1.881302,
           "usd_cumulative": 3.436093
         },
         {
           "share_cumulative": 0.372467887,
-          "turn": 2,
+          "turn": 9,
           "usd": 1.569824,
           "usd_cumulative": 5.005917
         },
         {
           "share_cumulative": 0.49640413,
-          "turn": 3,
+          "turn": 13,
           "usd": 1.665686,
           "usd_cumulative": 6.671603
         },
         {
           "share_cumulative": 0.62208548,
-          "turn": 4,
+          "turn": 17,
           "usd": 1.68914,
           "usd_cumulative": 8.360743
         },
         {
           "share_cumulative": 0.763987532,
-          "turn": 5,
+          "turn": 21,
           "usd": 1.907144,
           "usd_cumulative": 10.267887
         },
         {
           "share_cumulative": 0.875087333,
-          "turn": 6,
+          "turn": 25,
           "usd": 1.493166,
           "usd_cumulative": 11.761053
         },
         {
           "share_cumulative": 1.0,
-          "turn": 7,
+          "turn": 29,
           "usd": 1.678809,
           "usd_cumulative": 13.439862
         }
@@ -995,7 +974,7 @@
     },
     "20260731T1500Z-A3-sk48-carried-l1": {
       "adapter_turn_join": {
-        "join_confidence": "ambiguous-reconstructed",
+        "join_confidence": "exact",
         "joined_calls": 9,
         "ledger_calls": 9,
         "source": "curves.json"
@@ -1145,9 +1124,9 @@
         "curves": {
           "billed_calls": 9,
           "declared_total_usd": 12.251719,
-          "join_confidence": "ambiguous-reconstructed",
+          "join_confidence": "exact",
           "present": true,
-          "turn_rows": 5,
+          "turn_rows": 18,
           "usd": 12.251719
         },
         "disagreements": [],
@@ -1193,19 +1172,19 @@
         },
         {
           "share_cumulative": 0.4424211,
-          "turn": 2,
+          "turn": 5,
           "usd": 2.850453,
           "usd_cumulative": 5.420419
         },
         {
           "share_cumulative": 0.748923967,
-          "turn": 3,
+          "turn": 9,
           "usd": 3.755187,
           "usd_cumulative": 9.175606
         },
         {
           "share_cumulative": 1.0,
-          "turn": 4,
+          "turn": 13,
           "usd": 3.076113,
           "usd_cumulative": 12.251719
         }
@@ -1226,10 +1205,7 @@
       "20260731T1240Z-A3-level2-carried"
     ]
   },
-  "legs_with_disagreements": [
-    "20260731T1310Z-A3-level2-carried-r2",
-    "20260731T1430Z-A3-level2-carried-r3"
-  ],
+  "legs_with_disagreements": [],
   "measured_by_metric": {
     "E1": [
       "20260731T1310Z-A3-level2-carried-r2",

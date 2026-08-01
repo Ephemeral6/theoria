@@ -12,6 +12,7 @@
   "usd_cumulative_in_level",
   "usd_cumulative_in_leg",
   "surprise_total",
+  "turn_record_missing",
   "surprise_replay_mismatch",
   "surprise_render_mismatch",
   "surprise_proof_failure",
@@ -26,7 +27,7 @@
  "levels": [
   {
    "first_turn": 0,
-   "last_turn": 28,
+   "last_turn": 29,
    "level": 1,
    "surprise_total": [
     0,
@@ -58,10 +59,12 @@
     1,
     1,
     1,
-    1
+    1,
+    0
    ],
    "surprises": {
     "execution_mismatch": [
+     0,
      0,
      0,
      0,
@@ -123,6 +126,7 @@
      0,
      0,
      0,
+     0,
      0
     ],
     "probe_refutation": [
@@ -155,9 +159,11 @@
      1,
      1,
      1,
-     1
+     1,
+     0
     ],
     "proof_failure": [
+     0,
      0,
      0,
      0,
@@ -219,6 +225,7 @@
      0,
      0,
      0,
+     0,
      0
     ],
     "replay_mismatch": [
@@ -251,9 +258,11 @@
      0,
      0,
      0,
+     0,
      0
     ],
     "search_timeout": [
+     0,
      0,
      0,
      0,
@@ -316,7 +325,8 @@
     1,
     0,
     0,
-    0
+    0,
+    1
    ],
    "totals": {
     "http_commands": 234,
@@ -329,9 +339,9 @@
      "replay_mismatch": 1,
      "search_timeout": 0
     },
-    "theorize_rounds": 7,
-    "turns": 30,
-    "usd": 11.761053
+    "theorize_rounds": 8,
+    "turns": 31,
+    "usd": 13.439862
    },
    "turns": [
     0,
@@ -363,7 +373,8 @@
     25,
     26,
     27,
-    28
+    28,
+    29
    ],
    "usd": [
     0.0,
@@ -395,7 +406,8 @@
     1.493166,
     0.0,
     0.0,
-    0.0
+    0.0,
+    1.678809
    ],
    "usd_cumulative": [
     0.0,
@@ -427,7 +439,8 @@
     11.761053,
     11.761053,
     11.761053,
-    11.761053
+    11.761053,
+    13.439862
    ]
   }
  ],
@@ -451,6 +464,7 @@
    "surprise_total": 0,
    "theorize_rounds": 0,
    "turn": 0,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 0.0,
    "usd_cumulative_in_level": 0.0
@@ -472,6 +486,7 @@
    "surprise_total": 0,
    "theorize_rounds": 0,
    "turn": 0,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 0.0,
    "usd_cumulative_in_level": 0.0
@@ -493,6 +508,7 @@
    "surprise_total": 2,
    "theorize_rounds": 1,
    "turn": 1,
+   "turn_record_missing": false,
    "usd": 1.554791,
    "usd_cumulative_in_leg": 1.554791,
    "usd_cumulative_in_level": 1.554791
@@ -514,6 +530,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 2,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 1.554791,
    "usd_cumulative_in_level": 1.554791
@@ -535,6 +552,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 3,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 1.554791,
    "usd_cumulative_in_level": 1.554791
@@ -556,6 +574,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 4,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 1.554791,
    "usd_cumulative_in_level": 1.554791
@@ -577,6 +596,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 5,
+   "turn_record_missing": false,
    "usd": 1.881302,
    "usd_cumulative_in_leg": 3.436093,
    "usd_cumulative_in_level": 3.436093
@@ -598,6 +618,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 6,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 3.436093,
    "usd_cumulative_in_level": 3.436093
@@ -619,6 +640,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 7,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 3.436093,
    "usd_cumulative_in_level": 3.436093
@@ -640,6 +662,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 8,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 3.436093,
    "usd_cumulative_in_level": 3.436093
@@ -661,6 +684,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 9,
+   "turn_record_missing": false,
    "usd": 1.569824,
    "usd_cumulative_in_leg": 5.005917,
    "usd_cumulative_in_level": 5.005917
@@ -682,6 +706,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 10,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 5.005917,
    "usd_cumulative_in_level": 5.005917
@@ -703,6 +728,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 11,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 5.005917,
    "usd_cumulative_in_level": 5.005917
@@ -724,6 +750,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 12,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 5.005917,
    "usd_cumulative_in_level": 5.005917
@@ -745,6 +772,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 13,
+   "turn_record_missing": false,
    "usd": 1.665686,
    "usd_cumulative_in_leg": 6.671603,
    "usd_cumulative_in_level": 6.671603
@@ -766,6 +794,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 14,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 6.671603,
    "usd_cumulative_in_level": 6.671603
@@ -787,6 +816,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 15,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 6.671603,
    "usd_cumulative_in_level": 6.671603
@@ -808,6 +838,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 16,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 6.671603,
    "usd_cumulative_in_level": 6.671603
@@ -829,6 +860,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 17,
+   "turn_record_missing": false,
    "usd": 1.68914,
    "usd_cumulative_in_leg": 8.360743,
    "usd_cumulative_in_level": 8.360743
@@ -850,6 +882,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 18,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 8.360743,
    "usd_cumulative_in_level": 8.360743
@@ -871,6 +904,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 19,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 8.360743,
    "usd_cumulative_in_level": 8.360743
@@ -892,6 +926,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 20,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 8.360743,
    "usd_cumulative_in_level": 8.360743
@@ -913,6 +948,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 21,
+   "turn_record_missing": false,
    "usd": 1.907144,
    "usd_cumulative_in_leg": 10.267887,
    "usd_cumulative_in_level": 10.267887
@@ -934,6 +970,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 22,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 10.267887,
    "usd_cumulative_in_level": 10.267887
@@ -955,6 +992,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 23,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 10.267887,
    "usd_cumulative_in_level": 10.267887
@@ -976,6 +1014,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 24,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 10.267887,
    "usd_cumulative_in_level": 10.267887
@@ -997,6 +1036,7 @@
    "surprise_total": 1,
    "theorize_rounds": 1,
    "turn": 25,
+   "turn_record_missing": false,
    "usd": 1.493166,
    "usd_cumulative_in_leg": 11.761053,
    "usd_cumulative_in_level": 11.761053
@@ -1018,6 +1058,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 26,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 11.761053,
    "usd_cumulative_in_level": 11.761053
@@ -1039,6 +1080,7 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 27,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 11.761053,
    "usd_cumulative_in_level": 11.761053
@@ -1060,27 +1102,67 @@
    "surprise_total": 1,
    "theorize_rounds": 0,
    "turn": 28,
+   "turn_record_missing": false,
    "usd": 0.0,
    "usd_cumulative_in_leg": 11.761053,
    "usd_cumulative_in_level": 11.761053
+  },
+  {
+   "actions_taken": 0,
+   "campaign_turn_in_leg": 31,
+   "http_commands": 0,
+   "level": 1,
+   "model_calls": 1,
+   "step_idx": 34,
+   "surprise_execution_mismatch": 0,
+   "surprise_heuristic_miss": 0,
+   "surprise_probe_refutation": 0,
+   "surprise_proof_failure": 0,
+   "surprise_render_mismatch": 0,
+   "surprise_replay_mismatch": 0,
+   "surprise_search_timeout": 0,
+   "surprise_total": 0,
+   "theorize_rounds": 1,
+   "turn": 29,
+   "turn_record_missing": true,
+   "usd": 1.678809,
+   "usd_cumulative_in_leg": 13.439862,
+   "usd_cumulative_in_level": 13.439862
   }
  ],
  "run_id": "r-41e482ba348b4a3a",
  "schema": "theoria-arm/curves v1",
  "self_check": {
+  "accounts_for_every_billed_call": true,
+  "accounts_for_every_dollar": true,
   "accounts_for_every_env_step": true,
+  "billed_calls_over_the_curves": 8,
   "env_step_records_in_the_ledger": 234,
   "floor": "zero turns is refused outright. 0 == 0 satisfies the equality above, so an empty leg would otherwise write a file of zeros that reads exactly like a leg that was cheap.",
   "http_commands_over_the_curves": 234,
-  "turns": 30,
-  "why": "a curve is allowed to have fewer turns than the ledger has commands -- a turn issues several -- but it is never allowed to account for fewer commands than were issued. That difference is a hole in the accounting, and it is invisible in the plot: the curve just looks shorter."
+  "model_call_records_in_the_ledger": 8,
+  "turns": 31,
+  "turns_with_no_record_of_their_own": [
+   {
+    "model_calls": 1,
+    "step_idx": 34,
+    "turn": 29,
+    "usd": 1.678809
+   }
+  ],
+  "unattributed": "a turn the loop opened and never wrote down still gets a row -- flagged `turn_record_missing`, carrying its calls and its dollars, owning no ARC command. Absence is recorded as absence; a cost that vanishes is worse than a cost with no turn number.",
+  "usd_in_the_ledger": 13.439862,
+  "usd_over_the_curves": 13.439862,
+  "usd_tolerance": 1e-06,
+  "why": "a curve is allowed to have fewer turns than the ledger has commands -- a turn issues several -- but it is never allowed to account for fewer commands than were issued. That difference is a hole in the accounting, and it is invisible in the plot: the curve just looks shorter.",
+  "why_money_too": "the command equality above is blind to money, and that blindness had a cost. Two live legs ended on a tripped spend gate; the final desk call of each was billed by the pool and landed in no turn row, because inner/loop.py appends a turn record only after the turn's last ARC command and the gate killed the turn before it sent one. The missing turn had issued no command, so `http_commands` balanced exactly -- and the curve understated the leg by 17% and 12.5%. Commands and dollars are counted separately because a hole can open in either without moving the other."
  },
  "slug": "20260731T1430Z-A3-level2-carried-r3",
  "totals": {
   "levels": 1,
   "surprises": 29,
-  "theorize_rounds": 7,
-  "turns": 30,
-  "usd": 11.761053
+  "theorize_rounds": 8,
+  "turns": 31,
+  "usd": 13.439862
  }
 }

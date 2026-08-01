@@ -331,11 +331,11 @@
   },
   {
    "path": "curves.json",
-   "sha256": "9b51f42a3a4f24728a99a82c09d08711fd3e93c081ccaa2bf16b9fa42ae13d73"
+   "sha256": "61fac46b6941b09da130d51daefacc7cdde0cff8d2d765a5c2280f134ac5a543"
   },
   {
    "path": "curves/level-01.json",
-   "sha256": "8578dc866d98d98e35037caa3b95d98adc7a7278dee9d678f57f16436b459926"
+   "sha256": "6b28982fc0d0ad4b6a98d8f78a28d9d34df10d7880874dbc2d3d4cd1d3c91c82"
   },
   {
    "path": "desk/call-001-theorize-round1.md",

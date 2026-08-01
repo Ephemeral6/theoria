@@ -147,11 +147,11 @@
   },
   {
    "path": "curves.json",
-   "sha256": "72b9234a05e8c57e4e2a266e46550ecb336c66b8433114cf167a94590c7ab11d"
+   "sha256": "d0e4047a00cfbcc24d0f51fc0323841bc182a4f7df531e44b7d5047058ac0b87"
   },
   {
    "path": "curves/level-01.json",
-   "sha256": "2f5b2bba084f92da9d37db923e4ff3ac7f9ba4171bdf09c0eaaa9e8b49302e53"
+   "sha256": "81e37e1f1ea506b8b37941daf74e706d8545f6c83761f94596d50bb9e0f04dc1"
   },
   {
    "path": "desk_failures.json",

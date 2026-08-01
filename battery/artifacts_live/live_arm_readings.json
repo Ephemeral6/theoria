@@ -33,6 +33,10 @@
     {
       "reason": "refused: env_upstream is 'http://127.0.0.1:55064' -- this leg played a local mock, not the live environment",
       "slug": "a3-gate-mock"
+    },
+    {
+      "reason": "refused: env_upstream is 'http://127.0.0.1:55971' -- this leg played a local mock, not the live environment",
+      "slug": "audit-smoke"
     }
   ],
   "families": {
@@ -503,7 +507,7 @@
       "books/playbook.dsl": "sha256:860caf0c197754f8ff3a97e2b54082c6f09f2f22f1550a4968aa6c367df8b39e",
       "books/theory.dsl": "sha256:bee9cf7383982513e09dd8bef97826f4295f14c7b0b7c3bc846b4ed842fbba5f",
       "certify.json": "sha256:d6bf0f735fa404dadd2a29def6b52b524158f0255ae9a60a1ea8e350b1a3a493",
-      "curves.json": "sha256:72b9234a05e8c57e4e2a266e46550ecb336c66b8433114cf167a94590c7ab11d",
+      "curves.json": "sha256:d0e4047a00cfbcc24d0f51fc0323841bc182a4f7df531e44b7d5047058ac0b87",
       "ledger.jsonl": "sha256:9e161455bf5ccfe1d4dfb4c2dd7ba7d53a41bba8060f392446550a1722918ed5",
       "probes.jsonl": "sha256:cfb5125dbc330b2118c5ce450d6dc8ebbc0ef3c43aafe3674fc8331b236032f2",
       "surprises.jsonl": "sha256:24a5e0ed68fb0248aca8761fcb6d6bfbca496efe830397ef3c84d39bb461d7ee",
@@ -513,7 +517,7 @@
       "books/playbook.dsl": "sha256:36888fc272c978da503f4c94d6b24429b69cc53d5233e3b2655ffe2ffde5d9b4",
       "books/theory.dsl": "sha256:f073ce4a955261d2a6cf78a07d0cbc16a483eb2b80f5827008b167e6abb1d881",
       "certify.json": "sha256:423c23721cf58cc57092c858009519759cc314b6cc3f8ed58fb1985d226009ab",
-      "curves.json": "sha256:325a9bcb5652491ef456437049e653cb83f7fd37cddc95c6d1f3aea4c2e3d821",
+      "curves.json": "sha256:80210517306cda62181c1874056b53f3d5fcff5ca35e1ea8ecc3ba95da69f5fc",
       "ledger.jsonl": "sha256:75e5fa0f51f035e568ac8101938f6c33858f2582c4a3118bf9c9253be937a99c",
       "probes.jsonl": "sha256:a5e3489580159f06b46ee883d4e74fbe9794a2f0f8373072a2ef8989d3f23bac",
       "surprises.jsonl": "sha256:b95449691b03e197826060bf8db29c03d69c2acb81fe8e7e08105709a8de1584",
@@ -523,7 +527,7 @@
       "books/playbook.dsl": "sha256:8945e784b0aba80860a9238fb04607d20fdba5be440848797536030bb752fc16",
       "books/theory.dsl": "sha256:8ae0c50c9a158ac20fde764545cc873f668e34ccd31988a91238fc6f787ed090",
       "certify.json": "sha256:0529786ac3f1388b8654b24b9df52e7b263026101c6a500e4add0f29c8d2ef4f",
-      "curves.json": "sha256:9b51f42a3a4f24728a99a82c09d08711fd3e93c081ccaa2bf16b9fa42ae13d73",
+      "curves.json": "sha256:61fac46b6941b09da130d51daefacc7cdde0cff8d2d765a5c2280f134ac5a543",
       "ledger.jsonl": "sha256:871283871820549888426d69ccf1fdbd892b8720fc983668fc97cbc86c0e2ed3",
       "probes.jsonl": "sha256:329f84017959006e572c1b85c24f2ae7edc97a8e1235f4a0bf8d00eb280ccab3",
       "surprises.jsonl": "sha256:12eec8ca24ce366e3600e2652f8c3bbc80828cc126b5a76809704959d3dace0b",
@@ -533,7 +537,7 @@
       "books/playbook.dsl": "sha256:746e1406a1bf7917b6d43c60c7a934e9f6c95dfd9284af79bb7ac4f74720228f",
       "books/theory.dsl": "sha256:7e51ce0aeb056fa8ed2aa249dbb465ed55810b34dc122fd7c2a8e206143f6d49",
       "certify.json": "sha256:d8d0859e1a571e8c490d97a33f22072ec6e91feb12fa9717631302cd25c31bc1",
-      "curves.json": "sha256:b3cc75bad0f5f4a393cba53f3a1c6cb0b1ae3086c954191d4f233edb4eca3c73",
+      "curves.json": "sha256:84e968a6a73ecd9b8013550ff57b489e0da76fa197d5d0525217525669209d38",
       "ledger.jsonl": "sha256:88690c5cf32066c099d5403b105f2b976f04ae67a7adf13868c6c5c69256420e",
       "probes.jsonl": "sha256:0b0654cd8895ba0d0d0a73b8c9a5db8bd08fa8adbfcbe870567e8e47960bbed7",
       "surprises.jsonl": "sha256:097210d25c551274e3ab8ecad3867b4e9a4e4adca8527b5246a7579475b43bb4",
@@ -1631,15 +1635,15 @@
         },
         "turn_join": {
           "join_confidence": "degraded",
-          "joined_calls": 0,
+          "joined_calls": 5,
           "ledger_calls": 5,
-          "source": "unjoined: curves.json counts 4 billed call(s), the ledger has 5"
+          "source": "curves.json"
         }
       },
       "pile": "dev",
       "source": "theoria-arm-live",
       "steps": 99,
-      "turns": 5
+      "turns": 3
     },
     "20260731T1430Z-A3-level2-carried-r3": {
       "arm": "theoria",
@@ -1931,9 +1935,9 @@
         },
         "turn_join": {
           "join_confidence": "degraded",
-          "joined_calls": 0,
+          "joined_calls": 8,
           "ledger_calls": 8,
-          "source": "unjoined: curves.json counts 7 billed call(s), the ledger has 8"
+          "source": "curves.json"
         }
       },
       "pile": "dev",
@@ -2223,7 +2227,7 @@
           "replay_mismatch": 9
         },
         "turn_join": {
-          "join_confidence": "ambiguous-reconstructed",
+          "join_confidence": "exact",
           "joined_calls": 9,
           "ledger_calls": 9,
           "source": "curves.json"

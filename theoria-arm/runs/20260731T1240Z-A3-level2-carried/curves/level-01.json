@@ -12,6 +12,7 @@
   "usd_cumulative_in_level",
   "usd_cumulative_in_leg",
   "surprise_total",
+  "turn_record_missing",
   "surprise_replay_mismatch",
   "surprise_render_mismatch",
   "surprise_proof_failure",
