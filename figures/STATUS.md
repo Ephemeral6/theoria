@@ -34,6 +34,45 @@ each control *before* the check it guards.
 
 ## Standing rulings
 
+### D-F-008 · A discovery rule names a **role**, not a filename; and the plate states the C2 verdict rather than implying it (2026-08-01)
+
+`theoria-arm` renamed its per-call cost record from `cost_curve.json` to
+`bill_shape.json`. `sources.DISCOVERY`'s `theoria_run` rule named the old file,
+so seven billing legs — tracked, committed, `USD 85.600207` between them — were
+read by no figure for three days. P8's promise, that a run which lands enters the
+figure with no code edit, held only for as long as the arm kept spelling one
+filename the same way; a family declared by one filename is a hand-written tuple
+with extra steps.
+
+**The ruling.** `Rule.alternates` declares, per member, the other filenames that
+satisfy the same role. Resolution is **first declared, first present** — never
+newest-on-disk, because which file a build reads must not depend on mtime — and
+**every present candidate is declared**, not only the winning one, so a run
+carrying two spellings has both in `SOURCES.sha256` and the cross-check between
+them reads a declared source rather than a raw path. The alternation's soundness
+is re-measured on every build (`fig02._theoria_dialect_crosscheck`) on the one
+directory that carries both, rather than asserted in a comment.
+
+**What saved the probe, and what did not.** `check_coverage.py` *did* fire, and
+named the wrong cause — "a manifest claims spend and no cost curve stands beside
+it", a true sentence about a file that was there under another name. Its literal
+inventory is the reason it fired at all: read off `sources.DISCOVERY`, the rename
+would have narrowed the oracle in the same motion and it would have gone silent.
+Its pre-P8 negative control stayed **green through the whole failure**, which is
+the argument for `_rename_control` beside it: a control that passed over a live
+defect has been shown not to cover it.
+
+**And the plate now states its own verdict.** With 12 theoria curves instead of 5,
+the four legs long enough to have a shape do not show what Theoria.md 1.6
+predicts: one front-heavy, three flat to back-heavy, and the single leg that
+tapers to zero is `budget_exhausted` — a budget cutoff drawn on a cost axis is
+indistinguishable from convergence and is not convergence. Every other leg ends
+`spend_gate_tripped`. C2 is UNCONFIRMED and the caption says so in those words,
+because a flat curve and a converging one look alike at a glance when the curve
+is six points long, and leaving that to the reader is how a figure asserts
+something its author would not sign. Full working:
+`runs/20260801T1200Z-figures-bill-shape/RUN_STATE.md`.
+
 ### D-F-006 · The envelope ledger shards are tracked, and the guarantee is derived from git rather than counted (V23, 2026-07-29)
 
 `envelope_ledger` was written `tracked=False, optional=True, floor=0` because the
@@ -186,4 +225,19 @@ narrative from P4:
 * Gate 9 reports a standing `KNOWN DEFECT RESET_IN_DENOMINATOR` — 78 runs where
   `capability_spectrum.actions` counts the successful RESET, against
   `proxy/SCORING.md:60-62`. Reported on every run rather than subtracted.
+* fig02's C2 floor (`_C2_MIN_BILLED_STEPS = 4`) is this plate's own judgement and
+  is derived from nothing. It excludes eight drawn legs, which are listed by name
+  so the choice is auditable — but a different floor gives a different
+  denominator.
+* fig02's x-axis is `step_idx`. `bill_shape.json` also carries a game `turn`,
+  which is the more honest number; switching would move every already-published
+  curve for a cosmetic gain, so it was **deliberately not switched** (D-F-008).
+* fig02's C2 verdict is written in ASCII although Theoria.md 1.6's own phrasing is
+  Chinese: matplotlib's SVG writer does not carry those code points through
+  intact here and what lands in the file depends on the machine's codepage, which
+  would make gate 3 machine-dependent. The claim is glossed and cited on the
+  plate.
+* The `alternates` mechanism is tested against exactly one run — the only one
+  carrying both spellings. A second rename would be caught by
+  `check_coverage.py`'s literals alone, which is one instrument rather than two.
 * **Gates prove reproducibility, not correctness.** Look at the plates.

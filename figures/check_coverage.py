@@ -79,7 +79,20 @@ import sources  # noqa: E402
 #: disagreement is the finding; one description checked against itself cannot
 #: disagree with anything.
 THEORIA_ROOT = "theoria-arm/runs"
-THEORIA_MEMBERS = ("cost_curve.json", "MANIFEST.json")
+
+#: The filenames that can carry a theoria run's per-call cost record, stated as
+#: literals for the same reason the roots are. On 2026-08-01 the arm's rename
+#: from ``cost_curve.json`` to ``bill_shape.json`` hid seven billing legs from
+#: the plate, and this probe **did** report them -- as "a manifest claims spend
+#: and no cost curve stands beside it", which is a true sentence that names the
+#: wrong cause. Had this tuple been read off ``sources.DISCOVERY`` it would have
+#: been narrowed by the same rename, and the probe would have gone silent
+#: instead: the run directories would have carried "no members at all" and been
+#: skipped by the oracle exactly as they were by the rule. That is the third
+#: time this file's inventory has had to be pulled back out of the thing it
+#: audits, and this is the shape the pull-back takes for an alternation.
+THEORIA_CURVE_NAMES = ("cost_curve.json", "bill_shape.json")
+THEORIA_MEMBERS = ("MANIFEST.json",)
 ROLLUP_ROOT = "baseline-arms/out"
 ROLLUP_PATTERN = "pilot_*.json"
 
@@ -96,6 +109,40 @@ def _walk(rel_dir: str) -> list[str]:
         return []
 
 
+def _curve_names_present(entry: str) -> list[str]:
+    """Which of the accepted cost-record spellings this directory carries."""
+    return [
+        n
+        for n in THEORIA_CURVE_NAMES
+        if os.path.isfile(_abs(f"{THEORIA_ROOT}/{entry}/{n}"))
+    ]
+
+
+def _curve_calls(entry: str) -> list | None:
+    """The per-call records under whichever spelling is present, or ``None``.
+
+    Both dialects are read, because the oracle must be able to see a run under
+    either name whatever the rule currently accepts. ``bill_shape.json`` wraps
+    the list in a document; ``cost_curve.json`` is the bare list. An unreadable
+    or unrecognised file counts as **present with unknown contents**, reported
+    as an empty call list beside a manifest that may claim spend -- which is a
+    failure downstream, not a silent skip.
+    """
+    present = _curve_names_present(entry)
+    if not present:
+        return None
+    try:
+        with open(_abs(f"{THEORIA_ROOT}/{entry}/{present[0]}"), encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (OSError, ValueError):
+        return []
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict) and isinstance(payload.get("calls"), list):
+        return payload["calls"]
+    return []
+
+
 def _theoria_dirs_with_cost() -> list[tuple[str, list, dict]]:
     """``(dir, cost_rows, manifest)`` for every run directory on disk that billed.
 
@@ -104,16 +151,21 @@ def _theoria_dirs_with_cost() -> list[tuple[str, list, dict]]:
     """
     out: list[tuple[str, list, dict]] = []
     for entry in _walk(THEORIA_ROOT):
-        curve_path = _abs(f"{THEORIA_ROOT}/{entry}/cost_curve.json")
-        if not os.path.isfile(curve_path):
+        rows = _curve_calls(entry)
+        if rows is None:
             continue
-        with open(curve_path, encoding="utf-8") as fh:
-            rows = json.load(fh)
         manifest_path = _abs(f"{THEORIA_ROOT}/{entry}/MANIFEST.json")
-        manifest: dict = {}
-        if os.path.isfile(manifest_path):
-            with open(manifest_path, encoding="utf-8") as fh:
-                manifest = json.load(fh)
+        if not os.path.isfile(manifest_path):
+            # A curve with no manifest is not a run this question can ask about
+            # -- there is no slug to look for on the plate and no outcome to
+            # carry. It is a half-written directory, and it is named as one by
+            # _partial_theoria_dirs. Reporting it here as well would be the same
+            # directory failing twice under two descriptions, and the second
+            # description ("neither drawn nor named") would be false: it is
+            # named, one section up.
+            continue
+        with open(manifest_path, encoding="utf-8") as fh:
+            manifest = json.load(fh)
         out.append((entry, rows, manifest))
     return out
 
@@ -170,12 +222,21 @@ def _partial_theoria_dirs() -> tuple[list[str], list[str]]:
     failures: list[str] = []
     named: list[str] = []
     for entry in _walk(THEORIA_ROOT):
+        curve_names = _curve_names_present(entry)
         present = [
             m for m in THEORIA_MEMBERS if os.path.isfile(_abs(f"{THEORIA_ROOT}/{entry}/{m}"))
-        ]
-        if not present or len(present) == len(THEORIA_MEMBERS):
+        ] + curve_names
+        # The curve role is one role under two spellings, so "all members" means
+        # every plain member plus *at least one* curve name -- not both of them.
+        # Counting the alternation as two members would have reported every run
+        # in the repository as half-written, which is the same failure as
+        # reporting none of them: a probe nobody can read.
+        required = len(THEORIA_MEMBERS) + 1
+        if not present or len(present) >= required:
             continue
         missing = [m for m in THEORIA_MEMBERS if m not in present]
+        if not curve_names:
+            missing = missing + [" or ".join(THEORIA_CURVE_NAMES)]
         shape = f"{entry} (has {', '.join(present)}; missing {', '.join(missing)})"
         claims = _manifest_claims_spend(entry)
         if claims:
@@ -277,6 +338,69 @@ _PRE_P8_PATTERN = "pilot_????-*.json"
 #: The two runs that drift D-1 left drawn as outcome-unknown.
 _PRE_P8_VICTIMS = ("bare_cc-g50t-claude-sonnet-5-ddabe772", "bare_cc-sk48-claude-sonnet-5-9022a076")
 
+#: The billing legs that the ``cost_curve.json`` -> ``bill_shape.json`` rename
+#: hid from the plate between 2026-07-31 and 2026-08-01. Named, because a
+#: control that says "some run fires" is satisfied by any accident.
+_RENAME_VICTIMS = (
+    "20260731T1310Z-A3-level2-carried-r2",
+    "20260731T1430Z-A3-level2-carried-r3",
+    "20260731T1500Z-A3-sk48-carried-l1",
+    "20260731T231654Z-R1-g50t-a",
+    "20260731T231654Z-R1-sk48-b",
+    "20260801T001851Z-R1b-g50t-a",
+    "20260801T001851Z-R1b-sk48-b",
+)
+
+
+def _rename_control() -> list[str]:
+    """Drop the ``bill_shape.json`` alternate and require the probe to fire.
+
+    The defect of 2026-08-01, reconstructed. ``theoria-arm`` renamed its
+    per-call cost record and ``sources.DISCOVERY``'s theoria rule named the old
+    file, so seven billing legs -- tracked, committed, USD 85.60 between them --
+    were read by nothing. The alternation in ``Rule.alternates`` is the fix, and
+    this control is the reason to believe it is load-bearing rather than
+    decorative: with the alternate removed, every one of the seven must be
+    reported **by name**.
+
+    It is a distinct control from the pre-P8 one above and not a variation of
+    it. That one narrows a *pattern* and asks whether an outcome reaches the
+    plate; this one narrows an *alternation* and asks whether a run reaches the
+    plate at all. The first stayed green through this defect, which is the
+    whole argument for writing the second: a control that passed over a live
+    failure has been shown not to cover it.
+    """
+    problems: list[str] = []
+    original_rules = sources.DISCOVERY
+    original_found = dict(sources.DISCOVERED)
+    try:
+        sources.DISCOVERY = tuple(
+            dataclasses.replace(r, alternates=(), floor=7)
+            if r.name == fig02.THEORIA_RULE
+            else r
+            for r in original_rules
+        )
+        sources.DISCOVERED = {r.name: sources._discover(r) for r in sources.DISCOVERY}
+        narrowed = len(sources.discovered_groups(fig02.THEORIA_RULE))
+        if narrowed != 7:
+            problems.append(
+                "the rename control could not reconstruct the 2026-07-31 tree: expected "
+                f"the un-alternated rule to find 7 theoria runs, it found {narrowed}"
+            )
+            return problems
+        fired = check()
+        for victim in _RENAME_VICTIMS:
+            if not any(victim in f for f in fired):
+                problems.append(
+                    f"NEGATIVE CONTROL FAILED: with bill_shape.json removed from the "
+                    f"theoria rule's alternation, {victim} bills real money and reaches "
+                    "no figure, and the probe did not say so by name."
+                )
+    finally:
+        sources.DISCOVERY = original_rules
+        sources.DISCOVERED = original_found
+    return problems
+
 
 def self_test() -> list[str]:
     """Put the tree back the way it was before P8 and require the probe to fire.
@@ -363,6 +487,7 @@ def self_test() -> list[str]:
     finally:
         sources.DISCOVERY = original_rules
         sources.DISCOVERED = original_found
+    problems.extend(_rename_control())
     return problems
 
 
@@ -375,7 +500,9 @@ def main() -> int:
             return 1
         print(
             "coverage self-test ok: narrowed to the pre-P8 roll-up list, the probe "
-            f"reports both runs it was written to catch ({', '.join(_PRE_P8_VICTIMS)})."
+            f"reports both runs it was written to catch ({', '.join(_PRE_P8_VICTIMS)}); "
+            "with bill_shape.json dropped from the theoria rule's alternation, it "
+            f"reports all {len(_RENAME_VICTIMS)} legs the 2026-08-01 rename hid."
         )
         return 0
 

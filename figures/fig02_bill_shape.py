@@ -353,6 +353,75 @@ def _cost_basis(curves: list[dict]) -> dict | None:
     return max(played, key=lambda c: (c["ledger_cost"], c["run_id"]))
 
 
+#: The two spellings of the theoria arm's per-call cost record, and how to get
+#: the call list out of each. `cost_curve.json` was the name until
+#: 20260729T105729Z-leg01; `bill_shape.json` is the name the arm writes now, and
+#: it wraps the same list in a document that also carries `totals` and a
+#: `reading` note. A third shape is refused rather than guessed at: guessing a
+#: dialect is how a cost column silently becomes wrong, which is the rule this
+#: module already applies to the two ledger dialects.
+def _theoria_calls(entry: str, name: str, payload) -> tuple[list[dict], str]:
+    """``(calls, note)`` from either dialect. Raises on anything else."""
+    if name == "cost_curve.json":
+        if not isinstance(payload, list):
+            raise ValueError(
+                f"theoria run {entry}: cost_curve.json is {type(payload).__name__}, not a "
+                "list of per-call records. The arm's schema changed and this figure must "
+                "not guess how."
+            )
+        return payload, ""
+    if name == "bill_shape.json":
+        if not isinstance(payload, dict) or not isinstance(payload.get("calls"), list):
+            raise ValueError(
+                f"theoria run {entry}: bill_shape.json carries no 'calls' list. The arm's "
+                "schema changed and this figure must not guess how."
+            )
+        return payload["calls"], (
+            f"theoria {entry}: read from bill_shape.json, the arm's current name for the "
+            "per-call cost record. Same role as cost_curve.json, same step_idx keying, "
+            "same usd field; it additionally carries a game `turn` (offset from step_idx "
+            "by the pre-roll) and a `totals` block, neither of which this plate's x-axis "
+            "uses -- the axis is still step_idx, so no already-published curve moves."
+        )
+    raise ValueError(f"theoria run {entry}: {name} is not a cost-record dialect this figure reads")
+
+
+def _theoria_dialect_crosscheck(entry: str, members: dict) -> list[str]:
+    """When a run carries both spellings, are they the same bill?
+
+    The alternation in ``sources.Rule`` is only as good as the claim that the
+    two names mean the same thing, and exactly one run directory
+    (20260728T083400Z-E3-sk48-carried-v2) is in a position to test it. So it is
+    tested on every build rather than asserted in a comment: same step_idx
+    multiset, same total to the cent. A disagreement is reported and **not**
+    reconciled -- if the arm's two writers ever diverge, the figure should say
+    which run and by how much, not quietly pick the one it prefers.
+    """
+    if not ({"cost_curve.json", "bill_shape.json"} <= set(members)):
+        return []
+    old, _ = _theoria_calls(entry, "cost_curve.json", sources.read_json(members["cost_curve.json"].key))
+    new, _ = _theoria_calls(entry, "bill_shape.json", sources.read_json(members["bill_shape.json"].key))
+    old_total = sum(float(r["usd"]) for r in old)
+    new_total = sum(float(r["usd"]) for r in new)
+    old_steps = sorted(int(r["step_idx"]) for r in old)
+    new_steps = sorted(int(r["step_idx"]) for r in new)
+    if old_steps != new_steps or abs(old_total - new_total) > COST_TOLERANCE_USD:
+        return [
+            f"MISMATCH (not reconciled) theoria {entry}: cost_curve.json and "
+            f"bill_shape.json describe different bills -- {len(old)} call(s) summing "
+            f"{old_total:.6f} USD against {len(new)} call(s) summing {new_total:.6f} USD. "
+            "cost_curve.json is drawn because it is declared first; the disagreement is "
+            "reported because the alternation between the two names is only sound while "
+            "they agree."
+        ]
+    return [
+        f"theoria {entry} carries both cost-record dialects and they agree: "
+        f"{len(old)} call(s), {old_total:.6f} USD, identical step_idx sequence either "
+        "way. This is the only run in a position to test the alternation, and it is "
+        "tested on every build rather than asserted once."
+    ]
+
+
 def _load_theoria_curves() -> tuple[list[dict], list[str]]:
     """The theoria arm's curves, from ``cost_curve.json`` + ``MANIFEST.json``.
 
@@ -382,15 +451,25 @@ def _load_theoria_curves() -> tuple[list[dict], list[str]]:
     groups = sources.discovered_groups(THEORIA_RULE)
     notes.append(
         f"theoria: {len(groups)} run director(ies) found by rule {THEORIA_RULE!r} under "
-        f"{sources.rule(THEORIA_RULE).root}/, each carrying both "
-        f"{' and '.join(sources.rule(THEORIA_RULE).members)}. Directories carrying only "
-        "one of the two are skipped by the rule rather than by omission from a list."
+        f"{sources.rule(THEORIA_RULE).root}/, each carrying a MANIFEST.json beside a "
+        "per-call cost record under either accepted name ("
+        + " or ".join(sources.rule(THEORIA_RULE).candidates("cost_curve.json"))
+        + "). Directories carrying only one of the two are skipped by the rule rather "
+        "than by omission from a list. The alternation is why this count is 16 and not "
+        "the 7 it was on 2026-07-31: the arm renamed its cost record and a rule keyed on "
+        "a filename rather than on a role stopped seeing every leg written since."
     )
 
     for entry, members in groups:
-        curve_key = members["cost_curve.json"].key
+        curve_name, curve_src = sources.resolve_member(
+            THEORIA_RULE, members, "cost_curve.json"
+        )
+        curve_key = curve_src.key
         manifest_key = members["MANIFEST.json"].key
-        rows = sources.read_json(curve_key)
+        rows, dialect_note = _theoria_calls(entry, curve_name, sources.read_json(curve_key))
+        if dialect_note:
+            notes.append(dialect_note)
+        notes.extend(_theoria_dialect_crosscheck(entry, members))
         manifest = sources.read_json(manifest_key)
         # A newly landed run reaches this loop without anyone reviewing it, which
         # is the point of discovery and also its risk: a malformed manifest would
@@ -409,7 +488,7 @@ def _load_theoria_curves() -> tuple[list[dict], list[str]]:
         if not rows:
             empty.append(slug)
             notes.append(
-                f"theoria {slug}: cost_curve.json is empty -- no model call was "
+                f"theoria {slug}: {curve_name} is empty -- no model call was "
                 "billed, so no curve. Not a zero-cost run; a run with no calls."
             )
             continue
@@ -419,9 +498,34 @@ def _load_theoria_curves() -> tuple[list[dict], list[str]]:
         for row in rows:
             turn = int(row["step_idx"])
             per_turn[turn] = per_turn.get(turn, 0.0) + float(row["usd"])
-            models.add(str(row["model"]))
+            if "model" in row:
+                models.add(str(row["model"]))
+        if not models:
+            # `bill_shape.json` carries no per-call model, so the model comes
+            # from the manifest's own price-table breakdown -- the arm's
+            # statement about the same calls, not a guess and not a default.
+            # A run that spans models must say so; one that names none is
+            # recorded as naming none rather than being labelled with the
+            # ladder's most convenient rung.
+            models = set(
+                ((manifest.get("cost") or {}).get("from_price_table") or {}).get(
+                    "per_model"
+                )
+                or {}
+            )
+            if models:
+                notes.append(
+                    f"theoria {slug}: {curve_name} carries no per-call model field, so "
+                    f"the model is taken from MANIFEST cost.from_price_table.per_model "
+                    f"({', '.join(sorted(models))}). Both describe the same calls; this "
+                    "is a second reading of one fact, not a substitute for a missing one."
+                )
         if len(models) != 1:
-            raise ValueError(f"theoria {slug}: calls span models {sorted(models)}")
+            raise ValueError(
+                f"theoria {slug}: {curve_name} and MANIFEST between them name "
+                f"{len(models)} model(s) {sorted(models)} for a run with billed calls. "
+                "One curve is one model's price; this figure must not average two."
+            )
 
         total = sum(per_turn[t] for t in sorted(per_turn))
         declared = cost.get("cli_reported_usd")
@@ -514,7 +618,7 @@ def _load_theoria_curves() -> tuple[list[dict], list[str]]:
         else "the manifest carries no cache-TTL diagnosis for this run, so none is claimed"
     )
     notes.append(
-        "theoria cost basis: cost_curve.json carries the provider's own "
+        "theoria cost basis: the arm's per-call cost record carries the provider's own "
         f"arithmetic ({fcost['cli_reported_usd']:.6f} USD over "
         f"{fcost['model_calls']} calls on {basis['manifest']['slug']}). The repo's price "
         f"table recomputes {fcost['from_price_table']['usd_total']:.6f}, a "
@@ -902,6 +1006,9 @@ def extract() -> tuple[list[dict], dict, list[str]]:
     shape, shape_notes = _load_shape_metrics()
     notes.extend(shape_notes)
     notes.extend(_attach_shape(curves, shape))
+    c2_sentence, c2_notes = _c2_verdict(curves)
+    notes.extend(c2_notes)
+    notes.append(c2_sentence)
     return curves, shape, notes
 
 
@@ -1490,6 +1597,8 @@ def _caveat_text(curves: list[dict], shape: dict) -> str:
         "bound does not reproduce. The panel is annotated with REPORT_V0's band, which is the "
         f"one it was drawn against. {_envelope_caveat()} "
         + _shape_caveat(curves, shape)
+        + " "
+        + _c2_verdict(curves)[0]
     )
 
 
@@ -1519,6 +1628,169 @@ def _envelope_caveat() -> str:
         "in a release tree (release/LICENCE_POSTURE.md classes them B, excluded by "
         "default), and absence is not zero."
     )
+
+
+#: A leg needs this many *distinct billed steps* before its bill has a shape at
+#: all. Two points make a slope and nothing else; the number below is this
+#: plate's own, declared here rather than borrowed from
+#: `battery/metrics/economy.py`'s MIN_TURNS_FOR_SHAPE -- E2 is a Phase 4 primary
+#: endpoint counting a different thing on a different axis, and quietly reusing
+#: its floor would be this plate asserting a definition it is not entitled to.
+#: Legs under the floor are reported by name as too short, never folded into a
+#: majority.
+_C2_MIN_BILLED_STEPS = 4
+
+#: "Trailing to zero" means the last billed step costs under this fraction of
+#: the leg's most expensive one. It is deliberately generous: at a tenth of peak
+#: the arm has all but stopped buying, which is what 收敛后趋零 asserts, and a
+#: threshold that no leg can clear is a threshold that proves nothing.
+_C2_TAIL_FRACTION = 0.10
+
+
+def _outcome_tally(legs: list[dict], run_ids: list[str]) -> dict[str, list[str]]:
+    """``{outcome: [run_id, ...]}`` over named legs. ``None`` keeps its own bucket.
+
+    Written as a helper rather than inline because both C2 sentences want it and
+    a claim like "every one of them tripped the spend gate" is the kind of thing
+    that is true when it is typed and false a week later. Derived, so it cannot
+    be.
+    """
+    tally: dict[str, list[str]] = {}
+    for run_id in run_ids:
+        outcome = next(c["outcome"] for c in legs if c["run_id"] == run_id)
+        tally.setdefault("outcome absent" if outcome is None else str(outcome), []).append(run_id)
+    return tally
+
+
+def _c2_verdict(curves: list[dict]) -> tuple[str, list[str]]:
+    """What the theoria legs actually show about C2. ``(sentence, notes)``.
+
+    Theoria.md 1.6 predicts 前重后轻，收敛后趋零 -- front-heavy, tapering, and
+    approaching zero once the theory converges. Until 2026-08-01 the plate drew
+    one long theoria leg and left the reader to infer the rest. It now draws
+    eight, and the inference the reader would draw is wrong, so it is stated
+    instead.
+
+    Two descriptive quantities, both computed off the drawn points and neither
+    of them E2 (E2 is the battery's, is defined on a different axis, and is
+    ABSENT for every live theoria leg because battery v2 does not score this
+    arm -- see ``_shape_caveat``):
+
+    * **front-half share** -- the fraction of a leg's spend falling in the first
+      half of its billed-step span. Above 0.5 is front-heavy; at 0.5 the bill is
+      flat; below 0.5 it is back-heavy.
+    * **tail ratio** -- the last billed step's cost over the leg's peak. Near
+      zero is the taper the claim predicts.
+
+    A verdict either way is reportable. That matters: this function was written
+    expecting to confirm C2, and what it says is the opposite.
+    """
+    notes: list[str] = []
+    legs = sorted(
+        (c for c in curves if c["arm"] != BASELINE_ARM and c["points"]),
+        key=lambda c: c["run_id"],
+    )
+    if not legs:
+        return (
+            "C2 SHAPE, MEASURED: no theoria leg is drawn on this build, so the plate "
+            "makes no statement about the bill's shape at all.",
+            notes,
+        )
+
+    long_legs: list[tuple[str, float, float, int]] = []
+    short: list[str] = []
+    for c in legs:
+        steps = [p["turn"] for p in c["points"]]
+        costs = [p["cost_usd"] for p in c["points"]]
+        if len(steps) < _C2_MIN_BILLED_STEPS:
+            short.append(f"{c['run_id']} ({len(steps)})")
+            continue
+        span = steps[-1] - steps[0]
+        midpoint = steps[0] + span / 2
+        total = sum(costs)
+        front = sum(k for s, k in zip(steps, costs) if s <= midpoint) / total
+        peak = max(costs)
+        tail = costs[-1] / peak if peak else 0.0
+        long_legs.append((c["run_id"], front, tail, len(steps)))
+
+    if not long_legs:
+        return (
+            "C2 SHAPE, MEASURED: NOT ONE drawn theoria leg reaches "
+            f"{_C2_MIN_BILLED_STEPS} distinct billed steps, so no leg on this plate has "
+            "a bill shape to read. The short ones are "
+            + ", ".join(short)
+            + " (billed steps in brackets). The shape Theoria.md 1.6 predicts "
+            "(front-heavy, tapering to nothing once the theory converges) is UNTESTED "
+            "here, which is not the same as unsupported and is very much not the same "
+            "as confirmed.",
+            notes,
+        )
+
+    front_heavy = [n for n, f, _, _ in long_legs if f > 0.5]
+    tapering = [n for n, _, t, _ in long_legs if t <= _C2_TAIL_FRACTION]
+    detail = "; ".join(
+        f"{n} {k} steps, front-half share {f:.2f}, tail/peak {t:.2f}"
+        for n, f, t, k in long_legs
+    )
+    notes.append(
+        f"C2 shape, measured over {len(long_legs)} theoria leg(s) with at least "
+        f"{_C2_MIN_BILLED_STEPS} billed steps: {detail}. "
+        f"{len(front_heavy)} front-heavy, {len(tapering)} tapering to under "
+        f"{_C2_TAIL_FRACTION:.0%} of peak."
+    )
+    if short:
+        notes.append(
+            f"C2 shape: {len(short)} drawn theoria leg(s) are under the {_C2_MIN_BILLED_STEPS}"
+            "-billed-step floor and carry no shape verdict rather than a weak one ("
+            + ", ".join(short)
+            + "), and they ended "
+            + "; ".join(
+                f"{k}: {len(v)}"
+                for k, v in sorted(_outcome_tally(legs, [s.split(" (")[0] for s in short]).items())
+            )
+            + ". Their shortness is a fact about where each leg was cut off, not about "
+            "the theory -- which is exactly why it is reported and not averaged in."
+        )
+
+    # The plate stays ASCII on purpose. Theoria.md 1.6's own phrasing is
+    # Chinese, and the honest thing would be to quote it -- but matplotlib's SVG
+    # writer does not carry these code points through intact on this host, and
+    # what reaches the file depends on the machine's codepage, which is a
+    # determinism defect wearing a typography costume. The claim is glossed and
+    # cited instead; the Chinese lives in the run record, which is UTF-8 text
+    # nobody renders.
+    verdict = (
+        "C2 SHAPE, MEASURED AND NEGATIVE. Theoria.md 1.6 predicts a bill that is "
+        "front-heavy and then tapers to nothing as the theory converges. Over the "
+        f"{len(long_legs)} drawn theoria leg(s) long enough to have a shape ("
+        f"at least {_C2_MIN_BILLED_STEPS} distinct billed steps), {len(front_heavy)} "
+        f"is/are front-heavy and {len(tapering)} taper(s) to under "
+        f"{_C2_TAIL_FRACTION:.0%} of peak: {detail}. "
+        "THE PLATE SHOWS NO CONVERGENCE. It is written here rather than left to the "
+        "reader because a flat curve and a converging one look alike at a glance when "
+        "the curve is six points long."
+    )
+    by_outcome = _outcome_tally(legs, [n for n, _, _, _ in long_legs])
+    if tapering:
+        taper_outcomes = sorted(_outcome_tally(legs, tapering))
+        verdict += (
+            " The taper that does appear is on "
+            + ", ".join(tapering)
+            + ", and that leg's own manifest records its outcome as "
+            + ", ".join(taper_outcomes)
+            + " -- its zero-cost steps are the run still acting after the money stopped. "
+            "The desk stopped being called because the budget ended, not because the "
+            "manual stopped being surprised. A budget cutoff drawn on a cost axis is "
+            "indistinguishable from convergence, and it is not convergence."
+        )
+    verdict += (
+        " Read against how the legs ended ("
+        + "; ".join(f"{k}: {len(v)}" for k, v in sorted(by_outcome.items()))
+        + "), not one of them stopped because it ran out of surprises. C2 is therefore "
+        "UNCONFIRMED on this evidence, and the reason is where the legs were cut off "
+        "rather than what they showed before that."
+    )
+    return verdict, notes
 
 
 def _shape_caveat(curves: list[dict], shape: dict) -> str:
