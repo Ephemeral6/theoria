@@ -1,0 +1,3414 @@
+{
+ "legs": [
+  {
+   "anchor_drifted": 0,
+   "drift_cells_max": null,
+   "harness_disagreed_on": 0,
+   "harness_equivalent_on": 0,
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "observed__ablation": {
+    "contains_truth": 0,
+    "widths": []
+   },
+   "observed__generated": {
+    "contains_truth": 0,
+    "widths": []
+   },
+   "probes_completed": 0,
+   "reconstructed": 0,
+   "rolled__ablation": {
+    "contains_truth": 0,
+    "widths": []
+   },
+   "rolled__generated": {
+    "contains_truth": 0,
+    "widths": []
+   },
+   "status": "measured",
+   "unreconstructed": 0
+  },
+  {
+   "anchor_drifted": 7,
+   "drift_cells_max": 25,
+   "harness_disagreed_on": 0,
+   "harness_equivalent_on": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed__ablation": {
+    "contains_truth": 2,
+    "widths": [
+     1,
+     2
+    ]
+   },
+   "observed__generated": {
+    "contains_truth": 5,
+    "widths": [
+     3,
+     6
+    ]
+   },
+   "probes_completed": 8,
+   "reconstructed": 8,
+   "rolled__ablation": {
+    "contains_truth": 0,
+    "widths": [
+     2
+    ]
+   },
+   "rolled__generated": {
+    "contains_truth": 5,
+    "widths": [
+     5,
+     6,
+     8
+    ]
+   },
+   "status": "measured",
+   "unreconstructed": 0
+  },
+  {
+   "anchor_drifted": 21,
+   "drift_cells_max": 25,
+   "harness_disagreed_on": 0,
+   "harness_equivalent_on": 28,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed__ablation": {
+    "contains_truth": 12,
+    "widths": [
+     1,
+     2
+    ]
+   },
+   "observed__generated": {
+    "contains_truth": 25,
+    "widths": [
+     3,
+     6
+    ]
+   },
+   "probes_completed": 28,
+   "reconstructed": 28,
+   "rolled__ablation": {
+    "contains_truth": 0,
+    "widths": [
+     2
+    ]
+   },
+   "rolled__generated": {
+    "contains_truth": 25,
+    "widths": [
+     5,
+     6,
+     8
+    ]
+   },
+   "status": "measured",
+   "unreconstructed": 0
+  },
+  {
+   "anchor_drifted": 7,
+   "drift_cells_max": 1,
+   "harness_disagreed_on": 0,
+   "harness_equivalent_on": 16,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed__ablation": {
+    "contains_truth": 11,
+    "widths": [
+     2
+    ]
+   },
+   "observed__generated": {
+    "contains_truth": 13,
+    "widths": [
+     8
+    ]
+   },
+   "probes_completed": 16,
+   "reconstructed": 16,
+   "rolled__ablation": {
+    "contains_truth": 5,
+    "widths": [
+     2
+    ]
+   },
+   "rolled__generated": {
+    "contains_truth": 13,
+    "widths": [
+     8,
+     10
+    ]
+   },
+   "status": "measured",
+   "unreconstructed": 0
+  }
+ ],
+ "probes": [
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "522b40a28b6d9fbc",
+    "cells_total": 4096,
+    "cells_wrong": 6,
+    "drifted": true,
+    "fraction_wrong": 0.00146484375,
+    "unmeasurable": null,
+    "world_hash": "9bb17844cc3a57c9"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "af3bb95d3135e37c",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 6
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "5da99fd80ff97e24",
+    "cells_total": 4096,
+    "cells_wrong": 7,
+    "drifted": true,
+    "fraction_wrong": 0.001708984375,
+    "unmeasurable": null,
+    "world_hash": "af3bb95d3135e37c"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0e1cd0b30fbb12b3",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 7
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "522b40a28b6d9fbc",
+    "cells_total": 4096,
+    "cells_wrong": 23,
+    "drifted": true,
+    "fraction_wrong": 0.005615234375,
+    "unmeasurable": null,
+    "world_hash": "0e1cd0b30fbb12b3"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "b90a6233898771e2",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance_2"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance_2"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 8
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "5da99fd80ff97e24",
+    "cells_total": 4096,
+    "cells_wrong": 24,
+    "drifted": true,
+    "fraction_wrong": 0.005859375,
+    "unmeasurable": null,
+    "world_hash": "b90a6233898771e2"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "15c2e5de8c8dc96b",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 9
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "15c2e5de8c8dc96b"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0c56717accb832fb",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "world_inert_plus_edge_1"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "world_inert_plus_edge_1"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 10
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "cells_total": 4096,
+    "cells_wrong": 24,
+    "drifted": true,
+    "fraction_wrong": 0.005859375,
+    "unmeasurable": null,
+    "world_hash": "0c56717accb832fb"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0c56717accb832fb",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "inert",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 1
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "inert",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 3
+   },
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 5
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 11
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "0c56717accb832fb"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "06e79195f0adc15f",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 12
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "cells_total": 4096,
+    "cells_wrong": 25,
+    "drifted": true,
+    "fraction_wrong": 0.006103515625,
+    "unmeasurable": null,
+    "world_hash": "06e79195f0adc15f"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "06e79195f0adc15f",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "inert",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 1
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "inert",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 3
+   },
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 5
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 13
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "9bb17844cc3a57c9",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "9bb17844cc3a57c9"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "af3bb95d3135e37c",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 6
+   },
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 6
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "25cac958273811a3",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "af3bb95d3135e37c"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0e1cd0b30fbb12b3",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 7
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "9bb17844cc3a57c9",
+    "cells_total": 4096,
+    "cells_wrong": 24,
+    "drifted": true,
+    "fraction_wrong": 0.005859375,
+    "unmeasurable": null,
+    "world_hash": "0e1cd0b30fbb12b3"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "b90a6233898771e2",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 26,
+    "right": [
+     "edge_advance_2"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 26,
+    "right": [
+     "edge_advance_2"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 8
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "25cac958273811a3",
+    "cells_total": 4096,
+    "cells_wrong": 25,
+    "drifted": true,
+    "fraction_wrong": 0.006103515625,
+    "unmeasurable": null,
+    "world_hash": "b90a6233898771e2"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "15c2e5de8c8dc96b",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 6
+   },
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 16,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 26,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 9
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "15c2e5de8c8dc96b"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4922abb280cd8780",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 10
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "287dc66cc4b95e77",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "4922abb280cd8780"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "c65bd69c07fb3c77",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 11
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "c65bd69c07fb3c77"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0c86941f09a0caaf",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 12
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "b90a6233898771e2",
+    "cells_total": 4096,
+    "cells_wrong": 2,
+    "drifted": true,
+    "fraction_wrong": 0.00048828125,
+    "unmeasurable": null,
+    "world_hash": "0c86941f09a0caaf"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "06e79195f0adc15f",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 13
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "06e79195f0adc15f",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "06e79195f0adc15f"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4dfbfe14d4e85299",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-09",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 14
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "30332fff54b4924c",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "4dfbfe14d4e85299"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "d09fae77a1d46f2c",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-10",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 15
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "e66afa8078cb4fd2",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "d09fae77a1d46f2c"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "44c44660a53cf5d4",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-11",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 16
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "0c86941f09a0caaf",
+    "cells_total": 4096,
+    "cells_wrong": 2,
+    "drifted": true,
+    "fraction_wrong": 0.00048828125,
+    "unmeasurable": null,
+    "world_hash": "44c44660a53cf5d4"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "3a11719074841328",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-12",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 17
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "3a11719074841328",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "3a11719074841328"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "8a0fb5148b5adfb0",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-13",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 18
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "e260ba2228378b61",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "8a0fb5148b5adfb0"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "2bdbfae66570eec5",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-14",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 19
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "01006a6a9e21beca",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "2bdbfae66570eec5"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0db510635e263539",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-15",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 20
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "44c44660a53cf5d4",
+    "cells_total": 4096,
+    "cells_wrong": 2,
+    "drifted": true,
+    "fraction_wrong": 0.00048828125,
+    "unmeasurable": null,
+    "world_hash": "0db510635e263539"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4c57486b12b722d4",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 22,
+    "right": [
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-16",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 22,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 32,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 21
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "4c57486b12b722d4",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "4c57486b12b722d4"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "71e8272c15afb851",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-17",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 22
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "1e0bbc75dc840f79",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "71e8272c15afb851"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "c0d6bb54354c57d2",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-18",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 23
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "ade8774fe1cc3a9b",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "c0d6bb54354c57d2"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "eb6ce939c989359a",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-19",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 24
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "0db510635e263539",
+    "cells_total": 4096,
+    "cells_wrong": 2,
+    "drifted": true,
+    "fraction_wrong": 0.00048828125,
+    "unmeasurable": null,
+    "world_hash": "eb6ce939c989359a"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "6ac765de5c59b51e",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-20",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 25
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "6ac765de5c59b51e",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "6ac765de5c59b51e"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "ba530aab6f501769",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-21",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 26
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "6d0db422effc0cdc",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "ba530aab6f501769"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "cf2157b5311a6e35",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_dims",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-22",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 27
+  },
+  {
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "c530010f3b45d4ae",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "cf2157b5311a6e35"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "9c6d40686d791ac6",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-23",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 28
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "eb6ce939c989359a",
+    "cells_total": 4096,
+    "cells_wrong": 2,
+    "drifted": true,
+    "fraction_wrong": 0.00048828125,
+    "unmeasurable": null,
+    "world_hash": "9c6d40686d791ac6"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "70eb49bbc21b44e9",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-24",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 29
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "70eb49bbc21b44e9",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "70eb49bbc21b44e9"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "132f0bf441d96376",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-25",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 6
+   },
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 30
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "65612ce2b219fbe6",
+    "cells_total": 4096,
+    "cells_wrong": 24,
+    "drifted": true,
+    "fraction_wrong": 0.005859375,
+    "unmeasurable": null,
+    "world_hash": "132f0bf441d96376"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "132f0bf441d96376",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "inert",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 1
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "inert",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 3
+   },
+   "probe_id": "P-26",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 5
+   },
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 31
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "70eb49bbc21b44e9",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "132f0bf441d96376"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "121cbbc9c93803ed",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 6
+   },
+   "probe_id": "P-27",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "world_inert_plus_edge"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 32
+  },
+  {
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "65612ce2b219fbe6",
+    "cells_total": 4096,
+    "cells_wrong": 25,
+    "drifted": true,
+    "fraction_wrong": 0.006103515625,
+    "unmeasurable": null,
+    "world_hash": "121cbbc9c93803ed"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "121cbbc9c93803ed",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 24,
+    "right": [
+     "inert",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next"
+    ],
+    "width": 1
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "inert",
+     "manual",
+     "without_key1_inert_at_spawn",
+     "without_key2_body_arrives",
+     "without_key2_body_leaves",
+     "without_key3_inert_below_spawn",
+     "without_key5_body_clears",
+     "without_key5_body_respawns",
+     "without_key5_slot1_dims",
+     "without_key5_slot1_lights",
+     "without_key5_slot2_centre_darkens",
+     "without_key5_slot2_centre_resets",
+     "without_key5_slot2_ring_resets",
+     "without_key5_slot2_row1_lights",
+     "without_key5_slot2_row2_left_lights",
+     "without_key5_slot2_row2_right_lights",
+     "without_key5_slot2_row3_lights",
+     "without_key5_underline1_dims",
+     "without_key5_underline1_lights",
+     "without_key5_underline2_dims",
+     "without_key5_underline2_lights",
+     "without_meter_burn_key2_next",
+     "without_meter_burn_key2_rightmost",
+     "without_meter_burn_key4_next",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 3
+   },
+   "probe_id": "P-28",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 24,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 34,
+    "right": [
+     "edge_advance_1",
+     "edge_advance_2",
+     "world_anchored_manual",
+     "world_inert",
+     "world_inert_plus_edge_1",
+     "world_inert_plus_edge_2"
+    ],
+    "width": 5
+   },
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 33
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "05615f3d5f835100",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "05615f3d5f835100"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8ccbe276408c4dd7",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 9,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_advances_the_meter_once",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_advances_the_meter_once",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 9,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_advances_the_meter_once",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_advances_the_meter_once",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 6
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8ccbe276408c4dd7",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "8ccbe276408c4dd7"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "05615f3d5f835100",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 9,
+    "right": [
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 9,
+    "right": [
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 7
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "05615f3d5f835100",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "05615f3d5f835100"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "bb5c436a2318c544",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 8
+   },
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 19,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 8
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8ccbe276408c4dd7",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "bb5c436a2318c544"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3bf51d2fd9036a78",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 9,
+    "right": [
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key4_advances_the_meter_once",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 9,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 19,
+    "right": [
+     "edge_advance",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 9
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "3bf51d2fd9036a78",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "3bf51d2fd9036a78"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "bb5c436a2318c544",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 10
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "bb5c436a2318c544",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "bb5c436a2318c544"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "b278887e087d3593",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 20,
+    "right": [],
+    "width": 8
+   },
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 20,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 11
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "3bf51d2fd9036a78",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "b278887e087d3593"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "1317da5b367d300a",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 12
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "bb5c436a2318c544",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "1317da5b367d300a"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "b278887e087d3593",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key4_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 13
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "b278887e087d3593",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "b278887e087d3593"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3281b51b4c1aa929",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 20,
+    "right": [],
+    "width": 8
+   },
+   "probe_id": "P-09",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": false,
+    "n_hypotheses": 20,
+    "right": [],
+    "width": 8
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 14
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "1317da5b367d300a",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "3281b51b4c1aa929"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "d2c8aa05e38a2da7",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-10",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 15
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "b278887e087d3593",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "d2c8aa05e38a2da7"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3281b51b4c1aa929",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-11",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 16
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "1317da5b367d300a",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "3281b51b4c1aa929"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "febfe034e90989ad",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_3"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-12",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_3"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 17
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "febfe034e90989ad",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "febfe034e90989ad"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8b41d5b61c523b9e",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-13",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_blanks_the_strip_pips",
+     "without_key3_blanks_the_strip_studs",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 18
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8b41d5b61c523b9e",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "8b41d5b61c523b9e"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "febfe034e90989ad",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-14",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance",
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 19
+  },
+  {
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "febfe034e90989ad",
+    "cells_total": 4096,
+    "cells_wrong": 0,
+    "drifted": false,
+    "fraction_wrong": 0.0,
+    "unmeasurable": null,
+    "world_hash": "febfe034e90989ad"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "e4ef9819d5084e7e",
+   "observed__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_3"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-15",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_3"
+    ],
+    "width": 8
+   },
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 20
+  },
+  {
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8b41d5b61c523b9e",
+    "cells_total": 4096,
+    "cells_wrong": 1,
+    "drifted": true,
+    "fraction_wrong": 0.000244140625,
+    "unmeasurable": null,
+    "world_hash": "e4ef9819d5084e7e"
+   },
+   "harness_equivalent": true,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8ead43840cc83b3d",
+   "observed__ablation": {
+    "contains_truth": true,
+    "n_hypotheses": 10,
+    "right": [
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs"
+    ],
+    "width": 2
+   },
+   "observed__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_1",
+     "manual",
+     "without_key3_marches_the_meter_leftward",
+     "without_key4_restores_the_strip_pips",
+     "without_key4_restores_the_strip_studs",
+     "without_key4_seeds_the_meter_at_the_right_edge",
+     "without_key7_blanks_the_strip_pips",
+     "without_key7_blanks_the_strip_studs",
+     "world_anchored_manual"
+    ],
+    "width": 8
+   },
+   "probe_id": "P-16",
+   "reconstructed": true,
+   "rolled__ablation": {
+    "contains_truth": false,
+    "n_hypotheses": 10,
+    "right": [],
+    "width": 2
+   },
+   "rolled__generated": {
+    "contains_truth": true,
+    "n_hypotheses": 20,
+    "right": [
+     "edge_advance_1",
+     "world_anchored_manual"
+    ],
+    "width": 10
+   },
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 21
+  }
+ ],
+ "totals": {
+  "anchor_drifted": 35,
+  "harness_disagreed_on": 0,
+  "harness_equivalence_means": "R2's replay rolls the manual over [s.action for s in prefix.steps]; inner/loop._roll_forward rolls it over store.actions, which is that list shifted by one. These are different action sequences. Equal on every probe means R2's measured 35 is a fact about the arm and not an artefact of its own harness.",
+  "harness_equivalent_on": 52,
+  "how_many_of_the_drifted_would_be_seated_correctly": {
+   "count": 35,
+   "why": "all of them, by construction and not by measurement: under --anchor observed the frontier's anchor IS the world's last observed frame, so it cannot have drifted from it. The measurement worth reporting is the consequence, which is the containment row below."
+  },
+  "observed__ablation": {
+   "contains_truth": 25,
+   "of": 52,
+   "on_the_drifted_subset": {
+    "contains_truth": 20,
+    "of": 35
+   },
+   "widths": [
+    1,
+    2
+   ]
+  },
+  "observed__generated": {
+   "contains_truth": 43,
+   "of": 52,
+   "on_the_drifted_subset": {
+    "contains_truth": 30,
+    "of": 35
+   },
+   "widths": [
+    3,
+    6,
+    8
+   ]
+  },
+  "probes_completed": 52,
+  "reconstructed": 52,
+  "rolled__ablation": {
+   "contains_truth": 5,
+   "of": 52,
+   "on_the_drifted_subset": {
+    "contains_truth": 0,
+    "of": 35
+   },
+   "widths": [
+    2
+   ]
+  },
+  "rolled__generated": {
+   "contains_truth": 43,
+   "of": 52,
+   "on_the_drifted_subset": {
+    "contains_truth": 30,
+    "of": 35
+   },
+   "widths": [
+    5,
+    6,
+    8,
+    10
+   ]
+  },
+  "unreconstructed": 0
+ }
+}

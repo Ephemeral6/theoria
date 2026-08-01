@@ -1114,3 +1114,106 @@ answer 5 times of 52 and generation 43.
    the world's frame is the actual fix, and it would make certify's replay
    trivially green -- destroying the only instrument that currently detects a
    wrong manual. That is somebody else's call, made deliberately, not skipped.
+
+---
+
+## D-R3-001 · One state was doing two jobs; the repair gives the second job its own anchor and leaves the first alone
+
+`inner/loop._roll_forward` answers "where would the manual be if it were
+right?", and this arm spends that one answer on two jobs whose requirements are
+opposed.
+
+**Job A, audit.** `certify.cheap` replays the manual open-loop from
+`initial_state()` over the whole recorded action sequence. It is a test of the
+manual **because** it is allowed to drift; a replay re-seated on the world each
+turn cannot diverge by more than one step, so it goes green on a manual that is
+wrong everywhere. `Theoria.md` 1.3 makes this the detector of 写错的规则, and
+`GAPS.md` GAP 3 records that both Lean routes are shut on a real ARC level --
+so it is not one instrument among several, it is the only one.
+
+**Job B, experiment design.** Every hypothesis in the probe frontier is a
+successor of that same state, so it had better be the frame the world is
+showing. R2 measured that it was not, on 35 of 52 completed probes, all 35 of
+which landed off-frontier.
+
+One variable, two jobs, and Job A wins silently. **The obvious repair --
+re-seat the state on the world's observed frame each turn -- fixes Job B by
+destroying Job A's instrument**, which is why R2 filed it rather than doing it.
+It is also not available on its own terms: `render` is not injective (the
+generated `State` is one `_pos`/`_color` pair per instance and many assignments
+paint the same grid), so "the state the world is in" would have to be *guessed*
+and the guess seated inside the manual's own state, where nothing downstream
+could distinguish it from something the manual derived.
+
+**What was decided.** Job B does not need a *state*; it needs the *frame its
+successors succeed*. The world's own last observed frame is that frame exactly,
+with nothing inferred. So `--anchor observed` keeps every hypothesis's
+mechanism -- still the manual's `step` from the rolled-forward state -- and
+moves only the frame the answer is read against:
+
+    prediction = hash( world ⊕ ( render(h(state, a)) − render(state) ) )
+
+Same ids, same order, same width. `certify` is untouched and
+`tests/test_anchor.py::test_certify_never_reads_the_anchor` fails the day
+anybody wires them together.
+
+**Three alternatives, and why each traded one blindness for another.**
+
+1. *Add world-anchored hypotheses beside the ablations* -- this is R2's shipped
+   `--frontier generated`, and it works (43 of 52). But it delivers the
+   anchoring as two extra hypotheses, widening the frontier from 2 distinct
+   predictions to 5--10, which lowers the split entropy of every action and
+   prices every probe higher. Measured here: the anchor switch **subsumes**
+   both of them exactly -- `manual` anchored on the world is right on 25 probes
+   and so is `world_anchored_manual`; `inert` anchored is right on 4 and so is
+   `world_inert` -- and `observed × generated` reaches the same 43 at widths
+   `[3, 6, 8]` rather than `[5, 6, 8, 10]`.
+2. *Re-anchor for probe design only, discard the rolled state, log each
+   re-anchor.* Rejected on a measurable ground, not a taste: a re-anchor event
+   is a bit, and this run's finding is a magnitude. 20 of the 35 drifted probes
+   were off by **one cell in 4096**; 8 were off by 23--25. "The anchor was
+   wrong" cannot distinguish "the manual is nearly right and the frontier
+   compares whole-frame hashes" from "the manual is lost". Keeping both states
+   subsumes everything this records and adds the size -- and does not need the
+   ill-posed inversion.
+3. *Drift as an eighth surprise.* Rejected twice. `Theoria.md` 1.9 closes the
+   taxonomy at seven and `inner/surprise.py` raises on an eighth by
+   construction, so this is a design change and would have to be argued as one.
+   It is also the wrong eighth on the merits: drift is not a new **kind** of
+   evidence, it is the accumulated consequence of a `replay_mismatch` that has
+   already fired and already paid for a desk call. A second surprise for the
+   same defect double-counts against constraint 8's arithmetic, which
+   `Register.audit` checks, and buys a paid call to hear the same news twice.
+   Its home is a measurement attached to the surprise that already exists.
+
+**Two corrections this turned up, both to sentences this arm had been
+repeating.**
+
+*The arm has been computing the drift all along.* `certify.cheap` writes
+`entry["cells_wrong"]` per transition, and that series **is** the anchor's
+drift -- same walk, same origin, same actions. `certify.json` archives the
+summary line and the first divergence; `replay_steps`, where the counts live,
+never reaches disk. `GAPS.md` R2-1 says a default leg cannot see its own drift;
+in fact every leg has measured it every certify beat since P-8 and filed it as
+an audit line nobody read as the error of the frame the probes were designed
+against.
+
+*"One mispredicted transition desynchronises the state permanently" is false.*
+It is in R2's README and in this ticket's brief. The archive refutes it: drift
+**recovers**, 8 recovery events across the 8 live legs, on 4 of the 6 that ever
+drifted, with a non-monotone series on those 4 (`sk48-carried-l1` runs
+`[96, 0, 0, 0, 0, 0, 1, 0, 1, …]`). The manual's `step` is not injective, so a
+capped mover or a set-rather-than-toggled cell re-converges. The case for the
+change survives intact -- what matters is whether the anchor was wrong *when a
+probe was designed*, and it was, 35 times of 52 -- but the sentence would have
+been repeated into the next round unchallenged.
+
+**And R2's own harness was checked before its number was built on.** R2's
+replay rolls the manual over `[s.action for s in prefix.steps]`, beginning with
+`RESET`; `_roll_forward` rolls it over `store.actions`, that list shifted by
+one. Different sequences; had they produced different states, R2's 35 would
+have been an artefact of its own harness. Recomputed on every probe: equal on
+52 of 52.
+
+Full account and the four-cell table:
+`runs/20260801T1200Z-R3-anchor-duality/`.

@@ -44,8 +44,9 @@ from harness.modelcall import (AnonymityBreach, CostCeilingReached,
 from world.adapt import run_engines as adapt_run_engines
 from world.frames import FrameStore, Step, grid_hash
 
-from . import (certify, commit, deskdiet, goal as goal_beat, plan as plan_beat,
-               probe as probe_beat, theorize, transfer)
+from . import (anchor as anchor_beat, certify, commit, deskdiet,
+               goal as goal_beat, plan as plan_beat, probe as probe_beat,
+               theorize, transfer)
 from .books import Books
 from .goal import GoalState
 from .levels import LevelLog
@@ -214,6 +215,7 @@ class TheoriaArm:
                  prompt_id: str = "P-8",
                  probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None,
                  frontier: "Optional[probe_beat.FrontierConfig]" = None,
+                 anchor: "Optional[anchor_beat.AnchorConfig]" = None,
                  desk_diet: Optional[str] = None):
         self.game_id = game_id
         self.offline = offline
@@ -263,6 +265,15 @@ class TheoriaArm:
         #: the measurement that asked for it.
         self.frontier = (frontier if frontier is not None
                          else probe_beat.FrontierConfig.from_env())
+        #: R3's change, default off, same plumbing again: which frame the
+        #: frontier's hypotheses are successors *of*. `rolled` is 2026-07-31 --
+        #: `_roll_forward`'s state, drift and all -- and `observed` transplants
+        #: each hypothesis onto the world's own last frame. It deliberately does
+        #: **not** touch `certify`, whose open-loop replay from `initial_state()`
+        #: is this arm's only detector of a wrong rule and would go trivially
+        #: green if it were re-seated. See `inner/anchor.py`.
+        self.anchor = (anchor if anchor is not None
+                       else anchor_beat.AnchorConfig.from_env())
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
         self.tags = list(tags or ["theoria", "p8", "first-contact"])
         self.prompt_id = prompt_id
@@ -351,6 +362,12 @@ class TheoriaArm:
         self.certify_reports: List[Dict[str, Any]] = []
         self.plan_reports: List[Dict[str, Any]] = []
         self.commit_reports: List[Dict[str, Any]] = []
+        #: One row per probe-or-explore beat: how far the manual's
+        #: rolled-forward state had drifted from the frame the world was
+        #: showing. Goes to `anchor.jsonl` and nowhere else, so a leg on the
+        #: default anchor reports its own drift without any existing artefact
+        #: moving a byte.
+        self.drift_log: List[Dict[str, Any]] = []
         self.action_counts: Dict[int, int] = {}
         self.outcome = "not_started"
         self.scorecard: Optional[Dict[str, Any]] = None
@@ -1188,6 +1205,97 @@ class TheoriaArm:
         commit.surprises_from(report, self.register)
         record["commit"] = {k: v for k, v in report.items() if k != "steps"}
 
+    def _record_drift(self, namespace, state) -> None:
+        """How far the manual's state has drifted from the world's frame. Free.
+
+        The number nothing in this arm has ever reported, and the one the four
+        legs of 2026-07-31 most needed: 35 of their 52 completed probes were
+        designed against a state the world had already left, and all 35 landed
+        off the frontier. `certify`'s replay says *where* the manual first went
+        wrong and then stops quantifying; this says *how wrong it still is*,
+        every turn, in cells.
+
+        It is not a surprise and does not call anybody. `Theoria.md` 1.9 closes
+        the taxonomy at seven and `inner/surprise.py` refuses an eighth by
+        construction -- and drift would be the wrong eighth anyway: it is the
+        accumulated consequence of a `replay_mismatch` that has already fired
+        and already paid for a desk call, so firing again would double-count
+        against constraint 8's arithmetic and buy a second telling of the same
+        news.
+
+        **It writes to `anchor.jsonl` and to nothing else.** No existing
+        artefact grows a key -- not `turns.json`, not `probes.jsonl`, not
+        `design`'s report -- so a leg left on the default anchor is still
+        byte-for-byte the arm the A/B thinks it is while finally being able to
+        report its own drift. That is the trade `GAPS.md` R2-1 named and could
+        not make, because R2's diagnostic had to go into a report that already
+        existed.
+        """
+        row: Dict[str, Any] = {
+            "turn": len(self.turns) + 1,
+            "level": self.levels.level,
+            "step_idx": len(self.store.steps),
+            "anchor_mode": self.anchor.mode,
+        }
+        if namespace is None:
+            row["divergence"] = {
+                "unmeasurable": "no compiled manual on this turn",
+                "cells_wrong": None, "drifted": None}
+        else:
+            row["divergence"] = anchor_beat.divergence(
+                namespace, state, self._level_store())
+        # The cell list is a diagnosis for one turn; the series is the
+        # deliverable. Keep the count, drop the coordinates, so a 200-turn leg
+        # does not write a 4800-cell dump nobody reads.
+        row["divergence"].pop("first_cells", None)
+        self.drift_log.append(row)
+
+    def drift_summary(self) -> Dict[str, Any]:
+        """The leg's drift, as one block. Evidence about the manual's quality.
+
+        `turns_measured` is the denominator and it is **not** the turn count:
+        a turn with no compiled manual, or before the first frame, cannot be
+        measured, and those are counted separately rather than folded in as
+        zero drift. A summary whose denominator quietly includes the turns it
+        could not measure reads a silent instrument as a clean bill.
+        """
+        measured = [r for r in self.drift_log
+                    if r["divergence"].get("cells_wrong") is not None]
+        unmeasurable = [r for r in self.drift_log
+                        if r["divergence"].get("cells_wrong") is None]
+        cells = [r["divergence"]["cells_wrong"] for r in measured]
+        drifted = [r for r in measured if r["divergence"].get("drifted")]
+        first = next((r for r in measured if r["divergence"].get("drifted")),
+                     None)
+        return {
+            "anchor_mode": self.anchor.mode,
+            "measure": self.anchor.measure,
+            "turns_recorded": len(self.drift_log),
+            "turns_measured": len(measured),
+            "turns_unmeasurable": len(unmeasurable),
+            "why_unmeasurable": sorted({
+                str(r["divergence"].get("unmeasurable"))
+                for r in unmeasurable}) or None,
+            "turns_drifted": len(drifted),
+            "first_drifted_turn": first["turn"] if first else None,
+            "cells_wrong_first": cells[0] if cells else None,
+            "cells_wrong_last": cells[-1] if cells else None,
+            "cells_wrong_max": max(cells) if cells else None,
+            "cells_wrong_mean": (sum(cells) / float(len(cells))
+                                 if cells else None),
+            "cells_total": (measured[-1]["divergence"].get("cells_total")
+                            if measured else None),
+            "series": cells,
+            "what_this_is": (
+                "the number of board cells on which the manual's "
+                "rolled-forward state and the world's observed frame "
+                "disagree, at the probe beat of each turn. certify's replay "
+                "names where the manual first went wrong; this is how wrong "
+                "it still is. 0 throughout is a manual that has tracked the "
+                "world exactly, and is also the condition under which "
+                "--anchor observed is provably a no-op."),
+        }
+
     def _probe_or_explore(self, namespace, record) -> None:
         legal = self._legal_actions()
         if not legal:
@@ -1207,6 +1315,13 @@ class TheoriaArm:
         #: real allow/refuse decision to write into the economy's audit.
         designed = False
 
+        if namespace is None:
+            # No compiled manual, so there is no rolled-forward state and no
+            # drift to measure. Written down as absence, never as zero drift:
+            # a turn with no manual is not a turn on which the manual tracked
+            # the world perfectly.
+            self._record_drift(None, None)
+
         if namespace is not None:
             # This level's trajectory, not the run's: `_roll_forward` replays
             # the manual's `step` over every recorded action, and across a
@@ -1214,6 +1329,14 @@ class TheoriaArm:
             # board. `inner/levels.py` names this as the third of the three
             # beats that read the trace as one continuous trajectory.
             state = _roll_forward(namespace, self._level_store())
+            # Free, and unconditional. Two renders and a cell diff -- no
+            # action, no model call -- and it goes to `anchor.jsonl`, a file
+            # that did not exist before, so no artefact a 2026-07-31 leg wrote
+            # changes by one byte. That is what closes GAPS.md R2-1 without
+            # paying its price: the diagnostic a drifting leg most needs was
+            # withheld from the default leg only because writing it into an
+            # EXISTING report would have broken the A/B's byte-identity.
+            self._record_drift(namespace, state)
             manual_actions = [("key", a) for a in legal]
             try:
                 # The witnesses a candidate claims must be the transitions the
@@ -1232,6 +1355,7 @@ class TheoriaArm:
                     coverage="%d/%d" % (level_steps, level_steps),
                     economy=self.probe_economy,
                     frontier=self.frontier,
+                    anchor=self.anchor,
                     store=self._level_store())
             except Exception as exc:                   # noqa: BLE001
                 design = {"error": "%s: %s" % (type(exc).__name__, exc)}
@@ -1267,8 +1391,12 @@ class TheoriaArm:
                     # frontier and the same experiment gets a new name every
                     # time the theory narrows. Disabled, the two are the same
                     # dict and this is the original line.
+                    # The same three switches `design` was given. Feeding this
+                    # a different anchor than the design used would name the
+                    # experiment by predictions no hypothesis in it ever made.
                     hypotheses = probe_beat.build_hypotheses(
                         namespace, frontier=self.frontier,
+                        anchor=self.anchor,
                         store=self._level_store())
                     for hypothesis in hypotheses:
                         try:
@@ -1649,6 +1777,16 @@ class TheoriaArm:
         _dump(os.path.join(out, "probe_economy.json"),
               dict(self.probe_economy.as_json(),
                    decisions=self.probe_economy.decisions))
+        # Same rule, and a file that did not exist before this change, which is
+        # why it can be unconditional without breaking any A/B: the per-turn
+        # drift of the manual's rolled-forward state away from the world's
+        # frame, plus the anchor this leg designed its probes from.
+        _dump(os.path.join(out, "anchor.json"), self.drift_summary())
+        with open(os.path.join(out, "anchor.jsonl"), "w", encoding="utf-8",
+                  newline="\n") as fh:
+            for row in self.drift_log:
+                fh.write(json.dumps(row, sort_keys=True, default=str))
+                fh.write("\n")
         if self.carried:
             _dump(os.path.join(out, "transfer.json"), self.transfer_summary())
         self._write_run_state()
