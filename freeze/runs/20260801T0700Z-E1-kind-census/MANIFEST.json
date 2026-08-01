@@ -1,0 +1,47 @@
+{
+ "prompt_id": "r2/u3-kind",
+ "prompt": "Repair the three defects exam found in freeze/u3.py (E1, U3 attainment): F1 the non-triviality gate keys on theorem names; D1 only theory.lean is discovered; D2 expand_targets descends one level.  Classify by what a theorem PROVES, split `vacuous` from `unclassified`, re-run the census.",
+ "branch": "r2/u3-kind",
+ "base_commit": "af138a0d",
+ "utc": "2026-08-01T07:00:00Z",
+ "seed": null,
+ "files": [
+  {
+   "path": "freeze/theorem_shape.py",
+   "sha256": "34ed7941626e9fbd71b3c98e42bce729b80fb50e8020f85a7a6d8f3affa6aae0"
+  },
+  {
+   "path": "freeze/u3.py",
+   "sha256": "071b0152eed747380d1be099a2d35310995578e266a44a84b8f9994a3a34907e"
+  },
+  {
+   "path": "freeze/tests/test_u3_kind.py",
+   "sha256": "a7a67624aabee63f4b8a0a89ba54471200f705a61aeb4a3faaad0e321d8cd0b5"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/census.py",
+   "sha256": "1780cecaae79f06d5a357dda6edf6538aa86ebd95eeee340d957d42834a9f39f"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/compare.py",
+   "sha256": "4a5eb4befc46848a452e7cbb78b7168ab0fa6c14d3903ccc85c22f4543ddec8d"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/census.json",
+   "sha256": "f05eafacfe4ed20f5ff6427f7cf90c13682d3f40e730639030816d6356f5c214"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/CENSUS.md",
+   "sha256": "6234baeb47451a10c9e2c28457536c76c14ef0fe3bd18cd82ad242dbb81aa78b"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/COMPARISON.md",
+   "sha256": "4ec1df0e5bf384b14f9c6aa084b22abbcdda9526b67b6e2b1c77ccdf1c2ab75f"
+  },
+  {
+   "path": "freeze/runs/20260801T0700Z-E1-kind-census/RUN_STATE.md",
+   "sha256": "e0bb72fc8a4502676d39e16bb6805e46cf576bef9d82f43daacc3a65cedbc761"
+  }
+ ],
+ "notes": "offline: Lean 4.9.0 only, no API/model/network.  gates: `python -m pytest freeze -q` 52 passed; `bash freeze/verify.sh` 3 failed, IDENTICAL to clean master in this worktree (MANIFEST drift, BUDGET_TABLE drift, locations findings in arc-recon/ proxy/ theoria-arm run dirs) -- no stage moved.  census: 24 books, discharged 14->17, vacuous 9->2, unclassified 0->4, failing_obligation 1->1."
+}

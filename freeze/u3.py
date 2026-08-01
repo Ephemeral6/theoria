@@ -87,7 +87,13 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Set
+
+try:                                    # `python -m freeze.u3` and `python u3.py`
+    from freeze import theorem_shape as _shape
+except ImportError:                     # pragma: no cover - direct-script fallback
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from freeze import theorem_shape as _shape
 
 # ----------------------------------------------------------------- frozen sets
 
@@ -106,9 +112,26 @@ STAGES = [
     "failing_obligation",  # Lean rejected the file — (a) fails
     "axioms_unreported",   # compiled, but no #print axioms evidence — (b) unverified
     "axiom_violation",     # compiled, axioms outside the whitelist — (b) fails
-    "vacuous",             # compiled + whitelisted, but statement is vacuous — (c) fails
+    "vacuous",             # (c) CHECKED and refuted — the manual proved a tautology
+    "unclassified",        # (c) NOT CHECKED — E1 does not know this kind of assertion
     "discharged",          # (a) ∧ (b) ∧ (c) for at least one theorem — ATTAINED
 ]
+
+# `vacuous` and `unclassified` are the two verdicts one word used to carry
+# (exam → freeze, 2026-08-01, F1).  They are not interchangeable:
+#
+#   vacuous       an ACCUSATION about the manual.  §1.2.1's check ran and said
+#                 no: the invariant is constant, the pattern is satisfied by
+#                 nothing, the goal set is empty.  Action: the arm must prove
+#                 something else.
+#   unclassified  a CONFESSION about this adjudicator.  The statement's shape
+#                 is outside the fragment §1.2.1 writes a requirement for, so
+#                 no check ran.  Action: extend E1, or narrow §1.2 on purpose.
+#
+# Both are `not_attained` — the arithmetic is unchanged, and fails-closed still
+# fails closed.  `unclassified` ranks ABOVE `vacuous` because a development that
+# was never checked may yet attain once a check exists, while a refuted one will
+# not; the rank orders "how close did this come", not "how bad is it".
 _STAGE_RANK = {s: i for i, s in enumerate(STAGES)}
 
 REFUSAL_PREFIX = "not attempted:"
@@ -153,25 +176,22 @@ def judge_axioms(axioms: List[str]) -> Dict[str, Any]:
 
 # ------------------------------------------------------------------ kinds / (c)
 
-INVARIANT_KIND = "invariant"
-UNSOLVABLE_KIND = "unsolvable"
-PRUNE_KIND = "prune"
-UNKNOWN_KIND = "unknown"
+INVARIANT_KIND = _shape.INVARIANT_KIND
+UNSOLVABLE_KIND = _shape.UNSOLVABLE_KIND
+PRUNE_KIND = _shape.PRUNE_KIND
+POINT_KIND = _shape.POINT_KIND
+WITNESS_KIND = _shape.WITNESS_KIND
+UNCLASSIFIED_KIND = _shape.UNCLASSIFIED_KIND
 
-
-def classify_theorem(name: str) -> str:
-    n = name.lower()
-    if n.startswith(("inv_", "invariant")) or n == "inv":
-        return INVARIANT_KIND
-    if n.startswith(("unsolvable", "goal_break", "no_goal")):
-        return UNSOLVABLE_KIND
-    if n.startswith(("prune", "deadlock")):
-        return PRUNE_KIND
-    return UNKNOWN_KIND
+#: Retained only so a reader can see what the old prefix matcher WOULD have
+#: said.  It is reported as `name_hint` next to every theorem and is read by
+#: nothing that decides anything — see `theorem_shape.name_hint`.
+classify_theorem = _shape.name_hint
 
 
 _DEF_RE = re.compile(
-    r"^def\s+(?P<name>I|Goal)\s*(?:\(\s*\w+\s*:\s*(?P<sty>[\w.]+)\s*\))?"
+    r"^def\s+(?P<name>[A-Za-z_][A-Za-z0-9_']*)"
+    r"\s*(?:\(\s*\w+\s*:\s*(?P<sty>[\w.]+)\s*\))?"
     r"\s*:\s*(?P<rty>Bool|Prop)\s*:=\s*(?P<body>.+)$",
     re.M)
 
@@ -179,7 +199,10 @@ _CONSTANT_BODIES = {"true", "false", "True", "False"}
 
 
 def scan_defs(lean_src: str) -> Dict[str, Dict[str, Any]]:
-    """Static scan of `def I` / `def Goal`: is the body a literal constant?"""
+    """Static scan of every single-line `def P (s : T) : Bool|Prop := body`:
+    is the body a literal constant?  Formerly restricted to the names `I` and
+    `Goal`; the predicate a theorem is about is now read off the theorem, so
+    the scan may not assume what it is called."""
     out: Dict[str, Dict[str, Any]] = {}
     for m in _DEF_RE.finditer(lean_src):
         body = m.group("body").strip()
@@ -192,25 +215,25 @@ def scan_defs(lean_src: str) -> Dict[str, Dict[str, Any]]:
     return out
 
 
-def _probe_texts(state_type: str, ret_type: str) -> List[Dict[str, str]]:
+def _probe_texts(state_type: str, ret_type: str, pred: str = "I") -> List[Dict[str, str]]:
     """Definitional-constancy probes.  A probe that ELABORATES proves the
-    invariant is definitionally constant of that polarity → vacuous."""
+    predicate is definitionally constant of that polarity → vacuous."""
     if ret_type == "Bool":
         return [
             {"polarity": "true",
-             "text": "example : ∀ s : %s, I s = true := fun _ => rfl"
-                     % state_type},
+             "text": "example : ∀ s : %s, %s s = true := fun _ => rfl"
+                     % (state_type, pred)},
             {"polarity": "false",
-             "text": "example : ∀ s : %s, I s = false := fun _ => rfl"
-                     % state_type},
+             "text": "example : ∀ s : %s, %s s = false := fun _ => rfl"
+                     % (state_type, pred)},
         ]
     return [
         {"polarity": "true",
-         "text": "example : ∀ s : %s, I s := fun _ => trivial"
-                 % state_type},
+         "text": "example : ∀ s : %s, %s s := fun _ => trivial"
+                 % (state_type, pred)},
         {"polarity": "false",
-         "text": "example : ∀ s : %s, ¬ I s := fun _ h => h"
-                 % state_type},
+         "text": "example : ∀ s : %s, ¬ %s s := fun _ h => h"
+                 % (state_type, pred)},
     ]
 
 
@@ -238,18 +261,20 @@ def run_lean(lean_bin: str, path: Path, timeout: int = 900) -> Dict[str, Any]:
 
 
 def probe_constancy(lean_bin: str, lean_src_path: Path,
-                    scratch: Optional[Path] = None) -> Dict[str, Any]:
+                    scratch: Optional[Path] = None,
+                    pred: str = "I") -> Dict[str, Any]:
     """Run the constancy probes against a COPY of the source.  Only meaningful
     if the source itself already compiles (else every probe 'fails')."""
     src = lean_src_path.read_text(encoding="utf-8")
     defs = scan_defs(src)
-    info = defs.get("I")
+    info = defs.get(pred)
     if not info or not info.get("state_type"):
-        return {"probed": False, "reason": "no `def I (s : T) : Bool|Prop :=` found"}
+        return {"probed": False, "pred": pred,
+                "reason": "no `def %s (s : T) : Bool|Prop :=` found" % pred}
     results = []
     tmpdir = Path(tempfile.mkdtemp(prefix="u3probe_", dir=scratch))
     try:
-        for probe in _probe_texts(info["state_type"], info["ret_type"]):
+        for probe in _probe_texts(info["state_type"], info["ret_type"], pred):
             probe_file = tmpdir / ("probe_%s.lean" % probe["polarity"])
             probe_file.write_text(src + "\n\n-- u3 (c) constancy probe\n"
                                   + probe["text"] + "\n", encoding="utf-8")
@@ -259,74 +284,189 @@ def probe_constancy(lean_bin: str, lean_src_path: Path,
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
     constant = next((r["polarity"] for r in results if r["elaborated"]), None)
-    return {"probed": True, "results": results, "constant": constant}
+    return {"probed": True, "pred": pred, "results": results, "constant": constant}
 
 
 # ------------------------------------------------------------- per-theorem (c)
 
-def judge_nonvacuity(kind: str, defs: Dict[str, Dict[str, Any]],
-                     probe_result: Optional[Dict[str, Any]],
-                     recorded: Dict[str, Any]) -> Dict[str, Any]:
-    """Frozen (c), per §1.2.1, executable extent; fails CLOSED on unknowns.
+class Prober:
+    """Lazily answers "is predicate `P` definitionally constant?".
 
-    `recorded` carries run-record evidence for the unsolvable-kind sub-checks:
-      trace_transitions      : int  — >0 discharges §1.2.1-unsolvable (c)
-      solvable_witness       : bool — discharges §1.2.1-unsolvable (d)
-      theorems_present       : set of theorem names in the development
-      recorded_non_vacuous   : Optional[bool] — the pipeline's own recorded bit,
-                               reported as provenance, never sufficient alone
+    Accepts the legacy single-probe dict (which probed `I` and nothing else),
+    a {pred: result} map, and/or a callable that runs a fresh probe.  Results
+    are memoised so a wide development is not recompiled once per predicate.
+    """
+
+    def __init__(self, probe_result: Any = None,
+                 run: Optional[Callable[[str], Optional[Dict[str, Any]]]] = None,
+                 budget: int = 4):
+        self._cache: Dict[str, Optional[Dict[str, Any]]] = {}
+        self._run = run
+        self._budget = budget
+        if isinstance(probe_result, dict):
+            if "probed" in probe_result:
+                self._cache[probe_result.get("pred") or "I"] = probe_result
+            else:
+                self._cache.update(probe_result)
+
+    def __call__(self, pred: Optional[str]) -> Optional[Dict[str, Any]]:
+        if not pred:
+            return None
+        if pred in self._cache:
+            return self._cache[pred]
+        if self._run is None or self._budget <= 0:
+            return None
+        self._budget -= 1
+        try:
+            res = self._run(pred)
+        except Exception:  # noqa: BLE001 — a crashed probe is "not probed"
+            res = None
+        self._cache[pred] = res
+        return res
+
+    def ran(self) -> bool:
+        return any(bool(v) and v.get("probed") for v in self._cache.values())
+
+
+def _constancy(pred: Optional[str], defs: Dict[str, Dict[str, Any]],
+               prober: Optional[Prober], residuals: List[str]) -> Optional[str]:
+    """`"true"` / `"false"` if `pred` is a literal or definitional constant."""
+    if not pred:
+        return None
+    info = defs.get(pred, {})
+    const = info.get("constant")
+    res = prober(pred) if prober else None
+    if res and res.get("probed"):
+        if res.get("constant"):
+            const = const or res["constant"]
+    else:
+        residuals.append("constancy probe not run for `%s` (static scan only)" % pred)
+    if pred not in defs:
+        residuals.append("`%s` has no single-line `def` this scan can read; "
+                         "non-constancy is not established statically" % pred)
+    return const
+
+
+def _mentions_constant(thm: "_shape.Theorem", dev: "_shape.Development") -> bool:
+    return any(re.search(r"(?<![\w.])%s(?![\w])" % re.escape(c), thm.statement)
+               for c in dev.constants)
+
+
+def judge_nonvacuity(thm: "_shape.Theorem", dev: "_shape.Development",
+                     defs: Dict[str, Dict[str, Any]],
+                     prober: Optional[Prober],
+                     recorded: Dict[str, Any],
+                     axiom_ok: Callable[[str], bool]) -> Dict[str, Any]:
+    """Frozen (c), per §1.2.1, keyed on WHAT THE THEOREM PROVES.
+
+    Three-valued on purpose (exam → freeze F1):
+
+      ok = True   §1.2.1's requirement for this kind of assertion is discharged
+      ok = False  it ran and FAILED — the manual proved a tautology (`vacuous`)
+      ok = None   §1.2.1 defines no requirement for this shape, so nothing ran
+                  (`unclassified`).  Still not attained; not an accusation.
+
+    Every supporting obligation a sub-check leans on must itself have passed
+    (b): a witness resting on `sorry` witnesses nothing.  That is what
+    `axiom_ok` is for.
+
+    `recorded` carries run-record evidence, used only where the Lean source
+    cannot supply it:
+      trace_transitions   : int  — >0 discharges §1.2.1-unsolvable (c)
+      solvable_witness    : bool — discharges §1.2.1-unsolvable (d) / prune (c)
+      recorded_non_vacuous: Optional[bool] — the pipeline's own bit, provenance
+                            only, never sufficient alone
     """
     residuals: List[str] = []
-    inv = defs.get("I", {})
-    inv_constant = inv.get("constant")
-    if probe_result and probe_result.get("probed"):
-        if probe_result.get("constant"):
-            inv_constant = inv_constant or ("true" if probe_result["constant"] == "true"
-                                            else "false")
-    else:
-        residuals.append("constancy probe not run (static scan only)")
 
-    if kind == INVARIANT_KIND:
-        if not inv:
-            return {"ok": False, "why": "no `def I` found to check", "residuals": residuals}
-        if inv_constant is not None:
+    # ---------------------------------------------------------- invariant
+    if thm.kind == INVARIANT_KIND:
+        pred = thm.basis.get("invariant_pred")
+        const = _constancy(pred, defs, prober, residuals)
+        if const is not None:
             return {"ok": False,
-                    "why": "invariant is constant `%s` — D-A3-007 class, "
-                           "fails §1.2.1 (two-witness)" % inv_constant,
+                    "why": "the invariant `%s` is constant `%s` — D-A3-007 "
+                           "class, fails §1.2.1 (two-witness)" % (pred, const),
                     "residuals": residuals}
         residuals.append("full §1.2.1 two-witness check deferred (§9.2 residual): "
-                         "non-constancy established %s"
-                         % ("definitionally (probe)" if probe_result
-                            and probe_result.get("probed") else "statically only"))
-        return {"ok": True, "why": "invariant not constant", "residuals": residuals}
+                         "non-constancy of `%s` established %s"
+                         % (pred, "definitionally (probe)"
+                            if prober and prober(pred) and prober(pred).get("probed")
+                            else "statically only"))
+        return {"ok": True,
+                "why": "the invariant `%s` is not constant" % pred,
+                "residuals": residuals}
 
-    if kind == UNSOLVABLE_KIND:
-        subs = {}
-        present = set(recorded.get("theorems_present") or [])
-        subs["a_inv_at_init"] = "inv_init" in present or "inv_all" in present
-        subs["b_goals_excluded"] = "goal_break" in present or "unsolvable" in present
-        goal = defs.get("Goal", {})
-        goal_constant = goal.get("constant")
-        if goal_constant in ("false", "False"):
-            return {"ok": False, "why": "Goal is constant false — empty goal set, "
-                                        "fails §1.2.1-unsolvable (d)",
+    # --------------------------------------------------------- unsolvable
+    if thm.kind == UNSOLVABLE_KIND:
+        goal = thm.basis.get("goal_pred")
+        subs: Dict[str, Any] = {}
+        gconst = _constancy(goal, defs, prober, residuals)
+        if gconst in ("false", "False"):
+            return {"ok": False,
+                    "why": "`%s` is constant false — empty goal set, fails "
+                           "§1.2.1-unsolvable (d)" % goal,
                     "residuals": residuals, "sub_checks": subs}
+
+        inv_preds = {t.basis.get("invariant_pred")
+                     for t in dev.by_kind(INVARIANT_KIND) if axiom_ok(t.name)}
+        inv_preds.discard(None)
+        init_claims = [t for t in dev.by_kind(POINT_KIND)
+                       if axiom_ok(t.name)
+                       and t.basis.get("pred") in inv_preds
+                       and any(a.polarity == "pos" for a in t.concl_atoms)]
+        subs["a_inv_at_init"] = bool(init_claims)
+        if init_claims:
+            t0 = init_claims[0]
+            subs["a_provenance"] = (
+                "`%s` states `%s` at the closed state `%s`, and `%s` is the "
+                "subject of a closure theorem in the same development"
+                % (t0.name, t0.basis.get("pred"), t0.basis.get("at"),
+                   t0.basis.get("pred")))
+            for t in init_claims:
+                c = _constancy(t.basis.get("pred"), defs, prober, residuals)
+                if c is not None:
+                    return {"ok": False,
+                            "why": "the invariant `%s` the unsolvability rests "
+                                   "on is constant `%s`" % (t.basis.get("pred"), c),
+                            "residuals": residuals, "sub_checks": subs}
+
+        excluders = [t.name for t in dev.theorems.values()
+                     if t.name != thm.name and axiom_ok(t.name)
+                     and (any(a.pred == goal and a.polarity == "neg"
+                              for a in t.concl_atoms)
+                          or (any(a.pred == goal and a.polarity == "pos"
+                                  for a in t.hyp_atoms)
+                              and any(a.polarity == "neg" for a in t.concl_atoms)))]
+        subs["b_goals_excluded"] = bool(excluders)
+        if excluders:
+            subs["b_provenance"] = "goal states excluded by `%s`" % excluders[0]
+
         transitions = recorded.get("trace_transitions") or 0
         subs["c_init_has_action"] = bool(transitions > 0)
         if transitions > 0:
             subs["c_provenance"] = "recorded trace: %d transitions" % transitions
-        subs["d_goal_nonempty"] = bool(recorded.get("solvable_witness"))
+
+        goal_witnesses = [t.name for t in dev.by_kind(WITNESS_KIND)
+                          if axiom_ok(t.name)
+                          and any(a.pred == goal and a.polarity == "pos"
+                                  for a in t.concl_atoms)]
+        subs["d_goal_nonempty"] = bool(recorded.get("solvable_witness")
+                                       or goal_witnesses)
         if recorded.get("solvable_witness"):
             subs["d_provenance"] = recorded.get("solvable_witness_provenance",
                                                 "recorded solvable witness")
-        if inv_constant is not None:
-            return {"ok": False,
-                    "why": "invariant is constant `%s` — the unsolvability rests "
-                           "on a vacuous I" % inv_constant,
-                    "residuals": residuals, "sub_checks": subs}
-        ok = all(subs.get(k) for k in
-                 ("a_inv_at_init", "b_goals_excluded",
-                  "c_init_has_action", "d_goal_nonempty"))
+        elif goal_witnesses:
+            subs["d_provenance"] = ("`%s` exhibits a state satisfying `%s`"
+                                    % (goal_witnesses[0], goal))
+        if not subs["c_init_has_action"]:
+            residuals.append(
+                "§1.2.1-unsolvable (c) has no source-level check: "
+                "「初始态存在至少一个合法动作」is discharged only from a run "
+                "record's `trace_transitions`, which a bare Lean book never "
+                "carries.  Stated as a coverage gap, not passed open.")
+        ok = all(subs.get(k) for k in ("a_inv_at_init", "b_goals_excluded",
+                                       "c_init_has_action", "d_goal_nonempty"))
         why = ("§1.2.1-unsolvable (a)-(d) discharged" if ok else
                "missing sub-check: %s" % [k for k in
                                           ("a_inv_at_init", "b_goals_excluded",
@@ -334,11 +474,99 @@ def judge_nonvacuity(kind: str, defs: Dict[str, Dict[str, Any]],
                                           if not subs.get(k)])
         return {"ok": ok, "why": why, "residuals": residuals, "sub_checks": subs}
 
-    # prune-kind and unknown-kind: no implemented check → fail closed (§9.2).
-    return {"ok": False,
-            "why": "no executable §1.2.1 check implemented for kind `%s` — "
-                   "fails closed" % kind,
-            "residuals": residuals}
+    # -------------------------------------------------------------- prune
+    if thm.kind == PRUNE_KIND:
+        goal = thm.basis.get("goal_pred")
+        pattern = list(thm.basis.get("pattern_preds") or [])
+        subs = {"pattern_preds": pattern, "goal_pred": goal}
+        for p in pattern:
+            c = _constancy(p, defs, prober, residuals)
+            if c is not None:
+                return {"ok": False,
+                        "why": "the pattern predicate `%s` is constant `%s` — "
+                               "the pattern has no content, so the theorem says "
+                               "nothing (§1.2.1-prune (a))" % (p, c),
+                        "residuals": residuals, "sub_checks": subs}
+        gconst = _constancy(goal, defs, prober, residuals)
+        if gconst in ("false", "False"):
+            return {"ok": False,
+                    "why": "`%s` is constant false — an empty goal set makes "
+                           "every pattern dead for free" % goal,
+                    "residuals": residuals, "sub_checks": subs}
+
+        # (a) at least one well-formed state satisfies the pattern.  The whole
+        # pattern conjunction must hold, at ONE closed state, in ONE theorem.
+        witness = None
+        for t in dev.theorems.values():
+            if t.name == thm.name or not axiom_ok(t.name):
+                continue
+            by_arg: Dict[str, Set[str]] = {}
+            for a in t.concl_atoms:
+                if a.polarity == "pos" and not t.mentions_bound(a.arg):
+                    by_arg.setdefault(a.arg.strip(), set()).add(a.pred)
+            for arg, preds in sorted(by_arg.items()):
+                if set(pattern) <= preds:
+                    witness = (t.name, arg)
+                    break
+            if witness:
+                break
+        subs["a_pattern_satisfiable"] = witness is not None
+        if witness:
+            subs["a_provenance"] = ("`%s` exhibits the state `%s` satisfying %s"
+                                    % (witness[0], witness[1], pattern))
+
+        # (b) the pattern contains no goal state — proved of the PATTERN, not
+        # of the reachable set (a co-theorem with a relation hypothesis would
+        # be the deadlock theorem restating itself).
+        excluder = None
+        for t in dev.theorems.values():
+            if t.name == thm.name or not axiom_ok(t.name) or t.relation_hyps:
+                continue
+            if not any(a.pred == goal and a.polarity == "neg"
+                       and t.mentions_bound(a.arg) for a in t.concl_atoms):
+                continue
+            hp = {a.pred for a in t.hyp_atoms if a.polarity == "pos"}
+            if hp and hp <= set(pattern):
+                excluder = t.name
+                break
+        subs["b_pattern_excludes_goal"] = excluder is not None
+        if excluder:
+            subs["b_provenance"] = "`%s` excludes goal states from the pattern" % excluder
+
+        # (c) the level is itself solvable — otherwise "already lost" is
+        # masquerading as a dead zone (CONTRACTS/deadlock_certificate_v0.1:
+        # 「在一局本来就输定的关卡上证一条死区定理，句句为真，什么也没证明」).
+        solvable = None
+        for t in dev.by_kind(WITNESS_KIND):
+            if not axiom_ok(t.name):
+                continue
+            if any(a.pred == goal and a.polarity == "pos" for a in t.concl_atoms) \
+                    and _mentions_constant(t, dev):
+                solvable = t.name
+                break
+        subs["c_level_solvable"] = bool(solvable or recorded.get("solvable_witness"))
+        if solvable:
+            subs["c_provenance"] = ("`%s` exhibits a run from a declared initial "
+                                    "state to a state satisfying `%s`" % (solvable, goal))
+        elif recorded.get("solvable_witness"):
+            subs["c_provenance"] = recorded.get("solvable_witness_provenance",
+                                                "recorded solvable witness")
+
+        keys = ("a_pattern_satisfiable", "b_pattern_excludes_goal", "c_level_solvable")
+        ok = all(subs.get(k) for k in keys)
+        why = ("§1.2.1-prune (a)-(c) discharged" if ok else
+               "missing sub-check: %s" % [k for k in keys if not subs.get(k)])
+        return {"ok": ok, "why": why, "residuals": residuals, "sub_checks": subs}
+
+    # ------------------------------------------------------- unclassified
+    return {"ok": None,
+            "why": "§1.2.1 defines no non-vacuity requirement for a `%s` "
+                   "assertion — UNCLASSIFIED, not vacuous: E1 did not check "
+                   "this theorem, it is not accusing it (%s)"
+                   % (thm.kind, thm.basis.get("rule", "")),
+            "residuals": residuals,
+            "shape": {"conclusion": thm.conclusion,
+                      "hypotheses": thm.hypotheses}}
 
 
 # ------------------------------------------------------------ verdict assembly
@@ -371,37 +599,88 @@ def judge_development(compiles: bool, axiom_report: Dict[str, List[str]],
                                  "strict (b) unmet — re-run with --probe"},
                         evidence)
     defs = scan_defs(lean_src) if lean_src else {}
+    dev = _shape.parse_development(lean_src)
+    prober = probe_result if isinstance(probe_result, Prober) else Prober(probe_result)
+    b_by_name = {name: judge_axioms(axioms) for name, axioms in axiom_report.items()}
+
+    def axiom_ok(name: str) -> bool:
+        """A supporting obligation counts only if it passed (b) itself."""
+        rec = b_by_name.get(name)
+        return bool(rec and rec["ok"])
+
     per_theorem: Dict[str, Any] = {}
     flags: Dict[str, Any] = {"classical_choice_needed": False}
-    any_pass = False
     c_residuals: List[str] = []
+    passed: List[str] = []
+    refuted: List[str] = []
+    unclassified: List[str] = []
+    kind_coverage: Dict[str, int] = {}
+
     for name, axioms in sorted(axiom_report.items()):
-        b = judge_axioms(axioms)
+        b = b_by_name[name]
         if b["classical_choice_needed"]:
             flags["classical_choice_needed"] = True
-        kind = classify_theorem(name)
-        c = (judge_nonvacuity(kind, defs, probe_result, recorded)
+        thm = dev.theorems.get(name)
+        if thm is None:
+            thm = _shape.Theorem(
+                name=name, statement="",
+                kind=_shape.UNCLASSIFIED_KIND,
+                basis={"rule": "no Lean statement available for `%s` — the "
+                               "shape could not be read, so no §1.2.1 check "
+                               "applies" % name})
+        kind_coverage[thm.kind] = kind_coverage.get(thm.kind, 0) + 1
+        c = (judge_nonvacuity(thm, dev, defs, prober, recorded, axiom_ok)
              if b["ok"] else {"ok": None, "why": "not reached — (b) failed"})
         if c.get("residuals"):
             c_residuals.extend("%s: %s" % (name, r) for r in c["residuals"])
-        per_theorem[name] = {"kind": kind, "b": b, "c": c}
-        if b["ok"] and c.get("ok"):
-            any_pass = True
+        per_theorem[name] = {"kind": thm.kind, "kind_basis": thm.basis,
+                             "name_hint": _shape.name_hint(name),
+                             "b": b, "c": c}
+        if not b["ok"]:
+            continue
+        if c.get("ok") is True:
+            passed.append(name)
+        elif c.get("ok") is False:
+            refuted.append(name)
+        else:
+            unclassified.append(name)
+
     if not lean_src:
-        c_residuals.append("no Lean source available — (c) judged from recorded "
-                           "evidence only")
-    if any_pass:
+        c_residuals.append("no Lean source available — every theorem reads "
+                           "`unclassified` because the statement could not be "
+                           "read; a name is not evidence of what was proved")
+
+    # Label precedence.  `vacuous` is the strongest CLAIM this adjudicator can
+    # make, so it is reached only when a §1.2.1 check actually ran and refused;
+    # `unclassified` is what is left when nothing ran.  A development holding
+    # both a refuted and an unclassified theorem reads `vacuous` — the word is
+    # then true of the theorems named in `criteria.refuted`, and the residual
+    # below names the ones it is NOT true of, so the accusation stays bounded.
+    if passed:
         label = "discharged"
-    elif any(t["b"]["ok"] for t in per_theorem.values()):
+    elif refuted:
         label = "vacuous"
+        if unclassified:
+            c_residuals.append(
+                "label `vacuous` is a finding about %s, the theorem(s) whose "
+                "§1.2.1 check ran and failed.  It is NOT a finding about %s, "
+                "which E1 could not classify." % (refuted, unclassified))
+    elif unclassified:
+        label = "unclassified"
     else:
         label = "axiom_violation"
+    if unclassified:
+        flags["unclassified_theorems"] = unclassified
     return _verdict(label,
                     {"a_compiles": True,
                      "b_axioms": {n: t["b"]["ok"] for n, t in per_theorem.items()},
                      "c_nonvacuous": {n: t["c"].get("ok")
                                       for n, t in per_theorem.items()},
                      "per_theorem": per_theorem,
+                     "kind_coverage": kind_coverage,
+                     "attaining": passed,
+                     "refuted": refuted,
+                     "unclassified": unclassified,
                      "c_residuals": c_residuals},
                     evidence, flags)
 
@@ -462,7 +741,8 @@ def eval_arm_record(record: Dict[str, Any], run_dir: Path,
                                     lean_bin=lean_bin, recorded={})
             live["evidence"]["source"] = "certify record + live re-run of %s" % lean_file
             return live
-        probe_result = probe_constancy(lean_bin, Path(lean_file))
+        _lf = Path(lean_file)
+        probe_result = Prober(run=lambda p: probe_constancy(lean_bin, _lf, pred=p))
     return judge_development(compiles, axiom_report, lean_src, probe_result,
                              {}, evidence)
 
@@ -492,7 +772,8 @@ def eval_lean_source(lean_path: Path, probe: bool, lean_bin: Optional[str],
                     parse_axiom_lines(res["stdout"]).items() if t in theorems}
     probe_result = None
     if probe and compiles:
-        probe_result = probe_constancy(lean_bin, lean_path)
+        probe_result = Prober(
+            run=lambda p: probe_constancy(lean_bin, lean_path, pred=p))
     out = judge_development(compiles, axiom_report, src, probe_result,
                             recorded, evidence)
     if not compiles:
@@ -565,6 +846,28 @@ def eval_lean_cert(cert: Dict[str, Any], territory: Path,
 
 
 # ------------------------------------------------------------- run-dir driver
+
+_THEOREM_LINE = re.compile(r"^\s*(?:theorem|lemma)\s+\w", re.M)
+
+
+def states_a_theorem(lean_file: Path) -> bool:
+    """Does this `.lean` file declare a theorem?  A build script does not."""
+    try:
+        return bool(_THEOREM_LINE.search(
+            _shape.strip_comments(lean_file.read_text(encoding="utf-8"))))
+    except OSError:
+        return False
+
+
+def find_books(path: Path) -> List[Path]:
+    """Lean developments directly inside `path`, `theory.lean` first."""
+    if not path.is_dir():
+        return []
+    books = [p for p in sorted(path.glob("*.lean"))
+             if p.is_file() and states_a_theorem(p)]
+    books.sort(key=lambda p: (p.name != "theory.lean", p.name))
+    return books
+
 
 def evaluate(path: Path, probe: bool = False,
              lean_bin: Optional[str] = None) -> Dict[str, Any]:
@@ -642,11 +945,18 @@ def evaluate(path: Path, probe: bool = False,
     # 4. bare theory dir with a Lean development.  Compiling is criterion (a),
     # so Lean is looked up even without --probe; --probe only adds the
     # constancy probes.
-    lean_file = path / "theory.lean"
-    if best is None and lean_file.exists():
-        consider(eval_lean_source(lean_file, probe=probe,
-                                  lean_bin=lean_bin or find_lean(),
-                                  recorded={}))
+    #
+    # D1 (exam → freeze, 2026-08-01): this used to hard-code `theory.lean`, so
+    # the four handover packages whose book is called `Level.lean` read
+    # `no_evidence` — indistinguishable from "there was no proof layer".  A
+    # book's file name is not evidence about a book, so every `.lean` file in
+    # the directory that STATES A THEOREM is a candidate.  `lakefile.lean` and
+    # friends state none and are skipped by that test, not by a name list.
+    if best is None:
+        for lean_file in find_books(path):
+            consider(eval_lean_source(lean_file, probe=probe,
+                                      lean_bin=lean_bin or find_lean(),
+                                      recorded={}))
 
     if best is None:
         best = _verdict("no_evidence",
@@ -659,25 +969,84 @@ def evaluate(path: Path, probe: bool = False,
 
 # -------------------------------------------------------------------- sweep
 
-def expand_targets(paths: List[Path]) -> List[Path]:
+#: Directories a census must never descend into, each with the reason it is
+#: excluded.  An exclusion that is invisible cannot be audited, so
+#: `expand_targets` will hand the list back on request rather than silently
+#: dropping paths.
+DEFAULT_EXCLUSIONS: Dict[str, str] = {
+    ".git": "git internals, not artefacts",
+    ".worktrees": "byte-copies of other branches; counting them would inflate "
+                  "the denominator with duplicates of the same book",
+    ".lake": "Lean build output, not a book",
+    ".toolchain": "gitignored toolchain build",
+    "build": "build output",
+    "__pycache__": "compiled Python",
+    "node_modules": "vendored dependencies",
+    "environment_files": "upstream game source — the pile cut forbids reading "
+                         "anything here that is not development pile",
+    "_worktree-scratch-archive": "archived byte-copies of other territories' books",
+}
+
+
+def is_target_dir(p: Path) -> bool:
+    """Does this directory hold a proof-layer artefact E1 can adjudicate?"""
+    if any((p / n).exists() for n in ("certify.json", "transfer.json")):
+        return True
+    if (p / "artifacts").is_dir() and any(
+            (p / "artifacts" / n).exists()
+            for n in ("a0_report.json", "certify_lean_generated_theory_lean.json")):
+        return True
+    return bool(find_books(p))
+
+
+def expand_targets(paths: List[Path], exclusions: Optional[Dict[str, str]] = None,
+                   record_exclusions: Optional[List[Dict[str, str]]] = None,
+                   max_depth: int = 12) -> List[Path]:
+    """Every adjudicable directory at or under each path.
+
+    D2 (exam → freeze, 2026-08-01): this used to descend exactly one level, so
+    the three books under `cold-start-a3/runs/<run>/generated/<variant>/` were
+    unreachable and the 2026-07-31 sweep's hand-typed path list stood in for a
+    census.  A hand-typed list only finds what someone remembered, which is the
+    one thing a census may not depend on.  It now walks, and it declares what
+    it refuses to walk into.
+    """
+    excl = DEFAULT_EXCLUSIONS if exclusions is None else exclusions
     out: List[Path] = []
+    seen: Set[Path] = set()
+
+    def walk(d: Path, depth: int, root: Path) -> None:
+        if depth > max_depth:
+            if record_exclusions is not None:
+                record_exclusions.append(
+                    {"path": str(d), "reason": "deeper than max_depth=%d" % max_depth})
+            return
+        if is_target_dir(d):
+            key = d.resolve()
+            if key not in seen:
+                seen.add(key)
+                out.append(d)
+        try:
+            children = sorted(c for c in d.iterdir() if c.is_dir())
+        except OSError:
+            return
+        for c in children:
+            if c.is_symlink():
+                continue
+            if c.name in excl:
+                if record_exclusions is not None:
+                    record_exclusions.append(
+                        {"path": str(c.relative_to(root)) if root in c.parents
+                                 else str(c),
+                         "reason": excl[c.name]})
+                continue
+            walk(c, depth + 1, root)
+
     for p in paths:
         p = Path(p)
         if not p.is_dir():
             continue
-        # A runs/ container: expand to children that look like run dirs.
-        children = [c for c in sorted(p.iterdir()) if c.is_dir()]
-        has_own = any((p / n).exists() for n in
-                      ("certify.json", "transfer.json", "theory.lean")) \
-            or (p / "artifacts").is_dir()
-        if has_own:
-            out.append(p)
-        elif children and p.name == "runs":
-            out.extend(children)
-        elif (p / "runs").is_dir() and (p / "artifacts").is_dir() is False:
-            out.extend(c for c in sorted((p / "runs").iterdir()) if c.is_dir())
-        else:
-            out.append(p)
+        walk(p, 0, p)
     return out
 
 
