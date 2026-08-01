@@ -1,0 +1,114 @@
+{
+  "artifacts": {
+    "theoria-arm/DECISIONS.md": {
+      "bytes": 72834,
+      "sha256": "dba37a2b30a7259752557a3abd9ca8d6db95583fed1145d49b0358af55d3be16"
+    },
+    "theoria-arm/inner/loop.py": {
+      "bytes": 96280,
+      "sha256": "5f59f253f745c0232c4c134a87308837bbcc41df77dc1e627966e76464bab003"
+    },
+    "theoria-arm/inner/probe.py": {
+      "bytes": 50570,
+      "sha256": "9273c86ae0a33c91ec37be8a4c6a9508678e34183018c82e72d5c2bd2adc3fec"
+    },
+    "theoria-arm/runs/2026-08-01T050800Z-R2-1-anchor-refusal/NOTES.md": {
+      "bytes": 5115,
+      "sha256": "6a9aa58d7c3a406bc3fa73608bfd13243ffa7664c33526ee85b6cbfab0a0ccd0"
+    },
+    "theoria-arm/runs/2026-08-01T050800Z-R2-1-anchor-refusal/RUN_STATE.md": {
+      "bytes": 9267,
+      "sha256": "fb3d86f6bdb4397cf403b94cd33bd419c3bf8588d09289ba4d426f563b90360c"
+    },
+    "theoria-arm/runs/2026-08-01T050800Z-R2-1-anchor-refusal/results.json": {
+      "bytes": 2829,
+      "sha256": "d344fb7525e7ec08ac0555092c1ff26fa577ca9f447fa5e671fa2c5d198e49c2"
+    },
+    "theoria-arm/tests/test_anchor_refusal.py": {
+      "bytes": 16930,
+      "sha256": "2e9548a0aeba95b2c41f6ab867f99bed2a0ea6ff42070878074f5aa4539ed96c"
+    },
+    "theoria-arm/tests/test_frontier_generation.py": {
+      "bytes": 19372,
+      "sha256": "26ae421ab5fc4a0b4b5a406ce4f5672d956ef00eac89c5790399497dbf7d4c33"
+    },
+    "theoria-arm/verify.sh": {
+      "bytes": 2331,
+      "sha256": "517692c827b40e0fcee9aa475e05fb52437abe0f855f62ffbb2deab3b1e52934"
+    }
+  },
+  "base_commit": "4c08ea6be6ff480d9b7cfcd6be8bd17c2e9e3749",
+  "branch": "agent/r2-1-roll-forward-drift",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "R2-1",
+  "results": {
+    "baseline": {
+      "command": "python -m pytest (repo root, worktree)",
+      "failures": [
+        "tests/test_arm.py::test_the_archive_stays_accountable",
+        "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+      ],
+      "green": false,
+      "note": "both pre-existing on master at base 4c08ea6b, unrelated to this ticket; the ceiling one is claude-opus-5 ceiling $12.00 < $13.4480 implied by the archive",
+      "summary": "2 failed, 657 passed in 807.76s"
+    },
+    "concurrent_branch_check": {
+      "also_touches": [
+        "theoria-arm/inner/loop.py",
+        "theoria-arm/DECISIONS.md"
+      ],
+      "branch": "phase3/c1-theorize-deferral",
+      "decisions_md": "they insert at :567, I append at EOF -- no overlap",
+      "my_loop_hunks_start": 1206,
+      "overlap": false,
+      "their_loop_hunks_end": 1164,
+      "verdict": "no conflict expected; flagged for whoever merges second"
+    },
+    "defect_found_by_negative_control": "roll_forward treated FrameStore.actions' designed None terminator as stopped_early; caught by the anchored twin, not by the refusing test",
+    "drift_measurement": {
+      "anchor_drifted": 35,
+      "entropy_floor_refusals": 0,
+      "frontier_width_max": 2,
+      "off_frontier_while_drifted": 35,
+      "probes_completed": 52,
+      "source": "runs/20260801T0900Z-R2-frontier-by-generation/MEASUREMENT.json"
+    },
+    "red_lines": {
+      "boundary": "1/1 green -- nothing changed outside theoria-arm",
+      "sealed": "2/2 green -- 21 sealed / 4 dev, no sealed id in 7 changed files",
+      "secret": "5/5 green -- .env ignored+untracked, no secret value in 12761 tracked files"
+    },
+    "suite": {
+      "after_fix": "tests/test_frontier_generation.py + tests/test_anchor_refusal.py = 35 passed",
+      "command": "python -m pytest tests -q (theoria-arm)",
+      "mine": 1,
+      "my_failure": "tests/test_frontier_generation.py::test_the_design_report_grows_no_key_on_the_default -- a guard that correctly caught a deliberate contract change; rewritten and renamed, see NOTES",
+      "pre_existing": 2,
+      "pre_existing_names": [
+        "tests/test_arm.py::test_the_archive_stays_accountable",
+        "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+      ],
+      "result": "3 failed"
+    },
+    "suite_final": {
+      "baseline_was": "657 passed, 2 failed (659) at base 4c08ea6b",
+      "both_pre_existing_on_master": true,
+      "command": "python -m pytest tests -q (theoria-arm)",
+      "delta": "+15 tests, same 2 reds",
+      "failed": 2,
+      "failed_names": [
+        "tests/test_arm.py::test_the_archive_stays_accountable",
+        "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+      ],
+      "note": "pytest final summary line did not reach the file; counts derived from the progress block and cross-checked against the baseline total",
+      "passed": 672,
+      "total": 674
+    }
+  },
+  "run_dir": "theoria-arm/runs/2026-08-01T050800Z-R2-1-anchor-refusal",
+  "seed": null,
+  "t": "2026-08-01T06:00:37Z",
+  "tests": "674 tests: 672 passed, 2 failed -- both pre-existing on master at base 4c08ea6b (test_the_archive_stays_accountable, test_the_ceiling_table_still_covers_the_archive); baseline was 657 passed / 2 failed",
+  "title": "R2-1: the frontier's anchor is computed on every path and refuses a drifted probe"
+}

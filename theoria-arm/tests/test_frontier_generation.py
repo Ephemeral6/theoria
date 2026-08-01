@@ -18,7 +18,17 @@ says something narrower and worse than "the probes were badly chosen":
 
 So this file has two jobs and they are equally load-bearing. The first is that
 `generated` can contain what `ablation` structurally cannot. The second is that
-`ablation` -- the default -- did not move a byte.
+`ablation` -- the default -- keeps the same frontier: same hypotheses, same
+order, same ids, so the switch still has a real control.
+
+**The second job was narrower after R2-1, and the narrowing is deliberate.**
+It used to be "`ablation` did not move a byte". It no longer holds for the
+report or for the arm's behaviour: `report["anchor"]` is now written on both
+paths and a drifted probe is refused on both, because the anchor guarded
+nothing while it lived behind a non-default flag -- the four paid legs never
+took it. The frontier half of the guarantee is untouched and still tested.
+See `D-R2-002`, and `test_the_default_switch_changes_nothing_except_the_anchor
+_reading` below, which carries the argument in full.
 
 **Every check that can say no is watched saying it.** The generated frontier is
 handed a world whose mechanism is outside every generator, and asserted
@@ -154,8 +164,36 @@ def test_a_store_present_changes_nothing_while_the_mode_is_ablation():
     assert without == with_store == with_both
 
 
-def test_the_design_report_grows_no_key_on_the_default():
-    """`design()`'s report is byte-identical with the switch at its default."""
+def test_the_default_switch_changes_nothing_except_the_anchor_reading():
+    """**This guarantee was narrowed by R2-1, deliberately. Read the reason.**
+
+    As written on 2026-08-01 this asserted the report was byte-identical with
+    the switch at its default, and it was the second of this file's two jobs:
+    `ablation` did not move a byte. R2-1 broke that half on purpose.
+
+    Why it had to break. The anchor -- whether the state a design was ranked
+    against is the frame the world is showing -- was computed only under
+    `generated`, which is not the default, so on the four legs that were
+    actually paid for it was never taken. 35 of their 52 probes were designed
+    against a frame the world had left, and all 35 landed off-frontier. A
+    reading that exists only behind a non-default flag cannot catch that, and
+    an instrument that must be switched on to see the defect it was built for
+    is the defect. So `report["anchor"]` is now written on both paths, and
+    `loop.py` refuses a drifted probe on both paths. See `D-R2-002`.
+
+    **What is unchanged, and it is the half that carried the knob's honesty:**
+    the *frontier* does not move on the default -- same hypotheses, same order,
+    same ids -- so `generated` still has a real control to be compared against.
+    That property has its own test immediately above this one
+    (`test_the_default_frontier_is_the_ablation_frontier` and the store/no-store
+    equality), and it still passes untouched. This test now checks the
+    surviving guarantee and says so in its name, rather than keeping a name
+    that claims more than it checks.
+
+    The two anchors below differ, and that is information rather than drift in
+    the switch: `old` is called without a store, so there is no world frame to
+    compare against and the reading is "no claim"; `new` has one.
+    """
     import json                                        # noqa: PLC0415
 
     namespace = _namespace()
@@ -165,9 +203,19 @@ def test_the_design_report_grows_no_key_on_the_default():
     old = probe_beat.design(namespace, state, actions)
     new = probe_beat.design(namespace, state, actions,
                             frontier=FrontierConfig(), store=store)
-    assert "frontier" not in old
+
+    assert "frontier" not in old, "the generated block is still switched"
     assert "frontier" not in new
-    assert json.dumps(old, sort_keys=True) == json.dumps(new, sort_keys=True)
+
+    old_anchor = old.pop("anchor")
+    new_anchor = new.pop("anchor")
+    assert json.dumps(old, sort_keys=True) == json.dumps(new, sort_keys=True), (
+        "everything the design is ranked on is still byte-identical at the "
+        "switch's default; only the anchor reading was added")
+
+    assert old_anchor["world_hash"] is None
+    assert old_anchor["drifted"] is False, "no store is not a claim about drift"
+    assert new_anchor["drifted"] is True
 
 
 # ==================================== 2. the switch is a positive whitelist

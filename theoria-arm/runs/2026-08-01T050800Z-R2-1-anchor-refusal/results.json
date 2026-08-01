@@ -1,0 +1,64 @@
+{
+  "baseline": {
+    "command": "python -m pytest (repo root, worktree)",
+    "failures": [
+      "tests/test_arm.py::test_the_archive_stays_accountable",
+      "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+    ],
+    "green": false,
+    "note": "both pre-existing on master at base 4c08ea6b, unrelated to this ticket; the ceiling one is claude-opus-5 ceiling $12.00 < $13.4480 implied by the archive",
+    "summary": "2 failed, 657 passed in 807.76s"
+  },
+  "concurrent_branch_check": {
+    "also_touches": [
+      "theoria-arm/inner/loop.py",
+      "theoria-arm/DECISIONS.md"
+    ],
+    "branch": "phase3/c1-theorize-deferral",
+    "decisions_md": "they insert at :567, I append at EOF -- no overlap",
+    "my_loop_hunks_start": 1206,
+    "overlap": false,
+    "their_loop_hunks_end": 1164,
+    "verdict": "no conflict expected; flagged for whoever merges second"
+  },
+  "defect_found_by_negative_control": "roll_forward treated FrameStore.actions' designed None terminator as stopped_early; caught by the anchored twin, not by the refusing test",
+  "drift_measurement": {
+    "anchor_drifted": 35,
+    "entropy_floor_refusals": 0,
+    "frontier_width_max": 2,
+    "off_frontier_while_drifted": 35,
+    "probes_completed": 52,
+    "source": "runs/20260801T0900Z-R2-frontier-by-generation/MEASUREMENT.json"
+  },
+  "red_lines": {
+    "boundary": "1/1 green -- nothing changed outside theoria-arm",
+    "sealed": "2/2 green -- 21 sealed / 4 dev, no sealed id in 7 changed files",
+    "secret": "5/5 green -- .env ignored+untracked, no secret value in 12761 tracked files"
+  },
+  "suite": {
+    "after_fix": "tests/test_frontier_generation.py + tests/test_anchor_refusal.py = 35 passed",
+    "command": "python -m pytest tests -q (theoria-arm)",
+    "mine": 1,
+    "my_failure": "tests/test_frontier_generation.py::test_the_design_report_grows_no_key_on_the_default -- a guard that correctly caught a deliberate contract change; rewritten and renamed, see NOTES",
+    "pre_existing": 2,
+    "pre_existing_names": [
+      "tests/test_arm.py::test_the_archive_stays_accountable",
+      "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+    ],
+    "result": "3 failed"
+  },
+  "suite_final": {
+    "baseline_was": "657 passed, 2 failed (659) at base 4c08ea6b",
+    "both_pre_existing_on_master": true,
+    "command": "python -m pytest tests -q (theoria-arm)",
+    "delta": "+15 tests, same 2 reds",
+    "failed": 2,
+    "failed_names": [
+      "tests/test_arm.py::test_the_archive_stays_accountable",
+      "tests/test_desk_gate.py::test_the_ceiling_table_still_covers_the_archive"
+    ],
+    "note": "pytest final summary line did not reach the file; counts derived from the progress block and cross-checked against the baseline total",
+    "passed": 672,
+    "total": 674
+  }
+}

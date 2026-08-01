@@ -820,12 +820,16 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
     the frontier that is actually still standing.
 
     `frontier` and `store` are the other switch. On `ablation` -- the default,
-    and what you get when either is absent -- nothing in this function moves:
-    the same hypotheses in the same order, and no new key in the report. On
-    `generated` the frontier grows the world-anchored successors, and the
-    report grows a `frontier` block carrying the mode, the generated ids, and
-    the anchor-drift reading that says whether the old frontier was about this
-    world at all.
+    and what you get when either is absent -- the hypotheses do not move: the
+    same set in the same order. On `generated` the frontier grows the
+    world-anchored successors and the report grows a `frontier` block carrying
+    the mode and the generated ids.
+
+    `report["anchor"]` is written on **both** paths and is not a switch. It
+    says whether the state this design was ranked against is the frame the
+    world is actually showing; on 35 of the 52 probes of 2026-07-31 it was not,
+    and all 35 landed off-frontier. A reading that only exists under a
+    non-default flag is not an instrument, which is why it is out here.
     """
     from engines import probe_frontier                # noqa: PLC0415
 
@@ -870,6 +874,23 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
     }
     if economy_report is not None:
         report["economy"] = economy_report
+
+    # -- the anchor, on every path -----------------------------------------
+    #
+    # This used to be computed only under `cfg.generated`, and `generated` is
+    # not the default -- so on exactly the legs that were paid for, the one
+    # number that says whether the experiment is about this world was never
+    # taken. Drift is a fact about the manual, not about which frontier was
+    # chosen: an ablation frontier anchored on a stale state is off by the same
+    # frame as a generated one would be. It costs no action and no model call,
+    # which is the whole reason it can be unconditional.
+    #
+    # One dict, referenced twice, never recomputed. Two readings of one fact
+    # can disagree, and `ProbeEconomy.observe` already refuses to take a second
+    # opinion on vacuity for the same reason.
+    anchor = anchor_drift(namespace, state, store)
+    report["anchor"] = anchor
+
     if cfg.generated:
         ablation_ids = {"manual", "inert"} | {
             h.id for h in full if h.id.startswith("without_")}
@@ -878,7 +899,7 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
             "keep_ablations": cfg.keep_ablations,
             "n_generated": sum(1 for h in full if h.id not in ablation_ids),
             "generated": sorted(h.id for h in full if h.id not in ablation_ids),
-            "anchor": anchor_drift(namespace, state, store),
+            "anchor": anchor,
         }
     return report
 

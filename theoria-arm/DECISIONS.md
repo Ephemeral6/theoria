@@ -1114,3 +1114,104 @@ answer 5 times of 52 and generation 43.
    the world's frame is the actual fix, and it would make certify's replay
    trivially green -- destroying the only instrument that currently detects a
    wrong manual. That is somebody else's call, made deliberately, not skipped.
+
+## D-R2-002 · The anchor is wired in as a refusal, and the deferral's premise needed splitting
+
+`D-R2-001` decision 3 left the wiring to someone else: "Re-seating the manual's
+state on the world's frame is the actual fix, and it would make certify's
+replay trivially green -- destroying the only instrument that currently detects
+a wrong manual. That is somebody else's call, made deliberately, not skipped."
+The owner made the call on 2026-08-01. This entry records what the call turned
+out to require, which is less than that sentence implies.
+
+**The premise has two readings and only one of them is true.** `loop._roll_
+forward` has exactly one call site (`loop.py`, the probe designer) and
+`certify.py` runs its **own** replay -- its own local `state`, from
+`initial_state()` over `store.actions`, reporting `first_divergence` and
+`step_raised`. So *narrow* re-seating, of the value that one call site
+receives, would not touch certify at all; *broad* re-seating, of how the arm
+maintains manual state everywhere, would. `D-R2-001` does not distinguish them,
+and the distinction is the entire cost of the decision it deferred.
+
+**This ticket needs neither, so it does neither.** The state `_roll_forward`
+returns is unchanged, byte for byte. What changes is that its staleness stops
+being invisible.
+
+**Three defects, all in the wiring rather than in the instrument.**
+
+1. `probe.anchor_drift` was computed only under `if cfg.generated:`, and
+   `generated` is not the default -- so on exactly the four paid legs of
+   2026-07-31 the one number that says whether the experiment is about this
+   world was never taken. It is now computed on every path. Drift is a fact
+   about the manual, not about which frontier was chosen, and it costs no
+   action and no model call, which is what lets it be unconditional. One dict,
+   referenced by both `report["anchor"]` and the `frontier` block, because two
+   readings of one fact can disagree -- the reason `ProbeEconomy.observe`
+   already refuses to recompute vacuity.
+2. Where it *was* taken, nothing read it. `ProbeEconomy.gate`'s two refusals
+   (frontier collapse, bits floor) cannot see it. It is now the **fourth**
+   unconditional refusal in `loop.py`, beside the vacuous streak, the repeat
+   and the theorize cap.
+3. `_roll_forward` swallowed a raising `step` with a bare `break` and returned
+   the half-rolled state, so a manual that crashed on action 3 of 40 handed
+   back a 37-action-stale state and said nothing. It now returns
+   `(state, rollout)`.
+
+**The anchor is asked first, and the order is the argument.** The other three
+refusals price an experiment; the anchor asks whether there is one. Asking it
+second would also put a wrong reason in the record: the vacuous-streak refusal
+blames the ablation family for being closed downward, which is true of the
+family and was *not* the binding cause on those legs. A refusal that names a
+real defect the run did not suffer from is worse than no refusal, because it is
+believed.
+
+**Refusing costs nothing measurable.** All 35 of the drifted probes landed off
+the frontier (`runs/20260801T0900Z-R2-frontier-by-generation/MEASUREMENT.json`,
+`totals.off_frontier_while_drifted`), so not one of them was going to hit. This
+is a saving, not a trade.
+
+**A defect this ticket caught in itself, kept because the shape recurs.** The
+first draft counted `FrameStore.actions`' trailing `None` as an early stop.
+`world/frames.py` says verbatim that the last element must be `None` -- "there
+is no action after the final observed frame" -- so it is the designed end of
+the trace, and `stopped_early` was true on every clean leg. A flag that is true
+on healthy runs is not an instrument. **The refusing test passed the whole
+time**; it was the anchored twin that failed. That is the second time on this
+arm that only the negative control could tell a working check from a check that
+always fires, and it is why every refusal in `tests/test_anchor_refusal.py` has
+a twin that must *not* fire.
+
+**A guarantee was narrowed, and a guard test was rewritten. Both on purpose.**
+`D-R2-001` shipped `ablation` as byte-identical to 2026-07-31 and
+`tests/test_frontier_generation.py` held it with
+`test_the_design_report_grows_no_key_on_the_default`. That test failed on this
+branch, which is the correct behaviour for a guard, so it is recorded here
+rather than quietly regenerated.
+
+The guarantee bundled two properties, and only one of them was load-bearing:
+
+* **the frontier does not move on the default** -- same hypotheses, same order,
+  same ids, so `generated` has a real control to be measured against. *This
+  still holds, untouched, and it already had its own tests
+  (`test_the_default_frontier_is_the_ablation_frontier`, and the store /
+  no-store equality beside it), both still green.*
+* **the report is byte-identical and the arm behaves identically.** *This is
+  now false, deliberately.* The anchor must be on the default path because the
+  default path is the one that spent the money -- an instrument that has to be
+  switched on to see the defect it was built for is the defect. The test is
+  rewritten to assert the surviving property and **renamed**, because a test
+  whose name claims more than it checks is worse than one that fails.
+
+The cost is real and is not waved away: `ablation` is no longer a byte-exact
+replay of 2026-07-31. Probe *counts* from here on are not comparable to R1/R1b
+-- on the archived legs this refuses 35 of 52 designed probes -- and whoever
+runs the next round must say so in the round record rather than read the drop
+as an effect of their knob. This arrives outside the one-knob-per-round
+protocol because it is a defect repair, not a treatment.
+
+**What is still not done, named so it is not mistaken for done.** The drift
+itself is unrepaired -- the manual still desynchronises on a mispredicted
+transition, and 35 of 52 is a statement about how often. The arm will now refuse
+those probes and explore instead of paying for them, which is the honest
+behaviour, not a fix for the underlying `step`. Whether to re-seat, in either
+reading above, remains open.

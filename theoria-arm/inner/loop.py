@@ -1206,6 +1206,9 @@ class TheoriaArm:
         #: A probe was designed and cleared the entropy floor, so there is a
         #: real allow/refuse decision to write into the economy's audit.
         designed = False
+        #: How far the manual's replay got before it stopped, if it stopped.
+        #: Set by `_roll_forward`; `{}` on the branch where no manual exists.
+        rollout: Dict[str, Any] = {}
 
         if namespace is not None:
             # This level's trajectory, not the run's: `_roll_forward` replays
@@ -1213,7 +1216,7 @@ class TheoriaArm:
             # boundary that replays level N's actions into level N+1's opening
             # board. `inner/levels.py` names this as the third of the three
             # beats that read the trace as one continuous trajectory.
-            state = _roll_forward(namespace, self._level_store())
+            state, rollout = _roll_forward(namespace, self._level_store())
             manual_actions = [("key", a) for a in legal]
             try:
                 # The witnesses a candidate claims must be the transitions the
@@ -1283,22 +1286,50 @@ class TheoriaArm:
                 else:
                     refusal = why_not
 
-        # -- the three reasons a designed probe is not worth its action ------
+        # -- the four reasons a designed probe is not worth its action -------
         #
         # Each of these was paid for in the record on 2026-07-31, and each is
         # read straight off what `ProbeLog` writes down -- the vacuous streak
         # and the fingerprint are measurements, not policy, so refusing on them
-        # needs no switch and applies to every leg. All three end the same way
+        # needs no switch and applies to every leg. All four end the same way
         # -- record the refusal as a finding, then explore -- and the
         # exploration is the point: it takes the LEAST-TRIED legal action,
         # which is precisely what breaks the standing pattern. `...-l1` spent
         # its last fourteen actions alternating ACTION4/ACTION3 and revisiting
         # states it had already been in, because the frontier kept nominating
         # the same two actions and nothing in the loop noticed.
+        #
+        # **The anchor is asked first, and the order is the argument.** The
+        # other three price an experiment; the anchor asks whether there is one.
+        # A frontier built on a state the world has left is not a cheap
+        # experiment about the next frame, it is an experiment about a frame
+        # that is gone, and 35 of the 52 completed probes of 2026-07-31 were in
+        # that condition -- all 35 off-frontier (`runs/20260801T0900Z-R2-
+        # frontier-by-generation/MEASUREMENT.json`, `totals.anchor_drifted`).
+        # Asking it second would also put the wrong reason in the record: the
+        # vacuous-streak refusal below blames the ablation frontier for being
+        # closed downward, which is true and was not the binding cause on those
+        # legs. A refusal that names a real defect it did not suffer from is
+        # worse than no refusal, because it is believed.
         if chosen is not None:
             streak = self.probes.vacuous_streak
             repeat_of = self.probes.already_asked(chosen, identity)
-            if streak >= MAX_VACUOUS_PROBES_IN_A_ROW:
+            anchor = (design or {}).get("anchor") or {}
+            if anchor.get("drifted") is True:
+                refusal = (
+                    "the manual's state is not the frame the world is showing "
+                    "(anchor %s, world %s), so every hypothesis in this "
+                    "frontier is a successor of a frame that is gone and the "
+                    "experiment cannot be about the next one. The manual "
+                    "replayed %s of %s recorded actions%s. Going for evidence "
+                    "instead of spending an action on a question about a state "
+                    "the world has left."
+                    % (anchor.get("anchor_hash"), anchor.get("world_hash"),
+                       rollout.get("actions_replayed"),
+                       rollout.get("actions_in_trace"),
+                       (" and stopped early: %s" % rollout.get("stopped_because"))
+                       if rollout.get("stopped_early") else ""))
+            elif streak >= MAX_VACUOUS_PROBES_IN_A_ROW:
                 refusal = (
                     "%d probes in a row came back with an empty posterior: "
                     "every hypothesis refuted, including `inert`, so each "
@@ -1666,17 +1697,54 @@ def _book_token(text: str) -> str:
 
 
 def _roll_forward(namespace, store):
-    """Where the manual thinks the world is now."""
+    """Where the manual thinks the world is now, and how far it got.
+
+    Returns `(state, rollout)`. The second half is new and exists because the
+    first half cannot be read without it: this function replays `step` from
+    `initial_state()` over the recorded actions, and it used to `break` out of
+    that loop on any exception and return the half-rolled state with no way for
+    the caller to tell. A manual that crashes on action 3 of 40 then hands back
+    a state 37 actions stale, and every consumer treats it as current.
+
+    That is a *different* fact from drift and deserves its own name.
+    `probe.anchor_drift` catches the consequence -- the render disagrees with
+    the world's frame -- but a `step` that raises is the manual failing on a
+    transition it was actually shown, which `certify`'s replay already reports
+    as `step_raised`. Silently swallowing it here made the loop the one place
+    that saw it and said nothing.
+
+    Nothing about the returned state changes. It is not re-seated on the
+    world's frame: that would be a different decision with a real cost
+    (`DECISIONS.md`, R2 decision 3), and this is only the instrument.
+    """
     state = namespace["initial_state"]()
     step = namespace["step"]
+
+    # `FrameStore.actions` is aligned with the grids and its last element is
+    # always `None` -- "there is no action after the final observed frame"
+    # (`world/frames.py`). That terminator is the ordinary end of the trace and
+    # not a failure. Reporting it as one would make every clean leg accuse
+    # itself of stopping early, which is the opposite of the defect this record
+    # exists to catch; a test's anchored twin caught exactly that.
+    pending: List[Any] = []
     for arc_action in store.actions:
         if arc_action is None:
             break
+        pending.append(arc_action)
+
+    replayed = 0
+    stopped: Optional[str] = None
+    for arc_action in pending:
         try:
             state = step(state, commit.action_to_manual(arc_action))
-        except Exception:                              # noqa: BLE001
+        except Exception as exc:                       # noqa: BLE001
+            stopped = "%s: %s" % (type(exc).__name__, exc)
             break
-    return state
+        replayed += 1
+    return state, {"actions_replayed": replayed,
+                   "actions_in_trace": len(pending),
+                   "stopped_early": stopped is not None,
+                   "stopped_because": stopped}
 
 
 def _certify_line(report: Dict[str, Any]) -> Dict[str, Any]:
