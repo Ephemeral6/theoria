@@ -1,0 +1,13 @@
+{
+  "push4": {
+    "board_items": [
+      "A18-scorer-at-run-end",
+      "A19-bare-cc-seal-split",
+      "A20-model-side-bypass-negative",
+      "A21-ablation-arm-name"
+    ],
+    "owner_ruling": "subscription quota only, no ANTHROPIC_API_KEY; p1-proxy-model sealed per P1READJ else-branch",
+    "scan": "exit 0, Phase 1: 12/16 green (unchanged, expected)",
+    "suite": "525 passed, 2 xfailed, exit 0"
+  }
+}
