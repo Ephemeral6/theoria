@@ -192,6 +192,18 @@ the same way — §7 now cites the effect sizes and not those aggregates.
 | repaired backend on A0 | grounds every schema; solves the level in 12 steps (plan length) | `theory-compiler/tests/test_e2e_rehearsal.py`, `test_pddl_compiled_against_the_level_solves_like_the_world` |
 | handover packages, rebuilt | a0-cart: all five files of four forms generated; a0-sokoban2: planning form a declared refusal, reason on the cover | `theory-compiler/handover_packages/a0-cart/README.md`; `theory-compiler/handover_packages/a0-sokoban2/README.md` |
 | undeclared-PDDL-failure guard | live arm's green keyed on planning and prose forms too | `theoria-arm/inner/books.py` (the `result["ok"]` assignment and its comment) |
+| probes designed / completed, live legs | 56 / 52 (2026-07-31, four legs) | `theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md` §1; recounted in `papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json` |
+| probe frontier width | 2 distinct predictions on 52 of 52 | ibid. |
+| off-frontier results | 47 of 52; 5 on-frontier | ibid. |
+| realised information gain | 0.000 bits on all 56, against 0.5436–1.0000 predicted; 0 monotone frontier shrinks | `theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md` §1 (bits **read**, shrink **recomputed**) |
+| decomposition of the 47 | 35 anchor drift, 12 expressivity, 0 action choice | `theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`, `measurement` (not recomputable here: gitignored input) |
+| generated frontier, offline replay | contains the answer 43 of 52; ablation 5; 52 of 52 reconstructed; 9 still missed | ibid., `replay` |
+| generated frontier, live evidence | **none** — default `ablation`, byte-identical; never run live | ibid., `switch` and `classification` |
+| `cegis_miner` on live legs | 48 dispatches, 48 refusals with a written reason, 0 errors, across the 8 legs carrying an engine record | `papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`, key `cegis_miner` |
+| levels completed, live arm | 0 rows across 10 tracked live legs; `levels_completed: 0` on every leg of both rounds | ibid., keys `levels` and `rounds`; `battery/STATUS.md` §B18 for the six-leg reading |
+| curves shortfall on gate-tripped legs | $1.63 of $9.56 (r2), $1.68 of $13.44 (r3) = 12–17 % | `theoria-arm/DECISIONS.md` D-A8-001 (the percentage is derived) |
+| U3 kind census, before → after | `discharged` 14 → 17, `vacuous` 9 → 2, `unclassified` 0 → 4, over 24 Lean books | `freeze/runs/20260801T0700Z-E1-kind-census/COMPARISON.md`; `freeze/runs/20260801T0700Z-E1-kind-census/CENSUS.md` |
+| the battery's 38-of-38 demotion | one finding stated 38 times: the attacker was the record's author | `battery/runs/20260801T0300Z-E2L-frontload-step-axis/RUN_STATE.md` §1; `battery/STATUS.md`, the V-E2L note |
 
 ---
 

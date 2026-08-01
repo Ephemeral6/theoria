@@ -139,6 +139,19 @@ whole consistent set rather than one maximally-weighted model, and compiling the
 induced model to a PDDL domain *and* to Lean, so the learned preconditions are also
 the object of a proof.
 
+**The use for the frontier's width is a design, not a measurement, and on live
+play it has not yet happened.** The version-space relationship above is a
+statement about what `engine-rig/engines/cegis_miner` returns, exercised by that
+engine's offline tests against synthetic fixtures. On the eight live ARC legs the
+miner refused all 48 dispatches, so no version space was ever handed to
+`engine-rig/engines/probe_frontier`; what it priced was the arm's own
+downward-closed ablation family, two predictions wide on every one of the 52
+completed probes, and 47 of those 52 observations fell outside it
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`;
+§11.3a). The ancestry claim to the version-space literature stands; the claim
+that this work *adds* a use for the frontier's width does not yet, and is
+qualified here rather than in a footnote.
+
 **Petri invariants and model checking / IC3.** The kinship is with place
 invariants — linear quantities preserved by every transition, computed as the left
 null space of a net's incidence matrix [`petri1962kommunikation`,

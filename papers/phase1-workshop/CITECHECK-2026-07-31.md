@@ -6,9 +6,15 @@ sha256: 0c173e2219ff727cb3f10d2463cef9a15578c19bfcb44ee8f3f54d9231a48d49
 lines: 3825
 bytes: 244675
 scope: delta audit of the 2026-07-31 four-forms correction (five edited sites in the abstract, §1.5, §2.1, §3.1, §11.3); everything outside those edits is unchanged from the state CITECHECK-2026-07-30.md pinned, and that file's five-slice index remains the evidence for it
-status: binding
+status: stale
+superseded_by: CITECHECK-2026-08-01.md
 date: 2026-07-31
 ```
+
+**Retired 2026-08-01.** The four-forms delta this file audits is unchanged and
+its verdicts still hold of that text, but `PAPER.md` moved again on 2026-08-01
+(the probe-frontier correction), so this stamp no longer covers the target and
+is flipped by its own rule rather than by anyone's judgement.
 
 **What this file is.** The successor `CITECHECK-2026-07-30.md`'s stamp names.
 It is a **delta audit, not a re-audit**: the 2026-07-31 edit touched five sites

@@ -59,7 +59,16 @@ repair, the post-repair census (196 of 299 actions semantically non-empty and
 well-formed, the other 103 declared refusals rather than silent empties), and
 the census's own scope — it measured no form but PDDL, and its bar is a
 ceiling on correctness, not a floor — are §11.3's.
-Neither layer certifies the manual against the world. **The one thing this paper
+Neither layer certifies the manual against the world. The framework's answer to
+that gap is the probe beat, and it carries a date too: measured against live play
+on 2026-08-01, the frontier the probes split was built by deleting clauses from
+the manual, so it could not contain a mechanism the manual lacked — two
+predictions wide on every one of 52 completed probes, 47 of the 52 observations
+outside it, 0.000 bits realised on all 56 designed, and the rule miner that the
+design assigns to supply that frontier refused all 48 dispatches it ever
+received. A repair exists, is default-off, and has offline replay evidence only.
+§11.3a is that account, and no live leg has completed a level.
+**The one thing this paper
 claims is that we built that instrument, ran it end to end on small deterministic
 worlds we constructed ourselves, and then held our own measurements to the same
 adversarial standard, where it did the most damage.** That is a claim about an
@@ -473,6 +482,21 @@ Scoped to what was actually run:
 Sections 6, 8 and 9 report a transfer result, an examination instrument and two
 live API runs. They are reported and not claimed; §11.5 says why.
 
+One item on that list carries a correction made after the list was written.
+Contribution 2's 戳探 beat is the framework's answer to its own title — neither
+certification layer checks the manual against the world, so the probe does — and
+on 2026-08-01 that mechanism was measured against live play for the first time
+and did not behave as designed: the frontier being split was built by deleting
+clauses from the manual, so it could not contain a mechanism the manual lacked,
+and it contained the world's answer on 5 of 52 completed probes while realising
+0.000 bits on all 56 designed
+(`theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md`;
+`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+The A2 ledger this contribution cites is unaffected — it is an offline loop on a
+self-built world, and its beats are the artefacts they say they are — but the
+general claim that the probe beat closes the gap is withdrawn until a live leg
+shows it. §11.3a is the account.
+
 ### 1.6 What this paper does not claim
 
 Stated here rather than deferred, because §1.5's list is the part a reader is
@@ -579,6 +603,14 @@ evidence for most of what follows, and they were written before the scores
 existed (`a0-spike/THEORIZE_LOG.md`, `cold-start-a0/THEORIZE_LOG.md`,
 `cold-start-a2/THEORIZE_LOG.md`, `cold-start-a3/THEORIZE_LOG.md`).
 
+Two of those engines now have a live-play measurement beside their offline one,
+and it does not read like the design. On the live ARC legs `cegis_miner` was
+dispatched and returned a refusal with a written reason every time, so the guard
+frontier `probe_frontier` priced in bits was not a mined version space but a
+family the arm built by deleting clauses from its own manual. §2.3 states the
+consequence and §11.3a carries the counts
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+
 The division has teeth in both directions. `a0-spike/THEORIZE_LOG.md` T-6
 records the adjudicator proposing a conservation law — the box never changes
 checkerboard colour — and `zero_space` returning a strictly stronger one: a null
@@ -607,6 +639,33 @@ that, as two files a reader can diff. Neither layer certifies the manual against
 the world. That is what `probe` is for: an experiment, chosen by the engine for
 how many bits it splits, whose prediction is written down *before* the action is
 taken (`Theoria.md` §1.10e, constraint 7).
+
+**That paragraph describes the design. On 2026-08-01 the design was measured
+against live play for the first time, and the mechanism does not work the way it
+is described above.** The frontier the live arm splits is built by *ablation* —
+the manual as written, an inert reading, and one without-rule-N variant per
+schema — which is a family closed downward under clause deletion and therefore
+cannot contain a mechanism the manual lacks. Over the four live legs of
+2026-07-31 the arm designed 56 probes and completed 52, and the frontier was
+**two distinct predictions wide on every one of the 52**, **47 of the 52
+observations matched no hypothesis in it at all**, and the realised information
+gain was **0.000 bits on all 56** against a design-time price of 0.5436–1.0000
+bits — the frontier never once shrank
+(`theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md` §1;
+`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`,
+recounted from tracked files alone in
+`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+
+The design document asks for the opposite of what was built. `Theoria.md`'s
+engine table gives the rule miner the job of returning 全体一致假设的前沿 — the
+frontier of *all* hypotheses consistent with the ledger, explicitly 不交点猜测 —
+and says in the same cell that this frontier is 戳探的原料, the raw material of
+probing. That supply line has never run on a game: across the eight live legs
+that carry an engine record, `cegis_miner` was dispatched **48** times and
+refused **48** times, with zero errors
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`;
+the arm's account of why is `theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/README.md` §1).
+§11.3a is the full statement, including what a repair has and has not shown.
 
 ### 2.4 The failure taxonomy this paper is scored against
 
@@ -3503,6 +3562,156 @@ its green on the planning and prose forms too, turning red on an undeclared
 PDDL failure. The pre-repair record stays frozen, because the zero is what
 forced the repair.
 
+### 11.3a The probe beat, measured against live play, contradicts its own design
+
+§2.3 offers `probe` as the answer to this paper's title: neither certification
+layer checks the manual against the world, and the probe beat is what does. That
+sentence has now been measured on live ARC play, on 2026-08-01, and **it is
+false as written**. It is stated here with the measurement and the date, the way
+§11.3's four-forms correction was stated on 2026-07-31, because a claim that a
+mechanism works as designed is exactly the kind this paper keeps finding it has
+to withdraw.
+
+**The frontier could not have contained the answer.** The live arm builds its
+hypothesis frontier by ablation in `theoria-arm/inner/probe.py`: the manual as
+written, an inert reading, and one without-rule-N variant per schema. That family
+is closed downward under clause deletion, so no member of it states a mechanism
+the manual does not already state. Over the four live legs of 2026-07-31 the
+measured consequence is unambiguous — 56 probes designed, 52 completed, frontier
+width **two distinct predictions on every one of the 52**, **47 of the 52
+observations matching no hypothesis at all**, realised information gain **0.000
+bits on all 56** against a design-time price of 0.5436–1.0000 bits, and **zero
+monotone frontier shrinks** in any leg
+(`theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md` §1;
+`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`).
+Every number in that list was recounted for this paper from tracked files alone,
+because the arm's own measurement reads a per-leg frame trace that is gitignored,
+so a reader of this repository could not re-run it; all six recomputed quantities
+agree
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.py`,
+`--check`).
+
+**And it is the design document the measurement contradicts, not only the
+implementation.** `Theoria.md`'s engine table assigns the rule miner the job of
+returning 全体一致假设的前沿, the frontier of all consistent hypotheses rather
+than a point guess, and names that frontier 戳探的原料. Across the eight live
+legs that carry an engine record, `cegis_miner` was dispatched **48** times and
+returned a refusal with a written reason **48** times, with zero errors — so the
+mined frontier the design is built on has never once reached a live probe
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`,
+key `cegis_miner`). The arm was not discarding a frontier the engine had
+computed; the engine declined, on every dispatch, for a reason it wrote down
+(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/README.md` §1).
+
+**What the 47 misses actually were, which is not what the failure taxonomy would
+have guessed.** Reading the grids rather than their hashes decomposes them
+exactly: **35** of the 47 were designed from a state the world had already
+left — the manual's rolled-forward state, which is the anchor every hypothesis is
+a successor of, did not equal the frame the world was showing, and all 35 of
+those landed off-frontier; **12** were correctly anchored and missed by a delta
+containing exactly one cell that had never changed before in the run, a board
+cell on which the arm seats no object instance and which no rule in this grammar
+can name; and **0** are attributable to choosing the wrong action
+(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`, the
+`measurement` block). So 戳探设计差 — the failure class §2.4 pre-declares for bad
+probe design — is the wrong diagnosis for all 47. The classes actually hit are
+state drift and 表达力不够, and the second of them is a grammar limit rather than
+a probe limit: a confirmed edge hypothesis about a board cell is a fact the arm
+can hold and cannot write down.
+
+**The repair has offline evidence only, and saying more would be the error this
+section exists to record.** A generated frontier — successor hypotheses anchored
+on the world's own last observed frame rather than on the manual's state — is
+implemented and **default off**, with the ablation path byte-identical; replayed
+through the real builder against manuals recompiled from each leg's own
+snapshots, with all 52 probes reconstructed exactly before anything was scored,
+it contains the world's answer **43 of 52** where ablation contains it 5
+(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`, the
+`replay` block). That is a counterfactual about containment on recorded states,
+not a forecast for a leg: a real leg diverges after the first probe whose answer
+differs, **no live leg has ever run with the switch on**, and 9 of the 47 are
+missed even on the replay — six opening probes with too little history for an
+edge chain, and three correctly-anchored mid-leg probes where the extrapolated
+edge lands on a different board cell than the world burned. The drift is
+diagnosed and *not* repaired; re-seating the manual's state on the world's frame
+would make the replay layer trivially green and destroy the only instrument that
+currently detects a wrong manual.
+
+**Underneath all of it: no level has been completed.** Every live leg of the
+Theoria arm carries a tracked level record, and across all ten of them — the six
+the battery reads and the four added by the two rounds since — the total number
+of level-completion rows is **zero**, and the two rounds that publish the figure
+directly report `levels_completed: 0` on every leg, each stopped by the spend
+gate rather than by understanding
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`,
+keys `levels` and `rounds`; `battery/STATUS.md` §B18 for the six-leg reading).
+No claim in this paper rests on a completed level, and none should be read as
+implying one.
+
+### 11.4a Three defects found in the instruments that read the live legs
+
+None of these is a result about world models; all three are results about
+measurement, which is the register §1.2 says this paper is strongest in, and each
+was found by an instrument other than the one it indicts.
+
+**A cost curve that lost its most expensive call.** The arm builds a turn record
+at the top of the loop and appends it at the bottom, and the desk call spends in
+the middle — so when the spend gate stopped a leg the exception unwound past the
+append and the turn in flight was never written. Every gate-tripped leg
+understated its own bill: r2 by $1.63 of $9.56 and r3 by $1.68 of $13.44, which
+is **12–17 %** of the money, and the arm's own self-check could not see it
+because the vanished turn had issued no ARC command, so the command counts
+balanced exactly (`theoria-arm/DECISIONS.md`, the entry for the in-flight turn;
+the cross-territory report that caught it is
+`monitor/inbox/20260731T1731Z-battery-to-theoria-arm-curves-shortfall.md`). It
+was found by a three-way reconciliation from another territory, not by the arm.
+Repaired at three levels — the loop parks the in-flight turn, the archiver
+reconstructs leftover invocations as rows that own no command and say why, and
+`theoria-arm/armtools/curves.py` now checks three equalities instead of one — and
+the join confidence stays `degraded`, because money adding up must not launder a
+claim about the join. Any cost figure in this paper drawn from a gate-tripped
+live leg predates that repair unless it says otherwise.
+
+**An endpoint check that was reading names instead of statements.** The first of
+the three frozen primary endpoints decided its criterion with a prefix matcher
+over theorem *names*, which makes it a naming-convention detector: a name is a
+label the arm picks freely. The development the endpoint's own rule text names as
+the paradigm of what it means — a deadlock theorem over 28 672 states, with an
+empty axiom set (`freeze/STATS_RULES.md`, the G1 argument) — was being labelled
+vacuous by it, and the same illness was found a second time in *definition*
+names, where a hard-coded lookup missed an invariant that was called something
+else. The repair reads what a theorem proves off its statement; the census over
+the 24 Lean books on disk moves `discharged` from **14 to 17** and `vacuous` from
+**9 to 2**, with **4** newly `unclassified` and the one `failing_obligation`
+unchanged, and every one of the seven moves is an accusation being withdrawn
+rather than a pass being granted
+(`freeze/runs/20260801T0700Z-E1-kind-census/COMPARISON.md`;
+`freeze/runs/20260801T0700Z-E1-kind-census/CENSUS.md`; `freeze/theorem_shape.py`).
+`vacuous` and
+`unclassified` are now different words because they are different acts — one is
+an accusation, the other a confession that the check does not know this kind of
+assertion — and both still count as not attained.
+
+**The battery's headline anti-gaming number is one finding stated many times
+over.** §7 and §1.2 report that 37 of 38 metrics were driven to their
+pre-registered thresholds by blind attackers, and §11.5 carries it as a
+contribution. A follow-up ruling on 2026-08-01 demotes what that number means
+without changing the number: the attackers wrote zero-argument constructors
+returning the run record itself, so every metric being a total function of that
+record reduces "can this metric be pushed over its threshold" to "is this
+threshold reachable by any record at all" — a property of the threshold, not of
+the metric. The attack techniques really are mechanically heterogeneous, and they
+share one threat model, and under it a universal demotion is what a tautology
+looks like from outside (`battery/STATUS.md`, the V-E2L note;
+`battery/runs/20260801T0300Z-E2L-frontload-step-axis/RUN_STATE.md` §1). Narrowing
+the threat model does not rescue it: the narrowed filter cleared four economy
+families, that clearance was then defeated by attaching forty step records — pure
+layout, which the poverty certificate explicitly permits — and the defeat is
+pinned as an assertion so that a green there reads as somebody loosening the
+audit. The blocker underneath is not metric quality at all: the endpoint is a
+paired difference and there are zero pairs, so no amount of replication on this
+one arm buys one.
+
 ### 11.4 What the battery cannot yet certify
 
 Restated from §7 so that the limitations section is complete on its own. Every
@@ -3573,6 +3782,16 @@ follow-up review
 §7.7 reports the earlier round, whose artefacts were frozen before this one, and
 §1.2 states the five limits that qualify all of it — including that the
 adjudication rule was amended after the results were seen).
+
+Two of the clauses in that itemisation are weaker than they read, and §11.3a and
+§11.4a say how. The blind round's headline is retained as a number and demoted as
+an interpretation: a universal demotion obtained by an attacker who is also the
+record's author measures the reachability of thresholds, not the resistance of
+metrics (`battery/runs/20260801T0300Z-E2L-frontload-step-axis/RUN_STATE.md` §1).
+And nothing in the itemisation is a claim about the probe beat working on a live
+game; the frontier it split there was closed downward under clause deletion and
+contained the world's answer 5 times in 52
+(`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`).
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.
@@ -3719,6 +3938,19 @@ learning problem [`yang2007arms`], not a new one; what differs is returning the
 whole consistent set rather than one maximally-weighted model, and compiling the
 induced model to a PDDL domain *and* to Lean, so the learned preconditions are also
 the object of a proof.
+
+**The use for the frontier's width is a design, not a measurement, and on live
+play it has not yet happened.** The version-space relationship above is a
+statement about what `engine-rig/engines/cegis_miner` returns, exercised by that
+engine's offline tests against synthetic fixtures. On the eight live ARC legs the
+miner refused all 48 dispatches, so no version space was ever handed to
+`engine-rig/engines/probe_frontier`; what it priced was the arm's own
+downward-closed ablation family, two predictions wide on every one of the 52
+completed probes, and 47 of those 52 observations fell outside it
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`;
+§11.3a). The ancestry claim to the version-space literature stands; the claim
+that this work *adds* a use for the frontier's width does not yet, and is
+qualified here rather than in a footnote.
 
 **Petri invariants and model checking / IC3.** The kinship is with place
 invariants — linear quantities preserved by every transition, computed as the left

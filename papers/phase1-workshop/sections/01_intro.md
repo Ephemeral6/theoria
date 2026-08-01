@@ -314,6 +314,21 @@ Scoped to what was actually run:
 Sections 6, 8 and 9 report a transfer result, an examination instrument and two
 live API runs. They are reported and not claimed; §11.5 says why.
 
+One item on that list carries a correction made after the list was written.
+Contribution 2's 戳探 beat is the framework's answer to its own title — neither
+certification layer checks the manual against the world, so the probe does — and
+on 2026-08-01 that mechanism was measured against live play for the first time
+and did not behave as designed: the frontier being split was built by deleting
+clauses from the manual, so it could not contain a mechanism the manual lacked,
+and it contained the world's answer on 5 of 52 completed probes while realising
+0.000 bits on all 56 designed
+(`theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md`;
+`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+The A2 ledger this contribution cites is unaffected — it is an offline loop on a
+self-built world, and its beats are the artefacts they say they are — but the
+general claim that the probe beat closes the gap is withdrawn until a live leg
+shows it. §11.3a is the account.
+
 ### 1.6 What this paper does not claim
 
 Stated here rather than deferred, because §1.5's list is the part a reader is

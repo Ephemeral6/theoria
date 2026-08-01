@@ -21,9 +21,16 @@ placeholders; figures are data first and styling later.
 | `figures/*.py` | figure **data** extractors, deterministic |
 | `figures/data/*.json` | extracted payloads |
 | `figures/*.txt` | plain-text renderings, for reading before anything is styled |
-| `REVIEW-2026-07-30.md` | **the live** adversarial reviewer pass — binding on the whole current `PAPER.md` |
-| `CITECHECK-2026-07-30.md` | **the live** mechanical path/number/quote audit — an index over five slice files under `runs/` |
-| `REVIEW.md`, `CITECHECK.md` | **retired.** Both are pinned to a `PAPER.md` of 75,885 bytes, which is 31.9% of the current text; both carry `status: stale` and a `superseded_by` in their own stamp |
+| `REVIEW-2026-08-01.md`, `CITECHECK-2026-08-01.md` | **the live pair** — binding on the current `PAPER.md`. Both are *delta* audits of the 2026-08-01 probe-frontier correction; the coverage of the untouched text is carried by the chain of stale predecessors they name |
+| `REVIEW-2026-07-31.md`, `CITECHECK-2026-07-31.md` | **retired 2026-08-01.** Delta audits of the four-forms correction; still true of that text, no longer covering the target |
+| `REVIEW-2026-07-30.md`, `CITECHECK-2026-07-30.md` | **retired 2026-07-31.** The last full-paper passes; `CITECHECK-2026-07-30.md` is an index over five slice files under `runs/` |
+| `REVIEW.md`, `CITECHECK.md` | **retired.** Both are pinned to a `PAPER.md` of 75,885 bytes, which is 29.1% of the current text; both carry `status: stale` and a `superseded_by` in their own stamp |
+
+Do not read this table for which audit is binding: it is prose and it has been
+wrong before — it named the 2026-07-30 pair as live for a day after the
+2026-07-31 pair superseded them. `verify_paper.py`'s **G AUDITSTAMP** prints the
+answer from the stamps themselves on every run, and `audit_stamp.binding_audits`
+is the programmatic form.
 | `runs/` | the run archive for this piece of work |
 
 ## Rebuild

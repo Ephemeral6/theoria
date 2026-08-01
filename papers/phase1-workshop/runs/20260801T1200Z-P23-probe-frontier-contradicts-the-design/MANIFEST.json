@@ -1,0 +1,95 @@
+{
+ "base_commit": "e8345affa0d500b8358e19fab65b8e25f615c7f9",
+ "branch": "z/papers-phase1-workshop",
+ "changed": [
+  "papers/phase1-workshop/sections/00_abstract.md",
+  "papers/phase1-workshop/sections/01_intro.md",
+  "papers/phase1-workshop/sections/02_framework.md",
+  "papers/phase1-workshop/sections/11_limitations.md",
+  "papers/phase1-workshop/sections/12_related.md",
+  "papers/phase1-workshop/PAPER.md",
+  "papers/phase1-workshop/PROVENANCE.md",
+  "papers/phase1-workshop/README.md",
+  "papers/phase1-workshop/CITECHECK-2026-07-31.md",
+  "papers/phase1-workshop/REVIEW-2026-07-31.md",
+  "papers/phase1-workshop/CITECHECK-2026-08-01.md",
+  "papers/phase1-workshop/REVIEW-2026-08-01.md",
+  "papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/ (this directory: census.py, census.json, RUN_STATE.md, stamp_manifest.py, MANIFEST.json)"
+ ],
+ "files": [
+  {
+   "path": "RUN_STATE.md",
+   "sha256": "cc653bc4f58c8243c62270e2c54988d76fa7d887946911ff6dc7383f7c960556"
+  },
+  {
+   "path": "census.json",
+   "sha256": "5bb9feeb171060d0e13fa44746a6aadde24212ba6d1059a88024dfe7855ad195"
+  },
+  {
+   "path": "census.py",
+   "sha256": "007f771206ce11ef8de6b3a23566c316fe12065c6847982df612279297cbaa86"
+  }
+ ],
+ "files_note": "Filled by `python stamp_manifest.py`, which hashes the bytes git publishes (the index), not the working copy. Re-check with `--check`. A hand-written hash list is what that script exists to refuse, so this field was `null` until the script ran.",
+ "gates": {
+  "after": {
+   "pytest": "2 failed, 272 passed, 1 xfailed",
+   "verify_paper": "FAIL (2/7) -- E UNCITED: 1 uncited; F BARE: 24 ambiguous"
+  },
+  "before": {
+   "pytest": "2 failed, 272 passed, 1 xfailed",
+   "verify_paper": "FAIL (2/7) -- E UNCITED: 1 uncited; F BARE: 24 ambiguous"
+  },
+  "finding_counts_unchanged": true,
+  "note": "The two pytest failures and the two red checks are pre-existing on clean master, reproduced in a fresh worktree before any edit. F BARE went 24 -> 26 -> 24 during the work: two bare filenames introduced by a first draft were rewritten, not ruled."
+ },
+ "lane": "paper-correction",
+ "measurement": {
+  "cegis_miner_dispatches_live": 48,
+  "cegis_miner_refusals_live": 48,
+  "frontier_width_distinct_values": [
+   2
+  ],
+  "legs_with_an_engine_record": 8,
+  "level_completion_rows_across_ten_live_legs": 0,
+  "off_frontier": 47,
+  "on_frontier": 5,
+  "probes_completed": 52,
+  "probes_designed": 56,
+  "recomputed_here_vs_the_arms_figures": "6 quantities, 6 AGREES, 0 DIFFERS",
+  "unmeasurable_here": [
+   "anchor drift (35 of 47) -- needs the gitignored per-leg frame trace; recorded as unmeasurable, never as zero",
+   "virgin-cell deltas (12 of 47) -- same input, same treatment"
+  ]
+ },
+ "not_changed": [
+  "every territory other than papers/ -- theoria-arm, battery, freeze, crosscheck, monitor and the arms were read only",
+  "papers/verify.py and papers/phase1-workshop/verify_paper.py -- the gate was not touched by a change that had to pass it",
+  "papers/phase1-workshop/figures/ -- no figure data moved",
+  "sections/03..10 -- untouched, so the stale audits' coverage of them carries forward unchanged"
+ ],
+ "prompt_id": "P23-papers-probe-frontier-contradicts-the-design",
+ "reproduce": [
+  "cd papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design",
+  "python census.py --check",
+  "cd ../../.. && python phase1-workshop/assemble.py",
+  "python phase1-workshop/verify_paper.py",
+  "python -m pytest -q"
+ ],
+ "residual_gaps": [
+  "the 35/12/0 decomposition and the 43-of-52 replay are read from theoria-arm's manifest and are not recomputable from this repository (gitignored inputs); CITECHECK-2026-08-01.md grades every claim recomputed/read/derived rather than letting the citation imply parity",
+  "sections 1.5 item 1 and 7 keep the old framing of the battery's 37-of-38 that 11.4a demotes; left standing rather than re-auditing a chapter this delta did not open",
+  "no independent adversary reviewed this delta; the correction is written by the project that made the error",
+  "two of the ten live legs carry no engine record, so the 48-of-48 refusal is over eight legs and the paper says eight"
+ ],
+ "sealed_pile_contact": "none. Development-pile games only (g50t-5849a774, sk48-d8078629), and only as leg identifiers in counts.",
+ "spend": {
+  "arc_actions": 0,
+  "model_calls": 0,
+  "network": "none",
+  "usd": 0.0
+ },
+ "territory": "papers",
+ "utc": "2026-08-01T12:00:00Z",
+ "what": "The paper offered the probe beat as the answer to its own title -- neither certification layer checks the manual against the world, so probe does. Measured against live play for the first time on 2026-08-01, that mechanism does not work as described: the frontier is built by ablation, a family closed downward under clause deletion, so it cannot contain a mechanism the manual lacks; it was 2 distinct predictions wide on every one of 52 completed probes, 47 of the 52 observations matched nothing in it, realised gain was 0.000 bits on all 56 designed, and the frontier never shrank. Theoria.md's engine table specifies the opposite -- the rule miner is to return the frontier of all consistent hypotheses -- and that supply line has never run on a game: cegis_miner refused 48 of 48 dispatches across every live leg with an engine record. The claim is now qualified in the abstract, 1.5, 2.2, 2.3, 11.3a, 11.5 and 12, with the measurement and the date, on the pattern the four-forms claim was qualified with on 2026-07-31. New 11.4a carries the curves defect (12-17 % of the bill lost on gate-tripped legs), U3's name-keying defect and its repair, and the battery's E2 ruling that 38 of 38 is one finding stated 38 times; 11.3a carries the anchor drift (35 of 47) and the flat statement that zero levels have been completed across the live legs. The repair to the frontier is stated four times as default-off, offline-replay-only and never run live, because overstating it would be the exact error the section documents."
+}
