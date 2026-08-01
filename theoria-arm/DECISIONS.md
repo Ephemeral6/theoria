@@ -981,3 +981,66 @@ and the resolved `inner/loop.py` differs from master only by the branch's four
 edits and from the branch only by master's. The claim each side made separately,
 that its default is today's arm, is re-asserted for the conjunction rather than
 inherited from the three halves.
+
+# D-R2-001 · The frontier's anchor is a measurement nobody was taking, and it decided this ticket
+
+R2 was chartered to replace the ablation frontier with a generated one, on a
+structural argument that is correct: `manual`, `inert` and one
+`without_<schema>` per rule are all *deletions* of the manual, the family is
+closed downward, and it therefore cannot contain a mechanism the manual lacks.
+`Theoria.md`'s engine table asks the rule miner for 全体一致假设的前沿 for
+exactly this reason.
+
+The brief also said: measure first, and if no generated frontier could have
+contained the observed successors, say so instead of shipping one that also
+cannot. Measuring first changed what got built.
+
+**What the grids say that the hashes did not.** `20260801T0000Z-A-probe-
+economics` measured the four legs of 2026-07-31 out of `probes.jsonl`, which
+carries hashes. Reading `trace.jsonl` beside it makes one comparison available
+that nobody had made: `predictions["inert"]` is the manual's rolled-forward
+state, rendered -- and it is therefore *the anchor every hypothesis in the
+frontier is a successor of*. `trace.before_hash` is the frame the world was
+actually showing. They disagreed on **35 of the 52** completed probes, and
+**all 35 of those landed off the frontier**. `inner/loop._roll_forward` replays
+`step` from `initial_state()` over every recorded action, so one mispredicted
+transition desynchronises the manual's state permanently and every probe after
+it is an experiment about a frame the world left behind.
+
+Of the 17 that *were* anchored, 12 still landed off-frontier, and every one of
+those 12 missed by a delta containing **exactly one cell that had never changed
+before in the run** -- 49 cells with 1 virgin on r3, 13 with 1 virgin on
+`sk48-l1`, against 12 with 0 virgin on the 5 probes that landed on. A cell that
+has never varied is board; the arm seats no object instance there; no
+`forall ?p in <Type>` rule can name it.
+
+**So the 47 decompose exactly: 35 state drift, 12 expressivity, 0 action
+choice.** Generating near-miss *rules* -- from the DSL grammar, or from
+`cegis_miner`'s version space -- would have recovered none of them. That is the
+finding, and it is not the finding the ticket expected.
+
+**What was built, and why it is not a contradiction.** One of the two causes is
+reachable without touching the grammar, so `--frontier generated` (default
+`ablation`, byte-identical) adds successor hypotheses anchored on the *world's*
+last observed frame rather than on the manual's state. They are predictions,
+not proposals for the manual, which is all a frontier has to be. Replayed
+through the real builder against manuals recompiled from each leg's own
+snapshots -- 52 of 52 reconstructed exactly -- ablation contains the world's
+answer 5 times of 52 and generation 43.
+
+**Three decisions inside that are worth the ink.**
+
+1. `next_unnameable_cells` returns **every** leading-edge chain the evidence
+   supports (one per colour, plus the colour-blind one), not the best. The
+   draft that chose the longest chain recovered 32 of the 47; returning all of
+   them recovers 38. Choosing is a point guess, and this whole change is an
+   argument against point guesses.
+2. A fifth generator, `action_replay`, was **built, measured and cut** -- 15
+   hits of 52, and **0 marginal**: every one was an answer
+   `world_anchored_manual` already had, and it recovers none of the 9 still
+   missed. `replay_frontier.py --with-cut-generators` keeps the number
+   checkable rather than remembered.
+3. The drift is **diagnosed, not repaired**. Re-seating the manual's state on
+   the world's frame is the actual fix, and it would make certify's replay
+   trivially green -- destroying the only instrument that currently detects a
+   wrong manual. That is somebody else's call, made deliberately, not skipped.

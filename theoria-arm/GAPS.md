@@ -331,3 +331,41 @@ manifest no longer matches. 437 bytes and 4 CRLF in the main tree; 433 bytes
 and 0 in any worktree. Change B touches none of those files. Filed here rather
 than fixed, because the fix is a decision about four archived manifests and
 belongs to whoever owns them.
+
+## GAP R2-1 · A leg on the default cannot see its own drift
+
+The measurement that decided R2 -- does the frontier's anchor equal the frame
+the world is showing? -- costs nothing: two hashes, no action, no call. But
+keeping `--frontier ablation` byte-identical means the anchor block is written
+only when the switch is on, so the legs most likely to be drifting are the ones
+that cannot report it. Byte-identity was chosen over the diagnostic because a
+round measuring an A/B needs the A leg to be the arm it thinks it is. If a
+later round decides the diagnostic is worth a byte, this is the trade it is
+reversing.
+
+## GAP R2-2 · The unnameable cell can now be predicted and still cannot be written down
+
+`edge_advance` and `world_inert_plus_edge` are the first hypotheses in this arm
+that can be right about a board cell. If one of them survives a probe, the arm
+has learned something true that **has no home in the DSL**: the manual cannot
+state a rule about a cell it has no instance on, and `arc-instances: all`
+cannot seat one on a cell the board explains
+(`20260731T1430Z-...-r3`'s `i_cannot_manufacture_an_instance_on_a_cell_that_
+has_never_changed` rejects the workarounds one at a time). So a confirmed edge
+hypothesis is currently a fact the arm can hold but not compile. That is a
+grammar change and belongs to `theory-compiler`; it is filed here because R2
+made it reachable rather than hypothetical.
+
+## GAP R2-3 · 9 of the 47 are still missed, and 3 of them are the honest kind
+
+Six are opening probes (`P-01`–`P-04` of r2 and r3, steps 6–9): too little
+history for an edge chain, and three of them a 71-cell cascade with zero virgin
+cells that the transplanted manual delta does not reproduce. Generation needs
+evidence; on turn one there is none.
+
+The other three -- `sk48-l1 P-03/P-06/P-09` -- are mid-leg, **correctly
+anchored**, 13-cell delta with exactly one virgin cell each, and the edge this
+arm extrapolates lands on a *different* board cell than the world burned.
+Raising the chain cap catches more of them and costs every other action some
+split entropy; four edges is where the replay stops paying for itself. The
+residue is real and is not closed here.

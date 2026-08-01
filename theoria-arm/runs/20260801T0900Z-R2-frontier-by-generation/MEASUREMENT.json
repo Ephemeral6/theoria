@@ -1,0 +1,1519 @@
+{
+ "legs": [
+  {
+   "anchor_drifted": 0,
+   "anchor_unknown": 0,
+   "anchored_to_world": 0,
+   "frontier_width_distinct_values": [],
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "off_frontier": 0,
+   "off_frontier_while_anchored": 0,
+   "probes_completed": 0,
+   "probes_designed": 1,
+   "probes_with_delta_measured": 0,
+   "probes_with_virgin_delta_cells": 0,
+   "trace_available": true
+  },
+  {
+   "anchor_drifted": 7,
+   "anchor_unknown": 0,
+   "anchored_to_world": 1,
+   "frontier_width_distinct_values": [
+    2
+   ],
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "off_frontier": 8,
+   "off_frontier_while_anchored": 1,
+   "probes_completed": 8,
+   "probes_designed": 9,
+   "probes_with_delta_measured": 8,
+   "probes_with_virgin_delta_cells": 4,
+   "trace_available": true
+  },
+  {
+   "anchor_drifted": 21,
+   "anchor_unknown": 0,
+   "anchored_to_world": 7,
+   "frontier_width_distinct_values": [
+    2
+   ],
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "off_frontier": 28,
+   "off_frontier_while_anchored": 7,
+   "probes_completed": 28,
+   "probes_designed": 29,
+   "probes_with_delta_measured": 28,
+   "probes_with_virgin_delta_cells": 14,
+   "trace_available": true
+  },
+  {
+   "anchor_drifted": 7,
+   "anchor_unknown": 0,
+   "anchored_to_world": 9,
+   "frontier_width_distinct_values": [
+    2
+   ],
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "off_frontier": 11,
+   "off_frontier_while_anchored": 4,
+   "probes_completed": 16,
+   "probes_designed": 17,
+   "probes_with_delta_measured": 16,
+   "probes_with_virgin_delta_cells": 5,
+   "trace_available": true
+  }
+ ],
+ "probes": [
+  {
+   "action": 2,
+   "anchor_hash": "522b40a28b6d9fbc",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 9,
+   "n_hypotheses": 9,
+   "observed": "af3bb95d3135e37c",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-01",
+   "realised_bits": null,
+   "step_idx": 6,
+   "virgin_cells": [
+    [
+     63,
+     61
+    ]
+   ],
+   "world_before_hash": "9bb17844cc3a57c9"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "5da99fd80ff97e24",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 9,
+   "n_hypotheses": 9,
+   "observed": "0e1cd0b30fbb12b3",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-02",
+   "realised_bits": null,
+   "step_idx": 7,
+   "virgin_cells": [],
+   "world_before_hash": "af3bb95d3135e37c"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "522b40a28b6d9fbc",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 7,
+   "n_hypotheses": 9,
+   "observed": "b90a6233898771e2",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-03",
+   "realised_bits": null,
+   "step_idx": 8,
+   "virgin_cells": [
+    [
+     63,
+     60
+    ]
+   ],
+   "world_before_hash": "0e1cd0b30fbb12b3"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "5da99fd80ff97e24",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 9,
+   "n_hypotheses": 9,
+   "observed": "15c2e5de8c8dc96b",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-04",
+   "realised_bits": null,
+   "step_idx": 9,
+   "virgin_cells": [],
+   "world_before_hash": "b90a6233898771e2"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "15c2e5de8c8dc96b",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [
+    "9->1"
+   ],
+   "expected_bits": 0.845350936622,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 1,
+   "n_hypotheses": 22,
+   "observed": "0c56717accb832fb",
+   "observed_delta_cells": 1,
+   "off_frontier": true,
+   "probe_id": "P-05",
+   "realised_bits": null,
+   "step_idx": 10,
+   "virgin_cells": [
+    [
+     63,
+     59
+    ]
+   ],
+   "world_before_hash": "15c2e5de8c8dc96b"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "818eaaf57cafd7bb",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [],
+   "expected_bits": 0.976020648237,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 1,
+   "n_hypotheses": 22,
+   "observed": "0c56717accb832fb",
+   "observed_delta_cells": 0,
+   "off_frontier": true,
+   "probe_id": "P-06",
+   "realised_bits": null,
+   "step_idx": 11,
+   "virgin_cells": [],
+   "world_before_hash": "0c56717accb832fb"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "15c2e5de8c8dc96b",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [
+    "9->1"
+   ],
+   "expected_bits": 0.845350936622,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 1,
+   "n_hypotheses": 22,
+   "observed": "06e79195f0adc15f",
+   "observed_delta_cells": 1,
+   "off_frontier": true,
+   "probe_id": "P-07",
+   "realised_bits": null,
+   "step_idx": 12,
+   "virgin_cells": [
+    [
+     63,
+     58
+    ]
+   ],
+   "world_before_hash": "0c56717accb832fb"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "818eaaf57cafd7bb",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [],
+   "expected_bits": 0.976020648237,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "n_frames": 1,
+   "n_hypotheses": 22,
+   "observed": "06e79195f0adc15f",
+   "observed_delta_cells": 0,
+   "off_frontier": true,
+   "probe_id": "P-08",
+   "realised_bits": null,
+   "step_idx": 13,
+   "virgin_cells": [],
+   "world_before_hash": "06e79195f0adc15f"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "9bb17844cc3a57c9",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.696212260125,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 16,
+   "observed": "af3bb95d3135e37c",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-01",
+   "realised_bits": null,
+   "step_idx": 6,
+   "virgin_cells": [
+    [
+     63,
+     61
+    ]
+   ],
+   "world_before_hash": "9bb17844cc3a57c9"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "25cac958273811a3",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.696212260125,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 16,
+   "observed": "0e1cd0b30fbb12b3",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-02",
+   "realised_bits": null,
+   "step_idx": 7,
+   "virgin_cells": [],
+   "world_before_hash": "af3bb95d3135e37c"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "9bb17844cc3a57c9",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.696212260125,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 16,
+   "observed": "b90a6233898771e2",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-03",
+   "realised_bits": null,
+   "step_idx": 8,
+   "virgin_cells": [
+    [
+     63,
+     60
+    ]
+   ],
+   "world_before_hash": "0e1cd0b30fbb12b3"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "25cac958273811a3",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 0.696212260125,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 16,
+   "observed": "15c2e5de8c8dc96b",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-04",
+   "realised_bits": null,
+   "step_idx": 9,
+   "virgin_cells": [],
+   "world_before_hash": "b90a6233898771e2"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "15c2e5de8c8dc96b",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "4922abb280cd8780",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-05",
+   "realised_bits": null,
+   "step_idx": 10,
+   "virgin_cells": [
+    [
+     63,
+     59
+    ]
+   ],
+   "world_before_hash": "15c2e5de8c8dc96b"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "287dc66cc4b95e77",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.945660304601,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "c65bd69c07fb3c77",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-06",
+   "realised_bits": null,
+   "step_idx": 11,
+   "virgin_cells": [],
+   "world_before_hash": "4922abb280cd8780"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "818eaaf57cafd7bb",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 22,
+   "observed": "0c86941f09a0caaf",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-07",
+   "realised_bits": null,
+   "step_idx": 12,
+   "virgin_cells": [
+    [
+     63,
+     58
+    ]
+   ],
+   "world_before_hash": "c65bd69c07fb3c77"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "b90a6233898771e2",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 1.0,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "06e79195f0adc15f",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-08",
+   "realised_bits": null,
+   "step_idx": 13,
+   "virgin_cells": [],
+   "world_before_hash": "0c86941f09a0caaf"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "06e79195f0adc15f",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "4dfbfe14d4e85299",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-09",
+   "realised_bits": null,
+   "step_idx": 14,
+   "virgin_cells": [
+    [
+     63,
+     57
+    ]
+   ],
+   "world_before_hash": "06e79195f0adc15f"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "30332fff54b4924c",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.945660304601,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "d09fae77a1d46f2c",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-10",
+   "realised_bits": null,
+   "step_idx": 15,
+   "virgin_cells": [],
+   "world_before_hash": "4dfbfe14d4e85299"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "e66afa8078cb4fd2",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 22,
+   "observed": "44c44660a53cf5d4",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-11",
+   "realised_bits": null,
+   "step_idx": 16,
+   "virgin_cells": [
+    [
+     63,
+     56
+    ]
+   ],
+   "world_before_hash": "d09fae77a1d46f2c"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "0c86941f09a0caaf",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 1.0,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "3a11719074841328",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-12",
+   "realised_bits": null,
+   "step_idx": 17,
+   "virgin_cells": [],
+   "world_before_hash": "44c44660a53cf5d4"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "3a11719074841328",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "8a0fb5148b5adfb0",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-13",
+   "realised_bits": null,
+   "step_idx": 18,
+   "virgin_cells": [
+    [
+     63,
+     55
+    ]
+   ],
+   "world_before_hash": "3a11719074841328"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "e260ba2228378b61",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.945660304601,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "2bdbfae66570eec5",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-14",
+   "realised_bits": null,
+   "step_idx": 19,
+   "virgin_cells": [],
+   "world_before_hash": "8a0fb5148b5adfb0"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "01006a6a9e21beca",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.574635697838,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 22,
+   "observed": "0db510635e263539",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-15",
+   "realised_bits": null,
+   "step_idx": 20,
+   "virgin_cells": [
+    [
+     63,
+     54
+    ]
+   ],
+   "world_before_hash": "2bdbfae66570eec5"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "44c44660a53cf5d4",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 1.0,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 22,
+   "observed": "4c57486b12b722d4",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-16",
+   "realised_bits": null,
+   "step_idx": 21,
+   "virgin_cells": [],
+   "world_before_hash": "0db510635e263539"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "4c57486b12b722d4",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.5435644432,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "71e8272c15afb851",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-17",
+   "realised_bits": null,
+   "step_idx": 22,
+   "virgin_cells": [
+    [
+     63,
+     53
+    ]
+   ],
+   "world_before_hash": "4c57486b12b722d4"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "1e0bbc75dc840f79",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "c0d6bb54354c57d2",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-18",
+   "realised_bits": null,
+   "step_idx": 23,
+   "virgin_cells": [],
+   "world_before_hash": "71e8272c15afb851"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "ade8774fe1cc3a9b",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.5435644432,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 24,
+   "observed": "eb6ce939c989359a",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-19",
+   "realised_bits": null,
+   "step_idx": 24,
+   "virgin_cells": [
+    [
+     63,
+     52
+    ]
+   ],
+   "world_before_hash": "c0d6bb54354c57d2"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "0db510635e263539",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 0.994984828186,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "6ac765de5c59b51e",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-20",
+   "realised_bits": null,
+   "step_idx": 25,
+   "virgin_cells": [],
+   "world_before_hash": "eb6ce939c989359a"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "6ac765de5c59b51e",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.5435644432,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "ba530aab6f501769",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-21",
+   "realised_bits": null,
+   "step_idx": 26,
+   "virgin_cells": [
+    [
+     63,
+     51
+    ]
+   ],
+   "world_before_hash": "6ac765de5c59b51e"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "6d0db422effc0cdc",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->1",
+    "0->9",
+    "2->9",
+    "5->9",
+    "9->0",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "cf2157b5311a6e35",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-22",
+   "realised_bits": null,
+   "step_idx": 27,
+   "virgin_cells": [],
+   "world_before_hash": "ba530aab6f501769"
+  },
+  {
+   "action": 2,
+   "anchor_hash": "c530010f3b45d4ae",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 48,
+   "delta_colour_transitions": [
+    "5->9",
+    "9->1",
+    "9->5"
+   ],
+   "expected_bits": 0.5435644432,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 7,
+   "n_hypotheses": 24,
+   "observed": "9c6d40686d791ac6",
+   "observed_delta_cells": 49,
+   "off_frontier": true,
+   "probe_id": "P-23",
+   "realised_bits": null,
+   "step_idx": 28,
+   "virgin_cells": [
+    [
+     63,
+     50
+    ]
+   ],
+   "world_before_hash": "cf2157b5311a6e35"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "eb6ce939c989359a",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 71,
+   "delta_colour_transitions": [
+    "0->9",
+    "1->0",
+    "1->9",
+    "5->9",
+    "9->0",
+    "9->2",
+    "9->5"
+   ],
+   "expected_bits": 0.994984828186,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 9,
+   "n_hypotheses": 24,
+   "observed": "70eb49bbc21b44e9",
+   "observed_delta_cells": 71,
+   "off_frontier": true,
+   "probe_id": "P-24",
+   "realised_bits": null,
+   "step_idx": 29,
+   "virgin_cells": [],
+   "world_before_hash": "9c6d40686d791ac6"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "70eb49bbc21b44e9",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [
+    "9->1"
+   ],
+   "expected_bits": 0.811278124459,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 1,
+   "n_hypotheses": 24,
+   "observed": "132f0bf441d96376",
+   "observed_delta_cells": 1,
+   "off_frontier": true,
+   "probe_id": "P-25",
+   "realised_bits": null,
+   "step_idx": 30,
+   "virgin_cells": [
+    [
+     63,
+     49
+    ]
+   ],
+   "world_before_hash": "70eb49bbc21b44e9"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "65612ce2b219fbe6",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [],
+   "expected_bits": 0.954434002925,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 1,
+   "n_hypotheses": 24,
+   "observed": "132f0bf441d96376",
+   "observed_delta_cells": 0,
+   "off_frontier": true,
+   "probe_id": "P-26",
+   "realised_bits": null,
+   "step_idx": 31,
+   "virgin_cells": [],
+   "world_before_hash": "132f0bf441d96376"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "70eb49bbc21b44e9",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [
+    "9->1"
+   ],
+   "expected_bits": 0.811278124459,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 1,
+   "n_hypotheses": 24,
+   "observed": "121cbbc9c93803ed",
+   "observed_delta_cells": 1,
+   "off_frontier": true,
+   "probe_id": "P-27",
+   "realised_bits": null,
+   "step_idx": 32,
+   "virgin_cells": [
+    [
+     63,
+     48
+    ]
+   ],
+   "world_before_hash": "132f0bf441d96376"
+  },
+  {
+   "action": 5,
+   "anchor_hash": "65612ce2b219fbe6",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 0,
+   "delta_colour_transitions": [],
+   "expected_bits": 0.954434002925,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "n_frames": 1,
+   "n_hypotheses": 24,
+   "observed": "121cbbc9c93803ed",
+   "observed_delta_cells": 0,
+   "off_frontier": true,
+   "probe_id": "P-28",
+   "realised_bits": null,
+   "step_idx": 33,
+   "virgin_cells": [],
+   "world_before_hash": "121cbbc9c93803ed"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "05615f3d5f835100",
+   "anchored": true,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 9,
+   "observed": "8ccbe276408c4dd7",
+   "observed_delta_cells": 12,
+   "off_frontier": false,
+   "probe_id": "P-01",
+   "realised_bits": null,
+   "step_idx": 6,
+   "virgin_cells": [],
+   "world_before_hash": "05615f3d5f835100"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "8ccbe276408c4dd7",
+   "anchored": true,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 9,
+   "observed": "05615f3d5f835100",
+   "observed_delta_cells": 12,
+   "off_frontier": false,
+   "probe_id": "P-02",
+   "realised_bits": null,
+   "step_idx": 7,
+   "virgin_cells": [],
+   "world_before_hash": "8ccbe276408c4dd7"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "05615f3d5f835100",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "2->3",
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 9,
+   "observed": "bb5c436a2318c544",
+   "observed_delta_cells": 13,
+   "off_frontier": true,
+   "probe_id": "P-03",
+   "realised_bits": null,
+   "step_idx": 8,
+   "virgin_cells": [
+    [
+     53,
+     62
+    ]
+   ],
+   "world_before_hash": "05615f3d5f835100"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "8ccbe276408c4dd7",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.918295834054,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 9,
+   "observed": "3bf51d2fd9036a78",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-04",
+   "realised_bits": null,
+   "step_idx": 9,
+   "virgin_cells": [],
+   "world_before_hash": "bb5c436a2318c544"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "3bf51d2fd9036a78",
+   "anchored": true,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "bb5c436a2318c544",
+   "observed_delta_cells": 12,
+   "off_frontier": false,
+   "probe_id": "P-05",
+   "realised_bits": null,
+   "step_idx": 10,
+   "virgin_cells": [],
+   "world_before_hash": "3bf51d2fd9036a78"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "bb5c436a2318c544",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->3",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "b278887e087d3593",
+   "observed_delta_cells": 13,
+   "off_frontier": true,
+   "probe_id": "P-06",
+   "realised_bits": null,
+   "step_idx": 11,
+   "virgin_cells": [
+    [
+     53,
+     61
+    ]
+   ],
+   "world_before_hash": "bb5c436a2318c544"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "3bf51d2fd9036a78",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "1317da5b367d300a",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-07",
+   "realised_bits": null,
+   "step_idx": 12,
+   "virgin_cells": [],
+   "world_before_hash": "b278887e087d3593"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "bb5c436a2318c544",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "b278887e087d3593",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-08",
+   "realised_bits": null,
+   "step_idx": 13,
+   "virgin_cells": [],
+   "world_before_hash": "1317da5b367d300a"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "b278887e087d3593",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "2->3",
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "3281b51b4c1aa929",
+   "observed_delta_cells": 13,
+   "off_frontier": true,
+   "probe_id": "P-09",
+   "realised_bits": null,
+   "step_idx": 14,
+   "virgin_cells": [
+    [
+     53,
+     60
+    ]
+   ],
+   "world_before_hash": "b278887e087d3593"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "1317da5b367d300a",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "d2c8aa05e38a2da7",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-10",
+   "realised_bits": null,
+   "step_idx": 15,
+   "virgin_cells": [],
+   "world_before_hash": "3281b51b4c1aa929"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "b278887e087d3593",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "3281b51b4c1aa929",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-11",
+   "realised_bits": null,
+   "step_idx": 16,
+   "virgin_cells": [],
+   "world_before_hash": "d2c8aa05e38a2da7"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "1317da5b367d300a",
+   "anchored": false,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->3",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "febfe034e90989ad",
+   "observed_delta_cells": 13,
+   "off_frontier": true,
+   "probe_id": "P-12",
+   "realised_bits": null,
+   "step_idx": 17,
+   "virgin_cells": [
+    [
+     53,
+     59
+    ]
+   ],
+   "world_before_hash": "3281b51b4c1aa929"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "febfe034e90989ad",
+   "anchored": true,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "8b41d5b61c523b9e",
+   "observed_delta_cells": 12,
+   "off_frontier": false,
+   "probe_id": "P-13",
+   "realised_bits": null,
+   "step_idx": 18,
+   "virgin_cells": [],
+   "world_before_hash": "febfe034e90989ad"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "8b41d5b61c523b9e",
+   "anchored": true,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "febfe034e90989ad",
+   "observed_delta_cells": 12,
+   "off_frontier": false,
+   "probe_id": "P-14",
+   "realised_bits": null,
+   "step_idx": 19,
+   "virgin_cells": [],
+   "world_before_hash": "8b41d5b61c523b9e"
+  },
+  {
+   "action": 4,
+   "anchor_hash": "febfe034e90989ad",
+   "anchored": true,
+   "delta_cells_first_ever_change": 1,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "2->3",
+    "4->1",
+    "4->2"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "e4ef9819d5084e7e",
+   "observed_delta_cells": 13,
+   "off_frontier": true,
+   "probe_id": "P-15",
+   "realised_bits": null,
+   "step_idx": 20,
+   "virgin_cells": [
+    [
+     53,
+     58
+    ]
+   ],
+   "world_before_hash": "febfe034e90989ad"
+  },
+  {
+   "action": 3,
+   "anchor_hash": "8b41d5b61c523b9e",
+   "anchored": false,
+   "delta_cells_first_ever_change": 0,
+   "delta_cells_previously_dynamic": 12,
+   "delta_colour_transitions": [
+    "1->4",
+    "2->4"
+   ],
+   "expected_bits": 0.881290899231,
+   "frontier_width_distinct": 2,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "n_frames": 2,
+   "n_hypotheses": 10,
+   "observed": "8ead43840cc83b3d",
+   "observed_delta_cells": 12,
+   "off_frontier": true,
+   "probe_id": "P-16",
+   "realised_bits": null,
+   "step_idx": 21,
+   "virgin_cells": [],
+   "world_before_hash": "e4ef9819d5084e7e"
+  }
+ ],
+ "totals": {
+  "anchor_drifted": 35,
+  "anchored_to_world": 17,
+  "frontier_width_distinct_values": [
+   2
+  ],
+  "frontier_width_max": 2,
+  "off_frontier": 47,
+  "off_frontier_while_anchored": 12,
+  "off_frontier_while_drifted": 35,
+  "probes_completed": 52,
+  "probes_whose_delta_touches_a_never_before_changed_cell": 23,
+  "probes_with_delta_measured": 52,
+  "traces_missing": []
+ }
+}

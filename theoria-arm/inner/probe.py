@@ -7,8 +7,11 @@ refutation goes back to theorize. 1.10(b) adds the part that matters online:
 probe value is entropy per unit cost, and **the path costs API actions**, so
 the value function must price them.
 
-The frontier here is built by ablation, which is the form a frontier takes
-once a manual exists. The hypotheses are:
+The frontier here is built by ablation **by default**, which is the form a
+frontier takes once a manual exists -- and which R2 measured to be the wrong
+form. See `FrontierConfig` for `--frontier generated` and the numbers that
+asked for it; everything from here to `ProbeEconomy` describes `ablation`,
+which is still what an unswitched run gets, byte for byte. The hypotheses are:
 
 * `manual` -- what the manual predicts;
 * `manual_without_<rule>` -- what it would predict if that one rule did not
@@ -66,6 +69,16 @@ no-op (every one of the 56 measured probes scored 0.5436--1.0000 bits, so no
 floor would have cut one the streak and fingerprint rules do not already cut).
 
 `enabled=False` is the default and reproduces the pre-economy frontier exactly.
+
+**And the frontier itself is the fourth switch, also default off.** Everything
+above prices, refuses and shrinks an ablation frontier; none of it can put a
+mechanism into one, because every ablation is a *deletion* of the manual and
+the family is closed downward. `runs/20260801T0900Z-R2-frontier-by-generation/`
+measured what that cost on the same four legs -- width 2 on all 52 probes, 35
+of them anchored to a state the world had already left, and the other 12
+misses each one board cell wide -- and `FrontierConfig(mode="generated")` is
+the answer to the first of those two causes. The second is expressivity and is
+named as such.
 """
 
 import hashlib
@@ -370,8 +383,363 @@ class ProbeEconomy:
         }
 
 
-def build_hypotheses(namespace: Dict[str, Any]):
-    """One hypothesis per ablation, plus the manual and the inert reading."""
+@dataclass(frozen=True)
+class FrontierConfig:
+    """How the frontier is built. `ablation` is the default and is unchanged.
+
+    **The measurement that made this a switch** (`runs/20260801T0900Z-R2-
+    frontier-by-generation/MEASUREMENT.json`, over the same four legs of
+    2026-07-31). The ablation family is `manual`, `inert`, and one
+    `without_<schema>` per rule schema. Every one of those is a *deletion* of
+    the manual, so the family is closed downward under clause removal and
+    cannot contain a mechanism the manual lacks. `Theoria.md`'s engine table
+    asks the rule miner for 全体一致假设的前沿 -- the frontier of all hypotheses
+    consistent with the evidence -- precisely because the split entropy the
+    probe is priced by is meaningless when the truth is outside the set.
+
+    What the legs measured, with the grids read and not only their hashes:
+
+    * frontier width was **2 distinct predictions on all 52** completed probes,
+      whatever the hypothesis count said (16 to 24);
+    * **35 of the 52 were designed against a state the world had already
+      left**: `predictions["inert"]` -- the manual's rolled-forward render, and
+      therefore the anchor every hypothesis in the frontier is a successor of
+      -- did not equal the world's own `before_hash`. All 35 landed off the
+      frontier. That is not a bad experiment, it is an experiment about a
+      different world;
+    * of the 17 that *were* anchored, 12 still landed off-frontier, and each of
+      those 12 missed by a delta containing **exactly one cell that had never
+      changed before in the run**. The arm seats object instances only on
+      colours the board cannot explain, so a cell that has never varied gets no
+      instance and no rule in this grammar can name it. Deleting a clause
+      cannot reach it either.
+
+    So all 47 off-frontier answers were out of reach of *any* ablation, and 12
+    of them out of reach of any rule the DSL can currently write. `generated`
+    attacks the first cause and the third; the second is expressivity and is
+    named as such rather than papered over.
+    """
+
+    #: `ablation` -- the 2026-07-31 frontier, hypothesis for hypothesis, report
+    #: byte for byte. `generated` adds world-anchored successor hypotheses.
+    mode: str = "ablation"
+
+    #: In `generated`, keep the ablation hypotheses too. The manual's
+    #: ablations are still the only thing that says *which clause* is wrong,
+    #: and dropping them would trade one blind spot for another.
+    keep_ablations: bool = True
+
+    @property
+    def generated(self) -> bool:
+        return self.mode == "generated"
+
+    @classmethod
+    def from_env(cls, env: Optional[Dict[str, str]] = None) -> "FrontierConfig":
+        """`THEORIA_FRONTIER=generated` turns it on; anything else is off.
+
+        A positive whitelist, for the same reason `ProbeEconomyConfig.from_env`
+        is one: a misspelt switch must not silently change the hypothesis set a
+        round is trying to measure. `banana`, `1`, `GENERATED!` and the empty
+        string all leave it on `ablation`.
+        """
+        env = os.environ if env is None else env
+        raw = str(env.get("THEORIA_FRONTIER", "")).strip()
+        return cls(mode="generated") if raw == "generated" else cls()
+
+
+def _grid_of(store: Any) -> Optional[Any]:
+    """The world's most recent observed frame, or None."""
+    if store is None:
+        return None
+    try:
+        return store.current
+    except Exception:                                  # noqa: BLE001
+        return None
+
+
+def _delta(before: Any, after: Any) -> Dict[Tuple[int, int], int]:
+    """`{(row, col): new_value}` for every cell two grids disagree on."""
+    out: Dict[Tuple[int, int], int] = {}
+    if before is None or after is None:
+        return out
+    for r in range(max(len(before), len(after))):
+        rb = before[r] if r < len(before) else []
+        ra = after[r] if r < len(after) else []
+        for c in range(max(len(rb), len(ra))):
+            vb = rb[c] if c < len(rb) else None
+            va = ra[c] if c < len(ra) else None
+            if vb != va and va is not None:
+                out[(r, c)] = va
+    return out
+
+
+def _applied(grid: Any, delta: Dict[Tuple[int, int], int]) -> Any:
+    """A copy of `grid` with `delta` written into it. Out-of-range is dropped."""
+    out = [list(row) for row in grid]
+    for (r, c), value in delta.items():
+        if 0 <= r < len(out) and 0 <= c < len(out[r]):
+            out[r][c] = value
+    return out
+
+
+def next_unnameable_cells(store: Any, *, cap: int = 4
+                          ) -> List[Tuple[Tuple[int, int], int]]:
+    """Extrapolate the next cells that will change for the first time.
+
+    Returns a list of `((row, col), colour)`, longest chain first, at most
+    `cap` of them. Empty when the evidence licenses none.
+
+    This is the mechanism the manual provably cannot state. The arm seats an
+    object instance on a colour *the board cannot explain*, so a cell that has
+    never varied is board, gets no instance, and no `forall ?p in <Type>` rule
+    can reach it -- `20260731T1430Z-...-r3`'s manual says so itself, in
+    `i_cannot_manufacture_an_instance_on_a_cell_that_has_never_changed`, and
+    pays one pixel for it on every second command. Ablating a clause certainly
+    cannot reach it. But the *record* of which cells changed first, and in what
+    order, is arithmetic over the frame store, and if those cells march in a
+    line the next one is an extrapolation and not a guess.
+
+    Deliberately narrow, in two ways, and the second was forced by a failure.
+
+    * It fires only when two first-ever-change cells are 8-adjacent, so the
+      direction is a single step and the claim is "one more of the same". A
+      scattered history yields None and the hypothesis is simply absent, which
+      is the honest output -- an extrapolation over unrelated cells would be a
+      hypothesis nothing licensed.
+    * The chains are followed **per colour, and every one of them is
+      returned.** The first draft took the last two first-ever changes
+      outright, which is wrong whenever more than one thing in the world is
+      touching virgin cells: a body walking onto fresh ground and a counter
+      burning along a row interleave in the record, and the "direction" between
+      the last body cell and the last counter cell is noise. Colours separate
+      them, because a counter that burns to 1 keeps burning to 1.
+
+      The second draft separated by colour and then *chose* the longest chain.
+      That cost six of the answers the first draft had recovered on the replay
+      of the four legs (38 to 32), and the reason is the point of this whole
+      change: choosing is a point guess, and `Theoria.md`'s engine table asks
+      for 全体一致假设的前沿 -- the frontier of every hypothesis the evidence
+      leaves standing -- precisely so that the probe can be the thing that
+      chooses. So every colour whose chain admits a line comes back, ordered
+      longest chain first and then by colour so the order does not depend on
+      dict iteration, and the frontier is wider by exactly as many hypotheses
+      as the evidence supports.
+    """
+    try:
+        grids = list(store.grids)
+    except Exception:                                  # noqa: BLE001
+        return []
+    if len(grids) < 3:
+        return []
+    seen: Set[Tuple[int, int]] = set()
+    by_colour: Dict[int, List[Tuple[int, int]]] = {}
+    #: Every first-ever change in the order it happened, and what colour it
+    #: took. Two readings are built off this and both are kept -- see below.
+    order: List[Tuple[int, int]] = []
+    colour_of: Dict[Tuple[int, int], int] = {}
+    previous = grids[0]
+    for grid in grids[1:]:
+        for cell, value in sorted(_delta(previous, grid).items()):
+            if cell not in seen:
+                seen.add(cell)
+                by_colour.setdefault(value, []).append(cell)
+                order.append(cell)
+                colour_of[cell] = value
+        previous = grid
+
+    def _chain(cells: Sequence[Tuple[int, int]]
+               ) -> Optional[Tuple[int, Tuple[int, int]]]:
+        """`(run length, the next cell)` if these march in a line, else None."""
+        if len(cells) < 2:
+            return None
+        (r1, c1), (r0, c0) = cells[-1], cells[-2]
+        dr, dc = r1 - r0, c1 - c0
+        if (dr, dc) == (0, 0) or abs(dr) > 1 or abs(dc) > 1:
+            return None
+        run = 2
+        for idx in range(len(cells) - 2, 0, -1):
+            if (cells[idx][0] - cells[idx - 1][0],
+                    cells[idx][1] - cells[idx - 1][1]) != (dr, dc):
+                break
+            run += 1
+        return run, (r1 + dr, c1 + dc)
+
+    ranked: List[Tuple[int, int, Tuple[int, int], int]] = []
+    for colour, cells in sorted(by_colour.items()):
+        found = _chain(cells)
+        if found is not None:
+            ranked.append((found[0], colour, found[1], colour))
+
+    # …and the colour-blind chain, which is a *different* mechanism and not a
+    # fallback: "the leading edge advances, whatever it is painting". On
+    # `20260731T1500Z-...-l1` the virgin cells alternate colour, so no
+    # single-colour chain is a line and only this reading sees the march; on r3
+    # the per-colour chains are the ones that see it. Measured on the replay of
+    # all four legs: colour-separated chains alone recover 32 of the 47
+    # off-frontier answers, both readings together recover 38. Neither reading
+    # dominates, so neither gets to be the guess -- which is the whole argument
+    # of this change applied to its own internals.
+    found = _chain(order)
+    if found is not None and order:
+        ranked.append((found[0], -1, found[1], colour_of[order[-1]]))
+
+    ranked.sort(key=lambda row: (-row[0], row[1]))
+    out: List[Tuple[Tuple[int, int], int]] = []
+    for _run, _key, cell, colour in ranked:
+        if (cell, colour) not in out:
+            out.append((cell, colour))
+    return out[:cap]
+
+
+def anchor_drift(namespace: Dict[str, Any], state: Any, store: Any
+                 ) -> Dict[str, Any]:
+    """Is the frontier's anchor the frame the world is actually showing?
+
+    Free -- no action, no model call -- and it is the single number the
+    2026-07-31 legs most needed and never computed. `inner/loop._roll_forward`
+    replays the manual's `step` from `initial_state()` over every recorded
+    action, so *one* mispredicted transition desynchronises the manual's state
+    permanently, and every later probe hypothesises about a frame the world
+    left behind. 35 of 52 probes were in that condition and 35 of those 35 came
+    back off-frontier.
+    """
+    render = namespace.get("render")
+    world = _grid_of(store)
+    manual_hash = None
+    if render is not None:
+        try:
+            manual_hash = _observation(render(state))
+        except Exception:                              # noqa: BLE001
+            manual_hash = "error"
+    world_hash = _observation(world) if world is not None else None
+    return {"anchor_hash": manual_hash,
+            "world_hash": world_hash,
+            "drifted": (manual_hash is not None and world_hash is not None
+                        and manual_hash != world_hash)}
+
+
+def build_generated_hypotheses(namespace: Dict[str, Any], store: Any,
+                               *, config: Optional[FrontierConfig] = None):
+    """Successor hypotheses that are not deletions of the manual.
+
+    Each carries a mechanism the manual does not state, and each is a claim
+    about the **world's** last observed frame rather than about the manual's
+    rolled-forward state -- which is the difference the measurement said
+    mattered most.
+
+    * `world_inert` -- the world's frame, unchanged. Distinct from `inert`,
+      which says the *manual's* state is unchanged; when the two states have
+      drifted apart they are different predictions, and only one of them can be
+      about the next frame.
+    * `world_anchored_manual` -- the manual's own rule effects, transplanted
+      onto the world's frame. The hypothesis "my rules are right and my
+      bookkeeping is stale", which the ablation family cannot express because
+      every member of it is a successor of the stale state.
+    * `edge_advance` / `world_inert_plus_edge` -- the above plus one cell that
+      no rule in this grammar can name (`next_unnameable_cell`). These are the
+      only hypotheses in the arm that can be right about a board cell.
+
+    **A fifth generator was built, measured, and cut, and the number that cut
+    it is not the obvious one.** `action_replay` -- "whatever this action did
+    last time, applied again to the world's frame" -- is a genuinely
+    action-indexed mechanism the manual's state-indexed rules cannot state, and
+    on the replay it named the world's answer **15 times out of 52**, which
+    sounds like a keeper. Its *marginal* contribution is what matters: of the 9
+    answers the four hypotheses above still miss, `action_replay` gets **0**.
+    All 15 of its hits are answers `world_anchored_manual` already had. A
+    hypothesis that is only ever right in company widens the frontier, lowers
+    the split entropy of every action, and buys nothing, so it is not here.
+    `replay_frontier.py --with-cut-generators` re-measures both numbers, so the
+    decision stays checkable rather than remembered.
+
+    A generator with no evidence to stand on emits nothing. The set is
+    therefore smaller than its maximum on an early turn, and that is reported
+    rather than padded.
+    """
+    from engines.probe_frontier import Hypothesis     # noqa: PLC0415
+
+    cfg = config or FrontierConfig(mode="generated")
+    world = _grid_of(store)
+    out: List[Any] = []
+    if world is None:
+        return out
+
+    render = namespace.get("render")
+    step = namespace.get("step")
+
+    def world_inert(_state, _action):
+        return _observation(world)
+
+    def manual_delta(state, action):
+        if render is None or step is None:
+            return None
+        try:
+            return _delta(render(state), render(step(state, action)))
+        except Exception:                              # noqa: BLE001
+            return None
+
+    def world_anchored_manual(state, action):
+        delta = manual_delta(state, action)
+        if delta is None:
+            return "error"
+        return _observation(_applied(world, delta))
+
+    out.append(Hypothesis(
+        id="world_inert", predict=world_inert,
+        description="the world's own last frame, unchanged -- 'nothing "
+                    "happens' said about the world rather than about the "
+                    "manual's rolled-forward state"))
+    out.append(Hypothesis(
+        id="world_anchored_manual", predict=world_anchored_manual,
+        description="the manual's rule effects applied to the world's last "
+                    "frame: the rules are right, the manual's state is stale"))
+
+    edges = next_unnameable_cells(store)
+    for rank, (cell, colour) in enumerate(edges):
+        # One pair of hypotheses per leading edge the evidence supports. The
+        # first edge keeps the unsuffixed ids, so a world with a single moving
+        # edge -- which is every world measured so far -- reads exactly as it
+        # did before the plural form existed.
+        suffix = "" if rank == 0 else "_%d" % rank
+
+        def inert_plus_edge(_state, _action, _cell=cell, _colour=colour):
+            return _observation(_applied(world, {_cell: _colour}))
+
+        def manual_plus_edge(state, action, _cell=cell, _colour=colour):
+            delta = manual_delta(state, action)
+            if delta is None:
+                return "error"
+            merged = dict(delta)
+            merged[_cell] = _colour
+            return _observation(_applied(world, merged))
+
+        out.append(Hypothesis(
+            id="world_inert_plus_edge" + suffix, predict=inert_plus_edge,
+            description="nothing moves except cell %r, which takes colour %d: "
+                        "a cell that has never changed, so no object instance "
+                        "sits on it and no rule in this grammar can name it"
+                        % (cell, colour)))
+        out.append(Hypothesis(
+            id="edge_advance" + suffix, predict=manual_plus_edge,
+            description="the manual's effects on the world's frame, plus cell "
+                        "%r taking colour %d -- the leading edge advancing one "
+                        "step further along the line the previous first-ever "
+                        "changes in colour %d travelled"
+                        % (cell, colour, colour)))
+
+    return out
+
+
+def build_hypotheses(namespace: Dict[str, Any], *,
+                     frontier: Optional[FrontierConfig] = None,
+                     store: Any = None):
+    """One hypothesis per ablation, plus the manual and the inert reading.
+
+    With `frontier.mode == "generated"` and a frame store to stand on, the
+    generated successors of `build_generated_hypotheses` are appended. Absent
+    either -- which is the default -- this returns exactly what it returned on
+    2026-07-31, in the same order.
+    """
     from engines.probe_frontier import Hypothesis     # noqa: PLC0415
 
     render = namespace["render"]
@@ -425,6 +793,13 @@ def build_hypotheses(namespace: Dict[str, Any]):
                 description=("the manual with rule %r removed (%d ground "
                              "instance%s)" % (base, len(members),
                                               "" if len(members) == 1 else "s"))))
+
+    cfg = frontier or FrontierConfig()
+    if cfg.generated:
+        generated = build_generated_hypotheses(namespace, store, config=cfg)
+        if not cfg.keep_ablations:
+            hypotheses = hypotheses[:2]                # `manual` and `inert`
+        hypotheses = hypotheses + generated
     return hypotheses
 
 
@@ -433,7 +808,9 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
            out_path: Optional[str] = None,
            transitions: Optional[Sequence[int]] = None,
            coverage: Optional[str] = None,
-           economy: Optional[ProbeEconomy] = None) -> Dict[str, Any]:
+           economy: Optional[ProbeEconomy] = None,
+           frontier: Optional[FrontierConfig] = None,
+           store: Any = None) -> Dict[str, Any]:
     """Rank the available actions by bits-per-action. Zero model calls.
 
     With `economy` disabled or absent this is the original function: the full
@@ -441,10 +818,19 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
     it enabled, hypotheses this generation's earlier probes already refuted are
     dropped before the engine sees them, so the frontier the report describes is
     the frontier that is actually still standing.
+
+    `frontier` and `store` are the other switch. On `ablation` -- the default,
+    and what you get when either is absent -- nothing in this function moves:
+    the same hypotheses in the same order, and no new key in the report. On
+    `generated` the frontier grows the world-anchored successors, and the
+    report grows a `frontier` block carrying the mode, the generated ids, and
+    the anchor-drift reading that says whether the old frontier was about this
+    world at all.
     """
     from engines import probe_frontier                # noqa: PLC0415
 
-    full = build_hypotheses(namespace)
+    cfg = frontier or FrontierConfig()
+    full = build_hypotheses(namespace, frontier=cfg, store=store)
     hypotheses = list(full)
     economy_report: Optional[Dict[str, Any]] = None
     if economy is not None:
@@ -484,6 +870,16 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
     }
     if economy_report is not None:
         report["economy"] = economy_report
+    if cfg.generated:
+        ablation_ids = {"manual", "inert"} | {
+            h.id for h in full if h.id.startswith("without_")}
+        report["frontier"] = {
+            "mode": cfg.mode,
+            "keep_ablations": cfg.keep_ablations,
+            "n_generated": sum(1 for h in full if h.id not in ablation_ids),
+            "generated": sorted(h.id for h in full if h.id not in ablation_ids),
+            "anchor": anchor_drift(namespace, state, store),
+        }
     return report
 
 

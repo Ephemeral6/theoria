@@ -1,0 +1,36 @@
+Gate outputs, verbatim. Run from theoria-arm/.
+Re-run: python -m pytest -q ; python verify.py ; python -m armtools.verify_provenance
+
+=== python -m pytest -q ===
+........................................................................ [ 93%]
+...........................................                              [100%]
+(619 collected: baseline 599 + 20 in tests/test_frontier_generation.py; 0 lost)
+
+=== python verify.py ===
+[1/3] suite
+   ok    619 tests collected, suite green
+[2/3] one real run -- the whole arm, offline against proxy/mock
+   ok    game g50t-5849a774, budget 6 actions, no key, no network
+[3/3] artefact self-check
+   ok    11 ledger records (7 env_steps), 18 run files, all 17 manifest fields, sealing clean, dev pile only
+
+theoria-arm: green -- suite, one offline run, artefact fields
+
+=== python -m armtools.verify_provenance ===
+Run after this run's MANIFEST.json was written and committed. This block is
+verbatim from that run; the only files that changed afterwards are this one
+(which gained the block) and MANIFEST.json (which re-hashed it), so a re-run
+prints the same ten lines with the same two counts.
+
+PASS  runs/ contains no test or smoke fixture                                                       every directory under runs/ is archive material or a process record
+PASS  every run has a MANIFEST.json                                                                 21 runs, 21 manifests
+PASS  prompt_id / branch / base_commit / utc are present or explicitly accounted for                every manifest either carries the four or names what it lost
+PASS  billed actions reconcile: ledgers vs closed scorecards                                        ledgers say 156 = 143 reconciled against 13 closed cards + 13 declared unreconcilable (cards opened and never closed; closed cards 404, so the API-side total is unobtainable by construction) [20260728T025503Z-g50t-e08-fixed: 13 against 3d6e68e3-d571-4592-86dc-857dadd39572; preflight-20260728T012031Z: 0 against bbbd5b57-de5d-4f14-aa0e-adaedb234fef]
+PASS  every run that spent actions can point at its scorecard                                       each of the 20 runs that spent an action carries its scorecard or names the salvage holding it
+PASS  every scorecard opened and never closed is declared as such                                   2 orphan(s), all declared in the manifest of the run that opened them
+PASS  no sealed-pile game appears anywhere in the archive                                           every manifest's sealing check is clean
+PASS  re-deriving every manifest reproduces it byte for byte                                        21 manifests, all byte-stable under re-derivation
+PASS  every recorded base_commit carries its verification verdict                                   each base_commit is either derived from the recorded arm_version or carries a check that says it is not
+PASS  every file a shipped manifest lists is shipped too or excluded by the repository's own rules  55 manifests this commit ships, 716 listed paths: every one is shipped too, or named by a `.gitignore` rule that says why it is not
+
+OK: 10 checks
