@@ -1,0 +1,78 @@
+{
+ "budget_per_leg": 300,
+ "ceiling_per_leg": 15.0,
+ "change": "goal_protocol=propose \u2014 the arm may now notice it has no goal and propose one on a theorize call a surprise already paid for. All 56 plan calls across the four 2026-07-31 legs returned no_goal_declared; zero plans, zero commits.",
+ "exit_codes": {
+  "20260731T231654Z-R1-g50t-a": 0,
+  "20260731T231654Z-R1-sk48-b": 0
+ },
+ "legs": [
+  {
+   "actions_ok": 13,
+   "computational": 2,
+   "desk_calls": 4,
+   "empirical": 7,
+   "game_id": null,
+   "level": 1,
+   "levels_completed": 0,
+   "outcome": "spend_gate_tripped",
+   "slug": "20260731T231654Z-R1-g50t-a",
+   "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-7553b20ec56f4ef2 for 'theoria-arm:A3-campaign-devpile:g50",
+   "surprises": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 2,
+    "probe_refutation": 5,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprises_total": 9,
+   "theorize_rounds": null,
+   "usd": 7.603419
+  },
+  {
+   "actions_ok": 5,
+   "computational": 1,
+   "desk_calls": 3,
+   "empirical": 2,
+   "game_id": null,
+   "level": 1,
+   "levels_completed": 0,
+   "outcome": "spend_gate_tripped",
+   "slug": "20260731T231654Z-R1-sk48-b",
+   "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: reservation res-5b347dc042074e96 for 'theoria-arm:A3-campaign-devpile:sk4",
+   "surprises": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 1,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 2,
+    "search_timeout": 0
+   },
+   "surprises_total": 3,
+   "theorize_rounds": null,
+   "usd": 7.608528
+  }
+ ],
+ "model": "claude-opus-5",
+ "round": "R1",
+ "seed_books": "runs/20260731T1430Z-A3-level2-carried-r3/books",
+ "totals": {
+  "actions_ok": 18,
+  "desk_calls": 7,
+  "levels_completed": 0,
+  "surprises": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 3,
+   "probe_refutation": 5,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 4,
+   "search_timeout": 0
+  },
+  "usd": 15.211947
+ },
+ "utc": "20260731T231654Z"
+}

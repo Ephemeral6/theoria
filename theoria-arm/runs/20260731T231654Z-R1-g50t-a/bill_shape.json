@@ -1,0 +1,72 @@
+{
+ "calls": [
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 5,
+   "beat": "theorize",
+   "call_idx": 0,
+   "elapsed_ms": 568892,
+   "label": "round1",
+   "output_tokens": 48721,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 1.651009,
+   "usd_cumulative": 1.651009,
+   "usd_per_action_marginal": 0.330202
+  },
+  {
+   "actions_at_call": 9,
+   "actions_since_last_call": 4,
+   "beat": "theorize",
+   "call_idx": 1,
+   "elapsed_ms": 801189,
+   "label": "round1",
+   "output_tokens": 66102,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 2.715763,
+   "usd_cumulative": 4.366772,
+   "usd_per_action_marginal": 0.678941
+  },
+  {
+   "actions_at_call": 9,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 2,
+   "elapsed_ms": 634108,
+   "label": "round2",
+   "output_tokens": 52696,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 1.722576,
+   "usd_cumulative": 6.089348,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 9,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 3,
+   "elapsed_ms": 498020,
+   "label": "round1",
+   "output_tokens": 43396,
+   "step_idx": 10,
+   "turn": 6,
+   "usd": 1.514071,
+   "usd_cumulative": 7.603419,
+   "usd_per_action_marginal": null
+  }
+ ],
+ "reading": "`actions_at_call` counts BILLED actions; `commands_sent` counts HTTP requests, and the two differ by this API's 400-wave retry envelope. A curve against one is not a curve against the other.",
+ "totals": {
+  "actions_billed": 13,
+  "commands_sent": 106,
+  "desk_calls": 4,
+  "elapsed_s": 2983.6,
+  "http_amplification": 8.154,
+  "transitions_observed": 13,
+  "usd": 7.603419,
+  "usd_per_billed_action": 0.584878,
+  "usd_per_transition": 0.584878
+ }
+}

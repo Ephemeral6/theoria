@@ -1,0 +1,58 @@
+{
+ "calls": [
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 5,
+   "beat": "theorize",
+   "call_idx": 0,
+   "elapsed_ms": 923503,
+   "label": "round1",
+   "output_tokens": 74879,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 2.961837,
+   "usd_cumulative": 2.961837,
+   "usd_per_action_marginal": 0.592367
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 1,
+   "elapsed_ms": 856693,
+   "label": "round2",
+   "output_tokens": 69014,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 2.816642,
+   "usd_cumulative": 5.778479,
+   "usd_per_action_marginal": null
+  },
+  {
+   "actions_at_call": 5,
+   "actions_since_last_call": 0,
+   "beat": "theorize",
+   "call_idx": 2,
+   "elapsed_ms": 703330,
+   "label": "round3",
+   "output_tokens": 55975,
+   "step_idx": 6,
+   "turn": 2,
+   "usd": 1.830049,
+   "usd_cumulative": 7.608528,
+   "usd_per_action_marginal": null
+  }
+ ],
+ "reading": "`actions_at_call` counts BILLED actions; `commands_sent` counts HTTP requests, and the two differ by this API's 400-wave retry envelope. A curve against one is not a curve against the other.",
+ "totals": {
+  "actions_billed": 5,
+  "commands_sent": 38,
+  "desk_calls": 3,
+  "elapsed_s": 2998.0,
+  "http_amplification": 7.6,
+  "transitions_observed": 5,
+  "usd": 7.608528,
+  "usd_per_billed_action": 1.521705,
+  "usd_per_transition": 1.521705
+ }
+}

@@ -1,0 +1,315 @@
+[
+ {
+  "actions_spent": 5,
+  "beat": "observe",
+  "detail": "opening sweep over [1, 2, 3, 4, 5]",
+  "turn": 0
+ },
+ {
+  "actions_spent": 5,
+  "beat": "transfer",
+  "detail": "carried manual from 20260731T1430Z-A3-level2-carried-r3 certified cold on g50t-5849a774",
+  "prediction": {
+   "detail": "the carried manual uses `arc-instances: all` on Glyph9, Vacated, Spent, Dark, which spreads one declaration over every dynamic cell of its colour. The formula assumes one declaration draws one pixel, so it does not apply here and reporting a number would be a test of nothing.",
+   "formula": "unexplained(frame_0) = D0 - K",
+   "observed": null,
+   "predicted": null,
+   "verdict": "withheld"
+  },
+  "turn": 0
+ },
+ {
+  "actions_before": 5,
+  "certify": {
+   "cheap_green": true,
+   "proof_layer_available": false,
+   "replay": "5/5 transitions replay exactly",
+   "replay_ok": true,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 141.1,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-01",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key1_inert_at_spawn",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key2_rightmost",
+    "without_meter_burn_key4_next"
+   ]
+  },
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 1,
+  "turn": 1
+ },
+ {
+  "actions_before": 6,
+  "elapsed_s": 764.5,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-02",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key1_inert_at_spawn",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key3_inert_below_spawn",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key2_rightmost",
+    "without_meter_burn_key4_next"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 2
+ },
+ {
+  "actions_before": 7,
+  "elapsed_s": 771.0,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 1,
+   "kind": "exploration",
+   "why": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not."
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 3
+ },
+ {
+  "actions_before": 8,
+  "elapsed_s": 802.2,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 3,
+   "kind": "exploration",
+   "why": "this is the same experiment as P-01 -- same action, same prediction from every hypothesis, therefore the same partition of the frontier. Re-running it cannot separate anything P-01 did not."
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 4
+ },
+ {
+  "actions_before": 9,
+  "certify": {
+   "cheap_green": true,
+   "proof_layer_available": false,
+   "replay": "9/9 transitions replay exactly",
+   "replay_ok": true,
+   "responsibility_ok": true,
+   "unexplained_cells": 0
+  },
+  "elapsed_s": 813.4,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-05",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key1_primed",
+    "without_meter_burn_key2_primed",
+    "without_meter_burn_key2_pristine",
+    "without_meter_burn_key4_primed"
+   ]
+  },
+  "theorize_calls": 1,
+  "theorize_ok": true,
+  "theorize_rounds": 2,
+  "turn": 5
+ },
+ {
+  "actions_before": 10,
+  "elapsed_s": 2867.2,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 5,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-06",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key1_primed",
+    "without_meter_burn_key2_primed",
+    "without_meter_burn_key2_pristine",
+    "without_meter_burn_key4_primed"
+   ]
+  },
+  "theorize": "skipped: 2 surprise(s) pending but only 1 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 6
+ },
+ {
+  "actions_before": 11,
+  "elapsed_s": 2945.8,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 2,
+   "frontier_vacuous": true,
+   "information_gain_bits": 0.0,
+   "kind": "probe",
+   "manual_survived": false,
+   "probe_id": "P-07",
+   "refuted": [
+    "inert",
+    "manual",
+    "without_key2_body_arrives",
+    "without_key2_body_leaves",
+    "without_key5_body_clears",
+    "without_key5_body_respawns",
+    "without_key5_slot1_dims",
+    "without_key5_slot1_lights",
+    "without_key5_slot2_centre_darkens",
+    "without_key5_slot2_centre_resets",
+    "without_key5_slot2_ring_resets",
+    "without_key5_slot2_row1_lights",
+    "without_key5_slot2_row2_left_lights",
+    "without_key5_slot2_row2_right_lights",
+    "without_key5_slot2_row3_lights",
+    "without_key5_underline1_dims",
+    "without_key5_underline1_lights",
+    "without_key5_underline2_dims",
+    "without_key5_underline2_lights",
+    "without_meter_burn_key1_primed",
+    "without_meter_burn_key2_primed",
+    "without_meter_burn_key2_pristine",
+    "without_meter_burn_key4_primed"
+   ]
+  },
+  "theorize": "skipped: 3 surprise(s) pending but only 2 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 7
+ },
+ {
+  "actions_before": 12,
+  "elapsed_s": 2948.0,
+  "plan": {
+   "backend": null,
+   "detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "plan": null,
+   "status": "no_goal_declared"
+  },
+  "predictor": "loaded",
+  "probe": {
+   "action": 4,
+   "kind": "exploration",
+   "why": "3 probes in a row came back with an empty posterior: every hypothesis refuted, including `inert`, so each eliminated nothing (0.0 bits realised). The frontier is built by ablating the manual, so while the manual is unchanged the next one is vacuous too. Going for evidence the ablation frontier cannot reach instead."
+  },
+  "theorize": "skipped: 4 surprise(s) pending but only 3 new transition(s) since the last call (want 4). Going to get more.",
+  "turn": 8
+ }
+]

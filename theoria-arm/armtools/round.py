@@ -54,8 +54,16 @@ def utc_slug() -> str:
 
 def launch(game: str, account: str, slug: str, *, budget: int, ceiling: float,
            model: str, seed_books: Optional[str], prompt_id: str,
-           round_id: str) -> subprocess.Popen:
-    """Start one leg. Returns the process; the log is its own file."""
+           round_id: str, knobs: Optional[List[str]] = None) -> subprocess.Popen:
+    """Start one leg. Returns the process; the log is its own file.
+
+    `knobs` are the switch flags this round turns on, forwarded verbatim to
+    `harness.run`. R1 is why this parameter exists: the runner recorded a
+    `--change` sentence saying `goal_protocol=propose` and had no way to pass
+    it, so both legs ran the default and the round measured nothing while its
+    own record said otherwise. A field that describes an intervention without
+    causing it is worse than no field -- it is a green light with no bulb.
+    """
     env = dict(os.environ)
     cfg = ACCOUNTS.get(account)
     if cfg:
@@ -67,6 +75,7 @@ def launch(game: str, account: str, slug: str, *, budget: int, ceiling: float,
            "--tags", "%s,round,%s" % (round_id, account)]
     if seed_books:
         cmd += ["--seed-books", seed_books, "--carry-source-game", game]
+    cmd += list(knobs or ())
     log_dir = os.path.join(ARM, "runs", "_round_logs")
     os.makedirs(log_dir, exist_ok=True)
     log = open(os.path.join(log_dir, "%s.log" % slug), "w", encoding="utf-8")
@@ -124,6 +133,12 @@ def main(argv=None) -> int:
                          "Written into round.json; Theoria.md:336 forbids a "
                          "round that changed several things, and a record with "
                          "no answer here is that round with the evidence lost.")
+    ap.add_argument("--knob", action="append", default=None, metavar="FLAG",
+                    help="a switch flag forwarded verbatim to every leg, e.g. "
+                         "--knob --goal-protocol=propose. Repeatable, but a "
+                         "round that turns on two unrelated knobs is not one "
+                         "round (Theoria.md:336) -- the runner does not stop "
+                         "you, it records what you did.")
     ap.add_argument("--out-dir", default=None)
     args = ap.parse_args(argv)
 
@@ -141,7 +156,8 @@ def main(argv=None) -> int:
                                    ceiling=args.ceiling, model=args.model,
                                    seed_books=args.seed_books,
                                    prompt_id=args.prompt_id,
-                                   round_id=args.round)))
+                                   round_id=args.round,
+                                   knobs=args.knob)))
         slugs.append(slug)
         print("launched %s (%s, account %s)" % (slug, game, account), flush=True)
 
@@ -155,6 +171,10 @@ def main(argv=None) -> int:
         "round": args.round,
         "utc": stamp,
         "change": args.change,
+        # The prose and the argv, side by side. A reader comparing them is the
+        # only thing that catches a `--change` describing an intervention the
+        # legs never received; R1 shipped exactly that and nothing noticed.
+        "knobs": list(args.knob or ()),
         "seed_books": args.seed_books,
         "budget_per_leg": args.budget,
         "ceiling_per_leg": args.ceiling,

@@ -1,0 +1,430 @@
+[
+ {
+  "cheap": {
+   "checks": {
+    "predictor": {
+     "detail": "theory.py has not been generated",
+     "ok": false
+    }
+   },
+   "error": "theory.py has not been generated",
+   "layer": "cheap",
+   "ok": false
+  },
+  "cheap_green": false,
+  "expensive": {
+   "available": false,
+   "detail": "no Lean form was generated",
+   "layer": "expensive",
+   "ok": false,
+   "state_estimate": null
+  },
+  "green": false,
+  "proof_layer_available": false
+ },
+ {
+  "cheap": {
+   "checks": {
+    "predictor": {
+     "ok": true
+    },
+    "replay": {
+     "detail": "5/5 transitions replay exactly",
+     "first_divergence": null,
+     "matched": 5,
+     "ok": true,
+     "transitions": 5
+    },
+    "responsibility": {
+     "cells_unexplained": 0,
+     "detail": "every pixel of frame 0 belongs to the board or to an object",
+     "first_cells": [],
+     "ok": true,
+     "total_cells": 4096
+    },
+    "unambiguous": {
+     "actions": 5,
+     "cap_reached": false,
+     "clashes": [],
+     "detail": "no (state, action) among 6 x 5 admitted two rules, and all 30 pairs were adjudicated -- no call to `step` raised",
+     "n_clashes": 0,
+     "ok": true,
+     "pairs_checked": 30,
+     "pairs_nominal": 30,
+     "replay_truncated_by_crash": false,
+     "sample_cap": 400,
+     "scope": "sampled",
+     "states": 6,
+     "states_reconstructed": 6,
+     "step_crashes": {
+      "by_phase": {},
+      "by_type": {},
+      "count": 0,
+      "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+      "sample_cap": 8,
+      "samples": [],
+      "site": "certify._ambiguity: step(state, action)"
+     }
+    }
+   },
+   "layer": "cheap",
+   "ok": true,
+   "replay_steps": [
+    {
+     "arc_action": "ACTION1",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      1
+     ],
+     "t": 0
+    },
+    {
+     "arc_action": "ACTION2",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      2
+     ],
+     "t": 1
+    },
+    {
+     "arc_action": "ACTION3",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      3
+     ],
+     "t": 2
+    },
+    {
+     "arc_action": "ACTION4",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      4
+     ],
+     "t": 3
+    },
+    {
+     "arc_action": "ACTION5",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      5
+     ],
+     "t": 4
+    }
+   ]
+  },
+  "cheap_green": true,
+  "expensive": {
+   "available": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "layer": "expensive",
+   "ok": false,
+   "state_estimate": null
+  },
+  "green": false,
+  "proof_layer_available": false
+ },
+ {
+  "cheap": {
+   "checks": {
+    "predictor": {
+     "ok": true
+    },
+    "replay": {
+     "detail": "1/9 transitions replay exactly",
+     "first_divergence": {
+      "arc_action": "ACTION2",
+      "cells": [
+       {
+        "cell": [
+         63,
+         63
+        ],
+        "manual_says": 9,
+        "world_says": 1
+       }
+      ],
+      "cells_wrong": 1,
+      "kind": "frame_mismatch",
+      "t": 1
+     },
+     "matched": 1,
+     "ok": false,
+     "transitions": 9
+    },
+    "responsibility": {
+     "cells_unexplained": 0,
+     "detail": "every pixel of frame 0 belongs to the board or to an object",
+     "first_cells": [],
+     "ok": true,
+     "total_cells": 4096
+    },
+    "unambiguous": {
+     "actions": 2,
+     "cap_reached": false,
+     "clashes": [],
+     "detail": "no (state, action) among 10 x 2 admitted two rules, and all 20 pairs were adjudicated -- no call to `step` raised",
+     "n_clashes": 0,
+     "ok": true,
+     "pairs_checked": 20,
+     "pairs_nominal": 20,
+     "replay_truncated_by_crash": false,
+     "sample_cap": 400,
+     "scope": "sampled",
+     "states": 10,
+     "states_reconstructed": 10,
+     "step_crashes": {
+      "by_phase": {},
+      "by_type": {},
+      "count": 0,
+      "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+      "sample_cap": 8,
+      "samples": [],
+      "site": "certify._ambiguity: step(state, action)"
+     }
+    }
+   },
+   "layer": "cheap",
+   "ok": false,
+   "replay_steps": [
+    {
+     "arc_action": "ACTION1",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      1
+     ],
+     "t": 0
+    },
+    {
+     "arc_action": "ACTION2",
+     "cells_wrong": 1,
+     "manual_action": [
+      "key",
+      2
+     ],
+     "t": 1
+    },
+    {
+     "arc_action": "ACTION3",
+     "cells_wrong": 1,
+     "manual_action": [
+      "key",
+      3
+     ],
+     "t": 2
+    },
+    {
+     "arc_action": "ACTION4",
+     "cells_wrong": 2,
+     "manual_action": [
+      "key",
+      4
+     ],
+     "t": 3
+    },
+    {
+     "arc_action": "ACTION5",
+     "cells_wrong": 2,
+     "manual_action": [
+      "key",
+      5
+     ],
+     "t": 4
+    },
+    {
+     "arc_action": "ACTION2",
+     "cells_wrong": 3,
+     "manual_action": [
+      "key",
+      2
+     ],
+     "t": 5
+    },
+    {
+     "arc_action": "ACTION5",
+     "cells_wrong": 3,
+     "manual_action": [
+      "key",
+      5
+     ],
+     "t": 6
+    },
+    {
+     "arc_action": "ACTION1",
+     "cells_wrong": 4,
+     "manual_action": [
+      "key",
+      1
+     ],
+     "t": 7
+    },
+    {
+     "arc_action": "ACTION3",
+     "cells_wrong": 4,
+     "manual_action": [
+      "key",
+      3
+     ],
+     "t": 8
+    }
+   ]
+  },
+  "cheap_green": false,
+  "expensive": {
+   "available": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "layer": "expensive",
+   "ok": false,
+   "state_estimate": null
+  },
+  "green": false,
+  "proof_layer_available": false
+ },
+ {
+  "cheap": {
+   "checks": {
+    "predictor": {
+     "ok": true
+    },
+    "replay": {
+     "detail": "9/9 transitions replay exactly",
+     "first_divergence": null,
+     "matched": 9,
+     "ok": true,
+     "transitions": 9
+    },
+    "responsibility": {
+     "cells_unexplained": 0,
+     "detail": "every pixel of frame 0 belongs to the board or to an object",
+     "first_cells": [],
+     "ok": true,
+     "total_cells": 4096
+    },
+    "unambiguous": {
+     "actions": 4,
+     "cap_reached": false,
+     "clashes": [],
+     "detail": "no (state, action) among 10 x 4 admitted two rules, and all 40 pairs were adjudicated -- no call to `step` raised",
+     "n_clashes": 0,
+     "ok": true,
+     "pairs_checked": 40,
+     "pairs_nominal": 40,
+     "replay_truncated_by_crash": false,
+     "sample_cap": 400,
+     "scope": "sampled",
+     "states": 10,
+     "states_reconstructed": 10,
+     "step_crashes": {
+      "by_phase": {},
+      "by_type": {},
+      "count": 0,
+      "note": "`step` is documented total and its only declared exception, AmbiguousTransition, is a constraint-9 violation which is counted as a clash rather than here. Anything counted here is a bug in the compiled manual, and each one removed a pair from adjudication while leaving it inside the nominal coverage.",
+      "sample_cap": 8,
+      "samples": [],
+      "site": "certify._ambiguity: step(state, action)"
+     }
+    }
+   },
+   "layer": "cheap",
+   "ok": true,
+   "replay_steps": [
+    {
+     "arc_action": "ACTION1",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      1
+     ],
+     "t": 0
+    },
+    {
+     "arc_action": "ACTION2",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      2
+     ],
+     "t": 1
+    },
+    {
+     "arc_action": "ACTION3",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      3
+     ],
+     "t": 2
+    },
+    {
+     "arc_action": "ACTION4",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      4
+     ],
+     "t": 3
+    },
+    {
+     "arc_action": "ACTION5",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      5
+     ],
+     "t": 4
+    },
+    {
+     "arc_action": "ACTION2",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      2
+     ],
+     "t": 5
+    },
+    {
+     "arc_action": "ACTION5",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      5
+     ],
+     "t": 6
+    },
+    {
+     "arc_action": "ACTION1",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      1
+     ],
+     "t": 7
+    },
+    {
+     "arc_action": "ACTION3",
+     "cells_wrong": 0,
+     "manual_action": [
+      "key",
+      3
+     ],
+     "t": 8
+    }
+   ]
+  },
+  "cheap_green": true,
+  "expensive": {
+   "available": false,
+   "detail": "not attempted: the enumerative development decides every state in the kernel and this level has about an unknown number of them (ceiling 200000). The pagoda development is the alternative and needs a LINE world plus an lp_potential certificate; this is a grid world with no state graph.",
+   "layer": "expensive",
+   "ok": false,
+   "state_estimate": null
+  },
+  "green": false,
+  "proof_layer_available": false
+ }
+]

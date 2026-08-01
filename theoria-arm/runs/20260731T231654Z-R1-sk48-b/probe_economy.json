@@ -1,0 +1,25 @@
+{
+ "config": {
+  "carry_refutations": true,
+  "min_bits": 0.0
+ },
+ "decisions": [
+  {
+   "action": [
+    "key",
+    4
+   ],
+   "allowed": true,
+   "bits": 0.918295834054,
+   "reason": "",
+   "step_idx": 6
+  }
+ ],
+ "enabled": false,
+ "fired_this_generation": 1,
+ "generations": 1,
+ "probes_allowed": 1,
+ "probes_refused": 0,
+ "refusal_reasons": {},
+ "retired_hypotheses": []
+}
