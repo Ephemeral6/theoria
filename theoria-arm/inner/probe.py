@@ -730,37 +730,36 @@ def build_generated_hypotheses(namespace: Dict[str, Any], store: Any,
     return out
 
 
-def build_hypotheses(namespace: Dict[str, Any], *,
-                     frontier: Optional[FrontierConfig] = None,
-                     store: Any = None):
-    """One hypothesis per ablation, plus the manual and the inert reading.
+def ablation_grid_specs(namespace: Dict[str, Any]
+                        ) -> List[Tuple[str, str, Callable[..., Any], bool]]:
+    """The ablation family at the **grid** level: `(id, description, grid_of, swallow)`.
 
-    With `frontier.mode == "generated"` and a frame store to stand on, the
-    generated successors of `build_generated_hypotheses` are appended. Absent
-    either -- which is the default -- this returns exactly what it returned on
-    2026-07-31, in the same order.
+    `build_hypotheses` is the only historic consumer and wraps each `grid_of`
+    in `_observation`, so this is where the family is defined and there is
+    exactly one definition of it. It is public because `inner/anchor.py` needs
+    the grids and not their hashes: moving a hypothesis's anchor means applying
+    the cells it changes to a different frame, and a hash cannot be re-anchored.
+
+    `swallow` preserves the historic error behaviour per hypothesis, which is
+    not uniform and must not be made uniform: `manual` and every
+    `without_<rule>` catch and answer `"error"`, while `inert` lets a raising
+    `render` propagate to the caller. A leg whose `render` raises therefore
+    keeps producing exactly the report it produced on 2026-07-31.
     """
-    from engines.probe_frontier import Hypothesis     # noqa: PLC0415
-
     render = namespace["render"]
     step = namespace["step"]
     fired = namespace.get("fired")
     rules = list(namespace.get("RULES") or [])
 
-    def manual_predict(state, action):
-        try:
-            return _observation(render(step(state, action)))
-        except Exception:                              # noqa: BLE001
-            return "error"
+    def manual_grid(state, action):
+        return render(step(state, action))
 
-    def inert_predict(state, action):
-        return _observation(render(state))
+    def inert_grid(state, _action):
+        return render(state)
 
-    hypotheses = [
-        Hypothesis(id="manual", predict=manual_predict,
-                   description="the manual as written"),
-        Hypothesis(id="inert", predict=inert_predict,
-                   description="this action does nothing in this state"),
+    specs: List[Tuple[str, str, Callable[..., Any], bool]] = [
+        ("manual", "the manual as written", manual_grid, True),
+        ("inert", "this action does nothing in this state", inert_grid, False),
     ]
 
     if fired is not None:
@@ -781,18 +780,48 @@ def build_hypotheses(namespace: Dict[str, Any], *,
         for base, members in sorted(schemas.items()):
             group = frozenset(members)
 
-            def ablated(state, action, _group=group):
-                try:
-                    if _group & set(fired(state, action) or []):
-                        return _observation(render(state))
-                    return _observation(render(step(state, action)))
-                except Exception:                      # noqa: BLE001
-                    return "error"
-            hypotheses.append(Hypothesis(
-                id="without_%s" % base, predict=ablated,
-                description=("the manual with rule %r removed (%d ground "
-                             "instance%s)" % (base, len(members),
-                                              "" if len(members) == 1 else "s"))))
+            def ablated_grid(state, action, _group=group):
+                if _group & set(fired(state, action) or []):
+                    return render(state)
+                return render(step(state, action))
+
+            specs.append((
+                "without_%s" % base,
+                "the manual with rule %r removed (%d ground instance%s)"
+                % (base, len(members), "" if len(members) == 1 else "s"),
+                ablated_grid, True))
+    return specs
+
+
+def build_hypotheses(namespace: Dict[str, Any], *,
+                     frontier: Optional[FrontierConfig] = None,
+                     store: Any = None,
+                     anchor: Any = None):
+    """One hypothesis per ablation, plus the manual and the inert reading.
+
+    With `frontier.mode == "generated"` and a frame store to stand on, the
+    generated successors of `build_generated_hypotheses` are appended. Absent
+    either -- which is the default -- this returns exactly what it returned on
+    2026-07-31, in the same order.
+
+    `anchor` is the second, orthogonal switch (`inner/anchor.py`). On the
+    default `rolled` it does nothing at all. On `observed` the **ablation**
+    hypotheses are re-anchored onto the world's own last observed frame,
+    keeping their ids, order and mechanisms; the generated ones are left alone
+    because they are already world-anchored and re-anchoring them would be a
+    second application of the same transplant.
+    """
+    from engines.probe_frontier import Hypothesis     # noqa: PLC0415
+
+    specs = ablation_grid_specs(namespace)
+    hypotheses = [Hypothesis(id=hid, predict=_hashing(grid_of, swallow),
+                             description=description)
+                  for hid, description, grid_of, swallow in specs]
+
+    if anchor is not None and getattr(anchor, "observed", False):
+        from inner import anchor as anchor_mod         # noqa: PLC0415
+        hypotheses = anchor_mod.reanchor_specs(specs, namespace, store,
+                                               config=anchor)
 
     cfg = frontier or FrontierConfig()
     if cfg.generated:
@@ -803,6 +832,21 @@ def build_hypotheses(namespace: Dict[str, Any], *,
     return hypotheses
 
 
+def _hashing(grid_of: Callable[..., Any], swallow: bool):
+    """A grid-level predictor as the hash-level one the frontier engine wants."""
+    if not swallow:
+        def predict(state, action):
+            return _observation(grid_of(state, action))
+        return predict
+
+    def predict(state, action):
+        try:
+            return _observation(grid_of(state, action))
+        except Exception:                              # noqa: BLE001
+            return "error"
+    return predict
+
+
 def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
            costs: Optional[Dict[Any, float]] = None,
            out_path: Optional[str] = None,
@@ -810,7 +854,8 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
            coverage: Optional[str] = None,
            economy: Optional[ProbeEconomy] = None,
            frontier: Optional[FrontierConfig] = None,
-           store: Any = None) -> Dict[str, Any]:
+           store: Any = None,
+           anchor: Any = None) -> Dict[str, Any]:
     """Rank the available actions by bits-per-action. Zero model calls.
 
     With `economy` disabled or absent this is the original function: the full
@@ -826,11 +871,21 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
     report grows a `frontier` block carrying the mode, the generated ids, and
     the anchor-drift reading that says whether the old frontier was about this
     world at all.
+
+    `anchor` is the third and is orthogonal to both. On the default `rolled`
+    nothing moves and the report grows no key. On `observed` the ablation
+    hypotheses are re-anchored on the world's own last frame -- same ids, same
+    order, same width -- and the report grows an `anchor` block carrying the
+    mode, whether an anchor was available, and the divergence between the two
+    anchors. `AnchorConfig(measure=True)` writes that block **without**
+    changing the frontier, which is how a leg measures its own drift while
+    still being the arm the A/B thinks it is.
     """
     from engines import probe_frontier                # noqa: PLC0415
 
     cfg = frontier or FrontierConfig()
-    full = build_hypotheses(namespace, frontier=cfg, store=store)
+    full = build_hypotheses(namespace, frontier=cfg, store=store,
+                            anchor=anchor)
     hypotheses = list(full)
     economy_report: Optional[Dict[str, Any]] = None
     if economy is not None:
@@ -879,6 +934,21 @@ def design(namespace: Dict[str, Any], state: Any, actions: Sequence[Any], *,
             "n_generated": sum(1 for h in full if h.id not in ablation_ids),
             "generated": sorted(h.id for h in full if h.id not in ablation_ids),
             "anchor": anchor_drift(namespace, state, store),
+        }
+    if anchor is not None and (getattr(anchor, "observed", False)
+                               or getattr(anchor, "measure", False)):
+        from inner import anchor as anchor_mod        # noqa: PLC0415
+        seated = (getattr(anchor, "observed", False)
+                  and anchor_mod.world_frame(store) is not None
+                  and namespace.get("render") is not None)
+        report["anchor"] = {
+            "mode": getattr(anchor, "mode", anchor_mod.ROLLED),
+            "frontier_is_seated_on_the_world": seated,
+            "why_not": (None if seated or not getattr(anchor, "observed", False)
+                        else ("no frame observed yet"
+                              if anchor_mod.world_frame(store) is None
+                              else "the namespace exposes no render")),
+            "divergence": anchor_mod.divergence(namespace, state, store),
         }
     return report
 

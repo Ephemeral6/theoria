@@ -83,6 +83,7 @@ from proxy.paths import UPSTREAM_ARC
 
 from harness import freeze_gate
 from harness import spend as spend_mod
+from inner import anchor as anchor_mod
 from inner import goal as goal_mod
 from inner import probe as probe_mod
 from harness.proxy_process import EnvProxyProcess
@@ -469,6 +470,29 @@ def main(argv=None) -> int:
                          "`generated` adds successor hypotheses anchored on "
                          "the world's own last frame. See inner/probe.py and "
                          "runs/20260801T0900Z-R2-frontier-by-generation.")
+    ap.add_argument("--anchor", default="rolled",
+                    choices=("rolled", "observed"),
+                    help="which frame the probe frontier's hypotheses are "
+                         "successors of. `rolled` (the default) is "
+                         "2026-07-31: loop._roll_forward's state, replayed "
+                         "from initial_state() over every action, so one "
+                         "mispredicted transition desynchronises it "
+                         "permanently -- 35 of 52 probes on the four legs of "
+                         "2026-07-31 were designed from a frame the world had "
+                         "already left, and all 35 landed off the frontier. "
+                         "`observed` transplants each hypothesis onto the "
+                         "world's own last frame, same ids and same width. "
+                         "Neither setting touches certify, whose open-loop "
+                         "replay is the only detector of a wrong rule and "
+                         "would go trivially green if it were re-seated. See "
+                         "inner/anchor.py.")
+    ap.add_argument("--anchor-measure", action="store_true",
+                    help="write the rolled-vs-observed divergence into "
+                         "`design`'s report as well. The per-turn series is "
+                         "written to anchor.jsonl either way -- that file is "
+                         "new, so it costs no existing artefact a byte -- and "
+                         "this flag is only for a leg that wants the reading "
+                         "inline in probes.jsonl's design rows.")
     ap.add_argument("--desk-diet", default="full",
                     choices=("full", "off", "evidence", "patch", "diet", "on"),
                     help="what the desk is shown and asked to write back. "
@@ -524,7 +548,11 @@ def main(argv=None) -> int:
                               enabled=True, carry_refutations=True)
                               if args.probe_economy else None),
                           frontier=probe_mod.FrontierConfig(
-                              mode=args.frontier))
+                              mode=args.frontier),
+                          anchor=anchor_mod.AnchorConfig(
+                              mode=args.anchor,
+                              measure=(args.anchor_measure
+                                       or args.anchor == "observed")))
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}

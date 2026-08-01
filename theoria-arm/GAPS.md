@@ -415,3 +415,67 @@ produced the artefact unprompted on 2 of 2 legs that got that far). Whether a
 desk given somewhere to put its target uses it is **not** settled and cannot be
 settled offline. One carried `g50t-5849a774` leg at leg ceiling $25 -- $17-25,
 ~9 desk calls, ~25 ARC actions -- would settle it. None was run.
+
+## GAP R3-1 · The anchor is fixed for probe design and the audit still cannot be trusted twice
+
+`--anchor observed` gives the probe frontier the frame the world is showing and
+leaves `certify`'s open-loop replay exactly as it was, which is the whole
+design. What it does **not** do is give this arm a second opinion about the
+manual. `GAPS.md` GAP 3 still holds -- both of Lean's routes are shut on a real
+ARC level -- so the replay this change went out of its way to protect remains
+the *only* instrument that detects a wrong rule, and it is an instrument this
+arm has now been shown to be quietly under-reading: its per-transition
+`cells_wrong` series never reaches disk, and until this ticket nothing had read
+it as the error of the frame the probes were designed against.
+
+Protecting one instrument is not the same as having two. Nothing here changes
+that a manual which replays green over a short history is only weakly attested.
+
+## GAP R3-2 · The change is measured on the archive and has never run
+
+Every number in `runs/20260801T1200Z-R3-anchor-duality/` is a counterfactual
+over recorded states. The four-cell table -- 5, 25, 43, 43 of 52 -- is
+*containment* on states the rolled anchor produced. A live leg on the observed
+anchor diverges from the archive at the first probe whose answer differs, and 4
+of the archived 52 would not have been bought at all (the anchored frontier
+collapses to width 1 there, entropy 0, and the arm correctly refuses the
+action). So the replay bounds nothing about a leg's trajectory.
+
+Specifically not established, and not establishable offline:
+
+* that `manual` on a correctly anchored frontier is *right* on a live leg. The
+  replay's 25 of 52 rests on the manual being right about the mechanism and
+  wrong only about the frame; if a live leg is correctly anchored and `manual`
+  still misses, the diagnosis was wrong.
+* that width-1 collapse stays rare. 4 of 52 is tolerable; a majority would mean
+  anchoring had abolished the experiment rather than fixed it.
+* that a live leg drifts at all on the games it plays. Two of the eight
+  archived legs never drifted.
+
+The run's §9 prices the leg that would settle it: **one** leg, not two, because
+the archive plus `anchor.jsonl` supplies the control for free -- 6--7 desk
+calls, roughly **$16--19** on the measured carried-manual basis. Not run: the
+programme is over its ceiling and this ticket had zero spend authority.
+
+## GAP R3-3 · The expressivity residue is now the whole residue, and it is somebody else's
+
+`observed × generated` misses exactly the 9 probes `rolled × generated` missed:
+`r2 P-01/P-02/P-04`, `r3 P-01/P-02/P-04` and `sk48-l1 P-03/P-06/P-09`.
+Anchoring was never going to reach them. With the drift cause closed, R2-2 is
+no longer one of two causes but the only one left: a confirmed edge hypothesis
+is a fact this arm can predict and cannot write down, because the DSL cannot
+state a rule about a cell it has no instance on. That is a grammar change and
+belongs to `theory-compiler`; it is restated here because R3 narrowed the
+problem to it rather than because R3 can act on it.
+
+## GAP R3-4 · The archived drift series is per certify beat, not per turn
+
+The live arm records drift at every probe beat, into `anchor.jsonl`. The eight
+archived legs can only be re-measured where a `certify.json` report exists to
+verify the reconstruction against -- a snapshot is accepted only if the
+`checks.replay` block it produces matches the archived one field for field.
+Turns between certify beats are not measured, and they are reported as absent
+rather than as zero. One certify round on each of R1-g50t-a, R1-sk48-b,
+R1b-g50t-a and R1b-sk48-b is `unreconstructed` for the honest reason that the
+archived report carries no replay to reproduce (the manual would not compile
+that round); those four contribute nothing to any number here.

@@ -1,0 +1,644 @@
+{
+ "legs": [
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 0,
+   "cells_wrong_last": 25,
+   "cells_wrong_max": 25,
+   "cells_wrong_mean": 5.8,
+   "certify_rounds": 1,
+   "first_drifted_transition": 1,
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": 25,
+     "certify_round": 0,
+     "matched": 1,
+     "reconstructed": true,
+     "snapshot": "rev03-before-theorize",
+     "transitions": 5,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 1,
+   "series": [
+    0,
+    1,
+    1,
+    2,
+    25
+   ],
+   "snapshot_used": "rev03-before-theorize",
+   "status": "measured",
+   "transitions": 5,
+   "transitions_drifted": 4,
+   "transitions_with_a_cells_wrong_number": 5,
+   "unreconstructed_rounds": 0
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 0,
+   "cells_wrong_last": 2,
+   "cells_wrong_max": 2,
+   "cells_wrong_mean": 0.4615,
+   "certify_rounds": 5,
+   "first_drifted_transition": 9,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": 6,
+     "certify_round": 0,
+     "matched": 1,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 6,
+     "certify_round": 1,
+     "matched": 1,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 6,
+     "certify_round": 2,
+     "matched": 1,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 3,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev11-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 2,
+     "certify_round": 4,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev11-before-theorize",
+     "transitions": 13,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 5,
+   "series": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    2,
+    2
+   ],
+   "snapshot_used": "rev11-before-theorize",
+   "status": "measured",
+   "transitions": 13,
+   "transitions_drifted": 4,
+   "transitions_with_a_cells_wrong_number": 13,
+   "unreconstructed_rounds": 0
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 0,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 0,
+   "cells_wrong_mean": 0.0,
+   "certify_rounds": 8,
+   "first_drifted_transition": null,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": 23,
+     "certify_round": 0,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev03-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 1,
+     "matched": 5,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 2,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 3,
+     "matched": 13,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 13,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 4,
+     "matched": 17,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 17,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 5,
+     "matched": 21,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 21,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 6,
+     "matched": 25,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 25,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 7,
+     "matched": 29,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 29,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 8,
+   "series": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "snapshot_used": "rev17-before-theorize",
+   "status": "measured",
+   "transitions": 29,
+   "transitions_drifted": 0,
+   "transitions_with_a_cells_wrong_number": 29,
+   "unreconstructed_rounds": 0
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 96,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 96,
+   "cells_wrong_mean": 6.2353,
+   "certify_rounds": 9,
+   "first_drifted_transition": 0,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 0,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 1,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 2,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 3,
+     "matched": 6,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 4,
+     "matched": 6,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 5,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev15-before-theorize",
+     "transitions": 13,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 6,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev15-before-theorize",
+     "transitions": 13,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 7,
+     "matched": 7,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 17,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 8,
+     "matched": 7,
+     "reconstructed": true,
+     "snapshot": "rev19-before-theorize",
+     "transitions": 17,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 9,
+   "series": [
+    96,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    0
+   ],
+   "snapshot_used": "rev19-before-theorize",
+   "status": "measured",
+   "transitions": 17,
+   "transitions_drifted": 10,
+   "transitions_with_a_cells_wrong_number": 17,
+   "unreconstructed_rounds": 0
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 0,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 0,
+   "cells_wrong_mean": 0.0,
+   "certify_rounds": 4,
+   "first_drifted_transition": null,
+   "leg": "20260731T231654Z-R1-g50t-a",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": null,
+     "certify_round": 0,
+     "matched": null,
+     "reconstructed": false,
+     "snapshot": null,
+     "transitions": null,
+     "why": "the archived report has no replay to reproduce (transitions=None)"
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 1,
+     "matched": 5,
+     "reconstructed": true,
+     "snapshot": "rev09-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 4,
+     "certify_round": 2,
+     "matched": 1,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 3,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev09-before-theorize",
+     "transitions": 9,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 3,
+   "series": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "snapshot_used": "rev09-before-theorize",
+   "status": "measured",
+   "transitions": 9,
+   "transitions_drifted": 0,
+   "transitions_with_a_cells_wrong_number": 9,
+   "unreconstructed_rounds": 1
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 96,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 96,
+   "cells_wrong_mean": 19.2,
+   "certify_rounds": 2,
+   "first_drifted_transition": 0,
+   "leg": "20260731T231654Z-R1-sk48-b",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": null,
+     "certify_round": 0,
+     "matched": null,
+     "reconstructed": false,
+     "snapshot": null,
+     "transitions": null,
+     "why": "the archived report has no replay to reproduce (transitions=None)"
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 1,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev05-before-theorize",
+     "transitions": 5,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 1,
+   "series": [
+    96,
+    0,
+    0,
+    0,
+    0
+   ],
+   "snapshot_used": "rev05-before-theorize",
+   "status": "measured",
+   "transitions": 5,
+   "transitions_drifted": 1,
+   "transitions_with_a_cells_wrong_number": 5,
+   "unreconstructed_rounds": 1
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 0,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 1,
+   "cells_wrong_mean": 0.2381,
+   "certify_rounds": 8,
+   "first_drifted_transition": 12,
+   "leg": "20260801T001851Z-R1b-g50t-a",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": null,
+     "certify_round": 0,
+     "matched": null,
+     "reconstructed": false,
+     "snapshot": null,
+     "transitions": null,
+     "why": "the archived report has no replay to reproduce (transitions=None)"
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 1,
+     "matched": 5,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 2,
+     "matched": 9,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 9,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 0,
+     "certify_round": 3,
+     "matched": 13,
+     "reconstructed": true,
+     "snapshot": "rev09-before-theorize",
+     "transitions": 13,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 1,
+     "certify_round": 4,
+     "matched": 15,
+     "reconstructed": true,
+     "snapshot": "rev13-before-theorize",
+     "transitions": 17,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 1,
+     "certify_round": 5,
+     "matched": 15,
+     "reconstructed": true,
+     "snapshot": "rev13-before-theorize",
+     "transitions": 17,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 1,
+     "certify_round": 6,
+     "matched": 16,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 21,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 1,
+     "certify_round": 7,
+     "matched": 16,
+     "reconstructed": true,
+     "snapshot": "rev17-before-theorize",
+     "transitions": 21,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 7,
+   "series": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0
+   ],
+   "snapshot_used": "rev17-before-theorize",
+   "status": "measured",
+   "transitions": 21,
+   "transitions_drifted": 5,
+   "transitions_with_a_cells_wrong_number": 21,
+   "unreconstructed_rounds": 1
+  },
+  {
+   "cells_total": 4096,
+   "cells_wrong_first": 96,
+   "cells_wrong_last": 0,
+   "cells_wrong_max": 96,
+   "cells_wrong_mean": 19.2,
+   "certify_rounds": 3,
+   "first_drifted_transition": 0,
+   "leg": "20260801T001851Z-R1b-sk48-b",
+   "per_certify_round": [
+    {
+     "cells_wrong_max": null,
+     "certify_round": 0,
+     "matched": null,
+     "reconstructed": false,
+     "snapshot": null,
+     "transitions": null,
+     "why": "the archived report has no replay to reproduce (transitions=None)"
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 1,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 5,
+     "why": null
+    },
+    {
+     "cells_wrong_max": 96,
+     "certify_round": 2,
+     "matched": 4,
+     "reconstructed": true,
+     "snapshot": "rev07-before-theorize",
+     "transitions": 5,
+     "why": null
+    }
+   ],
+   "reconstructed_rounds": 2,
+   "series": [
+    96,
+    0,
+    0,
+    0,
+    0
+   ],
+   "snapshot_used": "rev07-before-theorize",
+   "status": "measured",
+   "transitions": 5,
+   "transitions_drifted": 1,
+   "transitions_with_a_cells_wrong_number": 5,
+   "unreconstructed_rounds": 1
+  }
+ ],
+ "totals": {
+  "legs_listed": 8,
+  "legs_measured": 8,
+  "legs_not_measured": [],
+  "legs_that_ever_drifted": 6,
+  "legs_that_never_drifted": 2,
+  "what_the_number_is": "cells on which the manual's open-loop rolled-forward state and the world's observed frame disagree, per transition. It is certify's own replay series, which the arm computes every certify beat and does not archive; the drift of the probe frontier's anchor is the same walk from the same origin, so this IS that drift."
+ }
+}
