@@ -16,16 +16,27 @@ import argparse
 import json
 import sys
 
-from . import arc_client, ledger
+from . import arc_client, key_proxy, ledger
 
 
 def main(argv=None) -> int:
+    """The credential child wraps the probe; `_probe` is the probe.
+
+    Split so the body keeps its indentation. A live probe spends real ARC
+    calls, so it is a spending entry point like the two runners and gets the
+    same treatment (STATUS.md GAP-5, DECISIONS.md D-026).
+    """
+    with key_proxy.sealed_upstream(run_id="probe-api") as proxy:
+        return _probe(argv, base_url=proxy.base_url)
+
+
+def _probe(argv=None, base_url=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--rounds", type=int, default=2,
                     help="RESET attempts per development-pile game")
     args = ap.parse_args(argv)
 
-    client = arc_client.ArcClient()
+    client = arc_client.ArcClient(base_url=base_url)
     dev = arc_client.dev_pile()
     print("development pile:", ", ".join(dev))
     print("sealed pile: %d games, unreachable from this module" % len(client.sealed))

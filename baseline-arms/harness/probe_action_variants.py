@@ -21,7 +21,7 @@ import json
 import sys
 import time
 
-from . import arc_client, ledger
+from . import arc_client, key_proxy, ledger
 
 
 def variants(game_id: str, card_id: str, guid: str):
@@ -38,6 +38,17 @@ def variants(game_id: str, card_id: str, guid: str):
 
 
 def main(argv=None) -> int:
+    """The credential child wraps the probe; `_probe` is the probe.
+
+    Split so the body keeps its indentation. A live probe spends real ARC
+    calls, so it is a spending entry point like the two runners and gets the
+    same treatment (STATUS.md GAP-5, DECISIONS.md D-026).
+    """
+    with key_proxy.sealed_upstream(run_id="probe-action-variants") as proxy:
+        return _probe(argv, base_url=proxy.base_url)
+
+
+def _probe(argv=None, base_url=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--game", default="g50t-5849a774")
     ap.add_argument("--resets", type=int, default=8,
@@ -46,7 +57,7 @@ def main(argv=None) -> int:
                     help="H-C: consecutive identical ACTION retries per window")
     args = ap.parse_args(argv)
 
-    client = arc_client.ArcClient()
+    client = arc_client.ArcClient(base_url=base_url)
     client.assert_playable(args.game)          # sealed-pile guard, fails closed
 
     card_id = client.open_scorecard(tags=["baseline-arms", "inc-002-retry"],

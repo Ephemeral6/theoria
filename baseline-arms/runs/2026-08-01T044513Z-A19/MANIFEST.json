@@ -1,0 +1,87 @@
+{
+  "artifacts": {
+    "baseline-arms/DECISIONS.md": {
+      "bytes": 47659,
+      "sha256": "c160b36b2747179105db60678789c6ceddaebe4aa22d29eb60ee51646ae11647"
+    },
+    "baseline-arms/STATUS.md": {
+      "bytes": 30625,
+      "sha256": "c55e9e26e5eab28a317f3d02a9a801eb2253b0ae1d91dae748d12f4374571215"
+    },
+    "baseline-arms/harness/arc_client.py": {
+      "bytes": 27928,
+      "sha256": "cc93e529b1082867c4314f27b263872e1bec292f8120a1687de46a69d6188075"
+    },
+    "baseline-arms/harness/bare_cc.py": {
+      "bytes": 29266,
+      "sha256": "f5cc4a1336841bcc983dcec8f12395fbdbbbc09cb4170c7b5fe2a7c4c0ed5ab3"
+    },
+    "baseline-arms/harness/campaign.py": {
+      "bytes": 10867,
+      "sha256": "498a73039de1cd3f9db895cef4fcc4827c0e8941acbc6fe738da41efc71bc4f5"
+    },
+    "baseline-arms/harness/key_proxy.py": {
+      "bytes": 15781,
+      "sha256": "d26b774a520d0090e61c41d6833848eee5d2a7fe1f233da5a5327404dd4f8f61"
+    },
+    "baseline-arms/harness/key_proxy_server.py": {
+      "bytes": 23934,
+      "sha256": "b1ba72fc368e94da624f871e80a3437cb77ddb40673af39df8f8efcf4c1da0da"
+    },
+    "baseline-arms/harness/probe_action_variants.py": {
+      "bytes": 4945,
+      "sha256": "ddc8ff9b7a9d26822fa328263af47f87b76897eb2b774287cbfc83c49f2ba692"
+    },
+    "baseline-arms/harness/probe_api.py": {
+      "bytes": 4078,
+      "sha256": "e5b6e6ae6156c816d0e5318dad0e950cdcbde6291c2bb21da2a5520560149ec4"
+    },
+    "baseline-arms/harness/run_campaign.py": {
+      "bytes": 28716,
+      "sha256": "da79f1d7f109df3f416dbd9e26e1024cd694b2f8e429284214870b0036fdf321"
+    },
+    "baseline-arms/harness/run_pilot.py": {
+      "bytes": 4964,
+      "sha256": "ea946e04c2cf21442a0b51b771cad071e1c65bd426478e49a28b43859ea4d9d1"
+    },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/NOTES.md": {
+      "bytes": 1621,
+      "sha256": "3203710bee7c0843bf4593149b2347613b15927e593f0955b918708d7563000d"
+    },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/RUN_STATE.md": {
+      "bytes": 9133,
+      "sha256": "9071fe36201dd408e05302f8229e399c8d6927a431a62f18cfbed23bee09c6d3"
+    },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/results.json": {
+      "bytes": 384,
+      "sha256": "55585a488ca60051cc9931398f62e9d5f0d1f427837341e2998e58c8822b0cf7"
+    },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/verify.sh": {
+      "bytes": 2309,
+      "sha256": "cb408b0b132aabbffcc1cf8da19d69c2506b6d90a080bd554c8c1f19d0405bfa"
+    },
+    "baseline-arms/tests/test_seal_process.py": {
+      "bytes": 33398,
+      "sha256": "f7347d6a7ea69e8bb324fc9e785bee1792e2a8913f7f39c6acdca1d294c6524a"
+    }
+  },
+  "base_commit": "4c08ea6be6ff480d9b7cfcd6be8bd17c2e9e3749",
+  "branch": "agent/a19-bare-cc-seal-split",
+  "determinism": "No stochastic step; seed is null.",
+  "prompt": null,
+  "prompt_id": "A19",
+  "results": {
+    "suite": {
+      "fresh_worktree_without_payload": "530 passed, 3 failed, 1 skipped -- all 3 are test_schema_column.py, gitignored payload absent",
+      "main_checkout_master": "534 passed, 0 failed",
+      "new_tests": 19,
+      "worktree_after_A19": "552 passed, 1 skipped, 0 failed",
+      "worktree_before_A19": "533 passed, 1 skipped, 0 failed (with THEORIA_SCHEMA_TRACES set)"
+    }
+  },
+  "run_dir": "baseline-arms/runs/2026-08-01T044513Z-A19",
+  "seed": null,
+  "t": "2026-08-01T05:15:47Z",
+  "tests": "552 passed, 1 skipped, 0 failed",
+  "title": "A19 GAP-5 closed: the ARC credential leaves the bare_cc arm process"
+}

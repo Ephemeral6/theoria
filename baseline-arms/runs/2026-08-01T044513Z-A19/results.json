@@ -1,0 +1,9 @@
+{
+  "suite": {
+    "fresh_worktree_without_payload": "530 passed, 3 failed, 1 skipped -- all 3 are test_schema_column.py, gitignored payload absent",
+    "main_checkout_master": "534 passed, 0 failed",
+    "new_tests": 19,
+    "worktree_after_A19": "552 passed, 1 skipped, 0 failed",
+    "worktree_before_A19": "533 passed, 1 skipped, 0 failed (with THEORIA_SCHEMA_TRACES set)"
+  }
+}
