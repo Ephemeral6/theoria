@@ -459,6 +459,16 @@ def main(argv=None) -> int:
                     help="carry probe refutations forward so the frontier can "
                          "shrink. Off by default (also settable with "
                          "THEORIA_PROBE_ECONOMY=1). See inner/probe.py.")
+    ap.add_argument("--frontier", default="ablation",
+                    choices=("ablation", "generated"),
+                    help="how the probe frontier is built. `ablation` (the "
+                         "default) is 2026-07-31: the manual, the inert "
+                         "reading, and one without-rule-N variant per schema "
+                         "-- a family closed downward under clause deletion, "
+                         "so it cannot contain a mechanism the manual lacks. "
+                         "`generated` adds successor hypotheses anchored on "
+                         "the world's own last frame. See inner/probe.py and "
+                         "runs/20260801T0900Z-R2-frontier-by-generation.")
     ap.add_argument("--desk-diet", default="full",
                     choices=("full", "off", "evidence", "patch", "diet", "on"),
                     help="what the desk is shown and asked to write back. "
@@ -512,7 +522,9 @@ def main(argv=None) -> int:
                                          else goal_mod.DEFAULT_PROTOCOL),
                           probe_economy=(probe_mod.ProbeEconomyConfig(
                               enabled=True, carry_refutations=True)
-                              if args.probe_economy else None))
+                              if args.probe_economy else None),
+                          frontier=probe_mod.FrontierConfig(
+                              mode=args.frontier))
 
     expect_pool = ({"pool": gate.policy.pool,
                     "ledger_abspath": os.path.abspath(gate.ledger_path)}

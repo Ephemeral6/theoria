@@ -359,9 +359,18 @@ def test_an_arm_built_with_no_knobs_has_all_three_off(tmp_path, monkeypatch):
     explicitly cannot see that.
     """
     monkeypatch.delenv("THEORIA_PROBE_ECONOMY", raising=False)
+    monkeypatch.delenv("THEORIA_FRONTIER", raising=False)
     run = types.SimpleNamespace(dir=str(tmp_path), run=None, run_id="r-pytest")
     arm = TheoriaArm(env_base="http://127.0.0.1:1", run=run,
                      game_id="g50t-5849a774", offline=True)
+
+    # A fourth knob landed after this file was named (R2's `--frontier`), and
+    # the conjunction this file exists to assert is over however many there
+    # are, not over three. Its own default-off proof is
+    # `test_frontier_generation.py`; this line is the one that fails if a
+    # future merge makes it the default while every single-knob test stays
+    # green.
+    assert arm.frontier.mode == "ablation"
 
     assert DEFAULT_GOAL_PROTOCOL == "off"
     assert arm.goal.protocol == "off"

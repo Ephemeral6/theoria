@@ -69,10 +69,17 @@ def _arm(tmp_path, monkeypatch, predictions=None, design=None, economy=None):
     # never designs a probe. These tests stub the design instead, so the guards
     # are reached with a real `chosen` and a real `predictions` dict.
     monkeypatch.setattr(probe_beat, "design", lambda *a, **k: DESIGN_)
+    # `**_kw` because the caller now passes `frontier=` and `store=` on every
+    # call (R2's switch, default `ablation`). A double whose signature lags the
+    # caller's fails as a TypeError inside a `try/except Exception` in the beat
+    # and would be reported as "the design errored", not as "the stub is
+    # stale" -- so it takes whatever it is given and ignores it, which is what
+    # these tests mean: the guards, not the frontier, are under test here.
     monkeypatch.setattr(
         probe_beat, "build_hypotheses",
-        lambda ns: [types.SimpleNamespace(id=name, predict=lambda s, a, _v=value: _v)
-                    for name, value in PREDICTIONS_.items()])
+        lambda ns, **_kw: [
+            types.SimpleNamespace(id=name, predict=lambda s, a, _v=value: _v)
+            for name, value in PREDICTIONS_.items()])
     return arm, sent
 
 

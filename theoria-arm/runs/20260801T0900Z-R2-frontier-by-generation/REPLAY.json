@@ -1,0 +1,1903 @@
+{
+ "legs": [
+  {
+   "ablation_contains_truth": 0,
+   "ablation_widths": [],
+   "anchor_drifted": 0,
+   "cut_action_replay_right": 0,
+   "generated_contains_truth": 0,
+   "generated_widths": [],
+   "leg": "20260731T1240Z-A3-level2-carried",
+   "probes_completed": 0,
+   "reconstructed": 0,
+   "unreconstructed": 0
+  },
+  {
+   "ablation_contains_truth": 0,
+   "ablation_widths": [
+    2
+   ],
+   "anchor_drifted": 7,
+   "cut_action_replay_right": 2,
+   "generated_contains_truth": 5,
+   "generated_widths": [
+    5,
+    6,
+    8
+   ],
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "probes_completed": 8,
+   "reconstructed": 8,
+   "unreconstructed": 0
+  },
+  {
+   "ablation_contains_truth": 0,
+   "ablation_widths": [
+    2
+   ],
+   "anchor_drifted": 21,
+   "cut_action_replay_right": 2,
+   "generated_contains_truth": 25,
+   "generated_widths": [
+    5,
+    6,
+    8
+   ],
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "probes_completed": 28,
+   "reconstructed": 28,
+   "unreconstructed": 0
+  },
+  {
+   "ablation_contains_truth": 5,
+   "ablation_widths": [
+    2
+   ],
+   "anchor_drifted": 7,
+   "cut_action_replay_right": 11,
+   "generated_contains_truth": 13,
+   "generated_widths": [
+    8,
+    10
+   ],
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "probes_completed": 16,
+   "reconstructed": 16,
+   "unreconstructed": 0
+  }
+ ],
+ "probes": [
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "522b40a28b6d9fbc",
+    "drifted": true,
+    "world_hash": "9bb17844cc3a57c9"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "af3bb95d3135e37c",
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 6,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "5da99fd80ff97e24",
+    "drifted": true,
+    "world_hash": "af3bb95d3135e37c"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0e1cd0b30fbb12b3",
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 7,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "522b40a28b6d9fbc",
+    "drifted": true,
+    "world_hash": "0e1cd0b30fbb12b3"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "b90a6233898771e2",
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 8,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "5da99fd80ff97e24",
+    "drifted": true,
+    "world_hash": "b90a6233898771e2"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "15c2e5de8c8dc96b",
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 9,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "drifted": false,
+    "world_hash": "15c2e5de8c8dc96b"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0c56717accb832fb",
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 10,
+   "which_generated_hypotheses_were_right": [
+    "world_inert_plus_edge_1"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "drifted": true,
+    "world_hash": "0c56717accb832fb"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 5,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "0c56717accb832fb",
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 11,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "drifted": true,
+    "world_hash": "0c56717accb832fb"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "06e79195f0adc15f",
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 12,
+   "which_generated_hypotheses_were_right": [
+    "world_inert_plus_edge"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "drifted": true,
+    "world_hash": "06e79195f0adc15f"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 5,
+   "leg": "20260731T1310Z-A3-level2-carried-r2",
+   "observed": "06e79195f0adc15f",
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 13,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "9bb17844cc3a57c9",
+    "drifted": false,
+    "world_hash": "9bb17844cc3a57c9"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "af3bb95d3135e37c",
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 6,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "25cac958273811a3",
+    "drifted": true,
+    "world_hash": "af3bb95d3135e37c"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0e1cd0b30fbb12b3",
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 7,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "9bb17844cc3a57c9",
+    "drifted": true,
+    "world_hash": "0e1cd0b30fbb12b3"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "b90a6233898771e2",
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 8,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "25cac958273811a3",
+    "drifted": true,
+    "world_hash": "b90a6233898771e2"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "15c2e5de8c8dc96b",
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "snapshot": "rev05-before-theorize",
+   "step_idx": 9,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "15c2e5de8c8dc96b",
+    "drifted": false,
+    "world_hash": "15c2e5de8c8dc96b"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4922abb280cd8780",
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 10,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "287dc66cc4b95e77",
+    "drifted": true,
+    "world_hash": "4922abb280cd8780"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "c65bd69c07fb3c77",
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 11,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "818eaaf57cafd7bb",
+    "drifted": true,
+    "world_hash": "c65bd69c07fb3c77"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0c86941f09a0caaf",
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 12,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "b90a6233898771e2",
+    "drifted": true,
+    "world_hash": "0c86941f09a0caaf"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "06e79195f0adc15f",
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 13,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "06e79195f0adc15f",
+    "drifted": false,
+    "world_hash": "06e79195f0adc15f"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4dfbfe14d4e85299",
+   "probe_id": "P-09",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 14,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "30332fff54b4924c",
+    "drifted": true,
+    "world_hash": "4dfbfe14d4e85299"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "d09fae77a1d46f2c",
+   "probe_id": "P-10",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 15,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "e66afa8078cb4fd2",
+    "drifted": true,
+    "world_hash": "d09fae77a1d46f2c"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "44c44660a53cf5d4",
+   "probe_id": "P-11",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 16,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "0c86941f09a0caaf",
+    "drifted": true,
+    "world_hash": "44c44660a53cf5d4"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "3a11719074841328",
+   "probe_id": "P-12",
+   "reconstructed": true,
+   "snapshot": "rev09-before-theorize",
+   "step_idx": 17,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "3a11719074841328",
+    "drifted": false,
+    "world_hash": "3a11719074841328"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "8a0fb5148b5adfb0",
+   "probe_id": "P-13",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 18,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "e260ba2228378b61",
+    "drifted": true,
+    "world_hash": "8a0fb5148b5adfb0"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "2bdbfae66570eec5",
+   "probe_id": "P-14",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 19,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "01006a6a9e21beca",
+    "drifted": true,
+    "world_hash": "2bdbfae66570eec5"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "0db510635e263539",
+   "probe_id": "P-15",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 20,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "44c44660a53cf5d4",
+    "drifted": true,
+    "world_hash": "0db510635e263539"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "4c57486b12b722d4",
+   "probe_id": "P-16",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 21,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "4c57486b12b722d4",
+    "drifted": false,
+    "world_hash": "4c57486b12b722d4"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "71e8272c15afb851",
+   "probe_id": "P-17",
+   "reconstructed": true,
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 22,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "1e0bbc75dc840f79",
+    "drifted": true,
+    "world_hash": "71e8272c15afb851"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "c0d6bb54354c57d2",
+   "probe_id": "P-18",
+   "reconstructed": true,
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 23,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "ade8774fe1cc3a9b",
+    "drifted": true,
+    "world_hash": "c0d6bb54354c57d2"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "eb6ce939c989359a",
+   "probe_id": "P-19",
+   "reconstructed": true,
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 24,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "0db510635e263539",
+    "drifted": true,
+    "world_hash": "eb6ce939c989359a"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "6ac765de5c59b51e",
+   "probe_id": "P-20",
+   "reconstructed": true,
+   "snapshot": "rev13-before-theorize",
+   "step_idx": 25,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "6ac765de5c59b51e",
+    "drifted": false,
+    "world_hash": "6ac765de5c59b51e"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "ba530aab6f501769",
+   "probe_id": "P-21",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 26,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "6d0db422effc0cdc",
+    "drifted": true,
+    "world_hash": "ba530aab6f501769"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "cf2157b5311a6e35",
+   "probe_id": "P-22",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 27,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 2,
+   "anchor": {
+    "anchor_hash": "c530010f3b45d4ae",
+    "drifted": true,
+    "world_hash": "cf2157b5311a6e35"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "9c6d40686d791ac6",
+   "probe_id": "P-23",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 28,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "eb6ce939c989359a",
+    "drifted": true,
+    "world_hash": "9c6d40686d791ac6"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "70eb49bbc21b44e9",
+   "probe_id": "P-24",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 29,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "70eb49bbc21b44e9",
+    "drifted": false,
+    "world_hash": "70eb49bbc21b44e9"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 6,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "132f0bf441d96376",
+   "probe_id": "P-25",
+   "reconstructed": true,
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 30,
+   "which_generated_hypotheses_were_right": [
+    "world_inert_plus_edge"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "65612ce2b219fbe6",
+    "drifted": true,
+    "world_hash": "132f0bf441d96376"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 5,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "132f0bf441d96376",
+   "probe_id": "P-26",
+   "reconstructed": true,
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 31,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "70eb49bbc21b44e9",
+    "drifted": true,
+    "world_hash": "132f0bf441d96376"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "121cbbc9c93803ed",
+   "probe_id": "P-27",
+   "reconstructed": true,
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 32,
+   "which_generated_hypotheses_were_right": [
+    "world_inert_plus_edge"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 5,
+   "anchor": {
+    "anchor_hash": "65612ce2b219fbe6",
+    "drifted": true,
+    "world_hash": "121cbbc9c93803ed"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 5,
+   "leg": "20260731T1430Z-A3-level2-carried-r3",
+   "observed": "121cbbc9c93803ed",
+   "probe_id": "P-28",
+   "reconstructed": true,
+   "snapshot": "rev17-before-theorize",
+   "step_idx": 33,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "edge_advance_2",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2"
+   ]
+  },
+  {
+   "ablation_contains_truth": true,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "05615f3d5f835100",
+    "drifted": false,
+    "world_hash": "05615f3d5f835100"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8ccbe276408c4dd7",
+   "probe_id": "P-01",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 6,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": true,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8ccbe276408c4dd7",
+    "drifted": false,
+    "world_hash": "8ccbe276408c4dd7"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "05615f3d5f835100",
+   "probe_id": "P-02",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 7,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "05615f3d5f835100",
+    "drifted": false,
+    "world_hash": "05615f3d5f835100"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "bb5c436a2318c544",
+   "probe_id": "P-03",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 8,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8ccbe276408c4dd7",
+    "drifted": true,
+    "world_hash": "bb5c436a2318c544"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3bf51d2fd9036a78",
+   "probe_id": "P-04",
+   "reconstructed": true,
+   "snapshot": "rev07-before-theorize",
+   "step_idx": 9,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": true,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "3bf51d2fd9036a78",
+    "drifted": false,
+    "world_hash": "3bf51d2fd9036a78"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "bb5c436a2318c544",
+   "probe_id": "P-05",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 10,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "bb5c436a2318c544",
+    "drifted": false,
+    "world_hash": "bb5c436a2318c544"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "b278887e087d3593",
+   "probe_id": "P-06",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 11,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "3bf51d2fd9036a78",
+    "drifted": true,
+    "world_hash": "b278887e087d3593"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "1317da5b367d300a",
+   "probe_id": "P-07",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 12,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "bb5c436a2318c544",
+    "drifted": true,
+    "world_hash": "1317da5b367d300a"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "b278887e087d3593",
+   "probe_id": "P-08",
+   "reconstructed": true,
+   "snapshot": "rev11-before-theorize",
+   "step_idx": 13,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "b278887e087d3593",
+    "drifted": false,
+    "world_hash": "b278887e087d3593"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": false,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3281b51b4c1aa929",
+   "probe_id": "P-09",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 14,
+   "which_generated_hypotheses_were_right": []
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "1317da5b367d300a",
+    "drifted": true,
+    "world_hash": "3281b51b4c1aa929"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "d2c8aa05e38a2da7",
+   "probe_id": "P-10",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 15,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "b278887e087d3593",
+    "drifted": true,
+    "world_hash": "d2c8aa05e38a2da7"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "3281b51b4c1aa929",
+   "probe_id": "P-11",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 16,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "1317da5b367d300a",
+    "drifted": true,
+    "world_hash": "3281b51b4c1aa929"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "febfe034e90989ad",
+   "probe_id": "P-12",
+   "reconstructed": true,
+   "snapshot": "rev15-before-theorize",
+   "step_idx": 17,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_3"
+   ]
+  },
+  {
+   "ablation_contains_truth": true,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "febfe034e90989ad",
+    "drifted": false,
+    "world_hash": "febfe034e90989ad"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8b41d5b61c523b9e",
+   "probe_id": "P-13",
+   "reconstructed": true,
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 18,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": true,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8b41d5b61c523b9e",
+    "drifted": false,
+    "world_hash": "8b41d5b61c523b9e"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "febfe034e90989ad",
+   "probe_id": "P-14",
+   "reconstructed": true,
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 19,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance",
+    "world_anchored_manual"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 4,
+   "anchor": {
+    "anchor_hash": "febfe034e90989ad",
+    "drifted": false,
+    "world_hash": "febfe034e90989ad"
+   },
+   "cut_action_replay_right": false,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 8,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "e4ef9819d5084e7e",
+   "probe_id": "P-15",
+   "reconstructed": true,
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 20,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_3"
+   ]
+  },
+  {
+   "ablation_contains_truth": false,
+   "ablation_width": 2,
+   "action": 3,
+   "anchor": {
+    "anchor_hash": "8b41d5b61c523b9e",
+    "drifted": true,
+    "world_hash": "e4ef9819d5084e7e"
+   },
+   "cut_action_replay_right": true,
+   "generated_contains_truth": true,
+   "generated_ids": [
+    "edge_advance",
+    "edge_advance_1",
+    "edge_advance_2",
+    "edge_advance_3",
+    "world_anchored_manual",
+    "world_inert",
+    "world_inert_plus_edge",
+    "world_inert_plus_edge_1",
+    "world_inert_plus_edge_2",
+    "world_inert_plus_edge_3"
+   ],
+   "generated_width": 10,
+   "leg": "20260731T1500Z-A3-sk48-carried-l1",
+   "observed": "8ead43840cc83b3d",
+   "probe_id": "P-16",
+   "reconstructed": true,
+   "snapshot": "rev19-before-theorize",
+   "step_idx": 21,
+   "which_generated_hypotheses_were_right": [
+    "edge_advance_1",
+    "world_anchored_manual"
+   ]
+  }
+ ],
+ "totals": {
+  "ablation_off_frontier": 47,
+  "ablation_width_values": [
+   2
+  ],
+  "anchor_drifted": 35,
+  "anchor_drifted_and_off_ablation_frontier": 35,
+  "cut_generator_action_replay_right": 15,
+  "generated_recovers_off_frontier": 38,
+  "generated_still_off_frontier": 9,
+  "generated_width_values": [
+   5,
+   6,
+   8,
+   10
+  ],
+  "probes_completed": 52,
+  "reconstructed": 52,
+  "unreconstructed": 0,
+  "which_generated_hypothesis_was_right": {
+   "edge_advance": 14,
+   "edge_advance_1": 16,
+   "edge_advance_2": 16,
+   "edge_advance_3": 2,
+   "world_anchored_manual": 20,
+   "world_inert": 4,
+   "world_inert_plus_edge": 3,
+   "world_inert_plus_edge_1": 5,
+   "world_inert_plus_edge_2": 4
+  }
+ }
+}

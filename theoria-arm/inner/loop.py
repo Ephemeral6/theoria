@@ -213,6 +213,7 @@ class TheoriaArm:
                  goal_protocol: str = DEFAULT_GOAL_PROTOCOL,
                  prompt_id: str = "P-8",
                  probe_economy: "Optional[probe_beat.ProbeEconomyConfig]" = None,
+                 frontier: "Optional[probe_beat.FrontierConfig]" = None,
                  desk_diet: Optional[str] = None):
         self.game_id = game_id
         self.offline = offline
@@ -255,6 +256,13 @@ class TheoriaArm:
         self.probe_economy = probe_beat.ProbeEconomy(
             config=(probe_economy if probe_economy is not None
                     else probe_beat.ProbeEconomyConfig.from_env()))
+        #: R2's change, default off and on the same plumbing: how the frontier
+        #: is *built*. `ablation` is 2026-07-31, hypothesis for hypothesis and
+        #: report byte for byte; `generated` adds successor hypotheses anchored
+        #: on the world's own last frame. See `inner/probe.FrontierConfig` for
+        #: the measurement that asked for it.
+        self.frontier = (frontier if frontier is not None
+                         else probe_beat.FrontierConfig.from_env())
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
         self.tags = list(tags or ["theoria", "p8", "first-contact"])
         self.prompt_id = prompt_id
@@ -1222,7 +1230,9 @@ class TheoriaArm:
                     transitions=list(range(self.levels.start,
                                            len(self.store.steps))),
                     coverage="%d/%d" % (level_steps, level_steps),
-                    economy=self.probe_economy)
+                    economy=self.probe_economy,
+                    frontier=self.frontier,
+                    store=self._level_store())
             except Exception as exc:                   # noqa: BLE001
                 design = {"error": "%s: %s" % (type(exc).__name__, exc)}
             best = (design or {}).get("best")
@@ -1257,7 +1267,9 @@ class TheoriaArm:
                     # frontier and the same experiment gets a new name every
                     # time the theory narrows. Disabled, the two are the same
                     # dict and this is the original line.
-                    hypotheses = probe_beat.build_hypotheses(namespace)
+                    hypotheses = probe_beat.build_hypotheses(
+                        namespace, frontier=self.frontier,
+                        store=self._level_store())
                     for hypothesis in hypotheses:
                         try:
                             identity[hypothesis.id] = hypothesis.predict(
