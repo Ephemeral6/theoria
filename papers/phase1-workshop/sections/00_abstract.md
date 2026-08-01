@@ -57,7 +57,16 @@ repair, the post-repair census (196 of 299 actions semantically non-empty and
 well-formed, the other 103 declared refusals rather than silent empties), and
 the census's own scope — it measured no form but PDDL, and its bar is a
 ceiling on correctness, not a floor — are §11.3's.
-Neither layer certifies the manual against the world. **The one thing this paper
+Neither layer certifies the manual against the world. The framework's answer to
+that gap is the probe beat, and it carries a date too: measured against live play
+on 2026-08-01, the frontier the probes split was built by deleting clauses from
+the manual, so it could not contain a mechanism the manual lacked — two
+predictions wide on every one of 52 completed probes, 47 of the 52 observations
+outside it, 0.000 bits realised on all 56 designed, and the rule miner that the
+design assigns to supply that frontier refused all 48 dispatches it ever
+received. A repair exists, is default-off, and has offline replay evidence only.
+§11.3a is that account, and no live leg has completed a level.
+**The one thing this paper
 claims is that we built that instrument, ran it end to end on small deterministic
 worlds we constructed ourselves, and then held our own measurements to the same
 adversarial standard, where it did the most damage.** That is a claim about an

@@ -1,0 +1,240 @@
+{
+ "cegis_miner": {
+  "dispatches": 48,
+  "legs_with_a_reading": 8,
+  "per_leg": {
+   "20260729T004020Z-leg01": {
+    "cegis_miner": "absent",
+    "why": "theoria-arm/runs/20260729T004020Z-leg01/engines_online.json is not tracked"
+   },
+   "20260729T105729Z-leg01": {
+    "cegis_miner": "absent",
+    "why": "theoria-arm/runs/20260729T105729Z-leg01/engines_online.json is not tracked"
+   },
+   "20260731T1240Z-A3-level2-carried": {
+    "dispatches": 2,
+    "errored": 0,
+    "refused_with_reason": 2
+   },
+   "20260731T1310Z-A3-level2-carried-r2": {
+    "dispatches": 6,
+    "errored": 0,
+    "refused_with_reason": 6
+   },
+   "20260731T1430Z-A3-level2-carried-r3": {
+    "dispatches": 9,
+    "errored": 0,
+    "refused_with_reason": 9
+   },
+   "20260731T1500Z-A3-sk48-carried-l1": {
+    "dispatches": 10,
+    "errored": 0,
+    "refused_with_reason": 10
+   },
+   "20260731T231654Z-R1-g50t-a": {
+    "dispatches": 5,
+    "errored": 0,
+    "refused_with_reason": 5
+   },
+   "20260731T231654Z-R1-sk48-b": {
+    "dispatches": 3,
+    "errored": 0,
+    "refused_with_reason": 3
+   },
+   "20260801T001851Z-R1b-g50t-a": {
+    "dispatches": 9,
+    "errored": 0,
+    "refused_with_reason": 9
+   },
+   "20260801T001851Z-R1b-sk48-b": {
+    "dispatches": 4,
+    "errored": 0,
+    "refused_with_reason": 4
+   }
+  },
+  "refused_with_reason": 48
+ },
+ "comparison_with_the_arms_own_figures": [
+  {
+   "arm_published": 56,
+   "quantity": "probes_designed",
+   "recounted_here": 56,
+   "verdict": "AGREES"
+  },
+  {
+   "arm_published": 52,
+   "quantity": "probes_completed",
+   "recounted_here": 52,
+   "verdict": "AGREES"
+  },
+  {
+   "arm_published": 47,
+   "quantity": "off_frontier",
+   "recounted_here": 47,
+   "verdict": "AGREES"
+  },
+  {
+   "arm_published": 0,
+   "quantity": "frontier_monotone_drops",
+   "recounted_here": 0,
+   "verdict": "AGREES"
+  },
+  {
+   "arm_published": [
+    2
+   ],
+   "quantity": "frontier_width_values",
+   "recounted_here": [
+    2
+   ],
+   "verdict": "AGREES"
+  },
+  {
+   "arm_published": 5,
+   "quantity": "on_frontier",
+   "recounted_here": 5,
+   "verdict": "AGREES"
+  }
+ ],
+ "levels": {
+  "battery_six": {
+   "20260729T004020Z-leg01": 0,
+   "20260729T105729Z-leg01": 0,
+   "20260731T1240Z-A3-level2-carried": 0,
+   "20260731T1310Z-A3-level2-carried-r2": 0,
+   "20260731T1430Z-A3-level2-carried-r3": 0,
+   "20260731T1500Z-A3-sk48-carried-l1": 0
+  },
+  "legs_with_a_levels_file": 10,
+  "level_completion_rows_total": 0,
+  "note": "levels.jsonl carries one row per completed level. An empty tracked file is a measured zero; a missing file is `absent`.",
+  "per_leg": {
+   "20260729T004020Z-leg01": 0,
+   "20260729T105729Z-leg01": 0,
+   "20260731T1240Z-A3-level2-carried": 0,
+   "20260731T1310Z-A3-level2-carried-r2": 0,
+   "20260731T1430Z-A3-level2-carried-r3": 0,
+   "20260731T1500Z-A3-sk48-carried-l1": 0,
+   "20260731T231654Z-R1-g50t-a": 0,
+   "20260731T231654Z-R1-sk48-b": 0,
+   "20260801T001851Z-R1b-g50t-a": 0,
+   "20260801T001851Z-R1b-sk48-b": 0
+  }
+ },
+ "probes": {
+  "frontier_monotone_drops": 0,
+  "frontier_width_values": [
+   2
+  ],
+  "off_frontier": 47,
+  "on_frontier": 5,
+  "per_leg": {
+   "20260731T1240Z-A3-level2-carried": {
+    "completed": 0,
+    "designed": 1,
+    "frontier_width_values": [
+     2
+    ],
+    "hypothesis_count_values": [
+     6
+    ],
+    "monotone_drops": 0,
+    "off_frontier": 0,
+    "on_frontier": 0
+   },
+   "20260731T1310Z-A3-level2-carried-r2": {
+    "completed": 8,
+    "designed": 9,
+    "frontier_width_values": [
+     2
+    ],
+    "hypothesis_count_values": [
+     9,
+     22
+    ],
+    "monotone_drops": 0,
+    "off_frontier": 8,
+    "on_frontier": 0
+   },
+   "20260731T1430Z-A3-level2-carried-r3": {
+    "completed": 28,
+    "designed": 29,
+    "frontier_width_values": [
+     2
+    ],
+    "hypothesis_count_values": [
+     16,
+     22,
+     24
+    ],
+    "monotone_drops": 0,
+    "off_frontier": 28,
+    "on_frontier": 0
+   },
+   "20260731T1500Z-A3-sk48-carried-l1": {
+    "completed": 16,
+    "designed": 17,
+    "frontier_width_values": [
+     2
+    ],
+    "hypothesis_count_values": [
+     9,
+     10
+    ],
+    "monotone_drops": 0,
+    "off_frontier": 11,
+    "on_frontier": 5
+   }
+  },
+  "probes_completed": 52,
+  "probes_designed": 56,
+  "unmeasurable_here": {
+   "anchor_drift": "needs trace.jsonl (gitignored): the comparison is predictions['inert'] against trace.before_hash. Recorded as unmeasurable, not as zero.",
+   "virgin_cell_deltas": "needs the grids in trace.jsonl, same reason."
+  }
+ },
+ "reads_only_tracked_files": true,
+ "rounds": {
+  "20260731T231654Z-R1": {
+   "legs": [
+    {
+     "levels_completed": 0,
+     "outcome": "spend_gate_tripped",
+     "slug": "20260731T231654Z-R1-g50t-a"
+    },
+    {
+     "levels_completed": 0,
+     "outcome": "spend_gate_tripped",
+     "slug": "20260731T231654Z-R1-sk48-b"
+    }
+   ],
+   "totals_levels_completed": 0,
+   "totals_usd": 15.211947
+  },
+  "20260801T001851Z-R1b": {
+   "legs": [
+    {
+     "levels_completed": 0,
+     "outcome": "spend_gate_tripped",
+     "slug": "20260801T001851Z-R1b-g50t-a"
+    },
+    {
+     "levels_completed": 0,
+     "outcome": "spend_gate_tripped",
+     "slug": "20260801T001851Z-R1b-sk48-b"
+    }
+   ],
+   "totals_levels_completed": 0,
+   "totals_usd": 35.139827
+  }
+ },
+ "sealed_pile_contact": "none (g50t-5849a774, sk48-d8078629 only)",
+ "spend": {
+  "arc_actions": 0,
+  "model_calls": 0,
+  "network": "none",
+  "usd": 0.0
+ },
+ "utc": "2026-08-01T12:00:00Z",
+ "what": "papers-territory recount of the live-leg numbers the 2026-08-01 edit puts in the body, from tracked files only"
+}

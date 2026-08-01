@@ -73,6 +73,14 @@ evidence for most of what follows, and they were written before the scores
 existed (`a0-spike/THEORIZE_LOG.md`, `cold-start-a0/THEORIZE_LOG.md`,
 `cold-start-a2/THEORIZE_LOG.md`, `cold-start-a3/THEORIZE_LOG.md`).
 
+Two of those engines now have a live-play measurement beside their offline one,
+and it does not read like the design. On the live ARC legs `cegis_miner` was
+dispatched and returned a refusal with a written reason every time, so the guard
+frontier `probe_frontier` priced in bits was not a mined version space but a
+family the arm built by deleting clauses from its own manual. §2.3 states the
+consequence and §11.3a carries the counts
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+
 The division has teeth in both directions. `a0-spike/THEORIZE_LOG.md` T-6
 records the adjudicator proposing a conservation law — the box never changes
 checkerboard colour — and `zero_space` returning a strictly stronger one: a null
@@ -101,6 +109,33 @@ that, as two files a reader can diff. Neither layer certifies the manual against
 the world. That is what `probe` is for: an experiment, chosen by the engine for
 how many bits it splits, whose prediction is written down *before* the action is
 taken (`Theoria.md` §1.10e, constraint 7).
+
+**That paragraph describes the design. On 2026-08-01 the design was measured
+against live play for the first time, and the mechanism does not work the way it
+is described above.** The frontier the live arm splits is built by *ablation* —
+the manual as written, an inert reading, and one without-rule-N variant per
+schema — which is a family closed downward under clause deletion and therefore
+cannot contain a mechanism the manual lacks. Over the four live legs of
+2026-07-31 the arm designed 56 probes and completed 52, and the frontier was
+**two distinct predictions wide on every one of the 52**, **47 of the 52
+observations matched no hypothesis in it at all**, and the realised information
+gain was **0.000 bits on all 56** against a design-time price of 0.5436–1.0000
+bits — the frontier never once shrank
+(`theoria-arm/runs/20260801T0000Z-A-probe-economics/README.md` §1;
+`theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/MANIFEST.json`,
+recounted from tracked files alone in
+`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`).
+
+The design document asks for the opposite of what was built. `Theoria.md`'s
+engine table gives the rule miner the job of returning 全体一致假设的前沿 — the
+frontier of *all* hypotheses consistent with the ledger, explicitly 不交点猜测 —
+and says in the same cell that this frontier is 戳探的原料, the raw material of
+probing. That supply line has never run on a game: across the eight live legs
+that carry an engine record, `cegis_miner` was dispatched **48** times and
+refused **48** times, with zero errors
+(`papers/phase1-workshop/runs/20260801T1200Z-P23-probe-frontier-contradicts-the-design/census.json`;
+the arm's account of why is `theoria-arm/runs/20260801T0900Z-R2-frontier-by-generation/README.md` §1).
+§11.3a is the full statement, including what a repair has and has not shown.
 
 ### 2.4 The failure taxonomy this paper is scored against
 
