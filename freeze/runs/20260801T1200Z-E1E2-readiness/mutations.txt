@@ -1,0 +1,9 @@
+baseline (unmutated): rc=0  8/8
+PASS M1/always-holds      the hold fires whether or not the balance is negative      -> 3 control(s) red
+PASS M2/boundary          exact zero counts as over-ceiling                          -> 1 control(s) red
+PASS M3/silent-block      item 12 is blocked without recording what was overridden   -> 1 control(s) red
+PASS M4/holds-everything  the hold ignores BUDGET_HOLD_ITEMS and blocks the whole list -> 2 control(s) red
+PASS M5/paraphrase        the verdict describes the overrun instead of quoting it    -> 1 control(s) red
+PASS M6/absence-as-zero   a missing budget table reads as `not over ceiling` rather than unknown -> 1 control(s) red
+PASS M7/no-table          the positive control is pointed at a table that is not there -> 1 control(s) red
+7/7 mutations caught

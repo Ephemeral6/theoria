@@ -1,0 +1,77 @@
+CAPTURED: exam's u3 census suite, run against the repaired freeze/u3.py.
+
+  worktree : detached at z/exam-u3-followthrough (tip 01d627e3), since removed
+  merge-base with master : e8345aff
+  freeze/u3.py in that tree : 77297975238cbb3e285a1a9647c65a1718e62f45 (== master's)
+  command  : python -m pytest exam/tests/test_u3_census.py -v -rA --tb=no
+  offline  : Lean 4.9.0 only.  No API call, no model call, no network.
+
+WHY THE FULL-TRACEBACK CAPTURE IS NOT ARCHIVED HERE.  pytest prints the
+absolute path of the file under test and the absolute `tmp_path` of every
+fixture, and `tools/check_locations.py` (verify.sh stage [18]) is red on any
+tracked run file that names a machine.  Scrubbing a captured log is explicitly
+not one of that gate's options -- it falsifies a third party's output -- so the
+capture was RE-RUN with `--tb=no` instead, which never emits a path at all.
+The per-failure assertion MESSAGES are reproduced below from a second run with
+`--tb=line`; those message strings contain no path.  Nothing was edited.
+
+exam/ was not modified in any way.
+
+================================ ROSTER ================================
+============================= test session starts =============================
+collecting ... collected 21 items
+
+exam\tests\test_u3_census.py::test_negative_control_tautology_manual_does_not_attain PASSED [  4%]
+exam\tests\test_u3_census.py::test_positive_control_real_obligation_attains PASSED [  9%]
+exam\tests\test_u3_census.py::test_the_two_controls_differ_only_in_the_invariant PASSED [ 14%]
+exam\tests\test_u3_census.py::test_frozen_negative_control_on_disk_still_fails PASSED [ 19%]
+exam\tests\test_u3_census.py::test_sorried_manual_does_not_attain PASSED [ 23%]
+exam\tests\test_u3_census.py::test_level_lean_book_is_discovered FAILED  [ 28%]
+exam\tests\test_u3_census.py::test_level_lean_book_is_adjudicated_not_reported_as_no_evidence FAILED [ 33%]
+exam\tests\test_u3_census.py::test_deeply_nested_book_is_discovered FAILED [ 38%]
+exam\tests\test_u3_census.py::test_exclusions_are_recorded_with_a_reason PASSED [ 42%]
+exam\tests\test_u3_census.py::test_lakefile_is_not_mistaken_for_a_book PASSED [ 47%]
+exam\tests\test_u3_census.py::test_census_delegates_every_verdict_to_freeze_u3 PASSED [ 52%]
+exam\tests\test_u3_census.py::test_attainment_rate_carries_its_denominator_meaning PASSED [ 57%]
+exam\tests\test_u3_census.py::test_kind_coverage_names_the_kinds_that_can_never_attain FAILED [ 61%]
+exam\tests\test_u3_census.py::test_FINDING_renaming_the_theorems_alone_flips_the_verdict FAILED [ 66%]
+exam\tests\test_u3_census.py::test_FINDING_deadlock_paradigm_on_disk_is_labelled_vacuous FAILED [ 71%]
+exam\tests\test_u3_census.py::test_bookless_certify_run_is_not_silently_dropped PASSED [ 76%]
+exam\tests\test_u3_census.py::test_bookless_claimants_are_not_folded_into_the_book_rate PASSED [ 80%]
+exam\tests\test_u3_census.py::test_a_book_dir_is_not_double_counted_as_a_claimant PASSED [ 85%]
+exam\tests\test_u3_census.py::test_census_json_is_serialisable_and_path_sanitised PASSED [ 90%]
+exam\tests\test_u3_census.py::test_cli_expect_books_is_the_only_thing_that_fails PASSED [ 95%]
+exam\tests\test_u3_census.py::test_cli_runs_as_a_module PASSED           [100%]
+
+=========================== short test summary info ===========================
+PASSED exam\tests\test_u3_census.py::test_negative_control_tautology_manual_does_not_attain
+PASSED exam\tests\test_u3_census.py::test_positive_control_real_obligation_attains
+PASSED exam\tests\test_u3_census.py::test_the_two_controls_differ_only_in_the_invariant
+PASSED exam\tests\test_u3_census.py::test_frozen_negative_control_on_disk_still_fails
+PASSED exam\tests\test_u3_census.py::test_sorried_manual_does_not_attain
+PASSED exam\tests\test_u3_census.py::test_exclusions_are_recorded_with_a_reason
+PASSED exam\tests\test_u3_census.py::test_lakefile_is_not_mistaken_for_a_book
+PASSED exam\tests\test_u3_census.py::test_census_delegates_every_verdict_to_freeze_u3
+PASSED exam\tests\test_u3_census.py::test_attainment_rate_carries_its_denominator_meaning
+PASSED exam\tests\test_u3_census.py::test_bookless_certify_run_is_not_silently_dropped
+PASSED exam\tests\test_u3_census.py::test_bookless_claimants_are_not_folded_into_the_book_rate
+PASSED exam\tests\test_u3_census.py::test_a_book_dir_is_not_double_counted_as_a_claimant
+PASSED exam\tests\test_u3_census.py::test_census_json_is_serialisable_and_path_sanitised
+PASSED exam\tests\test_u3_census.py::test_cli_expect_books_is_the_only_thing_that_fails
+PASSED exam\tests\test_u3_census.py::test_cli_runs_as_a_module
+FAILED exam\tests\test_u3_census.py::test_level_lean_book_is_discovered - Ass...
+FAILED exam\tests\test_u3_census.py::test_level_lean_book_is_adjudicated_not_reported_as_no_evidence
+FAILED exam\tests\test_u3_census.py::test_deeply_nested_book_is_discovered - ...
+FAILED exam\tests\test_u3_census.py::test_kind_coverage_names_the_kinds_that_can_never_attain
+FAILED exam\tests\test_u3_census.py::test_FINDING_renaming_the_theorems_alone_flips_the_verdict
+FAILED exam\tests\test_u3_census.py::test_FINDING_deadlock_paradigm_on_disk_is_labelled_vacuous
+=================== 6 failed, 15 passed in 83.13s (0:01:23) ===================
+
+============ ASSERTION MESSAGES (--tb=line, message lines only) ============
+
+E   AssertionError: freeze/u3.py now sees non-standard book names; re-check D1
+E   AssertionError: assert 'u3.evaluate' == 'u3.eval_lean...ce:Level.lean'
+E   AssertionError: freeze/u3.py now walks; re-check D2's justification
+E   AssertionError: assert 'unknown' in {'invariant': {'c_ok': 2, 'examples': ['oddly_named::frobnicate_all', 'oddly_named::frobnicate_closed'], 'no_check_imp...'point_claim': {'c_ok': 0, 'examples': ['oddly_named::frobnicate_init'], 'no_check_implemented': False, 'theorems': 1}}
+E   AssertionError: assert 'attained' != 'attained'
+E   AssertionError: freeze/u3.py may have grown a prune/deadlock (c) check �� re-verify the report's finding F1

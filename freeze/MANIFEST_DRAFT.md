@@ -53,7 +53,7 @@
 | 9 | 变体算子库 | ✅ 有 | `proxy/variants.py` + `proxy/variants/` + `exam/artifacts/variant_specs/` |
 | 10 | 统计裁决规则 | ✅ 本套件 | `freeze/STATS_RULES.md` |
 | 11 | claim 逐字文本与双结局 | ✅ 本套件 | `freeze/CLAIMS_TEXT.md` |
-| 12 | 预算表 | ⚠ 表已写，**12 个情景无一装得下** | `freeze/BUDGET_TABLE.md`（机器层由 `build_budget_table.py --verify` 盯住）；三个数仍 needs_human |
+| 12 | 预算表 | ⛔ 表已写，**12 个情景无一装得下**，且 2026-08-01 起**余额为负** | `freeze/BUDGET_TABLE.md`（机器层由 `build_budget_table.py --verify` 盯住）；三个数仍 needs_human；`MANIFEST.json` 由 `BUDGET_HOLD_ITEMS` 强制 `blocked`，闸门 [20] |
 | 13 | 每格重复数 ⟨n⟩ | ⚠ 已裁定 n=2，依据**已可哈希**；13-d 脆、⛔ 13-f 无产出判据 | `freeze/STATS_RULES.md` §5 + §5.7 + `n_feasibility.py`；依据 `baseline-arms/out/campaign/`（`9307f139`）+ A7 包络 + `freeze/VARIANCE_BASIS.md` |
 
 **计数（2026-07-29，S4-freeze-complete 收工时）：13 项全部有落点或有标注。✅ 3 · ⚠ 10 · ⛔ 0。**
@@ -435,6 +435,32 @@ $1,177 opus，不是零头）；
 否则「我们丢了两局」会被读成一个自由度。
 **本条动的是钱（⟨$/局硬顶、总局数、止损⟩ 由监控定），故仍标 needs_human：
 RES-1 建议 19，理由如上；预算行由监控确认。** 在此之前上界口径是现行数字。
+
+### 2026-08-01 追记 —— 余额已经是负数，本条因此多了一道**不由文字解除**的闸
+
+`freeze/BUDGET_TABLE.json` 从账本重算出的
+`balance.remaining_measured_usd` = **−35.1687**
+（已花 $250.0687，天花板 $214.9，见 `proxy/spend_policy.json`）。
+这不是预测，是**已经发生的支出**。
+
+**这个数还是偏乐观的。** `verify.sh` 阶段 [15b] 今天是红的，红的理由正是
+`balance` 段移动了——账本已经跑到冻结表前面去了。所以
+**−35.1687 是超支的下界，不是超支本身**。本轮离线重算了一次当前值：
+**$293.83 已花 / 余 −$78.93**（读 `build_budget_table.build()`，不落盘）。
+不落盘是有意的：一轮线上跑中途重生成，等于把一个正在移动的余额钉进冻结包。
+
+**这道闸是算出来的，不是写出来的。** 上面那三个 ⟨…⟩ 是一个下午能填完的东西，
+而只要「第 12 项能不能 ready」的唯一障碍是散文，填完它就会把本项翻绿——
+于是清单会为一个已经透支的项目公布一张 ready 的预算表。故
+`freeze/build_manifest.py` 的 `BUDGET_HOLD_ITEMS` 直接读那个数：
+`remaining_measured_usd < 0` 时第 12 项一律落 `blocked`，
+`MANIFEST.json` 的 `entries[12].budget_hold` 记下它盖掉了哪一个自称状态。
+**数变了闸才开，文字变了闸不开。** 阴性对照见
+`build_manifest.py --selftest`（8 条，含两条「必须不触发」）
+与 `freeze/tests/test_budget_hold.py`；阶段 [20] 是它的闸门。
+
+**本条不修钱。** 停、抬天花板、还是把超支冲销，是所有者的裁决，此刻**未决**。
+这里只拒绝一件事：裁决还没下来，而清单对超支保持沉默。
 
 ---
 

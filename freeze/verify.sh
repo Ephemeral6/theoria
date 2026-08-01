@@ -1798,6 +1798,86 @@ else
 fi
 echo
 
+# --------- 20. the manifest's readiness must not outrun the programme's balance
+#
+# 2026-08-01.  `freeze/BUDGET_TABLE.json` recomputes the programme's spend from
+# the ledgers and `remaining_measured_usd` is NEGATIVE: the ceiling in
+# `proxy/spend_policy.json` has already been passed.  Item 12 of the freeze list
+# is the 预算表 itself.
+#
+# WHY A STAGE.  Item 12 is `blocked` today for a reason that has nothing to do
+# with the money -- three ⟨…⟩ placeholders in PENDING_FIVE.md -- and those are
+# fillable in an afternoon.  Without a hold that reads the NUMBER, filling them
+# would flip item 12 to `ready` and the manifest would publish a ready budget
+# for an overdrawn programme.  So the hold is derived in
+# `build_manifest.py:apply_budget_hold` from `remaining_measured_usd < 0`, and
+# this stage checks three things: the hold is in the published manifest, the
+# verdict says so in words a human will read first, and the controls fire.
+#
+# WHAT THIS STAGE DOES NOT DO.  It does not repair, re-plan or re-price
+# anything.  Whether to stop, raise the ceiling or write off the overrun is the
+# owner's ruling and it is pending; all this refuses is a manifest that is
+# silent about the overrun while the ruling is out.
+#
+# NOTE ON FRESHNESS.  The number is read from the tracked table, not from the
+# gitignored ledger, so the manifest reproduces on any checkout.  Stage [15b] is
+# the instrument for staleness and while it is red for a moved balance the
+# frozen figure is a FLOOR on the overspend.  A stage that read the live ledger
+# would be fresher and would make [12] red on every machine that has no pool --
+# that trade is refused here and stated rather than hidden.
+echo "[20] the freeze manifest tells the truth about the money"
+export PYTHONIOENCODING=utf-8
+
+b_over="$(python - "$HERE/MANIFEST.json" <<'PY' 2>&1
+import json, sys
+m = json.load(open(sys.argv[1], encoding="utf-8"))
+b = m.get("budget") or {}
+v = m.get("verdict") or {}
+held = b.get("items_held", [])
+e12 = [e for e in m["entries"] if e["n"] == 12]
+problems = []
+if not b:
+    problems.append("MANIFEST.json carries no `budget` block at all")
+if b.get("over_ceiling") is None:
+    problems.append("`budget.over_ceiling` is null -- the budget table was not "
+                    "readable when the manifest was generated")
+elif b["over_ceiling"]:
+    if held != [12]:
+        problems.append("balance is negative but items_held == %r (expected [12])" % (held,))
+    if not e12 or e12[0]["status"] != "blocked":
+        problems.append("item 12 is not `blocked` while the balance is negative")
+    if not e12 or not e12[0].get("budget_hold", {}).get("held"):
+        problems.append("item 12 carries no `budget_hold` record saying why")
+    for needle in ("NEGATIVE", str(b["remaining_measured_usd"]), str(b["ceiling_usd"])):
+        if needle not in v.get("statement", ""):
+            problems.append("verdict.statement does not quote %r" % needle)
+    if v.get("freeze_ready"):
+        problems.append("verdict.freeze_ready is true while the programme is overdrawn")
+if problems:
+    print("\n".join("- " + p for p in problems))
+    sys.exit(1)
+state = ("OVER CEILING" if b["over_ceiling"] else "within ceiling")
+print("%s: remaining_measured_usd = %s against a %s ceiling; items held: %s"
+      % (state, b.get("remaining_measured_usd"), b.get("ceiling_usd"),
+         held or "none"))
+PY
+)"
+if [ $? -eq 0 ]; then
+  ok "MANIFEST.json publishes the balance and holds on it: $b_over"
+else
+  bad "MANIFEST.json's readiness does not reflect the programme's balance"
+  printf '%s\n' "$b_over" | sed 's/^/        /'
+fi
+
+bs_out="$(python "$HERE/build_manifest.py" --selftest 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "build_manifest.py --selftest: $(printf '%s' "$bs_out" | tail -1 | tr -d ' ') budget-hold controls, including the two that must NOT fire"
+else
+  bad "build_manifest.py --selftest is red -- the budget hold cannot be trusted either way"
+  printf '%s\n' "$bs_out" | sed 's/^/        /'
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

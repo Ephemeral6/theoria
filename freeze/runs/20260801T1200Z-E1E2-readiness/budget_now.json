@@ -1,0 +1,26 @@
+{
+ "utc": "2026-08-01T12:00:00Z",
+ "measured_read_only": true,
+ "written_to_disk": false,
+ "frozen_table_remaining_measured_usd": -35.1687,
+ "live_balance": {
+  "ceiling_usd": 214.9,
+  "gate_visible_usd": 121.9087,
+  "gate_visible_headroom_usd": 92.9913,
+  "tracked_bare_cc_usd": 97.8161,
+  "tracked_theoria_usd": 109.8488,
+  "pool_only_measured_usd": 86.1698,
+  "pool_only_placeholder_usd": 4.0099,
+  "programme_measured_usd": 293.8347,
+  "programme_nominal_usd": 297.8446,
+  "remaining_measured_usd": -78.9347,
+  "remaining_nominal_usd": -82.9446,
+  "gate_blind_spot_usd": 171.926,
+  "action_ceiling": 24000,
+  "actions_used": 9671,
+  "actions_remaining": 14329,
+  "actions_spent_on_test_traffic": 6643,
+  "pricing_v1_vs_self_reported_theoria_pct": -1.83
+ },
+ "note": "recomputed from the ledgers in the MAIN checkout (build_budget_table.resolve_pool falls back out of the worktree for the gitignored pool). NOT written to freeze/BUDGET_TABLE.json: regenerating pins a balance that is still moving, and stage [15b] red is the honest state."
+}

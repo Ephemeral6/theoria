@@ -1,0 +1,75 @@
+{
+ "prompt_id": "z/freeze-e2u3",
+ "prompt": "freeze territory, 2026-08-01: (1) re-run the E1 census after the U3/E1 non-triviality repair and file the exact list of exam tests that must flip; (2) restate the three primary endpoints after battery's E2 ruling withdrew the front-loading paired difference; (3) make freeze/MANIFEST.json readiness reflect reality, including a NEGATIVE remaining_measured_usd -- record the money, do not fix it.",
+ "branch": "z/freeze-e2u3",
+ "base_commit": "e8345aff",
+ "utc": "2026-08-01T12:00:00Z",
+ "seed": null,
+ "files": [
+  {
+   "path": "freeze/build_manifest.py",
+   "sha256": "cb68f8af017678a61c1b9646f0ac4f0ba2fc3da894440f7f66de8d9a91aa8b45"
+  },
+  {
+   "path": "freeze/MANIFEST.json",
+   "sha256": "d921b40d199657b759f61a2a5867bf03391197b4c0cfbdb89969ac202299a374"
+  },
+  {
+   "path": "freeze/MANIFEST_DRAFT.md",
+   "sha256": "55eff718a4714f2833bcc390699cbfaae0f9c5220190d1f413404d6a625fd810"
+  },
+  {
+   "path": "freeze/verify.sh",
+   "sha256": "65865bea3ef026799bcf1436fe116102d933821f0bc07b936d9a3a0a2e0de89c"
+  },
+  {
+   "path": "freeze/tests/test_budget_hold.py",
+   "sha256": "c2a01e55972cfeb114850b7bd0ae1531de9fb650a86ee7a1d610a21f74fb5442"
+  },
+  {
+   "path": "monitor/inbox/20260801T1200Z-freeze-to-exam-the-flip-list-was-four-measured-it-is-six.md",
+   "sha256": "217c434fc9ea168e8e348666b13c8ece69d88099125f8c7c817bf054677d80be"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/recensus.py",
+   "sha256": "ce9e39d51dc54d9ed37c7181372b8b8ee55171e52fc15acf47f6b08d5aad1692"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/mutations.py",
+   "sha256": "5461ebfb432484153fc59c6ce94807e2d2ddbc8b0ab7035c3b692aefd844eb39"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/census.json",
+   "sha256": "c20c27766d19a86169762eab0f1783125b1403ad09425aca3082755b39308007"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/CENSUS.md",
+   "sha256": "6234baeb47451a10c9e2c28457536c76c14ef0fe3bd18cd82ad242dbb81aa78b"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/exam_u3_census_measured.txt",
+   "sha256": "ccc5307e1be1827e745ff995ec3c3b016bddfb2888f913104f0489e8adb676d8"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/budget_now.json",
+   "sha256": "2693e8448d5ff976cd5e10102e92b912ac2cfdffd1cc4346cd61116c26fbd8d9"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/gates_before.txt",
+   "sha256": "7b21769a7f8125ac7746ac60b75afd5fb3aa1525e0673f286b35e345ac3e84a9"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/gates_after.txt",
+   "sha256": "b11bc0a2d21e8f8e9f2becfc8fb131403d97937973167a311c451fdcb2a77148"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/mutations.txt",
+   "sha256": "a84d941a26b6bb8e3f4861dc9bec5ac9726f9529cae94de157c6b150a62c43c4"
+  },
+  {
+   "path": "freeze/runs/20260801T1200Z-E1E2-readiness/RUN_STATE.md",
+   "sha256": "43a0396751dc49f2f34f32d84967579b7c3b5fc0c2346c7cbbcc73baee919d31"
+  }
+ ],
+ "notes": "offline: Lean 4.9.0 only. ZERO API call, zero model call, zero network, zero spend, zero sealed-pile contact. gates: `python -m pytest freeze -q` 62 passed (52 -> 62, +10 new); `bash freeze/verify.sh` 79 PASS / 2 FAIL, baseline was 77/2 -- the only stages that moved are the two NEW checks in stage [20] and stage [14]'s blocking-gap count 19 -> 20. The two FAILs ([15b] BUDGET_TABLE drift, [18] locations) are unchanged from clean master and both name other territories' in-flight work. census: 24 books, discharged 17 / vacuous 2 / unclassified 4 / failing_obligation 1 = 17 of 24 attained, reproducing the 07:00Z run on a different checkout. exam: 6 failed / 15 passed, measured on z/exam-u3-followthrough@01d627e3 -- the 07:00Z letter derived four. budget: frozen remaining_measured_usd -35.1687, recomputed live -78.9347; item 12 held at `blocked` by BUDGET_HOLD_ITEMS; 7/7 mutations of that hold caught."
+}

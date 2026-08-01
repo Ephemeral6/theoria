@@ -1,4 +1,18 @@
 {
+  "budget": {
+    "ceiling_usd": 214.9,
+    "consequence": "item(s) 12 may not read `ready` while `remaining_measured_usd` is negative -- see `BUDGET_HOLD_ITEMS` in freeze/build_manifest.py. The hold records the overrun; it does not repair it, and the ruling on what to do about the money is the owner's.",
+    "items_held": [
+      12
+    ],
+    "over_ceiling": true,
+    "present": true,
+    "programme_measured_usd": 250.0687,
+    "reading": "as frozen. `verify.sh` stage [15b] re-derives this table from the ledgers and is the only thing that can say whether it is stale; while [15b] is red for a moved balance, the number here is a FLOOR on the overspend, not the overspend.",
+    "remaining_measured_usd": -35.1687,
+    "remaining_nominal_usd": -39.1786,
+    "source": "freeze/BUDGET_TABLE.json"
+  },
   "endpoints": {
     "computable_today": 0,
     "detail": [
@@ -496,6 +510,11 @@
     },
     {
       "absent": [],
+      "budget_hold": {
+        "declared_status": "blocked",
+        "held": true,
+        "why": "the programme's measured balance is $250.0687 against a $214.9 ceiling (`freeze/BUDGET_TABLE.json`), so remaining is $-35.1687. A 预算表 that reads `ready` for an overdrawn programme is a false record in the direction that flatters. This hold clears when the number does, not when the prose does."
+      },
       "n": 12,
       "name": "预算表",
       "note": "The price table is real and versioned (`table: pricing_v1`, `effective: 2026-07-28`, referenced by hash from every ledger entry). The three numbers Theoria.md:377 actually asks to freeze -- $/game hard cap, total games, stop-loss -- are still written as ⟨…⟩. See PENDING_FIVE.md.",
@@ -661,18 +680,21 @@
   ],
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
-    "branch": "master",
-    "commit": "3eee2d824130112c42dd6b03170d617872253895",
+    "branch": "z/freeze-e2u3",
+    "commit": "e8345affa0d500b8358e19fab65b8e25f615c7f9",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
     "absent_paths": [],
     "blocked": 5,
+    "budget_held_items": [
+      12
+    ],
     "freeze_ready": false,
     "items": 13,
     "partial": 10,
     "ready": 0,
-    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing. Separately and independently of the item count: 2 of the 3 primary-endpoint slots may still carry a confirmatory claim (slot 3, the front-loading index paired difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), and 0 of them can be computed today. Holm's divisor stays 3. See `endpoints`."
+    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing. Separately and independently of the item count: 2 of the 3 primary-endpoint slots may still carry a confirmatory claim (slot 3, the front-loading index paired difference, was withdrawn on 2026-08-01, STATS_RULES.md 3.0), and 0 of them can be computed today. Holm's divisor stays 3. See `endpoints`. And the money: the programme has already spent $250.0687 against a $214.9 ceiling, i.e. $-35.1687 remaining -- a NEGATIVE balance, and a floor on it rather than the figure, because stage [15b] says the ledgers have moved past this table. Item(s) 12 are therefore held at `blocked` regardless of what their prose says; a 预算表 that reads `ready` for an overdrawn programme is worse than one that reads blocked. Nothing here repairs the overrun -- the ruling on the money is the owner's and is pending."
   }
 }
