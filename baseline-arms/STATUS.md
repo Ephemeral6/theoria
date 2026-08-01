@@ -349,8 +349,9 @@ mock 游戏（开卡 / RESET / 三个 ACTION / 关卡），`claude -p` 由罐头
 没有打印也没有落盘任何值）。现已改为 `--no-require-key` 即**明确无钥、根本不看 `.env`**，
 并补了一条与机器无关的 `resolve_key` 单测钉住它。**「可选的凭据」不是凭据策略。**
 
-commit：见本仓库 `agent/a19-bare-cc-seal-split`（tag `a19-bare-cc-seal-split`），
-留痕在 [`runs/2026-08-01T044513Z-A19/`](runs/2026-08-01T044513Z-A19/)。
+commit：**`db33f983`**（分支 `agent/a19-bare-cc-seal-split`，tag
+`a19-bare-cc-seal-split`）。本段的 sha 由紧随其后的一次提交补记——一次提交无法
+写进自己的哈希。留痕在 [`runs/2026-08-01T044513Z-A19/`](runs/2026-08-01T044513Z-A19/)。
 
 **复飞资格不由本工单裁定。** 本单交付的是拆分与证据；`bare_cc` 是否恢复线上飞行、
 `p1-seal-test` 左合取项是否对三臂成立，是监控方的再裁决。

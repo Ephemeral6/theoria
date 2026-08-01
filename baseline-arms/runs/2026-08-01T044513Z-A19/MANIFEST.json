@@ -5,8 +5,8 @@
       "sha256": "c160b36b2747179105db60678789c6ceddaebe4aa22d29eb60ee51646ae11647"
     },
     "baseline-arms/STATUS.md": {
-      "bytes": 30516,
-      "sha256": "b243aeb9c72394f7033ee437cc6fe20d104630cf7377a2913687832b4ca99d16"
+      "bytes": 30625,
+      "sha256": "c55e9e26e5eab28a317f3d02a9a801eb2253b0ae1d91dae748d12f4374571215"
     },
     "baseline-arms/harness/arc_client.py": {
       "bytes": 27928,
@@ -48,9 +48,17 @@
       "bytes": 1621,
       "sha256": "3203710bee7c0843bf4593149b2347613b15927e593f0955b918708d7563000d"
     },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/RUN_STATE.md": {
+      "bytes": 9133,
+      "sha256": "9071fe36201dd408e05302f8229e399c8d6927a431a62f18cfbed23bee09c6d3"
+    },
     "baseline-arms/runs/2026-08-01T044513Z-A19/results.json": {
       "bytes": 384,
       "sha256": "55585a488ca60051cc9931398f62e9d5f0d1f427837341e2998e58c8822b0cf7"
+    },
+    "baseline-arms/runs/2026-08-01T044513Z-A19/verify.sh": {
+      "bytes": 2309,
+      "sha256": "cb408b0b132aabbffcc1cf8da19d69c2506b6d90a080bd554c8c1f19d0405bfa"
     },
     "baseline-arms/tests/test_seal_process.py": {
       "bytes": 33398,
@@ -73,7 +81,7 @@
   },
   "run_dir": "baseline-arms/runs/2026-08-01T044513Z-A19",
   "seed": null,
-  "t": "2026-08-01T05:08:39Z",
+  "t": "2026-08-01T05:15:47Z",
   "tests": "552 passed, 1 skipped, 0 failed",
   "title": "A19 GAP-5 closed: the ARC credential leaves the bare_cc arm process"
 }

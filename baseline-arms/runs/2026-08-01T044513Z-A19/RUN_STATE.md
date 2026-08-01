@@ -98,14 +98,17 @@ No file outside `baseline-arms/` was modified.
 
 ## Gaps and disclosures
 
-1. **The `--allow` on the sealed-pile check is disclosed here.** `verify.sh`
-   was regenerated with `--allow baseline-arms/STATUS.md`. That file already
-   contained sealed-pile identifiers before this branch existed, in its
-   pre-existing INC-BA-001 contamination-registration paragraph — which is the
-   documented exception. Proven mechanically rather than asserted: over all 26
-   files this branch changes, the number of **added** lines containing any
-   sealed identifier is **zero**, and the three new files contain zero. The
-   identifiers themselves are deliberately not written here.
+1. **The two `--allow` paths on the sealed-pile check are disclosed here.**
+   `verify.sh` was regenerated with `--allow baseline-arms/STATUS.md --allow
+   PARTNER_SYNC.md`. Both files already contained sealed-pile identifiers
+   before this branch existed — `STATUS.md` in its pre-existing INC-BA-001
+   contamination-registration paragraph, `PARTNER_SYNC.md` in paragraphs other
+   territories wrote — which is the documented exception. Proven mechanically
+   rather than asserted: over all files this branch changes, the number of
+   **added** lines containing any sealed identifier is **zero**, and both of
+   these files are pure appends (51 and 6 added lines, 0 removed). The three
+   new source files contain zero. The identifiers themselves are deliberately
+   not written here.
 
 2. **The red baseline `start_ritual` reported was a worktree artefact, not
    master.** Master in the main checkout runs 534 passed / 0 failed. Two
