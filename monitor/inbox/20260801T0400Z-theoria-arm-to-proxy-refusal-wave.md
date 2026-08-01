@@ -71,5 +71,7 @@ of its four source legs.
 
 Recorded the distinction rather than changed the wire: `armtools/refusal.py`
 classifies each row, `archive.reconcile()` now emits the split, and
-`spend.OUTBOUND_PER_ACTION` declares that it is a blended figure (85% weather)
-rather than a transport measurement. Its value is unchanged at 9.3.
+`spend.OUTBOUND_PER_ACTION` declares that it is a blended figure — 63.1% of
+every forwarded command this arm has sent is the wave, 79.3% of those whose
+outcome was recorded — rather than a transport measurement. Its value is
+unchanged at 9.3.

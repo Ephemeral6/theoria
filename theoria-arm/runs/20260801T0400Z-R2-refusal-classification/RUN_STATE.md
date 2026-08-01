@@ -42,8 +42,10 @@ real failure.** The wire behaviour is correct and is left alone.
   rows) rather than wrong.
 * `archive.reconcile()` averaged `http_amplification` over an undifferentiated
   mass of non-200 rows: weather and breakage produced the same number.
-* `spend.OUTBOUND_PER_ACTION = 9.3` inherited a numerator that is 85% weather
-  while being consumed as a statement about this arm's transport.
+* `spend.OUTBOUND_PER_ACTION = 9.3` inherited a numerator that is mostly
+  weather while being consumed as a statement about this arm's transport. Of
+  its 251 requests, 27 bought an action, 86 are the wave, and 138 are
+  `unrecorded` — 76% of the classifiable remainder is weather.
 
 ## Cost
 

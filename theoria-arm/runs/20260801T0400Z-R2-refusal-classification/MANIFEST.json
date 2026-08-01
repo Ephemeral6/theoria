@@ -1,14 +1,12 @@
 {
  "arm": "theoria",
- "base_commit": "af138a0d2302b85f193b9a65f57aadb65c55f95a",
+ "base_commit": "5162d06bab9f49a8860c1eee3427bcc6cacdc914",
  "branch": "r2/arm-refusal",
  "changed_paths": [
-  "heoria-arm/armtools/archive.py",
-  "theoria-arm/harness/spend.py",
-  "monitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
+  "onitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
   "theoria-arm/armtools/refusal.py",
-  "theoria-arm/runs/20260801T0400Z-R2-refusal-classification/",
-  "theoria-arm/tests/test_refusal_classification.py"
+  "theoria-arm/harness/spend.py",
+  "theoria-arm/runs/20260801T0400Z-R2-refusal-classification/RUN_STATE.md"
  ],
  "cross_territory": "monitor/inbox/20260801T0400Z-theoria-arm-to-proxy-refusal-wave.md",
  "did_not_do": [
@@ -20,9 +18,9 @@
  ],
  "files": [
   {
-   "bytes": 6310,
+   "bytes": 6451,
    "path": "RUN_STATE.md",
-   "sha256": "sha256:f1830fec9e317a25aba6f4be6823789fb6ed057b00a8ffb83f19bb44bf8ae0c0"
+   "sha256": "sha256:f64fddde579539fea907443247023f3fd11dd9af61c436c22ddd04e4905ea524"
   },
   {
    "bytes": 2580,

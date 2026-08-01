@@ -541,7 +541,9 @@ OUTBOUND_PER_ACTION_PROVENANCE = (
 #: pathology rather than the steady state, the true ratio for a healthy session
 #: is nearer 1.1". `armtools/refusal.py` settled it from the records. The wave
 #: is `400 SERVER_ERROR / game <id> not found`, it is the upstream's own
-#: transient, and it is 85% of every outbound request this arm has ever made.
+#: transient. Over every forwarded command this arm has ever sent (1462) it is
+#: 63.1% of all of them, and 79.3% of the 1164 whose outcome the ledger
+#: actually recorded.
 #: The request that gets refused is **byte-identical** to the one that succeeds
 #: moments later -- same `request_sha256`, same URL, same session -- so nothing
 #: this arm sends causes it and nothing this arm changes will avoid it.

@@ -1,9 +1,11 @@
 """Which refusals are the upstream breathing, and which are this arm being wrong.
 
-87% of the live commands this arm has ever sent came back `400 SERVER_ERROR`
-with the detail `game <id> not found`. Nobody treated that as a defect, and
-nobody was wrong to: it is not one. But the ledger recorded it identically to a
-genuine failure, and three things went quietly bad as a result.
+87% of the live commands in the four 2026-07-31 legs came back
+`400 SERVER_ERROR` with the detail `game <id> not found` -- 63% of every
+forwarded command this arm has ever sent, and 79% of the ones whose outcome the
+ledger recorded. Nobody treated that as a defect, and nobody was wrong to: it
+is not one. But the ledger recorded it identically to a genuine failure, and
+three things went quietly bad as a result.
 
 ## What the records actually say
 
@@ -55,9 +57,12 @@ recording, not from the condition:
   dominated by real breakage produced the same number.
 * **the sizing constant inherited it.** `harness/spend.py:OUTBOUND_PER_ACTION`
   is 9.3, from 251 outbound / 27 successful actions. That arithmetic reproduces
-  exactly from the ledgers; the trouble is that 224 of those 251 requests are
-  the transient wave, so the constant describes an upstream weather system and
-  is applied as though it described this arm's transport.
+  exactly from the ledgers. The trouble is what the 251 are: 27 bought an
+  action, 86 are the wave, and 138 are `unrecorded` -- rows from three legs
+  that predate the proxy keeping response bodies, and so cannot be attributed
+  either way. Of the 113 that can be classified, 76% are weather. The constant
+  describes an upstream weather system and is applied as though it described
+  this arm's transport.
 
 This module is the distinction, made computable. It does not change what the
 arm does on the wire -- retrying is the correct response and it already
